@@ -89,8 +89,20 @@ class BlogTagsController extends BlogAdminAppController
     public function add(BlogTagsServiceInterface $service)
     {
         if (!empty($this->request->getData())) {
+            // EVENT BlogTags.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $blogTag = $service->create($this->request->getData());
+                // EVENT BlogTags.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $blogTag
+                ]);
                 $this->BcMessage->setSuccess(sprintf(
                     __d('baser_core', 'タグ「%s」を追加しました。'),
                     $blogTag->name
@@ -122,9 +134,21 @@ class BlogTagsController extends BlogAdminAppController
     {
         $blogTag = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            // EVENT BlogTags.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 /* @var BlogTag $blogTag */
                 $blogTag = $service->update($blogTag, $this->getRequest()->getData());
+                // EVENT BlogTags.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $blogTag
+                ]);
                 $this->BcMessage->setSuccess(sprintf(
                     __d('baser_core', 'タグ「%s」を更新しました。'),
                     $blogTag->name

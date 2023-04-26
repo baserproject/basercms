@@ -13,6 +13,9 @@ namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogTagsTable;
+use BcBlog\Test\Factory\BlogTagFactory;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class BlogTagsTableTest
@@ -165,5 +168,44 @@ class BlogTagsTableTest extends BcTestCase
             ['%90V%90%BB%95i', false], // 文字列 新製品 をURLエンコード化
             ['hoge', false],
         ];
+    }
+
+    /**
+     * test beforeCopyEvent
+     */
+    public function testBeforeCopyEvent()
+    {
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcBlog.BlogTags.beforeCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeCopy';
+            $event->setData('data', $data);
+        });
+        $this->BlogTagsTable->copy(1);
+        //イベントに入るかどうか確認
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'beforeCopy_copy']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test AfterCopyEvent
+     */
+    public function testAfterCopyEvent()
+    {
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcBlog.BlogTags.afterCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $blogTags = TableRegistry::getTableLocator()->get('BcBlog.BlogTags');
+            $data->name = 'afterAdd';
+            $blogTags->save($data);
+        });
+        $this->BlogTagsTable->copy(1);
+        //イベントに入るかどうか確認
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
     }
 }

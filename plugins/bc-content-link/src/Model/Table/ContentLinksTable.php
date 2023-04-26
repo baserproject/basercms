@@ -11,7 +11,10 @@
 
 namespace BcContentLink\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\AppTable;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -24,6 +27,8 @@ use BaserCore\Annotation\UnitTest;
  */
 class ContentLinksTable extends AppTable
 {
+
+    use BcEventDispatcherTrait;
 
     /**
      * initialize
@@ -69,4 +74,61 @@ class ContentLinksTable extends AppTable
         return $validator;
     }
 
+
+    /**
+     * コピーする
+     *
+     * @param int $id
+     * @param $newParentId
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $newSiteId
+     * @return mixed page Or false
+     * @throws \Throwable
+     * @checked
+     * @noTodo
+     */
+    public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
+    {
+        $entity = $this->get($id, ['contain' => ['Contents']]);
+        $oldEntity = clone $entity;
+
+        // EVENT ContentLinks.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'data' => $entity,
+            'id' => $id,
+        ]);
+        if ($event !== false) {
+            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+        }
+
+        $entity->content = new Content([
+            'name' => $entity->content->name,
+            'parent_id' => $newParentId,
+            'title' => $newTitle,
+            'author_id' => $newAuthorId,
+            'site_id' => $newSiteId,
+            'description' => $entity->content->description,
+            'eyecatch' => $entity->content->eyecatch,
+            'layout_template' => $entity->content->layout_tmplate ?? ''
+        ]);
+        if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
+            $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
+        }
+        unset($entity->id);
+        unset($entity->created);
+        unset($entity->modified);
+
+        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+
+        // EVENT ContentLinks.afterCopy
+        $this->dispatchLayerEvent('afterCopy', [
+            'id' => $entity->id,
+            'data' => $entity,
+            'oldId' => $id,
+            'oldData' => $oldEntity,
+        ]);
+
+        return $entity;
+    }
 }

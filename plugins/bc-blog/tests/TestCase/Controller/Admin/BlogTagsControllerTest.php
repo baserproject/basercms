@@ -16,6 +16,8 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogTagsController;
 use BcBlog\Test\Factory\BlogTagFactory;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -195,5 +197,80 @@ class BlogTagsControllerTest extends BcTestCase
         $this->assertEquals(1, count($vars));
         //リダイレクトを確認
         $this->assertResponseOk();
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeAddEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        $this->post('/baser/admin/bc-blog/blog_tags/add', ['name' => 'new']);
+        $BlogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $BlogTags->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterAddEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.afterAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data->name = 'afterAdd';
+            $blogTags = TableRegistry::getTableLocator()->get('BlogTags');
+            $blogTags->save($data);
+        });
+        $this->post('/baser/admin/bc-blog/blog_tags/add', ['name' => 'new']);
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeEditEvent()
+    {
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeEdit';
+            $event->setData('data', $data);
+        });
+        $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => 'updated']);
+        $BlogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $BlogTags->find()->where(['name' => 'beforeEdit']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterEditEvent()
+    {
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.afterEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data->name = 'afterEdit';
+            $blogTags = TableRegistry::getTableLocator()->get('BlogTags');
+            $blogTags->save($data);
+        });
+        $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => 'updated']);
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'afterEdit']);
+        $this->assertEquals(1, $query->count());
     }
 }

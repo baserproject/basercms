@@ -11,12 +11,14 @@
 
 namespace BcBlog\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
@@ -25,7 +27,7 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * BlogCategoriesTable
- * @property BlogPostsTable $BlogPosts
+ * @property BlogCategoriesTable $BlogCategoriesTable
  */
 class BlogCategoriesTable extends BlogAppTable
 {
@@ -34,6 +36,7 @@ class BlogCategoriesTable extends BlogAppTable
      * Trait
      */
     use BcContainerTrait;
+    use BcEventDispatcherTrait;
 
     /**
      * バリデーション設定
@@ -193,7 +196,7 @@ class BlogCategoriesTable extends BlogAppTable
                 'type' => 'year'
             ]);
             foreach ($postedDates as $postedDate) {
-                if(empty($postedDate['category'])) continue;
+                if (empty($postedDate['category'])) continue;
                 if ($options['viewCount']) $postedDate['category']->count = $postedDate['count'];
                 $datas[$postedDate['year']][] = $postedDate['category'];
             }
@@ -214,11 +217,11 @@ class BlogCategoriesTable extends BlogAppTable
      * @return ResultSetInterface
      */
     protected function _getCategoryList(
-        int $blogContentId = null,
-        int $parentId = null,
-        bool $viewCount = false,
-        int $depth = 1,
-        int $current = 1,
+        int   $blogContentId = null,
+        int   $parentId = null,
+        bool  $viewCount = false,
+        int   $depth = 1,
+        int   $current = 1,
         array $fields = [],
         array $options = [])
     {
@@ -271,7 +274,7 @@ class BlogCategoriesTable extends BlogAppTable
             ->where($conditions)
             ->select($fields)
             ->order($options['order']);
-        if($distinct) {
+        if ($distinct) {
             $query->distinct($distinct);
         }
         $entities = $query->all();
@@ -367,5 +370,53 @@ class BlogCategoriesTable extends BlogAppTable
         ], $options);
         $this->unbindModel(['hasMany' => ['BlogPost']]);
         return $this->find('first', $options);
+    }
+
+    /**
+     * コピーする
+     *
+     * @param $id
+     * @param null $newParentId
+     * @return EntityInterface page Or false
+     * @throws \Throwable
+     * @checked
+     * @noTodo
+     */
+    public function copy($id, $newParentId = null)
+    {
+        $entity = $this->get($id);
+        $oldEntity = clone $entity;
+
+        // EVENT BlogCategories.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'data' => $entity,
+            'id' => $id,
+        ]);
+        if ($event !== false) {
+            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+        }
+
+        $entity->name .= '_copy';
+        $entity->parent_id = $newParentId;
+        $entity->no = $this->getMax('no', ['BlogCategories.blog_content_id' => $entity->blog_content_id]) + 1;
+        unset($entity->id);
+        unset($entity->created);
+        unset($entity->modified);
+
+        try {
+            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+
+            // EVENT BlogCategories.afterCopy
+            $this->dispatchLayerEvent('afterCopy', [
+                'id' => $entity->id,
+                'data' => $entity,
+                'oldId' => $id,
+                'oldData' => $oldEntity,
+            ]);
+
+            return $entity;
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 }
