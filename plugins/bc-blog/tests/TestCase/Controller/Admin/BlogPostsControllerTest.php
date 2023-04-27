@@ -16,12 +16,11 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcUtil;
 use BcBlog\Controller\Admin\BlogPostsController;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
-use Cake\Core\Plugin;
+use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -94,7 +93,39 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+
+        $request = $this->getRequest('/baser/admin/bc-blog/blog_posts/index/1');
+        $request = $this->loginAdmin($request);
+        $blogPosts = new BlogPostsController($request);
+
+        $event = new Event('filter');
+        $blogPosts->beforeFilter($event);
+        $helpers = $blogPosts->viewBuilder()->getHelpers();
+
+        $this->assertEquals($helpers[0], 'BaserCore.BcCkeditor');
+
+        //$blogContentIdを指定しない場合。
+        $this->expectExceptionMessage('不正なURLです。');
+        $this->expectException('BaserCore\Error\BcException');
+        $event = new Event('Controller.beforeFilter', $this->BlogPostsController);
+        $this->BlogPostsController->beforeFilter($event);
+    }
+    /**
+     * test beforeFilter
+     */
+    public function testBeforeFilter_content_is_null()
+    {
+        //コンテンツデータが存在しない場合。
+        $this->expectExceptionMessage('コンテンツデータが見つかりません。');
+        $this->expectException('BaserCore\Error\BcException');
+        $request = $this->getRequest('/baser/admin/bc-blog/blog_posts/index/1111');
+        $request = $this->loginAdmin($request);
+        $blogPosts = new BlogPostsController($request);
+
+        $event = new Event('filter');
+        $blogPosts->beforeFilter($event);
     }
 
     /**
