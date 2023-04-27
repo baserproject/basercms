@@ -151,7 +151,26 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //対象URLをコール
+        $this->post('/baser/admin/baser-core/permission_groups/delete/1/1');
+        //フラッシュメッセージを確認
+        $this->assertFlashMessage('アクセスグループ「コンテンツフォルダ管理」を削除しました。');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        //リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'index',
+            '1'
+        ]);
+        //削除したアクセスグループが存在するか確認すること
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        PermissionGroupFactory::get(1);
     }
 
     public function test_rebuild_by_user_group()

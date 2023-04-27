@@ -123,6 +123,10 @@ class PermissionGroupsController extends BcAdminAppController
      * @param PermissionGroupsServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|null
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(PermissionGroupsServiceInterface $service, int $userGroupId, int $id)
     {
