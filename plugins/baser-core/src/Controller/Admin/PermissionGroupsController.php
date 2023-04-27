@@ -63,6 +63,10 @@ class PermissionGroupsController extends BcAdminAppController
      * @param PermissionGroupsAdminServiceInterface $service
      * @param int $userGroupId
      * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(PermissionGroupsAdminServiceInterface $service, int $userGroupId, string $prefix)
     {
