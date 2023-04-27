@@ -500,7 +500,8 @@ class BcBaserHelper extends Helper
 
         // 現在SSLのURLの場合、プロトコル指定(フルパス)で取得以外
         // //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
-        if (($this->isSSL() || $ssl)
+        if (BcUtil::isInstalled()
+            && ($this->isSSL() || $ssl)
             && !(preg_match('/^(javascript|https?|ftp|tel):/', $_url))
             && !(strpos($_url, '//') === 0)
             && !preg_match('/^#/', $_url)) {
