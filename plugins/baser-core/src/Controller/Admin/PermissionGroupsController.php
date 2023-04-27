@@ -132,6 +132,10 @@ class PermissionGroupsController extends BcAdminAppController
      * @param PermissionGroupsServiceInterface $service
      * @param int $userGroupId
      * @return \Cake\Http\Response|void|null
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function rebuild_by_user_group(PermissionGroupsServiceInterface $service, int $userGroupId)
     {

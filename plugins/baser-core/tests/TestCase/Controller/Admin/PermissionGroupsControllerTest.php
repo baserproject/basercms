@@ -52,9 +52,9 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
-        $this->PermissionGroupsController = new PermissionGroupsController($this->getRequest());
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
@@ -102,6 +102,21 @@ class PermissionGroupsControllerTest extends BcTestCase
 
     public function test_rebuild_by_user_group()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //実行成功場合
+        $this->post('/baser/admin/baser-core/permission_groups/rebuild_by_user_group/1');
+        //メッセージを確認
+        $this->assertFlashMessage('アクセスルールの再構築に成功しました。');
+        //リダイレクトを確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'index',
+            '1'
+        ]);
     }
 }
