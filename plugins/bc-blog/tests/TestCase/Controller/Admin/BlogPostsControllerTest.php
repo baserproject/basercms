@@ -67,8 +67,8 @@ class BlogPostsControllerTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->BlogPostsController = new BlogPostsController($this->loginAdmin($this->getRequest()));
-        $this->loginAdmin($this->getRequest());
     }
 
     /**
