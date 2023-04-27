@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\PermissionGroupsController;
+use BaserCore\Test\Factory\PermissionGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -22,7 +23,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 /**
  * PermissionGroupsControllerTest
  *
- * @property  PermissionGroupsController $PermissionGroupsController
  */
 class PermissionGroupsControllerTest extends BcTestCase
 {
@@ -52,9 +52,9 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
-        $this->PermissionGroupsController = new PermissionGroupsController($this->getRequest());
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
@@ -73,7 +73,18 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //対象URLをコル
+        $this->get('/baser/admin/baser-core/permission_groups/index/1');
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻り値を確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        //userGroupIdが存在するのを確認
+        $this->assertEquals(1, $vars['userGroupId']);
     }
 
     /**
@@ -81,7 +92,29 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'システム基本設定　テスト',
+            'type' => 'Admin',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ];
+        //APIをコール
+        $this->post('/baser/admin/baser-core/permission_groups/add/1/Admin.json', $data);
+        //フラッシュメッセージを確認
+        $this->assertFlashMessage('ルールグループ「システム基本設定　テスト」を登録しました。');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        //リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'edit',
+            '1',
+            '1'
+        ]);
     }
 
     /**
@@ -89,7 +122,28 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $data = [
+            'name' => 'システム基本設定　Update',
+        ];
+        $this->post('/baser/admin/baser-core/permission_groups/edit/1/1', $data);
+        //メッセージを確認
+        $this->assertFlashMessage('ルールグループ「システム基本設定　Update」を更新しました。');
+        //リダイレクトを確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'edit',
+            '1',
+            '1'
+        ]);
+        //アクセスグループが編集できるか確認すること
+        $permission = PermissionGroupFactory::get(1);
+        $this->assertEquals($permission->name, 'システム基本設定　Update');
     }
 
     /**
@@ -97,11 +151,45 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //対象URLをコール
+        $this->post('/baser/admin/baser-core/permission_groups/delete/1/1');
+        //フラッシュメッセージを確認
+        $this->assertFlashMessage('アクセスグループ「コンテンツフォルダ管理」を削除しました。');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        //リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'index',
+            '1'
+        ]);
+        //削除したアクセスグループが存在するか確認すること
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        PermissionGroupFactory::get(1);
     }
 
     public function test_rebuild_by_user_group()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //実行成功場合
+        $this->post('/baser/admin/baser-core/permission_groups/rebuild_by_user_group/1');
+        //メッセージを確認
+        $this->assertFlashMessage('アクセスルールの再構築に成功しました。');
+        //リダイレクトを確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'index',
+            '1'
+        ]);
     }
 }
