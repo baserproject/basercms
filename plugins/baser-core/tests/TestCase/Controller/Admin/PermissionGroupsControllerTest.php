@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\PermissionGroupsController;
+use BaserCore\Test\Factory\PermissionGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -89,7 +90,28 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $data = [
+            'name' => 'システム基本設定　Update',
+        ];
+        $this->post('/baser/admin/baser-core/permission_groups/edit/1/1', $data);
+        //メッセージを確認
+        $this->assertFlashMessage('ルールグループ「システム基本設定　Update」を更新しました。');
+        //リダイレクトを確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'edit',
+            '1',
+            '1'
+        ]);
+        //アクセスグループが編集できるか確認すること
+        $permission = PermissionGroupFactory::get(1);
+        $this->assertEquals($permission->name, 'システム基本設定　Update');
     }
 
     /**
