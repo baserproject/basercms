@@ -74,7 +74,18 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //対象URLをコル
+        $this->get('/baser/admin/baser-core/permission_groups/index/1');
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻り値を確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        //userGroupIdが存在するのを確認
+        $this->assertEquals(1, $vars['userGroupId']);
     }
 
     /**

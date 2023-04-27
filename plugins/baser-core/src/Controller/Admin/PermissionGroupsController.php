@@ -30,6 +30,10 @@ class PermissionGroupsController extends BcAdminAppController
      *
      * @param PermissionGroupsAdminService $service
      * @param int|null $userGroupId
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function index(PermissionGroupsAdminServiceInterface $service, ?int $userGroupId = null)
     {
