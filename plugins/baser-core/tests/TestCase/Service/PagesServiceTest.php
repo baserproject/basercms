@@ -270,6 +270,10 @@ class PagesServiceTest extends BcTestCase
             fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
         )($this->PagesService);
         $this->assertNotNull($result->clause('where'));
+        $binder = new ValueBinder();
+        $sql = $result->clause('where')->sql($binder);
+        $this->assertStringContainsString('contents like', $sql);
+        $this->assertStringContainsString('draft like', $sql);
     }
 
     /**
