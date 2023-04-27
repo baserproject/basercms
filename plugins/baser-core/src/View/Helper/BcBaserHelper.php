@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
 use BcCustomContent\Model\Entity\CustomContent;
@@ -2426,16 +2427,10 @@ END_FLASH;
      */
     public function getSiteName()
     {
-        $siteConfig = $this->_View->get('siteConfig');
-        if (!empty($siteConfig['formal_name'])) {
-            return $siteConfig['formal_name'];
-        }
-
-        if (!empty($this->siteConfig['formal_name'])) {
-            return $this->siteConfig['formal_name'];
-        }
-
-        return '';
+        /** @var Site $site */
+        $site = $this->getView()->getRequest()->getAttribute('currentSite');
+        if(!$site) return '';
+        return $site->display_name;
     }
 
     /**

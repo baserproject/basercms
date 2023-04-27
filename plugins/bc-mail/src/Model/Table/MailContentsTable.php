@@ -143,13 +143,23 @@ class MailContentsTable extends MailAppTable
         $validator
             ->scalar('sender_1')
             ->allowEmptyString('sender_1')
-            ->email('sender_1', true, __d('baser_core', '送信先メールアドレスのEメールの形式が不正です。'));
+            ->add('sender_2', [
+                'emails' => [
+                    'rule' => 'emails',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '送信先メールアドレスのEメールの形式が不正です。')
+                ]]);
 
         // sender_2
         $validator
             ->scalar('sender_2')
             ->allowEmptyString('sender_2')
-            ->email('sender_2', true, __d('baser_core', '送信先メールアドレスのEメールの形式が不正です。'));
+            ->add('sender_2', [
+                'emails' => [
+                    'rule' => 'emails',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'BCC用送信先メールアドレスのEメールの形式が不正です。')
+                ]]);
 
         // ssl_on
         $validator

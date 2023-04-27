@@ -163,7 +163,7 @@ class MailFieldsTable extends MailAppTable
             'pref' => __d('baser_core', '都道府県リスト'),
             'date_time_calender' => __d('baser_core', 'カレンダー'),
             'tel' => __d('baser_core', '電話番号'),
-            'number' => __d('baser', '数値'),
+            'number' => __d('baser_core', '数値'),
             'password' => __d('baser_core', 'パスワード'),
             'hidden' => __d('baser_core', '隠しフィールド')
         ];

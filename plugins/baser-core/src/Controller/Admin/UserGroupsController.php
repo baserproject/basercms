@@ -168,7 +168,7 @@ class UserGroupsController extends BcAdminAppController
             $message = [$e->getMessage()];
             $errors = $e->getErrors();
             if (!empty($errors)) {
-                foreach($errors as $error) $message[] = __d('baser_core', current($error));
+                foreach($errors as $error) $message[] = current($error);
             }
             $this->BcMessage->setError(implode("\n", $message), false);
         }

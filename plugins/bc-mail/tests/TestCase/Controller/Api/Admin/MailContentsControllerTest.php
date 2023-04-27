@@ -118,7 +118,35 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'content' => [
+                'name' => 'コンテンツ名',
+                'title' => 'add mail content',
+                'site_id' => 1,
+                'parent_id' => 1
+            ]
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_contents.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        // 戻るメッセージを確認
+        $this->assertEquals($result->message, 'メールフォーム「add mail content」を追加しました。');
+        // コンテンツのタイトルが変更できるか確認すること
+        $this->assertEquals($result->content->name, 'コンテンツ名');
+
+        //コンテンツがない場合はエラーを返す
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_contents.json?token=" . $this->accessToken, []);
+        // レスポンスコードを確認する
+        $this->assertResponseCode(400);
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        // 戻るメッセージを確認
+        $this->assertEquals($result->message, '入力エラーです。内容を修正してください。');
+        $this->assertEquals($result->errors->content->_required, '関連するコンテンツがありません');
     }
 
     /**
@@ -231,6 +259,22 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $copyData = [
+            'entity_id' => 1,
+            'parent_id' => 1,
+            'title' => 'メールコンテンツコピー',
+            'site_id' => 1
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_contents/copy.json?token=" . $this->accessToken, $copyData);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        // 戻るメッセージを確認
+        $this->assertEquals($result->message, 'メールフォームのコピー「メールコンテンツコピー」を追加しました。');
+        $this->assertNotNull($result->mailContents);
     }
 }

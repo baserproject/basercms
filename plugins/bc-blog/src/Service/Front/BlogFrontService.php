@@ -405,7 +405,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             if ($validationErrors) {
                 foreach($validationErrors as $columnsErros) {
                     foreach($columnsErros as $error) {
-                        throw new NotFoundException(__d('baser_core', $error));
+                        throw new NotFoundException($error);
                     }
                 }
             }

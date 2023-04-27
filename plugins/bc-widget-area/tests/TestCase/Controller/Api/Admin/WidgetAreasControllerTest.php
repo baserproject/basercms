@@ -11,9 +11,11 @@
 
 namespace BcWidgetArea\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
+use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class WidgetAreasControllerTest extends BcTestCase
@@ -36,6 +38,7 @@ class WidgetAreasControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcWidgetArea.Factory/WidgetAreas',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -234,7 +237,31 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストデータを作る
+        WidgetAreaFactory::make(['id' => 1, 'name' => 'test', 'widgets' => 'test'])->persist();
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1],
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/batch.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, '一括処理が完了しました。');
+
+        // DBログに保存するかどうか確認する
+        $dbLogService = $this->getService(DblogsServiceInterface::class);
+        $dbLog = $dbLogService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ウィジェットエリア「test」を 削除 しました。', $dbLog->message);
+        $this->assertEquals(1, $dbLog->id);
+        $this->assertEquals('WidgetAreas', $dbLog->controller);
+        $this->assertEquals('batch', $dbLog->action);
+
+        //削除したメールフィルドが存在するか確認すること
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        WidgetAreaFactory::get(1);
     }
 
     /**
@@ -283,7 +310,18 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testUpdate_sort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        $data['sorted_ids'] = '4,2,3';
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_sort/1.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットエリア「標準サイドバー」の並び順を更新しました。', $result->message);
+        //ウィジェットエリア名を更新できるか確認すること
+        $this->assertEquals('標準サイドバー', $result->widgetArea->name);
     }
 
     /**
@@ -291,7 +329,26 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testDelete_widget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/delete_widget/1/2.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットを削除しました。', $result->message);
+        //ウィジェットエリア名を更新できるか確認すること
+        $this->assertEquals('標準サイドバー', $result->widgetArea->name);
+
+        //存在しないウィジェットエリアIDを指定した場合、
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/delete_widget/11/12.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseCode(404);
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**

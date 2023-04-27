@@ -10,8 +10,12 @@
  */
 
 namespace BcMail\Model\Table;
+
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * メール設定モデル

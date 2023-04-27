@@ -17,6 +17,7 @@ use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use Cake\Filesystem\Folder;
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -403,13 +404,14 @@ class BlogPostsTableTest extends BcTestCase
      *
      * @dataProvider allowPublishDataProvider
      */
-    public function testAllowPublish($publish_begin, $publish_end, $status, $expected)
+    public function testAllowPublish($publishBegin, $publishEnd, $status, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $data['publish_begin'] = $publish_begin;
-        $data['publish_end'] = $publish_end;
-        $data['status'] = $status;
-        $this->assertEquals($this->BlogPost->allowPublish($data), $expected);
+        $post = $this->BlogPostsTable->newEntity([
+            'publish_begin' => $publishBegin,
+            'publish_end' => $publishEnd,
+            'status' => $status,
+        ]);
+        $this->assertEquals($this->BlogPostsTable->allowPublish($post), $expected);
     }
 
     public function allowPublishDataProvider()
@@ -417,11 +419,17 @@ class BlogPostsTableTest extends BcTestCase
         return [
             [null, null, false, false],
             [null, null, true, true],
-            [null, date('Y-m-d H:i:s'), true, false],
-            [null, date('Y-m-d H:i:s', strtotime("+1 hour")), true, true],
-            [date('Y-m-d H:i:s'), null, true, true],
-            [date('Y-m-d H:i:s', strtotime("+1 hour")), null, true, false],
-            [date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
+
+            [null, new FrozenTime('+1 hour'), true, true],
+            [new FrozenTime('-1 hour'), null, true, true],
+            [null, new FrozenTime('-1 hour'), true, false],
+            [new FrozenTime('+1 hour'), null, true, false],
+
+            [new FrozenTime('-1 hour'), new FrozenTime('+1 hour'), true, true],
+            [new FrozenTime('-1 hour'), new FrozenTime('+1 hour'), false, false],
+            [new FrozenTime('-1 hour'), new FrozenTime('-1 hour'), true, false],
+            [new FrozenTime('+1 hour'), new FrozenTime('-1 hour'), true, false],
+            [new FrozenTime('+1 hour'), new FrozenTime('+2 hour'), true, false],
         ];
     }
 

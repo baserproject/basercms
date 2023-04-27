@@ -654,7 +654,17 @@ class PluginsService implements PluginsServiceInterface
     /**
      * 取得可能なコアのバージョン情報を取得
      *
+     * `BcApp.coreReleaseUrl` で、Packagist よりリリース情報を取得し、
+     * キャッシュ `_bc_update_` の `coreReleaseInfo` として保存する。
+     *
+     * アップデート対象バージョンの取得条件
+     * - 同じメジャーバージョンであること
+     * - 現在のパッケージののバージョンが開発版でないこと
+     * - アップデートバージョンが現在のパッケージのバージョンより大きいこと
+     *
      * @return array
+     *  - `latest`: 最新バージョン
+     *  - `versions`: 取得可能なコアのバージョンリスト
      */
     public function getAvailableCoreVersionInfo()
     {
@@ -685,6 +695,11 @@ class PluginsService implements PluginsServiceInterface
                             $latest = $version;
                             $currentVerPoint = BcUtil::verpoint($currentVersion);
                             $latestVerPoint = BcUtil::verpoint($latest);
+                            // 現在のパッケージが開発版の場合は無視
+                            if($currentVerPoint === false) break;
+                            // アップデートバージョンが開発版の場合は無視
+                            if($latestVerPoint === false) continue;
+                            // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
                             if($currentVerPoint > $latestVerPoint) break;
                         }
                         if ($currentVersion === $version) break;

@@ -101,6 +101,7 @@ class MailContentsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(MailContentsServiceInterface $service)
     {
@@ -209,6 +210,7 @@ class MailContentsController extends BcAdminApiController
      * @param MailContentsService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(MailContentsServiceInterface $service)
     {

@@ -11,11 +11,13 @@
 
 namespace BcMail\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Service\MailFieldsServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -43,6 +45,7 @@ class MailFieldsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcMail.Factory/MailContents',
         'plugin.BcMail.Factory/MailFields',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -218,7 +221,31 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1],
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_fields/batch.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, '一括処理が完了しました。');
+
+        // DBログに保存するかどうか確認する
+        $dbLogService = $this->getService(DblogsServiceInterface::class);
+        $dbLog = $dbLogService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('メールフィールド「性」を 削除 しました。', $dbLog->message);
+        $this->assertEquals(1, $dbLog->id);
+        $this->assertEquals('MailFields', $dbLog->controller);
+        $this->assertEquals('batch', $dbLog->action);
+
+        //削除したメールフィルドが存在するか確認すること
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        MailFieldsFactory::get(1);
     }
 
     /**
@@ -226,6 +253,14 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testUpdateSort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_fields/update_sort/1.json?token=" . $this->accessToken, ['id' => 1, 'offset' => 3]);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, 'メールフィールド「性」の並び替えを更新しました。。');
     }
 }

@@ -12,10 +12,13 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Entity\Content;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\EventInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -33,6 +36,7 @@ class ContentFoldersTable extends AppTable
      * Trait
      */
     use BcContainerTrait;
+    use BcEventDispatcherTrait;
 
     /**
      * 変更前ステータス
@@ -138,5 +142,62 @@ class ContentFoldersTable extends AppTable
         if ($record->content->url) {
             $this->beforeStatus = $record->content->status;
         }
+    }
+
+    /**
+     * コピーする
+     *
+     * @param int $id
+     * @param $newParentId
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $newSiteId
+     * @return mixed page Or false
+     * @checked
+     * @noTodo
+     */
+    public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
+    {
+        $entity = $this->get($id, ['contain' => ['Contents']]);
+        $oldEntity = clone $entity;
+
+        // EVENT ContentFolders.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'data' => $entity,
+            'id' => $id,
+        ]);
+        if ($event !== false) {
+            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+        }
+
+        $entity->content = new Content([
+            'name' => $entity->content->name,
+            'parent_id' => $newParentId,
+            'title' => $newTitle,
+            'author_id' => $newAuthorId,
+            'site_id' => $newSiteId,
+            'description' => $entity->content->description,
+            'eyecatch' => $entity->content->eyecatch,
+            'layout_template' => $entity->content->layout_tmplate?? ''
+        ]);
+        if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
+            $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
+        }
+        unset($entity->id);
+        unset($entity->created);
+        unset($entity->modified);
+
+        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+
+        // EVENT ContentFolders.afterCopy
+        $this->dispatchLayerEvent('afterCopy', [
+            'id' => $entity->id,
+            'data' => $entity,
+            'oldId' => $id,
+            'oldData' => $oldEntity,
+        ]);
+
+        return $entity;
+
     }
 }

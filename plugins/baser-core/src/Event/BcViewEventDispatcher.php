@@ -105,7 +105,7 @@ class BcViewEventDispatcher implements EventListenerInterface
      */
     public function beforeRender(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -124,7 +124,7 @@ class BcViewEventDispatcher implements EventListenerInterface
      */
     public function afterRender(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -143,7 +143,7 @@ class BcViewEventDispatcher implements EventListenerInterface
      */
     public function beforeLayout(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -162,7 +162,7 @@ class BcViewEventDispatcher implements EventListenerInterface
      */
     public function afterLayout(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }

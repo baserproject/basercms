@@ -215,7 +215,7 @@ class UsersTable extends AppTable
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', __d('baser_core', 'パスワードが同じものではありません。'))
+                    'message' => __d('baser_core', 'パスワードが同じものではありません。')
                 ]]);
 
         return $validator;
@@ -261,7 +261,7 @@ class UsersTable extends AppTable
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', __d('baser_core', 'パスワードが同じものではありません。'))
+                    'message' => __d('baser_core', 'パスワードが同じものではありません。')
                 ]]);
 
         return $validator;

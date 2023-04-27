@@ -199,16 +199,16 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール｜ス�
     </div>
 
 		<div class="panel-box bca-panel-box corner10">
-			<h3 class="bca-panel-box__title"><?php echo __d('baser', '拡張モジュール') ?></h3>
+			<h3 class="bca-panel-box__title"><?php echo __d('baser_core', '拡張モジュール') ?></h3>
 			<ul class="section">
 				<li class='<?php echo $zipOk ? 'check' : 'failed'; ?>'>
-					<?php echo __d('baser', 'Zip') ?><br/>
+					<?php echo __d('baser_core', 'Zip') ?><br/>
 					<div class="check-result">
 						<?php if ($zipOk): ?>
-							<?php echo __d('baser', '利用可') ?>
+							<?php echo __d('baser_core', '利用可') ?>
 						<?php else: ?>
-							<?php echo __d('baser', '利用不可') ?><br/>
-							<small><?php echo __d('baser', 'テーマなどのzipダウンロードが制限されます。') ?></small>
+							<?php echo __d('baser_core', '利用不可') ?><br/>
+							<small><?php echo __d('baser_core', 'テーマなどのzipダウンロードが制限されます。') ?></small>
 						<?php endif ?>
 					</div>
 				</li>

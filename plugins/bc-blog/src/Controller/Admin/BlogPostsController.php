@@ -65,6 +65,7 @@ class BlogPostsController extends BlogAdminAppController
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {

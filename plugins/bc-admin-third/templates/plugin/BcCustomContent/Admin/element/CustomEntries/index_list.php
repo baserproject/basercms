@@ -40,8 +40,8 @@ $creators = $this->BcAdminForm->getControlSource('BcCustomContent.CustomEntries.
         <?php echo __d('baser_core', 'No') ?>
       <?php else: ?>
         <?php echo $this->Paginator->sort('id', [
-          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', __d('baser_core', 'No')),
-          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', __d('baser_core', 'No'))
+          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'No'),
+          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'No')
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       <?php endif ?>
     </th>
@@ -51,13 +51,13 @@ $creators = $this->BcAdminForm->getControlSource('BcCustomContent.CustomEntries.
         <?php echo __d('baser_core', 'タイトル') ?>
       <?php else: ?>
         <?php echo $this->Paginator->sort('title', [
-          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', __d('baser_core', 'タイトル')),
-          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', __d('baser_core', 'タイトル'))
+          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'タイトル'),
+          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'タイトル')
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
         <?php if ($customTable->isContentTable()): ?>
           （<?php echo $this->Paginator->sort('name', [
-            'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', __d('baser_core', 'スラッグ')),
-            'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', __d('baser_core', 'スラッグ'))
+            'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'スラッグ'),
+            'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'スラッグ')
           ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>）
         <?php endif ?>
       <?php endif ?>
@@ -103,12 +103,12 @@ $creators = $this->BcAdminForm->getControlSource('BcCustomContent.CustomEntries.
          <?php echo __d('baser_core', '登録日') ?><br> <?php echo __d('baser_core', '更新日') ?>
       <?php else: ?>
       <?php echo $this->Paginator->sort('created', [
-        'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', __d('baser_core', '登録日')),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', __d('baser_core', '登録日'))
+        'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '登録日'),
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '登録日')
       ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?><br>
       <?php echo $this->Paginator->sort('modified', [
-        'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', __d('baser_core', '更新日')),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', __d('baser_core', '更新日'))
+        'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '更新日'),
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '更新日')
       ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       <?php endif ?>
     </th>

@@ -155,7 +155,7 @@ class ContentsController extends BcAdminApiController
                         $text .= "\n" . __d('baser_core', "コンテンツ: {0}を削除しました。", $child->title);
                     }
                 }
-                $message = __d('baser_core', $text);
+                $message = $text;
                 $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (RecordNotFoundException $e) {

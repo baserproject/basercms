@@ -24,8 +24,8 @@
     <?php echo h($customLink->title) ?>
   <?php else: ?>
   <?php echo $this->Paginator->sort($customLink->name, [
-    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', $customLink->title),
-    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', $customLink->title)
+    'asc' => '<i class="bca-icon--asc"></i>' . $customLink->title,
+    'desc' => '<i class="bca-icon--desc"></i>' . $customLink->title
   ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
   <?php endif ?>
 </th>

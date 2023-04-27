@@ -46,7 +46,3 @@ License
 -------
 
 Licensed under the MIT license since version 2.0
-
-
-
-
