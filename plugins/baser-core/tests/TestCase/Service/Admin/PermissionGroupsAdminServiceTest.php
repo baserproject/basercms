@@ -68,8 +68,8 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->PermissionGroupsAdmin = $this->getService(PermissionGroupsAdminServiceInterface::class);
-        $this->Permissions = $this->getService(PermissionsServiceInterface::class);
-        $this->UserGroupsService = $this->getService(UserGroupsServiceInterface::class);
+//        $this->Permissions = $this->getService(PermissionsServiceInterface::class);
+//        $this->UserGroupsService = $this->getService(UserGroupsServiceInterface::class);
     }
 
     /**
@@ -92,7 +92,19 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
         $this->loadFixtureScenario(PermissionGroupsScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/permission_groups/index?list_type=Admin&permission_amount=true');
         $this->loginAdmin($request);
+
         $vars = $this->PermissionGroupsAdmin->getViewVarsForIndex(1, $request);
-        $this->assertCount(3, $vars['entities']->all());
+        $entities = $vars['entities']->all();
+        $this->assertCount(3, $entities);
+        $this->assertEquals(1, $vars['userGroupId']);
+
+        $request = $this->getRequest('/baser/admin/baser-core/permission_groups/index?list_type=Admin&permission_amount=false');
+        $vars = $this->PermissionGroupsAdmin->getViewVarsForIndex(0, $request);
+        $this->assertEquals(0, $vars['userGroupId']);
+
+        $request = $this->getRequest('/baser/admin/baser-core/permission_groups/index?list_type=Nghiem&permission_amount=false');
+        $vars = $this->PermissionGroupsAdmin->getViewVarsForIndex(1, $request);
+        $entities = $vars['entities']->all();
+        $this->assertCount(0, $entities);
     }
 }
