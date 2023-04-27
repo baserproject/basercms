@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-04-24 13:30+0900\n"
+"POT-Creation-Date: 2023-04-27 10:05+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -279,7 +279,7 @@ msgstr ""
 #: ./plugins/bc-mail/config/permission.php:91
 #: ./plugins/bc-mail/config/permission.php:107
 #: ./plugins/bc-mail/config/permission.php:121
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:46
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:47
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:285
 #: ./plugins/bc-search-index/config/permission.php:27
 #: ./plugins/bc-search-index/config/permission.php:43
@@ -294,7 +294,7 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Api/Admin/UploaderCategoriesController.php:212
 #: ./plugins/bc-widget-area/config/permission.php:28
 #: ./plugins/bc-widget-area/config/permission.php:44
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:189
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:190
 msgid "削除"
 msgstr ""
 
@@ -356,7 +356,7 @@ msgstr ""
 #: ./plugins/baser-core/config/permission.php:269
 #: ./plugins/baser-core/src/Controller/Api/Admin/PermissionsController.php:233
 #: ./plugins/baser-core/src/Controller/Api/Admin/PluginsController.php:337
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:48
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:49
 msgid "無効化"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 #: ./plugins/baser-core/config/permission.php:267
 #: ./plugins/baser-core/src/Controller/Api/Admin/PermissionsController.php:232
 #: ./plugins/bc-admin-third/templates/Admin/Plugins/install.php:79
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:47
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:48
 msgid "有効化"
 msgstr ""
 
@@ -1140,7 +1140,7 @@ msgstr ""
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:276
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:301
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:326
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:164
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:188
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogCategoriesController.php:59
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogCategoriesController.php:92
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogCategoriesController.php:122
@@ -1253,16 +1253,16 @@ msgstr ""
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:298
 #: ./plugins/bc-mail/src/Controller/Admin/MailMessagesController.php:147
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:72
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:118
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:188
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:231
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:68
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:102
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:140
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:197
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:231
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:306
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:345
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:119
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:189
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:233
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:69
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:104
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:142
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:199
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:233
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:308
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:347
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:60
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:98
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:151
@@ -1315,12 +1315,12 @@ msgstr ""
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:88
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:127
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:163
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:209
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:240
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:276
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:307
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:340
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:370
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:210
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:241
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:277
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:309
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:343
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:373
 #: ./plugins/bc-widget-area/src/Service/WidgetAreasService.php:149
 msgid "データベース処理中にエラーが発生しました。"
 msgstr ""
@@ -1429,8 +1429,8 @@ msgstr ""
 #: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:70
 #: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:82
 #: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:128
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:87
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:91
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:99
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:103
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:185
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:241
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:356
@@ -1474,10 +1474,10 @@ msgstr ""
 #: ./plugins/bc-mail/src/Controller/Admin/MailContentsController.php:85
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:150
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:197
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:115
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:149
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:227
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:268
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:116
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:150
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:229
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:270
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:145
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:202
 #: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:68
@@ -1500,8 +1500,8 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Api/Admin/UploaderFilesController.php:102
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:85
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:121
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:234
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:270
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:235
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:271
 msgid "入力エラーです。内容を修正してください。"
 msgstr ""
 
@@ -1909,11 +1909,11 @@ msgstr ""
 #: ./plugins/bc-favorite/src/Controller/Api/Admin/FavoritesController.php:124
 #: ./plugins/bc-favorite/src/Controller/Api/Admin/FavoritesController.php:156
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:70
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:153
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:229
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:138
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:195
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:271
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:154
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:231
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:140
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:197
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:273
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:58
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:96
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:148
@@ -1930,11 +1930,11 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Api/Admin/UploaderFilesController.php:139
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:124
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:160
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:237
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:273
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:304
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:337
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:367
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:238
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:274
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:306
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:340
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:370
 msgid "データが見つかりません。"
 msgstr ""
 
@@ -1973,9 +1973,9 @@ msgstr ""
 #: ./plugins/bc-custom-content/src/Controller/Api/Admin/CustomFieldsController.php:65
 #: ./plugins/bc-custom-content/src/Controller/Api/Admin/CustomLinksController.php:76
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:93
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:192
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:310
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:349
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:193
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:312
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:351
 msgid "データが見つかりません"
 msgstr ""
 
@@ -2059,12 +2059,12 @@ msgstr ""
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogCommentsController.php:151
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogPostsController.php:341
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogTagsController.php:216
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:65
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:66
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:303
 #: ./plugins/bc-search-index/src/Controller/Api/Admin/SearchIndexesController.php:101
 #: ./plugins/bc-theme-file/src/Controller/Api/Admin/ThemeFoldersController.php:68
 #: ./plugins/bc-uploader/src/Controller/Api/Admin/UploaderCategoriesController.php:229
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:206
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:207
 msgid "一括処理が完了しました。"
 msgstr ""
 
@@ -2118,7 +2118,7 @@ msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Api/Admin/PermissionsController.php:285
 #: ./plugins/baser-core/src/Controller/Api/Admin/PluginsController.php:294
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:95
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:97
 msgid "一度リロードしてから再実行してみてください。"
 msgstr ""
 
@@ -2239,11 +2239,11 @@ msgid "パスワードのリセット"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:80
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:156
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:195
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:274
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:313
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:352
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:157
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:196
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:276
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:315
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:354
 #: ./plugins/bc-theme-file/src/Controller/Api/Admin/ThemeFilesController.php:52
 #: ./plugins/bc-theme-file/src/Controller/Api/Admin/ThemeFilesController.php:88
 #: ./plugins/bc-theme-file/src/Controller/Api/Admin/ThemeFilesController.php:123
@@ -2279,11 +2279,11 @@ msgstr ""
 msgid "関連するコンテンツがありません"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentFoldersTable.php:81
+#: ./plugins/baser-core/src/Model/Table/ContentFoldersTable.php:85
 #: ./plugins/baser-core/src/Model/Table/ContentsTable.php:137
 #: ./plugins/baser-core/src/Model/Table/ContentsTable.php:138
 #: ./plugins/baser-core/src/Model/Table/PagesTable.php:109
-#: ./plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:62
+#: ./plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:67
 msgid "IDに不正な値が利用されています。"
 msgstr ""
 
@@ -6696,7 +6696,7 @@ msgid "投稿者"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_list.php:67
-#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:228
+#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:238
 msgid "メール"
 msgstr ""
 
@@ -9166,7 +9166,7 @@ msgid "設定内容も削除されますが、本当に削除してもいいで�
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:27
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:333
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:336
 msgid "ウィジェットを削除しました。"
 msgstr ""
 
@@ -9342,12 +9342,12 @@ msgstr ""
 msgid "ブログコメント No.%s を公開状態にしました。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:68
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:80
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogContentsController.php:135
 msgid "ブログ「{0}」を更新しました。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:70
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:82
 msgid "URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。\n                        設定 > ユーティリティ > 検索インデックス より、検索インデックスの再構築を行ってください。"
 msgstr ""
 
@@ -9394,20 +9394,20 @@ msgstr ""
 msgid "ブログ記事「%s」をコピーしました。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:95
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:107
 msgid "タグ「%s」を追加しました。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:102
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:136
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:114
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:160
 msgid "エラーが発生しました。内容を確認してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:129
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:153
 msgid "タグ「%s」を更新しました。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:161
+#: ./plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:185
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogTagsController.php:165
 msgid "ブログタグ「{0}」を削除しました。"
 msgstr ""
@@ -9465,7 +9465,7 @@ msgid "ブログコンテンツ「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/bc-blog/src/Controller/Api/Admin/BlogContentsController.php:207
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:221
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:223
 msgid "コピーに失敗しました。データが不整合となっている可能性があります。"
 msgstr ""
 
@@ -9533,30 +9533,30 @@ msgstr ""
 msgid "【{0}】コメントが投稿されました"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:105
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:108
 msgid "カテゴリ名は255文字以内で入力してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:106
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:107
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:109
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:110
 #: ./plugins/bc-uploader/src/Model/Table/UploaderCategoriesTable.php:76
 msgid "カテゴリ名を入力してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:112
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:115
 msgid "カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:117
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:120
 msgid "入力されたカテゴリ名は既に登録されています。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:121
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:124
 msgid "カテゴリタイトルは255文字以内で入力してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:122
-#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:123
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:125
+#: ./plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:126
 msgid "カテゴリタイトルを入力してください。"
 msgstr ""
 
@@ -9679,12 +9679,12 @@ msgstr ""
 msgid "許可されていないファイルです。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:79
-#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:80
+#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:85
+#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:86
 msgid "ブログタグを入力してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:85
+#: ./plugins/bc-blog/src/Model/Table/BlogTagsTable.php:91
 msgid "既に登録のあるタグです。"
 msgstr ""
 
@@ -9889,7 +9889,7 @@ msgstr ""
 msgid "コンテンツリンク: {0} を削除しました。"
 msgstr ""
 
-#: ./plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:67
+#: ./plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:72
 msgid "リンク先URLを入力してください。"
 msgstr ""
 
@@ -11117,7 +11117,7 @@ msgid "メールプラグイン設定を保存しました。"
 msgstr ""
 
 #: ./plugins/bc-mail/src/Controller/Admin/MailContentsController.php:75
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:145
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:146
 msgid "メールフォーム「{0}」を更新しました。"
 msgstr ""
 
@@ -11127,22 +11127,22 @@ msgid "ファイルフィールドを利用している場合、フォームよ�
 msgstr ""
 
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:142
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:223
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:225
 msgid "新規メールフィールド「{0}」を追加しました。"
 msgstr ""
 
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:189
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:263
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:265
 msgid "メールフィールド「{0}」を更新しました。"
 msgstr ""
 
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:224
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:303
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:305
 msgid "メールフィールド「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:249
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:342
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:344
 msgid "メールフィールド「{0}」をコピーしました。"
 msgstr ""
 
@@ -11158,27 +11158,27 @@ msgstr ""
 msgid "{0} への受信データ NO「{1}」 を削除しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:111
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:112
 msgid "メールフォーム「{0}」を追加しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:185
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:186
 msgid "メールフォーム「{0}」を削除しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:223
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailContentsController.php:225
 msgid "メールフォームのコピー「{0}」を追加しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:61
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:62
 msgid "メールフィールド「%s」を %s しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:97
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:99
 msgid "メールフィールド「%s」の並び替えを更新しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:127
+#: ./plugins/bc-mail/src/Controller/Api/Admin/MailFieldsController.php:129
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:49
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:87
 #: ./plugins/bc-mail/src/Controller/Api/Admin/MailMessagesController.php:128
@@ -11259,12 +11259,15 @@ msgstr ""
 msgid "リダイレクトURLは255文字以内で入力してください。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:146
-#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:152
+#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:150
 msgid "送信先メールアドレスのEメールの形式が不正です。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:160
+#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:161
+msgid "BCC用送信先メールアドレスのEメールの形式が不正です。"
+msgstr ""
+
+#: ./plugins/bc-mail/src/Model/Table/MailContentsTable.php:170
 msgid "SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。"
 msgstr ""
 
@@ -12101,16 +12104,16 @@ msgid "ウィジェットエリア「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:116
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:229
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:265
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:230
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:266
 msgid "ウィジェットエリア「{0}」を更新しました。"
 msgstr ""
 
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:202
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:203
 msgid "ウィジェットエリア「%s」を %s しました。"
 msgstr ""
 
-#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:300
+#: ./plugins/bc-widget-area/src/Controller/Api/Admin/WidgetAreasController.php:302
 msgid "ウィジェットエリア「{0}」の並び順を更新しました。"
 msgstr ""
 
