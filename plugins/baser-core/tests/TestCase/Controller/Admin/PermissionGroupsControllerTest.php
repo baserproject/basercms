@@ -53,10 +53,9 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->PermissionGroupsController = new PermissionGroupsController($this->loginAdmin($this->getRequest()));
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
