@@ -13,29 +13,18 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\Admin\PermissionGroupsAdminService;
 use BaserCore\Service\Admin\PermissionGroupsAdminServiceInterface;
-use BaserCore\Service\PermissionsService;
-use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\UserGroupsServiceInterface;
-use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Service\UserGroupsService;
-use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Test\Factory\PermissionGroupFactory;
-use BaserCore\Test\Factory\PermissionFactory;
-use BaserCore\Utility\BcUtil;
-use Cake\Core\Configure;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * PermissionGroupsAdminServiceTest
  *
  * @property PermissionGroupsAdminService $PermissionGroupsAdmin
- * @property PermissionsService $Permissions
  * @property UserGroupsService $UserGroupsService
  */
 class PermissionGroupsAdminServiceTest extends BcTestCase
@@ -68,8 +57,7 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->PermissionGroupsAdmin = $this->getService(PermissionGroupsAdminServiceInterface::class);
-//        $this->Permissions = $this->getService(PermissionsServiceInterface::class);
-//        $this->UserGroupsService = $this->getService(UserGroupsServiceInterface::class);
+        $this->UserGroupsService = $this->getService(UserGroupsServiceInterface::class);
     }
 
     /**
@@ -106,5 +94,23 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
         $vars = $this->PermissionGroupsAdmin->getViewVarsForIndex(1, $request);
         $entities = $vars['entities']->all();
         $this->assertCount(0, $entities);
+    }
+
+    /**
+     * Test getViewVarsForForm
+     *
+     * @return void
+     */
+    public function testGetViewVarsForForm(): void
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $userGroupId = 1;
+        $entity = $this->PermissionGroupsAdmin->get(1, $userGroupId);
+        $result = $this->PermissionGroupsAdmin->getViewVarsForForm($userGroupId, $entity);
+        $userGroup = $this->UserGroupsService->get($userGroupId);
+        $this->assertEquals($userGroupId, $result['userGroupId']);
+        $this->assertEquals($entity, $result['entity']);
+        $this->assertEquals($userGroup->title, $result['userGroupTitle']);
     }
 }
