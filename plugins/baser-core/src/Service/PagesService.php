@@ -213,6 +213,10 @@ class PagesService implements PagesServiceInterface
      */
     protected function createIndexConditions(Query $query, $options = [])
     {
+        $options = array_merge([
+            'status' => null
+        ], $options);
+
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();

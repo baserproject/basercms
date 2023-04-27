@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Database\ValueBinder;
 use Closure;
 
@@ -249,29 +250,30 @@ class PagesServiceTest extends BcTestCase
 
     /**
      * test createIndexConditions
+     *
+     * protected のテストのため Closure を利用
      */
     public function test_createIndexConditions()
     {
+        // 条件指定なし
         $query = $this->Pages->find();
-        $options = [];
         $result = Closure::bind(
-            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
+            fn($class) => $class->createIndexConditions($query, []), null, get_class($this->PagesService)
         )($this->PagesService);
-        $this->assertCount(9, $result->all());
+        $this->assertEmpty($result->clause('where')->sql(new ValueBinder()));
 
+        // 条件指定あり
         $query = $this->Pages->find()->contain('Contents');
-        $options = [
-            'status' => 'publish',
-            'contents' => 'Nghiem',
-            'draft' => ''
-        ];
-        $this->assertNull($query->clause('where'));
         $result = Closure::bind(
-            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
+            fn($class) => $class->createIndexConditions($query, [
+                'status' => 'publish',
+                'contents' => 'Nghiem',
+                'draft' => ''
+            ]), null, get_class($this->PagesService)
         )($this->PagesService);
         $this->assertNotNull($result->clause('where'));
-        $binder = new ValueBinder();
-        $sql = $result->clause('where')->sql($binder);
+        $sql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('status =', $sql);
         $this->assertStringContainsString('contents like', $sql);
         $this->assertStringContainsString('draft like', $sql);
     }
