@@ -18,6 +18,9 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Database\Expression\QueryExpression;
+use Cake\Database\ValueBinder;
+use Closure;
 
 /**
  * Class PagesServiceTest
@@ -243,6 +246,36 @@ class PagesServiceTest extends BcTestCase
         ], $this->PagesService->getEditLink($request));
         $request = $this->getRequest('/hoge');
         $this->assertEmpty($this->PagesService->getEditLink($request));
+    }
+
+    /**
+     * test createIndexConditions
+     *
+     * protected のテストのため Closure を利用
+     */
+    public function test_createIndexConditions()
+    {
+        // 条件指定なし
+        $query = $this->Pages->find();
+        $result = Closure::bind(
+            fn($class) => $class->createIndexConditions($query, []), null, get_class($this->PagesService)
+        )($this->PagesService);
+        $this->assertEmpty($result->clause('where')->sql(new ValueBinder()));
+
+        // 条件指定あり
+        $query = $this->Pages->find()->contain('Contents');
+        $result = Closure::bind(
+            fn($class) => $class->createIndexConditions($query, [
+                'status' => 'publish',
+                'contents' => 'Nghiem',
+                'draft' => ''
+            ]), null, get_class($this->PagesService)
+        )($this->PagesService);
+        $this->assertNotNull($result->clause('where'));
+        $sql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('status =', $sql);
+        $this->assertStringContainsString('contents like', $sql);
+        $this->assertStringContainsString('draft like', $sql);
     }
 
     /**
