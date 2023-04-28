@@ -77,8 +77,8 @@ class MailContentsServiceTest extends BcTestCase
         $rs = $this->MailContentsService->getIndex([])->toArray();
         //戻る値を確認
         $this->assertCount(2, $rs);
-        $this->assertEquals($rs[1]->description, 'description test');
-        $this->assertEquals($rs[1]->content->title, 'お問い合わせ');
+        $this->assertEquals('description test 2', $rs[1]->description);
+        $this->assertEquals('テスト', $rs[1]->content->title);
     }
 
     /**
@@ -96,6 +96,31 @@ class MailContentsServiceTest extends BcTestCase
         $this->assertEquals(true, $result->save_info);
         $this->assertEquals(false, $result->validate);
         $this->assertEquals(false, $result->ssl_on);
+    }
+
+    /**
+     * test get
+     */
+    public function test_get()
+    {
+        $options = [
+            'contain' => []
+        ];
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $result = $this->MailContentsService->get(1, $options)->toArray();
+        $this->assertEquals('description test', $result['description']);
+        $this->assertNull($result['content']);
+
+        $options = [
+            'contain' => [
+                'Contents' => ['Sites'],
+                'MailFields'
+            ]
+        ];
+        $result = $this->MailContentsService->get(1, $options)->toArray();
+        $this->assertEquals('description test', $result['description']);
+        $this->assertEquals('お問い合わせ', $result['content']['title']);
+
     }
 
     /**

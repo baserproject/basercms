@@ -154,6 +154,7 @@ class MailContentsService implements MailContentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $options = [])
     {
