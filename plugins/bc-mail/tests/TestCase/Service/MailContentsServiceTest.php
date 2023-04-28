@@ -86,7 +86,16 @@ class MailContentsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailContentsService->getNew();
+        $this->assertEquals('お問い合わせ頂きありがとうございます', $result->subject_user);
+        $this->assertEquals('お問い合わせを頂きました', $result->subject_admin);
+        $this->assertEquals('default', $result->layout_template);
+        $this->assertEquals('default', $result->form_template);
+        $this->assertEquals('mail_default', $result->mail_template);
+        $this->assertEquals(true, $result->use_description);
+        $this->assertEquals(true, $result->save_info);
+        $this->assertEquals(false, $result->validate);
+        $this->assertEquals(false, $result->ssl_on);
     }
 
     /**
