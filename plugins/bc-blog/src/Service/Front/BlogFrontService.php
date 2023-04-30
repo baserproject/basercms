@@ -16,6 +16,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogContent;
+use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogContentsService;
