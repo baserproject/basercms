@@ -302,7 +302,29 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testUpdate_widget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //Postデータを準備
+        $data['Widget4']['name'] = 'リンク';
+        $data['Widget4']['sort'] = '1';
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_widget/1.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals($result->message, 'ウィジェットエリア「標準サイドバー」を更新しました。');
+        //ウィジェット名が変更できるか確認
+        $this->assertEquals($result->widgetArea->widgets_array[1]->Widget4->name, 'リンク');
+
+        //存在しないウィジェットを指定した場合
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_widget/11.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
