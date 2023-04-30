@@ -41,6 +41,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(string $file)
     {
