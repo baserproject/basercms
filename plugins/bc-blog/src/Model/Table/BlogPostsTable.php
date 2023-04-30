@@ -806,7 +806,7 @@ class BlogPostsTable extends BlogAppTable
      * @checked
      * @noTodo
      */
-    public function getPublishByNo(int $blogContentId, int $no, bool $preview = false)
+    public function getPublishByNo(int $blogContentId, mixed $no, bool $preview = false)
     {
         $conditions = ['BlogPosts.blog_content_id' => $blogContentId];
         if(!$preview) {
