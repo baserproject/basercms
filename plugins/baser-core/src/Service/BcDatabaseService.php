@@ -115,6 +115,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return \Migrations\Table
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getMigrationsTable(string $tableName)
     {
