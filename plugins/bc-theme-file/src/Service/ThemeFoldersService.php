@@ -309,6 +309,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolderForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getForm(array $data)
     {
