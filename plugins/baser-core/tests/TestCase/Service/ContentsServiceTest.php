@@ -976,7 +976,7 @@ class ContentsServiceTest extends BcTestCase
             [
                 'id' => 111,
                 'plugin' => 'BaserCore',
-                'type' => 'ContentFolder',
+                'type' => 'Nghiem',
                 'entity_id' => 1,
                 'site_id' => 1,
                 'lft' => 1,
@@ -998,7 +998,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
         $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(111);
-        $result = $this->ContentsService->setCurrentToRequest('ContentFolder', 1, $request);
+        $result = $this->ContentsService->setCurrentToRequest('Nghiem', 1, $request);
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
         $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
