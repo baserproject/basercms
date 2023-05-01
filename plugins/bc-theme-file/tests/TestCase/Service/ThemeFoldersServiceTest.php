@@ -80,7 +80,21 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $data = [
+            'fullpath' => $fullpath,
+            'parent' => BASER_PLUGINS . 'BcThemeSample' . '/templates',
+            'name' => 'new_folder',
+        ];
+        $rs = $this->ThemeFoldersService->create($data);
+        //戻る値を確認
+        $this->assertEquals($rs->getData('mode'), 'create');
+        $this->assertEquals($rs->getData('fullpath'), $data['fullpath'] . DS . $data['name']);
+        $this->assertEquals($rs->getData('name'), $data['name']);
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . DS . 'new_folder'));
+        //作成されたフォルダを削除
+        rmdir($fullpath . DS . 'new_folder');
     }
 
     /**
