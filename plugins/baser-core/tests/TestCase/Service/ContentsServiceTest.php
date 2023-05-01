@@ -998,7 +998,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
         $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(111);
-        $result = $this->ContentsService->setCurrentToRequest('ContentFolder', 0, $request);
+        $result = $this->ContentsService->setCurrentToRequest('ContentFolder', 1, $request);
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
         $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
