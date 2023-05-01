@@ -67,21 +67,21 @@ class ThemeFoldersServiceTest extends BcTestCase
     public function test_getIndex()
     {
         //typeはetcではない場合、
-        $param['fullpath'] = '/var/www/html/plugins/bc-front/webroot';
+        $param['fullpath'] = '/var/www/html/plugins/bc-front/templates';
         $param['type'] = 'folder';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(7, $themeFiles);
+        $this->assertCount(12, $themeFiles);
 
         //typeはetcかつpathは指定しない場合、
         $param['type'] = 'etc';
         $param['path'] = '';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(4, $themeFiles);
+        $this->assertCount(8, $themeFiles);
 
         //typeはetcかつpathは指定した場合、
-        $param['path'] = '/var/www/html/plugins/bc-front/webroot';
+        $param['path'] = '/var/www/html/plugins/bc-front/templates';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(7, $themeFiles);
+        $this->assertCount(12, $themeFiles);
     }
 
     /**
