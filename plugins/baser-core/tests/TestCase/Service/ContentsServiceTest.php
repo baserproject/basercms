@@ -992,21 +992,16 @@ class ContentsServiceTest extends BcTestCase
                 'lft' => 3,
                 'rght' => 4,
             ], 1)->persist();
-        $type = 'Page';
-        $entityId = 1;
         $request = $this->getRequest();
-        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->findByType($type, $entityId);
-        $result = $this->ContentsService->setCurrentToRequest($type, $entityId, $request);
+        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(222);
+        $result = $this->ContentsService->setCurrentToRequest('Page', 1, $request);
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
-        $type = 'ContentFolder';
-        $entityId = 0;
-        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->findByType($type, $entityId);
-        $result = $this->ContentsService->setCurrentToRequest($type, $entityId, $request);
+        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(111);
+        $result = $this->ContentsService->setCurrentToRequest('ContentFolder', 0, $request);
         $this->assertEquals($content, $result->getAttribute('currentContent'));
 
-        $type = 'Nghiem';
-        $result = $this->ContentsService->setCurrentToRequest($type, $entityId, $request);
+        $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
         $this->assertEquals(false, $result);
     }
 }
