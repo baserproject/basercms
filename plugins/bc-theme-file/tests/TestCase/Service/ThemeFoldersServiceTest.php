@@ -130,6 +130,8 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_getForm()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data['fullpath'] = '/var/www/html/plugins/bc-front/webroot/img';
+        $rs = $this->ThemeFoldersService->getForm($data);
+        $this->assertEquals($rs->getData('fullpath'), $data['fullpath']);
     }
 }
