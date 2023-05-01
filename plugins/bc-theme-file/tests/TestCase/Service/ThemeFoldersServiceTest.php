@@ -58,7 +58,13 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $fullPath = '/var/www/html/plugins/bc-front/webroot/img';
+        //対象のメソッドをコル
+        $rs = $this->ThemeFoldersService->get($fullPath);
+        //戻る値を確認
+        $this->assertEquals($rs->type, 'folder');
+        $this->assertEquals($rs->fullpath, $fullPath);
+        $this->assertEquals($rs->parent, '/var/www/html/plugins/bc-front/webroot/');
     }
 
     /**
