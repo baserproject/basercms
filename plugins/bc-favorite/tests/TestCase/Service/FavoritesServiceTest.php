@@ -76,12 +76,11 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testGet(): void
     {
-        $this->expectException("Cake\Datasource\Exception\RecordNotFoundException");
-        $result = $this->FavoritesService->get(0);
-        $this->assertEmpty($result);
-
         $result = $this->FavoritesService->get(1);
         $this->assertEquals("固定ページ管理", $result->name);
+
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $result = $this->FavoritesService->get(0);
     }
 
     /**
