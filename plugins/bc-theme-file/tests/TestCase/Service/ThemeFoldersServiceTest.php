@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFoldersService;
+use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersServiceTest
@@ -118,7 +119,24 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        (new Folder())->create($fullpath . 'new_folder', 0777);
+
+        //対象のメソッドを確認
+        $rs = $this->ThemeFoldersService->copy($fullpath . 'new_folder');
+
+        //戻る値を確認
+        $this->assertEquals($rs->type, 'folder');
+        $this->assertEquals($rs->fullpath, $fullpath . 'new_folder_copy');
+        $this->assertEquals($rs->parent, $fullpath);
+
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder_copy'));
+
+        //作成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
+        rmdir($fullpath . 'new_folder_copy');
     }
 
     /**
