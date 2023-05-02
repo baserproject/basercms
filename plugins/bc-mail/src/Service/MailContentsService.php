@@ -130,6 +130,7 @@ class MailContentsService implements MailContentsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {

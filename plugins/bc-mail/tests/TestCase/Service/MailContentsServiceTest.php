@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -142,8 +143,31 @@ class MailContentsServiceTest extends BcTestCase
         $rs = $this->MailContentsService->getList();
         //戻る値を確認
         $this->assertCount(2, $rs);
-        $this->assertEquals('お問い合わせ',$rs[1]);
-        $this->assertEquals('テスト',$rs[2]);
+        $this->assertEquals('お問い合わせ', $rs[1]);
+        $this->assertEquals('テスト', $rs[2]);
     }
+
+    /**
+     * test delete
+     * @throws \Throwable
+     */
+    public function test_delete()
+    {
+        //data create
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        $mailContent = $this->MailContentsService->get(1, ['contain' => []]);
+        $this->assertEquals(1, $mailContent->id);
+
+        $result = $this->MailContentsService->delete(1);
+        $this->assertTrue($result);
+        $this->expectException(RecordNotFoundException::class);
+        $this->MailContentsService->get(1, ['contain' => []]);
+
+        $result = $this->MailContentsService->delete(0);
+        $this->assertFalse($result);
+
+    }
+
 
 }
