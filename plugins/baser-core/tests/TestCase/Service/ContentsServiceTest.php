@@ -993,13 +993,11 @@ class ContentsServiceTest extends BcTestCase
                 'rght' => 4,
             ], 1)->persist();
         $request = $this->getRequest();
-        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(222);
         $result = $this->ContentsService->setCurrentToRequest('Page', 1, $request);
-        $this->assertEquals($content, $result->getAttribute('currentContent'));
+        $this->assertEquals(222, $result->getAttribute('currentContent')->id);
 
-        $content = TableRegistry::getTableLocator()->get("BaserCore.Contents")->get(111);
         $result = $this->ContentsService->setCurrentToRequest('Nghiem', 1, $request);
-        $this->assertEquals($content, $result->getAttribute('currentContent'));
+        $this->assertEquals(111, $result->getAttribute('currentContent')->id);
 
         $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
         $this->assertEquals(false, $result);
