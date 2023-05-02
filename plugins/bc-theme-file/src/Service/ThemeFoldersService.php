@@ -228,6 +228,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $paths): bool
     {
