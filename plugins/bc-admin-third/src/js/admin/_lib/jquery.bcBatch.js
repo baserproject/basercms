@@ -74,9 +74,6 @@
                     form.append($('<input name="_csrfToken" type="hidden">').val($.bcToken.key));
                     return $.ajax({
                         url: config.batchUrl,
-                        headers: {
-                            "Authorization": $.bcJwt.accessToken,
-                        },
                         type: 'POST',
                         data: form.serialize(),
                         dataType: 'json',

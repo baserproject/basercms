@@ -74,9 +74,6 @@
                 form.find('input[name="_csrfToken"]').remove();
                 return $.ajax({
                     url: $.bcSortable.updateSortUrl,
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: data,
                     dataType: 'text',

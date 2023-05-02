@@ -92,9 +92,6 @@ $(function () {
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/is_unique_content',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         url: targetUrl,
@@ -109,9 +106,6 @@ $(function () {
                             $.bcToken.check(function () {
                                 return $.ajax({
                                     url: bcManageContent['ContentAlias']['url']['add'],
-                                    headers: {
-                                        "Authorization": $.bcJwt.accessToken,
-                                    },
                                     type: 'POST',
                                     data: $.extend(data, {
                                         _csrfToken: $.bcToken.key,
@@ -165,9 +159,6 @@ $(function () {
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/is_unique_content',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         url: targetUrl,
@@ -182,9 +173,6 @@ $(function () {
                             $.bcToken.check(function () {
                                 return $.ajax({
                                     url: bcManageContent[current.type]['url']['copy'],
-                                    headers: {
-                                        "Authorization": $.bcJwt.accessToken,
-                                    },
                                     type: 'POST',
                                     data: $.extend(data, {
                                         _csrfToken: $.bcToken.key,
