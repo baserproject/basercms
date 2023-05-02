@@ -299,7 +299,7 @@ class UsersService implements UsersServiceInterface
      */
     public function reLogin(ServerRequest $request, Response $response)
     {
-        $user = BcUtil::loginUser($request->getParam('prefix'));
+        $user = BcUtil::loginUser();
         if (!$user) {
             return false;
         }
@@ -391,7 +391,7 @@ class UsersService implements UsersServiceInterface
      */
     public function loginToAgent(ServerRequest $request, Response $response, $id, $referer = ''): bool
     {
-        $user = BcUtil::loginUser($request->getParam('prefix'));
+        $user = BcUtil::loginUser();
         $target = $this->get($id);
         if(!$user->isEnableLoginAgent($target)) {
             throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
@@ -425,7 +425,7 @@ class UsersService implements UsersServiceInterface
         if (empty($user)) {
             throw new Exception(__d('baser_core', '対象データが見つかりません。'));
         }
-        $currentUser = BcUtil::loginUser($request->getParam('prefix'));
+        $currentUser = BcUtil::loginUser();
         $this->logout($request, $response, $currentUser->id);
         $this->login($request, $response, $user->id);
         $redirectUrl = $session->read('AuthAgent.referer') ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
@@ -445,7 +445,7 @@ class UsersService implements UsersServiceInterface
     public function reload(ServerRequest $request)
     {
         $prefix = BcUtil::getRequestPrefix($request);
-        $sessionUser = BcUtil::loginUser($prefix);
+        $sessionUser = BcUtil::loginUser();
         if ($sessionUser === false) {
             return true;
         }

@@ -131,14 +131,12 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function loginUser($prefix = null)
+    public static function loginUser()
     {
         $request = Router::getRequest();
         if (!$request) return false;
 
-        if(!$prefix) {
-            $prefix = BcUtil::getRequestPrefix($request);
-        }
+        $prefix = BcUtil::getRequestPrefix($request);
 
         $authenticator = $request->getAttribute('authentication');
         if($authenticator) {
