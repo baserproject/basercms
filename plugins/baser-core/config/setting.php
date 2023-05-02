@@ -657,11 +657,9 @@ return [
         // baserCMSオフィシャルニュース
         'baserNewsRss' => 'https://basercms.net/news/index.rss',
         // インストールマニュアル
-        // TODO ucmitz リンク先を準備した上で変更要
-        'installManual' => 'https://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
+        'installManual' => 'https://baserproject.github.io/5/introduce/',
         // アップデートマニュアル
-        // TODO ucmitz リンク先を準備した上で変更要
-        'updateManual' => 'https://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
+        'updateManual' => 'https://baserproject.github.io/5/operation/update'
     ],
 
     /**
