@@ -179,6 +179,7 @@ class PluginsService implements PluginsServiceInterface
             unlink(LOGS . 'update.log');
         }
 
+		$ids = [];
         if ($pluginName === 'BaserCore') {
             $names = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
             $ids = $this->detachAll();
@@ -202,7 +203,16 @@ class PluginsService implements PluginsServiceInterface
             $plugin = $pluginCollection->create($name);
             $migrate = false;
             if (method_exists($plugin, 'migrate')) {
-                $plugin->migrate($options);
+            	try {
+					$plugin->migrate($options);
+				} catch (\Throwable $e) {
+					if($ids) $this->attachAllFromIds($ids);
+					BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
+					BcUpdateLog::set($e->getMessage());
+					BcUtil::clearAllCache();
+					BcUpdateLog::save();
+					return false;
+				}
                 $migrate = true;
             }
             $plugins[$name] = [
@@ -225,6 +235,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
+            if($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -245,6 +256,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
+            if($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -256,10 +268,7 @@ class PluginsService implements PluginsServiceInterface
 
         BcUtil::clearAllCache();
         BcUpdateLog::save();
-
-        if ($pluginName === 'BaserCore') {
-            $this->attachAllFromIds($ids);
-        }
+        if($ids) $this->attachAllFromIds($ids);
 
         return true;
     }

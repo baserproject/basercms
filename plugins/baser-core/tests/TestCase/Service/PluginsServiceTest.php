@@ -245,6 +245,56 @@ class PluginsServiceTest extends BcTestCase
     }
 
     /**
+     * test Update Core Fail
+     *
+     * @return void
+     */
+    public function test_updateCoreFails()
+    {
+        rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+        $file = new File(BASER . 'VERSION.txt');
+        $file->write('10.0.0');
+
+        // 失敗用のマイグレーションファイルを作成
+        $path = $this->createFailMigration();
+
+        // 失敗を確認
+        $this->assertFalse($this->Plugins->update('BaserCore', 'test'));
+
+        // 無効化されたプラグインの有効化を確認
+        $this->assertEquals(5, $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['status' => true])->count());
+
+        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
+        unlink($path);
+    }
+
+    /**
+     * コアのアップデートを失敗させるためのマイグレーションファイルを作成する
+     *
+     * test_updateCoreFail にて利用
+     *
+     * 既に存在するIDを利用することで失敗させる
+     *
+     * @return string
+     */
+    protected function createFailMigration()
+    {
+        $path = Plugin::path('BaserCore') . 'config' . DS . 'Migrations' . DS . '20230328000000_TestMigration.php';
+        $file = new File($path);
+        $data = <<< EOF
+<?php
+use BaserCore\Database\Migration\BcMigration;
+class TestMigration extends BcMigration
+{
+    public function up(){}
+}
+EOF;
+        $file->write($data);
+        $file->close();
+        return $path;
+    }
+
+    /**
      * test detachAll
      */
     public function test_detachAll()
