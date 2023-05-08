@@ -11,6 +11,8 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
@@ -39,6 +41,12 @@ class MailContentsServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcMail.Factory/MailContents',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcMail.Factory/MailFields',
     ];
 
     /**
@@ -129,7 +137,19 @@ class MailContentsServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $data = [
+            'content' => [
+                'name' => 'コンテンツ名',
+                'title' => 'add mail content',
+                'site_id' => 1,
+                'parent_id' => 0
+            ],
+            'description' => 'Nghiem',
+        ];
+        $mailContent = $this->MailContentsService->create($data, []);
+        $this->assertEquals('Nghiem', $mailContent->description);
     }
 
     /**
