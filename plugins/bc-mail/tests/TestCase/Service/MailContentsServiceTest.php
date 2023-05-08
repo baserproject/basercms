@@ -18,6 +18,7 @@ use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -150,6 +151,11 @@ class MailContentsServiceTest extends BcTestCase
         ];
         $mailContent = $this->MailContentsService->create($data, []);
         $this->assertEquals('Nghiem', $mailContent->description);
+        $data = [
+            'description' => 'Nghiem',
+        ];
+        $this->expectException(PersistenceFailedException::class);
+        $this->MailContentsService->create($data, []);
     }
 
     /**
