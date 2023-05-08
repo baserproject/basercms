@@ -195,5 +195,24 @@ class MailContentsServiceTest extends BcTestCase
 
     }
 
+    /**
+     * update test
+     */
+    public function test_update()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $mailContent = $this->MailContentsService->get(1, ['contain' => []]);
+        $data = [
+            'content' => [
+                'name' => 'コンテンツ名',
+                'title' => 'add mail content',
+                'site_id' => 1,
+                'parent_id' => 0
+            ],
+            'description' => 'Nghiem',
+        ];
+        $result = $this->MailContentsService->update($mailContent, $data);
+        $this->assertEquals('Nghiem', $result->description);
+    }
 
 }
