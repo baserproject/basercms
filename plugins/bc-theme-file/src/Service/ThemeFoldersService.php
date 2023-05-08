@@ -41,6 +41,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(string $file)
     {
@@ -56,6 +57,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(string $file)
     {
@@ -125,6 +127,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolderForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -308,6 +311,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolderForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getForm(array $data)
     {

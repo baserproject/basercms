@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
@@ -244,6 +245,56 @@ class PluginsServiceTest extends BcTestCase
     }
 
     /**
+     * test Update Core Fail
+     *
+     * @return void
+     */
+    public function test_updateCoreFails()
+    {
+        rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+        $file = new File(BASER . 'VERSION.txt');
+        $file->write('10.0.0');
+
+        // 失敗用のマイグレーションファイルを作成
+        $path = $this->createFailMigration();
+
+        // 失敗を確認
+        $this->assertFalse($this->Plugins->update('BaserCore', 'test'));
+
+        // 無効化されたプラグインの有効化を確認
+        $this->assertEquals(5, $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['status' => true])->count());
+
+        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
+        unlink($path);
+    }
+
+    /**
+     * コアのアップデートを失敗させるためのマイグレーションファイルを作成する
+     *
+     * test_updateCoreFail にて利用
+     *
+     * 既に存在するIDを利用することで失敗させる
+     *
+     * @return string
+     */
+    protected function createFailMigration()
+    {
+        $path = Plugin::path('BaserCore') . 'config' . DS . 'Migrations' . DS . '20230328000000_TestMigration.php';
+        $file = new File($path);
+        $data = <<< EOF
+<?php
+use BaserCore\Database\Migration\BcMigration;
+class TestMigration extends BcMigration
+{
+    public function up(){}
+}
+EOF;
+        $file->write($data);
+        $file->close();
+        return $path;
+    }
+
+    /**
      * test detachAll
      */
     public function test_detachAll()
@@ -399,4 +450,105 @@ class PluginsServiceTest extends BcTestCase
 //        $this->expectExceptionMessage("送信できるデータ量を超えています。合計で " . ini_get('post_max_size') . " 以内のデータを送信してください。");
 //        $this->Plugins->add(["file" => $files]);
     }
+
+    /**
+     * test getAvailableCoreVersionInfo
+     * @return void
+     * @dataProvider getAvailableCoreVersionInfoDataProvider
+     */
+    public function test_getAvailableCoreVersionInfo(
+        string $currentVersion,
+        array $releaseVersions,
+        string $expectLatest,
+        array $expectAvailable
+    )
+    {
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        $versionBakPath = Plugin::path('BaserCore') . 'VERSION.bak.txt';
+        $rssPath = WWW_ROOT . 'baser-core.rss';
+
+        // バックアップを取得する
+        copy($versionPath, $versionBakPath);
+        // オートアップデートを有効化
+        SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => true])->persist();
+        // BcApp.coreReleaseUrl を書き換える
+        Configure::write('BcApp.coreReleaseUrl', $rssPath);
+        // バージョンを書き換える
+        $file = new File($versionPath);
+        $file->write($currentVersion);
+        $file->close();
+        // RSSを生成
+        $this->createReleaseRss($releaseVersions);
+        // キャッシュを削除
+        Cache::delete('coreReleaseInfo', '_bc_update_');
+
+        // 実行
+        $versionInfo = $this->Plugins->getAvailableCoreVersionInfo();
+        $this->assertEquals($expectLatest, $versionInfo['latest']);
+        $this->assertEquals($expectAvailable, $versionInfo['versions']);
+
+        // 初期化
+        rename($versionBakPath, $versionPath);
+        unlink($rssPath);
+    }
+
+    public function getAvailableCoreVersionInfoDataProvider()
+    {
+        return [
+            // 通常
+            ['5.0.0', ['5.0.2', '5.0.1', '5.0.0'], '5.0.2', ['5.0.2', '5.0.1']],
+            // 現在のバージョンが dev の場合
+            ['5.0.0-dev', ['5.0.2', '5.0.1', '5.0.0'], '5.0.2', []],
+            // リリースに dev が含まれている場合
+            ['5.0.0', ['5.0.2-dev', '5.0.1-dev', '5.0.0'], '5.0.0', []],
+            // マイナーアップデートの場合
+            ['5.0.0', ['5.1.0', '5.0.0'], '5.1.0', ['5.1.0']],
+            // メジャーアップデートの場合
+            ['5.0.0', ['6.0.0', '5.5.0'], '6.0.0', ['5.5.0']],
+            // アップデート対象が古いものしかない場合
+            ['5.0.0', ['5.0.0', '4.9.0'], '5.0.0', []],
+            // アップデート対象が全く取れない場合
+            ['5.0.0', [], '', []],
+        ];
+    }
+
+    /**
+     * リリース情報のRSSを作成する
+     * @param array $versions
+     * @return void
+     */
+    public function createReleaseRss(array $versions)
+    {
+        $url = WWW_ROOT . 'baser-core.rss';
+        $rss = <<< EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <channel>
+    <title>baserproject/baser-core releases</title>
+    <description>Latest releases on Packagist of baserproject/baser-core.</description>
+    <pubDate>Wed, 19 Apr 2023 07:17:04 +0000</pubDate>
+    <generator>Packagist</generator>
+    <link>https://packagist.org/packages/baserproject/baser-core</link>
+EOF;
+        foreach($versions as $version) {
+            $rss .= <<< EOF
+    <item>
+      <title>baserproject/baser-core ({$version})</title>
+      <description><![CDATA[baserCMS plugin for CakePHP]]></description>
+      <pubDate>Wed, 19 Apr 2023 07:17:04 +0000</pubDate>
+      <link>https://packagist.org/packages/baserproject/baser-core</link>
+      <guid isPermaLink="false">baserproject/baser-core {$version}</guid>
+      <slash:comments>0</slash:comments>
+    </item>
+EOF;
+        }
+        $rss .= <<< EOF
+  </channel>
+</rss>
+EOF;
+        $file = new File($url);
+        $file->write($rss);
+        $file->close();
+    }
+
 }

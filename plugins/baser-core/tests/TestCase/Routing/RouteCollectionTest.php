@@ -54,6 +54,7 @@ class RouteCollectionTest extends BcTestCase
      */
     public function testMatch()
     {
+        $this->getRequest();
         $this->assertEquals('/', Router::url([
             'plugin' => 'BaserCore',
             'controller' => 'ContentFolders',

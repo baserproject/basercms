@@ -20,6 +20,7 @@ use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Filesystem\File;
 use Cake\Http\Client;
 use Cake\Http\Client\Exception\NetworkException;
 use Cake\ORM\TableRegistry;
@@ -37,6 +38,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use InvalidArgumentException;
 
 /**
  * Class PluginsService
@@ -177,6 +179,7 @@ class PluginsService implements PluginsServiceInterface
             unlink(LOGS . 'update.log');
         }
 
+		$ids = [];
         if ($pluginName === 'BaserCore') {
             $names = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
             $ids = $this->detachAll();
@@ -200,7 +203,16 @@ class PluginsService implements PluginsServiceInterface
             $plugin = $pluginCollection->create($name);
             $migrate = false;
             if (method_exists($plugin, 'migrate')) {
-                $plugin->migrate($options);
+            	try {
+					$plugin->migrate($options);
+				} catch (\Throwable $e) {
+					if($ids) $this->attachAllFromIds($ids);
+					BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
+					BcUpdateLog::set($e->getMessage());
+					BcUtil::clearAllCache();
+					BcUpdateLog::save();
+					return false;
+				}
                 $migrate = true;
             }
             $plugins[$name] = [
@@ -223,6 +235,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
+            if($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -243,6 +256,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
+            if($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -254,10 +268,7 @@ class PluginsService implements PluginsServiceInterface
 
         BcUtil::clearAllCache();
         BcUpdateLog::save();
-
-        if ($pluginName === 'BaserCore') {
-            $this->attachAllFromIds($ids);
-        }
+        if($ids) $this->attachAllFromIds($ids);
 
         return true;
     }
@@ -676,47 +687,54 @@ class PluginsService implements PluginsServiceInterface
             $http = new Client();
             try {
                 $response = $http->get($releaseUrl);
+                $body = $response->getStringBody();
+            } catch (InvalidArgumentException $e) {
+                // ユニットテストの場合にhttpでアクセスできないので、ファイルから直接読み込む
+                $file = new File($releaseUrl);
+                $body = $file->read();
             } catch (NetworkException $e) {
                 return [];
             }
-            $xml = Xml::build($response->getStringBody());
+            $xml = Xml::build($body);
+            $latest = null;
+            $versions = [];
+            $currentVersion = BcUtil::getVersion();
             if (isset($xml->channel->item)) {
-                $latest = null;
-                $versions = [];
-                $currentVersion = BcUtil::getVersion();
                 $major = preg_replace('/^([0-9]+\.).+?$/', "$1", $currentVersion);
                 foreach($xml->channel->item as $item) {
                     if (!isset($item->guid)) continue;
                     if (preg_match('/baserproject\/baser-core ([0-9.]+)$/', $item->guid, $matches)) {
                         $version = $matches[1];
-                        // 同じメジャーバージョンでない場合は無視
-                        if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
                         if (!$latest) {
                             $latest = $version;
-                            $currentVerPoint = BcUtil::verpoint($currentVersion);
-                            $latestVerPoint = BcUtil::verpoint($latest);
-                            // 現在のパッケージが開発版の場合は無視
-                            if($currentVerPoint === false) break;
-                            // アップデートバージョンが開発版の場合は無視
-                            if($latestVerPoint === false) continue;
-                            // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
-                            if($currentVerPoint > $latestVerPoint) break;
                         }
+                        // 同じメジャーバージョンでない場合は無視
+                        if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
+
+                        $currentVerPoint = BcUtil::verpoint($currentVersion);
+                        $latestVerPoint = BcUtil::verpoint($latest);
+                        // 現在のパッケージが開発版の場合は無視
+                        if($currentVerPoint === false) break;
+                        // アップデートバージョンが開発版の場合は無視
+                        if($latestVerPoint === false) continue;
+                        // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
+                        if($currentVerPoint > $latestVerPoint) break;
+
                         if ($currentVersion === $version) break;
                         $versions[] = $version;
                     }
                 }
-                $coreReleaseInfo = [
-                    'latest' => $latest,
-                    'versions' => $versions,
-                ];
-                Cache::write('coreReleaseInfo', $coreReleaseInfo, '_bc_update_');
-                return $coreReleaseInfo;
             }
+            arsort($versions);
+            $coreReleaseInfo = [
+                'latest' => $latest,
+                'versions' => $versions,
+            ];
+            Cache::write('coreReleaseInfo', $coreReleaseInfo, '_bc_update_');
+            return $coreReleaseInfo;
         } else {
             return $coreReleaseInfo;
         }
-        return [];
     }
 
     /**

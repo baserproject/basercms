@@ -32,6 +32,7 @@ class PermissionGroupsAdminService extends PermissionGroupsService implements Pe
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(int $userGroupId, ServerRequest $request): array
     {
@@ -55,6 +56,7 @@ class PermissionGroupsAdminService extends PermissionGroupsService implements Pe
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForForm(int $userGroupId, EntityInterface $entity): array
     {

@@ -256,6 +256,7 @@ class WidgetAreasController extends BcAdminApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update_widget(WidgetAreasServiceInterface $service, int $widgetAreaId)
     {

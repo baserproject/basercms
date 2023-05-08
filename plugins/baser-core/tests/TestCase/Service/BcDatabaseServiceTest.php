@@ -101,7 +101,11 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_getMigrationsTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //対象のメソッドをコール
+        $rs = $this->BcDatabaseService->getMigrationsTable('sites');
+        //戻る値を確認
+        $this->assertNotNull($rs->getAdapter());
+        $this->assertEquals($rs->getTable()->getName(), 'sites');
     }
 
     /**

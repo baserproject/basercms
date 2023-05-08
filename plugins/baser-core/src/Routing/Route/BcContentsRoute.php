@@ -268,10 +268,10 @@ class BcContentsRoute extends Route
 
         // エンティティID確定
         $entityId = $contentId = null;
+        $request = Router::getRequest(true);
         if (isset($url['entityId'])) {
             $entityId = $url['entityId'];
         } else {
-            $request = Router::getRequest(true);
             if (!empty($request->getParam('entityId'))) {
                 $entityId = $request->getParam('entityId');
             }
@@ -347,7 +347,7 @@ class BcContentsRoute extends Route
         if ($type === 'ContentFolder') {
             $strUrl .= '/';
         }
-        return $strUrl;
+        return $request->getAttribute('base') . $strUrl;
     }
 
     /**
