@@ -11,6 +11,8 @@
 
 namespace BcThemeFile\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFoldersService;
 
@@ -21,6 +23,19 @@ class ThemeFoldersServiceTest extends BcTestCase
 {
 
     public $ThemeFoldersService = null;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+    ];
 
     /**
      * set up
@@ -142,7 +157,35 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_copyToTheme()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //現在のテーマを設定する
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcPluginSample'])->persist();
+        UserFactory::make()->admin()->persist();
+        $this->getRequest()->getParam('Site');
+
+        $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
+        $data = [
+            'type' => 'Pages',
+            'path' => '',
+            'assets' => '',
+            'plugin' => 'BaserCore',
+            'fullpath' => '/var/www/html/plugins/bc-front/templates/Pages/'
+        ];
+
+        $rs = $this->ThemeFoldersService->copyToTheme($data);
+        //戻る値を確認
+        $this->assertEquals($rs, '/plugins/BcPluginSample/templates/Pages/');
+        //実際にフォルダがコピーできるか確認すること
+        $this->assertTrue(is_dir($fullpath . '/Pages'));
+        //生成されたフォルダを削除
+        unlink($fullpath . '/Pages/default.php');
+        rmdir($fullpath . '/Pages');
+
+        //コピーできないの場合、
+        $data ['fullpath'] = '/var/www/html/plugins/bc-front/templates/Pages/11111';
+
+        $rs = $this->ThemeFoldersService->copyToTheme($data);
+        //戻る値を確認
+        $this->assertFalse($rs);
     }
 
     /**

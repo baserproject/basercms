@@ -278,6 +278,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array|false|string|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copyToTheme(array $params)
     {
