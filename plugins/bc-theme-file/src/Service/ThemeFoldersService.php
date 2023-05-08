@@ -74,6 +74,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $params)
     {
