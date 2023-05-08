@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFoldersService;
+use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersServiceTest
@@ -141,7 +142,19 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダパス
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout';
+        (new Folder())->create($fullpath . DS . 'folder_1', 0777);
+        (new Folder())->create($fullpath . DS . 'folder_2', 0777);
+        //一括削除処理をテスト
+        $paths = [
+            $fullpath . DS . 'folder_1',
+            $fullpath . DS . 'folder_2'
+        ];
+        $this->ThemeFoldersService->batch('delete', $paths);
+        //実際にフォルダが削除できるか確認すること
+        $this->assertFalse(is_dir($fullpath . DS . 'folder_1'));
+        $this->assertFalse(is_dir($fullpath . DS . 'folder_2'));
     }
 
     /**
