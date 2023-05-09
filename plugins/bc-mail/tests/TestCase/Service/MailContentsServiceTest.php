@@ -20,6 +20,7 @@ use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Error;
 
 /**
  * MailContentsServiceTest
@@ -237,6 +238,10 @@ class MailContentsServiceTest extends BcTestCase
         $this->loginAdmin($this->getRequest());
         $result = $this->MailContentsService->copy($data);
         $this->assertEquals('Nghiem', $result->content->title);
+
+        $data['entity_id'] = 0;
+        $this->expectException(Error::class);
+        $this->MailContentsService->copy($data);
     }
 
 }
