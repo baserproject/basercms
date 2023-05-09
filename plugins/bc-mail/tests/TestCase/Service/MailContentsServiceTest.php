@@ -213,6 +213,12 @@ class MailContentsServiceTest extends BcTestCase
         ];
         $result = $this->MailContentsService->update($mailContent, $data);
         $this->assertEquals('Nghiem', $result->description);
+
+        $data = [
+            'description' => 'Nghiem',
+        ];
+        $this->expectException(PersistenceFailedException::class);
+        $this->MailContentsService->update($mailContent, $data);
     }
 
 }
