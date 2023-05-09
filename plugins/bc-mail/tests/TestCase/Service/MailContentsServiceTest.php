@@ -221,4 +221,22 @@ class MailContentsServiceTest extends BcTestCase
         $this->MailContentsService->update($mailContent, $data);
     }
 
+    /**
+     * copy test
+     */
+    public function test_copy()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $data = [
+            'entity_id' => 1,
+            'parent_id' => 1,
+            'title' => 'Nghiem',
+            'site_id' => 1
+        ];
+        $this->loginAdmin($this->getRequest());
+        $result = $this->MailContentsService->copy($data);
+        $this->assertEquals('Nghiem', $result->content->title);
+    }
+
 }

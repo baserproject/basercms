@@ -41,6 +41,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'form_template' => 'default',
             'mail_template' => 'mail_default',
             'redirect_url' => '/',
+            'ssl_on' => 0
         ])->persist();
         ContentFactory::make([
             'id' => 1,
