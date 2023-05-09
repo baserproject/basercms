@@ -275,14 +275,21 @@ class ContentsServiceTest extends BcTestCase
     {
         // treeBehavior falseの場合
         $this->assertTrue($this->ContentsService->hardDelete(15));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentsService->getTrash(15);
+        try {
+            $this->ContentsService->getTrash(15);
+            $this->fail();
+        } catch (RecordNotFoundException $e) {}
+
         // treeBehavior trueの場合
         $this->assertTrue($this->ContentsService->hardDelete(16, true));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentsService->getTrash(16); // 親要素
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentsService->getTrash(17); // 子要素
+        try {
+            $this->ContentsService->getTrash(16); // 親要素
+            $this->fail();
+        } catch (RecordNotFoundException $e) {}
+        try {
+            $this->ContentsService->getTrash(17); // 子要素
+            $this->fail();
+        } catch (RecordNotFoundException $e) {}
     }
 
     /**
