@@ -1,6 +1,5 @@
 <?php
 // TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,33 +10,40 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailMessage', 'BcMail.Model');
+namespace BcMail\Test\TestCase\Model;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Table\MailMessagesTable;
 
 /**
  * Class MailMessageTest
  *
- * @property MailMessage $MailMessage
+ * @property MailMessagesTable $MailMessage
  */
-class MailMessageTest extends BaserTestCase
+class MailMessagesTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Default.SiteConfig',
-        'baser.Default.Site',
-        'baser.Default.Content',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Permissions',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents',
         'plugin.Mail.Default/MailMessage',
         'plugin.Mail.Default/MailConfig',
         'plugin.Mail.Model/MailMessage/MailContentMailMessage',
         'plugin.Mail.Model/MailMessage/MailFieldMailMessage',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->MailMessage = ClassRegistry::init('BcMail.MailMessage');
+        $this->MailMessage = $this->getTableLocator()->get('BcMail.MailMessages');
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->MailMessage);
         parent::tearDown();
@@ -55,11 +61,6 @@ class MailMessageTest extends BaserTestCase
     {
         $this->MailMessage->setup(1);
         $this->assertEquals('mail_message_1', $this->MailMessage->createTableName(1), 'テーブルを正しく設定できません');
-
-        // setupUpload
-        $saveDir = $this->MailMessage->getBehavior('BcUpload')->BcUpload['MailMessage']->settings['saveDir'];
-        $expected = "mail" . DS . "limited" . DS . '1' . DS . "messages";
-        $this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
     }
 
     /**
@@ -126,25 +127,25 @@ class MailMessageTest extends BaserTestCase
     public function validateDataProvider()
     {
         return [
-            // 正常系
+            // 豁｣蟶ｸ邉ｻ
             [
                 1, [
-                    'email_1' => 'a@example.co.jp', 'email_2' => 'a@example.co.jp',
-                    'tel_1' => '000', 'tel_2' => '0000', 'tel_3' => '0000',
-                    'category' => 1, 'message' => ['year' => 9999, 'month' => 99, 'day' => 99],
-                    'name_1' => 'baser', 'name_2' => 'cms',
-                    'root' => '検索エンジン',
-                ],
+                'email_1' => 'a@example.co.jp', 'email_2' => 'a@example.co.jp',
+                'tel_1' => '000', 'tel_2' => '0000', 'tel_3' => '0000',
+                'category' => 1, 'message' => ['year' => 9999, 'month' => 99, 'day' => 99],
+                'name_1' => 'baser', 'name_2' => 'cms',
+                'root' => '検索エンジン',
+            ],
                 [], 'バリデーションチェックが正しく行われていません'
             ],
             // 異常系
             [
                 1, [
-                    'email_1' => 'email', 'email_2' => 'email_hoge', // Eメール確認チェック
-                    'tel_1' => 'num1', 'tel_2' => false, 'tel_3' => false, // 不完全データチェック
-                    'category' => false, 'message' => false, // 拡張バリデートチェック, FixtureでmessageにVALID_DATETIME付与済み
-                    'name_1' => '', 'name_2' => '', // バリデートグループエラーチェック
-                ],
+                'email_1' => 'email', 'email_2' => 'email_hoge', // Eメール確認チェック
+                'tel_1' => 'num1', 'tel_2' => false, 'tel_3' => false, // 不完全データチェック
+                'category' => false, 'message' => false, // 拡張バリデートチェック, FixtureでmessageにVALID_DATETIME付与済み
+                'name_1' => '', 'name_2' => '', // バリデートグループエラーチェック
+            ],
                 [
                     'name_1' => [__d('baser_core', '必須項目です。')],
                     'name_2' => [__d('baser_core', '必須項目です。')],

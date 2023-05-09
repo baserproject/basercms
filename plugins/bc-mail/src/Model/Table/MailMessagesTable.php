@@ -81,6 +81,7 @@ class MailMessagesTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup(int $mailContentId, array $postData = [])
     {
