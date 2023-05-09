@@ -127,16 +127,11 @@ export default {
             let favoriteForm = this
             $.bcToken.check(function () {
                 axios.post(apiUrl, {
-                        user_id: userId,
-                        name: name,
-                        url: url,
-                        _csrfToken: $.bcToken.key
-                    }, {
-                        headers: {
-                            "Authorization": $.bcJwt.accessToken,
-                        }
-                    }
-                ).then(function (response) {
+                    user_id: userId,
+                    name: name,
+                    url: url,
+                    _csrfToken: $.bcToken.key
+                }).then(function (response) {
                     if (response.data) {
                         $("#Waiting").hide();
                         $.bcToken.key = null;
