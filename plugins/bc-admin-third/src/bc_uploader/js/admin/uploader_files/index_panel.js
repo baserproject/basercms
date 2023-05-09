@@ -78,9 +78,6 @@ $(function () {
             }
             $.ajax({
                 url: $.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_image/' + name + '/large',
-                headers: {
-                    "Authorization": $.bcJwt.accessToken,
-                },
                 type: 'get',
                 dataType: 'html',
                 success: function (res) {
@@ -116,9 +113,6 @@ $(function () {
                         };
                         return $.ajax({
                             url: $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'post',
                             data: data,
                             dataType: 'json',
@@ -172,9 +166,6 @@ $(function () {
                 }
                 return $.ajax({
                     url: url,
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'post',
                     data: fd,
                     dataType: 'json',
