@@ -118,7 +118,24 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+
+        //ポストデータを作成
+        $postData = [
+            'fullpath' => $fullpath . 'new_folder',
+            'name' => 'edit_folder'
+        ];
+        //サービスメソッドをコル
+        $this->ThemeFoldersService->update($postData);
+
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . 'new_folder'));
+        //変更されたフォルダを削除
+        rmdir($fullpath . 'edit_folder');
     }
 
     /**
