@@ -203,7 +203,14 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_getNamesByFullpath()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $fullPaths = [
+            '/var/www/html/plugins/bc-front/webroot/img',
+            '/var/www/html/plugins/bc-front/webroot/js',
+        ];
+        //対象のメソッドをコル
+        $rs = $this->ThemeFoldersService->getNamesByFullpath($fullPaths);
+        //戻る値を確認
+        $this->assertEquals($rs, ['img', 'js']);
     }
 
     /**

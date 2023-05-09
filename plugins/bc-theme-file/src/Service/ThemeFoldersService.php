@@ -258,6 +258,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNamesByFullpath(array $paths)
     {
