@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
@@ -963,5 +964,42 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($originalName, $content['name']);
         // DBの search_indexes の変更を確認（BcSearchIndexプラグインの有効化が必要）
         $this->assertEquals($countBefore + 1, SearchIndexesFactory::count());
+    }
+
+
+    /**
+     * test setCurrentToRequest
+     */
+    public function testSetCurrentToRequest()
+    {
+        ContentFactory::make(
+            [
+                'id' => 111,
+                'plugin' => 'BaserCore',
+                'type' => 'Nghiem',
+                'entity_id' => 1,
+                'site_id' => 1,
+                'lft' => 1,
+                'rght' => 2,
+            ], 1)->persist();
+        ContentFactory::make(
+            [
+                'id' => 222,
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'entity_id' => 1,
+                'site_id' => 1,
+                'lft' => 3,
+                'rght' => 4,
+            ], 1)->persist();
+        $request = $this->getRequest();
+        $result = $this->ContentsService->setCurrentToRequest('Page', 1, $request);
+        $this->assertEquals(222, $result->getAttribute('currentContent')->id);
+
+        $result = $this->ContentsService->setCurrentToRequest('Nghiem', 1, $request);
+        $this->assertEquals(111, $result->getAttribute('currentContent')->id);
+
+        $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
+        $this->assertEquals(false, $result);
     }
 }
