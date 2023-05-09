@@ -197,6 +197,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolder|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $fullpath)
     {
