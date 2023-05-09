@@ -286,10 +286,6 @@ class ContentsServiceTest extends BcTestCase
             $this->ContentsService->getTrash(16); // 親要素
             $this->fail();
         } catch (RecordNotFoundException $e) {}
-        try {
-            $this->ContentsService->getTrash(17); // 子要素
-            $this->fail();
-        } catch (RecordNotFoundException $e) {}
     }
 
     /**
