@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFoldersService;
+use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersServiceTest
@@ -72,7 +73,22 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //typeはetcではない場合、
+        $param['fullpath'] = '/var/www/html/plugins/bc-front/templates';
+        $param['type'] = 'folder';
+        $themeFiles = $this->ThemeFoldersService->getIndex($param);
+        $this->assertCount(12, $themeFiles);
+
+        //typeはetcかつpathは指定しない場合、
+        $param['type'] = 'etc';
+        $param['path'] = '';
+        $themeFiles = $this->ThemeFoldersService->getIndex($param);
+        $this->assertCount(8, $themeFiles);
+
+        //typeはetcかつpathは指定した場合、
+        $param['path'] = '/var/www/html/plugins/bc-front/templates';
+        $themeFiles = $this->ThemeFoldersService->getIndex($param);
+        $this->assertCount(12, $themeFiles);
     }
 
     /**
@@ -126,7 +142,19 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダパス
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout';
+        (new Folder())->create($fullpath . DS . 'folder_1', 0777);
+        (new Folder())->create($fullpath . DS . 'folder_2', 0777);
+        //一括削除処理をテスト
+        $paths = [
+            $fullpath . DS . 'folder_1',
+            $fullpath . DS . 'folder_2'
+        ];
+        $this->ThemeFoldersService->batch('delete', $paths);
+        //実際にフォルダが削除できるか確認すること
+        $this->assertFalse(is_dir($fullpath . DS . 'folder_1'));
+        $this->assertFalse(is_dir($fullpath . DS . 'folder_2'));
     }
 
     /**

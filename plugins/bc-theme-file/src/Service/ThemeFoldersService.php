@@ -74,6 +74,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $params)
     {
@@ -228,6 +229,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $paths): bool
     {
