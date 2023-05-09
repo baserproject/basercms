@@ -160,7 +160,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         //現在のテーマを設定する
         SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcPluginSample'])->persist();
         UserFactory::make()->admin()->persist();
-        $this->getRequest()->getParam('Site');
+        $this->getRequest();
 
         $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
         $data = [
