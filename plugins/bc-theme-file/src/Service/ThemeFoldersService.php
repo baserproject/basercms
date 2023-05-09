@@ -178,6 +178,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(string $fullpath)
     {
