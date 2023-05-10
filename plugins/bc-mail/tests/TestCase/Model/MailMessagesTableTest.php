@@ -1,5 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -14,6 +13,9 @@ namespace BcMail\Test\TestCase\Model;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Table\MailMessagesTable;
+use BcMail\Test\Scenario\MailContentsScenario;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailMessageTest
@@ -23,18 +25,21 @@ use BcMail\Model\Table\MailMessagesTable;
 class MailMessagesTableTest extends BcTestCase
 {
 
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
     public $fixtures = [
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Permissions',
         'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
-        'plugin.Mail.Default/MailMessage',
-        'plugin.Mail.Default/MailConfig',
-        'plugin.Mail.Model/MailMessage/MailContentMailMessage',
-        'plugin.Mail.Model/MailMessage/MailFieldMailMessage',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BcMail.Factory/MailContents',
     ];
 
     public function setUp(): void
@@ -50,17 +55,13 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
-     * モデルのセットアップを行う
      *
-     * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
-     *
-     * @param type $mailContentId
-     * @return boolean
+     * setup test
      */
-    public function testSetup()
+    public function test_setup(): void
     {
-        $this->MailMessage->setup(1);
-        $this->assertEquals('mail_message_1', $this->MailMessage->createTableName(1), 'テーブルを正しく設定できません');
+        $result = $this->MailMessage->setup(1);
+        $this->assertTrue($result);
     }
 
     /**
