@@ -488,6 +488,7 @@ class BlogPostsTable extends BlogAppTable
      * @return boolean 公開状態
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function allowPublish($post)
     {
