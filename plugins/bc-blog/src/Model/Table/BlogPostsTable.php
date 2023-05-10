@@ -805,6 +805,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array|\Cake\Datasource\EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishByNo(int $blogContentId, mixed $no, bool $preview = false)
     {
