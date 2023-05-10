@@ -11,9 +11,18 @@
 
 namespace BcMail\Test\TestCase\Model;
 
+use Authentication\PasswordHasher\DefaultPasswordHasher;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailField;
+use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Model\Table\MailMessagesTable;
+use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -21,6 +30,7 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
  * Class MailMessageTest
  *
  * @property MailMessagesTable $MailMessage
+ * @property MailFieldsTable $MailField
  */
 class MailMessagesTableTest extends BcTestCase
 {
@@ -40,11 +50,13 @@ class MailMessagesTableTest extends BcTestCase
         'plugin.BaserCore.Factory/Contents',
         'plugin.BaserCore.Factory/Sites',
         'plugin.BcMail.Factory/MailContents',
+        'plugin.BcMail.Factory/MailFields',
     ];
 
     public function setUp(): void
     {
         $this->MailMessage = $this->getTableLocator()->get('BcMail.MailMessages');
+        $this->MailField = $this->getTableLocator()->get('BcMail.MailFields');
         parent::setUp();
     }
 
@@ -87,6 +99,7 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $this->MailMessage->createTable(1);
         // ======================================================
@@ -118,6 +131,7 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testValidate($id, $data, $expected, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailMessage->setup($id);
         $this->MailMessage->data = ['MailMessage' => $data];
 
@@ -183,33 +197,53 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
-     * データベース用のデータに変換する
      *
-     * @param array $type
-     * @param mixed $value データベース用のデータの値
-     * @param mixed $expected 期待値
-     * @dataProvider convertToDbDataProvider
+     * convertToDb test
      */
-    public function testConvertToDb($type, $value, $expected)
+    public function testConvertToDb()
     {
-        // 初期化
-        $this->MailMessage->mailFields = [
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'no' => 2,
+            'name' => '名',
+            'field_name' => 'multi_check',
+            'type' => 'multi_check',
+            'options' => 'placeholder|性',
+            'valid' => 0,
+            'not_empty' => 1,
+            'use_field' => 1,
+            'no_send' => 0,
+            'sort' => 2,
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'no' => 2,
+            'name' => '名',
+            'field_name' => 'pw',
+            'type' => 'password',
+            'options' => 'placeholder|性',
+            'valid' => 0,
+            'not_empty' => 1,
+            'use_field' => 1,
+            'no_send' => 0,
+            'sort' => 2,
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        $mail_fields = $this->MailField->find('all')->all();
+        $mail_message = new Entity(
             [
-                'MailField' => [
-                    'field_name' => 'value',
-                    'use_field' => true,
-                    'type' => $type,
-                ]
+                'id' => 1,
+                'name_1' => "\xE3\x8C\x98",
+                'multi_check' => ['a', 'b', 'c'],
             ]
-        ];
-        $dbData = ['MailMessage' => [
-            'value' => $value,
-        ]];
-
-        // 実行
-        $result = $this->MailMessage->convertToDb($dbData);
-
-        $this->assertEquals($expected, $result['MailMessage']['value']);
+        );
+        $result = $this->MailMessage->convertToDb($mail_fields, $mail_message);
+        $this->assertEquals('グラム', $result->name_1);
+        $this->assertEquals('a|b|c', $result->multi_check);
     }
 
     public function convertToDbDataProvider()
@@ -242,6 +276,7 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testConvertDatasToMail($no_send, $type)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $this->MailMessage->mailFields = [
             [

@@ -462,6 +462,7 @@ class MailMessagesTable extends MailAppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToDb(ResultSetInterface $mailFields, EntityInterface $mailMessage)
     {
