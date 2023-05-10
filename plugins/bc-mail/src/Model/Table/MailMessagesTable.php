@@ -103,6 +103,7 @@ class MailMessagesTable extends MailAppTable
      * @param int $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setMailFields(int $mailContentId)
     {

@@ -425,4 +425,24 @@ class MailMessagesTableTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     *
+     * setMailFields test
+     *
+     */
+    public function testSetMailFields()
+    {
+        $mailFields = $this->MailMessage->mailFields;
+        $this->assertCount(0, $mailFields);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        $this->MailMessage->setMailFields(1);
+        $mailFields = $this->MailMessage->mailFields;
+        $this->assertCount(3, $mailFields);
+
+        $this->MailMessage->setMailFields(99);
+        $mailFields = $this->MailMessage->mailFields;
+        $this->assertCount(0, $mailFields);
+    }
 }
