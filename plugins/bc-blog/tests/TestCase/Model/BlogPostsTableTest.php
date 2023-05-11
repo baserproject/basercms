@@ -655,6 +655,8 @@ class BlogPostsTableTest extends BcTestCase
         $result = $this->BlogPostsTable->copy(1);
         //戻る値を確認
         $this->assertEquals($result->name, 'release_copy');
+        $this->assertEquals($result->title, 'プレスリリース_copy');
+        $this->assertFalse($result->status);
     }
 
     /**
