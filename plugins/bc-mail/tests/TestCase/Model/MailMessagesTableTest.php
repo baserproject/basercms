@@ -25,6 +25,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Closure;
 
 /**
  * Class MailMessageTest
@@ -444,5 +445,28 @@ class MailMessagesTableTest extends BcTestCase
         $this->MailMessage->setMailFields(99);
         $mailFields = $this->MailMessage->mailFields;
         $this->assertCount(0, $mailFields);
+    }
+
+    /**
+     *
+     * _validGroupErrorCheck test
+     *
+     */
+    public function test_validGroupErrorCheck()
+    {
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $mail_message = new Entity(
+            [
+                'id' => 1,
+                'name_1' => "hehe",
+            ]
+        );
+        $this->MailMessage->setMailFields(1);
+        Closure::bind(
+            fn($class) => $class->_validGroupErrorCheck($mail_message),
+            null,
+            get_class($this->MailMessage)
+        )($this->MailMessage);
+        $this->assertCount(0, $mail_message->getErrors());
     }
 }
