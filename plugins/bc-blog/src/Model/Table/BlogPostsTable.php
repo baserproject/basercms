@@ -638,6 +638,7 @@ class BlogPostsTable extends BlogAppTable
      * @return mixed page Or false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy($id = null, $data = [])
     {

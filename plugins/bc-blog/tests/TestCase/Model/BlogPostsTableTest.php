@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,8 +38,14 @@ class BlogPostsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
 
@@ -629,19 +636,25 @@ class BlogPostsTableTest extends BcTestCase
 
     /**
      * コピーする
-     *
-     * @param int $id
-     * @param array $data
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogPost->copy(1);
-        $result = $this->BlogPost->find('first', [
-            'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
-        ]);
-        $this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
-        $this->assertEquals(date('Y/m/d', strtotime($result['BlogPost']['posts_date'])), date('Y/m/d'));
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 6,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+        ])->persist();
+
+        //コピーメソッドを呼ぶ
+        $result = $this->BlogPostsTable->copy(1);
+        //戻る値を確認
+        $this->assertEquals($result->name, 'release_copy');
     }
 
     /**
