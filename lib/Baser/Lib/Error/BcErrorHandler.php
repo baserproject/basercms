@@ -336,7 +336,8 @@ class BcErrorHandler extends ErrorHandler
 			$rs[] = 'Referer: ' . env('HTTP_REFERER');
 		}
 
-		if (empty(Configure::read('Error.trace'))) {
+		$trace = Configure::read('Error.trace');
+		if (empty($trace)) {
 			return implode("\n", $rs);
 		}
 
