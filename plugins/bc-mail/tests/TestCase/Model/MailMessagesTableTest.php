@@ -15,6 +15,7 @@ use Authentication\PasswordHasher\DefaultPasswordHasher;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailField;
+use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Model\Table\MailMessagesTable;
 use BcMail\Test\Factory\MailContentFactory;
@@ -455,10 +456,42 @@ class MailMessagesTableTest extends BcTestCase
     public function test_validGroupErrorCheck()
     {
         $this->loadFixtureScenario(MailFieldsScenario::class);
-        $mail_message = new Entity(
+        $mail_message = new MailMessage(
             [
                 'id' => 1,
                 'name_1' => "hehe",
+            ]
+        );
+        $this->MailMessage->setMailFields(1);
+        Closure::bind(
+            fn($class) => $class->_validGroupErrorCheck($mail_message),
+            null,
+            get_class($this->MailMessage)
+        )($this->MailMessage);
+        $this->assertCount(0, $mail_message->getErrors());
+
+        MailFieldsFactory::make([
+            'id' => 4,
+            'mail_content_id' => 1,
+            'no' => 4,
+            'name' => 'a',
+            'field_name' => 'ok',
+            'type' => 'number',
+            'head' => 'a',
+            'maxlength' => 0,
+            'source' => '',
+            'valid' => 0,
+            'not_empty' => 1,
+            'use_field' => 1,
+            'no_send' => 0,
+            'sort' => 3,
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        $mail_message = new MailMessage(
+            [
+                'id' => 1,
+                'ok' => 11,
             ]
         );
         $this->MailMessage->setMailFields(1);
