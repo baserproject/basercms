@@ -120,6 +120,7 @@ class BlogPostsTable extends BlogAppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -195,7 +196,7 @@ class BlogPostsTable extends BlogAppTable
                 'checkDate' => [
                     'rule' => ['checkDate'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', '公開開始日の形式が不正です。')
+                    'message' => __d('baser_core', '公開終了日の形式が不正です。')
                 ]
             ]);
         $validator
