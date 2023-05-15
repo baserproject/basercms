@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,8 +38,14 @@ class BlogPostsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
 
@@ -49,7 +56,6 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
     }
@@ -317,22 +323,18 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testGetEntryDates($blogContentId, $year, $month, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
-        if ($datasource === 'Database/BcSqlite') {
-            $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        }
-
-        $result = $this->BlogPost->getEntryDates($blogContentId, $year, $month);
-        $this->assertEquals($expected, $result, '正しく日付リストを取得できません');
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $result = $this->BlogPostsTable->getEntryDates($blogContentId, $year, $month);
+        $this->assertEquals($expected, $result);
     }
 
     public function getEntryDatesDataProvider()
     {
         return [
-            [1, 2015, 1, ['2015-01-27', '2015-01-27']],
-            [1, 2016, 1, []],
-            [2, 2016, 2, ['2016-02-10', '2016-02-10']],
+            [6, 2015, 1, ['2015-01-27']],
+            [6, 2016, 1, []],
+            [7, 2016, 2, ['2016-02-10']],
         ];
     }
 
