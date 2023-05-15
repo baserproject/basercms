@@ -69,6 +69,12 @@ class BcUploadBehavior extends ModelBehavior
 	public $validatingLock = [];
 
 	/**
+	 * 公開承認を利用するモデルかどうか
+	 * @var bool
+	 */
+	public $useApprover = false;
+
+	/**
 	 * セットアップ
 	 *
 	 * @param Model $Model
@@ -79,6 +85,7 @@ class BcUploadBehavior extends ModelBehavior
 		$this->BcFileUploader[$Model->alias] = new BcFileUploader();
         $this->BcFileUploader[$Model->alias]->initialize($settings, $Model);
 		$this->validatingLock[$Model->alias] = false;
+		$this->useApprover = (CakePlugin::loaded('CuApprover') && in_array($Model->alias, ['Content', 'BlogPost']));
         // @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
         // CuApprover-4.3.2以下に対応するための処理
         // >>>
@@ -122,10 +129,11 @@ class BcUploadBehavior extends ModelBehavior
 		// >>>
 		$files = $this->BcFileUploader[$Model->alias]->getUploadingFiles();
 		foreach($files as $key => $file) {
-			$this->settings[$Model->alias]['fields'][$key]['upload'] = (!empty($file['uploadable'])) ? true : false;
-			if(!empty($file['uploadable'])) {
+			$this->settings[$Model->alias]['fields'][$key]['upload'] = (!empty($file['uploadable']))? true : false;
+			if (!empty($file['uploadable'])) {
 				$Model->data[$Model->alias][$key] = $file;
 				// 公開承認のおける草稿の新規投稿対応
+				if(!$this->useApprover) continue;
 				$setting = $this->settings[$Model->alias]['fields'][$key];
 				$Model->data[$Model->alias][$key] = $fileName = $this->BcFileUploader[$Model->alias]->saveFile($setting, $file);
 				if (($setting['type'] == 'all' || $setting['type'] == 'image') && !empty($setting['imagecopy']) && in_array($file['ext'], $this->BcFileUploader[$Model->alias]->imgExts)) {
@@ -231,7 +239,7 @@ class BcUploadBehavior extends ModelBehavior
 		// 公開承認のおける草稿の新規投稿対応
 		// afterValidate で無理やり生成したファイルを削除する
 		// >>>
-		if(!empty($files)) {
+		if($this->useApprover && !empty($files)) {
 			foreach($files as $key => $file) {
 				if(!empty($file['name'])) {
 					$setting = $this->settings[$Model->alias]['fields'][$key];
