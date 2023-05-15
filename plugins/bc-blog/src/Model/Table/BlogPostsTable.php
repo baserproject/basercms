@@ -411,6 +411,7 @@ class BlogPostsTable extends BlogAppTable
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsEntry(int $blogContentId, int $year, int $month): bool
     {

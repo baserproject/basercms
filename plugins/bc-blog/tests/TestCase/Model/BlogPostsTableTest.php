@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,8 +38,14 @@ class BlogPostsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
 
@@ -359,21 +366,19 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testExistsEntry()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
-        if ($datasource === 'Database/BcSqlite') {
-            $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        }
-        $result = $this->BlogPost->existsEntry(1, 2015, 1);
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        $result = $this->BlogPostsTable->existsEntry(6, 2015, 1);
         $this->assertTrue($result);
 
-        $result = $this->BlogPost->existsEntry(1, 2016, 1);
+        $result = $this->BlogPostsTable->existsEntry(6, 2016, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2015, 1);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2016, 2);
+        $result = $this->BlogPostsTable->existsEntry(7, 2016, 2);
         $this->assertTrue($result);
     }
 
