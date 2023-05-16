@@ -317,21 +317,19 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testExistsEntry()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
-        if ($datasource === 'Database/BcSqlite') {
-            $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        }
-        $result = $this->BlogPost->existsEntry(1, 2015, 1);
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        $result = $this->BlogPostsTable->existsEntry(6, 2015, 1);
         $this->assertTrue($result);
 
-        $result = $this->BlogPost->existsEntry(1, 2016, 1);
+        $result = $this->BlogPostsTable->existsEntry(6, 2016, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2015, 1);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2016, 2);
+        $result = $this->BlogPostsTable->existsEntry(7, 2016, 2);
         $this->assertTrue($result);
     }
 
