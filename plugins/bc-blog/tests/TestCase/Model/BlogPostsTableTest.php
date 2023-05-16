@@ -592,19 +592,27 @@ class BlogPostsTableTest extends BcTestCase
 
     /**
      * コピーする
-     *
-     * @param int $id
-     * @param array $data
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogPost->copy(1);
-        $result = $this->BlogPost->find('first', [
-            'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
-        ]);
-        $this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
-        $this->assertEquals(date('Y/m/d', strtotime($result['BlogPost']['posts_date'])), date('Y/m/d'));
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 6,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+        ])->persist();
+
+        //コピーメソッドを呼ぶ
+        $result = $this->BlogPostsTable->copy(1);
+        //戻る値を確認
+        $this->assertEquals($result->name, 'release_copy');
+        $this->assertEquals($result->title, 'プレスリリース_copy');
+        $this->assertFalse($result->status);
     }
 
     /**
