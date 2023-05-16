@@ -473,25 +473,18 @@ class MailMessagesTableTest extends BcTestCase
         MailFieldsFactory::make([
             'id' => 4,
             'mail_content_id' => 1,
-            'no' => 4,
             'name' => 'a',
             'field_name' => 'ok',
             'type' => 'number',
-            'head' => 'a',
-            'maxlength' => 0,
-            'source' => '',
             'valid' => 0,
+            'group_valid' => 'name',
             'not_empty' => 1,
             'use_field' => 1,
-            'no_send' => 0,
-            'sort' => 3,
             'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
         ])->persist();
         $mail_message = new MailMessage(
             [
-                'id' => 1,
-                'ok' => 11,
+                'id' => 11,
             ]
         );
         $this->MailMessage->setMailFields(1);
@@ -502,4 +495,64 @@ class MailMessagesTableTest extends BcTestCase
         )($this->MailMessage);
         $this->assertCount(0, $mail_message->getErrors());
     }
+
+    /**
+     *
+     * _validGroupComplete test
+     *
+     */
+    public function test_validGroupComplete()
+    {
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => 'a',
+            'field_name' => 'ok99',
+            'type' => 'number',
+            'valid_ex' => 'VALID_GROUP_COMPLATE, keke',
+            'use_field' => 1,
+            'created' => '2015-08-10 18:57:47',
+        ])->persist();
+        MailFieldsFactory::make([
+            'id' => 98,
+            'mail_content_id' => 1,
+            'name' => 'a',
+            'field_name' => 'ok98',
+            'type' => 'number',
+            'valid_ex' => 'VALID_GROUP_COMPLATE, 98',
+            'use_field' => 1,
+            'created' => '2015-08-10 18:57:47',
+        ])->persist();
+        $this->MailMessage->setMailFields(1);
+        $mail_message = new MailMessage(
+            [
+                'id' => 1,
+                'name_1' => "hehe",
+                'ok98' => "hic98",
+                'ok99' => "hic99",
+            ]
+        );
+        Closure::bind(
+            fn($class) => $class->_validGroupComplete($mail_message),
+            null,
+            get_class($this->MailMessage)
+        )($this->MailMessage);
+        $this->assertCount(0, $mail_message->getErrors());
+
+        $mail_message = new MailMessage(
+            [
+                'id' => 1,
+                'name_1' => "hehe",
+                'ok98' => "hic98",
+                'ok99' => "",
+            ]
+        );
+        Closure::bind(
+            fn($class) => $class->_validGroupComplete($mail_message),
+            null,
+            get_class($this->MailMessage)
+        )($this->MailMessage);
+        $this->assertCount(1, $mail_message->getErrors()['_not_complate']);
+    }
+
 }

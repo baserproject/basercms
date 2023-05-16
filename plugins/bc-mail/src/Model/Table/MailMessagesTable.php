@@ -423,6 +423,7 @@ class MailMessagesTable extends MailAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _validGroupComplete(EntityInterface $entity)
     {
