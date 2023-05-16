@@ -46,7 +46,6 @@ class BlogPostsAdminServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
