@@ -162,6 +162,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishLink(BlogPost $post)
     {
