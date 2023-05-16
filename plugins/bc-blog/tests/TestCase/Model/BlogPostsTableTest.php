@@ -11,11 +11,15 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,8 +41,14 @@ class BlogPostsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
 
@@ -676,4 +686,47 @@ class BlogPostsTableTest extends BcTestCase
 		$dir->delete();
 	}
 
+    /**
+     * test getPublishByNo
+     */
+    public function test_getPublishByNo()
+    {
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        BlogCategoryFactory::make(['id' => BlogPostFactory::get(1)->blog_category_id])->persist();
+        UserFactory::make(['id' => BlogPostFactory::get(1)->user_id])->persist();
+        //$no=数値＆$preview=True
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
+
+        //戻る値を確認
+        $this->assertEquals($rs->no, 3);
+        $this->assertEquals($rs->blog_content_id, 6);
+        $this->assertEquals($rs->title, 'プレスリリース');
+        $this->assertNotNull($rs->blog_comments);
+        $this->assertNotNull($rs->blog_tags);
+        $this->assertNotNull($rs->blog_category);
+        $this->assertNotNull($rs->user);
+        $this->assertNotNull($rs->blog_content);
+        $this->assertNotNull($rs->blog_content->content);
+        $this->assertNotNull($rs->blog_content->content->site);
+
+        //$no=文字列＆$preview=false
+        $rs = $this->BlogPostsTable->getPublishByNo(7, 'smartphone_release', false);
+        //戻る値を確認
+        $this->assertEquals($rs->no, 4);
+        $this->assertEquals($rs->title, 'スマホサイトリリース');
+
+        //サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //非公開を設定する
+        $blogPostsService->unpublish(1);
+
+        //preview が true の場合に取得できる
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
+        $this->assertEquals($rs->title, 'プレスリリース');
+
+        //preview が false の場合に取得できない
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3);
+        $this->assertNull($rs);
+    }
 }
