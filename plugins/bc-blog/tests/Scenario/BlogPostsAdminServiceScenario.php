@@ -17,14 +17,14 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * BlogPostsAdminScenario
+ * BlogPostsAdminServiceScenario
  *
  * 利用する場合は、テーブルの初期化に次のフィクスチャの定義が必要
  * 'plugin.BcBlog.Factory/BlogPosts',
  * 'plugin.BcBlog.Factory/BlogContents',
  * 'plugin.BaserCore.Factory/Contents',
  */
-class BlogPostsAdminScenario implements FixtureScenarioInterface
+class BlogPostsAdminServiceScenario implements FixtureScenarioInterface
 {
 
     /**

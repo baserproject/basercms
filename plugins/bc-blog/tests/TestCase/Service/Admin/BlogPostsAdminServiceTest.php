@@ -17,7 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\Admin\BlogPostsAdminService;
 use BcBlog\Service\Admin\BlogPostsAdminServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
-use BcBlog\Test\Scenario\BlogPostsAdminScenario;
+use BcBlog\Test\Scenario\BlogPostsAdminServiceScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -75,7 +75,7 @@ class BlogPostsAdminServiceTest extends BcTestCase
     public function test_getViewVarsForIndex()
     {
         // データを作成する
-        $this->loadFixtureScenario(BlogPostsAdminScenario::class);
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
 
         $post = ['id' => 1];
@@ -99,7 +99,7 @@ class BlogPostsAdminServiceTest extends BcTestCase
         $userService = $this->getService(UsersServiceInterface::class);
 
         // データを作成する
-        $this->loadFixtureScenario(BlogPostsAdminScenario::class);
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
 
         $request = $this->getRequest('/baser/admin')->withParam('pass.0', 1);
@@ -131,7 +131,7 @@ class BlogPostsAdminServiceTest extends BcTestCase
         $userService = $this->getService(UsersServiceInterface::class);
 
         // データを作成する
-        $this->loadFixtureScenario(BlogPostsAdminScenario::class);
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
 
         $request = $this->getRequest('/baser/admin')->withParam('pass.0', 1);
@@ -159,7 +159,7 @@ class BlogPostsAdminServiceTest extends BcTestCase
     public function test_getPublishLink()
     {
         // データを作成する
-        $this->loadFixtureScenario(BlogPostsAdminScenario::class);
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         //サービスクラス
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
