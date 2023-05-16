@@ -364,7 +364,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($result[0]->real_name_1, 'real_name_1_test');
         $this->assertEquals($result[0]->real_name_2, 'real_name_2_test');
         $this->assertEquals($result[0]->nickname, 'nickname_test');
-//
+
         $result = $this->BlogPostsTable->getAuthors(6, ['viewCount' => true]);
         $this->assertEquals($result[0]->count, 1);
     }
