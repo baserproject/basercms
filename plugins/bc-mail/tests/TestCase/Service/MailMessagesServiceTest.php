@@ -12,10 +12,11 @@
 namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailMessagesFactory;
-use BcMail\Test\Scenario\MailFieldsScenario;
+use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -41,6 +42,7 @@ class MailMessagesServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BcMail.Factory/MailFields',
         'plugin.BcMail.Factory/MailMessages',
+        'plugin.BcMail.Factory/MailContents',
     ];
 
     /**
@@ -65,7 +67,6 @@ class MailMessagesServiceTest extends BcTestCase
     public function test_get()
     {
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        $this->loadFixtureScenario(MailFieldsScenario::class);
         MailMessagesFactory::make(
             [
                 'id' => 99,
@@ -75,6 +76,23 @@ class MailMessagesServiceTest extends BcTestCase
         $this->assertEquals(99, $result->id);
         $this->expectException(RecordNotFoundException::class);
         $MailMessagesService->get(1);
+    }
+
+    /**
+     * test getIndex
+     */
+    public function test_getIndex()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->setup(1);
+        MailMessagesFactory::make(
+            [
+                'id' => 2,
+            ]
+        )->persist();
+        $result = $MailMessagesService->getIndex();
+        $this->assertCount(1, $result->all());
     }
 
     /**

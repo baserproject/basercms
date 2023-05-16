@@ -84,6 +84,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
