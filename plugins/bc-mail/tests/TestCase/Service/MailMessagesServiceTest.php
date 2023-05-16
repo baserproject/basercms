@@ -1,5 +1,4 @@
 <?php
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
@@ -10,15 +9,39 @@ return;
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-//namespace BcMail\Test\TestCase\Service;
+namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Service\MailMessagesService;
+use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailMessagesFactory;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+
 
 /**
  * MailMessagesServiceTest
  */
 class MailMessagesServiceTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BcMail.Factory/MailFields',
+        'plugin.BcMail.Factory/MailMessages',
+    ];
 
     /**
      * set up
@@ -34,6 +57,24 @@ class MailMessagesServiceTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test get
+     */
+    public function test_get()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 99,
+            ]
+        )->persist();
+        $result = $MailMessagesService->get(99);
+        $this->assertEquals(99, $result->id);
+        $this->expectException(RecordNotFoundException::class);
+        $MailMessagesService->get(1);
     }
 
     /**

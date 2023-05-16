@@ -70,6 +70,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
