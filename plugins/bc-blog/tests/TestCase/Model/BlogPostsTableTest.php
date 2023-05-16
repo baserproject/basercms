@@ -341,6 +341,33 @@ class BlogPostsTableTest extends BcTestCase
     }
 
     /**
+     * test _getEntryDatesConditions
+     * @param $blogContentId
+     * @param $year
+     * @param $month
+     * @param $expectYear
+     * @param $expertMonth
+     * @dataProvider _getEntryDatesConditionsProvider
+     */
+    public function test_getEntryDatesConditions($blogContentId, $year, $month, $expectYear, $expertMonth)
+    {
+        $rs = $this->execPrivateMethod($this->BlogPostsTable, '_getEntryDatesConditions', [$blogContentId, $year, $month]);
+        //戻る値を確認
+        $this->assertEquals($rs["YEAR(`BlogPosts`.`posted`)"], $expectYear);
+        $this->assertEquals($rs["MONTH(`BlogPosts`.`posted`)"], $expertMonth);
+        $this->assertTrue($rs["BlogPosts.status"]);
+        $this->assertEquals($rs["BlogPosts.blog_content_id"], 1);
+    }
+
+    public function _getEntryDatesConditionsProvider()
+    {
+        return [
+            [1, 2027, 1, 2027, 1],      //日付を設定する場合、
+            [1, null, null, 2023, 5],   //日付を設定ない場合、
+        ];
+    }
+
+    /**
      * コントロールソースを取得する
      *
      * @param array $options オプション

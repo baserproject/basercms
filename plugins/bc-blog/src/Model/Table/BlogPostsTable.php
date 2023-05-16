@@ -435,6 +435,9 @@ class BlogPostsTable extends BlogAppTable
      * @param int $year
      * @param int $month
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest 
      */
     protected function _getEntryDatesConditions($blogContentId, $year, $month)
     {
