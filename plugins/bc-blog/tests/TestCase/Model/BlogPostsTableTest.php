@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
+use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
@@ -714,5 +715,18 @@ class BlogPostsTableTest extends BcTestCase
         //戻る値を確認
         $this->assertEquals($rs->no, 4);
         $this->assertEquals($rs->title, 'スマホサイトリリース');
+
+        //サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //非公開を設定する
+        $blogPostsService->unpublish(1);
+
+        //preview が true の場合に取得できる
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
+        $this->assertEquals($rs->title, 'プレスリリース');
+
+        //preview が false の場合に取得できない
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3);
+        $this->assertNull($rs);
     }
 }
