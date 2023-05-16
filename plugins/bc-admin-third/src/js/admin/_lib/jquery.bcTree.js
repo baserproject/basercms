@@ -326,9 +326,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/change_status.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'PATCH',
                                                     data: {
                                                         id: data.contentId,
@@ -367,9 +364,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/change_status.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'PATCH',
                                                     data: {
                                                         id: data.contentId,
@@ -504,9 +498,6 @@
                                         if (data.alias) {
                                             $.ajax({
                                                 url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/exists/' + data.contentAliasId + '.json',
-                                                headers: {
-                                                    "Authorization": $.bcJwt.accessToken,
-                                                },
                                                 type: 'GET',
                                                 dataType: 'json',
                                                 beforeSend: function () {
@@ -537,9 +528,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/trash_empty.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'DELETE',
                                                     dataType: 'json',
                                                     data: {
@@ -889,9 +877,6 @@
                         };
                         return $.ajax({
                             url: url,
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'POST',
                             data: {
                                 _csrfToken: $.bcToken.key,
@@ -976,9 +961,6 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/delete/' + data.contentId + '.json',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         id: data.contentId,
@@ -1027,9 +1009,6 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcTree.settings[data.contentType]['url']['copy'],
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         content_id: data.contentId,
@@ -1056,9 +1035,6 @@
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;');
                         $.ajax($.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_full_url/' + data.contentId + '.json', {
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'GET',
                             dataType: 'json'
                         }).done(function (result) {
@@ -1106,9 +1082,6 @@
                 $.bcToken.check(function () {
                     return $.ajax({
                         url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/rename.json',
-                        headers: {
-                            "Authorization": $.bcJwt.accessToken,
-                        },
                         type: 'PATCH',
                         dataType: 'json',
                         data: {
@@ -1218,9 +1191,6 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/move.json',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'PATCH',
                     data: {
                         origin: {

@@ -58,9 +58,6 @@ $(function () {
     $("#site-id").change(function () {
         $.ajax({
             url: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val() + '.json',
-            headers: {
-                "Authorization": $.bcJwt.accessToken,
-            },
             type: "GET",
             dataType: "json",
             beforeSend: function () {

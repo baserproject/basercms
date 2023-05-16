@@ -1528,6 +1528,7 @@ class ContentsService implements ContentsServiceInterface
      * @return false|ServerRequest
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setCurrentToRequest(string $type, int $entityId, ServerRequest $request)
     {

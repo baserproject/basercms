@@ -153,6 +153,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolderForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(array $postData)
     {
@@ -177,6 +178,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(string $fullpath)
     {
@@ -195,6 +197,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return ThemeFolder|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $fullpath)
     {
@@ -255,6 +258,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNamesByFullpath(array $paths)
     {
@@ -280,6 +284,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      * @return array|false|string|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copyToTheme(array $params)
     {

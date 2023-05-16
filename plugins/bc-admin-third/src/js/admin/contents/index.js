@@ -46,35 +46,6 @@ $(function () {
             return true;
         });
 
-        // サイトが変わった場合は検索ボックスをリセット
-        if (e !== undefined && e.target.id === 'viewsetting-site-id') {
-            $("#BtnSearchClear").click();
-            $.ajax({
-                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
-                headers: {
-                    "Authorization": $.bcJwt.accessToken,
-                },
-                type: "GET",
-                dataType: "json",
-                beforeSend: function () {
-                    $("#ContentFolderId").prop('disabled', true);
-                },
-                complete: function () {
-                    $("#ContentFolderId").removeAttr("disabled");
-                },
-                success: function (result) {
-                    let contentFolderId = $("#ContentFolderId");
-                    contentFolderId.empty();
-                    let optionItems = [];
-                    optionItems.push(new Option("指定なし", ""));
-                    for (key in result) {
-                        optionItems.push(new Option(result.list[key].replace(/&nbsp;/g, "\u00a0"), key));
-                    }
-                    contentFolderId.append(optionItems);
-                }
-            });
-        }
-
         // 表示変更時
         $("input[name='ViewSetting[list_type]']").change(() => {
             $.bcUtil.showLoader();

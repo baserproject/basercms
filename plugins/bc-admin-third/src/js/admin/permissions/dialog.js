@@ -60,9 +60,6 @@ $(function () {
                     $.bcToken.check(function () {
                         return $.ajax({
                             url: $.bcUtil.apiAdminBaseUrl + 'baser-core/permissions/add',
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'POST',
                             data: form.serialize(),
                             dataType: 'json',

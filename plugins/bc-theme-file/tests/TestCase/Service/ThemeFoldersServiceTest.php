@@ -11,6 +11,8 @@
 
 namespace BcThemeFile\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFoldersService;
 use Cake\Filesystem\Folder;
@@ -22,6 +24,19 @@ class ThemeFoldersServiceTest extends BcTestCase
 {
 
     public $ThemeFoldersService = null;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+    ];
 
     /**
      * set up
@@ -118,7 +133,24 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+
+        //ポストデータを作成
+        $postData = [
+            'fullpath' => $fullpath . 'new_folder',
+            'name' => 'edit_folder'
+        ];
+        //サービスメソッドをコル
+        $this->ThemeFoldersService->update($postData);
+
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . 'new_folder'));
+        //変更されたフォルダを削除
+        rmdir($fullpath . 'edit_folder');
     }
 
     /**
@@ -126,7 +158,14 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        (new Folder())->create($fullpath . DS . 'delete_folder', 0777);
+        $rs = $this->ThemeFoldersService->delete($fullpath . DS . 'delete_folder');
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
     }
 
     /**
@@ -134,7 +173,24 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        (new Folder())->create($fullpath . 'new_folder', 0777);
+
+        //対象のメソッドを確認
+        $rs = $this->ThemeFoldersService->copy($fullpath . 'new_folder');
+
+        //戻る値を確認
+        $this->assertEquals($rs->type, 'folder');
+        $this->assertEquals($rs->fullpath, $fullpath . 'new_folder_copy');
+        $this->assertEquals($rs->parent, $fullpath);
+
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder_copy'));
+
+        //作成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
+        rmdir($fullpath . 'new_folder_copy');
     }
 
     /**
@@ -162,7 +218,14 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_getNamesByFullpath()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $fullPaths = [
+            '/var/www/html/plugins/bc-front/webroot/img',
+            '/var/www/html/plugins/bc-front/webroot/js',
+        ];
+        //対象のメソッドをコル
+        $rs = $this->ThemeFoldersService->getNamesByFullpath($fullPaths);
+        //戻る値を確認
+        $this->assertEquals($rs, ['img', 'js']);
     }
 
     /**
@@ -170,7 +233,35 @@ class ThemeFoldersServiceTest extends BcTestCase
      */
     public function test_copyToTheme()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //現在のテーマを設定する
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcPluginSample'])->persist();
+        UserFactory::make()->admin()->persist();
+        $this->getRequest();
+
+        $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
+        $data = [
+            'type' => 'Pages',
+            'path' => '',
+            'assets' => '',
+            'plugin' => 'BaserCore',
+            'fullpath' => '/var/www/html/plugins/bc-front/templates/Pages/'
+        ];
+
+        $rs = $this->ThemeFoldersService->copyToTheme($data);
+        //戻る値を確認
+        $this->assertEquals($rs, '/plugins/BcPluginSample/templates/Pages/');
+        //実際にフォルダがコピーできるか確認すること
+        $this->assertTrue(is_dir($fullpath . '/Pages'));
+        //生成されたフォルダを削除
+        unlink($fullpath . '/Pages/default.php');
+        rmdir($fullpath . '/Pages');
+
+        //コピーできないの場合、
+        $data ['fullpath'] = '/var/www/html/plugins/bc-front/templates/Pages/11111';
+
+        $rs = $this->ThemeFoldersService->copyToTheme($data);
+        //戻る値を確認
+        $this->assertFalse($rs);
     }
 
     /**

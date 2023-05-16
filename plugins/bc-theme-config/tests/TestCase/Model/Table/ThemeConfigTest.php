@@ -70,6 +70,22 @@ class ThemeConfigTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $validator = $this->ThemeConfigsTable->getValidator('default');
+
+        //設定名が指定しない場合、
+        $errors = $validator->validate([
+            'name' => ''
+        ]);
+        //戻り値を確認
+        $this->assertEquals('設定名を入力してください。', current($errors['name']));
+
+        //maxLength　テスト、
+        $errors = $validator->validate([
+            'name' => str_repeat('a', 256),
+            'value' => str_repeat('a', 65536)
+        ]);
+        //戻り値を確認
+        $this->assertEquals('255文字以内で入力してください。', current($errors['name']));
+        $this->assertEquals('65535文字以内で入力してください。', current($errors['value']));
     }
 }
