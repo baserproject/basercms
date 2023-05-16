@@ -374,6 +374,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthors(int $blogContentId, array $options)
     {

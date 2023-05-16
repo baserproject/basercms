@@ -297,17 +297,24 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testGetAuthors()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '投稿者一覧を正しく取得できません';
-        $result = $this->BlogPost->getAuthors(1, []);
-        $this->assertEquals($result[0]['User']['name'], 'basertest', $message);
-        $this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        UserFactory::make([
+            'id' => BlogPostFactory::get(1)->user_id,
+            'name' => 'name_test',
+            'real_name_1' => 'real_name_1_test',
+            'real_name_2' => 'real_name_2_test',
+            'nickname' => 'nickname_test',
+        ])->persist();
 
-        $result = $this->BlogPost->getAuthors(2, []);
-        $this->assertEquals($result[0]['User']['name'], 'basertest', $message);
+        $result = $this->BlogPostsTable->getAuthors(6, []);
+        $this->assertEquals($result[0]->name, 'name_test');
+        $this->assertEquals($result[0]->real_name_1, 'real_name_1_test');
+        $this->assertEquals($result[0]->real_name_2, 'real_name_2_test');
+        $this->assertEquals($result[0]->nickname, 'nickname_test');
 
-        $result = $this->BlogPost->getAuthors(2, ['viewCount' => true]);
-        $this->assertEquals($result[0]['count'], 2, $message);
+        $result = $this->BlogPostsTable->getAuthors(6, ['viewCount' => true]);
+        $this->assertEquals($result[0]->count, 1);
     }
 
     /**
