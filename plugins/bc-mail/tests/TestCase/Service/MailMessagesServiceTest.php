@@ -65,6 +65,21 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
+     * test setup
+     */
+    public function testSetup()
+    {
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->setup(1);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $this->assertEquals('1', $mailMessageTable->mailFields->toArray()[0]->id);
+        $this->assertCount(3, $mailMessageTable->mailFields);
+
+    }
+
+    /**
      * test get
      */
     public function testGet()

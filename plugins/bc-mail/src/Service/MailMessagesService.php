@@ -57,6 +57,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @param int $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup(int $mailContentId, $postData = [])
     {
