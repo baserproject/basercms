@@ -11,7 +11,9 @@
 
 namespace BcBlog\Test\TestCase\Service\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\Admin\BlogPostsAdminService;
@@ -181,7 +183,37 @@ class BlogPostsAdminServiceTest extends BcTestCase
      */
     public function test_getEditorOptions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスクラス
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        //データを生成
+        SiteConfigFactory::make([
+            'name' => 'editor_styles',
+            'value' => '#青見出し
+                        h3 {
+                        color:Blue;
+                        }'
+        ])->persist();
+        //editorDisableDraft＝trueとeditor_stylesがある場合、
+        $rs = $this->BlogPostsAdminService->getEditorOptions(true);
+
+        //戻る値を確認
+        $this->assertEquals($rs['editorDisableDraft'], true);
+        $this->assertEquals($rs['editorStylesSet'], 'default');
+        $this->assertEquals($rs['editorStyles']['default'][0]['name'], '青見出し(h3)');
+        $this->assertEquals($rs['editorStyles']['default'][0]['element'], 'h3');
+        $this->assertEquals($rs['editorStyles']['default'][0]['styles']['color'], 'Blue');
+
+        //editor_stylesのバリューをリセットする
+        $siteConfigsService->resetValue('editor_styles');
+
+        //editorDisableDraft＝falseとeditor_stylesがない場合、
+        $rs = $this->BlogPostsAdminService->getEditorOptions(false);
+        //戻る値を確認
+        $this->assertEquals($rs['editorDisableDraft'], false);
+        //editorStylesSetが存在しないの確認すること
+        $this->assertNotContains('editorStylesSet', $rs);
+        //editorStylesが存在しないの確認すること
+        $this->assertNotContains('editorStyles', $rs);
     }
 
 }
