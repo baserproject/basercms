@@ -80,6 +80,27 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
+     * test batch
+     */
+    public function testBatch()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->setup(1);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+        $mailMessageTable->save(new Entity(['id' => 2]));
+        $result = $MailMessagesService->batch('delete', []);
+        $this->assertTrue($result);
+
+        $result = $MailMessagesService->get(1);
+        $this->assertEquals(1, $result->id);
+        $result = $MailMessagesService->batch('delete', [1]);
+        $this->assertTrue($result);
+        $this->expectException(RecordNotFoundException::class);
+        $MailMessagesService->get(1);
+    }
+
+    /**
      * test get
      */
     public function testGet()

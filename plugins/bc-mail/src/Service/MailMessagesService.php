@@ -170,6 +170,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
