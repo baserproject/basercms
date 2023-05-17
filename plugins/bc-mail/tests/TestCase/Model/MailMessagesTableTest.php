@@ -144,7 +144,7 @@ class MailMessagesTableTest extends BcTestCase
     public function validateDataProvider()
     {
         return [
-            // 豁｣蟶ｸ邉ｻ
+            // 正常系
             [
                 1, [
                 'email_1' => 'a@example.co.jp', 'email_2' => 'a@example.co.jp',
@@ -207,33 +207,15 @@ class MailMessagesTableTest extends BcTestCase
         $this->loadFixtureScenario(MailFieldsScenario::class);
         MailFieldsFactory::make([
             'mail_content_id' => 1,
-            'no' => 2,
-            'name' => '名',
             'field_name' => 'multi_check',
             'type' => 'multi_check',
-            'options' => 'placeholder|性',
-            'valid' => 0,
-            'not_empty' => 1,
             'use_field' => 1,
-            'no_send' => 0,
-            'sort' => 2,
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
         ])->persist();
         MailFieldsFactory::make([
             'mail_content_id' => 1,
-            'no' => 2,
-            'name' => '名',
             'field_name' => 'pw',
             'type' => 'password',
-            'options' => 'placeholder|性',
-            'valid' => 0,
-            'not_empty' => 1,
             'use_field' => 1,
-            'no_send' => 0,
-            'sort' => 2,
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
         ])->persist();
         $mail_fields = $this->MailField->find('all')->all();
         $mail_message = new Entity(
