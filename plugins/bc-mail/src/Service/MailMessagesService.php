@@ -333,6 +333,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(int $mailContentId, array $params): EntityInterface
     {
@@ -355,7 +356,7 @@ class MailMessagesService implements MailMessagesServiceInterface
 
         if ($params) {
             foreach($params as $key => $value) {
-                $messageArray[$key] = h(base64UrlsafeDecode($value));
+                $messageArray[$key] = h(BcUtil::base64UrlsafeDecode($value));
             }
         }
         return $this->MailMessages->newEntity($messageArray, ['validate' => false]);

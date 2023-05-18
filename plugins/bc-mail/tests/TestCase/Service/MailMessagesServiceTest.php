@@ -12,9 +12,11 @@
 namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -294,45 +296,44 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * 初期値の設定をする
      *
-     * @param string $type
-     * @dataProvider getNewDataProvider
+     * test getNew
      */
-    public function testGetNew($type)
+    public function testGetNew()
     {
-        $this->markTestIncomplete('こちらのテストは未実装です。MailMessagesTable::getDefaultValue()より移植');
-        // 初期化
-        $this->MailMessage->mailFields = [
-            [
-                'MailField' => [
-                    'field_name' => 'value',
-                    'use_field' => true,
-                    'default_value' => 'default',
-                    'type' => $type,
-                ]
-            ]
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertNull($result->mail_content_id);
+
+        MailFieldsFactory::make([
+            'id' => 4,
+            'mail_content_id' => 1,
+            'field_name' => 'test1',
+            'use_field' => 1,
+            'default_value' => 'Nghiem',
+        ])->persist();
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertEquals('Nghiem', $result->test1);
+
+        MailFieldsFactory::make([
+            'id' => 5,
+            'mail_content_id' => 1,
+            'type' => 'multi_check',
+            'field_name' => 'test2',
+            'use_field' => 1,
+            'default_value' => 'hehe',
+        ])->persist();
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertIsArray($result->test2);
+        $this->assertEquals('hehe', $result->test2[0]);
+
+        $mailMessage = [
+            'field1' => BcUtil::base64UrlsafeEncode('https://book.cakephp.org'),
         ];
-        $data = ['MailMessage' => [
-            'key1' => 'hoge1',
-            'key2' => 'hoge2',
-        ]];
-
-        // 実行
-        $result = $this->MailMessage->getDefaultValue($data);
-
-        if ($type != 'multi_check') {
-            $expected = [
-                'MailMessage' => [
-                    'value' => 'default',
-                    'key1' => 'hoge1',
-                    'key2' => 'hoge2'
-                ]
-            ];
-            $this->assertEquals($expected, $result);
-        } else {
-            $this->assertEquals('default', $result['MailMessage']['value'][0]);
-        }
+        $result = $MailMessagesService->getNew(1, $mailMessage);
+        $this->assertEquals('https://book.cakephp.org', $result->field1);
     }
 
     public function getNewDataProvider()
