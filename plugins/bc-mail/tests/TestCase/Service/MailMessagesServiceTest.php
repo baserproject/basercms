@@ -116,7 +116,7 @@ class MailMessagesServiceTest extends BcTestCase
         $result = $MailMessagesService->delete(1);
         $this->assertTrue($result);
         $this->expectException(RecordNotFoundException::class);
-        $MailMessagesService->get(1);
+        $MailMessagesService->delete(1);
     }
 
     /**
