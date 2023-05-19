@@ -381,37 +381,31 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * 自動変換
-     * 確認画面で利用される事も踏まえてバリデートを通す為の
-     * 可能な変換処理を行う。
-     *
-     * @param string $auto_convert 変換タイプ
-     * @param string $value 入力値
-     * @param string $expected 期待値
-     * @param string $message テスト失敗時に表示されるメッセージ
-     * @dataProvider autoConvertDataProvider
+     * test autoConvert
      */
-    public function testAutoConvert($auto_convert, $value, $expected, $message)
+    public function testAutoConvert()
     {
-        $this->markTestIncomplete('こちらのテストは未実装です。MailMessagesTable::autoConvert()より移植');
-        // 初期化
-        $this->MailMessage->mailFields = [
-            [
-                'MailField' => [
-                    'field_name' => 'value',
-                    'auto_convert' => $auto_convert,
-                    'use_field' => true,
-                ]
-            ]
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailFieldsFactory::make([
+            'id' => 4,
+            'mail_content_id' => 1,
+            'field_name' => 'name_3',
+            'use_field' => 1,
+            'auto_convert' => 'CONVERT_HANKAKU',
+        ])->persist();
+        $data = [
+            'name_1' => '   hello world   ',
+            'name_2' => '<!--hello world',
+            'name_3' => 'こんにちは',
+            'test' => '   Nghiem   ',
         ];
-        $data = ['MailMessage' => [
-            'value' => $value
-        ]];
-
-        // 実行
-        $result = $this->MailMessage->autoConvert($data);
-
-        $this->assertEquals($expected, $result['MailMessage']['value'], $message);
+        $result = $MailMessagesService->autoConvert(1, $data);
+        $this->assertEquals('hello world', $result['name_1']);
+        $this->assertEquals('&lt;!--hello world', $result['name_2']);
+        $this->assertEquals('こんにちは', $result['name_3']);
+        $this->assertEquals('   Nghiem   ', $result['test']);
     }
 
     public function autoConvertDataProvider()

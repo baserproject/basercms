@@ -373,6 +373,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return array $data
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function autoConvert(int $mailContentId, array $data): array
     {
