@@ -24,6 +24,7 @@ use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use BcMail\ServiceProvider\BcMailServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use BcThemeFile\ServiceProvider\BcThemeFileServiceProvider;
+use BcUploader\ServiceProvider\BcUploaderServiceProvider;
 use BcWidgetArea\ServiceProvider\BcWidgetAreaServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -216,6 +217,7 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcMailServiceProvider());
         $container->addServiceProvider(new BcWidgetAreaServiceProvider());
         $container->addServiceProvider(new BcThemeFileServiceProvider());
+        $container->addServiceProvider(new BcUploaderServiceProvider());
         EventManager::instance(new EventManager());
     }
 
