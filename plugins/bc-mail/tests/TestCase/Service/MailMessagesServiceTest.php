@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
+use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
@@ -151,6 +152,33 @@ class MailMessagesServiceTest extends BcTestCase
         $result = $MailMessagesService->getIndex();
         $this->assertCount(2, $result->all());
         $this->assertEquals(1, $result->all()->toArray()[0]->id);
+    }
+
+    /**
+     * test create
+     */
+    public function test_create()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $postData = [];
+        $mailContent = $MailContentsService->get(1);
+        $MailMessagesService->create($mailContent, $postData);
+        $result = $MailMessagesService->get(1);
+        $this->assertEquals(1, $result->id);
+
+        $postData = [
+            'id' => 2,
+            'name_1' => 'value 1',
+        ];
+        $result = $MailMessagesService->create($mailContent, $postData);
+        $this->assertEquals('value 1', $result->name_1);
+
+        $result = $MailMessagesService->get(2);
+        $this->assertEquals(2, $result->id);
+
     }
 
     /**

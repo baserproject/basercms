@@ -112,6 +112,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @param EntityInterface|MailContent $mailContent
      * @param array|MailMessage $postData
      * @return EntityInterface
+     * @unitTest
      */
     public function create(EntityInterface $mailContent, $postData)
     {
