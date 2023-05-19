@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
@@ -234,7 +235,14 @@ class MailMessagesServiceTest extends BcTestCase
      */
     public function testCreateTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->createTable(99);
+        $this->assertTrue($result);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $checkExist = $BcDatabaseService->tableExists('mail_message_99');
+        $this->assertTrue($checkExist);
+        $dropTable = $BcDatabaseService->dropTable('mail_message_99');
+        $this->assertTrue($dropTable);
     }
 
     /**
