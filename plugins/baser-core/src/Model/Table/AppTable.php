@@ -147,7 +147,7 @@ class AppTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
+        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
     }
 
     /**

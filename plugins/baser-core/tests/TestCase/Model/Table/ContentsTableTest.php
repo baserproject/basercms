@@ -771,8 +771,8 @@ class ContentsTableTest extends BcTestCase
                     'self_publish_end' => new FrozenTime('2022/12/30 00:00:00'),
                 ],
                 [
-                    'publish_begin' => '2022/12/01 00:00:00',
-                    'publish_end' => '2022/12/30 00:00:00',
+                    'publish_begin' => '2022-12-01 00:00:00',
+                    'publish_end' => '2022-12-30 00:00:00',
                 ]
             ],
             // nullになる場合
