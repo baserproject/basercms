@@ -351,6 +351,12 @@ $(function () {
             return false;
         });
 
+        $('.bca-list-num a').on('click.listNumEvent', function(){
+            $("#Waiting").show();
+            $.get($(this).attr('href'), updateFileListCompleteHander);
+            return false;
+        });
+
         /*$('#FilterUploaderCategoryId'+listId).bind('change.filterEvent', function() {
             $("#Waiting").show();
             $.get(getListUrl(),updateFileListCompleteHander);
