@@ -32,6 +32,7 @@ class EditorTemplatesTable extends AppTable
      * @param array $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
