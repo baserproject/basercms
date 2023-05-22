@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
@@ -406,6 +407,20 @@ class MailMessagesServiceTest extends BcTestCase
         $this->assertEquals('&lt;!--hello world', $result['name_2']);
         $this->assertEquals('こんにちは', $result['name_3']);
         $this->assertEquals('   Nghiem   ', $result['test']);
+    }
+
+    /**
+     * test createTableName
+     */
+    public function testCreateTableName()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->createTableName(1);
+        $this->assertEquals('mail_message_1', $result);
+        $result = $MailMessagesService->createTableName(99);
+        $this->assertEquals('mail_message_99', $result);
+        $this->expectException(\TypeError::class);
+        $MailMessagesService->createTableName('a');
     }
 
     public function autoConvertDataProvider()

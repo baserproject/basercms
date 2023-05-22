@@ -211,6 +211,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createTableName(int $mailContentId)
     {
