@@ -30,8 +30,6 @@ class BlogTagsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
         'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
     ];
 
