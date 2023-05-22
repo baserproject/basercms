@@ -79,7 +79,7 @@ class BcAdminApiController extends BcApiController
         if ($auth instanceof JwtAuthenticator) {
             $payload = $auth->getPayload();
             if ($payload->token_type !== 'access_token' && $this->getRequest()->getParam('action') !== 'refresh_token') {
-                $this->setResponse($this->response->withStatus(401));
+                return $this->response->withStatus(401);
             }
         }
 
