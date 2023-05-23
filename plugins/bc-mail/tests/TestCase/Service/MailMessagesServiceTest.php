@@ -315,7 +315,12 @@ class MailMessagesServiceTest extends BcTestCase
      */
     public function testDropTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $MailMessagesService->createTable(99);
+        $this->assertTrue($BcDatabaseService->tableExists('mail_message_99'));
+        $this->assertTrue($MailMessagesService->dropTable(99));
+        $this->assertFalse($BcDatabaseService->tableExists('mail_message_99'));
     }
 
     /**

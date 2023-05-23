@@ -253,6 +253,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dropTable(int $mailContentId)
     {
