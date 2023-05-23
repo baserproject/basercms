@@ -26,7 +26,6 @@ use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Closure;
 
 /**
  * Class MailMessageTest
@@ -445,11 +444,7 @@ class MailMessagesTableTest extends BcTestCase
             ]
         );
         $this->MailMessage->setMailFields(1);
-        Closure::bind(
-            fn($class) => $class->_validGroupErrorCheck($mail_message),
-            null,
-            get_class($this->MailMessage)
-        )($this->MailMessage);
+        $this->execPrivateMethod($this->MailMessage, '_validGroupErrorCheck', [$mail_message]);
         $this->assertCount(0, $mail_message->getErrors());
 
         MailFieldsFactory::make([
