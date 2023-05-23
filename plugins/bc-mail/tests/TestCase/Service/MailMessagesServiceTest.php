@@ -450,6 +450,19 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
+     * test deleteMessageField
+     */
+    public function testDeleteMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($MailMessagesService->addMessageField(1, 'Nghiem'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+        $this->assertTrue($MailMessagesService->deleteMessageField(1, 'Nghiem'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+    }
+
+    /**
      * test renameMessageField
      */
     public function testRenameMessageField()

@@ -272,6 +272,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteMessageField(int $mailContentId, string $field)
     {
