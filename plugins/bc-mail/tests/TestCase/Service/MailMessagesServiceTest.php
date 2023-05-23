@@ -417,10 +417,57 @@ class MailMessagesServiceTest extends BcTestCase
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $result = $MailMessagesService->createTableName(1);
         $this->assertEquals('mail_message_1', $result);
+
         $result = $MailMessagesService->createTableName(99);
         $this->assertEquals('mail_message_99', $result);
+
         $this->expectException(\TypeError::class);
         $MailMessagesService->createTableName('a');
+    }
+
+    /**
+     * test addMessageField
+     */
+    public function testAddMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->addMessageField(1, 'Nghiem');
+        $this->assertTrue($result);
+
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $result = $BcDatabaseService->columnExists('mail_message_1', 'Nghiem');
+        $this->assertTrue($result);
+        $BcDatabaseService->removeColumn('mail_message_1', 'Nghiem');
+
+        $this->expectExceptionMessage("Base table or view not found: 1146 Table 'test_basercms.mail_message_99' doesn't exist");
+        $MailMessagesService->addMessageField(99, 'Nghiem');
+
+    }
+
+    /**
+     * test renameMessageField
+     */
+    public function testRenameMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        $MailMessagesService->addMessageField(1, 'Nghiem');
+        $result = $BcDatabaseService->columnExists('mail_message_1', 'Nghiem');
+        $this->assertTrue($result);
+
+        $result = $MailMessagesService->renameMessageField(1, 'Nghiem', 'Test');
+        $this->assertTrue($result);
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'Test'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+
+        $this->expectExceptionMessage("The specified column doesn't exist: Nghiem");
+        $MailMessagesService->renameMessageField(1, 'Nghiem', 'Test');
+
+        $this->expectExceptionMessage("Base table or view not found: 1146 Table 'test_basercms.mail_message_99' doesn't exist");
+        $MailMessagesService->addMessageField(99, 'Test', 'Test1');
+
+        $BcDatabaseService->removeColumn('mail_message_1', 'Test');
     }
 
     public function autoConvertDataProvider()

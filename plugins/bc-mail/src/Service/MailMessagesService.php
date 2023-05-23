@@ -197,6 +197,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addMessageField(int $mailContentId, string $fieldName): bool
     {
@@ -285,6 +286,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function renameMessageField(int $mailContentId, string $oldFieldName, string $newfieldName)
     {
