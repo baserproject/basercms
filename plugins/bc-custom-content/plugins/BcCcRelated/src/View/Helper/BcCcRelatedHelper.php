@@ -75,11 +75,16 @@ class BcCcRelatedHelper extends Helper
         /** @var CustomEntriesServiceInterface $entriesService */
         $entriesService = $this->getService(CustomEntriesServiceInterface::class);
         $currentTableId = $entriesService->CustomEntries->tableId;
-        $entriesService->setup($field->meta['BcCcRelated']['custom_table_id']);
+        try {
+            $entriesService->setup($field->meta['BcCcRelated']['custom_table_id']);
+            $list = $entriesService->getList($conditions);
+        } catch (\Throwable $e) {
+            $list = [];
+        }
 
         $options = array_merge([
             'type' => 'select',
-            'options' => $entriesService->getList($conditions),
+            'options' => $list,
             'empty' => __d('baser_core', '選択してください'),
         ], $options);
 

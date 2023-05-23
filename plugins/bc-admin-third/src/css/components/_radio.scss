@@ -67,6 +67,10 @@
       //background: #EEEEEE;
     }
 
+    &.form-error + label:before {
+      border: 1px solid $color_danger;
+    }
+
     &:checked + label:before {
       background: $color_primary;
       box-shadow: 0 0 0 4px #fff inset;
