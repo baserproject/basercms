@@ -159,7 +159,7 @@ class MailMessagesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create()
+    public function testCreate()
     {
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
@@ -469,6 +469,17 @@ class MailMessagesServiceTest extends BcTestCase
 
         $BcDatabaseService->removeColumn('mail_message_1', 'Test');
     }
+
+    /**
+     * test __construct
+     */
+    public function testConstruct()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $this->assertTrue(isset($MailMessagesService->BcDatabaseService));
+        $this->assertTrue(isset($MailMessagesService->MailMessages));
+    }
+
 
     public function autoConvertDataProvider()
     {

@@ -42,6 +42,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
