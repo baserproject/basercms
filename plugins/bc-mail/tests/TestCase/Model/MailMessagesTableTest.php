@@ -216,15 +216,15 @@ class MailMessagesTableTest extends BcTestCase
             'type' => 'password',
             'use_field' => 1,
         ])->persist();
-        $mail_fields = $this->MailField->find('all')->all();
-        $mail_message = new Entity(
+        $mailFields = $this->MailField->find('all')->all();
+        $mailMessage = new Entity(
             [
                 'id' => 1,
                 'name_1' => "\xE3\x8C\x98",
                 'multi_check' => ['a', 'b', 'c'],
             ]
         );
-        $result = $this->MailMessage->convertToDb($mail_fields, $mail_message);
+        $result = $this->MailMessage->convertToDb($mailFields, $mailMessage);
         $this->assertEquals('グラム', $result->name_1);
         $this->assertEquals('a|b|c', $result->multi_check);
     }
@@ -437,15 +437,15 @@ class MailMessagesTableTest extends BcTestCase
     public function testValidGroupErrorCheck()
     {
         $this->loadFixtureScenario(MailFieldsScenario::class);
-        $mail_message = new MailMessage(
+        $mailMessage = new MailMessage(
             [
                 'id' => 1,
                 'name_1' => "hehe",
             ]
         );
         $this->MailMessage->setMailFields(1);
-        $this->execPrivateMethod($this->MailMessage, '_validGroupErrorCheck', [$mail_message]);
-        $this->assertCount(0, $mail_message->getErrors());
+        $this->execPrivateMethod($this->MailMessage, '_validGroupErrorCheck', [$mailMessage]);
+        $this->assertCount(0, $mailMessage->getErrors());
 
         MailFieldsFactory::make([
             'id' => 4,
@@ -454,14 +454,14 @@ class MailMessagesTableTest extends BcTestCase
             'group_valid' => 'name',
             'use_field' => 1,
         ])->persist();
-        $mail_message = new MailMessage(
+        $mailMessage = new MailMessage(
             [
                 'id' => 11,
             ]
         );
         $this->MailMessage->setMailFields(1);
-        $this->execPrivateMethod($this->MailMessage, '_validGroupErrorCheck', [$mail_message]);
-        $this->assertCount(0, $mail_message->getErrors());
+        $this->execPrivateMethod($this->MailMessage, '_validGroupErrorCheck', [$mailMessage]);
+        $this->assertCount(0, $mailMessage->getErrors());
     }
 
     /**
@@ -487,7 +487,7 @@ class MailMessagesTableTest extends BcTestCase
             'use_field' => 1,
         ])->persist();
         $this->MailMessage->setMailFields(1);
-        $mail_message = new MailMessage(
+        $mailMessage = new MailMessage(
             [
                 'id' => 1,
                 'name_1' => "hehe",
@@ -495,10 +495,10 @@ class MailMessagesTableTest extends BcTestCase
                 'ok99' => "hic99",
             ]
         );
-        $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mail_message]);
-        $this->assertCount(0, $mail_message->getErrors());
+        $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
+        $this->assertCount(0, $mailMessage->getErrors());
 
-        $mail_message = new MailMessage(
+        $mailMessage = new MailMessage(
             [
                 'id' => 1,
                 'name_1' => "hehe",
@@ -506,8 +506,8 @@ class MailMessagesTableTest extends BcTestCase
                 'ok99' => "",
             ]
         );
-        $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mail_message]);
-        $this->assertCount(1, $mail_message->getErrors()['_not_complate']);
+        $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
+        $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
     }
 
 }
