@@ -247,67 +247,27 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * メッセージ保存用テーブルのフィールドを最適化する
-     * 初回の場合、id/created/modifiedを追加する
-     * 2回目以降の場合は、最後のカラムに追加する
      *
-     * @param array $dbConfig
-     * @param int $mailContentId
-     * @return boolean
+     * test construction
+     *
      */
     public function testConstruction()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $db = $this->MailMessage->getDataSource();
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'sex'));
+        $this->assertTrue($MailMessagesService->construction(1));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'sex'));
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_1');
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_2');
+        $BcDatabaseService->removeColumn('mail_message_1', 'sex');
 
-        switch ($db->config['datasource']) {
-            case 'Database/BcPostgres':
-                $this->markTestIncomplete('このテストは、まだ実装されていません。');
-                break;
-            case 'Database/BcMysql':
-                $command = 'EXPLAIN';
-                break;
-            case 'Database/BcSqlite':
-                $this->markTestIncomplete('このテストは、まだ実装されていません。');
-                $command = '.schema';
-            default:
-        }
-
-        $id = 1;
-        $fullTable = $this->MailMessage->createFullTableName(1);
-
-        $this->MailMessage->dropTable($id);
-
-        // 一回目
-        $this->MailMessage->construction($id);
-        $this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
-
-        $expectColumns = ['id', 'modified', 'created'];
-        $sql = $command . " $fullTable";
-        $resultColumns = [];
-        foreach ($this->MailMessage->query($sql) as $key => $value) {
-            $resultColumns[] = $value['COLUMNS']['Field'];
-        }
-        foreach ($expectColumns as $column) {
-            $this->assertContains($column, $resultColumns, '正しくカラムが追加されていません');
-        }
-
-        // 二回目
-        $this->MailMessage->construction($id);
-
-        $this->MailField = ClassRegistry::init('BcMail.MailField');
-        $expectColumns = $this->MailField->find('list', [
-            'fields' => 'field_name',
-            'conditions' => ['mail_content_id' => 1],
-        ]);
-        array_unshift($expectColumns, 'id', 'modified', 'created');
-
-        $sql = $command . " $fullTable";
-        $resultColumns = [];
-        foreach ($this->MailMessage->query($sql) as $key => $value) {
-            $resultColumns[] = $value['COLUMNS']['Field'];
-        }
-        $this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
     }
 
     /**

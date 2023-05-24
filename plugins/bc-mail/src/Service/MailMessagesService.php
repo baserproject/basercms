@@ -307,6 +307,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function construction(int $mailContentId): bool
     {
