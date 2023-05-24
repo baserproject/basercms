@@ -11,11 +11,15 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,8 +41,14 @@ class BlogPostsTableTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
 
@@ -49,7 +59,6 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
     }
@@ -263,22 +272,18 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testGetEntryDates($blogContentId, $year, $month, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
-        if ($datasource === 'Database/BcSqlite') {
-            $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        }
-
-        $result = $this->BlogPost->getEntryDates($blogContentId, $year, $month);
-        $this->assertEquals($expected, $result, '正しく日付リストを取得できません');
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $result = $this->BlogPostsTable->getEntryDates($blogContentId, $year, $month);
+        $this->assertEquals($expected, $result);
     }
 
     public function getEntryDatesDataProvider()
     {
         return [
-            [1, 2015, 1, ['2015-01-27', '2015-01-27']],
-            [1, 2016, 1, []],
-            [2, 2016, 2, ['2016-02-10', '2016-02-10']],
+            [6, 2015, 1, ['2015-01-27']],
+            [6, 2016, 1, []],
+            [7, 2016, 2, ['2016-02-10']],
         ];
     }
 
@@ -287,17 +292,24 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testGetAuthors()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '投稿者一覧を正しく取得できません';
-        $result = $this->BlogPost->getAuthors(1, []);
-        $this->assertEquals($result[0]['User']['name'], 'basertest', $message);
-        $this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        UserFactory::make([
+            'id' => BlogPostFactory::get(1)->user_id,
+            'name' => 'name_test',
+            'real_name_1' => 'real_name_1_test',
+            'real_name_2' => 'real_name_2_test',
+            'nickname' => 'nickname_test',
+        ])->persist();
 
-        $result = $this->BlogPost->getAuthors(2, []);
-        $this->assertEquals($result[0]['User']['name'], 'basertest', $message);
+        $result = $this->BlogPostsTable->getAuthors(6, []);
+        $this->assertEquals($result[0]->name, 'name_test');
+        $this->assertEquals($result[0]->real_name_1, 'real_name_1_test');
+        $this->assertEquals($result[0]->real_name_2, 'real_name_2_test');
+        $this->assertEquals($result[0]->nickname, 'nickname_test');
 
-        $result = $this->BlogPost->getAuthors(2, ['viewCount' => true]);
-        $this->assertEquals($result[0]['count'], 2, $message);
+        $result = $this->BlogPostsTable->getAuthors(6, ['viewCount' => true]);
+        $this->assertEquals($result[0]->count, 1);
     }
 
     /**
@@ -305,22 +317,47 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testExistsEntry()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
-        if ($datasource === 'Database/BcSqlite') {
-            $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        }
-        $result = $this->BlogPost->existsEntry(1, 2015, 1);
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        $result = $this->BlogPostsTable->existsEntry(6, 2015, 1);
         $this->assertTrue($result);
 
-        $result = $this->BlogPost->existsEntry(1, 2016, 1);
+        $result = $this->BlogPostsTable->existsEntry(6, 2016, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2015, 1);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPost->existsEntry(2, 2016, 2);
+        $result = $this->BlogPostsTable->existsEntry(7, 2016, 2);
         $this->assertTrue($result);
+    }
+
+    /**
+     * test _getEntryDatesConditions
+     * @param $blogContentId
+     * @param $year
+     * @param $month
+     * @param $expectYear
+     * @param $expertMonth
+     * @dataProvider _getEntryDatesConditionsProvider
+     */
+    public function test_getEntryDatesConditions($blogContentId, $year, $month, $expectYear, $expertMonth)
+    {
+        $rs = $this->execPrivateMethod($this->BlogPostsTable, '_getEntryDatesConditions', [$blogContentId, $year, $month]);
+        //戻る値を確認
+        $this->assertEquals($rs["YEAR(`BlogPosts`.`posted`)"], $expectYear);
+        $this->assertEquals($rs["MONTH(`BlogPosts`.`posted`)"], $expertMonth);
+        $this->assertTrue($rs["BlogPosts.status"]);
+        $this->assertEquals($rs["BlogPosts.blog_content_id"], 1);
+    }
+
+    public function _getEntryDatesConditionsProvider()
+    {
+        return [
+            [1, 2027, 1, 2027, 1],      //日付を設定する場合、
+            [1, null, null, 2023, 5],   //日付を設定ない場合、
+        ];
     }
 
     /**
@@ -575,19 +612,27 @@ class BlogPostsTableTest extends BcTestCase
 
     /**
      * コピーする
-     *
-     * @param int $id
-     * @param array $data
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogPost->copy(1);
-        $result = $this->BlogPost->find('first', [
-            'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
-        ]);
-        $this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
-        $this->assertEquals(date('Y/m/d', strtotime($result['BlogPost']['posts_date'])), date('Y/m/d'));
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 6,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+        ])->persist();
+
+        //コピーメソッドを呼ぶ
+        $result = $this->BlogPostsTable->copy(1);
+        //戻る値を確認
+        $this->assertEquals($result->name, 'release_copy');
+        $this->assertEquals($result->title, 'プレスリリース_copy');
+        $this->assertFalse($result->status);
     }
 
     /**
@@ -676,4 +721,47 @@ class BlogPostsTableTest extends BcTestCase
 		$dir->delete();
 	}
 
+    /**
+     * test getPublishByNo
+     */
+    public function test_getPublishByNo()
+    {
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        BlogCategoryFactory::make(['id' => BlogPostFactory::get(1)->blog_category_id])->persist();
+        UserFactory::make(['id' => BlogPostFactory::get(1)->user_id])->persist();
+        //$no=数値＆$preview=True
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
+
+        //戻る値を確認
+        $this->assertEquals($rs->no, 3);
+        $this->assertEquals($rs->blog_content_id, 6);
+        $this->assertEquals($rs->title, 'プレスリリース');
+        $this->assertNotNull($rs->blog_comments);
+        $this->assertNotNull($rs->blog_tags);
+        $this->assertNotNull($rs->blog_category);
+        $this->assertNotNull($rs->user);
+        $this->assertNotNull($rs->blog_content);
+        $this->assertNotNull($rs->blog_content->content);
+        $this->assertNotNull($rs->blog_content->content->site);
+
+        //$no=文字列＆$preview=false
+        $rs = $this->BlogPostsTable->getPublishByNo(7, 'smartphone_release', false);
+        //戻る値を確認
+        $this->assertEquals($rs->no, 4);
+        $this->assertEquals($rs->title, 'スマホサイトリリース');
+
+        //サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //非公開を設定する
+        $blogPostsService->unpublish(1);
+
+        //preview が true の場合に取得できる
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
+        $this->assertEquals($rs->title, 'プレスリリース');
+
+        //preview が false の場合に取得できない
+        $rs = $this->BlogPostsTable->getPublishByNo(6, 3);
+        $this->assertNull($rs);
+    }
 }

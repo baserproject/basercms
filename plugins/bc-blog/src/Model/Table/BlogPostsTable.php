@@ -352,6 +352,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryDates($blogContentId, $year, $month)
     {
@@ -374,6 +375,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthors(int $blogContentId, array $options)
     {
@@ -412,6 +414,7 @@ class BlogPostsTable extends BlogAppTable
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsEntry(int $blogContentId, int $year, int $month): bool
     {
@@ -434,6 +437,9 @@ class BlogPostsTable extends BlogAppTable
      * @param int $year
      * @param int $month
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest 
      */
     protected function _getEntryDatesConditions($blogContentId, $year, $month)
     {
@@ -489,6 +495,7 @@ class BlogPostsTable extends BlogAppTable
      * @return boolean 公開状態
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function allowPublish($post)
     {
@@ -639,6 +646,7 @@ class BlogPostsTable extends BlogAppTable
      * @return mixed page Or false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy($id = null, $data = [])
     {
@@ -806,6 +814,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array|\Cake\Datasource\EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishByNo(int $blogContentId, mixed $no, bool $preview = false)
     {
