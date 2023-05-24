@@ -56,6 +56,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get($id)
     {
@@ -199,6 +200,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {

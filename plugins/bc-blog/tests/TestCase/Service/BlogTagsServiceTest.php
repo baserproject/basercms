@@ -13,10 +13,8 @@ namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogTagsService;
-use BcBlog\Test\Factory\BlogPostFactory;
-use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
-use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -68,9 +66,27 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
-     * test __construct
+     * test get
+     */
+    public function testGet()
+    {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $blogTag = $this->BlogTagsService->get(1);
+        $this->assertEquals(1, $blogTag->id);
+        $this->expectException(RecordNotFoundException::class);
+        $this->BlogTagsService->get(11);
+    }
+
+    /**
+     * test delete
      */
     public function testDelete()
     {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $blogTag = $this->BlogTagsService->get(1);
+        $this->assertEquals(1, $blogTag->id);
+        $this->assertTrue($this->BlogTagsService->delete(1));
+        $this->expectException(RecordNotFoundException::class);
+        $this->BlogTagsService->get(1);
     }
 }
