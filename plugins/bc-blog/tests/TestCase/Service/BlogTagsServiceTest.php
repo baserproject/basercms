@@ -11,10 +11,13 @@
 
 namespace BcBlog\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogTagsTable;
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Test\Scenario\BlogTagsScenario;
+use Cake\Database\ValueBinder;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -75,6 +78,8 @@ class BlogTagsServiceTest extends BcTestCase
     public function testCreateIndexConditions()
     {
         $this->loadFixtureScenario(BlogTagsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $params = [
             'conditions' => [],
             'direction' => 'ASC',
@@ -82,11 +87,14 @@ class BlogTagsServiceTest extends BcTestCase
             'contentId' => null,
             'contentUrl' => null,
             'siteId' => null,
-            'name' => null,
+            'name' => 'tag',
             'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
         ];
         $query = $this->BlogTags->find();
         $result = $this->BlogTagsService->createIndexConditions($query, $params);
+        $sql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name like', $sql);
+
     }
 
     /**
