@@ -93,7 +93,22 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_initAdapter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //期待値
+        $option = [
+            'adapter' => 'mysql',
+            'host' => 'bc5-db',
+            'user' => 'root',
+            'pass' => 'root',
+            'port' => '3306',
+            'name' => 'test_basercms',
+            'charset' => 'utf8mb4',
+            'unix_socket' => null,
+        ];
+        //対象メソッドを呼ぶ
+        $this->execPrivateMethod($this->BcDatabaseService, 'initAdapter', []);
+        //戻る値を確認
+        $adapter = $this->BcDatabaseService->_adapter->getAdapter();
+        $this->assertEquals($option, $adapter->getOptions());
     }
 
     /**

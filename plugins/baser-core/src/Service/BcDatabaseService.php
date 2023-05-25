@@ -81,6 +81,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function initAdapter()
     {
