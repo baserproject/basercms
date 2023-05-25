@@ -129,6 +129,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createIndexConditions(Query $query, array $params)
     {

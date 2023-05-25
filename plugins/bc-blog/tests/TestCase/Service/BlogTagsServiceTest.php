@@ -12,14 +12,17 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogTagsTable;
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BlogTagsServiceTest
  * @property BlogTagsService $BlogTagsService
+ * @property BlogTagsTable $BlogTags
  */
 class BlogTagsServiceTest extends BcTestCase
 {
@@ -52,6 +55,7 @@ class BlogTagsServiceTest extends BcTestCase
         $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogTagsService = new BlogTagsService();
+        $this->BlogTags = TableRegistry::getTableLocator()->get("BcBlog.BlogTags");
     }
 
     /**
@@ -63,6 +67,26 @@ class BlogTagsServiceTest extends BcTestCase
     {
         unset($this->BlogTagsService);
         parent::tearDown();
+    }
+
+    /**
+     * test createIndexConditions
+     */
+    public function testCreateIndexConditions()
+    {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $params = [
+            'conditions' => [],
+            'direction' => 'ASC',
+            'sort' => 'name',
+            'contentId' => null,
+            'contentUrl' => null,
+            'siteId' => null,
+            'name' => null,
+            'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
+        ];
+        $query = $this->BlogTags->find();
+        $result = $this->BlogTagsService->createIndexConditions($query, $params);
     }
 
     /**
