@@ -96,7 +96,7 @@ class BcDatabaseServiceTest extends BcTestCase
         //期待値
         $option = [
             'adapter' => 'mysql',
-            'host' => 'bc5-db',
+            'host' => 'bc-db',
             'user' => 'root',
             'pass' => 'root',
             'port' => '3306',
