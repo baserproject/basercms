@@ -115,6 +115,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createIndexOrder(Query $query, array $params)
     {

@@ -73,6 +73,30 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test createIndexOrder
+     */
+    public function testCreateIndexOrder()
+    {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $params = [
+            'conditions' => [],
+            'direction' => 'ASC',
+            'sort' => 'name',
+            'contentId' => 1,
+            'contentUrl' => 'test',
+            'siteId' => 1,
+            'name' => 'tag',
+            'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
+        ];
+        $query = $this->BlogTags->find();
+        $result = $this->BlogTagsService->createIndexOrder($query, $params);
+        $sortSql = $result->clause('order')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name ASC', $sortSql);
+    }
+
+    /**
      * test getNew
      */
     public function testGetNew()
