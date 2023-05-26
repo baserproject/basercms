@@ -84,9 +84,9 @@ class BlogTagsServiceTest extends BcTestCase
             'conditions' => [],
             'direction' => 'ASC',
             'sort' => 'name',
-            'contentId' => null,
-            'contentUrl' => null,
-            'siteId' => null,
+            'contentId' => 1,
+            'contentUrl' => 'test',
+            'siteId' => 1,
             'name' => 'tag',
             'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
         ];
@@ -94,6 +94,8 @@ class BlogTagsServiceTest extends BcTestCase
         $result = $this->BlogTagsService->createIndexConditions($query, $params);
         $sql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('BlogTags.name like', $sql);
+        $this->assertStringContainsString('Contents.site_id =', $sql);
+        $this->assertStringContainsString('Content.url =', $sql);
 
     }
 
