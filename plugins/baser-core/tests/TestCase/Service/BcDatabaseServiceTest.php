@@ -799,7 +799,7 @@ class UserActionsSchema extends BcSchema
     public function test_constructionTable()
     {
         //Migrationsフォルダーがあるプラグイン
-//        $this->assertTrue($this->BcDatabaseService->constructionTable('bc-widget-area', 'test_debug_kit'));
+        $this->assertTrue($this->BcDatabaseService->constructionTable('bc-widget-area', 'test_debug_kit'));
 
         //Migrationsフォルダーがないプラグイン
         $this->assertFalse($this->BcDatabaseService->constructionTable('BcThemeSample'));
