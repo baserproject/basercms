@@ -798,7 +798,11 @@ class UserActionsSchema extends BcSchema
      */
     public function test_constructionTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //Migrationsフォルダーがあるプラグイン
+        $this->assertTrue($this->BcDatabaseService->constructionTable('bc-widget-area', 'test'));
+
+        //Migrationsフォルダーがないプラグイン
+        $this->assertFalse($this->BcDatabaseService->constructionTable('BcThemeSample'));
     }
 
     /**
