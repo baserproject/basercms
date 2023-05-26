@@ -85,6 +85,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams)
     {

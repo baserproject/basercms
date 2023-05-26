@@ -73,6 +73,39 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test getIndex
+     */
+    public function testGetIndex()
+    {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $params = [
+            'conditions' => [],
+            'direction' => 'ASC',
+            'sort' => 'name',
+            'contentId' => 1,
+            'contentUrl' => 'test',
+            'siteId' => 1,
+            'name' => 'tag',
+            'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
+        ];
+        $result = $this->BlogTagsService->getIndex($params);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name like', $whereSql);
+        $this->assertStringContainsString('Contents.site_id =', $whereSql);
+        $this->assertStringContainsString('Content.url =', $whereSql);
+        $sortSql = $result->clause('order')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name ASC', $sortSql);
+        $params['direction'] = 'DESC';
+        $params['sort'] = 'id';
+        $result = $this->BlogTagsService->getIndex($params);
+        $sortSql = $result->clause('order')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.id DESC', $sortSql);
+
+    }
+
+    /**
      * test createIndexConditions
      */
     public function testCreateIndexConditions()
@@ -82,8 +115,6 @@ class BlogTagsServiceTest extends BcTestCase
         $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $params = [
             'conditions' => [],
-            'direction' => 'ASC',
-            'sort' => 'name',
             'contentId' => 1,
             'contentUrl' => 'test',
             'siteId' => 1,
