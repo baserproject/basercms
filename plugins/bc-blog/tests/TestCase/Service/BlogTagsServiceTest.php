@@ -73,6 +73,15 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test getNew
+     */
+    public function testGetNew()
+    {
+        $result = $this->BlogTagsService->getNew();
+        $this->assertInstanceOf("Cake\Datasource\EntityInterface", $result);
+    }
+
+    /**
      * test getIndex
      */
     public function testGetIndex()
