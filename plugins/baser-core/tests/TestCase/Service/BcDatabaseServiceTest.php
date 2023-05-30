@@ -814,7 +814,50 @@ class UserActionsSchema extends BcSchema
      */
     public function test_checkDbConnection()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
+        ];
+        //接続できる場合、返す値＝NULL
+        $rs = $this->BcDatabaseService->checkDbConnection($config);
+        $this->assertNull($rs);
+
+        // 接続できない場合、
+        $config['datasource'] = 'MySQL2';
+        $this->expectException("BaserCore\Error\BcException");
+        $this->expectExceptionMessage('ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)');
+        $this->BcDatabaseService->checkDbConnection($config);
+    }
+
+    /**
+     * Test checkDbConnection
+     */
+    public function test_checkDbConnection_db_wrong()
+    {
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc5-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
+        ];
+        // 接続できない場合、
+        $this->expectException("PDOException");
+        $this->expectExceptionMessage('SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for bc5-db failed: Name or service not known');
+        $this->BcDatabaseService->checkDbConnection($config);
     }
 
     /**
