@@ -190,6 +190,7 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_get_market_themes()
     {
+        $this->markTestIncomplete('baserマーケットのRSSのロードに時間がかかり過ぎるためスキップ。マーケット側を見直してから対応する');
         $this->post('/baser/api/admin/baser-core/themes/get_market_themes.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
