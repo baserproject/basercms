@@ -73,6 +73,21 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test create
+     */
+    public function testCreate()
+    {
+        $data = [
+            'name' => 'test create'
+        ];
+        $result = $this->BlogTagsService->create($data);
+        $this->assertEquals(1, $result->id);
+        $data = [];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->BlogTagsService->create($data);
+    }
+
+    /**
      * test createIndexOrder
      */
     public function testCreateIndexOrder()
