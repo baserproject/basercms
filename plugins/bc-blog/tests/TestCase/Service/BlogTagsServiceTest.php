@@ -46,6 +46,11 @@ class BlogTagsServiceTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogComments',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
     ];
 
     /**
@@ -55,7 +60,6 @@ class BlogTagsServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogTagsService = new BlogTagsService();
         $this->BlogTags = TableRegistry::getTableLocator()->get("BcBlog.BlogTags");
