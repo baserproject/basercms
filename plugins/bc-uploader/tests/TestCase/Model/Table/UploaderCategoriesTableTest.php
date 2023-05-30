@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,33 +9,57 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderCategory', 'BcUploader.Model');
+namespace BcUploader\Test\TestCase\Model\Table;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Model\Table\UploaderCategoriesTable;
 
 /**
- * Class UploaderCategoryTest
+ * Class UploaderCategoriesTableTest
  *
- * @property  UploaderCategory $UploaderCategory
+ * @property  UploaderCategoriesTable $UploaderCategoriesTable
  */
-class UploaderCategoriesTableTest extends BaserTestCase
+class UploaderCategoriesTableTest extends BcTestCase
 {
     /**
-     * set up
+     * Set Up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->UploaderCategoriesTable = $this->getTableLocator()->get('BcUploader.UploaderCategories');
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
+        unset($this->UploaderCategoriesTable);
         parent::tearDown();
+    }
+
+    /**
+     * initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertEquals('uploader_categories', $this->UploaderCategoriesTable->getTable());
+        $this->assertEquals('id', $this->UploaderCategoriesTable->getPrimaryKey());
+        $this->assertTrue($this->UploaderCategoriesTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->UploaderCategoriesTable->hasAssociation('UploaderFiles'));
+    }
+
+    /**
+     * validationDefault
+     */
+    public function test_validationDefault()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
