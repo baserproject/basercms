@@ -283,18 +283,18 @@ class PluginsService implements PluginsServiceInterface
     public function updateCore(string $currentVersion, string $targetVersion, string $php, $connection = 'default')
     {
         // Composer 実行
-        $command = ROOT . DS . 'bin' . DS . 'cake composer ' . $targetVersion . ' --php ' . $php;
+        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php composer ' . $targetVersion . ' --php ' . $php;
         exec($command, $out, $code);
         if ($code !== 0) throw new BcException(__d('baser_core', 'プログラムファイルのアップデートに失敗しました。ログを確認してください。'));
 
         // マイグレーション、アップデートスクリプト実行、バージョン番号更新
         // マイグレーションファイルがプログラムに反映されないと実行できないため、別プロセスとして実行する
-        $command = ROOT . DS . 'bin' . DS . 'cake update --connection ' . $connection;
+        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php update --connection ' . $connection;
         $out = $code = null;
         exec($command, $out, $code);
         if ($code !== 0) {
             // 失敗した場合は元のバージョンに戻す
-            $command = ROOT . DS . 'bin' . DS . 'cake composer ' . $currentVersion;
+            $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php composer ' . $currentVersion;
             exec($command, $out, $code);
             if ($code !== 0) {
                 throw new BcException(__d('baser_core', 'アップデートスクリプトの処理が失敗したので、プログラムファイルを元に戻そうとしましたが失敗しました。。ログを確認してください。'));

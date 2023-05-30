@@ -67,7 +67,13 @@ class UploaderCategoriesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $validator = $this->UploaderCategoriesTable->getValidator('default');
+        //必須チェック、
+        $errors = $validator->validate([
+            'name' => ''
+        ]);
+        //戻り値を確認
+        $this->assertEquals('カテゴリ名を入力してください。', current($errors['name']));
     }
 
     /**
