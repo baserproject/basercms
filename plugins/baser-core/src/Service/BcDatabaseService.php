@@ -191,6 +191,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $columnName
      * @param string $newColumnName
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function renameColumn(
         string $tableName,

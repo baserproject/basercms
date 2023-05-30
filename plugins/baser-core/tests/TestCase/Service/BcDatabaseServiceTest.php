@@ -173,7 +173,24 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_renameColumn()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーブル生成
+        $table = 'table_test_rename';
+        $columns = [
+            'new_column' => ['type' => 'text']
+        ];
+        $this->BcDatabaseService->createTable($table, $columns);
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->renameColumn($table, 'new_column', 'rename_column');
+
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // カラムが変更されているか確認
+        $this->assertFalse($this->BcDatabaseService->columnExists($table, 'new_column'));
+        $this->assertTrue($this->BcDatabaseService->columnExists($table, 'rename_column'));
+
+        // テストテーブルを削除
+        $this->BcDatabaseService->dropTable($table);
     }
 
     /**
