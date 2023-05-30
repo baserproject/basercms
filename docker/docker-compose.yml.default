@@ -20,10 +20,9 @@ services:
 
   bc-php:
     container_name: bc-php
-    image: baserproject/basercms:php8.1
+    image: baserproject/basercms:php8.2
     volumes:
       - ../:/var/www/html:delegated
-#      - ../:/var/www/shared:delegated
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       XDEBUG_MODE: "debug"
@@ -35,7 +34,6 @@ services:
     depends_on:
       - bc-db
     command: bash -c "/var/www/html/docker/bin/init.sh && apache2-foreground"
-#    command: bash -c "/var/www/shared/docker/bin/init_lsyncd.sh && /var/www/shared/docker/bin/init.sh && apache2-foreground"
 
   bc-smtp:
     container_name: bc-smtp

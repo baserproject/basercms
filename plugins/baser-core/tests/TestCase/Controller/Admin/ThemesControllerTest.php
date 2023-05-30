@@ -112,6 +112,7 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_get_market_themes()
     {
+        $this->markTestIncomplete('baserマーケットのRSSのロードに時間がかかり過ぎるためスキップ。マーケット側を見直してから対応する');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
