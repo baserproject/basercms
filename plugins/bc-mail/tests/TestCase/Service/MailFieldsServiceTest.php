@@ -62,9 +62,13 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test constructor
      */
-    public function test__construct()
+    public function testConstruct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->MailFieldsService->__construct();
+        $this->assertTrue(isset($this->MailFieldsService->MailFields));
+        $this->assertTrue(isset($this->MailFieldsService->MailMessagesService));
+        $this->assertInstanceOf("BcMail\Service\MailMessagesService", $this->MailFieldsService->MailMessagesService);
+        $this->assertInstanceOf("BcMail\Model\Table\MailFieldsTable", $this->MailFieldsService->MailFields);
     }
 
     /**

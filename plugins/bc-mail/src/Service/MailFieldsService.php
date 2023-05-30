@@ -40,6 +40,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
