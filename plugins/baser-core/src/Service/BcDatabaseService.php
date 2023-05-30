@@ -81,6 +81,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function initAdapter()
     {
@@ -191,6 +192,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $columnName
      * @param string $newColumnName
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function renameColumn(
         string $tableName,
@@ -1430,6 +1434,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $dbConfigKeyName
      * @param array $dbConfig
      * @return boolean
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function constructionTable(string $plugin, string $dbConfigKeyName = 'default', array $dbConfig = [])
     {

@@ -451,6 +451,7 @@ $(function () {
                 $(`#${inUseFieldId} input[name='template[sort]']`).attr('name', `custom_links[new-${baseId}][sort]`);
                 $(`#${inUseFieldId} input[name='template[title]']`).attr('name', `custom_links[new-${baseId}][title]`);
                 $(`#${inUseFieldId} input[name='template[display_front]']`).attr('name', `custom_links[new-${baseId}][display_front]`);
+                $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
                 $(`#${inUseFieldId} input[name='template[status]']`).attr('name', `custom_links[new-${baseId}][status]`);
 
                 registerEventToInUseField(inUseFieldId);

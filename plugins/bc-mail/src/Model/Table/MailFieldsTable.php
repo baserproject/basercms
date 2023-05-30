@@ -36,6 +36,7 @@ class MailFieldsTable extends MailAppTable
      *
      * @param array $config The configuration for the Table.
      * @return void
+     * @noTodo
      * @checked
      * @unitTest
      */

@@ -100,6 +100,7 @@ class BlogTagsTable extends BlogAppTable
      * @param int $blogContentId ブログコンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasNewTagAddablePermission($userGroupId, $blogContentId)
     {
