@@ -114,7 +114,6 @@ class MailMessagesServiceTest extends BcTestCase
         $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
         $mailMessageTable->setup(1);
         $mailMessageTable->save(new Entity(['id' => 1]));
-        $mailMessageTable->save(new Entity(['id' => 2]));
 
         $result = $MailMessagesService->get(1);
         $this->assertEquals(1, $result->id);
@@ -364,13 +363,13 @@ class MailMessagesServiceTest extends BcTestCase
         $data = [
             'name_1' => '   hello world   ',
             'name_2' => '<!--hello world',
-            'name_3' => 'こんにちは',
+            'name_3' => 'ｈｅｌｌｏ　ｗｏｒｌｄ',
             'test' => '   Nghiem   ',
         ];
         $result = $MailMessagesService->autoConvert(1, $data);
         $this->assertEquals('hello world', $result['name_1']);
         $this->assertEquals('&lt;!--hello world', $result['name_2']);
-        $this->assertEquals('こんにちは', $result['name_3']);
+        $this->assertEquals('hello　world', $result['name_3']);
         $this->assertEquals('   Nghiem   ', $result['test']);
     }
 

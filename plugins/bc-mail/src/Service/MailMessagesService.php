@@ -365,7 +365,7 @@ class MailMessagesService implements MailMessagesServiceInterface
 
         if ($params) {
             foreach($params as $key => $value) {
-                $messageArray[$key] = h(BcUtil::base64UrlsafeDecode($value));
+                $messageArray[$key] = h(BcUtil::base64UrlSafeDecode($value));
             }
         }
         return $this->MailMessages->newEntity($messageArray, ['validate' => false]);

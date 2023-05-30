@@ -1964,7 +1964,7 @@ class BcUtil
      * @param string $val 対象文字列
      * @return string
      */
-    public static function base64UrlsafeDecode($val): string
+    public static function base64UrlSafeDecode($val): string
     {
         $val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
         return base64_decode($val);
