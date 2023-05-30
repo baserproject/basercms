@@ -13,6 +13,9 @@ namespace BcUploader\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Table\UploaderCategoriesTable;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class UploaderCategoriesTableTest
@@ -21,6 +24,11 @@ use BcUploader\Model\Table\UploaderCategoriesTable;
  */
 class UploaderCategoriesTableTest extends BcTestCase
 {
+
+    public $fixtures = [
+        'plugin.BcUploader.Factory/UploaderCategories',
+    ];
+
     /**
      * Set Up
      *
@@ -73,6 +81,44 @@ class UploaderCategoriesTableTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        UploaderCategoryFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        $rs = $this->UploaderCategoriesTable->copy(1);
+        $this->assertEquals('test_copy', $rs->name);
+    }
+
+    /**
+     * test beforeCopyEvent
+     */
+    public function testBeforeCopyEvent()
+    {
+        UploaderCategoryFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcUploader.UploaderCategories.beforeCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $data->name = 'beforeCopy';
+            $event->setData('data', $data);
+        });
+
+        $rs = $this->UploaderCategoriesTable->copy(1);
+        //イベントに入るかどうか確認
+        $this->assertEquals('beforeCopy_copy', $rs->name);
+    }
+
+    /**
+     * test AfterCopyEvent
+     */
+    public function testAfterCopyEvent()
+    {
+        UploaderCategoryFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcUploader.UploaderCategories.afterCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $uploaderCategories = TableRegistry::getTableLocator()->get('BcUploader.UploaderCategories');
+            $data->name = 'AfterCopy';
+            $uploaderCategories->save($data);
+        });
+        $rs = $this->UploaderCategoriesTable->copy(1);
+        //イベントに入るかどうか確認
+        $this->assertEquals('AfterCopy', $rs->name);
     }
 }

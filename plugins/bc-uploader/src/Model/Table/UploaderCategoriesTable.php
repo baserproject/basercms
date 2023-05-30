@@ -87,6 +87,7 @@ class UploaderCategoriesTable extends AppTable
      * @return EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy($id = null, $entity = [])
     {
@@ -99,7 +100,7 @@ class UploaderCategoriesTable extends AppTable
             'id' => $id,
         ]);
         if ($event !== false) {
-            $entity = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
         }
 
         $entity->name .= '_copy';
