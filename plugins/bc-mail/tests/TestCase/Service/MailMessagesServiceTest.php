@@ -1,5 +1,4 @@
 <?php
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
@@ -10,15 +9,49 @@ return;
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-//namespace BcMail\Test\TestCase\Service;
+namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
+use BcMail\Model\Entity\MailContent;
+use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Service\MailMessagesService;
+use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\Test\Factory\MailMessagesFactory;
+use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+
 
 /**
  * MailMessagesServiceTest
  */
 class MailMessagesServiceTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BcMail.Factory/MailFields',
+        'plugin.BcMail.Factory/MailMessages',
+        'plugin.BcMail.Factory/MailContents',
+    ];
 
     /**
      * set up
@@ -34,6 +67,119 @@ class MailMessagesServiceTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test setup
+     */
+    public function testSetup()
+    {
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->setup(1);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $this->assertEquals('1', $mailMessageTable->mailFields->toArray()[0]->id);
+        $this->assertCount(3, $mailMessageTable->mailFields);
+
+    }
+
+    /**
+     * test batch
+     */
+    public function testBatch()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->setup(1);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+        $mailMessageTable->save(new Entity(['id' => 2]));
+        $result = $MailMessagesService->batch('delete', []);
+        $this->assertTrue($result);
+
+        $result = $MailMessagesService->get(1);
+        $this->assertEquals(1, $result->id);
+        $result = $MailMessagesService->batch('delete', [1]);
+        $this->assertTrue($result);
+        $this->expectException(RecordNotFoundException::class);
+        $MailMessagesService->get(1);
+    }
+
+    /**
+     * test delete
+     */
+    public function testDelete()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->setup(1);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+
+        $result = $MailMessagesService->get(1);
+        $this->assertEquals(1, $result->id);
+        $result = $MailMessagesService->delete(1);
+        $this->assertTrue($result);
+        $this->expectException(RecordNotFoundException::class);
+        $MailMessagesService->delete(1);
+    }
+
+    /**
+     * test get
+     */
+    public function testGet()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 99,
+            ]
+        )->persist();
+        $result = $MailMessagesService->get(99);
+        $this->assertEquals(99, $result->id);
+        $this->expectException(RecordNotFoundException::class);
+        $MailMessagesService->get(1);
+    }
+
+    /**
+     * test getIndex
+     */
+    public function testGetIndex()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->setup(1);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+        $mailMessageTable->save(new Entity(['id' => 2]));
+        $result = $MailMessagesService->getIndex();
+        $this->assertCount(2, $result->all());
+        $this->assertEquals(1, $result->all()->toArray()[0]->id);
+    }
+
+    /**
+     * test create
+     */
+    public function testCreate()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $postData = [];
+        $mailContent = $MailContentsService->get(1);
+        $MailMessagesService->create($mailContent, $postData);
+        $result = $MailMessagesService->get(1);
+        $this->assertEquals(1, $result->id);
+
+        $postData = [
+            'id' => 2,
+            'name_1' => 'value 1',
+        ];
+        $result = $MailMessagesService->create($mailContent, $postData);
+        $this->assertEquals('value 1', $result->name_1);
+
+        $result = $MailMessagesService->get(2);
+        $this->assertEquals(2, $result->id);
+
     }
 
     /**
@@ -89,71 +235,38 @@ class MailMessagesServiceTest extends BcTestCase
      */
     public function testCreateTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->createTable(99);
+        $this->assertTrue($result);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $checkExist = $BcDatabaseService->tableExists('mail_message_99');
+        $this->assertTrue($checkExist);
+        $dropTable = $BcDatabaseService->dropTable('mail_message_99');
+        $this->assertTrue($dropTable);
     }
 
     /**
-     * メッセージ保存用テーブルのフィールドを最適化する
-     * 初回の場合、id/created/modifiedを追加する
-     * 2回目以降の場合は、最後のカラムに追加する
      *
-     * @param array $dbConfig
-     * @param int $mailContentId
-     * @return boolean
+     * test construction
+     *
      */
     public function testConstruction()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $db = $this->MailMessage->getDataSource();
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'sex'));
+        $this->assertTrue($MailMessagesService->construction(1));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'sex'));
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_1');
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_2');
+        $BcDatabaseService->removeColumn('mail_message_1', 'sex');
 
-        switch ($db->config['datasource']) {
-            case 'Database/BcPostgres':
-                $this->markTestIncomplete('このテストは、まだ実装されていません。');
-                break;
-            case 'Database/BcMysql':
-                $command = 'EXPLAIN';
-                break;
-            case 'Database/BcSqlite':
-                $this->markTestIncomplete('このテストは、まだ実装されていません。');
-                $command = '.schema';
-            default:
-        }
-
-        $id = 1;
-        $fullTable = $this->MailMessage->createFullTableName(1);
-
-        $this->MailMessage->dropTable($id);
-
-        // 一回目
-        $this->MailMessage->construction($id);
-        $this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
-
-        $expectColumns = ['id', 'modified', 'created'];
-        $sql = $command . " $fullTable";
-        $resultColumns = [];
-        foreach ($this->MailMessage->query($sql) as $key => $value) {
-            $resultColumns[] = $value['COLUMNS']['Field'];
-        }
-        foreach ($expectColumns as $column) {
-            $this->assertContains($column, $resultColumns, '正しくカラムが追加されていません');
-        }
-
-        // 二回目
-        $this->MailMessage->construction($id);
-
-        $this->MailField = ClassRegistry::init('BcMail.MailField');
-        $expectColumns = $this->MailField->find('list', [
-            'fields' => 'field_name',
-            'conditions' => ['mail_content_id' => 1],
-        ]);
-        array_unshift($expectColumns, 'id', 'modified', 'created');
-
-        $sql = $command . " $fullTable";
-        $resultColumns = [];
-        foreach ($this->MailMessage->query($sql) as $key => $value) {
-            $resultColumns[] = $value['COLUMNS']['Field'];
-        }
-        $this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
     }
 
     /**
@@ -161,7 +274,12 @@ class MailMessagesServiceTest extends BcTestCase
      */
     public function testDropTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $MailMessagesService->createTable(99);
+        $this->assertTrue($BcDatabaseService->tableExists('mail_message_99'));
+        $this->assertTrue($MailMessagesService->dropTable(99));
+        $this->assertFalse($BcDatabaseService->tableExists('mail_message_99'));
     }
 
     /**
@@ -179,45 +297,44 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * 初期値の設定をする
      *
-     * @param string $type
-     * @dataProvider getNewDataProvider
+     * test getNew
      */
-    public function testGetNew($type)
+    public function testGetNew()
     {
-        $this->markTestIncomplete('こちらのテストは未実装です。MailMessagesTable::getDefaultValue()より移植');
-        // 初期化
-        $this->MailMessage->mailFields = [
-            [
-                'MailField' => [
-                    'field_name' => 'value',
-                    'use_field' => true,
-                    'default_value' => 'default',
-                    'type' => $type,
-                ]
-            ]
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertNull($result->mail_content_id);
+
+        MailFieldsFactory::make([
+            'id' => 4,
+            'mail_content_id' => 1,
+            'field_name' => 'test1',
+            'use_field' => 1,
+            'default_value' => 'Nghiem',
+        ])->persist();
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertEquals('Nghiem', $result->test1);
+
+        MailFieldsFactory::make([
+            'id' => 5,
+            'mail_content_id' => 1,
+            'type' => 'multi_check',
+            'field_name' => 'test2',
+            'use_field' => 1,
+            'default_value' => 'hehe',
+        ])->persist();
+        $result = $MailMessagesService->getNew(1, []);
+        $this->assertIsArray($result->test2);
+        $this->assertEquals('hehe', $result->test2[0]);
+
+        $mailMessage = [
+            'field1' => BcUtil::base64UrlsafeEncode('https://book.cakephp.org'),
         ];
-        $data = ['MailMessage' => [
-            'key1' => 'hoge1',
-            'key2' => 'hoge2',
-        ]];
-
-        // 実行
-        $result = $this->MailMessage->getDefaultValue($data);
-
-        if ($type != 'multi_check') {
-            $expected = [
-                'MailMessage' => [
-                    'value' => 'default',
-                    'key1' => 'hoge1',
-                    'key2' => 'hoge2'
-                ]
-            ];
-            $this->assertEquals($expected, $result);
-        } else {
-            $this->assertEquals('default', $result['MailMessage']['value'][0]);
-        }
+        $result = $MailMessagesService->getNew(1, $mailMessage);
+        $this->assertEquals('https://book.cakephp.org', $result->field1);
     }
 
     public function getNewDataProvider()
@@ -229,38 +346,117 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * 自動変換
-     * 確認画面で利用される事も踏まえてバリデートを通す為の
-     * 可能な変換処理を行う。
-     *
-     * @param string $auto_convert 変換タイプ
-     * @param string $value 入力値
-     * @param string $expected 期待値
-     * @param string $message テスト失敗時に表示されるメッセージ
-     * @dataProvider autoConvertDataProvider
+     * test autoConvert
      */
-    public function testAutoConvert($auto_convert, $value, $expected, $message)
+    public function testAutoConvert()
     {
-        $this->markTestIncomplete('こちらのテストは未実装です。MailMessagesTable::autoConvert()より移植');
-        // 初期化
-        $this->MailMessage->mailFields = [
-            [
-                'MailField' => [
-                    'field_name' => 'value',
-                    'auto_convert' => $auto_convert,
-                    'use_field' => true,
-                ]
-            ]
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailFieldsFactory::make([
+            'id' => 4,
+            'mail_content_id' => 1,
+            'field_name' => 'name_3',
+            'use_field' => 1,
+            'auto_convert' => 'CONVERT_HANKAKU',
+        ])->persist();
+        $data = [
+            'name_1' => '   hello world   ',
+            'name_2' => '<!--hello world',
+            'name_3' => 'ｈｅｌｌｏ　ｗｏｒｌｄ',
+            'test' => '   Nghiem   ',
         ];
-        $data = ['MailMessage' => [
-            'value' => $value
-        ]];
-
-        // 実行
-        $result = $this->MailMessage->autoConvert($data);
-
-        $this->assertEquals($expected, $result['MailMessage']['value'], $message);
+        $result = $MailMessagesService->autoConvert(1, $data);
+        $this->assertEquals('hello world', $result['name_1']);
+        $this->assertEquals('&lt;!--hello world', $result['name_2']);
+        $this->assertEquals('hello　world', $result['name_3']);
+        $this->assertEquals('   Nghiem   ', $result['test']);
     }
+
+    /**
+     * test createTableName
+     */
+    public function testCreateTableName()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->createTableName(1);
+        $this->assertEquals('mail_message_1', $result);
+
+        $result = $MailMessagesService->createTableName(99);
+        $this->assertEquals('mail_message_99', $result);
+
+        $this->expectException(\TypeError::class);
+        $MailMessagesService->createTableName('a');
+    }
+
+    /**
+     * test addMessageField
+     */
+    public function testAddMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $result = $MailMessagesService->addMessageField(1, 'Nghiem');
+        $this->assertTrue($result);
+
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $result = $BcDatabaseService->columnExists('mail_message_1', 'Nghiem');
+        $this->assertTrue($result);
+        $BcDatabaseService->removeColumn('mail_message_1', 'Nghiem');
+
+        $this->expectExceptionMessage("Base table or view not found: 1146 Table 'test_basercms.mail_message_99' doesn't exist");
+        $MailMessagesService->addMessageField(99, 'Nghiem');
+
+    }
+
+    /**
+     * test deleteMessageField
+     */
+    public function testDeleteMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($MailMessagesService->addMessageField(1, 'Nghiem'));
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+        $this->assertTrue($MailMessagesService->deleteMessageField(1, 'Nghiem'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+    }
+
+    /**
+     * test renameMessageField
+     */
+    public function testRenameMessageField()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        $MailMessagesService->addMessageField(1, 'Nghiem');
+        $result = $BcDatabaseService->columnExists('mail_message_1', 'Nghiem');
+        $this->assertTrue($result);
+
+        $result = $MailMessagesService->renameMessageField(1, 'Nghiem', 'Test');
+        $this->assertTrue($result);
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'Test'));
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
+
+        $this->expectExceptionMessage("The specified column doesn't exist: Nghiem");
+        $MailMessagesService->renameMessageField(1, 'Nghiem', 'Test');
+
+        $this->expectExceptionMessage("Base table or view not found: 1146 Table 'test_basercms.mail_message_99' doesn't exist");
+        $MailMessagesService->addMessageField(99, 'Test', 'Test1');
+
+        $BcDatabaseService->removeColumn('mail_message_1', 'Test');
+    }
+
+    /**
+     * test __construct
+     */
+    public function testConstruct()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $this->assertTrue(isset($MailMessagesService->BcDatabaseService));
+        $this->assertTrue(isset($MailMessagesService->MailMessages));
+    }
+
 
     public function autoConvertDataProvider()
     {
