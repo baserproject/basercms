@@ -66,6 +66,7 @@ class UploaderCategoriesTable extends AppTable
      * @param null $ds
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
