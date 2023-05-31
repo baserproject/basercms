@@ -1963,6 +1963,36 @@ class BcUtil
     }
 
     /**
+     * パーセントエンコーディングされないURLセーフなbase64デコード
+     *
+     * @param string $val 対象文字列
+     * @return string
+     */
+    public static function base64UrlSafeDecode($val): string
+    {
+        $val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
+        return base64_decode($val);
+    }
+
+    /**
+     * パーセントエンコーディングされないURLセーフなbase64エンコード
+     *
+     * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール)
+     * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
+     * パーセントエンコーディングされてしまいます。
+     * そのため、このメソッドではパーセントエンコーディングされないURLセーフな
+     * base64エンコードを行います。
+     *
+     * @param string $val 対象文字列
+     * @return string
+     */
+    public static function base64UrlsafeEncode($val): string
+    {
+        $val = base64_encode($val);
+        return str_replace(['+', '/', '='], ['_', '-', '.'], $val);
+    }
+
+    /**
      * 指定したプラグインがコアプラグインかどうかを判定する
      *
      * @param string $plugin
