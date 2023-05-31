@@ -846,7 +846,7 @@ class UserActionsSchema extends BcSchema
         $this->assertFalse($this->BcDatabaseService->migrate('BcThemeSample'));
 
         //Migrationsフォルダーがあるプラグイン
-        $this->assertTrue($this->BcDatabaseService->migrate('bc-widget-area'));
+        $this->assertTrue($this->BcDatabaseService->migrate('bc-widget-area', 'test'));
     }
 
     /**
