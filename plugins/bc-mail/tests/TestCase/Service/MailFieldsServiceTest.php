@@ -13,6 +13,7 @@ namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
@@ -122,13 +123,25 @@ class MailFieldsServiceTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $postData = [
-            'id' => 1,
-            'mail_content_id' => 1,
-            'name' => '性',
-            'source' => '男性|女性',
-            'type' => 'text',
+            'id' => '1',
+            'mail_content_id' => '1',
+            'no' => '1',
+            'name' => '姓漢字',
             'field_name' => 'name_1',
+            'type' => 'text',
+            'head' => 'お名前',
+            'attention' => '',
+            'before_attachment' => '<small>[姓]</small>',
+            'after_attachment' => '',
+            'options' => '',
+            'class' => '',
+            'default_value' => '',
+            'description' => '',
+            'group_field' => 'name',
+            'group_valid' => 'name',
+            'valid_ex' => '',
             'use_field' => 1,
+            'sort' => '1',
         ];
         $result = $this->MailFieldsService->create($postData);
         $this->assertEquals('name_1', $result->field_name);
