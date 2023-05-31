@@ -12,6 +12,7 @@
 namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -78,9 +79,37 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getIndex
      */
-    public function test_getIndex()
+    public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $queryParams = [];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+
+        $queryParams = [
+            'limit' => '1'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(1, $result->all());
+
+        $queryParams = [
+            'use_field' => 1
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+
+        $queryParams = [
+            'use_field' => 0
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(0, $result->all());
+
+        $queryParams = [
+            'status' => 'publish'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
     }
 
     /**
@@ -102,7 +131,7 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
     }
 
     /**
