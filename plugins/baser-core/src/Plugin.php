@@ -371,16 +371,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 $this->setupSessionAuth($service, $authSetting);
                 break;
             case 'Jwt':
-                if ($this->isEnabledCoreApi($prefix)) {
-                    $this->setupJwtAuth($service, $authSetting);
-                    if($prefix === 'Api/Admin') {
-                        // セッションを持っている場合もログイン状態とみなす
-                        $service->loadAuthenticator('Authentication.Session', [
-                            'sessionKey' => $authSetting['sessionKey'],
-                        ]);
-                    }
-                } else {
-                    throw new ForbiddenException(__d('baser_core', 'Web APIは許可されていません。'));
+                $this->setupJwtAuth($service, $authSetting);
+                if($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
+                    // セッションを持っている場合もログイン状態とみなす
+                    $service->loadAuthenticator('Authentication.Session', [
+                        'sessionKey' => $authSetting['sessionKey'],
+                    ]);
                 }
                 break;
         }
@@ -400,24 +396,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if(!empty($authSetting['disabled'])) return false;
         if(!BcUtil::isInstalled()) return false;
         return true;
-    }
-
-    /**
-     * APIが利用できるか確認する
-     *
-     * @param string $prefix
-     * @return bool
-     */
-    public static function isEnabledCoreApi(string $prefix): bool
-    {
-        if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if ($prefix === 'Api/Admin') {
-                return BcUtil::isSameReferrerAsCurrent();
-            }
-        } else {
-            return true;
-        }
-        return false;
     }
 
     /**
