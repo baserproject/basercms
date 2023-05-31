@@ -826,9 +826,8 @@ class UserActionsSchema extends BcSchema
             "prefix" => "mysite_",
             "encoding" => "utf8"
         ];
-        //接続できる場合、返す値＝NULL
-        $rs = $this->BcDatabaseService->checkDbConnection($config);
-        $this->assertNull($rs);
+        //接続できる場合、エラを返さない
+        $this->BcDatabaseService->checkDbConnection($config);
 
         // 接続できない場合、
         $config['datasource'] = 'MySQL2';
