@@ -148,6 +148,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {

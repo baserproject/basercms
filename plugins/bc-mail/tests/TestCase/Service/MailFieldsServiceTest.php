@@ -11,7 +11,9 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -39,6 +41,13 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BcMail.Factory/MailFields',
+        'plugin.BcMail.Factory/MailContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups'
     ];
 
     /**
@@ -108,9 +117,21 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create()
+    public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $postData = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => '性',
+            'source' => '男性|女性',
+            'type' => 'text',
+            'field_name' => 'name_1',
+            'use_field' => 1,
+        ];
+        $result = $this->MailFieldsService->create($postData);
+        $this->assertEquals('name_1', $result->field_name);
     }
 
     /**
