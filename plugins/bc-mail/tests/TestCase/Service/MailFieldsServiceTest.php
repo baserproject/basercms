@@ -127,7 +127,7 @@ class MailFieldsServiceTest extends BcTestCase
             'mail_content_id' => '1',
             'no' => '1',
             'name' => '姓漢字',
-            'field_name' => 'name_1',
+            'field_name' => 'test',
             'type' => 'text',
             'head' => 'お名前',
             'attention' => '',
