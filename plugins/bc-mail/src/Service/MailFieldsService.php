@@ -131,6 +131,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew($mailContentId)
     {
