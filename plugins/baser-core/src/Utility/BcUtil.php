@@ -1889,6 +1889,11 @@ class BcUtil
     /**
      * 認証プレフィックスのリストを取得
      *
+     * 設定 `BcPrefixAuth` で定義されているものより取得する
+     *
+     * - フロント用のAPIでないこと
+     * - disabled = true でないこと
+     *
      * @return array
      * @checked
      * @noTodo
@@ -1898,7 +1903,6 @@ class BcUtil
         $authPrefixes = [];
         foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
             if($key === 'Api') continue;
-            if(!empty($authPrefix['isRestApi']) && !filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) continue;
             if(!empty($authPrefix['disabled'])) continue;
             $authPrefixes[$key] = $authPrefix['name'];
         }
@@ -1956,6 +1960,18 @@ class BcUtil
             }
         }
         return true;
+    }
+
+    /**
+     * 指定したプラグインがコアプラグインかどうかを判定する
+     *
+     * @param string $plugin
+     * @return bool
+     */
+    public static function isCorePlugin(string $plugin)
+    {
+        $corePlugins = array_merge(Configure::read('BcApp.core'), Configure::read('BcApp.corePlugins'));
+        return in_array(Inflector::camelize($plugin, '-'), $corePlugins);
     }
 
 }
