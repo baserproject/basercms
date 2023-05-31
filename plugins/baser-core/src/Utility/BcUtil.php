@@ -1997,6 +1997,9 @@ class BcUtil
      *
      * @param string $plugin
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isCorePlugin(string $plugin)
     {
