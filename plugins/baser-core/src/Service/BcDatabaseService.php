@@ -1360,6 +1360,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * データベース接続テスト
      *
      * @param array $config
+     *
+     * @checked
+     * @unitTest
      */
     public function testConnectDb($config)
     {

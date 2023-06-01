@@ -822,7 +822,38 @@ class UserActionsSchema extends BcSchema
      */
     public function test_testConnectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+        ];
+        //接続できる場合、エラを返さない
+        $this->BcDatabaseService->testConnectDb($config);
+
+        // 接続できない場合、エラーを返す
+        $config['host'] = 'test';
+        $this->expectException("PDOException");
+        $this->expectExceptionMessage('データベースへの接続でエラーが発生しました。データベース設定を見直してください。
+サーバー上に指定されたデータベースが存在しない可能性が高いです。
+SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: Name or service not known');
+
+        $this->BcDatabaseService->testConnectDb($config);
+    }
+
+    /**
+     * Test testConnectDb
+     */
+    public function test_testConnectDb_server_error()
+    {
+        $this->expectException("BaserCore\Error\BcException");
+        $this->expectExceptionMessage('データベースへの接続でエラーが発生しました。データベース設定を見直してください。
+サーバー上に指定されたデータベースが存在しない可能性が高いです。');
+
+        $this->BcDatabaseService->testConnectDb([]);
     }
 
     /**
