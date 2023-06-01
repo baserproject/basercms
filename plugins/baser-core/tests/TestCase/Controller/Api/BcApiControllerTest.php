@@ -61,6 +61,22 @@ class BcApiControllerTest extends BcTestCase
     }
 
     /**
+     * test Before Filter
+     * @return void
+     */
+    public function testBeforeFilter()
+    {
+        // API ON
+        $this->get('/baser/api/baser-core/contents/index.json');
+        $this->assertResponseCode(200);
+        // API OFF
+        $_SERVER['USE_CORE_API'] = 'false';
+        $this->get('/baser/api/baser-core/contents/index.json');
+        $this->assertResponseCode(403);
+        $_SERVER['USE_CORE_API'] = 'true';
+    }
+
+    /**
      * test getAccessToken
      */
     public function testGetAccessToken()

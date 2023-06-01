@@ -1305,4 +1305,25 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('あいうえおtest.php', $result);
     }
 
+    /**
+     * test isCorePluginData
+     *
+     * @return void
+     * @dataProvider isCorePluginDataProvider
+     */
+    public function testIsCorePlugin(string $plugin, bool $expected)
+    {
+        $this->assertEquals($expected, BcUtil::isCorePlugin($plugin));
+    }
+
+    public function isCorePluginDataProvider()
+    {
+        return [
+            ['baser-core', true],
+            ['BcCustomContent', true],
+            ['test', false],
+            ['baser_core', false]
+        ];
+    }
+
 }
