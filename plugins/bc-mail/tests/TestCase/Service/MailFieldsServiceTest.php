@@ -11,7 +11,9 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -132,9 +134,20 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test copy
      */
-    public function test_copy()
+    public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $result = $this->MailFieldsService->copy(1, 1);
+        $this->assertTrue($result);
+        $mailField = $this->MailFieldsService->get(4);
+        $this->assertEquals('name_1_copy', $mailField->field_name);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_1_copy'));
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_1_copy');
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_1');
+        $BcDatabaseService->removeColumn('mail_message_1', 'name_2');
+        $BcDatabaseService->removeColumn('mail_message_1', 'sex');
     }
 
     /**

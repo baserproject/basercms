@@ -232,6 +232,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $mailContentId, int $id)
     {
