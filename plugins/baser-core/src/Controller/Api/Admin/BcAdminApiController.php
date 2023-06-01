@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -65,7 +66,7 @@ class BcAdminApiController extends BcApiController
         // ただし、同じリファラからのアクセスは、Webブラウザの管理画面からのAJAXとして通す
         if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
             if (!BcUtil::isSameReferrerAsCurrent()) {
-                return $this->response->withStatus(401);
+                throw new ForbiddenException(__d('baser_core', 'baser Admin APIは許可されていません。'));
             }
         }
 
