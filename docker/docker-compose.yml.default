@@ -20,7 +20,7 @@ services:
 
   bc-php:
     container_name: bc-php
-    image: baserproject/basercms:php8.2
+    image: baserproject/basercms:php8.1
     volumes:
       - ../:/var/www/html:delegated
     environment:
