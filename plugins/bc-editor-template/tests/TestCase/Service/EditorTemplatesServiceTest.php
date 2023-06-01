@@ -12,12 +12,28 @@
 namespace BcEditorTemplate\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcEditorTemplate\Service\EditorTemplatesService;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * EditorTemplatesServiceTest
+ * @property EditorTemplatesService $EditorTemplatesService
  */
 class EditorTemplatesServiceTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BcEditorTemplate.Factory/EditorTemplates',
+    ];
 
     /**
      * set up
@@ -25,6 +41,7 @@ class EditorTemplatesServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->EditorTemplatesService = new EditorTemplatesService();
     }
 
     /**
@@ -32,7 +49,72 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->EditorTemplatesService);
         parent::tearDown();
+    }
+
+    /**
+     * test __construct
+     */
+    public function testConstruct()
+    {
+        $this->assertTrue(isset($this->EditorTemplatesService->EditorTemplates));
+    }
+
+    /**
+     * test getNew
+     */
+    public function testGetNew()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test get
+     */
+    public function testGet()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getIndex
+     */
+    public function testGetIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getList
+     */
+    public function testGetList()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test create
+     */
+    public function testCreate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test delete
+     */
+    public function testDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }
