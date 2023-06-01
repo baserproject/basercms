@@ -33,6 +33,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {

@@ -1458,6 +1458,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $plugin
      * @param string $connection
      * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function migrate(string $plugin, string $connection = 'default')
     {
