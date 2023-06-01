@@ -83,6 +83,23 @@ class BcAdminApiControllerTest extends BcTestCase
         $this->assertResponseCode(401);
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseOk();
+
+        // APIを無効
+        $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
+        $this->assertResponseCode(403);
+
+        // API無効、かつ、同じサイトからのリクエスト
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $_SERVER['HTTP_REFERER'] = 'https://localhost';
+        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
+        $this->assertResponseCode(200);
+
+        // 初期化
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['HTTP_REFERER']);
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+
         // ユーザーの有効チェック
         $users = $this->getTableLocator()->get('BaserCore.Users');
         $user = $users->get(1);
