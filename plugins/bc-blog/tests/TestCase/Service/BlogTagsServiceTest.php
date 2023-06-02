@@ -81,15 +81,15 @@ class BlogTagsServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        // €”õ
+        // æº–å‚™
         $data = [
             'name' => 'Nghiem'
         ];
-        // ³íŒnÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->BlogTagsService->create($data);
         $this->assertEquals('Nghiem', $result->name);
         $data = [];
-        // ƒf[ƒ^‚ª‚È‚¢‚Æ¸”s‚·‚é‚Ì‚ğŠm”F‚·‚é
+        // ãƒ‡ãƒ¼ã‚¿ãŒãªã„ã¨å¤±æ•—ã™ã‚‹ã®ã‚’ç¢ºèªã™ã‚‹
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
         $this->BlogTagsService->create($data);
     }
