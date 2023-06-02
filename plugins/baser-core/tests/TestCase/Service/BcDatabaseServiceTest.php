@@ -873,7 +873,11 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: Na
      */
     public function test_migrate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //Migrationsフォルダーがないプラグイン
+        $this->assertFalse($this->BcDatabaseService->migrate('BcThemeSample'));
+
+        //Migrationsフォルダーがあるプラグイン
+        $this->assertTrue($this->BcDatabaseService->migrate('bc-widget-area', 'test'));
     }
 
     /**

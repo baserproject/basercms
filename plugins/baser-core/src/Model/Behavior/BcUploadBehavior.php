@@ -289,7 +289,7 @@ class BcUploadBehavior extends Behavior
     public function getOldEntity($id)
     {
         $table = $this->table();
-        $query = $table->find()->where(['id' => $id]);
+        $query = $table->find()->where([$table->getAlias() . '.id' => $id]);
         if ($table instanceof \BaserCore\Model\Table\ContentsTable) {
             $oldEntity = $query->applyOptions(['withDeleted'])->first();
         } else {
