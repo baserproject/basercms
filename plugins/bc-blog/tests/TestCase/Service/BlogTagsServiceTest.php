@@ -81,12 +81,15 @@ class BlogTagsServiceTest extends BcTestCase
      */
     public function testCreate()
     {
+        // 準備
         $data = [
             'name' => 'Nghiem'
         ];
+        // 正常系実行
         $result = $this->BlogTagsService->create($data);
         $this->assertEquals('Nghiem', $result->name);
         $data = [];
+        // データがないと失敗するのを確認する
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
         $this->BlogTagsService->create($data);
     }
