@@ -168,7 +168,7 @@ class BlogTagsServiceTest extends BcTestCase
         $whereSql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('BlogTags.name like', $whereSql);
         $this->assertStringContainsString('Contents.site_id =', $whereSql);
-        $this->assertStringContainsString('Content.url =', $whereSql);
+        $this->assertStringContainsString('Contents.url =', $whereSql);
         $sortSql = $result->clause('order')->sql(new ValueBinder());
         $this->assertStringContainsString('BlogTags.name ASC', $sortSql);
         $params['direction'] = 'DESC';
