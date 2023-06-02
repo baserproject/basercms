@@ -163,7 +163,7 @@ class BlogTagsServiceTest extends BcTestCase
         $sql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('BlogTags.name like', $sql);
         $this->assertStringContainsString('Contents.site_id =', $sql);
-        $this->assertStringContainsString('Content.url =', $sql);
+        $this->assertStringContainsString('Contents.url =', $sql);
 
     }
 
