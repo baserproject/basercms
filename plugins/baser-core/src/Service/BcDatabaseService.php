@@ -1318,7 +1318,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $port = Hash::get($config, 'port');
         $login = Hash::get($config, 'username');
         $password = Hash::get($config, 'password');
-        $datasource = strtolower($datasource);
+        $datasource = strtolower($datasource ?? '');
 
         try {
             switch($datasource) {

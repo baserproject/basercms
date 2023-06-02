@@ -842,7 +842,7 @@ class UserActionsSchema extends BcSchema
         $this->expectException("PDOException");
         $this->expectExceptionMessage('データベースへの接続でエラーが発生しました。データベース設定を見直してください。
 サーバー上に指定されたデータベースが存在しない可能性が高いです。
-SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: Name or service not known');
+SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: Temporary failure in name resolution');
 
         $this->BcDatabaseService->testConnectDb($config);
     }
