@@ -830,6 +830,9 @@ class UserActionsSchema extends BcSchema
             "port" => "3306",
             "username" => "root",
             "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
         ];
         //接続できる場合、エラを返さない
         $this->BcDatabaseService->testConnectDb($config);
