@@ -67,7 +67,7 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), []);
     }
 
     /**
