@@ -54,6 +54,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return EntityInterface|MailField
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $queryParams = [])
     {
