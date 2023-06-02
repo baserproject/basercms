@@ -77,6 +77,26 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $blogTag = $this->BlogTagsService->get(1);
+        $this->assertEquals('tag1', $blogTag->name);
+        $data = [
+            'name' => 'Nghiem'
+        ];
+        $result = $this->BlogTagsService->update($blogTag, $data);
+        $this->assertEquals('Nghiem', $result->name);
+        $data = [
+            'name' => ''
+        ];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->BlogTagsService->update($blogTag, $data);
+    }
+
+    /**
      * test createIndexOrder
      */
     public function testCreateIndexOrder()

@@ -190,6 +190,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(BlogTag $blogTag, $postData)
     {
