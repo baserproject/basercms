@@ -1309,6 +1309,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *  - `password`: 接続パスワード テキストDBの場合は不要
      * @throws PDOException
      * @throws BcException
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function checkDbConnection($config)
     {
@@ -1458,6 +1462,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $plugin
      * @param string $connection
      * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function migrate(string $plugin, string $connection = 'default')
     {

@@ -155,7 +155,7 @@ class BlogTagsService implements BlogTagsServiceInterface
         }
         if ($params['contentUrl']) {
             $assocContent = true;
-            $conditions['Content.url'] = $params['contentUrl'];
+            $conditions['Contents.url'] = $params['contentUrl'];
         }
         if (!empty($params['name'])) {
             $conditions['BlogTags.name LIKE'] = '%' . urldecode($params['name']) . '%';

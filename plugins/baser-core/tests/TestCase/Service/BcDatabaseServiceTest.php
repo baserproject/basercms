@@ -814,7 +814,26 @@ class UserActionsSchema extends BcSchema
      */
     public function test_checkDbConnection()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
+        ];
+        //接続できる場合、エラを返さない
+        $this->BcDatabaseService->checkDbConnection($config);
+
+        // 接続できない場合、
+        $config['datasource'] = 'MySQL2';
+        $this->expectException("BaserCore\Error\BcException");
+        $this->expectExceptionMessage('ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)');
+        $this->BcDatabaseService->checkDbConnection($config);
     }
 
     /**
@@ -842,7 +861,11 @@ class UserActionsSchema extends BcSchema
      */
     public function test_migrate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //Migrationsフォルダーがないプラグイン
+        $this->assertFalse($this->BcDatabaseService->migrate('BcThemeSample'));
+
+        //Migrationsフォルダーがあるプラグイン
+        $this->assertTrue($this->BcDatabaseService->migrate('bc-widget-area', 'test'));
     }
 
     /**

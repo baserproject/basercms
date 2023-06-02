@@ -15,10 +15,12 @@ use Authentication\Authenticator\ResultInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\AppController;
 use BaserCore\Utility\BcApiUtil;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Routing\Router;
 
 /**
@@ -27,6 +29,26 @@ use Cake\Routing\Router;
  */
 class BcApiController extends AppController
 {
+
+    /**
+     * Before Filter
+     *
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        // APIが許可されていない場合は弾く
+        if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if(BcUtil::isCorePlugin($this->getRequest()->getParam('plugin'))) {
+                throw new ForbiddenException(__d('baser_core', 'baser APIは許可されていません。'));
+            }
+        }
+        parent::beforeFilter($event);
+    }
 
     /**
      * トークンを取得する
