@@ -12,9 +12,11 @@
 namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -172,9 +174,20 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test changeSort
      */
-    public function test_changeSort()
+    public function testChangeSort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $mailField = $this->MailFieldsService->get(2);
+        $this->assertEquals(2, $mailField->sort);
+
+        $this->assertTrue($this->MailFieldsService->changeSort(2, 1));
+        $mailField = $this->MailFieldsService->get(2);
+        $this->assertEquals(3, $mailField->sort);
+
+        $this->assertTrue($this->MailFieldsService->changeSort(2, -1));
+        $mailField = $this->MailFieldsService->get(2);
+        $this->assertEquals(2, $mailField->sort);
     }
 
 }
