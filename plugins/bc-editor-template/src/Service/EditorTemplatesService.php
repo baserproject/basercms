@@ -137,6 +137,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getList()
     {
