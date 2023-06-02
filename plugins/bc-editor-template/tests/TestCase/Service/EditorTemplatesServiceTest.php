@@ -126,7 +126,16 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //対象メソッドをコル
+        $rs = $this->EditorTemplatesService->delete(1);
+        //戻り値を確認
+        $this->assertTrue($rs);
+
+        //削除したエディターテンプレートが存在しないか確認すること
+        $this->expectException("Cake\Datasource\Exception\RecordNotFoundException");
+        $this->EditorTemplatesService->get(1);
     }
 
 }
