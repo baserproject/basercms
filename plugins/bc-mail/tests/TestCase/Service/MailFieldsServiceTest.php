@@ -114,9 +114,12 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getNew
      */
-    public function test_getNew()
+    public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailFieldsService->getNew(1);
+        $this->assertInstanceOf('BcMail\Model\Entity\MailField', $result);
+        $result = $this->MailFieldsService->getNew(99);
+        $this->assertEquals(99, $result->mail_content_id);
     }
 
     /**
