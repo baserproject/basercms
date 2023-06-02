@@ -40,6 +40,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -132,6 +133,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew($mailContentId)
     {
@@ -149,6 +151,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {

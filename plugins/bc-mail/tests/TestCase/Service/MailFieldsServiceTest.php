@@ -11,7 +11,9 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
@@ -40,6 +42,13 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BcMail.Factory/MailFields',
+        'plugin.BcMail.Factory/MailContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups'
     ];
 
     /**
@@ -63,9 +72,13 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test constructor
      */
-    public function test__construct()
+    public function testConstruct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->MailFieldsService->__construct();
+        $this->assertTrue(isset($this->MailFieldsService->MailFields));
+        $this->assertTrue(isset($this->MailFieldsService->MailMessagesService));
+        $this->assertInstanceOf("BcMail\Service\MailMessagesService", $this->MailFieldsService->MailMessagesService);
+        $this->assertInstanceOf("BcMail\Model\Table\MailFieldsTable", $this->MailFieldsService->MailFields);
     }
 
     /**
@@ -131,17 +144,44 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getNew
      */
-    public function test_getNew()
+    public function testGetNew()
     {
-
+        $result = $this->MailFieldsService->getNew(1);
+        $this->assertInstanceOf('BcMail\Model\Entity\MailField', $result);
+        $result = $this->MailFieldsService->getNew(99);
+        $this->assertEquals(99, $result->mail_content_id);
     }
 
     /**
      * test create
      */
-    public function test_create()
+    public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $postData = [
+            'id' => '1',
+            'mail_content_id' => '1',
+            'no' => '1',
+            'name' => '姓漢字',
+            'field_name' => 'test',
+            'type' => 'text',
+            'head' => 'お名前',
+            'attention' => '',
+            'before_attachment' => '<small>[姓]</small>',
+            'after_attachment' => '',
+            'options' => '',
+            'class' => '',
+            'default_value' => '',
+            'description' => '',
+            'group_field' => 'name',
+            'group_valid' => 'name',
+            'valid_ex' => '',
+            'use_field' => 1,
+            'sort' => '1',
+        ];
+        $result = $this->MailFieldsService->create($postData);
+        $this->assertEquals('name_1', $result->field_name);
     }
 
     /**

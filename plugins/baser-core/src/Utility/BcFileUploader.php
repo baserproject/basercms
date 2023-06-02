@@ -866,7 +866,7 @@ class BcFileUploader
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         $where = [$setting['name'] . ' LIKE' => $basename . '%' . $ext];
         if($entity->id) {
-            $where = array_merge($where, ['id <>' => $entity->id]);
+            $where = array_merge($where, [$this->table->getAlias() . '.id <>' => $entity->id]);
         }
         $records = $this->table->find()->where($where)->select($setting['name'])->all()->toArray();
         $numbers = [];
