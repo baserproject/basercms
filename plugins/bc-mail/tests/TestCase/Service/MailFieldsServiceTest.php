@@ -173,13 +173,17 @@ class MailFieldsServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
         $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+        $BcDatabaseService->addColumn('mail_message_1', 'name_2', 'text');
 
-        $mailField = $this->MailFieldsService->get(1);
-        $this->assertEquals(1, $mailField->id);
-        $this->assertTrue($this->MailFieldsService->batch('delete', [1]));
+        $mailField1 = $this->MailFieldsService->get(1);
+        $this->assertEquals(1, $mailField1->id);
+        $mailField2 = $this->MailFieldsService->get(2);
+        $this->assertEquals(2, $mailField2->id);
+        $this->assertTrue($this->MailFieldsService->batch('delete', [1, 2]));
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsService->get(1);
-
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->MailFieldsService->get(2);
     }
 
     /**
