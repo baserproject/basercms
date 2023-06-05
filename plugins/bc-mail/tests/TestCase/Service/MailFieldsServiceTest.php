@@ -222,8 +222,6 @@ class MailFieldsServiceTest extends BcTestCase
         $this->assertTrue($this->MailFieldsService->batch('delete', [1, 2]));
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsService->get(1);
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->MailFieldsService->get(2);
     }
 
     /**
