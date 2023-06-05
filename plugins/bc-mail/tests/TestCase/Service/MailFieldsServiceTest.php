@@ -92,9 +92,39 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getIndex
      */
-    public function test_getIndex()
+    public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //　準備
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        // パラメータなしでテストする
+        $queryParams = [];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+        // レコード数を制限するのをテストする
+        $queryParams = [
+            'limit' => '1'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(1, $result->all());
+        // フィールドを利用するレコードの取得をテストする
+        $queryParams = [
+            'use_field' => 1
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+        // フィールドを利用しないレコードの取得をテストする
+        $queryParams = [
+            'use_field' => 0
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(0, $result->all());
+        // ステータスが公開するレコードの取得をテストする
+        $queryParams = [
+            'status' => 'publish'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
     }
 
     /**

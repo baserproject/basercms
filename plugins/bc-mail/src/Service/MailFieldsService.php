@@ -78,6 +78,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * 一覧データ取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(int $mailContentId, array $queryParams = [])
     {
