@@ -78,6 +78,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * 一覧データ取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(int $mailContentId, array $queryParams = [])
     {
@@ -211,6 +212,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
