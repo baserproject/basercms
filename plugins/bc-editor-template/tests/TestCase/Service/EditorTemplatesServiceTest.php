@@ -13,6 +13,7 @@ namespace BcEditorTemplate\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcEditorTemplate\Service\EditorTemplatesService;
+use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -66,7 +67,7 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), []);
     }
 
     /**
@@ -90,7 +91,18 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //対象メソッドをコル
+        $rs = $this->EditorTemplatesService->getList();
+        //期待値
+        $expect = [
+            1 => '画像（左）とテキスト',
+            2 => '画像（右）とテキスト',
+            3 => 'テキスト２段組',
+        ];
+        //期待値を戻るかどうか確認
+        $this->assertEquals($expect, $rs);
     }
 
     /**
@@ -114,7 +126,16 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //対象メソッドをコル
+        $rs = $this->EditorTemplatesService->delete(1);
+        //戻り値を確認
+        $this->assertTrue($rs);
+
+        //削除したエディターテンプレートが存在しないか確認すること
+        $this->expectException("Cake\Datasource\Exception\RecordNotFoundException");
+        $this->EditorTemplatesService->get(1);
     }
 
 }

@@ -11,8 +11,11 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -41,6 +44,13 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BcMail.Factory/MailFields',
+        'plugin.BcMail.Factory/MailContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups'
     ];
 
     /**
@@ -64,9 +74,13 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test constructor
      */
-    public function test__construct()
+    public function testConstruct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->MailFieldsService->__construct();
+        $this->assertTrue(isset($this->MailFieldsService->MailFields));
+        $this->assertTrue(isset($this->MailFieldsService->MailMessagesService));
+        $this->assertInstanceOf("BcMail\Service\MailMessagesService", $this->MailFieldsService->MailMessagesService);
+        $this->assertInstanceOf("BcMail\Model\Table\MailFieldsTable", $this->MailFieldsService->MailFields);
     }
 
     /**
@@ -85,9 +99,39 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getIndex
      */
-    public function test_getIndex()
+    public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //　準備
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        // パラメータなしでテストする
+        $queryParams = [];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+        // レコード数を制限するのをテストする
+        $queryParams = [
+            'limit' => '1'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(1, $result->all());
+        // フィールドを利用するレコードの取得をテストする
+        $queryParams = [
+            'use_field' => 1
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
+        // フィールドを利用しないレコードの取得をテストする
+        $queryParams = [
+            'use_field' => 0
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(0, $result->all());
+        // ステータスが公開するレコードの取得をテストする
+        $queryParams = [
+            'status' => 'publish'
+        ];
+        $result = $this->MailFieldsService->getIndex(1, $queryParams);
+        $this->assertCount(3, $result->all());
     }
 
     /**
@@ -107,17 +151,44 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test getNew
      */
-    public function test_getNew()
+    public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailFieldsService->getNew(1);
+        $this->assertInstanceOf('BcMail\Model\Entity\MailField', $result);
+        $result = $this->MailFieldsService->getNew(99);
+        $this->assertEquals(99, $result->mail_content_id);
     }
 
     /**
      * test create
      */
-    public function test_create()
+    public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $postData = [
+            'id' => '1',
+            'mail_content_id' => '1',
+            'no' => '1',
+            'name' => '姓漢字',
+            'field_name' => 'test',
+            'type' => 'text',
+            'head' => 'お名前',
+            'attention' => '',
+            'before_attachment' => '<small>[姓]</small>',
+            'after_attachment' => '',
+            'options' => '',
+            'class' => '',
+            'default_value' => '',
+            'description' => '',
+            'group_field' => 'name',
+            'group_valid' => 'name',
+            'valid_ex' => '',
+            'use_field' => 1,
+            'sort' => '1',
+        ];
+        $result = $this->MailFieldsService->create($postData);
+        $this->assertEquals('name_1', $result->field_name);
     }
 
     /**
@@ -131,9 +202,22 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test delete
      */
-    public function test_delete()
+    public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+        $mailField = $this->MailFieldsService->get(1);
+        $this->assertEquals(1, $mailField->id);
+        //正常系実行
+        $this->assertTrue($this->MailFieldsService->delete(1));
+        //カラムの削除を確認する
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        //レコードの削除を確認する
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->MailFieldsService->get(1);
     }
 
     /**
