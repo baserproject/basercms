@@ -85,6 +85,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
