@@ -11,10 +11,11 @@
 
 namespace BcMail\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -195,9 +196,22 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test delete
      */
-    public function test_delete()
+    public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+        $mailField = $this->MailFieldsService->get(1);
+        $this->assertEquals(1, $mailField->id);
+        //正常系実行
+        $this->assertTrue($this->MailFieldsService->delete(1));
+        //カラムの削除を確認する
+        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        //レコードの削除を確認する
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->MailFieldsService->get(1);
     }
 
     /**
