@@ -83,7 +83,16 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //Getサービスをコル
+        $rs = $this->EditorTemplatesService->getIndex();
+
+        //戻る値を確認
+        $this->assertEquals(3, $rs->count());
+        $this->assertEquals(1, $rs->all()->toArray()[0]->id);
+        $this->assertEquals('画像（左）とテキスト', $rs->all()->toArray()[0]->name);
     }
 
     /**
