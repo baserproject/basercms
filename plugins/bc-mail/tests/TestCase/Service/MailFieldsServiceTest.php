@@ -135,8 +135,11 @@ class MailFieldsServiceTest extends BcTestCase
         $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
         $mailField = $this->MailFieldsService->get(1);
         $this->assertEquals(1, $mailField->id);
+        //正常系実行
         $this->assertTrue($this->MailFieldsService->delete(1));
+        //カラムの削除を確認する
         $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
+        //レコードの削除を確認する
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsService->get(1);
     }
