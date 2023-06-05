@@ -75,7 +75,15 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //Getサービスをコル
+        $rs = $this->EditorTemplatesService->get(1);
+
+        //戻る値を確認
+        $this->assertEquals(1, $rs->id);
+        $this->assertEquals('画像（左）とテキスト', $rs->name);
     }
 
     /**
