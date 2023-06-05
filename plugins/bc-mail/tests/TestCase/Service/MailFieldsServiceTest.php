@@ -13,6 +13,7 @@ namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailField;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -199,7 +200,16 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function test_getTitlesById()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 準備
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        // 正常系実行
+        $result = $this->MailFieldsService->getTitlesById([1, 2]);
+        $this->assertEquals('性', $result[1]);
+        $this->assertEquals('名', $result[2]);
+        //　異常系実行
+        $result = $this->MailFieldsService->getTitlesById([99]);
+        $this->assertEquals(array(), $result);
     }
 
     /**

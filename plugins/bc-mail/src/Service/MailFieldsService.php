@@ -282,6 +282,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
