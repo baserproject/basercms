@@ -30,6 +30,7 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -682,10 +683,25 @@ class BlogFrontServiceTest extends BcTestCase
 
     /**
      * test getViewVarsForBlogCalendarWidget
+     * @dataProvider getViewVarsForBlogCalendarWidgetDataProvider
      */
-    public function test_getViewVarsForBlogCalendarWidget()
+    public function test_getViewVarsForBlogCalendarWidget($blogContentId, $year, $month, $nextExpected, $prevExpected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $rs = $this->BlogFrontService->getViewVarsForBlogCalendarWidget($blogContentId, $year, $month);
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('entryDates', $rs);
+        $this->assertEquals($nextExpected, $rs['next']);
+        $this->assertEquals($prevExpected, $rs['prev']);
+    }
+
+    private function getViewVarsForBlogCalendarWidgetDataProvider()
+    {
+        return [
+            [6, 2014, 12, true, false],
+            [7, 2016, 3, false, true],
+            [6, 2015, 1, false, false],
+        ];
     }
 
     /**
