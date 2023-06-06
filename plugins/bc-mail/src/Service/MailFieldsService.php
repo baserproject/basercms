@@ -297,6 +297,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
