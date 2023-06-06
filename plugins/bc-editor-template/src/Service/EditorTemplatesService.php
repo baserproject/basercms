@@ -60,6 +60,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
