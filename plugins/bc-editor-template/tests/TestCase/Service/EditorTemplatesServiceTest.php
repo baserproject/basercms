@@ -118,7 +118,12 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //対象メソッドをコル
+        $rs = $this->EditorTemplatesService->update($this->EditorTemplatesService->get(1), ['name' => 'edited']);
+        //エディターテンプレートの名前が変更されるか確認
+        $this->assertEquals('edited', $rs->name);
     }
 
     /**

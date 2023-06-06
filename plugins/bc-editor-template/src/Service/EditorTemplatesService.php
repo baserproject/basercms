@@ -106,6 +106,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
