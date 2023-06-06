@@ -27,7 +27,7 @@
 			$this->BcBaser->link(
 				__d('baser', 'アカウント設定'),
 				[
-					SessionHelper::read('Auth.Admin.id'),
+					$this->Session->read('Auth.Admin.id'),
 					'admin' => true,
 					'plugin' => null,
 					'controller' => 'users',
