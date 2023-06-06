@@ -494,6 +494,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '')
     {
