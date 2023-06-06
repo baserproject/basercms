@@ -73,6 +73,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex()
     {
