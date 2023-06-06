@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -242,6 +243,45 @@ class MailContentsServiceTest extends BcTestCase
         $data['entity_id'] = 0;
         $this->expectException(Error::class);
         $this->MailContentsService->copy($data);
+    }
+
+    /**
+     * copy getPublishedAll
+     */
+    public function test_getPublishedAll()
+    {
+        //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //正常系実行
+        $result = $this->MailContentsService->getPublishedAll(1);
+        $this->assertCount(2, $result);
+        //レコードを追加した後、返するレコード数を確認する
+        MailContentFactory::make([
+            'id' => 3,
+            'description' => 'description test',
+            'ssl_on' => 0,
+            'save_info' => 1,
+        ])->persist();
+        ContentFactory::make([
+            'id' => 10,
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 3,
+            'parent_id' => 1,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+        ])->persist();
+        $result = $this->MailContentsService->getPublishedAll(1);
+        $this->assertCount(3, $result);
+        //異常系実行
+        $result = $this->MailContentsService->getPublishedAll(99);
+        $this->assertCount(0, $result);
     }
 
 }
