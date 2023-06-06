@@ -98,6 +98,10 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param BlogContent $blogContent
      * @param ResultSet $posts
      * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
     {
