@@ -15,10 +15,10 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Test\Scenario\MailContentsScenario;
-use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -85,9 +85,14 @@ class MailFieldsServiceTest extends BcTestCase
     /**
      * test get
      */
-    public function test_get()
+    public function testGet()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $result = $this->MailFieldsService->get(1);
+        $this->assertEquals(1, $result->id);
+        $this->expectException(RecordNotFoundException::class);
+        $result = $this->MailFieldsService->get(99);
     }
 
     /**
