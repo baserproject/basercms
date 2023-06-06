@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Service\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\Admin\MailContentsAdminService;
 use BcMail\Service\MailContentsService;
@@ -70,11 +71,26 @@ class MailContentsAdminServiceTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
         $mailContent = $this->MailContentsService->get(1);
         //正常系実行
         $result = $this->MailContentsAdminService->getViewVarsForEdit($mailContent);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
+    }
+
+    /**
+     * test getPublishLink
+     */
+    public function test_getPublishLink()
+    {
+        //準備
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $mailContent = $this->MailContentsService->get(1);
+        //正常系実行
+        $result = $this->MailContentsAdminService->getPublishLink($mailContent);
+        $this->assertEquals('https://localhost/contact/', $result);
     }
 
 }
