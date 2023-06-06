@@ -71,6 +71,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
