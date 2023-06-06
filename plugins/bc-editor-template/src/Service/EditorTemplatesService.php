@@ -60,6 +60,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
@@ -72,6 +73,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex()
     {
@@ -85,6 +87,7 @@ class EditorTemplatesService implements EditorTemplatesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
