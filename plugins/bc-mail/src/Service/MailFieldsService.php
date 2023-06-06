@@ -184,6 +184,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param array $postData
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {

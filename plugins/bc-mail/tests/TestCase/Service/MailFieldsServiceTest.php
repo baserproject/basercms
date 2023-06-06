@@ -195,7 +195,27 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 準備
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $mailField = $this->MailFieldsService->get(1);
+        $postData = [
+            'name' => 'Nghiem',
+            'type' => 'radio',
+            'source' => '1|2|3'
+        ];
+        // 正常系実行
+        $result = $this->MailFieldsService->update($mailField, $postData);
+        $this->assertEquals('Nghiem', $result->name);
+        $this->assertEquals('radio', $result->type);
+        $this->assertEquals("1\n2\n3", $result->source);
+        // 異常系実行
+        $postData = [
+            'field_name' => '',
+            'name' => '',
+        ];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->MailFieldsService->update($mailField, $postData);
     }
 
     /**
