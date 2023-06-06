@@ -15,6 +15,7 @@ use BaserCore\Controller\BcFrontAppController;
 use BaserCore\Controller\ContentFoldersController;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -71,7 +72,6 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogFrontService = $this->getService(BlogFrontServiceInterface::class);
     }
@@ -103,6 +103,44 @@ class BlogFrontServiceTest extends BcTestCase
     public function test_getViewVarsForIndex()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForIndexRss
+     */
+    public function test_getViewVarsForIndexRss()
+    {
+        // サービスクラス
+        $blogContentService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true
+        ])->persist();
+
+        //パラメーターの準備
+        $request = $this->getRequest()->withQueryParams([
+            'Site' => SiteFactory::get(1),
+            'Content' => ContentFactory::get(1)
+        ]);
+        $this->loginAdmin($request);
+
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('posts', $rs);
+        $this->assertArrayHasKey('channel', $rs);
+        $this->assertNotNull($rs['channel']['title']);
+        $this->assertNotNull($rs['channel']['description']);
     }
 
     /**

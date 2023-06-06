@@ -75,7 +75,15 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //Getサービスをコル
+        $rs = $this->EditorTemplatesService->get(1);
+
+        //戻る値を確認
+        $this->assertEquals(1, $rs->id);
+        $this->assertEquals('画像（左）とテキスト', $rs->name);
     }
 
     /**
@@ -83,7 +91,16 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //Getサービスをコル
+        $rs = $this->EditorTemplatesService->getIndex();
+
+        //戻る値を確認
+        $this->assertEquals(3, $rs->count());
+        $this->assertEquals(1, $rs->all()->toArray()[0]->id);
+        $this->assertEquals('画像（左）とテキスト', $rs->all()->toArray()[0]->name);
     }
 
     /**
@@ -110,7 +127,18 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //正常テスト場合、
+        $data['name'] = 'テスト追加';
+        //新規追加メソッドを追加
+        $rs = $this->EditorTemplatesService->create($data);
+        //戻る値を確認
+        $this->assertEquals('テスト追加', $rs->name);
+
+        //異常テスト場合、
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.maxLength: "テンプレート名は50文字以内で入力してください。');
+        $data['name'] = str_repeat('a', 51);
+        $this->EditorTemplatesService->create($data);
     }
 
     /**
