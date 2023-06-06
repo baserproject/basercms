@@ -260,7 +260,18 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function test_unpublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        // 準備
+        $mailField = $this->MailFieldsService->get(1);
+        // 今の公開ステータスを確認する
+        $this->assertTrue($mailField->use_field);
+        // 正常系実行
+        $this->MailFieldsService->unpublish(1);
+        //非公開したかを確認する
+        $mailField = $this->MailFieldsService->get(1);
+        $this->assertFalse($mailField->use_field);
     }
 
     /**
