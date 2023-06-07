@@ -605,6 +605,10 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param int $limit
      * @return array
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getViewVarsRecentEntriesWidget(int $blogContentId, int $limit = 5)
     {

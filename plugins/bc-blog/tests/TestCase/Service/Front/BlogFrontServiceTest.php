@@ -733,6 +733,14 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsRecentEntriesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // サービスクラスを呼ぶ
+        $rs = $this->BlogFrontService->getViewVarsRecentEntriesWidget(6);
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertEquals(1, $rs['recentEntries']->count());
     }
 }
