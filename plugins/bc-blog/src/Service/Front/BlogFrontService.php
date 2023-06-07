@@ -583,6 +583,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $limit
      * @param bool $viewCount
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsBlogMonthlyArchivesWidget(
         int $blogContentId,

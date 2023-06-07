@@ -725,7 +725,15 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsBlogMonthlyArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // サービスクラスを呼ぶ
+        $rs = $this->BlogFrontService->getViewVarsBlogMonthlyArchivesWidget(6);
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('201501', $rs['postedDates']);
     }
 
     /**
