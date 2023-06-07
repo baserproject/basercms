@@ -102,7 +102,7 @@ class MailFieldsAdminServiceTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailField = new MailField();
         // ³íŒnŽÀs
-        $result = $this->MailFieldsAdminService->getViewVarsForEdit(1, $mailField);
+        $result = $this->MailFieldsAdminService->getViewVarsForAdd(1, $mailField);
         $this->assertInstanceOf(MailField::class, $result['mailField']);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
