@@ -531,6 +531,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogCategoryArchivesWidget(
         int $blogContentId,
