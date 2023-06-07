@@ -80,6 +80,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(int $mailContentId, EntityInterface $mailField)
     {
