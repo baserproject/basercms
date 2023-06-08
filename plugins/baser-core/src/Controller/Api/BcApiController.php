@@ -42,11 +42,11 @@ class BcApiController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         // APIが許可されていない場合は弾く
-//        if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-//            if(BcUtil::isCorePlugin($this->getRequest()->getParam('plugin'))) {
-//                throw new ForbiddenException(__d('baser_core', 'baser APIは許可されていません。'));
-//            }
-//        }
+        if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if(BcUtil::isCorePlugin($this->getRequest()->getParam('plugin')) && !BcUtil::isSameReferrerAsCurrent()) {
+                throw new ForbiddenException(__d('baser_core', 'baser APIは許可されていません。'));
+            }
+        }
         parent::beforeFilter($event);
     }
 
