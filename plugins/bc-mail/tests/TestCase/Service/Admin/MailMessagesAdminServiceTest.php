@@ -18,6 +18,7 @@ use BcMail\Service\MailMessagesService;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -87,7 +88,9 @@ class MailMessagesAdminServiceTest extends BcTestCase
         $this->assertEquals(2, $result['mailMessage']->id);
         $this->assertCount(3, $result['mailFields']);
         $this->assertEquals('sex', $result['mailFields'][2]->field_name);
-        //
+        // abnormal case
+        $this->expectException(RecordNotFoundException::class);
+        $this->MailMessagesAdminService->getViewVarsForView(99, 99);
     }
 
 }
