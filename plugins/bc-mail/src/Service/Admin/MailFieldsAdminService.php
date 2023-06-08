@@ -104,7 +104,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return null|string
      * @checked
      * @noTodo
-     * @unitTest ラッパーメソッドのためテストは実装しない
+     * @unitTest
      */
     public function getPublishLink(EntityInterface $mailContent)
     {
