@@ -113,4 +113,23 @@ class MailFieldsAdminServiceTest extends BcTestCase
         $this->MailFieldsAdminService->getViewVarsForEdit(0, $mailField);
 
     }
+
+    /**
+     * test getViewVarsForIndex
+     */
+    public function test_getViewVarsForIndex()
+    {
+        // €”õ
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_fields/index?sortmode=1');
+        $this->loginAdmin($request);
+        // ³íŒnŽÀs
+        $result = $this->MailFieldsAdminService->getViewVarsForIndex($request, 1);
+        $this->assertEquals(1, $result['mailContent']->id);
+        $this->assertCount(3, $result['mailFields']);
+        $this->assertEquals('https://localhost/contact/', $result['publishLink']);
+        $this->assertEquals(1, $result['sortmode']);
+    }
 }

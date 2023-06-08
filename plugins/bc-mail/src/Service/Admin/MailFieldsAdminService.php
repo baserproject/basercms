@@ -38,6 +38,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(ServerRequest $request, int $mailContentId)
     {
