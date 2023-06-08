@@ -275,18 +275,27 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です。BlogContentsTableより移植');
-        $result = $this->BlogContent->getControlSource($field);
+        if ($field == 'id') {
+            BlogContentFactory::make(['id' => 2])->persist();
+            ContentFactory::make([
+                'id' => 2,
+                'title' => 'news',
+                'plugin' => 'BcBlog',
+                'type' => 'BlogContent',
+                'entity_id' => 2
+            ])->persist();
+        }
+        $result = $this->BlogContentsService->getControlSource($field);
         $this->assertEquals($result, $expected);
     }
 
     public function getControlSourceDataProvider()
     {
         return [
-            [null, false],
-            ['', false],
-            ['hoge', false],
-            ['id', ['1' => '新着情報']],
+            [null, false], //$field = null; return false
+            ['', false], //$field = ''; return false
+            ['hoge', false], //$field が存在しない; return false
+            ['id', ['2' => 'news']], //$field がid; return コンテンツタイトル
         ];
     }
 
