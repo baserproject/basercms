@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcMail\Service\Admin\MailMessagesAdminService;
 use BcMail\Service\MailMessagesService;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -91,6 +92,39 @@ class MailMessagesAdminServiceTest extends BcTestCase
         // abnormal case
         $this->expectException(RecordNotFoundException::class);
         $this->MailMessagesAdminService->getViewVarsForView(99, 99);
+    }
+
+
+    /**
+     * test getViewVarsForIndex
+     */
+    public function test_getViewVarsForIndex()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        MailMessagesFactory::make(
+            [
+                'id' => 2,
+            ]
+        )->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessages = $MailMessagesService->getIndex()->all();
+        // normal case
+        $result = $this->MailMessagesAdminService->getViewVarsForIndex(1, $mailMessages);
+        $this->assertEquals('description test', $result['mailContent']->description);
+        $this->assertCount(2, $result['mailMessages']);
+        $this->assertCount(3, $result['mailFields']);
+        $this->assertEquals('sex', $result['mailFields'][2]->field_name);
+        // abnormal case
+        $this->expectException(RecordNotFoundException::class);
+        $this->MailMessagesAdminService->getViewVarsForIndex(99, $mailMessages);
     }
 
 }
