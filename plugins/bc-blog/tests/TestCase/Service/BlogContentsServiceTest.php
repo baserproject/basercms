@@ -19,6 +19,7 @@ use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -290,4 +291,25 @@ class BlogContentsServiceTest extends BcTestCase
         ];
     }
 
+    /**
+     * test getContentsTemplateRelativePath
+     */
+    public function test_getContentsTemplateRelativePath()
+    {
+        //データを生成
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+
+        //contentsTemplateは値がある場合、
+        $rs = $this->BlogContentsService->getContentsTemplateRelativePath(['contentsTemplate' => 'contentsTemplate']);
+        $this->assertEquals($rs, 'BcBlog.../Blog/contentsTemplate/posts');
+
+        //contentsTemplateは値がない、かつBlogContentsにcontentUrlが存在する場合、
+        $rs = $this->BlogContentsService->getContentsTemplateRelativePath(['contentUrl' => ['/test']]);
+        $this->assertEquals($rs, 'BcBlog.../Blog/homePage/posts');
+
+        //contentsTemplateは値がない、かつBlogContentsにcontentUrlが存在しない場合、
+        $rs = $this->BlogContentsService->getContentsTemplateRelativePath(['contentUrl' => ['/test3']]);
+        $this->assertEquals($rs, 'BcBlog.../Blog/default/posts');
+
+    }
 }
