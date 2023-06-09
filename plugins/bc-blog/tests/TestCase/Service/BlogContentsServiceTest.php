@@ -20,6 +20,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -252,6 +253,30 @@ class BlogContentsServiceTest extends BcTestCase
         $this->assertEquals($rs['content']['title'], 'news');
         $this->assertEquals($rs['content']['type'], 'BlogContent');
         $this->assertNotEquals($rs['id'], 2);
+    }
+
+    /**
+     * test checkRequireSearchIndexReconstruction
+     * @dataProvider checkRequireSearchIndexReconstructionProvider
+     */
+    public function test_checkRequireSearchIndexReconstruction($beforeValue, $afterValue, $expected)
+    {
+        $before = new Entity($beforeValue);
+        $after = new Entity($afterValue);
+        $rs = $this->BlogContentsService->checkRequireSearchIndexReconstruction($before, $after);
+        $this->assertEquals($rs, $expected);
+    }
+
+    public function checkRequireSearchIndexReconstructionProvider()
+    {
+        return [
+            [['name' => 'name 1'], ['name' => 'name 2'], true], //$before->name !== $after->name; return true
+            [['name' => 'name 1'], ['name' => 'name 1'], false], //$before->name == $after->name; return false
+            [['status' => 'status 1'], ['status' => 'status 2'], true], //$before->status !== $after->status; return true
+            [['status' => 'status 1'], ['status' => 'status 1'], false], //$before->status == $after->status; return false
+            [['parent_id' => 1], ['parent_id' => 2], true], //$before->parent_id !== $after->parent_id; return true
+            [['parent_id' => 1], ['parent_id' => 1], false], //$before->status == $after->status; return false
+        ];
     }
 
     /**

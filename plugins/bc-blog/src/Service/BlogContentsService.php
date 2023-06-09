@@ -306,6 +306,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @param Content|EntityInterface $before
      * @param Content|EntityInterface $after
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function checkRequireSearchIndexReconstruction(EntityInterface $before, EntityInterface $after)
     {
