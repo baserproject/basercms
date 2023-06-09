@@ -113,4 +113,19 @@ class MailFrontServiceTest extends BcTestCase
         // 正常系実行
         $this->assertEquals('Mail/default/confirm', $result);
     }
+
+    /**
+     * test getIndexTemplate
+     */
+    public function test_getIndexTemplate()
+    {
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $result = $this->MailFrontService->getIndexTemplate($mailContent);
+        // 正常系実行
+        $this->assertEquals('Mail/default/index', $result);
+    }
 }
