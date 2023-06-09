@@ -228,4 +228,18 @@ class BlogTagsServiceTest extends BcTestCase
         $this->expectException(RecordNotFoundException::class);
         $this->BlogTagsService->get(1);
     }
+
+    /**
+     * test getTitlesById
+     */
+    public function test_getTitlesById()
+    {
+        //データを生成
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->BlogTagsService->getTitlesById([1, 2]);
+        //戻る値を確認
+        $this->assertEquals($rs[1], 'tag1');
+        $this->assertEquals($rs[2], 'tag2');
+    }
 }
