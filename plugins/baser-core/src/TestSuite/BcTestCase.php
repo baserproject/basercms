@@ -20,6 +20,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
 use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
+use BcCustomContent\ServiceProvider\BcCustomContentServiceProvider;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use BcMail\ServiceProvider\BcMailServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
@@ -218,6 +219,7 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcWidgetAreaServiceProvider());
         $container->addServiceProvider(new BcThemeFileServiceProvider());
         $container->addServiceProvider(new BcUploaderServiceProvider());
+        $container->addServiceProvider(new BcCustomContentServiceProvider());
         EventManager::instance(new EventManager());
     }
 

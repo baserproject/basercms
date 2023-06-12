@@ -40,6 +40,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -54,6 +55,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return EntityInterface|MailField
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $queryParams = [])
     {
@@ -77,6 +79,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * 一覧データ取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(int $mailContentId, array $queryParams = [])
     {
@@ -131,6 +134,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew($mailContentId)
     {
@@ -148,6 +152,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -179,6 +184,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param array $postData
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -208,6 +214,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -264,6 +271,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unpublish(int $id)
     {
@@ -280,6 +288,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
@@ -293,6 +302,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
