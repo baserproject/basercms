@@ -709,7 +709,13 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForBlogCategoryArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        //対象メソッドをコール
+        $rs = $this->BlogFrontService->getViewVarsForBlogCategoryArchivesWidget(6);
+        //戻る値を確認
+        $this->assertEquals(6, $rs['blogContent']->id);
+        $this->assertEquals(2, $rs['categories']->count());
     }
 
     /**
