@@ -69,11 +69,11 @@ class MailContentsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        //ƒf[ƒ^‚ð¶¬
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆ
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailContent = $this->MailContentsService->get(1);
-        //³íŒnŽÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailContentsAdminService->getViewVarsForEdit($mailContent);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
@@ -84,11 +84,11 @@ class MailContentsAdminServiceTest extends BcTestCase
      */
     public function test_getPublishLink()
     {
-        //€”õ
+        //æº–å‚™
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailContent = $this->MailContentsService->get(1);
-        //³íŒnŽÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailContentsAdminService->getPublishLink($mailContent);
         $this->assertEquals('https://localhost/contact/', $result);
     }
