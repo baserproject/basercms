@@ -103,7 +103,46 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogContentService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true
+        ])->persist();
+
+        //パラメーターの準備
+        $request = $this->getRequest();
+
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndex($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('posts', $rs);
+        $this->assertFalse($rs['single']);
+        $this->assertNull($rs['editLink']); //ログインしない場合、Nullを返す
+        $this->assertArrayHasKey('currentWidgetAreaId', $rs);
+
+        //ログインした場合
+        $this->loginAdmin($request);
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndex($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        //編集リンクを返す
+        $this->assertEquals($rs['editLink'], [
+            'prefix' => 'Admin',
+            'plugin' => 'BcBlog',
+            'controller' => 'BlogContents',
+            'action' => 'edit',
+            1
+        ]);
     }
 
     /**
