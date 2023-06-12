@@ -472,6 +472,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getThanksTemplate(EntityInterface $mailContent): string
     {
