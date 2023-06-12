@@ -472,6 +472,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param bool $viewCount
      * @return array|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogAuthorArchivesWidget(int $blogContentId, bool $viewCount)
     {
