@@ -138,6 +138,38 @@ class BlogTagsServiceTest extends BcTestCase
     }
 
     /**
+     * test batch
+     */
+    public function test_batch()
+    {
+        // データを生成
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+
+        //// 正常系のテスト
+
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogTagsService->batch('delete', [1, 2, 3]);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // データが削除されていることを確認
+        $blogTags = $this->BlogTagsService->getIndex([])->toArray();
+        $this->assertCount(0, $blogTags);
+
+        //// 異常系のテスト
+
+        // delete で id が指定されていない場合は true を返すこと
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogTagsService->batch('delete', []);
+        // 戻り値を確認
+        $this->assertTrue($result);
+
+        // 存在しない id を指定された場合は例外が発生すること
+        // サービスメソッドを呼ぶ
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->BlogTagsService->batch('delete', [1, 2, 3]);
+    }
+
+    /**
      * test getNew
      */
     public function testGetNew()
@@ -227,5 +259,19 @@ class BlogTagsServiceTest extends BcTestCase
         $this->assertTrue($this->BlogTagsService->delete(1));
         $this->expectException(RecordNotFoundException::class);
         $this->BlogTagsService->get(1);
+    }
+
+    /**
+     * test getTitlesById
+     */
+    public function test_getTitlesById()
+    {
+        //データを生成
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->BlogTagsService->getTitlesById([1, 2]);
+        //戻る値を確認
+        $this->assertEquals($rs[1], 'tag1');
+        $this->assertEquals($rs[2], 'tag2');
     }
 }

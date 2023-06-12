@@ -221,6 +221,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
@@ -234,6 +235,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {

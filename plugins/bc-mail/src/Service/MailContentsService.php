@@ -176,6 +176,7 @@ class MailContentsService implements MailContentsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = []): Query
     {
@@ -219,6 +220,7 @@ class MailContentsService implements MailContentsServiceInterface
      * @checked
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getList()
     {
@@ -252,6 +254,7 @@ class MailContentsService implements MailContentsServiceInterface
      *
      * @param int|null $siteId
      * @return \Cake\Datasource\ResultSetInterface
+     * @unitTest
      */
     public function getPublishedAll(int $siteId = null)
     {
