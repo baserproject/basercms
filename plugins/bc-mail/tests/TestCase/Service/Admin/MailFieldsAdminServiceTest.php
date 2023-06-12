@@ -148,4 +148,5 @@ class MailFieldsAdminServiceTest extends BcTestCase
         $result = $this->MailFieldsAdminService->getPublishLink($mailContent);
         $this->assertEquals('https://localhost/contact/', $result);
     }
+
 }
