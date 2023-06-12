@@ -245,6 +245,7 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @return array|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null, $options = [])
     {
