@@ -135,7 +135,7 @@ class MailMessagesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForDownloadCsv()
     {
-        // 準備
+        // 貅門ｙ
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
@@ -143,13 +143,13 @@ class MailMessagesAdminServiceTest extends BcTestCase
         $mailMessageTable->save(new Entity(['id' => 1]));
         $mailMessageTable->save(new Entity(['id' => 2]));
 
-        // 正常系実行：Encodingを指定するケース
+        // 豁｣蟶ｸ邉ｻ螳溯｡鯉ｼ哘ncoding繧呈欠螳壹☆繧九こ繝ｼ繧ｹ
         $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?encoding=abc');
         $this->loginAdmin($request);
         $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
         $this->assertEquals('abc', $result['encoding']);
 
-        // 正常系実行：Encodingを指定しないケース
+        // 豁｣蟶ｸ邉ｻ螳溯｡鯉ｼ哘ncoding繧呈欠螳壹＠縺ｪ縺�繧ｱ繝ｼ繧ｹ
         $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?');
         $this->loginAdmin($request);
         $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
