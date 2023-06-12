@@ -146,7 +146,18 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //対象メソッドをコル
+        $rs = $this->EditorTemplatesService->update($this->EditorTemplatesService->get(1), ['name' => 'edited']);
+        //エディターテンプレートの名前が変更されるか確認
+        $this->assertEquals('edited', $rs->name);
+
+        //異常テスト場合、
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.maxLength: "テンプレート名は50文字以内で入力してください。');
+        $data['name'] = str_repeat('a', 51);
+        $this->EditorTemplatesService->update($this->EditorTemplatesService->get(1), $data);
     }
 
     /**
