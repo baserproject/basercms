@@ -97,7 +97,6 @@ class MailMessagesAdminServiceTest extends BcTestCase
         $this->MailMessagesAdminService->getViewVarsForView(99, 99);
     }
 
-
     /**
      * test getViewVarsForIndex
      */

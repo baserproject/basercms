@@ -13,6 +13,11 @@ namespace BcCustomContent\Test\TestCase\Service;
 
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Service\Admin\CustomContentsAdminService;
+use BcCustomContent\Service\Admin\CustomContentsAdminServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomContentsAdminServiceTest
@@ -21,11 +26,35 @@ class CustomContentsAdminServiceTest extends BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
+
+    /**
+     * Test subject
+     *
+     * @var CustomContentsAdminService
+     */
+    public $CustomContentsAdminService;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BcCustomContent.Factory/CustomContents',
+        'plugin.BaserCore.Factory/Contents',
+    ];
+
+    /**
      * Set up
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->CustomContentsAdminService = $this->getService(CustomContentsAdminServiceInterface::class);
     }
 
     /**
@@ -33,7 +62,21 @@ class CustomContentsAdminServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->CustomContentsAdminService);
         parent::tearDown();
     }
 
+    /**
+     * test getViewVarsForEdit
+     */
+    public function test_getViewVarsForEdit()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //テストメソッドを呼ぶ
+        $rs = $this->CustomContentsAdminService->getViewVarsForEdit($this->CustomContentsAdminService->get(1));
+        $this->assertEquals(1, $rs['entity']->id);
+        $this->assertArrayHasKey('customTables', $rs);
+        $this->assertArrayHasKey('editorEnterBr', $rs);
+    }
 }

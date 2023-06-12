@@ -86,8 +86,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
         'data-bca-btn-size' => 'lg'
       ]); ?>
     <?php endif ?>
-    <?php if ($plugin->admin_link && $plugin->status && !$plugin->update && !$plugin->old_version): ?>
-      <?php $this->BcBaser->link('', $plugin->admin_link, [
+    <?php if ($plugin->adminLink && $plugin->status && !$plugin->update && !$plugin->old_version): ?>
+      <?php $this->BcBaser->link('', $plugin->adminLink, [
         'aria-label' => __d('baser_core', 'このプラグインの設定を行う'),
         'title' => __d('baser_core', '管理'),
         'class' => 'btn-setting  bca-btn-icon',

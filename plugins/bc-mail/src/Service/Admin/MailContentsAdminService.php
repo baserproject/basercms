@@ -32,6 +32,7 @@ class MailContentsAdminService extends MailContentsService implements MailConten
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(EntityInterface $entity)
     {
@@ -48,6 +49,7 @@ class MailContentsAdminService extends MailContentsService implements MailConten
      * @return null|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishLink(EntityInterface $entity) {
         $contentsService = $this->getService(ContentsServiceInterface::class);

@@ -472,6 +472,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param bool $viewCount
      * @return array|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogAuthorArchivesWidget(int $blogContentId, bool $viewCount)
     {
@@ -531,6 +534,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogCategoryArchivesWidget(
         int $blogContentId,
@@ -559,6 +563,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param bool $limit
      * @param bool $viewCount
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogYearlyArchivesWidget(
         int $blogContentId,
@@ -583,6 +590,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $limit
      * @param bool $viewCount
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsBlogMonthlyArchivesWidget(
         int $blogContentId,
@@ -605,6 +615,10 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param int $limit
      * @return array
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getViewVarsRecentEntriesWidget(int $blogContentId, int $limit = 5)
     {
