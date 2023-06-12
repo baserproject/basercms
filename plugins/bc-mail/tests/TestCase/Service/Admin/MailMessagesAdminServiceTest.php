@@ -20,6 +20,8 @@ use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -94,7 +96,6 @@ class MailMessagesAdminServiceTest extends BcTestCase
         $this->MailMessagesAdminService->getViewVarsForView(99, 99);
     }
 
-
     /**
      * test getViewVarsForIndex
      */
@@ -125,6 +126,36 @@ class MailMessagesAdminServiceTest extends BcTestCase
         // abnormal case
         $this->expectException(RecordNotFoundException::class);
         $this->MailMessagesAdminService->getViewVarsForIndex(99, $mailMessages);
+    }
+
+    /**
+     * test getViewVarsForDownloadCsv
+     */
+    public function test_getViewVarsForDownloadCsv()
+    {
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->save(new Entity(['id' => 1]));
+        $mailMessageTable->save(new Entity(['id' => 2]));
+
+        // 正常系実行：Encodingを指定するケース
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?encoding=abc');
+        $this->loginAdmin($request);
+        $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
+        $this->assertEquals('abc', $result['encoding']);
+
+        // 正常系実行：Encodingを指定しないケース
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?');
+        $this->loginAdmin($request);
+        $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
+        $this->assertEquals('utf-8', $result['encoding']);
+        $this->assertCount(2, $result['messages']);
+        $this->assertEquals(1, $result['messages'][0]['NO']);
+        $this->assertEquals(2, $result['messages'][1]['NO']);
+        $this->assertEquals('name_test', $result['contentName']);
     }
 
 }
