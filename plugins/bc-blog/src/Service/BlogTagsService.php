@@ -235,6 +235,7 @@ class BlogTagsService implements BlogTagsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
