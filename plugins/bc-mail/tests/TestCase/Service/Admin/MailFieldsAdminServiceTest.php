@@ -86,6 +86,7 @@ class MailFieldsAdminServiceTest extends BcTestCase
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals(1, $result['mailField']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
+        $this->assertNotNull($result['autoCompleteOptions']);
         // 異常系実行
         $mailField = $this->MailFieldsService->get(1);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
