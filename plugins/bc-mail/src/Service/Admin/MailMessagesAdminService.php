@@ -57,6 +57,7 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForView(int $mailContentId, int $mailMessageId)
     {
