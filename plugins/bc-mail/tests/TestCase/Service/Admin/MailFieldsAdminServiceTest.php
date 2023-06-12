@@ -73,18 +73,18 @@ class MailFieldsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        // €”õ
+        // æº–å‚™
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailField = $this->MailFieldsService->get(1);
-        // ³íŒnŽÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailFieldsAdminService->getViewVarsForEdit(1, $mailField);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals(1, $result['mailField']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
         $this->assertNotNull($result['autoCompleteOptions']);
-        // ˆÙíŒnŽÀs
+        // ç•°å¸¸ç³»å®Ÿè¡Œ
         $mailField = $this->MailFieldsService->get(1);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsAdminService->getViewVarsForEdit(99, $mailField);
