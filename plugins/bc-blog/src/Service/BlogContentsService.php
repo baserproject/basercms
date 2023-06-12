@@ -276,6 +276,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      *
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentsTemplateRelativePath(array $options): string
     {
