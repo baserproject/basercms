@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailField;
 use BcMail\Service\Admin\MailFieldsAdminService;
+use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -132,4 +133,20 @@ class MailFieldsAdminServiceTest extends BcTestCase
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
         $this->assertEquals(1, $result['sortmode']);
     }
+
+    /**
+     * test getPublishLink
+     */
+    public function test_getPublishLink()
+    {
+        // 準備
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $mailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $mailContentsService->get(1);
+        // 正常系実行
+        $result = $this->MailFieldsAdminService->getPublishLink($mailContent);
+        $this->assertEquals('https://localhost/contact/', $result);
+    }
+
 }
