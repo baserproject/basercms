@@ -15,6 +15,8 @@ use BaserCore\Controller\BcFrontAppController;
 use BaserCore\Controller\ContentFoldersController;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -29,6 +31,7 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -71,7 +74,6 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogFrontService = $this->getService(BlogFrontServiceInterface::class);
     }
@@ -102,7 +104,84 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogContentService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true
+        ])->persist();
+
+        //パラメーターの準備
+        $request = $this->getRequest();
+
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndex($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('posts', $rs);
+        $this->assertFalse($rs['single']);
+        $this->assertNull($rs['editLink']); //ログインしない場合、Nullを返す
+        $this->assertArrayHasKey('currentWidgetAreaId', $rs);
+
+        //ログインした場合
+        $this->loginAdmin($request);
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndex($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        //編集リンクを返す
+        $this->assertEquals($rs['editLink'], [
+            'prefix' => 'Admin',
+            'plugin' => 'BcBlog',
+            'controller' => 'BlogContents',
+            'action' => 'edit',
+            1
+        ]);
+    }
+
+    /**
+     * test getViewVarsForIndexRss
+     */
+    public function test_getViewVarsForIndexRss()
+    {
+        // サービスクラス
+        $blogContentService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true
+        ])->persist();
+
+        //パラメーターの準備
+        $request = $this->getRequest()->withQueryParams([
+            'Site' => SiteFactory::get(1),
+            'Content' => ContentFactory::get(1)
+        ]);
+        $this->loginAdmin($request);
+
+        //対象メソッドをコル
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('posts', $rs);
+        $this->assertArrayHasKey('channel', $rs);
+        $this->assertNotNull($rs['channel']['title']);
+        $this->assertNotNull($rs['channel']['description']);
     }
 
     /**
@@ -639,15 +718,50 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForBlogAuthorArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        UserFactory::make([
+            'id' => BlogPostFactory::get(1)->user_id,
+            'name' => 'name_test',
+            'real_name_1' => 'real_name_1_test',
+            'real_name_2' => 'real_name_2_test',
+            'nickname' => 'nickname_test',
+        ])->persist();
+
+        // viewCountはTrue場合、
+        $rs = $this->BlogFrontService->getViewVarsForBlogAuthorArchivesWidget(6, true);
+
+        //戻る値を確認
+        $this->assertEquals(6, $rs['blogContent']->id);
+        $this->assertEquals('name_test', $rs['authors'][0]->name);
+        $this->assertEquals(1, $rs['authors'][0]->count);
+
+        //viewCountはFalse場合
+        $rs = $this->BlogFrontService->getViewVarsForBlogAuthorArchivesWidget(6, false);
+        $this->assertNull($rs['authors'][0]->count);
     }
 
     /**
      * test getViewVarsForBlogCalendarWidget
+     * @dataProvider getViewVarsForBlogCalendarWidgetDataProvider
      */
-    public function test_getViewVarsForBlogCalendarWidget()
+    public function test_getViewVarsForBlogCalendarWidget($blogContentId, $year, $month, $nextExpected, $prevExpected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $rs = $this->BlogFrontService->getViewVarsForBlogCalendarWidget($blogContentId, $year, $month);
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('entryDates', $rs);
+        $this->assertEquals($nextExpected, $rs['next']);
+        $this->assertEquals($prevExpected, $rs['prev']);
+    }
+
+    private function getViewVarsForBlogCalendarWidgetDataProvider()
+    {
+        return [
+            [6, 2014, 12, true, false],
+            [7, 2016, 3, false, true],
+            [6, 2015, 1, false, false],
+        ];
     }
 
     /**
@@ -655,7 +769,13 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForBlogCategoryArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        //対象メソッドをコール
+        $rs = $this->BlogFrontService->getViewVarsForBlogCategoryArchivesWidget(6);
+        //戻る値を確認
+        $this->assertEquals(6, $rs['blogContent']->id);
+        $this->assertEquals(2, $rs['categories']->count());
     }
 
     /**
@@ -663,7 +783,15 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForBlogYearlyArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // サービスクラスを呼ぶ
+        $rs = $this->BlogFrontService->getViewVarsForBlogYearlyArchivesWidget(6);
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('2015', $rs['postedDates']);
     }
 
     /**
@@ -671,7 +799,15 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsBlogMonthlyArchivesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // サービスクラスを呼ぶ
+        $rs = $this->BlogFrontService->getViewVarsBlogMonthlyArchivesWidget(6);
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertArrayHasKey('201501', $rs['postedDates']);
     }
 
     /**
@@ -679,6 +815,14 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsRecentEntriesWidget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // サービスクラスを呼ぶ
+        $rs = $this->BlogFrontService->getViewVarsRecentEntriesWidget(6);
+
+        //戻る値を確認
+        $this->assertArrayHasKey('blogContent', $rs);
+        $this->assertEquals(1, $rs['recentEntries']->count());
     }
 }
