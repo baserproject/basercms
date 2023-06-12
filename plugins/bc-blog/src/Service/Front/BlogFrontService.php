@@ -98,6 +98,10 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param BlogContent $blogContent
      * @param ResultSet $posts
      * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
     {
@@ -468,6 +472,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param bool $viewCount
      * @return array|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogAuthorArchivesWidget(int $blogContentId, bool $viewCount)
     {
@@ -490,6 +497,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '')
     {
@@ -526,6 +534,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogCategoryArchivesWidget(
         int $blogContentId,
@@ -554,6 +563,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param bool $limit
      * @param bool $viewCount
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForBlogYearlyArchivesWidget(
         int $blogContentId,
@@ -578,6 +590,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $limit
      * @param bool $viewCount
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsBlogMonthlyArchivesWidget(
         int $blogContentId,
@@ -600,6 +615,10 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param int $blogContentId
      * @param int $limit
      * @return array
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getViewVarsRecentEntriesWidget(int $blogContentId, int $limit = 5)
     {
