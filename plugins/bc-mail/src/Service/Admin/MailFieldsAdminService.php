@@ -38,6 +38,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(ServerRequest $request, int $mailContentId)
     {
@@ -59,6 +60,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(int $mailContentId, EntityInterface $mailField)
     {
@@ -80,6 +82,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(int $mailContentId, EntityInterface $mailField)
     {
@@ -101,7 +104,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
      * @return null|string
      * @checked
      * @noTodo
-     * @unitTest ラッパーメソッドのためテストは実装しない
+     * @unitTest
      */
     public function getPublishLink(EntityInterface $mailContent)
     {
