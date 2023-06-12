@@ -50,6 +50,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'plugin' => 'BcMail',
             'type' => 'MailContent',
             'url' => '/contact/',
+            'site_id' => 1,
             'title' => 'お問い合わせ',
             'entity_id' => 1,
             'parent_id' => 1,
@@ -74,11 +75,12 @@ class MailContentsScenario implements FixtureScenarioInterface
             'plugin' => 'BcMail',
             'type' => 'MailContent',
             'url' => '/form/',
+            'site_id' => 1,
             'title' => 'テスト',
             'entity_id' => 2,
             'rght' => 1,
             'lft' => 2,
-            'status'=> true,
+            'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
     }

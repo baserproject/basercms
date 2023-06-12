@@ -245,6 +245,7 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @return array|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null, $options = [])
     {
@@ -275,6 +276,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      *
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentsTemplateRelativePath(array $options): string
     {
@@ -306,6 +310,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @param Content|EntityInterface $before
      * @param Content|EntityInterface $after
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function checkRequireSearchIndexReconstruction(EntityInterface $before, EntityInterface $after)
     {
