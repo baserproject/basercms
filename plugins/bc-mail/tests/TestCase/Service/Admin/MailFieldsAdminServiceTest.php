@@ -76,17 +76,17 @@ class MailFieldsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        // €”õ
+        // æº–å‚™
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailField = $this->MailFieldsService->get(1);
-        // ³íŒnŽÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailFieldsAdminService->getViewVarsForEdit(1, $mailField);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals(1, $result['mailField']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
-        // ˆÙíŒnŽÀs
+        // ç•°å¸¸ç³»å®Ÿè¡Œ
         $mailField = $this->MailFieldsService->get(1);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsAdminService->getViewVarsForEdit(99, $mailField);
@@ -97,18 +97,18 @@ class MailFieldsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
-        // €”õ
+        // æº–å‚™
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailField = new MailField();
-        // ³íŒnŽÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailFieldsAdminService->getViewVarsForAdd(1, $mailField);
         $this->assertInstanceOf(MailField::class, $result['mailField']);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertEquals('https://localhost/contact/', $result['publishLink']);
         $this->assertNotNull($result['autoCompleteOptions']);
-        // ˆÙíŒnŽÀs
+        // ç•°å¸¸ç³»å®Ÿè¡Œ
         $mailField = $this->MailFieldsService->get(1);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsAdminService->getViewVarsForEdit(0, $mailField);
@@ -120,13 +120,13 @@ class MailFieldsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
-        // €”õ
+        // æº–å‚™
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/bc-mail/mail_fields/index?sortmode=1');
         $this->loginAdmin($request);
-        // ³íŒnŽÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailFieldsAdminService->getViewVarsForIndex($request, 1);
         $this->assertEquals(1, $result['mailContent']->id);
         $this->assertCount(3, $result['mailFields']);
@@ -139,12 +139,12 @@ class MailFieldsAdminServiceTest extends BcTestCase
      */
     public function test_getPublishLink()
     {
-        // €”õ
+        // æº–å‚™
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $mailContentsService = $this->getService(MailContentsServiceInterface::class);
         $mailContent = $mailContentsService->get(1);
-        // ³íŒnŽÀs
+        // æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->MailFieldsAdminService->getPublishLink($mailContent);
         $this->assertEquals('https://localhost/contact/', $result);
     }
