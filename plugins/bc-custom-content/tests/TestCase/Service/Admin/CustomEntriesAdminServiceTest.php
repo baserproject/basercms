@@ -66,7 +66,6 @@ class CustomEntriesAdminServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesAdminService = $this->getService(CustomEntriesAdminServiceInterface::class);
     }
