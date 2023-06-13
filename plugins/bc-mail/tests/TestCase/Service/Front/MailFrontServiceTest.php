@@ -19,6 +19,7 @@ use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -121,5 +122,56 @@ class MailFrontServiceTest extends BcTestCase
         $this->assertCount(3, $result['mailFields']);
         $this->assertEquals('description test', $result['mailContent']->description);
         $this->assertEquals('test_name', $result['mailConfig']->name);
+    }
+
+    /**
+     * test getUserMail
+     */
+    public function test_getUserMail()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        // add mail field with type = email
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => 'email',
+            'field_name' => 'email_1',
+            'type' => 'email',
+            'use_field' => 1,
+        ])->persist();
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // get mail field list
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        // create mail message
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->construction(1);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $postData = [
+            'id' => 2,
+            'test' => 'Nghiem1',
+            'name_1' => 'Nghiem2',
+            'name_2' => 'Nghiem3',
+            'sex' => 'Nghiem4',
+            'email_1' => 'Nghiem',
+        ];
+        $mailMessage = $MailMessagesService->create($mailContent, $postData);
+
+        // normal case
+        $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
+        $this->assertEquals('Nghiem', $result);
+
+        // abnormal case
+        $mailMessage = $MailMessagesService->get(1);
+        $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
+        $this->assertEquals('', $result);
     }
 }
