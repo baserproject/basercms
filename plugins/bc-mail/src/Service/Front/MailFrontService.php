@@ -250,6 +250,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAdminMail(EntityInterface $mailContent): string
     {

@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Service\Front;
 
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailConfig;
@@ -19,6 +20,7 @@ use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -174,4 +176,54 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
         $this->assertEquals('', $result);
     }
+
+    /**
+     * test getAdminMail
+     */
+    public function test_getAdminMail()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        MailContentFactory::make([
+            'id' => 111,
+            'description' => 'description test',
+            'sender_1' => 'sender_1',
+            'sender_name' => 'name 111',
+            'subject_user' => 'subject_user 111',
+            'subject_admin' => 'subject_admin 111',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'redirect_url' => '/',
+            'ssl_on' => 0,
+            'save_info' => 1,
+        ])->persist();
+        ContentFactory::make([
+            'id' => 111,
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'title111',
+            'entity_id' => 111,
+            'parent_id' => 1,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(111);
+
+        // normal case
+        $result = $this->MailFrontService->getAdminMail($mailContent);
+        $this->assertEquals('sender_1', $result);
+
+        // abnormal case
+        $mailContent = $MailContentsService->get(1);
+        $this->expectException('TypeError');
+        $result = $this->MailFrontService->getAdminMail($mailContent);
+    }
+
 }
