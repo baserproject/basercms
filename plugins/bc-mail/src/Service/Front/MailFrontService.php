@@ -72,6 +72,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {

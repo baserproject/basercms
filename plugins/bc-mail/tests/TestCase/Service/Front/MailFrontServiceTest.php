@@ -265,4 +265,31 @@ class MailFrontServiceTest extends BcTestCase
         $this->assertEquals(1, $vars['mailContent']->id);
         $this->assertEquals('お問い合わせ', $vars['title']);
     }
+
+    /**
+     * test getViewVarsForIndex
+     */
+    public function test_getViewVarsForIndex()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $mailMessage = $MailMessagesService->get(1);
+        // normal case
+        $result = $this->MailFrontService->getViewVarsForIndex($mailContent, $mailMessage);
+        $this->assertEquals(false, $result['freezed']);
+        $this->assertEquals(1, $result['mailContent']->id);
+        $this->assertCount(3, $result['mailFields']);
+        $this->assertEquals(1, $result['mailMessage']->id);
+        $this->assertEquals(null, $result['editLink']);
+    }
 }
