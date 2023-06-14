@@ -226,4 +226,12 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getAdminMail($mailContent);
     }
 
+    /**
+     * test __construct
+     */
+    public function test_construct()
+    {
+        $this->MailFrontService->__construct();
+        $this->assertInstanceOf(MailContentsServiceInterface::class, $this->MailFrontService->MailContentsService);
+    }
 }

@@ -58,6 +58,7 @@ class MailFrontService implements MailFrontServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
