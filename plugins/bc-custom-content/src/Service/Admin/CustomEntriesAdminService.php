@@ -132,6 +132,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param EntityInterface $table
      * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPublishLinkForIndex(EntityInterface $table)
     {
