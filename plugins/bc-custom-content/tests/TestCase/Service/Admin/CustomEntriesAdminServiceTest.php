@@ -48,9 +48,16 @@ class CustomEntriesAdminServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomTables',
         'plugin.BcCustomContent.Factory/CustomContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
     ];
 
     /**
@@ -58,7 +65,6 @@ class CustomEntriesAdminServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesAdminService = $this->getService(CustomEntriesAdminServiceInterface::class);
     }
