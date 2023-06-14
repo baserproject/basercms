@@ -130,6 +130,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForConfirm(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {
