@@ -91,6 +91,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param Controller $controller
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupPreviewForIndex(Controller $controller): void
     {

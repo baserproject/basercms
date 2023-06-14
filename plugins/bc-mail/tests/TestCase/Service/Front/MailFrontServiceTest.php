@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Service\Front;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Controller\MailFrontAppController;
 use BcMail\Model\Entity\MailConfig;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
@@ -233,5 +234,35 @@ class MailFrontServiceTest extends BcTestCase
     {
         $this->MailFrontService->__construct();
         $this->assertInstanceOf(MailContentsServiceInterface::class, $this->MailFrontService->MailContentsService);
+    }
+
+    /**
+     * test setupPreviewForIndex
+     */
+    public function test_setupPreviewForIndex()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1)->toArray();
+        $controller = new MailFrontAppController(
+            $this->getRequest('/contact/')
+                ->withParam('entityId', 2)
+                ->withParsedBody($mailContent)
+        );
+        // normal case
+        $this->MailFrontService->setupPreviewForIndex($controller);
+        $this->assertEquals('Mail/default/index', $controller->viewBuilder()->getTemplate());
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertArrayHasKey('mailContent', $vars);
+        $this->assertArrayHasKey('title', $vars);
+        $this->assertArrayHasKey('freezed', $vars);
+        $this->assertArrayHasKey('mailFields', $vars);
+        $this->assertArrayHasKey('mailMessage', $vars);
+        $this->assertArrayHasKey('editLink', $vars);
+        $this->assertArrayHasKey('currentWidgetAreaId', $vars);
+        $this->assertEquals(1, $vars['mailContent']->id);
+        $this->assertEquals('お問い合わせ', $vars['title']);
     }
 }
