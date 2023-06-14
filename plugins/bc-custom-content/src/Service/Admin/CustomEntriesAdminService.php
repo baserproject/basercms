@@ -154,6 +154,7 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishLinkForEdit(Content $content, EntityInterface $entity)
     {
