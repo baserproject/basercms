@@ -11,11 +11,13 @@
 
 namespace BcMail\Test\TestCase\Service\Front;
 
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -127,6 +129,72 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getIndexTemplate($mailContent);
         // 正常系実行
         $this->assertEquals('Mail/default/index', $result);
+    }
+
+    /**
+     * test isAccepting
+     */
+    public function test_isAccepting()
+    {
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        MailContentFactory::make([
+            'id' => 99,
+            'description' => 'description test 99',
+            'sender_name' => '送信先名を入力してください',
+            'subject_user' => 'お問い合わせ頂きありがとうございます',
+            'subject_admin' => 'お問い合わせを頂きました',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'redirect_url' => '/',
+            'publish_begin' => strtotime(date('Y-m-d H:i:s') . "-1 week"),
+            'publish_end' => strtotime(date('Y-m-d H:i:s') . "+1 week"),
+        ])->persist();
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/form/',
+            'title' => 'テスト',
+            'entity_id' => 99,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(99);
+        // 正常系実行
+        $result = $this->MailFrontService->isAccepting($mailContent);
+        $this->assertTrue($result);
+        // 非常系実行
+        MailContentFactory::make([
+            'id' => 999,
+            'description' => 'description test 999',
+            'sender_name' => '送信先名を入力してください',
+            'subject_user' => 'お問い合わせ頂きありがとうございます',
+            'subject_admin' => 'お問い合わせを頂きました',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'redirect_url' => '/',
+            'publish_begin' => strtotime(date('Y-m-d H:i:s') . "+1 week"),
+            'publish_end' => strtotime(date('Y-m-d H:i:s') . "-1 week"),
+        ])->persist();
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/form/',
+            'title' => 'テスト',
+            'entity_id' => 999,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        $mailContent = $MailContentsService->get(999);
+        $result = $this->MailFrontService->isAccepting($mailContent);
+        $this->assertFalse($result);
     }
 
 }

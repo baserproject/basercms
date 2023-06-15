@@ -412,6 +412,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return    bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAccepting(EntityInterface $mailContent): bool
     {
