@@ -98,4 +98,20 @@ class MailFrontServiceTest extends BcTestCase
         // normal case
         $this->assertEquals('Mail/default/unpublish', $result);
     }
+
+    /**
+     * test getConfirmTemplate
+     */
+    public function test_getConfirmTemplate()
+    {
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $result = $this->MailFrontService->getConfirmTemplate($mailContent);
+        // 正常系実行
+        $this->assertEquals('Mail/default/confirm', $result);
+    }
+
 }
