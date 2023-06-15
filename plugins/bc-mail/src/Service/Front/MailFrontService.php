@@ -391,6 +391,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _checkDirectoryRraversal(int $mailContentId, array $postData)
     {

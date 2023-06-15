@@ -26,6 +26,7 @@ use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\Filesystem\File;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -319,5 +320,42 @@ class MailFrontServiceTest extends BcTestCase
         $this->assertCount(3, $result['mailFields']);
         $this->assertEquals(1, $result['mailMessage']->id);
         $this->assertEquals(null, $result['editLink']);
+    }
+
+    /**
+     * test _checkDirectoryRraversal
+     */
+    public function test_checkDirectoryRraversal()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailFieldsFactory::make(
+            [
+                'id' => '99',
+                'mail_content_id' => 1,
+                'no' => '19',
+                'name' => 'ルートその他',
+                'field_name' => 'file_1',
+                'type' => 'file',
+                'before_attachment' => '',
+                'after_attachment' => '',
+                'options' => 'maxFileSize|1|fileExt|jpg',
+                'class' => '',
+                'default_value' => '',
+                'description' => '',
+                'group_field' => 'root',
+                'valid_ex' => 'VALID_MAX_FILE_SIZE,VALID_FILE_EXT',
+                'auto_convert' => '',
+                'not_empty' => 0,
+                'use_field' => 1,
+                'no_send' => 0,
+            ],
+        )->persist();
+        // normal case
+        $postData = ['test'];
+        $result = $this->execPrivateMethod($this->MailFrontService, '_checkDirectoryRraversal', [1, $postData]);
+        $this->assertTrue($result);
     }
 }
