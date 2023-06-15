@@ -222,7 +222,30 @@ class CustomEntriesAdminServiceTest extends BcTestCase
      */
     public function test_getPublishLinkForIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomEntriesAdminService->getPublishLinkForIndex($customTable->getWithContentAndLinks(1));
+
+        //戻る値を確認
+        $this->assertEquals('/', $rs);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
