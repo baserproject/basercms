@@ -96,11 +96,15 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getEditLink(1);
 
         // normal case
-        $this->assertEquals('Admin', $result['prefix']);
-        $this->assertEquals('BcMail', $result['plugin']);
-        $this->assertEquals('MailContents', $result['controller']);
-        $this->assertEquals('edit', $result['action']);
-        $this->assertEquals(1, $result[0]);
+        $this->assertEquals(
+            [
+                'prefix' => 'Admin',
+                'plugin' => 'BcMail',
+                'controller' => 'MailContents',
+                'action' => 'edit',
+                1
+            ], $result
+        );
     }
 
     /**
