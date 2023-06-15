@@ -41,6 +41,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      * @param EntityInterface $table
      * @param ResultSet|array $entities
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(EntityInterface $table, $entities): array
     {
@@ -59,6 +62,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param int $tableId
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTableWithLinksByAll(int $tableId) {
         /** @var CustomTablesService $customTables */
@@ -73,6 +79,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param int $tableId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(int $tableId, EntityInterface $entity): array
     {
@@ -132,6 +141,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param EntityInterface $table
      * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPublishLinkForIndex(EntityInterface $table)
     {
@@ -154,6 +166,7 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishLinkForEdit(Content $content, EntityInterface $entity)
     {
