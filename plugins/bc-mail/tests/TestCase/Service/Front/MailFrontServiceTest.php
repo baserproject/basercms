@@ -196,4 +196,5 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->isAccepting($mailContent);
         $this->assertFalse($result);
     }
+
 }
