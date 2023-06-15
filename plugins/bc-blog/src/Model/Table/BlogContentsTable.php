@@ -11,7 +11,6 @@
 
 namespace BcBlog\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Utility\BcUtil;
@@ -33,12 +32,6 @@ use Cake\Validation\Validator;
  */
 class BlogContentsTable extends BlogAppTable
 {
-
-    /**
-     * Trait
-     */
-    use BcEventDispatcherTrait;
-
     /**
      * Validation Default
      *

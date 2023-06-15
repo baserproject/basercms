@@ -11,7 +11,6 @@
 
 namespace BcSearchIndex\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -23,11 +22,6 @@ use BaserCore\Annotation\Note;
  */
 class SearchIndexesTable extends AppTable
 {
-    /**
-     * Trait
-     */
-    use BcEventDispatcherTrait;
-
     /**
      * Initialize
      *

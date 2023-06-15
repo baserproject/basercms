@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
@@ -36,7 +35,6 @@ class ContentFoldersTable extends AppTable
      * Trait
      */
     use BcContainerTrait;
-    use BcEventDispatcherTrait;
 
     /**
      * 変更前ステータス
