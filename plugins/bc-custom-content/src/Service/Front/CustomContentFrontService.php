@@ -57,6 +57,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
