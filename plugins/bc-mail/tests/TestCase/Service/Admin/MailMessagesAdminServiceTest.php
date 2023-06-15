@@ -14,7 +14,6 @@ namespace BcMail\Test\TestCase\Service\Admin;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcMail\Service\Admin\MailMessagesAdminService;
-use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailMessagesFactory;
