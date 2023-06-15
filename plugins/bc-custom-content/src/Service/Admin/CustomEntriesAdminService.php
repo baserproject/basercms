@@ -76,6 +76,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param int $tableId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(int $tableId, EntityInterface $entity): array
     {
