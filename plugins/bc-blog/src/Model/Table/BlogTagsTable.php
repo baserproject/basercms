@@ -11,7 +11,6 @@
 
 namespace BcBlog\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -33,8 +32,6 @@ class BlogTagsTable extends BlogAppTable
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
-
     use BcContainerTrait;
 
     /**
