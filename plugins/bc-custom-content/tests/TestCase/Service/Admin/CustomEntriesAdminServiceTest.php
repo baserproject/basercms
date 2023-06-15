@@ -20,6 +20,7 @@ use BcCustomContent\Service\Admin\CustomEntriesAdminServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -50,6 +51,8 @@ class CustomEntriesAdminServiceTest extends BcTestCase
         'plugin.BcCustomContent.Factory/CustomTables',
         'plugin.BcCustomContent.Factory/CustomContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
     ];
 
     /**
@@ -111,7 +114,31 @@ class CustomEntriesAdminServiceTest extends BcTestCase
      */
     public function test_getTableWithLinksByAll()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        $rs = $this->CustomEntriesAdminService->getTableWithLinksByAll(1);
+
+        //戻る値を確認
+        $this->assertEquals('求人情報', $rs->title);
+        $this->assertCount(2, $rs->custom_links);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**

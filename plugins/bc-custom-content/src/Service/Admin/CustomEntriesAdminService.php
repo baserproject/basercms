@@ -59,6 +59,9 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
      *
      * @param int $tableId
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTableWithLinksByAll(int $tableId) {
         /** @var CustomTablesService $customTables */
