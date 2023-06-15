@@ -128,4 +128,5 @@ class MailFrontServiceTest extends BcTestCase
         // 正常系実行
         $this->assertEquals('Mail/default/index', $result);
     }
+
 }
