@@ -353,8 +353,17 @@ class MailFrontServiceTest extends BcTestCase
                 'no_send' => 0,
             ],
         )->persist();
+        $pathTest = TMP . 'test' . DS;
+        //テストファイルを作成
+        new File($pathTest . 'test.txt', true);
+        $testFile = $pathTest . 'test.txt';
+
         // normal case
-        $postData = ['test'];
+        $postData = [
+            'name_1' => '1',
+            'name_2' => '2',
+            'file_1' => $testFile
+        ];
         $result = $this->execPrivateMethod($this->MailFrontService, '_checkDirectoryRraversal', [1, $postData]);
         $this->assertTrue($result);
     }
