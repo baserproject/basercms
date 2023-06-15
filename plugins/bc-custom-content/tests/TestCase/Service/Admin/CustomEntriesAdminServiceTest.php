@@ -80,9 +80,9 @@ class CustomEntriesAdminServiceTest extends BcTestCase
     }
 
     /**
-     * test getViewVarsForIndex
+     * test getViewVarsForEdit
      */
-    public function test_getViewVarsForIndex()
+    public function test_getViewVarsForEdit()
     {
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
@@ -183,11 +183,38 @@ class CustomEntriesAdminServiceTest extends BcTestCase
     }
 
     /**
-     * test getViewVarsForEdit
+     * test getViewVarsForIndex
      */
-    public function test_getViewVarsForEdit()
+    public function test_getViewVarsForIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomEntriesAdminService->getViewVarsForIndex($customTable->get(1), $this->CustomEntriesAdminService->get(1));
+
+        //戻る値を確認
+        $this->assertEquals(1, $rs['tableId']);
+        $this->assertArrayHasKey('customTable', $rs);
+        $this->assertArrayHasKey('entities', $rs);
+        $this->assertArrayHasKey('publishLink', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
