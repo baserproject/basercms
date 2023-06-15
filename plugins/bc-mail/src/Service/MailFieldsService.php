@@ -328,6 +328,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool
     {
