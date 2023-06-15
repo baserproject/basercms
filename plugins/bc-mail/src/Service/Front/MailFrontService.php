@@ -158,6 +158,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param EntityInterface $mailContent
      * @param array $postData
      * @return EntityInterface
+     * @unitTest
      */
     public function confirm(EntityInterface $mailContent, array $postData): EntityInterface
     {

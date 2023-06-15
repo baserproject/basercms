@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Controller\MailFrontAppController;
 use BcMail\Model\Entity\MailConfig;
+use BcMail\Model\Entity\MailMessage;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
@@ -366,5 +367,27 @@ class MailFrontServiceTest extends BcTestCase
         ];
         $result = $this->execPrivateMethod($this->MailFrontService, '_checkDirectoryRraversal', [1, $postData]);
         $this->assertTrue($result);
+    }
+
+    /**
+     * test confirm
+     */
+    public function test_confirm()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+
+        // normal case
+        $postData = [
+            'name_1' => 'Nghiem 1',
+            'name_2' => 'Nghiem 2',
+        ];
+        $result = $this->MailFrontService->confirm($mailContent, $postData);
+        $this->assertInstanceOf(MailMessage::class, $result);
+        $this->assertEquals('Nghiem 1', $result['name_1']);
     }
 }
