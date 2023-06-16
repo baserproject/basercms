@@ -22,7 +22,6 @@ use BaserCore\Annotation\Note;
  */
 class SearchIndexesTable extends AppTable
 {
-
     /**
      * Initialize
      *

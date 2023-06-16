@@ -21,7 +21,7 @@ echo $this->Rss->items($posts->toArray(), function($entity) {
   $view = new Cake\View\View();
   $blogHelper = new \BcBlog\View\Helper\BlogHelper($view);
   $bcBaserhelper = new \BaserCore\View\Helper\BcBaserHelper($view);
-  $url = $bcBaserhelper->getContentsUrl(null, false, null, false) . 'archives/' . ($entity->name)? $entity->name : $entity->no;
+  $url = $bcBaserhelper->getContentsUrl(null, false, null, false) . 'archives/' . (($entity->name)? $entity->name : $entity->no);
   $eyeCatch = [
     'url' => '',
     'type' => '',

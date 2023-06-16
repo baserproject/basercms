@@ -11,7 +11,6 @@
 
 namespace BaserCore\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association\BelongsTo;
@@ -35,12 +34,6 @@ use BaserCore\Annotation\Checked;
  */
 class PasswordRequestsTable extends AppTable
 {
-
-    /**
-     * Trait
-     */
-    use BcEventDispatcherTrait;
-
     /**
      * Initialize
      *

@@ -12,7 +12,6 @@
 namespace BcCustomContent\Model\Table;
 
 use ArrayObject;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -31,12 +30,6 @@ use Cake\Validation\Validator;
  */
 class CustomLinksTable extends AppTable
 {
-
-    /**
-     * Trait
-     */
-    use BcEventDispatcherTrait;
-
     /**
      * Initialize
      *
