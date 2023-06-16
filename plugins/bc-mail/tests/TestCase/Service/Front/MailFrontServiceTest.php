@@ -167,7 +167,6 @@ class MailFrontServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $MailContentsService = $this->getService(MailContentsServiceInterface::class);
-        $mailContent = $MailContentsService->get(1);
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         MailMessagesFactory::make(
             [
@@ -175,8 +174,34 @@ class MailFrontServiceTest extends BcTestCase
             ]
         )->persist();
         $mailMessage = $MailMessagesService->get(1);
+        MailContentFactory::make([
+            'id' => 99,
+            'description' => 'description test 99',
+            'sender_name' => '送信先名を入力してください99',
+            'subject_user' => 'お問い合わせ頂きありがとうございます99',
+            'subject_admin' => 'お問い合わせを頂きました99',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'sender_1' => 't@gm.com',
+            'redirect_url' => '/',
+        ])->persist();
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/form/',
+            'site_id' => 1,
+            'title' => 'テスト',
+            'entity_id' => 99,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
         // normal case
+        $mailContent = $MailContentsService->get(99);
         $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
+        $this->expectException('');
 
     }
 
