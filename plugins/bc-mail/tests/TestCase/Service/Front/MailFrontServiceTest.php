@@ -17,8 +17,11 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -151,6 +154,30 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getIndexTemplate($mailContent);
         // 正常系実行
         $this->assertEquals('Mail/default/index', $result);
+    }
+
+    /**
+     * test sendMail
+     * @throws \Throwable
+     */
+    public function test_sendMail()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $mailMessage = $MailMessagesService->get(1);
+        // normal case
+        $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
+
     }
 
     /**
