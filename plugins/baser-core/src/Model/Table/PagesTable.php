@@ -21,7 +21,6 @@ use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -35,7 +34,6 @@ class PagesTable extends AppTable
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
     use BcContainerTrait;
 
     /**

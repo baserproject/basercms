@@ -11,7 +11,6 @@
 
 namespace BcSearchIndex\View\Helper;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\View\Helper;
@@ -28,7 +27,6 @@ class BcSearchIndexHelper extends Helper
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
     use BcContainerTrait;
 
     /**

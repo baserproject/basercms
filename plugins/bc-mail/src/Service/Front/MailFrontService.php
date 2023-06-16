@@ -351,6 +351,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEditLink(int $mailContentId)
     {
