@@ -200,9 +200,8 @@ class MailFrontServiceTest extends BcTestCase
         ])->persist();
         // normal case
         $mailContent = $MailContentsService->get(99);
-        $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
         $this->expectException('');
-
+        $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
     }
 
     /**
