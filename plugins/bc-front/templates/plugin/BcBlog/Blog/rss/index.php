@@ -34,7 +34,7 @@ echo $this->Rss->items($posts->toArray(), function($entity) {
     'title' => $entity->title,
     'link' => $url,
     'guid' => $url,
-    'category' => $entity->category->title?? null,
+    'category' => $entity->blog_category->title ?? null,
     'description' => $blogHelper->removeCtrlChars($entity->content . $entity->detail),
     'pubDate' => $entity->posted,
     'enclosure' => $eyeCatch,
