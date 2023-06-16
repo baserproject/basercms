@@ -17,8 +17,13 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Service\MailFieldsServiceInterface;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -69,6 +74,47 @@ class MailFrontServiceTest extends BcTestCase
         parent::tearDown();
         unset($this->MailFrontService);
     }
+
+    /**
+     * test getAttachments
+     */
+    public function test_getAttachments()
+    {
+        // prepare
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $settings = $mailMessagesService->MailMessages->getFileUploader()->settings;
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'field_name' => 'file_99',
+            'type' => 'file',
+            'use_field' => 1,
+        ])->persist();
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // normal case
+        $mailMessage = new Entity([
+            'name_1' => 'a',
+            'name_2' => 'b',
+            'file_99' => 'file.txt',
+        ]);
+        // get mail field list
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        // normal case
+        $result = $this->MailFrontService->getAttachments($mailFields, $mailMessage);
+        $expect = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'file.txt';
+        $this->assertEquals($expect, $result[0]);
+
+        // abnormal case
+        $mailMessage = new Entity([
+            'name_1' => 'a',
+            'name_2' => 'b'
+        ]);
+        $result = $this->MailFrontService->getAttachments($mailFields, $mailMessage);
+        $this->assertEquals([], $result);
+    }
+
 
     /**
      * test getThanksTemplate
