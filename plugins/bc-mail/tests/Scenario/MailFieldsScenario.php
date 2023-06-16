@@ -49,6 +49,13 @@ class MailFieldsScenario implements FixtureScenarioInterface
             'sort' => 1,
             'created' => '2015-08-10 18:57:47',
             'modified' => NULL,
+            'attention' => '',
+            'before_attachment' => '<small>[名]</small>',
+            'after_attachment' => '',
+            'source' => '',
+            'class' => '',
+            'default_value' => '',
+            'description' => '',
         ])->persist();
         MailFieldsFactory::make([
             'id' => 2,

@@ -239,6 +239,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $mailContentId, int $id)
     {
@@ -327,6 +328,7 @@ class MailFieldsService implements MailFieldsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool
     {
