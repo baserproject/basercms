@@ -73,6 +73,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @param int $entityId
      * @param array $options
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomContent(int $entityId)
     {
@@ -86,6 +89,10 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      *
      * @param int $customTableId
      * @return mixed
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomEntries(CustomContent $customContent, array $queryParams = [])
     {
@@ -107,6 +114,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @param EntityInterface $customContent
      * @param ResultSetInterface $customEntries
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(EntityInterface $customContent, ResultSetInterface $customEntries): array
     {
