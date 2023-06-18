@@ -114,6 +114,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @param EntityInterface $customContent
      * @param ResultSetInterface $customEntries
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(EntityInterface $customContent, ResultSetInterface $customEntries): array
     {
