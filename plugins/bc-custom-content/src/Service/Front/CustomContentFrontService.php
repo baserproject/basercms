@@ -73,6 +73,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @param int $entityId
      * @param array $options
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomContent(int $entityId)
     {

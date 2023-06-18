@@ -268,6 +268,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUserMail(ResultSetInterface $mailFields, EntityInterface $mailMessage): string
     {
@@ -320,6 +321,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createMailData(
         EntityInterface $mailConfig,
