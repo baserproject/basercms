@@ -33,6 +33,7 @@ $this->BcBaser->i18nScript([
 ]);
 $this->BcBaser->js('admin/plugins/update.bundle', false, [
   'id' => 'AdminPluginsUpdateScript',
+  'defer' => true,
   'data-plugin' => $plugin->name
 ]);
 ?>
