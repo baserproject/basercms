@@ -14,11 +14,16 @@ namespace BcMail\Test\TestCase\Service\Front;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailConfig;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Service\MailFieldsServiceInterface;
+use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -105,6 +110,39 @@ class MailFrontServiceTest extends BcTestCase
                 1
             ], $result
         );
+    }
+
+    /**
+     * test createMailData
+     */
+    public function test_createMailData()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $mailMessages = $MailMessagesService->get(1);
+        $mailConfig = new MailConfig([
+            'name' => 'test_name',
+            'value' => 'test value',
+        ]);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        // normal case
+        $result = $this->MailFrontService->createMailData($mailConfig, $mailContent, $mailFields, $mailMessages, []);
+        $this->assertEquals(1, $result['message']->id);
+        $this->assertEquals('name_test', $result['content']->name);
+        $this->assertCount(3, $result['mailFields']);
+        $this->assertEquals('description test', $result['mailContent']->description);
+        $this->assertEquals('test_name', $result['mailConfig']->name);
     }
 
     /**
