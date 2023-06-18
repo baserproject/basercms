@@ -89,6 +89,10 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      *
      * @param int $customTableId
      * @return mixed
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomEntries(CustomContent $customContent, array $queryParams = [])
     {

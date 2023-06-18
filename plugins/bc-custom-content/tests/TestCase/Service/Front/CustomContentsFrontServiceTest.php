@@ -15,10 +15,12 @@ namespace BcCustomContent\Test\TestCase\Service\Front;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontService;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -48,6 +50,8 @@ class CustomContentsFrontServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BcCustomContent.Factory/CustomContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
     ];
 
     /**
@@ -114,7 +118,33 @@ class CustomContentsFrontServiceTest extends BcTestCase
      */
     public function test_getCustomEntries()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomContentFrontService->getCustomEntries($customContent->get(1));
+        //戻る値を確認
+        $this->assertEquals(6, $rs->count());
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
