@@ -16,10 +16,17 @@ const updateForm = {
     plugin: null,
 
     /**
+     * vendor / composer に書き込み権限があるか
+     */
+    isWritablePackage: false,
+
+    /**
      * 起動処理
      */
     mounted() {
-        this.plugin = $("#AdminPluginsUpdateScript").attr('data-plugin');
+        const script = $("#AdminPluginsUpdateScript");
+        this.plugin = script.attr('data-plugin');
+        this.isWritablePackage = script.attr('data-isWritablePackage');
         this.registerEvents();
         this.toggleUpdate();
     },
@@ -57,6 +64,9 @@ const updateForm = {
         } else {
             $btnUpdate.attr('disabled', 'disabled');
             $phpNotice.show();
+        }
+        if(!updateForm.isWritablePackage) {
+            $btnUpdate.attr('disabled', 'disabled');
         }
     }
 
