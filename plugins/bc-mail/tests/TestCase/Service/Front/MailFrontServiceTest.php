@@ -503,6 +503,37 @@ class MailFrontServiceTest extends BcTestCase
         // prepare
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
+
+    /**
+     * test getEditLink
+     */
+    public function test_getEditLink()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $result = $this->MailFrontService->getEditLink(1);
+
+        // normal case
+        $this->assertEquals(
+            [
+                'prefix' => 'Admin',
+                'plugin' => 'BcMail',
+                'controller' => 'MailContents',
+                'action' => 'edit',
+                1
+            ], $result
+        );
+    }
+
+    /**
+     * test getUnpublishTemplate
+     */
+    public function test_getUnpublishTemplate()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
         $MailContentsService = $this->getService(MailContentsServiceInterface::class);
         $mailContent = $MailContentsService->get(1);
         $result = $this->MailFrontService->getUnpublishTemplate($mailContent);
