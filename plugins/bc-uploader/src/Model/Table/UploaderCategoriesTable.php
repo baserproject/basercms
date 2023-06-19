@@ -11,7 +11,6 @@
 
  namespace BcUploader\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Table\AppTable;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -26,12 +25,6 @@ use BaserCore\Annotation\Checked;
  */
 class UploaderCategoriesTable extends AppTable
 {
-
-    /**
-     * Trait
-     */
-    use BcEventDispatcherTrait;
-
     /**
      * Initialize
      *

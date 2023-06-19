@@ -11,7 +11,6 @@
 
 namespace BcBlog\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -36,7 +35,6 @@ class BlogCategoriesTable extends BlogAppTable
      * Trait
      */
     use BcContainerTrait;
-    use BcEventDispatcherTrait;
 
     /**
      * バリデーション設定
