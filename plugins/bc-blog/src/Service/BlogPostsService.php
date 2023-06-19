@@ -538,7 +538,7 @@ class BlogPostsService implements BlogPostsServiceInterface
                 'blog_content_id を指定してください。',
             ));
         }
-        $postData['no'] = $this->BlogPosts->getMax('no', ['blog_content_id' => $postData['blog_content_id']]) + 1;
+        $postData['no'] = $this->BlogPosts->getMax('no', ['BlogPosts.blog_content_id' => $postData['blog_content_id']]) + 1;
         if (!empty($postData['posted'])) $postData['posted'] = new FrozenTime($postData['posted']);
         if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
         if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
@@ -710,7 +710,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     public function getTitlesById(array $ids): array
     {
-        return $this->BlogPosts->find('list')->select(['id', 'title'])->where(['id IN' => $ids])->toArray();
+        return $this->BlogPosts->find('list')->select(['id', 'title'])->where(['BlogPosts.id IN' => $ids])->toArray();
     }
 
     /**

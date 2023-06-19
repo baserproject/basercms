@@ -11,13 +11,10 @@
 
 namespace BcMail\Test\TestCase\Service;
 
-use BaserCore\Error\BcException;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
-use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailContentsServiceInterface;
-use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;

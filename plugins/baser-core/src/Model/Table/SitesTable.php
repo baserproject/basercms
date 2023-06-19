@@ -27,7 +27,6 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Utility\BcAbstractDetector;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Annotation\Note;
@@ -47,7 +46,6 @@ class SitesTable extends AppTable
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
     use BcContainerTrait;
 
     /**

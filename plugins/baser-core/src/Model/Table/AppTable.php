@@ -23,12 +23,14 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class AppTable
  */
 class AppTable extends Table
 {
+    use BcEventDispatcherTrait;
 
     /**
      * 一時イベント
