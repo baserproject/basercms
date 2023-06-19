@@ -74,6 +74,10 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $programVerPoint = BcUtil::verpoint($programVersion);
         $dbVerPoint = BcUtil::verpoint($dbVersion);
 
+        $isWritableVendor = is_writable(ROOT . DS . 'vendor');
+        $isWritableComposerJson = is_writable(ROOT . DS . 'composer.json');
+        $isWritableComposerLock = is_writable(ROOT . DS . 'composer.lock');
+
         return [
             'plugin' => $entity,
             'scriptNum' => $scriptNum,
@@ -90,7 +94,11 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
                 $availableVersion,
                 $scriptNum
             ),
-            'php' => $this->whichPhp()
+            'php' => $this->whichPhp(),
+            'isWritableVendor' => $isWritableVendor,
+            'isWritableComposerJson' => $isWritableComposerJson,
+            'isWritableComposerLock' => $isWritableComposerLock,
+            'isWritablePackage' => ($isWritableVendor && $isWritableComposerJson && $isWritableComposerLock)
         ];
     }
 

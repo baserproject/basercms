@@ -198,6 +198,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendMail(EntityInterface $mailContent, EntityInterface $mailMessage, array $sendEmailOptions)
     {

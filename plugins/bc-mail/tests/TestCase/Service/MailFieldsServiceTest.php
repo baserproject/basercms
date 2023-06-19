@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Service;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Service\MailFieldsService;
@@ -263,7 +264,22 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function test_publish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // prepare
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'field_name' => 'name_99',
+            'type' => 'text',
+            'use_field' => 0,
+        ])->persist();
+        // normal case
+        $result = $this->MailFieldsService->publish(99);
+        $this->assertEquals(1, $result->use_field);
+        // abnormal case
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->MailFieldsService->publish(0);
+
     }
 
     /**
