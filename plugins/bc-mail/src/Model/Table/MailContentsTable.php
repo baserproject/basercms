@@ -11,7 +11,6 @@
 
 namespace BcMail\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
@@ -34,7 +33,6 @@ class MailContentsTable extends MailAppTable
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
     use BcContainerTrait;
 
     /**

@@ -115,6 +115,23 @@ class PluginsController extends BcAdminAppController
         BcUtil::clearAllCache();
         $plugin = $this->Plugins->getPluginConfig($name);
         $this->set($service->getViewVarsForUpdate($plugin));
+
+        if($plugin->name === 'BaserCore') {
+            $message = [];
+            if (!$this->viewBuilder()->getVar('isWritableVendor')) {
+                $message[] = __d('baser_core', ROOT . DS . 'vendor に書き込み権限を設定してください。');
+            }
+            if (!$this->viewBuilder()->getVar('isWritableComposerJson')) {
+                $message[] = __d('baser_core', ROOT . DS . 'composer.json に書き込み権限を設定してください。');
+            }
+            if (!$this->viewBuilder()->getVar('isWritableComposerLock')) {
+                $message[] = __d('baser_core', ROOT . DS . 'composer.lock に書き込み権限を設定してください。');
+            }
+            if($message) {
+                $this->BcMessage->setError(implode("\n", $message));
+            }
+        }
+
         if (!$this->request->is(['put', 'post'])) return;
         try {
             if($plugin->name === 'BaserCore') {
