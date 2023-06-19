@@ -12,9 +12,14 @@
 namespace BcCustomContent\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Table\CustomEntriesTable;
+use BcCustomContent\Model\Table\CustomTablesTable;
 use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
@@ -23,6 +28,7 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 /**
  * CustomEntriesServiceTest
  * @property CustomEntriesService $CustomEntriesService
+ * @property BcDatabaseService $BcDatabaseService
  */
 class CustomEntriesServiceTest extends BcTestCase
 {
@@ -43,7 +49,11 @@ class CustomEntriesServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups'
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
+        'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomContents'
     ];
 
     /**
@@ -53,6 +63,7 @@ class CustomEntriesServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
     }
 
     /**
@@ -68,7 +79,10 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_construct()
     {
-
+        $this->CustomEntriesService->__construct();
+        $this->assertInstanceOf(CustomEntriesTable::class, $this->CustomEntriesService->CustomEntries);
+        $this->assertInstanceOf(CustomTablesTable::class, $this->CustomEntriesService->CustomTables);
+        $this->assertInstanceOf(BcDatabaseServiceInterface::class, $this->CustomEntriesService->BcDatabaseService);
     }
 
     /**
