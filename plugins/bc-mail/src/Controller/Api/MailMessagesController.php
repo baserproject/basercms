@@ -53,7 +53,7 @@ class MailMessagesController extends BcApiController
         $this->request->allowMethod(['post']);
         $mailMessage = null;
         try {
-            $service->setup($mailContentId);
+            $service->setup($mailContentId, $this->getRequest()->getData());
             $mailContent = $mailContentsService->get($mailContentId);
             $mailMessage = $service->create($mailContent, $this->request->getData());
             $message = __d('baser_core',

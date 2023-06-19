@@ -307,9 +307,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     if($authenticator) {
                         // 認証済の際、セッション認証以外はスキップ
                         if(!$authenticator instanceof SessionAuthenticator) return true;
-                    } else {
-                        // 認証できていない場合、領域がJwt認証前提の場合はスキップ
-                        if($authSetting['type'] === 'Jwt') return true;
                     }
                     return false;
                 });
