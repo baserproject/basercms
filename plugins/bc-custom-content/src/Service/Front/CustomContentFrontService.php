@@ -201,6 +201,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      *
      * @param CustomContent $customContent
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewTemplate(CustomContent $customContent): string
     {
