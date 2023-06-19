@@ -67,7 +67,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
     }
