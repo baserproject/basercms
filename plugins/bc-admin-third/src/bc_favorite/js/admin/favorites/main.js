@@ -8,7 +8,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-import Vue from 'vue/dist/vue.js'
+import Vue from 'vue'
 import FavoriteIndex from "./index.vue";
 import Vuelidate from 'vuelidate'
 

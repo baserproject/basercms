@@ -205,7 +205,6 @@ class MailMessagesTable extends MailAppTable
      */
     protected function setupValidate(array $postData)
     {
-        if (!$postData) return;
         $validator = new $this->_validatorClass();
         $validator->setProvider('mailMessage', 'BcMail\Model\Validation\MailMessageValidation');
         $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
