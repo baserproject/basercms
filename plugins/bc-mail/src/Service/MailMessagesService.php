@@ -23,6 +23,7 @@ use BcMail\Model\Entity\MailContent;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailMessagesTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -132,7 +133,7 @@ class MailMessagesService implements MailMessagesServiceInterface
                 return $this->MailMessages->saveOrFail($entity);
             }
         }
-        return $entity;
+        throw new PersistenceFailedException($validateEntity, __d('baser_core', '入力エラーです。内容を見直してください。'));
     }
 
     /**

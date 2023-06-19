@@ -11,7 +11,6 @@
 
 namespace BcWidgetArea\View\Helper;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\Helper\BcBaserHelper;
 use BcWidgetArea\Service\WidgetAreasService;
@@ -33,7 +32,6 @@ class BcWidgetAreaHelper extends Helper
     /**
      * Trait
      */
-    use BcEventDispatcherTrait;
     use BcContainerTrait;
 
     /**

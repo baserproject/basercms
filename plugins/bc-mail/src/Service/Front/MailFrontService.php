@@ -197,6 +197,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendMail(EntityInterface $mailContent, EntityInterface $mailMessage, array $sendEmailOptions)
     {
@@ -357,6 +358,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEditLink(int $mailContentId)
     {
@@ -419,6 +421,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return    bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAccepting(EntityInterface $mailContent): bool
     {
@@ -443,6 +446,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndexTemplate(EntityInterface $mailContent): string
     {
@@ -455,6 +459,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getConfirmTemplate(EntityInterface $mailContent): string
     {
@@ -467,6 +472,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUnpublishTemplate(EntityInterface $mailContent): string
     {
