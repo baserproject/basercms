@@ -190,6 +190,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      *
      * @param CustomContent $customContent
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndexTemplate(CustomContent $customContent): string
     {

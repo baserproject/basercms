@@ -67,6 +67,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
     }
@@ -208,7 +209,32 @@ class CustomContentsFrontServiceTest extends BcTestCase
      */
     public function test_getIndexTemplate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomContentFrontService->getIndexTemplate($customContent->get(1));
+
+        //戻る値を確認
+        $this->assertEquals('CustomContent' . DS . 'template_1' . DS . 'index', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
