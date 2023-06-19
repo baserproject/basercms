@@ -18,12 +18,14 @@ use BcMail\Model\Entity\MailConfig;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
-use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
+use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -76,6 +78,47 @@ class MailFrontServiceTest extends BcTestCase
     }
 
     /**
+     * test getAttachments
+     */
+    public function test_getAttachments()
+    {
+        // prepare
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $settings = $mailMessagesService->MailMessages->getFileUploader()->settings;
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'field_name' => 'file_99',
+            'type' => 'file',
+            'use_field' => 1,
+        ])->persist();
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // normal case
+        $mailMessage = new Entity([
+            'name_1' => 'a',
+            'name_2' => 'b',
+            'file_99' => 'file.txt',
+        ]);
+        // get mail field list
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        // normal case
+        $result = $this->MailFrontService->getAttachments($mailFields, $mailMessage);
+        $expect = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'file.txt';
+        $this->assertEquals($expect, $result[0]);
+
+        // abnormal case
+        $mailMessage = new Entity([
+            'name_1' => 'a',
+            'name_2' => 'b'
+        ]);
+        $result = $this->MailFrontService->getAttachments($mailFields, $mailMessage);
+        $this->assertEquals([], $result);
+    }
+
+
+    /**
      * test getThanksTemplate
      */
     public function test_getThanksTemplate()
@@ -88,6 +131,57 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getThanksTemplate($mailContent);
         // normal case
         $this->assertEquals('Mail/default/submit', $result);
+    }
+
+    /**
+     * test getUserMail
+     */
+    public function test_getUserMail()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        // add mail field with type = email
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => 'email',
+            'field_name' => 'email_1',
+            'type' => 'email',
+            'use_field' => 1,
+        ])->persist();
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // get mail field list
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        // create mail message
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->construction(1);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+        $postData = [
+            'id' => 2,
+            'test' => 'Nghiem1',
+            'name_1' => 'Nghiem2',
+            'name_2' => 'Nghiem3',
+            'sex' => 'Nghiem4',
+            'email_1' => 'Nghiem',
+        ];
+        $mailMessage = $MailMessagesService->create($mailContent, $postData);
+
+        // normal case
+        $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
+        $this->assertEquals('Nghiem', $result);
+
+        // abnormal case
+        $mailMessage = $MailMessagesService->get(1);
+        $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
+        $this->assertEquals('', $result);
     }
 
     /**
@@ -189,6 +283,54 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->getIndexTemplate($mailContent);
         // 正常系実行
         $this->assertEquals('Mail/default/index', $result);
+    }
+
+    /**
+     * test sendMail
+     * @throws \Throwable
+     */
+    public function test_sendMail()
+    {
+        // prepare
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        MailMessagesFactory::make(
+            [
+                'id' => 1,
+            ]
+        )->persist();
+        $mailMessage = $MailMessagesService->get(1);
+        MailContentFactory::make([
+            'id' => 99,
+            'description' => 'description test 99',
+            'sender_name' => '送信先名を入力してください99',
+            'subject_user' => 'お問い合わせ頂きありがとうございます99',
+            'subject_admin' => 'お問い合わせを頂きました99',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'sender_1' => 't@gm.com',
+            'redirect_url' => '/',
+        ])->persist();
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/form/',
+            'site_id' => 1,
+            'title' => 'テスト',
+            'entity_id' => 99,
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        // normal case
+        $mailContent = $MailContentsService->get(99);
+        $this->expectException('');
+        $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
     }
 
     /**

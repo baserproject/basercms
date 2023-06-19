@@ -193,6 +193,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendMail(EntityInterface $mailContent, EntityInterface $mailMessage, array $sendEmailOptions)
     {
@@ -268,6 +269,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUserMail(ResultSetInterface $mailFields, EntityInterface $mailMessage): string
     {
@@ -293,6 +295,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param Query $mailFields
      * @param EntityInterface $mailMessage
      * @return array
+     * @unitTest
      */
     public function getAttachments(ResultSetInterface $mailFields, EntityInterface $mailMessage): array
     {
