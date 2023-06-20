@@ -41,6 +41,9 @@ class CustomContentsService implements CustomContentsServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -90,6 +93,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $options = [])
     {
@@ -110,6 +116,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * カスタムコンテンツの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {

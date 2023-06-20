@@ -301,6 +301,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param Query $mailFields
      * @param EntityInterface $mailMessage
      * @return array
+     * @unitTest
      */
     public function getAttachments(ResultSetInterface $mailFields, EntityInterface $mailMessage): array
     {
