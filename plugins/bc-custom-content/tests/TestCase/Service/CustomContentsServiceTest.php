@@ -107,7 +107,13 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストメソッドを呼ぶ
+        $result = $this->CustomContentsService->getNew();
+        //戻る値を確認
+        $this->assertEquals(10, $result->list_count);
+        $this->assertEquals('id', $result->list_order);
+        $this->assertEquals('DESC', $result->list_direction);
+        $this->assertEquals('default', $result->template);
     }
 
     /**
