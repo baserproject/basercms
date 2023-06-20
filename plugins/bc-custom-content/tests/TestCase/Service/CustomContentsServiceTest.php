@@ -66,6 +66,14 @@ class CustomContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->assertEquals('custom_contents', $this->CustomContentsService->CustomContents->getTable());
+    }
+
+    /**
      * test getIndex
      */
     public function test_getIndex()

@@ -41,6 +41,9 @@ class CustomContentsService implements CustomContentsServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
