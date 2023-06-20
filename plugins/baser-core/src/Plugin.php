@@ -297,11 +297,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     $prefix = $request->getParam('prefix');
                     $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
 
-                    // 領域が REST API でない場合はスキップしない
-                    if (empty($authSetting['isRestApi'])) return false;
-
                     // 設定ファイルでスキップの定義がされている場合はスキップ
                     if(in_array($request->getPath(), $this->getSkipCsrfUrl())) return true;
+
+                    // 領域が REST API でない場合はスキップしない
+                    if (empty($authSetting['isRestApi'])) return false;
 
                     $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
                     if($authenticator) {
@@ -328,7 +328,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     protected function getSkipCsrfUrl(): array
     {
         $skipUrl = [];
-        $skipUrlSrc = Configure::read('BcApp.skipCsrfUrlInPostApi');
+        $skipUrlSrc = Configure::read('BcApp.skipCsrfUrl');
         foreach($skipUrlSrc as $url) {
             $skipUrl[] = Router::url($url);
         }
