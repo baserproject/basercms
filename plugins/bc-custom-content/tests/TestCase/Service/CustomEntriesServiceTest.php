@@ -61,6 +61,7 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -144,8 +145,31 @@ class CustomEntriesServiceTest extends BcTestCase
     /**
      * test get
      */
-    public function test_get()
+    public function test_get_()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //正常系実行
+        $result = $this->CustomEntriesService->get(1);
+        $this->assertEquals(1, $result->id);
+        $this->assertEquals('プログラマー', $result->name);
+        //異常系実行
+        $result = $this->CustomEntriesService->get(99);
+        $this->assertNull($result);
 
     }
 
