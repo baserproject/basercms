@@ -145,7 +145,7 @@ class CustomEntriesServiceTest extends BcTestCase
     /**
      * test get
      */
-    public function test_get_()
+    public function test_get()
     {
         //準備
         $customTable = $this->getService(CustomTablesServiceInterface::class);
