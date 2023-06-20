@@ -165,9 +165,15 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         //正常系実行
+
+        //idで取得
         $result = $this->CustomEntriesService->get(1);
         $this->assertEquals(1, $result->id);
         $this->assertEquals('プログラマー', $result->name);
+        //名前で取得
+        $result = $this->CustomEntriesService->get('プログラマー 2');
+        $this->assertEquals(2, $result->id);
+
         //異常系実行
         $result = $this->CustomEntriesService->get(99);
         $this->assertNull($result);
