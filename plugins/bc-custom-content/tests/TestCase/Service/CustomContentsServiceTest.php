@@ -85,7 +85,13 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //テストメソッドを呼ぶ
+        $result = $this->CustomContentsService->get(1);
+        //戻る値を確認
+        $this->assertEquals('サービステスト', $result->description);
+        $this->assertArrayHasKey('content', $result);
     }
 
     /**
