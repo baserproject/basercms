@@ -160,6 +160,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData, $options = []): ?EntityInterface
     {
