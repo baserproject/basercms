@@ -220,6 +220,9 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * カスタムエントリーの詳細ページ用のプレビューのセットアップを行う
      *
      * @param Controller $controller
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setupPreviewForView(Controller $controller): void
     {
