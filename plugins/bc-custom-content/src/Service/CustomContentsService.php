@@ -110,6 +110,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * カスタムコンテンツの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
