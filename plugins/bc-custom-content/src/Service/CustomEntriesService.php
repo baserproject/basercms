@@ -279,6 +279,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $options
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
