@@ -95,8 +95,17 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         return new CustomEntry($default, ['source' => 'BcCustomContent.CustomEntries']);
     }
 
+    /**
+     *
+     * @param string $type
+     * @return string
+     * @notodo
+     * @checked
+     * @unitTest
+     */
     public function getFieldControlType(string $type)
     {
+        $a = Configure::read("BcCustomContent.fieldTypes");
         return Configure::read("BcCustomContent.fieldTypes.$type.controlType");
     }
 
