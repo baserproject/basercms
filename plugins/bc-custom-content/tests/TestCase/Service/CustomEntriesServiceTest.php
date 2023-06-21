@@ -139,7 +139,7 @@ class CustomEntriesServiceTest extends BcTestCase
             'name' => 'recruit_categories',
             'title' => '求人情報',
             'type' => '1',
-            'display_field' => 'title',
+            'display_field' => 'name',
             'has_child' => 0
         ]);
         $this->CustomEntriesService->setup(1);
@@ -151,6 +151,10 @@ class CustomEntriesServiceTest extends BcTestCase
         //正常系実行
         $result = $this->CustomEntriesService->getList();
         $this->assertCount(3, $result);
+        //nameパラメータを入れる
+        $result = $this->CustomEntriesService->getList(['conditions' => ['name' => 'プログラマー 2']]);
+        $this->assertCount(1, $result);
+        $this->assertEquals('プログラマー 2', $result[2]);
 
     }
 
