@@ -150,7 +150,27 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //テストメソッドを呼ぶ
+        $postData = [
+            'custom_table_id' => 1,
+            'list_count' => 10,
+            'content' =>
+                [
+                    'title' => 'update title',
+                    'site_id' => 1,
+                ]
+        ];
+        $result = $this->CustomContentsService->update($this->CustomContentsService->get(1), $postData);
+        //戻る値を確認
+        $this->assertEquals($result->content->title, 'update title');
+
+        //異常系をテスト
+        $postData['content']['title'] = null;
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (content.title._empty: "タイトルを入力してください。")');
+        $this->CustomContentsService->update($this->CustomContentsService->get(1), $postData);
     }
 
     /**
