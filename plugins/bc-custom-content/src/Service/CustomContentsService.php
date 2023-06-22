@@ -224,6 +224,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $tableId
      * @return string[]
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getListOrders(int $tableId): array
     {
