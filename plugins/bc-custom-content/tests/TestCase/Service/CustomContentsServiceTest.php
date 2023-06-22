@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomContentsService;
@@ -43,6 +44,11 @@ class CustomContentsServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomContents',
         'plugin.BaserCore.Factory/Contents',
     ];
@@ -171,7 +177,10 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_getTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $rs = $this->CustomContentsService->getTemplates(1);
+        $this->assertEquals('default', $rs['default']);
     }
 
     /**

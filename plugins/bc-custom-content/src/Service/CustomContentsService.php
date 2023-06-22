@@ -242,6 +242,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $siteId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTemplates(int $siteId): array
     {
