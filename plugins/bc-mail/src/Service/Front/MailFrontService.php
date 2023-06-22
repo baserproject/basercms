@@ -58,6 +58,7 @@ class MailFrontService implements MailFrontServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -71,6 +72,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {
@@ -90,6 +92,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param Controller $controller
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupPreviewForIndex(Controller $controller): void
     {
@@ -127,6 +130,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForConfirm(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {
@@ -154,6 +158,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param EntityInterface $mailContent
      * @param array $postData
      * @return EntityInterface
+     * @unitTest
      */
     public function confirm(EntityInterface $mailContent, array $postData): EntityInterface
     {
@@ -390,6 +395,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _checkDirectoryRraversal(int $mailContentId, array $postData)
     {
