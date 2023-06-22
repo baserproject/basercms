@@ -18,6 +18,7 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -299,7 +300,56 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createSelect()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
 
+        //正常系実行: use_api = null
+        $options = [
+            'use_api' => null
+        ];
+        $result = $this->CustomEntriesService->createSelect($options);
+        $this->assertCount(15, $result);
+        $this->assertEquals('CustomEntries.id', $result[0]);
+        $this->assertEquals('CustomEntries.created', $result[14]);
+        //正常系実行: use_api = 1
+        $options = [
+            'use_api' => 1
+        ];
+        CustomLinkFactory::make([
+            'id' => 99,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 2,
+            'name' => 'Nghiem',
+            'title' => '求人分類',
+            'display_admin_list' => 1,
+            'use_api' => 1,
+            'status' => 1,
+        ])->persist();
+        $CustomEntries->setLinks(1);
+        $result = $this->CustomEntriesService->createSelect($options);
+        $this->assertCount(18, $result);
+        $this->assertEquals('CustomEntries.recruit_category', $result[15]);
+        $this->assertEquals('CustomEntries.feature', $result[16]);
+        $this->assertEquals('CustomEntries.Nghiem', $result[17]);
     }
 
     /**
