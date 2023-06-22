@@ -21,6 +21,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Database\ValueBinder;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -170,7 +171,43 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createIndexConditions()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
 
+        //正常系実行
+        $query = $CustomEntries->find();
+        $params = [
+            'title' => null,
+            'creator_id' => null,
+            'status' => null,
+        ];
+        $result = $this->CustomEntriesService->createIndexConditions($query, $params);
+        $this->assertEquals($query, $result);
+        $params = [
+            'title' => 'a',
+            'creator_id' => 1,
+            'status' => 'publish',
+        ];
+        $result = $this->CustomEntriesService->createIndexConditions($query, $params);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('title like', $whereSql);
+        $this->assertStringContainsString('CustomEntries.status =', $whereSql);
+        $this->assertStringContainsString('CustomEntries.publish_begin <=', $whereSql);
     }
 
     /**

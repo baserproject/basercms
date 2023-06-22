@@ -195,6 +195,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param Query $query
      * @param array $params
      * @return Query
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function createIndexConditions(Query $query, array $params)
     {
