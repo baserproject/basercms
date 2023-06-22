@@ -304,7 +304,10 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_getTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $rs = $this->CustomContentsService->getTemplates(1);
+        $this->assertEquals('default', $rs['default']);
     }
 
     /**
