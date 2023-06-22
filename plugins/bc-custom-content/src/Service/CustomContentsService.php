@@ -41,6 +41,9 @@ class CustomContentsService implements CustomContentsServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -90,6 +93,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $options = [])
     {
@@ -110,6 +116,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * カスタムコンテンツの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
@@ -130,6 +139,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData, $options = []): ?EntityInterface
     {
@@ -151,6 +161,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData, $options = []): ?EntityInterface
     {
@@ -183,6 +194,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
@@ -210,6 +224,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $tableId
      * @return string[]
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getListOrders(int $tableId): array
     {
@@ -233,6 +250,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $siteId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTemplates(int $siteId): array
     {
@@ -268,6 +288,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * 全てのカスタムコンテンツを対象とする
      *
      * @param int $tableId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function unsetTable(int $tableId): void
     {

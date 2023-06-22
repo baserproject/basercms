@@ -297,11 +297,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     $prefix = $request->getParam('prefix');
                     $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
 
-                    // 領域が REST API でない場合はスキップしない
-                    if (empty($authSetting['isRestApi'])) return false;
-
                     // 設定ファイルでスキップの定義がされている場合はスキップ
                     if(in_array($request->getPath(), $this->getSkipCsrfUrl())) return true;
+
+                    // 領域が REST API でない場合はスキップしない
+                    if (empty($authSetting['isRestApi'])) return false;
 
                     $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
                     if($authenticator) {
@@ -328,7 +328,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     protected function getSkipCsrfUrl(): array
     {
         $skipUrl = [];
-        $skipUrlSrc = Configure::read('BcApp.skipCsrfUrlInPostApi');
+        $skipUrlSrc = Configure::read('BcApp.skipCsrfUrl');
         foreach($skipUrlSrc as $url) {
             $skipUrl[] = Router::url($url);
         }
@@ -368,7 +368,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 $this->setupSessionAuth($service, $authSetting);
                 break;
             case 'Jwt':
-                $this->setupJwtAuth($service, $authSetting);
+                $this->setupJwtAuth($service, $authSetting, $prefix);
                 if($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
                     // セッションを持っている場合もログイン状態とみなす
                     $service->loadAuthenticator('Authentication.Session', [
@@ -439,7 +439,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param array $authSetting
      * @return AuthenticationService
      */
-    public function setupJwtAuth(AuthenticationService $service, array $authSetting)
+    public function setupJwtAuth(AuthenticationService $service, array $authSetting, string $prefix)
     {
         if (Configure::read('Jwt.algorithm') === 'HS256') {
             $secretKey = Security::getSalt();
@@ -462,7 +462,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             'resolver' => [
                 'className' => 'BaserCore.PrefixOrm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder']?? 'available',
+                'prefix' => $prefix,
             ],
         ]);
         $service->loadAuthenticator('Authentication.Form', [
