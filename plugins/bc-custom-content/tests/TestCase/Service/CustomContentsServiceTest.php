@@ -315,7 +315,36 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_unsetTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //対象メソッドをコール
+        $this->CustomContentsService->unsetTable(1);
+
+        //カスタムテーブルを除外したか確認すること
+        $entities1 = CustomContentFactory::get(1);
+        $this->assertNull($entities1->custom_table_id);
+
+        $entities2 = CustomContentFactory::get(2);
+        $this->assertNull($entities2->custom_table_id);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**

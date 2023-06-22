@@ -288,6 +288,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * 全てのカスタムコンテンツを対象とする
      *
      * @param int $tableId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function unsetTable(int $tableId): void
     {
