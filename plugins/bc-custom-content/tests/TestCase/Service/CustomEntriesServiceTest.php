@@ -17,6 +17,11 @@ use BcCustomContent\Model\Table\CustomTablesTable;
 use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
@@ -46,7 +51,11 @@ class CustomEntriesServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups'
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
+        'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomContents'
     ];
 
     /**
@@ -99,7 +108,24 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_setup()
     {
-
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //正常系実行
+        $this->CustomEntriesService->setup(1);
+        $this->assertTrue($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
+        $this->CustomEntriesService->dropTable(1);
     }
 
     /**

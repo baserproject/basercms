@@ -108,6 +108,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup(int $tableId, array $postData = [])
     {
