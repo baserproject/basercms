@@ -62,7 +62,7 @@ class BcApiController extends AppController
     {
         if ($result->isValid()) {
             $request = Router::getRequest();
-            return BcApiUtil::createAccessToken($result->getData()->id, $request->getParam('prefix')?? 'Admin');
+            return BcApiUtil::createAccessToken($result->getData()->id, $request->getParam('prefix')?? 'Api/Admin');
         } else {
             return [];
         }
