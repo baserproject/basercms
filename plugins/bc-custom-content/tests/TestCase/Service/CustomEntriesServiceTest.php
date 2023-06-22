@@ -63,6 +63,7 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -140,6 +141,10 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createOrder()
     {
+        $order = 'test';
+        $direction = 'asc';
+        $result = $this->CustomEntriesService->createOrder($order, $direction);
+        $this->assertEquals('CustomEntries.test asc, CustomEntries.id asc', $result);
 
     }
 
