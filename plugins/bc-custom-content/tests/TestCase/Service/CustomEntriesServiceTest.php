@@ -357,6 +357,45 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_create()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $CustomEntries->setLinks(1);
+
+        //正常系実行
+        $postData = [
+            'id' => 99,
+            'custom_table_id' => 1,
+            'title' => 'title99',
+            'creator_id' => 1,
+            'status' => 1,
+        ];
+        $result = $this->CustomEntriesService->create($postData);
+        $this->assertEquals(99, $result->id);
+        $this->assertEquals('title99', $result->title);
+        //異常系実行
+        $postData = [
+            'custom_table_id' => 1,
+            'creator_id' => 1,
+            'status' => 1,
+        ];
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._required: "This field is required")');
+        $this->CustomEntriesService->create($postData);
 
     }
 
