@@ -315,6 +315,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * カスタムエントリーの単一データを取得する
      *
      * @return EntityInterface
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function get($id, array $options = [])
     {
