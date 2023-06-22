@@ -139,6 +139,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData, $options = []): ?EntityInterface
     {
@@ -160,6 +161,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData, $options = []): ?EntityInterface
     {
@@ -192,6 +194,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
