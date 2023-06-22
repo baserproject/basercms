@@ -31,7 +31,7 @@ class BcApiUtil
      * @unitTest
      * @noTodo
      */
-    public static function createAccessToken(int $userId, string $prefix = 'Admin')
+    public static function createAccessToken(int $userId, string $prefix = 'Api/Admin')
     {
         $algorithm = Configure::read('Jwt.algorithm');
         $privateKey = file_get_contents(Configure::read('Jwt.privateKeyPath'));
