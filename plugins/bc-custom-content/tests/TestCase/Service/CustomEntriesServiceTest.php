@@ -101,7 +101,14 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getFieldControlType()
     {
-
+        //正常系実行
+        $result = $this->CustomEntriesService->getFieldControlType('BcCcText');
+        $this->assertEquals('text', $result);
+        $result = $this->CustomEntriesService->getFieldControlType('BcCcCheckbox');
+        $this->assertEquals('checkbox', $result);
+        //異常系実行
+        $result = $this->CustomEntriesService->getFieldControlType('a');
+        $this->assertEquals('', $result);
     }
 
     /**
