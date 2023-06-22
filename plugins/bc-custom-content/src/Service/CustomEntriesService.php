@@ -425,6 +425,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {

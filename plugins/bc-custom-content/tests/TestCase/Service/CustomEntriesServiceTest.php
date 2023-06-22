@@ -404,6 +404,39 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_update()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $CustomEntries->setLinks(1);
+
+        //正常系実行
+        $postData = [
+            'title' => 'Nghiem',
+        ];
+        $customEntry = $this->CustomEntriesService->get(1);
+        $result = $this->CustomEntriesService->update($customEntry, $postData);
+        $this->assertEquals('Nghiem', $result->title);
+        //異常系実行
+        $postData = [
+            'title' => '',
+        ];
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "タイトルは必須項目です。").');
+        $this->CustomEntriesService->update($customEntry, $postData);
 
     }
 
