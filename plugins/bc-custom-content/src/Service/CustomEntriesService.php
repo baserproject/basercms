@@ -411,6 +411,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $id
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function delete(int $id)
     {
