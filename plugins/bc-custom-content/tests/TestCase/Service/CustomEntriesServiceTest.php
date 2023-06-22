@@ -21,6 +21,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
@@ -155,6 +156,35 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createSelect()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //正常系実行
+        $options = [
+            'limit' => null,
+            'direction' => '',    // 並び方向
+            'order' => '',    // 並び順対象のフィールド
+            'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
+            'status' => '',
+            'use_api' => null
+        ];
+        $result = $this->CustomEntriesService->createSelect($options);
+
 
     }
 
