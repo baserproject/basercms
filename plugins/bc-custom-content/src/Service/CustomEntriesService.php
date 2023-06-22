@@ -116,6 +116,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup(int $tableId, array $postData = [])
     {
@@ -126,6 +127,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * カスタムエントリーの一覧を取得する
      *
      * @return \Cake\ORM\Query
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
@@ -199,6 +203,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param Query $query
      * @param array $params
      * @return Query
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function createIndexConditions(Query $query, array $params)
     {
@@ -287,6 +294,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $options
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
@@ -322,6 +332,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * カスタムエントリーの単一データを取得する
      *
      * @return EntityInterface
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function get($id, array $options = [])
     {
