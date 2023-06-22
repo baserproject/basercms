@@ -64,7 +64,6 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
