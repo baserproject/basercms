@@ -105,7 +105,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function getFieldControlType(string $type)
     {
-        $a = Configure::read("BcCustomContent.fieldTypes");
         return Configure::read("BcCustomContent.fieldTypes.$type.controlType");
     }
 
