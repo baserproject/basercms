@@ -121,7 +121,28 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $postData = [
+            'custom_table_id' => 1,
+            'content' =>
+                [
+                    'title' => 'test create',
+                    'site_id' => 1,
+                    'parent_id' => 1
+                ]
+        ];
+        //正常ケースをテスト
+        $result = $this->CustomContentsService->create($postData);
+        //戻る値を確認
+        $this->assertEquals(1, $result->custom_table_id);
+        $this->assertEquals('test create', $result->content->title);
+        $this->assertEquals(10, $result->list_count);
+
+        //異常ケースをテスト
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (content._required: "関連するコンテンツがありません"');
+        $this->CustomContentsService->create([]);
     }
 
     /**
