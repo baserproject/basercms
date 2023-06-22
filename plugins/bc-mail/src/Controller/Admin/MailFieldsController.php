@@ -84,6 +84,9 @@ class MailFieldsController extends MailAdminAppController
                     __d('baser_core', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/')
                 );
             }
+
+        }
+        if (!file_exists($savePath . DS . '.htaccess')) {
             $File = new File($savePath . DS . '.htaccess');
             $htaccess = "Order allow,deny\nDeny from all";
             $File->write($htaccess);
