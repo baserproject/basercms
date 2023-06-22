@@ -368,7 +368,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 $this->setupSessionAuth($service, $authSetting);
                 break;
             case 'Jwt':
-                $this->setupJwtAuth($service, $authSetting);
+                $this->setupJwtAuth($service, $authSetting, $prefix);
                 if($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
                     // セッションを持っている場合もログイン状態とみなす
                     $service->loadAuthenticator('Authentication.Session', [
@@ -439,7 +439,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param array $authSetting
      * @return AuthenticationService
      */
-    public function setupJwtAuth(AuthenticationService $service, array $authSetting)
+    public function setupJwtAuth(AuthenticationService $service, array $authSetting, string $prefix)
     {
         if (Configure::read('Jwt.algorithm') === 'HS256') {
             $secretKey = Security::getSalt();
@@ -462,7 +462,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             'resolver' => [
                 'className' => 'BaserCore.PrefixOrm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder']?? 'available',
+                'prefix' => $prefix,
             ],
         ]);
         $service->loadAuthenticator('Authentication.Form', [
