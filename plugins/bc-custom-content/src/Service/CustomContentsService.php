@@ -224,6 +224,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $tableId
      * @return string[]
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getListOrders(int $tableId): array
     {
@@ -247,6 +250,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param int $siteId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTemplates(int $siteId): array
     {
@@ -282,6 +288,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      * 全てのカスタムコンテンツを対象とする
      *
      * @param int $tableId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function unsetTable(int $tableId): void
     {

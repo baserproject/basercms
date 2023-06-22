@@ -95,6 +95,14 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         return new CustomEntry($default, ['source' => 'BcCustomContent.CustomEntries']);
     }
 
+    /**
+     *
+     * @param string $type
+     * @return string
+     * @notodo
+     * @checked
+     * @unitTest
+     */
     public function getFieldControlType(string $type)
     {
         return Configure::read("BcCustomContent.fieldTypes.$type.controlType");
@@ -195,6 +203,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param Query $query
      * @param array $params
      * @return Query
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function createIndexConditions(Query $query, array $params)
     {
@@ -283,6 +294,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $options
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
@@ -364,6 +378,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $options
      * @return array|string[]
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function createSelect(array $options)
     {
@@ -391,6 +408,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $postData
      * @return EntityInterface
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -405,6 +425,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
