@@ -194,6 +194,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
