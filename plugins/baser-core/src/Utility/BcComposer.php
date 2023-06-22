@@ -190,7 +190,7 @@ class BcComposer {
      */
     public static function createCommand(string $command)
     {
-        return  self::$cd . ' ' . self::$export . ' ' . self::$php . ' ' . self::$composerDir . 'composer.phar ' . $command . ' 2>&1';
+        return  self::$cd . ' ' . self::$export . ' echo y | ' . self::$php . ' ' . self::$composerDir . 'composer.phar ' . $command . ' 2>&1';
     }
 
 }

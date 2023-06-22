@@ -62,7 +62,6 @@ class BcComposerTest extends BcTestCase
      */
     public function test_require()
     {
-        $this->markTestIncomplete('このテストは、5.0.2リリース時に実装する予定です。');
         $orgPath = ROOT . DS . 'composer.json';
         $backupPath = ROOT . DS . 'composer.json.bak';
         $orgLockPath = ROOT . DS . 'composer.lock';
@@ -105,7 +104,7 @@ class BcComposerTest extends BcTestCase
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
 
         // エラー
-        $result = BcComposer::require('bc-content-link', '5.0.1');
+        $result = BcComposer::require('bc-content-link', '100.0.0');
         $this->assertEquals(2, $result['code']);
 
         // バックアップ復元
