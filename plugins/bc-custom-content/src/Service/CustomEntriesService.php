@@ -119,6 +119,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * カスタムエントリーの一覧を取得する
      *
      * @return \Cake\ORM\Query
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {

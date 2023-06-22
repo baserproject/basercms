@@ -133,6 +133,35 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //正常系実行
+        $result = $this->CustomEntriesService->getIndex()->all();
+        $this->assertCount(6, $result);
+        //containパラメータを入れる
+        $result = $this->CustomEntriesService->getIndex(['contain' => 'CustomTables'])->all();
+        $this->assertCount(3, $result);
+        //limitパラメータを入れる
+        $result = $this->CustomEntriesService->getIndex(['limit' => 2])->all();
+        $this->assertCount(2, $result);
+        //ソートする
+        $result = $this->CustomEntriesService->getIndex(['order' => 'name', 'direction' => 'desc'])->all()->toArray();
+        $this->assertEquals('プログラマー 3', $result[0]->name);
 
     }
 
