@@ -18,6 +18,11 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\TableRegistry;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
@@ -255,6 +260,10 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createOrder()
     {
+        $order = 'test';
+        $direction = 'asc';
+        $result = $this->CustomEntriesService->createOrder($order, $direction);
+        $this->assertEquals('CustomEntries.test asc, CustomEntries.id asc', $result);
 
     }
 
