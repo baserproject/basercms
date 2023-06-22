@@ -40,6 +40,10 @@ class PrefixOrmResolver extends OrmResolver implements ResolverInterface
             }
         }
 
+        if ($prefix !== $this->_config['prefix']) {
+            return null;
+        }
+
         $table = $this->getTableLocator()->get($this->_config['userModel']);
 
         $query = $table->query();
