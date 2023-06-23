@@ -21,6 +21,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use Cake\Database\ValueBinder;
@@ -511,7 +512,24 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createTable()
     {
-
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->createTable(1);
+        $this->assertTrue($result);
+        $this->assertTrue($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
+        //異常系実行
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->createTable(99);
     }
 
     /**
