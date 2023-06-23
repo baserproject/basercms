@@ -28,11 +28,13 @@ use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Database\ValueBinder;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use TypeError;
 
 /**
  * CustomEntriesServiceTest
@@ -70,6 +72,7 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -454,6 +457,34 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //正常系実行
+        $result = $this->CustomEntriesService->delete(1);
+        $this->assertTrue($result);
+        // レコードが存在しない
+        $rs = $this->CustomEntriesService->get(1);
+        $this->assertNull($rs);
+        //異常系実行
+        $this->expectException(TypeError::class);
+        $this->CustomEntriesService->delete(999);
+
 
     }
 
