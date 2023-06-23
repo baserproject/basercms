@@ -67,6 +67,7 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -469,8 +470,8 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->delete(1);
         $this->assertTrue($result);
         // レコードが存在しない
-        $this->expectException(RecordNotFoundException::class);
-        $this->CustomEntriesService->get(1);
+        $rs = $this->CustomEntriesService->get(1);
+        $this->assertNull($rs);
         //異常系実行
         $this->expectException(TypeError::class);
         $this->CustomEntriesService->delete(999);
