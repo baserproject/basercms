@@ -79,6 +79,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param array $queryParams
      * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
