@@ -37,6 +37,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
