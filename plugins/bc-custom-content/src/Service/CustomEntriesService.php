@@ -475,6 +475,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param string $oldName
      * @param string $newName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function renameField(int $tableId, string $oldName, string $newName): bool
     {

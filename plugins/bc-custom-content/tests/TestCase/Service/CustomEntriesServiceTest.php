@@ -495,7 +495,34 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_renameField()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
 
+        //正常系実行
+        $result = $this->CustomEntriesService->renameField(1, 'name', 'name_test');
+        $this->assertTrue($result);
+        $this->assertFalse($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name'));
+        $this->assertTrue($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name_test'));
+        //旧カラム名を戻す
+        $this->BcDatabaseService->renameColumn('custom_entry_1_recruit_categories', 'name_test', 'name');
+        //異常系実行
+        $this->expectExceptionMessage("The specified column doesn't exist: test");
+        $result = $this->CustomEntriesService->renameField(1, 'test', 'test1');
     }
 
     /**
