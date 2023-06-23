@@ -488,6 +488,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @param string $fieldName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function removeField(int $tableId, string $fieldName)
     {
