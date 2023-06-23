@@ -51,6 +51,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * カスタムフィールドの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
