@@ -461,6 +461,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param string $fieldName
      * @param string $type
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function addField(int $tableId, string $fieldName, string $type): bool
     {
