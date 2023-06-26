@@ -14,6 +14,9 @@ namespace BcCustomContent\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -109,7 +112,20 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customField = $this->CustomFieldsService->get(1);
+        $customField->title = 'test edit title';
+        //正常系をテスト
+        $rs = $this->CustomFieldsService->update($customField, $customField->toArray());
+        //戻る値を確認
+        $this->assertEquals($rs->title, 'test edit title');
+
+        //異常系をテスト
+        $customField->title = null;
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "項目見出しを入力してください。")');
+        $this->CustomFieldsService->update($customField, $customField->toArray());
     }
 
     /**
