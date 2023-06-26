@@ -14,6 +14,8 @@ namespace BcCustomContent\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -77,7 +79,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストメソッドを呼ぶ
+        $result = $this->CustomFieldsService->getNew();
+        //戻る値を確認
+        $this->assertTrue($result->status);
+        $this->assertEquals('', $result->placeholder);
+        $this->assertEquals('BcCcText', $result->type);
+        $this->assertEquals('', $result->source);
+        $this->assertEquals('', $result->auto_convert);
     }
 
     /**
@@ -85,7 +94,19 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->get(1);
+        //戻る値を確認
+        $this->assertEquals(1, $rs->id);
+        $this->assertEquals('recruit_category', $rs->name);
+        $this->assertEquals('求人分類', $rs->title);
+
+        //存在しないIDを指定した場合、
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_fields"');
+        $this->CustomFieldsService->get(111);
     }
 
     /**
@@ -93,7 +114,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getIndex()->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('求人分類', $rs[0]->title);
+        $this->assertEquals('この仕事の特徴', $rs[1]->title);
     }
 
     /**
