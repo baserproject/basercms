@@ -77,7 +77,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストメソッドを呼ぶ
+        $result = $this->CustomFieldsService->getNew();
+        //戻る値を確認
+        $this->assertTrue($result->status);
+        $this->assertEquals('', $result->placeholder);
+        $this->assertEquals('BcCcText', $result->type);
+        $this->assertEquals('', $result->source);
+        $this->assertEquals('', $result->auto_convert);
     }
 
     /**
