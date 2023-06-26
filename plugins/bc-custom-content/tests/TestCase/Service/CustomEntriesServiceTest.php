@@ -21,6 +21,8 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\Entity;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use Cake\Database\ValueBinder;
@@ -487,6 +489,33 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_addField()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //正常系実行
+        $result = $this->CustomEntriesService->addField(1, 'nghiem', 'text');
+        $this->assertTrue($result);
+        $this->assertTrue($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'nghiem'));
+        //テストデータを削除
+        $this->BcDatabaseService->removeColumn('custom_entry_1_recruit_categories', 'nghiem');
+        //異常系実行
+        $this->expectExceptionMessage('An invalid column type "text11" was specified for column "nghiem"');
+        $this->CustomEntriesService->addField(1, 'nghiem', 'text11');
 
     }
 
@@ -495,7 +524,34 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_renameField()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
 
+        //正常系実行
+        $result = $this->CustomEntriesService->renameField(1, 'name', 'name_test');
+        $this->assertTrue($result);
+        $this->assertFalse($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name'));
+        $this->assertTrue($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name_test'));
+        //旧カラム名を戻す
+        $this->BcDatabaseService->renameColumn('custom_entry_1_recruit_categories', 'name_test', 'name');
+        //異常系実行
+        $this->expectExceptionMessage("The specified column doesn't exist: test");
+        $result = $this->CustomEntriesService->renameField(1, 'test', 'test1');
     }
 
     /**
@@ -503,6 +559,31 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_removeField()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //正常系実行
+        $result = $this->CustomEntriesService->removeField(1, 'name');
+        $this->assertTrue($result);
+        $this->assertFalse($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name'));
+        //異常系実行
+        $this->expectExceptionMessage("The specified column doesn't exist: test");
+        $result = $this->CustomEntriesService->renameField(1, 'test', 'test1');
 
     }
 
@@ -511,7 +592,24 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_createTable()
     {
-
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->createTable(1);
+        $this->assertTrue($result);
+        $this->assertTrue($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
+        //異常系実行
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->createTable(99);
     }
 
     /**
@@ -519,6 +617,20 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_renameTable()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->renameTable(1, 'nghiem');
+        $this->assertTrue($result);
 
     }
 
@@ -527,6 +639,24 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_dropTable()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->dropTable(1);
+        $this->assertTrue($result);
+        $this->assertFalse($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
+        //異常系実行
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomEntriesService->dropTable(99);
 
     }
 
@@ -535,6 +665,49 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_addFields()
     {
+        //準備
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $links = [
+            new Entity([
+                'custom_table_id' => 1,
+                'custom_field_id' => 1,
+                'lft' => 1,
+                'rght' => 2,
+                'name' => 'link1',
+                'title' => '求人分類',
+                'type' => 'text'
+            ]),
+            new Entity([
+                'custom_table_id' => 1,
+                'custom_field_id' => 2,
+                'lft' => 1,
+                'rght' => 2,
+                'name' => 'link2',
+                'title' => '求人分類2',
+                'type' => 'text'
+            ]),
+        ];
+        $this->CustomEntriesService->addFields(1, $links);
+        $this->assertTrue($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'link1'));
+        $this->assertTrue($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'link2'));
+        //異常系実行
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomEntriesService->addFields(99, $links);
 
     }
 

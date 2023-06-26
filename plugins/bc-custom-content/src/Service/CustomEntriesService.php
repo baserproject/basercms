@@ -461,6 +461,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param string $fieldName
      * @param string $type
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function addField(int $tableId, string $fieldName, string $type): bool
     {
@@ -475,6 +478,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param string $oldName
      * @param string $newName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function renameField(int $tableId, string $oldName, string $newName): bool
     {
@@ -488,6 +494,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @param string $fieldName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function removeField(int $tableId, string $fieldName)
     {
@@ -500,6 +509,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $tableId
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function createTable(int $tableId): bool
     {
@@ -532,6 +544,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @param string $oldName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function renameTable(int $tableId, string $oldName)
     {
@@ -551,6 +566,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $tableId
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function dropTable(int $tableId)
     {
@@ -563,6 +581,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $tableId
      * @param array $fields
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function addFields(int $tableId, array $links)
     {
