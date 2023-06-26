@@ -563,6 +563,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $tableId
      * @param array $fields
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function addFields(int $tableId, array $links)
     {
