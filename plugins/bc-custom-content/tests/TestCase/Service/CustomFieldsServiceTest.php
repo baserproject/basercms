@@ -114,7 +114,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getIndex()->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('求人分類', $rs[0]->title);
+        $this->assertEquals('この仕事の特徴', $rs[1]->title);
     }
 
     /**
