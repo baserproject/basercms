@@ -638,6 +638,24 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_dropTable()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->dropTable(1);
+        $this->assertTrue($result);
+        $this->assertFalse($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
+        //異常系実行
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomEntriesService->dropTable(99);
 
     }
 
