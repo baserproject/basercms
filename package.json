@@ -13,7 +13,9 @@
   },
   "homepage": "https://github.com/baserproject/ucmitz#readme",
   "workspaces": [
-    "plugins/*"
+    "plugins/bc-admin-third",
+    "plugins/bc-front",
+    "plugins/BcSpaSample"
   ],
   "private": true
 }

@@ -8,7 +8,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-const { VueLoaderPlugin } = require('vue-loader');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const glob = require("glob");
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
