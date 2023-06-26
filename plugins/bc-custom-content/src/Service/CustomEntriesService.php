@@ -532,6 +532,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param int $tableId
      * @param string $oldName
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function renameTable(int $tableId, string $oldName)
     {
