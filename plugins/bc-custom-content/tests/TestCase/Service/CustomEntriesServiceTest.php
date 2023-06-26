@@ -616,6 +616,20 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_renameTable()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->renameTable(1, 'nghiem');
+        $this->assertTrue($result);
 
     }
 
