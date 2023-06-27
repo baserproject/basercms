@@ -21,6 +21,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
@@ -732,6 +733,37 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_isAllowPublish()
     {
+        //正常系実行:status = false 開始日と終了日とを指定しない
+        $entity = new Entity([
+            'status' => false,
+            'publish_begin' => 'alo',
+            'publish_end' => 'alo',
+        ]);
+        $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
+
+        //正常系実行:status = true 開始日と終了日とを指定しない
+        $entity = new Entity([
+            'status' => true,
+            'publish_begin' => 'alo',
+            'publish_end' => 'alo',
+        ]);
+        $this->assertTrue($this->CustomEntriesService->isAllowPublish($entity));
+
+        //正常系実行: 将来の開始日を指定する
+        $entity = new Entity([
+            'status' => true,
+            'publish_begin' => FrozenTime::tomorrow(),
+            'publish_end' => 'alo',
+        ]);
+        $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
+
+        //正常系実行: 過去の開始日を指定する
+        $entity = new Entity([
+            'status' => true,
+            'publish_begin' => '',
+            'publish_end' => FrozenTime::yesterday(),
+        ]);
+        $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
 
     }
 

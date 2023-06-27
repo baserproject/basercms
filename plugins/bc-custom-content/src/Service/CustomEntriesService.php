@@ -650,6 +650,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param EntityInterface $entity
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function isAllowPublish(EntityInterface $entity)
     {
