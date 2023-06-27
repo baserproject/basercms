@@ -161,7 +161,37 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getFieldTypes()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getFieldTypes();
+        //戻る値を確認
+        $this->assertEquals($rs['基本'], [
+            'BcCcEmail' => 'Eメール',
+            'BcCcHidden' => '隠しフィールド',
+            'BcCcPassword' => 'パスワード',
+            'BcCcTel' => '電話番号',
+            'BcCcText' => 'テキスト',
+            'BcCcTextarea' => 'テキストエリア',
+        ]);
+        $this->assertEquals($rs['日付'], [
+            'BcCcDate' => '日付（年月日）',
+            'BcCcDateTime' => '日付（年月日時間）',
+        ]);
+        $this->assertEquals($rs['選択'], [
+            'BcCcCheckbox' => 'チェックボックス',
+            'BcCcMultiple' => 'マルチチェックボックス',
+            'BcCcPref' => '都道府県リスト',
+            'BcCcRadio' => 'ラジオボタン',
+            'BcCcRelated' => '関連データ',
+            'BcCcSelect' => 'セレクトボックス',
+        ]);
+        $this->assertEquals($rs['コンテンツ'], [
+            'BcCcFile' => 'ファイル',
+            'BcCcWysiwyg' => 'Wysiwyg エディタ',
+        ]);
+        $this->assertEquals($rs['その他'], [
+            'group' => 'グループ',
+            'BcCcAutoZip' => '自動補完郵便番号',
+        ]);
     }
 
     /**

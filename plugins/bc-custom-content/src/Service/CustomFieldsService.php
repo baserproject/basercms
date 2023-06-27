@@ -158,6 +158,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * フィールドタイプのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getFieldTypes(): array
     {
