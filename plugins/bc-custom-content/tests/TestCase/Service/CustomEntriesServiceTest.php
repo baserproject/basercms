@@ -18,6 +18,7 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -748,6 +749,72 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_autoConvert()
     {
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        //リンクとフィールドでーたを生成
+        CustomFieldFactory::make([
+            'id' => 1,
+            'title' => '求人分類',
+            'name' => 'recruit_category',
+            'type' => 'BcCcRelated',
+            'auto_convert' => 'CONVERT_HANKAKU',
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 0,
+            'name' => 'link1',
+            'title' => '求人分類',
+            'status' => 1,
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 2,
+            'title' => 'この仕事の特徴',
+            'name' => 'feature',
+            'type' => 'BcCcMultiple',
+            'status' => 1,
+            'auto_convert' => 'CONVERT_ZENKAKU',
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 0,
+            'name' => 'link2',
+            'title' => 'この仕事の特徴',
+            'status' => 1,
+        ])->persist();
+        $CustomEntries->setLinks(1);
+        //正常系実行
+        $data = [
+            'link1' => 'あ',
+            'link2' => 'Nghiem',
+        ];
+        $result = $this->CustomEntriesService->autoConvert($data);
+        $dataExpect = [
+            'link1' => 'あ',
+            'link2' => 'Ｎｇｈｉｅｍ',
+        ];
+        $this->assertEquals($dataExpect, $result);
+
 
     }
 
