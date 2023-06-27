@@ -670,6 +670,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param EntityInterface $entity
      * @param bool $full
      * @return string
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getUrl(Content $content, EntityInterface $entity, bool $full = true)
     {
