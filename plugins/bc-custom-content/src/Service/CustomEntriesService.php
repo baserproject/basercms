@@ -622,6 +622,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int|null $selfId
      * @return array
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getParentTargetList($selfId, array $options = [])
     {

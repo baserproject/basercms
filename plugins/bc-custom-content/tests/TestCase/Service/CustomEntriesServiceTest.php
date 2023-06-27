@@ -18,6 +18,7 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -724,6 +725,61 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getParentTargetList()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->CustomEntriesService->setup(1);
+        CustomEntryFactory::make([
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => 2,
+                'rght' => 3,
+                'status' => 1,
+                'level' => 1,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 2,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => 3,
+                'rght' => null,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 3,
+                'custom_table_id' => 1,
+                'title' => 'title3',
+                'lft' => null,
+                'rght' => 2,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        //正常系実行
+        $result = $this->CustomEntriesService->getParentTargetList(2);
+        $this->assertCount(1, $result);
+        $this->assertEquals('title1', $result[1]);
 
     }
 
