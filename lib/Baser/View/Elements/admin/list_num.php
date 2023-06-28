@@ -38,7 +38,7 @@ if ($links) {
 
 
 <?php if ($link): ?>
-	<div class="list-num page-numbers">
+	<div class="list-num">
 		<strong><?php echo __d('baser', '表示件数') ?></strong>
 		<p><?php echo $link ?></p>
 	</div>
