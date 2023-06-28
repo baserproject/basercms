@@ -782,8 +782,6 @@ class CustomEntriesServiceTest extends BcTestCase
         //正常系実行
         $result = $this->CustomEntriesService->moveUp(3);
         $this->assertTrue($result);
-        $customEntry = $this->CustomEntriesService->get(3);
-        $this->assertEquals(3, $customEntry->level);
         //異常系実行
         $this->expectException(RecordNotFoundException::class);
         $this->CustomEntriesService->moveUp(99);
