@@ -69,6 +69,15 @@ class CustomLinksServiceTest extends BcTestCase
     }
 
     /**
+     * Test __construct
+     */
+    public function test__construct()
+    {
+        // テーブルがセットされている事を確認
+        $this->assertEquals('CustomLinks', $this->CustomLinksService->CustomLinks->getAlias());
+    }
+
+    /**
      * test getIndex
      */
     public function test_getIndex()

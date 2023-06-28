@@ -35,6 +35,9 @@ class CustomLinksService implements CustomLinksServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
