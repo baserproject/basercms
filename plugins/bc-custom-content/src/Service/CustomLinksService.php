@@ -47,6 +47,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param int $id
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $options = [])
     {
