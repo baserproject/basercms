@@ -764,6 +764,37 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_moveDown()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'name',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntry = $this->CustomEntriesService->get(2);
+        $data =[
+            'title'=>'title3',
+            'level'=>1
+        ];
+        $this->CustomEntriesService->update($customEntry, $data);
+
+        //正常系実行
+        $result = $this->CustomEntriesService->moveDown(2);
+        $this->assertTrue($result);
+        $customEntry = $this->CustomEntriesService->get(2);
+        $this->assertEquals(2, $customEntry->level);
+        //異常系実行
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->moveDown(99);
 
     }
 
