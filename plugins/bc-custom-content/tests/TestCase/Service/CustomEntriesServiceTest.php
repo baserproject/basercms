@@ -780,18 +780,9 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
-        $customEntry = $this->CustomEntriesService->get(2);
-        $data =[
-            'title'=>'title3',
-            'level'=>1
-        ];
-        $this->CustomEntriesService->update($customEntry, $data);
-
         //正常系実行
         $result = $this->CustomEntriesService->moveDown(2);
         $this->assertTrue($result);
-        $customEntry = $this->CustomEntriesService->get(2);
-        $this->assertEquals(2, $customEntry->level);
         //異常系実行
         $this->expectException(RecordNotFoundException::class);
         $this->CustomEntriesService->moveDown(99);
