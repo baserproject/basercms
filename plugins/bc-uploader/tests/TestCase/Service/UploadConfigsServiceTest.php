@@ -63,6 +63,10 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_clearCache()
     {
+        //³íŒnÀs
+        $this->UploaderConfigsService->clearCache();
+        $result = $this->getPrivateProperty($this->UploaderConfigsService, 'entity');
+        $this->assertNull($result);
 
     }
 
