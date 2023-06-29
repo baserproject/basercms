@@ -738,6 +738,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $id
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function moveDown(int $id)
     {
