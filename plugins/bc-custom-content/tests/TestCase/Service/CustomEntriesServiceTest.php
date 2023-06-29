@@ -617,10 +617,8 @@ class CustomEntriesServiceTest extends BcTestCase
         ])->persist();
 
         //正常系実行
-        //creator_idのパラメータを入れる
-        $field = '';
-        $options = [];
-        $result = $this->CustomEntriesService->getControlSource($field, $options);
+        //空のパラメータを入れる
+        $result = $this->CustomEntriesService->getControlSource('', []);
         $this->assertEquals([], $result);
         //creator_idのパラメータを入れる
         $field = 'creator_id';
