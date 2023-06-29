@@ -767,6 +767,15 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->assertEquals('https://localhost/test/view/Nghiem', $result);
         $result = $this->CustomEntriesService->getUrl($content, $entity, false);
         $this->assertEquals('test/view/Nghiem', $result);
+        //name = ''のケース
+        $entity = new Entity([
+            'id' => '1',
+            'name' => ''
+        ]);
+        $result = $this->CustomEntriesService->getUrl($content, $entity);
+        $this->assertEquals('https://localhost/test/view/1', $result);
+        $result = $this->CustomEntriesService->getUrl($content, $entity, false);
+        $this->assertEquals('test/view/1', $result);
 
     }
 
