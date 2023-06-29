@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
@@ -912,6 +913,41 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getUrl()
     {
+        //準備
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $entity = new Entity([
+            'id' => '1',
+            'name' => 'Nghiem'
+        ]);
+        $content = new Content([
+            'id' => 1,
+            'url' => 'test/',
+            'name' => '',
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'parent_id' => null,
+            'title' => 'サービスタイトル',
+            'lft' => 1,
+            'rght' => 2,
+            'entity_id' => 1,
+            'status' => true
+        ]);
+        //正常系実行
+        $result = $this->CustomEntriesService->getUrl($content, $entity);
+        $this->assertEquals('https://localhost/test/view/Nghiem', $result);
+        $result = $this->CustomEntriesService->getUrl($content, $entity, false);
+        $this->assertEquals('test/view/Nghiem', $result);
+        //name = ''のケース
+        $entity = new Entity([
+            'id' => '1',
+            'name' => ''
+        ]);
+        $result = $this->CustomEntriesService->getUrl($content, $entity);
+        $this->assertEquals('https://localhost/test/view/1', $result);
+        $result = $this->CustomEntriesService->getUrl($content, $entity, false);
+        $this->assertEquals('test/view/1', $result);
 
     }
 
