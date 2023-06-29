@@ -621,15 +621,12 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->getControlSource('', []);
         $this->assertEquals([], $result);
         //creator_idのパラメータを入れる
-        $field = 'creator_id';
         $options = ['status' => 1];
-        $result = $this->CustomEntriesService->getControlSource($field, $options);
+        $result = $this->CustomEntriesService->getControlSource('creator_id', $options);
         $this->assertCount(2, $result);
         $this->assertEquals('nickname2', $result[2]);
         //parent_idのパラメータを入れる
-        $field = 'parent_id';
-        $options = [];
-        $result = $this->CustomEntriesService->getControlSource($field, $options);
+        $result = $this->CustomEntriesService->getControlSource('parent_id', []);
         $this->assertCount(2, $result);
 
     }
