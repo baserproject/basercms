@@ -264,6 +264,37 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$field == 'field_type'
+        $rs = $this->CustomFieldsService->getControlSource('field_type');
+        $this->assertArrayHasKey('基本', $rs);
+        $this->assertArrayHasKey('日付', $rs);
+        $this->assertArrayHasKey('選択', $rs);
+        $this->assertArrayHasKey('コンテンツ', $rs);
+        $this->assertArrayHasKey('その他', $rs);
+
+        //$field == 'validate'
+        $rs = $this->CustomFieldsService->getControlSource('validate');
+        $this->assertEquals($rs, [
+            'EMAIL' => 'Eメール形式チェック',
+            'EMAIL_CONFIRM' => 'Eメール比較チェック',
+            'NUMBER' => '数値チェック',
+            'HANKAKU' => '半角英数チェック',
+            'ZENKAKU_KATAKANA' => '全角カタカナチェック',
+            'ZENKAKU_HIRAGANA' => '全角ひらがなチェック',
+            'DATETIME' => '日付チェック',
+            'MAX_FILE_SIZE' => 'ファイルアップロードサイズ制限',
+            'FILE_EXT' => 'ファイル拡張子チェック'
+        ]);
+
+        //$field == 'validate'
+        $rs = $this->CustomFieldsService->getControlSource('auto_convert');
+        $this->assertEquals($rs, [
+            'CONVERT_HANKAKU' => '半角変換',
+            'CONVERT_ZENKAKU' => '全角変換'
+        ]);
+
+        //$field == 'other'
+        $rs = $this->CustomFieldsService->getControlSource('other');
+        $this->assertEquals($rs, []);
     }
 }

@@ -194,6 +194,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field): array
     {
