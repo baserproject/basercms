@@ -945,12 +945,12 @@ class CustomEntriesServiceTest extends BcTestCase
         $CustomEntries->setLinks(1);
         //正常系実行
         $data = [
-            'link1' => 'あ',
+            'link1' => 'Ｎｇｈｉｅｍ',
             'link2' => 'Nghiem',
         ];
         $result = $this->CustomEntriesService->autoConvert($data);
         $dataExpect = [
-            'link1' => 'あ',
+            'link1' => 'Nghiem',
             'link2' => 'Ｎｇｈｉｅｍ',
         ];
         $this->assertEquals($dataExpect, $result);
