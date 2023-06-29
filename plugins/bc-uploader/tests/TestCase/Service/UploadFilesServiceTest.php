@@ -12,8 +12,10 @@
 namespace BcUploader\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
+use BcUploader\Service\UploaderFilesServiceInterface;
 
 /**
  * UploadFilesServiceTest
@@ -28,6 +30,7 @@ class UploadFilesServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->UploaderFilesService = $this->getService(UploaderFilesServiceInterface::class);
     }
 
     /**
@@ -44,7 +47,7 @@ class UploadFilesServiceTest extends BcTestCase
     public function test_construct()
     {
         $this->UploaderFilesService->__construct();
-//        $this->assertInstanceOf(UploaderConfigsServiceInterface::class, $this->UploaderFilesService->UploaderFiles);
+        $this->assertInstanceOf(UploaderFilesTable::class, $this->UploaderFilesService->UploaderFiles);
         $this->assertInstanceOf(UploaderConfigsServiceInterface::class, $this->UploaderFilesService->uploaderConfigsService);
 
     }
