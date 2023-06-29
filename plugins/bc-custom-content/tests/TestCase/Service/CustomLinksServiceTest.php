@@ -17,7 +17,9 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -47,6 +49,8 @@ class CustomLinksServiceTest extends BcTestCase
         'plugin.BcCustomContent.Factory/CustomFields',
         'plugin.BcCustomContent.Factory/CustomLinks',
         'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomContents',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -90,7 +94,33 @@ class CustomLinksServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //サービスメソッドを呼ぶ
+        $result = $this->CustomLinksService->get(1);
+        //戻る値を確認
+        $this->assertEquals('求人分類', $result->title);
+        $this->assertArrayHasKey('custom_field', $result);
+        $this->assertArrayHasKey('custom_table', $result);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //存在しないIDを指定した場合、
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_links"');
+        $this->CustomLinksService->get(11);
     }
 
     /**
