@@ -102,7 +102,6 @@ class CreateReleaseCommand extends Command
         $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
         $data = preg_replace($regex, $replace, $data);
         $file->write($data);
-        unlink($packagePath . 'composer.lock');
     }
 
     /**
