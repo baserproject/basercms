@@ -120,6 +120,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
