@@ -48,6 +48,9 @@ class CustomLinksTable extends AppTable
         $this->belongsTo('CustomTables')
             ->setClassName('BcCustomContent.CustomTables')
             ->setForeignKey('custom_table_id');
+        $this->belongsTo('CustomContents')
+            ->setClassName('BcCustomContent.CustomContents')
+            ->setForeignKey('custom_table_id');
     }
 
     /**

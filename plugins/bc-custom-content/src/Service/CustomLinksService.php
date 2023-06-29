@@ -71,6 +71,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param int $tableId
      * @param array $options
      * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(int $tableId, array $options = [])
     {
@@ -78,13 +81,8 @@ class CustomLinksService implements CustomLinksServiceInterface
             'finder' => 'threaded',
             'status' => null,
             'for' => null,
-            'contain' => [
-                'CustomFields',
-                'CustomTables' => [
-                    'CustomContents' => ['Contents']
-                ]
-            ]
-        ], $options);
+            'contain' => ['CustomFields', 'CustomContents' => ['Contents']]],
+            $options);
 
         $findOptions = [];
         if (!is_null($options['for'])) {
@@ -103,7 +101,7 @@ class CustomLinksService implements CustomLinksServiceInterface
             $conditions = array_merge(
                 $conditions,
                 ['CustomLinks.status' => true],
-                $this->CustomLinks->CustomTables->CustomContents->Contents->getConditionAllowPublish()
+                $this->CustomLinks->CustomContents->Contents->getConditionAllowPublish()
             );
         }
 

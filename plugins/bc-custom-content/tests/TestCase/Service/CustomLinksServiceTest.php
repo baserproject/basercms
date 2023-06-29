@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -47,6 +48,8 @@ class CustomLinksServiceTest extends BcTestCase
         'plugin.BcCustomContent.Factory/CustomFields',
         'plugin.BcCustomContent.Factory/CustomLinks',
         'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomContents',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -73,7 +76,27 @@ class CustomLinksServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //APIを呼ぶ
+        $rs = $this->CustomLinksService->getIndex(1, ['status' => 'publish'])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('この仕事の特徴', $rs[0]['title']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
