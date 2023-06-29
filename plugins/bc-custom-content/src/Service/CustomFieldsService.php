@@ -135,6 +135,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -143,7 +146,7 @@ class CustomFieldsService implements CustomFieldsServiceInterface
         $customLinksService = $this->getService(CustomLinksServiceInterface::class);
         $entity = $this->get($id, ['contain' => ['CustomLinks']]);
         if ($entity->custom_links) {
-            foreach($entity->custom_links as $field) {
+            foreach ($entity->custom_links as $field) {
                 $customLinksService->delete($field->id);
             }
         }

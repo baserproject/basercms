@@ -11,9 +11,11 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -176,7 +178,33 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $dataBaseService->addColumn('custom_entry_1_recruit', 'recruit_category', 'text');
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //カラムrecruit_categoryが削除されたか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit', 'recruit_category'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+        //削除したカスタムフィールドが存在しないか確認すること
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomFieldsService->get(1);
     }
 
     /**
