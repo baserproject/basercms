@@ -735,7 +735,7 @@ class BlogController extends BlogAppController
 			$this->notFound();
 		}
 		// /tags/{存在しないタグ名} がステータス200として戻される問題の解決
-		$tag = $this->BlogTag->findByName($name);
+		$tag = $this->BlogTag->find('first', ['conditions' => ['BlogTag.name' => $name], 'recursive' => -1]);
 		if (empty($tag)) {
 			$this->notFound();
 		}
