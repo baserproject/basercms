@@ -705,6 +705,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return array $data
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function autoConvert(array $data): array
     {
