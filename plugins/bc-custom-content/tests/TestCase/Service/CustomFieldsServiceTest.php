@@ -212,7 +212,13 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getList();
+        //戻る値を確認
+        $this->assertEquals('求人分類', $rs[1]);
+        $this->assertEquals('この仕事の特徴', $rs[2]);
     }
 
     /**
