@@ -15,6 +15,10 @@ use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Table\UploaderConfigsTable;
 use BcUploader\Service\UploaderConfigsService;
 use BcUploader\Service\UploaderConfigsServiceInterface;
+use BcUploader\Test\Factory\UploaderConfigFactory;
+use BcUploader\Test\Scenario\UploaderFilesScenario;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * UploadConfigsServiceTest
@@ -23,6 +27,12 @@ use BcUploader\Service\UploaderConfigsServiceInterface;
  */
 class UploadConfigsServiceTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
 
     /**
      * set up
@@ -71,6 +81,14 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_update()
     {
+        //€”õ
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        //³íŒnŽÀs
+        $postData = [
+            'large_width' => 600
+        ];
+        $result = $this->UploaderConfigsService->update($postData);
+        $this->assertEquals(600, $result->large_width);
 
     }
 
