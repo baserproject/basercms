@@ -114,7 +114,7 @@ class CreateReleaseCommand extends Command
         $tmp = TMP;
         $repository = Configure::read('BcApp.repositoryUrl');
         exec("cd {$tmp}; git clone {$repository} basercms");
-        exec("cd {$packagePath}; git checktout {$branch}");
+        exec("cd {$packagePath}; git checkout {$branch}");
     }
 
     /**
