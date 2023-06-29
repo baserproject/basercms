@@ -54,6 +54,9 @@ function command($phpPath)
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');
     }
+    if (!is_writable(ROOT_DIR . 'composer.lock')) {
+        throw new Exception('/composer.lock に書き込み権限がありません。書き込み権限を与えてください。');
+    }
     if (!is_writable(ROOT_DIR . 'vendor')) {
         throw new Exception('/vendor に書き込み権限がありません。書き込み権限を与えてください。');
     }
@@ -350,7 +353,7 @@ function command($phpPath)
                             </h1>
                             <form id="AdminInstallerForm" method="POST">
                                 <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。
-                                    /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
+                                    /composer.lock ファイルと /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
                                 <small>PHPのパス</small>
                                 <input type="text" name="php_path" value="<?php echo $phpPath ?>" class="bca-textbox__input"/>
 
