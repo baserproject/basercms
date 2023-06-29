@@ -736,16 +736,16 @@ class CustomEntriesServiceTest extends BcTestCase
         //正常系実行:status = false 開始日と終了日とを指定しない
         $entity = new Entity([
             'status' => false,
-            'publish_begin' => 'alo',
-            'publish_end' => 'alo',
+            'publish_begin' => '',
+            'publish_end' => '',
         ]);
         $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
 
         //正常系実行:status = true 開始日と終了日とを指定しない
         $entity = new Entity([
             'status' => true,
-            'publish_begin' => 'alo',
-            'publish_end' => 'alo',
+            'publish_begin' => '',
+            'publish_end' => '',
         ]);
         $this->assertTrue($this->CustomEntriesService->isAllowPublish($entity));
 
@@ -753,7 +753,7 @@ class CustomEntriesServiceTest extends BcTestCase
         $entity = new Entity([
             'status' => true,
             'publish_begin' => FrozenTime::tomorrow(),
-            'publish_end' => 'alo',
+            'publish_end' => '',
         ]);
         $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
 
