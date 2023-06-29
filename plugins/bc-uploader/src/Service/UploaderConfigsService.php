@@ -46,6 +46,7 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      * @return UploaderConfig|\Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get()
     {
