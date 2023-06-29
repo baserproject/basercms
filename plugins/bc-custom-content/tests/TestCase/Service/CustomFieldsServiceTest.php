@@ -11,11 +11,14 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -129,7 +132,24 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //Postデータを準備
+        $data = [
+            'title' => '求人分類',
+            'name' => 'recruit_category',
+            'type' => 'BcCcRelated',
+            'status' => 1,
+            'default_value' => '新卒採用',
+        ];
+        //正常系をテスト
+        $rs = $this->CustomFieldsService->create($data);
+        //戻る値を確認
+        $this->assertEquals($rs->title, '求人分類');
+        $this->assertEquals($rs->default_value, '新卒採用');
+
+        //異常系をテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "項目見出しを入力してください。")');
+        $this->CustomFieldsService->create(['title' => null]);
     }
 
     /**
@@ -137,7 +157,20 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customField = $this->CustomFieldsService->get(1);
+        $customField->title = 'test edit title';
+        //正常系をテスト
+        $rs = $this->CustomFieldsService->update($customField, $customField->toArray());
+        //戻る値を確認
+        $this->assertEquals($rs->title, 'test edit title');
+
+        //異常系をテスト
+        $customField->title = null;
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "項目見出しを入力してください。")');
+        $this->CustomFieldsService->update($customField, $customField->toArray());
     }
 
     /**
@@ -145,7 +178,33 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $dataBaseService->addColumn('custom_entry_1_recruit', 'recruit_category', 'text');
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //カラムrecruit_categoryが削除されたか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit', 'recruit_category'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+        //削除したカスタムフィールドが存在しないか確認すること
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomFieldsService->get(1);
     }
 
     /**
