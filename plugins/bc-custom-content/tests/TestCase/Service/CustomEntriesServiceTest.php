@@ -11,6 +11,8 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Model\Entity\User;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomEntriesTable;
 use BcCustomContent\Model\Table\CustomTablesTable;
@@ -19,6 +21,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -717,6 +720,88 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        CustomEntryFactory::make([
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => 2,
+                'rght' => 3,
+                'status' => 1,
+                'level' => 1,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 2,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => null,
+                'rght' => null,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 3,
+                'custom_table_id' => 1,
+                'title' => 'title3',
+                'lft' => null,
+                'rght' => null,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        $this->CustomEntriesService->setup(1);
+        UserFactory::make([
+            'id' => 2,
+            'name' => 'nghiem',
+            'status' => 1,
+            'method' => 'ALL',
+            'real_name_1' => 'real_name_12',
+            'real_name_2' => 'real_name_22',
+            'nickname' => 'nickname2',
+        ])->persist();
+        UserFactory::make([
+            'id' => 3,
+            'name' => 'nghiem3',
+            'status' => 0,
+            'method' => 'ALL',
+            'real_name_1' => 'real_name_13',
+            'real_name_2' => 'real_name_23',
+            'nickname' => 'nickname3',
+        ])->persist();
+
+        //正常系実行
+        //空のパラメータを入れる
+        $result = $this->CustomEntriesService->getControlSource('', []);
+        $this->assertEquals([], $result);
+        //creator_idのパラメータを入れる
+        $options = ['status' => 1];
+        $result = $this->CustomEntriesService->getControlSource('creator_id', $options);
+        $this->assertCount(2, $result);
+        $this->assertEquals('nickname2', $result[2]);
+        //parent_idのパラメータを入れる
+        $result = $this->CustomEntriesService->getControlSource('parent_id', []);
+        $this->assertCount(2, $result);
 
     }
 
@@ -725,6 +810,61 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getParentTargetList()
     {
+        //準備
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->CustomEntriesService->setup(1);
+        CustomEntryFactory::make([
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => 2,
+                'rght' => 3,
+                'status' => 1,
+                'level' => 1,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 2,
+                'custom_table_id' => 1,
+                'title' => 'title1',
+                'lft' => 3,
+                'rght' => null,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        CustomEntryFactory::make([
+            [
+                'id' => 3,
+                'custom_table_id' => 1,
+                'title' => 'title3',
+                'lft' => null,
+                'rght' => 2,
+                'status' => 1,
+                'parent_id' => 1,
+                'level' => 2,
+            ]
+        ])->persist();
+        //正常系実行
+        $result = $this->CustomEntriesService->getParentTargetList(2);
+        $this->assertCount(1, $result);
+        $this->assertEquals('title1', $result[1]);
 
     }
 

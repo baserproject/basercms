@@ -602,6 +602,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param string $field
      * @return array
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
@@ -622,6 +625,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int|null $selfId
      * @return array
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getParentTargetList($selfId, array $options = [])
     {
