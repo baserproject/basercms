@@ -37,6 +37,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
