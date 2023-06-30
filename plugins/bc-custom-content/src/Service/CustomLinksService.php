@@ -87,8 +87,13 @@ class CustomLinksService implements CustomLinksServiceInterface
             'finder' => 'threaded',
             'status' => null,
             'for' => null,
-            'contain' => ['CustomFields', 'CustomContents' => ['Contents']]],
-            $options);
+            'contain' => [
+                'CustomFields',
+                'CustomTables' => [
+                    'CustomContents' => ['Contents']
+                ]
+            ]
+        ], $options);
 
         $findOptions = [];
         if (!is_null($options['for'])) {
@@ -101,13 +106,13 @@ class CustomLinksService implements CustomLinksServiceInterface
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
 
         if ($options['status'] === 'publish') {
-            $options ['contain'] = ['CustomContents' => ['Contents']];
+            $options ['contain'] = ['CustomTables' => ['CustomContents' => ['Contents']]];
             $fields = $this->CustomLinks->getSchema()->columns();
             $query->select($fields);
             $conditions = array_merge(
                 $conditions,
                 ['CustomLinks.status' => true],
-                $this->CustomLinks->CustomContents->Contents->getConditionAllowPublish()
+                $this->CustomLinks->CustomTables->CustomContents->Contents->getConditionAllowPublish()
             );
         }
 
