@@ -65,6 +65,40 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_createAdminIndexConditions()
     {
+        //正常系実行
+        $param = [
+            'conditions' => [
+                'alt' => 'a'
+            ],
+            'uploader_category_id' => 1,
+            'uploader_type' => 'img',
+            'name' => 'a',
+        ];
+        $result = $this->execPrivateMethod($this->UploaderFilesService, 'createAdminIndexConditions', [$param]);
+        $this->assertIsArray($result);
+        $this->assertEquals('a', $result['alt']);
+        $this->assertEquals(1, $result['UploaderFiles.uploader_category_id']);
+        $this->assertEquals([
+            ['UploaderFiles.name LIKE' => '%.png'],
+            ['UploaderFiles.name LIKE' => '%.jpg'],
+            ['UploaderFiles.name LIKE' => '%.gif']
+        ], $result['or']);
+        $this->assertEquals([
+            'or' => [
+                ['UploaderFiles.name LIKE' => '%a%'],
+                ['UploaderFiles.alt LIKE' => '%a%'],
+            ]
+        ], $result['and']);
+        //uploader_typeを変えるケース
+        $param = [
+            'uploader_type' => 'etc',
+        ];
+        $result = $this->execPrivateMethod($this->UploaderFilesService, 'createAdminIndexConditions', [$param]);
+        $this->assertEquals([
+            ['UploaderFiles.name NOT LIKE' => '%.png'],
+            ['UploaderFiles.name NOT LIKE' => '%.jpg'],
+            ['UploaderFiles.name NOT LIKE' => '%.gif']
+        ], $result['and']);
 
     }
 
