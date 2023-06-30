@@ -104,6 +104,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -117,6 +120,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -129,6 +135,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -137,7 +146,7 @@ class CustomFieldsService implements CustomFieldsServiceInterface
         $customLinksService = $this->getService(CustomLinksServiceInterface::class);
         $entity = $this->get($id, ['contain' => ['CustomLinks']]);
         if ($entity->custom_links) {
-            foreach($entity->custom_links as $field) {
+            foreach ($entity->custom_links as $field) {
                 $customLinksService->delete($field->id);
             }
         }
@@ -148,6 +157,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * カスタムフィールドのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList()
     {
@@ -158,6 +170,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * フィールドタイプのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getFieldTypes(): array
     {
@@ -179,6 +194,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field): array
     {
