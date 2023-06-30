@@ -104,7 +104,7 @@ class CustomLinksServiceTest extends BcTestCase
         ]);
         //カスタムエントリテーブルでrecruit_categoryフィルドを生成
         $dataBaseService->addColumn('custom_entry_1_recruit_category', 'recruit_category', 'integer');
-        //APIを呼ぶ
+        //サービスメソッドを呼ぶ
         $result = $this->CustomLinksService->delete(1);
         //戻る値を確認
         $this->assertTrue($result);
