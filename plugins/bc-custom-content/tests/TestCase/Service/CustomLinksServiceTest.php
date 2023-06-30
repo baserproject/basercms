@@ -176,6 +176,21 @@ class CustomLinksServiceTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    public function test_getControlSource()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //$field === 'parent_id'の場合、
+        $rs = $this->CustomLinksService->getControlSource('parent_id', ['tableId' => 1]);
+        //戻る値を確認
+        $this->assertEquals('この仕事の特徴', $rs[2]);
+
+        //$field !== 'parent_id'の場合、
+        $rs = $this->CustomLinksService->getControlSource('test', ['tableId' => 1]);
+        //戻る値を確認
+        $this->assertEquals([], $rs);
+    }
+
     /**
      * test getList
      */
