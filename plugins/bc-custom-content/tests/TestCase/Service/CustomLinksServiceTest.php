@@ -176,6 +176,9 @@ class CustomLinksServiceTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test getControlSource
+     */
     public function test_getControlSource()
     {
         //データを生成
