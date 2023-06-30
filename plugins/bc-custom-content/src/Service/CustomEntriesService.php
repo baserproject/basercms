@@ -602,6 +602,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param string $field
      * @return array
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
@@ -622,6 +625,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int|null $selfId
      * @return array
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getParentTargetList($selfId, array $options = [])
     {
@@ -650,6 +656,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param EntityInterface $entity
      * @return bool
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function isAllowPublish(EntityInterface $entity)
     {
@@ -670,6 +679,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @param EntityInterface $entity
      * @param bool $full
      * @return string
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function getUrl(Content $content, EntityInterface $entity, bool $full = true)
     {
@@ -693,6 +705,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return array $data
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function autoConvert(array $data): array
     {
@@ -718,6 +731,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $id
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function moveUp(int $id)
     {
@@ -729,6 +745,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param int $id
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function moveDown(int $id)
     {

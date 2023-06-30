@@ -102,7 +102,6 @@ class CreateReleaseCommand extends Command
         $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
         $data = preg_replace($regex, $replace, $data);
         $file->write($data);
-        unlink($packagePath . 'composer.lock');
     }
 
     /**
@@ -115,7 +114,7 @@ class CreateReleaseCommand extends Command
         $tmp = TMP;
         $repository = Configure::read('BcApp.repositoryUrl');
         exec("cd {$tmp}; git clone {$repository} basercms");
-        exec("cd {$packagePath}; git checktout {$branch}");
+        exec("cd {$packagePath}; git checkout {$branch}");
     }
 
     /**

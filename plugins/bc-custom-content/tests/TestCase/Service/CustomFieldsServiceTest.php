@@ -11,9 +11,11 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -176,7 +178,33 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $dataBaseService->addColumn('custom_entry_1_recruit', 'recruit_category', 'text');
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //カラムrecruit_categoryが削除されたか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit', 'recruit_category'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+        //削除したカスタムフィールドが存在しないか確認すること
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomFieldsService->get(1);
     }
 
     /**
@@ -184,7 +212,13 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getList();
+        //戻る値を確認
+        $this->assertEquals('求人分類', $rs[1]);
+        $this->assertEquals('この仕事の特徴', $rs[2]);
     }
 
     /**
@@ -192,7 +226,37 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getFieldTypes()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //対象メソッドをコール
+        $rs = $this->CustomFieldsService->getFieldTypes();
+        //戻る値を確認
+        $this->assertEquals($rs['基本'], [
+            'BcCcEmail' => 'Eメール',
+            'BcCcHidden' => '隠しフィールド',
+            'BcCcPassword' => 'パスワード',
+            'BcCcTel' => '電話番号',
+            'BcCcText' => 'テキスト',
+            'BcCcTextarea' => 'テキストエリア',
+        ]);
+        $this->assertEquals($rs['日付'], [
+            'BcCcDate' => '日付（年月日）',
+            'BcCcDateTime' => '日付（年月日時間）',
+        ]);
+        $this->assertEquals($rs['選択'], [
+            'BcCcCheckbox' => 'チェックボックス',
+            'BcCcMultiple' => 'マルチチェックボックス',
+            'BcCcPref' => '都道府県リスト',
+            'BcCcRadio' => 'ラジオボタン',
+            'BcCcRelated' => '関連データ',
+            'BcCcSelect' => 'セレクトボックス',
+        ]);
+        $this->assertEquals($rs['コンテンツ'], [
+            'BcCcFile' => 'ファイル',
+            'BcCcWysiwyg' => 'Wysiwyg エディタ',
+        ]);
+        $this->assertEquals($rs['その他'], [
+            'group' => 'グループ',
+            'BcCcAutoZip' => '自動補完郵便番号',
+        ]);
     }
 
     /**
@@ -200,6 +264,37 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$field == 'field_type'
+        $rs = $this->CustomFieldsService->getControlSource('field_type');
+        $this->assertArrayHasKey('基本', $rs);
+        $this->assertArrayHasKey('日付', $rs);
+        $this->assertArrayHasKey('選択', $rs);
+        $this->assertArrayHasKey('コンテンツ', $rs);
+        $this->assertArrayHasKey('その他', $rs);
+
+        //$field == 'validate'
+        $rs = $this->CustomFieldsService->getControlSource('validate');
+        $this->assertEquals($rs, [
+            'EMAIL' => 'Eメール形式チェック',
+            'EMAIL_CONFIRM' => 'Eメール比較チェック',
+            'NUMBER' => '数値チェック',
+            'HANKAKU' => '半角英数チェック',
+            'ZENKAKU_KATAKANA' => '全角カタカナチェック',
+            'ZENKAKU_HIRAGANA' => '全角ひらがなチェック',
+            'DATETIME' => '日付チェック',
+            'MAX_FILE_SIZE' => 'ファイルアップロードサイズ制限',
+            'FILE_EXT' => 'ファイル拡張子チェック'
+        ]);
+
+        //$field == 'validate'
+        $rs = $this->CustomFieldsService->getControlSource('auto_convert');
+        $this->assertEquals($rs, [
+            'CONVERT_HANKAKU' => '半角変換',
+            'CONVERT_ZENKAKU' => '全角変換'
+        ]);
+
+        //$field == 'other'
+        $rs = $this->CustomFieldsService->getControlSource('other');
+        $this->assertEquals($rs, []);
     }
 }

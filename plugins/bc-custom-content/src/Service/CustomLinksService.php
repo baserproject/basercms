@@ -35,6 +35,9 @@ class CustomLinksService implements CustomLinksServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -47,6 +50,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param int $id
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, array $options = [])
     {
