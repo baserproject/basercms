@@ -209,7 +209,8 @@ class CustomLinksServiceTest extends BcTestCase
             'display_field' => 'title',
             'has_child' => 0
         ]);
-        //カスタムエントリテーブルでrecruit_categoryフィルドを生成
+        //カスタムエントリテーブルでfeatureフィルドを生成
+        //フィルドが削除される予定
         $dataBaseService->addColumn('custom_entry_1_recruit_category', 'feature', 'integer');
         //対象メソッドを呼ぶ
         $this->CustomLinksService->deleteFields(1, [$this->CustomLinksService->get(1)]);
