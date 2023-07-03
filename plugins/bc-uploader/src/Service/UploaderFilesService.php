@@ -147,6 +147,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
