@@ -188,4 +188,34 @@ class CustomLinksServiceTest extends BcTestCase
         $this->assertEquals('この仕事の特徴', $result[2]);
     }
 
+    /**
+     *test deleteFields
+     */
+    public function test_deleteFields()
+    {
+        //サービス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //カスタムエントリテーブルでrecruit_categoryフィルドを生成
+        $dataBaseService->addColumn('custom_entry_1_recruit_category', 'feature', 'integer');
+        //対象メソッドを呼ぶ
+        $this->CustomLinksService->deleteFields(1, [$this->CustomLinksService->get(1)]);
+        //custom_entry_1_recruit_categoryテーブルにfeatureが存在しないか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit_category', 'feature'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+    }
 }
