@@ -16,6 +16,7 @@ use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use BcUploader\Test\Factory\UploaderFileFactory;
 
 /**
  * UploadFilesServiceTest
@@ -89,7 +90,29 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
+        //準備
+        //フィクチャーからデーターを生成: UploaderCategory
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        //正常系実行
+        $this->assertTrue($this->UploaderFilesService->delete(1));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->UploaderFilesService->get(1);
 
+    }
+
+    /**
+     * test delete not found
+     */
+    public function test_delete_not_found()
+    {
+        //準備
+        //フィクチャーからデーターを生成: UploaderCategory
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        //正常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->UploaderFilesService->delete(100);
     }
 
     /**
