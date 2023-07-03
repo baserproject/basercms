@@ -252,6 +252,10 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @param array $customLinks
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateFields(int $tableId, array $customLinks)
     {

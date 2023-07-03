@@ -124,6 +124,48 @@ class CustomLinksServiceTest extends BcTestCase
     }
 
     /**
+     * test updateFields
+     */
+    public function test_updateFields()
+    {
+        //サービス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //カスタムエントリテーブルでfeatureフィルドを生成
+        $dataBaseService->addColumn('custom_entry_1_recruit_category', 'feature', 'integer');
+        //カスタムリンクがlft / rght を変更する。
+        $data = $this->CustomLinksService->get(1);
+        $data->lft = 1;
+        $data->rght = 4;
+        $this->CustomLinksService->update($data, $data->toArray());
+
+        //対象メソッドを呼ぶ
+        $this->CustomLinksService->updateFields(1, [$this->CustomLinksService->get(1)]);
+        //custom_entry_1_recruit_categoryテーブルにfeatureが存在しないか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit_category', 'feature'));
+
+        //lft / rght を最新にするかどうか確認すること
+        $newLink = $this->CustomLinksService->get(1);
+        $this->assertEquals(1, $newLink->lft);
+        $this->assertEquals(2, $newLink->rght);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+    }
+
+    /**
      * test getNew
      */
     public function test_getNew()
