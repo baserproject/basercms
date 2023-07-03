@@ -11,11 +11,13 @@
 
 namespace BcUploader\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
 
 /**
  * UploadFilesServiceTest
@@ -73,6 +75,32 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
+        //準備
+        //フィクチャーからデーターを生成: UploaderCategory
+        UploaderCategoryFactory::make(['id' => 1, 'name' => 'blog'])->persist();
+        UploaderCategoryFactory::make(['id' => 2, 'name' => 'contact'])->persist();
+        UploaderCategoryFactory::make(['id' => 3, 'name' => 'service'])->persist();
+        //フィクチャーからデーターを生成: User
+        UserFactory::make(['id' => 1, 'name' => 'test user1', 'nickname' => 'Nghiem1'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'test user2', 'nickname' => 'Nghiem2'])->persist();
+        UserFactory::make(['id' => 3, 'name' => 'test user3', 'nickname' => 'Nghiem3'])->persist();
+
+        //正常系実行: user_idパラメータを入れる
+        $result = $this->UploaderFilesService->getControlSource('user_id');
+        $this->assertIsArray($result);
+        $this->assertCount(3, $result);
+        $this->assertEquals('Nghiem1', $result[1]);
+        //正常系実行: uploader_category_idパラメータを入れる
+        $result = $this->UploaderFilesService->getControlSource('uploader_category_id');
+        $this->assertCount(3, $result);
+        $this->assertEquals('contact', $result[2]);
+        //正常系実行: パラメータなし
+        $result = $this->UploaderFilesService->getControlSource();
+        $this->assertFalse($result);
+
+        //異常系実行
+        $result = $this->UploaderFilesService->getControlSource('test');
+        $this->assertFalse($result);
 
     }
 
