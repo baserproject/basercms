@@ -108,8 +108,8 @@ class UploadFilesServiceTest extends BcTestCase
     {
         //準備
         //フィクチャーからデーターを生成: UploaderCategory
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 10, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 20, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
         //正常系実行
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->UploaderFilesService->delete(100);
