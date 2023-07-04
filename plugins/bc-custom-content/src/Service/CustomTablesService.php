@@ -82,6 +82,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $tableId
      * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function hasCustomContent(int $tableId)
     {
