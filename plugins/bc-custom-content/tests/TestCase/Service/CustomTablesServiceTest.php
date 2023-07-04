@@ -11,10 +11,12 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -93,7 +95,31 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //テスト対象メソッドをコール
+        $rs = $this->CustomTablesService->get(1);
+        //戻る値を確認
+        $this->assertEquals('contact', $rs->type);
+        $this->assertEquals('contact', $rs->name);
+        $this->assertEquals('お問い合わせタイトル', $rs->title);
+        $this->assertEquals('お問い合わせ', $rs->display_field);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //異常系をテスト
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomTablesService->get(111);
     }
 
     /**
