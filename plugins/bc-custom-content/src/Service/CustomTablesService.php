@@ -63,6 +63,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $id
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, $options = [])
     {
