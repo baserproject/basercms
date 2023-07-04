@@ -36,6 +36,9 @@ class CustomTablesService implements CustomTablesServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
