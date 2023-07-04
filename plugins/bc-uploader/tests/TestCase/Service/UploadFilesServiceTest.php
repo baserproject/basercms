@@ -11,6 +11,7 @@
 
 namespace BcUploader\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -20,7 +21,9 @@ use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use Cake\Filesystem\File;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
 use Laminas\Diactoros\UploadedFile;
@@ -123,26 +126,22 @@ class UploadFilesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create()
+    public function test_create1()
     {
         //準備
-        $imgPath = TMP;
-        $testFile = $imgPath . 'tmp.png';
-        $this->setUploadFileToRequest('backup', $testFile);
-        new UploadedFile(
-            $testFile,
-            100,
-            UPLOAD_ERR_OK,
-            'tmp.png',
-            BcUtil::getContentType($testFile)
-        );
+        $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
+        $settings = $uploaderFilesTable->getSettings();
+        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'tmp.txt';
+        $File = new File($savePath);
+        $File->write("hello");
+        $File->close();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $postData = [
             'file' => [
-                'name' => 'test.png',
-                'tmp_name' => 'tmp.png',
-                'type' => 'img',
+                'name' => 'test.txt',
+                'tmp_name' => $savePath,
+                'type' => 'etc',
                 'size' => 100,
             ],
             'publish_begin' => FrozenTime::yesterday(),
@@ -151,8 +150,11 @@ class UploadFilesServiceTest extends BcTestCase
         //正常系実行
         $result = $this->UploaderFilesService->create($postData);
         $this->assertEquals(1, $result->id);
-        $this->assertEquals('test.png', $result->file['name']);
+        $this->assertEquals('test.txt', $result->file['name']);
         //異常系実行
+        $this->expectException(BcException::class);
+        $this->UploaderFilesService->create([]);
+
 
     }
 
