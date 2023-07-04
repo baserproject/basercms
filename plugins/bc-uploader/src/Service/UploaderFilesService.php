@@ -127,6 +127,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return array|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null, $options = [])
     {
