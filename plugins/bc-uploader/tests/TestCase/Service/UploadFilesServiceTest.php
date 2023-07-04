@@ -72,7 +72,7 @@ class UploadFilesServiceTest extends BcTestCase
         //正常系実行: nameパラメータを入れる
         $result = $this->UploaderFilesService->getIndex(['name' => 'a'])->all();
         $this->assertCount(2, $result);
-        //正常系実行: nameパラメータを入れる
+        //正常系実行: uploader_typeパラメータを入れる
         $result = $this->UploaderFilesService->getIndex(['uploader_type' => 'img'])->all();
         $this->assertCount(2, $result);
 
