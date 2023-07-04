@@ -83,6 +83,44 @@ class CustomLinksServiceTest extends BcTestCase
     }
 
     /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        //サービス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //カスタムエントリテーブルでrecruit_categoryフィルドを生成
+        $dataBaseService->addColumn('custom_entry_1_recruit_category', 'recruit_category', 'integer');
+        //サービスメソッドを呼ぶ
+        $result = $this->CustomLinksService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($result);
+        //custom_entry_1_recruit_categoryテーブルにrecruit_categoryが存在しないか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit_category', 'recruit_category'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+
+        //存在しないカスタムリンクを削除
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_links"');
+        $this->CustomLinksService->delete(1);
+    }
+
+    /**
      * test getIndex
      */
     public function test_getIndex()
