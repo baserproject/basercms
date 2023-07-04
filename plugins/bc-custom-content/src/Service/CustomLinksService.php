@@ -198,6 +198,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, $options = []): array
     {
