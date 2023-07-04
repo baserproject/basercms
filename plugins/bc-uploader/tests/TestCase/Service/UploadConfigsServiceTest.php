@@ -81,9 +81,9 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        //€”õ
+        //æº–å‚™
         $this->loadFixtureScenario(UploaderFilesScenario::class);
-        //³íŒnŽÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
         $postData = [
             'large_width' => 600
         ];
