@@ -12,11 +12,13 @@
 namespace BcCustomContent\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -45,11 +47,16 @@ class CustomTablesServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BcCustomContent.Factory/CustomFields',
-        'plugin.BcCustomContent.Factory/CustomLinks',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomTables',
         'plugin.BcCustomContent.Factory/CustomContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BcCustomContent.Factory/CustomFields',
+        'plugin.BcCustomContent.Factory/CustomLinks',
     ];
 
     /**
@@ -168,7 +175,36 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getWithContentAndLinks()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->getWithContentAndLinks(1);
+
+        //戻る値を確認
+        $this->assertEquals('recruit_categories', $rs->name);
+        $this->assertEquals(1, $rs->custom_content->custom_table_id);
+        $this->assertEquals(1, $rs->custom_content->content->entity_id);
+        $this->assertEquals(1, $rs->custom_content->content->site->id);
+        $this->assertCount(2, $rs->custom_links);
+        $this->assertEquals('recruit_category', $rs->custom_links[0]->custom_field->name);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
