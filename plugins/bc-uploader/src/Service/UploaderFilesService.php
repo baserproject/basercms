@@ -77,6 +77,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function createAdminIndexConditions(array $params)
     {
@@ -148,6 +149,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {

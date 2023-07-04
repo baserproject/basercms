@@ -18,6 +18,7 @@ use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
+use BcUploader\Test\Factory\UploaderFileFactory;
 
 /**
  * UploadFilesServiceTest
@@ -67,6 +68,40 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_createAdminIndexConditions()
     {
+        //正常系実行
+        $param = [
+            'conditions' => [
+                'alt' => 'a'
+            ],
+            'uploader_category_id' => 1,
+            'uploader_type' => 'img',
+            'name' => 'a',
+        ];
+        $result = $this->execPrivateMethod($this->UploaderFilesService, 'createAdminIndexConditions', [$param]);
+        $this->assertIsArray($result);
+        $this->assertEquals('a', $result['alt']);
+        $this->assertEquals(1, $result['UploaderFiles.uploader_category_id']);
+        $this->assertEquals([
+            ['UploaderFiles.name LIKE' => '%.png'],
+            ['UploaderFiles.name LIKE' => '%.jpg'],
+            ['UploaderFiles.name LIKE' => '%.gif']
+        ], $result['or']);
+        $this->assertEquals([
+            'or' => [
+                ['UploaderFiles.name LIKE' => '%a%'],
+                ['UploaderFiles.alt LIKE' => '%a%'],
+            ]
+        ], $result['and']);
+        //uploader_typeを変えるケース
+        $param = [
+            'uploader_type' => 'etc',
+        ];
+        $result = $this->execPrivateMethod($this->UploaderFilesService, 'createAdminIndexConditions', [$param]);
+        $this->assertEquals([
+            ['UploaderFiles.name NOT LIKE' => '%.png'],
+            ['UploaderFiles.name NOT LIKE' => '%.jpg'],
+            ['UploaderFiles.name NOT LIKE' => '%.gif']
+        ], $result['and']);
 
     }
 
@@ -109,6 +144,16 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_get()
     {
+        //準備
+        //フィクチャーからデーターを生成: UploaderCategory
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        //正常系実行
+        $result = $this->UploaderFilesService->get(1);
+        $this->assertEquals('social_new.jpg', $result->name);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->UploaderFilesService->get(100);
 
     }
 
