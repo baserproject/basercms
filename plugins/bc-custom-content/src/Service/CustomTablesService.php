@@ -141,6 +141,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param array $queryParams
      * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams)
     {
