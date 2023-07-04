@@ -374,10 +374,14 @@ class CustomLinksServiceTest extends BcTestCase
         //カスタムエントリテーブルでfeatureフィルドを生成
         //フィルドが削除される予定
         $dataBaseService->addColumn('custom_entry_1_recruit_category', 'feature', 'integer');
+        // //カスタムエントリテーブルでrecruit_categoryフィルドを生成、フィルドが削除しない予定
+        $dataBaseService->addColumn('custom_entry_1_recruit_category', 'recruit_category', 'integer');
         //対象メソッドを呼ぶ
         $this->CustomLinksService->deleteFields(1, [$this->CustomLinksService->get(1)]);
         //custom_entry_1_recruit_categoryテーブルにfeatureが存在しないか確認すること
         $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit_category', 'feature'));
+        //custom_entry_1_recruit_categoryテーブルにrecruit_category が存在するか確認すること
+        $this->assertTrue($dataBaseService->columnExists('custom_entry_1_recruit_category', 'recruit_category'));
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_category');
     }
