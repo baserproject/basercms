@@ -86,7 +86,27 @@ class CustomLinksServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //APIを呼ぶ
+        $rs = $this->CustomLinksService->getIndex(1, ['status' => 'publish'])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('この仕事の特徴', $rs[0]['title']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
