@@ -56,7 +56,7 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        //³íŒnŽÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
         $result = $this->UploaderConfigsService->get();
         $this->assertInstanceOf(UploaderConfig::class, $result);
 
