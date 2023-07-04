@@ -215,6 +215,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getGroupList(int $tableId)
     {

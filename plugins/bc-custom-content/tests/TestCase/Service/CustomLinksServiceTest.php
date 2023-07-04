@@ -145,11 +145,16 @@ class CustomLinksServiceTest extends BcTestCase
     }
 
     /**
-     * test getNew
+     * test getGroupList
      */
-    public function test_getNew()
+    public function test_getGroupList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //サービスメソッドを呼ぶ
+        $rs = $this->CustomLinksService->getGroupList(1);
+        //戻る値を確認
+        $this->assertEquals('この仕事の特徴', $rs[2]);
     }
 
     /**
