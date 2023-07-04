@@ -19,6 +19,7 @@ use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -90,7 +91,11 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テスト対象メソッドをコール
+        $rs = $this->CustomTablesService->getNew();
+        //戻る値を確認
+        $this->assertEquals(1, $rs->type);
+        $this->assertEquals('title', $rs->display_field);
     }
 
     /**
@@ -98,7 +103,31 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //テスト対象メソッドをコール
+        $rs = $this->CustomTablesService->get(1);
+        //戻る値を確認
+        $this->assertEquals('contact', $rs->type);
+        $this->assertEquals('contact', $rs->name);
+        $this->assertEquals('お問い合わせタイトル', $rs->title);
+        $this->assertEquals('お問い合わせ', $rs->display_field);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //異常系をテスト
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomTablesService->get(111);
     }
 
     /**
@@ -106,7 +135,39 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_hasCustomContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $customTable->create([
+            'id' => 3,
+            'name' => 'recruit_category_false',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //Trueを返すのユニットテスト
+        $rs = $this->CustomTablesService->hasCustomContent(1);
+        $this->assertTrue($rs);
+
+        //Falseを返すのユニットテスト
+        $rs = $this->CustomTablesService->hasCustomContent(3);
+        $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+        $dataBaseService->dropTable('custom_entry_3_recruit_category_false');
     }
 
     /**
