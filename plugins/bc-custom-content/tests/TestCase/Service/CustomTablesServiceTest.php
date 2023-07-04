@@ -81,7 +81,11 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テスト対象メソッドをコール
+        $rs = $this->CustomTablesService->getNew();
+        //戻る値を確認
+        $this->assertEquals(1, $rs->type);
+        $this->assertEquals('title', $rs->display_field);
     }
 
     /**

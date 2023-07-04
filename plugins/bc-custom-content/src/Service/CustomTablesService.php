@@ -49,6 +49,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムテーブルの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
