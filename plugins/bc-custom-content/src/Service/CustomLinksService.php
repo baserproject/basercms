@@ -168,6 +168,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
