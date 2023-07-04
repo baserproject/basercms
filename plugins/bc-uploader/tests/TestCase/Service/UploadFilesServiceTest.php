@@ -59,9 +59,9 @@ class UploadFilesServiceTest extends BcTestCase
     public function test_getIndex()
     {
         //準備
-        UploaderFileFactory::make(['id' => 1, 'name' => '2_a1.jpg', 'atl' => '2_1.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 2, 'name' => '2_a2.png', 'atl' => '2_2.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 3, 'name' => '2_3.txt', 'atl' => '2_3.txt', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 1, 'name' => '2_a1.jpg', 'alt' => '2_1.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => '2_a2.png', 'alt' => '2_2.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 3, 'name' => '2_3.txt', 'alt' => '2_3.txt', 'user_id' => 1])->persist();
 
         //正常系実行: パラメータなしで
         $result = $this->UploaderFilesService->getIndex([])->all();
