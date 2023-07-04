@@ -186,6 +186,12 @@ class UsersTable extends AppTable
             ->requirePresence('email', 'create', __d('baser_core', 'Eメールを入力してください。'))
             ->scalar('email')
             ->email('email', true, __d('baser_core', 'Eメールの形式が不正です。'))
+            ->add('email', [
+                'halfText' => [
+                    'rule' => 'halfText',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'Eメールは半角で入力してください。')
+                ]])
             ->maxLength('email', 255, __d('baser_core', 'Eメールは255文字以内で入力してください。'))
             ->notEmptyString('email', __d('baser_core', 'Eメールを入力してください。'))
             ->add('email', [
