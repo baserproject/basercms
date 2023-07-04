@@ -51,7 +51,7 @@ class CustomContentsScenario implements FixtureScenarioInterface
 
         CustomContentFactory::make([
             'id' => 2,
-            'custom_table_id' => 1,
+            'custom_table_id' => 2,
             'description' => '求人',
             'template' => 'template_2',
         ])->persist();
