@@ -52,6 +52,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
