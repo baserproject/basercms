@@ -12,13 +12,16 @@
 namespace BcUploader\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * UploadFilesServiceTest
@@ -26,6 +29,25 @@ use BcUploader\Test\Factory\UploaderFileFactory;
  */
 class UploadFilesServiceTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Factory/Permissions',
+        'plugin.BaserCore.Factory/PermissionGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+    ];
 
     /**
      * set up
@@ -178,6 +200,24 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_update()
     {
+        //準備
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        $entity = $this->UploaderFilesService->get(1);
+        $postData = [
+            'name' => 'test.jpg',
+        ];
+        //正常系実行
+        $entity = $this->UploaderFilesService->update($entity, $postData);
+        $this->assertEquals('test.jpg', $entity->name);
+        //異常系実行
+//        $postData=[
+//            'user_id'=>22,
+//        ];
+//        $entity = $this->UploaderFilesService->update($entity, $postData);
+
 
     }
 
