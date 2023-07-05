@@ -20,6 +20,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -212,7 +213,38 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getWithLinks()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->getWithLinks(1);
+
+        //戻る値を確認
+        $this->assertEquals('recruit_categories', $rs->name);
+
+        //カスタムリンクが存在するかどうか確認する事
+        $this->assertCount(2, $rs->custom_links);
+        $this->assertEquals('recruit_category', $rs->custom_links[0]->custom_field->name);
+
+        //カスタムコンテンツが存在しないかどうか確認する事
+        $this->assertArrayNotHasKey('custom_content', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
@@ -220,7 +252,35 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'test_1',
+            'title' => '求人情報 1',
+            'type' => '1',
+            'display_field' => 'title 1',
+            'has_child' => 0
+        ]);
+        $customTable->create([
+            'id' => 2,
+            'name' => 'test_2',
+            'title' => '求人情報 2',
+            'type' => '1',
+            'display_field' => 'title 2',
+            'has_child' => 0
+        ]);
+
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('test_1', $rs[0]->name);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_test_1');
+        $dataBaseService->dropTable('custom_entry_2_test_2');
     }
 
     /**
@@ -228,7 +288,34 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->create($data);
+        //戻る値を確認
+        $this->assertEquals('contact', $rs->name);
+
+        //自動テーブルが生成できるか確認すること
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //エラーを発生した時のテスト
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'お問い合わせタイトル',
+        ];
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->CustomTablesService->create($data);
     }
 
     /**

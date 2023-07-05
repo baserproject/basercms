@@ -52,6 +52,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
@@ -163,6 +164,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
@@ -212,6 +214,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {

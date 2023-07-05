@@ -46,6 +46,7 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      * @return UploaderConfig|\Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get()
     {
@@ -66,6 +67,7 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCache()
     {

@@ -124,6 +124,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $tableId
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getWithLinks(int $tableId)
     {
@@ -141,6 +145,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param array $queryParams
      * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams)
     {
@@ -159,6 +166,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
