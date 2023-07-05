@@ -94,6 +94,9 @@ class UploadConfigsServiceTest extends BcTestCase
         ];
         $result = $this->UploaderConfigsService->update($postData);
         $this->assertEquals(600, $result->large_width);
+        //アップデート後の確認
+        $rs = $UploaderConfigs->find()->where(['name' => 'large_width'])->first();
+        $this->assertEquals(600, $rs->value);
 
     }
 
