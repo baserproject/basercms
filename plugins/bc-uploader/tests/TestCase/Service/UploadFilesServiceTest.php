@@ -266,7 +266,7 @@ class UploadFilesServiceTest extends BcTestCase
         $this->loginAdmin($this->getRequest());
         //正常系実行
         $result = $this->UploaderFilesService->getNew();
-        $this->assertEquals(BcUtil::loginUser()->id, $result->user_id);
+        $this->assertEquals(1, $result->user_id);
 
     }
 
