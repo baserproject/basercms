@@ -49,6 +49,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムテーブルの初期値となるエンティティを取得する
      *
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -63,6 +67,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $id
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id, $options = [])
     {
@@ -74,6 +82,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $tableId
      * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function hasCustomContent(int $tableId)
     {
@@ -88,6 +100,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $tableId
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getWithContentAndLinks(int $tableId)
     {
