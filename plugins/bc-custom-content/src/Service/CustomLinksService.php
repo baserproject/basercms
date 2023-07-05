@@ -77,6 +77,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param int $tableId
      * @param array $options
      * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(int $tableId, array $options = [])
     {
@@ -103,7 +106,7 @@ class CustomLinksService implements CustomLinksServiceInterface
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
 
         if ($options['status'] === 'publish') {
-            $options ['contain'] = ['CustomContents' => ['Contents']];
+            $options ['contain'] = ['CustomTables' => ['CustomContents' => ['Contents']]];
             $fields = $this->CustomLinks->getSchema()->columns();
             $query->select($fields);
             $conditions = array_merge(
@@ -165,6 +168,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -192,6 +198,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param string $field
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, $options = []): array
     {
@@ -206,6 +215,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getGroupList(int $tableId)
     {
@@ -228,6 +240,7 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
@@ -252,6 +265,10 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @param array $customLinks
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateFields(int $tableId, array $customLinks)
     {
@@ -266,6 +283,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @param array $customLinks 存在対象のフィールド
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteFields(int $tableId, array $customLinks)
     {
