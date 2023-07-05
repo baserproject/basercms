@@ -199,7 +199,7 @@ class UploadFilesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create1()
+    public function test_create()
     {
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
