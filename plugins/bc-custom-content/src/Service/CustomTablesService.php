@@ -124,6 +124,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $tableId
      * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getWithLinks(int $tableId)
     {
