@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
@@ -194,6 +195,10 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
+        //準備
+        //正常系実行
+        $result = $this->UploaderFilesService->getNew();
+        $this->assertEquals(BcUtil::loginUser()->id, $result->user_id);
 
     }
 
