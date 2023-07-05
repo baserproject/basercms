@@ -11,17 +11,26 @@
 
 namespace BcUploader\Test\TestCase\Service;
 
-use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Error\BcException;
+use BaserCore\Service\DblogsService;
+use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use Cake\Filesystem\File;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Composer\Package\Archiver\ZipArchiver;
+use Laminas\Diactoros\UploadedFile;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
-use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * UploadFilesServiceTest
@@ -29,6 +38,7 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
  */
 class UploadFilesServiceTest extends BcTestCase
 {
+
     /**
      * Trait
      */
@@ -192,6 +202,41 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_create()
     {
+        //準備
+        $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
+        $settings = $uploaderFilesTable->getSettings();
+        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'test.txt';
+        $tmpPath = TMP . 'tmp.txt';
+        $File = new File($tmpPath);
+        $File->write("hello");
+        $File->close();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        $postData = [
+            'file' => [
+                'name' => 'test.txt',
+                'tmp_name' => $tmpPath,
+                'type' => 'etc',
+                'size' => 100,
+            ],
+            'publish_begin' => FrozenTime::yesterday(),
+            'publish_end' => FrozenTime::tomorrow(),
+        ];
+        //正常系実行
+        $result = $this->UploaderFilesService->create($postData);
+        $this->assertEquals(1, $result->id);
+        $this->assertEquals('test.txt', $result->file['name']);
+        //レコードは保存されたのを確認
+        $rs = $this->UploaderFilesService->get(1);
+        $this->assertEquals(1, $rs->id);
+        //フィルは作成されたのを確認
+        $this->assertFileExists($savePath);
+        //ファイル削除
+        unlink($savePath);
+        //異常系実行
+        $this->expectException(BcException::class);
+        $this->UploaderFilesService->create([]);
+
 
     }
 

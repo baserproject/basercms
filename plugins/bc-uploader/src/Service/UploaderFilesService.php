@@ -180,6 +180,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
