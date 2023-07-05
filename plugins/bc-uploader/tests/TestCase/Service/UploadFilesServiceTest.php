@@ -262,6 +262,8 @@ class UploadFilesServiceTest extends BcTestCase
     public function test_getNew()
     {
         //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         //正常系実行
         $result = $this->UploaderFilesService->getNew();
         $this->assertEquals(BcUtil::loginUser()->id, $result->user_id);
