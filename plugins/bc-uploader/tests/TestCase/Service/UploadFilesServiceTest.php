@@ -224,8 +224,10 @@ class UploadFilesServiceTest extends BcTestCase
         $result = $this->UploaderFilesService->create($postData);
         $this->assertEquals(1, $result->id);
         $this->assertEquals('test.txt', $result->file['name']);
+        //レコードは保存されたのを確認
         $rs = $this->UploaderFilesService->get(1);
         $this->assertEquals(1, $rs->id);
+        //フィルは作成されたのを確認
         $this->assertFileExists($savePath . 'test.txt');
         //ファイル削除
         unlink($savePath . 'test.txt');
