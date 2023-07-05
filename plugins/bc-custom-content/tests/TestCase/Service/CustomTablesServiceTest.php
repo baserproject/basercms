@@ -251,7 +251,35 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //カスタムテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'test_1',
+            'title' => '求人情報 1',
+            'type' => '1',
+            'display_field' => 'title 1',
+            'has_child' => 0
+        ]);
+        $customTable->create([
+            'id' => 2,
+            'name' => 'test_2',
+            'title' => '求人情報 2',
+            'type' => '1',
+            'display_field' => 'title 2',
+            'has_child' => 0
+        ]);
+
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('test_1', $rs[0]->name);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_test_1');
+        $dataBaseService->dropTable('custom_entry_2_test_2');
     }
 
     /**
