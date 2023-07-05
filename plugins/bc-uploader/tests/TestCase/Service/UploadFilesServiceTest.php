@@ -23,6 +23,7 @@ use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 use Cake\Filesystem\File;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
@@ -248,7 +249,6 @@ class UploadFilesServiceTest extends BcTestCase
         //準備
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loginAdmin($this->getRequest());
         UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
         $entity = $this->UploaderFilesService->get(1);
         $postData = [
@@ -258,10 +258,12 @@ class UploadFilesServiceTest extends BcTestCase
         $entity = $this->UploaderFilesService->update($entity, $postData);
         $this->assertEquals('test.jpg', $entity->name);
         //異常系実行
-//        $postData=[
-//            'user_id'=>22,
-//        ];
-//        $entity = $this->UploaderFilesService->update($entity, $postData);
+        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => true])->persist();
+        $postData = [
+            'user_id' => 99,
+        ];
+        $this->expectException(BcException::class);
+        $this->UploaderFilesService->update($entity, $postData);
 
 
     }
