@@ -11,6 +11,7 @@
 
 namespace BcUploader\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Table\UploaderFilesTable;
@@ -196,6 +197,7 @@ class UploadFilesServiceTest extends BcTestCase
         $postData = [
             'user_id' => 99
         ];
+        $this->expectException(BcException::class);
         $result = $this->UploaderFilesService->isEditable($postData);
         $this->assertFalse($result);
 
