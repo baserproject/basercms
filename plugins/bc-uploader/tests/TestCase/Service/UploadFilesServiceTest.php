@@ -18,6 +18,7 @@ use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
 
 /**
@@ -186,8 +187,12 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_isEditable()
     {
+        //準備
+        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => true])->persist();
+        //正常系実行
         $result = $this->UploaderFilesService->isEditable([]);
         $this->assertTrue($result);
+        //異常系実行
         $postData = [
             'user_id' => 99
         ];
