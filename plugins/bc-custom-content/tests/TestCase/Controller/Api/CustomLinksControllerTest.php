@@ -104,7 +104,7 @@ class CustomLinksControllerTest extends BcTestCase
             'display_field' => 'お問い合わせ'
         ]);
         //APIを呼ぶ
-        $this->get('/baser/api/bc-custom-content/custom_links/index/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-custom-content/custom_links/index.json?custom_table_id=1&token=' . $this->accessToken);
         //ステータスを確認
         $this->assertResponseOk();
         //戻る値を確認
