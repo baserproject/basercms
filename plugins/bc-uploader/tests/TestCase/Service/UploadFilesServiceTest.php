@@ -199,13 +199,13 @@ class UploadFilesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create()
+    public function test_create1()
     {
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
         $settings = $uploaderFilesTable->getSettings();
-        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'tmp.txt';
-        $File = new File($savePath);
+        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
+        $File = new File($savePath . 'tmp.txt');
         $File->write("hello");
         $File->close();
         $this->loadFixtureScenario(InitAppScenario::class);
@@ -213,7 +213,7 @@ class UploadFilesServiceTest extends BcTestCase
         $postData = [
             'file' => [
                 'name' => 'test.txt',
-                'tmp_name' => $savePath,
+                'tmp_name' => $savePath . 'tmp.txt',
                 'type' => 'etc',
                 'size' => 100,
             ],
@@ -224,8 +224,11 @@ class UploadFilesServiceTest extends BcTestCase
         $result = $this->UploaderFilesService->create($postData);
         $this->assertEquals(1, $result->id);
         $this->assertEquals('test.txt', $result->file['name']);
+        $rs = $this->UploaderFilesService->get(1);
+        $this->assertEquals(1, $rs->id);
+        $this->assertFileExists($savePath . 'test.txt');
         //ファイル削除
-        unlink($savePath);
+        unlink($savePath . 'test.txt');
         //異常系実行
         $this->expectException(BcException::class);
         $this->UploaderFilesService->create([]);
