@@ -12,9 +12,11 @@
 namespace BcUploader\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Model\Entity\UploaderConfig;
 use BcUploader\Model\Table\UploaderConfigsTable;
 use BcUploader\Service\UploaderConfigsService;
 use BcUploader\Service\UploaderConfigsServiceInterface;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 
 /**
  * UploadConfigsServiceTest
@@ -55,6 +57,13 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_get()
     {
+        //準備
+        //データを生成
+        UploaderConfigFactory::make(['name' => 'name_1', 'value' => 'value_1'])->persist();
+        //正常系実行
+        $result = $this->UploaderConfigsService->get();
+        $this->assertInstanceOf(UploaderConfig::class, $result);
+        $this->assertEquals('value_1', $result->name_1);
 
     }
 
