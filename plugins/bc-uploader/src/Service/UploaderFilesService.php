@@ -234,6 +234,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEditable(array $postData)
     {
