@@ -240,7 +240,9 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     public function isEditable(array $postData)
     {
         if(!$this->uploaderConfigsService->get()->use_permission) return true;
+        if(!isset($postData['user_id'])) return false;
         $user = BcUtil::loginUser();
+        if(!$user) return false;
         if (!BcUtil::isAdminUser($user) && $postData['user_id'] !== $user->id) {
             return false;
         }

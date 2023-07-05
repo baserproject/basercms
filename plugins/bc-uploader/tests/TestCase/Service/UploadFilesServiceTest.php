@@ -65,6 +65,7 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->UploaderFilesService = $this->getService(UploaderFilesServiceInterface::class);
     }
@@ -257,16 +258,27 @@ class UploadFilesServiceTest extends BcTestCase
         //準備
         UploaderConfigFactory::make(['name' => 'use_permission', 'value' => true])->persist();
         //正常系実行
+
+        // ログインしていない状態
         $result = $this->UploaderFilesService->isEditable([]);
+        $this->assertFalse($result);
+
+        // ログインしている状態、アップローダーファイルにuser_id が設定されていない
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $result = $this->UploaderFilesService->isEditable([]);
+        $this->assertFalse($result);
+
+        // ログインしている状態、アップローダーファイルにuser_id が設定されている
+        $result = $this->UploaderFilesService->isEditable(['user_id' => 1]);
         $this->assertTrue($result);
+
         //異常系実行
         $postData = [
             'user_id' => 99
         ];
-        $this->expectException(BcException::class);
         $result = $this->UploaderFilesService->isEditable($postData);
         $this->assertFalse($result);
-
     }
 
     /**

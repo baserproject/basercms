@@ -50,10 +50,13 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
     public function get()
     {
         if (!$this->entity) {
-            $this->entity = $this->UploaderConfigs->newEntity(
+            $entity = $this->UploaderConfigs->newEntity(
                 $this->UploaderConfigs->getKeyValue(),
                 ['validate' => 'keyValue']
             );
+            if ($entity->toArray()) {
+                $this->entity = $entity;
+            }
         }
         return $this->entity;
     }
