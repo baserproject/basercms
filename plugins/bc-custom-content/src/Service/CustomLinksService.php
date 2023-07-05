@@ -283,6 +283,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      *
      * @param int $tableId
      * @param array $customLinks 存在対象のフィールド
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteFields(int $tableId, array $customLinks)
     {
