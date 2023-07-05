@@ -12,6 +12,7 @@
 namespace BcUploader\Test\TestCase\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\DblogsService;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\UserFactory;
@@ -199,13 +200,14 @@ class UploadFilesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create()
+    public function test_create1()
     {
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
         $settings = $uploaderFilesTable->getSettings();
-        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
-        $File = new File($savePath . 'tmp.txt');
+        $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'test.txt';
+        $tmpPath = TMP . 'tmp.txt';
+        $File = new File($tmpPath);
         $File->write("hello");
         $File->close();
         $this->loadFixtureScenario(InitAppScenario::class);
@@ -213,7 +215,7 @@ class UploadFilesServiceTest extends BcTestCase
         $postData = [
             'file' => [
                 'name' => 'test.txt',
-                'tmp_name' => $savePath . 'tmp.txt',
+                'tmp_name' => $tmpPath,
                 'type' => 'etc',
                 'size' => 100,
             ],
@@ -228,9 +230,10 @@ class UploadFilesServiceTest extends BcTestCase
         $rs = $this->UploaderFilesService->get(1);
         $this->assertEquals(1, $rs->id);
         //フィルは作成されたのを確認
-        $this->assertFileExists($savePath . 'test.txt');
+        $this->assertFileExists($savePath);
         //ファイル削除
-        unlink($savePath . 'test.txt');
+        unlink($savePath);
+        unlink($tmpPath);
         //異常系実行
         $this->expectException(BcException::class);
         $this->UploaderFilesService->create([]);
