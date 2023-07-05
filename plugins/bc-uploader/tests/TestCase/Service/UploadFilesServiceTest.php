@@ -200,7 +200,7 @@ class UploadFilesServiceTest extends BcTestCase
     /**
      * test create
      */
-    public function test_create1()
+    public function test_create()
     {
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
@@ -233,7 +233,6 @@ class UploadFilesServiceTest extends BcTestCase
         $this->assertFileExists($savePath);
         //ファイル削除
         unlink($savePath);
-        unlink($tmpPath);
         //異常系実行
         $this->expectException(BcException::class);
         $this->UploaderFilesService->create([]);
