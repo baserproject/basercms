@@ -166,6 +166,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {

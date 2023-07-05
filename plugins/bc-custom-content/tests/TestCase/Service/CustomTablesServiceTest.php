@@ -20,6 +20,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -287,7 +288,34 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        //対象メソッドをコール
+        $rs = $this->CustomTablesService->create($data);
+        //戻る値を確認
+        $this->assertEquals('contact', $rs->name);
+
+        //自動テーブルが生成できるか確認すること
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //エラーを発生した時のテスト
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'お問い合わせタイトル',
+        ];
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->CustomTablesService->create($data);
     }
 
     /**
