@@ -80,16 +80,10 @@ class WidgetAreasAdminServiceTest extends BcTestCase
             'plugin' => 'BaserCore',
             'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
         ], $result[0]);
-        // テスト用のプラグインフォルダ作成
-        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
-        $file = new File($pluginPath . DS . 'config.php');
-        $file->write("<?php return ['type' => 'Plugin'];");
-        $file->close();
+        //正常系実行
         Configure::write('BcRequest.isInstalled', true);
-        //
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
+        $this->assertCount(2, $result);
         $this->assertEquals('BcBlog', $result[1]['plugin']);
 
     }
