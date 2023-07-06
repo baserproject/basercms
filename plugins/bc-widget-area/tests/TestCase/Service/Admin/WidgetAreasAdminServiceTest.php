@@ -46,6 +46,14 @@ class WidgetAreasAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
+        $entity = new WidgetArea();
+        $result = $this->WidgetAreasAdminService->getViewVarsForEdit($entity);
+        $this->assertInstanceOf(WidgetArea::class, $result['widgetArea']);
+        $this->assertEquals([
+            'title' => __d('baser_core', 'コアウィジェット'),
+            'plugin' => 'BaserCore',
+            'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
+        ], $result['widgetInfos'][0]);
 
     }
 
