@@ -74,6 +74,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
         //EnablePluginsがないケース
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
         $this->assertIsArray($result);
+        $this->assertCount(1, $result);
         $this->assertEquals([
             'title' => __d('baser_core', 'コアウィジェット'),
             'plugin' => 'BaserCore',
@@ -90,6 +91,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
         //
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
         $this->assertCount(2, $result);
+        $this->assertEquals('', $result[1]['plugin']);
 
     }
 
