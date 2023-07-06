@@ -46,6 +46,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
+        //正常系実行
         $entity = new WidgetArea();
         $result = $this->WidgetAreasAdminService->getViewVarsForEdit($entity);
         $this->assertInstanceOf(WidgetArea::class, $result['widgetArea']);
