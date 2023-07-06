@@ -62,6 +62,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
      * @return array|array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function getWidgetInfos()
     {
