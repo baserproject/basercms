@@ -65,6 +65,7 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomTablesService = $this->getService(CustomTablesServiceInterface::class);
     }
@@ -331,7 +332,28 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        //テストデータを生成
+        $this->CustomTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        //削除メソッドを呼ぶ
+        $rs = $this->CustomTablesService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //カスタムテーブルにレコードが削除できるか確認すること
+        $this->assertCount(0, $this->CustomTablesService->getIndex([]));
+        //テーブル名が存在しないの確認
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //エラーを発生した時をテスト
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomTablesService->delete(1);
     }
 
     /**
