@@ -323,7 +323,32 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        $this->CustomTablesService->create($data);
+        //アップデートメソッドを呼ぶ
+        $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'contact_edit']);
+        //戻る値を確認
+        $this->assertEquals('contact_edit', $rs->name);
+        //テーブル名も変更されたの確認
+        $this->assertTrue($dataBaseService->tableExists('custom_entry_1_contact_edit'));
+        //変更した前テーブル名が存在しないの確認
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact_edit');
+
+        //エラーする時をテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'あああああ']);
     }
 
     /**
