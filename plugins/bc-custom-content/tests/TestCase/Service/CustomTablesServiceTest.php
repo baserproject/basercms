@@ -347,7 +347,36 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //カスタムテーブルを生成
+        $this->CustomTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //$field === 'display_field'の場合、
+        $rs = $this->CustomTablesService->getControlSource('display_field', ['id' => 1]);
+        //戻る値を確認
+        $this->assertEquals($rs['title'], 'タイトル');
+        $this->assertEquals($rs['name'], 'スラッグ');
+        $this->assertEquals($rs['recruit_category'], '求人分類');
+        $this->assertEquals($rs['feature'], 'この仕事の特徴');
+
+        //$field !== 'display_field'の場合、
+        $rs = $this->CustomTablesService->getControlSource('no', ['id' => 1]);
+        //戻る値を確認
+        $this->assertEquals($rs, []);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
