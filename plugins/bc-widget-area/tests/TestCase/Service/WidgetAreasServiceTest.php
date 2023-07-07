@@ -91,6 +91,18 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+
+        //正常系実行: パラメータなし
+        $result = $this->WidgetAreasService->getIndex()->all()->toArray();
+        $this->assertCount(2, $result);
+        $this->assertEquals(2, $result[1]->id);
+
+        //正常系実行: limitパラメータを入れる
+        $result = $this->WidgetAreasService->getIndex(['limit' => 1])->all()->toArray();
+        $this->assertCount(1, $result);
+        $this->assertEquals('標準サイドバー', $result[0]->name);
 
     }
 
