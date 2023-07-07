@@ -306,6 +306,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムコンテンツIDを取得する
      * @param int $id
      * @return false|mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomContentId(int $id)
     {
