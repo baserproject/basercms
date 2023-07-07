@@ -83,6 +83,15 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_get()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->get(1);
+        $this->assertEquals(1, $result->id);
+        $this->assertEquals('ローカルナビゲーション', $result->widgets_array[0]['Widget2']['name']);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->WidgetAreasService->get(99);
 
     }
 

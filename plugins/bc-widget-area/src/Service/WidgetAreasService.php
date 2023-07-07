@@ -42,6 +42,9 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * 単一データ取得
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id)
     {
