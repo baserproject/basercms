@@ -31,6 +31,9 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
