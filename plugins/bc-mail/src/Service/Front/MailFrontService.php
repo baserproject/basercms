@@ -76,7 +76,13 @@ class MailFrontService implements MailFrontServiceInterface
      */
     public function getViewVarsForIndex(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {
+        $error = false;
+        if ($mailMessage->getErrors()) {
+            $error = true;
+        }
+
         return [
+            'error' => $error,
             'freezed' => false,
             'mailContent' => $mailContent,
             'mailFields' => $this->getMailFields($mailContent->id),
@@ -134,17 +140,9 @@ class MailFrontService implements MailFrontServiceInterface
      */
     public function getViewVarsForConfirm(EntityInterface $mailContent, EntityInterface $mailMessage): array
     {
-        if (!$mailMessage->getErrors()) {
-            $freezed = true;
-            $error = false;
-        } else {
-            $freezed = false;
-            $error = true;
-        }
-
         return [
-            'error' => $error,
-            'freezed' => $freezed,
+            'error' => false,
+            'freezed' => true,
             'mailContent' => $mailContent,
             'mailFields' => $this->getMailFields($mailContent->id),
             'mailMessage' => $mailMessage,
