@@ -40,6 +40,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(EntityInterface $widgetArea)
     {

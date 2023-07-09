@@ -50,7 +50,9 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
             'scriptEnd' => ['Html', 'scriptEnd'],
             'meta' => ['Html', 'meta'],
             'setTableToUpload' => ['BcUpload', 'setTable'],
-            'truncateText' => ['Text', 'truncate']
+            'truncateText' => ['Text', 'truncate'],
+            'getCurrentSite' => ['BcContents', 'getCurrentSite'],
+            'getCurrentContent' => ['BcContents', 'getCurrentContent']
         ];
     }
 

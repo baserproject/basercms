@@ -12,10 +12,10 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
-use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -51,17 +51,13 @@ class BcAdminHelper extends Helper
      * ログインユーザーがシステム管理者かチェックする
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためテスト不要
      */
     public function isSystemAdmin()
     {
-        $user = $this->_View->getVar('user');
-        if ($this->request->getParam['prefix'] === 'Admin' || !$user) {
-            return false;
-        }
-        if ($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-            return true;
-        }
-        return false;
+        return BcUtil::isAdminUser();
     }
 
     /**
@@ -518,6 +514,16 @@ class BcAdminHelper extends Helper
     {
         if($this->getView()->getRequest()->getParam('controller') === 'installations') return;
         $this->BcBaser->element('first_access');
+    }
+
+    /**
+     * 管理画面において現在のサイトを取得する
+     * @return false|Site
+     */
+    public function getCurrentSite()
+    {
+        if(!BcUtil::isAdminSystem()) return false;
+        return $this->getView()->getRequest()->getAttribute('currentSite');
     }
 
 }

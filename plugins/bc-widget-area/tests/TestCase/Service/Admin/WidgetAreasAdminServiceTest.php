@@ -63,7 +63,15 @@ class WidgetAreasAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-
+        //正常系実行
+        $entity = new WidgetArea();
+        $result = $this->WidgetAreasAdminService->getViewVarsForEdit($entity);
+        $this->assertInstanceOf(WidgetArea::class, $result['widgetArea']);
+        $this->assertEquals([
+            'title' => __d('baser_core', 'コアウィジェット'),
+            'plugin' => 'BaserCore',
+            'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
+        ], $result['widgetInfos'][0]);
     }
 
     /**
@@ -85,8 +93,6 @@ class WidgetAreasAdminServiceTest extends BcTestCase
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
         $this->assertCount(2, $result);
         $this->assertEquals('BcBlog', $result[1]['plugin']);
-
     }
-
 
 }
