@@ -11,11 +11,16 @@
 
 namespace BcWidgetArea\Test\TestCase\Service\Admin;
 
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BcWidgetArea\Model\Entity\WidgetArea;
 use BcWidgetArea\Service\Admin\WidgetAreasAdminService;
 use BcWidgetArea\Service\Admin\WidgetAreasAdminServiceInterface;
+use Cake\Core\App;
+use Cake\Core\Configure;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 
 /**
  * WidgetAreasAdminServiceTest
@@ -23,6 +28,18 @@ use BcWidgetArea\Service\Admin\WidgetAreasAdminServiceInterface;
  */
 class WidgetAreasAdminServiceTest extends BcTestCase
 {
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.SiteConfigs'
+    ];
 
     /**
      * set up
@@ -55,7 +72,6 @@ class WidgetAreasAdminServiceTest extends BcTestCase
             'plugin' => 'BaserCore',
             'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
         ], $result['widgetInfos'][0]);
-
     }
 
     /**
@@ -63,8 +79,20 @@ class WidgetAreasAdminServiceTest extends BcTestCase
      */
     public function test_getWidgetInfos()
     {
-
+        //EnablePluginsがないケース
+        $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals([
+            'title' => __d('baser_core', 'コアウィジェット'),
+            'plugin' => 'BaserCore',
+            'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
+        ], $result[0]);
+        //正常系実行
+        Configure::write('BcRequest.isInstalled', true);
+        $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
+        $this->assertCount(2, $result);
+        $this->assertEquals('BcBlog', $result[1]['plugin']);
     }
-
 
 }
