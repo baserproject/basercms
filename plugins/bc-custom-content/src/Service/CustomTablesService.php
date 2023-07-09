@@ -286,6 +286,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * @param string $field
      * @param array $options
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
