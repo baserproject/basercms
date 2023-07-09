@@ -384,7 +384,31 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getCustomContentId()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        //カスタムテーブルを生成
+        $this->CustomTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //カスタムコンテンツIDが取得出来る場合。
+        $rs = $this->CustomTablesService->getCustomContentId(1);
+        //戻る値を確認
+        $this->assertEquals(1, $rs);
+
+        //カスタムコンテンツIDが取得できない場合、
+        $rs = $this->CustomTablesService->getCustomContentId(10);
+        //戻る値を確認
+        $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
 }
