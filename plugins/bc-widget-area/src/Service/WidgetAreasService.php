@@ -55,6 +55,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * 一覧データ取得
      * @checked
      * @noTodo
+     * @unitTest
      * @param array $queryParams
      * @return \Cake\ORM\Query
      */
