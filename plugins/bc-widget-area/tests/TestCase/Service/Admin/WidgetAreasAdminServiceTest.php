@@ -12,9 +12,14 @@
 namespace BcWidgetArea\Test\TestCase\Service\Admin;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
+use BcWidgetArea\Model\Entity\WidgetArea;
+use BcWidgetArea\Service\Admin\WidgetAreasAdminService;
+use BcWidgetArea\Service\Admin\WidgetAreasAdminServiceInterface;
 
 /**
  * WidgetAreasAdminServiceTest
+ * @property WidgetAreasAdminService $WidgetAreasAdminService
  */
 class WidgetAreasAdminServiceTest extends BcTestCase
 {
@@ -25,6 +30,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->WidgetAreasAdminService = $this->getService(WidgetAreasAdminServiceInterface::class);
     }
 
     /**
@@ -34,5 +40,31 @@ class WidgetAreasAdminServiceTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test getViewVarsForEdit
+     */
+    public function test_getViewVarsForEdit()
+    {
+        //正常系実行
+        $entity = new WidgetArea();
+        $result = $this->WidgetAreasAdminService->getViewVarsForEdit($entity);
+        $this->assertInstanceOf(WidgetArea::class, $result['widgetArea']);
+        $this->assertEquals([
+            'title' => __d('baser_core', 'コアウィジェット'),
+            'plugin' => 'BaserCore',
+            'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
+        ], $result['widgetInfos'][0]);
+
+    }
+
+    /**
+     * test getWidgetInfos
+     */
+    public function test_getWidgetInfos()
+    {
+
+    }
+
 
 }
