@@ -81,6 +81,7 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      * @return UploaderConfig|\Cake\Datasource\EntityInterface|false
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function update(array $postData)
     {
