@@ -344,13 +344,13 @@ class CustomTablesServiceTest extends BcTestCase
 
         //テストデータを生成
         $this->CustomTablesService->create([
-            'type' => 'contact',
+            'type' => 1,
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
             'display_field' => 'お問い合わせ'
         ]);
         $this->CustomTablesService->create([
-            'type' => 'recruit',
+            'type' => 2,
             'name' => 'recruit',
             'title' => '求人',
             'display_field' => '求人'
@@ -360,6 +360,13 @@ class CustomTablesServiceTest extends BcTestCase
         //戻る値を確認
         $this->assertEquals($rs[1], 'お問い合わせタイトル');
         $this->assertEquals($rs[2], '求人');
+
+
+        //type=1をテスト
+        $rs = $this->CustomTablesService->getList(['type' => 1]);
+        //戻る値は'type'＝１しかとれないのか確認すること
+        $this->assertCount(1, $rs);
+        $this->assertEquals($rs[1], 'お問い合わせタイトル');
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_contact');
