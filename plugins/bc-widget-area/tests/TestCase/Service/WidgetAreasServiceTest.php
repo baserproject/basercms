@@ -120,6 +120,9 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
+        //正常系実行
+        $result = $this->WidgetAreasService->getNew();
+        $this->assertInstanceOf(WidgetArea::class, $result);
 
     }
 
