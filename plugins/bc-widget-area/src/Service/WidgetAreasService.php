@@ -99,6 +99,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
