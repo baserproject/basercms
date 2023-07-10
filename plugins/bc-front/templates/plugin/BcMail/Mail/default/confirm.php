@@ -1,4 +1,3 @@
-confirm
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
