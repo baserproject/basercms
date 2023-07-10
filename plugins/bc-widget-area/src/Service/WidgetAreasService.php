@@ -85,6 +85,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
