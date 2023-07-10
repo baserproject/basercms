@@ -326,7 +326,7 @@ class MailController extends MailFrontAppController
     {
         $mailContent = $mailContentsService->get($this->request->getParam('entityId'));
         if (!$service->isAccepting($mailContent)) {
-            return; $this->render($service->getUnpublishTemplate($mailContent));
+            return $this->render($service->getUnpublishTemplate($mailContent));
         }
 
         $mailContent = $this->getRequest()->getSession()->consume('BcMail.MailContent');
