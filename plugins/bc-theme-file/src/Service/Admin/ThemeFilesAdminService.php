@@ -43,6 +43,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
