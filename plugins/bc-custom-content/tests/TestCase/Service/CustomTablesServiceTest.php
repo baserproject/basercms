@@ -65,6 +65,7 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomTablesService = $this->getService(CustomTablesServiceInterface::class);
     }
@@ -328,14 +329,28 @@ class CustomTablesServiceTest extends BcTestCase
 
         //テストデータを生成
         $data = [
-            'type' => 'contact',
+            'type' => 1,
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
             'display_field' => 'お問い合わせ'
         ];
         $this->CustomTablesService->create($data);
         //アップデートメソッドを呼ぶ
-        $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'contact_edit']);
+        $postData = $this->CustomTablesService->get(1)->toArray();
+        $postData = [
+            'name' => 'contact_edit',
+            'new' => [
+                'no' => NULL,
+                'custom_table_id' => 1,
+                'custom_field_id' => 4,
+                'parent_id' => NULL,
+                'lft' => 1,
+                'rght' => 2,
+                'level' => 0,
+                'name' => 'recruit_category_new',
+                'title' => '求人分類',]
+        ];
+        $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), $postData);
         //戻る値を確認
         $this->assertEquals('contact_edit', $rs->name);
         //テーブル名も変更されたの確認
