@@ -86,7 +86,31 @@ class ThemeFilesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //テスト前の準備
+        $param = [
+            'fullpath' => '/var/www/html/plugins/bc-front/templates',
+            'path' => '/var/www/html/plugins/bc-front/templates',
+            'plugin' => 'bc-front',
+            'theme' => 'bc-front',
+            'type' => 'folder',
+        ];
+        //対象メソッドをコール
+        $rs = $this->ThemeFilesAdminService->getViewVarsForAdd(
+            $this->ThemeFilesAdminService->getNew('test', 'txt'),
+            $this->ThemeFilesAdminService->getForm([]),
+            $param
+        );
+
+        //戻る値を確認
+        $this->assertArrayHasKey('themeFileForm', $rs);
+        $this->assertArrayHasKey('themeFile', $rs);
+        $this->assertNotNull($rs['currentPath']);
+        $this->assertNotNull($rs['theme']);
+        $this->assertNotNull($rs['plugin']);
+        $this->assertNotNull($rs['type']);
+        $this->assertNotNull($rs['path']);
+        $this->assertTrue($rs['isWritable']);
+        $this->assertEquals($rs['pageTitle'], 'Bc-front｜作成');
     }
 
     /**
