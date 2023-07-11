@@ -144,7 +144,27 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_delete()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->delete(1);
+        $this->assertTrue($result);
+        //削除されたかを確認する
+        $this->expectExceptionMessage('Record not found in table "widget_areas"');
+        $this->WidgetAreasService->get(1);
 
+    }
+
+    /**
+     * test delete_not_found
+     */
+    public function test_delete_not_found()
+    {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $this->expectExceptionMessage('Record not found in table "widget_areas"');
+        $this->WidgetAreasService->delete(99);
     }
 
     /**
