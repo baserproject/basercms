@@ -132,6 +132,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @param array $ids
      * @return array
      * @checked
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
