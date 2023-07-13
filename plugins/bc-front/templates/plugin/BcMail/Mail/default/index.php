@@ -27,9 +27,11 @@ $this->BcBaser->setTableToUpload('BcMail.MailMessages');
 
 <h3 class="bs-mail-title-sub"><?php echo __d('baser_core', '入力フォーム') ?></h3>
 
-<?php if ($this->BcBaser->mailFormDescriptionExists()): ?>
-	<div class="bs-mail-description"><?php $this->BcBaser->mailFormDescription() ?></div>
-<?php endif ?>
+<?php if (!$error): ?>
+  <?php if ($this->BcBaser->mailFormDescriptionExists()): ?>
+    <div class="bs-mail-description"><?php $this->BcBaser->mailFormDescription() ?></div>
+  <?php endif ?>
+<?php endif; ?>
 
 <div class="bs-mail-form">
 	<?php $this->BcBaser->flash() ?>
