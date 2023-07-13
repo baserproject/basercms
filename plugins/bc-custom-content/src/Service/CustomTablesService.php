@@ -247,6 +247,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -270,6 +273,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムテーブルのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
