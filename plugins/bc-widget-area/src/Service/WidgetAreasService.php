@@ -116,6 +116,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @throws Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
