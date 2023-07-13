@@ -181,17 +181,17 @@ class WidgetAreasServiceTest extends BcTestCase
 
         //更新前の確認
         $rs = $this->WidgetAreasService->get(1);
-        $this->assertEquals(2, $rs->widgets_array[0]['Widget2']['id']);
-        $this->assertEquals(3, $rs->widgets_array[1]['Widget3']['id']);
-        $this->assertEquals(4, $rs->widgets_array[2]['Widget4']['id']);
+        $this->assertEquals(1, $rs->widgets_array[0]['Widget2']['sort']);
+        $this->assertEquals(2, $rs->widgets_array[1]['Widget3']['sort']);
+        $this->assertEquals(3, $rs->widgets_array[2]['Widget4']['sort']);
 
         //正常系実行
         $postData = ['sorted_ids' => '3,4,2'];
         $this->WidgetAreasService->updateSort(1, $postData);
         $rs = $this->WidgetAreasService->get(1);
-        $this->assertEquals(3, $rs->widgets_array[0]['Widget3']['id']);
-        $this->assertEquals(4, $rs->widgets_array[1]['Widget4']['id']);
-        $this->assertEquals(2, $rs->widgets_array[2]['Widget2']['id']);
+        $this->assertEquals(3, $rs->widgets_array[2]['Widget2']['sort']);
+        $this->assertEquals(1, $rs->widgets_array[0]['Widget3']['sort']);
+        $this->assertEquals(2, $rs->widgets_array[1]['Widget4']['sort']);
 
         //異常系実行
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
