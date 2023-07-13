@@ -281,6 +281,22 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_deleteWidget()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //削除する前、確認する
+        $widgetArea = $this->WidgetAreasService->get(1);
+        $widgets = $widgetArea->widgets_array;
+        $this->assertCount(3, $widgets);
+        $this->assertArrayHasKey('Widget2', $widgets[0]);
+        //正常系実行
+        $this->WidgetAreasService->deleteWidget(1, 2);
+        $widgetArea = $this->WidgetAreasService->get(1);
+        $widgets = $widgetArea->widgets_array;
+        $this->assertCount(2, $widgets);
+        $this->assertArrayNotHasKey('Widget2', $widgets[0]);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->WidgetAreasService->deleteWidget(99, 2);
 
     }
 

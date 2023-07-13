@@ -232,6 +232,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteWidget(int $widgetAreaId, int $widgetId)
     {
