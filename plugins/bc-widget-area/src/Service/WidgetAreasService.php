@@ -73,6 +73,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * 初期データ取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
