@@ -218,6 +218,20 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_getTitlesById()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->getTitlesById([1, 2]);
+        $this->assertCount(2, $result);
+        $this->assertEquals([
+            1 => '標準サイドバー',
+            2 => 'ブログサイドバー',
+        ], $result);
+        $result = $this->WidgetAreasService->getTitlesById([99]);
+        $this->assertCount(0, $result);
+        //異常系実行
+        $this->expectExceptionMessage('Impossible to generate condition with empty list of values for field (id)');
+        $this->WidgetAreasService->getTitlesById([]);
 
     }
 
