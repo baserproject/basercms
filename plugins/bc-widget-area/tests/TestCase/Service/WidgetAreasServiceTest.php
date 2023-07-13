@@ -248,6 +248,23 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_updateWidget()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        $postData = [
+            'Widget2' => [
+                'id' => '2',
+                'name' => 'Nghiem',
+                'sort' => 1
+            ]
+        ];
+        //正常系実行
+        $this->WidgetAreasService->updateWidget(1, $postData);
+        //更新されたかを確認する
+        $rs = $this->WidgetAreasService->get(1);
+        $this->assertEquals('Nghiem', $rs->widgets_array[0]['Widget2']['name']);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->WidgetAreasService->updateWidget(99, $postData);
 
     }
 
