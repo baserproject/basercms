@@ -247,6 +247,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
