@@ -17,6 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -331,7 +332,37 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        //テストデータを生成
+        $this->CustomTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //削除する前にカスタムテーブルをカスタムコンテンツに紐づいてきる
+        $entities1 = CustomContentFactory::get(1);
+        $this->assertNotNull($entities1->custom_table_id);
+
+        //削除メソッドを呼ぶ
+        $rs = $this->CustomTablesService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //カスタムテーブルにレコードが削除できるか確認すること
+        $this->assertCount(0, $this->CustomTablesService->getIndex([]));
+        //テーブル名が存在しないの確認
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //削除した後カスタムテーブルを除外したか確認すること
+        $entities1 = CustomContentFactory::get(1);
+        $this->assertNull($entities1->custom_table_id);
+
+        //エラーを発生した時をテスト
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->CustomTablesService->delete(1);
     }
 
     /**
@@ -339,7 +370,38 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータを生成
+        $this->CustomTablesService->create([
+            'type' => 1,
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        $this->CustomTablesService->create([
+            'type' => 2,
+            'name' => 'recruit',
+            'title' => '求人',
+            'display_field' => '求人'
+        ]);
+        //カスタムテーブルのリストメソッドを呼ぶ
+        $rs = $this->CustomTablesService->getList([]);
+        //戻る値を確認
+        $this->assertEquals($rs[1], 'お問い合わせタイトル');
+        $this->assertEquals($rs[2], '求人');
+
+
+        //type=1をテスト
+        $rs = $this->CustomTablesService->getList(['type' => 1]);
+        //戻る値は'type'＝１しかとれないのか確認すること
+        $this->assertCount(1, $rs);
+        $this->assertEquals($rs[1], 'お問い合わせタイトル');
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+        $dataBaseService->dropTable('custom_entry_2_recruit');
     }
 
     /**
