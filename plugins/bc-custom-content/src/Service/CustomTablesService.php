@@ -273,6 +273,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムテーブルのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
