@@ -292,6 +292,7 @@ class WidgetAreasServiceTest extends BcTestCase
         $this->WidgetAreasService->deleteWidget(1, 2);
         $widgetArea = $this->WidgetAreasService->get(1);
         $widgets = $widgetArea->widgets_array;
+        //削除されたかを確認する
         $this->assertCount(2, $widgets);
         $this->assertArrayNotHasKey('Widget2', $widgets[0]);
         //異常系実行
