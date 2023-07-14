@@ -31,6 +31,9 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -39,6 +42,9 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * 単一データ取得
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id)
     {
@@ -49,6 +55,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * 一覧データ取得
      * @checked
      * @noTodo
+     * @unitTest
      * @param array $queryParams
      * @return \Cake\ORM\Query
      */
@@ -66,6 +73,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * 初期データ取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -78,6 +86,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -92,6 +101,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -106,6 +116,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @throws Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -125,6 +136,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @param array $ids
      * @return array
      * @checked
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
@@ -161,6 +173,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateWidget(int $widgetAreaId, array $postData)
     {

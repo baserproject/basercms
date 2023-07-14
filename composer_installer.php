@@ -69,16 +69,21 @@ function command($phpPath)
     if (!is_writable(ROOT_DIR . 'logs')) {
         throw new Exception('/logs に書き込み権限がありません。書き込み権限を与えてください。');
     }
+
     $composerDir = ROOT_DIR . 'composer' . DS;
     $command = "cd {$composerDir}; export HOME={$composerDir}; curl -sS https://getcomposer.org/installer | {$phpPath}";
+
     exec($command, $out, $code);
-    if ($code !== 0) throw new Exception('composer のインストールに失敗しました。');
+    if ($code !== 0) throw new Exception('composer のインストールに失敗しました。(' . $command . ')');
+
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar self-update";
     exec($command, $out, $code);
-    if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。');
+    if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。(' . $command . ')');
+
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。<br>コマンド実行をお試しください<br>' . $command);
+
     if (!copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env')) {
         throw new Exception('.env のコピーに失敗しました。<br>/config/.env.example を /config/.env としてリネームしてください。');
     }

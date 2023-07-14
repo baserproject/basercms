@@ -45,6 +45,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }
@@ -779,4 +780,47 @@ class BcContentsHelperTest extends BcTestCase
         $plugin = $this->execPrivateMethod($this->BcContents, '_getContent', [['Contents.id' => 1], 'plugin']);
         $this->assertEquals('BaserCore', $plugin);
     }
+
+    /**
+     * test getCurrentContent
+     */
+    public function testGetCurrentContent()
+    {
+        // トップページ
+        $content = $this->BcContents->getCurrentContent();
+        $this->assertEquals('/index', $content->url);
+
+        // サービスページ
+        $this->BcContents->getView()->setRequest($this->getRequest('/service/index'));
+        $content = $this->BcContents->getCurrentContent();
+        $this->assertEquals('/service/', $content->url);
+
+        // 管理画面の場合
+        $request = $this->getRequest('/baser/admin');
+        $this->loginAdmin($request);
+        $this->BcContents->getView()->setRequest($request);
+        $this->assertFalse($this->BcContents->getCurrentContent());
+    }
+
+    /**
+     * test getCurrentSite
+     */
+    public function testGetCurrentSite()
+    {
+        // トップページ
+        $entity = $this->BcContents->getCurrentSite();
+        $this->assertEquals('baserCMS inc.', $entity->title);
+
+        // サービスページ
+        $this->BcContents->getView()->setRequest($this->getRequest('/en/'));
+        $entity = $this->BcContents->getCurrentSite();
+        $this->assertEquals('en', $entity->name);
+
+        // 管理画面の場合
+        $request = $this->getRequest('/baser/admin');
+        $this->loginAdmin($request);
+        $this->BcContents->getView()->setRequest($request);
+        $this->assertFalse($this->BcContents->getCurrentSite());
+    }
+
 }

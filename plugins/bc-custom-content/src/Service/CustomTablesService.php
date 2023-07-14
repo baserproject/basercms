@@ -250,6 +250,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id)
     {
@@ -273,6 +276,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムテーブルのリストを取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(array $options = [])
     {
@@ -289,6 +295,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * @param string $field
      * @param array $options
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = []): array
     {
@@ -309,6 +318,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * カスタムコンテンツIDを取得する
      * @param int $id
      * @return false|mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCustomContentId(int $id)
     {

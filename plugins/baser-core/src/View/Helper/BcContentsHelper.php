@@ -12,9 +12,8 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
-use BaserCore\Service\SitesService;
-use BaserCore\Service\SitesServiceInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
 use Exception;
@@ -909,6 +908,32 @@ class BcContentsHelper extends Helper
         /** @var SitesTable $sites */
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         return $sites->getPublishedAll();
+    }
+
+    /**
+     * フロントページにおいて現在のサイトを取得する
+     * @return false|Site
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCurrentSite()
+    {
+        if(BcUtil::isAdminSystem()) return false;
+        return $this->getView()->getRequest()->getAttribute('currentSite');
+    }
+
+    /**
+     * フロントページにおいて現在のコンテンツを取得する
+     * @return false|Site
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCurrentContent()
+    {
+        if(BcUtil::isAdminSystem()) return false;
+        return $this->getView()->getRequest()->getAttribute('currentContent');
     }
 
 }
