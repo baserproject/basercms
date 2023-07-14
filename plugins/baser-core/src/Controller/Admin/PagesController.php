@@ -45,11 +45,14 @@ class PagesController extends BcAdminAppController
     }
 
 	/**
-	 * 固定ページ新規追加
-	 *
-	 * @param int $parentContentId 親コンテンツID
-	 * @return void|ResponseInterface
-	 */
+     * 固定ページ新規追加
+     *
+     * @param int $parentContentId 親コンテンツID
+     * @return void|ResponseInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
 	public function add(
 	    PagesAdminServiceInterface $service,
         ContentsServiceInterface $contentsService,

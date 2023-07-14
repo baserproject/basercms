@@ -92,6 +92,34 @@ class PagesControllerTest extends BcTestCase
     }
 
     /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'page_template' => 'Nghiem create',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "Nghiem フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "Page",
+                "site_id" => "1",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/pages/add/' . 1, $data);
+        $this->assertResponseSuccess();
+        $Pages = $this->getTableLocator()->get('Pages');
+        $pages = $Pages->find()->where(['page_template' => $data['page_template']])->toArray();
+        $this->assertCount(1, $pages);
+        $this->assertEquals('Nghiem create', $pages[0]->page_template);
+    }
+
+    /**
      * [ADMIN] 固定ページ情報編集
      */
     public function testEdit()
