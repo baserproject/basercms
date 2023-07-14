@@ -299,9 +299,18 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストはまだ確認できていません。WidgetAreasTableより移行済');
-        $result = $this->WidgetArea->getControlSource('id');
-        $this->assertEquals([1 => 'ウィジェットエリア', 2 => 'ブログサイドバー'], $result, 'コントロールソースを取得できません');
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->getControlSource('id');
+        $this->assertEquals([
+            1 => '標準サイドバー',
+            2 => 'ブログサイドバー'
+        ], $result);
+        //[]を返すケース
+        $result = $this->WidgetAreasService->getControlSource('test');
+        $this->assertEquals([], $result);
+
     }
 
 }

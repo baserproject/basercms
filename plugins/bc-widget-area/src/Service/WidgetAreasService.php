@@ -266,6 +266,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field): array
     {
