@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -18,6 +19,7 @@ use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 
 /**
  * Class BcAdminHelperTest
@@ -343,41 +345,6 @@ class BcAdminHelperTest extends BcTestCase
     }
 
     /**
-     * testIsSystemAdmin method
-     *
-     * @param mixed $admin request->params['admin']の値
-     * @param int $groupId ユーザーグループID
-     * @param boolean $expected 期待値
-     * @param string $message テストが失敗した場合に表示されるメッセージ
-     * @dataProvider isSystemAdminDataProvider
-     */
-    public function testIsSystemAdmin($admin, $groupId, $expected, $message = null)
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-        // TODO : 要コード確認
-        /* >>>
-        $this->BcAdmin->request = $this->BcAdmin->request->withParam('admin',  $admin);
-        $this->BcAdmin->_View->viewVars['user'] = [
-            'user_group_id' => $groupId
-        ];
-
-        $result = $this->BcAdmin->isSystemAdmin();
-        $this->assertEquals($expected, $result, $message);
-        <<< */
-    }
-
-    public function isSystemAdminDataProvider()
-    {
-        return [
-            ['', null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
-            [1, null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
-            ['', 1, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
-            ['1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'],
-            ['1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'],
-        ];
-    }
-
-    /**
      * test setEditLink
      */
     public function testSetEditLink()
@@ -492,4 +459,31 @@ class BcAdminHelperTest extends BcTestCase
 
         $this->assertEquals($rs, $title);
     }
+
+    /**
+     * test getCurrentSite
+     */
+    public function testGetCurrentSite()
+    {
+        // メインサイト
+        $request = $this->getRequest('/baser/admin');
+        $this->BcAdmin->getView()->setRequest($request);
+        $entity = $this->BcAdmin->getCurrentSite();
+        $this->assertEquals('baserCMS inc.', $entity->title);
+
+        // サブサイト
+        $request = $this->getRequest('/baser/admin?site_id=2');
+        $bcAdmin = new BcAdminMiddleware();
+        /* @var ServerRequest $request */
+        $request = $bcAdmin->setCurrentSite($request);
+        $this->BcAdmin->getView()->setRequest($request);
+        $entity = $this->BcAdmin->getCurrentSite();
+        $this->assertEquals('smartphone', $entity->name);
+
+        // フロントページの場合
+        $request = $this->getRequest('/');
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertFalse($this->BcAdmin->getCurrentSite());
+    }
+
 }

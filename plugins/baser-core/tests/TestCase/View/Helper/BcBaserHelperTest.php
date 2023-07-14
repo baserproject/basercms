@@ -2156,16 +2156,6 @@ class BcBaserHelperTest extends BcTestCase
     /**
      * @return void
      */
-    public function testGetCurrentContent()
-    {
-        $result = $this->BcBaser->getCurrentContent();
-        $content = $this->Contents->get($result->id, ['contain' => 'Sites']);
-        $this->assertEquals($content, $result);
-    }
-
-    /**
-     * @return void
-     */
     public function testCurrentPrefix()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
