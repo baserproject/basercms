@@ -352,7 +352,7 @@ class CustomTablesServiceTest extends BcTestCase
 
         //カスタムリンクを追加するテスト
         $postData = [
-            'name' => 'contact_edit',
+            'name' => 'contact_edit_2',
             'new' => [
                 [
                     'no' => NULL,
@@ -371,12 +371,12 @@ class CustomTablesServiceTest extends BcTestCase
         //アップデートメソッドを呼ぶ
         $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), $postData);
         //戻る値を確認
-        $this->assertEquals('contact_edit', $rs->name);
+        $this->assertEquals('contact_edit_2', $rs->name);
         //カスタムリンクが追加できるか確認する事
         $this->assertEquals('add_new', $rs->custom_links[0]->name);
 
         //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_contact_edit');
+        $dataBaseService->dropTable('custom_entry_1_contact_edit_2');
 
         //エラーする時をテスト
         $this->expectException(PersistenceFailedException::class);
