@@ -109,4 +109,19 @@ class BcAdminApiControllerTest extends BcTestCase
         $this->assertResponseCode(401);
     }
 
+    /**
+     * test isAdminApiEnabled
+     */
+    public function test_isAdminApiEnabled()
+    {
+        $controller = new BcAdminApiController($this->getRequest());
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
+        $this->apiLoginAdmin(1);
+        //正常系実行: USE_CORE_ADMIN_API = 'true';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+        $result = $controller->isAdminApiEnabled();
+        $this->assertTrue($result);
+    }
+
+
 }
