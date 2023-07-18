@@ -240,6 +240,18 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_batch()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //実行する前、確認する
+        $result = $this->WidgetAreasService->getIndex()->all()->toArray();
+        $this->assertCount(2, $result);
+        //正常系実行: delete method
+        $this->assertTrue($this->WidgetAreasService->batch('delete', []));
+        $result = $this->WidgetAreasService->batch('delete', [1, 2]);
+        $this->assertTrue($result);
+        //削除されたかを確認する
+        $result = $this->WidgetAreasService->getIndex()->all()->toArray();
+        $this->assertCount(0, $result);
 
     }
 

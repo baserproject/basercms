@@ -149,6 +149,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @param array $ids
      * @return bool
      * @checked
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
