@@ -220,9 +220,12 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-	 * コンテンツ削除（論理削除）
-     * @param  ContentsServiceInterface $service
-	 */
+     * コンテンツ削除（論理削除）
+     * @param ContentsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
 	public function delete(ContentsServiceInterface $service)
 	{
         if ($this->request->is(['post', 'put', 'delete'])) {
