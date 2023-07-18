@@ -149,6 +149,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @param array $ids
      * @return bool
      * @checked
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
@@ -206,6 +207,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return WidgetArea|EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSort(int $widgetAreaId, array $postData)
     {
@@ -232,6 +234,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteWidget(int $widgetAreaId, int $widgetId)
     {
@@ -254,6 +257,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {
@@ -266,6 +270,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field): array
     {

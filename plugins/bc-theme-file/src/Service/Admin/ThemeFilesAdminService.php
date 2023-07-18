@@ -58,6 +58,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      *
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(array $args)
     {
@@ -86,6 +89,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      * @param ThemeFileForm $form
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(ThemeFile $entity, ThemeFileForm $form, array $args)
     {
@@ -109,6 +115,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      * @param ThemeFileForm $themeFileForm
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(ThemeFile $themeFile, ThemeFileForm $themeFileForm, array $args)
     {
@@ -132,6 +141,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      * @param ThemeFileForm $themeFileForm
      * @param array $args
      * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getViewVarsForView(ThemeFile $themeFile, ThemeFileForm $themeFileForm, array $args)
     {
