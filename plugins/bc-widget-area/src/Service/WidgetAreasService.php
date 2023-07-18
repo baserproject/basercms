@@ -207,6 +207,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
      * @return WidgetArea|EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSort(int $widgetAreaId, array $postData)
     {
