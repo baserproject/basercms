@@ -89,6 +89,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      * @param ThemeFileForm $form
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(ThemeFile $entity, ThemeFileForm $form, array $args)
     {
