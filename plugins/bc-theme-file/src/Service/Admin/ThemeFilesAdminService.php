@@ -58,6 +58,9 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
      *
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(array $args)
     {
