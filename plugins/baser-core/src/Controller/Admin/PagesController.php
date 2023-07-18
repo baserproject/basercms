@@ -63,10 +63,10 @@ class PagesController extends BcAdminAppController
 
             // EVENT Pages.beforeAdd
             $event = $this->dispatchLayerEvent('beforeAdd', [
-                'request' => $this->request,
+                'data' => $this->request->getData()
             ]);
             if ($event !== false) {
-                $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+                $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult());
             }
 
             try {
