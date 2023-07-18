@@ -24,6 +24,7 @@ use BcCustomContent\ServiceProvider\BcCustomContentServiceProvider;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use BcMail\ServiceProvider\BcMailServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
+use BcThemeConfig\ServiceProvider\BcThemeConfigServiceProvider;
 use BcThemeFile\ServiceProvider\BcThemeFileServiceProvider;
 use BcUploader\ServiceProvider\BcUploaderServiceProvider;
 use BcWidgetArea\ServiceProvider\BcWidgetAreaServiceProvider;
@@ -220,6 +221,7 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcThemeFileServiceProvider());
         $container->addServiceProvider(new BcUploaderServiceProvider());
         $container->addServiceProvider(new BcCustomContentServiceProvider());
+        $container->addServiceProvider(new BcThemeConfigServiceProvider());
         EventManager::instance(new EventManager());
     }
 

@@ -42,6 +42,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
