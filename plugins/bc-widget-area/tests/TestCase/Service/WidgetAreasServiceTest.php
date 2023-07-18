@@ -321,6 +321,14 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_getList()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->getList();
+        $this->assertEquals([
+            1 => '標準サイドバー',
+            2 => 'ブログサイドバー'
+        ], $result);
 
     }
 
