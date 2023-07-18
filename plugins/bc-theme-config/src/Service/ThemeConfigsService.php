@@ -71,6 +71,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCache()
     {
