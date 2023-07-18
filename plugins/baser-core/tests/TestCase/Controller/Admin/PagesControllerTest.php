@@ -163,11 +163,35 @@ class PagesControllerTest extends BcTestCase
     public function test_afterAdd()
     {
         //準備
-
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Pages.afterAdd', function (Event $event) {
+            $page = $event->getData('data');
+            $pages = $this->getTableLocator()->get('Pages');
+            $page->page_template = 'Nghiem after';
+            $pages->save($page);
+        });
+        $data = [
+            'page_template' => 'test create',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "test フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "Page",
+                "site_id" => "1",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+        ];
         //正常系実行
-
-        //異常系実行
-
+        $this->post('/baser/admin/baser-core/pages/add/' . 1, $data);
+        $this->assertResponseSuccess();
+        $Pages = $this->getTableLocator()->get('Pages');
+        $rs = $Pages->find()->where(['page_template' => $data['page_template']])->toArray();
+        $this->assertCount(0, $rs);
+        $pages = $Pages->find()->where(['page_template' => 'Nghiem after'])->toArray();
+        $this->assertEquals('Nghiem after', $pages[0]->page_template);
 
     }
 

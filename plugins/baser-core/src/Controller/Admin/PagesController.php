@@ -75,6 +75,7 @@ class PagesController extends BcAdminAppController
                 // EVENT Pages.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'request' => $this->request,
+                    'data' => $page
                 ]);
 
                 // site を取得するため page を再取得
