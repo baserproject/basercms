@@ -240,6 +240,18 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_batch()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //実行する前、確認する
+        $result = $this->WidgetAreasService->getIndex()->all()->toArray();
+        $this->assertCount(2, $result);
+        //正常系実行: delete method
+        $this->assertTrue($this->WidgetAreasService->batch('delete', []));
+        $result = $this->WidgetAreasService->batch('delete', [1, 2]);
+        $this->assertTrue($result);
+        //削除されたかを確認する
+        $result = $this->WidgetAreasService->getIndex()->all()->toArray();
+        $this->assertCount(0, $result);
 
     }
 
@@ -273,6 +285,26 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_updateSort()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+
+        //更新前の確認
+        $rs = $this->WidgetAreasService->get(1);
+        $this->assertEquals(1, $rs->widgets_array[0]['Widget2']['sort']);
+        $this->assertEquals(2, $rs->widgets_array[1]['Widget3']['sort']);
+        $this->assertEquals(3, $rs->widgets_array[2]['Widget4']['sort']);
+
+        //正常系実行
+        $postData = ['sorted_ids' => '3,4,2'];
+        $this->WidgetAreasService->updateSort(1, $postData);
+        $rs = $this->WidgetAreasService->get(1);
+        $this->assertEquals(3, $rs->widgets_array[2]['Widget2']['sort']);
+        $this->assertEquals(1, $rs->widgets_array[0]['Widget3']['sort']);
+        $this->assertEquals(2, $rs->widgets_array[1]['Widget4']['sort']);
+
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->WidgetAreasService->updateSort(99, $postData);
 
     }
 
@@ -281,6 +313,23 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_deleteWidget()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //削除する前、確認する
+        $widgetArea = $this->WidgetAreasService->get(1);
+        $widgets = $widgetArea->widgets_array;
+        $this->assertCount(3, $widgets);
+        $this->assertArrayHasKey('Widget2', $widgets[0]);
+        //正常系実行
+        $this->WidgetAreasService->deleteWidget(1, 2);
+        $widgetArea = $this->WidgetAreasService->get(1);
+        $widgets = $widgetArea->widgets_array;
+        //削除されたかを確認する
+        $this->assertCount(2, $widgets);
+        $this->assertArrayNotHasKey('Widget2', $widgets[0]);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->WidgetAreasService->deleteWidget(99, 2);
 
     }
 
@@ -289,6 +338,14 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function test_getList()
     {
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->getList();
+        $this->assertEquals([
+            1 => '標準サイドバー',
+            2 => 'ブログサイドバー'
+        ], $result);
 
     }
 
@@ -299,9 +356,18 @@ class WidgetAreasServiceTest extends BcTestCase
      */
     public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストはまだ確認できていません。WidgetAreasTableより移行済');
-        $result = $this->WidgetArea->getControlSource('id');
-        $this->assertEquals([1 => 'ウィジェットエリア', 2 => 'ブログサイドバー'], $result, 'コントロールソースを取得できません');
+        //準備
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //正常系実行
+        $result = $this->WidgetAreasService->getControlSource('id');
+        $this->assertEquals([
+            1 => '標準サイドバー',
+            2 => 'ブログサイドバー'
+        ], $result);
+        //[]を返すケース
+        $result = $this->WidgetAreasService->getControlSource('test');
+        $this->assertEquals([], $result);
+
     }
 
 }
