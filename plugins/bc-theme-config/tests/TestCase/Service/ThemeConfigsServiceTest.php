@@ -19,6 +19,7 @@ use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Filesystem\File;
 
 /**
  * ThemeConfigsServiceTest
@@ -130,6 +131,7 @@ class ThemeConfigsServiceTest extends BcTestCase
         UserFactory::make()->admin()->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
 
+        //元に戻るため、変更する前内容を取得する
         $configPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
         $fileContentBefore = file_get_contents($configPath);
 
