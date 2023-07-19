@@ -190,6 +190,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return boolean
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function updateColorConfig($entity)
     {
