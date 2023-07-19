@@ -47,9 +47,6 @@ class ThemeConfigsServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcThemeConfig.Factory/ThemeConfigs',
     ];
 
@@ -128,7 +125,6 @@ class ThemeConfigsServiceTest extends BcTestCase
         //データを生成
         $this->getRequest()->getAttribute('currentSite');
         SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
-        UserFactory::make()->admin()->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
 
         //元に戻るため、変更する前内容を取得する
