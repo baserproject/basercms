@@ -93,7 +93,16 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_clearCache()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+        //$entityが値を設定する
+        $this->ThemeConfigsService->get();
+        //テストメソッドをコール前に$entityの値があるか確認
+        $this->assertNotNull($this->getPrivateProperty($this->ThemeConfigsService, 'entity'));
+        //テストメソッドをコール
+        $this->ThemeConfigsService->clearCache();
+        //戻る値を確認
+        $this->assertNull($this->getPrivateProperty($this->ThemeConfigsService, 'entity'));
     }
 
     /**
