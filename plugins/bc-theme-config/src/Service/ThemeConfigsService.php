@@ -54,6 +54,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return ThemeConfig|\Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get()
     {

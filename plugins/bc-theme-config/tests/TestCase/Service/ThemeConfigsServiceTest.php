@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
+use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -76,7 +77,15 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+        //テスト対象メソッドをコール
+        $rs = $this->ThemeConfigsService->get();
+        //戻る値を確認
+        $this->assertEquals('001800', $rs->color_main);
+        $this->assertEquals('001800', $rs->color_sub);
+        $this->assertEquals('2B7BB9', $rs->color_link);
+        $this->assertEquals('2B7BB9', $rs->color_hover);
     }
 
     /**
