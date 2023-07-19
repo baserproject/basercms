@@ -62,6 +62,21 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        $this->loginAdmin($this->getRequest());
+        //正常系実行
+        $this->get('/baser/api/admin/baser-core/content_folders/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(10, $result->contentFolders);
+    }
+
+
+    /**
      * Test add method
      *
      * @return void
