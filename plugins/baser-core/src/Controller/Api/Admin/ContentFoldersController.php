@@ -50,6 +50,7 @@ class ContentFoldersController extends BcAdminApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ContentFoldersServiceInterface $service, int $id)
     {
