@@ -11,6 +11,8 @@
 
 namespace BcThemeConfig\Test\TestCase\Service;
 
+use BaserCore\Model\Entity\SiteConfig;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Service\ThemeConfigsService;
@@ -117,8 +119,29 @@ class ThemeConfigsServiceTest extends BcTestCase
      * test saveImage
      */
     public function test_saveImage()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    {//データを生成
+        $this->getRequest()->getAttribute('currentSite');
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+
+        //$entityが値を設定する
+        $this->ThemeConfigsService->get();
+        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
+        $pathTest = TMP . 'tests' . DS.'logo.png';
+        copy($logoPath, $pathTest);
+        //アップロードファイルを準備
+        $this->setUploadFileToRequest('file', $pathTest);
+        $this->setUnlockedFields(['file']);
+
+        $rs = $this->ThemeConfigsService->saveImage(new SiteConfig([
+            'logo' => [
+                'tmp_name' => $pathTest,
+                'error' => 0,
+                'name' => 'logo.png',
+                'type' => 'image/x-png',
+                'size' => 2962,
+            ]
+        ]));
     }
 
     /**
