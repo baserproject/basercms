@@ -126,6 +126,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return EntityInterface
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function saveImage($entity)
     {
