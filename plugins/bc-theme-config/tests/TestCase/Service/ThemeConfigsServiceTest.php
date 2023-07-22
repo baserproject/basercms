@@ -127,7 +127,7 @@ class ThemeConfigsServiceTest extends BcTestCase
         //$entityが値を設定する
         $this->ThemeConfigsService->get();
         $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
-        $pathTest = TMP . 'tests' . DS.'logo.png';
+        $pathTest = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
         copy($logoPath, $pathTest);
         //アップロードファイルを準備
         $this->setUploadFileToRequest('file', $pathTest);
@@ -142,6 +142,9 @@ class ThemeConfigsServiceTest extends BcTestCase
                 'size' => 2962,
             ]
         ]));
+
+        //戻る値を確認
+        $this->assertEquals($rs['logo'], 'logo.png');
     }
 
     /**
