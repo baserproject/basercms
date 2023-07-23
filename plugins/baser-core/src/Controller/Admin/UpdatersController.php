@@ -28,6 +28,7 @@ class UpdatersController extends BcAdminAppController
      * [ADMIN] アップデートスクリプトを実行する
      *
      * @return void
+     * @checked
      */
     public function admin_exec_script()
     {
