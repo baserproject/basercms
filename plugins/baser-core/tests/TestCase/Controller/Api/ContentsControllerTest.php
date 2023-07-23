@@ -157,12 +157,17 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_get_next()
     {
-        //準備
-
         //正常系実行
-
+        $this->get('/baser/api/baser-core/contents/get_next/4.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(10, $result->content->id);
         //異常系実行
-
+        $this->get('/baser/api/baser-core/contents/get_next/99.json?token=' . $this->accessToken);
+        $this->assertResponseError();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNull($result->content);
+        $this->assertEquals('データが見つかりません', $result->message);
 
     }
 
