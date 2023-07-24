@@ -119,7 +119,8 @@ class ThemeConfigsServiceTest extends BcTestCase
      * test saveImage
      */
     public function test_saveImage()
-    {//データを生成
+    {
+        //データを生成
         $this->getRequest()->getAttribute('currentSite');
         SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
