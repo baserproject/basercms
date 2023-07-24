@@ -175,6 +175,7 @@ class ContentsController extends BcApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_global_navi(ContentsServiceInterface $service, int $id)
     {
