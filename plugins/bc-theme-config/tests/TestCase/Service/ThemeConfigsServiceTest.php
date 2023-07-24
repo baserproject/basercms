@@ -11,12 +11,14 @@
 
 namespace BcThemeConfig\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Filesystem\File;
 
 /**
  * ThemeConfigsServiceTest
@@ -42,6 +44,8 @@ class ThemeConfigsServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BcThemeConfig.Factory/ThemeConfigs',
     ];
 
@@ -110,7 +114,13 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->getRequest()->getAttribute('currentSite');
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcThemeSample'])->persist();
+        //テストメソッドをコール
+        $rs = $this->ThemeConfigsService->update(['logo_alt' => 'baserCMS']);
+        //戻る値を確認
+        $this->assertEquals('baserCMS', $rs['logo_alt']);
     }
 
     /**
