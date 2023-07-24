@@ -431,7 +431,7 @@ class PermissionsService implements PermissionsServiceInterface
     private function checkGroup(
         string $url,
         array $groupPermission,
-        EntityInterface $userGroup,
+        ?EntityInterface $userGroup,
         string $method = 'GET'): bool
     {
         // ドメイン部分を除外
