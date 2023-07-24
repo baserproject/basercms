@@ -12,13 +12,14 @@
 namespace BcThemeConfig\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\SiteConfig;
-use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Filesystem\File;
 
 /**
  * ThemeConfigsServiceTest
@@ -44,6 +45,8 @@ class ThemeConfigsServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BcThemeConfig.Factory/ThemeConfigs',
     ];
 
@@ -161,7 +164,43 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_updateColorConfig()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->getRequest()->getAttribute('currentSite');
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+
+        //元に戻るため、変更する前内容を取得する
+        $configPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
+        $fileContentBefore = file_get_contents($configPath);
+
+        //テストメソッドをコール
+        $rs = $this->ThemeConfigsService->updateColorConfig($this->ThemeConfigsService->get());
+        //戻る値を確認
+        $this->assertTrue($rs);
+
+        //WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css'の中身を確認
+        $fileContentAfter = file_get_contents($configPath);
+
+        $this->assertTextContains('.main-color {
+	background: #001800 !important;
+}', $fileContentAfter);
+
+        $this->assertTextContains('.sub-color {
+	background: #001800 !important;
+}', $fileContentAfter);
+
+        $this->assertTextContains('a {
+	color:#2B7BB9;
+}', $fileContentAfter);
+
+        $this->assertTextContains('.btn {
+    background-color: #001800 !important;
+}', $fileContentAfter);
+
+        //config.cssの内容を元に戻る
+        $File = new File($configPath, true, 0666);
+        $File->write($fileContentBefore);
+        $File->close();
     }
 
 }
