@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\File;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class UpdatersController
