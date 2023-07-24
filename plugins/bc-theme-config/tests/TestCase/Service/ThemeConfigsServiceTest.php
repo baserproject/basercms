@@ -12,9 +12,11 @@
 namespace BcThemeConfig\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\SiteConfig;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcThemeConfig\Model\Entity\ThemeConfig;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
@@ -123,23 +125,26 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_saveImage()
     {
-        //データを生成
-        $this->getRequest()->getAttribute('currentSite');
+        // データを生成
         SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
 
-        //$entityが値を設定する
+        // ThemeConfigsService::entity の値を設定する
         $this->ThemeConfigsService->get();
-        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
-        $pathTest = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
-        copy($logoPath, $pathTest);
-        //アップロードファイルを準備
-        $this->setUploadFileToRequest('file', $pathTest);
-        $this->setUnlockedFields(['file']);
 
-        $rs = $this->ThemeConfigsService->saveImage(new SiteConfig([
+        // アップロードファイルを準備
+        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
+        $this->setUploadFileToRequest('file', $logoPath);
+
+        // saveImage の内部で実行される move_uploaded_file() が、
+        // 実際にファイルをアップロードしないと失敗してしまうため、copy() で代替処理とする
+        $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
+        copy($logoPath, $uploadedPath);
+
+        // 実行
+        $rs = $this->ThemeConfigsService->saveImage(new ThemeConfig([
             'logo' => [
-                'tmp_name' => $pathTest,
+                'tmp_name' => $logoPath,
                 'error' => 0,
                 'name' => 'logo.png',
                 'type' => 'image/x-png',
@@ -147,8 +152,15 @@ class ThemeConfigsServiceTest extends BcTestCase
             ]
         ]));
 
-        //戻る値を確認
+        // 戻り値を確認
         $this->assertEquals($rs['logo'], 'logo.png');
+        // サムネイルが作成されたことを確認
+        $thumbPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo_thumb.png';
+        $this->assertFileExists($thumbPath);
+
+        // 初期化処理
+        unlink($uploadedPath);
+        unlink($thumbPath);
     }
 
     /**
