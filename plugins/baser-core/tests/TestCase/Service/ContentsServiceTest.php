@@ -942,6 +942,23 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test getGlobalNavi
+     */
+    public function test_getGlobalNavi()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getGlobalNavi(26)->toArray();
+        $this->assertCount(3, $result);
+        $this->assertEquals(3, $result[0]->site_id);
+        $this->assertFalse($result[2]->exclude_menu);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getGlobalNavi(999)->toArray();
+
+    }
+
+
+    /**
      * test rename
      */
     public function testRename()
