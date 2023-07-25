@@ -1544,6 +1544,7 @@ class ContentsService implements ContentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPrev(int $id)
     {

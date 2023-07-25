@@ -1005,4 +1005,22 @@ class ContentsServiceTest extends BcTestCase
         $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
         $this->assertEquals(false, $result);
     }
+
+    /**
+     * test getPrev
+     */
+    public function test_getPrev()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getPrev(9);
+        $this->assertEquals(6, $result->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getPrev(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getPrev(1111);
+
+    }
+
 }
