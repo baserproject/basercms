@@ -86,6 +86,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return ThemeConfig|\Cake\Datasource\EntityInterface|false
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function update(array $postData)
     {
@@ -175,6 +176,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return EntityInterface
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function deleteImage($entity)
     {
