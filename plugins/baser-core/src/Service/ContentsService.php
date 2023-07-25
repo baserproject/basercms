@@ -1569,6 +1569,7 @@ class ContentsService implements ContentsServiceInterface
      * @return array|EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNext(int $id)
     {
