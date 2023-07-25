@@ -31,6 +31,7 @@ class SiteConfigsController extends BcAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(SiteConfigsAdminServiceInterface $service)
     {

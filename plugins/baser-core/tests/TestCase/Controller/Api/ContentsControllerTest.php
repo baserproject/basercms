@@ -133,4 +133,85 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(3, count($result->contents));
     }
 
+
+    /**
+     * test get_prev
+     */
+    public function test_get_prev()
+    {
+        //正常系実行
+        $this->get('/baser/api/baser-core/contents/get_prev/9.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(6, $result->content->id);
+        //異常系実行
+        $this->get('/baser/api/baser-core/contents/get_prev/99.json?token=' . $this->accessToken);
+        $this->assertResponseError();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNull($result->content);
+        $this->assertEquals('データが見つかりません', $result->message);
+    }
+
+    /**
+     * test get_next
+     */
+    public function test_get_next()
+    {
+        //正常系実行
+        $this->get('/baser/api/baser-core/contents/get_next/4.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(10, $result->content->id);
+        //異常系実行
+        $this->get('/baser/api/baser-core/contents/get_next/99.json?token=' . $this->accessToken);
+        $this->assertResponseError();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNull($result->content);
+        $this->assertEquals('データが見つかりません', $result->message);
+
+    }
+
+    /**
+     * test get_global_navi
+     */
+    public function test_get_global_navi()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test get_crumbs
+     */
+    public function test_get_crumbs()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test get_local_navi
+     */
+    public function test_get_local_navi()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+
 }
