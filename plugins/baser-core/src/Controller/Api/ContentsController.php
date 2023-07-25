@@ -109,6 +109,7 @@ class ContentsController extends BcApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_prev(ContentsServiceInterface $service, int $id)
     {
@@ -141,6 +142,7 @@ class ContentsController extends BcApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_next(ContentsServiceInterface $service, int $id)
     {

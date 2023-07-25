@@ -165,9 +165,20 @@ class AppController extends BaseController
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
                 if (BcUtil::loginUser()) {
-                    $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                    if($this->getRequest()->getMethod() === 'GET') {
+                        $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                    } else {
+                        $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。'));
+                    }
                 }
-                return $this->redirect(Configure::read("BcPrefixAuth.{$prefix}.loginRedirect"));
+                // リファラが存在する場合はリファラにリダイレクトする
+                // $this->referer() で判定した場合、リファラがなくてもトップのURLが返却されるため ServerRequest で判定
+                if($this->getRequest()->getEnv('HTTP_REFERER')) {
+                    $url = $this->referer();
+                } else {
+                    $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
+                }
+                return $this->redirect($url);
             }
         }
 
@@ -193,7 +204,8 @@ class AppController extends BaseController
         }
         /* @var PermissionsServiceInterface $permission */
         $permission = $this->getService(PermissionsServiceInterface::class);
-        return $permission->check($this->getRequest()->getPath(), $userGroupsIds);
+        $request = $this->getRequest();
+        return $permission->check($request->getPath(), $userGroupsIds, $request->getMethod());
     }
 
     /**

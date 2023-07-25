@@ -80,12 +80,13 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
      *
      * @param string $url
      * @param array $userGroupId
+     * @param string $method
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function check(string $url, array $userGroupId): bool;
+    public function check(string $url, array $userGroupId, string $method = 'GET'): bool;
 
     /**
      * 権限チェック対象を追加する

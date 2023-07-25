@@ -62,6 +62,21 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        $this->loginAdmin($this->getRequest());
+        //正常系実行
+        $this->get('/baser/api/admin/baser-core/content_folders/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(10, $result->contentFolders);
+    }
+
+
+    /**
      * Test add method
      *
      * @return void
@@ -87,6 +102,30 @@ class ContentFoldersControllerTest extends BcTestCase
         $query = $ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        //準備
+        $this->loginAdmin($this->getRequest());
+        //正常系実行
+        $this->get('/baser/api/admin/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('baserCMSサンプル', $result->contentFolder->folder_template);
+        $this->assertEquals(1, $result->content->id);
+        //異常系実行
+        //存在しないIDを指定した場合、
+        $this->get('/baser/api/admin/baser-core/content_folders/view/99.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+    }
+
 
     /**
      * Test delete method

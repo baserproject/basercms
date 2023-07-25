@@ -2523,7 +2523,7 @@ END_FLASH;
     public function getContentCreatedDate($format = 'Y/m/d H:i')
     {
         $content = $this->getCurrentContent();
-        if ($content['created_date']) {
+        if (!empty($content['created_date'])) {
             return date($format, strtotime($content['created_date']));
         } else {
             return '';
@@ -2543,7 +2543,7 @@ END_FLASH;
     public function getContentModifiedDate($format = 'Y/m/d H:i')
     {
         $content = $this->getCurrentContent();
-        if ($content['modified_date']) {
+        if (!empty($content['modified_date'])) {
             return date($format, strtotime($content['modified_date']));
         } else {
             return '';
