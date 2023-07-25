@@ -175,7 +175,24 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_deleteImage()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+
+        //$entityが値を設定する
+        $this->ThemeConfigsService->get();
+        //テーマロゴを設定する
+        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
+        $pathTest = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
+        copy($logoPath, $pathTest);
+
+        //テストサービスをコール
+        $rs = $this->ThemeConfigsService->deleteImage(new SiteConfig([
+            'logo_delete' => 1
+        ]));
+
+        //戻る値を確認
+        $this->assertEquals($rs['logo'], '');
+        //fileが存在しないか確認すること
+        $this->assertFalse(file_exists($pathTest));
     }
 
     /**
