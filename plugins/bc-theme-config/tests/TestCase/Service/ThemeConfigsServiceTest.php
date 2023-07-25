@@ -117,7 +117,14 @@ class ThemeConfigsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->getRequest()->getAttribute('currentSite');
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcThemeSample'])->persist();
+        //テストメソッドをコール
+        $this->ThemeConfigsService->update(['logo_alt' => 'baserCMS']);
+        //テーマ設定のデータが更新されたか確認すること
+        $themeConfigs = $this->ThemeConfigsService->get();
+        $this->assertEquals($themeConfigs->logo_alt, 'baserCMS');
     }
 
     /**
