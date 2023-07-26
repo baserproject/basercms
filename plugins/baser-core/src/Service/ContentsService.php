@@ -1635,6 +1635,7 @@ class ContentsService implements ContentsServiceInterface
      * @return \Cake\Datasource\ResultSetInterface|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLocalNavi(int $id)
     {

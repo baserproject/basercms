@@ -912,6 +912,26 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test getLocalNavi
+     */
+    public function test_getLocalNavi()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getLocalNavi(4)->toArray();
+        $this->assertCount(11, $result);
+        $this->assertEquals(1, $result[0]->parent_id);
+        $this->assertEquals(24, $result[10]->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getLocalNavi(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getLocalNavi(999)->toArray();
+
+    }
+
+
+    /**
      * test batch
      * @return void
      */
