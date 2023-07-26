@@ -63,7 +63,7 @@ class ThemeFilesServiceTest extends BcTestCase
         $this->assertEquals($rs['ext'], 'php');
         $this->assertEquals($rs['type'], 'file');
         $this->assertEquals($rs['path'], null);
-        $this->assertEquals($rs['content'], '');
+        $this->assertEquals($rs['contents'], '');
     }
 
     /**
