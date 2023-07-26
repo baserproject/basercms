@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFilesService;
+use Cake\Filesystem\File;
 
 /**
  * ThemeFilesServiceTest
@@ -93,7 +94,19 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストファイルを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/base_name_1.php';
+        new File($fullpath, true);
+        $rs = $this->ThemeFileService->delete($fullpath);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //実際にファイルが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
+
+        //存在しないファイルを削除した場合、
+        $rs = $this->ThemeFileService->delete($fullpath);
+        //戻る値を確認
+        $this->assertFalse($rs);
     }
 
     /**
