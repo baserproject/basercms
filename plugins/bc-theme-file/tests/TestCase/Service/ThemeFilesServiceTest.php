@@ -61,7 +61,21 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $filePath = '/var/www/html/plugins/BcThemeSample/templates/layout/default.php';
+
+        //テスト対象メソッドをコール
+        $rs = $this->ThemeFileService->get($filePath);
+        $this->assertEquals(1, 1);
+
+        //戻る値を確認
+        $this->assertEquals($rs['fullpath'], $filePath);
+        $this->assertEquals($rs['parent'], '/var/www/html/plugins/BcThemeSample/templates/layout/');
+        $this->assertEquals($rs['name'], 'default.php');
+        $this->assertEquals($rs['base_name'], 'default');
+        $this->assertEquals($rs['ext'], 'php');
+        $this->assertEquals($rs['type'], 'text');
+        $this->assertEquals($rs['path'], null);
+        $this->assertTextContains('baserCMS :  Based Website Development Project', $rs['contents']);
     }
 
     /**

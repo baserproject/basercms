@@ -70,6 +70,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFile
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(string $file)
     {
