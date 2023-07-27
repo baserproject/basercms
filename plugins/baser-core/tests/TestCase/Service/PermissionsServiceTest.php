@@ -332,17 +332,17 @@ class PermissionsServiceTest extends BcTestCase
     {
         $this->truncateTable('permissions');
 
-        // ホワイトリスト
+        // ブラックリスト
         $this->assertTrue($this->PermissionsService->isAuthorized(2, '/', 'GET', []));
         $this->assertTrue($this->PermissionsService->isAuthorized(2, '/', 'POST', []));
         $this->assertTrue($this->PermissionsService->isAuthorized(2, '/', 'PUT', []));
         $this->assertTrue($this->PermissionsService->isAuthorized(2, '/', 'PATCH', []));
         $this->assertTrue($this->PermissionsService->isAuthorized(2, '/', 'DELETE', []));
 
-        // ブラックリスト（データなし）
+        // ホワイトリスト（データなし）
         $this->assertFalse($this->PermissionsService->isAuthorized(1, '/', 'GET', []));
 
-        // ブラックリスト（/ に対し 表示 のみ許可）
+        // ホワイトリスト（/ に対し 表示 のみ許可）
         PermissionFactory::make(['url' => '/', 'method' => 'GET', 'auth' => true])->persist();
         $permissions = PermissionFactory::find()->all()->toArray();
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'GET', $permissions));
@@ -351,7 +351,7 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertFalse($this->PermissionsService->isAuthorized(1, '/', 'PATCH', $permissions));
         $this->assertFalse($this->PermissionsService->isAuthorized(1, '/', 'DELETE', $permissions));
 
-        // ブラックリスト（/ に対し表示と編集を許可）
+        // ホワイトリスト（/ に対し表示と編集を許可）
         // ※ 現在、* と挙動が同じになっている。DELETE を * の場合だけ許可するか検討が必要
         $this->truncateTable('permissions');
         PermissionFactory::make(['url' => '/', 'method' => 'POST', 'auth' => true])->persist();
@@ -362,7 +362,7 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'PATCH', $permissions));
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'DELETE', $permissions));
 
-        // ブラックリスト（/ に対し全て許可）
+        // ホワイトリスト（/ に対し全て許可）
         $this->truncateTable('permissions');
         PermissionFactory::make(['url' => '/', 'method' => '*', 'auth' => true])->persist();
         $permissions = PermissionFactory::find()->all()->toArray();
@@ -371,6 +371,9 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'PUT', $permissions));
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'PATCH', $permissions));
         $this->assertTrue($this->PermissionsService->isAuthorized(1, '/', 'DELETE', $permissions));
+
+        // ホワイトリスト（クエリパラメーター付き）
+        $this->assertTrue($this->PermissionsService->isAuthorized(1, '/?test=1', 'GET', $permissions));
     }
 
     /**
