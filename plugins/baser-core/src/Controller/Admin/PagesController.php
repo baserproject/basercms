@@ -155,7 +155,8 @@ class PagesController extends BcAdminAppController
 	 */
 	public function beforeFilter(EventInterface $event)
 	{
-		parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
             $this->viewBuilder()->addHelpers([BcSiteConfig::get('editor')]);
         }
