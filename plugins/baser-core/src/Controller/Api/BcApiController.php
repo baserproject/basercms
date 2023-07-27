@@ -47,7 +47,7 @@ class BcApiController extends AppController
                 throw new ForbiddenException(__d('baser_core', 'baser APIは許可されていません。'));
             }
         }
-        parent::beforeFilter($event);
+        return parent::beforeFilter($event);
     }
 
     /**
