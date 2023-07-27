@@ -11,6 +11,7 @@
 
 namespace BcThemeFile\Test\TestCase\Service;
 
+use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFilesService;
 
@@ -77,7 +78,32 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //ポストデータを生成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $postData = [
+            'fullpath' => $fullpath,
+            'parent' => $fullpath,
+            'base_name' => 'test',
+            'ext' => 'php',
+            'contents' => "<?php echo 'test' ?>"
+        ];
+        //正常系テスト
+        $rs = $this->ThemeFileService->create($postData);
+        //戻る値を確認
+        $this->assertEquals($rs->getData('fullpath'), $fullpath . 'test.php');
+        //実際にファイルが作成されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'test.php'));
+        //fileの中身を確認する事
+        $this->assertEquals(file_get_contents($fullpath . 'test.php'), "<?php echo 'test' ?>");
+
+        //作成されたファイルを削除
+        unlink($fullpath . 'test.php');
+
+        //異常系テスト・ファイル名を入力しない
+        $postData['base_name'] = '';
+        $this->expectException(BcFormFailedException::class);
+        $this->expectExceptionMessage('ファイルの作成に失敗しました。');
+        $this->ThemeFileService->create($postData);
     }
 
     /**
