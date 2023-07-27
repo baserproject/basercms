@@ -35,7 +35,8 @@ class SearchIndexesController extends BcApiController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
         $this->Security->setConfig('validatePost', false);
     }
 

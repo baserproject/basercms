@@ -63,7 +63,8 @@ class ContentsController extends BcAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
         $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 

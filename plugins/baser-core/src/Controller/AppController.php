@@ -136,7 +136,8 @@ class AppController extends BaseController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
 
 		// index.php をつけたURLの場合、base の値が正常でなくなり、
 		// 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
