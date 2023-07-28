@@ -904,6 +904,23 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test getParent
+     */
+    public function test_getParent()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getParent(4);
+        $this->assertEquals(1, $result->id);
+        //正常系実行: false返す
+        $result = $this->ContentsService->getParent(1);
+        $this->assertFalse($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getLocalNavi(999)->toArray();
+    }
+
+
+    /**
      * test create
      */
     public function test_create()
