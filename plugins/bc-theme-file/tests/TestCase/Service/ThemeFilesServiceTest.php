@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFilesService;
+use Cake\Filesystem\File;
 
 /**
  * ThemeFilesServiceTest
@@ -101,7 +102,19 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストファイルを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'base_name_1.php', true);
+        //サービスメソッドをコール
+        $rs = $this->ThemeFileService->copy($fullpath . 'base_name_1.php');
+        //戻る値を確認
+        $this->assertEquals($rs['base_name'], 'base_name_1_copy');
+        $this->assertEquals($rs['fullpath'], $fullpath . 'base_name_1_copy.php');
+        //実際にファイルが削除されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'base_name_1_copy.php'));
+        //生成されたテストファイルを削除
+        unlink($fullpath . 'base_name_1.php');
+        unlink($fullpath . 'base_name_1_copy.php');
     }
 
     /**
