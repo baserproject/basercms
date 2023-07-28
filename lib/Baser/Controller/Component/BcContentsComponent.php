@@ -247,7 +247,7 @@ class BcContentsComponent extends Component
 					$controller->helpers[] = 'BcCache';
 					// php 8系では'+5 min'など、string型で指定されていた場合、5分後と判定されない問題を解消
 					$cacheTime = $controller->Content->getCacheTime($controller->request->params['Content']);
-					$controller->cacheAction = is_numeric($cacheTime) ? $cacheTime : strtotime($cacheTime);
+					$controller->cacheAction = is_numeric($cacheTime) ? $cacheTime : strtotime($cacheTime) - time();
 				}
 			}
 		}
