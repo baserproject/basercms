@@ -245,7 +245,9 @@ class BcContentsComponent extends Component
 				//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
 				if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
 					$controller->helpers[] = 'BcCache';
-					$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
+					// php 8系では'+5 min'など、string型で指定されていた場合、5分後と判定されない問題を解消
+					$cacheTime = $controller->Content->getCacheTime($controller->request->params['Content']);
+					$controller->cacheAction = $cacheTime = is_numeric($cacheTime) ? $cacheTime : strtotime($cacheTime);
 				}
 			}
 		}
