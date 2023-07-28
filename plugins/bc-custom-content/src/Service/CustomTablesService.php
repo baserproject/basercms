@@ -198,6 +198,9 @@ class CustomTablesService implements CustomTablesServiceInterface
      * @param EntityInterface $entity
      * @param array $postData
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -214,14 +217,6 @@ class CustomTablesService implements CustomTablesServiceInterface
             $entity = $this->CustomTables->patchEntity($entity, $postData);
             $entity = $this->CustomTables->saveOrFail($entity);
 
-            // 関連フィードの削除されたフィールドの反映、並び順の更新を実行
-            /** @var CustomLinksServiceInterface $customEntriesService */
-            $customLinksService = $this->getService(CustomLinksServiceInterface::class);
-            $customLinksService->updateFields(
-                $entity->id,
-                $entity->custom_links
-            );
-
             /** @var CustomEntriesService $customEntriesService */
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
 
@@ -230,6 +225,14 @@ class CustomTablesService implements CustomTablesServiceInterface
                 $this->CustomTables->getConnection()->rollback();
                 throw new BcException(__d('baser_core', 'データベースに問題があります。エントリー保存用テーブルのリネーム処理に失敗しました。'));
             }
+
+            // 関連フィードの削除されたフィールドの反映、並び順の更新を実行
+            /** @var CustomLinksServiceInterface $customEntriesService */
+            $customLinksService = $this->getService(CustomLinksServiceInterface::class);
+            $customLinksService->updateFields(
+                $entity->id,
+                $entity->custom_links
+            );
 
             // フィールドの追加処理
             $customEntriesService->addFields($entity->id, $entity->custom_links);

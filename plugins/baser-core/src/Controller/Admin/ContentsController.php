@@ -63,7 +63,8 @@ class ContentsController extends BcAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
         $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
@@ -220,9 +221,12 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-	 * コンテンツ削除（論理削除）
-     * @param  ContentsServiceInterface $service
-	 */
+     * コンテンツ削除（論理削除）
+     * @param ContentsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
 	public function delete(ContentsServiceInterface $service)
 	{
         if ($this->request->is(['post', 'put', 'delete'])) {

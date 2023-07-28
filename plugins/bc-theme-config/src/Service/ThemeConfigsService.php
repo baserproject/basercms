@@ -42,6 +42,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -53,6 +54,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return ThemeConfig|\Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get()
     {
@@ -70,6 +72,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCache()
     {
@@ -83,6 +86,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return ThemeConfig|\Cake\Datasource\EntityInterface|false
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function update(array $postData)
     {
@@ -123,6 +127,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return EntityInterface
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function saveImage($entity)
     {
@@ -131,23 +136,31 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
             $folder = new Folder();
             $folder->create($saveDir);
         }
-        $images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
         $thumbSuffix = '_thumb';
         $oldEntity = $this->ThemeConfigs->getKeyValue();
 
-        foreach($images as $image) {
+        foreach(['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'] as $image) {
             if (!empty($entity->{$image}['tmp_name'])) {
+                // 古い本体ファイルを削除
                 @unlink($saveDir . $oldEntity[$image]);
+
+                // 古いサムネイルを削除
                 $pathinfo = pathinfo($oldEntity[$image]);
                 @unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
-                $fileName = $entity->{$image}['name'];
-                $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-                $filePath = $saveDir . $image . '.' . $ext;
-                $thumbPath = $saveDir . $image . $thumbSuffix . '.' . $ext;
+
+                // 本体ファイルを保存
+                $ext = pathinfo($entity->{$image}['name'], PATHINFO_EXTENSION);
+                $fileName = $image . '.' . $ext;
+                $filePath = $saveDir . $fileName;
                 move_uploaded_file($entity->{$image}['tmp_name'], $filePath);
+
+                // サムネイルを保存
                 $imageresizer = new Imageresizer();
+                $thumbPath = $saveDir . $image . $thumbSuffix . '.' . $ext;
                 $imageresizer->resize($filePath, $thumbPath, 320, 320);
-                $entity->{$image} = $image . '.' . $ext;
+
+                // エンティティを更新
+                $entity->{$image} = $fileName;
             } else {
                 unset($entity->{$image});
             }
@@ -163,6 +176,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return EntityInterface
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function deleteImage($entity)
     {
@@ -189,6 +203,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      * @return boolean
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function updateColorConfig($entity)
     {

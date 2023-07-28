@@ -17,6 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -66,6 +67,7 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomTablesService = $this->getService(CustomTablesServiceInterface::class);
     }
@@ -324,7 +326,63 @@ class CustomTablesServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        CustomFieldFactory::make([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'type' => 'text'
+        ])->persist();
+        $this->CustomTablesService->create($data);
+        //アップデートメソッドを呼ぶ
+        $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'contact_edit']);
+        //戻る値を確認
+        $this->assertEquals('contact_edit', $rs->name);
+        //テーブル名も変更されたの確認
+        $this->assertTrue($dataBaseService->tableExists('custom_entry_1_contact_edit'));
+        //変更した前テーブル名が存在しないの確認
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //カスタムリンクを追加するテスト
+        $postData = [
+            'name' => 'contact_edit_2',
+            'new' => [
+                [
+                    'no' => NULL,
+                    'custom_table_id' => 1,
+                    'custom_field_id' => 1,
+                    'parent_id' => NULL,
+                    'lft' => 1,
+                    'rght' => 2,
+                    'level' => 0,
+                    'name' => 'add_new',
+                    'title' => '求人分類',
+                    'group_valid' => 0,
+                ]
+            ]
+        ];
+        //アップデートメソッドを呼ぶ
+        $rs = $this->CustomTablesService->update($this->CustomTablesService->get(1), $postData);
+        //戻る値を確認
+        $this->assertEquals('contact_edit_2', $rs->name);
+        //カスタムリンクが追加できるか確認する事
+        $this->assertEquals('add_new', $rs->custom_links[0]->name);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact_edit_2');
+
+        //エラーする時をテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'あああああ']);
     }
 
     /**
