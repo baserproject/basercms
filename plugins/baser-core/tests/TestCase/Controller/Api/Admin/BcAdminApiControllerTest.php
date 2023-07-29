@@ -15,6 +15,7 @@ use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Controller\Controller;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -116,10 +117,12 @@ class BcAdminApiControllerTest extends BcTestCase
     public function test_isAdminApiEnabled()
     {
         $controller = new BcAdminApiController($this->getRequest());
-        $this->loadFixtures(InitAppScenario::class);
-        $this->apiLoginAdmin(1);
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
+        $token = $this->apiLoginAdmin(1);
         //正常系実行: USE_CORE_ADMIN_API = 'true';
+        $controller->loadComponent('Authentication.Authentication');
         $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['refresh_token']);
         $result = $controller->isAdminApiEnabled();
         $this->assertTrue($result);
     }
