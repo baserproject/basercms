@@ -63,7 +63,6 @@ class PagesController extends BcAdminAppController
 
             // EVENT Pages.beforeAdd
             $event = $this->dispatchLayerEvent('beforeAdd', [
-                'request' => $this->request,
                 'data' => $this->request->getData()
             ]);
             if ($event !== false) {
@@ -75,7 +74,6 @@ class PagesController extends BcAdminAppController
 
                 // EVENT Pages.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
-                    'request' => $this->request,
                     'data' => $page
                 ]);
 
