@@ -13,6 +13,9 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\File;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class UpdatersController
@@ -28,6 +31,7 @@ class UpdatersController extends BcAdminAppController
      * [ADMIN] アップデートスクリプトを実行する
      *
      * @return void
+     * @checked
      */
     public function admin_exec_script()
     {
