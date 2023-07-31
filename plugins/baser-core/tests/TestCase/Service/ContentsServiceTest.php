@@ -969,6 +969,22 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($countBefore + 1, SearchIndexesFactory::count());
     }
 
+    /**
+     * test getNext
+     */
+    public function test_getNext()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getNext(9);
+        $this->assertEquals(18, $result->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getNext(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getPrev(999);
+    }
+
 
     /**
      * test setCurrentToRequest
