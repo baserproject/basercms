@@ -33,6 +33,7 @@ class BcThemeFileService implements BcThemeFileServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFullpath(string $theme, string $plugin, string $type, string $path)
     {

@@ -55,6 +55,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFile
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(string $file, string $type)
     {
@@ -70,6 +71,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFile
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(string $file)
     {
@@ -83,6 +85,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFileForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getForm(array $data)
     {
@@ -96,6 +99,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFileForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -120,6 +124,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFileForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(array $postData)
     {
@@ -143,6 +148,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(string $fullpath)
     {
@@ -160,6 +166,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFile|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $fullpath)
     {
