@@ -27,7 +27,6 @@ class BcThemeFileServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcThemeFileService = new BcThemeFileService();
     }
@@ -37,6 +36,7 @@ class BcThemeFileServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->BcThemeFileService);
         parent::tearDown();
     }
 
@@ -46,11 +46,15 @@ class BcThemeFileServiceTest extends BcTestCase
     public function test_getFullpath()
     {
         //typeが$assetsではない場合、
-        $themePath = $this->BcThemeFileService->getFullpath('BcThemeSample', 'layout', 'default.php');
+        $themePath = $this->BcThemeFileService->getFullpath('BcThemeSample', 'BaserCore', 'layout', 'default.php');
         $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout/default.php', $themePath);
 
         //typeがimgの場合、
-        $themePath = $this->BcThemeFileService->getFullpath('BcFront', 'img', 'logo.png');
+        $themePath = $this->BcThemeFileService->getFullpath('BcFront', 'BaserCore', 'img', 'logo.png');
         $this->assertEquals('/var/www/html/plugins/bc-front/webroot/img/logo.png', $themePath);
+
+        //$pluginがないの場合、
+        $themePath = $this->BcThemeFileService->getFullpath('BcThemeSample', '', 'layout', 'default.php');
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout/default.php', $themePath);
     }
 }
