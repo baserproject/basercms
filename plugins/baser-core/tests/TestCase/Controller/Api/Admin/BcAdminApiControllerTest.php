@@ -117,14 +117,22 @@ class BcAdminApiControllerTest extends BcTestCase
     public function test_isAdminApiEnabled()
     {
         $controller = new BcAdminApiController($this->getRequest());
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
-        $token = $this->apiLoginAdmin(1);
-        //正常系実行: USE_CORE_ADMIN_API = 'true';
         $controller->loadComponent('Authentication.Authentication');
+
+        // USE_CORE_ADMIN_API = 'true';
         $_SERVER['USE_CORE_ADMIN_API'] = 'true';
-        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['refresh_token']);
-        $result = $controller->isAdminApiEnabled();
-        $this->assertTrue($result);
+
+        // - 認証済
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', new Identity([])));
+        $this->assertTrue($controller->isAdminApiEnabled());
+
+        // - 未認証
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', null));
+        $this->assertFalse($controller->isAdminApiEnabled());
+
+        // USE_CORE_ADMIN_API = 'false';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+        $this->assertFalse($controller->isAdminApiEnabled());
     }
 
 
