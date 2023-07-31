@@ -11,11 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use Cake\Controller\Controller;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
