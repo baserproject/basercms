@@ -161,7 +161,10 @@ class BcAuthConfigureComponentTest extends BaserTestCase
 		if (!empty($userScope)) {
 			$expected['authenticate']['Form']['scope'] = $userScope;
 		} else if (!empty($auth_prefix)) {
-			$expected['authenticate']['Form']['scope'] = ['UserGroup.auth_prefix LIKE' => '%' . $auth_prefix . '%'];
+			$expected['authenticate']['Form']['scope'] = [
+				'UserGroup.auth_prefix LIKE' => '%' . $auth_prefix . '%',
+				'User.status' => true
+			];
 		}
 
 		// 判定
