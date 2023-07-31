@@ -92,6 +92,9 @@ class BcAdminApiController extends BcApiController
      * 認証が必要なAPIを利用可能かどうか判定
      *
      * @return bool
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function isAdminApiEnabled()
     {

@@ -12,8 +12,10 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Controller\Controller;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -108,5 +110,30 @@ class BcAdminApiControllerTest extends BcTestCase
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseCode(401);
     }
+
+    /**
+     * test isAdminApiEnabled
+     */
+    public function test_isAdminApiEnabled()
+    {
+        $controller = new BcAdminApiController($this->getRequest());
+        $controller->loadComponent('Authentication.Authentication');
+
+        // USE_CORE_ADMIN_API = 'true';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+
+        // - 認証済
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', new Identity([])));
+        $this->assertTrue($controller->isAdminApiEnabled());
+
+        // - 未認証
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', null));
+        $this->assertFalse($controller->isAdminApiEnabled());
+
+        // USE_CORE_ADMIN_API = 'false';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+        $this->assertFalse($controller->isAdminApiEnabled());
+    }
+
 
 }
