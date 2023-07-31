@@ -421,14 +421,14 @@ class BcAppController extends Controller
 					}
 					$conditions = [
 						$userModel . '.id' => $user['id'],
-						$userModel . '.' . $nameField => $user[$nameField]
+						$userModel . '.' . $nameField => $user[$nameField],
+						$userModel . '.status' => true
 					];
 					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
 						$userGroups = $UserGroup->find('all', ['conditions' => ['UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'], 'recursive' => -1]);
 						$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
 						$conditions[$userModel . '.user_group_id'] = $userGroupIds;
-						$conditions['User.status'] = true;
 					}
 					if (!$User->find('count', [
 						'conditions' => $conditions,
