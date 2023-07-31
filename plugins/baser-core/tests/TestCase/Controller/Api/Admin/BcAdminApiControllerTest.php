@@ -132,6 +132,8 @@ class BcAdminApiControllerTest extends BcTestCase
         // USE_CORE_ADMIN_API = 'false';
         $_SERVER['USE_CORE_ADMIN_API'] = 'false';
         $this->assertFalse($controller->isAdminApiEnabled());
+
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
     }
 
 
