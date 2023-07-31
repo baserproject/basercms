@@ -60,6 +60,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(ThemeFolder $entity, ThemeFolderForm $form, array $args)
     {
