@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -133,6 +134,26 @@ class BcAdminApiControllerTest extends BcTestCase
         // USE_CORE_ADMIN_API = 'false';
         $_SERVER['USE_CORE_ADMIN_API'] = 'false';
         $this->assertFalse($controller->isAdminApiEnabled());
+    }
+
+    /**
+     * test isAvailableUser
+     */
+    public function test_isAvailableUser()
+    {
+        //準備
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
+        $token = $this->apiLoginAdmin(1);
+        $controller = new BcAdminApiController($this->getRequest());
+        $controller->loadComponent('Authentication.Authentication');
+        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
+        $this->assertResponseOk();
+        // - 認証済
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', new Identity([])));
+        $this->assertTrue($controller->isAvailableUser());
+        //異常系実行
+
+
     }
 
 

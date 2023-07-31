@@ -112,6 +112,9 @@ class BcAdminApiController extends BcApiController
      * ない場合は、 true を返却する
      *
      * @return bool
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function isAvailableUser(): bool
     {
