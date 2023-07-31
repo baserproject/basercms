@@ -81,7 +81,16 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_getForm()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $filePath = '/var/www/html/plugins/BcThemeSample/templates/layout/default.php';
+        $data = $this->ThemeFileService->get($filePath);
+        //テスト対象メソッドをコール
+        $rs = $this->ThemeFileService->getForm($data->toArray());
+        //戻る値を確認
+        $this->assertEquals(
+            '/var/www/html/plugins/BcThemeSample/templates/layout/default.php',
+            $rs->getData('fullpath')
+        );
     }
 
     /**
