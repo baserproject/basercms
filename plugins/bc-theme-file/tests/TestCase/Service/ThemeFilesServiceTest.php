@@ -75,7 +75,10 @@ class ThemeFilesServiceTest extends BcTestCase
         //テスト対象メソッドをコール
         $rs = $this->ThemeFileService->getForm($data->toArray());
         //戻る値を確認
-        $this->assertEquals($rs->getData('fullpath'), $data['fullpath']);
+        $this->assertEquals(
+            '/var/www/html/plugins/BcThemeSample/templates/layout/default.php',
+            $rs->getData('fullpath')
+        );
     }
 
     /**
