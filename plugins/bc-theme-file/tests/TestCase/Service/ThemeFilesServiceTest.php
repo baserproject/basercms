@@ -65,7 +65,6 @@ class ThemeFilesServiceTest extends BcTestCase
 
         //テスト対象メソッドをコール
         $rs = $this->ThemeFileService->get($filePath);
-        $this->assertEquals(1, 1);
 
         //戻る値を確認
         $this->assertEquals($rs['fullpath'], $filePath);
