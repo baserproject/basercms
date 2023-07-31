@@ -27,7 +27,6 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->ThemeFileService = new ThemeFilesService();
     }
@@ -53,7 +52,18 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $file = '/var/www/html/plugins/BcThemeSample/templates/layout/';
+        //テスト対象メソッドをコール
+        $rs = $this->ThemeFileService->getNew($file, 'layout');
+        //戻る値を確認
+        $this->assertEquals($rs['fullpath'], $file);
+        $this->assertEquals($rs['parent'], $file);
+        $this->assertEquals($rs['name'], 'layout');
+        $this->assertEquals($rs['base_name'], '');
+        $this->assertEquals($rs['ext'], 'php');
+        $this->assertEquals($rs['type'], 'file');
+        $this->assertEquals($rs['path'], null);
+        $this->assertEquals($rs['contents'], '');
     }
 
     /**
