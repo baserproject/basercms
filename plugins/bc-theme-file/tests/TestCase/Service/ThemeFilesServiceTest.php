@@ -11,6 +11,7 @@
 
 namespace BcThemeFile\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcThemeFile\Service\ThemeFilesService;
 
@@ -19,6 +20,15 @@ use BcThemeFile\Service\ThemeFilesService;
  */
 class ThemeFilesServiceTest extends BcTestCase
 {
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+    ];
 
     public $ThemeFileService = null;
 
@@ -117,7 +127,31 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_copyToTheme()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->getRequest()->getAttribute('currentSite');
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        //パラメーターを作成
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            'path' => 'bge_style.css',
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
+            'assets' => true
+        ];
+        //対象メソッドをコール
+        $rs = $this->ThemeFileService->copyToTheme($param);
+        //戻る値を確認
+        $this->assertEquals($rs, '/plugins/bc-column/webroot/css/bge_style.css');
+        $copiedFilePath = '/var/www/html/plugins/bc-column/webroot/css/bge_style.css';
+        //実際にファイルが作成されいてるか確認すること
+        $this->assertTrue(file_exists($copiedFilePath));
+        //ファイルの中身を確認
+        $this->assertTextContains('.cke_editable {
+  padding: 15px;
+}', file_get_contents($copiedFilePath));
+        //作成されたファイルを削除
+        unlink($copiedFilePath);
     }
 
     /**
