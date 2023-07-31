@@ -122,7 +122,34 @@ class ThemeFilesServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //POSTデータを生成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'test.php', true);
+        $data = [
+            'fullpath' => $fullpath . 'test.php',
+            'parent' => $fullpath,
+            'base_name' => 'test_update',
+            'ext' => 'php',
+            'contents' => "<?php echo 'test' ?>"
+        ];
+        //正常系テスト
+        $rs = $this->ThemeFileService->update($data);
+        //戻る値を確認
+        $this->assertEquals($rs->getData('fullpath'), $fullpath . 'test_update.php');
+        //実際にファイルが変更されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'test_update.php'));
+        //ファイルの中身を確認
+        $this->assertEquals(file_get_contents($fullpath . 'test_update.php'), "<?php echo 'test' ?>");
+        //変更した前にファイル名が存在しないか確認すること
+        $this->assertFalse(file_exists($fullpath . 'test.php'));
+        //作成されたファイルを削除
+        unlink($fullpath . 'test_update.php');
+
+        //異常系テスト・ファイル名を入力しない
+        $postData['base_name'] = '';
+        $this->expectException(BcFormFailedException::class);
+        $this->expectExceptionMessage('ファイルの保存に失敗しました。');
+        $this->ThemeFileService->update($postData);
     }
 
     /**
