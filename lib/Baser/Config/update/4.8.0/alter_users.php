@@ -28,7 +28,7 @@ class UsersSchema extends CakeSchema {
 		'nickname' => ['type' => 'string', 'null' => true, 'default' => null],
 		'activate_key' => ['type' => 'string', 'null' => true, 'default' => null],
 		'activate_expire' => ['type' => 'datetime', 'null' => true, 'default' => null],
-		'status' => ['type' => 'boolean', 'null' => true, 'default' => true],
+		'status' => ['type' => 'boolean', 'null' => true, 'default' => false],
 		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
