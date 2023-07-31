@@ -67,13 +67,13 @@ class ThemeFilesServiceTest extends BcTestCase
         $rs = $this->ThemeFileService->get($filePath);
 
         //戻る値を確認
-        $this->assertEquals($rs['fullpath'], $filePath);
-        $this->assertEquals($rs['parent'], '/var/www/html/plugins/BcThemeSample/templates/layout/');
-        $this->assertEquals($rs['name'], 'default.php');
-        $this->assertEquals($rs['base_name'], 'default');
-        $this->assertEquals($rs['ext'], 'php');
-        $this->assertEquals($rs['type'], 'text');
-        $this->assertEquals($rs['path'], null);
+        $this->assertEquals($filePath, $rs['fullpath']);
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout/', $rs['parent']);
+        $this->assertEquals('default.php', $rs['name']);
+        $this->assertEquals('default', $rs['base_name']);
+        $this->assertEquals('php', $rs['ext']);
+        $this->assertEquals('text', $rs['type']);
+        $this->assertEquals(null, $rs['path']);
         $this->assertTextContains('baserCMS :  Based Website Development Project', $rs['contents']);
     }
 
