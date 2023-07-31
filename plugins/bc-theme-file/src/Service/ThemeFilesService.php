@@ -97,6 +97,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFileForm
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
