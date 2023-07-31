@@ -110,7 +110,7 @@ class ThemeFilesServiceTest extends BcTestCase
         //戻る値を確認
         $this->assertEquals($rs['base_name'], 'base_name_1_copy');
         $this->assertEquals($rs['fullpath'], $fullpath . 'base_name_1_copy.php');
-        //実際にファイルが削除されいてるか確認すること
+        //実際にファイルが作成されいてるか確認すること
         $this->assertTrue(file_exists($fullpath . 'base_name_1_copy.php'));
         //生成されたテストファイルを削除
         unlink($fullpath . 'base_name_1.php');
