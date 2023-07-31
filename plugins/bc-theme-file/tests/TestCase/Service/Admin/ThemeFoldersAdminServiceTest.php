@@ -115,7 +115,13 @@ class ThemeFoldersAdminServiceTest extends BcTestCase
      */
     public function test_isWritableDir()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //trueを返す場合、
+        $fullPath = '/var/www/html/plugins/bc-front/templates';
+        $this->assertTrue($this->ThemeFoldersAdminService->isWritableDir($fullPath));
+
+        //falseを返す場合、
+        $fullPath = 'test';
+        $this->assertFalse($this->ThemeFoldersAdminService->isWritableDir($fullPath));
     }
 
     /**

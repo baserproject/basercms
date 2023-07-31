@@ -86,6 +86,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isWritableDir($fullpath)
     {
