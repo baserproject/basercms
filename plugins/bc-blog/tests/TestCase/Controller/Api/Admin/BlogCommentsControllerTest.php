@@ -263,4 +263,18 @@ class BlogCommentsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('パラメーターに blog_content_id が指定されていません。', $result->message);
     }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
 }
