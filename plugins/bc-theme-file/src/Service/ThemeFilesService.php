@@ -193,6 +193,9 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      *
      * @param string $fullpath
      * @param array $postData
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function upload(string $fullpath, array $postData)
     {
