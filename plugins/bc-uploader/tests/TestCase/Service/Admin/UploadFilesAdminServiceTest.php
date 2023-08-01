@@ -90,7 +90,19 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     public function test_checkInstall()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //limitedフォルダーと.htaccessファイルが存在しない場合、
+        $limitPath = '/var/www/html/webroot/files/uploads/limited';
+        unlink($limitPath . DS . '.htaccess');
+        rmdir($limitPath);
+        //対象メソッドをコール
+        $rs = $this->execPrivateMethod($this->UploaderFilesAdminService, 'checkInstall', []);
+        //戻る値を確認
+        $this->assertEquals('', $rs);
+        //.htaccessが生成されたか確認
+        $this->assertTrue(file_exists($limitPath . DS . '.htaccess'));
+        //.htaccessの中身を確認
+        $this->assertEquals('Order allow,deny
+Deny from all', file_get_contents($limitPath . DS . '.htaccess'));
     }
 
     /**
