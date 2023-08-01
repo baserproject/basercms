@@ -269,12 +269,25 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        //準備
-
+        // 準備：データ生成
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
         //正常系実行
-
+        $this->get('/baser/api/admin/bc-blog/blog_comments/index.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(3, $result->blogComments);
+        $this->assertEquals('baserCMS', $result->blogComments[0]->name);
         //異常系実行
-
+        $this->get('/baser/api/admin/bc-blog/blog_comments/index.json?token=' . $this->refreshToken);
+        $this->assertResponseCode(401);
 
     }
 }

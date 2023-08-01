@@ -34,6 +34,7 @@ class BlogCommentsController extends BcAdminApiController
      * @param BlogCommentsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogCommentsServiceInterface $service)
     {
