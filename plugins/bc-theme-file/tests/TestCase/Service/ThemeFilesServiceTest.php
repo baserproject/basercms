@@ -250,9 +250,6 @@ class ThemeFilesServiceTest extends BcTestCase
                 'type' => 'html'
             ]
         ];
-        $this->setUploadFileToRequest('file', $testFile);
-        $this->setUnlockedFields(['file']);
-
         //テスト対象メソッドをコール
         $this->ThemeFileService->upload($fullpath . 'new_folder', $files);
         //実際にファイルが存在するか確認すること
