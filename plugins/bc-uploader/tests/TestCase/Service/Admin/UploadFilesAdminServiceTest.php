@@ -82,12 +82,16 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAjaxList()
     {
+        //データを生成
         UploaderConfigFactory::make(['name' => 'layout_type', 'value' => 'panel'])->persist();
         UploaderFileFactory::make(['name' => '2_3.jpg', 'atl' => '2_3.jpg', 'user_id' => 1])->persist();
+
+        //対象メソッドをコール
         $rs = $this->UploaderFilesAdminService->getViewVarsForAjaxList(
             $this->UploaderFilesAdminService->getIndex([])->all(),
             1
         );
+
         //戻る値を確認
         $this->assertEquals(1, $rs['listId']);
         $this->assertEquals('panel', $rs['layoutType']);
