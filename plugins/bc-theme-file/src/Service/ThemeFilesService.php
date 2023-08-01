@@ -71,6 +71,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return ThemeFile
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(string $file)
     {
@@ -222,6 +223,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      * @return array|false|string|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copyToTheme(array $params)
     {
