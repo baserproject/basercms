@@ -120,6 +120,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAjaxImage(string $name, string $size)
     {
