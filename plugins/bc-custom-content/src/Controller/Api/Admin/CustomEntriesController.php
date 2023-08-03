@@ -36,6 +36,7 @@ class CustomEntriesController extends BcAdminApiController
      * @param $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(CustomEntriesServiceInterface $service, $id)
     {
