@@ -118,6 +118,7 @@ class BlogCommentsControllerTest extends BcTestCase
         //異常系実行
         $this->get('/baser/api/admin/bc-blog/blog_comments/view/111.json?token=' . $this->accessToken);
         $this->assertResponseCode(404);
+        $this->setFixtureTruncate();
     }
 
 
