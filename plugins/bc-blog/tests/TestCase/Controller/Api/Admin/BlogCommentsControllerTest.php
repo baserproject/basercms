@@ -100,14 +100,6 @@ class BlogCommentsControllerTest extends BcTestCase
     public function test_view()
     {
         // 準備: コメントを作成する
-        $this->loadFixtureScenario(
-            BlogContentScenario::class,
-            1,  // id
-            1, // siteId
-            null, // parentId
-            'news1', // name
-            '/news/' // url
-        );
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
         // 正常系実行
         $this->get('/baser/api/admin/bc-blog/blog_comments/view/2.json?token=' . $this->accessToken);
