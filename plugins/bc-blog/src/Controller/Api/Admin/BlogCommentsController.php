@@ -58,6 +58,7 @@ class BlogCommentsController extends BcAdminApiController
      * @param $blogCommentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(BlogCommentsServiceInterface $service, $blogCommentId)
     {

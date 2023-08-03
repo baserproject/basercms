@@ -95,6 +95,33 @@ class BlogCommentsControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function test_view()
+    {
+        // 準備: コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        // 正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/view/2.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // 取得されたコメントのidを確認する
+        $this->assertEquals(2, $result->blogComment->id);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/view/111.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+    }
+
+
+    /**
      * test delete
      */
     public function test_delete()
