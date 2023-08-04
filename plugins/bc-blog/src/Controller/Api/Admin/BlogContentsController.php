@@ -48,6 +48,7 @@ class BlogContentsController extends BcAdminApiController
      * @param $blogContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(BlogContentsServiceInterface $service, $blogContentId)
     {
