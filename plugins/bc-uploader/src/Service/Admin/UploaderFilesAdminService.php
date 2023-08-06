@@ -53,6 +53,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAjaxList(ResultSet $entities, int $listId = null)
     {
