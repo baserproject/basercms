@@ -36,6 +36,7 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BcUploader.Factory/UploaderConfigs',
+        'plugin.BcUploader.Factory/UploaderFiles',
     ];
 
     /**
@@ -124,6 +125,13 @@ Deny from all', file_get_contents($limitPath . DS . '.htaccess'));
      */
     public function test_getViewVarsForAjaxImage()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データ生成
+        UploaderFileFactory::make(['name' => 'test.jpg', 'atl' => '2_3.jpg'])->persist();
+        //対象メソッドをコール
+        $rs = $this->UploaderFilesAdminService->getViewVarsForAjaxImage('test.jpg', '1111');
+        //戻る値を確認
+        $this->assertEquals('1111', $rs['size']);
+        $this->assertEquals('test.jpg', $rs['uploaderFile']->name);
+        $this->assertEquals('2_3.jpg', $rs['uploaderFile']->atl);
     }
 }
