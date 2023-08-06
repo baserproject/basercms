@@ -72,6 +72,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @return string インストールメッセージ
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function checkInstall()
     {
