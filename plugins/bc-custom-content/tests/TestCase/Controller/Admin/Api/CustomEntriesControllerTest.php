@@ -288,8 +288,55 @@ class CustomEntriesControllerTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+    public function test_index()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_entries.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(3, $result->entries);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+
+        //パラメーターに custom_table_id を指定しない場合、
+        $this->get('/baser/api/admin/bc-custom-content/custom_entries.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
+
+        //存在しないcustom_table_id を指定した場合、
+        $this->get('/baser/api/admin/bc-custom-content/custom_entries.json?custom_table_id=11&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(
+            'データベース処理中にエラーが発生しました。Record not found in table "custom_tables"',
+            $result->message
+        );
+    }
+
     /**
-     * test batch
+     * test list
      */
     public function test_list()
     {
