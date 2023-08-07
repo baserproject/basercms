@@ -63,7 +63,6 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);

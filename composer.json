@@ -23,7 +23,8 @@
         "cakephp/debug_kit": "^4.5",
         "phpunit/phpunit": "^9.5",
         "symplify/monorepo-builder": "^10.2",
-        "vierge-noire/cakephp-fixture-factories": "^2.5"
+        "vierge-noire/cakephp-fixture-factories": "^2.5",
+        "vierge-noire/cakephp-test-suite-light": "^2.0"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",

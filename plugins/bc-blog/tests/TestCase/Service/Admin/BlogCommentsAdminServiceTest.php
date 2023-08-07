@@ -48,7 +48,6 @@ class BlogCommentsAdminServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogCommentsAdminService = new BlogCommentsAdminService();
     }
