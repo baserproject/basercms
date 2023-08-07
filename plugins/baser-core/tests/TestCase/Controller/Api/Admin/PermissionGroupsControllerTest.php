@@ -45,12 +45,6 @@ class PermissionGroupsControllerTest extends BcTestCase
     ];
 
     /**
-     * autoFixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * Access Token
      * @var string
      */
@@ -67,7 +61,6 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);

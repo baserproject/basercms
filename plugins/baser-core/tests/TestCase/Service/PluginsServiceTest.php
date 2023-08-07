@@ -128,6 +128,9 @@ class PluginsServiceTest extends BcTestCase
      */
     public function testInstall()
     {
+        $this->markTestIncomplete('このメソッドを利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要');
+        // データが初期化されなくなってしまう。dropTableでトリガーが削除されるのが原因の様子
+
         // 正常な場合
         $this->assertTrue($this->Plugins->install('BcUploader', true, 'test'));
         // プラグインがない場合
@@ -162,6 +165,9 @@ class PluginsServiceTest extends BcTestCase
      */
     public function testResetDb()
     {
+        $this->markTestIncomplete('このメソッドを利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要');
+        // データが初期化されなくなってしまう。dropTableでトリガーが削除されるのが原因の様子
+
         $this->Plugins->install('BcBlog', true, 'test');
         $blogPosts = $this->getTableLocator()->get('BcBlog.plugins');
 

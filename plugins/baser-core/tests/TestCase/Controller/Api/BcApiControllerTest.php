@@ -46,18 +46,11 @@ class BcApiControllerTest extends BcTestCase
     ];
 
     /**
-     * Auto Fixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures('Sites', 'SiteConfigs');
     }
 
     /**
@@ -81,7 +74,6 @@ class BcApiControllerTest extends BcTestCase
      */
     public function testGetAccessToken()
     {
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
         $user = $this->getService(UsersServiceInterface::class);
         $controller = new BcApiController($this->getRequest());
         $result = $controller->getAccessToken(new Result($user->get(1), Result::SUCCESS));

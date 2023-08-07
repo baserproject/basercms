@@ -1719,8 +1719,6 @@ class BcBaserHelperTest extends BcTestCase
     public function testPage($input, $pageRecursive, $recursive, $expected)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->loadFixtures('Page');
-        $this->loadFixtures('Content');
         $Page = ClassRegistry::init('Page');
         $record = $Page->findByUrl($input);
         if ($record) {
@@ -2082,7 +2080,6 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetContentsUrl()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute');
         // URLが設定されていない場合
         $this->BcBaser->request = $this->_getRequest('/news/');
         $this->assertEquals('/news/', $this->BcBaser->getContentsUrl());

@@ -35,7 +35,6 @@ class BlogCategoryValidationTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogCategoryValidation = new BlogCategoryValidation();
     }

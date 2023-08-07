@@ -52,6 +52,7 @@ class ContentLinksController extends BcAdminApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ContentLinksServiceInterface $service)
     {
@@ -198,6 +199,7 @@ class ContentLinksController extends BcAdminApiController
      * @param $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ContentLinksServiceInterface $service, $id)
     {

@@ -28,12 +28,6 @@ class UsersUserGroupsTableTest extends BcTestCase
     ];
 
     /**
-     * Auto Fixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * set up
      *
      * @return void
@@ -41,7 +35,6 @@ class UsersUserGroupsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
         $this->UsersUserGroups = $this->getTableLocator()->get('BaserCore.UsersUserGroups');
     }
 
