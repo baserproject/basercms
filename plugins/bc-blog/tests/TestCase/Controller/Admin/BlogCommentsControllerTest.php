@@ -57,7 +57,6 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->Controller = new BlogCommentsController($this->loginAdmin($this->getRequest()));
@@ -78,7 +77,28 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        //正常系実行
+        $this->post("/baser/admin/bc-blog/blog_comments/index/1");
+        $vars = $this->_controller->viewBuilder()->getVars()['blogComments'];
+        $this->assertCount(1, $vars);
+        //リダイレクトを確認
+        $this->assertResponseOk();
+        //異常系実行
+        $this->post("/baser/admin/bc-blog/blog_comments/index/99");
+        //リダイレクトを確認
+        $this->assertResponseCode(404);
     }
 
     /**
