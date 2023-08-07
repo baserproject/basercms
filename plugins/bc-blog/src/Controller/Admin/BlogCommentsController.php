@@ -38,6 +38,7 @@ class BlogCommentsController extends BlogAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogCommentsAdminServiceInterface $service, int $blogContentId)
     {
