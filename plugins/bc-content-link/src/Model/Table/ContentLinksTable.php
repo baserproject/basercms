@@ -83,6 +83,7 @@ class ContentLinksTable extends AppTable
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {

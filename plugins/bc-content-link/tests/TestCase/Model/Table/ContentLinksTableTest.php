@@ -123,4 +123,20 @@ class ContentLinksTableTest extends BcTestCase
         $query = $contentLinks->find()->where(['url' => 'AfterCopy']);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //データを生成
+        $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+        //コピーメソッドをコール
+        $rs = $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
+        //戻る値を確認
+        $this->assertEquals('new title', $rs->content->title);
+        $this->assertEquals(1, $rs->content->parent_id);
+        $this->assertEquals(1, $rs->content->author_id);
+        $this->assertEquals(1, $rs->content->site_id);
+    }
 }
