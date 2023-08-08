@@ -34,23 +34,6 @@ class BlogCommentsControllerTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcBlog.Factory/BlogComments',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcBlog.Factory/BlogPosts',
-    ];
-
-    /**
      * set up
      *
      * @return void

@@ -26,13 +26,6 @@ use Cake\ORM\TableRegistry;
 class BlogTagsTableTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'plugin.BcBlog.Factory/BlogPosts',
-        'plugin.BcBlog.Factory/BlogPostsBlogTags',
-        'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BaserCore.Factory/UserGroups',
-    ];
-
     /**
      * Set Up
      *

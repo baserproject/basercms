@@ -37,21 +37,6 @@ class BlogPostsTableTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
-    public $fixtures = [
-        'plugin.BcBlog.Factory/BlogPosts',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BcBlog.Factory/BlogCategories',
-        'plugin.BcBlog.Factory/BlogPostsBlogTags',
-    ];
-
-
     /**
      * Set Up
      *
