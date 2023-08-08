@@ -27,17 +27,6 @@ class UploadCategoriesServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BcUploader.Factory/UploaderConfigs',
-        'plugin.BcUploader.Factory/UploaderFiles',
-        'plugin.BcUploader.Factory/UploaderCategories',
-    ];
-
-    /**
      * Test subject
      *
      * @var UploaderCategoriesService
