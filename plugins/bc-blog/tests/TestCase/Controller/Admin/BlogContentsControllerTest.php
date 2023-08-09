@@ -138,6 +138,7 @@ class BlogContentsControllerTest extends BcTestCase
         $this->assertEquals('test edit', $blogContent['description']);
         //異常系実行
         $this->post("/baser/admin/bc-blog/blog_contents/edit/199", $data);
+        $this->assertResponseCode(404);
     }
 
     /**
