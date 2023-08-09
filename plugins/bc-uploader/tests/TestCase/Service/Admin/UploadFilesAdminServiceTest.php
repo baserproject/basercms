@@ -30,15 +30,6 @@ class UploadFilesAdminServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BcUploader.Factory/UploaderConfigs',
-    ];
-
-    /**
      * Test subject
      *
      * @var UploaderFilesAdminService
@@ -82,7 +73,21 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAjaxList()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        UploaderConfigFactory::make(['name' => 'layout_type', 'value' => 'panel'])->persist();
+        UploaderFileFactory::make(['name' => '2_3.jpg', 'atl' => '2_3.jpg', 'user_id' => 1])->persist();
+
+        //対象メソッドをコール
+        $rs = $this->UploaderFilesAdminService->getViewVarsForAjaxList(
+            $this->UploaderFilesAdminService->getIndex([])->all(),
+            1
+        );
+
+        //戻る値を確認
+        $this->assertEquals(1, $rs['listId']);
+        $this->assertEquals('panel', $rs['layoutType']);
+        $this->assertCount(1, $rs['uploaderFiles']);
+        $this->assertArrayHasKey('installMessage', $rs);
     }
 
     /**
@@ -90,7 +95,19 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     public function test_checkInstall()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //limitedフォルダーと.htaccessファイルが存在しない場合、
+        $limitPath = '/var/www/html/webroot/files/uploads/limited';
+        unlink($limitPath . DS . '.htaccess');
+        rmdir($limitPath);
+        //対象メソッドをコール
+        $rs = $this->execPrivateMethod($this->UploaderFilesAdminService, 'checkInstall', []);
+        //戻る値を確認
+        $this->assertEquals('', $rs);
+        //.htaccessが生成されたか確認
+        $this->assertTrue(file_exists($limitPath . DS . '.htaccess'));
+        //.htaccessの中身を確認
+        $this->assertEquals('Order allow,deny
+Deny from all', file_get_contents($limitPath . DS . '.htaccess'));
     }
 
     /**
@@ -98,6 +115,13 @@ class UploadFilesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAjaxImage()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データ生成
+        UploaderFileFactory::make(['name' => 'test.jpg', 'atl' => '2_3.jpg'])->persist();
+        //対象メソッドをコール
+        $rs = $this->UploaderFilesAdminService->getViewVarsForAjaxImage('test.jpg', '1111');
+        //戻る値を確認
+        $this->assertEquals('1111', $rs['size']);
+        $this->assertEquals('test.jpg', $rs['uploaderFile']->name);
+        $this->assertEquals('2_3.jpg', $rs['uploaderFile']->atl);
     }
 }

@@ -76,7 +76,6 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
@@ -93,6 +92,33 @@ class BlogCommentsControllerTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        // 準備: コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        // 正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/view/2.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // 取得されたコメントのidを確認する
+        $this->assertEquals(2, $result->blogComment->id);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/view/111.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+    }
+
 
     /**
      * test delete
@@ -262,5 +288,32 @@ class BlogCommentsControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('パラメーターに blog_content_id が指定されていません。', $result->message);
+    }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        // 準備：データ生成
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/index.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(3, $result->blogComments);
+        $this->assertEquals('baserCMS', $result->blogComments[0]->name);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_comments/index.json?token=' . $this->refreshToken);
+        $this->assertResponseCode(401);
+
     }
 }

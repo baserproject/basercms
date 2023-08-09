@@ -54,7 +54,6 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->Listener = new BcBlogViewEventListener();
         $this->loadFixtureScenario(InitAppScenario::class);

@@ -92,35 +92,14 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 // load schema from a SQL dump file with
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
-if (!empty($_SERVER['argv'][1]) && preg_match('/^plugins\//', $_SERVER['argv'][1])) {
-    // パス指定をしている場合は、そのパスのプラグイン と BaserCore だけをロードする
-    // 他のプラグインが必要な場合は、適宜下記に記述する
-    $plugin = \Cake\Utility\Inflector::camelize(preg_replace('/^plugins\/(.+?)\/.+$/', "$1", $_SERVER['argv'][1]), '-');
-    $targets = [
-        ['plugin' => 'BaserCore'],
-        ['plugin' => $plugin]
-    ];
-    if($plugin === 'BaserCore') {
-        $targets[] = ['plugin' => 'BcSearchIndex'];
-        $targets[] = ['plugin' => 'BcBlog'];
-        $targets[] = ['plugin' => 'BcMail'];
-        $targets[] = ['plugin' => 'BcThemeConfig'];
-        $targets[] = ['plugin' => 'BcContentLink'];
-    }
-    if($plugin === 'BcBlog') {
-        $targets[] = ['plugin' => 'BcSearchIndex'];
-    }
-} else {
-    $targets = [
-        ['plugin' => 'BaserCore'],
-        ['plugin' => 'BcBlog'],
-        ['plugin' => 'BcSearchIndex'],
-        ['plugin' => 'BcContentLink'],
-        ['plugin' => 'BcMail'],
-        ['plugin' => 'BcWidgetArea'],
-        ['plugin' => 'BcThemeConfig'],
-        ['plugin' => 'BcThemeFile'],
-        ['plugin' => 'BcUploader'],
-    ];
-}
-(new Migrator())->runMany($targets);
+(new Migrator())->runMany([
+    ['plugin' => 'BaserCore'],
+    ['plugin' => 'BcBlog'],
+    ['plugin' => 'BcSearchIndex'],
+    ['plugin' => 'BcContentLink'],
+    ['plugin' => 'BcMail'],
+    ['plugin' => 'BcWidgetArea'],
+    ['plugin' => 'BcThemeConfig'],
+    ['plugin' => 'BcThemeFile'],
+    ['plugin' => 'BcUploader'],
+]);

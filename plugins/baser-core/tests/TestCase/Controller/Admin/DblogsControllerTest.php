@@ -30,6 +30,7 @@ class DblogsControllerTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Dblogs',
     ];
 
     /**
