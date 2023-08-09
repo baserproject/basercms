@@ -22,11 +22,6 @@ use BcMail\Model\Validation\MailMessageValidation;
 class MailMessageValidationTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'plugin.BcMail.Factory/MailContents',
-        'plugin.BcMail.Factory/MailFields',
-    ];
-
     /**
      * Setup
      *

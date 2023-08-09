@@ -38,22 +38,6 @@ class MailFieldsServiceTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BcMail.Factory/MailFields',
-        'plugin.BcMail.Factory/MailContents',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups'
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void

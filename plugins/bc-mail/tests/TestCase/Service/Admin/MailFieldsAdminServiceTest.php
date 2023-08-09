@@ -38,22 +38,6 @@ class MailFieldsAdminServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcMail.Factory/MailContents',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcMail.Factory/MailFields',
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void
