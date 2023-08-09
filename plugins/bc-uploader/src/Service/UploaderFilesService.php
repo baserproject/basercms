@@ -37,6 +37,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -51,6 +52,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = [])
     {
@@ -76,6 +78,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function createAdminIndexConditions(array $params)
     {
@@ -125,6 +128,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return array|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null, $options = [])
     {
@@ -146,6 +150,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
@@ -159,6 +164,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
@@ -176,6 +182,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -207,6 +214,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData)
     {
@@ -230,11 +238,14 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEditable(array $postData)
     {
         if(!$this->uploaderConfigsService->get()->use_permission) return true;
+        if(!isset($postData['user_id'])) return false;
         $user = BcUtil::loginUser();
+        if(!$user) return false;
         if (!BcUtil::isAdminUser($user) && $postData['user_id'] !== $user->id) {
             return false;
         }
@@ -247,6 +258,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {

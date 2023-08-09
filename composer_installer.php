@@ -54,6 +54,9 @@ function command($phpPath)
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');
     }
+    if (!is_writable(ROOT_DIR . 'composer.lock')) {
+        throw new Exception('/composer.lock に書き込み権限がありません。書き込み権限を与えてください。');
+    }
     if (!is_writable(ROOT_DIR . 'vendor')) {
         throw new Exception('/vendor に書き込み権限がありません。書き込み権限を与えてください。');
     }
@@ -66,16 +69,21 @@ function command($phpPath)
     if (!is_writable(ROOT_DIR . 'logs')) {
         throw new Exception('/logs に書き込み権限がありません。書き込み権限を与えてください。');
     }
+
     $composerDir = ROOT_DIR . 'composer' . DS;
     $command = "cd {$composerDir}; export HOME={$composerDir}; curl -sS https://getcomposer.org/installer | {$phpPath}";
+
     exec($command, $out, $code);
-    if ($code !== 0) throw new Exception('composer のインストールに失敗しました。');
+    if ($code !== 0) throw new Exception('composer のインストールに失敗しました。(' . $command . ')');
+
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar self-update";
     exec($command, $out, $code);
-    if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。');
+    if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。(' . $command . ')');
+
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。<br>コマンド実行をお試しください<br>' . $command);
+
     if (!copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env')) {
         throw new Exception('.env のコピーに失敗しました。<br>/config/.env.example を /config/.env としてリネームしてください。');
     }
@@ -350,7 +358,7 @@ function command($phpPath)
                             </h1>
                             <form id="AdminInstallerForm" method="POST">
                                 <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。
-                                    /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
+                                    /composer.lock ファイルと /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
                                 <small>PHPのパス</small>
                                 <input type="text" name="php_path" value="<?php echo $phpPath ?>" class="bca-textbox__input"/>
 

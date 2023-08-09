@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
@@ -55,6 +56,8 @@ use BaserCore\Annotation\Doc;
  *
  * ### BcContentsHelper
  * @method EntityInterface getParentContent(int $id = null, bool $direct = true)
+ * @method Site getCurrentSite()
+ * @method Content getCurrentContent()
  *
  * ### BcThemeConfigHelper
  * @method void mainImage(array $options = [])
@@ -2496,23 +2499,6 @@ END_FLASH;
     }
 
     /**
-     * 現在のコンテンツ情報を取得する
-     *
-     * @return mixed|null
-     * @checked
-     * @noTodo
-     * @unitTest
-     * @doc
-     */
-    public function getCurrentContent()
-    {
-        if (!empty($this->_View->getRequest()->getAttribute('currentContent'))) {
-            return $this->_View->getRequest()->getAttribute('currentContent');
-        }
-        return null;
-    }
-
-    /**
      * 現在のサイトプレフィックスを取得する
      *
      * @return string
@@ -2537,7 +2523,7 @@ END_FLASH;
     public function getContentCreatedDate($format = 'Y/m/d H:i')
     {
         $content = $this->getCurrentContent();
-        if ($content['created_date']) {
+        if (!empty($content['created_date'])) {
             return date($format, strtotime($content['created_date']));
         } else {
             return '';
@@ -2557,7 +2543,7 @@ END_FLASH;
     public function getContentModifiedDate($format = 'Y/m/d H:i')
     {
         $content = $this->getCurrentContent();
-        if ($content['modified_date']) {
+        if (!empty($content['modified_date'])) {
             return date($format, strtotime($content['modified_date']));
         } else {
             return '';

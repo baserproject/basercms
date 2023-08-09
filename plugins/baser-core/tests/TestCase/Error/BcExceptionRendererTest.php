@@ -25,24 +25,6 @@ class BcExceptionRendererTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Pages',
-        'plugin.BaserCore.Factory/Permissions',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcThemeConfig.Factory/ThemeConfigs',
-    ];
-
-    /**
      * Trait
      */
     use ScenarioAwareTrait;
@@ -52,7 +34,6 @@ class BcExceptionRendererTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
     }
 

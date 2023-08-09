@@ -85,13 +85,16 @@ class BcAdminApiController extends BcApiController
         }
 
         // 親の beforeFilter で認可チェックが入るので一番最後とする
-        parent::beforeFilter($event);
+        return parent::beforeFilter($event);
     }
 
     /**
      * 認証が必要なAPIを利用可能かどうか判定
      *
      * @return bool
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function isAdminApiEnabled()
     {

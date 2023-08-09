@@ -1544,6 +1544,7 @@ class ContentsService implements ContentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPrev(int $id)
     {
@@ -1569,6 +1570,7 @@ class ContentsService implements ContentsServiceInterface
      * @return array|EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNext(int $id)
     {
@@ -1594,6 +1596,7 @@ class ContentsService implements ContentsServiceInterface
      * @return \Cake\Datasource\ResultSetInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGlobalNavi(int $id)
     {
@@ -1635,6 +1638,7 @@ class ContentsService implements ContentsServiceInterface
      * @return \Cake\Datasource\ResultSetInterface|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLocalNavi(int $id)
     {
@@ -1654,6 +1658,7 @@ class ContentsService implements ContentsServiceInterface
      * @return EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getParent(int $id)
     {

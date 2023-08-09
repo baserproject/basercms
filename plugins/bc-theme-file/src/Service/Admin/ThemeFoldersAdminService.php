@@ -34,6 +34,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return array
      * @checked
      * @noTodo
+     * @checked
      */
     public function getViewVarsForEdit(ThemeFolder $entity, ThemeFolderForm $form, array $args)
     {
@@ -59,6 +60,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(ThemeFolder $entity, ThemeFolderForm $form, array $args)
     {
@@ -84,6 +86,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isWritableDir($fullpath)
     {
@@ -106,6 +109,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForView(ThemeFolder $entity, ThemeFolderForm $form, array $args)
     {

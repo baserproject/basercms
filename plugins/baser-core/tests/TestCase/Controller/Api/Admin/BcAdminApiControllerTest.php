@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -43,18 +44,11 @@ class BcAdminApiControllerTest extends BcTestCase
     ];
 
     /**
-     * Auto Fixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures('Sites', 'SiteConfigs');
     }
 
     /**
@@ -76,7 +70,6 @@ class BcAdminApiControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
         $token = $this->apiLoginAdmin(1);
         // トークンタイプチェック
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['refresh_token']);
@@ -108,5 +101,32 @@ class BcAdminApiControllerTest extends BcTestCase
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseCode(401);
     }
+
+    /**
+     * test isAdminApiEnabled
+     */
+    public function test_isAdminApiEnabled()
+    {
+        $controller = new BcAdminApiController($this->getRequest());
+        $controller->loadComponent('Authentication.Authentication');
+
+        // USE_CORE_ADMIN_API = 'true';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+
+        // - 認証済
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', new Identity([])));
+        $this->assertTrue($controller->isAdminApiEnabled());
+
+        // - 未認証
+        $controller->setRequest($controller->getRequest()->withAttribute('identity', null));
+        $this->assertFalse($controller->isAdminApiEnabled());
+
+        // USE_CORE_ADMIN_API = 'false';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+        $this->assertFalse($controller->isAdminApiEnabled());
+
+        $_SERVER['USE_CORE_ADMIN_API'] = 'true';
+    }
+
 
 }

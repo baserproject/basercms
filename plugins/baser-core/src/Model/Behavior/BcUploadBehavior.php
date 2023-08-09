@@ -161,7 +161,6 @@ class BcUploadBehavior extends Behavior
         if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id])) {
             $oldEntity = $this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id];
             $oldEntity->_bc_upload_id = $entity->_bc_upload_id;
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($oldEntity);
         }
         $this->BcFileUploader[$this->table()->getAlias()]->saveFiles($entity);
         if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id])) {

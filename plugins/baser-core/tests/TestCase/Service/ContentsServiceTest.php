@@ -904,12 +904,49 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test getParent
+     */
+    public function test_getParent()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getParent(4);
+        $this->assertEquals(1, $result->id);
+        //正常系実行: false返す
+        $result = $this->ContentsService->getParent(1);
+        $this->assertFalse($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getLocalNavi(999)->toArray();
+    }
+
+
+    /**
      * test create
      */
     public function test_create()
     {
         $this->assertNull($this->ContentsService->create([]));
     }
+
+    /**
+     * test getLocalNavi
+     */
+    public function test_getLocalNavi()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getLocalNavi(4)->toArray();
+        $this->assertCount(11, $result);
+        $this->assertEquals(1, $result[0]->parent_id);
+        $this->assertEquals(24, $result[10]->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getLocalNavi(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getLocalNavi(999)->toArray();
+
+    }
+
 
     /**
      * test batch
@@ -942,6 +979,23 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * test getGlobalNavi
+     */
+    public function test_getGlobalNavi()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getGlobalNavi(26)->toArray();
+        $this->assertCount(3, $result);
+        $this->assertEquals(3, $result[0]->site_id);
+        $this->assertFalse($result[2]->exclude_menu);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getGlobalNavi(999)->toArray();
+
+    }
+
+
+    /**
      * test rename
      */
     public function testRename()
@@ -967,6 +1021,22 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($originalName, $content['name']);
         // DBの search_indexes の変更を確認（BcSearchIndexプラグインの有効化が必要）
         $this->assertEquals($countBefore + 1, SearchIndexesFactory::count());
+    }
+
+    /**
+     * test getNext
+     */
+    public function test_getNext()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getNext(9);
+        $this->assertEquals(18, $result->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getNext(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getPrev(999);
     }
 
 
@@ -1005,4 +1075,22 @@ class ContentsServiceTest extends BcTestCase
         $result = $this->ContentsService->setCurrentToRequest('Test', 1, $request);
         $this->assertEquals(false, $result);
     }
+
+    /**
+     * test getPrev
+     */
+    public function test_getPrev()
+    {
+        //正常系実行
+        $result = $this->ContentsService->getPrev(9);
+        $this->assertEquals(6, $result->id);
+        //正常系実行: null返す
+        $result = $this->ContentsService->getPrev(1);
+        $this->assertNull($result);
+        //異常系実行
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->getPrev(1111);
+
+    }
+
 }

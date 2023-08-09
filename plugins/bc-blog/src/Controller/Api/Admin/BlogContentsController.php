@@ -30,6 +30,7 @@ class BlogContentsController extends BcAdminApiController
      * @param BlogContentsServiceInterface $blogContentsService
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogContentsServiceInterface $blogContentsService)
     {
@@ -48,6 +49,7 @@ class BlogContentsController extends BcAdminApiController
      * @param $blogContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(BlogContentsServiceInterface $service, $blogContentId)
     {

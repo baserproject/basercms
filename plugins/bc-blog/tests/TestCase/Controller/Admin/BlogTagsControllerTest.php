@@ -55,7 +55,6 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->BlogTagsController = new BlogTagsController($this->loginAdmin($this->getRequest()));

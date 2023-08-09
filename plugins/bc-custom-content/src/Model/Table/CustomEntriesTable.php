@@ -176,7 +176,8 @@ class CustomEntriesTable extends AppTable
             $customTablesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
             $name = $customTablesTable->get($tableId)->name;
         }
-        return 'custom_entry_' . $tableId . '_' . $name;
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        return $prefix . 'custom_entry_' . $tableId . '_' . $name;
     }
 
     /**

@@ -31,12 +31,6 @@ class ContentLinksTableTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcContentLink.Factory/ContentLinks',
-    ];
-
     /**
      * Set Up
      *

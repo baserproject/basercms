@@ -92,6 +92,110 @@ class PagesControllerTest extends BcTestCase
     }
 
     /**
+     * test beforeAdd
+     */
+    public function test_beforeAdd()
+    {
+        //準備
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Pages.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['page_template'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'page_template' => 'test create',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "test フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "Page",
+                "site_id" => "1",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+        ];
+        //正常系実行
+        $this->post('/baser/admin/baser-core/pages/add/' . 1, $data);
+        $this->assertResponseSuccess();
+        $Pages = $this->getTableLocator()->get('Pages');
+        $rs = $Pages->find()->where(['page_template' => $data['page_template']])->toArray();
+        $this->assertCount(0, $rs);
+        $pages = $Pages->find()->where(['page_template' => 'Nghiem'])->toArray();
+        $this->assertEquals('Nghiem', $pages[0]->page_template);
+    }
+
+
+    /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'page_template' => 'Nghiem create',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "Nghiem フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "Page",
+                "site_id" => "1",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/pages/add/' . 1, $data);
+        $this->assertResponseSuccess();
+        $Pages = $this->getTableLocator()->get('Pages');
+        $pages = $Pages->find()->where(['page_template' => $data['page_template']])->toArray();
+        $this->assertCount(1, $pages);
+        $this->assertEquals('Nghiem create', $pages[0]->page_template);
+    }
+
+
+    /**
+     * test afterAdd
+     */
+    public function test_afterAdd()
+    {
+        //準備
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Pages.afterAdd', function (Event $event) {
+            $page = $event->getData('data');
+            $pages = $this->getTableLocator()->get('Pages');
+            $page->page_template = 'Nghiem after';
+            $pages->save($page);
+        });
+        $data = [
+            'page_template' => 'test create',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "test フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "Page",
+                "site_id" => "1",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+        ];
+        //正常系実行
+        $this->post('/baser/admin/baser-core/pages/add/' . 1, $data);
+        $this->assertResponseSuccess();
+        $Pages = $this->getTableLocator()->get('Pages');
+        $rs = $Pages->find()->where(['page_template' => $data['page_template']])->toArray();
+        $this->assertCount(0, $rs);
+        $pages = $Pages->find()->where(['page_template' => 'Nghiem after'])->toArray();
+        $this->assertEquals('Nghiem after', $pages[0]->page_template);
+
+    }
+
+    /**
      * [ADMIN] 固定ページ情報編集
      */
     public function testEdit()

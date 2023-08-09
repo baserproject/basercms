@@ -58,7 +58,6 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->Controller = new BlogCategoriesController($this->loginAdmin($this->getRequest()));

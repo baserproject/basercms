@@ -68,7 +68,6 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
@@ -85,6 +84,27 @@ class BlogContentsControllerTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        BlogContentFactory::make(['id' => 1, 'description' => 'description test 1'])->persist();
+        BlogContentFactory::make(['id' => 2, 'description' => 'description test 2'])->persist();
+
+        ContentFactory::make(['id' => 100, 'type' => 'BlogContent', 'entity_id' => 1, 'alias_id' => NULL, 'title' => 'title 1',])->persist();
+        ContentFactory::make(['id' => 200, 'type' => 'BlogContent', 'entity_id' => 2, 'alias_id' => NULL, 'title' => 'title 2',])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->blogContents);
+        $this->assertEquals('description test 1', $result->blogContents[0]->description);
+        $this->assertEquals('description test 2', $result->blogContents[1]->description);
+    }
+
 
     /**
      * test list
@@ -133,6 +153,25 @@ class BlogContentsControllerTest extends BcTestCase
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
     }
+
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        //準備
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 99])->persist();
+        BlogContentFactory::make(['id' => 99, 'description' => 'Nghiem'])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/view/99.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(99, $result->blogContent->id);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/view/999.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+    }
+
 
     /**
      * test edit

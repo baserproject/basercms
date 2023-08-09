@@ -30,5 +30,6 @@ class ThemeConfigsScenario implements FixtureScenarioInterface
         ThemeConfigFactory::make(['name' => 'color_sub', 'value' => '001800'])->persist();
         ThemeConfigFactory::make(['name' => 'color_link', 'value' => '2B7BB9'])->persist();
         ThemeConfigFactory::make(['name' => 'color_hover', 'value' => '2B7BB9'])->persist();
+        ThemeConfigFactory::make(['name' => 'logo', 'value' => 'logo.png'])->persist();
     }
 }

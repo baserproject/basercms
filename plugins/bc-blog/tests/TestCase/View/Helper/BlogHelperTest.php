@@ -68,7 +68,6 @@ class BlogHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(BlogContentScenario::class,
             1,  // id
