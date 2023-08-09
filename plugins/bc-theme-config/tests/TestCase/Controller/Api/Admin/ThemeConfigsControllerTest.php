@@ -30,20 +30,6 @@ class ThemeConfigsControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcThemeConfig.Factory/ThemeConfigs',
-    ];
-
-    /**
      * Access Token
      * @var string
      */
@@ -60,7 +46,6 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);

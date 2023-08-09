@@ -37,20 +37,6 @@ class ContentLinksControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcContentLink.Factory/ContentLinks',
-        'plugin.BaserCore.Factory/Contents',
-    ];
-
-    /**
      * set up
      *
      * @return void

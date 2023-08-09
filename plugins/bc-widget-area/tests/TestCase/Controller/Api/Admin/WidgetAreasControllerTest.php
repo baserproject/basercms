@@ -27,21 +27,6 @@ class WidgetAreasControllerTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcWidgetArea.Factory/WidgetAreas',
-        'plugin.BaserCore.Factory/Dblogs',
-    ];
-
-    /**
      * set up
      *
      * @return void
