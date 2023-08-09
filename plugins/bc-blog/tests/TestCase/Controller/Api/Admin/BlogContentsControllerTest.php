@@ -155,6 +155,25 @@ class BlogContentsControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function test_view()
+    {
+        //準備
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 99])->persist();
+        BlogContentFactory::make(['id' => 99, 'description' => 'Nghiem'])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/view/99.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(99, $result->blogContent->id);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/view/999.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+    }
+
+
+    /**
      * test edit
      */
     public function test_edit()
