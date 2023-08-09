@@ -1165,8 +1165,8 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testSetAndGetUploadedFile()
     {
-        $this->BcFileUploader->setUploadingFiles($this->uploadedData);
-        $this->assertEquals($this->uploadedData, $this->BcFileUploader->getUploadingFiles());
+        $this->BcFileUploader->setUploadingFiles($this->uploadedData, 1);
+        $this->assertEquals($this->uploadedData, $this->BcFileUploader->getUploadingFiles(1));
     }
 
     /**
