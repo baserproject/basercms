@@ -58,7 +58,6 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogCategoriesAdminService = new BlogCategoriesAdminService();
     }

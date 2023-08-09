@@ -38,12 +38,6 @@ class PermissionsControllerTest extends BcTestCase
     ];
 
     /**
-     * autoFixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * Access Token
      * @var string
      */
@@ -61,14 +55,6 @@ class PermissionsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures(
-            'Users',
-            'UsersUserGroups',
-            'UserGroups',
-            'Permissions',
-            'Sites',
-            'SiteConfigs'
-        );
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];

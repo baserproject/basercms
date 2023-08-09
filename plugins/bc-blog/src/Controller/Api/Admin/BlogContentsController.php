@@ -30,6 +30,7 @@ class BlogContentsController extends BcAdminApiController
      * @param BlogContentsServiceInterface $blogContentsService
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogContentsServiceInterface $blogContentsService)
     {

@@ -68,7 +68,6 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
@@ -85,6 +84,27 @@ class BlogContentsControllerTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        BlogContentFactory::make(['id' => 1, 'description' => 'description test 1'])->persist();
+        BlogContentFactory::make(['id' => 2, 'description' => 'description test 2'])->persist();
+
+        ContentFactory::make(['id' => 100, 'type' => 'BlogContent', 'entity_id' => 1, 'alias_id' => NULL, 'title' => 'title 1',])->persist();
+        ContentFactory::make(['id' => 200, 'type' => 'BlogContent', 'entity_id' => 2, 'alias_id' => NULL, 'title' => 'title 2',])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_contents/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->blogContents);
+        $this->assertEquals('description test 1', $result->blogContents[0]->description);
+        $this->assertEquals('description test 2', $result->blogContents[1]->description);
+    }
+
 
     /**
      * test list

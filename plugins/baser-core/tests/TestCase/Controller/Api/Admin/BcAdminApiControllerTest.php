@@ -44,18 +44,11 @@ class BcAdminApiControllerTest extends BcTestCase
     ];
 
     /**
-     * Auto Fixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
-
-    /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures('Sites', 'SiteConfigs');
     }
 
     /**
@@ -77,7 +70,6 @@ class BcAdminApiControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
         $token = $this->apiLoginAdmin(1);
         // トークンタイプチェック
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['refresh_token']);

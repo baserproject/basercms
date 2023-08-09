@@ -57,7 +57,6 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->Controller = new BlogCommentsController($this->loginAdmin($this->getRequest()));
