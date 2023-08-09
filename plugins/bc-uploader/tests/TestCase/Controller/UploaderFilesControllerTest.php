@@ -32,22 +32,6 @@ class UploaderFilesControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcUploader.Factory/UploaderFiles',
-        'plugin.BcUploader.Factory/UploaderCategories',
-        'plugin.BcUploader.Factory/UploaderConfigs',
-    ];
-
-    /**
      * Access Token
      * @var string
      */
@@ -64,7 +48,6 @@ class UploaderFilesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);

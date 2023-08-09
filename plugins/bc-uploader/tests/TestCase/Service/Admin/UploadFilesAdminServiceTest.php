@@ -30,16 +30,6 @@ class UploadFilesAdminServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BcUploader.Factory/UploaderConfigs',
-        'plugin.BcUploader.Factory/UploaderFiles',
-    ];
-
-    /**
      * Test subject
      *
      * @var UploaderFilesAdminService
