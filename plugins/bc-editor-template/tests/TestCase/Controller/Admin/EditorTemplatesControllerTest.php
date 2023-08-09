@@ -33,25 +33,10 @@ class EditorTemplatesControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcEditorTemplate.Factory/EditorTemplates',
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         ConnectionManager::alias('test', 'default');
         $this->loadFixtureScenario(InitAppScenario::class);
