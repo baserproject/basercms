@@ -142,6 +142,34 @@ class BlogCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function test_view()
+    {
+        //準備
+        PermissionFactory::make()->allowGuest('/baser/api/admin/*')->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogCategoryFactory::make(['id' => 99, 'title' => 'title 99', 'name' => 'name-99', 'blog_content_id' => 1])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_categories/view/99.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('title 99', $result->blogCategory->title);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_categories/view/111.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+
+
+    }
+
+    /**
      * test add
      * @return void
      */

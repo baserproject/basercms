@@ -42,17 +42,6 @@ class ThemeConfigsServiceTest extends BcTestCase
     public $ThemeConfigsService;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BcThemeConfig.Factory/ThemeConfigs',
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void

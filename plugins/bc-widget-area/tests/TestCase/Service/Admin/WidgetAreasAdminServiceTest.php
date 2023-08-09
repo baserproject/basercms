@@ -28,19 +28,6 @@ use Cake\Filesystem\Folder;
  */
 class WidgetAreasAdminServiceTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.SiteConfigs'
-    ];
-
     /**
      * set up
      */
@@ -91,7 +78,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
         //正常系実行
         Configure::write('BcRequest.isInstalled', true);
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
-        $this->assertCount(2, $result);
+        $this->assertCount(1, $result);
         $this->assertEquals('BcBlog', $result[1]['plugin']);
     }
 

@@ -93,7 +93,6 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->post("/baser/admin/bc-blog/blog_comments/index/1");
         $vars = $this->_controller->viewBuilder()->getVars()['blogComments'];
         $this->assertCount(1, $vars);
-        //リダイレクトを確認
         $this->assertResponseOk();
         //異常系実行
         $this->post("/baser/admin/bc-blog/blog_comments/index/99");
