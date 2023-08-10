@@ -37,20 +37,6 @@ class SearchIndexesControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/SearchIndexes',
-    ];
-
-    /**
      * set up
      *
      * @return void
