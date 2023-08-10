@@ -28,14 +28,6 @@ use Cake\ORM\TableRegistry;
 class BlogCategoriesTableTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'plugin.BcBlog.Factory/BlogCategories',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Permissions',
-    ];
-
     /**
      * Setup
      *
