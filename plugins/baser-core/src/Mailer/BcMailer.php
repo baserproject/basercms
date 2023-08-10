@@ -11,6 +11,7 @@
 
 namespace BaserCore\Mailer;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -29,6 +30,14 @@ class BcMailer extends Mailer
      * Trait
      */
     use BcContainerTrait;
+    use BcEventDispatcherTrait;
+
+    /**
+     * プラグイン名
+     *
+     * @var string
+     */
+    protected $plugin = 'BaserCore';
 
     /**
      * Constructor
@@ -83,4 +92,26 @@ class BcMailer extends Mailer
         $this->setTransport($type);
     }
 
+    /**
+     * プラグイン名取得
+     *
+     * @return string
+     */
+    public function getPlugin(): ?string
+    {
+        return $this->plugin;
+    }
+
+    /**
+     * Render content and send email using configured transport.
+     *
+     * @param string $content Content.
+     * @return array
+     * @psalm-return array{headers: string, message: string}
+     */
+    public function deliver(string $content = '')
+    {
+        $this->dispatchLayerEvent('beforeDeliver');
+        return parent::deliver($content);
+    }
 }
