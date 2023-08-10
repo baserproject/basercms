@@ -40,19 +40,6 @@ class CustomContentAdminAppControllerTest extends BcTestCase
     public $CustomContentAdminAppController;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-    ];
-
-    /**
      * Set up
      */
     public function setUp(): void
