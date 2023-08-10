@@ -83,6 +83,7 @@ class ContentLinksTable extends AppTable
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
@@ -106,7 +107,8 @@ class ContentLinksTable extends AppTable
             'site_id' => $newSiteId,
             'description' => $entity->content->description,
             'eyecatch' => $entity->content->eyecatch,
-            'layout_template' => $entity->content->layout_tmplate ?? ''
+            'layout_template' => $entity->content->layout_tmplate ?? '',
+            'url' => $entity->content->url
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
