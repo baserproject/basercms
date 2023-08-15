@@ -43,24 +43,6 @@ class CustomContentsServiceTest extends BcTestCase
     public $CustomContentsService;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcCustomContent.Factory/CustomContents',
-        'plugin.BcCustomContent.Factory/CustomFields',
-        'plugin.BcCustomContent.Factory/CustomLinks',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcCustomContent.Factory/CustomTables',
-    ];
-
-    /**
      * Set up
      */
     public function setUp(): void

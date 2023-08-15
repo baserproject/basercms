@@ -16,4 +16,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 /**
  * Class BlogTagsFixture
  */
-class BlogTagsFixture extends TestFixture {}
+class BlogTagsFixture extends TestFixture
+{
+}

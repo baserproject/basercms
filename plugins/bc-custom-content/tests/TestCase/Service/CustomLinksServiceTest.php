@@ -42,24 +42,10 @@ class CustomLinksServiceTest extends BcTestCase
     public $CustomLinksService;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BcCustomContent.Factory/CustomFields',
-        'plugin.BcCustomContent.Factory/CustomLinks',
-        'plugin.BcCustomContent.Factory/CustomTables',
-        'plugin.BcCustomContent.Factory/CustomContents',
-        'plugin.BaserCore.Factory/Contents',
-    ];
-
-    /**
      * Set up
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomLinksService = $this->getService(CustomLinksServiceInterface::class);
     }

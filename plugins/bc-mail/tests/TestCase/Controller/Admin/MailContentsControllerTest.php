@@ -34,22 +34,6 @@ class MailContentsControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcMail.Factory/MailContents',
-        'plugin.BcMail.Factory/MailFields',
-    ];
-
-    /**
      * set up
      *
      * @return void
@@ -57,7 +41,6 @@ class MailContentsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->setFixtureTruncate();
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/bc-mail/mail_contents/');
         $request = $this->loginAdmin($request);

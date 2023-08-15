@@ -37,7 +37,6 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         ConnectionManager::alias('test', 'default');
         $this->loadFixtureScenario(InitAppScenario::class);

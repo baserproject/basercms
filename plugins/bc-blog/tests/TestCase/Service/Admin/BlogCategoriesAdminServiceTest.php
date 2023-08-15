@@ -35,23 +35,6 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Pages',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/SearchIndexes',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BcBlog.Factory/BlogPosts',
-    ];
-
-    /**
      * Set Up
      *
      * @return void

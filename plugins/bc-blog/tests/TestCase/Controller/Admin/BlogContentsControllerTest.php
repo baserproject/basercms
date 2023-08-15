@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BaserCore\Test\Factory\ContentFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -33,21 +34,6 @@ class BlogContentsControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use ScenarioAwareTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcBlog.Factory/BlogCategories',
-        'plugin.BcBlog.Factory/BlogContents',
-    ];
 
     /**
      * set up
@@ -116,7 +102,28 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを作成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test'
+        ])->persist();
+        //正常系実行
+        $data = [
+            'id' => 1,
+            'description' => 'test edit',
+            'content' => [
+                "title" => "更新 ブログ",
+            ]
+        ];
+        $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
+        $blogContent = BlogContentFactory::get(1);
+        $this->assertEquals('test edit', $blogContent['description']);
+        //異常系実行
+        $this->post("/baser/admin/bc-blog/blog_contents/edit/199", $data);
+        $this->assertResponseCode(404);
     }
 
     /**
