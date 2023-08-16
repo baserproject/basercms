@@ -159,10 +159,6 @@ class UsersController extends BcAdminAppController
      */
     public function logout(UsersServiceInterface $service)
     {
-        if (BcUtil::isAgentUser()) {
-            $session = $this->request->getSession();
-            $session->delete('AuthAgent');
-        }
         /* @var User $user */
         $user = $this->Authentication->getIdentity();
         $service->logout($this->request, $this->response, $user->id);
