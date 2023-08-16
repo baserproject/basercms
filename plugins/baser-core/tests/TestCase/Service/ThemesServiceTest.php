@@ -49,30 +49,12 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Permissions',
-        'plugin.BaserCore.Factory/Pages',
-    ];
-
-    /**
      * Set Up
      *
      * @return void
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->ThemesService = $this->getService(ThemesServiceInterface::class);
     }
@@ -85,11 +67,6 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->truncateTable('blog_categories');
-        $this->truncateTable('blog_contents');
-        $this->truncateTable('blog_posts');
-        $this->truncateTable('blog_tags');
-        $this->truncateTable('blog_posts_blog_tags');
     }
 
     /**

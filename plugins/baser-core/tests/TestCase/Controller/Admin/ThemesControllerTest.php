@@ -35,25 +35,12 @@ class ThemesControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-    ];
-
-    /**
      * set up
      *
      * @return void
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->ThemesController = new ThemesController($this->getRequest());
         $this->loadFixtureScenario(InitAppScenario::class);

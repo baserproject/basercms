@@ -62,7 +62,6 @@ class ContentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/contents/'));
         $this->ContentsController = new ContentsController($this->request);

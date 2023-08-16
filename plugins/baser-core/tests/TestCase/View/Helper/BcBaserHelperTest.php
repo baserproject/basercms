@@ -104,7 +104,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
             'name' => 'Pages',

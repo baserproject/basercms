@@ -37,20 +37,6 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Factory/Permissions',
-        'plugin.BaserCore.Factory/PermissionGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-    ];
-
-    /**
      * Set Up
      */
     public function setUp(): void

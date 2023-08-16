@@ -42,7 +42,6 @@ class ContentLinksServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->ContentLinksService = $this->getService(ContentLinksServiceInterface::class);
     }

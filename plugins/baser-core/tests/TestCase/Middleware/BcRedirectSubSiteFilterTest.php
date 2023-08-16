@@ -34,19 +34,6 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Pages',
-    ];
-
-    /**
      * Set Up
      *
      * @return void
