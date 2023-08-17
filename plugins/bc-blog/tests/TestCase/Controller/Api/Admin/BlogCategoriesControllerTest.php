@@ -84,7 +84,8 @@ class BlogCategoriesControllerTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogCategoryFactory::make(['id' => 3, 'title' => 'title test', 'name' => 'name-test', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 100, 'title' => 'title test', 'name' => 'name-test', 'blog_content_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 100, 'blog_content_id' => 1, 'blog_category_id' => 100, 'status' => true])->persist();
 
         //正常系実行
         $this->get('/baser/api/admin/bc-blog/blog_categories/index.json?blog_content_id=1&token=' . $this->accessToken);
