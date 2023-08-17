@@ -1056,7 +1056,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
-            'blog_content_id' => 2,
+            'blog_content_id' => 1,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1065,7 +1065,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
-            'blog_content_id' => 3,
+            'blog_content_id' => 1,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
             'status' => 1,
@@ -1084,7 +1084,7 @@ class BlogPostsServiceTest extends BcTestCase
         $result = $this->BlogPostsService->getPrevPost(BlogPostFactory::get(1));
         //戻り値を確認
         $this->assertEquals(3, $result->id);
-        $this->assertEquals(3, $result->blog_content_id);
+        $this->assertEquals(1, $result->blog_content_id);
         $this->assertEquals("blog post 3", $result->title);
 
         //テスト posted 最大, 結果はnullに戻る
@@ -1110,7 +1110,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
-            'blog_content_id' => 2,
+            'blog_content_id' => 1,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1119,7 +1119,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
-            'blog_content_id' => 3,
+            'blog_content_id' => 1,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
             'status' => 1,
@@ -1131,14 +1131,14 @@ class BlogPostsServiceTest extends BcTestCase
         $result = $this->BlogPostsService->getNextPost(BlogPostFactory::get(1));
         //戻り値を確認
         $this->assertEquals(2, $result->id);
-        $this->assertEquals(2, $result->blog_content_id);
+        $this->assertEquals(1, $result->blog_content_id);
         $this->assertEquals("blog post 2", $result->title);
 
         //テスト投稿日が新しいデータを取得
         $result = $this->BlogPostsService->getNextPost(BlogPostFactory::get(3));
         //戻り値を確認
         $this->assertEquals(2, $result->id);
-        $this->assertEquals(2, $result->blog_content_id);
+        $this->assertEquals(1, $result->blog_content_id);
         $this->assertEquals("blog post 2", $result->title);
 
         //テスト status=0, 結果はnullに戻る
