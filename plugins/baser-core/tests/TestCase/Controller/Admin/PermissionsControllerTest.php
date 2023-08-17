@@ -45,7 +45,6 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $request = $this->getRequest('/baser/admin/baser-core/users/');
         $request = $this->loginAdmin($request);

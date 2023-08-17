@@ -58,7 +58,6 @@ class PluginsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         Configure::config('baser', new PhpConfig());
         Configure::load('BaserCore.setting', 'baser');

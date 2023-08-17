@@ -45,7 +45,6 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }

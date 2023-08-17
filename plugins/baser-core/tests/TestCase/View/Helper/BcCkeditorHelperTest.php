@@ -42,7 +42,6 @@ class BcCkeditorHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcCkeditor = new BcCkeditorHelper(new BcAdminAppView($this->getRequest('/baser/admin')));
     }

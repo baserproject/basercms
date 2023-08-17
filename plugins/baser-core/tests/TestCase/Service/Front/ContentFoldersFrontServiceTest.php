@@ -34,16 +34,6 @@ class ContentFoldersFrontServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-    ];
-
-    /**
      * Set Up
      *
      * @return void

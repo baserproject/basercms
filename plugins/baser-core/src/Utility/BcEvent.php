@@ -32,7 +32,7 @@ class BcEvent
     {
         $pluginPath = BcUtil::getPluginPath($plugin);
         // プラグインイベント登録
-        $eventTargets = ['Controller', 'Model', 'View', 'Helper'];
+        $eventTargets = ['Controller', 'Model', 'View', 'Helper', 'Mailer'];
         foreach($eventTargets as $eventTarget) {
             $eventClassName = $plugin . $eventTarget . 'EventListener';
             if (file_exists($pluginPath . 'src' . DS . 'Event' . DS . $eventClassName . '.php')) {

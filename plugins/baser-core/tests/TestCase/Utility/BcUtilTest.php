@@ -53,9 +53,6 @@ class BcUtilTest extends BcTestCase
      */
     public function setUp(): void
     {
-        // testIsSuperUser にて FixtureFactory を利用しているため、setFixtureTruncate が必要
-        // 最終的には、全て FixtureFactory に変更予定
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->request = $this->getRequest();
     }
