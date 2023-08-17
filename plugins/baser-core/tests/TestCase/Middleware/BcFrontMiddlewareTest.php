@@ -24,23 +24,12 @@ class BcFrontMiddlewareTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Contents',
-    ];
-
-    /**
      * Set Up
      *
      * @return void
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcFrontMiddleware = new BcFrontMiddleware();
     }

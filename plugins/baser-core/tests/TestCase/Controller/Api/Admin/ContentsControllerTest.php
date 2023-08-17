@@ -46,7 +46,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
 //        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
 //        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
 //        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BcBlog.Factory/BlogContents'
     ];
 
     // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要

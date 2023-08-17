@@ -51,7 +51,6 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->PermissionsService = new PermissionsService();
     }
