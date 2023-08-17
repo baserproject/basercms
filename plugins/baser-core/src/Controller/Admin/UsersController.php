@@ -159,6 +159,12 @@ class UsersController extends BcAdminAppController
      */
     public function logout(UsersServiceInterface $service)
     {
+        // 代理ログインした場合、ログアウト前にセッションを削除する。
+        if (BcUtil::isAgentUser()) {
+            $session = $this->request->getSession();
+            $session->delete('AuthAgent');
+        }
+
         /* @var User $user */
         $user = $this->Authentication->getIdentity();
         $service->logout($this->request, $this->response, $user->id);
