@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Controller;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
+use Cake\Event\Event;
 
 /**
  * Class BlogControllerTest
@@ -53,5 +54,99 @@ class BlogControllerTest extends BcTestCase
         // configを確認するテスト
         $this->assertTrue($this->BlogController->BcFrontContents->getConfig('viewContentCrumb'));
     }
+
+    /**
+     * test beforeFilter
+     */
+    public function test_beforeFilter()
+    {
+        $event = new Event('Controller.beforeFilter', $this->BlogController);
+        $this->BlogController->beforeFilter($event);
+    }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test archives
+     */
+    public function test_archives()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test posts
+     */
+    public function test_posts()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test tags
+     */
+    public function test_tags()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test ajax_add_comment
+     */
+    public function test_ajax_add_comment()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test captcha
+     */
+    public function test_captcha()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
 
 }
