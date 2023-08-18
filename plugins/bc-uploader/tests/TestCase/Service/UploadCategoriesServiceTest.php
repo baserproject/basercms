@@ -14,6 +14,7 @@ namespace BcUploader\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
+use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -72,7 +73,13 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(3, $rs);
+        $this->assertEquals('blog', $rs[0]->name);
     }
 
     /**
