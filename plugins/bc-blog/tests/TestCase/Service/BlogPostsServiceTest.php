@@ -1048,6 +1048,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 3,
+            'no' => 100,
             'title' => 'blog post 1',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1057,6 +1058,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 2,
             'blog_content_id' => 3,
+            'no' => 101,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
