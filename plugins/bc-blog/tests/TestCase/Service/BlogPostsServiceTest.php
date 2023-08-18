@@ -1048,7 +1048,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 3,
-            'no' => 100,
+            'no' => 1010,
             'title' => 'blog post 1',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1058,7 +1058,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 2,
             'blog_content_id' => 3,
-            'no' => 101,
+            'no' => 1011,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1068,6 +1068,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 3,
             'blog_content_id' => 3,
+            'no' => 108,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
             'status' => 1,
@@ -1104,6 +1105,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 3,
+            'no' => 101,
             'title' => 'blog post 1',
             'posted' => '2022-10-02 09:00:00',
             'status' => 0,
@@ -1113,6 +1115,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 2,
             'blog_content_id' => 3,
+            'no' => 102,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
             'status' => 1,
@@ -1122,6 +1125,7 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 3,
             'blog_content_id' => 3,
+            'no' => 103,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
             'status' => 1,
