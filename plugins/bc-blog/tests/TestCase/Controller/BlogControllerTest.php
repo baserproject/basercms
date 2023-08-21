@@ -11,8 +11,20 @@
 
 namespace BcBlog\Test\TestCase\Controller;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
+use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Service\Front\BlogFrontServiceInterface;
+use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Event\Event;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogControllerTest
@@ -21,6 +33,12 @@ use BcBlog\Controller\BlogController;
  */
 class BlogControllerTest extends BcTestCase
 {
+
+    /**
+     * IntegrationTestTrait
+     */
+    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -53,5 +71,118 @@ class BlogControllerTest extends BcTestCase
         // configを確認するテスト
         $this->assertTrue($this->BlogController->BcFrontContents->getConfig('viewContentCrumb'));
     }
+
+    /**
+     * test beforeFilter
+     */
+    public function test_beforeFilter()
+    {
+//        $event = new Event('Controller.beforeFilter', $this->BlogController);
+//        $this->BlogController->beforeFilter($event);
+    }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogContentFactory::make(['id' => 1, 'template' => 'default', 'description' => 'description test 1'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
+
+        //正常系実行
+        $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
+        $controller = new BlogController($request);
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        $controller->index($blogFrontService, $blogContentsService, $blogPostsService);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        dd($vars);
+        $this->assertCount(1, $vars);
+        //異常系実行
+        $this->post("/baser/admin/bc-blog/blog_comments/index/99");
+        //リダイレクトを確認
+        $this->assertResponseCode(404);
+
+
+    }
+
+    /**
+     * test archives
+     */
+    public function test_archives()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test posts
+     */
+    public function test_posts()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test tags
+     */
+    public function test_tags()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test ajax_add_comment
+     */
+    public function test_ajax_add_comment()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test captcha
+     */
+    public function test_captcha()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
 
 }
