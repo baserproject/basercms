@@ -46,12 +46,12 @@ interface PasswordRequestsServiceInterface
      *
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
-     * @return array|false
+     * @return array|bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update($entity, $postData): ?array;
+    public function update($entity, $postData);
 
     /**
      * 有効なパスワード変更情報を取得する

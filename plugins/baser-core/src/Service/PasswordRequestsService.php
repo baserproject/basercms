@@ -86,23 +86,23 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
      *
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
-     * @return array|false
+     * @return array|bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update($entity, $postData): ?array
+    public function update($entity, $postData)
     {
         $passwordRequest = $this->PasswordRequests->patchEntity($entity, $postData);
         $usersTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
         $user = $usersTable->find()
             ->where(['Users.email' => $postData['email']])
             ->first();
-        if (empty($user)) throw new RecordNotFoundException(__d('baser_core', 'ユーザーが存在しません。'));
+        if (empty($user)) return true;
         $passwordRequest->user_id = $user->id;
         $passwordRequest->used = 0;
         $passwordRequest->setRequestKey();
-        if ($this->PasswordRequests->saveOrFail($passwordRequest)){
+        if ($this->PasswordRequests->saveOrFail($passwordRequest)) {
             return $this->getMailer('BaserCore.Admin/PasswordRequest')->send('resetPassword', [$user, $passwordRequest]);
         }
         return false;
