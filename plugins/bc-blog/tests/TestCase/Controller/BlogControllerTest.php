@@ -19,6 +19,7 @@ use BcBlog\Controller\BlogController;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
@@ -120,10 +121,56 @@ class BlogControllerTest extends BcTestCase
     public function test_archives()
     {
         //準備
-
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogContentFactory::make(['id' => 1,
+            'template' => 'default',
+            'list_direction' => 'DESC',
+            'description' => 'description test 1'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'lft' => 1,
+            'rght' => 2,
+        ])->persist();
+        BlogContentFactory::make([
+            'id' => '2',
+            'name' => 'release',
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'widget_area' => '2',
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+            'use_content' => '1',
+            'created' => '2015-08-10 18:57:47',
+            'status' => 1,
+            'modified' => NULL,
+        ])->persist();
         //正常系実行
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
+        $controller = new BlogController($request);
 
-        //異常系実行
+        $controller->setRequest($request->withParam('pass', ['release']));
+        $controller->viewBuilder()->setVar('crumbs', []);
+        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'category');
+        $vars = $this->_controller->viewBuilder()->getVars();
+        dd($vars);
 
 
     }
