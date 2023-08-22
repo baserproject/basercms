@@ -80,6 +80,7 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
