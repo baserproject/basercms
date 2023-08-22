@@ -19,10 +19,17 @@ use BcBlog\Controller\BlogController;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
+use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\BlogTagsScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
+use Cake\Http\Exception\NotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -148,10 +155,52 @@ class BlogControllerTest extends BcTestCase
     public function test_tags()
     {
         //準備
-
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogContentFactory::make(['id' => 1, 'template' => 'default', 'description' => 'description test 1'])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogCommentFactory::make([[
+            'id' => 1,
+            'blog_content_id' => 1,
+            'blog_post_id' => 1,
+            'no' => 1,
+            'status' => 1,
+            'name' => 'baserCMS',
+            'email' => '',
+            'url' => 'https://basercms.net',
+            'message' => 'ホームページの開設おめでとうございます。（ダミー）',
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        BlogPostFactory::make(['id' => '1',
+            'blog_content_id' => '1',
+            'blog_category_id' => 1,
+            'user_id' => 1,
+            'status' => true,
+            'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
+        BlogTagFactory::make(['id' => 1, 'name' => 'name1'])->persist();
+        BlogTagFactory::make(['id' => 2, 'name' => 'name2'])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 2])->persist();
         //正常系実行
-
+        $request = $this->getRequest()->withParam('action', 'tags');
+        $controller = new BlogController($request);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $controller->tags($blogPostsService, 'name1');
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('name1', $vars['tag']);
+        $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
         //異常系実行
+        $this->expectException(NotFoundException::class);
+        $controller->tags($blogPostsService);
 
 
     }
