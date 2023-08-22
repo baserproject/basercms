@@ -162,6 +162,7 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
