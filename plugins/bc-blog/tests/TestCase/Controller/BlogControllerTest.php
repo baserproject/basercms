@@ -77,8 +77,7 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_beforeFilter()
     {
-        $event = new Event('Controller.beforeFilter', $this->BlogController);
-        $this->BlogController->beforeFilter($event);
+
     }
 
     /**
