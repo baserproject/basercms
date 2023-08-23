@@ -14,6 +14,8 @@ namespace BcUploader\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
+use BcUploader\Test\Scenario\UploaderCategoriesScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -112,7 +114,16 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($rs);
+        //DBにデータが保存しないか確認すうること
+        $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionMessage('Record not found in table "uploader_categories"');
+        $this->UploaderCategoriesService->get(1);
     }
 
     /**
