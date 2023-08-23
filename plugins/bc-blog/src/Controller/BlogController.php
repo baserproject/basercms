@@ -101,6 +101,7 @@ class BlogController extends BlogFrontAppController
      * @param BlogPostsService $blogPostsService
      * @return void|ResponseInterface
      * @checked
+     * @unitTest
      */
     public function index(
         BlogFrontServiceInterface $service,
