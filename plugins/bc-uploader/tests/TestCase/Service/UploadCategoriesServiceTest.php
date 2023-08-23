@@ -120,7 +120,7 @@ class UploadCategoriesServiceTest extends BcTestCase
         $rs = $this->UploaderCategoriesService->delete(1);
         //戻る値を確認
         $this->assertTrue($rs);
-        //DBにデータが保存しないか確認すうること
+        //DBにデータが保存しないか確認すること
         $this->expectException(RecordNotFoundException::class);
         $this->expectExceptionMessage('Record not found in table "uploader_categories"');
         $this->UploaderCategoriesService->get(1);
