@@ -127,6 +127,7 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $id)
     {
