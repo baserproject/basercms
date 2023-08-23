@@ -14,6 +14,9 @@ namespace BcUploader\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
+use BcUploader\Test\Scenario\UploaderCategoriesScenario;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -104,7 +107,27 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->update(
+            UploaderCategoryFactory::get(1),
+            ['name' => '更新しました。']
+        );
+        //戻る値を確認
+        $this->assertEquals('更新しました。', $rs->name);
+        $this->assertEquals(1, $rs->id);
+        //DBにデータが保存されたか確認すること
+        $uploaderCategory = $this->UploaderCategoriesService->get(1);
+        $this->assertEquals('更新しました。', $uploaderCategory->name);
+
+        //異常系のテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name._empty: "カテゴリ名を入力してください。")');
+        $this->UploaderCategoriesService->update(
+            UploaderCategoryFactory::get(1),
+            ['name' => '']
+        );
     }
 
     /**
