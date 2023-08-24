@@ -20,8 +20,11 @@ use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
@@ -100,8 +103,15 @@ class BlogControllerTest extends BcTestCase
         BlogContentFactory::make(['id' => 1,
             'template' => 'default',
             'list_direction' => 'DESC',
+            'tag_use' => '1',
             'description' => 'description test 1'])->persist();
-        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        BlogPostFactory::make(['id' => '1',
+            'blog_content_id' => '1',
+            'user_id' => '1',
+            'status' => '1',
+            'posted' => '2023/08/20',
+            'list_direction' => 'DESC',
+            'title' => 'blog post'])->persist();
         ContentFactory::make(['plugin' => 'BcBlog',
             'status' => true,
             'lft' => 1,
@@ -118,24 +128,21 @@ class BlogControllerTest extends BcTestCase
             'lft' => 1,
             'rght' => 2,
         ])->persist();
-        BlogContentFactory::make([
-            'id' => '2',
-            'name' => 'release',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
+        BlogTagFactory::make(['id' => 1, 'name' => 'name1'])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogCommentFactory::make([[
+            'id' => 1,
+            'blog_content_id' => 1,
+            'blog_post_id' => 1,
+            'no' => 1,
             'status' => 1,
+            'name' => 'baserCMS',
+            'email' => '',
+            'url' => 'https://basercms.net',
+            'message' => 'ホームページの開設おめでとうございます。（ダミー）',
+            'created' => '2015-08-10 18:57:47',
             'modified' => NULL,
-        ])->persist();
+        ]])->persist();
         $fullPath = BASER_PLUGINS . 'bc-front/templates/Blog/Blog/default';
         if (!file_exists($fullPath)){
             mkdir($fullPath, recursive: true);
@@ -155,10 +162,25 @@ class BlogControllerTest extends BcTestCase
         $controller->viewBuilder()->setVar('crumbs', []);
         $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'category');
         $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('category', $vars['blogArchiveType']);
         $this->assertEquals('release', $vars['blogCategory']->name);
         //type = 'author'
+        $controller->setRequest($request->withParam('pass', ['release', 'name']));
+        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'author');
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('author', $vars['blogArchiveType']);
+        $this->assertEquals('name', $vars['author']->name);
         //type = 'tag'
+        $controller->setRequest($request->withParam('pass', ['release', 'name1']));
+        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'tag');
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('tag', $vars['blogArchiveType']);
+        $this->assertEquals('name1', $vars['blogTag']->name);
         //type = 'date'
+        $controller->setRequest($request->withParam('pass', ['release', '2923', '08', '20']));
+        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'date');
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('daily', $vars['blogArchiveType']);
 
 
     }
