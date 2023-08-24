@@ -26,6 +26,7 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -82,8 +83,7 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_beforeFilter()
     {
-//        $event = new Event('Controller.beforeFilter', $this->BlogController);
-//        $this->BlogController->beforeFilter($event);
+
     }
 
     /**
@@ -91,6 +91,41 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_index()
     {
+        //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogContentFactory::make(['id' => 1,
+            'template' => 'default',
+            'description' => 'description test 1'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog',
+            'status' => true,
+            'lft' => 1,
+            'rght' => 2,
+            'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
+        $fullPath = BASER_PLUGINS . 'bc-front/templates/Blog/Blog/default';
+        if (!file_exists($fullPath)){
+            mkdir($fullPath, recursive: true);
+        }
+        $file = new File($fullPath .DS. 'index.php');
+        $file->write('html');
+        $file->close();
+        //正常系実行
+        $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
+        $controller = new BlogController($request);
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        $controller->index($blogFrontService, $blogContentsService, $blogPostsService);
+        $vars = $controller->viewBuilder()->getVars();
+        unlink($fullPath.DS.'index.php');
+        $this->assertEquals('description test 1', $vars['blogContent']->description);
+        //異常系実行
+        $request = $this->getRequest()->withAttribute('currentContent', null);
+        $controller = new BlogController($request);
+        $this->expectException(RecordNotFoundException::class);
+        $controller->index($blogFrontService, $blogContentsService, $blogPostsService);
     }
 
     /**
