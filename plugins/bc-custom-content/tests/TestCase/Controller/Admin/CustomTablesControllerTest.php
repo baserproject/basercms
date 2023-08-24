@@ -15,11 +15,13 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Controller\Admin\CustomTablesController;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -34,6 +36,18 @@ class CustomTablesControllerTest extends BcTestCase
     use ScenarioAwareTrait;
     use BcContainerTrait;
 
+    /**
+     * Test subject
+     *
+     * @var CustomTablesController
+     */
+    public $CustomTablesController;
+    /**
+     * Test subject
+     *
+     * @var ServerRequest
+     */
+    public $request;
 
     /**
      * Set up
@@ -42,8 +56,8 @@ class CustomTablesControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $request = $this->getRequest('/baser/admin/bc-custom-content/custom_tables/');
-        $this->loginAdmin($request);
+        $this->request = $this->loginAdmin($this->getRequest('/baser/admin/bc-custom-content/custom_tables/'));
+        $this->CustomTablesController = new CustomTablesController($this->request);
     }
 
     /**
@@ -53,7 +67,28 @@ class CustomTablesControllerTest extends BcTestCase
     {
         Configure::clear();
         parent::tearDown();
+        unset($this->CustomTablesController, $this->request);
     }
+
+    /**
+     * test beforeFilter
+     */
+    public function test_beforeFilter()
+    {
+        //action ！== delete 場合、validatePostはTrueを返す
+        $event = new Event('Controller.beforeFilter', $this->CustomTablesController);
+        $this->CustomTablesController->beforeFilter($event);
+        $config = $this->CustomTablesController->Security->getConfig('validatePost');
+        $this->assertTrue($config);
+
+        //action == delete 場合、validatePostをFalseに設定する
+        $this->CustomTablesController->setRequest($this->request->withParam('action', 'delete'));
+        $event = new Event('Controller.beforeFilter', $this->CustomTablesController);
+        $this->CustomTablesController->beforeFilter($event);
+        $config = $this->CustomTablesController->Security->getConfig('validatePost');
+        $this->assertFalse($config);
+    }
+
     /**
      * Test beforeAddEvent
      */
