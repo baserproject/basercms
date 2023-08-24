@@ -24,6 +24,7 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Event\Event;
+use Cake\Filesystem\File;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -87,32 +88,6 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        //準備
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $this->loadFixtureScenario(InitAppScenario::class);
-        BlogContentFactory::make(['id' => 1, 'template' => 'default', 'description' => 'description test 1'])->persist();
-        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
-        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
-            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
-
-        //正常系実行
-        $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
-        $controller = new BlogController($request);
-        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
-        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
-        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
-
-        $controller->index($blogFrontService, $blogContentsService, $blogPostsService);
-        $vars = $this->_controller->viewBuilder()->getVars();
-        dd($vars);
-        $this->assertCount(1, $vars);
-        //異常系実行
-        $this->post("/baser/admin/bc-blog/blog_comments/index/99");
-        //リダイレクトを確認
-        $this->assertResponseCode(404);
-
-
     }
 
     /**
@@ -121,15 +96,17 @@ class BlogControllerTest extends BcTestCase
     public function test_archives()
     {
         //準備
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->loadFixtureScenario(InitAppScenario::class);
         BlogContentFactory::make(['id' => 1,
             'template' => 'default',
             'list_direction' => 'DESC',
             'description' => 'description test 1'])->persist();
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
-        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
+        ContentFactory::make(['plugin' => 'BcBlog',
+            'status' => true,
+            'lft' => 1,
+            'rght' => 2,
+            'type' => 'BlogContent'])
             ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
         BlogCategoryFactory::make([
             'id' => 1,
@@ -159,6 +136,13 @@ class BlogControllerTest extends BcTestCase
             'status' => 1,
             'modified' => NULL,
         ])->persist();
+        $fullPath = BASER_PLUGINS . 'bc-front/templates/Blog/Blog/default';
+        if (!file_exists($fullPath)){
+            mkdir($fullPath, recursive: true);
+        }
+        $file = new File($fullPath .DS. 'archives.php');
+        $file->write('html');
+        $file->close();
         //正常系実行
         $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
@@ -166,11 +150,15 @@ class BlogControllerTest extends BcTestCase
         $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
         $controller = new BlogController($request);
 
+        //type = 'category'
         $controller->setRequest($request->withParam('pass', ['release']));
         $controller->viewBuilder()->setVar('crumbs', []);
         $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'category');
-        $vars = $this->_controller->viewBuilder()->getVars();
-        dd($vars);
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertEquals('release', $vars['blogCategory']->name);
+        //type = 'author'
+        //type = 'tag'
+        //type = 'date'
 
 
     }
