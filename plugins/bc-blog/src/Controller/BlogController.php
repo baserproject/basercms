@@ -58,7 +58,6 @@ class BlogController extends BlogFrontAppController
 
     /**
      * beforeFilter
-     * @checked
      * @noTodo
      * @unitTest
      * @return void
@@ -79,14 +78,14 @@ class BlogController extends BlogFrontAppController
             }
         }
 
-        if (empty($this->request->getAttribute('currentContent'))) {
-            // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
-            $content = $this->BcContents->getContent($blogContentId);
-            if ($content) {
-                $this->request = $this->request->withParam('Content', $content['Content']);
-                $this->request = $this->request->withParam('Site', $content['Site']);
-            }
-        }
+//        if (empty($this->request->getAttribute('currentContent'))) {
+//            // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
+//            $content = $this->BcContents->getContent($blogContentId);
+//            if ($content) {
+//                $this->request = $this->request->withParam('Content', $content['Content']);
+//                $this->request = $this->request->withParam('Site', $content['Site']);
+//            }
+//        }
 
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
