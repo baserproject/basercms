@@ -58,8 +58,6 @@ class BlogController extends BlogFrontAppController
 
     /**
      * beforeFilter
-     * @noTodo
-     * @unitTest
      * @return void
      */
     public function beforeFilter(EventInterface $event)

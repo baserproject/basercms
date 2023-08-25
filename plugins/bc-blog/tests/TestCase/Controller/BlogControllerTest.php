@@ -177,6 +177,7 @@ class BlogControllerTest extends BcTestCase
         $this->loginAdmin($this->getRequest());
         BlogContentFactory::make(['id' => 1,
             'template' => 'default',
+            'auth_captcha' => false,
             'description' => 'description test 1'])->persist();
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
         ContentFactory::make(['plugin' => 'BcBlog',
@@ -186,7 +187,15 @@ class BlogControllerTest extends BcTestCase
             'type' => 'BlogContent'])
             ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
         //正常系実行
-        $this->post('/bc-blog/blog/ajax_add_comment', ['blog_content_id' => 1, 'blog_post_id' => 1, 'name'=>'test', 'message'=>'test']);
+        $this->post('/bc-blog/blog/ajax_add_comment',
+            [
+                'blog_content_id' => 1,
+                'blog_post_id' => 1,
+                'name'=>'test',
+                'email'=>'test@gmail.com',
+                'auth_captcha' => '1',
+                'message'=>'test'
+            ]);
         $this->assertResponseOk();
         //異常系実行
 
