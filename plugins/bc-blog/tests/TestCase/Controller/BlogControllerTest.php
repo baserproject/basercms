@@ -12,12 +12,15 @@
 namespace BcBlog\Test\TestCase\Controller;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
+use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
+use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
@@ -175,6 +178,8 @@ class BlogControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'foo@example.com'])->persist();
+        SiteConfigFactory::make(['name' => 'formal_name', 'value' => 'test'])->persist();
         BlogContentFactory::make(['id' => 1,
             'template' => 'default',
             'auth_captcha' => false,
@@ -191,13 +196,26 @@ class BlogControllerTest extends BcTestCase
             [
                 'blog_content_id' => 1,
                 'blog_post_id' => 1,
-                'name'=>'test',
+                'name'=>'name test',
                 'email'=>'test@gmail.com',
                 'auth_captcha' => '1',
-                'message'=>'test'
+                'message'=>'message test'
             ]);
         $this->assertResponseOk();
+        $blogComment = BlogCommentFactory::get(1);
+        $this->assertEquals('name test', $blogComment->name);
+        $this->assertEquals('message test', $blogComment->message);
         //異常系実行
+        $this->post('/bc-blog/blog/ajax_add_comment',
+            [
+                'blog_content_id' => 111,
+                'blog_post_id' => 111,
+                'name'=>'name test',
+                'email'=>'test@gmail.com',
+                'auth_captcha' => '1',
+                'message'=>'message test'
+            ]);
+        $this->assertResponseCode(404);
 
     }
 
