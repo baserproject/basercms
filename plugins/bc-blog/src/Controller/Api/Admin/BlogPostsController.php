@@ -31,7 +31,6 @@ class BlogPostsController extends BcAdminApiController
      * @param BlogPostsServiceInterface $service
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function index(BlogPostsServiceInterface $service)
     {
