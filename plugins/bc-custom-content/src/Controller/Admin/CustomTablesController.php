@@ -48,6 +48,9 @@ class CustomTablesController extends CustomContentAdminAppController
      * カスタムテーブルの一覧を表示
      *
      * @param CustomTablesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomTablesAdminServiceInterface $service)
     {
