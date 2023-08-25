@@ -20,6 +20,7 @@ use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
@@ -170,11 +171,24 @@ class BlogControllerTest extends BcTestCase
     public function test_ajax_add_comment()
     {
         //準備
-
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        BlogContentFactory::make(['id' => 1,
+            'template' => 'default',
+            'description' => 'description test 1'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog',
+            'status' => true,
+            'lft' => 1,
+            'rght' => 2,
+            'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
         //正常系実行
-
+        $this->post('/bc-blog/blog/ajax_add_comment', ['blog_content_id' => 1, 'blog_post_id' => 1, 'name'=>'test', 'message'=>'test']);
+        $this->assertResponseOk();
         //異常系実行
-
 
     }
 
