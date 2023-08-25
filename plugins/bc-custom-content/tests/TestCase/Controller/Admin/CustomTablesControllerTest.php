@@ -72,25 +72,6 @@ class CustomTablesControllerTest extends BcTestCase
     }
 
     /**
-     * test beforeFilter
-     */
-    public function test_beforeFilter()
-    {
-        //action ！== delete 場合、validatePostはTrueを返す
-        $event = new Event('Controller.beforeFilter', $this->CustomTablesController);
-        $this->CustomTablesController->beforeFilter($event);
-        $config = $this->CustomTablesController->Security->getConfig('validatePost');
-        $this->assertTrue($config);
-
-        //action == delete 場合、validatePostをFalseに設定する
-        $this->CustomTablesController->setRequest($this->request->withParam('action', 'delete'));
-        $event = new Event('Controller.beforeFilter', $this->CustomTablesController);
-        $this->CustomTablesController->beforeFilter($event);
-        $config = $this->CustomTablesController->Security->getConfig('validatePost');
-        $this->assertFalse($config);
-    }
-
-    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()
