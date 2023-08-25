@@ -36,25 +36,6 @@ class BlogCategoriesControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Dblogs',
-        'plugin.BcBlog.Factory/BlogCategories',
-        'plugin.BcBlog.Factory/BlogComments',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcBlog.Factory/BlogPosts',
-    ];
-
-    /**
      * Access Token
      * @var string
      */
@@ -110,6 +91,34 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(get_object_vars($result->blogCategories)[3], 'title 3');
+    }
+
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        //準備
+        PermissionFactory::make()->allowGuest('/baser/api/admin/*')->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogCategoryFactory::make(['id' => 99, 'title' => 'title 99', 'name' => 'name-99', 'blog_content_id' => 1])->persist();
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_categories/view/99.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('title 99', $result->blogCategory->title);
+        //異常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_categories/view/111.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+
+
     }
 
     /**

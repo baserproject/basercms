@@ -31,17 +31,6 @@ class BlogCommentsAdminServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BcBlog.Factory/BlogPosts',
-        'plugin.BcBlog.Factory/BlogComments',
-        'plugin.BcBlog.Factory/BlogContents',
-    ];
-
-    /**
      * Set Up
      *
      * @return void

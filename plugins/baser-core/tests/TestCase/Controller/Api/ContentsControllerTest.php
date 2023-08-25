@@ -44,7 +44,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Pages',
-        'plugin.BcBlog.Factory/BlogContents'
     ];
 
     /**

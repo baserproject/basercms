@@ -49,25 +49,6 @@ class BlogFrontServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BcBlog.Factory/BlogPosts',
-        'plugin.BcBlog.Factory/BlogCategories',
-    ];
-
-    /**
      * Set Up
      *
      * @return void

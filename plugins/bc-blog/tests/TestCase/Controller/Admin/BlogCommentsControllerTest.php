@@ -34,23 +34,6 @@ class BlogCommentsControllerTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcBlog.Factory/BlogComments',
-        'plugin.BcBlog.Factory/BlogContents',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcBlog.Factory/BlogPosts',
-    ];
-
-    /**
      * set up
      *
      * @return void
@@ -93,7 +76,6 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->post("/baser/admin/bc-blog/blog_comments/index/1");
         $vars = $this->_controller->viewBuilder()->getVars()['blogComments'];
         $this->assertCount(1, $vars);
-        //リダイレクトを確認
         $this->assertResponseOk();
         //異常系実行
         $this->post("/baser/admin/bc-blog/blog_comments/index/99");

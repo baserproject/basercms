@@ -36,18 +36,6 @@ class MailMessagesTableTest extends BcTestCase
     use ScenarioAwareTrait;
     use IntegrationTestTrait;
 
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/Permissions',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BcMail.Factory/MailContents',
-        'plugin.BcMail.Factory/MailFields',
-    ];
-
     public function setUp(): void
     {
         $this->MailMessage = $this->getTableLocator()->get('BcMail.MailMessages');

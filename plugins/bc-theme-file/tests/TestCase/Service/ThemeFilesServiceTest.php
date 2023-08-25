@@ -24,15 +24,6 @@ use Cake\Filesystem\Folder;
 class ThemeFilesServiceTest extends BcTestCase
 {
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-    ];
-
     public $ThemeFileService = null;
 
     /**

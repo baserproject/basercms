@@ -32,18 +32,6 @@ class ContentLinksControllerTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcContentLink.Factory/ContentLinks',
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void

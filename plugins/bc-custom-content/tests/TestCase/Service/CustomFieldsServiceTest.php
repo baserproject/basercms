@@ -40,17 +40,6 @@ class CustomFieldsServiceTest extends BcTestCase
     public $CustomFieldsService;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BcCustomContent.Factory/CustomFields',
-        'plugin.BcCustomContent.Factory/CustomLinks',
-        'plugin.BcCustomContent.Factory/CustomTables',
-    ];
-
-    /**
      * Set up
      */
     public function setUp(): void

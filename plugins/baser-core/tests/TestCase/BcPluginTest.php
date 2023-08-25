@@ -55,7 +55,6 @@ class BcPluginTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -65,7 +64,6 @@ class BcPluginTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
     }
@@ -79,11 +77,6 @@ class BcPluginTest extends BcTestCase
     {
         unset($this->BcPlugin);
         parent::tearDown();
-        $this->truncateTable('blog_categories');
-        $this->truncateTable('blog_contents');
-        $this->truncateTable('blog_posts');
-        $this->truncateTable('blog_tags');
-        $this->truncateTable('blog_posts_blog_tags');
     }
 
     /**

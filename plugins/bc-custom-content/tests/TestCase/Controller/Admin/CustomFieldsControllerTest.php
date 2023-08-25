@@ -34,28 +34,10 @@ class CustomFieldsControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcCustomContent.Factory/CustomFields',
-        'plugin.BcCustomContent.Factory/CustomLinks',
-        'plugin.BcCustomContent.Factory/CustomTables',
-    ];
-
-    /**
      * Set up
      */
     public function setUp(): void
     {
-        parent::setUp();
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/bc-custom-content/custom_fields/');

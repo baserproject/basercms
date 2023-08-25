@@ -36,24 +36,12 @@ class ContentLinksServiceTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcContentLink.Factory/ContentLinks',
-    ];
-
-    /**
      * Set Up
      *
      * @return void
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->ContentLinksService = $this->getService(ContentLinksServiceInterface::class);
     }

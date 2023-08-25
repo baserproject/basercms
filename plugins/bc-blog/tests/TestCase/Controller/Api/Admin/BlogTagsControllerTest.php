@@ -33,21 +33,6 @@ class BlogTagsControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BaserCore.Factory/Dblogs',
-    ];
-
-    /**
      * Access Token
      * @var string
      */

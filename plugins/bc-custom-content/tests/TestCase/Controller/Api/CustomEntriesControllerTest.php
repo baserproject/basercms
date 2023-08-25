@@ -33,22 +33,6 @@ class CustomEntriesControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BcCustomContent.Factory/CustomTables',
-        'plugin.BcCustomContent.Factory/CustomContents',
-        'plugin.BaserCore.Factory/Contents',
-    ];
-
-    /**
      * Access Token
      * @var string
      */
@@ -65,7 +49,6 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
