@@ -1047,6 +1047,7 @@ class BlogPostsServiceTest extends BcTestCase
         //データ生成
         BlogPostFactory::make([
             'id' => 1,
+            'no' => 1,
             'blog_content_id' => 3,
             'title' => 'blog post 1',
             'posted' => '2022-10-02 09:00:00',
@@ -1056,6 +1057,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
+            'no' => 2,
             'blog_content_id' => 3,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
@@ -1065,6 +1067,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
+            'no' => 3,
             'blog_content_id' => 3,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
@@ -1101,6 +1104,7 @@ class BlogPostsServiceTest extends BcTestCase
         //データ生成
         BlogPostFactory::make([
             'id' => 1,
+            'no' => 1,
             'blog_content_id' => 3,
             'title' => 'blog post 1',
             'posted' => '2022-10-02 09:00:00',
@@ -1110,6 +1114,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
+            'no' => 2,
             'blog_content_id' => 3,
             'title' => 'blog post 2',
             'posted' => '2022-10-02 09:00:00',
@@ -1119,6 +1124,7 @@ class BlogPostsServiceTest extends BcTestCase
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
+            'no' => 3,
             'blog_content_id' => 3,
             'title' => 'blog post 3',
             'posted' => '2022-08-02 09:00:00',
