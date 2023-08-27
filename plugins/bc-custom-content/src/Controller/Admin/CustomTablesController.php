@@ -35,6 +35,9 @@ class CustomTablesController extends CustomContentAdminAppController
      *
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
