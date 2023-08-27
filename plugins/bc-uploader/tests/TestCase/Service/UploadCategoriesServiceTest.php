@@ -200,7 +200,20 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->batch('delete', [1, 2, 3]);
+        // 戻り値を確認
+        $this->assertTrue($rs);
+        // データが削除されていることを確認
+        $blogTags = $this->UploaderCategoriesService->getIndex([])->toArray();
+        $this->assertCount(0, $blogTags);
+
+        // 存在しない id を指定された場合は例外が発生すること
+        // サービスメソッドを呼ぶ
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->UploaderCategoriesService->batch('delete', [1, 2, 3]);
     }
 
     /**
