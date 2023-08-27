@@ -184,7 +184,15 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->copy(1);
+        //戻る値を確認
+        $this->assertEquals('blog_copy', $rs->name);
+        //DBにデータがコピーされたか確認すること
+        $uploaderCategory = $this->UploaderCategoriesService->get(4);
+        $this->assertEquals('blog_copy', $uploaderCategory->name);
     }
 
     /**
