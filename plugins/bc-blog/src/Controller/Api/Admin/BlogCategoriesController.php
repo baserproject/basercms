@@ -71,6 +71,7 @@ class BlogCategoriesController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogCategoriesServiceInterface $service)
     {
