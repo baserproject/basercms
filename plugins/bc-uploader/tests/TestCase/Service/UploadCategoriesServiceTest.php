@@ -15,7 +15,9 @@ use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -66,7 +68,13 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->get(1);
+        //戻る値を確認
+        $this->assertEquals($rs->id, 1);
+        $this->assertEquals($rs->name, 'blog');
     }
 
     /**
@@ -74,7 +82,13 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(3, $rs);
+        $this->assertEquals('blog', $rs[0]->name);
     }
 
     /**
@@ -82,7 +96,15 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getList();
+        //戻る値を確認
+        $this->assertCount(3, $rs);
+        $this->assertEquals('blog', $rs[1]);
+        $this->assertEquals('contact', $rs[2]);
+        $this->assertEquals('service', $rs[3]);
     }
 
     /**
@@ -90,7 +112,7 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $this->assertEquals([], $this->UploaderCategoriesService->getNew()->toArray());
     }
 
     /**
@@ -98,7 +120,18 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->create(['name' => 'blog']);
+        //戻る値を確認
+        $this->assertEquals('blog', $rs->name);
+        //DBにデータが保存されたか確認すること
+        $category = $this->UploaderCategoriesService->getIndex(['name' => 'blog'])->first();
+        $this->assertEquals('blog', $category->name);
+
+        //異常系のテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name._empty: "カテゴリ名を入力してください。")');
+        $this->UploaderCategoriesService->create(['name' => '']);
     }
 
     /**
@@ -106,7 +139,27 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->update(
+            UploaderCategoryFactory::get(1),
+            ['name' => '更新しました。']
+        );
+        //戻る値を確認
+        $this->assertEquals('更新しました。', $rs->name);
+        $this->assertEquals(1, $rs->id);
+        //DBにデータが保存されたか確認すること
+        $uploaderCategory = $this->UploaderCategoriesService->get(1);
+        $this->assertEquals('更新しました。', $uploaderCategory->name);
+
+        //異常系のテスト
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name._empty: "カテゴリ名を入力してください。")');
+        $this->UploaderCategoriesService->update(
+            UploaderCategoryFactory::get(1),
+            ['name' => '']
+        );
     }
 
     /**
@@ -147,6 +200,13 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getTitlesById()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getTitlesById([1, 2]);
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('blog', $rs[1]);
+        $this->assertEquals('contact', $rs[2]);
     }
 }
