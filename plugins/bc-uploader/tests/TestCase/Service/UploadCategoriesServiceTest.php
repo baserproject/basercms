@@ -169,6 +169,13 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getTitlesById()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getTitlesById([1, 2]);
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('blog', $rs[1]);
+        $this->assertEquals('contact', $rs[2]);
     }
 }
