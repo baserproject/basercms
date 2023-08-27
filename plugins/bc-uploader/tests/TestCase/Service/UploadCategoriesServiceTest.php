@@ -109,7 +109,7 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $this->assertEquals([], $this->UploaderCategoriesService->getNew()->toArray());
     }
 
     /**
