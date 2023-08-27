@@ -363,4 +363,28 @@ class BlogPostsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('データが見つかりません。', $result->message);
     }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        //データを生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 11, 'blog_content_id' => 1, 'title' => 'bl title 11'])->persist();
+        BlogPostFactory::make(['id' => 22, 'blog_content_id' => 1, 'title' => 'bl title 22'])->persist();
+
+        //正常の時を確認
+        //APIをコル
+        $this->get('/baser/api/admin/bc-blog/blog_posts/index.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->blogPosts);
+        $this->assertEquals('bl title 22', $result->blogPosts[0]->title);
+    }
+
 }
