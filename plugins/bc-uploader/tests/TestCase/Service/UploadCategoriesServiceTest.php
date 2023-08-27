@@ -93,7 +93,15 @@ class UploadCategoriesServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        //データを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //対象メソッドをコール
+        $rs = $this->UploaderCategoriesService->getList();
+        //戻る値を確認
+        $this->assertCount(3, $rs);
+        $this->assertEquals('blog', $rs[1]);
+        $this->assertEquals('contact', $rs[2]);
+        $this->assertEquals('service', $rs[3]);
     }
 
     /**
