@@ -44,6 +44,7 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {
