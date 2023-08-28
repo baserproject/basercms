@@ -12,23 +12,23 @@
 namespace BcBlog\Test\TestCase\Controller;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
-use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
-use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
-use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BcBlog\Model\Entity\BlogContent;
+use BcBlog\Test\Factory\BlogCommentFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 
 /**
  * Class BlogControllerTest
