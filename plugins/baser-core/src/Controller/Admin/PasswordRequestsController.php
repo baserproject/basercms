@@ -20,6 +20,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Service\PasswordRequestsService;
 use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Class PasswordRequestsController
@@ -59,12 +60,16 @@ class PasswordRequestsController extends BcAdminAppController
         $this->set('passwordRequest', clone $passwordRequest);
         if (!$this->request->is(['patch', 'post', 'put'])) return;
 
-        $passwordRequest = $service->update($passwordRequest, $this->request->getData());
-        if (!$passwordRequest) {
-            $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
-            return;
+        try {
+            $passwordRequest = $service->update($passwordRequest, $this->request->getData());
+            if (!$passwordRequest) {
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+                return;
+            }
+            $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
+        } catch (RecordNotFoundException $e) {
+            $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
         }
-        $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
         $this->redirect(['action' => 'entry']);
     }
 

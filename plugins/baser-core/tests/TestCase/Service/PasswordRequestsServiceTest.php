@@ -137,8 +137,8 @@ class PasswordRequestsServiceTest extends BcTestCase
         $this->assertStringContainsString('From: name <bar@example.com>', $result['headers']);
 
         // ユーザーが存在しない
-        $rs = $this->service->update($this->service->getNew(), ['email' => 'non@example.com']);
-        $this->assertTrue($rs);
+        $this->expectException(RecordNotFoundException::class);
+        $this->service->update($this->service->getNew(), ['email' => 'non@example.com']);
     }
 
     /**
