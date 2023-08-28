@@ -164,7 +164,10 @@ class BlogControllerTest extends BcTestCase
     public function test_tags()
     {
         //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         BlogContentFactory::make(['id' => 1, 'template' => 'default', 'description' => 'description test 1'])->persist();
         BlogCategoryFactory::make([
             'id' => 1,
@@ -203,14 +206,15 @@ class BlogControllerTest extends BcTestCase
         $request = $this->getRequest()->withParam('action', 'tags');
         $controller = new BlogController($request);
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
-        $controller->tags($blogPostsService, 'name1');
+        $this->get('/bc-blog/blog/tags/name1');
+        $this->assertResponseOk();
         $vars = $controller->viewBuilder()->getVars();
         $this->assertEquals('name1', $vars['tag']);
         $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
         //異常系実行
         $this->expectException(NotFoundException::class);
-        $controller->tags($blogPostsService);
-
+        $this->get('/bc-blog/blog/tags/?name1');
+        $this->assertResponseCode(404);
     }
 
     /**
