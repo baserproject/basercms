@@ -134,7 +134,10 @@ class BlogControllerTest extends BcTestCase
     public function test_archives()
     {
         //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         BlogContentFactory::make(['id' => 1,
             'template' => 'default',
             'list_direction' => 'DESC',
@@ -195,6 +198,7 @@ class BlogControllerTest extends BcTestCase
         //type = 'category'
         $controller->setRequest($request->withParam('pass', ['release']));
         $controller->viewBuilder()->setVar('crumbs', []);
+        $this->get('/bc-blog/blog/archives/category');
         $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'category');
         $vars = $controller->viewBuilder()->getVars();
         $this->assertEquals('category', $vars['blogArchiveType']);
