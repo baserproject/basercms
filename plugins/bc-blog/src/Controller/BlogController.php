@@ -58,8 +58,7 @@ class BlogController extends BlogFrontAppController
 
     /**
      * beforeFilter
-     * @checked
-     * @noTodo
+     *
      * @return void
      */
     public function beforeFilter(EventInterface $event)
@@ -101,6 +100,7 @@ class BlogController extends BlogFrontAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(
         BlogFrontServiceInterface $service,
