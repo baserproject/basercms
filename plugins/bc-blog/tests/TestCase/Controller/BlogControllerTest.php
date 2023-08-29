@@ -177,7 +177,6 @@ class BlogControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loginAdmin($this->getRequest());
         SiteConfigFactory::make(['name' => 'email', 'value' => 'foo@example.com'])->persist();
         SiteConfigFactory::make(['name' => 'formal_name', 'value' => 'test'])->persist();
         BlogContentFactory::make(['id' => 1,
