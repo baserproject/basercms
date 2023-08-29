@@ -205,9 +205,10 @@ class BlogControllerTest extends BcTestCase
         //正常系実行
         $request = $this->getRequest()->withParam('action', 'tags');
         $controller = new BlogController($request);
+        $this->_controller = $controller;
         $this->get('/bc-blog/blog/tags/name1');
-        $this->assertResponseOk();
-        $vars = $controller->viewBuilder()->getVars();
+        $this->assertResponseSuccess();
+        $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('name1', $vars['tag']);
         $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
         //異常系実行
