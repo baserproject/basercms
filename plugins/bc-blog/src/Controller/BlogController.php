@@ -58,7 +58,6 @@ class BlogController extends BlogFrontAppController
 
     /**
      * beforeFilter
-     *
      * @return void
      */
     public function beforeFilter(EventInterface $event)
@@ -334,6 +333,9 @@ class BlogController extends BlogFrontAppController
      *
      * 画像認証を行い認証されればブログのコメントを登録する
      * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function ajax_add_comment(BlogCommentsServiceInterface $service, BcCaptchaServiceInterface $bcCaptchaService)
     {

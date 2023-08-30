@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Controller;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
 use BcBlog\Service\BlogContentsServiceInterface;
@@ -33,6 +34,7 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\Filesystem\File;
+use BcBlog\Model\Entity\BlogContent;
 
 /**
  * Class BlogControllerTest
@@ -223,11 +225,47 @@ class BlogControllerTest extends BcTestCase
     public function test_ajax_add_comment()
     {
         //準備
-
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'foo@example.com'])->persist();
+        SiteConfigFactory::make(['name' => 'formal_name', 'value' => 'test'])->persist();
+        BlogContentFactory::make(['id' => 1,
+            'template' => 'default',
+            'auth_captcha' => false,
+            'description' => 'description test 1'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog',
+            'status' => true,
+            'lft' => 1,
+            'rght' => 2,
+            'type' => 'BlogContent'])
+            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
         //正常系実行
-
+        $this->post('/bc-blog/blog/ajax_add_comment',
+            [
+                'blog_content_id' => 1,
+                'blog_post_id' => 1,
+                'name'=>'name test',
+                'email'=>'test@gmail.com',
+                'auth_captcha' => '1',
+                'message'=>'message test'
+            ]);
+        $this->assertResponseOk();
+        $blogComment = BlogCommentFactory::get(1);
+        $this->assertEquals('name test', $blogComment->name);
+        $this->assertEquals('message test', $blogComment->message);
         //異常系実行
-
+        $this->post('/bc-blog/blog/ajax_add_comment',
+            [
+                'blog_content_id' => 111,
+                'blog_post_id' => 111,
+                'name'=>'name test',
+                'email'=>'test@gmail.com',
+                'auth_captcha' => '1',
+                'message'=>'message test'
+            ]);
+        $this->assertResponseCode(404);
 
     }
 
