@@ -70,6 +70,35 @@ class BlogCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //準備
+        PermissionFactory::make()->allowGuest('/baser/api/admin/*')->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogCategoryFactory::make(['id' => 100, 'title' => 'title test', 'name' => 'name-test', 'blog_content_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 100, 'blog_content_id' => 1, 'blog_category_id' => 100, 'status' => true])->persist();
+
+        //正常系実行
+        $this->get('/baser/api/admin/bc-blog/blog_categories/index.json?blog_content_id=1&token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('title test', $result->blogCategories[0]->title);
+
+        //異常系実行：blog_content_id指定しない
+        $this->get('/baser/api/admin/bc-blog/blog_categories/index.json?blog_content_id=&token=' . $this->accessToken);
+        $this->assertResponseCode(500);
+    }
+
+    /**
      * test list
      * @return void
      */
@@ -222,4 +251,5 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->post('/baser/api/admin/bc-blog/blog_categories/delete/11.json?token=' . $this->accessToken);
         $this->assertResponseCode(404);
     }
+
 }
