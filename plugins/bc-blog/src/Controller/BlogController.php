@@ -58,7 +58,6 @@ class BlogController extends BlogFrontAppController
 
     /**
      * beforeFilter
-     *
      * @return void
      */
     public function beforeFilter(EventInterface $event)
@@ -77,14 +76,14 @@ class BlogController extends BlogFrontAppController
             }
         }
 
-        if (empty($this->request->getAttribute('currentContent'))) {
-            // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
-            $content = $this->BcContents->getContent($blogContentId);
-            if ($content) {
-                $this->request = $this->request->withParam('Content', $content['Content']);
-                $this->request = $this->request->withParam('Site', $content['Site']);
-            }
-        }
+//        if (empty($this->request->getAttribute('currentContent'))) {
+//            // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
+//            $content = $this->BcContents->getContent($blogContentId);
+//            if ($content) {
+//                $this->request = $this->request->withParam('Content', $content['Content']);
+//                $this->request = $this->request->withParam('Site', $content['Site']);
+//            }
+//        }
 
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
@@ -99,6 +98,7 @@ class BlogController extends BlogFrontAppController
      * @param BlogPostsService $blogPostsService
      * @return void|ResponseInterface
      * @checked
+     * @unitTest
      */
     public function index(
         BlogFrontServiceInterface $service,
@@ -331,6 +331,9 @@ class BlogController extends BlogFrontAppController
      *
      * 画像認証を行い認証されればブログのコメントを登録する
      * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function ajax_add_comment(BlogCommentsServiceInterface $service, BcCaptchaServiceInterface $bcCaptchaService)
     {
