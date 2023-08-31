@@ -60,12 +60,10 @@ class PasswordRequestsController extends BcAdminAppController
         $passwordRequest = $service->getNew();
         $this->set('passwordRequest', clone $passwordRequest);
         if (!$this->request->is(['patch', 'post', 'put'])) return;
-
+        $message = 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。';
         try {
-            $service->update($passwordRequest, $this->request->getData());
-            $message = 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。';
+            $service->update($passwordRequest, $this->request->getData());    
         } catch (RecordNotFoundException) {
-            $message = 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。';
         } catch (PersistenceFailedException) {
             $message = '入力エラーです。内容を修正してください。';
         }
