@@ -140,6 +140,9 @@ class CustomTablesController extends CustomContentAdminAppController
      * @param CustomTablesServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function delete(CustomTablesServiceInterface $service, int $id)
     {
