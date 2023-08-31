@@ -64,6 +64,10 @@ class CustomTablesController extends CustomContentAdminAppController
      * カスタムテーブルの新規追加
      *
      * @param CustomTablesAdminServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomTablesAdminServiceInterface $service)
     {

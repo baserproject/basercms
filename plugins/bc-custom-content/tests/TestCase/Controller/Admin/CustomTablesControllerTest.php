@@ -159,6 +159,37 @@ class CustomTablesControllerTest extends BcTestCase
     }
 
     /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //Postデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_tables/add', $data);
+        $vars = $this->CustomTablesController->viewBuilder()->getVars();
+        $entities = ($vars['entities'])->toArray();
+        //戻る値を確認
+        $this->assertCount(1, $entities);
+        $this->assertEquals('contact', $entities[0]->name);
+
+        //データが追加できるか確認すること
+        $customTables = $this->getTableLocator()->get('BcCustomContent.CustomTables');
+        $query = $customTables->find()->where(['title' => 'contact']);
+        $this->assertEquals(1, $query->count());
+        //不要なテーブルを削除
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $dataBaseService->dropTable('custom_entry_1_contact');
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testAfterAddEvent()
