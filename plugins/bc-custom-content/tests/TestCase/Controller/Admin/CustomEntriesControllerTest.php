@@ -64,6 +64,53 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * test beforeFilter
+     */
+    public function test_beforeFilter()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //正常のテスト
+        $request = $this->getRequest('/baser/admin/bc-custom-content/custom_entries/index/1');
+        $request = $this->loginAdmin($request);
+        $customEntry = new CustomEntriesController($request);
+
+        $event = new Event('filter');
+        $customEntry->beforeFilter($event);
+        $currentContent = $customEntry->getRequest()->getAttribute('currentContent');
+        $this->assertEquals('サービスタイトル', $currentContent->title);
+
+
+        //$tableIdを指定しない場合。
+        $event = new Event('Controller.beforeFilter', $this->CustomEntriesController);
+        $this->CustomEntriesController->beforeFilter($event);
+
+        $currentContentResponse = $this->CustomEntriesController->getResponse();
+        $this->assertEquals(302, $currentContentResponse->getStatusCode());
+        $this->assertEquals(['https://localhost/baser/admin/baser-core/contents/index'], $currentContentResponse->getHeader('Location'));
+        $this->assertEquals(
+            'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * Test index method
      *
      * @return void
