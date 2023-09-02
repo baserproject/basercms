@@ -24,6 +24,30 @@
 class CakeEvent {
 
 /**
+ * PHP 8.2 deprecation notice: added to avoid `Creation of dynamic property ... is deprecated.`
+ * @var mixed|true
+ */
+	public $break;
+
+/**
+ * PHP 8.2 deprecation notice: added to avoid `Creation of dynamic property ... is deprecated.`
+ * @var mixed|true
+ */
+	public $modParams;
+
+/**
+ * PHP 8.2 deprecation notice: added to avoid `Creation of dynamic property ... is deprecated.`
+ * @var array|mixed
+ */
+	public $breakOn;
+
+/**
+ * PHP 8.2 deprecation notice: added to avoid `Creation of dynamic property ... is deprecated.`
+ * @var array|mixed
+ */
+	public $omitSubject;
+
+/**
  * Name of the event
  *
  * @var string

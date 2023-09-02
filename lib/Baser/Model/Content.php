@@ -311,7 +311,7 @@ class Content extends AppModel
 			foreach($datas as $data) {
 				if ($name === $data) {
 					$numbers[1] = 1;
-				} elseif (preg_match("/^" . preg_quote($name, '/') . "_([0-9]+)$/s", $data, $matches)) {
+				} elseif ($data !== $name. '_1' && preg_match("/^" . preg_quote($name, '/') . "_([0-9]+)$/s", $data, $matches)) {
 					$numbers[$matches[1]] = true;
 				}
 			}
