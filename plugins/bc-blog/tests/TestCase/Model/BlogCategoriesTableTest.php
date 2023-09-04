@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -319,6 +320,7 @@ class BlogCategoriesTableTest extends BcTestCase
     public function testGetCategoryList()
     {
         //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(
             BlogContentScenario::class,
             1,  // id
