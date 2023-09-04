@@ -59,10 +59,16 @@ class MailMessagesController extends BcApiController
             $mailContent = $mailContentsService->get($mailContentId);
             $mailMessage = $service->create($mailContent, $this->request->getData());
             //メールを送信
-            $sendEmailOptions =  [];
-            if ($this->getRequest()->getData('sendEmailOptions') !== null) {
-                $sendEmailOptions = $this->getRequest()->getData('sendEmailOptions');
+            // EVENT Mail.beforeSendEmail
+            $event = $this->dispatchLayerEvent('beforeSendEmail', [
+                'data' => $mailMessage
+            ]);
+            $sendEmailOptions = [];
+            if ($event !== false) {
+                $this->request = $this->request->withParsedBody($event->getResult() === true ? $event->getData('data') : $event->getResult());
+                if (!empty($event->getData('sendEmailOptions'))) $sendEmailOptions = $event->getData('sendEmailOptions');
             }
+
             $mailFrontService->sendMail($mailContent, $mailMessage, $sendEmailOptions);
 
             $message = __d('baser_core',
