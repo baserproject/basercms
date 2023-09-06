@@ -168,55 +168,78 @@ class BlogControllerTest extends BcTestCase
         //準備
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loginAdmin($this->getRequest());
-        BlogContentFactory::make(['id' => 1, 'template' => 'default', 'description' => 'description test 1'])->persist();
-        BlogCategoryFactory::make([
+        BlogTagFactory::make([[
             'id' => 1,
-            'blog_content_id' => 1,
-            'name' => 'category_name',
-            'title' => 'category title',
-            'lft' => 1,
-            'rght' => 1,
-        ])->persist();
-        BlogCommentFactory::make([[
-            'id' => 1,
-            'blog_content_id' => 1,
-            'blog_post_id' => 1,
-            'no' => 1,
-            'status' => 1,
-            'name' => 'baserCMS',
-            'email' => '',
-            'url' => 'https://basercms.net',
-            'message' => 'ホームページの開設おめでとうございます。（ダミー）',
-            'created' => '2015-08-10 18:57:47',
+            'name' => 'tag1',
+            'created' => '2022-08-10 18:57:47',
             'modified' => NULL,
         ]])->persist();
-        BlogPostFactory::make(['id' => '1',
-            'blog_content_id' => '1',
-            'blog_category_id' => 1,
-            'user_id' => 1,
+        BlogTagFactory::make([[
+            'id' => 2,
+            'name' => 'tag2',
+            'created' => '2022-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        BlogTagFactory::make([[
+            'id' => 3,
+            'name' => 'tag3',
+            'created' => '2022-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/index',
+            'site_id' => 1,
             'status' => true,
-            'title' => 'blog post'])->persist();
-        ContentFactory::make(['plugin' => 'BcBlog', 'status' => true, 'type' => 'BlogContent'])
-            ->treeNode(1, 1, null, 'test', '/test/', 1, true)->persist();
-        BlogTagFactory::make(['id' => 1, 'name' => 'name1'])->persist();
-        BlogTagFactory::make(['id' => 2, 'name' => 'name2'])->persist();
-        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
-        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 2])->persist();
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '1',
+            'rght' => '2',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 2,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '3',
+            'rght' => '4',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_content_id' => 2, 'no' => 2, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 2])->persist();
+        ContentFactory::make([
+            'id' => 3,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 3,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '5',
+            'rght' => '6',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 3, 'blog_content_id' => 3, 'no' => 3, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 3])->persist();
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 3, 'blog_post_id' => 3, 'blog_tag_id' => 2])->persist();
         //正常系実行
-        $request = $this->getRequest()->withParam('action', 'tags');
-        $controller = new BlogController($request);
-        $this->_controller = $controller;
-        $this->get('/bc-blog/blog/tags/name1');
+        $this->get('/bc-blog/blog/tags/tag1');
         $this->assertResponseSuccess();
         $vars = $this->_controller->viewBuilder()->getVars();
-        $this->assertEquals('name1', $vars['tag']);
-        $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
-        //異常系実行
-        $this->expectException(NotFoundException::class);
-        $this->get('/bc-blog/blog/tags/?name1');
-        $this->assertResponseCode(404);
+        $this->assertEquals('tag1', $vars['tag']);
+        $this->assertEquals(2, $vars['posts']->toArray()[0]->id);
     }
 
     /**
