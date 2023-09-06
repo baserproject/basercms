@@ -159,7 +159,12 @@ class BlogControllerTest extends BcTestCase
             'publish_begin' => '2020-01-27 12:00:00',
             'publish_end' => '9000-01-27 12:00:00'
         ])->persist();
-        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'status' => true])->persist();
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'blog_category_id' => 1,
+            'no' => 1,
+            'status' => true])->persist();
         BlogContentFactory::make(['id' => 1,
             'tag_use' => true,
             'list_direction' => 'DESC',
@@ -179,7 +184,10 @@ class BlogControllerTest extends BcTestCase
             'publish_begin' => '2020-01-27 12:00:00',
             'publish_end' => '9000-01-27 12:00:00'
         ])->persist();
-        BlogPostFactory::make(['id' => 2, 'blog_content_id' => 2, 'no' => 2, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_content_id' => 2,
+            'blog_category_id' => 1,
+            'no' => 2,
+            'status' => true])->persist();
         BlogContentFactory::make(['id' => 2, 'tag_use' => true])->persist();
         ContentFactory::make([
             'id' => 3,
@@ -205,7 +213,11 @@ class BlogControllerTest extends BcTestCase
             'lft' => 1,
             'rght' => 2,
         ])->persist();
-        BlogPostFactory::make(['id' => 3, 'blog_content_id' => 3, 'no' => 3, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 3,
+            'blog_category_id' => 1,
+            'blog_content_id' => 3,
+            'no' => 3,
+            'status' => true])->persist();
         BlogContentFactory::make(['id' => 3, 'tag_use' => true])->persist();
         BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
         BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
