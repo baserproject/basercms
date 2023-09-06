@@ -394,8 +394,10 @@ class BcFileUploader
     {
         if ((!empty($file['delete']) || $force) && !empty($oldEntity->{$setting['name']})) {
             $file = $oldEntity->{$setting['name']};
-            if ($oldEntity->isLimited()) {
-                $file = 'limited' . DS . $file;
+            if (method_exists($oldEntity, 'isLimited')){
+                if ($oldEntity->isLimited()) {
+                    $file = 'limited' . DS . $file;
+                }
             }
             $this->deleteFile($setting, $file);
             $newEntity->{$setting['name']} = '';
