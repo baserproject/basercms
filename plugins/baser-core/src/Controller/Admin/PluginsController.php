@@ -91,7 +91,7 @@ class PluginsController extends BcAdminAppController
                     $this->request->getData('permission'),
                     $this->request->getData('connection') ?? 'default')
                 ) {
-                    $this->BcMessage->setSuccess(sprintf(__d('baser_core', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
+                    $this->BcMessage->setSuccess(__d('baser_core', '新規プラグイン「{0}」を {1} に登録しました。', $name, Configure::read('BcApp.title')));
                     return $this->redirect(['action' => 'index']);
                 } else {
                     $this->BcMessage->setError(__d('baser_core', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));

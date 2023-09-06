@@ -12,6 +12,7 @@
 namespace BcMail\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
+use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
@@ -45,6 +46,7 @@ class MailMessagesController extends BcApiController
      * @unitTest
      */
     public function add(
+        MailFrontServiceInterface $mailFrontService,
         MailMessagesServiceInterface $service,
         MailContentsServiceInterface $mailContentsService,
         int $mailContentId
@@ -56,6 +58,19 @@ class MailMessagesController extends BcApiController
             $service->setup($mailContentId, $this->getRequest()->getData());
             $mailContent = $mailContentsService->get($mailContentId);
             $mailMessage = $service->create($mailContent, $this->request->getData());
+            //メールを送信
+            // EVENT Mail.beforeSendEmail
+            $event = $this->dispatchLayerEvent('beforeSendEmail', [
+                'data' => $mailMessage
+            ]);
+            $sendEmailOptions = [];
+            if ($event !== false) {
+                $this->request = $this->request->withParsedBody($event->getResult() === true ? $event->getData('data') : $event->getResult());
+                if (!empty($event->getData('sendEmailOptions'))) $sendEmailOptions = $event->getData('sendEmailOptions');
+            }
+
+            $mailFrontService->sendMail($mailContent, $mailMessage, $sendEmailOptions);
+
             $message = __d('baser_core',
                 '{0} への受信データ NO「{1}」を追加しました。',
                 $mailContent->content->title,
