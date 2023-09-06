@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Controller\Admin\CustomTablesController;
+use BcCustomContent\Service\Admin\CustomTablesAdminServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomTablesScenario;
@@ -118,6 +119,43 @@ class CustomTablesControllerTest extends BcTestCase
         //不要なテーブルを削除
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $dataBaseService->dropTable('custom_entry_1_contact');
+    }
+
+    public function test_index()
+    {
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTablesAdmin = $this->getService(CustomTablesAdminServiceInterface::class);
+
+        //カスタムテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'test_1',
+            'title' => '求人情報 1',
+            'type' => '1',
+            'display_field' => 'title 1',
+            'has_child' => 0
+        ]);
+        $customTable->create([
+            'id' => 2,
+            'name' => 'test_2',
+            'title' => '求人情報 2',
+            'type' => '1',
+            'display_field' => 'title 2',
+            'has_child' => 0
+        ]);
+
+        //対象メソッドをコール
+        $this->CustomTablesController->index($customTablesAdmin);
+        $vars = $this->CustomTablesController->viewBuilder()->getVars();
+        $entities = ($vars['entities'])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $entities);
+        $this->assertEquals('test_1', $entities[0]->name);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_test_1');
+        $dataBaseService->dropTable('custom_entry_2_test_2');
     }
 
     /**

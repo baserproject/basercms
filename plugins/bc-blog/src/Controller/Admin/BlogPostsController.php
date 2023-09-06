@@ -131,7 +131,7 @@ class BlogPostsController extends BlogAdminAppController
         try {
             $this->paginate = [
                 'sortableFields' => [
-                    'BlogCategories.name'
+                    'no', 'name','BlogCategories.name','user_id','posted'
                 ]
             ];
             $entities = $this->paginate($service->getIndex(array_merge(
