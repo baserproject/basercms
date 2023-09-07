@@ -1323,4 +1323,17 @@ class BcUtilTest extends BcTestCase
         ];
     }
 
+    /**
+     * 後方互換のための非推奨メッセージを生成する
+     */
+    public function testGetDeprecatedMessage()
+    {
+        $expect = 'target は、バージョン since より非推奨となりました。';
+        $this->assertEquals($expect, BcUtil::getDeprecatedMessage('target', 'since'));
+        $expect = 'target は、バージョン since より非推奨となりました。バージョン remove で削除される予定です。';
+        $this->assertEquals($expect, BcUtil::getDeprecatedMessage('target', 'since', 'remove'));
+        $expect = 'target は、バージョン since より非推奨となりました。バージョン remove で削除される予定です。note';
+        $this->assertEquals($expect, BcUtil::getDeprecatedMessage('target', 'since', 'remove', 'note'));
+    }
+
 }
