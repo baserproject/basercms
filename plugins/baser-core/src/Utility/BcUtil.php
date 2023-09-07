@@ -2021,7 +2021,7 @@ class BcUtil
      * @noTodo
      * @unitTest trigger_error のテストができないのでテストはスキップ
      */
-    public static function deprecated(
+    public static function triggerDeprecatedError(
         string $target,
         string $since,
         string $remove = null,
