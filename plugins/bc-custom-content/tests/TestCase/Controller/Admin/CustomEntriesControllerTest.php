@@ -98,6 +98,54 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * Test add
+     */
+    public function testAdd()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //追加データを準備
+        $data = [
+            'custom_table_id' => 1,
+            'title' => 'プログラマー'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_entries/add/1', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('エントリー「プログラマー」を追加しました。');
+        $this->assertRedirect(['action' => 'edit/1/1']);
+        //DBにデータが保存できるか確認すること
+        $customEntries = $this->getTableLocator()->get('BcCustomContent.CustomEntries');
+        $query = $customEntries->find()->where(['title' => 'プログラマー']);
+        $this->assertEquals(1, $query->count());
+
+        //タイトルを指定しない場合、
+        $this->post('/baser/admin/bc-custom-content/custom_entries/add/1', ['custom_table_id' => 1]);
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['title' => ['_required' => "This field is required"]],
+            $vars['entity']->getErrors()
+        );
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()

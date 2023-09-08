@@ -70,6 +70,9 @@ class CustomEntriesController extends CustomContentAdminAppController
      *
      * @param CustomEntriesAdminServiceInterface $service
      * @param int $tableId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomEntriesAdminServiceInterface $service, int $tableId)
     {
@@ -110,6 +113,9 @@ class CustomEntriesController extends CustomContentAdminAppController
      *
      * @param CustomEntriesAdminServiceInterface $service
      * @param int $tableId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomEntriesAdminServiceInterface $service, int $tableId)
     {
