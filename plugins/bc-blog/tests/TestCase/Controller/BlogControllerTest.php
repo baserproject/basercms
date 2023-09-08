@@ -12,10 +12,8 @@
 namespace BcBlog\Test\TestCase\Controller;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\SiteConfigFactory;
-use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\BlogController;
 use BcBlog\Service\BlogContentsServiceInterface;
@@ -27,15 +25,10 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
-use BcBlog\Test\Scenario\BlogContentScenario;
-use BcBlog\Test\Scenario\BlogTagsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\Event;
-use Cake\Http\Exception\NotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\Filesystem\File;
-use BcBlog\Model\Entity\BlogContent;
 
 /**
  * Class BlogControllerTest
@@ -160,6 +153,7 @@ class BlogControllerTest extends BcTestCase
             'lft' => '1',
             'rght' => '2',
             'publish_begin' => '2020-01-27 12:00:00',
+            'layout_template' => 'default',
             'publish_end' => '9000-01-27 12:00:00'
         ])->persist();
         BlogPostFactory::make([
@@ -167,44 +161,14 @@ class BlogControllerTest extends BcTestCase
             'blog_content_id' => 1,
             'blog_category_id' => 1,
             'no' => 1,
+            'user_id' => 1,
+            'name' => 'post1',
+            'posted' => '2023-01-11 12:57:59',
             'status' => true])->persist();
         BlogContentFactory::make(['id' => 1,
             'tag_use' => true,
             'list_direction' => 'DESC',
             'template' => 'default'
-        ])->persist();
-        ContentFactory::make([
-            'id' => 2,
-            'url' => '/index',
-            'site_id' => 1,
-            'status' => true,
-            'tag_use' => true,
-            'entity_id' => 2,
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'lft' => '3',
-            'rght' => '4',
-            'publish_begin' => '2020-01-27 12:00:00',
-            'publish_end' => '9000-01-27 12:00:00'
-        ])->persist();
-        BlogPostFactory::make(['id' => 2, 'blog_content_id' => 2,
-            'blog_category_id' => 1,
-            'no' => 2,
-            'status' => true])->persist();
-        BlogContentFactory::make(['id' => 2, 'tag_use' => true])->persist();
-        ContentFactory::make([
-            'id' => 3,
-            'url' => '/index',
-            'site_id' => 1,
-            'status' => true,
-            'tag_use' => true,
-            'entity_id' => 3,
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'lft' => '5',
-            'rght' => '6',
-            'publish_begin' => '2020-01-27 12:00:00',
-            'publish_end' => '9000-01-27 12:00:00'
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 1,
@@ -216,22 +180,7 @@ class BlogControllerTest extends BcTestCase
             'lft' => 1,
             'rght' => 2,
         ])->persist();
-        BlogPostFactory::make(['id' => 3,
-            'blog_category_id' => 1,
-            'blog_content_id' => 3,
-            'no' => 3,
-            'status' => true])->persist();
-        BlogContentFactory::make(['id' => 3, 'tag_use' => true])->persist();
         BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
-        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
-        BlogPostBlogTagFactory::make(['id' => 3, 'blog_post_id' => 3, 'blog_tag_id' => 2])->persist();
-        $fullPath = BASER_PLUGINS . 'bc-front/templates/Blog/default';
-        if (!file_exists($fullPath)){
-            mkdir($fullPath, recursive: true);
-        }
-        $file = new File($fullPath .DS. 'archives.php');
-        $file->write('html');
-        $file->close();
         //正常系実行
         //type = 'category'
         $this->get('/bc-blog/blog/archives/category/release');
@@ -239,24 +188,26 @@ class BlogControllerTest extends BcTestCase
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('category', $vars['blogArchiveType']);
         $this->assertEquals('release', $vars['blogCategory']->name);
-//        //type = 'author'
-//        $controller->setRequest($request->withParam('pass', ['release', 'name']));
-//        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'author');
-//        $vars = $controller->viewBuilder()->getVars();
-//        $this->assertEquals('author', $vars['blogArchiveType']);
-//        $this->assertEquals('name', $vars['author']->name);
-//        //type = 'tag'
-//        $controller->setRequest($request->withParam('pass', ['release', 'name1']));
-//        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'tag');
-//        $vars = $controller->viewBuilder()->getVars();
-//        $this->assertEquals('tag', $vars['blogArchiveType']);
-//        $this->assertEquals('name1', $vars['blogTag']->name);
-//        //type = 'date'
-//        $controller->setRequest($request->withParam('pass', ['release', '2923', '08', '20']));
-//        $controller->archives($blogFrontService, $blogContentsService, $blogPostsService, 'date');
-//        $vars = $controller->viewBuilder()->getVars();
-//        $this->assertEquals('daily', $vars['blogArchiveType']);
-
+        $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
+        //type = 'author'
+        $this->get('/bc-blog/blog/archives/author/name');
+        $this->assertResponseOk();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('author', $vars['blogArchiveType']);
+        $this->assertEquals('name', $vars['author']->name);
+        $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
+        //type = 'tag'
+        $this->get('/bc-blog/blog/archives/tag/tag1');
+        $this->assertResponseOk();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('tag', $vars['blogArchiveType']);
+        $this->assertEquals('tag1', $vars['blogTag']->name);
+        $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
+        //type = 'date'
+        $this->get('/bc-blog/blog/archives/date/2023');
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('yearly', $vars['blogArchiveType']);
+        $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
     }
 
     /**
