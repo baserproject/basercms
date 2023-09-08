@@ -28,6 +28,7 @@ class CustomContentsController extends CustomContentAdminAppController
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
