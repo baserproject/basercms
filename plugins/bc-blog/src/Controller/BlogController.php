@@ -98,6 +98,7 @@ class BlogController extends BlogFrontAppController
      * @param BlogPostsService $blogPostsService
      * @return void|ResponseInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function index(
@@ -307,6 +308,7 @@ class BlogController extends BlogFrontAppController
      * @param $name
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tags(BlogPostsServiceInterface $service, $name = null)
     {
