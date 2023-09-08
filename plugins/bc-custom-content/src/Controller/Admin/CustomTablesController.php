@@ -107,6 +107,9 @@ class CustomTablesController extends CustomContentAdminAppController
      * @param CustomTablesAdminServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(CustomTablesAdminServiceInterface $service, int $id)
     {
