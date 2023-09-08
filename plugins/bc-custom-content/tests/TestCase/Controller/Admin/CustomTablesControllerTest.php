@@ -335,4 +335,34 @@ class CustomTablesControllerTest extends BcTestCase
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_contact_edit');
     }
+
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        $customTable->create($data);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_tables/delete/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertFlashMessage('テーブル「お問い合わせタイトル」を削除しました。');
+        //テーブルが削除されたか確認すること。
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+    }
 }
