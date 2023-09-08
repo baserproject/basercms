@@ -2007,4 +2007,54 @@ class BcUtil
         return in_array(Inflector::camelize($plugin, '-'), $corePlugins);
     }
 
+    /**
+     * 非推奨エラーを発生させる
+     *
+     * デバッグモードの場合のみ発生する
+     *
+     * @param string $target 非推奨のターゲット
+     * @param string $since 非推奨となったバージョン
+     * @param string $remove 削除予定のバージョン
+     * @param string $note 備考
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest trigger_error のテストができないのでテストはスキップ
+     */
+    public static function triggerDeprecatedError(
+        string $target,
+        string $since,
+        string $remove = null,
+        string $note = null
+    ): void
+    {
+        if (!Configure::read('debug')) return;
+        trigger_error(self::getDeprecatedMessage($target, $since, $remove, $note), E_USER_DEPRECATED);
+    }
+
+    /**
+     * 非推奨エラーメッセージを取得する
+     *
+     * @param string $target 非推奨のターゲット
+     * @param string $since 非推奨となったバージョン
+     * @param string $remove 削除予定のバージョン
+     * @param string $note 備考
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getDeprecatedMessage(
+        string $target,
+        string $since,
+        string $remove = null,
+        string $note = null
+    ): string
+    {
+        $message = sprintf(__d('baser_core', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
+        if ($remove) $message .= sprintf(__d('baser_core', 'バージョン %s で削除される予定です。'), $remove);
+        if ($note) $message .= $note;
+        return $message;
+    }
+
 }

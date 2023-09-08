@@ -309,6 +309,7 @@ class BlogController extends BlogFrontAppController
      * @param $name
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tags(BlogPostsServiceInterface $service, $name = null)
     {

@@ -64,6 +64,53 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * test beforeFilter
+     */
+    public function test_beforeFilter()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //正常のテスト
+        $request = $this->getRequest('/baser/admin/bc-custom-content/custom_entries/index/1');
+        $request = $this->loginAdmin($request);
+        $customEntry = new CustomEntriesController($request);
+
+        $event = new Event('filter');
+        $customEntry->beforeFilter($event);
+        $currentContent = $customEntry->getRequest()->getAttribute('currentContent');
+        $this->assertEquals('サービスタイトル', $currentContent->title);
+
+
+        //$tableIdを指定しない場合。
+        $event = new Event('Controller.beforeFilter', $this->CustomEntriesController);
+        $this->CustomEntriesController->beforeFilter($event);
+
+        $currentContentResponse = $this->CustomEntriesController->getResponse();
+        $this->assertEquals(302, $currentContentResponse->getStatusCode());
+        $this->assertEquals(['https://localhost/baser/admin/baser-core/contents/index'], $currentContentResponse->getHeader('Location'));
+        $this->assertEquals(
+            'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * Test index method
      *
      * @return void
@@ -93,6 +140,54 @@ class CustomEntriesControllerTest extends BcTestCase
         $this->CustomEntriesController->beforeFilter(new Event('beforeFilter'));
         $this->CustomEntriesController->index($this->getService(CustomEntriesAdminServiceInterface::class), 1);
         $this->assertEquals(1, $this->CustomEntriesController->getRequest()->getQuery('num'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * Test add
+     */
+    public function testAdd()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //追加データを準備
+        $data = [
+            'custom_table_id' => 1,
+            'title' => 'プログラマー'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_entries/add/1', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('エントリー「プログラマー」を追加しました。');
+        $this->assertRedirect(['action' => 'edit/1/1']);
+        //DBにデータが保存できるか確認すること
+        $customEntries = $this->getTableLocator()->get('BcCustomContent.CustomEntries');
+        $query = $customEntries->find()->where(['title' => 'プログラマー']);
+        $this->assertEquals(1, $query->count());
+
+        //タイトルを指定しない場合、
+        $this->post('/baser/admin/bc-custom-content/custom_entries/add/1', ['custom_table_id' => 1]);
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['title' => ['_required' => "This field is required"]],
+            $vars['entity']->getErrors()
+        );
+
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }

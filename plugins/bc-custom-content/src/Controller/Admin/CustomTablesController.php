@@ -64,6 +64,10 @@ class CustomTablesController extends CustomContentAdminAppController
      * カスタムテーブルの新規追加
      *
      * @param CustomTablesAdminServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomTablesAdminServiceInterface $service)
     {
@@ -103,6 +107,9 @@ class CustomTablesController extends CustomContentAdminAppController
      * @param CustomTablesAdminServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(CustomTablesAdminServiceInterface $service, int $id)
     {
@@ -140,6 +147,9 @@ class CustomTablesController extends CustomContentAdminAppController
      * @param CustomTablesServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function delete(CustomTablesServiceInterface $service, int $id)
     {

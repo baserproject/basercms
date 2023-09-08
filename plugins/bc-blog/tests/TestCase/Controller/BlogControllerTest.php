@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\Controller;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
@@ -27,11 +28,13 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\BlogTagsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
-use Cake\Filesystem\File;
+use Cake\Http\Exception\NotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Filesystem\File;
 use BcBlog\Model\Entity\BlogContent;
 
 /**
@@ -276,12 +279,80 @@ class BlogControllerTest extends BcTestCase
     public function test_tags()
     {
         //準備
-
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        BlogTagFactory::make([[
+            'id' => 1,
+            'name' => 'tag1',
+            'created' => '2022-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        BlogTagFactory::make([[
+            'id' => 2,
+            'name' => 'tag2',
+            'created' => '2022-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        BlogTagFactory::make([[
+            'id' => 3,
+            'name' => 'tag3',
+            'created' => '2022-08-10 18:57:47',
+            'modified' => NULL,
+        ]])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '1',
+            'rght' => '2',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 2,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '3',
+            'rght' => '4',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_content_id' => 2, 'no' => 2, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 2])->persist();
+        ContentFactory::make([
+            'id' => 3,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 3,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '5',
+            'rght' => '6',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make(['id' => 3, 'blog_content_id' => 3, 'no' => 3, 'status' => true])->persist();
+        BlogContentFactory::make(['id' => 3])->persist();
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 3, 'blog_post_id' => 3, 'blog_tag_id' => 2])->persist();
         //正常系実行
-
-        //異常系実行
-
-
+        $this->get('/bc-blog/blog/tags/tag1');
+        $this->assertResponseSuccess();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('tag1', $vars['tag']);
+        $this->assertEquals(2, $vars['posts']->toArray()[0]->id);
     }
 
     /**
@@ -347,6 +418,5 @@ class BlogControllerTest extends BcTestCase
 
 
     }
-
 
 }

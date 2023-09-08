@@ -160,6 +160,9 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId
      * @param array $options
      * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
      *
      */
     public function getCategoryList($blogContentId = null, $options = [])
@@ -213,6 +216,9 @@ class BlogCategoriesTable extends BlogAppTable
      * @param array $fields
      * @param array $options
      * @return ResultSetInterface
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     protected function _getCategoryList(
         int   $blogContentId = null,
@@ -379,6 +385,7 @@ class BlogCategoriesTable extends BlogAppTable
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy($id, $newParentId = null)
     {

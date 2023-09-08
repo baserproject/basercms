@@ -15,11 +15,16 @@ use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogCategoryTest
@@ -27,6 +32,11 @@ use Cake\ORM\TableRegistry;
  */
 class BlogCategoriesTableTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
 
     /**
      * Setup
@@ -309,34 +319,124 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testGetCategoryList()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '正しくカテゴリリストを取得できません';
-        // 正常
-        $result = $this->BlogCategory->getCategoryList(1, []);
-        $this->assertNotEmpty($result, $message);
-        $this->assertEquals($result[0]['BlogCategory']['id'], 1, $message);
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+
+        // 正常:　$blogContentId = null
+        $result = $this->BlogCategoriesTable->getCategoryList();
+        $this->assertCount(2, $result);
+
+        // 正常:　$blogContentId = 1
+        $result = $this->BlogCategoriesTable->getCategoryList(1);
+        $this->assertCount(1, $result);
 
         // 存在しないID
-        $result = $this->BlogCategory->getCategoryList(0, []);
-        $this->assertEmpty($result, $message);
+        $result = $this->BlogCategoriesTable->getCategoryList(0, []);
+        $this->assertEmpty($result);
 
         // option depth 2
-        $result = $this->BlogCategory->getCategoryList(1, ['depth' => 2]);
-        $this->assertNotEmpty($result[0]['BlogCategory']['children'], $message);
+        $result = $this->BlogCategoriesTable->getCategoryList(1, ['depth' => 2]);
+        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
 
         // option type year
-        $result = $this->BlogCategory->getCategoryList(1, ['type' => 'year']);
-        $this->assertNotEmpty($result, $message);
-        $this->assertEquals($result['2015'][0]['BlogCategory']['id'], 1, $message);
+        $result = $this->BlogCategoriesTable->getCategoryList(1, ['type' => 'year']);
+        $this->assertEquals('name-1', $result['2015'][0]->name);
 
         // option viewCount true
-        $result = $this->BlogCategory->getCategoryList(1, ['viewCount' => true]);
-        $this->assertEquals($result[0]['BlogCategory']['count'], 2, $message);
+        $result = $this->BlogCategoriesTable->getCategoryList(1, ['viewCount' => true]);
+        $this->assertEquals(2, $result->toArray()[0]->count);
 
         // option limit true
-        $result = $this->BlogCategory->getCategoryList(1, ['type' => 'year', 'limit' => 1, 'viewCount' => true]);
-        $this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
+        $result = $this->BlogCategoriesTable->getCategoryList(1, ['type' => 'year', 'limit' => 1, 'viewCount' => true]);
+        $this->assertEquals(1, $result['2015'][0]->count);
     }
+
+    /**
+     * test _getCategoryList
+     */
+    public function test__getCategoryList()
+    {
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+
+        // 正常:　$blogContentId = null
+        $fields = [
+            'BlogCategories.id',
+            'BlogCategories.name',
+            'BlogCategories.title',
+            'BlogCategories.lft',
+            'BlogCategories.rght'
+        ];
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'fields' => $fields,
+            ]);
+        $this->assertCount(2, $result);
+
+        // 正常:　$blogContentId = 1
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+            ]);
+        $this->assertCount(1, $result);
+
+        // 存在しないID
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 0,
+                'fields' => $fields,
+            ]);
+        $this->assertEmpty($result);
+
+        // option depth 2
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+                'depth' => 2,
+            ]);
+        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
+        // option viewCount true
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+                'depth' => 2,
+                'viewCount' => true
+            ]);
+        $this->assertEquals(2, $result->toArray()[0]->count);
+
+    }
+
 
     /**
      * アクセス制限としてカテゴリの新規追加ができるか確認する
@@ -434,6 +534,21 @@ class BlogCategoriesTableTest extends BcTestCase
         $query = $blogCategories->find()->where(['name' => 'beforeCopy_copy']);
         $this->assertEquals(1, $query->count());
     }
+
+
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //準備
+        BlogCategoryFactory::make(['id' => 1, 'name' => 'test', 'title' => 'title', 'blog_content_id' => 1])->persist();
+        //正常系実行
+        $this->BlogCategoriesTable->copy(1);
+        $query = $this->BlogCategoriesTable->find()->where(['name' => 'test_copy']);
+        $this->assertEquals(1, $query->count());
+    }
+
 
     /**
      * test AfterCopyEvent
