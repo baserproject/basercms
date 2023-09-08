@@ -97,4 +97,27 @@ class MailMessagesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message', 'errors']);
     }
 
+    /**
+     * [API] バリデーション
+     *
+     * @param MailMessagesServiceInterface $mailMessagesService
+     * @param int $mailContentId
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validate(MailMessagesServiceInterface $mailMessagesService, int $mailContentId)
+    {
+        $this->request->allowMethod(['post']);
+
+        $mailMessagesService->setup($mailContentId, $this->getRequest()->getData());
+        $messageArray = $mailMessagesService->autoConvert($mailContentId, $this->getRequest()->getData());
+        $mailMessage = $mailMessagesService->MailMessages->newEntity($messageArray);
+
+        $this->set([
+            'success' => !$mailMessage->getErrors(),
+            'errors' => $mailMessage->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['success', 'errors']);
+    }
 }
