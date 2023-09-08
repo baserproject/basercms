@@ -385,6 +385,7 @@ class BlogCategoriesTable extends BlogAppTable
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy($id, $newParentId = null)
     {

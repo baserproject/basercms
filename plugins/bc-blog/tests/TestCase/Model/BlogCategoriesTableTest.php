@@ -535,6 +535,21 @@ class BlogCategoriesTableTest extends BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
+
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //準備
+        BlogCategoryFactory::make(['id' => 1, 'name' => 'test', 'title' => 'title', 'blog_content_id' => 1])->persist();
+        //正常系実行
+        $this->BlogCategoriesTable->copy(1);
+        $query = $this->BlogCategoriesTable->find()->where(['name' => 'test_copy']);
+        $this->assertEquals(1, $query->count());
+    }
+
+
     /**
      * test AfterCopyEvent
      */
