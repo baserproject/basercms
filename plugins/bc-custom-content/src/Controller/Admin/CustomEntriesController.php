@@ -160,6 +160,9 @@ class CustomEntriesController extends CustomContentAdminAppController
      * @param CustomEntriesAdminServiceInterface $service
      * @param int $tableId
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(CustomEntriesAdminServiceInterface $service, int $tableId, int $id)
     {

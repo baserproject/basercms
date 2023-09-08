@@ -286,6 +286,56 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * Test edit
+     */
+    public function testEdit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        //Postデータを生成
+        $data['title'] = 'test edit title';
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_entries/edit/1/1', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('エントリー「test edit title」を更新しました。');
+        $this->assertRedirect(['action' => 'edit/1/1']);
+        //DBにデータが保存できるか確認すること
+        $customEntries = $this->getTableLocator()->get('BcCustomContent.CustomEntries');
+        $query = $customEntries->find()->where(['title' => 'test edit title']);
+        $this->assertEquals(1, $query->count());
+
+
+        //タイトルを指定しない場合、
+        $this->post('/baser/admin/bc-custom-content/custom_entries/edit/1/1', ['title' => null]);
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['title' => ['_empty' => "タイトルは必須項目です。"]],
+            $vars['entity']->getErrors()
+        );
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeEditEvent()
