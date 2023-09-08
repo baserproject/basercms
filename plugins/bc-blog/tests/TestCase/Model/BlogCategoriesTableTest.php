@@ -366,6 +366,79 @@ class BlogCategoriesTableTest extends BcTestCase
     }
 
     /**
+     * test _getCategoryList
+     */
+    public function test__getCategoryList()
+    {
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+
+        // 正常:　$blogContentId = null
+        $fields = [
+            'BlogCategories.id',
+            'BlogCategories.name',
+            'BlogCategories.title',
+            'BlogCategories.lft',
+            'BlogCategories.rght'
+        ];
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'fields' => $fields,
+            ]);
+        $this->assertCount(2, $result);
+
+        // 正常:　$blogContentId = 1
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+            ]);
+        $this->assertCount(1, $result);
+
+        // 存在しないID
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 0,
+                'fields' => $fields,
+            ]);
+        $this->assertEmpty($result);
+
+        // option depth 2
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+                'depth' => 2,
+            ]);
+        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
+        // option viewCount true
+        $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
+            [
+                'blogContentId' => 1,
+                'fields' => $fields,
+                'depth' => 2,
+                'viewCount' => true
+            ]);
+        $this->assertEquals(2, $result->toArray()[0]->count);
+
+    }
+
+
+    /**
      * アクセス制限としてカテゴリの新規追加ができるか確認する
      */
     public function testHasNewCategoryAddablePermission()

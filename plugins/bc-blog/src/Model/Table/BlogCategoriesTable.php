@@ -216,6 +216,9 @@ class BlogCategoriesTable extends BlogAppTable
      * @param array $fields
      * @param array $options
      * @return ResultSetInterface
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     protected function _getCategoryList(
         int   $blogContentId = null,
