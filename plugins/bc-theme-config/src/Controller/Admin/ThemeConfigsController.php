@@ -33,6 +33,7 @@ class ThemeConfigsController extends BcAdminAppController
      * @param ThemeConfigsService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(ThemeConfigsServiceInterface $service)
     {

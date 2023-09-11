@@ -1,17 +1,20 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('ThemeConfigsController', 'Controller');
+namespace BcThemeConfig\Test\TestCase\Controller\Admin;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcThemeConfig\Controller\Admin\ThemeConfigsController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeConfigsControllerTest
@@ -20,13 +23,18 @@ App::uses('ThemeConfigsController', 'Controller');
  */
 class ThemeConfigsControllerTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -36,7 +44,7 @@ class ThemeConfigsControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -46,7 +54,11 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function testAdmin_form()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get("/baser/admin/bc-theme-config/theme_configs/index");
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        $var = $this->_controller->viewBuilder()->getVars();
+        dd($var);
     }
 
 }
