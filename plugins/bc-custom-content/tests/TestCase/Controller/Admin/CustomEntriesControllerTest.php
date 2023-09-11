@@ -366,4 +366,34 @@ class CustomEntriesControllerTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+    /**
+     * Test move_down
+     */
+    public function test_move_down()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'name',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_entries/move_down/1/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('エントリー「Webエンジニア・Webプログラマー」を下に移動しました。');
+        $this->assertRedirect(['action' => 'index/1']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
 }
