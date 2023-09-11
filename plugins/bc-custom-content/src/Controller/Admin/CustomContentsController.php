@@ -47,6 +47,7 @@ class CustomContentsController extends CustomContentAdminAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(CustomContentsAdminServiceInterface $service, int $id)
     {
@@ -56,10 +57,11 @@ class CustomContentsController extends CustomContentAdminAppController
 
             // EVENT CustomContents.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
-                'request' => $this->request,
+                'data' => $this->getRequest()->getData()
             ]);
             if ($event !== false) {
-                $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
             }
 
             try {
@@ -67,7 +69,7 @@ class CustomContentsController extends CustomContentAdminAppController
 
                 // EVENT CustomContents.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
-                    'request' => $this->request,
+                    'data' => $entity
                 ]);
 
                 $this->BcMessage->setSuccess(__d('baser_core', "カスタムコンテンツ「{0}」を更新しました。", $entity->content->title));
