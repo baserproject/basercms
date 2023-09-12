@@ -54,11 +54,18 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function testAdmin_form()
     {
-        $this->get("/baser/admin/bc-theme-config/theme_configs/index");
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $data = [
+            'name_add' => 'value_edit'
+        ];
+        $this->post("/baser/admin/bc-theme-config/theme_configs/index", $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         $var = $this->_controller->viewBuilder()->getVars();
-        dd($var);
+        $this->assertArrayHasKey('themeConfig', $var);
     }
 
 }
