@@ -79,4 +79,33 @@ class ThemeConfigTest extends BcTestCase
         $this->assertEquals('255文字以内で入力してください。', current($errors['name']));
         $this->assertEquals('65535文字以内で入力してください。', current($errors['value']));
     }
+
+    /**
+     * test validationKeyValue
+     */
+    public function test_validationKeyValue()
+    {
+        $validator = $this->ThemeConfigsTable->getValidator('keyValue');
+        $errors = $validator->validate([
+            'logo' => 'logo.ppp',
+            'main_image_1' => 'logo.ppp',
+            'main_image_2' => 'logo.ppp',
+            'main_image_3' => 'logo.ppp',
+            'main_image_4' => 'logo.ppp',
+            'main_image_5' => 'logo.ppp',
+        ]);
+        $this->assertArrayHasKey('logo', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['logo']));
+        $this->assertArrayHasKey('main_image_1', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['main_image_1']));
+        $this->assertArrayHasKey('main_image_2', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['main_image_2']));
+        $this->assertArrayHasKey('main_image_3', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['main_image_3']));
+        $this->assertArrayHasKey('main_image_4', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['main_image_4']));
+        $this->assertArrayHasKey('main_image_5', $errors);
+        $this->assertEquals('許可されていないファイルです。', current($errors['main_image_5']));
+    }
+
 }
