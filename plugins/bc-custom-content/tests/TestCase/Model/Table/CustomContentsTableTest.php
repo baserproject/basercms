@@ -59,6 +59,7 @@ class CustomContentsTableTest extends BcTestCase
             'list_count' => '',
         ]);
         $this->assertArrayHasKey('list_count', $errors);
+        $this->assertEquals('ˆê——•\¦Œ”‚Í•K{€–Ú‚Å‚·B', current($errors['list_count']));
     }
 
 
