@@ -52,13 +52,8 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        //€”õ
-
-        //³íŒnŽÀs
-
-        //ˆÙíŒnŽÀs
-
-
+        $this->assertTrue($this->CustomEntriesTable->hasBehavior('BcContents'));
+        $this->assertTrue($this->CustomEntriesTable->hasBehavior('BcSearchIndexManager'));
     }
 
     /**
