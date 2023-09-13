@@ -12,9 +12,12 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Table\CustomContentsTable;
 
 /**
  * CustomContentsTableTest
+ * @property CustomContentsTable $CustomContentsTable
+ *
  */
 class CustomContentsTableTest extends BcTestCase
 {
@@ -25,6 +28,8 @@ class CustomContentsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->CustomContentsTable = $this->getTableLocator()->get('BcCustomContent.CustomContentsTable');
+
     }
 
     /**
@@ -34,5 +39,27 @@ class CustomContentsTableTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertTrue($this->CustomContentsTable->hasBehavior('BcContents'));
+        $this->assertTrue($this->CustomContentsTable->hasBehavior('Timestamp'));
+    }
+
+    /**
+     * test validationWithTable
+     */
+    public function test_validationWithTable()
+    {
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate([
+            'list_count' => '',
+        ]);
+        $this->assertArrayHasKey('list_count', $errors);
+    }
+
 
 }

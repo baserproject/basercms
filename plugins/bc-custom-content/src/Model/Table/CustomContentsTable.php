@@ -46,6 +46,9 @@ class CustomContentsTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationWithTable(Validator $validator): Validator
     {
