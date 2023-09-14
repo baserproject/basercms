@@ -52,7 +52,7 @@ class ThemeConfigsControllerTest extends BcTestCase
     /**
      * [ADMIN] 設定編集
      */
-    public function testAdmin_form()
+    public function testIndex()
     {
         //準備
         $this->enableSecurityToken();
