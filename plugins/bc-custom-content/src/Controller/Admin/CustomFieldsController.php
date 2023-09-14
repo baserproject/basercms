@@ -115,6 +115,9 @@ class CustomFieldsController extends CustomContentAdminAppController
      * @param CustomFieldsServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(CustomFieldsServiceInterface $service, int $id)
     {

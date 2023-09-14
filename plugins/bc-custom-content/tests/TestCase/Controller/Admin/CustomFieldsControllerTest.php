@@ -11,10 +11,12 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Controller\Admin\CustomFieldsController;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Event\Event;
@@ -161,5 +163,44 @@ class CustomFieldsControllerTest extends BcTestCase
         $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
         $query = $customFields->find()->where(['title' => 'afterEdit']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test delete
+     */
+    public function testDelete()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $dataBaseService->addColumn('custom_entry_1_recruit', 'recruit_category', 'text');
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_fields/delete/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フィールド「求人分類」を削除しました。');
+        $this->assertRedirect(['action' => 'index']);
+        //DBにデータが存在しないか確認すること
+        $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
+        $query = $customFields->find()->where(['title' => '求人分類']);
+        $this->assertEquals(0, $query->count());
+
+        //存在しないIDを指定した場合、
+        $this->post('/baser/admin/bc-custom-content/custom_fields/delete/1111');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table "custom_fields"');
+        $this->assertRedirect(['action' => 'index']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
     }
 }
