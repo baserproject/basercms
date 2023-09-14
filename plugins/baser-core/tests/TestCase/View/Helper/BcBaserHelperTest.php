@@ -1763,12 +1763,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsCurrentUrl($currentUrl, $url, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($currentUrl);
+        $this->BcBaser->getView()->setRequest($this->getRequest($currentUrl));
         $this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
         // --- サブフォルダ+スマートURLオフ ---
         Configure::write('App.baseUrl', '/basercms/index.php');
-        $this->BcBaser->request = $this->_getRequest($currentUrl);
+        $this->BcBaser->getView()->setRequest($this->getRequest($currentUrl));
         $this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
     }
 
