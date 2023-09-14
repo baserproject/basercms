@@ -61,11 +61,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_createSearchIndex()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -75,11 +75,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_createSearchDetail()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -89,11 +89,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setUp()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -103,11 +103,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setUseTable()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -117,11 +117,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_getTableName()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -131,11 +131,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setLinks()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -145,11 +145,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setupValidate()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -159,11 +159,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateMaxFileSize()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -173,11 +173,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateFileExt()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -187,11 +187,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmailConfirm()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -201,11 +201,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateRegex()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -215,11 +215,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmail()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -229,11 +229,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateNumber()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -243,11 +243,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateHankaku()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -257,11 +257,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuKatakana()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -271,11 +271,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuHiragana()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -285,11 +285,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateDatetime()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -299,11 +299,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -313,11 +313,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_beforeMarshal()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -327,11 +327,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_autoConvert()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -341,11 +341,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -355,11 +355,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_decodeRow()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
@@ -369,11 +369,11 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_isJson()
     {
-        //€”õ
+        //æº–å‚™
 
-        //³íŒnÀs
+        //æ­£å¸¸ç³»å®Ÿè¡Œ
 
-        //ˆÙíŒnÀs
+        //ç•°å¸¸ç³»å®Ÿè¡Œ
 
 
     }
