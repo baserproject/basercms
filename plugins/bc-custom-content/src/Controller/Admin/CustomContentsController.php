@@ -90,6 +90,9 @@ class CustomContentsController extends CustomContentAdminAppController
      *
      * @param CustomContentsServiceInterface $service
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomContentsServiceInterface $service, int $id)
     {
