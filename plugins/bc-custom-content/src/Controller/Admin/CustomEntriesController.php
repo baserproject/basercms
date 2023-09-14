@@ -233,6 +233,9 @@ class CustomEntriesController extends CustomContentAdminAppController
      * @param CustomEntriesServiceInterface $service
      * @param int $tableId
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function move_up(CustomEntriesServiceInterface $service, int $tableId, int $id)
     {
