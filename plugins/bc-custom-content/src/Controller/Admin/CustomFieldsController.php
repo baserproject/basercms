@@ -28,6 +28,9 @@ class CustomFieldsController extends CustomContentAdminAppController
      * カスタムフィールドの一覧を表示
      *
      * @param CustomFieldsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomFieldsAdminServiceInterface $service)
     {
