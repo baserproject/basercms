@@ -76,6 +76,9 @@ class CustomFieldsController extends CustomContentAdminAppController
      * @param CustomFieldsAdminServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(CustomFieldsAdminServiceInterface $service, int $id)
     {
@@ -95,7 +98,7 @@ class CustomFieldsController extends CustomContentAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $entity
                 ]);
-                $this->BcMessage->setSuccess(__d('baser_core', 'フィールド「{0}」を更新しました', $entity->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'フィールド「{0}」を更新しました。', $entity->title));
                 return $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
