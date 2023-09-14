@@ -81,6 +81,43 @@ class CustomFieldsControllerTest extends BcTestCase
     }
 
     /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //Postデータを生成
+        $data = [
+            'title' => '求人分類',
+            'name' => 'recruit_category',
+            'type' => 'BcCcRelated',
+            'status' => 1,
+            'default_value' => '新卒採用',
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_fields/add', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フィールド「求人分類」を追加しました');
+        $this->assertRedirect(['action' => 'edit/1']);
+        //DBにデータが保存できるか確認すること
+        $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
+        $query = $customFields->find()->where(['title' => '求人分類']);
+        $this->assertEquals(1, $query->count());
+
+        //タイトルを指定しない場合、
+        $this->post('/baser/admin/bc-custom-content/custom_fields/add', ['name' => '']);
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['name' => ['_empty' => "フィールド名を入力してください。"]],
+            $vars['entity']->getErrors()
+        );
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testAfterAddEvent()
