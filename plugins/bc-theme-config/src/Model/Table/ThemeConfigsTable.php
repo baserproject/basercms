@@ -68,6 +68,9 @@ class ThemeConfigsTable extends AppTable
      * KeyValue のバリデーション設定
      *
      * @param Validator $validator
+     * @noTodo
+     * @checked
+     * @unitTest
      * @return Validator
      */
     public function validationKeyValue(Validator $validator): Validator
