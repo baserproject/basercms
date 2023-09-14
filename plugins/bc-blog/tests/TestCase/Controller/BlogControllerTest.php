@@ -143,7 +143,7 @@ class BlogControllerTest extends BcTestCase
         ]])->persist();
         ContentFactory::make([
             'id' => 1,
-            'url' => '/news/',
+            'url' => '/news',
             'site_id' => 1,
             'status' => true,
             'tag_use' => true,
@@ -183,28 +183,28 @@ class BlogControllerTest extends BcTestCase
         BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
         //正常系実行
         //type = 'category'
-        $this->get('/bc-blog/blog/archives/category/release');
+        $this->get('/news/archives/category/release');
         $this->assertResponseOk();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('category', $vars['blogArchiveType']);
         $this->assertEquals('release', $vars['blogCategory']->name);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
         //type = 'author'
-        $this->get('/bc-blog/blog/archives/author/name');
+        $this->get('/news/archives/author/name');
         $this->assertResponseOk();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('author', $vars['blogArchiveType']);
         $this->assertEquals('name', $vars['author']->name);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
         //type = 'tag'
-        $this->get('/bc-blog/blog/archives/tag/tag1');
+        $this->get('/news/archives/tag/tag1');
         $this->assertResponseOk();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('tag', $vars['blogArchiveType']);
         $this->assertEquals('tag1', $vars['blogTag']->name);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
         //type = 'date'
-        $this->get('/bc-blog/blog/archives/date/2023');
+        $this->get('/news/archives/date/2023');
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('yearly', $vars['blogArchiveType']);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
