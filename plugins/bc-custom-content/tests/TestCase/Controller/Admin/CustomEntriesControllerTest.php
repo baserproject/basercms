@@ -145,6 +145,41 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * Test delete
+     */
+    public function testDelete()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_entries/delete/1/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('エントリー「Webエンジニア・Webプログラマー」を削除しました。');
+        $this->assertRedirect(['action' => 'index/1']);
+        //データが削除できるか確認すること
+        $customEntries = $this->getTableLocator()->get('BcCustomContent.CustomEntries');
+        $query = $customEntries->find()->where(['title' => '求人情報']);
+        $this->assertEquals(0, $query->count());
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * Test add
      */
     public function testAdd()

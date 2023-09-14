@@ -205,6 +205,9 @@ class CustomEntriesController extends CustomContentAdminAppController
      * @param CustomEntriesServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(CustomEntriesServiceInterface $service, int $tableId, int $id)
     {
