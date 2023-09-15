@@ -53,6 +53,25 @@ class CustomFieldsControllerTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test index
+     */
+    public function testIndex()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_fields/');
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $entities = $this->_controller->viewBuilder()->getVars() ['entities']->toArray();
+        $this->assertCount(2, $entities);
+    }
+
     /**
      * Test beforeAddEvent
      */
