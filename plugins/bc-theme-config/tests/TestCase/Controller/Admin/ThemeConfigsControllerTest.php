@@ -67,6 +67,13 @@ class ThemeConfigsControllerTest extends BcTestCase
         $var = $this->_controller->viewBuilder()->getVars();
         $this->assertArrayHasKey('themeConfig', $var);
         $this->assertEquals('value_edit', $var['themeConfig']->name_add);
+        $this->assertRedirect([
+            'plugin' => 'BcThemeConfig',
+            'prefix' => 'Admin',
+            'controller' => 'ThemeConfigsController',
+            'action' => 'index',
+            '1'
+        ]);
     }
 
 }
