@@ -113,6 +113,39 @@ class CustomFieldsControllerTest extends BcTestCase
     }
 
     /**
+     * test edit
+     */
+    public function testEdit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //Postデータを生成
+        $data = CustomFieldFactory::get(1);
+        $data['title'] = 'test edit title';
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フィールド「test edit title」を更新しました。');
+        $this->assertRedirect(['action' => 'edit/1']);
+        //DBにデータが保存できるか確認すること
+        $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
+        $query = $customFields->find()->where(['title' => 'test edit title']);
+        $this->assertEquals(1, $query->count());
+
+        //タイトルを指定しない場合、
+        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', ['title' => '']);
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['title' => ['_empty' => "項目見出しを入力してください。"]],
+            $vars['entity']->getErrors()
+        );
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeEditEvent()
