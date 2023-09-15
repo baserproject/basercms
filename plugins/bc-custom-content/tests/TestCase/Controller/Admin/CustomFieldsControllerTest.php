@@ -63,7 +63,7 @@ class CustomFieldsControllerTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
 
         //対象URLをコル
-        $this->post('/baser/admin/bc-custom-content/custom_fields');
+        $this->post('/baser/admin/bc-custom-content/custom_fields/');
         //戻る値を確認
         $this->assertResponseCode(200);
         $entities = $this->_controller->viewBuilder()->getVars() ['entities']->toArray();
