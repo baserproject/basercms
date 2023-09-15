@@ -71,8 +71,7 @@ class ThemeConfigsControllerTest extends BcTestCase
             'plugin' => 'BcThemeConfig',
             'prefix' => 'Admin',
             'controller' => 'ThemeConfigsController',
-            'action' => 'index',
-            '1'
+            'action' => 'index'
         ]);
     }
 
