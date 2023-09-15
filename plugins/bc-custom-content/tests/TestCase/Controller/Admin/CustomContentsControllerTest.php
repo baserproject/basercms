@@ -226,7 +226,25 @@ class CustomContentsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //対象URLをコル
+        $this->post('/baser/admin/bc-custom-content/custom_contents/index/1');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'controller' => 'CustomEntries',
+            'action' => 'index',
+            1
+        ]);
+
+        //存在しないIDを指定した場合、
+        $this->post('/baser/admin/bc-custom-content/custom_contents/index/11111');
+        //戻る値を確認
+        $this->assertResponseCode(404);
     }
 
 }
