@@ -175,6 +175,7 @@ class BlogController extends BlogFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function archives(
         BlogFrontServiceInterface $service,
