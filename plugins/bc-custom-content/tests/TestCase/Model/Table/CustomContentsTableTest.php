@@ -60,6 +60,11 @@ class CustomContentsTableTest extends BcTestCase
         ]);
         $this->assertArrayHasKey('list_count', $errors);
         $this->assertEquals('一覧表示件数は必須項目です。', current($errors['list_count']));
+        $errors = $validator->validate([
+            'list_count' => 'a',
+        ]);
+        $this->assertArrayNotHasKey('list_count', $errors);
+
     }
 
 
