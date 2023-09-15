@@ -38,6 +38,9 @@ class CustomFieldsController extends CustomContentAdminAppController
      * カスタムフィールドの新規追加
      *
      * @param CustomFieldsAdminServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomFieldsAdminServiceInterface $service)
     {
