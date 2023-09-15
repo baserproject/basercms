@@ -143,7 +143,7 @@ class BlogControllerTest extends BcTestCase
         ]])->persist();
         ContentFactory::make([
             'id' => 1,
-            'url' => '/news',
+            'url' => '/news/',
             'site_id' => 1,
             'status' => true,
             'tag_use' => true,
