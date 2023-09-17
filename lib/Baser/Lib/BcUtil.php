@@ -60,6 +60,20 @@ class BcUtil extends CakeObject
 	}
 
 	/**
+	 * ユーザーが編集可能なユーザーかチェック
+	 * @return bool
+	 */
+	public static function isUserEditableUser()
+	{
+		if(BcUtil::isAdminUser()) return true;
+		$user = BcUtil::loginUser();
+		if(!$user) return false;
+		/* @var Permission $permissionModel */
+		$permissionModel = ClassRegistry::init('Permission');
+		return $permissionModel->check('/admin/users/edit/', $user['UserGroup']['id']);
+	}
+
+	/**
 	 * ログインユーザーのデータを取得する
 	 *
 	 * @return array

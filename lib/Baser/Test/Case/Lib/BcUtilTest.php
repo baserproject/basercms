@@ -29,7 +29,9 @@ class BcUtilTest extends BaserTestCase
 		'baser.Default.SiteConfig',
 		'baser.Default.Content',
 		'baser.Default.Site',
-		'baser.Default.User'
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Permission',
 	];
 
 	/**
@@ -111,6 +113,43 @@ class BcUtilTest extends BaserTestCase
 			['hoge', false],
 			['', false],
 		];
+	}
+
+	/**
+	 * test isUserEditableUser
+	 * @param $userGroupId
+	 * @param $expect
+	 * @return void
+	 */
+	public function testIsUserEditableUser()
+	{
+		$Session = new CakeSession();
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+
+		// システム管理グループ
+		$Session->write('Auth.' . $sessionKey . '.UserGroup.id', 1);
+		$this->assertTrue(BcUtil::isUserEditableUser());
+
+		// システム管理グループ以外
+		$Session->write('Auth.' . $sessionKey . '.UserGroup.id', 2);
+		$this->assertFalse(BcUtil::isUserEditableUser());
+
+		// システム管理グループ以外（権限追加）
+		$permissionModel = ClassRegistry::init('Permission');
+		$permissionModel->create([
+			'name' => 'ユーザー編集',
+			'user_group_id' => 2,
+			'url' => '/admin/users/edit/*',
+			'auth' => 1,
+			'status' => 1,
+			'no' => 16,
+			'sort' => 16
+		]);
+		$permissionModel->save();
+		clearDataCache();
+		$permissionModel->permissionsTmp = -1;
+		$permissionModel->setCheck(2);
+		$this->assertTrue(BcUtil::isUserEditableUser());
 	}
 
 	/**
