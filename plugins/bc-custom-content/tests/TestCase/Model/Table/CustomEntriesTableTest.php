@@ -21,8 +21,6 @@ use BcCustomContent\Service\CustomEntriesService;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomEntriesScenario;
-use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -45,7 +43,6 @@ class CustomEntriesTableTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomEntriesTable = new CustomEntriesTable();
-        $this->CustomEntriesService = $this->getService(CustomEntriesServiceInterface::class);
         $this->loadFixtureScenario(InitAppScenario::class);
     }
 
