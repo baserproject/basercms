@@ -125,6 +125,7 @@ class CustomLinksController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(CustomLinksServiceInterface $service, $id)
     {
