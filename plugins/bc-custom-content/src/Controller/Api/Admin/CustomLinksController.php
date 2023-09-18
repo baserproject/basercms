@@ -216,6 +216,7 @@ class CustomLinksController extends BcAdminApiController
      *
      * @param CustomLinksServiceInterface $service
      * @param int $tableId
+     * @unitTest
      */
     public function get_parent_list(CustomLinksServiceInterface $service, int $tableId)
     {
