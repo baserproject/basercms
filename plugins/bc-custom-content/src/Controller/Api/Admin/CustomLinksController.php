@@ -63,6 +63,7 @@ class CustomLinksController extends BcAdminApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(CustomLinksServiceInterface $service, int $id)
     {
@@ -73,7 +74,7 @@ class CustomLinksController extends BcAdminApiController
             $customLink = $service->get($id, $this->getRequest()->getQueryParams());
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません。');
         }
 
         $this->set([
