@@ -153,7 +153,7 @@ class CustomEntriesTableTest extends BcTestCase
             'type' => '1',
             'display_field' => 'title',
         ]);
-        //正常系実行: $postData = null
+        //正常系実行
         $result = $this->CustomEntriesTable->setUp(1, []);
         $this->assertTrue($result);
         $this->assertEquals(1, $this->CustomEntriesTable->tableId);
