@@ -134,6 +134,9 @@ class CustomEntriesTable extends AppTable
      *
      * @param int $tableId
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setUp(int $tableId, array $postData = [])
     {
