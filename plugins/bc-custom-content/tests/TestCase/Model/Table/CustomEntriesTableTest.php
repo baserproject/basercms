@@ -15,7 +15,6 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Table\CustomEntriesTable;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
@@ -40,7 +39,7 @@ class CustomEntriesTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->CustomEntriesTable = $this->getTableLocator()->get('BcCustomContent.CustomEntriesTable');
+        $this->CustomEntriesTable = new CustomEntriesTable();
         $this->loadFixtureScenario(InitAppScenario::class);
     }
 
@@ -92,7 +91,7 @@ class CustomEntriesTableTest extends BcTestCase
     /**
      * test setUp
      */
-    public function test_setUp()
+    public function test_setUp1()
     {
         //準備
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -157,6 +156,8 @@ class CustomEntriesTableTest extends BcTestCase
         //正常系実行: $postData = null
         $result = $this->CustomEntriesTable->setUp(1, []);
         $this->assertTrue($result);
+        $this->assertEquals(1, $this->CustomEntriesTable->tableId);
+        $this->assertEquals('recruit_category', $this->CustomEntriesTable->links[0]->name);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');
 
