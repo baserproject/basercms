@@ -99,16 +99,25 @@ class CustomContentsControllerTest extends BcTestCase
             'publish_end' => '9999-11-30 23:59:59',
             'has_child' => 0
         ]);
-        $dataBaseService->addColumn('custom_entry_1_recruit_categories', 'recruit_category', 'integer');
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loadFixtureScenario(CustomFieldsScenario::class);
 
-
         //対象URLをコル
         $this->get('/test/view/プログラマー');
-        $result = json_decode((string)$this->_response->getBody());
+        $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertResponseCode(200);
+        $this->assertEquals('サービスタイトル', $vars['title']);
+        $this->assertNotNull($vars['customContent']);
+        $this->assertNotNull($vars['customEntry']);
+
+        //存在しないURLを指定した場合、
+        $this->get('/test-false/');
+        $this->assertResponseCode(404);
+        $this->assertEquals(
+            'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }

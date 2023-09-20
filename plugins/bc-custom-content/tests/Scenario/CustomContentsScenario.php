@@ -50,7 +50,7 @@ class CustomContentsScenario implements FixtureScenarioInterface
             'lft' => 1,
             'rght' => 2,
             'entity_id' => 1,
-            "level"=> 1,
+            "level" => 1,
             'layout_template' => 'default',
             'status' => true
         ])->persist();
@@ -72,6 +72,31 @@ class CustomContentsScenario implements FixtureScenarioInterface
             'lft' => 3,
             'rght' => 4,
             'entity_id' => 2,
+            'layout_template' => 'default',
+            'status' => true
+        ])->persist();
+
+        CustomContentFactory::make([
+            'id' => 3,
+            'description' => 'サービステスト',
+            'template' => 'default',
+            "widget_area" => null,
+            "list_count" => 10,
+            "list_order" => "id",
+            "list_direction" => "DESC"
+        ])->persist();
+        ContentFactory::make([
+            'url' => '/test-false/',
+            'name' => 'test',
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'parent_id' => null,
+            'title' => 'サービスタイトル',
+            'lft' => 11,
+            'rght' => 21,
+            'entity_id' => 3,
+            "level" => 1,
             'layout_template' => 'default',
             'status' => true
         ])->persist();
