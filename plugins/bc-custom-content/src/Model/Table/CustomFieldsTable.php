@@ -72,6 +72,14 @@ class CustomFieldsTable extends AppTable
         $validator
             ->scalar('type')
             ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
+        $validator
+            ->add('source', [
+                'checkSelectList' => [
+                    'provider' => 'bc',
+                    'rule' => ['checkSelectList'],
+                    'message' => __d('baser_core', '選択リストに同じ項目を複数登録できません。')
+                ]
+        ]);
         return $validator;
     }
 

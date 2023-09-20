@@ -583,4 +583,17 @@ class BcValidation extends Validation
         return true;
     }
 
+    /**
+     * 選択リストに同じ項目を複数登録するかをチェック
+     *
+     * @param $value
+     * @return bool
+     */
+    public static function checkSelectList($value): bool
+    {
+        $data = preg_split("/\r\n|\n|\r/", $value);
+        $result = max(array_count_values($data));
+        return ($result < 2);
+    }
+
 }
