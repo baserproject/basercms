@@ -104,12 +104,12 @@ class CustomContentsControllerTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
 
         //対象URLをコル
-        $this->get('/test/view/プログラマー');
+        $this->get('/test/');
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertResponseCode(200);
         $this->assertEquals('サービスタイトル', $vars['title']);
         $this->assertNotNull($vars['customContent']);
-        $this->assertNotNull($vars['customEntry']);
+        $this->assertNotNull($vars['customEntries']);
 
         //存在しないURLを指定した場合、
         $this->get('/test-false/');
