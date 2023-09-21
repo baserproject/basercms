@@ -54,13 +54,10 @@ class CustomTablesTableTest extends BcTestCase
      */
     public function test_setHasManyLinksByThreaded()
     {
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $association = $this->CustomTablesTable->getAssociation('CustomLinks');
+        $this->assertEquals('threaded', $association->getFinder());
+        $this->assertEquals('custom_table_id', $association->getForeignKey());
+        $this->assertEquals(['CustomLinks.lft' => 'ASC'], $association->getSort());
     }
 
     /**
@@ -68,13 +65,11 @@ class CustomTablesTableTest extends BcTestCase
      */
     public function test_setHasManyLinksByAll()
     {
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $this->CustomTablesTable->setHasManyLinksByAll();
+        $association = $this->CustomTablesTable->getAssociation('CustomLinks');
+        $this->assertEquals('all', $association->getFinder());
+        $this->assertEquals('custom_table_id', $association->getForeignKey());
+        $this->assertEquals(['CustomLinks.lft' => 'ASC'], $association->getSort());
     }
 
     /**
