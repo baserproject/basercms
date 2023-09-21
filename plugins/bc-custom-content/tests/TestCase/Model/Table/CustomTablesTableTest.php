@@ -12,9 +12,11 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Table\CustomTablesTable;
 
 /**
  * CustomTablesTableTest
+ * @property CustomTablesTable $CustomTablesTable
  */
 class CustomTablesTableTest extends BcTestCase
 {
@@ -25,6 +27,7 @@ class CustomTablesTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->CustomTablesTable = new CustomTablesTable();
     }
 
     /**
@@ -34,5 +37,63 @@ class CustomTablesTableTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test setHasManyLinksByThreaded
+     */
+    public function test_setHasManyLinksByThreaded()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test setHasManyLinksByAll
+     */
+    public function test_setHasManyLinksByAll()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+    /**
+     * test validationDefault
+     */
+    public function test_validationDefault()
+    {
+        //準備
+
+        //正常系実行
+
+        //異常系実行
+
+
+    }
+
+
 
 }
