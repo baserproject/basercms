@@ -43,13 +43,9 @@ class CustomTablesTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $this->assertTrue($this->CustomTablesTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->CustomTablesTable->hasAssociation('CustomEntries'));
+        $this->assertTrue($this->CustomTablesTable->hasAssociation('CustomContents'));
     }
 
     /**
