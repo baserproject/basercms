@@ -46,6 +46,7 @@ class CustomTablesTableTest extends BcTestCase
         $this->assertTrue($this->CustomTablesTable->hasBehavior('Timestamp'));
         $this->assertTrue($this->CustomTablesTable->hasAssociation('CustomEntries'));
         $this->assertTrue($this->CustomTablesTable->hasAssociation('CustomContents'));
+        $this->assertTrue($this->CustomTablesTable->hasAssociation('CustomLinks'));
     }
 
     /**
