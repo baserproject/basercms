@@ -66,6 +66,47 @@ class CustomLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->customLinks);
+
+        //custom_table_idを指定しない場合、
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+    }
+
+    /**
      * test add
      */
     public function test_add()
