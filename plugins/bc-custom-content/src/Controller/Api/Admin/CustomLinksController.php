@@ -33,6 +33,7 @@ class CustomLinksController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(CustomLinksServiceInterface $service)
     {
@@ -63,6 +64,7 @@ class CustomLinksController extends BcAdminApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(CustomLinksServiceInterface $service, int $id)
     {
@@ -73,7 +75,7 @@ class CustomLinksController extends BcAdminApiController
             $customLink = $service->get($id, $this->getRequest()->getQueryParams());
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません。');
         }
 
         $this->set([
@@ -124,6 +126,7 @@ class CustomLinksController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(CustomLinksServiceInterface $service, $id)
     {
@@ -216,6 +219,7 @@ class CustomLinksController extends BcAdminApiController
      *
      * @param CustomLinksServiceInterface $service
      * @param int $tableId
+     * @unitTest
      */
     public function get_parent_list(CustomLinksServiceInterface $service, int $tableId)
     {

@@ -66,6 +66,47 @@ class CustomLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->customLinks);
+
+        //custom_table_idを指定しない場合、
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+    }
+
+    /**
      * test add
      */
     public function test_add()
@@ -114,6 +155,45 @@ class CustomLinksControllerTest extends BcTestCase
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');
 
+    }
+
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links/view/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->customLink);
+
+        //存在しないIDを指定した場合、
+        $this->get('/baser/api/admin/bc-custom-content/custom_links/view/11111.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
     }
 
     /**
@@ -241,5 +321,33 @@ class CustomLinksControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('求人分類', $result->customLinks->{1});
         $this->assertEquals('この仕事の特徴', $result->customLinks->{2});
+    }
+
+    /**
+     * test get_parent_list
+     */
+    public function test_get_parent_list()
+    {
+        //データを生成
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->post('/baser/api/admin/bc-custom-content/custom_links/get_parent_list/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->parentList);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
     }
 }

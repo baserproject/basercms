@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcCustomContent\Controller\Admin;
+namespace BcCustomContent\Controller;
 
 use BaserCore\Controller\BcAppController;
 use Cake\Event\EventInterface;
@@ -29,6 +29,8 @@ class CustomContentFrontAppController extends BcAppController
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {
