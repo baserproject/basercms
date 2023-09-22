@@ -22,11 +22,14 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Service\CustomEntriesService;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomEntriesTableTest
  * @property CustomEntriesTable $CustomEntriesTable
+ * @property CustomEntriesService $CustomEntriesService
  */
 class CustomEntriesTableTest extends BcTestCase
 {
@@ -69,11 +72,34 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_createSearchIndex()
     {
         //準備
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $entry = new CustomEntry(
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'published' => '2023-02-14 13:57:29',
+                'modified' => '2023-02-14 13:57:29',
+                'created' => '2023-01-30 07:09:22',
+                'name' => 'プログラマー',
+                'recruit_category' => '1',
+            ]
+        );
         //正常系実行
-
-        //異常系実行
-
+        $result = $this->CustomEntriesTable->createSearchIndex($entry);
+        $this->assertEquals('カスタムコンテンツ', $result['type']);
+        $this->assertEquals(1, $result['model_id']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
 
     }
 

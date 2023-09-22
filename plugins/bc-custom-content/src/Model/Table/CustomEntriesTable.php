@@ -84,6 +84,9 @@ class CustomEntriesTable extends AppTable
      *
      * @param CustomEntry $entry
      * @return array|false
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function createSearchIndex(CustomEntry $entry)
     {
