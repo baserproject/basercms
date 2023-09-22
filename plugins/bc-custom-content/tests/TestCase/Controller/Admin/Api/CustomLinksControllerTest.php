@@ -322,4 +322,32 @@ class CustomLinksControllerTest extends BcTestCase
         $this->assertEquals('求人分類', $result->customLinks->{1});
         $this->assertEquals('この仕事の特徴', $result->customLinks->{2});
     }
+
+    /**
+     * test get_parent_list
+     */
+    public function test_get_parent_list()
+    {
+        //データを生成
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->post('/baser/api/admin/bc-custom-content/custom_links/get_parent_list/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->parentList);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+    }
 }
