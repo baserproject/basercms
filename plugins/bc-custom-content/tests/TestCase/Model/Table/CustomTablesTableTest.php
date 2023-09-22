@@ -77,13 +77,33 @@ class CustomTablesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        //準備
-
+        $validator = $this->CustomTablesTable->getValidator('default');
+        //入力フィールドのデータが超えた場合、
+        $errors = $validator->validate([
+            'name' => str_repeat('a', 256),
+            'title' => str_repeat('a', 256),
+        ]);
+        //戻り値を確認
+        $this->assertEquals('255文字以内で入力してください。', current($errors['name']));
+        $this->assertEquals('255文字以内で入力してください。', current($errors['title']));
+        //入力フィールドのデータがない
+        $errors = $validator->validate([
+            'name' => '',
+            'title' => '',
+        ]);
+        $this->assertEquals('識別名を入力してください。', current($errors['name']));
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
+        //入力フィールドのデータが異常な記号含める
+        $errors = $validator->validate([
+            'name' => 'あ',
+        ]);
+        $this->assertEquals('識別名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
         //正常系実行
-
-        //異常系実行
-
-
+        $errors = $validator->validate([
+            'name' => 'test',
+            'title' => 'test',
+        ]);
+        $this->assertEmpty($errors);
     }
 
 

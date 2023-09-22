@@ -88,6 +88,9 @@ class CustomTablesTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
