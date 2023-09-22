@@ -158,6 +158,45 @@ class CustomLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function test_view()
+    {
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_links/view/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->customLink);
+
+        //存在しないIDを指定した場合、
+        $this->get('/baser/api/admin/bc-custom-content/custom_links/view/11111.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+    }
+
+    /**
      * test edit
      */
     public function test_edit()
