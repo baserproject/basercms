@@ -91,60 +91,25 @@ class CustomEntriesTableTest extends BcTestCase
     /**
      * test setUp
      */
-    public function test_setUp1()
+    public function test_setUp()
     {
         //準備
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         CustomFieldFactory::make([
-            'id' => 1,
             'title' => '求人分類',
             'name' => 'recruit_category',
             'type' => 'text',
             'status' => 1,
-            'validate' => '',
-            'regex' => '',
-            'regex_error_message' => '',
             'counter' => 0,
-            'auto_convert' => '',
-            'placeholder' => '',
-            'size' => NULL,
-            'max_length' => NULL,
-            'source' => '',
-            'created' => '2023-01-30 06:22:47',
-            'modified' => '2023-02-20 11:18:32',
-            'line' => NULL,
         ])->persist();
         CustomLinkFactory::make([
-            'id' => 1,
-            'no' => NULL,
             'custom_table_id' => 1,
             'custom_field_id' => 1,
-            'parent_id' => NULL,
-            'lft' => 1,
-            'rght' => 2,
-            'level' => 0,
             'name' => 'recruit_category',
             'title' => '求人分類',
-            'group_valid' => 0,
-            'created' => '2023-01-30 06:45:08',
-            'modified' => '2023-02-12 23:31:04',
-            'use_loop' => 0,
             'display_admin_list' => 1,
-            'use_api' => 1,
-            'search_target_front' => 1,
-            'before_linefeed' => 0,
-            'after_linefeed' => 0,
-            'display_front' => 1,
-            'search_target_admin' => 1,
-            'description' => NULL,
-            'attention' => NULL,
-            'before_head' => NULL,
-            'after_head' => NULL,
-            'options' => NULL,
-            'class' => NULL,
             'status' => 1,
-            'required' => NULL,
         ])->persist();
         $customTable->create([
             'id' => 1,
