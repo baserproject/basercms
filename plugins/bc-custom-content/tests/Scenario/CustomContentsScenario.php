@@ -87,7 +87,7 @@ class CustomContentsScenario implements FixtureScenarioInterface
         ])->persist();
         ContentFactory::make([
             'url' => '/test-false/',
-            'name' => 'test',
+            'name' => 'test-false',
             'plugin' => 'BcCustomContent',
             'type' => 'CustomContent',
             'site_id' => 1,
