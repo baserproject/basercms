@@ -284,7 +284,7 @@ class MailformHelper extends BcFreezeHelper
 			'class' => 'auth-captcha-image'
 		], $options);
 		$captchaId = mt_rand(0, 99999999);
-		$url = $this->request->params['Content']['url'];
+		$url = h($this->request->params['Content']['url']);
 		if (!empty($this->request->params['Site']['same_main_url'])) {
 			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
 		}
