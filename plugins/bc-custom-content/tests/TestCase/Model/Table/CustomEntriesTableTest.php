@@ -11,15 +11,25 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Table\CustomEntriesTable;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Service\CustomEntriesService;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomEntriesTableTest
  * @property CustomEntriesTable $CustomEntriesTable
+ * @property CustomEntriesService $CustomEntriesService
  */
 class CustomEntriesTableTest extends BcTestCase
 {
@@ -35,7 +45,7 @@ class CustomEntriesTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->CustomEntriesTable = $this->getTableLocator()->get('BcCustomContent.CustomEntriesTable');
+        $this->CustomEntriesTable = new CustomEntriesTable();
         $this->loadFixtureScenario(InitAppScenario::class);
     }
 
@@ -62,11 +72,34 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_createSearchIndex()
     {
         //準備
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $entry = new CustomEntry(
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'published' => '2023-02-14 13:57:29',
+                'modified' => '2023-02-14 13:57:29',
+                'created' => '2023-01-30 07:09:22',
+                'name' => 'プログラマー',
+                'recruit_category' => '1',
+            ]
+        );
         //正常系実行
-
-        //異常系実行
-
+        $result = $this->CustomEntriesTable->createSearchIndex($entry);
+        $this->assertEquals('カスタムコンテンツ', $result['type']);
+        $this->assertEquals(1, $result['model_id']);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
 
     }
 
@@ -76,11 +109,147 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_createSearchDetail()
     {
         //準備
-
-        //正常系実行
-
-        //異常系実行
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+        ]);
+        $entry = new CustomEntry(
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'published' => '2023-02-14 13:57:29',
+                'modified' => '2023-02-14 13:57:29',
+                'created' => '2023-01-30 07:09:22',
+                'name' => 'プログラマー',
+                'recruit_category' => '1',
+            ]
+        );
+        //正常系実行: links = null
+        $result = $this->CustomEntriesTable->createSearchDetail($entry);
+        $this->assertEquals('プログラマー', $result);
+        //正常系実行: links != null
+        CustomFieldFactory::make([
+            'id' => 1,
+            'title' => '求人分類',
+            'name' => 'recruit_category',
+            'type' => 'text',
+            'status' => 1,
+            'validate' => '',
+            'regex' => '',
+            'regex_error_message' => '',
+            'counter' => 0,
+            'auto_convert' => '',
+            'placeholder' => '',
+            'size' => NULL,
+            'max_length' => NULL,
+            'source' => '',
+            'created' => '2023-01-30 06:22:47',
+            'modified' => '2023-02-20 11:18:32',
+            'line' => NULL,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'no' => NULL,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'parent_id' => NULL,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 0,
+            'name' => 'recruit_category',
+            'title' => '求人分類',
+            'group_valid' => 0,
+            'created' => '2023-01-30 06:45:08',
+            'modified' => '2023-02-12 23:31:04',
+            'use_loop' => 0,
+            'display_admin_list' => 1,
+            'use_api' => 1,
+            'search_target_front' => 1,
+            'before_linefeed' => 0,
+            'after_linefeed' => 0,
+            'display_front' => 1,
+            'search_target_admin' => 1,
+            'description' => NULL,
+            'attention' => NULL,
+            'before_head' => NULL,
+            'after_head' => NULL,
+            'options' => NULL,
+            'class' => NULL,
+            'status' => 1,
+            'required' => NULL,
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 2,
+            'title' => 'この仕事の特徴',
+            'name' => 'feature',
+            'type' => 'text',
+            'status' => 1,
+            'default_value' => '',
+            'validate' => '',
+            'regex' => '',
+            'regex_error_message' => '',
+            'counter' => 0,
+            'auto_convert' => '',
+            'placeholder' => '',
+            'size' => NULL,
+            'max_length' => NULL,
+            'created' => '2023-01-30 06:23:41',
+            'modified' => '2023-02-20 11:21:03',
+            'line' => NULL,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'no' => NULL,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'parent_id' => NULL,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 0,
+            'name' => 'feature',
+            'title' => 'この仕事の特徴',
+            'group_valid' => 0,
+            'created' => '2023-01-30 06:45:08',
+            'modified' => '2023-02-12 23:31:04',
+            'use_loop' => 0,
+            'display_admin_list' => 0,
+            'use_api' => 1,
+            'search_target_front' => 1,
+            'before_linefeed' => 0,
+            'after_linefeed' => 0,
+            'display_front' => 1,
+            'search_target_admin' => 1,
+            'description' => NULL,
+            'attention' => NULL,
+            'before_head' => NULL,
+            'after_head' => NULL,
+            'options' => NULL,
+            'class' => NULL,
+            'status' => 1,
+            'required' => 1,
+        ])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+        $entry = new CustomEntry(
+            [
+                'id' => 1,
+                'custom_table_id' => 1,
+                'published' => '2023-02-14 13:57:29',
+                'modified' => '2023-02-14 13:57:29',
+                'created' => '2023-01-30 07:09:22',
+                'name' => 'プログラマー',
+                'recruit_category' => 'recruit_category',
+                'feature' => 'feature',
+            ]
+        );
+        $result = $this->CustomEntriesTable->createSearchDetail($entry);
+        $this->assertEquals('プログラマー,recruit_category,feature', $result);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
 
     }
 
