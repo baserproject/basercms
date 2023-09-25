@@ -584,4 +584,20 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($result, false);
     }
 
+    /**
+     * test checkSelectList
+     */
+    public function test_checkSelectList()
+    {
+        //戻り＝falseケース
+        $str = "あ\rべ\r\nあ\nべ\ntest";
+        $result = $this->BcValidation->checkSelectList($str);
+        $this->assertFalse($result);
+        //戻り＝trueケース
+        $str = "あa\nべ\nあ";
+        $result = $this->BcValidation->checkSelectList($str);
+        $this->assertTrue($result);
+    }
+
+
 }

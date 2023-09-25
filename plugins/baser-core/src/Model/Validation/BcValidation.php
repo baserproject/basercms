@@ -588,6 +588,9 @@ class BcValidation extends Validation
      *
      * @param $value
      * @return bool
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function checkSelectList($value): bool
     {
