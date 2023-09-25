@@ -78,6 +78,9 @@ class CustomContentController extends BcFrontAppController
      *
      * @param CustomContentFrontServiceInterface $service
      * @return \Cake\Http\Response
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(CustomContentFrontServiceInterface $service, $entryId)
     {
