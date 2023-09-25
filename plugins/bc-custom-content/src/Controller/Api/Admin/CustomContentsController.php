@@ -58,6 +58,7 @@ class CustomContentsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(CustomContentsServiceInterface $service, int $id)
     {
