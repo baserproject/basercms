@@ -32,6 +32,7 @@ class CustomContentsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(CustomContentsServiceInterface $service)
     {

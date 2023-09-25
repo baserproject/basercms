@@ -63,6 +63,22 @@ class CustomContentsControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-custom-content/custom_contents/index.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->customContents);
+    }
+
+    /**
      * test add
      */
     public function test_add()
