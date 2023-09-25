@@ -262,9 +262,8 @@ class CustomEntriesTableTest extends BcTestCase
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         CustomFieldFactory::make([
-            'title' => '求人分類',
+            'name' => 'test',
             'type' => 'text',
-            'status' => 1,
         ])->persist();
         CustomLinkFactory::make([
             'custom_table_id' => 1,

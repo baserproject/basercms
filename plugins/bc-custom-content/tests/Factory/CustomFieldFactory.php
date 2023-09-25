@@ -41,7 +41,23 @@ class CustomFieldFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'title' => 'test',
+                'status' => 1,
+                'default_value' => '',
+                'validate' => '',
+                'regex' => '',
+                'regex_error_message' => '',
+                'counter' => 0,
+                'auto_convert' => '',
+                'placeholder' => '',
+                'size' => NULL,
+                'max_length' => NULL,
+                'source' => '',
+                'created' => '2023-01-30 06:22:47',
+                'modified' => '2023-02-20 11:18:32',
+                'line' => NULL
+            ];
         });
     }
 
