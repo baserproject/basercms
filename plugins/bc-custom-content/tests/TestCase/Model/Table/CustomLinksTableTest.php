@@ -96,7 +96,9 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_implementedEvents()
     {
-
+        $result = $this->CustomLinksTable->implementedEvents();
+        $this->assertArrayHasKey('Model.beforeSave', $result);
+        $this->assertArrayHasKey('Model.beforeDelete', $result);
     }
 
     /**

@@ -91,6 +91,9 @@ class CustomLinksTable extends AppTable
      * scope の設定のため、TreeBehavior より優先度を高くする
      *
      * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function implementedEvents(): array
     {
