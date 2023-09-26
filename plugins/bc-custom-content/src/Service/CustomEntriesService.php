@@ -137,7 +137,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'limit' => null,
             'direction' => '',    // 並び方向
             'order' => '',    // 並び順対象のフィールド
-            'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
+            'contain' => [],
             'status' => '',
             'use_api' => null
         ], $queryParams);
@@ -226,7 +226,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // 公開状態
         if ($params['status'] === 'publish') {
             $conditions = $this->CustomEntries->getConditionAllowPublish();
-            $params['contain'] = ['CustomTables' => ['CustomContents' => ['Contents']]];
+            $query->contain(['CustomTables' => ['CustomContents' => ['Contents']]]);
             $fields = $this->CustomEntries->getSchema()->columns();
             $query->select($fields);
             $conditions = array_merge_recursive(
