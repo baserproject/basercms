@@ -146,6 +146,10 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             ->select($this->createSelect($options))
             ->contain($options['contain']);
 
+        if(array_key_exists('CustomTables', $options['contain']) || in_array('CustomTables', $options['contain'])) {
+            $query->select($this->CustomEntries->CustomTables);
+        }
+
         if ($options['order']) {
             $query->order($this->createOrder($options['order'], $options['direction']));
         }
