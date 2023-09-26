@@ -56,6 +56,9 @@ class CustomLinksTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {

@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 
 /**
  * CustomTablesTableTest
@@ -54,6 +55,39 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
+        $validator = $this->CustomLinksTable->getValidator('default');
+        //入力フィールドのデータが超えた場合、
+        $errors = $validator->validate([
+            'name' => str_repeat('a', 256),
+            'title' => str_repeat('a', 256),
+        ]);
+        $this->assertEquals('255文字以内で入力してください。', current($errors['name']));
+        $this->assertEquals('255文字以内で入力してください。', current($errors['title']));
+        //入力フィールドのデータがない
+        $errors = $validator->validate([
+            'name' => '',
+            'title' => '',
+        ]);
+        $this->assertEquals('フィールド名を入力してください。', current($errors['name']));
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
+        //nameは半角英数字以外の記号が含めるケース
+        $errors = $validator->validate([
+            'name' => 'aこんにちは',
+        ]);
+        $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        //システム予約名称のケース
+        $errors = $validator->validate([
+            'name' => 'option',
+        ]);
+        $this->assertEquals('group, rows, option はシステム予約名称のため利用できません。', current($errors['name']));
+        //既に登録のケース
+        CustomLinkFactory::make([
+            'name' => 'recruit_category',
+        ])->persist();
+        $errors = $validator->validate([
+            'name' => 'recruit_category',
+        ]);
+        $this->assertEquals('既に登録のあるフィールド名です。', current($errors['name']));
 
     }
 
