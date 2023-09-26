@@ -12,11 +12,13 @@ namespace BcBlog\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\View\Helper\BlogHelper;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\View\View;
 
 /**
  * BlogPostsController
@@ -83,6 +85,8 @@ class BlogPostsController extends BcApiController
         $blogPost = $message = null;
         try {
             $blogPost = $service->get($id, $queryParams);
+            $BlogHelper = new BlogHelper(new View());
+            $blogPost->eye_catch = $BlogHelper->getEyeCatch($blogPost, ['output' => 'url']);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
