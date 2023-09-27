@@ -53,6 +53,36 @@ class ThemeFoldersControllerTest extends BcTestCase
     }
 
     /**
+     * test batch
+     */
+    public function test_batch()
+    {
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new Folder())->create($fullpath . 'delete_folder', 0777);
+        //APIをコール
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
+            [
+                'batch' => 'delete',
+                'batch_targets' => [$fullpath]
+            ]);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
+
+        //$allowMethodは削除ではない場合、
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
+            [
+                'batch' => 'create',
+                'batch_targets' => [$fullpath]
+            ]);
+        $this->assertResponseCode(500);
+    }
+
+    /**
      * [API] テーマフォルダ 一覧取得
      */
     public function test_index()
