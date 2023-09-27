@@ -259,11 +259,34 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_setUp()
     {
         //準備
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        CustomFieldFactory::make([
+            'name' => 'test',
+            'type' => 'text',
+        ])->persist();
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人分類',
+            'display_admin_list' => 1,
+            'status' => 1,
+        ])->persist();
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+        ]);
         //正常系実行
-
-        //異常系実行
-
+        $result = $this->CustomEntriesTable->setUp(1, []);
+        $this->assertTrue($result);
+        $this->assertEquals(1, $this->CustomEntriesTable->tableId);
+        $this->assertEquals('recruit_category', $this->CustomEntriesTable->links[0]->name);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
 
     }
 
