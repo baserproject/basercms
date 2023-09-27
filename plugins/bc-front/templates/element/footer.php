@@ -23,7 +23,7 @@
 <footer class="bs-footer">
 	<p class="bs-footer__copyright"> Copyright(C)
 		<?php $this->BcBaser->copyYear(2008) ?>
-		baserCMS Users Community All rights Reserved.
+    Theme Sample All rights Reserved.
 		<span class="bs-footer__banner">
 			<a href="https://basercms.net/" target="_blank" class="bs-footer__banner-link"><?php echo $this->BcHtml->image('BaserCore.baser.power.gif', ['alt' => 'baserCMS : Based Website Development Project']) ?></a>&nbsp;
 			<a href="https://cakephp.org/" target="_blank" class="bs-footer__banner-link"><?php echo $this->BcHtml->image('cake.power.gif', ['alt' => 'CakePHP(tm) : Rapid Development Framework']) ?></a>
