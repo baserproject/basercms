@@ -108,7 +108,7 @@ class BcContentsRoute extends Route
         $redirect = Configure::read('BcContents.previewRedirect');
         if ($redirect) {
             // データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
-            if ((!empty($request->geQuery['preview']) || !empty($request->geQuery['force'])) && !BcUtil::loginUser()) {
+            if ((!empty($request->getQuery['preview']) || !empty($request->getQuery['force'])) && !BcUtil::loginUser()) {
                 $_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
                 header('Location: ' . BcUtil::topLevelUrl(false) . BcUtil::baseUrl() . Configure::read('BcPrefixAuth.Admin.alias') . '/users/login');
                 exit();
