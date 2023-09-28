@@ -920,6 +920,9 @@ class BcFileUploader
             $basePath = WWW_ROOT . 'files' . DS;
         } else {
             $request = Router::getRequest();
+
+            if (is_null($request)) return false;
+
             $site = $request->getAttribute('currentSite');
             if ($site && $site->theme) {
                 $basePath = ROOT . DS . 'plugins' . DS . $site->theme . DS . 'webroot' . DS . 'files' . DS;
