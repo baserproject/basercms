@@ -191,7 +191,7 @@ class InstallationsService implements InstallationsServiceInterface
         try {
             $this->installCorePlugin();
         } catch (\Throwable $e) {
-            throw new BcException(__d('baser_core', 'コアプラグインのインストールに失敗しました。'));
+            throw new BcException(__d('baser_core', 'コアプラグインのインストールに失敗しました。'.$e->getMessage()));
         }
 
         try {
