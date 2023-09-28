@@ -188,11 +188,7 @@ class InstallationsService implements InstallationsServiceInterface
             throw new BcException(__d('baser_core', 'コアテーブルの構築に失敗しました。'));
         }
 
-        try {
-            $this->installCorePlugin();
-        } catch (\Throwable $e) {
-            throw new BcException($e);
-        }
+        $this->installCorePlugin();
 
         try {
             [$theme, $pattern] = explode('.', $dbDataPattern);
