@@ -55,8 +55,18 @@ class BlogPost extends Entity
         'id' => false
     ];
 
-
+    /**
+     * アイキャッチのフルパス
+     */
     protected $_virtual = ['_eyecatch'];
+
+    /**
+     * アイキャッチのフルパスを取得
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     protected function _get_eyecatch(){
         $BlogHelper = new BlogHelper(new View());
         return $BlogHelper->getEyeCatch($this, ['output' => 'url']);
