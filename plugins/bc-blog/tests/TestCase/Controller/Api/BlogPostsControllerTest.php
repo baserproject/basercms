@@ -103,7 +103,7 @@ class BlogPostsControllerTest extends BcTestCase
         // 戻り値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(1, $result->blogPost->id);
-        $this->assertTextContains('/files/blog/1/blog_posts/eye_catch.img', $result->blogPost->eye_catch);
+        $this->assertTextContains('/files/blog/1/blog_posts/eye_catch.img', $result->blogPost->_eyecatch);
         $this->assertEquals(1, $result->blogPost->blog_content_id);
 
         //存在しないBlogPostIDをテスト場合、
