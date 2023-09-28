@@ -38,6 +38,7 @@ class BcFolder
      */
     public function getFiles($options = [])
     {
+        if (!is_dir($this->path)) return [];
         $options = array_merge([
             'exclude' => [],
             'full' => false
@@ -60,6 +61,7 @@ class BcFolder
      */
     public function getFolders($options = [])
     {
+        if (!is_dir($this->path)) return [];
         $options = array_merge([
             'exclude' => [],
             'full' => false
@@ -75,6 +77,27 @@ class BcFolder
         }
         sort($folders);
         return $folders;
+    }
+
+    /**
+     * ディレクトリを再帰的に削除する
+     */
+    public function delete()
+    {
+        if (!is_dir($this->path)) return false;
+        $files = $this->getFiles(['full' => true]);
+        foreach ($files as $file) {
+            unlink($file);
+        }
+        $folders = $this->getFolders(['full' => true]);
+        $path = $this->path;
+        foreach ($folders as $folder) {
+            $this->path = $folder;
+            $this->delete();
+        }
+        $this->path = $path;
+        rmdir($this->path);
+        return true;
     }
 
 }

@@ -183,8 +183,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
     public function delete(string $fullpath)
     {
         if (is_dir($fullpath)) {
-            $folder = new Folder();
-            return $folder->delete($fullpath);
+            $folder = new BcFolder($fullpath);
+            return $folder->delete();
         } else {
             return false;
         }
