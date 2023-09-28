@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\View\Form\EntityContext;
@@ -1283,11 +1284,20 @@ SCRIPT_END;
             'editor' => 'BaserCore.BcCkeditor',
             'style' => 'width:99%;height:540px'
         ], $options);
+
+        if ($options['editor']) {
+            [$plugin] = pluginSplit($options['editor']);
+            if(!Plugin::isLoaded($plugin)) {
+                $options['editor'] = '';
+            }
+        }
+
         if (!$options['editor']) {
             /** @var BcCkeditorHelper $bcCkeditor */
             $bcCkeditor = $this->getView()->BcCkeditor;
             return $bcCkeditor->editor($fieldName, $options);
         }
+
         $this->_View->loadHelper($options['editor']);
         [, $editor] = pluginSplit($options['editor']);
         if (!empty($this->getView()->{$editor})) {

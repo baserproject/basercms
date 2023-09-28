@@ -148,21 +148,4 @@ class PagesController extends BcAdminAppController
         $this->set($service->getViewVarsForEdit($page));
     }
 
-    /**
-	 * beforeFilter
-	 *
-     * @param EventInterface $event
-     * @checked
-     * @noTodo
-     * @unitTest
-	 */
-	public function beforeFilter(EventInterface $event)
-	{
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
-        if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->addHelpers([BcSiteConfig::get('editor')]);
-        }
-	}
-
 }
