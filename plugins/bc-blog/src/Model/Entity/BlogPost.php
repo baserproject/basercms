@@ -14,8 +14,10 @@ namespace BcBlog\Model\Entity;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcBlog\View\Helper\BlogHelper;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
+use Cake\View\View;
 
 /**
  * Class BlogPost
@@ -53,4 +55,20 @@ class BlogPost extends Entity
         'id' => false
     ];
 
+    /**
+     * アイキャッチのフルパス
+     */
+    protected $_virtual = ['_eyecatch'];
+
+    /**
+     * アイキャッチのフルパスを取得
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _get_eyecatch(){
+        $BlogHelper = new BlogHelper(new View());
+        return $BlogHelper->getEyeCatch($this, ['output' => 'url']);
+    }
 }

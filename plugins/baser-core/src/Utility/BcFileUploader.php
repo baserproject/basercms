@@ -909,17 +909,20 @@ class BcFileUploader
      * 保存先のフォルダを設定し、取得する
      * @param bool $isTheme
      * @param bool $limited
-     * @return string
+     * @return string|bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getSaveDir(bool $isTheme = false, bool $limited = false): string
+    public function getSaveDir(bool $isTheme = false, bool $limited = false): bool|string
     {
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
         } else {
             $request = Router::getRequest();
+
+            if (is_null($request)) return false;
+
             $site = $request->getAttribute('currentSite');
             if ($site && $site->theme) {
                 $basePath = ROOT . DS . 'plugins' . DS . $site->theme . DS . 'webroot' . DS . 'files' . DS;

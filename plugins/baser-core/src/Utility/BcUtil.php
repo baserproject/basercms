@@ -1175,8 +1175,14 @@ class BcUtil
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.coreFrontTheme')));
         if (!BcUtil::isInstalled()) return $theme;
         $request = Router::getRequest();
-        /** @var Site $site */
-        $site = $request->getAttribute('currentSite');
+
+        if (is_null($request))
+            $site = null;
+        else{
+            /** @var Site $site */
+            $site = $request->getAttribute('currentSite');
+        }
+
         if ($site) {
             if($site->theme) {
                 return $site->theme;
