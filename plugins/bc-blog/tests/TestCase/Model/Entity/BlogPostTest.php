@@ -11,7 +11,6 @@
 
 namespace BcBlog\Test\TestCase\Model\Entity;
 
-use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Test\Scenario\BlogContentScenario;
