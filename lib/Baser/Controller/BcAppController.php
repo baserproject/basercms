@@ -734,6 +734,8 @@ class BcAppController extends Controller
 			}
 		}
 
+		if(preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return;
+
 		/* ログインユーザー */
 		if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
 			$this->set('user', $user);
@@ -1693,4 +1695,21 @@ class BcAppController extends Controller
 		}
 		return true;
 	}
+
+	/**
+	 * Render
+	 *
+	 * map ファイルへのリクエストの際、PHPのセッションを書き換えてしまい
+	 * ログイン状態が継続できない問題となってしまうため、render を実行せず、Not Found を返却する
+	 *
+	 * @param string $view
+	 * @param string $layout
+	 * @return CakeResponse|string
+	 */
+	public function render($view = null, $layout = null)
+	{
+		if(preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return 'Not Found';
+		return parent::render($view, $layout);
+	}
+
 }

@@ -109,13 +109,13 @@ Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 /**
  * 静的ファイルの読み込みの場合はスキップ
  */
-$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png|map)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png|map)$/';
 // テーマ編集は除外
-$nonAssets = '/^' . preg_quote(BC_BASE_URL . Configure::read('Routing.prefixes.0') . '/theme_files/edit/', '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$nonAssets = '/^' . preg_quote(BC_BASE_URL . Configure::read('Routing.prefixes.0') . '/theme_files/edit/', '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png|map)$/';
 $uri = null;
 if (isset($_SERVER['REQUEST_URI'])) {
-	$uri = $_SERVER['REQUEST_URI'];
+	list($uri) = explode('?', $_SERVER['REQUEST_URI']);
 }
 if (preg_match($nonAssets, $uri) === 0) {
 	if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
