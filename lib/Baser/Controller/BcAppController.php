@@ -734,7 +734,7 @@ class BcAppController extends Controller
 			}
 		}
 
-		if(preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return;
+		if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return;
 
 		/* ログインユーザー */
 		if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
