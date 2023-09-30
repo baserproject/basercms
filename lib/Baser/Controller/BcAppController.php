@@ -1708,7 +1708,7 @@ class BcAppController extends Controller
 	 */
 	public function render($view = null, $layout = null)
 	{
-		if(preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return 'Not Found';
+		if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return 'Not Found';
 		return parent::render($view, $layout);
 	}
 

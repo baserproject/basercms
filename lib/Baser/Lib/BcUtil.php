@@ -82,7 +82,7 @@ class BcUtil extends CakeObject
 	{
 		// map ファイルへのリクエストの際、PHPのセッションを書き換えてしまい
 		// ログイン状態が継続できなくなってしまうため処理を実行しない
-		if(preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return null;
+		if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return null;
 
 		$Session = new CakeSession();
 		$sessionKey = BcUtil::authSessionKey($prefix);
