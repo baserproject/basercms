@@ -122,6 +122,7 @@ class BlogHelper extends Helper
     public function setContent($blogContentId = null)
     {
         $blogContentUpdated = false;
+        $content = false;
         if (empty($this->currentBlogContent) || ($blogContentId != $this->currentBlogContent->id)) {
             if ($blogContentId) {
                 if ($this->_View->getRequest()->getQuery('preview') == 'default' && $this->_View->getRequest()->getData()) {
