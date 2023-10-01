@@ -520,4 +520,23 @@ class BcUtil extends CakeObject
 		return Configure::read('BcAuthPrefix.admin.alias');
 	}
 
+	/**
+	 * 文字列よりスクリプトタグを除去する
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function stripScriptTag($value)
+	{
+		$allows = [
+			'a', 'abbr', 'address', 'area', 'b', 'blockquote', 'body', 'br', 'button', 'caption', 'cite', 'code',
+			'col', 'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'fieldset', 'form', 'h1', 'h2', 'h3',
+			'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link',
+			'map', 'meta', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 'samp', 'select',
+			'small', 'span', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead',
+			'title', 'tr', 'ul', 'var', 'style'
+		];
+		return strip_tags($value, '<' . implode('><', $allows) . '>');
+	}
+
 }

@@ -481,4 +481,29 @@ class BcUtilTest extends BaserTestCase
 		];
 	}
 
+	/**
+	 * test stripScriptTag
+	 * @return void
+	 * @dataProvider stripScriptTagDataProvider
+	 */
+	public function testStripScriptTag($content, $expect)
+	{
+		$result = BcUtil::stripScriptTag($content);
+		$this->assertEquals($expect, $result, 'scriptタグを削除できません。');
+	}
+
+	public function stripScriptTagDataProvider()
+	{
+		return [
+			[
+				'content' => '<script>hoge</script>',
+				'expect' => 'hoge'
+			],
+			[
+				'content' => '<a href="http://hoge.com" class="bca-action">hoge<script>hoge</script></a>',
+				'expect' => '<a href="http://hoge.com" class="bca-action">hogehoge</a>'
+			]
+		];
+	}
+
 }

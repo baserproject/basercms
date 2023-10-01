@@ -158,7 +158,7 @@ class MailHelper extends AppHelper
 	 */
 	public function getDescription()
 	{
-		return preg_replace('/<script.*?>(.*?)<\/script>/', '', $this->mailContent['description']);
+		return BcUtil::stripScriptTag($this->mailContent['description']);
 	}
 
 	/**
