@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
-use Cake\I18n\FrozenDate;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
 /**
@@ -37,20 +37,20 @@ use Cake\ORM\Entity;
  * @property integer $author_id
  * @property string $layout_template
  * @property bool $status
- * @property FrozenDate $publish_begin
- * @property FrozenDate $publish_end
+ * @property FrozenTime $publish_begin
+ * @property FrozenTime $publish_end
  * @property bool $self_status
- * @property FrozenDate $self_publish_begin
- * @property FrozenDate $self_publish_end
+ * @property FrozenTime $self_publish_begin
+ * @property FrozenTime $self_publish_end
  * @property bool $exclude_search
- * @property FrozenDate $created_date
- * @property FrozenDate $modified_date
+ * @property FrozenTime $created_date
+ * @property FrozenTime $modified_date
  * @property bool $site_root
- * @property FrozenDate $deleted_date
+ * @property FrozenTime $deleted_date
  * @property bool $exclude_menu
  * @property bool $blank_link
- * @property FrozenDate $created
- * @property FrozenDate $modified
+ * @property FrozenTime $created
+ * @property FrozenTime $modified
  * @property Site $site
  */
 class Content extends Entity

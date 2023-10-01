@@ -12,7 +12,7 @@
 namespace BaserCore\Model\Entity;
 
 use BaserCore\Utility\BcUtil;
-use Cake\I18n\Time as TimeAlias;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity as EntityAlias;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -40,8 +40,8 @@ use Psr\Http\Message\ServerRequestInterface;
  * @property bool $auto_link
  * @property bool $use_subdomain
  * @property int $domain_type
- * @property TimeAlias $created
- * @property TimeAlias $modified
+ * @property FrozenTime $created
+ * @property FrozenTime $modified
  */
 class Site extends EntityAlias
 {

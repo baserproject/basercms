@@ -14,7 +14,7 @@ namespace BaserCore\Model\Entity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
-use Cake\I18n\Time as TimeAlias;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity as EntityAlias;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -31,8 +31,8 @@ use Cake\Utility\Hash;
  * @property string $email
  * @property string $nickname
  * @property bool $status
- * @property TimeAlias $created
- * @property TimeAlias $modified
+ * @property FrozenTime $created
+ * @property FrozenTime $modified
  */
 class User extends EntityAlias
 {
