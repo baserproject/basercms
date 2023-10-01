@@ -15,6 +15,7 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
@@ -84,11 +85,13 @@ class AppControllerTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->AppController->BcMessage);
-        $this->assertNotEmpty($this->AppController->Security);
-        $this->assertEquals('_blackHoleCallback', $this->AppController->Security->getConfig('blackHoleCallback'));
-        $this->assertTrue($this->AppController->Security->getConfig('validatePost'));
-        $this->assertFalse($this->AppController->Security->getConfig('requireSecure'));
-        $this->assertEquals(['x', 'y', 'MAX_FILE_SIZE'], $this->AppController->Security->getConfig('unlockedFields'));
+        $this->assertNotEmpty($this->AppController->FormProtection);
+        $this->assertTrue($this->AppController->FormProtection->getConfig('validate'));
+        $this->assertEquals(['x', 'y', 'MAX_FILE_SIZE'], $this->AppController->FormProtection->getConfig('unlockedFields'));
+        $callback = $this->AppController->FormProtection->getConfig('validationFailureCallback');
+        $this->expectException("Cake\Http\Exception\BadRequestException");
+        $this->expectExceptionMessage("不正なリクエストと判断されました。<br>もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。<br>不正なリクエストです。");
+        $callback(new BadRequestException('不正なリクエストです。'));
     }
 
     /**
@@ -165,20 +168,6 @@ class AppControllerTest extends BcTestCase
         $this->AppController->setRequest($request);
         $this->AppController->setupFrontView();
         $this->assertEquals('test', $this->AppController->viewBuilder()->getTheme());
-    }
-
-    /**
-     * test blackHoleCallback
-     */
-    public function test_blackHoleCallback()
-    {
-        $this->enableCsrfToken();
-        $logPath = ROOT . 'logs' . DS . 'cli-error.log';
-        @unlink($logPath);
-        $this->post('/', [
-            'name' => 'Test_test_Man'
-        ]);
-        $this->assertResponseRegExp('/不正なリクエストと判断されました。/');
     }
 
     /**
