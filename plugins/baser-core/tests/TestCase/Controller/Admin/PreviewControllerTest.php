@@ -61,7 +61,7 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertEquals(['view'], $this->PreviewController->Security->getConfig('unlockedActions'));
+        $this->assertEquals(['view'], $this->PreviewController->FormProtection->getConfig('unlockedActions'));
     }
 
     /**

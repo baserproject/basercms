@@ -31,7 +31,7 @@ class MailMessagesController extends BcApiController
 
     public function beforeFilter(EventInterface $event)
     {
-        $this->Security->setConfig('validatePost', false);
+        $this->FormProtection->setConfig('validate', false);
         return parent::beforeFilter($event);
     }
 

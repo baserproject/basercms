@@ -41,7 +41,7 @@ class PreviewController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Security->setConfig('unlockedActions', ['view']);
+        $this->FormProtection->setConfig('unlockedActions', ['view']);
     }
 
     /**
@@ -117,9 +117,9 @@ class PreviewController extends BcAdminAppController
         // FormProtectionComponent では、_Tokenを送っても「_Token was not found in request data.」
         // となり、理由がわからず断念。SecurityComponent を利用する。
         //
-        // SecurityComponent は、SecurityComponent::_validatePost() で引っかかってしまうため、
+        // FormProtectionComponent は、FormProtectionComponent::_validatePost() で引っかかってしまうため、
         // initialize でアンロックしている。
-        // $this->Security->setConfig('unlockedActions', ['view']);
+        // $this->FormProtection->setConfig('unlockedActions', ['view']);
         //
         // そのため、自動で formTokenData が生成されないため、明示的にここで生成する。
         //========================================================================

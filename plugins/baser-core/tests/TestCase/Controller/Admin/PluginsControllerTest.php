@@ -105,7 +105,7 @@ class PluginsControllerTest extends BcTestCase
         Configure::write('BcRequest.isUpdater', true);
         $event = new Event('Controller.beforeFilter', $this->PluginsController);
         $this->PluginsController->beforeFilter($event);
-        $this->assertEquals($this->PluginsController->Security->getConfig('unlockedActions'), ['reset_db', 'update_sort', 'batch']);
+        $this->assertEquals($this->PluginsController->FormProtection->getConfig('unlockedActions'), ['reset_db', 'update_sort', 'batch']);
         $this->assertEquals(['update'], $this->PluginsController->Authentication->getUnauthenticatedActions());
     }
 

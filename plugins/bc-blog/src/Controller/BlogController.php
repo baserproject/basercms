@@ -87,7 +87,7 @@ class BlogController extends BlogFrontAppController
 
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
-        $this->Security->setConfig('validatePost', false);
+        $this->FormProtection->setConfig('validate', false);
     }
 
     /**
