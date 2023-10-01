@@ -19,6 +19,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -252,7 +253,7 @@ class BlogHelper extends Helper
      */
     public function description()
     {
-        echo $this->getDescription();
+        echo BcText::stripScriptTag($this->getDescription());
     }
 
     /**

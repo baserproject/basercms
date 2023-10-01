@@ -12,8 +12,9 @@
 namespace BcMail\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
-use BcMail\Service\MailContentsService;
+use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailContentsServiceInterface;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -44,6 +45,12 @@ class MailHelper extends Helper
     public $helpers = ['BcBaser'];
 
     /**
+     * 現在のメールコンテンツ
+     * @var MailContent
+     */
+    public $currentMailContent;
+
+    /**
      * コンストラクタ
      *
      * @param View $View Viewオブジェクト
@@ -63,15 +70,15 @@ class MailHelper extends Helper
      */
     public function setMailContent($mailContentId = null)
     {
-        if (isset($this->mailContent)) {
+        if (isset($this->currentMailContent)) {
             return;
         }
         if ($mailContentId) {
             $MailContent = ClassRegistry::init('BcMail.MailContent');
             $MailContent->reduceAssociations([]);
-            $this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
+            $this->currentMailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
         } elseif ($this->_View->get('mailContent')) {
-            $this->mailContent = $this->_View->get('mailContent');
+            $this->currentMailContent = $this->_View->get('mailContent');
         }
     }
 
@@ -149,7 +156,7 @@ class MailHelper extends Helper
      */
     public function getDescription()
     {
-        return $this->mailContent['description'];
+        return $this->currentMailContent->description;
     }
 
     /**
@@ -159,7 +166,7 @@ class MailHelper extends Helper
      */
     public function description()
     {
-        echo $this->getDescription();
+        echo BcText::stripScriptTag($this->getDescription());
     }
 
     /**
@@ -169,10 +176,9 @@ class MailHelper extends Helper
      */
     public function descriptionExists()
     {
-        if (empty($this->mailContent['description'])) {
+        if (empty($this->currentMailContent->description)) {
             return false;
         }
-
         return true;
     }
 
