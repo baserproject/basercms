@@ -11,14 +11,14 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class BcFileTest
  */
-class BcFileTest extends TestCase
+class BcFileTest extends BcTestCase
 {
 
     /**
@@ -43,4 +43,29 @@ class BcFileTest extends TestCase
         $this->assertTrue(is_file($path));
         (new BcFolder(dirname($path)))->delete();
 	}
+
+    /**
+     * test CheckParentFolder
+     * @return void
+     */
+    public function testCheckParentFolder()
+    {
+        $path = TMP_TESTS . 'test' . DS . 'test.txt';
+        $this->assertTrue($this->execPrivateMethod(new BcFile($path), 'checkParentFolder'));
+        $this->assertTrue(is_dir(dirname($path)));
+        (new BcFolder(dirname($path)))->delete();
+    }
+
+    /**
+     * test WriteAndRead
+     * @return void
+     */
+	public function testWriteAndRead()
+    {
+        $path = TMP_TESTS . 'test' . DS . 'test.txt';
+        $file = new BcFile($path);
+        $this->assertTrue($file->write('test'));
+        $this->assertEquals('test', $file->read());
+        (new BcFolder(dirname($path)))->delete();
+    }
 }

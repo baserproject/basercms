@@ -11,6 +11,10 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 class BcFile
 {
 
@@ -53,17 +57,48 @@ class BcFile
      */
     public function create()
     {
-        $path = $this->path;
-        $parent = dirname($path);
+        if (!$this->checkParentFolder()) return false;
+        if (!is_file($this->path)) return touch($this->path);
+        return true;
+    }
+
+    /**
+     * 親フォルダが存在するかチェックし、存在しない場合は作成する
+     * @return bool
+     */
+    private function checkParentFolder()
+    {
+        $parent = dirname($this->path);
         if (!is_dir($parent)) {
             $folder = new BcFolder($parent);
             if(!$folder->create()) {
                 return false;
             }
         }
-        if (!is_file($this->path)) {
-            return touch($this->path);
-        }
         return true;
     }
+
+    /**
+     * ファイルを読み込む
+     * @return false|string
+     */
+    public function read()
+    {
+        if(!is_file($this->path)) {
+            return false;
+        }
+        return file_get_contents($this->path);
+    }
+
+    /**
+     * ファイルを書き込む
+     * @param $data
+     * @return bool
+     */
+    public function write($data)
+    {
+        if (!$this->checkParentFolder()) return false;
+        return (bool) file_put_contents($this->path, $data);
+    }
+
 }
