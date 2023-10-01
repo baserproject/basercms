@@ -96,6 +96,7 @@ class BlogControllerTest extends BcTestCase
             'description' => 'description test 1'])->persist();
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post'])->persist();
         ContentFactory::make(['plugin' => 'BcBlog',
+        	'entity_id' => 1,
             'status' => true,
             'lft' => 1,
             'rght' => 2,

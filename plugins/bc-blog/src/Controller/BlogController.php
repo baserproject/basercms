@@ -106,8 +106,8 @@ class BlogController extends BlogFrontAppController
         BlogContentsServiceInterface $blogContentsService,
         BlogPostsServiceInterface $blogPostsService)
     {
-
-        $blogContentId = (int)$this->getRequest()->getAttribute('currentContent')->entity_id;
+		$currentContent = $this->getRequest()->getAttribute('currentContent');
+        $blogContentId = (int) $currentContent?->entity_id;
 
         /* @var BlogContent $blogContent */
         $blogContent = $blogContentsService->get(
