@@ -19,6 +19,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -121,6 +122,7 @@ class BlogHelper extends Helper
     public function setContent($blogContentId = null)
     {
         $blogContentUpdated = false;
+        $content = false;
         if (empty($this->currentBlogContent) || ($blogContentId != $this->currentBlogContent->id)) {
             if ($blogContentId) {
                 if ($this->_View->getRequest()->getQuery('preview') == 'default' && $this->_View->getRequest()->getData()) {
@@ -252,7 +254,7 @@ class BlogHelper extends Helper
      */
     public function description()
     {
-        echo $this->getDescription();
+        echo BcText::stripScriptTag($this->getDescription());
     }
 
     /**

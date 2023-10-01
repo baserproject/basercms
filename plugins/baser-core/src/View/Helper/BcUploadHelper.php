@@ -328,7 +328,7 @@ class BcUploadHelper  extends Helper
         $fileUrl = $this->getBasePath($settings);;
         $fileUrlInTheme = $this->getBasePath($settings, true);
         $saveDir = $this->table->getSaveDir(false, $options['limited']);
-        $saveDirInTheme = $this->table->getSaveDir(true, $options['limited']);
+        $saveDirInTheme = $this->table->getSaveDir(true, $options['limited']) ?? '';
 
         $settingField = $fieldName;
         if(strpos($fieldName, '.') !== false) {
