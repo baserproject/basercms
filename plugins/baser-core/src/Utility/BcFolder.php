@@ -21,22 +21,67 @@ class BcFolder
      * パス
      * @var string
      */
-    private $path;
+    private string $path;
 
     /**
      * Constructor
      * @param string $path
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function __construct($path)
+    public function __construct(string $path)
     {
         $this->path = $path;
     }
 
     /**
+     * パスを取得する
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * ディレクトリを作成する
+     * @param int $path
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function create(int $mask = 0777)
+    {
+        $path = $this->path;
+        $parent = dirname($path);
+        if (!is_dir($parent)) {
+            $this->path = $parent;
+            if($this->create($mask)) {
+                $this->path = $path;
+            } else {
+                $this->path = $path;
+                return false;
+            }
+        }
+        if (!is_dir($this->path)) {
+            return mkdir($this->path, $mask, true);
+        }
+        return true;
+    }
+
+    /**
      * ディレクトリ内のファイル一覧を取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getFiles($options = [])
+    public function getFiles(array $options = [])
     {
         if (!is_dir($this->path)) return [];
         $options = array_merge([
@@ -58,8 +103,11 @@ class BcFolder
     /**
      * ディレクトリ内のフォルダ一覧を取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getFolders($options = [])
+    public function getFolders(array $options = [])
     {
         if (!is_dir($this->path)) return [];
         $options = array_merge([
@@ -81,6 +129,9 @@ class BcFolder
 
     /**
      * ディレクトリを再帰的に削除する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete()
     {
