@@ -39,6 +39,7 @@ class BcThemeConfigServiceProvider extends ServiceProvider
      * @param \Cake\Core\ContainerInterface $container
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function services($container): void
     {
