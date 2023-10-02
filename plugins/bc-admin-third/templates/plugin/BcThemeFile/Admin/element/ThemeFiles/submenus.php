@@ -15,6 +15,7 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var bool $isDefaultTheme
  * @var string $theme
+ * @var string $plugin
  */
 $types = [
   'layout' => __d('baser_core', 'レイアウト'),
@@ -38,17 +39,25 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
 
 
 <div class="bca-main__submenu" id="ThemeFilesMenu">
-  <?php foreach($plugins as $plugin): ?>
-    <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($theme, $plugin['name'], '', 'front') &&
-              !\BaserCore\Utility\BcUtil::getExistsWebrootDir($theme, $plugin['name'], '', 'front')) continue; ?>
-    <h2 class="bca-main__submenu-title">
-      <?php echo $plugin['title'] ?>
+  <?php foreach($plugins as $k => $pluginVal): ?>
+    <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($theme, $pluginVal['name'], '', 'front') &&
+              !\BaserCore\Utility\BcUtil::getExistsWebrootDir($theme, $pluginVal['name'], '', 'front')) continue; ?>
+
+           <?php
+            if($pluginVal['name'] == $plugin) {
+              $activeClass = 'selected-plugin';
+            }else {
+              $activeClass = '';
+            }
+           ?>
+    <h2 class="bca-main__submenu-title <?php echo $activeClass ?>" data-id="<?php echo ($k -1) ?>">
+      <?php echo $pluginVal['title'] ?>
     </h2>
     <ul class="bca-main__submenu-list clearfix">
       <?php foreach($types as $key => $type): ?>
         <li class="bca-main__submenu-list-item">
-          <?php if ($theme !== $plugin['name']): ?>
-            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $plugin['name'], $key]) ?>
+          <?php if ($theme !== $pluginVal['name']): ?>
+            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $pluginVal['name'], $key]) ?>
           <?php else: ?>
             <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $key]) ?>
           <?php endif ?>
