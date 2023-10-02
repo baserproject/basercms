@@ -37,6 +37,7 @@ class ThemeFoldersController extends BcAdminApiController
      * @param ThemeFoldersService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(ThemeFoldersServiceInterface $service)
     {
