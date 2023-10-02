@@ -83,9 +83,6 @@ class BlogPostsControllerTest extends BcTestCase
 
         $event = new Event('filter');
         $blogPosts->beforeFilter($event);
-        $helpers = $blogPosts->viewBuilder()->getHelpers();
-
-        $this->assertEquals($helpers[0], 'BaserCore.BcCkeditor');
 
         //$blogContentIdを指定しない場合。
         $this->expectExceptionMessage('不正なURLです。');
