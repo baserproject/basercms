@@ -50,6 +50,10 @@ class ThemeFilesController extends BcAdminAppController
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct(
         ?ServerRequest $request = null,
