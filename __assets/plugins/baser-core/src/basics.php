@@ -184,7 +184,7 @@ function clearViewCache($url = null, $ext = '.php')
     } else {
         $folder = new BcFolder(CACHE . 'views' . DS);
         $files = $folder->getFiles();
-        foreach ($files[1] as $file) {
+        foreach ($files as $file) {
             if ($file != 'empty') {
                 @unlink(CACHE . 'views' . DS . $file);
             }
