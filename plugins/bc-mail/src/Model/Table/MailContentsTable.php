@@ -286,7 +286,7 @@ class MailContentsTable extends MailAppTable
         $data->content = new Content([
             'name' => $name,
             'parent_id' => $newParentId,
-            'title' => $newTitle,
+            'title' => $newTitle ?? $oldData->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'exclude_search' => false,
