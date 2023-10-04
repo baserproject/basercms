@@ -13,8 +13,8 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcComposer;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 
 /**
  * BcComposer Test
@@ -72,18 +72,17 @@ class BcComposerTest extends BcTestCase
         copy($orgLockPath, $backupLockPath);
 
         // replace を削除
-        $file = new File($orgPath);
+        $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
         $data = preg_replace($regex, '' , $data);
         $file->write($data);
-        $file->close();
 
         // インストール
         BcComposer::setup();
         $result = BcComposer::require('baser-core', '5.0.0');
         $this->assertEquals(0, $result['code']);
-        $file = new File($orgPath);
+        $file = new BcFile($orgPath);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
 
@@ -91,7 +90,7 @@ class BcComposerTest extends BcTestCase
         BcComposer::setup();
         $result = BcComposer::require('baser-core', '5.0.1');
         $this->assertEquals(0, $result['code']);
-        $file = new File($orgPath);
+        $file = new BcFile($orgPath);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.1"'));
 
@@ -99,7 +98,7 @@ class BcComposerTest extends BcTestCase
         BcComposer::setup();
         $result = BcComposer::require('baser-core', '5.0.0');
         $this->assertEquals(0, $result['code']);
-        $file = new File($orgPath);
+        $file = new BcFile($orgPath);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
 
@@ -110,8 +109,8 @@ class BcComposerTest extends BcTestCase
         // バックアップ復元
         rename($backupPath, $orgPath);
         rename($backupLockPath, $orgLockPath);
-        $folder = new Folder();
-        $folder->delete(ROOT . DS . 'vendor' . DS . 'baserproject');
+        $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
+        $folder->delete();
     }
 
 }
