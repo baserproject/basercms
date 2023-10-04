@@ -11,11 +11,11 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Utility\BcFile;
 use ReflectionClass;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Filesystem\File;
 use Cake\Event\EventManager;
 use Cake\View\Helper\UrlHelper;
 use Cake\View\Helper\HtmlHelper;
@@ -222,13 +222,13 @@ class BcBaserHelperTest extends BcTestCase
 
         // 管理画面用のテンプレートがなくフロントのテンプレートがある場合
         $templateDir = ROOT . DS . 'plugins' . DS . 'bc-admin-third' . DS . 'templates'. DS;
-        $fileFront = new File($templateDir . 'element' . DS . 'test.php');
+        $fileFront = new BcFile($templateDir . 'element' . DS . 'test.php');
         $fileFront->create();
         $fileFront->write('front');
         $this->assertTextContains('front', $this->BcBaser->getElement('test'));
 
         // 管理画面用のテンプレートとフロントのテンプレートの両方がある場合
-        $fileAdmin = new File($templateDir . 'Admin' . DS . 'element' . DS . 'test.php');
+        $fileAdmin = new BcFile($templateDir . 'Admin' . DS . 'element' . DS . 'test.php');
         $fileAdmin->create();
         $fileAdmin->write('admin');
         $this->assertTextContains('admin', $this->BcBaser->getElement('test'));
@@ -1813,7 +1813,7 @@ class BcBaserHelperTest extends BcTestCase
             $path2 = ROOT . '/lib/Baser/Plugin/Test/View';
             mkdir($path2);
             $path3 = ROOT . '/lib/Baser/Plugin/Test/View/test.php';
-            $plugin = new File($path3);
+            $plugin = new BcFile($path3);
             $plugin->write('test');
             $plugin->close();
         }
