@@ -261,7 +261,8 @@ class BcDatabaseServiceTest extends BcTestCase
         // csvフォルダーを作成する
         $csvFolder = TMP . 'csv' . DS;
         if (!is_dir($csvFolder)) {
-            new BcFolder($csvFolder);
+            $csv = new BcFolder($csvFolder);
+            $csv->create();
         }
         // csvファイルを作成する
         $table = 'pages';
@@ -423,7 +424,8 @@ class BcDatabaseServiceTest extends BcTestCase
             $path = BcUtil::getDefaultDataPath($theme, $pattern);
             $this->assertNotNull($path);
             $Folder = new BcFolder($path . DS . $plugin);
-            $files = $Folder->getFiles(['sort' => true]);
+            $Folder->create();
+            $files = $Folder->getFiles();
             $csvList = $files;
             foreach ($csvList as $path) {
                 $table = basename($path, '.csv');
