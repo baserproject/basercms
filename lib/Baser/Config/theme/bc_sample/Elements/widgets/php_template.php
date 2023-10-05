@@ -26,7 +26,7 @@ if(!isset($subDir)) {
 ?>
 
 
-<div class="bs-widget bs-widget-php-template bs-widget-php-template-<?php echo $id ?>">
+<div class="bs-widget bs-widget-php-template bs-widget-php-template-<?php echo h($id) ?>">
 	<?php if ($name && $use_title): ?>
 		<h2 class="bs-widget-list"><?php echo $name ?></h2>
 	<?php endif ?>

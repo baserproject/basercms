@@ -49,7 +49,7 @@ $this->Blog = new BlogHelper($this);
 ?>
 
 
-<div class="bs-widget bs-widget-blog-categories-archives bs-widget-blog-categories-archives-<?php echo $id ?> bs-blog-widget">
+<div class="bs-widget bs-widget-blog-categories-archives bs-widget-blog-categories-archives-<?php echo h($id) ?> bs-blog-widget">
 	<?php if ($name && $use_title): ?>
 		<h2 class="bs-widget-head"><?php echo $name ?></h2>
 	<?php endif ?>
