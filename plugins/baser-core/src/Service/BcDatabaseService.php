@@ -371,7 +371,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $Folder = new BcFolder($path . DS . $plugin);
         $Folder->create();
-        $files = $Folder->getFiles();
+        $files = $Folder->getFiles(['full'=>true]);
         $targetTables = $files;
         $tableList = $this->getAppTableList($plugin);
         $result = true;
