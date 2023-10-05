@@ -12,10 +12,10 @@
 namespace BaserCore\Test\TestCase\View;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\View\BcAdminAppView;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use ReflectionClass;
 
@@ -91,9 +91,9 @@ class BcAdminAppViewTest extends BcTestCase
         $this->BcAdminAppView->setRequest($this->getRequest('/baser/admin/baser-core/users/index'));
         $pluginDir = ROOT . DS . 'plugins' . DS . $pluginName . DS;
         $templateDir = $pluginDir . 'templates' . DS . 'Admin' . DS . 'element' . DS;
-        $folder = new Folder();
-        $folder->create($templateDir);
-        $file = new File($templateDir . 'sidebar.php');
+        $folder = new BcFolder($templateDir);
+        $folder->create();
+        $file = new BcFile($templateDir . 'sidebar.php');
         $file->create();
         $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
         $plugins->save(new \BaserCore\Model\Entity\Plugin([
