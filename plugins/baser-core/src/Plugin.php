@@ -279,10 +279,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
+            ->prepend(new BcRequestFilterMiddleware())
             ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
-            ->add(new BcRequestFilterMiddleware())
             ->add(new BcRedirectSubSiteFilter());
 
         // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
