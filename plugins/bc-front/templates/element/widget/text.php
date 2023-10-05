@@ -23,7 +23,7 @@
 ?>
 
 
-<div class="bs-widget bs-widget-text bs-widget-text-<?php echo $id ?>">
+<div class="bs-widget bs-widget-text bs-widget-text-<?php echo h($id) ?>">
 	<?php if ($name && $use_title): ?>
 		<h2 class="bs-widget-head"><?php echo $name ?></h2>
 	<?php endif ?>

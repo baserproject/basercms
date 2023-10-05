@@ -25,6 +25,6 @@ if ($this->getRequest()->is('maintenance') || empty($no)) return;
 ?>
 
 
-<div class="bs-widget-area bs-widget-area-<?php echo $no ?>">
+<div class="bs-widget-area bs-widget-area-<?php echo h($no) ?>">
 	<?php $this->BcWidgetArea->show($no) ?>
 </div>
