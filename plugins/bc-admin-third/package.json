@@ -26,7 +26,7 @@
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.0.0",
     "normalize.css": "^8.0.1",
-    "postcss": ">=8.2.13",
+    "postcss": ">=8.4.31",
     "postcss-import": "^14.1.0",
     "process": "^0.11.10",
     "sass": "^1.49.11",
