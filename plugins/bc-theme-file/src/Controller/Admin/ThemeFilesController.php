@@ -109,6 +109,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {

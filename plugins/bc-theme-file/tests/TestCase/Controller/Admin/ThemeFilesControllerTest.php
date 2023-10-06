@@ -14,6 +14,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeFile\Controller\Admin\ThemeFilesController;
+use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -74,7 +75,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_beforeRender()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テーマがデフォルトテーマの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcFront');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $this->ThemeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals(
+            'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
+
+        //テーマがデフォルトテーマではないの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $this->ThemeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEmpty($_SESSION);
     }
 
     /**
