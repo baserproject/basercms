@@ -1815,7 +1815,6 @@ class BcBaserHelperTest extends BcTestCase
             $path3 = ROOT . '/lib/Baser/Plugin/Test/View/test.php';
             $plugin = new BcFile($path3);
             $plugin->write('test');
-            $plugin->close();
         }
 
         $this->expectOutputRegex('/' . $expected . '/', $message);
