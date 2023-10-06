@@ -350,16 +350,16 @@ class MailMessage extends MailAppModel
 				continue;
 			}
 			if (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-				if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
-					preg_match_all('/[^ァ-ヾ 　]/u', $this->data['MailMessage'][$mailField['field_name']], $notKatakanaArray);
+				if (!preg_match('/^(|[ァ-ヾ 　ー]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ァ-ヾ 　ー]/u', $this->data['MailMessage'][$mailField['field_name']], $notKatakanaArray);
 					$notKatakana = implode('', $notKatakanaArray[0]);
 					$this->invalidate($mailField['field_name'], __('次の文字はカタカナではないので受け付けられません: ' . $notKatakana));
 				}
 				continue;
 			}
 			if (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
-				if (!preg_match('/^(|[ぁ-ゞ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
-					preg_match_all('/[^ぁ-ゞ　]/u', $this->data['MailMessage'][$mailField['field_name']], $notHiraganaArray);
+				if (!preg_match('/^(|[ぁ-ゞ 　ー]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ぁ-ゞ　ー]/u', $this->data['MailMessage'][$mailField['field_name']], $notHiraganaArray);
 					$notHiragana = implode('', $notHiraganaArray[0]);
 					$this->invalidate($mailField['field_name'], __('次の文字はひらがなではないので受け付けられません: ' . $notHiragana));
 				}
