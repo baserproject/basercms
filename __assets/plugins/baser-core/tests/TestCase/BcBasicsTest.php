@@ -251,17 +251,11 @@ class BcBasicsTest extends BcTestCase
         // キャッシュ削除
         BcUtil::clearAllCache();
 
-        $this->assertFalse($coreCache->exists());
-        $this->assertFalse($modelCache->exists());
-        $this->assertFalse($envCache->exists());
-        $this->assertFalse($viewCache->exists());
-        $this->assertFalse($dataCache->exists());
-
-        $coreCache->close();
-        $modelCache->close();
-        $envCache->close();
-        $viewCache->close();
-        $dataCache->close();
+        $this->assertFalse(is_file($coreCache->getPath()));
+        $this->assertFalse(is_file($modelCache->getPath()));
+        $this->assertFalse(is_file($envCache->getPath()));
+        $this->assertFalse(is_file($viewCache->getPath()));
+        $this->assertFalse(is_file($dataCache->getPath()));
     }
 
     /**
