@@ -119,7 +119,7 @@ class PluginTest extends BcTestCase
         copy('config/.env','config/.env.bak');
 
         $file = new File('config/.env');
-        $file->write('export APP_NAME="ucmitz"
+        $file->write('export APP_NAME="baserCMS"
 export DEBUG="true"
 export APP_ENCODING="UTF-8"
 export APP_DEFAULT_LOCALE="en_US"
