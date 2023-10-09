@@ -44,6 +44,8 @@ class BcGoogleMapsHelper extends Helper
      * @param int $width
      * @param int $height
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function load($options)
     {
@@ -87,6 +89,8 @@ class BcGoogleMapsHelper extends Helper
      * @param string $title
      * @param string $address
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public function getMarker(string $title, string $address)
     {
@@ -102,6 +106,8 @@ class BcGoogleMapsHelper extends Helper
      * @param string $address
      * @param string $apiKey
      * @return array|null
+     * @checked
+     * @noTodo
      */
     public function getLocation(string $address, ?string $apiKey)
     {
