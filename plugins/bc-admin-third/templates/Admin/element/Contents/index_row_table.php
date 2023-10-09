@@ -215,12 +215,12 @@ if ($content->self_status) {
         ]) ?>
     <?php endif ?>
 
+    <!-- コピーのみ使うフォーム -->
     <form>
       <input type="hidden" name="id" value="<?= $content->id ?>">
       <input type="hidden" name="type" value="<?= $content->type ?>">
       <input type="hidden" name="entity_id" value="<?= $content->entity_id ?>">
       <input type="hidden" name="parent_id" value="<?= $content->parent_id ?>">
-      <input type="hidden" name="title" value="<?= h($content->title) ?>">
       <input type="hidden" name="site_id" value="<?= $content->site_id ?>">
       <input type="hidden" name="status" value="<?= $toStatus ?>">
       <input type="hidden" name="alias_id" value="<?= (bool)$content->alias_id ?>">
