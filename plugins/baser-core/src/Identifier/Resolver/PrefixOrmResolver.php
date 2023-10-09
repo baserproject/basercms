@@ -14,6 +14,9 @@ namespace BaserCore\Identifier\Resolver;
 use Authentication\Identifier\Resolver\OrmResolver;
 use Authentication\Identifier\Resolver\ResolverInterface;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * PrefixOrmResolver
