@@ -38,7 +38,7 @@ class BcAuthHelper extends Helper
      * Helper
      * @var array
      */
-    public $helpers = ['BcBaser'];
+    public $helpers = ['BaserCore.BcBaser'];
 
     /**
      * 現在認証プレフィックスを取得する
@@ -163,13 +163,11 @@ class BcAuthHelper extends Helper
     {
         $currentPrefixSetting = $this->getCurrentPrefixSetting();
         if (!empty($currentPrefixSetting['name']) && $this->getCurrentPrefix() !== 'Front') {
-            $name = $currentPrefixSetting['name'];
-        } elseif (isset($this->BcBaser->siteConfig['formal_name'])) {
-            $name = $this->BcBaser->siteConfig['formal_name'];
+            return $currentPrefixSetting['name'];
         } else {
-            $name = '';
+            $siteName = $this->BcBaser->getSiteName();
+            return $siteName ? $siteName : '';
         }
-        return $name;
     }
 
     /**
