@@ -39,7 +39,6 @@ use Cake\Core\ContainerInterface;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
-use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
@@ -67,13 +66,13 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     /**
      * bootstrap
      *
-     * @param PluginApplicationInterface $application
+     * @param PluginApplicationInterface $app
      *
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function bootstrap(PluginApplicationInterface $application): void
+    public function bootstrap(PluginApplicationInterface $app): void
     {
         /**
          * composer インストール対応
@@ -116,14 +115,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if (BcUtil::isInstalled()) {
             BcUtil::checkTmpFolders();
         } else {
-            $application->addPlugin('BcInstaller');
+            $app->addPlugin('BcInstaller');
             Configure::load('BcInstaller.setting');
         }
 
         /**
          * プラグインごとの設定ファイル読み込み
          */
-        parent::bootstrap($application);
+        parent::bootstrap($app);
 
         /**
          * 文字コードの検出順を指定
@@ -150,11 +149,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         /**
          * プラグインロード
          */
-        if (BcUtil::isTest()) $application->addPlugin('CakephpFixtureFactories');
-        $application->addPlugin('Authentication');
-        $application->addPlugin('Migrations');
+        if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
+        $app->addPlugin('Authentication');
+        $app->addPlugin('Migrations');
 
-        $this->addTheme($application);
+        $this->addTheme($app);
 
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
@@ -164,7 +163,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if ($plugins) {
             foreach($plugins as $plugin) {
                 if (BcUtil::includePluginClass($plugin->name)) {
-                    $this->loadPlugin($application, $plugin->name, $plugin->priority);
+                    $this->loadPlugin($app, $plugin->name, $plugin->priority);
                 }
             }
         }
@@ -386,6 +385,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      *
      * @param array $authSetting
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isRequiredAuthentication(array $authSetting)
     {
@@ -401,6 +402,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param AuthenticationService $service
      * @param array $authSetting
      * @return AuthenticationService
+     * @checked
+     * @noTodo
      */
     public function setupSessionAuth(AuthenticationService $service, array $authSetting)
     {
@@ -438,6 +441,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param AuthenticationService $service
      * @param array $authSetting
      * @return AuthenticationService
+     * @checked
+     * @noTodo
      */
     public function setupJwtAuth(AuthenticationService $service, array $authSetting, string $prefix)
     {
@@ -608,6 +613,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      *
      * @param CommandCollection $commands
      * @return CommandCollection
+     * @checked
+     * @checked
      */
     public function console(CommandCollection $commands): CommandCollection
     {

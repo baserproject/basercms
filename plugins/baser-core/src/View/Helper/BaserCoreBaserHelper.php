@@ -12,6 +12,9 @@
 namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * BaserCoreBaserHelper
@@ -35,6 +38,12 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
         'Text'
     ];
 
+    /**
+     * BcBaserHelper のメソッドと、外部ヘルパーの関連付けを返却する
+     * @return array[]
+     * @checked
+     * @noTodo
+     */
     public function methods(): array
     {
         return [

@@ -437,6 +437,8 @@ class BcUtil
      * 現在のDB接続の設定を取得する
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     public static function getCurrentDbConfig()
     {
@@ -447,6 +449,8 @@ class BcUtil
      * 現在のDB接続を取得する
      *
      * @return \Cake\Database\Connection
+     * @checked
+     * @noTodo
      */
     public static function getCurrentDb()
     {
@@ -687,6 +691,9 @@ class BcUtil
      *
      * @param mixed $value 対象文字列
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function unserialize($value)
     {
@@ -742,6 +749,8 @@ class BcUtil
      * ユニットテストかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public static function isTest()
     {
@@ -1226,6 +1235,8 @@ class BcUtil
      * 現在の管理画面のテーマ名を取得する
      * キャメルケースが前提
      * @return mixed|string
+     * @checked
+     * @noTodo
      */
     public static function getCurrentAdminTheme()
     {
@@ -1242,6 +1253,8 @@ class BcUtil
      * @param string $str
      * @param string $suffix
      * @return string
+     * @checked
+     * @noTodo
      */
     public static function mbBasename($str, $suffix = null)
     {
@@ -1308,7 +1321,10 @@ class BcUtil
      *
      * index.phpは含まない
      *
-     * @return    string
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function siteUrl()
     {
@@ -1330,6 +1346,9 @@ class BcUtil
      * ※ プログラムフォルダ内の画像やCSSの読み込み時もbootstrap.php で呼び出されるのでサーバーキャッシュは利用しない
      *
      * @return string ベースURL
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function baseUrl()
     {
@@ -1363,7 +1382,10 @@ class BcUtil
      * サブドメインの場合など、$_SERVER['DOCUMENT_ROOT'] が正常に取得できない場合に利用する
      * UserDir に対応
      *
-     * @return string   ドキュメントルートの絶対パス
+     * @return string ドキュメントルートの絶対パス
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function docRoot()
     {
@@ -1392,6 +1414,9 @@ class BcUtil
      * 実行環境のOSがWindowsであるかどうかを返す
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isWindows()
     {
@@ -1498,11 +1523,11 @@ class BcUtil
     /**
      * ファイルポインタから行を取得し、CSVフィールドを処理する
      *
-     * @param stream    handle
-     * @param int        length
-     * @param string    delimiter
-     * @param string    enclosure
-     * @return    mixed    ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
+     * @param resource $handle
+     * @param int $length
+     * @param string $d delimiter
+     * @param string $e enclosure
+     * @return mixed ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
      * @checked
      * @noTodo
      * @unitTest
@@ -1655,6 +1680,9 @@ class BcUtil
     /**
      * 必要な一時フォルダが存在するかチェックし、
      * なければ生成する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function checkTmpFolders()
     {
@@ -1693,7 +1721,10 @@ class BcUtil
      * httpからのフルURLを取得する
      *
      * @param mixed $url
-     * @return    string
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function fullUrl($url)
     {
@@ -1780,6 +1811,8 @@ class BcUtil
      * @param string $path
      * @param string $type
      * @return false|string
+     * @checked
+     * @noTodo
      */
     public static function getExistsWebrootDir(string $theme, string $plugin, string $path, string $type = '')
     {
@@ -1835,6 +1868,8 @@ class BcUtil
      * `array('a'=>'b')`
      *
      * @return array Associative array
+     * @checked
+     * @noTodo
      */
     public static function pairToAssoc()
     {
@@ -1863,6 +1898,8 @@ class BcUtil
      * @param int $interval 試行の間隔（ミリ秒）
      * @return mixed
      * @throws Exception
+     * @checked
+     * @noTodo
      */
     public static function retry($times, callable $callback, $interval = 0)
     {
@@ -1944,6 +1981,8 @@ class BcUtil
      * デバッグモードかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public static function isDebug(): bool
     {
@@ -1957,8 +1996,9 @@ class BcUtil
      * @param $min
      * @param $sec
      * @return bool
+     * @checked
+     * @noTodo
      */
-
     public static function checkTime($hour, $min, $sec = null): bool
     {
         $hour = (int)$hour;
@@ -1983,6 +2023,8 @@ class BcUtil
      *
      * @param string $val 対象文字列
      * @return string
+     * @checked
+     * @noTodo
      */
     public static function base64UrlSafeDecode($val): string
     {
@@ -2001,8 +2043,10 @@ class BcUtil
      *
      * @param string $val 対象文字列
      * @return string
+     * @checked
+     * @noTodo
      */
-    public static function base64UrlsafeEncode($val): string
+    public static function base64UrlSafeEncode($val): string
     {
         $val = base64_encode($val);
         return str_replace(['+', '/', '='], ['_', '-', '.'], $val);

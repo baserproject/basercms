@@ -30,7 +30,9 @@
         "baserproject/bc-uploader": "^5.1",
         "baserproject/bc-widget-area": "^5.1",
         "imo-tikuwa/cakephp-soft-delete": "^2.0",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-zip": "*",
+        "ext-gd": "*"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",

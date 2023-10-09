@@ -67,6 +67,8 @@ class AppView extends View
      *
      * @param string $templateFile Filename of the template.
      * @return string Rendered output
+     * @checked
+     * @noTodo
      */
     public function evaluate(string $templateFile): string
     {
@@ -80,6 +82,8 @@ class AppView extends View
     /**
      * 拡張子を取得する
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getExt(): string
     {

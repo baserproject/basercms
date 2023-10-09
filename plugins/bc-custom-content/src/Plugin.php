@@ -75,11 +75,11 @@ class Plugin extends BcPlugin
     /**
      * Bootstrap
      *
-     * @param PluginApplicationInterface $application
+     * @param PluginApplicationInterface $app
      */
-    public function bootstrap(PluginApplicationInterface $application): void
+    public function bootstrap(PluginApplicationInterface $app): void
     {
-        parent::bootstrap($application);
+        parent::bootstrap($app);
         $this->loadPlugin();
     }
 
