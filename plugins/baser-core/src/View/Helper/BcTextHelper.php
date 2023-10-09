@@ -28,17 +28,18 @@ class BcTextHelper extends TextHelper
     use BcEventDispatcherTrait;
 
 // <<<
+
     /**
      * helpers
      *
      * @var array
      */
-    // CUSTOMIZE MODIFY 2014/07/03 ryuring
-    // >>>
-    //public $helpers = array('Html');
-    // ---
-    public $helpers = ['BaserCore.BcTime', 'BaserCore.BcForm', 'Html', 'BaserCore.BcAdminForm'];
-    // <<<
+// CUSTOMIZE MODIFY 2014/07/03 ryuring
+// >>>
+//protected $helpers = ['Html'];
+// ---
+    protected $helpers = ['BaserCore.BcTime', 'BaserCore.BcForm', 'Html', 'BaserCore.BcAdminForm'];
+// <<<
 
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
@@ -47,6 +48,8 @@ class BcTextHelper extends TextHelper
      *
      * @param boolean $value
      * @return string ○ または ―
+     * @checked
+     * @noTodo
      */
     public function booleanMark($value)
     {
@@ -61,6 +64,8 @@ class BcTextHelper extends TextHelper
      * boolean型用のリストを ○ ― マークで出力
      *
      * @return array マークリスト（ - ○ ）
+     * @checked
+     * @noTodo
      */
     public function booleanMarkList()
     {
@@ -71,6 +76,8 @@ class BcTextHelper extends TextHelper
      * boolean型用のリストを「有」「無」で出力
      *
      * @return array 「有」「無」リスト
+     * @checked
+     * @noTodo
      */
     public function booleanExistsList()
     {
@@ -81,6 +88,8 @@ class BcTextHelper extends TextHelper
      * boolean型用のリストを可、不可で出力
      *
      * @return array 可/不可リスト
+     * @checked
+     * @noTodo
      */
     public function booleanAllowList()
     {
@@ -92,6 +101,8 @@ class BcTextHelper extends TextHelper
      *
      * @param string $doText Do文字列
      * @return array [〜する/〜しない]形式のリスト
+     * @checked
+     * @noTodo
      */
     public function booleanDoList($doText = null)
     {
@@ -107,6 +118,8 @@ class BcTextHelper extends TextHelper
      * @param boolean $value 値
      * @param string $doText Do文字列
      * @return string
+     * @checked
+     * @noTodo
      */
     public function booleanDo($value, $doText = null)
     {
@@ -118,6 +131,8 @@ class BcTextHelper extends TextHelper
      * 都道府県のリストを出力
      *
      * @return array 都道府県リスト
+     * @checked
+     * @noTodo
      */
     public function prefList($empty = '')
     {
@@ -146,6 +161,8 @@ class BcTextHelper extends TextHelper
      *
      * @param array $value
      * @return string
+     * @checked
+     * @noTodo
      */
     public function sex($value = 1)
     {
@@ -162,7 +179,8 @@ class BcTextHelper extends TextHelper
      * @param string $value 郵便番号
      * @param string $prefix '〒'
      * @return string    〒マーク、ハイフン付きの郵便番号
-     * @access    public
+     * @checked
+     * @noTodo
      */
     public function zipFormat($value, $prefix = "〒 ")
     {
@@ -181,7 +199,8 @@ class BcTextHelper extends TextHelper
      * @param int $value 都道府県番号
      * @param string $noValue 都道府県名
      * @return string 都道府県名
-     * @access    public
+     * @checked
+     * @noTodo
      */
     public function pref($value, $noValue = '')
     {
@@ -198,6 +217,8 @@ class BcTextHelper extends TextHelper
      * @param mixed $value
      * @param mixed $noValue データが空の場合に返す値
      * @return mixed そのままのデータ/空の場合のデータ
+     * @checked
+     * @noTodo
      */
     public function noValue($value, $noValue)
     {
@@ -216,7 +237,8 @@ class BcTextHelper extends TextHelper
      *
      * @param boolean $value
      * @return    string    可/不可
-     * @access    public
+     * @checked
+     * @noTodo
      */
     public function booleanAllow($value)
     {
@@ -229,6 +251,8 @@ class BcTextHelper extends TextHelper
      *
      * @param boolean $value
      * @return string 有/無
+     * @checked
+     * @noTodo
      */
     public function booleanExists($value)
     {
@@ -242,6 +266,8 @@ class BcTextHelper extends TextHelper
      * @param int $value 通貨となる数値
      * @param string $prefix '¥'
      * @return string
+     * @checked
+     * @noTodo
      */
     public function moneyFormat($value, $prefix = '¥')
     {
@@ -265,13 +291,14 @@ class BcTextHelper extends TextHelper
      *    - `month` : 月
      *    - `day` : 日
      * @return string 日付（例）2015/8/11
+     * @checked
+     * @noTodo
      */
     public function dateTime($arrDate)
     {
         if (!isset($arrDate['year']) || !isset($arrDate['month']) || !isset($arrDate['day'])) {
-            return;
+            return '';
         }
-
         return $arrDate['year'] . "/" . $arrDate['month'] . "/" . $arrDate['day'];
     }
 
@@ -282,7 +309,8 @@ class BcTextHelper extends TextHelper
      * @param mixed $value フォーマット対象の値
      * @param mixed $noValue データがなかった場合の初期値
      * @return    string    変換後の文字列
-     * @access    public
+     * @checked
+     * @noTodo
      */
     public function format($format, $value, $noValue = '')
     {
@@ -299,6 +327,8 @@ class BcTextHelper extends TextHelper
      * @param string $field フィールド名
      * @param mixed $value 値
      * @return string 表示用データ
+     * @checked
+     * @noTodo
      */
     public function listValue($field, $value)
     {
@@ -317,6 +347,8 @@ class BcTextHelper extends TextHelper
      * @param array $array 配列
      * @param mixed type $noValue 値がない場合に返す値
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public function arrayValue($key, $array, $noValue = '')
     {
@@ -337,6 +369,8 @@ class BcTextHelper extends TextHelper
      * @param array $keys 結合対象のキーのリスト
      * @param array $array リスト
      * @return string
+     * @checked
+     * @noTodo
      */
     public function arrayValues($glue, $keys, $array)
     {
@@ -360,23 +394,24 @@ class BcTextHelper extends TextHelper
      * @param string $suffix
      * @param mixed $noValue
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public function age($birthday, $suffix = '歳', $noValue = '不明')
     {
         if (!$birthday) {
             return $noValue;
         }
-        $byear = date('Y', strtotime($birthday));
-        $bmonth = date('m', strtotime($birthday));
-        $bday = date('d', strtotime($birthday));
-        $tyear = date('Y');
-        $tmonth = date('m');
-        $tday = date('d');
+        $byear = (int) date('Y', strtotime($birthday));
+        $bmonth = (int) date('m', strtotime($birthday));
+        $bday = (int) date('d', strtotime($birthday));
+        $tyear = (int) date('Y');
+        $tmonth = (int) date('m');
+        $tday = (int) date('d');
         $age = $tyear - $byear;
-        if ($tmonth * 100 + $tday < $bmonth * 100 + $bday) {
+        if (($tmonth * 100 + $tday) < ($bmonth * 100 + $bday)) {
             $age--;
         }
-
         return $age . $suffix;
     }
 
@@ -384,6 +419,8 @@ class BcTextHelper extends TextHelper
      * boolean型用のリストを有効、無効で出力
      *
      * @return array 可/不可リスト
+     * @checked
+     * @noTodo
      */
     public function booleanStatusList()
     {
@@ -395,6 +432,8 @@ class BcTextHelper extends TextHelper
      *
      * @param boolean
      * @return string 無効/有効
+     * @checked
+     * @noTodo
      */
     public function booleanStatus($value)
     {
