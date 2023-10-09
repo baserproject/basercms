@@ -1212,38 +1212,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * サブメニューを設定する
-     * @param array $elements サブメニューエレメント名を配列で指定
-     * @param array $expects 期待するサブメニュータイトル
-     * @return void
-     * @dataProvider setSubMenusDataProvider
-     */
-    public function testSetSubMenus($elements, $expects)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->_View->subDir = 'admin';
-        $this->BcBaser->setSubMenus($elements);
-        ob_start();
-        $this->BcBaser->subMenu();
-        $result = ob_get_clean();
-        foreach($expects as $expect) {
-            $this->assertTextContains($expect, $result);
-        }
-    }
-
-    public function setSubMenusDataProvider()
-    {
-        return [
-            [['contents'], ['<th>コンテンツメニュー</th>']],
-            [['editor_templates', 'site_configs'], ['<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>']],
-            [['tools'], ['<th>ユーティリティメニュー</th>']],
-            [['plugins', 'themes'], ['<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>']],
-            [['users'], ['<th>ユーザー管理メニュー</th>']],
-            [['widget_areas'], ['<th>ウィジェットエリア管理メニュー</th>']],
-        ];
-    }
-
-    /**
      * XMLヘッダタグを出力する
      * @param string $expected 期待値
      * @param string $url URL
@@ -1252,9 +1220,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testXmlHeader($expected, $url = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->expectOutputString($expected);
         $this->BcBaser->xmlHeader();
     }
@@ -1262,8 +1228,7 @@ class BcBaserHelperTest extends BcTestCase
     public function xmlDataProvider()
     {
         return [
-            ['<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/'],
-            ['<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", '/m/']
+            ['<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/']
         ];
     }
 
@@ -1402,32 +1367,6 @@ class BcBaserHelperTest extends BcTestCase
         return [
             ["2000 - {$year}", 2000],
             [$year, 'はーい']
-        ];
-    }
-
-    /**
-     * アップデート処理が必要かチェックする
-     * @param string $baserVersion baserCMSのバージョン
-     * @param string $dbVersion データベースのバージョン
-     * @param bool $expected 結果
-     * @return void
-     * @dataProvider checkUpdateDataProvider
-     */
-    public function testCheckUpdate($baserVersion, $dbVersion, $expected)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->siteConfig['version'] = $dbVersion;
-        $this->_View->viewVars['baserVersion'] = $baserVersion;
-        $this->assertEquals($expected, $this->BcBaser->checkUpdate());
-    }
-
-    public function checkUpdateDataProvider()
-    {
-        return [
-            ['1.0.0', '1.0.0', false],
-            ['1.0.1', '1.0.0', true],
-            ['1.0.1-beta', '1.0.0', false],
-            ['1.0.1', '1.0.0-beta', false]
         ];
     }
 
@@ -1605,38 +1544,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * Flashを表示する
-     *
-     * MEMO : サンプルになるかもしれないswfファイルの場所
-     *　/lib/Cake/Test/test_app/Plugin/TestPlugin/webroot/flash/plugin_test.swf
-     *　/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf
-     * @param string $id 任意のID（divにも埋め込まれる）
-     * @param int $width 横幅
-     * @param int $height 高さ
-     * @param array $options オプション（初期値 : array()）
-     * @param string $expected 期待値
-     * @param string $message テストが失敗した場合に表示されるメッセージ
-     * @dataProvider swfDataProvider
-     */
-    public function testSwf($id, $width, $height, $options, $expected, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $path = ROOT . '/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf';
-        $this->expectOutputRegex('/' . $expected . '/s', $message);
-        $this->BcBaser->swf($path, $id, $width, $height, $options);
-    }
-
-    public function swfDataProvider()
-    {
-        return [
-            ['test', 300, 300, [], 'id="test".*theme_test.swf.*"test", "300", "300", "7"', 'Flashを正しく表示できません'],
-            ['test', 300, 300, ['version' => '6'], '"test", "300", "300", "6"', 'Flashを正しく表示できません'],
-            ['test', 300, 300, ['script' => 'hoge'], 'src="\/js\/hoge\.js"', 'Flashを正しく表示できません'],
-            ['test', 300, 300, ['noflash' => 'Flashがインストールされていません'], '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'],
-        ];
-    }
-
-    /**
      * 現在のページが固定ページかどうかを判定する
      * @param  bool $expected
      * @param  string $requestUrl
@@ -1794,50 +1701,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * コアテンプレートを読み込む
-     * @param boolean $selectPlugin ダミーのプラグインを作るかどうか
-     * @param string $name テンプレート名
-     * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
-     * @param array $options オプション（初期値 : array()）
-     * @param string $expected 期待値
-     * @param string $message テストが失敗した場合に表示するメッセージ
-     * @dataProvider includeCoreDataProvider
-     */
-    public function testIncludeCore($selectPlugin, $name, $data, $options, $expected, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // テスト用プラグインフォルダ作成
-        if ($selectPlugin) {
-            $path1 = ROOT . '/lib/Baser/Plugin/Test/';
-            mkdir($path1);
-            $path2 = ROOT . '/lib/Baser/Plugin/Test/View';
-            mkdir($path2);
-            $path3 = ROOT . '/lib/Baser/Plugin/Test/View/test.php';
-            $plugin = new File($path3);
-            $plugin->write('test');
-            $plugin->close();
-        }
-
-        $this->expectOutputRegex('/' . $expected . '/', $message);
-        $this->BcBaser->includeCore($name, $data, $options);
-
-        if ($selectPlugin) {
-            unlink($path3);
-            rmdir($path2);
-            rmdir($path1);
-        }
-    }
-
-    public function includeCoreDataProvider()
-    {
-        return [
-            [false, 'Elements/footer', [], [], '<div id="Footer">', 'コアテンプレートを読み込めません'],
-            [false, 'Elements/footer', [], [], '<div id="Footer">', 'コアテンプレートを読み込めません'],
-            [true, 'Test.test', [], [], 'test', 'コアテンプレートを読み込めません'],
-        ];
-    }
-
-    /**
      * テーマのURLを取得する
      * @return void
      */
@@ -1887,17 +1750,6 @@ class BcBaserHelperTest extends BcTestCase
             ['/basercms', '/contact/index', '/basercms/'],
             ['/basercms', '/blog/blog/index', '/basercms/']
         ];
-    }
-
-    /**
-     * サブメニューを取得する
-     * @return void
-     */
-    public function testGetSubMenu()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->setSubMenus(["default"]);
-        $this->assertMatchesRegularExpression('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s', $this->BcBaser->getSubMenu());
     }
 
     /**
