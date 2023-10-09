@@ -931,7 +931,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $path = $pluginPath . 'config' . DS . 'Migrations';
             if (!is_dir($path)) continue;
             $folder = new BcFolder($path);
-            $folder->create();
             $files = $folder->getFiles();
             if (empty($files)) continue;
             foreach($files as $file) {

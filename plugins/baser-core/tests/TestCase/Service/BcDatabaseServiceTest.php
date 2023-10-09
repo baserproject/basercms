@@ -424,7 +424,6 @@ class BcDatabaseServiceTest extends BcTestCase
             $path = BcUtil::getDefaultDataPath($theme, $pattern);
             $this->assertNotNull($path);
             $Folder = new BcFolder($path . DS . $plugin);
-            $Folder->create();
             $files = $Folder->getFiles(['full'=>true]);
             $csvList = $files;
             foreach ($csvList as $path) {
