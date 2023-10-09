@@ -13,7 +13,6 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Page;
 use BaserCore\Utility\BcUtil;
-use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
