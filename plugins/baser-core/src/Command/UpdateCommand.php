@@ -37,6 +37,8 @@ class UpdateCommand extends Command
      *
      * @param \Cake\Console\ConsoleOptionParser $parser
      * @return \Cake\Console\ConsoleOptionParser
+     * @checked
+     * @noTodo
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
@@ -53,6 +55,8 @@ class UpdateCommand extends Command
      * @param Arguments $args
      * @param ConsoleIo $io
      * @return int|void|null
+     * @checked
+     * @noTodo
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {

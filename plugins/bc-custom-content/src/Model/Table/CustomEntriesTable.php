@@ -168,6 +168,7 @@ class CustomEntriesTable extends AppTable
      * @param int $tableId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setUseTable(int $tableId)
     {
@@ -179,6 +180,9 @@ class CustomEntriesTable extends AppTable
      *
      * @param int $tableId
      * @return string
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getTableName(int $tableId, string $name = ''): string
     {

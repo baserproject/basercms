@@ -185,9 +185,4 @@ class BcPageHelperTest extends BcTestCase
         ];
     }
 
-    public function test__construct()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
 }

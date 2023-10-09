@@ -53,6 +53,8 @@ class BcFrontAppView extends AppView
      * テーマ用のヘルパーをセットする
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     protected function setThemeHelpers(): void
     {

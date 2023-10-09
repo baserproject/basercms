@@ -317,7 +317,7 @@ class MailMessagesServiceTest extends BcTestCase
         $this->assertEquals('hehe', $result->test2[0]);
 
         $mailMessage = [
-            'field1' => BcUtil::base64UrlsafeEncode('https://book.cakephp.org'),
+            'field1' => BcUtil::base64UrlSafeEncode('https://book.cakephp.org'),
         ];
         $result = $MailMessagesService->getNew(1, $mailMessage);
         $this->assertEquals('https://book.cakephp.org', $result->field1);

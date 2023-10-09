@@ -193,20 +193,12 @@ class BcContentsBehaviorTest extends BcTestCase
     {
         $entity = $this->table->get(10);
         $entity->content = $this->contentService->getTrash(16);
-        $event = $this->table->dispatchEvent('Model.afterDelete', [
+        $this->table->dispatchEvent('Model.afterDelete', [
             'entity' => $entity,
             'options' => new ArrayObject(),
         ]);
         $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->all()->isEmpty());
 
-    }
-
-    /**
-     * 公開されたコンテンツを取得する
-     */
-    public function testFindPublished()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }

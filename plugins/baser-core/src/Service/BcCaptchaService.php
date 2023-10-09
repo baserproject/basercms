@@ -13,6 +13,9 @@ namespace BaserCore\Service;
 
 use Cake\Http\ServerRequest;
 use KCAPTCHA;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcCaptchaService
@@ -24,6 +27,8 @@ class BcCaptchaService implements BcCaptchaServiceInterface
      * キャプチャ画象を表示する
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function render(ServerRequest $request, string $token): void
     {
@@ -38,6 +43,8 @@ class BcCaptchaService implements BcCaptchaServiceInterface
      *
      * @param string $value フォームから送信された文字列
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function check(ServerRequest $request, string $token, string $value): bool
     {

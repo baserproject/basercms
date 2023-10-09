@@ -9,8 +9,10 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Middleware;
+namespace Middleware;
 
+use BaserCore\Middleware\Configure;
+use BaserCore\Middleware\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

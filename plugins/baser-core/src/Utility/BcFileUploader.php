@@ -1163,6 +1163,8 @@ class BcFileUploader
      * ファイルアップロード対象のデータを元に戻す
      *
      * @param EntityInterface $entity
+     * @checked
+     * @noTodo
      */
     public function rollbackFile(EntityInterface $entity)
     {

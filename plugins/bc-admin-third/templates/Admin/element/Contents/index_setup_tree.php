@@ -45,7 +45,6 @@ $this->BcBaser->i18nScript([
   'bcTreeAlertMessage6' => __d('baser_core', '追加に失敗しました。'),
   'bcTreeInfoMessage1' => __d('baser_core', 'ゴミ箱は空です'),
   'bcTreeInfoMessage2' => __d('baser_core', 'ゴミ箱より戻しました。一覧に遷移しますのでしばらくお待ち下さい。'),
-  'bcTreeCopyTitle' => __d('baser_core', '%s のコピー'),
   'bcTreeAliasTitle' => __d('baser_core', '%s のエイリアス'),
   'bcTreeUnNamedTitle' => __d('baser_core', '名称未設定'),
   'bcTreeNewTitle' => __d('baser_core', '新しい %s'),

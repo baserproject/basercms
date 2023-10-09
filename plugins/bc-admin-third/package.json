@@ -6,12 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baserproject/ucmitz.git"
+    "url": "git+https://github.com/baserproject/basercms.git"
   },
   "bugs": {
-    "url": "https://github.com/baserproject/ucmitz/issues"
+    "url": "https://github.com/baserproject/basercms/issues"
   },
-  "homepage": "https://github.com/baserproject/ucmitz#readme",
+  "homepage": "https://github.com/baserproject/basercms#readme",
   "scripts": {
     "dev": "gulp"
   },
@@ -26,7 +26,7 @@
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.0.0",
     "normalize.css": "^8.0.1",
-    "postcss": ">=8.2.13",
+    "postcss": ">=8.4.31",
     "postcss-import": "^14.1.0",
     "process": "^0.11.10",
     "sass": "^1.49.11",

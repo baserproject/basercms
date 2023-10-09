@@ -64,6 +64,8 @@ class BcSchema extends TableSchema
      * テーブルをセットする
      *
      * @param string $table
+     * @checked
+     * @noTodo
      */
     public function setTable(string $table)
     {

@@ -16,12 +16,12 @@ use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Middleware\BcRequestFilterMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Container;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 
@@ -119,7 +119,7 @@ class PluginTest extends BcTestCase
         copy('config/.env','config/.env.bak');
 
         $file = new File('config/.env');
-        $file->write('export APP_NAME="ucmitz"
+        $file->write('export APP_NAME="baserCMS"
 export DEBUG="true"
 export APP_ENCODING="UTF-8"
 export APP_DEFAULT_LOCALE="en_US"
@@ -176,7 +176,8 @@ return [];
         $middleware = new MiddlewareQueue();
         $middleware->add(CsrfProtectionMiddleware::class);
         $middlewareQueue = $this->Plugin->middleware($middleware);
-        $this->assertInstanceOf(AuthenticationMiddleware::class, $middlewareQueue->current());
+        $this->assertInstanceOf(BcRequestFilterMiddleware::class, $middlewareQueue->current());
+        $this->assertEquals(6, $middlewareQueue->count());
     }
 
     /**

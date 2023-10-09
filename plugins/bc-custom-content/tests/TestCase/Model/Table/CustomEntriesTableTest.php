@@ -296,12 +296,20 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_setUseTable()
     {
         //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+        ]);
+        $this->CustomEntriesTable->setUseTable(1);
+        $result = $this->CustomEntriesTable->getTable();
+        $this->assertEquals('custom_entry_1_recruit', $result);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
     }
 
     /**
@@ -310,11 +318,23 @@ class CustomEntriesTableTest extends BcTestCase
     public function test_getTableName()
     {
         //準備
-
-        //正常系実行
-
-        //異常系実行
-
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+        ]);
+        //正常系実行: name パラメータなし
+        $result = $this->CustomEntriesTable->getTableName(1);
+        $this->assertEquals('custom_entry_1_recruit', $result);
+        //正常系実行: name パラメータあり
+        $result = $this->CustomEntriesTable->getTableName(1, 'Nghiem');
+        $this->assertEquals('custom_entry_1_Nghiem', $result);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
 
     }
 

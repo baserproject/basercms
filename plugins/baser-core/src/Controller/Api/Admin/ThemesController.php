@@ -165,6 +165,7 @@ class ThemesController extends BcAdminApiController
      * [API] テーマの初期データを読み込むAPIを実装
      * @param ThemesServiceInterface $service
      * @noTodo
+     * @checked
      */
     public function load_default_data(ThemesServiceInterface $service)
     {

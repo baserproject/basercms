@@ -64,7 +64,7 @@ class BcUpdateLog
      */
     public static function save()
     {
-        if(self::$message) {
+        if (self::$message) {
             foreach(self::$message as $value) {
                 Log::write(LogLevel::INFO, $value, 'update');
             }
@@ -74,6 +74,8 @@ class BcUpdateLog
 
     /**
      * 一時領域のアップデートメッセージを削除する
+     * @checked
+     * @noTodo
      */
     public static function clear()
     {

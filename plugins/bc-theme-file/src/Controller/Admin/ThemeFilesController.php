@@ -50,6 +50,10 @@ class ThemeFilesController extends BcAdminAppController
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct(
         ?ServerRequest $request = null,
@@ -93,6 +97,9 @@ class ThemeFilesController extends BcAdminAppController
      * 現在の画面のテーマがデフォルトテーマかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function isDefaultTheme()
     {

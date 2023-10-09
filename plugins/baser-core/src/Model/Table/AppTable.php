@@ -105,7 +105,7 @@ class AppTable extends Table
      */
     public function belongsToMany(string $associated, array $options = []): BelongsToMany
     {
-        if(isset($options['joinTable'])) {
+        if (isset($options['joinTable'])) {
             $options['joinTable'] = $this->addPrefix($options['joinTable']);
         }
         return parent::belongsToMany($associated, $options);
@@ -131,7 +131,7 @@ class AppTable extends Table
     public function addPrefix($table)
     {
         $prefix = BcUtil::getCurrentDbConfig()['prefix'];
-        if(!preg_match('/^' . $prefix . '/', $table)) {
+        if (!preg_match('/^' . $prefix . '/', $table)) {
             return $prefix . $table;
         }
         return $table;
