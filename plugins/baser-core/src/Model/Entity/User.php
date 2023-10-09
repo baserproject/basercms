@@ -95,6 +95,8 @@ class User extends EntityAlias
      * スーパーユーザーかどうか判定する
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isSuper(): bool
     {
@@ -107,6 +109,8 @@ class User extends EntityAlias
      * 利用可能条件
      * - 自身がスーパーユーザーで対象がスーパーユーザーでない場合
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
+     * @checked
+     * @noTodo
      */
     public function isAddableToAdminGroup(): bool
     {
@@ -122,10 +126,12 @@ class User extends EntityAlias
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
      * @param EntityInterface|User $targetUser
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isEnableLoginAgent(EntityInterface $targetUser): bool
     {
-        if(!$targetUser->status) return false;
+        if (!$targetUser->status) return false;
         return (($this->isSuper() && !$targetUser->isSuper()) ||
             ($this->isAdmin() && !$targetUser->isAdmin()));
     }
@@ -138,6 +144,8 @@ class User extends EntityAlias
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
      * @param EntityInterface|User $targetUser
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isDeletableUser(EntityInterface $targetUser): bool
     {
@@ -155,11 +163,13 @@ class User extends EntityAlias
      *
      * @param EntityInterface|User $targetUser
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isEditableUser(EntityInterface $targetUser): bool
     {
-        if($this->isSuper()) return true;
-        if($this->id === $targetUser->id) return true;
+        if ($this->isSuper()) return true;
+        if ($this->id === $targetUser->id) return true;
         return !$targetUser->isAdmin();
     }
 
@@ -182,9 +192,9 @@ class User extends EntityAlias
         if (!empty($this->real_name_2)) {
             $userName[] = $this->real_name_2;
         }
-        if(count($userName) > 1) {
+        if (count($userName) > 1) {
             return implode(' ', $userName);
-        } elseif(count($userName) === 1) {
+        } elseif (count($userName) === 1) {
             return $userName[0];
         } else {
             return 'undefined';

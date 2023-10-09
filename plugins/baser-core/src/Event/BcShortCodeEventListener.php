@@ -29,6 +29,8 @@ class BcShortCodeEventListener implements EventListenerInterface
      * Implemented Events
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     public function implementedEvents(): array
     {
@@ -41,6 +43,9 @@ class BcShortCodeEventListener implements EventListenerInterface
      * After Render
      *
      * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
      */
     public function afterRender(Event $event)
     {
@@ -53,6 +58,9 @@ class BcShortCodeEventListener implements EventListenerInterface
      * ショートコードを実行する
      *
      * @param View $View
+     * @return void
+     * @checked
+     * @noTodo
      */
     protected function _execShortCode(View $view)
     {

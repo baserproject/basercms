@@ -48,6 +48,8 @@ class UserGroup extends Entity
      * 管理グループかどうか判定
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isAdmin(): bool
     {
@@ -76,7 +78,7 @@ class UserGroup extends Entity
      */
     public function getAuthPrefixArray(): array
     {
-        if($this->auth_prefix) {
+        if ($this->auth_prefix) {
             return explode(',', $this->auth_prefix);
         } else {
             return [];
@@ -92,7 +94,7 @@ class UserGroup extends Entity
      */
     public function getAuthPrefixSettingsArray(): array
     {
-        if($this->auth_prefix_settings) {
+        if ($this->auth_prefix_settings) {
             return json_decode($this->auth_prefix_settings, true);
         } else {
             return [];
@@ -110,7 +112,7 @@ class UserGroup extends Entity
     public function getAuthPrefixSettings(string $prefix): array
     {
         $settings = $this->getAuthPrefixSettingsArray();
-        if(isset($settings[$prefix])) {
+        if (isset($settings[$prefix])) {
             return $settings[$prefix];
         } else {
             return [];
@@ -129,7 +131,7 @@ class UserGroup extends Entity
     public function getAuthPrefixSetting(string $prefix, string $name): string
     {
         $settings = $this->getAuthPrefixSettings($prefix);
-        if(isset($settings[$name])) {
+        if (isset($settings[$name])) {
             return $settings[$name];
         } else {
             return '';

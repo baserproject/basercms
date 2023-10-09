@@ -29,6 +29,8 @@ class UploadsController extends AppController
      * セッションに保存した一時ファイルを出力する
      * @param string $name
      * @return \Cake\Http\Response
+     * @checked
+     * @noTodo
      */
     public function tmp()
     {

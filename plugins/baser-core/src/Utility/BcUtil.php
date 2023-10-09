@@ -139,7 +139,7 @@ class BcUtil
         $prefix = BcUtil::getRequestPrefix($request);
 
         $authenticator = $request->getAttribute('authentication');
-        if($authenticator) {
+        if ($authenticator) {
             /** @var Result $result */
             $result = $authenticator->getResult();
             if (!empty($result) && $result->isValid()) {
@@ -147,7 +147,7 @@ class BcUtil
                 $user = $result->getData();
                 if (is_null($user->user_groups)) {
                     $userModel = Configure::read("BcPrefixAuth.{$prefix}.userModel");
-                    if($userModel === 'BaserCore.Users') {
+                    if ($userModel === 'BaserCore.Users') {
                         $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
                         $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
                     }
@@ -157,7 +157,7 @@ class BcUtil
         }
 
         $user = false;
-        if($prefix === 'Front') {
+        if ($prefix === 'Front') {
             $user = BcUtil::loginUserFromSession($prefix);
             if (!$user) {
                 $users = self::getLoggedInUsers(false);
@@ -180,11 +180,11 @@ class BcUtil
     {
         $users = [];
         $prefixSettings = array_reverse(Configure::read('BcPrefixAuth'));
-        foreacH($prefixSettings as $key => $prefixSetting) {
-            if(!empty($prefixSetting['disabled'])) continue;
+        foreach($prefixSettings as $key => $prefixSetting) {
+            if (!empty($prefixSetting['disabled'])) continue;
             $user = BcUtil::loginUserFromSession($key);
-            if($user) {
-                if($assoc) {
+            if ($user) {
+                if ($assoc) {
                     $users[$key] = $user;
                 } else {
                     $users[] = $user;
@@ -694,10 +694,10 @@ class BcUtil
         $value = @unserialize(base64_decode($value));
         // 下位互換のため、しばらくの間、失敗した場合の再変換を行う v.3.0.2
         if ($value === false) {
-			$value = @unserialize($_value);
-			if($value === false) {
-				return '';
-			}
+            $value = @unserialize($_value);
+            if ($value === false) {
+                return '';
+            }
         }
         return $value;
     }
@@ -812,6 +812,8 @@ class BcUtil
      *
      * @param $siteId
      * @return []|array
+     * @checked
+     * @noTodo
      */
     public static function getFrontTemplatePaths($siteId, $plugin)
     {
@@ -920,6 +922,8 @@ class BcUtil
      * サブドメインを取得する
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public static function getSubDomain($host = null)
     {
@@ -998,6 +1002,8 @@ class BcUtil
      *
      * @param $pluginName
      * @return string|false
+     * @checked
+     * @noTodo
      */
     public static function getPluginPath($pluginName): string
     {
@@ -1017,6 +1023,8 @@ class BcUtil
      * プラグインのディレクトリ名を取得する
      * @param $pluginName
      * @return false|mixed
+     * @checked
+     * @noTodo
      */
     public static function getPluginDir($pluginName)
     {
@@ -1146,6 +1154,8 @@ class BcUtil
      * 現在のビューディレクトリのパスを取得する
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public static function getViewPath()
     {
@@ -1178,13 +1188,13 @@ class BcUtil
 
         if (is_null($request))
             $site = null;
-        else{
+        else {
             /** @var Site $site */
             $site = $request->getAttribute('currentSite');
         }
 
         if ($site) {
-            if($site->theme) {
+            if ($site->theme) {
                 return $site->theme;
             } else {
                 $sitesService = BcContainer::get()->get(SitesServiceInterface::class);
@@ -1908,8 +1918,8 @@ class BcUtil
     {
         $authPrefixes = [];
         foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
-            if($key === 'Api') continue;
-            if(!empty($authPrefix['disabled'])) continue;
+            if ($key === 'Api') continue;
+            if (!empty($authPrefix['disabled'])) continue;
             $authPrefixes[$key] = $authPrefix['name'];
         }
         return $authPrefixes;

@@ -62,6 +62,8 @@ class BcAdminAppController extends BcAppController
      * Before Filter
      * @param EventInterface $event
      * @return Response|void|null
+     * @checked
+     * @noTodo
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -109,6 +111,8 @@ class BcAdminAppController extends BcAppController
      * 初回アクセスメッセージ用のフラグを更新する
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     private function __updateFirstAccess()
     {

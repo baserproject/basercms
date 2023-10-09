@@ -52,6 +52,8 @@ class DashboardAdminService implements DashboardAdminServiceInterface
     /**
      * パネルを取得する
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getPanels()
     {

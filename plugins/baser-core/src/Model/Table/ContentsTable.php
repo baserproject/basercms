@@ -36,8 +36,16 @@ use SoftDelete\Model\Table\SoftDeleteTrait;
  */
 class ContentsTable extends AppTable
 {
+
+    /**
+     * Trait
+     */
     use SoftDeleteTrait;
 
+    /**
+     * 論理削除フィールド名
+     * @var string
+     */
     protected $softDeleteField = 'deleted_date';
 
     /**
@@ -333,9 +341,9 @@ class ContentsTable extends AppTable
                 if ($user) $content['author_id'] = $user['id'];
             }
         } else {
-			if (isset($content['name'])) {
-				$content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
-			}
+            if (isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+            }
             if (!empty($content['self_publish_begin'])) {
                 $content['self_publish_begin'] = new FrozenTime($content['self_publish_begin']);
             }
@@ -981,7 +989,7 @@ class ContentsTable extends AppTable
             if ($site->alias) {
                 $prefix = $site->alias;
             }
-            if($prefix) {
+            if ($prefix) {
                 $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
             }
             $mainSitePrefix = $this->Sites->getPrefix($site->main_site_id);

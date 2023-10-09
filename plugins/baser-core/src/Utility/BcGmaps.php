@@ -17,6 +17,9 @@ use Cake\Http\Client;
 use Cake\Http\Client\Exception\NetworkException;
 use Cake\Utility\Exception\XmlException;
 use Cake\Utility\Xml;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcGmaps
@@ -54,6 +57,8 @@ class BcGmaps
      *
      * @param string $apiKey
      * @return void
+     * @checked
+     * @noTodo
      */
     public function __construct($apiKey)
     {
@@ -68,6 +73,8 @@ class BcGmaps
      *
      * @param string $address
      * @return array|null
+     * @checked
+     * @noTodo
      */
     public function getLocation($address)
     {

@@ -40,6 +40,8 @@ class BcFormFailedException extends CakeException {
      * @param array<string>|string $message
      * @param int|null $code
      * @param \Throwable|null $previous
+     * @checked
+     * @noTodo
      */
     public function __construct(ValidatorAwareInterface $form, $message, ?int $code = null, ?Throwable $previous = null)
     {
@@ -61,6 +63,8 @@ class BcFormFailedException extends CakeException {
      * フォームを取得する
      *
      * @return ValidatorAwareInterface
+     * @checked
+     * @noTodo
      */
     public function getForm(): ValidatorAwareInterface
     {

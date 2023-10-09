@@ -40,6 +40,8 @@ class BcEventDispatcher
      * @param array $data
      * @param array $options
      * @return boolean|Event
+     * @checked
+     * @noTodo
      */
     public static function dispatch($name, $subject, $data = [], $options = [])
     {

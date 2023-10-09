@@ -83,6 +83,8 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	 * 初期データを取得
 	 *
 	 * @return EntityInterface
+     * @checked
+     * @noTodo
 	 */
 	public function getNew(string $prefix)
 	{
@@ -97,6 +99,8 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	 * @param EntityInterface $entity
 	 * @param array $postData
 	 * @return EntityInterface
+     * @checked
+     * @noTodo
 	 */
 	public function create(array $postData)
 	{
@@ -125,9 +129,6 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param array $queryParams
-     * @noTodo
-     * @unitTest
-     * @checked
      * @return Query
      * @notodo
      * @unitTest
@@ -162,6 +163,8 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	 * アクセスグループを削除する
 	 *
 	 * @param int $id
+     * @checked
+     * @noTodo
 	 */
 	public function delete(int $id): bool
 	{
@@ -225,6 +228,8 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	 *
 	 * @param int $userGroupId
 	 * @return bool
+     * @checked
+     * @noTodo
 	 */
 	public function rebuildByUserGroup(int $userGroupId)
 	{
@@ -447,6 +452,8 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * アクセスグループを利用可能なユーザーグループの最小のIDを取得する
      *
      * @return false|mixed
+     * @checked
+     * @noTodo
      */
     public function getAvailableMinUserGroupId()
     {

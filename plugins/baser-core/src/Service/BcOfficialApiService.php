@@ -11,11 +11,13 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Error\BcException;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Client;
 use Cake\Utility\Xml;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * interface BcOfficialApiService
@@ -28,6 +30,8 @@ class BcOfficialApiService implements BcOfficialApiServiceInterface
      *
      * @param string $rssName
      * @return array|mixed
+     * @checked
+     * @noTodo
      */
     public function getRss(string $rssName): array
     {

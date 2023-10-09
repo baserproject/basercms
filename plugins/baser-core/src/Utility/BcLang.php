@@ -11,6 +11,10 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * Class BcLang
  *
@@ -37,6 +41,8 @@ class BcLang extends BcAbstractDetector
      *
      * @param array $config 設定の配列
      * @return void
+     * @checked
+     * @noTodo
      */
     protected function _setConfig(array $config)
     {
@@ -47,6 +53,8 @@ class BcLang extends BcAbstractDetector
      * デフォルトの設定値を取得
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     protected function _getDefaultConfig()
     {
@@ -59,6 +67,8 @@ class BcLang extends BcAbstractDetector
      * 判定用正規表現を取得
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getDetectorRegex()
     {
@@ -70,6 +80,8 @@ class BcLang extends BcAbstractDetector
      * キーワードを含むかどうかを判定
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isMatchDecisionKey()
     {
@@ -85,6 +97,8 @@ class BcLang extends BcAbstractDetector
      *
      * @param $acceptLanguage
      * @return array|string
+     * @checked
+     * @noTodo
      */
     static public function parseLang($acceptLanguage)
     {
@@ -107,4 +121,5 @@ class BcLang extends BcAbstractDetector
         }
         return $langs[0];
     }
+    
 }

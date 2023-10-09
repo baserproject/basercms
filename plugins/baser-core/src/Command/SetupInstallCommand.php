@@ -35,6 +35,8 @@ class SetupInstallCommand extends Command
      * @param Arguments $args
      * @param ConsoleIo $io
      * @return int|void|null
+     * @checked
+     * @noTodo
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {

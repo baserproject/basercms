@@ -19,6 +19,8 @@ class MaintenanceController extends BcFrontAppController
 
     /**
      * メンテナンス中ページを表示する
+     * @checked
+     * @noTodo
      */
     public function index()
     {
