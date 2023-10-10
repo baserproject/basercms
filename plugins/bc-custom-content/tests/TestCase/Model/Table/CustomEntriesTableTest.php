@@ -21,9 +21,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Service\CustomEntriesService;
-use BcCustomContent\Service\CustomEntriesServiceInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**

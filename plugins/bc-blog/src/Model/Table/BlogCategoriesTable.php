@@ -17,7 +17,6 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
-use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
@@ -349,6 +348,8 @@ class BlogCategoriesTable extends BlogAppTable
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function hasChild($id)
     {
