@@ -108,7 +108,28 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/add/BcThemeSample/layout');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート作成', $pageTitle);
+
+        $postData = [
+            'fullpath' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'base_name' => 'test',
+            'ext' => 'php',
+            'contents' => 'test content',
+        ];
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/add', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル test.php を作成しました。');
+        $this->assertRedirect(['action' => 'edit/layout/test.php']);
+        unlink('/var/www/html/plugins/BcThemeSample/templates/layout/test.php');
     }
 
     /**

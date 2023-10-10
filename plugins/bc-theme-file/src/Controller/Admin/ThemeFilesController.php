@@ -145,6 +145,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ThemeFilesAdminServiceInterface $service)
     {
