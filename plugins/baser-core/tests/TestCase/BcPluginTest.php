@@ -274,7 +274,6 @@ $users = TableRegistry::getTableLocator()->get(\'BaserCore.Users\');
 $user = $users->find()->where([\'id\' => 1])->first();
 $user->name = \'hoge\';
 $users->save($user);');
-        $file->close();
         $this->BcPlugin->execScript($version);
         $users = $this->getTableLocator()->get('BaserCore.Users');
         $user = $users->find()->where(['id' => 1])->first();
@@ -284,7 +283,6 @@ $users->save($user);');
         $file->create();
         $file->write('<?php
 $this->log(\'test\');');
-        $file->close();
         $this->BcPlugin->execScript($version);
         $file = new BcFile(LOGS . 'cli-error.log');
         $log = $file->read();
@@ -317,9 +315,12 @@ $this->log(\'test\');');
         $migrationPath = $configPath . 'Migrations' . DS;
         $seedPath = $configPath . 'Seeds' . DS;
         $srcPath = $pluginPath . 'src' . DS;
-        $folder->create($srcPath);
-        $folder->create($migrationPath);
-        $folder->create($seedPath);
+        $folder = new BcFolder($srcPath);
+        $folder->create();
+        $folder = new BcFolder($migrationPath);
+        $folder->create();
+        $folder = new BcFolder($seedPath);
+        $folder->create();
 
         // VERSION.txt
         $this->createVersionFile($pluginPath, '0.0.1');

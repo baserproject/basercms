@@ -284,7 +284,6 @@ class BcPlugin extends BasePlugin
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
         $folder = new BcFolder($path);
-        $folder->create();
         $files = $folder->getFiles();
         $messages = [];
         $updateVerPoints = [];
