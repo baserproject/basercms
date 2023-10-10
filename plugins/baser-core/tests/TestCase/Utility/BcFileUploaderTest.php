@@ -277,6 +277,7 @@ class BcFileUploaderTest extends BcTestCase
         copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', $this->uploadedData['eyecatch']['tmp_name']);
         $this->BcFileUploader->saveTmpFiles($this->uploadedData, 1);
         $this->uploadedData['eyecatch_tmp'] = '00000001_eyecatch_png';
+        $this->uploadedData['_bc_upload_id'] = 1;
         $file = new ArrayObject($this->uploadedData);
         $this->BcFileUploader->setupTmpData($file);
         $this->assertFalse(isset($file['eyecatch_tmp']));
