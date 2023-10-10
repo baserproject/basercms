@@ -40,6 +40,8 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
      * メソッド一覧取得
      *
      * @return array[]
+     * @checked
+     * @noTodo
      */
     public function methods(): array
     {
@@ -73,7 +75,6 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
             'getBlogPostContent' => ['Blog', 'getPostContent'],
             'blogPostPrevLink' => ['Blog', 'prevLink'],
             'blogPostNextLink' => ['Blog', 'nextLink'],
-
         ];
     }
 

@@ -152,7 +152,7 @@ class BlogHelper extends Helper
                 $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
                 // 現在のサイトにエイリアスが存在するのであればそちらを優先する
                 $site = $this->_View->getRequest()->getAttribute('currentSite');
-                if(!empty($site->id)) {
+                if (!empty($site->id)) {
                     $content = $contentTable->find()->where([
                         'Contents.entity_id' => $this->currentBlogContent->id,
                         'Contents.type' => 'BlogContent',
@@ -376,7 +376,7 @@ class BlogHelper extends Helper
     public function getPostLinkUrl(BlogPost $post, bool $base = true, bool $full = true)
     {
         $this->setContent($post->blog_content_id);
-        if(!$this->currentContent) return '';
+        if (!$this->currentContent) return '';
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         $url = $blogPostsService->getUrl($this->currentContent, $post, $full);
         if ($base && !$full) {
@@ -417,12 +417,13 @@ class BlogHelper extends Helper
      * @noTodo
      */
     public function postContent(
-    	BlogPost $post,
-    	bool $moreText = true,
-    	bool $moreLink = false,
-    	mixed $cut = false,
-    	bool $lastText = false
-	) {
+        BlogPost $post,
+        bool $moreText = true,
+        bool $moreLink = false,
+        mixed $cut = false,
+        bool $lastText = false
+    )
+    {
         echo $this->getPostContent($post, $moreText, $moreLink, $cut, $lastText);
     }
 
@@ -441,12 +442,13 @@ class BlogHelper extends Helper
      * @noTodo
      */
     public function getPostContent(
-    	BlogPost $post,
-    	bool $moreText = true,
-    	mixed $moreLink = false,
-    	mixed $cut = false,
-    	bool $lastText = false
-	) {
+        BlogPost $post,
+        bool $moreText = true,
+        mixed $moreLink = false,
+        mixed $cut = false,
+        bool $lastText = false
+    )
+    {
         if ($cut) {
             $out = str_replace(["\r\n", "\r", "\n"], '', $post->content . $post->detail);
             $out = html_entity_decode($out, ENT_QUOTES, 'UTF-8');
@@ -680,13 +682,13 @@ class BlogHelper extends Helper
         }
     }
 
-	/**
-	 * 記事の登録日を出力する
-	 *
-	 * @param BlogPost $post ブログ記事
-	 * @param string $format 日付フォーマット（初期値 : Y/m/d）
-	 * @return void
-	 */
+    /**
+     * 記事の登録日を出力する
+     *
+     * @param BlogPost $post ブログ記事
+     * @param string $format 日付フォーマット（初期値 : Y/m/d）
+     * @return void
+     */
     public function postDate(BlogPost $post, string $format = 'Y/m/d')
     {
         echo $this->getPostDate($post, $format);
@@ -744,7 +746,7 @@ class BlogHelper extends Helper
                 'options' => $options
             ]);
         } else {
-            return  '';
+            return '';
         }
     }
 

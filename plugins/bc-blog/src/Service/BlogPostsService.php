@@ -101,7 +101,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         $entity = $this->BlogPosts->get($id, [
             'conditions' => $conditions,
             'contain' => $options['contain']]);
-        if($options['draft'] === false) {
+        if ($options['draft'] === false) {
             unset($entity->content_draft);
             unset($entity->detail_draft);
         }
@@ -188,7 +188,7 @@ class BlogPostsService implements BlogPostsServiceInterface
                     break;
             }
         } else {
-            if(strpos($sort, '.') === false) {
+            if (strpos($sort, '.') === false) {
                 $sort = 'BlogPosts.' . $sort;
             }
             $order = "{$sort} {$direction}, BlogPosts.id {$direction}";
@@ -214,7 +214,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     protected function createIndexConditions(Query $query, array $params)
     {
-        foreach ($params as $key => $value) {
+        foreach($params as $key => $value) {
             if ($value === '') unset($params[$key]);
         }
         if (empty($params)) return $query;
@@ -249,14 +249,14 @@ class BlogPostsService implements BlogPostsServiceInterface
         // ステータス
         if (($params['status'] === 'publish' || (string)$params['status'] === '1') && !$params['preview']) {
             $conditions = $this->BlogPosts->getConditionAllowPublish();
-            if(empty($params['contain']) || $params['draft'] === false) {
+            if (empty($params['contain']) || $params['draft'] === false) {
                 $fields = $this->BlogPosts->getSchema()->columns();
-                if($params['draft'] === false) {
+                if ($params['draft'] === false) {
                     unset($fields[array_search('content_draft', $fields)]);
                     unset($fields[array_search('detail_draft', $fields)]);
                 }
                 $query->contain(['BlogContents' => ['Contents']])->select($fields);
-            } elseif(!isset($params['contain']['BlogContents']['Contents'])) {
+            } elseif (!isset($params['contain']['BlogContents']['Contents'])) {
                 $query->contain(array_merge_recursive($query->getContain(), ['BlogContents' => ['Contents']]));
             }
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
@@ -286,7 +286,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         }
         // タグ
         if (!is_null($params['blog_tag_id'])) {
-            $query->matching('BlogTags', function ($q) use ($params) {
+            $query->matching('BlogTags', function($q) use ($params) {
                 return $q->where(['BlogTags.id' => $params['blog_tag_id']]);
             });
         }
@@ -295,7 +295,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             $blogCategoryIds = [$params['blog_category_id']];
             $children = $this->BlogPosts->BlogCategories->find('children', ['for' => $params['blog_category_id']]);
             if ($children) {
-                foreach ($children as $child) {
+                foreach($children as $child) {
                     $blogCategoryIds[] = $child->id;
                 }
             }
@@ -355,11 +355,11 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @unitTest
      */
     public function createCategoryCondition(
-        array  $conditions,
+        array $conditions,
         string $category,
-        int    $blogContentId = null,
+        int $blogContentId = null,
         string $contentUrl = null,
-        bool   $force = false)
+        bool $force = false)
     {
         $categoryConditions = ['BlogCategories.name' => $category];
         if ($blogContentId) {
@@ -820,7 +820,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     public function getPrevPost(BlogPost $post)
     {
-        if(is_null($post->posted) || !$post->id) return null;
+        if (is_null($post->posted) || !$post->id) return null;
         $order = 'BlogPosts.posted DESC, BlogPosts.id DESC';
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが大きいデータを検索
         $conditions = array_merge_recursive([
@@ -857,7 +857,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     public function getNextPost(BlogPost $post)
     {
-        if(is_null($post->posted) || !$post->id) return null;
+        if (is_null($post->posted) || !$post->id) return null;
         $order = 'BlogPosts.posted, BlogPosts.id';
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが小さいデータを検索
         $conditions = array_merge_recursive([
@@ -903,7 +903,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         ], $options);
 
         $tagNames = [];
-        foreach ($post->blog_tags as $tag) {
+        foreach($post->blog_tags as $tag) {
             $tagNames[] = rawurldecode($tag['name']);
         }
         $tags = $this->BlogPosts->BlogTags->find()->where(['BlogTags.name IN' => $tagNames])->contain('BlogPosts')->all()->toArray();
@@ -911,10 +911,10 @@ class BlogPostsService implements BlogPostsServiceInterface
         $ids = array_unique(Hash::extract($tags, '{n}.blog_posts.{n}.id'));
         if (!$ids) return [];
         return $this->BlogPosts->find()->where(array_merge([
-                ['BlogPosts.id IN ' => $ids],
-                ['BlogPosts.id <>' => $post->id],
-                'BlogPosts.blog_content_id' => $post->blog_content_id
-            ], $this->BlogPosts->getConditionAllowPublish()))
+            ['BlogPosts.id IN ' => $ids],
+            ['BlogPosts.id <>' => $post->id],
+            'BlogPosts.blog_content_id' => $post->blog_content_id
+        ], $this->BlogPosts->getConditionAllowPublish()))
             ->order($options['order'])
             ->limit($options['limit']);
     }
@@ -926,6 +926,8 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @param BlogPost $post
      * @param $full
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getUrl(Content $content, BlogPost $post, $full)
     {

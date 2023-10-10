@@ -17,7 +17,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Event\Event;
-use Cake\Utility\Inflector;
 use Cake\View\View;
 
 /**
@@ -35,20 +34,22 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
         'leftOfToolbar'
     ];
 
-	/**
-	 * leftOfToolbar
-	 * @param Event $event
-	 */
-	public function leftOfToolbar(Event $event)
-	{
-		if(BcUtil::isAdminSystem()) return;
-		$view = $event->getSubject();
-		$content = $view->getRequest()->getAttribute('currentContent');
-		if(!$content) return;
-		if ($content->type === 'BlogContent') {
-			echo $view->element('BcBlog.BlogPosts/left_of_toolbar');
-		}
-	}
+    /**
+     * leftOfToolbar
+     * @param Event $event
+     * @checked
+     * @noTodo
+     */
+    public function leftOfToolbar(Event $event)
+    {
+        if (BcUtil::isAdminSystem()) return;
+        $view = $event->getSubject();
+        $content = $view->getRequest()->getAttribute('currentContent');
+        if (!$content) return;
+        if ($content->type === 'BlogContent') {
+            echo $view->element('BcBlog.BlogPosts/left_of_toolbar');
+        }
+    }
 
     /**
      * Before render
