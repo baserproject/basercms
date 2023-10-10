@@ -71,6 +71,24 @@ class ThemeFilesControllerTest extends BcTestCase
     }
 
     /**
+     * test isDefaultTheme
+     */
+    public function test_isDefaultTheme()
+    {
+        //テーマがデフォルトテーマの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcFront');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $result = $this->execPrivateMethod($this->ThemeFilesController, 'isDefaultTheme', []);
+        $this->assertTrue($result);
+
+        //テーマがデフォルトテーマではないの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $result = $this->execPrivateMethod($this->ThemeFilesController, 'isDefaultTheme', []);
+        $this->assertFalse($result);
+    }
+
+    /**
      * test beforeRender
      */
     public function test_beforeRender()

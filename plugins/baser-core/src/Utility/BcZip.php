@@ -13,6 +13,9 @@ namespace BaserCore\Utility;
 
 use Cake\Filesystem\Folder;
 use ZipArchive;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcZip
@@ -25,6 +28,7 @@ class BcZip
      * @var bool|ZipArchive
      */
     public $Zip = false;
+
     /**
      * error
      *
@@ -41,6 +45,8 @@ class BcZip
 
     /**
      * BcZip constructor.
+     * @checked
+     * @noTodo
      */
     public function __construct()
     {
@@ -55,6 +61,8 @@ class BcZip
      * @param $source
      * @param $target
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function extract($source, $target)
     {
@@ -82,6 +90,8 @@ class BcZip
      * @param $source
      * @param $target
      * @return bool
+     * @checked
+     * @noTodo
      */
     protected function _extractByPhpLib($source, $target)
     {
@@ -101,6 +111,8 @@ class BcZip
      * @param $source
      * @param $target
      * @return bool
+     * @checked
+     * @noTodo
      */
     protected function _extractByCommand($source, $target)
     {
@@ -130,6 +142,8 @@ class BcZip
      *
      * @param $path
      * @return string
+     * @checked
+     * @noTodo
      */
     protected function _escapePath($path)
     {
@@ -146,6 +160,8 @@ class BcZip
      * @param string $sorce 元データ
      * @param string $dist 出力先
      * @return void
+     * @checked
+     * @noTodo
      */
     public function create($sorce, $dist)
     {
@@ -162,11 +178,13 @@ class BcZip
      * @param string $path
      * @param string $parentPath
      * @return void
+     * @checked
+     * @noTodo
      */
     private function zipSub($za, $path, $parentPath = '')
     {
         $dh = opendir($path);
-        while (($entry = readdir($dh)) !== false) {
+        while(($entry = readdir($dh)) !== false) {
             if ($entry == '.' || $entry == '..') {
             } else {
                 $localPath = $parentPath . $entry;

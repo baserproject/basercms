@@ -68,6 +68,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * Constructor
+     * @checked
+     * @noTodo
      */
     public function __construct()
     {
@@ -159,6 +161,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $tableName
      * @param string $columnName
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function columnExists(string $tableName, string $columnName)
     {
@@ -215,6 +219,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $tableName
      * @param array $columns
      * @return bool
+     * @checked
+     * @noTodo
      * @unitTest
      */
     public function createTable(string $tableName, array $columns = [])
@@ -240,6 +246,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $oldTableName
      * @param string $newTableName
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function renameTable(string $oldTableName, string $newTableName)
     {
@@ -275,6 +283,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @param string $tableName
      * @return bool
+     * @checked
+     * @noTodo
      * @unitTest
      */
     public function dropTable(string $tableName)
@@ -631,6 +641,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * データベースシーケンスをアップデートする
+     * @checked
+     * @noTodo
      */
     public function updateSequence()
     {
@@ -648,6 +660,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * シーケンスを取得する
+     * @checked
+     * @noTodo
      */
     public function getSequence($table, $field = 'id')
     {
@@ -968,7 +982,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param array $options
      *  - `path` : スキーマファイルの生成場所
      * @return string|false スキーマファイルの内容
-     * @unitTest
+     * @checked
      * @noTodo
      * @unitTest
      */

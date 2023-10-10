@@ -17,9 +17,9 @@ use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
+use Cake\Utility\Inflector;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -36,8 +36,16 @@ use SoftDelete\Model\Table\SoftDeleteTrait;
  */
 class ContentsTable extends AppTable
 {
+
+    /**
+     * Trait
+     */
     use SoftDeleteTrait;
 
+    /**
+     * 論理削除フィールド名
+     * @var string
+     */
     protected $softDeleteField = 'deleted_date';
 
     /**
@@ -333,9 +341,9 @@ class ContentsTable extends AppTable
                 if ($user) $content['author_id'] = $user['id'];
             }
         } else {
-			if (isset($content['name'])) {
-				$content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
-			}
+            if (isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+            }
             if (!empty($content['self_publish_begin'])) {
                 $content['self_publish_begin'] = new FrozenTime($content['self_publish_begin']);
             }
@@ -476,29 +484,6 @@ class ContentsTable extends AppTable
                 $this->beforeSaveParentId = null;
             }
         }
-    }
-
-    /**
-     * 関連するコンテンツ本体のデータキャッシュを削除する
-     * @param Content $content
-     */
-    public function deleteAssocCache($content)
-    {
-        if (empty($content->plugin) || empty($content->type)) {
-            $content = $this->find()->applyOptions(['withDeleted'])->select(['plugin', 'type'])->where(['id' => $content->id])->first();
-        }
-        $assoc = $content->plugin . '.' . Inflector::pluralize($content->type);
-        if ($content->plugin != 'BaserCore') {
-            if (!Plugin::isLoaded($content->plugin)) {
-                return;
-            }
-        }
-        $AssocTable = TableRegistry::getTableLocator()->get($assoc);
-        // if ($AssocTable && !empty($AssocTable->actsAs) && in_array('BcCache', $AssocTable->actsAs)) {
-        //     if ($AssocTable->Behaviors->hasMethod('delCache')) {
-        //         $AssocTable->delCache();
-        //     }
-        // }
     }
 
     /**
@@ -981,7 +966,7 @@ class ContentsTable extends AppTable
             if ($site->alias) {
                 $prefix = $site->alias;
             }
-            if($prefix) {
+            if ($prefix) {
                 $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
             }
             $mainSitePrefix = $this->Sites->getPrefix($site->main_site_id);
@@ -1247,38 +1232,6 @@ class ContentsTable extends AppTable
             }
         }
         return $contents;
-    }
-
-    /**
-     * キャッシュ時間を取得する
-     *
-     * @param mixed $id | $data
-     * @return mixed int or false
-     */
-    public function getCacheTime($data)
-    {
-        if (!is_array($data)) {
-            $data = $this->find('first', ['conditions' => ['Content.id' => $data], 'recursive' => 0]);
-        }
-        if (isset($data['Content'])) {
-            $data = $data['Content'];
-        }
-        if (!$data) {
-            return false;
-        }
-        // #10680 Modify 2016/01/22 gondoh
-        // 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む
-        $duration = Configure::read('BcCache.viewDuration');
-        if (empty($duration)) {
-            $duration = Configure::read('BcCache.duration');
-        }
-        // 固定ページなどの公開期限がviewDulationより短い場合
-        if ($data['status'] && $data['publish_end'] && $data['publish_end'] != '0000-00-00 00:00:00') {
-            if (strtotime($duration) - time() > (strtotime($data['publish_end']) - time())) {
-                $duration = strtotime($data['publish_end']) - time();
-            }
-        }
-        return $duration;
     }
 
     /**

@@ -38,8 +38,10 @@ class Plugin extends BcPlugin
      * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
+     * @checked
+     * @noTodo
      */
-    public function install($options = []) : bool
+    public function install($options = []): bool
     {
         // ここに必要なインストール処理を記述
         $result = parent::install($options);
@@ -47,18 +49,6 @@ class Plugin extends BcPlugin
         $table->setUp(1);
         $this->updateDateNow('BcCustomContent.CustomEntries', ['published']);
         return $result;
-    }
-
-    /**
-     * プラグインをアンインストールする
-     *  - `plugin` : プラグイン名
-     *  - `connection` : コネクション名
-     *  - `target` : ロールバック対象バージョン
-     */
-    public function uninstall($options = []): bool
-    {
-        // ここに必要なアンインストール処理を記述
-        return parent::uninstall();
     }
 
     /**
@@ -75,11 +65,13 @@ class Plugin extends BcPlugin
     /**
      * Bootstrap
      *
-     * @param PluginApplicationInterface $application
+     * @param PluginApplicationInterface $app
+     * @checked
+     * @noTodo
      */
-    public function bootstrap(PluginApplicationInterface $application): void
+    public function bootstrap(PluginApplicationInterface $app): void
     {
-        parent::bootstrap($application);
+        parent::bootstrap($app);
         $this->loadPlugin();
     }
 
@@ -97,25 +89,25 @@ class Plugin extends BcPlugin
             [$path]
         ));
 
-		$Folder = new Folder($path);
-		$files = $Folder->read(true, true, false);
-		if(empty($files[0])) return;
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, false);
+        if (empty($files[0])) return;
 
-		if(Configure::read('BcRequest.asset')) {
-		    // TODO ucmitz 検証要
-			foreach($files[0] as $pluginName) {
-			    BcUtil::includePluginClass($pluginName);
-			}
-		} else {
-			foreach($files[0] as $pluginName) {
+        if (Configure::read('BcRequest.asset')) {
+            // TODO ucmitz 検証要
+            foreach($files[0] as $pluginName) {
+                BcUtil::includePluginClass($pluginName);
+            }
+        } else {
+            foreach($files[0] as $pluginName) {
                 // 設定ファイルを読み込む
-                if(!BcUtil::includePluginClass($pluginName)) continue;
+                if (!BcUtil::includePluginClass($pluginName)) continue;
                 $pluginCollection = CakePlugin::getCollection();
                 $plugin = $pluginCollection->create($pluginName);
                 $pluginCollection->add($plugin);
                 BcEvent::registerPluginEvent($pluginName);
-			}
-		}
+            }
+        }
     }
 
 }

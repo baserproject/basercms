@@ -18,7 +18,6 @@ use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
-use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 
@@ -86,7 +85,7 @@ class BlogTagsTable extends BlogAppTable
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のあるタグです。')
-        ]]);
+                ]]);
         return $validator;
     }
 
@@ -147,7 +146,7 @@ class BlogTagsTable extends BlogAppTable
             'id' => $id,
         ]);
         if ($event !== false) {
-            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+            $entity = ($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult();
         }
 
         $entity->name .= '_copy';

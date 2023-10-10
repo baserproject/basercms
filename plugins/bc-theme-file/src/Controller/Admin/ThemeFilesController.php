@@ -97,6 +97,9 @@ class ThemeFilesController extends BcAdminAppController
      * 現在の画面のテーマがデフォルトテーマかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function isDefaultTheme()
     {

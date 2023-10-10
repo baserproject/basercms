@@ -91,8 +91,9 @@ class BcAdminHelper extends Helper
 
     /**
      * 管理画面のメニューに変更を加える
-     * @todo 整理する必要あり
      * @return array
+     * @checked
+     * @noTodo
      */
     private function convertAdminMenuGroups($adminMenuGroups)
     {
@@ -509,6 +510,8 @@ class BcAdminHelper extends Helper
     /**
      * 初回アクセス時のメッセージ表示
      * @return void
+     * @checked
+     * @noTodo
      */
     public function firstAccess()
     {
@@ -519,6 +522,8 @@ class BcAdminHelper extends Helper
     /**
      * 管理画面において現在のサイトを取得する
      * @return false|Site
+     * @checked
+     * @noTodo
      */
     public function getCurrentSite()
     {

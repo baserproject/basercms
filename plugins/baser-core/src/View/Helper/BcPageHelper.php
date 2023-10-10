@@ -11,8 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Model\Entity\Page;
 use BaserCore\Utility\BcUtil;
-use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -24,7 +24,7 @@ use BaserCore\Annotation\Note;
 
 /**
  * BcPageHelper
- * @property BcAdminHelper $BcAdmin
+ * @property BcContentsHelper $BcContents
  */
 class BcPageHelper extends Helper
 {
@@ -34,43 +34,13 @@ class BcPageHelper extends Helper
      */
     use BcEventDispatcherTrait;
     use BcContainerTrait;
-    /**
-     * ページモデル
-     *
-     * @var Page
-     */
-    public $Page = null;
-
-    /**
-     * data
-     * @var array
-     */
-    public $data = [];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['BcBaser', 'BcContents', 'BcAdmin'];
-
-    /**
-     * construct
-     *
-     * @param View $View
-     */
-    public function __construct(View $View, $settings = [])
-    {
-        parent::__construct($View, $settings);
-        // TODO ucmitz 未移行のためコメントアウト
-        /* >>>
-        if (ClassRegistry::isKeySet('Page')) {
-            $this->Page = ClassRegistry::getObject('Page');
-        } else {
-            $this->Page = ClassRegistry::init('Page', 'Model');
-        }
-        <<< */
-    }
+    public $helpers = ['BaserCore.BcContents'];
 
     /**
      * initialize
@@ -89,18 +59,17 @@ class BcPageHelper extends Helper
     /**
      * ページ機能用URLを取得する
      *
-     * @param array $page 固定ページデータ
+     * @param Page $page 固定ページデータ
      * @return string URL
+     * @checked
+     * @noTodo
      */
     public function getUrl($page)
     {
-        if (isset($page['Content'])) {
-            $page = $page['Content'];
+        if($page->content?->url) {
+            return $page->content?->url;
         }
-        if (!isset($page['url'])) {
-            return '';
-        }
-        return $page['url'];
+        return '';
     }
 
     /**
@@ -110,6 +79,8 @@ class BcPageHelper extends Helper
      * @param int $pageCategoryId カテゴリID
      * @param int $recursive 関連データの階層
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getPageList($id, $level = null, $options = [])
     {

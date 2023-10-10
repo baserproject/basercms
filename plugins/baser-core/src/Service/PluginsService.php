@@ -279,6 +279,8 @@ class PluginsService implements PluginsServiceInterface
      * @param string $currentVersion
      * @param string $targetVersion
      * @param string $connection
+     * @checked
+     * @noTodo
      */
     public function updateCore(string $currentVersion, string $targetVersion, string $php, $connection = 'default')
     {
@@ -676,6 +678,8 @@ class PluginsService implements PluginsServiceInterface
      * @return array
      *  - `latest`: 最新バージョン
      *  - `versions`: 取得可能なコアのバージョンリスト
+     * @checked
+     * @noTodo
      */
     public function getAvailableCoreVersionInfo()
     {
@@ -741,6 +745,8 @@ class PluginsService implements PluginsServiceInterface
      * 利用可能なコアの最新のバーションを取得
      *
      * @return bool|mixed|string
+     * @checked
+     * @noTodo
      */
     public function getAvailableCoreVersion()
     {
@@ -752,6 +758,8 @@ class PluginsService implements PluginsServiceInterface
      * 利用可能なコアのバージョン群を取得
      *
      * @return array|mixed
+     * @checked
+     * @noTodo
      */
     public function isAvailableCoreUpdates()
     {

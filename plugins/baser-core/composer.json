@@ -30,7 +30,9 @@
         "baserproject/bc-uploader": "^5.1",
         "baserproject/bc-widget-area": "^5.1",
         "imo-tikuwa/cakephp-soft-delete": "^2.0",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-zip": "*",
+        "ext-gd": "*"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
@@ -38,7 +40,8 @@
         "phpunit/phpunit": "^9.5",
         "symplify/monorepo-builder": "^10.2",
         "vierge-noire/cakephp-fixture-factories": "^2.5",
-        "vierge-noire/cakephp-test-suite-light": "^2.0"
+        "vierge-noire/cakephp-test-suite-light": "^2.0",
+        "ext-xdebug": "*"
     },
     "autoload": {
         "psr-4": {

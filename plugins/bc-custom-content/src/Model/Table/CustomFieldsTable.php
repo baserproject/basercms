@@ -49,6 +49,8 @@ class CustomFieldsTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -79,7 +81,7 @@ class CustomFieldsTable extends AppTable
                     'rule' => ['checkSelectList'],
                     'message' => __d('baser_core', '選択リストに同じ項目を複数登録できません。')
                 ]
-        ]);
+            ]);
         return $validator;
     }
 
@@ -89,18 +91,19 @@ class CustomFieldsTable extends AppTable
      * @param EventInterface $event
      * @param ArrayObject $content
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
         // beforeMarshal のタイミングで変換しないと配列が null になってしまう
-        if(!empty($content['meta'])) {
+        if (!empty($content['meta'])) {
             $content['meta'] = json_encode($content['meta'], JSON_UNESCAPED_UNICODE);
         }
-        if(!empty($content['validate'])) {
+        if (!empty($content['validate'])) {
             $content['validate'] = json_encode($content['validate'], JSON_UNESCAPED_UNICODE);
         }
     }
-
 
     /**
      * Find all
@@ -110,14 +113,16 @@ class CustomFieldsTable extends AppTable
      * @param Query $query
      * @param array $options
      * @return Query
+     * @checked
+     * @noTodo
      */
     public function findAll(Query $query, array $options = []): Query
     {
-        return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
-            return $results->map(function ($row) {
-                if(!$row) return $row;
-                if(isset($row->meta) && $row->meta) $row->meta = json_decode($row->meta, true);
-                if(isset($row->validate) &&  $row->validate) $row->validate = json_decode($row->validate, true);
+        return $query->formatResults(function(\Cake\Collection\CollectionInterface $results) {
+            return $results->map(function($row) {
+                if (!$row) return $row;
+                if (isset($row->meta) && $row->meta) $row->meta = json_decode($row->meta, true);
+                if (isset($row->validate) && $row->validate) $row->validate = json_decode($row->validate, true);
                 return $row;
             });
         });
