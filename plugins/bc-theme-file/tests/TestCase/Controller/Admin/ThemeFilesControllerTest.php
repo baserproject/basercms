@@ -93,6 +93,9 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_beforeRender()
     {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
         //テーマがデフォルトテーマの場合、
         $request = $this->getRequest()->withParam('pass.0', 'BcFront');
         $ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
@@ -107,6 +110,14 @@ class ThemeFilesControllerTest extends BcTestCase
         $ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
         $ThemeFilesController->beforeRender(new Event('beforeRender'));
         $this->assertEmpty($_SESSION);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertFalse($isDefaultTheme);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcFront');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertTrue($isDefaultTheme);
     }
 
     /**
