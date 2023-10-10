@@ -37,7 +37,7 @@ if($request->getAttribute('currentContent')->type === 'ContentFolder') {
 ?>
 
 
-<div class="bs-widget bs-widget-local-navi bs-widget-local-navi-<?php echo $id ?>">
+<div class="bs-widget bs-widget-local-navi bs-widget-local-navi-<?php echo h($id) ?>">
 	<?php if ($use_title): ?>
 		<h2 class="bs-widget-head"><?php echo h($title) ?></h2>
 	<?php endif ?>

@@ -16,6 +16,9 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\View\View;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcShortCodeEventListener
@@ -29,6 +32,8 @@ class BcShortCodeEventListener implements EventListenerInterface
      * Implemented Events
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     public function implementedEvents(): array
     {
@@ -41,6 +46,9 @@ class BcShortCodeEventListener implements EventListenerInterface
      * After Render
      *
      * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
      */
     public function afterRender(Event $event)
     {
@@ -53,6 +61,9 @@ class BcShortCodeEventListener implements EventListenerInterface
      * ショートコードを実行する
      *
      * @param View $View
+     * @return void
+     * @checked
+     * @noTodo
      */
     protected function _execShortCode(View $view)
     {

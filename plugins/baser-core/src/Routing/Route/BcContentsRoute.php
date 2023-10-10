@@ -139,6 +139,8 @@ class BcContentsRoute extends Route
      * @param $type
      * @param $entityId
      * @return mixed false|array
+     * @checked
+     * @noTodo
      */
     public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias)
     {
@@ -356,6 +358,8 @@ class BcContentsRoute extends Route
      * @param array $params パラメーター
      * @param bool $useAction アクションを判定に入れるかどうか
      * @return bool|string
+     * @checked
+     * @noTodo
      */
     protected function _getContentTypeByParams($params, $useAction = true)
     {

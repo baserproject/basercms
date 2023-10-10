@@ -191,6 +191,8 @@ class AppController extends BaseController
      * 現在アクセスしているURLについて権限があるかどうかを確認する。
      *
      * @return bool
+     * @noTodo
+     * @checked
      */
     private function checkPermission()
     {

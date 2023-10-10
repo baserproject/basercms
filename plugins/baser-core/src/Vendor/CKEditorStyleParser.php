@@ -11,6 +11,10 @@
 
 namespace BaserCore\Vendor;
 
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * CSSを解析してCKEditorのスタイルセット用のデータ構造に変換する
  *
@@ -31,10 +35,16 @@ namespace BaserCore\Vendor;
  *      ]
  *  ]
  */
-
 class CKEditorStyleParser
 {
 
+    /**
+     * Parse
+     * @param $css
+     * @return array
+     * @checked
+     * @noTodo
+     */
     public static function parse($css)
     {
         $css = preg_replace('/\/\*.*?\*\//s', '', $css);
@@ -68,6 +78,13 @@ class CKEditorStyleParser
 
     }
 
+    /**
+     * Parse Code
+     * @param $code
+     * @return array
+     * @checked
+     * @noTodo
+     */
     private static function parseCode($code)
     {
         $size = strlen($code);
@@ -95,6 +112,16 @@ class CKEditorStyleParser
         return $data;
     }
 
+    /**
+     * Read String
+     * @param $target
+     * @param $body
+     * @param $size
+     * @param $i
+     * @return string
+     * @checked
+     * @noTodo
+     */
     private static function readString($target, $body, $size, &$i)
     {
         $data = '';

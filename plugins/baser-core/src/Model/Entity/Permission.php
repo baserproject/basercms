@@ -16,6 +16,9 @@ namespace BaserCore\Model\Entity;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Permission
@@ -59,15 +62,17 @@ class Permission extends Entity
      * アクセスルールグループタイプを取得
      *
      * @return string|null
+     * @checked
+     * @noTodo
      */
     protected function _getPermissionGroupType()
     {
-        if($this->permission_group_id) {
+        if ($this->permission_group_id) {
             $permissionGroupsTable = TableRegistry::getTableLocator()->get('BaserCore.PermissionGroups');
             $entity = $permissionGroupsTable->find()->where(['id' => $this->permission_group_id])->first();
             return $entity->type;
         }
         return isset($this->_fields['permission_group_type'])? $this->_fields['permission_group_type'] : null;
     }
+
 }
-?>

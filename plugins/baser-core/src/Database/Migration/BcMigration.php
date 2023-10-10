@@ -14,6 +14,9 @@ namespace BaserCore\Database\Migration;
 use BaserCore\Utility\BcUtil;
 use Migrations\AbstractMigration;
 use Migrations\Table;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * BcMigration
@@ -29,6 +32,8 @@ class BcMigration extends AbstractMigration
      * @param string $tableName Table Name
      * @param array $options Options
      * @return \Migrations\Table
+     * @checked
+     * @noTodo
      */
     public function table(string $tableName, array $options = []): Table
     {

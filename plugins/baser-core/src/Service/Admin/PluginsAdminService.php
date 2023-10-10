@@ -102,6 +102,12 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         ];
     }
 
+    /**
+     * CLI版PHPのパスを取得する
+     * @return mixed|string
+     * @checked
+     * @noTodo
+     */
     public function whichPhp()
     {
         exec('which php', $out, $code);
@@ -117,6 +123,8 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @param string $availableVersion
      * @param int|false $scriptNum
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion, $scriptNum)
     {

@@ -11,18 +11,14 @@
 
 namespace BaserCore\Model\Table;
 
-use ArrayObject;
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
-use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Datasource\EntityInterface;
 use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
@@ -105,7 +101,7 @@ class AppTable extends Table
      */
     public function belongsToMany(string $associated, array $options = []): BelongsToMany
     {
-        if(isset($options['joinTable'])) {
+        if (isset($options['joinTable'])) {
             $options['joinTable'] = $this->addPrefix($options['joinTable']);
         }
         return parent::belongsToMany($associated, $options);
@@ -131,7 +127,7 @@ class AppTable extends Table
     public function addPrefix($table)
     {
         $prefix = BcUtil::getCurrentDbConfig()['prefix'];
-        if(!preg_match('/^' . $prefix . '/', $table)) {
+        if (!preg_match('/^' . $prefix . '/', $table)) {
             return $prefix . $table;
         }
         return $table;
@@ -176,31 +172,18 @@ class AppTable extends Table
     }
 
     /**
-     * コントロールソースを取得する
-     *
-     * 継承先でオーバーライドする事
-     *
-     * @param $field
-     * @return array
-     */
-    public function getControlSource($field)
-    {
-        return [];
-    }
-
-    /**
      * 機種依存文字の変換処理
      *
      * 内部文字コードがUTF-8である必要がある。
      * 多次元配列には対応していない。
      *
-     * @param string    変換対象文字列
-     * @return    string    変換後文字列
-     * @TODO AppExModeに移行すべきかも
+     * @param string $str 変換対象文字列
+     * @return string 変換後文字列
+     * @checked
+     * @noTodo
      */
     public function replaceText($str)
     {
-        $ret = $str;
         $arr = [
             "\xE2\x85\xA0" => "I",
             "\xE2\x85\xA1" => "II",
@@ -271,7 +254,6 @@ class AppTable extends Table
             "\xE3\x88\xB2" => "(有)",
             "\xE3\x88\xB9" => "(代)",
         ];
-
         return str_replace(array_keys($arr), array_values($arr), $str);
     }
 
@@ -331,6 +313,8 @@ class AppTable extends Table
      * @param string $id
      * @param array $conditions
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function sortup($id, $conditions)
     {
@@ -343,6 +327,8 @@ class AppTable extends Table
      * @param string $id
      * @param array $conditions
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function sortdown($id, $conditions)
     {
@@ -358,6 +344,8 @@ class AppTable extends Table
      *   - conditions: データ取得条件
      *   - sortFieldName: ソートフィールドのカラム名 (初期値: sort)
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function changeSort($id, $offset, $options = [])
     {
@@ -407,252 +395,6 @@ class AppTable extends Table
         }
 
         return true;
-    }
-
-    /**
-     * Deconstructs a complex data type (array or object) into a single field value.
-     *
-     * @param string $field The name of the field to be deconstructed
-     * @param mixed $data An array or object to be deconstructed into a field
-     * @return mixed The resulting data that should be assigned to a field
-     */
-    public function deconstruct($field, $data)
-    {
-        if (!is_array($data)) {
-            return $data;
-        }
-
-        $type = $this->getColumnType($field);
-
-        // >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-        /* if (!in_array($type, array('datetime', 'timestamp', 'date', 'time'))) { */
-        // ---
-        if (!in_array($type, ['string', 'text', 'datetime', 'timestamp', 'date', 'time'])) {
-            // <<<
-            return $data;
-        }
-
-        $useNewDate = (isset($data['year']) || isset($data['month']) ||
-            isset($data['day']) || isset($data['hour']) || isset($data['minute']));
-
-        // >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-        /* $dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'); */
-        // ---
-        $dateFields = ['W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'];
-        // <<<
-        $timeFields = ['H' => 'hour', 'i' => 'min', 's' => 'sec'];
-        $date = [];
-
-        if (isset($data['meridian']) && empty($data['meridian'])) {
-            return null;
-        }
-
-        if (isset($data['hour']) &&
-            isset($data['meridian']) &&
-            !empty($data['hour']) &&
-            $data['hour'] != 12 &&
-            $data['meridian'] === 'pm'
-        ) {
-            $data['hour'] = $data['hour'] + 12;
-        }
-        if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] == 12 && $data['meridian'] === 'am') {
-            $data['hour'] = '00';
-        }
-        if ($type === 'time') {
-            foreach($timeFields as $key => $val) {
-                if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
-                    $data[$val] = '00';
-                } elseif ($data[$val] !== '') {
-                    $data[$val] = sprintf('%02d', $data[$val]);
-                }
-                if (!empty($data[$val])) {
-                    $date[$key] = $data[$val];
-                } else {
-                    return null;
-                }
-            }
-        }
-
-        // >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-        /* if ($type === 'datetime' || $type === 'timestamp' || $type === 'date') { */
-        // ---
-        if ($type == 'text' || $type == 'string' || $type === 'datetime' || $type === 'timestamp' || $type === 'date') {
-            // <<<
-            foreach($dateFields as $key => $val) {
-                if ($val === 'hour' || $val === 'min' || $val === 'sec') {
-                    if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
-                        $data[$val] = '00';
-                    } else {
-                        $data[$val] = sprintf('%02d', $data[$val]);
-                    }
-                }
-
-                // >>> CUSTOMIZE ADD 2013/11/10 ryuring 和暦対応
-                if ($val == 'wareki' && !empty($data['wareki'])) {
-                    $warekis = ['m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988, 'r' => 2018];
-                    if (!empty($data['year'])) {
-                        [$wareki, $year] = explode('-', $data['year']);
-                        $data['year'] = $year + $warekis[$wareki];
-                    }
-                }
-                // <<<
-                // >>> CUSTOMIZE ADD 2013/11/10 ryuring 和暦対応
-                /* if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
-                  return null; */
-                // ---
-                if ($val != 'wareki' && !isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || (isset($data[$val][0]) && $data[$val][0] === '-'))) {
-                    if ($type == 'text' || $type == 'string') {
-                        return $data;
-                    } else {
-                        return null;
-                    }
-                }
-                if (isset($data[$val]) && !empty($data[$val])) {
-                    $date[$key] = $data[$val];
-                }
-            }
-        }
-
-        if ($useNewDate && !empty($date)) {
-            // >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-            /* $format = $this->getDataSource()->columns[$type]['format']; */
-            // ---
-            if ($type == 'text' || $type == 'string') {
-                $format = 'Y-m-d H:i:s';
-            } else {
-                $format = $this->getDataSource()->columns[$type]['format'];
-            }
-            // <<<
-
-            foreach(['m', 'd', 'H', 'i', 's'] as $index) {
-                if (isset($date[$index])) {
-                    $date[$index] = sprintf('%02d', $date[$index]);
-                }
-            }
-            return str_replace(array_keys($date), array_values($date), $format);
-        }
-        return $data;
-    }
-
-    /**
-     * 指定したモデル以外のアソシエーションを除外する
-     *
-     * @param array $auguments アソシエーションを除外しないモデル。
-     * 　「.（ドット）」で区切る事により、対象モデルにアソシエーションしているモデルがさらに定義しているアソシエーションを対象とする事ができる
-     * 　（例）UserGroup.Permission
-     * @param boolean $reset バインド時に１回の find でリセットするかどうか
-     * @return void
-     */
-    public function reduceAssociations($arguments, $reset = true)
-    {
-        $models = [];
-
-        foreach($arguments as $index => $argument) {
-            if (is_array($argument)) {
-                if (count($argument) > 0) {
-                    $arguments = am($arguments, $argument);
-                }
-                unset($arguments[$index]);
-            }
-        }
-
-        foreach($arguments as $index => $argument) {
-            if (!is_string($argument)) {
-                unset($arguments[$index]);
-            }
-        }
-
-        if (count($arguments) == 0) {
-            $models[$this->name] = [];
-        } else {
-            foreach($arguments as $argument) {
-                if (strpos($argument, '.') !== false) {
-                    $model = substr($argument, 0, strpos($argument, '.'));
-                    $child = substr($argument, strpos($argument, '.') + 1);
-
-                    if ($child == $model) {
-                        $models[$model] = [];
-                    } else {
-                        $models[$model][] = $child;
-                    }
-                } else {
-                    $models[$this->name][] = $argument;
-                }
-            }
-        }
-
-        $relationTypes = ['belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany'];
-
-        foreach($models as $bindingName => $children) {
-            $model = null;
-
-            foreach($relationTypes as $relationType) {
-                $currentRelation = (isset($this->$relationType)? $this->$relationType : null);
-                if (isset($currentRelation) && isset($currentRelation[$bindingName]) &&
-                    is_array($currentRelation[$bindingName]) && isset($currentRelation[$bindingName]['className'])) {
-                    $model = $currentRelation[$bindingName]['className'];
-                    break;
-                }
-            }
-
-            if (!isset($model)) {
-                $model = $bindingName;
-            }
-
-            if (isset($model) && $model != $this->name && isset($this->$model)) {
-                if (!isset($this->__backInnerAssociation)) {
-                    $this->__backInnerAssociation = [];
-                }
-                $this->__backInnerAssociation[] = $model;
-                $this->$model->reduceAssociations($children, $reset);
-            }
-        }
-
-        if (isset($models[$this->name])) {
-            foreach($models as $model => $children) {
-                if ($model != $this->name) {
-                    $models[$this->name][] = $model;
-                }
-            }
-
-            $models = array_unique($models[$this->name]);
-            $unbind = [];
-
-            foreach($relationTypes as $relation) {
-                if (isset($this->$relation)) {
-                    foreach($this->$relation as $bindingName => $bindingData) {
-                        if (!in_array($bindingName, $models)) {
-                            $unbind[$relation][] = $bindingName;
-                        }
-                    }
-                }
-            }
-            if (count($unbind) > 0) {
-                $this->unbindModel($unbind, $reset);
-            }
-        }
-    }
-
-    /**
-     * Used to report user friendly errors.
-     * If there is a file app/error.php or app/app_error.php this file will be loaded
-     * error.php is the AppError class it should extend ErrorHandler class.
-     *
-     * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
-     * @param array $messages Message that is to be displayed by the error class
-     */
-    public function cakeError($method, $messages = [])
-    {
-        //======================================================================
-        // router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
-        // AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。
-        // router.php がロードされる前のタイミングでは、通常のエラー表示を行う
-        //======================================================================
-        if (!Configure::read('BcRequest.routerLoaded')) {
-            trigger_error($method, E_USER_ERROR);
-        } else {
-            parent::cakeError($method, $messages);
-        }
     }
 
     /**
@@ -708,6 +450,8 @@ class AppTable extends Table
     /**
      * イベントを一時的にオフにする
      * @param string $eventKey
+     * @checked
+     * @noTodo
      */
     public function offEvent($eventKey)
     {

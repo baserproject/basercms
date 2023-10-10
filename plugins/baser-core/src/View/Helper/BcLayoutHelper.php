@@ -12,7 +12,12 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 
 /**
  * レイアウトヘルパ
@@ -29,6 +34,8 @@ class BcLayoutHelper extends Helper
      * コンテンツヘッダー発火
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public function dispatchContentsHeader()
     {
@@ -50,6 +57,8 @@ class BcLayoutHelper extends Helper
      * コンテンツフッター発火
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public function dispatchContentsFooter()
     {

@@ -8,9 +8,13 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Utility;
 
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * BcSiteConfig
@@ -23,6 +27,8 @@ class BcSiteConfig
      *
      * @param string $key
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public static function get($key)
     {

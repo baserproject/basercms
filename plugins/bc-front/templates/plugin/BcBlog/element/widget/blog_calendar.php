@@ -35,7 +35,7 @@ $entryDates = $data['entryDates'];
 ?>
 <?php // TODO コード整理する事  ?>
 
-<div class="bs-widget bs-widget-blog-calendar bs-widget-blog-calendar-<?php echo $id ?> bs-blog-widget">
+<div class="bs-widget bs-widget-blog-calendar bs-widget-blog-calendar-<?php echo h($id) ?> bs-blog-widget">
   <?php if ($name && $use_title): ?>
     <h2 class="bs-widget-head"><?php echo $name ?></h2>
   <?php endif ?>

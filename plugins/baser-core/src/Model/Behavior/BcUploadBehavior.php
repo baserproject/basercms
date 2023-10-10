@@ -128,7 +128,7 @@ class BcUploadBehavior extends Behavior
     {
         $this->BcFileUploader[$this->table()->getAlias()]->setupRequestData($data);
         $this->BcFileUploader[$this->table()->getAlias()]->setupTmpData($data);
-        $this->oldEntity[$this->table()->getAlias()] = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
+        $this->oldEntity[$this->table()->getAlias()][$data['_bc_upload_id']] = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
     }
 
     /**
@@ -139,6 +139,8 @@ class BcUploadBehavior extends Behavior
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
      */
     public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -158,12 +160,14 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity)
     {
-        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()])) {
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($this->oldEntity[$this->table()->getAlias()]);
+        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id])) {
+            $oldEntity = $this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id];
+            $oldEntity->_bc_upload_id = $entity->_bc_upload_id;
+            $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($oldEntity);
         }
         $this->BcFileUploader[$this->table()->getAlias()]->saveFiles($entity);
-        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()])) {
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($this->oldEntity[$this->table()->getAlias()], $entity);
+        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id])) {
+            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($this->oldEntity[$this->table()->getAlias()][$entity->_bc_upload_id], $entity);
         }
         if ($this->BcFileUploader[$this->table()->getAlias()]->isUploaded()) {
             $this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity);

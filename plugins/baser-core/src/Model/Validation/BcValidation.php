@@ -72,7 +72,7 @@ class BcValidation extends Validation
      */
     public static function alphaNumericDashUnderscore($value)
     {
-        return (bool) preg_match('|^[0-9a-zA-Z_-]*$|', $value);
+        return (bool)preg_match('|^[0-9a-zA-Z_-]*$|', $value);
     }
 
     /**
@@ -224,8 +224,8 @@ class BcValidation extends Validation
                     return false;
                 case 4:
                     // UPLOAD_ERR_NO_FILE
-                     Log::error(__d('baser_core', 'CODE: {0} ファイルがアップロードされませんでした。', $fileErrorCode));
-                     break;
+                    Log::error(__d('baser_core', 'CODE: {0} ファイルがアップロードされませんでした。', $fileErrorCode));
+                    break;
                 case 6:
                     // UPLOAD_ERR_NO_TMP_DIR
                     Log::error(__d('baser_core', 'CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。', $fileErrorCode));
@@ -267,29 +267,29 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-	public static function fileExt($file, $exts)
-	{
-		if (!is_array($exts)) {
-			$exts = explode(',', $exts);
-		}
+    public static function fileExt($file, $exts)
+    {
+        if (!is_array($exts)) {
+            $exts = explode(',', $exts);
+        }
 
-		// FILES形式のチェック
-		if (!empty($file['name'])) {
-			$ext = BcUtil::decodeContent($file['type'], $file['name']);
-			if (!in_array($ext, $exts)) {
-				return false;
-			}
-		}
+        // FILES形式のチェック
+        if (!empty($file['name'])) {
+            $ext = BcUtil::decodeContent($file['type'], $file['name']);
+            if (!in_array($ext, $exts)) {
+                return false;
+            }
+        }
 
-		// 更新時の文字列チェック
-		if (!empty($file) && is_string($file)) {
-			$ext = pathinfo($file, PATHINFO_EXTENSION);
-			if (!in_array($ext, $exts)) {
-				return false;
-			}
-		}
-		return true;
-	}
+        // 更新時の文字列チェック
+        if (!empty($file) && is_string($file)) {
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            if (!in_array($ext, $exts)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * ファイルが送信されたかチェックするバリデーション
@@ -493,20 +493,20 @@ class BcValidation extends Validation
      */
     public static function containsScript($value)
     {
-        if(!$value) return true;
-		$events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
-			'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
-			'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
+        if (!$value) return true;
+        $events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
+            'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
+            'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
         if (BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
             return true;
         }
         if (preg_match('/(<\?=|<\?php|<script)/i', $value)) {
             return false;
         }
-		if (preg_match('/<[^>]+?(' . implode('|', $events) . ')\s*=[^<>]*?>/i', $value)) {
+        if (preg_match('/<[^>]+?(' . implode('|', $events) . ')\s*=[^<>]*?>/i', $value)) {
             return false;
         }
-		if (preg_match('/href\s*=\s*[^>]*?javascript\s*?:/i', $value)) {
+        if (preg_match('/href\s*=\s*[^>]*?javascript\s*?:/i', $value)) {
             return false;
         }
         return true;
@@ -525,7 +525,7 @@ class BcValidation extends Validation
      * 半角と全角のスペースを許容しない場合はvaliadtionのrule設定で空の文字列を渡す
      * 'rule' => ['checkKatakana', '']
      */
-    public static function checkKatakana($value, $addAllow = '\s　') : bool
+    public static function checkKatakana($value, $addAllow = '\s　'): bool
     {
         if (!is_string($addAllow)) {
             $addAllow = '\s　';
@@ -534,7 +534,7 @@ class BcValidation extends Validation
         if ($value === '') {
             return true;
         }
-        if(preg_match("/^[ァ-ヾ" . $addAllow . "]+$/u", $value)){
+        if (preg_match("/^[ァ-ヾ" . $addAllow . "]+$/u", $value)) {
             return true;
         }
         return false;
@@ -554,7 +554,7 @@ class BcValidation extends Validation
      * 'rule' => ['checkHiragana', '']
      *
      */
-    public static function checkHiragana($value, $addAllow = '\s　ー') : bool
+    public static function checkHiragana($value, $addAllow = '\s　ー'): bool
     {
         if (!is_string($addAllow)) {
             $addAllow = '\s　ー';
@@ -563,7 +563,7 @@ class BcValidation extends Validation
         if ($value === '') {
             return true;
         }
-        if(preg_match("/^[ぁ-ゞ" . $addAllow . "]+$/u", $value)){
+        if (preg_match("/^[ぁ-ゞ" . $addAllow . "]+$/u", $value)) {
             return true;
         }
         return false;
@@ -574,10 +574,12 @@ class BcValidation extends Validation
      *
      * @param $value
      * @return bool
+     * @checked
+     * @noTodo
      */
     public static function reserved($value): bool
     {
-        if(in_array($value, Configure::read('BcApp.reservedWords'))) {
+        if (in_array($value, Configure::read('BcApp.reservedWords'))) {
             return false;
         }
         return true;

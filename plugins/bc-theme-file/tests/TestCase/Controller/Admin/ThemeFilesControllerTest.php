@@ -1,17 +1,20 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('ThemeFilesController', 'Controller');
+namespace BcThemeFile\Test\TestCase\Controller\Admin;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcThemeFile\Controller\Admin\ThemeFilesController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeFilesControllerTest
@@ -20,15 +23,22 @@ App::uses('ThemeFilesController', 'Controller');
  */
 class ThemeFilesControllerTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -36,131 +46,188 @@ class ThemeFilesControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
+        unset($this->ThemeFilesController);
         parent::tearDown();
     }
 
     /**
-     * テーマファイル一覧
+     * test __construct
      */
-    public function testAdmin_index()
+    public function test__construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $_tempalteTypesExpected = [
+            'Layouts' => 'レイアウトテンプレート',
+            'Elements' => 'エレメントテンプレート',
+            'Emails' => 'Eメールテンプレート',
+            'etc' => 'コンテンツテンプレート',
+            'css' => 'スタイルシート',
+            'js' => 'Javascript',
+            'img' => 'イメージ'
+        ];
+        $this->assertEquals($_tempalteTypesExpected, $this->ThemeFilesController->_tempalteTypes);
     }
 
     /**
-     * テーマファイル作成
+     * test isDefaultTheme
      */
-    public function testAdmin_add()
+    public function test_isDefaultTheme()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テーマがデフォルトテーマの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcFront');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $result = $this->execPrivateMethod($this->ThemeFilesController, 'isDefaultTheme', []);
+        $this->assertTrue($result);
+
+        //テーマがデフォルトテーマではないの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
+        $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $result = $this->execPrivateMethod($this->ThemeFilesController, 'isDefaultTheme', []);
+        $this->assertFalse($result);
     }
 
     /**
-     * テーマファイル編集
+     * test beforeRender
      */
-    public function testAdmin_edit()
+    public function test_beforeRender()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * ファイルを削除する
+     * test index
      */
-    public function testAdmin_del()
+    public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * ファイルを削除する　（ajax）
+     * test add
      */
-    public function testAdmin_ajax_del()
+    public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * テーマファイル表示
+     * test edit
      */
-    public function testAdmin_view()
+    public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * テーマファイルをコピーする
+     * test delete
      */
-    public function testAdmin_ajax_copy()
+    public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * ファイルをアップロードする
+     * test delete_folder
      */
-    public function testAdmin_upload()
+    public function test_delete_folder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * フォルダ追加
+     * test view
      */
-    public function testAdmin_add_folder()
+    public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * フォルダ編集
+     * test copy
      */
-    public function testAdmin_edit_folder()
+    public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * フォルダ表示
+     * test copy_folder
      */
-    public function testAdmin_view_folder()
+    public function test_copy_folder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * コアファイルを現在のテーマにコピーする
+     * test upload
      */
-    public function testAdmin_copy_to_theme()
+    public function test_upload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * コアファイルのフォルダを現在のテーマにコピーする
+     * test add_folder
      */
-    public function testAdmin_copy_folder_to_theme()
+    public function test_add_folder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * 画像を表示する
-     * コアの画像等も表示可
+     * test edit_folder
      */
-    public function testAdmin_img()
+    public function test_edit_folder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
-     * 画像を表示する
-     * コアの画像等も表示可
+     * test view_folder
      */
-    public function testAdmin_img_thumb()
+    public function test_view_folder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
+    /**
+     * test copy_to_theme
+     */
+    public function test_copy_to_theme()
+    {
+        $this->markTestIncomplete('このテストは未実装です。');
+    }
+
+    /**
+     * test copy_folder_to_theme
+     */
+    public function test_copy_folder_to_theme()
+    {
+        $this->markTestIncomplete('このテストは未実装です。');
+    }
+
+    /**
+     * test img
+     */
+    public function test_img()
+    {
+        $this->markTestIncomplete('このテストは未実装です。');
+    }
+
+    /**
+     * test img_thumb
+     */
+    public function test_img_thumb()
+    {
+        $this->markTestIncomplete('このテストは未実装です。');
+    }
+
+    /**
+     * test parseArgs
+     */
+    public function test_parseArgs()
+    {
+        $this->markTestIncomplete('このテストは未実装です。');
+    }
 }

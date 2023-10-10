@@ -257,7 +257,7 @@ class PagesTable extends AppTable
         $page->content = new Content([
 			'name' => $page->content->name,
 			'parent_id' => $newParentId,
-			'title' => $newTitle,
+			'title' => $newTitle ?? $oldPage->title . '_copy',
 			'author_id' => $newAuthorId,
 			'site_id' => $newSiteId,
 			'description' => $page->content->description,

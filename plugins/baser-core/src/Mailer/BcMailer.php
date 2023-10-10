@@ -19,10 +19,13 @@ use BaserCore\Utility\BcSiteConfig;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcMailer
-*/
+ */
 class BcMailer extends Mailer
 {
 
@@ -43,6 +46,8 @@ class BcMailer extends Mailer
      * Constructor
      *
      * @param null $config
+     * @checked
+     * @noTodo
      */
     public function __construct($config = null)
     {
@@ -61,6 +66,8 @@ class BcMailer extends Mailer
     /**
      * Emailのトランスポート設定を行う
      * @return void
+     * @checked
+     * @noTodo
      */
     public function setEmailTransport()
     {
@@ -96,6 +103,8 @@ class BcMailer extends Mailer
      * プラグイン名取得
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getPlugin(): ?string
     {
@@ -108,10 +117,13 @@ class BcMailer extends Mailer
      * @param string $content Content.
      * @return array
      * @psalm-return array{headers: string, message: string}
+     * @checked
+     * @noTodo
      */
     public function deliver(string $content = '')
     {
         $this->dispatchLayerEvent('beforeDeliver');
         return parent::deliver($content);
     }
+
 }

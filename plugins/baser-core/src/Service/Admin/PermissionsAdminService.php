@@ -19,6 +19,9 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * PermissionsAdminService
@@ -37,10 +40,11 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @param ServerRequest $request
      * @param int $userGroupId
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getViewVarsForIndex(ServerRequest $request, int $userGroupId)
     {
-        $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
         /** @var PermissionGroupsService $permissionGroupsService */
         $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         if($userGroupId) {
@@ -62,6 +66,8 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @param int $userGroupId
      * @param EntityInterface $entity
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getViewVarsForAdd(int $userGroupId, EntityInterface $entity)
     {
@@ -85,6 +91,8 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @param int $userGroupId
      * @param EntityInterface $entity
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getViewVarsForEdit(int $userGroupId, EntityInterface $entity)
     {

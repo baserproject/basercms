@@ -11,6 +11,10 @@
 
 namespace BaserCore\Controller;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * メンテナンスコントローラー
  */
@@ -19,6 +23,8 @@ class MaintenanceController extends BcFrontAppController
 
     /**
      * メンテナンス中ページを表示する
+     * @checked
+     * @noTodo
      */
     public function index()
     {

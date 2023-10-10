@@ -52,6 +52,15 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
             return new Response();
         }
 
+        /**
+         * CGIモード等PHPでJWT認証で必要なAuthorizationヘッダーが取得出来ないできない場合、REDIRECT_HTTP_AUTHORIZATION環境変数より取得する
+         * .htaccess等に下記を記載することで動作可能とする
+         * SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+         */
+        if (empty($request->getHeader('Authorization')) && $request->getEnv('REDIRECT_HTTP_AUTHORIZATION')) {
+            $request = $request->withHeader('Authorization', $request->getEnv('REDIRECT_HTTP_AUTHORIZATION'));
+        }
+
         if(BcUtil::isInstalled()) $this->redirectIfIsDeviceFile($request, $handler);
 
         return $handler->handle($request);

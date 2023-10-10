@@ -113,6 +113,9 @@ class CustomLinksTable extends AppTable
      * ツリービヘイビアのスコープを設定する
      *
      * @param int $tableId
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function setTreeScope(int $tableId): void
     {

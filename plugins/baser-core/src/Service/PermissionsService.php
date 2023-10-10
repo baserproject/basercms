@@ -507,6 +507,9 @@ class PermissionsService implements PermissionsServiceInterface
      * @param string $method
      * @param array $groupPermission
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isAuthorized(int $permissionType, string $url, string $method, array $groupPermission)
     {

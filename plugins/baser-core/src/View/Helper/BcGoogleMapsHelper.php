@@ -16,6 +16,9 @@ use BaserCore\Utility\BcGmaps;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * GoogleMapヘルパー
@@ -44,6 +47,8 @@ class BcGoogleMapsHelper extends Helper
      * @param int $width
      * @param int $height
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function load($options)
     {
@@ -87,6 +92,8 @@ class BcGoogleMapsHelper extends Helper
      * @param string $title
      * @param string $address
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public function getMarker(string $title, string $address)
     {
@@ -102,6 +109,8 @@ class BcGoogleMapsHelper extends Helper
      * @param string $address
      * @param string $apiKey
      * @return array|null
+     * @checked
+     * @noTodo
      */
     public function getLocation(string $address, ?string $apiKey)
     {
