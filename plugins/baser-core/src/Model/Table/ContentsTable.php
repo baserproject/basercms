@@ -12,12 +12,14 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use Cake\Core\Plugin;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
+use Cake\Utility\Inflector;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
