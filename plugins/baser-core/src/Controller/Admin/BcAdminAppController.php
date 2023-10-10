@@ -55,7 +55,6 @@ class BcAdminAppController extends BcAppController
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
         ]);
-        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole()) $this->Security->requireSecure();
     }
 
     /**
@@ -97,7 +96,6 @@ class BcAdminAppController extends BcAppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-        if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
         if ($this->getRequest()->getQuery('preview')) return;
         $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         $this->setAdminTheme();

@@ -12,13 +12,12 @@
 namespace BaserCore\Utility;
 
 use ArrayObject;
+use Cake\Filesystem\File;
 use Cake\Http\Session;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use BaserCore\Vendor\Imageresizer;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\Note;
@@ -123,9 +122,8 @@ class BcFileUploader
         $this->settings = $this->getSettings($config);
         $this->savePath = $this->getSaveDir();
         if (!is_dir($this->savePath)) {
-            $Folder = new Folder();
-            $Folder->create($this->savePath);
-            $Folder->chmod($this->savePath, 0777, true);
+            $Folder = new BcFolder($this->savePath);
+            $Folder->create();
         }
         $this->existsCheckDirs = $this->getExistsCheckDirs();
         $this->Session = new Session();
@@ -474,9 +472,9 @@ class BcFileUploader
         }
 
         // ファイルを一時ファイルとして保存
-        $file = new File($tmpName, true, 0666);
+        $file = new BcFile($tmpName);
+        $file->create();
         $file->write($fileData);
-        $file->close();
 
         // アップロードされたデータとしてデータを復元する
         $uploadInfo['error'] = 0;
@@ -792,9 +790,8 @@ class BcFileUploader
             $subdir = str_replace('/', DS, $subdir);
             $path = $this->savePath . $subdir;
             if (!is_dir($path)) {
-                $Folder = new Folder();
-                $Folder->create($path);
-                $Folder->chmod($path, 0777);
+                $Folder = new BcFolder($path);
+                $Folder->create();
             }
         }
         if(empty($file['ext'])) {

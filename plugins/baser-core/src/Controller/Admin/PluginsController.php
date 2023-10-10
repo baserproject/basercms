@@ -55,7 +55,7 @@ class PluginsController extends BcAdminAppController
     {
         $response = parent::beforeFilter($event);
         if($response) return $response;
-        $this->Security->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
+        $this->FormProtection->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
         if(Configure::read('BcRequest.isUpdater')) $this->Authentication->allowUnauthenticated(['update']);
     }
 

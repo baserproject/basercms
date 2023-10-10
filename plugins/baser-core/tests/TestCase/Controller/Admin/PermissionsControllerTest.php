@@ -70,7 +70,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->PermissionsController->beforeFilter($event);
         $this->assertNotEmpty($this->PermissionsController->viewBuilder()->getHelpers('BcTime'));
 
-        $unLockActions = $this->PermissionsController->Security->getConfig("unlockedActions");
+        $unLockActions = $this->PermissionsController->FormProtection->getConfig("unlockedActions");
         $this->assertEquals($unLockActions, [
             0 => 'update_sort',
             1 => 'batch',

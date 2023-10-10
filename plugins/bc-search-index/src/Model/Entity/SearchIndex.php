@@ -11,7 +11,7 @@
 
 namespace BcSearchIndex\Model\Entity;
 
-use Cake\I18n\Time as TimeAlias;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity as EntityAlias;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -33,10 +33,10 @@ use BaserCore\Annotation\Checked;
  * @property string $url
  * @property bool $status
  * @property string $priority
- * @property TimeAlias $publish_begin
- * @property TimeAlias $publish_end
- * @property TimeAlias $created
- * @property TimeAlias $modified
+ * @property FrozenTime $publish_begin
+ * @property FrozenTime $publish_end
+ * @property FrozenTime $created
+ * @property FrozenTime $modified
  */
 class SearchIndex extends EntityAlias
 {

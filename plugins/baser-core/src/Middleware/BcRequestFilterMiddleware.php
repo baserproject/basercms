@@ -114,6 +114,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         $configs['update'] = [$this, 'isUpdate'];
         $configs['page'] = [$this, 'isPage'];
         $configs['requestview'] = [$this, 'isRequestView'];
+		$configs['rss'] = ['param' => '_ext', 'value' => 'rss'];
 
         $agents = BcAgent::findAll();
         foreach($agents as $agent) {

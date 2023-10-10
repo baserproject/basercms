@@ -85,14 +85,11 @@ class BcAdminAppControllerTest extends BcTestCase
 //    {
 //        $this->assertNotEmpty($this->BcAdminApp->BcMessage);
 //        $this->assertNotEmpty($this->BcAdminApp->Authentication);
-//        $this->assertNotEmpty($this->BcAdminApp->Paginator);
-//        $this->assertFalse($this->BcAdminApp->Security->getConfig('validatePost'));
-//        $this->assertFalse($this->BcAdminApp->Security->getConfig('requireSecure'));
+//        $this->assertFalse($this->BcAdminApp->FormProtection->getConfig('validate'));
 //        $components = $this->BcAdminApp->components();
-//        $components->unload('Security');
+//        $components->unload('FormProtection');
 //        $_ENV['IS_CONSOLE'] = false;
 //        $this->BcAdminApp->initialize();
-//        $this->assertEquals([0 => '*'], $this->BcAdminApp->Security->getConfig('requireSecure'));
 //    }
 //
 //    /**

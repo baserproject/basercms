@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcTextHelper;
 use Cake\Core\Configure;
@@ -19,7 +20,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 
 /**
@@ -61,11 +61,11 @@ class BcFrontAppView extends AppView
         $theme = BcUtil::getCurrentTheme();
         if(!$theme) return;
         $themeHelpersPath = Plugin::path($theme) . 'src' . DS . 'View' . DS . 'Helper';
-        $Folder = new Folder($themeHelpersPath);
-        $files = $Folder->read(true, true);
-        if (empty($files[1])) return;
+        $Folder = new BcFolder($themeHelpersPath);
+        $files = $Folder->getFiles();
+        if (empty($files)) return;
 
-        foreach($files[1] as $file) {
+        foreach($files as $file) {
             $this->loadHelper(Inflector::camelize($theme, '-') . '.' . basename($file, 'Helper.php'));
         }
     }

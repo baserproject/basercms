@@ -94,7 +94,7 @@ class BlogController extends BlogFrontAppController
             ['status' => 'publish']
         );
 
-        if ($this->RequestHandler->prefers('rss')) {
+        if ($this->getRequest()->is('rss')) {
             $listCount = $blogContent->feed_count;
         } else {
             $listCount = $blogContent->list_count;
@@ -115,7 +115,7 @@ class BlogController extends BlogFrontAppController
             return $this->redirect(['action' => 'index']);
         }
 
-        if ($this->RequestHandler->prefers('rss')) {
+        if ($this->getRequest()->is('rss')) {
             $this->set($service->getViewVarsForIndexRss(
                 $this->getRequest(),
                 $blogContent,

@@ -103,7 +103,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $event = new Event('Controller.beforeFilter', $this->ContentsController);
         $this->ContentsController->beforeFilter($event);
-        $config = $this->ContentsController->Security->getConfig('unlockedActions');
+        $config = $this->ContentsController->FormProtection->getConfig('unlockedActions');
         $this->assertTrue(in_array('delete', $config));
         $this->assertTrue(in_array('batch', $config));
         $this->assertTrue(in_array('trash_return', $config));

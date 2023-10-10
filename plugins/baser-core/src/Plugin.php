@@ -40,6 +40,7 @@ use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\Middleware\HttpsEnforcerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
 use Cake\I18n\I18n;
@@ -283,6 +284,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
             ->add(new BcRedirectSubSiteFilter());
+
+        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem()) {
+            $middlewareQueue->add(new HttpsEnforcerMiddleware([
+                'redirect' => false
+            ]));
+        }
 
         // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
         $ref = new ReflectionClass($middlewareQueue);

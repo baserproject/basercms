@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Form\ThemeFolderForm;
 use BcThemeFile\Model\Entity\ThemeFolder;
@@ -104,16 +105,15 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
                 ];
             }
         }
-        $folder = new Folder($params['fullpath']);
-        $files = $folder->read(true, true);
+        $folder = new BcFolder($params['fullpath']);
         $themeFiles = [];
         $folders = [];
-        foreach($files[0] as $file) {
+        foreach($folder->getFolders() as $file) {
             if (in_array($file, $excludeFolderList)) continue;
             $folders[] = $this->get($params['fullpath'] . $file);
         }
         $themeFilesService = $this->getService(ThemeFilesServiceInterface::class);
-        foreach($files[1] as $file) {
+        foreach($folder->getFiles() as $file) {
             if (in_array($file, $excludeFileList)) continue;
             $themeFiles[] = $themeFilesService->get($params['fullpath'] . $file);
         }
@@ -183,8 +183,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
     public function delete(string $fullpath)
     {
         if (is_dir($fullpath)) {
-            $folder = new Folder();
-            return $folder->delete($fullpath);
+            $folder = new BcFolder($fullpath);
+            return $folder->delete();
         } else {
             return false;
         }

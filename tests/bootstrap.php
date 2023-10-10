@@ -15,7 +15,6 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
 
-use BaserCore\Error\BcException;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorTrap;
@@ -81,6 +80,11 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
     exit(__d('baser_core', 'ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変更してください。') . "\n");
 }
+
+/**
+ * パス定義
+ */
+include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
 
 // Use migrations to build test database schema.
 //
