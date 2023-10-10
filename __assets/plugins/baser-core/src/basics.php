@@ -15,8 +15,7 @@
 // App::uses('CakeText', 'Utility');
 use Cake\Cache\Cache;
 use Cake\Utility\Text;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFolder;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 
@@ -183,9 +182,9 @@ function clearViewCache($url = null, $ext = '.php')
             clearCache(strtolower(Text::slug($url)), 'views', $ext);
         }
     } else {
-        $folder = new Folder(CACHE . 'views' . DS);
-        $files = $folder->read(true, true);
-        foreach($files[1] as $file) {
+        $folder = new BcFolder(CACHE . 'views' . DS);
+        $files = $folder->getFiles();
+        foreach ($files as $file) {
             if ($file != 'empty') {
                 @unlink(CACHE . 'views' . DS . $file);
             }
@@ -200,16 +199,13 @@ function clearDataCache()
 {
 
     App::import('Core', 'Folder');
-    $folder = new Folder(CACHE . 'datas' . DS);
+    $folder = new BcFolder(CACHE . 'datas' . DS);
 
-    $files = $folder->read(true, true, true);
-    foreach($files[1] as $file) {
+    $files = $folder->getFiles();
+    foreach ($files as $file) {
         @unlink($file);
     }
-    $Folder = new Folder();
-    foreach($files[0] as $folder) {
-        $Folder->delete($folder);
-    }
+    $folder->delete();
 }
 
 /**

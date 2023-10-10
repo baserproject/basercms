@@ -101,4 +101,18 @@ class BcFile
         return (bool) file_put_contents($this->path, $data);
     }
 
+<<<<<<< HEAD
+    /**
+     * ファイルを削除
+     * @return bool
+     */
+    public function delete()
+    {
+        if(!is_file($this->path)) {
+            return false;
+        }
+        return unlink($this->path);
+    }
+=======
+>>>>>>> dev-5
 }

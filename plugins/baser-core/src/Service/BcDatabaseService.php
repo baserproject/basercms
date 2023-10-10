@@ -15,6 +15,8 @@ use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -27,8 +29,6 @@ use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Event\EventManager;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
@@ -379,9 +379,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return true;
 
-        $Folder = new Folder($path . DS . $plugin);
-        $files = $Folder->read(true, true, true);
-        $targetTables = $files[1];
+        $Folder = new BcFolder($path . DS . $plugin);
+        $Folder->create();
+        $files = $Folder->getFiles(['full'=>true]);
+        $targetTables = $files;
         $tableList = $this->getAppTableList($plugin);
         $result = true;
         foreach($targetTables as $targetTable) {
@@ -389,7 +390,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             if (in_array($targetTable, $excludes)) continue;
             if (!in_array($targetTable, $tableList)) continue;
             // 初期データ投入
-            foreach($files[1] as $file) {
+            foreach($files as $file) {
                 if (!preg_match('/\.csv$/', $file)) continue;
                 $table = basename($file, '.csv');
                 if ($table !== $targetTable) continue;
@@ -943,10 +944,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             if (!$pluginPath) continue;
             $path = $pluginPath . 'config' . DS . 'Migrations';
             if (!is_dir($path)) continue;
-            $folder = new Folder($path);
-            $files = $folder->read(true, true);
-            if (empty($files[1])) continue;
-            foreach($files[1] as $file) {
+            $folder = new BcFolder($path);
+            $files = $folder->getFiles();
+            if (empty($files)) continue;
+            foreach($files as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $tableName = Inflector::tableize($matches[1]);
                 $checkName = $prefix . $tableName;
@@ -997,8 +998,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $dir = dirname($options['path']);
         if (!is_dir($dir)) {
-            $folder = new Folder();
-            $folder->create($dir);
+            $folder = new BcFolder($dir);
+            $folder->create();
         }
         $describe = TableRegistry::getTableLocator()
             ->get('BaserCore.App')
@@ -1024,13 +1025,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         BcUtil::onEvent($eventManager, 'View.afterRender', $afterRenderListeners);
 
         if (!is_dir($options['path'])) {
-            $folder = new Folder();
-            $folder->create($options['path']);
+            $folder = new BcFolder($options['path']);
+            $folder->create();
         }
 
-        $file = new File($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
+        $file = new BcFile($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
         $file->write($content);
-        $file->close();
         return true;
     }
 
@@ -1207,8 +1207,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ]);
         if($config['datasource'] === 'sqlite') {
             if(!is_dir(ROOT . DS . 'db' . DS . 'sqlite')) {
-                $folder = new Folder(ROOT . DS . 'db' . DS . 'sqlite');
-                $folder->create(ROOT . DS . 'db' . DS . 'sqlite', 0777);
+                $folder = new BcFolder(ROOT . DS . 'db' . DS . 'sqlite');
+                $folder->create();
             }
         }
         $db = ConnectionManager::get($name);

@@ -12,10 +12,10 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Entity;
 use ReflectionClass;
-use Cake\Filesystem\File;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
@@ -509,9 +509,9 @@ class BcFileUploaderTest extends BcTestCase
         $this->uploadedData['eyecatch']['ext'] = $ext;
 
         // ダミーファイルの作成
-        $file = new File($tmpPath);
+        $file = new BcFile($tmpPath);
+        $file->create();
         $file->write('dummy');
-        $file->close();
 
         // セッションを設定
         $entity = $this->BcFileUploader->saveTmpFiles($this->uploadedData, $tmpId);
