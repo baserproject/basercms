@@ -94,4 +94,13 @@ class BcFolderTest extends TestCase
         $this->assertFalse(is_dir($parent));
 	}
 
+    /**
+     * test chmod
+     */
+    public function test_chmod()
+    {
+
+    }
+
+
 }

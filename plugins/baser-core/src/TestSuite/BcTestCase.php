@@ -17,6 +17,7 @@ use BaserCore\Plugin;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
 use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
@@ -32,7 +33,6 @@ use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
-use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
@@ -424,7 +424,7 @@ class BcTestCase extends TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        $folder = new Folder();
+        $folder = new BcFolder();
         $folder->chmod(LOGS, 0777);
         $folder->chmod(TMP, 0777);
     }

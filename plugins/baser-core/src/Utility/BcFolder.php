@@ -14,6 +14,10 @@ namespace BaserCore\Utility;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Exception;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Class BcFolder
@@ -27,6 +31,21 @@ class BcFolder
      */
     private string $path;
 
+    public int $mode = 0755;
+    /**
+     * Holds messages from last method.
+     *
+     * @var array
+     */
+    protected array $_messages = [];
+
+    /**
+     * Holds errors from last method.
+     *
+     * @var array
+     */
+    protected array $_errors = [];
+
     /**
      * Constructor
      * @param string $path
@@ -34,7 +53,7 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function __construct(string $path)
+    public function __construct(string $path = "")
     {
         $this->path = $path;
     }
@@ -153,6 +172,134 @@ class BcFolder
         $this->path = $path;
         rmdir($this->path);
         return true;
+    }
+
+    public function chmod(string $path, ?int $mode = null, bool $recursive = true, array $exceptions = []): bool
+    {
+        if (!$mode) {
+            $mode = $this->mode;
+        }
+
+        if ($recursive === false && is_dir($path)) {
+            // phpcs:disable
+            if (@chmod($path, intval($mode, 8))) {
+                // phpcs:enable
+                $this->_messages[] = sprintf('%s changed to %s', $path, $mode);
+
+                return true;
+            }
+
+            $this->_errors[] = sprintf('%s NOT changed to %s', $path, $mode);
+
+            return false;
+        }
+
+        if (is_dir($path)) {
+            $paths = $this->tree($path);
+
+            foreach ($paths as $type) {
+                foreach ($type as $fullpath) {
+                    $check = explode(DIRECTORY_SEPARATOR, $fullpath);
+                    $count = count($check);
+
+                    if (in_array($check[$count - 1], $exceptions, true)) {
+                        continue;
+                    }
+
+                    // phpcs:disable
+                    if (@chmod($fullpath, intval($mode, 8))) {
+                        // phpcs:enable
+                        $this->_messages[] = sprintf('%s changed to %s', $fullpath, $mode);
+                    } else {
+                        $this->_errors[] = sprintf('%s NOT changed to %s', $fullpath, $mode);
+                    }
+                }
+            }
+
+            if (empty($this->_errors)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function tree(?string $path = null, $exceptions = false, ?string $type = null): array
+    {
+        if (!$path) {
+            $path = $this->path;
+        }
+        $files = [];
+        $directories = [$path];
+
+        if (is_array($exceptions)) {
+            $exceptions = array_flip($exceptions);
+        }
+        $skipHidden = false;
+        if ($exceptions === true) {
+            $skipHidden = true;
+        } elseif (isset($exceptions['.'])) {
+            $skipHidden = true;
+            unset($exceptions['.']);
+        }
+
+        try {
+            $directory = new RecursiveDirectoryIterator(
+                $path,
+                FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_SELF
+            );
+            $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+        } catch (Exception $e) {
+            unset($directory, $iterator);
+
+            if ($type === null) {
+                return [[], []];
+            }
+
+            return [];
+        }
+
+        /**
+         * @var string $itemPath
+         * @var RecursiveDirectoryIterator $fsIterator
+         */
+        foreach ($iterator as $itemPath => $fsIterator) {
+            if ($skipHidden) {
+                $subPathName = $fsIterator->getSubPathname();
+                if ($subPathName[0] === '.' || str_contains($subPathName, DIRECTORY_SEPARATOR . '.')) {
+                    unset($fsIterator);
+                    continue;
+                }
+            }
+            /** @var \FilesystemIterator $item */
+            $item = $fsIterator->current();
+            if (!empty($exceptions) && isset($exceptions[$item->getFilename()])) {
+                unset($fsIterator, $item);
+                continue;
+            }
+
+            if ($item->isFile()) {
+                $files[] = $itemPath;
+            } elseif ($item->isDir() && !$item->isDot()) {
+                $directories[] = $itemPath;
+            }
+
+            // inner iterators need to be unset too in order for locks on parents to be released
+            unset($fsIterator, $item);
+        }
+
+        // unsetting iterators helps to release possible locks in certain environments,
+        // which could otherwise make `rmdir()` fail
+        unset($directory, $iterator);
+
+        if ($type === null) {
+            return [$directories, $files];
+        }
+        if ($type === 'dir') {
+            return $directories;
+        }
+
+        return $files;
     }
 
 }
