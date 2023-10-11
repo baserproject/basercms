@@ -212,6 +212,7 @@ class MailController extends MailFrontAppController
             $mailMessage = $service->confirm($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $mailMessage = $e->getEntity();
+            $mailMessage->category = $this->getRequest()->getData('category');
             $this->BcMessage->setError($e->getMessage());
             $this->set($service->getViewVarsForIndex($mailContent, $mailMessage));
             return $this->render($service->getIndexTemplate($mailContent));
