@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase\Database\Schema;
 
 use BaserCore\Database\Schema\BcSchema;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Filesystem\File;
+use BaserCore\Utility\BcFile;
 
 /**
  * Class BcSchemaTest
@@ -47,7 +47,8 @@ class BcSchemaTest extends BcTestCase
         $path = TMP . 'schema' . DS;
         $schemaName = 'UserActionsSchema';
         $schemaFilePath = $path . $schemaName . '.php';
-        $this->schemaFile = new File($schemaFilePath, true);
+        $this->schemaFile = new BcFile($schemaFilePath);
+        $this->schemaFile->create();
         $table = 'user_actions';
         // スキーマファイルを生成
         $this->schemaFile->write("<?php

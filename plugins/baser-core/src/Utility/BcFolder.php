@@ -174,6 +174,12 @@ class BcFolder
         return true;
     }
 
+    /**
+     * ディレクトリ構造のモードを再帰的に変更します。これにはファイルのモードも変更することが含まれます。
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function chmod(string $path, ?int $mode = null, bool $recursive = true, array $exceptions = []): bool
     {
         if (!$mode) {
@@ -224,6 +230,12 @@ class BcFolder
         return false;
     }
 
+    /**
+     * 各ディレクトリ内のネストされたディレクトリとファイルの配列を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function tree(?string $path = null, $exceptions = false, ?string $type = null): array
     {
         if (!$path) {
