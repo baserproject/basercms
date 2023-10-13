@@ -180,6 +180,20 @@ if (isset($thisSiteConfig['use_site_device_setting'])) {
 		</td>
 	</tr>
 	<tr>
+		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.use_subdomain', __d('baser', 'ドメイン（サブドメイン）利用')) ?></th>
+		<td class=" bca-form-table__input">
+			<?php echo $this->BcForm->input('Site.use_subdomain', ['type' => 'radio', 'options' => [0 => __d('baser', '利用しない'), 1 => __d('baser', '利用する')], 'default' => 0]) ?>
+			<?php echo $this->BcForm->error('Site.use_subdomain') ?>
+		</td>
+	</tr>
+	<tr class="domain_type">
+		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.domain_type', __d('baser', 'ドメインタイプ')) ?></th>
+		<td class=" bca-form-table__input">
+			<?php echo $this->BcForm->input('Site.domain_type', ['type' => 'radio', 'options' => [0 => __d('baser', '利用しない'), 1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '別ドメイン')], 'default' => 0]) ?>
+			<?php echo $this->BcForm->error('Site.domain_type') ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.status', __d('baser', '公開状態')) ?></th>
 		<td class=" bca-form-table__input">
 			<?php echo $this->BcForm->input('Site.status', ['type' => 'radio', 'options' => [0 => __d('baser', '公開しない'), 1 => __d('baser', '公開する')]]) ?>
