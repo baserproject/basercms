@@ -102,9 +102,9 @@ class BcFolderTest extends TestCase
         $path = TMP_TESTS . 'test' . DS . 'chmod';
         $folder = new BcFolder($path);
         $folder->create();
-        $folder->chmod($path, 0777);
+        $folder->chmod(0777);
         $this->assertEquals('0777', substr(sprintf('%o', fileperms($path)), -4));
-        $folder->chmod($path, 0775);
+        $folder->chmod(0775);
         $this->assertEquals('0775', substr(sprintf('%o', fileperms($path)), -4));
         $folder->delete();
     }

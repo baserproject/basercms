@@ -46,6 +46,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Utility\Inflector;
 use CakephpTestSuiteLight\Fixture\TruncateDirtyTables;
+use Couchbase\LookupGetSpec;
 use ReflectionClass;
 use BaserCore\Utility\BcContainer;
 use BaserCore\ServiceProvider\BcServiceProvider;
@@ -424,9 +425,10 @@ class BcTestCase extends TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        $folder = new BcFolder();
-        $folder->chmod(LOGS, 0777);
-        $folder->chmod(TMP, 0777);
+        $folder = new BcFolder(LOGS);
+        $folder->chmod( 0777);
+        $folder = new BcFolder(TMP);
+        $folder->chmod(0777);
     }
 
     /**

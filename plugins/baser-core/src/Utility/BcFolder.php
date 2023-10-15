@@ -53,7 +53,7 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function __construct(string $path = "")
+    public function __construct(string $path)
     {
         $this->path = $path;
     }
@@ -180,8 +180,9 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function chmod(string $path, ?int $mode = null, bool $recursive = true, array $exceptions = []): bool
+    public function chmod(?int $mode = null, bool $recursive = true, array $exceptions = []): bool
     {
+        $path = $this->path;
         if (!$mode) {
             $mode = $this->mode;
         }
