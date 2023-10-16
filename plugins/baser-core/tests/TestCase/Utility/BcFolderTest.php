@@ -119,7 +119,6 @@ class BcFolderTest extends TestCase
         $folder->create();
         $result = $folder->tree();
         $this->assertEquals($path, $result[0][0]);
-        //ƒtƒ@ƒCƒ‹‚ðì¬
         (new BcFile($path. DS . 'test.txt'))->create();
         $result = $folder->tree();
         $this->assertEquals($path, $result[0][0]);
