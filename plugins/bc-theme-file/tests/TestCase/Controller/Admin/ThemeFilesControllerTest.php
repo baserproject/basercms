@@ -177,7 +177,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'bc-column' . '/templates/layout/';
+        $file = new BcFile($fullpath . 'base_name_1.php');
+        $file->create();
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/delete/BcColumn/layout/base_name_1.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル base_name_1.php を削除しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout/');
+        //実際にファイルが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
     }
 
     /**
