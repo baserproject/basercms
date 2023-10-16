@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcFile;
 use BcThemeFile\Controller\Admin\ThemeFilesController;
 use Cake\Event\Event;
@@ -198,7 +199,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_delete_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'delete_folder');
+        $folder->create();
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/delete_folder/BcThemeSample/layout/delete_folder');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ delete_folder を削除しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/');
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
     }
 
     /**

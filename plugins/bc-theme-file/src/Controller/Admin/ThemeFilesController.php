@@ -251,6 +251,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_folder(ThemeFoldersAdminServiceInterface $service)
     {
