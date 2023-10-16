@@ -19,8 +19,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeFilesControllerTest
- *
- * @property  ThemeFilesController $ThemeFilesController
  */
 class ThemeFilesControllerTest extends BcTestCase
 {
@@ -98,8 +96,8 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //テーマがデフォルトテーマの場合、
         $request = $this->getRequest()->withParam('pass.0', 'BcFront');
-        $ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
-        $ThemeFilesController->beforeRender(new Event('beforeRender'));
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
         $this->assertEquals(
             'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。',
             $_SESSION['Flash']['flash'][0]['message']
@@ -107,8 +105,8 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //テーマがデフォルトテーマではないの場合、
         $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
-        $ThemeFilesController = new ThemeFilesController($this->loginAdmin($request));
-        $ThemeFilesController->beforeRender(new Event('beforeRender'));
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
         $this->assertEmpty($_SESSION);
 
         $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
