@@ -270,7 +270,21 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout/default.php');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート表示', $pageTitle);
+
+        //エラーを発生した場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout3/default.php');
+        //ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
