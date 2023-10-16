@@ -12,7 +12,6 @@
 namespace BaserCore\Utility;
 
 use ArrayObject;
-use Cake\Filesystem\File;
 use Cake\Http\Session;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
