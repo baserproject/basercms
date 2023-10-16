@@ -125,7 +125,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //実行成功場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート一覧', $pageTitle);
+
+        //実行成功場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/index');
+        //ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
