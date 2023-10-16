@@ -126,6 +126,36 @@ class BcFolderTest extends TestCase
         $folder->delete();
     }
 
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        $path = TMP_TESTS . 'test';
+        $folder = new BcFolder($path);
+        $folder->create();
+        $file = new BcFile($path. DS. 'test.txt');
+        $file->create();
+        $des = TMP_TESTS . 'test_des';
+        $result = $folder->copy($path, $des);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * test move
+     */
+    public function test_move()
+    {
+        //€”õ
+
+        //³íŒnÀs
+
+        //ˆÙíŒnÀs
+
+
+    }
+
+
 
 
 }
