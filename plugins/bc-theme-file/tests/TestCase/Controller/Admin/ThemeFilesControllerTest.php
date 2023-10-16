@@ -14,12 +14,11 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeFile\Controller\Admin\ThemeFilesController;
+use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeFilesControllerTest
- *
- * @property  ThemeFilesController $ThemeFilesController
  */
 class ThemeFilesControllerTest extends BcTestCase
 {
@@ -92,7 +91,31 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_beforeRender()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //テーマがデフォルトテーマの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcFront');
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals(
+            'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
+
+        //テーマがデフォルトテーマではないの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEmpty($_SESSION);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertFalse($isDefaultTheme);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcFront');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertTrue($isDefaultTheme);
     }
 
     /**
