@@ -47,7 +47,7 @@ class UserValidation extends Validation
         }
         $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
         /* @var User $loginUser */
-        $loginUser = $users->find()->contain('UserGroups')->where(['id' => $loginUserId])->first();
+        $loginUser = $users->find()->contain('UserGroups')->where(['Users.id' => $loginUserId])->first();
         $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
         if(in_array(Configure::read('BcApp.adminGroupId'), $loginGroupId)) {
             return true;

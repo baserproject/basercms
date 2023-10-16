@@ -112,6 +112,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -184,6 +185,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(ThemeFilesAdminServiceInterface $service)
     {
@@ -222,6 +224,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(ThemeFilesAdminServiceInterface $service)
     {
@@ -249,6 +252,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_folder(ThemeFoldersAdminServiceInterface $service)
     {
