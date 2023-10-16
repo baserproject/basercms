@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
 use BcThemeFile\Controller\Admin\ThemeFilesController;
 use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -139,7 +140,36 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'BcColumn' . '/layout/';
+        $file = new BcFile($fullpath . 'base_name_1.php');
+        $file->create();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcColumn｜レイアウトテンプレート編集', $pageTitle);
+
+        $postData = [
+            'fullpath' => '/var/www/html/plugins/BcColumn/layout/',
+            'parent' => '/var/www/html/plugins/BcColumn/layout/',
+            'theme' => 'BcColumn',
+            'type' => 'layout',
+            'path' => 'test.php',
+            'base_name' => 'base_name_2',
+            'contents' => 'this is a content changed!',
+            'ext' => 'php',
+            'plugin' => 'BaserCore'
+        ];
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル base_name_2.php を更新しました。');
+        $this->assertRedirect(['action' => 'edit/layout/base_name_2.php']);
+        unlink($fullpath . 'base_name_2.php');
     }
 
     /**
