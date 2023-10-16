@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Utility\BcContainer;
+use BaserCore\Utility\BcFile;
 use BaserCore\View\Helper\BcFormHelper;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -27,7 +28,6 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Filesystem\File;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -286,7 +286,7 @@ class BcTestCaseTest extends BcTestCase
     {
         $className = 'DummyClass';
         $filePath = TMP . $className . '.php';
-        $file = new File($filePath, true);
+        $file = new BcFile($filePath);
         // DummyClassファイルを作成する
         $file->write("<?php
 class $className

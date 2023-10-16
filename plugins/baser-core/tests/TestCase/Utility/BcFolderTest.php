@@ -94,4 +94,38 @@ class BcFolderTest extends TestCase
         $this->assertFalse(is_dir($parent));
 	}
 
+    /**
+     * test chmod
+     */
+    public function test_chmod()
+    {
+        $path = TMP_TESTS . 'test' . DS . 'chmod';
+        $folder = new BcFolder($path);
+        $folder->create();
+        $folder->chmod(0777);
+        $this->assertEquals('0777', substr(sprintf('%o', fileperms($path)), -4));
+        $folder->chmod(0775);
+        $this->assertEquals('0775', substr(sprintf('%o', fileperms($path)), -4));
+        $folder->delete();
+    }
+
+    /**
+     * test tree
+     */
+    public function test_tree()
+    {
+        $path = TMP_TESTS . 'test' . DS . 'tree';
+        $folder = new BcFolder($path);
+        $folder->create();
+        $result = $folder->tree();
+        $this->assertEquals($path, $result[0][0]);
+        (new BcFile($path. DS . 'test.txt'))->create();
+        $result = $folder->tree();
+        $this->assertEquals($path, $result[0][0]);
+        $this->assertEquals($path. DS . 'test.txt', $result[1][0]);
+        $folder->delete();
+    }
+
+
+
 }
