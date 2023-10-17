@@ -132,13 +132,18 @@ class BcFolderTest extends TestCase
     public function test_copy()
     {
         $path = TMP_TESTS . 'test';
-        $folder = new BcFolder($path);
-        $folder->create();
+        $folder1 = new BcFolder($path);
+        $folder1->create();
         $file = new BcFile($path. DS. 'test.txt');
         $file->create();
         $des = TMP_TESTS . 'test_des';
-        $result = $folder->copy($path, $des);
+        $folder2 = new BcFolder($des);
+        $folder2->create();
+        $result = $folder2->copy($path, $des);
         $this->assertTrue($result);
+        $this->assertFileExists($des. DS. 'test.txt');
+        $folder1->delete();
+        $folder2->delete();
     }
 
     /**
@@ -146,12 +151,19 @@ class BcFolderTest extends TestCase
      */
     public function test_move()
     {
-        //€”õ
-
-        //³íŒnŽÀs
-
-        //ˆÙíŒnŽÀs
-
+        $path = TMP_TESTS . 'test';
+        $folder1 = new BcFolder($path);
+        $folder1->create();
+        $file = new BcFile($path. DS. 'test.txt');
+        $file->create();
+        $des = TMP_TESTS . 'test_des';
+        $folder2 = new BcFolder($des);
+        $folder2->create();
+        $result = $folder1->move($path, $des);
+        $this->assertTrue($result);
+        $this->assertFileDoesNotExist($path. DS. 'test.txt');
+        $this->assertFileExists($des. DS. 'test.txt');
+        $folder2->delete();
 
     }
 
