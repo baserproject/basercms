@@ -300,7 +300,24 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'new_folder');
+        $folder->create();
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_folder/BcThemeSample/layout/new_folder');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ new_folder をコピーしました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+
+        //テスト後に不要なフォルダーを削除
+        $folder->delete();
+        $folder = new BcFolder($fullpath . DS . 'new_folder_copy');
+        $folder->delete();
     }
 
     /**
