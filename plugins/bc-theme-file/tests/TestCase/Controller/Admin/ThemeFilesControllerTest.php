@@ -292,7 +292,16 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy/BcThemeSample/layout/default.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル default.php をコピーしました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        unlink($fullpath . 'default_copy.php');
     }
 
     /**
