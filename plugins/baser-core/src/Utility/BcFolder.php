@@ -173,6 +173,47 @@ class BcFolder
         rmdir($this->path);
         return true;
     }
+    
+    /**
+     * ディレクトリをコピーする
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy($source, $dest): bool
+    {
+        if (!is_dir($source)) return false;
+        if(is_dir($source)) {
+            $dir_handle=opendir($source);
+            $sourceFolder = basename($source);
+            mkdir($dest."/".$sourceFolder);
+            while($file=readdir($dir_handle)){
+                if($file!="." && $file!=".."){
+                    if(is_dir($source."/".$file)){
+                        self::copy($source."/".$file, $dest."/".$sourceFolder);
+                    } else {
+                        copy($source."/".$file, $dest."/".$file);
+                    }
+                }
+            }
+            closedir($dir_handle);
+        } else {
+            copy($source, $dest);
+        }
+        return true;
+    }
+    
+    /**
+     * ディレクトリを移動する
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function move($source, $dest): bool
+    {
+        if (!is_dir($source)) return false;
+        return $this->copy($source, $dest) && $this->delete();
+    }
 
     /**
      * ディレクトリ構造のモードを再帰的に変更します。これにはファイルのモードも変更することが含まれます。
