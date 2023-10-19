@@ -132,6 +132,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(ThemeFilesAdminServiceInterface $service)
     {
@@ -146,6 +147,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ThemeFilesAdminServiceInterface $service)
     {
@@ -279,6 +281,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return    void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ThemeFilesAdminServiceInterface $service)
     {
@@ -296,6 +299,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(ThemeFilesAdminServiceInterface $service)
     {
@@ -322,6 +326,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -349,6 +354,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function upload(ThemeFilesAdminServiceInterface $service)
     {
