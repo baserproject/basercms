@@ -210,14 +210,6 @@ class InstallationsServiceTest extends BcTestCase
     }
 
     /**
-     * test initPlugin
-     */
-    public function testInitPlugin()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * データベース設定ファイル[database.php]を保存する
      *
      * @param array $options
