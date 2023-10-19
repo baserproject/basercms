@@ -26,8 +26,6 @@ use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Database\Exception;
@@ -282,7 +280,7 @@ class BcUtil
                 return false;
             }
         }
-        $versionFile = new File($path);
+        $versionFile = new BcFile($path);
         $versionData = $versionFile->read();
         $aryVersionData = explode("\n", $versionData);
         if (!empty($aryVersionData[0])) {
@@ -637,10 +635,10 @@ class BcUtil
     {
         $path = BcUtil::getPluginPath($theme) . 'plugins';
         if (!file_exists($path)) return [];
-        $Folder = new Folder($path);
-        $files = $Folder->read(true, true, false);
-        if (!empty($files[0])) {
-            return $files[0];
+        $Folder = new BcFolder($path);
+        $files = $Folder->getFolders();
+        if (!empty($files)) {
+            return $files;
         }
         return [];
     }
@@ -781,8 +779,8 @@ class BcUtil
                 self::getTemplatePath(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-')) . 'plugin' . DS . $plugin . DS
             ];
             foreach($templatePaths as $templatePath) {
-                $folder = new Folder($templatePath . $path . DS);
-                $files = $folder->read(true, true)[1];
+                $folder = new BcFolder($templatePath . $path . DS);
+                $files = $folder->getFiles();
                 if ($files) {
                     $templates = array_merge($templates, $files);
                 }
@@ -861,12 +859,12 @@ class BcUtil
         $paths = [ROOT . DS . 'plugins'];
         $themes = [];
         foreach($paths as $path) {
-            $folder = new Folder($path);
-            $files = $folder->read(true);
-            if (!$files[0]) {
+            $Folder = new BcFolder($path);
+            $folders = $Folder->getFolders();
+            if (!$folders) {
                 continue;
             }
-            foreach($files[0] as $name) {
+            foreach($folders as $name) {
                 $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
                 if ($name === '_notes' || !file_exists($appConfigPath)) {
                     continue;
@@ -1499,10 +1497,10 @@ class BcUtil
     public static function emptyFolder($path)
     {
         $result = true;
-        $Folder = new Folder($path);
-        $files = $Folder->read(true, true, true);
-        if (is_array($files[1])) {
-            foreach($files[1] as $file) {
+        $Folder = new BcFolder($path);
+        $files = $Folder->getFiles(['full'=>true]);
+        if (is_array($files)) {
+            foreach($files as $file) {
                 if ($file != 'empty') {
                     if (!@unlink($file)) {
                         $result = false;
@@ -1510,9 +1508,10 @@ class BcUtil
                 }
             }
         }
-        if (is_array($files[0])) {
-            foreach($files[0] as $file) {
-                if (!BcUtil::emptyFolder($file)) {
+        $folders = $Folder->getFolders(['full'=>true]);
+        if (is_array($folders)) {
+            foreach($folders as $folder) {
+                if (!BcUtil::emptyFolder($folder)) {
                     $result = false;
                 }
             }
@@ -1689,12 +1688,11 @@ class BcUtil
         if (!is_writable(TMP)) {
             return;
         }
-        $folder = new Folder();
-        $folder->create(TMP . 'sessions', 0777);
-        $folder->create(CACHE, 0777);
-        $folder->create(CACHE . 'models', 0777);
-        $folder->create(CACHE . 'persistent', 0777);
-        $folder->create(CACHE . 'environment', 0777);
+        (new BcFolder(TMP . 'sessions'))->create();
+        (new BcFolder(CACHE))->create();
+        (new BcFolder(CACHE . 'models'))->create();
+        (new BcFolder(CACHE . 'persistent'))->create();
+        (new BcFolder(CACHE . 'environment'))->create();
     }
 
     /**
@@ -1709,10 +1707,9 @@ class BcUtil
     {
         $pluginPath = BcUtil::getPluginPath($newPlugin);
         if (!$pluginPath) return false;
-        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
-        $file->close();
         return true;
     }
 

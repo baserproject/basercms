@@ -16,6 +16,8 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -193,25 +195,26 @@ class BcUtilTest extends BcTestCase
     public function testGetVersion(): void
     {
         // BaserCore
-        $file = new File(BASER . DS . 'VERSION.txt');
+        $file = new BcFile(BASER . DS . 'VERSION.txt');
         $expected = preg_replace('/^(.+?)\n.+$/s', "$1", $file->read());
         $result = BcUtil::getVersion();
         $this->assertEquals($expected, $result);
 
         // プラグイン
-        $file = new File(Plugin::path('bc-admin-third') . DS . 'VERSION.txt');
+        $file = new BcFile(Plugin::path('bc-admin-third') . DS . 'VERSION.txt');
         $expected = preg_replace('/^(.+?)\n.*$/s', "$1", $file->read());
         $result = BcUtil::getVersion('BcAdminThird');
         $this->assertEquals($expected, $result);
 
         // ダミーのプラグインを作成
         $path = App::path('plugins')[0] . 'hoge' . DS;
-        $Folder = new Folder($path, true);
-        $File = new File($path . 'VERSION.txt', true);
+        $Folder = new BcFolder($path);
+        $Folder->create();
+        $File = new BcFile($path . 'VERSION.txt');
+        $File->create();
         $File->write('1.2.3');
         $result = BcUtil::getVersion('Hoge');
 
-        $File->close();
         $Folder->delete();
         $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
     }
@@ -456,8 +459,8 @@ class BcUtilTest extends BcTestCase
         $this->assertCount(1, $plugins);
         $this->assertEquals($pluginName, $plugins[0]);
 
-        $folder = new Folder();
-        $folder->delete($themePath . 'plugins');
+        $folder = new BcFolder($themePath . 'plugins');
+        $folder->delete();
     }
 
     /**
@@ -470,8 +473,8 @@ class BcUtilTest extends BcTestCase
         $targetTheme = BcUtil::getCurrentTheme();
         $themePath = BcUtil::getPluginPath($targetTheme);
         $pluginName = 'test';
-        $folder = new Folder();
-        $folder->create($themePath . 'plugins/' . $pluginName, 0777);
+        $folder = new BcFolder($themePath . 'plugins/' . $pluginName);
+        $folder->create();
         // プラグインが存在しているかどうか確認する
         $plugins = BcUtil::getCurrentThemesPlugins();
         $this->assertCount(1, $plugins);
@@ -484,8 +487,8 @@ class BcUtilTest extends BcTestCase
         $this->assertCount(0, $plugins);
 
         // 作成したプラグインを削除する
-        $folder = new Folder();
-        $folder->delete($themePath . 'plugins');
+        $folder = new BcFolder($themePath . 'plugins');
+        $folder->delete();
     }
 
     /**
@@ -518,12 +521,12 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetDefaultDataPath($theme, $pattern, $expect)
     {
-        $Folder = new Folder();
         // 初期データ用のダミーディレクトリを作成
         if (!$pattern) $pattern = 'default';
         if ($theme) {
             $path = BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern;
-            $Folder->create($path);
+            $Folder = new BcFolder($path);
+            $Folder->create();
         }
         $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
@@ -638,20 +641,20 @@ class BcUtilTest extends BcTestCase
     {
         $themePath = ROOT . DS . 'plugins' . DS . 'TestTheme';
         $themeConfigPath = $themePath . DS . 'config.php';
-        $folder = new Folder();
-        $folder->create(ROOT . DS . 'plugins' . DS . 'TestTheme');
-        $file = new File($themeConfigPath);
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . 'TestTheme');
+        $folder->create();
+        $file = new BcFile($themeConfigPath);
+        $file->create();
         $file->write('<?php
             return [
                 \'type\' => \'Theme\'
             ];
         ');
-        $file->close();
         $themes = BcUtil::getAllThemeList();
         $this->assertTrue(in_array('BcFront', $themes));
         $this->assertTrue(in_array('BcAdminThird', $themes));
         $this->assertTrue(in_array('TestTheme', $themes));
-        $folder->delete($themePath);
+        $folder->delete();
     }
 
     /**
@@ -981,20 +984,19 @@ class BcUtilTest extends BcTestCase
         ];
 
         // ダミーのフォルダとファイルを作成
-        $Folder = new Folder();
-        $Folder->create($dummyPath, 0755);
-        $Folder->create($dummyPath . $names['folder'][0], 0755);
-        $Folder->create($dummyPath . $names['folder'][1], 0755);
+        (new BcFolder($dummyPath))->create(0755);
+        (new BcFolder($dummyPath . $names['folder'][0]))->create(0755);
+        (new BcFolder($dummyPath . $names['folder'][1]))->create(0755);
 
         // フォルダtestにファイルを追加する
-        new File($dummyPath . $names['file'][0], true);
-        new File($dummyPath . $names['file'][1], true);
+        (new BcFile($dummyPath . $names['file'][0]))->create();
+        (new BcFile($dummyPath . $names['file'][1]))->create();
 
         // folder1とfolder2にfile1とfile2を追加する
         foreach ($names['folder'] as $folder) {
             $folderPath = $dummyPath . $folder . DS;
             foreach ($names['file'] as $file) {
-                new File($folderPath . $file, true);
+                (new BcFile($folderPath . $file))->create();
             }
         }
 
@@ -1025,7 +1027,8 @@ class BcUtilTest extends BcTestCase
                 @unlink($folderPath . $file);
             }
         }
-        $Folder->delete($dummyPath);
+        $Folder = new BcFolder($dummyPath);
+        $Folder->delete();
 
         $this->assertTrue($result, 'フォルダの中のファイルのみを削除することができません');
     }
@@ -1239,7 +1242,7 @@ class BcUtilTest extends BcTestCase
         // 対象ファイルをopen
         $theme = 'BcFront';
         $pluginPath = BcUtil::getPluginPath($theme);
-        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
         // テーマ名とネームスペースが違う状態を作る
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));
@@ -1254,8 +1257,6 @@ class BcUtilTest extends BcTestCase
         $data = $file->read();
         preg_match('/namespace .+?;/', $data, $match);
         $this->assertEquals('namespace ' . $theme . ';', $match[0]);
-        // ファイルをclose
-        $file->close();
     }
 
     /**
