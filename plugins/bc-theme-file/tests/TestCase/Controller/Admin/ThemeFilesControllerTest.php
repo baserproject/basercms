@@ -308,7 +308,39 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_upload()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストフォルダパス
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+
+        //テストファイルを作成
+        $filePath = TMP . 'test_upload' . DS;
+        (new BcFolder($filePath))->create();
+        $testFile = $filePath . 'uploadTestFile.html';
+        $tmpFile = new BcFile($testFile);
+        $tmpFile->create();
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/upload/BcThemeSample/layout');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードに成功しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
+        //実際にファイルが存在するか確認すること
+        $this->assertTrue(file_exists($fullpath . 'uploadTestFile.html'));
+
+        //テストファイルとフォルダを削除
+        rmdir($filePath);
+        unlink($fullpath . 'uploadTestFile.html');
+
+        //エラーを発生した場合
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout3');
+        //ステータスを確認
+        $this->assertResponseCode(500);
     }
 
     /**
