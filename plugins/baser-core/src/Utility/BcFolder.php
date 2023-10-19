@@ -173,6 +173,7 @@ class BcFolder
         rmdir($this->path);
         return true;
     }
+    
     /**
      * ディレクトリをコピーする
      * @checked
@@ -201,13 +202,13 @@ class BcFolder
         }
         return true;
     }
+    
     /**
      * ディレクトリを移動する
      * @checked
      * @noTodo
      * @unitTest
      */
-
     public function move($source, $dest): bool
     {
         if (!is_dir($source)) return false;
