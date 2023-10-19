@@ -336,7 +336,7 @@ class MailMessage extends MailAppModel
 						$this->invalidate($field_name, __('日付の形式が無効です。'));
 					}
 				}
-				if (is_string($data['MailMessage'][$field_name])) {
+				if (is_string($data['MailMessage'][$field_name]) && $data['MailMessage'][$field_name]) {
 					// カレンダー入力利用時は yyyy/mm/dd で入ってくる
 					// yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
 					$inputValue = date('Y-m-d', strtotime($data['MailMessage'][$field_name]));
