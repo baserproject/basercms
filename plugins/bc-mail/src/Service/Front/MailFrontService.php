@@ -184,7 +184,11 @@ class MailFrontService implements MailFrontServiceInterface
             // フォームの初期化でエラーとなってしまう。そのため、source オプションで明示的にテーブルを指定する
             return new MailMessage($message->toArray(), ['source' => 'BcMail.MailMessages']);
         } else {
-            throw new PersistenceFailedException($message, __d('baser_core', 'エラー : 入力内容を確認して再度送信してください。'));
+            // 2023/10/16 by HungDV
+            // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
+            $mailMessage = new MailMessage($postData, ['source' => 'BcMail.MailMessages']);
+            $mailMessage->setErrors($message->getErrors());
+            throw new PersistenceFailedException($mailMessage, __d('baser_core', 'エラー : 入力内容を確認して再度送信してください。'));
         }
     }
 
