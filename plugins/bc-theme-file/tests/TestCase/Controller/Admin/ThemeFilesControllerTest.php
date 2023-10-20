@@ -401,6 +401,17 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //作成されたフォルダを削除
         rmdir($fullpath . '/new_folder');
+
+        //BcFormFailedExceptionを発生した場合、
+        $postData['name'] = 'ああああ';
+        $this->post('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
+        $this->assertEquals(
+            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
+        );
     }
 
     /**
