@@ -382,7 +382,50 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_edit_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'new_folder');
+        $folder->create();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜フォルダ編集', $pageTitle);
+
+        //Postデータを生成
+        $data = [
+            'parent' => $fullpath,
+            'fullpath' => $fullpath . DS . 'new_folder',
+            'name' => 'edit_folder',
+        ];
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder', $data);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ名を edit_folder に変更しました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . DS . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . DS . 'new_folder'));
+
+        //BcFormFailedExceptionを発生した場合、
+        $data['name'] = 'ああああ';
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder', $data);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
+        $this->assertEquals(
+            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
+        );
+
+        //変更されたフォルダを削除
+        rmdir($fullpath . '/edit_folder');
     }
 
     /**
