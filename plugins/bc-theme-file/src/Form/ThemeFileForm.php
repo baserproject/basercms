@@ -98,6 +98,8 @@ class ThemeFileForm extends Form
      * Validation default
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -125,6 +127,8 @@ class ThemeFileForm extends Form
      *
      * @param array $check
      * @return    boolean
+     * @checked
+     * @noTodo
      */
     public function duplicateThemeFile($value, $context = null)
     {
