@@ -11,6 +11,7 @@
 
 namespace BcMail\Model\Table;
 
+use BcMail\Model\Entity\MailField;
 use Cake\Datasource\EntityInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
@@ -49,9 +50,10 @@ class MailFieldsTable extends MailAppTable
     /**
      * MailField constructor.
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -142,6 +144,8 @@ class MailFieldsTable extends MailAppTable
      *
      * @param string $field
      * @return array source
+     * @checked
+     * @noTodo
      */
     public function getControlSource($field = null)
     {
@@ -188,6 +192,8 @@ class MailFieldsTable extends MailAppTable
      * @param string $value
      * @param array $context
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function duplicateMailField(string $value, array $context)
     {
@@ -210,6 +216,8 @@ class MailFieldsTable extends MailAppTable
      *
      * @param string $value
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function halfTextMailField(string $value)
     {
@@ -223,6 +231,8 @@ class MailFieldsTable extends MailAppTable
      * @param string $value
      * @param array $context
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function sourceMailField(string $value, array $context)
     {
@@ -240,13 +250,13 @@ class MailFieldsTable extends MailAppTable
      * フィールドデータをコピーする
      *
      * @param int $id
-     * @param array $data
+     * @param MailField $data
      * @param array $options
      * @return EntityInterface|false
      * @checked
      * @noTodo
      */
-    public function copy($id, $data = null, $options = [])
+    public function copy(?int $id, MailField $data = null, array $options = [])
     {
         $options = array_merge([
             'sortUpdateOff' => false,
@@ -303,6 +313,8 @@ class MailFieldsTable extends MailAppTable
      * | の対応は後方互換として残しておく
      * @param string $source 選択リストソース
      * @return string 整形後選択リストソース
+     * @checked
+     * @noTodo
      */
     public function formatSource($source)
     {

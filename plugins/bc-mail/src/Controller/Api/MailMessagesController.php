@@ -29,6 +29,14 @@ use BaserCore\Annotation\Checked;
 class MailMessagesController extends BcApiController
 {
 
+    /**
+     * Before Filter
+     *
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void
+     * @checked
+     * @noTodo
+     */
     public function beforeFilter(EventInterface $event)
     {
         $this->Security->setConfig('validatePost', false);
