@@ -378,6 +378,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add_folder(ThemeFoldersAdminServiceInterface $service)
     {
