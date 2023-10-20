@@ -51,6 +51,8 @@ class MailMessagesController extends MailAdminAppController
      * beforeFilter
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -152,6 +154,10 @@ class MailMessagesController extends MailAdminAppController
 
     /**
      * メールフォームに添付したファイルを開く
+     * @param MailMessagesServiceInterface $service
+     * @return void
+     * @checked
+     * @noTodo
      */
     public function attachment(MailMessagesServiceInterface $service)
     {
@@ -179,6 +185,8 @@ class MailMessagesController extends MailAdminAppController
      *
      * @param int $mailContentId
      * @return void
+     * @checked
+     * @noTodo
      */
     public function download_csv(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {

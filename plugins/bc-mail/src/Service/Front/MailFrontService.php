@@ -157,6 +157,8 @@ class MailFrontService implements MailFrontServiceInterface
      * @param array $postData
      * @return EntityInterface
      * @unitTest
+     * @checked
+     * @noTodo
      */
     public function confirm(EntityInterface $mailContent, array $postData): EntityInterface
     {
@@ -304,6 +306,8 @@ class MailFrontService implements MailFrontServiceInterface
      * @param EntityInterface $mailMessage
      * @return array
      * @unitTest
+     * @checked
+     * @noTodo
      */
     public function getAttachments(ResultSetInterface $mailFields, EntityInterface $mailMessage): array
     {

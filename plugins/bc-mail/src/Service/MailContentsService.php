@@ -255,6 +255,8 @@ class MailContentsService implements MailContentsServiceInterface
      * @param int|null $siteId
      * @return \Cake\Datasource\ResultSetInterface
      * @unitTest
+     * @checked
+     * @noTodo
      */
     public function getPublishedAll(int $siteId = null)
     {

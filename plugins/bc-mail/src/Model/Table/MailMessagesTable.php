@@ -119,6 +119,8 @@ class MailMessagesTable extends MailAppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -187,6 +189,9 @@ class MailMessagesTable extends MailAppTable
      * After Marshal
      *
      * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
      */
     public function afterMarshal(Event $event)
     {
@@ -490,6 +495,8 @@ class MailMessagesTable extends MailAppTable
      *
      * @param array $dbDatas
      * @return array $dbDatas
+     * @checked
+     * @noTodo
      * @TODO ヘルパー化すべきかも
      */
     public function convertDatasToMail($data, $options)
@@ -540,11 +547,12 @@ class MailMessagesTable extends MailAppTable
     /**
      * 受信メッセージの内容を表示状態に変換する
      *
-     * @param int $id
-     * @param $messages
+     * @param array $messages
      * @return array
+     * @checked
+     * @noTodo
      */
-    public function convertMessageToCsv($messages)
+    public function convertMessageToCsv(array $messages)
     {
         // フィールド名とデータの変換に必要なヘルパーを読み込む
         $maildataHelper = new MaildataHelper(new View());

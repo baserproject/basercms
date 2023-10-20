@@ -27,6 +27,7 @@ use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * お問い合わせメールフォーム用コントローラー
@@ -68,6 +69,7 @@ class MailController extends MailFrontAppController
      * beforeFilter.
      *
      * @return void
+     * @checked
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -80,6 +82,7 @@ class MailController extends MailFrontAppController
         $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $mailMessagesService->MailMessages->setup($this->request->getParam('entityId'), $this->getRequest()->getData());
 
+        // TODO ucmitz 未確認
         return;
         $this->dbDatas['mailContent'] = $this->MailMessage->mailContent;
         $this->dbDatas['mailFields'] = $this->MailMessage->mailFields;
@@ -115,6 +118,7 @@ class MailController extends MailFrontAppController
      * beforeRender
      *
      * @return void
+     * @checked
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -320,7 +324,11 @@ class MailController extends MailFrontAppController
     /**
      * [PUBIC] メール送信完了
      *
-     * @return void
+     * @param MailFrontServiceInterface $service
+     * @param MailContentsServiceInterface $mailContentsService
+     * @return void|ResponseInterface
+     * @checked
+     * @noTodo
      */
     public function thanks(MailFrontServiceInterface $service, MailContentsServiceInterface $mailContentsService)
     {
@@ -342,7 +350,11 @@ class MailController extends MailFrontAppController
     /**
      * 認証用のキャプチャ画像を表示する
      *
+     * @param BcCaptchaServiceInterface $service
+     * @param string $token
      * @return void
+     * @checked
+     * @noTodo
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
