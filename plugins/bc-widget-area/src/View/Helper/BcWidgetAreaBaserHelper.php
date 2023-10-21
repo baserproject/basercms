@@ -35,6 +35,8 @@ class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInter
      * メソッド一覧取得
      *
      * @return array[]
+     * @checked
+     * @noTodo
      */
     public function methods(): array
     {
