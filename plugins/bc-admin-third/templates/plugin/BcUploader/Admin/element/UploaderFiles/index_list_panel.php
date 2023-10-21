@@ -42,7 +42,7 @@ $uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFiles.upload
               'id' => 'UploaderFileUploaderCategoryId' . $listId
             ]) ?>&nbsp;
           <?php endif ?>
-          <span id="SpanUploadFile<?php echo $listId ?>">
+          <span id="SpanUploadFile<?= h($listId) ?>">
 				<?php echo $this->BcAdminForm->control('file', [
           'type' => 'file',
           'id' => 'UploaderFileFile' . $listId,

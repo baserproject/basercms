@@ -25,11 +25,10 @@ if (!$this->Uploader->isPublish($uploaderFile)) {
   $classies = ['publish', 'selectable-file'];
   $statusPublish = true;
 }
-$class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 ?>
 
 
-<span<?php echo $class; ?> id="selectedFile<?php echo $uploaderFile->id ?>" class="uploader-file-row-panel">
+<span class="bca-file-list__item <?= h(implode(' ', $classies)); ?>" id="selectedFile<?= h($uploaderFile->id) ?>" class="uploader-file-row-panel">
 	<?php echo $this->Uploader->file($uploaderFile, [
     'width' => 120,
     'height' => 120,
@@ -39,10 +38,10 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
   ]) ?>
 	<div class="uploader-file-row-panel__alt">
 		<span class="id">
-		  <?php echo $uploaderFile->id ?></span>.<span><?php echo $this->BcText->truncate(h($uploaderFile->alt), 13) ?>
+		  <?= h($uploaderFile->id) ?></span>.<span><?= h($this->BcText->truncate(h($uploaderFile->alt), 13)) ?>
     </span>
 	</div>
-	<span class="name"><?php echo $uploaderFile->name ?></span>
+	<span class="name"><?= h($uploaderFile->name) ?></span>
 	<div class="uploader-file-row-panel__created">
 		<span class="created" style="white-space: nowrap">
 			[<?php echo __d('baser_core', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format($uploaderFile->created, 'Y.m.d') ?>
@@ -57,9 +56,9 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 		<span class="midium"><?php echo $uploaderFile->midium ?></span>
 		<span class="large"><?php echo $uploaderFile->large ?></span>
 		<span class="url">
-		  <?php echo $this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name)) ?>
+		  <?= h($this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name))) ?>
     </span>
-		<span class="user-id"><?php echo $uploaderFile->user_id ?></span>
+		<span class="user-id"><?= h($uploaderFile->user_id) ?></span>
 		<span class="publish-begin">
 		  <?php echo $this->BcTime->format($uploaderFile->publish_begin, 'yyyy/MM/dd') ?>
     </span>
@@ -72,7 +71,7 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 		<span class="publish-end-time">
 		  <?php echo $this->BcTime->format($uploaderFile->publish_end, 'HH:mm:ss') ?>
     </span>
-		<span class="uploader-category-id"><?php echo $uploaderFile->uploader_category_id ?></span>
+		<span class="uploader-category-id"><?= h($uploaderFile->uploader_category_id) ?></span>
 		<span class="alt"><?php echo h($uploaderFile->alt) ?></span>
 	</div>
 </span>
