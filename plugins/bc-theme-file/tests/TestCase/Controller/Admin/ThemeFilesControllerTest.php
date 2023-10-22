@@ -374,7 +374,44 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_add_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜フォルダ作成', $pageTitle);
+
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $postData = [
+            'parent' => $fullpath,
+            'fullpath' => $fullpath,
+            'name' => 'new_folder',
+        ];
+
+        //POSTメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ「new_folder」を作成しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . '/new_folder'));
+
+        //作成されたフォルダを削除
+        rmdir($fullpath . '/new_folder');
+
+        //BcFormFailedExceptionを発生した場合、
+        $postData['name'] = 'ああああ';
+        $this->post('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
+        $this->assertEquals(
+            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
+        );
     }
 
     /**
