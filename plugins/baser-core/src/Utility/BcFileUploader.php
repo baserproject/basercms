@@ -359,6 +359,12 @@ class BcFileUploader
     	if(empty($file['tmp_name'])) return false;
         $fileName = $this->getSaveFileName($setting, $file);
         $filePath = $this->savePath . $fileName;
+
+        // .htaccessは保存させない
+        if (preg_match('/\.htaccess$/is', $fileName)) {
+            return false;
+        }
+
         $this->rotateImage($file['tmp_name']);
         if (copy($file['tmp_name'], $filePath)) {
             chmod($filePath, 0666);
