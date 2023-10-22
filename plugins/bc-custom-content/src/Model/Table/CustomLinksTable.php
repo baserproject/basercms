@@ -16,7 +16,6 @@ use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BcCustomContent\Model\Entity\CustomField;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
@@ -128,6 +127,8 @@ class CustomLinksTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool|void
+     * @checked
+     * @noTodo
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -143,6 +144,8 @@ class CustomLinksTable extends AppTable
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -154,6 +157,8 @@ class CustomLinksTable extends AppTable
      * 並び順を更新する
      *
      * @param array $customLinks
+     * @checked
+     * @noTodo
      */
     public function updateSort(array $customLinks)
     {
@@ -232,6 +237,8 @@ class CustomLinksTable extends AppTable
      * @param string $name
      * @param int $tableId
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getUniqueName(string $name, int $tableId)
     {

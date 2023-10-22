@@ -12,6 +12,9 @@
 namespace BcThemeFile\Model\Entity;
 
 use Cake\Filesystem\File;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * ThemeFile
@@ -67,6 +70,8 @@ class ThemeFile extends \Cake\ORM\Entity
      *
      * @param array $properties
      * @param array $options
+     * @checked
+     * @noTodo
      */
     public function __construct(array $properties = [], array $options = [])
     {
@@ -89,6 +94,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * ファイルタイプを取得する
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     protected function _getType()
     {
@@ -101,6 +108,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * ファイル名を取得する
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     protected function _getName()
     {
@@ -111,6 +120,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * 拡張子無しのファイル名を取得する
      *
      * @return string
+     * @checked
+     * @noTodo
      */
     protected function _getBaseName()
     {
@@ -126,6 +137,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * 拡張子を取得する
      *
      * @return mixed|string|null
+     * @checked
+     * @noTodo
      */
     protected function _getExt()
     {
@@ -143,6 +156,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * タイプが text の場合のみ
      *
      * @return false|string
+     * @checked
+     * @noTodo
      */
     protected function _getContents()
     {
@@ -159,6 +174,8 @@ class ThemeFile extends \Cake\ORM\Entity
      * 新規作成モードが確認する
      *
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isNew(): bool
     {

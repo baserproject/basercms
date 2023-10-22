@@ -1757,6 +1757,8 @@ class BcUtil
      * @param string $path
      * @param string $type
      * @return false|string
+     * @checked
+     * @noTodo
      */
     public static function getExistsTemplateDir(string $theme, string $plugin, string $path, string $type = '')
     {

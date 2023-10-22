@@ -227,16 +227,16 @@ class BlogPostsTable extends BlogAppTable
     /**
      * Before Save
      *
-     * @param  EventInterface $event
-     * @param  EntityInterface $entity
-     * @param  ArrayObject $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return void
      * @checked
      * @noTodo
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving ) {
+        if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving) {
             return;
         }
         // 検索用テーブルに登録
@@ -286,6 +286,8 @@ class BlogPostsTable extends BlogAppTable
      * @param int $blogContentId ブログコンテンツID
      * @param array $options オプション
      * @return array 月別リストデータ
+     * @checked
+     * @noTodo
      */
     public function getPostedDates($blogContentId = null, $options = [])
     {
@@ -317,8 +319,8 @@ class BlogPostsTable extends BlogAppTable
             } else {
                 $key = $year . $month;
             }
-            if($options['category'] && $post->blog_category) $key .= '-' . $post->blog_category->id;
-            if(!isset($postedDates[$key])) {
+            if ($options['category'] && $post->blog_category) $key .= '-' . $post->blog_category->id;
+            if (!isset($postedDates[$key])) {
                 $postedDate = [
                     'year' => $year,
                     'month' => ($options['type'] === 'month')? $month : null,
@@ -570,6 +572,8 @@ class BlogPostsTable extends BlogAppTable
      *
      * @param array $data
      * @return array|false
+     * @checked
+     * @noTodo
      */
     public function createSearchIndex($post)
     {
@@ -656,7 +660,7 @@ class BlogPostsTable extends BlogAppTable
         }
 
         $data->user_id = BcUtil::loginUser()['id'];
-        if($data->name) $data->name .= '_copy';
+        if ($data->name) $data->name .= '_copy';
         $data->title .= '_copy';
         $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
         $data->status = false;
@@ -812,7 +816,7 @@ class BlogPostsTable extends BlogAppTable
     public function getPublishByNo(int $blogContentId, mixed $no, bool $preview = false)
     {
         $conditions = ['BlogPosts.blog_content_id' => $blogContentId];
-        if(!$preview) {
+        if (!$preview) {
             $conditions = array_merge($conditions, $this->getConditionAllowPublish());
         }
         if (is_numeric($no)) {

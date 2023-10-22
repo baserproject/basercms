@@ -17,9 +17,9 @@ use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
+use Cake\Utility\Inflector;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -484,29 +484,6 @@ class ContentsTable extends AppTable
                 $this->beforeSaveParentId = null;
             }
         }
-    }
-
-    /**
-     * 関連するコンテンツ本体のデータキャッシュを削除する
-     * @param Content $content
-     */
-    public function deleteAssocCache($content)
-    {
-        if (empty($content->plugin) || empty($content->type)) {
-            $content = $this->find()->applyOptions(['withDeleted'])->select(['plugin', 'type'])->where(['id' => $content->id])->first();
-        }
-        $assoc = $content->plugin . '.' . Inflector::pluralize($content->type);
-        if ($content->plugin != 'BaserCore') {
-            if (!Plugin::isLoaded($content->plugin)) {
-                return;
-            }
-        }
-        $AssocTable = TableRegistry::getTableLocator()->get($assoc);
-        // if ($AssocTable && !empty($AssocTable->actsAs) && in_array('BcCache', $AssocTable->actsAs)) {
-        //     if ($AssocTable->Behaviors->hasMethod('delCache')) {
-        //         $AssocTable->delCache();
-        //     }
-        // }
     }
 
     /**
@@ -1255,38 +1232,6 @@ class ContentsTable extends AppTable
             }
         }
         return $contents;
-    }
-
-    /**
-     * キャッシュ時間を取得する
-     *
-     * @param mixed $id | $data
-     * @return mixed int or false
-     */
-    public function getCacheTime($data)
-    {
-        if (!is_array($data)) {
-            $data = $this->find('first', ['conditions' => ['Content.id' => $data], 'recursive' => 0]);
-        }
-        if (isset($data['Content'])) {
-            $data = $data['Content'];
-        }
-        if (!$data) {
-            return false;
-        }
-        // #10680 Modify 2016/01/22 gondoh
-        // 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む
-        $duration = Configure::read('BcCache.viewDuration');
-        if (empty($duration)) {
-            $duration = Configure::read('BcCache.duration');
-        }
-        // 固定ページなどの公開期限がviewDulationより短い場合
-        if ($data['status'] && $data['publish_end'] && $data['publish_end'] != '0000-00-00 00:00:00') {
-            if (strtotime($duration) - time() > (strtotime($data['publish_end']) - time())) {
-                $duration = strtotime($data['publish_end']) - time();
-            }
-        }
-        return $duration;
     }
 
     /**

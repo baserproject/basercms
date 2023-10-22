@@ -100,6 +100,13 @@ class BcFileUploader
     private $uploadingFiles = [];
 
     /**
+     * 同一テーブルのデータを複数扱う場合の競合対策のための固有ID
+     *
+     * @var int
+     */
+    private $bcUploadId = 1;
+
+    /**
      * Initialize
      * @param array $config
      * @param Table $table
@@ -210,7 +217,8 @@ class BcFileUploader
             }
             $files[$name] = $file;
         }
-        $this->setUploadingFiles($files);
+        $data['_bc_upload_id'] = $this->bcUploadId++;
+        $this->setUploadingFiles($files, $data['_bc_upload_id']);
         return $data;
     }
 
@@ -227,7 +235,7 @@ class BcFileUploader
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
             if (isset($data[$name . '_tmp']) && $this->moveFileSessionToTmp($data, $name)) {
-                $data[$setting['name']] = $this->getUploadingFiles()[$setting['name']];
+                $data[$setting['name']] = $this->getUploadingFiles($data['_bc_upload_id'])[$setting['name']];
                 // セッションに一時ファイルが保存されている場合は復元する
                 unset($data[$setting['name'] . '_tmp']);
             }
@@ -278,7 +286,7 @@ class BcFileUploader
      */
     public function saveFiles($entity)
     {
-        $files = $this->getUploadingFiles();
+        $files = $this->getUploadingFiles($entity->_bc_upload_id);
         $this->uploaded = false;
         foreach($this->settings['fields'] as $setting) {
             $file = $files[$setting['name']] ?? [];
@@ -290,7 +298,7 @@ class BcFileUploader
                 }
             }
         }
-        $this->setUploadingFiles($files);
+        $this->setUploadingFiles($files, $entity->_bc_upload_id);
     }
 
     /**
@@ -348,6 +356,12 @@ class BcFileUploader
     	if(empty($file['tmp_name'])) return false;
         $fileName = $this->getSaveFileName($setting, $file);
         $filePath = $this->savePath . $fileName;
+
+        // .htaccessは保存させない
+        if (preg_match('/\.htaccess$/is', $fileName)) {
+            return false;
+        }
+
         $this->rotateImage($file['tmp_name']);
         if (copy($file['tmp_name'], $filePath)) {
             chmod($filePath, 0666);
@@ -367,7 +381,7 @@ class BcFileUploader
      */
     public function deleteFiles($oldEntity, $newEntity, $force = false)
     {
-        $files = $this->getUploadingFiles();
+        $files = $this->getUploadingFiles($newEntity->_bc_upload_id);
         foreach($this->settings['fields'] as $setting) {
             $file = $files[$setting['name']] ?? [];
             $newEntity = $this->deleteFileWhileChecking($setting, $file, $newEntity, $oldEntity, $force);
@@ -476,7 +490,7 @@ class BcFileUploader
         $uploadInfo['uploadable'] = true;
         $uploadInfo['ext'] = BcUtil::decodeContent($fileType, $fileName);
         $uploadedFile[$fieldName] = $uploadInfo;
-        $this->setUploadingFiles($uploadedFile);
+        $this->setUploadingFiles($uploadedFile, $data['_bc_upload_id']);
         return true;
     }
 
@@ -662,7 +676,7 @@ class BcFileUploader
     public function renameToBasenameFields($entity, $copy = false)
     {
         if (!$copy) {
-            $files = $this->getUploadingFiles();
+            $files = $this->getUploadingFiles($entity->_bc_upload_id);
         }
         foreach($this->settings['fields'] as $setting) {
 			if ($copy) {
@@ -973,7 +987,7 @@ class BcFileUploader
     public function deleteExistingFiles($oldEntity, $force = false): void
     {
         if (!$oldEntity) return;
-        $files = $this->getUploadingFiles();
+        $files = $this->getUploadingFiles($oldEntity->_bc_upload_id);
         if (!$files) return;
         foreach($files as $name => $file) {
             if(!empty($file['uploadable']) || $force) {
@@ -1026,9 +1040,9 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function setUploadingFiles(array $files): void
+    public function setUploadingFiles(array $files, $bcUploadId): void
     {
-        $this->uploadingFiles = $files;
+        $this->uploadingFiles[$bcUploadId] = $files;
     }
 
     /**
@@ -1037,9 +1051,9 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function getUploadingFiles(): array
+    public function getUploadingFiles($bcUploadId): array
     {
-        return $this->uploadingFiles ?? [];
+        return $this->uploadingFiles[$bcUploadId] ?? [];
     }
 
     /**
@@ -1058,7 +1072,7 @@ class BcFileUploader
         $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
         $data = $this->setupRequestData($data);
-        $files = $this->getUploadingFiles();
+        $files = $this->getUploadingFiles($data['_bc_upload_id']);
         $entity = new Entity($data);
         foreach($this->settings['fields'] as $setting) {
             $fileName = $this->saveTmpFile($setting, $files[$setting['name']], $entity);
@@ -1075,7 +1089,7 @@ class BcFileUploader
 				unset($entity[$field]);
 			}
 		}
-        $this->setUploadingFiles($files);
+        $this->setUploadingFiles($files, $data['_bc_upload_id']);
         return $entity;
     }
 

@@ -223,16 +223,6 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
-     * 機種依存文字の変換処理
-     * 内部文字コードがUTF-8である必要がある。
-     * 多次元配列には対応していない。
-     */
-    public function testReplaceText()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * メール用に変換する
      *
      * @param int $no_send no_sendの値

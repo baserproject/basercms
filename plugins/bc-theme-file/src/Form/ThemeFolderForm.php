@@ -45,6 +45,8 @@ class ThemeFolderForm extends Form
      *
      * @param array $data
      * @return bool
+     * @checked
+     * @noTodo
      */
     protected function _execute(array $data): bool
     {
@@ -63,6 +65,8 @@ class ThemeFolderForm extends Form
      * Validation default
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -89,7 +93,9 @@ class ThemeFolderForm extends Form
      * フォルダーの重複チェック
      *
      * @param array $check
-     * @return    boolean
+     * @return boolean
+     * @checked
+     * @noTodo
      */
     public function duplicateThemeFolder($value, $context = null)
     {

@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
- namespace BcWidgetArea\Controller\Admin;
+namespace BcWidgetArea\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Utility\BcSiteConfig;
@@ -20,6 +20,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class WidgetAreasController
@@ -41,7 +42,7 @@ class WidgetAreasController extends BcAdminAppController
             'default' => [
                 'query' => [
                     'limit' => BcSiteConfig::get('admin_list_num'),
-        ]]]);
+                ]]]);
         $this->set([
             'widgetAreas' => $this->paginate($service->getIndex($this->getRequest()->getQueryParams()))
         ]);
@@ -50,7 +51,9 @@ class WidgetAreasController extends BcAdminAppController
     /**
      * 新規登録
      *
-     * @return void
+     * @return void|ResponseInterface
+     * @checked
+     * @noTodo
      */
     public function add(WidgetAreasServiceInterface $service)
     {
@@ -58,7 +61,7 @@ class WidgetAreasController extends BcAdminAppController
             try {
                 $entity = $service->create($this->getRequest()->getData());
                 $this->BcMessage->setInfo(__d('baser_core', '新しいウィジェットエリアを保存しました。'));
-                $this->redirect(['action' => 'edit', $entity->id]);
+                return $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '新しいウィジェットエリアの保存に失敗しました。'));
@@ -66,7 +69,7 @@ class WidgetAreasController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
-        $this->set(['widgetArea' => $entity?? $service->getNew()]);
+        $this->set(['widgetArea' => $entity ?? $service->getNew()]);
     }
 
     /**
@@ -88,7 +91,7 @@ class WidgetAreasController extends BcAdminAppController
      * [ADMIN] 削除処理　(ajax)
      *
      * @param int ID
-     * @return void
+     * @return void|ResponseInterface
      * @checked
      * @noTodo
      */
@@ -97,7 +100,7 @@ class WidgetAreasController extends BcAdminAppController
         $this->request->allowMethod(['post', 'delete']);
         $entity = $service->get($id);
         try {
-            if($service->delete($id)) {
+            if ($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'ウィジェットエリア「{0}」を削除しました。', $entity->name));
             } else {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));

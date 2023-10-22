@@ -21,6 +21,9 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * InstallCommand
@@ -43,6 +46,8 @@ class InstallCommand extends Command
      *
      * @param \Cake\Console\ConsoleOptionParser $parser
      * @return \Cake\Console\ConsoleOptionParser
+     * @checked
+     * @noTodo
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
@@ -101,6 +106,8 @@ class InstallCommand extends Command
      * @param Arguments $args
      * @param ConsoleIo $io
      * @return int|void|null
+     * @checked
+     * @noTodo
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
@@ -137,6 +144,7 @@ class InstallCommand extends Command
      * @param ConsoleIo $io
      * @param array $dbConfig
      * @return bool
+     * @checked
      */
     public function install(Arguments $args, ConsoleIo $io, array $dbConfig)
     {
@@ -190,6 +198,8 @@ class InstallCommand extends Command
      *
      * @param Arguments $args
      * @return bool[]|false|int[]|null[]|string[]
+     * @checked
+     * @noTodo
      */
     protected function getDbParams(Arguments $args)
     {
@@ -209,7 +219,7 @@ class InstallCommand extends Command
         $drivers = ['mysql', 'postgres', 'sqlite'];
         if (!in_array($dbConfig['datasource'], $drivers)) return false;
 
-        switch ($dbConfig['datasource']) {
+        switch($dbConfig['datasource']) {
             case 'mysql':
                 $dbConfig['encoding'] = 'utf8mb4';
                 break;

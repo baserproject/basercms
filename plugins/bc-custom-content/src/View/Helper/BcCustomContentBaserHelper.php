@@ -13,6 +13,9 @@ namespace BcCustomContent\View\Helper;
 
 use BaserCore\View\Helper\BcPluginBaserHelperInterface;
 use Cake\View\Helper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * MailBaserHelper
@@ -34,6 +37,8 @@ class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperIn
      * メソッド一覧取得
      *
      * @return array[]
+     * @checked
+     * @noTodo
      */
     public function methods(): array
     {

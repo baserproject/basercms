@@ -10,6 +10,7 @@
  */
 
 namespace BcBlog\Model\Table;
+
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -29,22 +30,24 @@ class BlogCommentsTable extends BlogAppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->scalar('name')
-            ->notEmptyString('name',  __d('baser_core', 'お名前を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'お名前を入力してください。'))
             ->maxLength('name', 50, __d('baser_core', 'お名前は50文字以内で入力してください。'));
         $validator
             ->scalar('email')
             ->allowEmptyString('email')
-            ->email('email',  false, __d('baser_core', 'Eメールの形式が不正です。'))
+            ->email('email', false, __d('baser_core', 'Eメールの形式が不正です。'))
             ->maxLength('email', 255, __d('baser_core', 'Eメールは255文字以内で入力してください。'));
         $validator
             ->scalar('url')
             ->allowEmptyString('url')
-            ->url('url',  __d('baser_core', 'URLの形式が不正です。'))
+            ->url('url', __d('baser_core', 'URLの形式が不正です。'))
             ->maxLength('url', 255, __d('baser_core', 'URLは255文字以内で入力してください。'));
         $validator
             ->scalar('message')

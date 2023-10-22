@@ -46,7 +46,7 @@ $this->BcBaser->js([
               'style' => 'width:100px'
             ]) ?>&nbsp;
           <?php endif ?>
-          <span id="SpanUploadFile<?php echo $listId ?>">
+          <span id="SpanUploadFile<?= h($listId) ?>">
             <?php echo $this->BcAdminForm->control('file', [
               'type' => 'file',
               'id' => 'UploaderFileFile' . $listId,
@@ -78,7 +78,7 @@ $this->BcBaser->js([
                 'id' => 'UploaderFileUploaderCategoryId' . $listId
               ]) ?>
             <?php endif ?>
-            <span id="SpanUploadFile<?php echo $listId ?>">
+            <span id="SpanUploadFile<?= h($listId) ?>">
               <?php echo $this->BcAdminForm->control('file', [
                 'type' => 'file',
                 'id' => 'UploaderFileFile' . $listId,

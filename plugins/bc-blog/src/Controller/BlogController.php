@@ -59,32 +59,12 @@ class BlogController extends BlogFrontAppController
     /**
      * beforeFilter
      * @return void
+     * @checked
      */
     public function beforeFilter(EventInterface $event)
     {
         $response = parent::beforeFilter($event);
         if($response) return $response;
-
-        $blogContentId = null;
-
-        if ($this->request->getParam('action') !== 'tags') {
-            if (!empty($this->request->getParam('entityId'))) {
-                $blogContentId = $this->request->getParam('entityId');
-            } elseif (!empty($this->request->getParam('pass'))) {
-                // 後方互換のため pass もチェック
-                $blogContentId = $this->request->getParam('pass');
-            }
-        }
-
-//        if (empty($this->request->getAttribute('currentContent'))) {
-//            // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
-//            $content = $this->BcContents->getContent($blogContentId);
-//            if ($content) {
-//                $this->request = $this->request->withParam('Content', $content['Content']);
-//                $this->request = $this->request->withParam('Site', $content['Site']);
-//            }
-//        }
-
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
         $this->FormProtection->setConfig('validate', false);
@@ -106,8 +86,8 @@ class BlogController extends BlogFrontAppController
         BlogContentsServiceInterface $blogContentsService,
         BlogPostsServiceInterface $blogPostsService)
     {
-		$currentContent = $this->getRequest()->getAttribute('currentContent');
-        $blogContentId = (int) $currentContent?->entity_id;
+        $currentContent = $this->getRequest()->getAttribute('currentContent');
+        $blogContentId = (int)$currentContent?->entity_id;
 
         /* @var BlogContent $blogContent */
         $blogContent = $blogContentsService->get(
@@ -208,7 +188,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'author':
-				if(count($pass) > 2) $this->notFound();
+                if (count($pass) > 2) $this->notFound();
                 $author = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByAuthor(
                     $this->paginate($blogPostsService->getIndexByAuthor($author, [
@@ -222,7 +202,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'tag':
-				if(count($pass) > 2) $this->notFound();
+                if (count($pass) > 2) $this->notFound();
                 $tag = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByTag(
                     $this->paginate($blogPostsService->getIndexByTag($tag, [
@@ -236,7 +216,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'date':
-				if(count($pass) > 4) $this->notFound();
+                if (count($pass) > 4) $this->notFound();
                 $year = $month = $day = '';
                 if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
                     $year = $pass[1];
@@ -261,7 +241,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             default:
-				if(count($pass) > 1) $this->notFound();
+                if (count($pass) > 1) $this->notFound();
                 $this->set($service->getViewVarsForSingle(
                     $this->getRequest(),
                     $blogContent,
@@ -275,33 +255,6 @@ class BlogController extends BlogFrontAppController
             $template = $service->getSingleTemplate($blogContent);
         }
         $this->render($template);
-    }
-
-    /**
-     * 記事リストを出力
-     * requestAction用
-     *
-     * @param int $blogContentId
-     * @param mixed $num
-     */
-    public function posts($blogContentId, $limit = 5)
-    {
-        if (!empty($this->request->getParam('named.template'))) {
-            $template = $this->request->getParam('named.template');
-        } else {
-            $template = 'posts';
-        }
-
-        $this->request->withParam('named.template', null);
-
-        $this->layout = null;
-        $this->contentId = $blogContentId;
-
-        $datas = $this->_getBlogPosts(['num' => $limit]);
-
-        $this->set('posts', $datas);
-
-        $this->render($this->blogContent['BlogContent']['template'] . DS . $template);
     }
 
     /**
@@ -353,13 +306,13 @@ class BlogController extends BlogFrontAppController
         $blogContent = $service->getBlogContent($postData['blog_content_id']);
         try {
             if ($blogContent->auth_captcha && !$bcCaptchaService->check(
-                $this->getRequest(),
-                $this->getRequest()->getData('captcha_id'),
-                $this->getRequest()->getData('auth_captcha')
-            )) {
+                    $this->getRequest(),
+                    $this->getRequest()->getData('captcha_id'),
+                    $this->getRequest()->getData('auth_captcha')
+                )) {
                 $message = __d('baser_core', '画像の文字が間違っています。再度入力してください。');
                 return $this->response->withStatus(400)->withStringBody(json_encode([
-                    'message'=> $message
+                    'message' => $message
                 ]));
             }
             $entity = $service->add($postData['blog_content_id'], $postData['blog_post_id'], $postData);
@@ -373,12 +326,12 @@ class BlogController extends BlogFrontAppController
         } catch (BcException $e) {
             $message = $e->getMessage();
             return $this->response->withStatus(400)->withStringBody(json_encode([
-                'message'=> $message
+                'message' => $message
             ]));
         } catch (Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             return $this->response->withStatus(500)->withStringBody(json_encode([
-                'message'=> $message
+                'message' => $message
             ]));
         }
 
@@ -399,6 +352,8 @@ class BlogController extends BlogFrontAppController
      * 認証用のキャプチャ画像を表示する
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {

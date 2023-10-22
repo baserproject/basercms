@@ -14,5 +14,8 @@
         "psr-4": {
             "BcInstaller\\Test\\": "tests/"
         }
+    },
+    "require": {
+        "ext-sqlite3": "*"
     }
 }

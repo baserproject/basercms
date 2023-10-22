@@ -81,7 +81,7 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_beforeFilter()
     {
-
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
     }
 
     /**
@@ -216,6 +216,7 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_posts()
     {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
         //準備
 
         //正常系実行
@@ -362,6 +363,7 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_captcha()
     {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
         //準備
 
         //正常系実行
