@@ -18,9 +18,9 @@
         <testsuite name="BcContentLink">
             <directory>plugins/bc-content-link/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcCustomContent">-->
-<!--            <directory>plugins/bc-custom-content/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcCustomContent">
+            <directory>plugins/bc-custom-content/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcEditorTemplate">-->
 <!--            <directory>plugins/bc-editor-template/tests/TestCase</directory>-->
 <!--        </testsuite>-->

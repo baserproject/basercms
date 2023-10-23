@@ -102,4 +102,6 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     ['plugin' => 'BcThemeConfig'],
     ['plugin' => 'BcThemeFile'],
     ['plugin' => 'BcUploader'],
+    ['plugin' => 'BcCustomContent'],
+    ['plugin' => 'BcFront'],
 ]);

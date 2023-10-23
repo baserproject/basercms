@@ -165,13 +165,13 @@ class CustomEntriesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('タイトルは必須項目です。', $result->errors->title->_empty);
+        $this->assertEquals('This field is required', $result->errors->title->_required);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
 
         //custom_table_idを指定しない場合、
-        $this->get('/baser/api/admin/bc-custom-content/custom_entries/add.json?token=' . $this->accessToken, []);
+        $this->post('/baser/api/admin/bc-custom-content/custom_entries/add.json?custom_table_id=0&token=' . $this->accessToken, []);
         //ステータスを確認
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());

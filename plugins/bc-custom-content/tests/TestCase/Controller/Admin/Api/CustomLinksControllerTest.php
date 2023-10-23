@@ -80,7 +80,7 @@ class CustomLinksControllerTest extends BcTestCase
         //テストデータを生成
         $customTable->create([
             'id' => 1,
-            'name' => 'recruit_category',
+            'name' => 'recruit',
             'title' => '求人情報',
             'type' => '1',
             'display_field' => 'title',
