@@ -11,6 +11,9 @@
 
 /**
  * [ADMIN] テーマファイルフォーム　ヘルプ
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 

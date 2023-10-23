@@ -16,6 +16,9 @@
  * @var bool $isDefaultTheme
  * @var string $theme
  * @var string $plugin
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $types = [
   'layout' => __d('baser_core', 'レイアウト'),

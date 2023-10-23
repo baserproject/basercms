@@ -44,6 +44,8 @@ class Plugin extends BcPlugin
      * ルーター設定
      *
      * @param \Cake\Routing\RouteBuilder $routes
+     * @checked
+     * @noTodo
      */
     public function routes($routes): void
     {
@@ -63,6 +65,8 @@ class Plugin extends BcPlugin
      *
      * @param CommandCollection $commands
      * @return CommandCollection
+     * @checked
+     * @noTodo
      */
     public function console(CommandCollection $commands): CommandCollection
     {

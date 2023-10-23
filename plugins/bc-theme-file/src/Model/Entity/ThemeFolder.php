@@ -11,6 +11,10 @@
 
 namespace BcThemeFile\Model\Entity;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * ThemeFolder
  *
@@ -49,6 +53,8 @@ class ThemeFolder extends \Cake\ORM\Entity
      *
      * @param array $properties
      * @param array $options
+     * @checked
+     * @noTodo
      */
     public function __construct(array $properties = [], array $options = [])
     {
@@ -65,6 +71,8 @@ class ThemeFolder extends \Cake\ORM\Entity
      * フォルダ名を取得する
      *
      * @return array|mixed|string|string[]
+     * @checked
+     * @noTodo
      */
     protected function _getName()
     {

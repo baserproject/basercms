@@ -26,7 +26,8 @@ class UploaderFilesController extends BcFrontAppController
 
     /**
      * 公開期間のチェックを行う
-     *
+     * @checked
+     * @noTodo
      */
     public function view_limited_file(UploaderFilesServiceInterface $service, string $filename)
     {

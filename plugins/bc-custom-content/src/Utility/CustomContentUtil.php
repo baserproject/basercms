@@ -28,10 +28,12 @@ class CustomContentUtil
      * @param $plugin
      * @param string $name
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public static function getPluginSetting(string $plugin, string $name = '')
     {
-        if($name) {
+        if ($name) {
             return Configure::read("BcCustomContent.fieldTypes.$plugin.$name");
         } else {
             return Configure::read("BcCustomContent.fieldTypes.$plugin");

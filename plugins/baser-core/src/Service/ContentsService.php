@@ -478,11 +478,6 @@ class ContentsService implements ContentsServiceInterface
         BcUtil::onEvent($this->Contents->getEventManager(), 'Model.beforeSave', $beforeEventListener);
         $this->Contents->enableUpdatingSystemData();
         $this->Contents->updatingRelated = true;
-        // =====================================================================
-        // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
-        // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
-        // =====================================================================
-        $this->Contents->deleteAssocCache($content);
         return $result;
     }
 

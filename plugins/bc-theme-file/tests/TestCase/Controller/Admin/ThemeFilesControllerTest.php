@@ -13,13 +13,14 @@ namespace BcThemeFile\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
+use BaserCore\Utility\BcFile;
 use BcThemeFile\Controller\Admin\ThemeFilesController;
+use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeFilesControllerTest
- *
- * @property  ThemeFilesController $ThemeFilesController
  */
 class ThemeFilesControllerTest extends BcTestCase
 {
@@ -92,7 +93,31 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_beforeRender()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //テーマがデフォルトテーマの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcFront');
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals(
+            'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。',
+            $_SESSION['Flash']['flash'][0]['message']
+        );
+
+        //テーマがデフォルトテーマではないの場合、
+        $request = $this->getRequest()->withParam('pass.0', 'BcColumn');
+        $themeFilesController = new ThemeFilesController($this->loginAdmin($request));
+        $themeFilesController->beforeRender(new Event('beforeRender'));
+        $this->assertEmpty($_SESSION);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertFalse($isDefaultTheme);
+
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcFront');
+        $isDefaultTheme = $this->_controller->viewBuilder()->getVars()['isDefaultTheme'];
+        $this->assertTrue($isDefaultTheme);
     }
 
     /**
@@ -100,7 +125,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //実行成功場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート一覧', $pageTitle);
+
+        //実行成功場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/index');
+        //ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -108,7 +146,44 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/add/BcThemeSample/layout');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート作成', $pageTitle);
+
+        $postData = [
+            'fullpath' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'base_name' => 'test',
+            'ext' => 'php',
+            'contents' => 'test content',
+        ];
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/add', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル test.php を作成しました。');
+        $this->assertRedirect(['action' => 'edit/layout/test.php']);
+        unlink('/var/www/html/plugins/BcThemeSample/templates/layout/test.php');
+
+        $postData = [
+            'fullpath' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
+            'ext' => 'php',
+            'contents' => 'test content',
+        ];
+        //エラーを発生した場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/add', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFileFormVar = $this->_controller->viewBuilder()->getVar('themeFileForm');
+        $this->assertEquals(
+            'テーマファイル名を入力してください。',
+            $themeFileFormVar->getErrors()['base_name']['_required']
+        );
     }
 
     /**
@@ -116,7 +191,36 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'BcColumn' . '/layout/';
+        $file = new BcFile($fullpath . 'base_name_1.php');
+        $file->create();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcColumn｜レイアウトテンプレート編集', $pageTitle);
+
+        $postData = [
+            'fullpath' => '/var/www/html/plugins/BcColumn/layout/',
+            'parent' => '/var/www/html/plugins/BcColumn/layout/',
+            'theme' => 'BcColumn',
+            'type' => 'layout',
+            'path' => 'test.php',
+            'base_name' => 'base_name_2',
+            'contents' => 'this is a content changed!',
+            'ext' => 'php',
+            'plugin' => 'BaserCore'
+        ];
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル base_name_2.php を更新しました。');
+        $this->assertRedirect(['action' => 'edit/layout/base_name_2.php']);
+        unlink($fullpath . 'base_name_2.php');
     }
 
     /**
@@ -124,7 +228,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'bc-column' . '/templates/layout/';
+        $file = new BcFile($fullpath . 'base_name_1.php');
+        $file->create();
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/delete/BcColumn/layout/base_name_1.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル base_name_1.php を削除しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout/');
+        //実際にファイルが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
     }
 
     /**
@@ -132,7 +249,20 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_delete_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'delete_folder');
+        $folder->create();
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/delete_folder/BcThemeSample/layout/delete_folder');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ delete_folder を削除しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/');
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
     }
 
     /**
@@ -140,7 +270,21 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout/default.php');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート表示', $pageTitle);
+
+        //エラーを発生した場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout3/default.php');
+        //ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -148,7 +292,16 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy/BcThemeSample/layout/default.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイル default.php をコピーしました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        unlink($fullpath . 'default_copy.php');
     }
 
     /**
@@ -156,7 +309,24 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'new_folder');
+        $folder->create();
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_folder/BcThemeSample/layout/new_folder');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ new_folder をコピーしました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+
+        //テスト後に不要なフォルダーを削除
+        $folder->delete();
+        $folder = new BcFolder($fullpath . DS . 'new_folder_copy');
+        $folder->delete();
     }
 
     /**
@@ -164,7 +334,39 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_upload()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストフォルダパス
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+
+        //テストファイルを作成
+        $filePath = TMP . 'test_upload' . DS;
+        (new BcFolder($filePath))->create();
+        $testFile = $filePath . 'uploadTestFile.html';
+        $tmpFile = new BcFile($testFile);
+        $tmpFile->create();
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+
+        //Postメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/upload/BcThemeSample/layout');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードに成功しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
+        //実際にファイルが存在するか確認すること
+        $this->assertTrue(file_exists($fullpath . 'uploadTestFile.html'));
+
+        //テストファイルとフォルダを削除
+        rmdir($filePath);
+        unlink($fullpath . 'uploadTestFile.html');
+
+        //エラーを発生した場合
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout3');
+        //ステータスを確認
+        $this->assertResponseCode(500);
     }
 
     /**
@@ -172,7 +374,44 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_add_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout');
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜フォルダ作成', $pageTitle);
+
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $postData = [
+            'parent' => $fullpath,
+            'fullpath' => $fullpath,
+            'name' => 'new_folder',
+        ];
+
+        //POSTメソッドを検証場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ「new_folder」を作成しました。');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . '/new_folder'));
+
+        //作成されたフォルダを削除
+        rmdir($fullpath . '/new_folder');
+
+        //BcFormFailedExceptionを発生した場合、
+        $postData['name'] = 'ああああ';
+        $this->post('/baser/admin/bc-theme-file/theme_files/add_folder/BcThemeSample/layout', $postData);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
+        $this->assertEquals(
+            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
+        );
     }
 
     /**
@@ -180,7 +419,50 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_edit_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'new_folder');
+        $folder->create();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('BcThemeSample｜フォルダ編集', $pageTitle);
+
+        //Postデータを生成
+        $data = [
+            'parent' => $fullpath,
+            'fullpath' => $fullpath . DS . 'new_folder',
+            'name' => 'edit_folder',
+        ];
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder', $data);
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('フォルダ名を edit_folder に変更しました。');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . DS . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . DS . 'new_folder'));
+
+        //BcFormFailedExceptionを発生した場合、
+        $data['name'] = 'ああああ';
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit_folder/BcThemeSample/layout/new_folder', $data);
+        //戻る値を確認
+        $this->assertResponseCode(200);
+        $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
+        $this->assertEquals(
+            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
+        );
+
+        //変更されたフォルダを削除
+        rmdir($fullpath . '/edit_folder');
     }
 
     /**

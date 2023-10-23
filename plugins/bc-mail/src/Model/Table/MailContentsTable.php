@@ -90,6 +90,8 @@ class MailContentsTable extends MailAppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -176,6 +178,8 @@ class MailContentsTable extends MailAppTable
      *
      * @param array $check チェック対象文字列
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public function checkSslUrl($value)
     {
@@ -256,9 +260,10 @@ class MailContentsTable extends MailAppTable
      * @param int $newAuthorId 新しいユーザーID
      * @param int $newSiteId 新しいサイトID
      * @return mixed mailContent|false
+     * @checked
      */
     public function copy(
-        int $id,
+        ?int $id,
         int $newParentId,
         string $newTitle,
         int $newAuthorId,

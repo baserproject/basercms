@@ -80,13 +80,15 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
      * @param ServerRequest $request
      * @return array
      * @unitTest
+     * @checked
+     * @noTodo
      */
     public function getViewVarsForDownloadCsv(int $mailContentId, ServerRequest $request)
     {
         $this->setup($mailContentId);
         return [
             'encoding' => $request->getQuery('encoding') ?? 'utf-8',
-            'messages' => $this->MailMessages->convertMessageToCsv($this->getIndex()->all()),
+            'messages' => $this->MailMessages->convertMessageToCsv($this->getIndex()->all()->toArray()),
             'contentName' => $request->getAttribute('currentContent')->name,
         ];
     }

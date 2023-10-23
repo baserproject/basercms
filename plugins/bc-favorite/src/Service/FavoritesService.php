@@ -33,6 +33,8 @@ class FavoritesService implements FavoritesServiceInterface
 
     /**
      * FavoritesService constructor.
+     * @checked
+     * @noTodo
      */
     public function __construct()
     {

@@ -47,16 +47,16 @@ $this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
 
 <!-- JS用設定値 -->
 <div style="display:none">
-  <div id="ListId"><?php echo $listId ?></div>
-  <div id="LoginUserId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->id ?></div>
-  <div id="LoginUserGroupId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->user_groups[0]->id ?></div>
-  <div id="AdminPrefix" style="display:none;"><?php echo \BaserCore\Utility\BcUtil::getAdminPrefix() ?></div>
-  <div id="UsePermission"><?php echo $uploaderConfigs->use_permission ?></div>
+  <div id="ListId"><?= h($listId) ?></div>
+  <div id="LoginUserId"><?= h(\BaserCore\Utility\BcUtil::loginUser()->id) ?></div>
+  <div id="LoginUserGroupId"><?= h(\BaserCore\Utility\BcUtil::loginUser()->user_groups[0]->id) ?></div>
+  <div id="AdminPrefix" style="display:none;"><?= h(\BaserCore\Utility\BcUtil::getAdminPrefix()) ?></div>
+  <div id="UsePermission"><?= h($uploaderConfigs->use_permission) ?></div>
 </div>
 
 
 <!-- ファイルリスト -->
-<div id="FileList<?php echo $listId ?>" class="file-list"></div>
+<div id="FileList<?php echo h($listId) ?>" class="file-list"></div>
 
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="<?php echo __d('baser_core', 'ファイル情報編集') ?>">

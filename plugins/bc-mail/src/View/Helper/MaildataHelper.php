@@ -25,6 +25,11 @@ use BaserCore\Annotation\Checked;
  */
 class MaildataHelper extends BcTextHelper
 {
+
+    /**
+     * ヘルパー
+     * @var string[]
+     */
     public $helpers = ['BcTime', 'BcBaser'];
 
     /**
@@ -36,25 +41,29 @@ class MaildataHelper extends BcTextHelper
      * @param array|string $options コントロールソース
      * @param bool $escape エスケープ処理を行うかどうか （初期値 : true）
      * @return string メール用データ
+     * @checked
+     * @noTodo
      */
     public function control($type, $value, $escape = true)
     {
         $toDisplayString = $this->toDisplayString($type, $value);
-        return $escape ? h($toDisplayString) : $toDisplayString;
+        return $escape? h($toDisplayString) : $toDisplayString;
     }
 
-	/**
-	 * メール表示用のデータを出力する
-	 *
-	 * @param string $type コントロールタイプ
-	 * @param mixed $value 変換前の値
-	 * @param bool $prefixSpace
-	 * @return string メール用データ
-	 */
+    /**
+     * メール表示用のデータを出力する
+     *
+     * @param string $type コントロールタイプ
+     * @param mixed $value 変換前の値
+     * @param bool $prefixSpace
+     * @return string メール用データ
+     * @checked
+     * @noTodo
+     */
     public function toDisplayString(string $type, $value, bool $prefixSpace = true)
     {
-    	$result = '';
-        switch ($type) {
+        $result = '';
+        switch($type) {
             case 'text':
             case 'radio':
             case 'select':
@@ -67,73 +76,74 @@ class MaildataHelper extends BcTextHelper
             case 'pref':
                 $prefs = $this->prefList();
                 $options = [];
-                foreach ($prefs as $pref) {
+                foreach($prefs as $pref) {
                     $options[$pref] = $pref;
                 }
-				if (isset($options[$value])) $result = $options[$value];
-				break;
+                if (isset($options[$value])) $result = $options[$value];
+                break;
 
             case 'multi_check':
-				if ($value === '') break;
-				if (!is_array($value)) $value = explode("|", $value);
-				$result = $value;
-				break;
+                if ($value === '') break;
+                if (!is_array($value)) $value = explode("|", $value);
+                $result = $value;
+                break;
 
             case 'file':
-				$prefixSpace = false;
-				if (empty($value)) break;
+                $prefixSpace = false;
+                if (empty($value)) break;
 
                 $mailContent = $this->_View->get('mailContent');
                 $aryFile = explode('/', $value);
                 $file = $aryFile[count($aryFile) - 1];
                 $ext = BcUtil::decodeContent(null, $file);
                 $link = array_merge([
-					'admin' => true,
-					'controller' => 'mail_messages',
-					'action' => 'attachment',
-					$mailContent->id
-				], $aryFile);
+                    'admin' => true,
+                    'controller' => 'mail_messages',
+                    'action' => 'attachment',
+                    $mailContent->id
+                ], $aryFile);
                 if (in_array($ext, ['gif', 'jpg', 'png'])) {
                     $result = $this->BcBaser->getLink(
                         $this->BcBaser->getImg($link, ['width' => 400]),
                         $link,
                         ['target' => '_blank', 'escape' => false]
                     );
-				} else {
-					$result = $this->BcBaser->getLink($file, $link);
+                } else {
+                    $result = $this->BcBaser->getLink($file, $link);
                 }
 
                 return $result;
 
             case 'date_time_calender':
-				if (is_array($value)) $value = $this->dateTime($value);
-				if ($value) $result = date(__d('baser_core', 'Y年 m月 d日'), strtotime($value));
-				break;
+                if (is_array($value)) $value = $this->dateTime($value);
+                if ($value) $result = date(__d('baser_core', 'Y年 m月 d日'), strtotime($value));
+                break;
 
             case 'autozip':
-				if (strlen($value) == 7) {
-					$result = substr($value, 0, 3) . '-' . substr($value, 3, 7);
-				} else {
-					$result = $value;
-				}
-				break;
+                if (strlen($value) == 7) {
+                    $result = substr($value, 0, 3) . '-' . substr($value, 3, 7);
+                } else {
+                    $result = $value;
+                }
+                break;
 
             default:
-				$prefixSpace = false;
-				$result = $value;
+                $prefixSpace = false;
+                $result = $value;
         }
 
-		if(is_array($result)) {
-			$out = '';
-			foreach($result as $v) {
-				$v = "・" . $v . PHP_EOL;
-				if($prefixSpace) $v = ' ' . $v;
-				$out .= $v;
-			}
-			$result = $out;
-		} else {
-			if($prefixSpace && $result) $result = ' ' . $result;
-		}
-		return $result;
+        if (is_array($result)) {
+            $out = '';
+            foreach($result as $v) {
+                $v = "・" . $v . PHP_EOL;
+                if ($prefixSpace) $v = ' ' . $v;
+                $out .= $v;
+            }
+            $result = $out;
+        } else {
+            if ($prefixSpace && $result) $result = ' ' . $result;
+        }
+        return $result;
     }
+
 }

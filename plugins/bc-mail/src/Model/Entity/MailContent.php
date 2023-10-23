@@ -58,6 +58,8 @@ class MailContent extends Entity
      * メッセージ件数を取得する
      *
      * @return int
+     * @checked
+     * @noTodo
      */
     public function getNumberOfMessages()
     {

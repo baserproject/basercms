@@ -111,7 +111,6 @@ class SearchIndexesController extends BcAdminApiController
     /***
      * [API] 検索インデックスを再構築する
      * @param SearchIndexesServiceInterface $searchIndexesService
-     *
      * @noTodo
      * @checked
      * @unitTest

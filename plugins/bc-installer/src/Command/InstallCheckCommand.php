@@ -17,6 +17,9 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * InstallCheckCommand
@@ -37,6 +40,8 @@ class InstallCheckCommand extends Command
      * @param Arguments $args
      * @param ConsoleIo $io
      * @return int|void|null
+     * @checked
+     * @noTodo
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
@@ -47,6 +52,8 @@ class InstallCheckCommand extends Command
      * 環境チェック
      *
      * @param ConsoleIo $io
+     * @checked
+     * @noTodo
      */
     public function check(ConsoleIo $io)
     {
@@ -123,11 +130,12 @@ class InstallCheckCommand extends Command
             $io->out('　' . __d('baser_core', 'Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。'));
         }
         $io->out();
-        if($checkResult['blRequirementsMet']) {
+        if ($checkResult['blRequirementsMet']) {
             $io->out(__d('baser_core', 'baserCMSのインストールが可能な状態です。 cake install を実行しましょう。'));
         } else {
             $io->out(__d('baser_core', 'baserCMSのインストールができません。環境を見直しましょう。'));
         }
         $io->out();
     }
+
 }
