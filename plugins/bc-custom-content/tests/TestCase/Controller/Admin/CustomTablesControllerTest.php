@@ -174,15 +174,13 @@ class CustomTablesControllerTest extends BcTestCase
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/add', $data);
-        $vars = $this->CustomTablesController->viewBuilder()->getVars();
-        $entities = ($vars['entities'])->toArray();
-        //戻る値を確認
-        $this->assertCount(1, $entities);
-        $this->assertEquals('contact', $entities[0]->name);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テーブル「お問い合わせタイトル」を追加しました');
+        $this->assertRedirect(['action' => 'edit/1']);
 
         //データが追加できるか確認すること
         $customTables = $this->getTableLocator()->get('BcCustomContent.CustomTables');
-        $query = $customTables->find()->where(['title' => 'contact']);
+        $query = $customTables->find()->where(['title' => 'お問い合わせタイトル']);
         $this->assertEquals(1, $query->count());
         //不要なテーブルを削除
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -238,23 +236,22 @@ class CustomTablesControllerTest extends BcTestCase
         ];
         $customTable->create($data);
         //Postデータを生成
-        $data = CustomFieldFactory::get(1);
+//        $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/edit/1', $data);
 
         //戻る値を確認
-        $vars = $this->CustomTablesController->viewBuilder()->getVars();
-        $entities = ($vars['entities'])->toArray();
-        $this->assertCount(1, $entities);
-        $this->assertEquals('test edit title', $entities[0]->title);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テーブル「test edit title」を更新しました');
+        $this->assertRedirect(['action' => 'edit/1']);
 
         //データが変更できるか確認すること
         $customTables = $this->getTableLocator()->get('BcCustomContent.CustomTables');
         $query = $customTables->find()->where(['title' => 'test edit title']);
         $this->assertEquals(1, $query->count());
         //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_contact_edit');
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
@@ -284,7 +281,6 @@ class CustomTablesControllerTest extends BcTestCase
             $event->setData('data', $data);
         });
         //Postデータを生成
-        $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/edit/1', $data);
@@ -293,7 +289,7 @@ class CustomTablesControllerTest extends BcTestCase
         $query = $customTables->find()->where(['title' => 'beforeEdit']);
         $this->assertEquals(1, $query->count());
         //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_contact_edit');
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
@@ -324,7 +320,6 @@ class CustomTablesControllerTest extends BcTestCase
             $contentLinks->save($data);
         });
         //Postデータを生成
-        $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/edit/1', $data);
@@ -333,7 +328,7 @@ class CustomTablesControllerTest extends BcTestCase
         $query = $customTables->find()->where(['title' => 'afterEdit']);
         $this->assertEquals(1, $query->count());
         //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_contact_edit');
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**

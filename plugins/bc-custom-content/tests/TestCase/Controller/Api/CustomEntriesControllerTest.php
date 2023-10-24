@@ -12,6 +12,7 @@
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -107,7 +108,7 @@ class CustomEntriesControllerTest extends BcTestCase
         //ログインしている状態では status パラメーターへへのアクセできるか確認
         $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&status=publish&token=' . $this->accessToken);
         // レスポンスを確認
-        $this->assertResponseOk();
+        $this->assertResponseCode(403);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -155,11 +156,11 @@ class CustomEntriesControllerTest extends BcTestCase
         //ログインしている状態では status パラメーターへへのアクセできるか確認
         $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?custom_table_id=1&status=publish&token=' . $this->accessToken);
         // レスポンスを確認
-        $this->assertResponseOk();
+        $this->assertResponseCode(403);
 
         //存在しないIDを指定した場合、
         // APIを呼ぶ
-        $this->get('/baser/api/bc-custom-content/custom_entries/view/11.json?custom_table_id=11&status=publish&token=' . $this->accessToken);
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/1111.json?custom_table_id=11111&token=' . $this->accessToken);
         $this->assertResponseCode(404);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('データが見つかりません。', $result->message);
