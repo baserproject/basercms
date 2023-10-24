@@ -116,7 +116,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeSave()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
@@ -124,7 +124,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeDelete()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
@@ -132,7 +132,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_updateSort()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
@@ -140,7 +140,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getCurentSort()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
@@ -148,7 +148,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_moveOffset()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
     /**
@@ -156,7 +156,7 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getUniqueName()
     {
-
+        $this->markTestIncomplete('このテストは未実装です。');
     }
 
 

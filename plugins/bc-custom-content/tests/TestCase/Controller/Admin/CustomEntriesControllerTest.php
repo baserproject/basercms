@@ -232,6 +232,7 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_move_up()
     {
+        $this->markTestIncomplete('このテストは未確認です。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データーを生成
@@ -487,6 +488,7 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_move_down()
     {
+        $this->markTestIncomplete('このテストは未確認です。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データーを生成

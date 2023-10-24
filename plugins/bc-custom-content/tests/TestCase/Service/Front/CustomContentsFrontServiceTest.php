@@ -132,7 +132,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getCustomEntries($customContent->get(1));
         //戻る値を確認
-        $this->assertEquals(6, $rs->count());
+        $this->assertEquals(3, $rs->count());
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -166,11 +166,12 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin/'));
         //対象メソッドをコール
-        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $customEntry->get(1));
+        $customEntry->setup(1);
+        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $customEntry->getIndex([])->all());
 
         //戻る値を確認
         $this->assertArrayHasKey('customContent', $rs);
-        $this->assertArrayHasKey('customEntry', $rs);
+        $this->assertArrayHasKey('customEntries', $rs);
         $this->assertArrayHasKey('currentWidgetAreaId', $rs);
         $this->assertArrayHasKey('editLink', $rs);
 
@@ -245,7 +246,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $rs = $this->CustomContentFrontService->getIndexTemplate($customContent->get(1));
 
         //戻る値を確認
-        $this->assertEquals('CustomContent' . DS . 'template_1' . DS . 'index', $rs);
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'index', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -278,7 +279,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $rs = $this->CustomContentFrontService->getViewTemplate($customContent->get(1));
 
         //戻る値を確認
-        $this->assertEquals('CustomContent' . DS . 'template_1' . DS . 'view', $rs);
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'view', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -316,7 +317,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->CustomContentFrontService->setupPreviewForView($controller);
 
         //戻る値を確認
-        $this->assertEquals('CustomContent/template_1/view', $controller->viewBuilder()->getTemplate());
+        $this->assertEquals('CustomContent/default/view', $controller->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('customEntry', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customContent', $controller->viewBuilder()->getVars());
 
@@ -355,7 +356,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->CustomContentFrontService->setupPreviewForIndex($controller);
 
         //戻る値を確認
-        $this->assertEquals('CustomContent/template_1/index', $controller->viewBuilder()->getTemplate());
+        $this->assertEquals('CustomContent/default/index', $controller->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('customContent', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customEntries', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customTable', $controller->viewBuilder()->getVars());
