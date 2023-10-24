@@ -23,8 +23,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\Session;
@@ -266,14 +264,12 @@ class BcUtilTest extends BcTestCase
     public function testClearAllCache(): void
     {
         // cacheファイルのバックアップ作成
-        $folder = new Folder();
         $origin = CACHE;
+        $folder = new BcFolder($origin);
+//        $folder->create();
         $backup = str_replace('cache', 'cache_backup', CACHE);
-        $folder->move($backup, [
-            'from' => $origin,
-            'mode' => 0777,
-            'schema' => Folder::OVERWRITE,
-        ]);
+//        (new BcFolder($backup))->create();
+        $folder->move($origin, $backup);
 
         // cache環境準備
         $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
@@ -297,12 +293,8 @@ class BcUtilTest extends BcTestCase
         }
 
         // cacheファイル復元
-        $folder->move($origin, [
-            'from' => $backup,
-            'mode' => 0777,
-            'schema' => Folder::OVERWRITE,
-        ]);
-        $folder->chmod($origin, 0777);
+        $folder->move($backup, $origin);
+        $folder->chmod(0777);
     }
 
     /**
@@ -1046,15 +1038,13 @@ class BcUtilTest extends BcTestCase
      */
     public function testFgetcsvReg($content, $length, $d, $e, $expect, $message)
     {
-        $csv = new File(CACHE . 'test.csv');
+        $csv = new BcFile(CACHE . 'test.csv');
+        $csv->create();
+        $handle = fopen($csv->getPath(), 'r');
         $csv->write($content);
-        $csv->close();
-        $csv->open();
 
-        $result = BcUtil::fgetcsvReg($csv->handle, $length, $d, $e);
+        $result = BcUtil::fgetcsvReg($handle, $length, $d, $e);
         $this->assertEquals($expect, $result, $message);
-
-        $csv->close();
     }
 
     public function fgetcsvRegDataProvider()
