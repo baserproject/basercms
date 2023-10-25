@@ -24,9 +24,9 @@
 <!--        <testsuite name="BcEditorTemplate">-->
 <!--            <directory>plugins/bc-editor-template/tests/TestCase</directory>-->
 <!--        </testsuite>-->
-<!--        <testsuite name="BcFavorite">-->
-<!--            <directory>plugins/bc-favorite/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcFavorite">
+            <directory>plugins/bc-favorite/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcInstaller">
             <directory>plugins/bc-installer/tests/TestCase</directory>
         </testsuite>
