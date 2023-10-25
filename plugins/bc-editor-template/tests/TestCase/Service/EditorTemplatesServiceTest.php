@@ -58,7 +58,7 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), []);
+        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), ['_bc_upload_id' => 1]);
     }
 
     /**

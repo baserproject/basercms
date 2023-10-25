@@ -21,9 +21,9 @@
 <!--        <testsuite name="BcCustomContent">-->
 <!--            <directory>plugins/bc-custom-content/tests/TestCase</directory>-->
 <!--        </testsuite>-->
-<!--        <testsuite name="BcEditorTemplate">-->
-<!--            <directory>plugins/bc-editor-template/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcEditorTemplate">
+            <directory>plugins/bc-editor-template/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcFavorite">-->
 <!--            <directory>plugins/bc-favorite/tests/TestCase</directory>-->
 <!--        </testsuite>-->
