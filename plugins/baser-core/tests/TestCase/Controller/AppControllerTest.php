@@ -352,4 +352,43 @@ class AppControllerTest extends BcTestCase
         $data = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
         $this->assertEquals(['title' => 'default'], $data);
     }
+
+
+    /**
+     * Test saveDblog
+     *
+     * @return void
+     * @dataProvider saveDblogDataProvider
+     */
+    public function testSaveDblog(string $message, int $userId = null): void
+    {
+        $request =$this->getRequest('/baser/admin/baser-core/users/');
+        if (isset($userId)) $this->loginAdmin($request, $userId);
+
+        $this->execPrivateMethod($this->AppController, 'saveDblog', [$message]);
+
+        $where = [
+            'message' => $message,
+            'controller' => 'Users',
+            'action' => 'index'
+        ];
+        if (isset($userId)) {
+            $where['user_id'] = $userId;
+        } else {
+            $where['user_id IS'] = null;
+        }
+
+        $dblogs = $this->getTableLocator()->get('Dblogs');
+        $query = $dblogs->find()->where($where);
+        $this->assertSame(1, $query->count());
+    }
+
+    public function saveDblogDataProvider(): array
+    {
+        return [
+            ['dblogs testSaveDblog message guest', null],
+            ['dblogs testSaveDblog message login', 1]
+        ];
+    }
+
 }

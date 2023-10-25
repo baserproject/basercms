@@ -201,4 +201,20 @@ class User extends EntityAlias
         }
     }
 
+    /**
+     * 認証領域のプレフィックスを配列で取得する
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getAuthPrefixes(): array
+    {
+        if(!$this->user_groups) return [];
+        $prefixes = [];
+        foreach($this->user_groups as $userGroup) {
+            $prefixes += explode(',', $userGroup->auth_prefix);
+        }
+        return $prefixes;
+    }
+
 }

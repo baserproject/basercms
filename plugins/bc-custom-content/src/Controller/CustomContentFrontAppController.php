@@ -11,7 +11,7 @@
 
 namespace BcCustomContent\Controller;
 
-use BaserCore\Controller\BcAppController;
+use BaserCore\Controller\AppController;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -20,7 +20,7 @@ use BaserCore\Annotation\Checked;
 /**
  * CustomContentFrontAppController
  */
-class CustomContentFrontAppController extends BcAppController
+class CustomContentFrontAppController extends AppController
 {
 
     /**
