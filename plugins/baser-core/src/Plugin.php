@@ -27,7 +27,8 @@ use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
-use BaserCore\Middleware\BcRedirectSubSiteFilter;
+use BaserCore\Middleware\BcRedirectMainSiteMiddleware;
+use BaserCore\Middleware\BcRedirectSubSiteMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcEvent;
@@ -45,6 +46,7 @@ use Cake\Http\ServerRequestFactory;
 use Cake\I18n\I18n;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -280,9 +282,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $middlewareQueue
             ->prepend(new BcRequestFilterMiddleware())
             ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
+            ->insertBefore(RoutingMiddleware::class, new BcRedirectMainSiteMiddleware())
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
-            ->add(new BcRedirectSubSiteFilter());
+            ->add(new BcRedirectSubSiteMiddleware());
 
         // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
         $ref = new ReflectionClass($middlewareQueue);

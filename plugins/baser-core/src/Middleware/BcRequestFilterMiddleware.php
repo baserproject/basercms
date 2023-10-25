@@ -15,7 +15,6 @@ use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -125,12 +124,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     /**
      * リクエスト検出器を追加する
      *
-     * @param ServerRequest $request リクエスト
+     * @param ServerRequestInterface $request リクエスト
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function addDetectors(ServerRequest $request): ServerRequest
+    public function addDetectors(ServerRequestInterface $request): ServerRequestInterface
     {
         foreach($this->getDetectorConfigs() as $name => $callback) {
             $request->addDetector($name, $callback);

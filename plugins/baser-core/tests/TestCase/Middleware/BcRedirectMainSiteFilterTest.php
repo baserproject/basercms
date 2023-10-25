@@ -1,22 +1,23 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcRedirectMainSiteFilter', 'Routing/Filter');
+namespace BaserCore\Test\TestCase\Middleware;
+
+use BaserCore\Middleware\BcRedirectMainSiteMiddleware;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class BcRedirectMainSiteFilterTest
  *
- * @property  BcRedirectMainSiteFilter $BcRedirectMainSiteFilter
+ * @property  BcRedirectMainSiteMiddleware $BcRedirectMainSiteMiddleware
  */
 class BcRedirectMainSiteFilterTest extends BcTestCase
 {
@@ -26,7 +27,7 @@ class BcRedirectMainSiteFilterTest extends BcTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -36,7 +37,7 @@ class BcRedirectMainSiteFilterTest extends BcTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
