@@ -83,7 +83,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
-        $this->get('/baser/api/admin/bc-editor-template/editor_templates/view/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/admin/bc-editor-template/editor_templates/view/11.json?token=' . $this->accessToken);
         //ステータスを確認
         $this->assertResponseOk();
         //戻る値を確認
@@ -135,7 +135,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     public function test_edit()
     {
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
-        $this->post('/baser/api/admin/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => 'name edit']);
+        $this->post('/baser/api/admin/bc-editor-template/editor_templates/edit/11.json?token=' . $this->accessToken, ['name' => 'name edit']);
         //ステータスを確認
         $this->assertResponseOk();
         //戻る値を確認
@@ -152,7 +152,7 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->assertEquals('データが見つかりません。', $result->message);
 
         //無効なIDを指定した場合、
-        $this->post('/baser/api/admin/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => '']);
+        $this->post('/baser/api/admin/bc-editor-template/editor_templates/edit/11.json?token=' . $this->accessToken, ['name' => '']);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
@@ -168,7 +168,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
-        $this->post('/baser/api/admin/bc-editor-template/editor_templates/delete/1.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/bc-editor-template/editor_templates/delete/11.json?token=' . $this->accessToken);
         //ステータスを確認
         $this->assertResponseOk();
         //戻る値を確認
@@ -198,6 +198,6 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->assertResponseOk();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals(get_object_vars($result->editorTemplates)[3], 'テキスト２段組');
+        $this->assertEquals(get_object_vars($result->editorTemplates)[13], 'テキスト２段組');
     }
 }

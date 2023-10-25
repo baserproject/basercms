@@ -112,7 +112,7 @@ class EditorTemplatesControllerTest extends BcTestCase
         $data = [
             'name' => 'japan'
         ];
-        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/1', $data);
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'beforeAdd']);
         $this->assertEquals(1, $query->count());
@@ -135,7 +135,7 @@ class EditorTemplatesControllerTest extends BcTestCase
         $data = [
             'name' => 'japan2'
         ];
-        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/1', $data);
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
