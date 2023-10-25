@@ -12,6 +12,7 @@
 namespace BcEditorTemplate\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcEditorTemplate\Service\EditorTemplatesService;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -26,6 +27,7 @@ class EditorTemplatesServiceTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * set up

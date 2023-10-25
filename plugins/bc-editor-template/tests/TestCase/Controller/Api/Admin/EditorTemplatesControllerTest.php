@@ -13,8 +13,8 @@ namespace BcEditorTemplate\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
-use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -27,7 +27,7 @@ class EditorTemplatesControllerTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-    use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Access Token
