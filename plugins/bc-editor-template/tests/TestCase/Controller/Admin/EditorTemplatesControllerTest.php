@@ -18,6 +18,7 @@ use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -31,6 +32,7 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
     use BcContainerTrait;
+    use IntegrationTestTrait;
 
     /**
      * set up

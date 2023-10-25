@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
+use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -28,6 +29,7 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
     use BcContainerTrait;
+    use IntegrationTestTrait;
 
     /**
      * Access Token
