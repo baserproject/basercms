@@ -268,7 +268,7 @@ class BcUtilTest extends BcTestCase
         $folder = new BcFolder($origin);
 //        $folder->create();
         $backup = str_replace('cache', 'cache_backup', CACHE);
-//        (new BcFolder($backup))->create();
+        (new BcFolder($backup))->create();
         $folder->move($origin, $backup);
 
         // cache環境準備
