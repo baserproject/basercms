@@ -34,7 +34,7 @@ class AppService
 
     /**
      * アプリケーション全体で必要な変数を取得
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -42,17 +42,19 @@ class AppService
      */
     public function getViewVarsForAll(): array
     {
+        $user = BcUtil::loginUser();
         return [
             'currentSite' => $this->getCurrentSite(),
             'otherSites' => $this->getOtherSiteList(),
-            'loginUser' => BcUtil::loginUser(),
-            'currentAdminTheme' => BcUtil::getCurrentAdminTheme()
+            'loginUser' => $user,
+            'currentAdminTheme' => BcUtil::getCurrentAdminTheme(),
+            'currentUserAuthPrefixes' => $user ? $user->getAuthPrefixes() : [],
         ];
     }
 
     /**
      * 現在の管理対象のサイトを取得する
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -72,7 +74,7 @@ class AppService
 
     /**
      * 現在の管理対象のサイト以外のリストを取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
