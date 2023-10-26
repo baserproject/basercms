@@ -140,7 +140,6 @@ class BcContentsComponent extends Component
 			if (!empty($controller->request->data['Content'])) {
 				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
-				$controller->Security->csrfCheck = false;
 			}
 		}
 
