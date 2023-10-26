@@ -95,7 +95,7 @@ class MaildataHelper extends BcTextHelper
 						$this->BcBaser->getImg($link, ['width' => 400]), $link, ['target' => '_blank']
 					);
 				} else {
-					$result = $this->BcBaser->getLink($file, $link);
+					$result = $this->BcBaser->getLink($file, $link, ['escape' => true]);
 				}
 				break;
 

@@ -141,7 +141,7 @@ class BcUploadHelper extends BcAppHelper
 					if (is_array($options['link'])) {
 						$linkOptions = array_merge($linkOptions, $options['link']);
 					}
-					$out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
+					$out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', h(mb_basename($value)), $figcaptionOptions), $figureOptions);
 				}
 			} else {
 				$out = $value;

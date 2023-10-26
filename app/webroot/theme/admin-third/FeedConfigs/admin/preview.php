@@ -15,4 +15,4 @@
  */
 ?>
 <h2><?php echo h($feedConfig['FeedConfig']['name']); ?></h2>
-<?php echo $this->BcBaser->js('/feed/ajax/' . $id) ?>
+<?php echo $this->BcBaser->js('/feed/ajax/' . h($id)) ?>
