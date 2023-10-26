@@ -27,17 +27,6 @@ class CustomTablesScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
-        PluginFactory::make(  [
-            'name' => 'BcCustomContent',
-            'title' => 'カスタムコンテンツ',
-            'version' => '1.0.0',
-            'status' => '1',
-            'db_init' => '1',
-            'priority' => '1',
-            'created' => '2021-05-03 10:57:07',
-            'modified' => '2021-05-03 10:57:07'
-        ]);
-
         CustomTableFactory::make([
             'id' => 1,
             'type' => 1,

@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Service\Front;
 
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -24,6 +25,7 @@ use BcCustomContent\Service\Front\CustomContentFrontService;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -52,6 +54,16 @@ class CustomContentsFrontServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
+        PluginFactory::make(  [
+            'name' => 'BcCustomContent',
+            'title' => 'カスタムコンテンツ',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '1',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ]);
     }
 
     /**
@@ -93,6 +105,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
 
         //対象メソッドをコール
@@ -126,6 +139,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
@@ -162,6 +176,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin/'));
@@ -203,6 +218,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin/'));
@@ -241,6 +257,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getIndexTemplate($customContent->get(1));
@@ -274,6 +291,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getViewTemplate($customContent->get(1));
@@ -306,6 +324,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
@@ -346,7 +365,8 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
         //対象メソッドをコール
