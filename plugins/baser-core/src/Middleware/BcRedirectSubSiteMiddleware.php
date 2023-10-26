@@ -23,12 +23,12 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * Class BcRedirectSubSiteFilter
+ * Class BcRedirectSubSiteMiddleware
  *
  * ユーザーエージェントにより、関連するサブサイトにリダイレクトを行う
  *
  */
-class BcRedirectSubSiteFilter implements MiddlewareInterface
+class BcRedirectSubSiteMiddleware implements MiddlewareInterface
 {
 
     /**
