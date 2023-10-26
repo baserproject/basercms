@@ -264,7 +264,14 @@ class MailMessagesController extends MailAppController
 		unset($args[0]);
 		$file = implode('/', $args);
 		$settings = $this->MailMessage->Behaviors->BcUpload->BcFileUploader['MailMessage']->settings;
-		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
+		$basePath = realpath(WWW_ROOT . 'files' . DS . $settings['saveDir']);
+		$filePath = realpath($basePath . DS . $file);
+
+		// basePath配下出ない場合は表示しない
+		if (strpos($filePath, $basePath) !== 0) {
+			$this->notFound();
+		}
+
 		$ext = decodeContent(null, $file);
 		$mineType = 'application/octet-stream';
 		if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
