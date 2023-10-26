@@ -165,8 +165,15 @@ $this->BcBaser->js('admin/users/edit', false);
 		<?php if ($this->request->data['Favorite']): ?>
 			<ul class="clearfix" id="DefaultFavorites">
 				<?php foreach($this->request->data['Favorite'] as $key => $favorite): ?>
+					<?php
+					// JavaScriptのリンクは除外
+					$link = $favorite['url'];
+					if (preg_match('/\A\s*?javascript\s*:/i', $link)) {
+						$link = '';
+					}
+					?>
 					<li style="float:left">
-						<?php $this->BcBaser->link(h($favorite['name']), $favorite['url']) ?>
+						<?php $this->BcBaser->link($favorite['name'], $link, ['escape' => true]) ?>
 						<?php echo $this->BcForm->input('Favorite.name.' . $key, ['type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name']) ?>
 						<?php echo $this->BcForm->input('Favorite.url.' . $key, ['type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url']) ?>
 					</li>

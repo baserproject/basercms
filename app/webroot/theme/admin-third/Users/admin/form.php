@@ -173,8 +173,15 @@ $this->BcBaser->js('admin/users/edit', false);
 		<?php if ($this->request->data['Favorite']): ?>
 			<ul class="bca-list" data-bca-list-layout="horizon" id="DefaultFavorites">
 				<?php foreach($this->request->data['Favorite'] as $key => $favorite): ?>
+					<?php
+					// JavaScriptのリンクは除外
+					$link = $favorite['url'];
+					if (preg_match('/\A\s*?javascript\s*:/i', $link)) {
+						$link = '';
+					}
+					?>
 					<li class="bca-list__item">
-						<?php $this->BcBaser->link($favorite['name'], $favorite['url'], ['escape' => true]) ?>
+						<?php $this->BcBaser->link($favorite['name'], $link, ['escape' => true]) ?>
 						<?php echo $this->BcForm->input('Favorite.name.' . $key, ['type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name']) ?>
 						<?php echo $this->BcForm->input('Favorite.url.' . $key, ['type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url']) ?>
 					</li>
