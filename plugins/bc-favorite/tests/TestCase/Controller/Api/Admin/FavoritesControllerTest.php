@@ -12,8 +12,9 @@
 namespace BcFavorite\Test\TestCase\Controller\Api\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\TestSuite\BcTestCase;
 
-class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
+class FavoritesControllerTest extends BcTestCase
 {
 
     /**
@@ -27,7 +28,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Plugins',
+//        'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
