@@ -14,12 +14,12 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Controller\Admin\ThemeConfigsController;
+use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ThemeConfigsControllerTest
  *
- * @property  ThemeConfigsController $ThemeConfigsController
  */
 class ThemeConfigsControllerTest extends BcTestCase
 {
@@ -30,6 +30,12 @@ class ThemeConfigsControllerTest extends BcTestCase
     use BcContainerTrait;
 
     /**
+     * ThemeConfigsController
+     * @var ThemeConfigsController
+     */
+    public $ThemeConfigsController;
+
+    /**
      * set up
      *
      * @return void
@@ -37,6 +43,10 @@ class ThemeConfigsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/bc-custom-content/custom_entries/');
+        $request = $this->loginAdmin($request);
+        $this->ThemeConfigsController = new ThemeConfigsController($request);
     }
 
     /**
@@ -57,20 +67,18 @@ class ThemeConfigsControllerTest extends BcTestCase
         //準備
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
         $data = [
             'name_add' => 'value_edit'
         ];
         $this->post("/baser/admin/bc-theme-config/theme_configs/index", $data);
         //ステータスを確認
         $this->assertResponseSuccess();
-        $var = $this->_controller->viewBuilder()->getVars();
-        $this->assertArrayHasKey('themeConfig', $var);
-        $this->assertEquals('value_edit', $var['themeConfig']->name_add);
+        $this->assertFlashMessage('テーマ設定を保存しました。');
         $this->assertRedirect([
             'plugin' => 'BcThemeConfig',
             'prefix' => 'Admin',
-            'controller' => 'ThemeConfigsController',
+            'controller' => 'ThemeConfigs',
             'action' => 'index'
         ]);
     }
