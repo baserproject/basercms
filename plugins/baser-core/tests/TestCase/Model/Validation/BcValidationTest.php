@@ -599,5 +599,30 @@ class BcValidationTest extends BcTestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * 範囲を指定しての長さチェック
+     *
+     * @param mixed $check
+     * @param int $min
+     * @param int $max
+     * @param boolean $expect
+     * @dataProvider betweenDataProvider
+     */
+    public function testBetween($check, $min, $max, $expect)
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $result = $this->BcApp->between($check, $min, $max);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function betweenDataProvider()
+    {
+        return [
+            ["あいう", 2, 4, true],
+            ["あいう", 3, 3, true],
+            ["あいう", 4, 3, false],
+            [["あいう", "あいうえお"], 2, 4, true],
+        ];
+    }
 
 }

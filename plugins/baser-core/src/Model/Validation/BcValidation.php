@@ -601,4 +601,18 @@ class BcValidation extends Validation
         return ($result < 2);
     }
 
+    /**
+     * 範囲を指定しての長さチェック
+     *
+     * @param mixed $value 対象となる値
+     * @param int $min 値の最短値
+     * @param int $max 値の最長値
+     * @param boolean
+     */
+    public static function between($value, $min, $max)
+    {
+        $length = mb_strlen($value, Configure::read('App.encoding'));
+        return ($length >= $min && $length <= $max);
+    }
+
 }
