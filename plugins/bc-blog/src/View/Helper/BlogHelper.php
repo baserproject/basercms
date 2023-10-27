@@ -114,8 +114,12 @@ class BlogHelper extends Helper
     public function __construct(View $view, array $config = [])
     {
         parent::__construct($view, $config);
-        $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
-        $this->setContent();
+        // インストールが完了している場合のみ実行
+        // インストール時に呼び出された際にサービスが利用できないため
+        if(BcUtil::isInstalled()) {
+            $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
+            $this->setContent();
+        }
     }
 
     /**
@@ -136,6 +140,7 @@ class BlogHelper extends Helper
         }
 
         if($blogContentId) {
+            if(!$this->BlogContentsService) return;
             $this->currentBlogContent = $this->BlogContentsService->get($blogContentId);
             $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
             // 現在のサイトにエイリアスが存在するのであればそちらを優先する
