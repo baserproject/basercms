@@ -105,10 +105,9 @@ $(function () {
         chengeUseDomein(use_subdomain);
     });
     function chengeUseDomein(use_subdomain) {
-        console.log(use_subdomain);
         if (use_subdomain == 0) {
             //ドメインを利用しない場合は、ドメインタイプは利用しない
-            $(".domain_type").hide();
+            $(".domain_type").hide('slow');
             $("#SiteDomainType0").prop("checked", true);
         } else {
             //ドメインを利用する場合は、ドメインタイプのラジオボタンを表示

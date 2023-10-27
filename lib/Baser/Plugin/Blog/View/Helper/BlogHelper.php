@@ -197,7 +197,7 @@ class BlogHelper extends AppHelper
 	 */
 	public function getDescription()
 	{
-		return $this->blogContent['description'];
+		return BcUtil::stripScriptTag($this->blogContent['description']);
 	}
 
 	/**

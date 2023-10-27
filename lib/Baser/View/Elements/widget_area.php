@@ -25,6 +25,6 @@ if (!isset($subDir)) {
 ?>
 
 
-<div class="widget-area widget-area-<?php echo $no ?>">
+<div class="widget-area widget-area-<?php echo h($no) ?>">
 	<?php $this->BcWidgetArea->show($no, ['subDir' => $subDir]) ?>
 </div>

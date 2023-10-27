@@ -336,7 +336,7 @@ class MailMessage extends MailAppModel
 						$this->invalidate($field_name, __('日付の形式が無効です。'));
 					}
 				}
-				if (is_string($data['MailMessage'][$field_name])) {
+				if (is_string($data['MailMessage'][$field_name]) && $data['MailMessage'][$field_name]) {
 					// カレンダー入力利用時は yyyy/mm/dd で入ってくる
 					// yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
 					$inputValue = date('Y-m-d', strtotime($data['MailMessage'][$field_name]));
@@ -350,16 +350,16 @@ class MailMessage extends MailAppModel
 				continue;
 			}
 			if (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-				if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
-					preg_match_all('/[^ァ-ヾ 　]/u', $this->data['MailMessage'][$mailField['field_name']], $notKatakanaArray);
+				if (!preg_match('/^(|[ァ-ヾ 　ー]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ァ-ヾ 　ー]/u', $this->data['MailMessage'][$mailField['field_name']], $notKatakanaArray);
 					$notKatakana = implode('', $notKatakanaArray[0]);
 					$this->invalidate($mailField['field_name'], __('次の文字はカタカナではないので受け付けられません: ' . $notKatakana));
 				}
 				continue;
 			}
 			if (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
-				if (!preg_match('/^(|[ぁ-ゞ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
-					preg_match_all('/[^ぁ-ゞ　]/u', $this->data['MailMessage'][$mailField['field_name']], $notHiraganaArray);
+				if (!preg_match('/^(|[ぁ-ゞ 　ー]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ぁ-ゞ　ー]/u', $this->data['MailMessage'][$mailField['field_name']], $notHiraganaArray);
 					$notHiragana = implode('', $notHiraganaArray[0]);
 					$this->invalidate($mailField['field_name'], __('次の文字はひらがなではないので受け付けられません: ' . $notHiragana));
 				}

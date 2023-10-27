@@ -390,7 +390,7 @@ class PluginsController extends AppController
 			} else {
 				// プラグインをインストール
 				if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
-					$this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
+					$this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を %s に登録しました。'), $name, Configure::read('BcApp.title')));
 
 					$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
 					$this->_addPermission($this->request->data);

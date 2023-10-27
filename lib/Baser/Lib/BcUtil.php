@@ -60,12 +60,30 @@ class BcUtil extends CakeObject
 	}
 
 	/**
+	 * ユーザーが編集可能なユーザーかチェック
+	 * @return bool
+	 */
+	public static function isUserEditableUser()
+	{
+		if(BcUtil::isAdminUser()) return true;
+		$user = BcUtil::loginUser();
+		if(!$user) return false;
+		/* @var Permission $permissionModel */
+		$permissionModel = ClassRegistry::init('Permission');
+		return $permissionModel->check('/admin/users/edit/', $user['UserGroup']['id']);
+	}
+
+	/**
 	 * ログインユーザーのデータを取得する
 	 *
 	 * @return array
 	 */
 	public static function loginUser($prefix = 'admin')
 	{
+		// map ファイルへのリクエストの際、PHPのセッションを書き換えてしまい
+		// ログイン状態が継続できなくなってしまうため処理を実行しない
+		if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.map$/', $_SERVER['REQUEST_URI'])) return null;
+
 		$Session = new CakeSession();
 		$sessionKey = BcUtil::authSessionKey($prefix);
 		$user = $Session->read('Auth.' . $sessionKey);
@@ -500,6 +518,25 @@ class BcUtil extends CakeObject
 	public static function getAdminPrefix()
 	{
 		return Configure::read('BcAuthPrefix.admin.alias');
+	}
+
+	/**
+	 * 文字列よりスクリプトタグを除去する
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function stripScriptTag($value)
+	{
+		$allows = [
+			'a', 'abbr', 'address', 'area', 'b', 'blockquote', 'body', 'br', 'button', 'caption', 'cite', 'code',
+			'col', 'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'fieldset', 'form', 'h1', 'h2', 'h3',
+			'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link',
+			'map', 'meta', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 'samp', 'select',
+			'small', 'span', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead',
+			'title', 'tr', 'ul', 'var', 'style'
+		];
+		return strip_tags($value, '<' . implode('><', $allows) . '>');
 	}
 
 }

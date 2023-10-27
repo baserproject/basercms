@@ -38,7 +38,7 @@ $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $thi
 ?>
 
 
-<div class="bs-widget bs-widget-search-box bs-widget-search-box-<?php echo $id ?>">
+<div class="bs-widget bs-widget-search-box bs-widget-search-box-<?php echo h($id) ?>">
 	<h2 class="bs-widget-head"><?php echo __('サイト内検索') ?></h2>
 	<div class="bs-widget-form">
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>

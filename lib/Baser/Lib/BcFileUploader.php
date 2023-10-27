@@ -1030,7 +1030,11 @@ class BcFileUploader
      */
     public function setUploadingFiles($files)
     {
-        $this->uploadingFiles = $files;
+		if ($this->uploadingFiles) {
+			$this->uploadingFiles = array_merge($this->uploadingFiles, $files);
+		} else {
+			$this->uploadingFiles = $files;
+		}
     }
 
     /**
