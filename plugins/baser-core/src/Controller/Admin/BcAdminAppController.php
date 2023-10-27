@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Controller\BcAppController;
+use BaserCore\Controller\AppController;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -34,7 +34,7 @@ use BaserCore\Annotation\Note;
  * Class BcAdminAppController
  * @property AuthenticationComponent $Authentication
  */
-class BcAdminAppController extends BcAppController
+class BcAdminAppController extends AppController
 {
 
     /**

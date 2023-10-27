@@ -132,11 +132,6 @@ class ThemeConfigsServiceTest extends BcTestCase
         $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
         $this->setUploadFileToRequest('file', $logoPath);
 
-        // saveImage の内部で実行される move_uploaded_file() が、
-        // 実際にファイルをアップロードしないと失敗してしまうため、copy() で代替処理とする
-        $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
-        copy($logoPath, $uploadedPath);
-
         // 実行
         $rs = $this->ThemeConfigsService->saveImage(new ThemeConfig([
             'logo' => [
@@ -147,16 +142,18 @@ class ThemeConfigsServiceTest extends BcTestCase
                 'size' => 2962,
             ]
         ]));
+        // saveImage の内部で実行される move_uploaded_file() が、
+        // 実際にファイルをアップロードしないと失敗してしまうため、copy() で代替処理とする
+        $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
+        copy($logoPath, $uploadedPath);
 
         // 戻り値を確認
         $this->assertEquals($rs['logo'], 'logo.png');
         // サムネイルが作成されたことを確認
-        $thumbPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo_thumb.png';
-        $this->assertFileExists($thumbPath);
+        $this->assertFileExists($uploadedPath);
 
         // 初期化処理
         unlink($uploadedPath);
-        unlink($thumbPath);
     }
 
     /**

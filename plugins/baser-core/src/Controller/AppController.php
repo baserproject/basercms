@@ -20,6 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
 use BaserCore\Service\AppServiceInterface;
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
@@ -35,6 +36,7 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class AppController
@@ -50,22 +52,23 @@ class AppController extends BaseController
     use BcContainerTrait;
 
     /**
-     * BcAppController constructor.
+     * AppController constructor.
      * @param ServerRequest|null $request
      * @param Response|null $response
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     * @return void|ResponseInterface
      * @checked
      * @noTodo
      * @unitTest
      */
     public function __construct(
-        ?ServerRequest         $request = null,
-        ?Response              $response = null,
-        ?string                $name = null,
+        ?ServerRequest $request = null,
+        ?Response $response = null,
+        ?string $name = null,
         ?EventManagerInterface $eventManager = null,
-        ?ComponentRegistry     $components = null
+        ?ComponentRegistry $components = null
     )
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
@@ -78,10 +81,10 @@ class AppController extends BaseController
             if (!($request? $request->is('install') : false)) {
                 // app_local.php が存在しない場合は、CakePHPの Internal Server のエラー画面が出て、
                 // 原因がわからなくなるので強制的にコピーする
-                if($this->getName() === 'BcError' && !file_exists(CONFIG . 'app_local.php')) {
+                if ($this->getName() === 'BcError' && !file_exists(CONFIG . 'app_local.php')) {
                     copy(CONFIG . 'app_local.example.php', CONFIG . 'app_local.php');
                     // app_local.php が存在しない場合、.env もない可能性があるので確認
-                    if(!file_exists(CONFIG . '.env')){
+                    if (!file_exists(CONFIG . '.env')) {
                         copy(CONFIG . '.env.example', CONFIG . '.env');
                     }
                 }
@@ -101,7 +104,6 @@ class AppController extends BaseController
                 }
             }
         }
-
     }
 
     /**
@@ -134,13 +136,13 @@ class AppController extends BaseController
     public function beforeFilter(EventInterface $event)
     {
         $response = parent::beforeFilter($event);
-        if($response) return $response;
+        if ($response) return $response;
 
-		// index.php をつけたURLの場合、base の値が正常でなくなり、
-		// 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
-		if(preg_match('/\/index\.php\//', $this->getRequest()->getAttribute('base'))) {
-			$this->notFound();
-		}
+        // index.php をつけたURLの場合、base の値が正常でなくなり、
+        // 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
+        if (preg_match('/\/index\.php\//', $this->getRequest()->getAttribute('base'))) {
+            $this->notFound();
+        }
 
         if (!$this->getRequest()->is('requestview')) return;
 
@@ -157,13 +159,13 @@ class AppController extends BaseController
             return;
         }
 
-        if(!$this->checkPermission()) {
+        if (!$this->checkPermission()) {
             $prefix = BcUtil::getRequestPrefix($this->getRequest());
             if ($prefix === 'Api/Admin') {
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
                 if (BcUtil::loginUser()) {
-                    if($this->getRequest()->getMethod() === 'GET') {
+                    if ($this->getRequest()->getMethod() === 'GET') {
                         $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
                     } else {
                         $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。'));
@@ -171,7 +173,7 @@ class AppController extends BaseController
                 }
                 // リファラが存在する場合はリファラにリダイレクトする
                 // $this->referer() で判定した場合、リファラがなくてもトップのURLが返却されるため ServerRequest で判定
-                if($this->getRequest()->getEnv('HTTP_REFERER')) {
+                if ($this->getRequest()->getEnv('HTTP_REFERER')) {
                     $url = $this->referer();
                 } else {
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
@@ -197,7 +199,7 @@ class AppController extends BaseController
     private function checkPermission()
     {
         $user = BcUtil::loginUser();
-        if($user && $user->user_groups) {
+        if ($user && $user->user_groups) {
             $userGroupsIds = Hash::extract($user->toArray()['user_groups'], '{n}.id');
         } else {
             $userGroupsIds = [];
@@ -269,8 +271,8 @@ class AppController extends BaseController
                 continue;
             }
             $inenc = mb_detect_encoding((string)$value);
-            if(!$inenc) continue;
-            if(!in_array($inenc, Configure::read('BcEncode.detectOrder'))) continue;
+            if (!$inenc) continue;
+            if (!in_array($inenc, Configure::read('BcEncode.detectOrder'))) continue;
             if ($inenc === $outenc) continue;
             // 半角カナは一旦全角に変換する
             $value = mb_convert_kana($value, 'KV', $inenc);
@@ -508,6 +510,47 @@ class AppController extends BaseController
     public function notFound()
     {
         throw new NotFoundException(__d('baser_core', '見つかりませんでした。'));
+    }
+
+    /**
+     * データベースログを記録する
+     *
+     * @param string $message
+     * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function saveDblog($message)
+    {
+        $dblogsService = $this->getService(DblogsServiceInterface::class);
+        return $dblogsService->create(['message' => $message]);
+    }
+
+    /**
+     * Ajax用のエラーを出力する
+     *
+     * @param int $errorNo エラーのステータスコード
+     * @param mixed $message エラーメッセージ
+     * @return void
+     * @deprecated since 5.0.5 このメソッドは非推奨です。
+     * @checked
+     * @noTodo
+     */
+    public function ajaxError(int $errorNo = 500, $message = '')
+    {
+        $this->response = $this->getResponse()->withStatus($errorNo);
+        if (!$message) return;
+        if (!is_array($message)) $message = [$message];
+        $aryMessage = [];
+        foreach($message as $value) {
+            if (is_array($value)) {
+                $aryMessage[] = implode('<br />', $value);
+            } else {
+                $aryMessage[] = $value;
+            }
+        }
+        echo implode('<br>', $aryMessage);
     }
 
 }

@@ -27,7 +27,7 @@ use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
-use BaserCore\Middleware\BcRedirectSubSiteFilter;
+use BaserCore\Middleware\BcRedirectSubSiteMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcEvent;
@@ -283,7 +283,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
-            ->add(new BcRedirectSubSiteFilter());
+            ->add(new BcRedirectSubSiteMiddleware());
 
         if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem()) {
             $middlewareQueue->add(new HttpsEnforcerMiddleware([
