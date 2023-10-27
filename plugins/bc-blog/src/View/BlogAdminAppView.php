@@ -33,7 +33,7 @@ class BlogAdminAppView extends BcAdminAppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BcBlog.Blog');
+        $this->addHelper('BcBlog.Blog');
     }
 
 }

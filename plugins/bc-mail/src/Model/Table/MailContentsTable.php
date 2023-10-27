@@ -16,6 +16,8 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
@@ -208,7 +210,7 @@ class MailContentsTable extends MailAppTable
      *
      * @return void
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
         // TODO ucmitz 未実装
         return;

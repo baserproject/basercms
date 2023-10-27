@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Model\Entity\UserGroup;
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
@@ -178,7 +179,7 @@ class UserGroupsTable extends AppTable
      * @param boolean $cascade
      * @return boolean
      */
-    public function beforeDelete($cascade = true)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
         if (!empty($this->data['UserGroup']['id'])) {
             $id = $this->data['UserGroup']['id'];
@@ -188,13 +189,10 @@ class UserGroupsTable extends AppTable
                 foreach($datas as $data) {
                     $data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');
                     $this->User->set($data);
-                    if (!$this->User->save()) {
-                        $cascade = false;
-                    }
+                    $this->User->save();
                 }
             }
         }
-        return $cascade;
     }
 
     /**

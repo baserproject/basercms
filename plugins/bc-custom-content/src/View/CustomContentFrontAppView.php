@@ -32,7 +32,7 @@ class CustomContentFrontAppView extends AppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BcCustomContent.CustomContent');
+        $this->addHelper('BcCustomContent.CustomContent');
     }
 
 }

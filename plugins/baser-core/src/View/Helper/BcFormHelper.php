@@ -717,7 +717,7 @@ SCRIPT_END;
             return $bcCkeditor->editor($fieldName, $options);
         }
 
-        $this->_View->loadHelper($options['editor']);
+        $this->_View->addHelper($options['editor']);
         [, $editor] = pluginSplit($options['editor']);
         if (!empty($this->getView()->{$editor})) {
             return $this->getView()->{$editor}->editor($fieldName, $options);

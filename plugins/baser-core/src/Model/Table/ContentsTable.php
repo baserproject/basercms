@@ -870,7 +870,7 @@ class ContentsTable extends AppTable
                 // =========================================================================================================
                 $connection = ConnectionManager::get('default');
                 $content = $connection
-                    ->newQuery()
+                    ->selectQuery()
                     ->select(['lft', 'rght'])
                     ->from($prefix . 'contents')
                     ->where(['id' => $id, 'deleted_date IS' => null])
@@ -882,7 +882,7 @@ class ContentsTable extends AppTable
                     return false;
                 }
                 $parents = $connection
-                    ->newQuery()
+                    ->selectQuery()
                     ->select(['name', 'plugin', 'type'])
                     ->from($prefix . 'contents')
                     ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'], 'deleted_date IS' => null])

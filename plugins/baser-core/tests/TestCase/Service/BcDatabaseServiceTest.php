@@ -698,7 +698,7 @@ class UserActionsSchema extends BcSchema
 
         // 接続できていること
         $this->assertNotEmpty($db);
-        $this->assertTrue($db->isConnected());
+        $this->assertTrue($db->getDriver()->isConnected());
     }
 
     /**

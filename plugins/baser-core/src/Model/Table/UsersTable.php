@@ -111,7 +111,7 @@ class UsersTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function afterSave(\Cake\Event\EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // ユーザデータが変更された場合は自動ログインのデータを削除する
         $loginStores = TableRegistry::getTableLocator()->get('BaserCore.LoginStores');

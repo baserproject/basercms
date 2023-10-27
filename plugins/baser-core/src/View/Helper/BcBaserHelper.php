@@ -1462,7 +1462,7 @@ class BcBaserHelper extends Helper
      */
     public function isSSL()
     {
-        return $this->_View->getRequest()->is('ssl');
+        return $this->_View->getRequest()->is('https');
     }
 
     /**

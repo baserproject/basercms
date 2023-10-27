@@ -769,7 +769,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
         }
 
-        $query = $db->query($sql);
+        $query = $db->execute($sql);
         $records = $query->fetchAll('assoc');
 
         $fp = fopen($options['path'], 'w');
@@ -1212,7 +1212,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             }
         }
         $db = ConnectionManager::get($name);
-        $db->connect();
+        $db->getDriver()->connect();
         return $db;
     }
 
@@ -1404,7 +1404,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         /* @var Connection $db */
         $db = $this->connectDb($config);
 
-        if (!$db->isConnected()) {
+        if (!$db->getDriver()->isConnected()) {
             throw new BcException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
         }
 
@@ -1419,7 +1419,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
             case 'Cake\Database\Driver\Postgres' :
                 // TODO ucmitz 未検証
-                $result = $db->query("SELECT version() as version")->fetch();
+                $result = $db->execute("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
                     throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
@@ -1466,8 +1466,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         if ($datasource === 'sqlite') {
-            $db->connect();
-        } elseif (!$db->isConnected()) {
+            $db->getDriver()->connect();
+        } elseif (!$db->getDriver()->isConnected()) {
             return false;
         }
         return $this->migrate($plugin, $dbConfigKeyName);
