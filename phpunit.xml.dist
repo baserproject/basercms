@@ -39,9 +39,9 @@
 <!--        <testsuite name="BcThemeConfig">-->
 <!--            <directory>plugins/bc-theme-config/tests/TestCase</directory>-->
 <!--        </testsuite>-->
-<!--        <testsuite name="BcThemeFile">-->
-<!--            <directory>plugins/bc-theme-file/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcThemeFile">
+            <directory>plugins/bc-theme-file/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcUploader">-->
 <!--            <directory>plugins/bc-uploader/tests/TestCase</directory>-->
 <!--        </testsuite>-->

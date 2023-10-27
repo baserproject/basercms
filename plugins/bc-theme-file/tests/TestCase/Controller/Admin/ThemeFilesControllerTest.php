@@ -193,33 +193,29 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $fullpath = BASER_PLUGINS . 'BcColumn' . '/layout/';
+        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
         $file = new BcFile($fullpath . 'base_name_1.php');
         $file->create();
 
         //GETメソッドを検証場合
-        $this->get('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php');
+        $this->get('/baser/admin/bc-theme-file/theme_files/edit/BcThemeSample/layout/base_name_1.php');
         //取得データを確認
         $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
-        $this->assertEquals('BcColumn｜レイアウトテンプレート編集', $pageTitle);
+        $this->assertEquals('BcThemeSample｜レイアウトテンプレート編集', $pageTitle);
 
         $postData = [
-            'fullpath' => '/var/www/html/plugins/BcColumn/layout/',
-            'parent' => '/var/www/html/plugins/BcColumn/layout/',
-            'theme' => 'BcColumn',
-            'type' => 'layout',
-            'path' => 'test.php',
+            'fullpath' => $fullpath . 'base_name_1.php',
+            'parent' => $fullpath,
             'base_name' => 'base_name_2',
-            'contents' => 'this is a content changed!',
             'ext' => 'php',
-            'plugin' => 'BaserCore'
+            'contents' => "<?php echo 'test' ?>"
         ];
         //Postメソッドを検証場合
-        $this->post('/baser/admin/bc-theme-file/theme_files/edit/BcColumn/layout/base_name_1.php', $postData);
+        $this->post('/baser/admin/bc-theme-file/theme_files/edit/BcThemeSample/layout/base_name_1.php', $postData);
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル base_name_2.php を更新しました。');
-        $this->assertRedirect(['action' => 'edit/layout/base_name_2.php']);
+        $this->assertRedirect(['action' => 'edit/BcThemeSample/layout/./base_name_2.php']);
         unlink($fullpath . 'base_name_2.php');
     }
 
@@ -239,7 +235,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル base_name_1.php を削除しました。');
-        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout/');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout/.');
         //実際にファイルが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
     }
@@ -260,7 +256,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('フォルダ delete_folder を削除しました。');
-        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
         //実際にフォルダが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'delete_folder'));
     }
@@ -364,7 +360,7 @@ class ThemeFilesControllerTest extends BcTestCase
         unlink($fullpath . 'uploadTestFile.html');
 
         //エラーを発生した場合
-        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout3');
+        $this->post('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout3');
         //ステータスを確認
         $this->assertResponseCode(500);
     }
