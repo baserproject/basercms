@@ -53,7 +53,7 @@ class BcMailer extends Mailer
     {
         parent::__construct($config);
         $request = Router::getRequest();
-        $site = $request->getAttribute('currentSite');
+        $site = $request ? $request->getAttribute('currentSite') : null;
         $this->setEmailTransport();
         if ($site) $this->viewBuilder()
             ->setTheme($site->theme)

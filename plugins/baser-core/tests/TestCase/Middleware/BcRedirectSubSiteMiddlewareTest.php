@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Middleware;
 
-use BaserCore\Middleware\BcRedirectSubSiteFilter;
+use BaserCore\Middleware\BcRedirectSubSiteMiddleware;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
@@ -23,10 +23,10 @@ use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
- * Class BcRedirectSubSiteFilterTest
- * @property BcRedirectSubSiteFilter $BcRedirectSubSiteFilter
+ * Class BcRedirectSubSiteMiddlewareTest
+ * @property BcRedirectSubSiteMiddleware $BcRedirectSubSiteMiddleware
  */
-class BcRedirectSubSiteFilterTest extends BcTestCase
+class BcRedirectSubSiteMiddlewareTest extends BcTestCase
 {
     /**
      * Trait
@@ -41,7 +41,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcRedirectSubSiteFilter = new BcRedirectSubSiteFilter();
+        $this->BcRedirectSubSiteMiddleware = new BcRedirectSubSiteMiddleware();
     }
 
     /**
@@ -51,7 +51,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->BcRedirectSubSiteFilter);
+        unset($this->BcRedirectSubSiteMiddleware);
         parent::tearDown();
     }
 
@@ -98,7 +98,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
 
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $request = $this->getRequest('/about')->withParam('plugin', 'BaserCore')->withParam('controller', 'Pages')->withParam('action', 'view');
-        $this->_response = $this->BcRedirectSubSiteFilter->process($request, $this->Application);
+        $this->_response = $this->BcRedirectSubSiteMiddleware->process($request, $this->Application);
         $this->assertResponseCode(302);
     }
 
@@ -130,7 +130,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
             ->withParam('plugin', 'BaserCore')
             ->withParam('controller', 'Pages')
             ->withParam('action', 'view');
-        $this->_response = $this->BcRedirectSubSiteFilter->process($request, $this->Application);
+        $this->_response = $this->BcRedirectSubSiteMiddleware->process($request, $this->Application);
         //リダイレクトしない確認
         $this->assertResponseSuccess();
     }
@@ -149,7 +149,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
         $SitesService->unpublish(1);
 
         $request = $this->loginAdmin($this->getRequest('/baser/admin/?site_id=1'));
-        $this->_response = $this->BcRedirectSubSiteFilter->process($request, $this->Application);
+        $this->_response = $this->BcRedirectSubSiteMiddleware->process($request, $this->Application);
         //リダイレクトしない確認
         $this->assertResponseSuccess();
     }
@@ -165,7 +165,7 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
 
         //管理画面へのアクセスを確認
         $request = $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->_response = $this->BcRedirectSubSiteFilter->process($request, $this->Application);
+        $this->_response = $this->BcRedirectSubSiteMiddleware->process($request, $this->Application);
         //リダイレクトしない確認
         $this->assertResponseSuccess();
     }
