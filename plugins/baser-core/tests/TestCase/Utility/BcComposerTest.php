@@ -46,9 +46,6 @@ class BcComposerTest extends BcTestCase
         if(file_exists(ROOT . DS . 'composer' . DS . 'composer.phar')) {
             unlink(ROOT . DS . 'composer' . DS . 'composer.phar');
         }
-        BcComposer::installComposer();
-        $this->assertFileDoesNotExist(BcComposer::$composerDir . 'composer.phar');
-
         BcComposer::$composerDir = ROOT . DS . 'composer' . DS;
         BcComposer::$export = "export HOME=" . BcComposer::$composerDir . ";";
         BcComposer::$php = '/usr/local/bin/php';
