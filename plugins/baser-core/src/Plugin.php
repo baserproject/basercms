@@ -614,7 +614,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param CommandCollection $commands
      * @return CommandCollection
      * @checked
-     * @checked
+     * @noTodo
      */
     public function console(CommandCollection $commands): CommandCollection
     {

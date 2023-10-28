@@ -48,7 +48,7 @@ class BcAgent extends BcAbstractDetector
      *
      * @checked
      * @unitTest
-
+     * @noTodo
      */
     protected function _setConfig(array $config)
     {
@@ -58,11 +58,11 @@ class BcAgent extends BcAbstractDetector
 
     /**
      * デフォルトの設定値を取得
-     * @checked
-     * @unitTest
-
      *
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     protected function _getDefaultConfig()
     {
@@ -75,10 +75,10 @@ class BcAgent extends BcAbstractDetector
     /**
      * ユーザーエージェントの判定用正規表現を取得
      *
+     * @return string
      * @checked
      * @unitTest
-     *
-     * @return string
+     * @noTodo
      */
     public function getDetectorRegex()
     {
@@ -89,10 +89,9 @@ class BcAgent extends BcAbstractDetector
     /**
      * ユーザーエージェントがキーワードを含むかどうかを判定
      *
+     * @return bool
      * @checked
      * @unitTest
-     *
-     * @return bool
      */
     public function isMatchDecisionKey()
     {
