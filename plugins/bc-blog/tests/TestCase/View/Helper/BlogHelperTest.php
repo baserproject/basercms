@@ -84,46 +84,6 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * ブログコンテンツデータをセットする
-     *
-     * @param int $blogContentId ブログコンテンツID
-     * @param bool $viewVars viewVarsを設定
-     * @dataProvider setContentDataProvider
-     */
-    public function testSetContent($blogContentId, $viewVars, $expected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-//        if ($viewVars) {
-//            $View = new View();
-//            $View->viewVars = ['blogContent' => [
-//                'BlogContent' => [
-//                    'id' => 3,
-//                    'name' => 'test',
-//                ]
-//            ]];
-//            $View->request = $this->_getRequest('/');
-//            $View->request->params['Content']['type'] = 'BlogContent';
-//            $this->Blog = new BlogHelper($View);
-//        }
-//        $this->Blog->blogContent = null;
-//        $this->Blog->setContent($blogContentId);
-//        $result = null;
-//        if (!empty($this->Blog->blogContent['id'])) {
-//            $result = $this->Blog->blogContent['id'];
-//        }
-//        $this->assertEquals($result, $expected, 'ブログコンテンツデータを正しくセットできません');
-    }
-
-    public function setContentDataProvider()
-    {
-        return [
-            [null, false, null],
-            [2, false, 2],
-            [null, true, 3],
-        ];
-    }
-
-    /**
      * ブログIDを取得する
      */
     public function testGetCurrentBlogId()
@@ -226,6 +186,7 @@ class BlogHelperTest extends BcTestCase
     {
         $this->truncateTable('contents');
         $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
 
         // データ生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
@@ -431,6 +392,7 @@ class BlogHelperTest extends BcTestCase
     {
         $this->truncateTable('contents');
         $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_categories');
         $this->loadFixtureScenario(MultiSiteBlogScenario::class);
 
         $blogContent = BlogContentFactory::get(6);
