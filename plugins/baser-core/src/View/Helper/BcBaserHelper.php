@@ -2026,10 +2026,10 @@ class BcBaserHelper extends Helper
      *    - `recursive` : 固定ページ読み込みを再帰的に読み込むかどうか（初期値 : true）
      *    - `checkExists` : 固定ページの存在判定をするかどうか（初期値 : true）
      * @return void
-     * @todo ucmitz loadHelpersが利用されていないのをなんとかする
      */
     public function page($url, $params = [], $options = [])
     {
+        // TODO ucmitz loadHelpersが利用されていないのをなんとかする
         if (!empty($this->_View->get('pageRecursive')) && !$this->_View->get('pageRecursive')) {
             return;
         }
