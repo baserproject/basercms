@@ -189,7 +189,7 @@ class BcModelEventDispatcher implements EventListenerInterface
      * @noTodo
      * @unitTest
      */
-    public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options): bool
+    public function beforeDelete(EventInterface $event): bool
     {
         if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
             return true;

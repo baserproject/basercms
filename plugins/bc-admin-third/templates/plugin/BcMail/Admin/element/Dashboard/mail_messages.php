@@ -17,7 +17,7 @@ use BaserCore\View\BcAdminAppView;
  * @unitTest
  * @noTodo
  */
-$this->addHelper('BcMail.Mail');
+$this->loadHelper('BcMail.Mail');
 ?>
 
 

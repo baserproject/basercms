@@ -1,0 +1,40 @@
+{
+    "name": "imo-tikuwa/cakephp-soft-delete",
+    "description": "SoftDelete plugin for CakePHP",
+    "keywords": ["cakephp", "cakephp 4", "plugin", "soft", "delete", "deletable"],
+    "homepage": "https://github.com/imo-tikuwa/cakephp-soft-delete",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "support": {
+        "source": "https://github.com/imo-tikuwa/cakephp-soft-delete"
+    },
+    "require": {
+        "php": ">=8.0",
+        "cakephp/plugin-installer": "*",
+        "cakephp/cakephp": "4.5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "cakephp/cakephp-codesniffer": "^4.5",
+        "cakephp/migrations": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "SoftDelete\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SoftDelete\\Test\\": "tests",
+            "Cake\\Test\\": "../../vendor/cakephp/cakephp/tests"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@test",
+            "@cs-check"
+        ],
+        "cs-check": "phpcs --colors -p  src/ tests/",
+        "test": "phpunit --colors=always"
+    }
+}

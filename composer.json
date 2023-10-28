@@ -56,7 +56,8 @@
             "BcThemeFile\\": "plugins/bc-theme-file/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "BcWidgetArea\\": "plugins/bc-widget-area/src/",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
+            "Cake\\Routing\\": "plugins/baser-core/src/Routing",
+            "SoftDelete\\": "plugins/cakephp-soft-delete/src"
         }
     },
     "autoload-dev": {
@@ -73,7 +74,8 @@
             "BcThemeConfig\\Test\\": "plugins/bc-theme-config/tests/",
             "BcThemeFile\\Test\\": "plugins/bc-theme-file/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/",
-            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
+            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/",
+            "SoftDelete\\Test\\": "plugins/cakephp-soft-delete/tests"
         }
     },
     "replace": {
