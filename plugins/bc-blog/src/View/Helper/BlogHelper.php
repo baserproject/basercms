@@ -40,6 +40,7 @@ use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -141,10 +142,19 @@ class BlogHelper extends Helper
 
         if($blogContentId) {
             if(!$this->BlogContentsService) return;
-            $this->currentBlogContent = $this->BlogContentsService->get($blogContentId);
+            try {
+                $this->currentBlogContent = $this->BlogContentsService->get($blogContentId);
+            } catch(RecordNotFoundException) {
+                $this->currentBlogContent = null;
+                $this->currentContent = null;
+                return;
+            } catch(\Throwable $e) {
+                throw $e;
+            }
             $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
             // 現在のサイトにエイリアスが存在するのであればそちらを優先する
             $site = $this->_View->getRequest()->getAttribute('currentSite');
+            $content = null;
             if (!empty($site->id)) {
                 $content = $contentTable->find()->where([
                     'Contents.entity_id' => $this->currentBlogContent->id,
@@ -152,7 +162,8 @@ class BlogHelper extends Helper
                     'Contents.alias_id IS NOT' => null,
                     'Contents.site_id' => $site->id
                 ])->first();
-            } else {
+            }
+            if(!$content) {
                 $content = $contentTable->find()->where([
                     'Contents.entity_id' => $this->currentBlogContent->id,
                     'Contents.type' => 'BlogContent',

@@ -495,7 +495,7 @@ class BcUtil
      * @return void
      * @checked
      * @unitTest
-     * @note(value="viewキャッシュ／dataキャッシュ実装時に対応")
+     * @noTodo
      */
     public static function clearAllCache(): void
     {
@@ -1074,6 +1074,7 @@ class BcUtil
      * baserCMSのインストールが完了しているかチェックする
      * @return    boolean
      * @checked
+     * @noTodo
      */
     public static function isInstalled()
     {
