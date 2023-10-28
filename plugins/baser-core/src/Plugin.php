@@ -153,7 +153,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
         $app->addPlugin('Authentication');
         $app->addPlugin('Migrations');
-        $app->addPlugin('SoftDelete');
 
         $this->addTheme($app);
 
