@@ -152,7 +152,13 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
                 $ext = pathinfo($entity->{$image}['name'], PATHINFO_EXTENSION);
                 $fileName = $image . '.' . $ext;
                 $filePath = $saveDir . $fileName;
-                move_uploaded_file($entity->{$image}['tmp_name'], $filePath);
+                if(is_uploaded_file($entity->{$image}['tmp_name'])) {
+                    move_uploaded_file($entity->{$image}['tmp_name'], $filePath);
+                } elseif(BcUtil::isTest()) {
+                    copy($entity->{$image}['tmp_name'], $filePath);
+                } else {
+                    continue;
+                }
 
                 // サムネイルを保存
                 $imageresizer = new Imageresizer();
