@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -244,12 +245,15 @@ class PluginsControllerTest extends BcTestCase
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
 
         // replace を削除
+        // baserCMS5.0.0が、CakePHP4.4.* に依存するため、一旦、CakePHP4.4.* に戻す
         $file = new File(ROOT . DS . 'composer.json');
         $data = $file->read();
-        $regex = '/("replace": {.+?},)/s';
-        $data = preg_replace($regex, '' , $data);
+        $data = preg_replace('/("replace": {.+?},)/s', '' , $data);
+        $data = str_replace('"cakephp/cakephp": "4.5.*"', '"cakephp/cakephp": "4.4.*"' , $data);
         $file->write($data);
         $file->close();
+        BcComposer::setup('php');
+        BcComposer::update();
 
         $file = new File(BASER . 'VERSION.txt');
         $file->write('5.0.0');
@@ -266,6 +270,7 @@ class PluginsControllerTest extends BcTestCase
         rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
         rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
         rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
+        BcComposer::update();
     }
 
     /**

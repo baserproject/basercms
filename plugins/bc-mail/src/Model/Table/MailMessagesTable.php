@@ -230,10 +230,10 @@ class MailMessagesTable extends MailAppTable
                     }
                 } else {
                     $validator->requirePresence($mailField->field_name)
-                        ->notEmpty($mailField->field_name, __d('baser_core', '必須項目です。'));
+                        ->notEmptyString($mailField->field_name, __d('baser_core', '必須項目です。'));
                 }
             } else {
-                $validator->allowEmpty($mailField->field_name);
+                $validator->allowEmptyString($mailField->field_name);
             }
 
             // ### 拡張バリデーション

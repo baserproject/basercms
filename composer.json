@@ -17,7 +17,6 @@
         "cakephp/migrations": "^3.2",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "6.1.0",
-        "imo-tikuwa/cakephp-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
