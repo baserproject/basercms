@@ -14,7 +14,6 @@ namespace BaserCore\Model\Table;
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Table;
-use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -26,6 +25,10 @@ use BaserCore\Event\BcEventDispatcherTrait;
  */
 class AppTable extends Table
 {
+
+    /**
+     * Trait
+     */
     use BcEventDispatcherTrait;
 
     /**
@@ -68,8 +71,7 @@ class AppTable extends Table
      */
     public function setTable(string $table)
     {
-        $table = $this->addPrefix($table);
-        return parent::setTable($table);
+        return parent::setTable($this->addPrefix($table));
     }
 
     /**
@@ -83,8 +85,7 @@ class AppTable extends Table
      */
     public function getTable(): string
     {
-        $table = parent::getTable();
-        $this->_table = $this->addPrefix($table);
+        $this->setTable(parent::getTable());
         return $this->_table;
     }
 
@@ -146,29 +147,6 @@ class AppTable extends Table
     {
         parent::initialize($config);
         FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
-    }
-
-    /**
-     * 配列の文字コードを変換する
-     *
-     * @param array $data 変換前のデータ
-     * @param string $outenc 変換後の文字コード
-     * @param string $inenc 変換元の文字コード
-     * @return array 変換後のデータ
-     * @TODO GLOBAL グローバルな関数として再配置する必要あり
-     */
-    public function convertEncodingByArray($data, $outenc, $inenc)
-    {
-        foreach($data as $key => $value) {
-            if (is_array($value)) {
-                $data[$key] = $this->convertEncodingByArray($value, $outenc, $inenc);
-            } else {
-                if (mb_detect_encoding($value) <> $outenc) {
-                    $data[$key] = mb_convert_encoding($value, $outenc, $inenc);
-                }
-            }
-        }
-        return $data;
     }
 
     /**
@@ -258,21 +236,6 @@ class AppTable extends Table
     }
 
     /**
-     * 範囲を指定しての長さチェック
-     *
-     * @param mixed $check 対象となる値
-     * @param int $min 値の最短値
-     * @param int $max 値の最長値
-     * @param boolean
-     */
-    public function between($check, $min, $max)
-    {
-        $check = (is_array($check))? current($check) : $check;
-        $length = mb_strlen($check, Configure::read('App.encoding'));
-        return ($length >= $min && $length <= $max);
-    }
-
-    /**
      * 指定フィールドのMAX値を取得する
      *
      * 現在数値フィールドのみ対応
@@ -288,24 +251,6 @@ class AppTable extends Table
     {
         $max = $this->find()->where($conditions)->all()->max($field);
         return $max->{$field} ?? 0;
-    }
-
-    /**
-     * 英数チェック
-     *
-     * @param string $value チェック対象文字列
-     * @return boolean
-     */
-    public static function alphaNumeric($value)
-    {
-        if (!$value) {
-            return true;
-        }
-        if (preg_match("/^[a-zA-Z0-9]+$/", $value)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

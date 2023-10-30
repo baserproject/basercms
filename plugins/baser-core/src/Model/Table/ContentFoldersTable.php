@@ -17,7 +17,6 @@ use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\EventInterface;
-use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -69,7 +68,7 @@ class ContentFoldersTable extends AppTable
     /**
      * validationDefault
      *
-     * @param  Validator $validator
+     * @param Validator $validator
      * @return Validator
      * @checked
      * @noTodo
@@ -165,7 +164,7 @@ class ContentFoldersTable extends AppTable
             'id' => $id,
         ]);
         if ($event !== false) {
-            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+            $entity = ($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult();
         }
 
         $entity->content = new Content([
@@ -176,7 +175,7 @@ class ContentFoldersTable extends AppTable
             'site_id' => $newSiteId,
             'description' => $entity->content->description,
             'eyecatch' => $entity->content->eyecatch,
-            'layout_template' => $entity->content->layout_tmplate?? ''
+            'layout_template' => $entity->content->layout_tmplate ?? ''
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
