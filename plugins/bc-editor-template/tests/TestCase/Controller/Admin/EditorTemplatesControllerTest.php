@@ -53,6 +53,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('editor_templates');
     }
 
     /**

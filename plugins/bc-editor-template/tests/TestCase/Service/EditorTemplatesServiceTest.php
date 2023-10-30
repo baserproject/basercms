@@ -47,6 +47,7 @@ class EditorTemplatesServiceTest extends BcTestCase
     {
         unset($this->EditorTemplatesService);
         parent::tearDown();
+        $this->truncateTable('editor_templates');
     }
 
     /**
