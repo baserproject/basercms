@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Service\Admin\SitesAdminServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\Note;
@@ -21,6 +22,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -66,11 +68,15 @@ class SitesController extends BcAdminAppController
      * サイト追加
      *
      * @param SiteConfigsServiceInterface $service
+     * @return void|ResponseInterface
      * @checked
      * @unitTest
-     * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
+     * @noTodo
      */
-    public function add(SitesAdminServiceInterface $service)
+    public function add(
+        SitesAdminServiceInterface $service,
+        ThemesServiceInterface $themesService
+    )
     {
         if ($this->request->is('post')) {
 
@@ -84,26 +90,20 @@ class SitesController extends BcAdminAppController
 
             try {
                 $site = $service->create($this->request->getData());
+
                 // EVENT Sites.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $site
                 ]);
 
-                // TODO ucmitz 未実装のためコメントアウト
-                /* >>>
-                if (!empty($site->theme)) {
-                    $this->BcManager->installThemesPlugins($site->theme);
-                }
-                <<< */
-
+                if ($site->theme) $themesService->installThemesPlugins($site->theme);
                 $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
-            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            } catch (PersistenceFailedException $e) {
                 $site = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
-
         $this->set($service->getViewVarsForAdd($site ?? $service->getNew()));
     }
 

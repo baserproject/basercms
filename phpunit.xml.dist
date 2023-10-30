@@ -36,9 +36,9 @@
         <testsuite name="BcSearchIndex">
             <directory>plugins/bc-search-index/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcThemeConfig">-->
-<!--            <directory>plugins/bc-theme-config/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcThemeConfig">
+            <directory>plugins/bc-theme-config/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcThemeFile">
             <directory>plugins/bc-theme-file/tests/TestCase</directory>
         </testsuite>

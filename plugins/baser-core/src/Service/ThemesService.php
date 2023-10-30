@@ -273,11 +273,11 @@ class ThemesService implements ThemesServiceInterface
      * @unitTest
      * @noTodo
      */
-    private function installThemesPlugins(string $theme)
+    public function installThemesPlugins(string $theme)
     {
         /* @var PluginsService $pluginsService */
         $pluginsService = $this->getService(PluginsServiceInterface::class);
-        $plugins = BcUtil::getCurrentThemesPlugins();
+        $plugins = BcUtil::getThemesPlugins($theme);
         // テーマ梱包のプラグインをインストール
         foreach($plugins as $plugin) {
             $pluginsService->install($plugin);

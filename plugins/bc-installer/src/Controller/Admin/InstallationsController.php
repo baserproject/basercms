@@ -27,6 +27,7 @@ use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class InstallationsController
@@ -46,6 +47,7 @@ class InstallationsController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @noTodo
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -138,8 +140,9 @@ class InstallationsController extends BcAdminAppController
      * Step 4: データベース生成／管理者ユーザー作成
      *
      * @param InstallationsAdminService $service
-     * @return void
+     * @return void|ResponseInterface
      * @checked
+     * @noTodo
      */
     public function step4(InstallationsAdminServiceInterface $service)
     {
