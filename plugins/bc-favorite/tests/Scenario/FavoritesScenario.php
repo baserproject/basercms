@@ -26,6 +26,7 @@ class FavoritesScenario implements FixtureScenarioInterface
     public function load(...$args)
     {
         FavoriteFactory::make([
+            'id' => 1,
             'user_id' => '1',
             'name' => '固定ページ管理',
             'url' => '/admin/pages/index',
@@ -39,6 +40,8 @@ class FavoritesScenario implements FixtureScenarioInterface
             'sort' => 2,
         ])->persist();
         FavoriteFactory::make([
+            'id' => 3,
+            'user_id' => '1',
             'name' => 'お問い合わせ管理',
             'url' => '/admin/mail/mail_fields/index/1',
             'sort' => 3,
