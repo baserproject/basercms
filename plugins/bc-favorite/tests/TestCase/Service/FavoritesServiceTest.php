@@ -11,9 +11,13 @@
 
 namespace BcFavorite\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use BcFavorite\Service\FavoritesService;
+use BcFavorite\Test\Scenario\FavoritesScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class FavoritesServiceTest
@@ -23,16 +27,10 @@ class FavoritesServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * IntegrationTestTrait
      */
-    protected $fixtures = [
-        'plugin.BcFavorite.Favorites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-    ];
+    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * FavoritesService
@@ -76,6 +74,7 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testGet(): void
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $result = $this->FavoritesService->get(1);
         $this->assertEquals("固定ページ管理", $result->name);
 
@@ -90,6 +89,7 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $result = $this->FavoritesService->getIndex(['num' => 2]);
         $this->assertEquals(2, $result->all()->count());
     }
@@ -112,6 +112,7 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testCreate(): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $result = $this->FavoritesService->create([
             'user_id' => '1',
@@ -127,6 +128,7 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testUpdate(): void
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $favorite = $this->FavoritesService->get(1);
         $this->FavoritesService->update($favorite, [
             'name' => 'ucmitz',
@@ -140,6 +142,7 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testDelete()
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $this->FavoritesService->delete(2);
         $users = $this->FavoritesService->getIndex([]);
         $this->assertEquals(5, $users->all()->count());
