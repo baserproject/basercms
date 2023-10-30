@@ -134,6 +134,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param array $data
      * @return void
      * @checked
+     * @noTodo
      */
     public function writeDbSettingToSession(ServerRequest $request, array $data): void
     {
@@ -330,6 +331,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      *
      * @param ServerRequest $request
      * @checked
+     * @noTodo
      */
     public function initDb(ServerRequest $request): void
     {

@@ -7,8 +7,8 @@
 <a href="LICENSE" target="_blank">
     <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
 </a>
-    <a href="https://github.com/baserproject/ucmitz/actions/workflows/test.yml" target="_blank">
-        <img alt="Build Status" src="https://github.com/baserproject/ucmitz/actions/workflows/test.yml/badge.svg?branch=dev">
+    <a href="https://github.com/baserproject/basercms/actions/workflows/test.yml" target="_blank">
+        <img alt="Build Status" src="https://github.com/baserproject/basercms/actions/workflows/test.yml/badge.svg?branch=dev-5">
     </a>
 </p>
 

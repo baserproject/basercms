@@ -139,10 +139,11 @@ class BcAuthHelperTest extends BcTestCase
     /**
      * Test getCurrentUserPrefixes
      * @return void
-     * @todo ucmitz getCurrentUserPrefixSettings() の実装が完了したら別パターンのテストを追加する
+     * @
      */
     public function testGetCurrentUserPrefixes()
     {
+        // TODO getCurrentUserPrefixSettings() の実装が完了したら別パターンのテストを追加する
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $result = $this->BcAuth->getCurrentUserPrefixes();
         $this->assertEquals(['Admin', 'Api/Admin'], $result);
