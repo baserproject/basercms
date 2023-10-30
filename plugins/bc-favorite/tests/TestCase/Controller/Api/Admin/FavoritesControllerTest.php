@@ -155,10 +155,10 @@ class FavoritesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->loadFixtureScenario(FavoritesScenario::class);
-        $this->post('/baser/api/admin/bc-favorite/favorites/delete/2.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/bc-favorite/favorites/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
         $favorites = $this->getTableLocator()->get('BcFavorite.Favorites');
-        $query = $favorites->find()->where(['id' => 2]);
+        $query = $favorites->find()->where(['id' => 1]);
         $this->assertEquals(0, $query->count());
     }
 

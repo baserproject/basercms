@@ -143,7 +143,7 @@ class FavoritesServiceTest extends BcTestCase
     public function testDelete()
     {
         $this->loadFixtureScenario(FavoritesScenario::class);
-        $this->FavoritesService->delete(2);
+        $this->FavoritesService->delete(1);
         $users = $this->FavoritesService->getIndex([]);
         $this->assertEquals(5, $users->all()->count());
     }

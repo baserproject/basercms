@@ -69,7 +69,6 @@ class FavoriteValidationTest extends BcTestCase
      */
     public function testIsPermitted($isAdmin, $id, $url, $expected): void
     {
-        $this->loadFixtureScenario(FavoritesScenario::class);
         if ($isAdmin) {
             $this->loadFixtureScenario(InitAppScenario::class);
             $this->loginAdmin($this->getRequest('/'), $id);

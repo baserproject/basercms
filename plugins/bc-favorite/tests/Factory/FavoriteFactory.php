@@ -41,7 +41,10 @@ class FavoriteFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'created' => $faker->date(),
+                'modified' => $faker->date()
+            ];
         });
     }
 
