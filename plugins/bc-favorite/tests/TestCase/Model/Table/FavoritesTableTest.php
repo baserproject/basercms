@@ -88,7 +88,6 @@ class FavoritesTableTest extends BcTestCase
     public function testValidationDefault($fields, $messages): void
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(FavoritesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $favorite = $this->Favorites->newEntity($fields);
         $this->assertSame($messages, $favorite->getErrors());

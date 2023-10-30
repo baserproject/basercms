@@ -58,6 +58,7 @@ class FavoritesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('favorites');
     }
 
     /**

@@ -65,6 +65,7 @@ class FavoritesServiceTest extends BcTestCase
     {
         unset($this->FavoritesService);
         parent::tearDown();
+        $this->truncateTable('favorites');
     }
 
     /**
