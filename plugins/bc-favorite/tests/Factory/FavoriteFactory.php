@@ -29,7 +29,7 @@ class FavoriteFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BcFavorite.favorites';
+        return 'BcFavorite.Favorites';
     }
 
     /**
