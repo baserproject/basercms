@@ -12,11 +12,11 @@
 namespace BaserCore\Service\Admin;
 
 use BaserCore\Service\PluginsService;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\File;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -159,7 +159,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $updateLogFile = LOGS . 'update.log';
         $updateLog = '';
         if (file_exists($updateLogFile)) {
-            $File = new File($updateLogFile);
+            $File = new BcFile($updateLogFile);
             $updateLog = $File->read();
         }
         return $updateLog;
