@@ -12,6 +12,7 @@
 namespace BcMail\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
@@ -100,13 +101,13 @@ class MailHelper extends Helper
         $templates = [];
         foreach ($templatesPaths as $templatePath) {
             $templatePath .= 'Mail' . DS;
-            $folder = new Folder($templatePath);
-            $files = $folder->read(true, true);
-            if ($files[0]) {
+            $folder = new BcFolder($templatePath);
+            $files = $folder->getFolders();
+            if ($files) {
                 if ($templates) {
-                    $templates = array_merge($templates, $files[0]);
+                    $templates = array_merge($templates, $files);
                 } else {
-                    $templates = $files[0];
+                    $templates = $files;
                 }
             }
         }
@@ -131,20 +132,20 @@ class MailHelper extends Helper
         $ext = Configure::read('BcApp.templateExt');
         foreach ($templatesPaths as $templatePath) {
             $templatePath .= 'email' . DS . 'text' . DS;
-            $folder = new Folder($templatePath);
-            $files = $folder->read(true, true);
-            if ($files[1]) {
-                foreach($files[1] as $key => $file) {
+            $folder = new BcFolder($templatePath);
+            $files = $folder->getFiles();
+            if ($files) {
+                foreach($files as $key => $file) {
                     if($file === 'mail_data.php' || !preg_match('/^mail_/', $file)) {
-                        unset($files[1][$key]);
+                        unset($files[$key]);
                     } else {
-                        $files[1][$key] = basename($file, $ext);
+                        $files[$key] = basename($file, $ext);
                     }
                 }
                 if ($templates) {
-                    $templates = array_merge($templates, $files[1]);
+                    $templates = array_merge($templates, $files);
                 } else {
-                    $templates = $files[1];
+                    $templates = $files;
                 }
             }
         }
