@@ -73,7 +73,7 @@ class UploaderConfigsControllerTest extends BcTestCase
         UploaderConfigFactory::make(['name' => 'name_1', 'value' => 'value_1'])->persist();
         UploaderConfigFactory::make(['name' => 'name_2', 'value' => 'value_2'])->persist();
         //APIを呼ぶ
-        $this->get("/baser/api/bc-uploader/uploader_configs/view.json?token=" . $this->accessToken);
+        $this->get("/baser/api/admin/bc-uploader/uploader_configs/view.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -93,7 +93,7 @@ class UploaderConfigsControllerTest extends BcTestCase
             'name_add' => 'value_add'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -106,7 +106,7 @@ class UploaderConfigsControllerTest extends BcTestCase
             'name_add' => 'value_edit'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -119,7 +119,7 @@ class UploaderConfigsControllerTest extends BcTestCase
             'test'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_configs/edit.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(500);
         //戻る値を確認

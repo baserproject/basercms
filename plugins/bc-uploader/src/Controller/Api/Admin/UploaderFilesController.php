@@ -146,7 +146,7 @@ class UploaderFilesController extends BcAdminApiController
             'uploaderFile' => $entity,
             'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['uploadFile', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['uploaderFile', 'message']);
     }
 
 }

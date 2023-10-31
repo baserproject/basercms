@@ -42,9 +42,9 @@
 <!--        <testsuite name="BcThemeFile">-->
 <!--            <directory>plugins/bc-theme-file/tests/TestCase</directory>-->
 <!--        </testsuite>-->
-<!--        <testsuite name="BcUploader">-->
-<!--            <directory>plugins/bc-uploader/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcUploader">
+            <directory>plugins/bc-uploader/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcWidgetArea">-->
 <!--            <directory>plugins/bc-widget-area/tests/TestCase</directory>-->
 <!--        </testsuite>-->

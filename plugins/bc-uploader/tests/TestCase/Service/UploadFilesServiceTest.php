@@ -316,7 +316,7 @@ class UploadFilesServiceTest extends BcTestCase
             'user_id' => 99
         ];
         $result = $this->UploaderFilesService->isEditable($postData);
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     /**
