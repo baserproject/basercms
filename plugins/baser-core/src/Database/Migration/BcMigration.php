@@ -37,7 +37,6 @@ class BcMigration extends AbstractMigration
      */
     public function table(string $tableName, array $options = []): Table
     {
-        echo $tableName . '/n';
         $prefix = BcUtil::getCurrentDbConfig()['prefix'];
         return parent::table($prefix . $tableName);
     }
