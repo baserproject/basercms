@@ -42,18 +42,7 @@ class PluginsSeed extends BcSeed
                 'priority' => '2',
                 'created' => NULL,
                 'modified' => NULL,
-            ],
-            [
-                'id' => '6',
-                'name' => 'BcFavorite',
-                'title' => 'お気に入り',
-                'version' => '2.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '2',
-                'created' => NULL,
-                'modified' => NULL,
-            ],
+            ]
         ];
 
         $table = $this->table('plugins');
