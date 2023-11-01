@@ -97,11 +97,11 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     ['plugin' => 'BcBlog'],
     ['plugin' => 'BcSearchIndex'],
     ['plugin' => 'BcContentLink'],
+    ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
     ['plugin' => 'BcThemeConfig'],
     ['plugin' => 'BcThemeFile'],
     ['plugin' => 'BcUploader'],
-    ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcFront'],
 ]);
