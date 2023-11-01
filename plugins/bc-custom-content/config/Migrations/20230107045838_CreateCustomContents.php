@@ -14,7 +14,7 @@ class CreateCustomContents extends BcMigration
      */
     public function up()
     {
-        echo 'custom_contents';exit();
+        echo 'custom_contents';
         $this->table('custom_contents', [
             'collation' => 'utf8mb4_general_ci'
          ])

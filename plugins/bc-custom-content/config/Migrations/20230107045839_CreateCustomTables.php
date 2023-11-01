@@ -14,6 +14,7 @@ class CreateCustomTables extends BcMigration
      */
     public function up()
     {
+        echo 'custom_tables';
         $this->table('custom_tables', [
             'collation' => 'utf8mb4_general_ci'
          ])
