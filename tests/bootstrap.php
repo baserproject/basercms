@@ -93,11 +93,11 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
 (new Migrator())->runMany([
+    ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
     ['plugin' => 'BcSearchIndex'],
     ['plugin' => 'BcContentLink'],
-    ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
     ['plugin' => 'BcThemeConfig'],
