@@ -1393,7 +1393,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
-                // TODO ucmitz 未検証
                 $result = $db->query("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
