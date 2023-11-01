@@ -11,8 +11,8 @@
 
 namespace BaserCore\Model\Validation;
 
+use BaserCore\Utility\BcFile;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;
@@ -53,10 +53,8 @@ class PageValidation extends Validation
 
         if (BcUtil::isWindows()) {
             $tmpName = tempnam(TMP, "syntax");
-            $tmp = new File($tmpName);
-            $tmp->open("w");
+            $tmp = new BcFile($tmpName);
             $tmp->write($check);
-            $tmp->close();
             $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
             exec($command, $output, $exit);
             $tmp->delete();
