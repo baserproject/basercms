@@ -215,7 +215,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル base_name_2.php を更新しました。');
-        $this->assertRedirect(['action' => 'edit/BcThemeSample/layout/./base_name_2.php']);
+        $this->assertRedirect(['action' => 'edit/BcThemeSample/layout/base_name_2.php']);
         unlink($fullpath . 'base_name_2.php');
     }
 
@@ -235,7 +235,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル base_name_1.php を削除しました。');
-        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout/.');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcColumn/layout');
         //実際にファイルが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
     }
@@ -256,7 +256,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('フォルダ delete_folder を削除しました。');
-        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        $this->assertRedirect('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
         //実際にフォルダが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'delete_folder'));
     }
@@ -296,7 +296,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル default.php をコピーしました。');
-        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
         unlink($fullpath . 'default_copy.php');
     }
 
@@ -317,7 +317,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('フォルダ new_folder をコピーしました。');
-        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout/.');
+        $this->assertRedirect('baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
 
         //テスト後に不要なフォルダーを削除
         $folder->delete();
