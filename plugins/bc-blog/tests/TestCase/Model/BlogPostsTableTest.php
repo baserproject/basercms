@@ -14,13 +14,13 @@ namespace BcBlog\Test\TestCase\Model;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFolder;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
-use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -634,8 +634,8 @@ class BlogPostsTableTest extends BcTestCase
 	public function testCopyEyeCatch()
 	{
 		if (is_dir(WWW_ROOT . '/files/blog/999')) {
-			$folder = new Folder();
-			$folder->delete(WWW_ROOT . '/files/blog/999');
+			$folder = new BcFolder(WWW_ROOT . '/files/blog/999');
+			$folder->delete();
 		}
 		copy(__DIR__ . '/../../Fixture/File/test1.png', __DIR__ . '/../../Fixture/File/test1_.png');
 		$this->loadFixtureScenario(InitAppScenario::class);
@@ -702,7 +702,7 @@ class BlogPostsTableTest extends BcTestCase
 		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__thumb.png'));
 		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__mobile_thumb.png'));
 
-		$dir = new Folder(WWW_ROOT . '/files/blog/999');
+		$dir = new BcFolder(WWW_ROOT . '/files/blog/999');
 		$dir->delete();
 	}
 
