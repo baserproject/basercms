@@ -1356,6 +1356,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function testConnectDb($config)
     {

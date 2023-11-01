@@ -180,6 +180,8 @@ class BcContentsHelper extends Helper
     /**
      * シングルコンテンツで既に登録済のタイトルを取得する
      * @return array
+     * @checked
+     * @noTodo
      */
     protected function _getExistsTitles()
     {

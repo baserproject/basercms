@@ -2025,6 +2025,8 @@ class BcBaserHelper extends Helper
      *    - `recursive` : 固定ページ読み込みを再帰的に読み込むかどうか（初期値 : true）
      *    - `checkExists` : 固定ページの存在判定をするかどうか（初期値 : true）
      * @return void
+     * @checked
+     * @noTodo
      */
     public function page($url, $params = [], $options = [])
     {
