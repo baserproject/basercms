@@ -19,6 +19,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
@@ -42,7 +43,6 @@ use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -891,13 +891,13 @@ class BlogHelper extends Helper
         $_templates = [];
         foreach($templatesPaths as $templatePath) {
             $templatePath .= 'Blog' . DS;
-            $folder = new Folder($templatePath);
-            $files = $folder->read(true, true);
-            if ($files[0]) {
+            $folder = new BcFolder($templatePath);
+            $files = $folder->getFolders();
+            if ($files) {
                 if ($_templates) {
-                    $_templates = array_merge($_templates, $files[0]);
+                    $_templates = array_merge($_templates, $files);
                 } else {
-                    $_templates = $files[0];
+                    $_templates = $files;
                 }
             }
         }
