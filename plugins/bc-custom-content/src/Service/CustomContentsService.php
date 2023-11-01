@@ -13,13 +13,13 @@ namespace BcCustomContent\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcCustomContent\Model\Table\CustomContentsTable;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\Folder;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -269,13 +269,13 @@ class CustomContentsService implements CustomContentsServiceInterface
         $templates = [];
         foreach($templatesPaths as $templatePath) {
             $templatePath .= 'CustomContent' . DS;
-            $folder = new Folder($templatePath);
-            $files = $folder->read(true, true);
-            if ($files[0]) {
+            $folder = new BcFolder($templatePath);
+            $files = $folder->getFolders();
+            if ($files) {
                 if ($templates) {
-                    $templates = array_merge($templates, $files[0]);
+                    $templates = array_merge($templates, $files);
                 } else {
-                    $templates = $files[0];
+                    $templates = $files;
                 }
             }
         }
