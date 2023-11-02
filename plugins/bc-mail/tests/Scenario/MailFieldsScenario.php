@@ -103,7 +103,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
         ])->persist();
 
         MailContentFactory::make([
-            'id' => 1,
+            'id' => 100,
             'description' => '<p>このコンテンツはメールフォーム機能により作られており、この文章については管理画面の [お問い合わせ] &rarr; [設定] より更新ができます。また、メールフォームは [コンテンツ管理] よりいくつでも作成することができます。</p>',
             'sender_1' => '',
             'sender_2' => '',
