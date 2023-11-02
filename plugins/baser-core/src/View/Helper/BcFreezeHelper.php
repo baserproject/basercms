@@ -597,31 +597,19 @@ class BcFreezeHelper extends BcFormHelper
      * @param array $attributes html属性
      * @return string htmlタグ
      * @checked
+     * @noTodo
      */
-    public function freezeControll($fieldName, $options, $attributes = [])
+    public function freezeControll(string $fieldName, array $options, array $attributes = [])
     {
-        $attributes = array_merge(['class' => ''], $attributes);
-        if (preg_match_all("/\./", $fieldName, $regs) == 2) {
-            [$model, $field, $detail] = explode('.', $fieldName);
-        } else {
-            if (strpos($fieldName, '.') !== false) {
-                [$model, $field] = explode('.', $fieldName);
-            } else {
-                $field = $fieldName;
-            }
-        }
+        $attributes = array_merge([
+            'class' => ''
+        ], $attributes);
 
         // 値を取得
         if (isset($attributes["value"])) {
             $value = $attributes["value"];
         } else {
-            // HABTAM
-            if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
-                // TODO ucmitz 未検証
-                $value = $this->request->data[$model];
-            } else {
-                $value = $this->getSourceValue($field);
-            }
+            $value = $this->getSourceValue($fieldName);
         }
 
         // optionsによるソース有 「0」は通す
@@ -629,15 +617,14 @@ class BcFreezeHelper extends BcFormHelper
 
             // HABTAM
             if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
-                $_value = "";
-                foreach($value as $data) {
-                    if (isset($data['id']) && isset($options[$data['id']])) {
-                        $_value .= sprintf($this->Html->_tags['li'], null, $options[$data['id']]);
+                $li = [];
+                foreach($value as $id) {
+                    if ($id && isset($options[$id])) {
+                        $li[] = $this->Html->tag('li', $options[$id]);
                     }
                 }
-                $value = sprintf($this->Html->_tags['ul'], " " . $this->_parseAttributes($attributes, null, '', ' '), $_value);
-
-                $out = parent::hidden($fieldName, $attributes) . $value;
+                $out = $this->Html->tag('ul', implode('', $li), array_merge($attributes, ['escape' => false]));
+                $out = parent::hidden($fieldName, $attributes) . $out;
 
                 // マルチチェック
             } elseif (!empty($attributes["multiple"]) && $attributes["multiple"] === 'checkbox') {

@@ -122,17 +122,8 @@ class BcContentsHelper extends Helper
             }
 
             // icon
-            if (!empty($item['icon'])) {
-                if (preg_match('/\.(png|jpg|gif)$/', $item['icon'])) {
-                    $item['url']['icon'] = $this->_getIconUrl($item['plugin'], $item['type'], $item['icon']);
-                }
-            } else {
-                // 後方互換のため判定を入れる（v4.2.0）
-                if (Configure::read('BcSite.admin_theme') === Configure::read('BcApp.coreAdminTheme')) {
-                    $item['icon'] = $item['icon'] = 'bca-icon--file';
-                } else {
-                    $item['url']['icon'] = $this->_getIconUrl($item['plugin'], $item['type'], null);
-                }
+            if (empty($item['icon'])) {
+                $item['icon'] = 'bca-icon--file';
             }
 
             // routes
@@ -189,6 +180,8 @@ class BcContentsHelper extends Helper
     /**
      * シングルコンテンツで既に登録済のタイトルを取得する
      * @return array
+     * @checked
+     * @noTodo
      */
     protected function _getExistsTitles()
     {
@@ -208,59 +201,12 @@ class BcContentsHelper extends Helper
                 }
             }
         }
-        // TODO ucmitz SoftDelete未実装
-        // $this->_Contents->Behaviors->unload('SoftDelete');
-        $contents = $this->_Contents->find('all')->select(['plugin', 'type', 'title'])->where([$conditions]);
-        // $this->_Contents->Behaviors->load('SoftDelete');
+        $contents = $this->_Contents->find('all', ['withDeleted'])->select(['plugin', 'type', 'title'])->where([$conditions]);
         $existContents = [];
         foreach($contents as $content) {
             $existContents[$content->plugin . '.' . $content->type] = $content->title;
         }
         return $existContents;
-    }
-
-    /**
-     * アイコンのURLを取得する
-     * @param $type
-     * @param $file
-     * @param null $suffix
-     * @return string
-     */
-    public function _getIconUrl($plugin, $type, $file, $suffix = null)
-    {
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
-        $imageBaseUrl = Configure::read('App.imageBaseUrl');
-        if ($file) {
-            $file = $plugin . '.' . $file;
-        } else {
-            $icon = 'admin/icon_' . Inflector::underscore($type) . $suffix . '.png';
-            $defaultIcon = 'admin/icon_content' . $suffix . '.png';
-            if ($plugin == 'BaserCore') {
-                $iconPath = WWW_ROOT . $imageBaseUrl . DS . $icon;
-                if (file_exists($iconPath)) {
-                    $file = $icon;
-                } else {
-                    $file = $defaultIcon;
-                }
-            } else {
-                try {
-                    $pluginPath = CakePlugin::path($plugin) . 'webroot' . DS;
-                } catch (Exception $e) {
-                    throw new ConfigureException(__d('baser_core', 'プラグインの BcContent 設定が間違っています。'));
-                }
-                $iconPath = $pluginPath . str_replace('/', DS, $imageBaseUrl) . $icon;
-                if (file_exists($iconPath)) {
-                    $file = $plugin . '.' . $icon;
-                } else {
-                    $file = $defaultIcon;
-                }
-            }
-        }
-        return $this->assetUrl($file, ['pathPrefix' => $imageBaseUrl]);
     }
 
     /**

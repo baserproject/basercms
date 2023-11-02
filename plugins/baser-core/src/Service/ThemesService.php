@@ -313,9 +313,6 @@ class ThemesService implements ThemesServiceInterface
             throw $e;
         }
 
-        // メッセージテーブルの初期化
-        if (!$dbService->initMessageTables()) $result = false;
-
         // システムデータの初期化
         if (!$dbService->initSystemData([
             'excludeUsers' => true,

@@ -46,29 +46,25 @@ class BcSmartphoneHelper extends Helper
      */
     public function afterLayout($layoutFile)
     {
-        // TODO ucmitz 未検証
-        // ブログのRSSを実装してから確認する
-        // >>>
-//        if ($this->request->getParam('ext') === 'rss') {
-//            $rss = true;
-//        } else {
-//            $rss = false;
-//        }
-        // ---
-        $rss = false;
-        // <<<
+        $view = $this->getView();
+        $request = $view->getRequest();
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findByUrl($this->_View->getRequest()->getPath());
-        if (!$rss && $site->device == 'smartphone' && $this->_View->getLayoutPath() != 'Emails' . DS . 'text') {
-            if (empty($this->_View->getRequest()->getAttribute('currentSite'))) {
+        $site = $sites->findByUrl($request->getPath());
+
+        if (
+            $request->getParam('_ext') !== 'rss' &&
+            $site->device === 'smartphone' &&
+            $view->getLayoutPath() !== 'Emails' . DS . 'text'
+        ) {
+            if (empty($request->getAttribute('currentSite'))) {
                 return;
             }
             // 内部リンクの自動変換
             if ($site->auto_link) {
                 $siteUrl = Configure::read('BcEnv.siteUrl');
                 $sslUrl = Configure::read('BcEnv.sslUrl');
-                $currentAlias = $this->_View->getRequest()->getAttribute('currentSite')->alias;
-                $base = '/' . $this->_View->getRequest()->getAttribute('base');
+                $currentAlias = $request->getAttribute('currentSite')->alias;
+                $base = '/' . $request->getAttribute('base');
                 $regBaseUrls = [
                     preg_quote($base, '/'),
                     preg_quote(preg_replace('/\/$/', '', $siteUrl) . $base, '/'),
@@ -80,11 +76,11 @@ class BcSmartphoneHelper extends Helper
 
                 // 一旦プレフィックスを除外
                 $reg = '/<a([^<]*?)href="((' . $regBaseUrl . ')(' . $currentAlias . '\/([^\"]*?)))\"/';
-                $this->_View->assign('content', preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->fetch('content')));
+                $view->assign('content', preg_replace_callback($reg, [$this, '_removePrefix'], $view->fetch('content')));
 
                 // プレフィックス追加
                 $reg = '/<a([^<]*?)href=\"(' . $regBaseUrl . ')([^\"]*?)\"/';
-                $this->_View->assign('content', preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->fetch('content')));
+                $view->assign('content', preg_replace_callback($reg, [$this, '_addPrefix'], $view->fetch('content')));
             }
         }
     }
