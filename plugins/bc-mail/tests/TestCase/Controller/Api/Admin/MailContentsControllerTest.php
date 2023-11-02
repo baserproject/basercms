@@ -61,6 +61,7 @@ class MailContentsControllerTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
         //APIを呼ぶ
         $this->get("/baser/api/admin/bc-mail/mail_contents/view/1.json?token=" . $this->accessToken);
         // レスポンスコードを確認する

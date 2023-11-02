@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -59,6 +60,7 @@ class MailFieldsControllerTest extends BcTestCase
     public function testIndex()
     {
         $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
         $this->get("/baser/api/bc-mail/mail_fields/index.json?mail_content_id=1&token=" . $this->accessToken);
         // レスポンスコードを確認する
         $this->assertResponseOk();
@@ -74,6 +76,7 @@ class MailFieldsControllerTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
         //APIを呼ぶ
         $this->get("/baser/api/bc-mail/mail_fields/view/1.json?token=" . $this->accessToken);
         // レスポンスコードを確認する
