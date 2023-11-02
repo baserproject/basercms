@@ -13,11 +13,11 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PluginsController;
 use Cake\Event\Event;
@@ -179,13 +179,10 @@ class PluginsControllerTest extends BcTestCase
 
         $from = BcUtil::getPluginPath('BcBlog');
         $pluginDir = dirname($from);
-        $folder = new Folder();
+        $folder = new BcFolder($from);
+        $folder->create();
         $to = $pluginDir . DS . 'BcBlogBak';
-        $folder->copy($to, [
-            'from' => $from,
-            'mode' => 0777
-        ]);
-        $folder->create($from, 0777);
+        $folder->copy($from, $to);
         $this->post('/baser/admin/baser-core/plugins/uninstall/BcBlog', $data);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
@@ -194,11 +191,7 @@ class PluginsControllerTest extends BcTestCase
             'action' => 'index'
         ]);
         $this->assertFlashMessage('プラグイン「BcBlog」を削除しました。');
-        $folder->move($from, [
-            'from' => $to,
-            'mode' => 0777,
-            'schema' => Folder::OVERWRITE
-        ]);
+        $folder->move($from, $to);
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 
@@ -212,9 +205,8 @@ class PluginsControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $path = Plugin::path('BcPluginSample');
         rename($path . 'VERSION.txt', $path . 'VERSION.bak.txt');
-        $file = new File($path . 'VERSION.txt');
+        $file = new BcFile($path . 'VERSION.txt');
         $file->write('0.0.2');
-        $file->close();
         PluginFactory::make(['name' => 'BcPluginSample', 'version' => '0.0.1'])->persist();
         $this->put('/baser/admin/baser-core/plugins/update/BcPluginSample', [
             'connection' => 'test',
@@ -244,16 +236,14 @@ class PluginsControllerTest extends BcTestCase
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
 
         // replace を削除
-        $file = new File(ROOT . DS . 'composer.json');
+        $file = new BcFile(ROOT . DS . 'composer.json');
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
         $data = preg_replace($regex, '' , $data);
         $file->write($data);
-        $file->close();
 
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('5.0.0');
-        $file->close();
         $this->put('/baser/admin/baser-core/plugins/update', [
             'connection' => 'test',
             'update' => 1,
@@ -311,9 +301,9 @@ class PluginsControllerTest extends BcTestCase
 
         $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new Folder();
-        $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -338,8 +328,9 @@ class PluginsControllerTest extends BcTestCase
         ]);
         $this->assertFlashMessage('新規プラグイン「' . $plugin . '」を追加しました。');
 
-        $folder = new Folder();
-        $folder->delete(BASER_PLUGINS . $plugin);
-        $folder->delete($zipSrcPath);
+        $folder = new BcFolder(BASER_PLUGINS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
     }
 }
