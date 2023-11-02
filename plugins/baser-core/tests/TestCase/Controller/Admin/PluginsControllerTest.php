@@ -301,7 +301,7 @@ class PluginsControllerTest extends BcTestCase
 
         $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new BcFolder($zipSrcPath);
+        $folder = new BcFolder($zipSrcPath. 'BcPluginSample2');
         $folder->create();
         $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
