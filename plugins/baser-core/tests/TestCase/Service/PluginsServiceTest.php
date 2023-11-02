@@ -15,6 +15,8 @@ use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -93,11 +95,10 @@ class PluginsServiceTest extends BcTestCase
     {
         // テスト用のプラグインフォルダ作成
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
-        $file = new File($pluginPath . DS . 'config.php');
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
+        $file = new BcFile($pluginPath . DS . 'config.php');
         $file->write("<?php return ['type' => 'Plugin'];");
-        $file->close();
 
         $plugins = $this->Plugins->getIndex($sortMode);
         $pluginNames = [];
@@ -140,14 +141,14 @@ class PluginsServiceTest extends BcTestCase
         }
         // フォルダはあるがインストールできない場合
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
         try {
             $this->assertNull($this->Plugins->install('BcTest', true, 'test'));
         } catch (\Exception $e) {
             $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
         }
-        $folder->delete($pluginPath);
+        $folder->delete();
     }
 
     /**
@@ -205,10 +206,10 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('既にインストール済のプラグインです。', $this->Plugins->getInstallStatusMessage('BcBlog'));
         $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->Plugins->getInstallStatusMessage('BcTest'));
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
         $this->assertEquals('', $this->Plugins->getInstallStatusMessage('BcTest'));
-        $folder->delete($pluginPath);
+        $folder->delete();
     }
 
     /**
@@ -231,7 +232,7 @@ class PluginsServiceTest extends BcTestCase
         $this->Plugins->install('BcPluginSample', true, 'test');
         $pluginPath = Plugin::path('BcPluginSample');
         rename($pluginPath . 'VERSION.txt', $pluginPath . 'VERSION.bak.txt');
-        $file = new File($pluginPath . 'VERSION.txt');
+        $file = new BcFile($pluginPath . 'VERSION.txt');
         $file->write('10.0.0');
         $this->Plugins->update('BcPluginSample', 'test');
         $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcPluginSample'));
@@ -239,7 +240,7 @@ class PluginsServiceTest extends BcTestCase
 
         // コア
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('10.0.0');
         $this->Plugins->update('BaserCore', 'test');
         $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
@@ -257,7 +258,7 @@ class PluginsServiceTest extends BcTestCase
     public function test_updateCoreFails()
     {
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('10.0.0');
 
         // 失敗用のマイグレーションファイルを作成
@@ -285,7 +286,7 @@ class PluginsServiceTest extends BcTestCase
     protected function createFailMigration()
     {
         $path = Plugin::path('BaserCore') . 'config' . DS . 'Migrations' . DS . '20230328000000_TestMigration.php';
-        $file = new File($path);
+        $file = new BcFile($path);
         $data = <<< EOF
 <?php
 use BaserCore\Database\Migration\BcMigration;
@@ -295,7 +296,6 @@ class TestMigration extends BcMigration
 }
 EOF;
         $file->write($data);
-        $file->close();
         return $path;
     }
 
@@ -388,9 +388,9 @@ EOF;
     {
         $path = BASER_PLUGINS . 'BcThemeSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new Folder();
-        $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcThemeSample2', ['from' => $path, 'mode' => 0777]);
+        $folder = new BcFolder($zipSrcPath . 'BcThemeSample2');
+        $folder->create();
+        $folder->copy($path, $zipSrcPath . 'BcThemeSample2');
         $plugin = 'BcThemeSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -432,10 +432,12 @@ EOF;
         $this->assertEquals('BcThemeSample3', $rs);
 
         //テスト実行後不要ファイルを削除
-        $folder = new Folder();
-        $folder->delete(ROOT . DS . 'plugins' . DS . $plugin);
-        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
-        $folder->delete($zipSrcPath);
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
 
         // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
         // post_max_size　を超えた場合、サーバーに設定されているサイズ制限を超えた場合、
@@ -479,9 +481,8 @@ EOF;
         // BcApp.coreReleaseUrl を書き換える
         Configure::write('BcApp.coreReleaseUrl', $rssPath);
         // バージョンを書き換える
-        $file = new File($versionPath);
+        $file = new BcFile($versionPath);
         $file->write($currentVersion);
-        $file->close();
         // RSSを生成
         $this->createReleaseRss($releaseVersions);
         // キャッシュを削除
@@ -551,9 +552,8 @@ EOF;
   </channel>
 </rss>
 EOF;
-        $file = new File($url);
+        $file = new BcFile($url);
         $file->write($rss);
-        $file->close();
     }
 
 }
