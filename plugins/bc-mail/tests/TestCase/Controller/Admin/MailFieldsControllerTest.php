@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
@@ -150,7 +151,9 @@ class MailFieldsControllerTest extends BcTestCase
     {
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         //テストデータベースを生成
-        $MailMessagesService->createTable(10);
+        $MailMessagesService->createTable(1);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
@@ -167,14 +170,14 @@ class MailFieldsControllerTest extends BcTestCase
             'name' => '性',
         ];
         //対象URLをコル
-        $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
         //イベントに入るかどうか確認
         $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
         $query = $mailFields->find()->where(['name' => 'beforeAdd']);
         $this->assertEquals(1, $query->count());
 
         //テストデータベースを削除
-        $MailMessagesService->dropTable(10);
+        $MailMessagesService->dropTable(1);
     }
 
     /**
