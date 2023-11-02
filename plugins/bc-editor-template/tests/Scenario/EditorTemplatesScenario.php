@@ -27,7 +27,7 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
     public function load(...$args)
     {
         EditorTemplateFactory::make([
-            'id' => '1',
+            'id' => '11',
             'name' => '画像（左）とテキスト',
             'image' => 'template1.gif',
             'description' => '画像を左に配置し、その右にテキストを配置するブロックです。',
@@ -44,7 +44,7 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
             'created' => '2015-01-27 12:56:52'
         ])->persist();
         EditorTemplateFactory::make([
-            'id' => '2',
+            'id' => '12',
             'name' => '画像（右）とテキスト',
             'image' => 'template2.gif',
             'description' => '画像を右に配置し、その左にテキストを配置するブロックです。',
@@ -61,7 +61,7 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
             'created' => '2015-01-27 12:56:52'
         ])->persist();
         EditorTemplateFactory::make([
-            'id' => '3',
+            'id' => '13',
             'name' => 'テキスト２段組',
             'image' => 'template3.gif',
             'description' => 'テキストを左右に２段組するブロックです。',
