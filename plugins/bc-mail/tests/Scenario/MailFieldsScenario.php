@@ -123,7 +123,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
             'modified' => NULL,
         ])->persist();
         ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent'])
-            ->treeNode(1, 1, 0, 'test', '/contact/', 1, true)->persist();
+            ->treeNode(100, 1, 0, 'test', '/contact/', 100, true)->persist();
 
     }
 }
