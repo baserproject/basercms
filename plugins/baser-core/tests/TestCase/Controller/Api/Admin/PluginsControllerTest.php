@@ -223,7 +223,6 @@ class PluginsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('新規プラグイン「' . $plugin . '」を追加しました。', $result->message);
 
-        $folder->delete();
         $folder = new BcFolder(BASER_PLUGINS . $plugin);
         $folder->delete();
     }
