@@ -96,6 +96,7 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
     ['plugin' => 'BcSearchIndex'],
+    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
