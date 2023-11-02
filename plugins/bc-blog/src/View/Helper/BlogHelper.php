@@ -40,6 +40,7 @@ use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -89,6 +90,12 @@ class BlogHelper extends Helper
     public $BlogCategory = null;
 
     /**
+     * ブログコンテンツサービス
+     * @var BlogContentsServiceInterface
+     */
+    public $BlogContentsService = null;
+
+    /**
      * コンテンツ
      *
      * @var array
@@ -108,7 +115,12 @@ class BlogHelper extends Helper
     public function __construct(View $view, array $config = [])
     {
         parent::__construct($view, $config);
-        $this->setContent();
+        // インストールが完了している場合のみ実行
+        // インストール時に呼び出された際にサービスが利用できないため
+        if(BcUtil::isInstalled()) {
+            $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
+            $this->setContent();
+        }
     }
 
     /**
@@ -119,62 +131,57 @@ class BlogHelper extends Helper
      * @param int $blogContentId ブログコンテンツID
      * @return void
      * @checked
+     * @noTodo
      */
     public function setContent($blogContentId = null)
     {
-        $blogContentUpdated = false;
-        $content = false;
-        if (empty($this->currentBlogContent) || ($blogContentId != $this->currentBlogContent->id)) {
-            if ($blogContentId) {
-                if ($this->_View->getRequest()->getQuery('preview') == 'default' && $this->_View->getRequest()->getData()) {
-                    // TODO ucmitz 未確認のためコメントアウト
-//                    if (!empty($this->_View->getRequest()->getData('BlogContent'))) {
-//                        $this->currentBlogContent = $this->_View->getRequest()->getData('BlogContent');
-//                        $blogContentUpdated = true;
-//                    }
-                } else {
-                    $BlogContent = TableRegistry::getTableLocator()->get('BcBlog.BlogContents');
-                    $blogContent = $BlogContent->find()->where(['BlogContents.id' => $blogContentId])->first();
-                    $this->currentBlogContent = $blogContent;
-                    $blogContentUpdated = true;
-                }
-            } elseif ($this->_View->get('blogContent')) {
-                $this->currentBlogContent = $this->_View->get('blogContent');
-                if ($this->currentBlogContent->content->type === 'BlogContent') {
-                    $this->currentContent = $this->currentBlogContent->content;
-                } else {
-                    $content = $this->BcContents->getContentByEntityId($this->currentBlogContent->id, 'BlogContent');
-                    if ($content) $this->currentContent = $content;
-                }
+        if($this->currentBlogContent) {
+            if(is_null($blogContentId)) return;
+            if($blogContentId === $this->currentBlogContent->id) return;
+        }
+
+        if($blogContentId) {
+            if(!$this->BlogContentsService) return;
+            try {
+                $this->currentBlogContent = $this->BlogContentsService->get($blogContentId);
+            } catch(RecordNotFoundException) {
+                $this->currentBlogContent = null;
+                $this->currentContent = null;
+                return;
+            } catch(\Throwable $e) {
+                throw $e;
+            }
+            $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+            // 現在のサイトにエイリアスが存在するのであればそちらを優先する
+            $site = $this->_View->getRequest()->getAttribute('currentSite');
+            $content = null;
+            if (!empty($site->id)) {
+                $content = $contentTable->find()->where([
+                    'Contents.entity_id' => $this->currentBlogContent->id,
+                    'Contents.type' => 'BlogContent',
+                    'Contents.alias_id IS NOT' => null,
+                    'Contents.site_id' => $site->id
+                ])->first();
+            }
+            if(!$content) {
+                $content = $contentTable->find()->where([
+                    'Contents.entity_id' => $this->currentBlogContent->id,
+                    'Contents.type' => 'BlogContent',
+                    'Contents.alias_id IS' => null,
+                ])->first();
+            }
+            $this->currentContent = $content;
+        } else {
+            if ($this->getView()->get('blogContent')) {
+                $this->currentBlogContent = $this->getView()->get('blogContent');
+                $this->currentContent = $this->currentBlogContent->content;
             }
         }
-        if ($this->currentBlogContent) {
-            if ($blogContentUpdated) {
-                $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-                // 現在のサイトにエイリアスが存在するのであればそちらを優先する
-                $site = $this->_View->getRequest()->getAttribute('currentSite');
-                if (!empty($site->id)) {
-                    $content = $contentTable->find()->where([
-                        'Contents.entity_id' => $this->currentBlogContent->id,
-                        'Contents.type' => 'BlogContent',
-                        'Contents.alias_id IS NOT' => null,
-                        'Contents.site_id' => $site->id
-                    ])->first();
-                }
-                if (!$content) {
-                    $content = $contentTable->find()->where([
-                        'Contents.entity_id' => $this->currentBlogContent->id,
-                        'Contents.type' => 'BlogContent',
-                        'Contents.alias_id IS' => null,
-                    ])->first();
-                }
-                $this->currentContent = $content;
-            }
+
+        if($this->currentBlogContent?->id) {
             /* @var BlogPostsTable $blogPostTable */
             $blogPostTable = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
             $blogPostTable->setupUpload($this->currentBlogContent->id);
-        } else {
-            $this->currentContent = null;
         }
     }
 

@@ -21,12 +21,12 @@
         <testsuite name="BcCustomContent">
             <directory>plugins/bc-custom-content/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcEditorTemplate">-->
-<!--            <directory>plugins/bc-editor-template/tests/TestCase</directory>-->
-<!--        </testsuite>-->
-<!--        <testsuite name="BcFavorite">-->
-<!--            <directory>plugins/bc-favorite/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcEditorTemplate">
+            <directory>plugins/bc-editor-template/tests/TestCase</directory>
+        </testsuite>
+        <testsuite name="BcFavorite">
+            <directory>plugins/bc-favorite/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcInstaller">
             <directory>plugins/bc-installer/tests/TestCase</directory>
         </testsuite>
@@ -36,12 +36,12 @@
         <testsuite name="BcSearchIndex">
             <directory>plugins/bc-search-index/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcThemeConfig">-->
-<!--            <directory>plugins/bc-theme-config/tests/TestCase</directory>-->
-<!--        </testsuite>-->
-<!--        <testsuite name="BcThemeFile">-->
-<!--            <directory>plugins/bc-theme-file/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcThemeConfig">
+            <directory>plugins/bc-theme-config/tests/TestCase</directory>
+        </testsuite>
+        <testsuite name="BcThemeFile">
+            <directory>plugins/bc-theme-file/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcUploader">-->
 <!--            <directory>plugins/bc-uploader/tests/TestCase</directory>-->
 <!--        </testsuite>-->
