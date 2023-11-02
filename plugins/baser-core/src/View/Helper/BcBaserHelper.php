@@ -2021,21 +2021,20 @@ class BcBaserHelper extends Helper
      * @param string $url 固定ページのURL
      * @param array $params 固定ページに引き継ぐパラメータ（初期値 : array()）
      * @param array $options オプション（初期値 : array()）
-     *    - `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
      *    - `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
      *    - `recursive` : 固定ページ読み込みを再帰的に読み込むかどうか（初期値 : true）
      *    - `checkExists` : 固定ページの存在判定をするかどうか（初期値 : true）
      * @return void
+     * @checked
+     * @noTodo
      */
     public function page($url, $params = [], $options = [])
     {
-        // TODO ucmitz loadHelpersが利用されていないのをなんとかする
         if (!empty($this->_View->get('pageRecursive')) && !$this->_View->get('pageRecursive')) {
             return;
         }
 
         $options = array_merge([
-            'loadHelpers' => false,
             'subDir' => true,
             'recursive' => true,
             'checkExists' => true

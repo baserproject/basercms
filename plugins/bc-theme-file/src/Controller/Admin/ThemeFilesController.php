@@ -203,7 +203,7 @@ class ThemeFilesController extends BcAdminAppController
                 $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を更新しました。'), $themeFile->name));
                 $this->redirect(array_merge(
                     [$args['theme'], $args['plugin'], $args['type']],
-                    explode('/', dirname($args['path'])),
+                    (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : [],
                     [$themeFile->name]
                 ));
             } catch (BcFormFailedException $e) {
@@ -242,7 +242,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -270,7 +270,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -316,7 +316,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -343,7 +343,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 

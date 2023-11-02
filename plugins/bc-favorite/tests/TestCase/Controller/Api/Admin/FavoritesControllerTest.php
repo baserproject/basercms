@@ -11,31 +11,20 @@
 
 namespace BcFavorite\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BcFavorite\Test\Scenario\FavoritesScenario;
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
-class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
+class FavoritesControllerTest extends BcTestCase
 {
 
     /**
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BcFavorite.Favorites',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -55,6 +44,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -68,6 +58,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('favorites');
     }
 
     /**
@@ -75,6 +66,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testView(): void
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $this->get('/baser/api/admin/bc-favorite/favorites/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -88,6 +80,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIndex()
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $this->get('/baser/api/admin/bc-favorite/favorites/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -142,6 +135,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $data = [
             'name' => 'Test_test_Man'
         ];
@@ -161,10 +155,11 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/admin/bc-favorite/favorites/delete/2.json?token=' . $this->accessToken);
+        $this->loadFixtureScenario(FavoritesScenario::class);
+        $this->post('/baser/api/admin/bc-favorite/favorites/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
         $favorites = $this->getTableLocator()->get('BcFavorite.Favorites');
-        $query = $favorites->find()->where(['id' => 2]);
+        $query = $favorites->find()->where(['id' => 1]);
         $this->assertEquals(0, $query->count());
     }
 
@@ -221,6 +216,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testAdmin_update_sort()
     {
+        $this->loadFixtureScenario(FavoritesScenario::class);
         $this->post('/baser/api/admin/bc-favorite/favorites/change_sort.json?token=' . $this->accessToken, [
             'id' => 1,
             'offset' => 1
