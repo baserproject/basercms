@@ -45,7 +45,7 @@ class ContentFactory extends CakephpBaseFactory
                 'site_id' => 1,
                 'alias_id' => null,
                 'main_site_content_id' => null,
-                'parent_id' => 1,
+                'parent_id' => null,
                 'lft' => null,
                 'rght' => null,
                 'level' => 1,
