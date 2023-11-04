@@ -12,8 +12,10 @@
 namespace BcEditorTemplate\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcEditorTemplate\Service\EditorTemplatesService;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
+use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -26,6 +28,8 @@ class EditorTemplatesServiceTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
+    use IntegrationTestTrait;
 
     /**
      * set up
@@ -43,6 +47,7 @@ class EditorTemplatesServiceTest extends BcTestCase
     {
         unset($this->EditorTemplatesService);
         parent::tearDown();
+        $this->truncateTable('editor_templates');
     }
 
     /**
@@ -58,7 +63,7 @@ class EditorTemplatesServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), []);
+        $this->assertEquals($this->EditorTemplatesService->getNew()->toArray(), ['_bc_upload_id' => 1]);
     }
 
     /**
@@ -70,10 +75,10 @@ class EditorTemplatesServiceTest extends BcTestCase
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
 
         //Getサービスをコル
-        $rs = $this->EditorTemplatesService->get(1);
+        $rs = $this->EditorTemplatesService->get(11);
 
         //戻る値を確認
-        $this->assertEquals(1, $rs->id);
+        $this->assertEquals(11, $rs->id);
         $this->assertEquals('画像（左）とテキスト', $rs->name);
     }
 
@@ -90,7 +95,7 @@ class EditorTemplatesServiceTest extends BcTestCase
 
         //戻る値を確認
         $this->assertEquals(3, $rs->count());
-        $this->assertEquals(1, $rs->all()->toArray()[0]->id);
+        $this->assertEquals(11, $rs->all()->toArray()[0]->id);
         $this->assertEquals('画像（左）とテキスト', $rs->all()->toArray()[0]->name);
     }
 
@@ -105,9 +110,9 @@ class EditorTemplatesServiceTest extends BcTestCase
         $rs = $this->EditorTemplatesService->getList();
         //期待値
         $expect = [
-            1 => '画像（左）とテキスト',
-            2 => '画像（右）とテキスト',
-            3 => 'テキスト２段組',
+            11 => '画像（左）とテキスト',
+            12 => '画像（右）とテキスト',
+            13 => 'テキスト２段組',
         ];
         //期待値を戻るかどうか確認
         $this->assertEquals($expect, $rs);
@@ -140,7 +145,7 @@ class EditorTemplatesServiceTest extends BcTestCase
         //データを生成
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
         //対象メソッドをコル
-        $rs = $this->EditorTemplatesService->update($this->EditorTemplatesService->get(1), ['name' => 'edited']);
+        $rs = $this->EditorTemplatesService->update($this->EditorTemplatesService->get(11), ['name' => 'edited']);
         //エディターテンプレートの名前が変更されるか確認
         $this->assertEquals('edited', $rs->name);
 
@@ -148,7 +153,7 @@ class EditorTemplatesServiceTest extends BcTestCase
         $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
         $this->expectExceptionMessage('Entity save failure. Found the following errors (name.maxLength: "テンプレート名は50文字以内で入力してください。');
         $data['name'] = str_repeat('a', 51);
-        $this->EditorTemplatesService->update($this->EditorTemplatesService->get(1), $data);
+        $this->EditorTemplatesService->update($this->EditorTemplatesService->get(11), $data);
     }
 
     /**
@@ -159,13 +164,13 @@ class EditorTemplatesServiceTest extends BcTestCase
         //データを生成
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
         //対象メソッドをコル
-        $rs = $this->EditorTemplatesService->delete(1);
+        $rs = $this->EditorTemplatesService->delete(11);
         //戻り値を確認
         $this->assertTrue($rs);
 
         //削除したエディターテンプレートが存在しないか確認すること
         $this->expectException("Cake\Datasource\Exception\RecordNotFoundException");
-        $this->EditorTemplatesService->get(1);
+        $this->EditorTemplatesService->get(11);
     }
 
 }

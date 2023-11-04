@@ -95,7 +95,9 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 (new Migrator())->runMany([
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
+    ['plugin' => 'BcEditorTemplate'],
     ['plugin' => 'BcSearchIndex'],
+    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
