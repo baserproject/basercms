@@ -24,6 +24,7 @@ use BcMail\View\Helper\MailformHelper;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\Http\ServerRequest;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -2524,26 +2525,28 @@ class BcBaserHelper extends Helper
     public function setCanonicalUrl()
     {
         $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
-        if (!$currentSite) {
-            return;
-        }
+        if (!$currentSite) return;
+
+        $view = $this->getView();
+        $request = $view->getRequest();
         if ($currentSite->device === 'smartphone') {
             $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $mainSite = $sites->getMainByUrl($this->_View->getRequest()->getPath());
-            $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-                $this->_View->getRequest()->getPath(),
-                $this->_View->getRequest()->getAttribute('currentSite')->id
-            )));
+            /** @var Site $mainSite */
+            $mainSite = $sites->getMainByUrl($request->getPath());
+            $url = $mainSite->makeUrl(new ServerRequest(['url' => $this->BcContents->getPureUrl(
+                $request->getPath(),
+                $request->getAttribute('currentSite')->id
+            )]));
 
         } else {
-            $url = '/' . $this->_View->getRequest()->url;
+            $url = $request->getPath();
         }
         $url = preg_replace('/\.html$/', '', $url);
         $url = preg_replace('/\/page:1$/', '', $url);
         $url = preg_replace('/\\/index$/', '/', $url);
-        $this->_View->set('meta',
+        $view->assign('meta',
             $this->BcHtml->meta('canonical',
-                $this->BcHtml->url($url, true),
+                $this->getUrl($url, true),
                 [
                     'rel' => 'canonical',
                     'type' => null,

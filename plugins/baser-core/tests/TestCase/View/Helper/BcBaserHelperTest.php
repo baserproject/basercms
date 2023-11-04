@@ -11,6 +11,11 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\MultiSiteScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 use Cake\Event\Event;
 use Cake\Core\Configure;
@@ -36,9 +41,15 @@ use BaserCore\View\Helper\BcBaserHelper;
  * @property BcBaserHelper $BcBaser
  * @property FlashHelper $Flash
  * @property UrlHelper $Url
+ * @property BcAdminAppView $BcAdminAppView
  */
 class BcBaserHelperTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -77,13 +88,6 @@ class BcBaserHelperTest extends BcTestCase
         // 'baser.Default.BlogComment',
         // 'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
     ];
-
-    /**
-     * View
-     *
-     * @var View
-     */
-    protected $_View;
 
     /**
      * __construct
@@ -2058,22 +2062,41 @@ class BcBaserHelperTest extends BcTestCase
      * testSetAlternateUrl
      * @dataProvider setCanonicalUrlDataProvider
      */
-    public function testSetCanonicalUrl($url, $expected)
+    public function testSetCanonicalUrl($siteId, $url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        Configure::write('BcSite.use_site_device_setting', true);
-        $this->BcBaser->request = $this->_getRequest($url);
+        // TODO FixtureManager が削除できたら、ここも削除する
+        // >>>
+        $this->truncateTable('sites');
+        $this->truncateTable('contents');
+        $this->truncateTable('content_folders');
+        $this->truncateTable('users');
+        $this->truncateTable('user_groups');
+        // <<<
+
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make([
+            'id' => 2,
+            'main_site_id' => 1,
+            'alias' => 's',
+            'device' => 'smartphone'
+        ])->persist();
+        ContentFactory::make([
+            'site_id' => $siteId,
+            'url' => $url
+        ])->persist();
+
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->BcBaser->setCanonicalUrl();
-        $this->assertEquals($expected, $this->_View->fetch('meta'));
+        $this->assertEquals($expected, $this->BcBaser->getView()->fetch('meta'));
     }
 
     public function setCanonicalUrlDataProvider()
     {
         return [
-            ['/', '<link href="http://localhost/" rel="canonical"/>'],
-            ['/index.html', '<link href="http://localhost/" rel="canonical"/>'],
-            ['/about/index.html', '<link href="http://localhost/about/" rel="canonical"/>'],
-            ['/s/', '<link href="http://localhost/" rel="canonical"/>'],
+            [1, '/', '<link href="https://localhost/" rel="canonical"/>'],
+            [1, '/index.html', '<link href="https://localhost/" rel="canonical"/>'],
+            [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical"/>'],
+            [2, '/s/', '<link href="https://localhost/" rel="canonical"/>'],
         ];
     }
 
