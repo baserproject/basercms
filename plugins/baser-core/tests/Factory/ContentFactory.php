@@ -99,7 +99,7 @@ class ContentFactory extends CakephpBaseFactory
             ->setField('url', $url)
             ->setField('entity_id', $entityId)
             ->setField('status', true)
-            ->setField('title', $this->getFaker()->title)
+            ->setField('title', $this->getFaker()->title())
             ->setField('site_root', $siteRoot);
     }
 
