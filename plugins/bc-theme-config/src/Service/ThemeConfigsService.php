@@ -157,7 +157,8 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
                 // サムネイルを保存
                 $imageresizer = new Imageresizer();
                 $thumbPath = $saveDir . $image . $thumbSuffix . '.' . $ext;
-                $imageresizer->resize($filePath, $thumbPath, 320, 320);
+                if (file_exists($filePath))
+                    $imageresizer->resize($filePath, $thumbPath, 320, 320);
 
                 // エンティティを更新
                 $entity->{$image} = $fileName;

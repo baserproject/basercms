@@ -13,7 +13,6 @@ namespace BcThemeConfig\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcThemeConfig\Model\Entity\ThemeConfig;

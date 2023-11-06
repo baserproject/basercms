@@ -61,6 +61,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => $fullpath,
             'type' => 'layout',
             'path' => '',
             'base_name' => 'base_name_1',
