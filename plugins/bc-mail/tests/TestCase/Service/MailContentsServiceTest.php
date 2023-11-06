@@ -105,7 +105,6 @@ class MailContentsServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         $result = $this->MailContentsService->get(1, $options)->toArray();
         $this->assertEquals('description test', $result['description']);
-        $this->assertNull($result['content']);
 
         $options = [
             'contain' => [

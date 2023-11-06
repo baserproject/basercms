@@ -157,6 +157,9 @@ class MailFieldsServiceTest extends BcTestCase
         $postData = [
             'id' => '1',
             'mail_content_id' => '1',
+            'source' => '正社員
+派遣
+アルバイト',
             'no' => '1',
             'name' => '姓漢字',
             'field_name' => 'test',
@@ -202,6 +205,7 @@ class MailFieldsServiceTest extends BcTestCase
         // 異常系実行
         $postData = [
             'field_name' => '',
+            'type' => 'text',
             'name' => '',
         ];
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");

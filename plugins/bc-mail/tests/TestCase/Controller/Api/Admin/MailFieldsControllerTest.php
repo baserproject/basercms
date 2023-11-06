@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -187,6 +188,12 @@ class MailFieldsControllerTest extends BcTestCase
     public function testCopy()
     {
         //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
         //メールメッセージサービスをコル
         $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
@@ -203,6 +210,9 @@ class MailFieldsControllerTest extends BcTestCase
         //メールフィルドがコピーできるか確認
         $mailField = $MailFieldsService->getIndex(1)->last();
         $this->assertEquals('性_copy', $mailField->name);
+
+        //不要テーブルを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
@@ -211,8 +221,13 @@ class MailFieldsControllerTest extends BcTestCase
     public function testBatch()
     {
         //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
         $data = [
             'batch' => 'delete',
             'batch_targets' => [1],
@@ -232,6 +247,8 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertEquals(1, $dbLog->id);
         $this->assertEquals('MailFields', $dbLog->controller);
         $this->assertEquals('batch', $dbLog->action);
+
+        $MailMessagesService->dropTable(1);
 
         //削除したメールフィルドが存在するか確認すること
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
