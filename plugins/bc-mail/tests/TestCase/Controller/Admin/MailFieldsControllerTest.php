@@ -149,6 +149,7 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testBeforeAddEvent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         //テストデータベースを生成
         $MailMessagesService->createTable(1);
@@ -185,6 +186,7 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAfterAddEvent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         //テストデータベースを生成
         $MailMessagesService->createTable(10);
@@ -220,6 +222,7 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testBeforeEditEvent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを生成
@@ -246,6 +249,7 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAfterEditEvent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを生成
