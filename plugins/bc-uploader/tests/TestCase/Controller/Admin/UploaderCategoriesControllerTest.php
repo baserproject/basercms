@@ -52,6 +52,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('uploader_categories');
     }
 
     /**
