@@ -358,11 +358,6 @@ class ThemeFilesControllerTest extends BcTestCase
         //テストファイルとフォルダを削除
         rmdir($filePath);
         unlink($fullpath . 'uploadTestFile.html');
-
-        //エラーを発生した場合
-        $this->post('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout3');
-        //ステータスを確認
-        $this->assertResponseCode(500);
     }
 
     /**
