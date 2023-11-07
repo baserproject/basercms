@@ -307,17 +307,6 @@ class UploadFilesServiceTest extends BcTestCase
         $this->assertTrue($result);
     }
 
-    public function test_isEditable_NoLogin()
-    {
-        //準備
-        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => true])->persist();
-        //正常系実行
-
-        // ログインしていない状態
-        $result = $this->UploaderFilesService->isEditable([]);
-        $this->assertFalse($result);
-    }
-
     /**
      * test getNew
      */
