@@ -64,6 +64,7 @@ class UploaderFilesControllerTest extends BcTestCase
     {
         parent::tearDown();
         $this->truncateTable('uploader_categories');
+        $this->truncateTable('uploader_files');
     }
 
     /**
@@ -126,14 +127,7 @@ class UploaderFilesControllerTest extends BcTestCase
     public function test_edit()
     {
         //データを生成
-        UploaderFileFactory::make([
-            'id' => 1,
-            'name' => '2_2.jpg',
-            'atl' => '2_2.jpg',
-            'user_id' => 1,
-            'publish_begin' => '2017-07-09 03:38:07',
-            'publish_end' => '2017-07-09 03:38:07',
-            ])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
         $data = UploaderFileFactory::get(1);
         $data->alt = 'test edit';
         //APIを呼ぶ
@@ -143,7 +137,7 @@ class UploaderFilesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         //メッセージを確認
-        $this->assertEquals($result->message, 'アップロードファイル「2_2.jpg」を更新しました。');
+        $this->assertEquals($result->message, 'アップロードファイル「social_new.jpg」を更新しました。');
         //値が変更されるか確認
         $this->assertEquals($result->uploaderFile->alt, 'test edit');
     }
@@ -156,17 +150,17 @@ class UploaderFilesControllerTest extends BcTestCase
     {
         $pathImg = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
         //テストファイルを作成
-        new File($pathImg . '2_2.jpg', true);
+        new File($pathImg . 'social_new.jpg', true);
         //データを生成
-        UploaderFileFactory::make(['id' => 1, 'name' => '2_2.jpg', 'atl' => '2_2.jpg', 'user_id' => 1])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
         //APIを呼ぶ
         $this->post("/baser/api/admin/bc-uploader/uploader_files/delete/1.json?token=" . $this->accessToken);
         // レスポンスコードを確認する
         $this->assertResponseOk();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals($result->message, 'アップロードファイル「2_2.jpg」を削除しました。');
-        $this->assertEquals($result->uploaderFile->name, '2_2.jpg');
+        $this->assertEquals($result->message, 'アップロードファイル「social_new.jpg」を削除しました。');
+        $this->assertEquals($result->uploaderFile->name, 'social_new.jpg');
         //ファイルが削除できるか確認
         $this->assertFalse(file_exists($pathImg . '2_2.jpg'));
     }
