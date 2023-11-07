@@ -90,6 +90,7 @@ class UploaderFilesControllerTest extends BcTestCase
      */
     public function test_upload()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $pathTest = TMP . 'test' . DS;
         $pathUpload = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
 

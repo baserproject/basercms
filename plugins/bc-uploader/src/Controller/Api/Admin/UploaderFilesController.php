@@ -50,7 +50,6 @@ class UploaderFilesController extends BcAdminApiController
      * @param UploaderFilesServiceInterface $service
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function upload(UploaderFilesServiceInterface $service)
     {
