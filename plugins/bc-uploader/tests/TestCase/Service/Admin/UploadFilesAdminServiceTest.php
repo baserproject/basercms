@@ -52,6 +52,8 @@ class UploadFilesAdminServiceTest extends BcTestCase
     {
         unset($this->UploaderFilesAdminService);
         parent::tearDown();
+        $this->truncateTable('uploader_categories');
+        $this->truncateTable('uploader_files');
     }
 
     /**

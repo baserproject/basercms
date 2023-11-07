@@ -46,6 +46,7 @@ class UploaderCategoriesTableTest extends BcTestCase
         unset($this->UploaderCategoriesTable);
         parent::tearDown();
         $this->truncateTable('uploader_categories');
+        $this->truncateTable('uploader_files');
     }
 
     /**
