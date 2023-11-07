@@ -24,7 +24,6 @@ use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Router;
-use Cake\Filesystem\File;
 
 /**
  * Class PluginTest
