@@ -45,9 +45,9 @@
         <testsuite name="BcUploader">
             <directory>plugins/bc-uploader/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcWidgetArea">-->
-<!--            <directory>plugins/bc-widget-area/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcWidgetArea">
+            <directory>plugins/bc-widget-area/tests/TestCase</directory>
+        </testsuite>
     </testsuites>
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
