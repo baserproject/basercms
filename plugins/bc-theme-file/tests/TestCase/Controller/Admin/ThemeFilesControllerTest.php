@@ -338,7 +338,8 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
-        (new BcFolder($filePath))->create();
+        $folder = new BcFolder($filePath);
+        $folder->create();
         $testFile = $filePath . 'uploadTestFile.html';
         $tmpFile = new BcFile($testFile);
         $tmpFile->create();
@@ -358,6 +359,15 @@ class ThemeFilesControllerTest extends BcTestCase
         //テストファイルとフォルダを削除
         rmdir($filePath);
         unlink($fullpath . 'uploadTestFile.html');
+
+        $folder->create();
+        $tmpFile->create();
+        //エラーを発生した場合
+        $this->post('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample333333/layout3');
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //テストファイルとフォルダを削除
+        $folder->delete();
     }
 
     /**
