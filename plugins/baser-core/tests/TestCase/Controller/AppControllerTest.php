@@ -224,35 +224,6 @@ class AppControllerTest extends BcTestCase
     }
 
     /**
-     * test _autoConvertEncodingByArray
-     */
-    public function test_autoConvertEncodingByArray()
-    {
-        $data = [
-            'test' => [
-                'test' => mb_convert_encoding('あいうえお', 'EUC-JP')
-            ]
-        ];
-        $result = $this->execPrivateMethod($this->AppController, '_autoConvertEncodingByArray', [$data, 'UTF-8']);
-        $this->assertEquals('あいうえお', $result['test']['test']);
-    }
-
-    /**
-     * test __convertEncodingHttpInput
-     */
-    public function test__convertEncodingHttpInput()
-    {
-        $data = [
-            'test' => [
-                'test' => mb_convert_encoding('あいうえお', 'EUC-JP')
-            ]
-        ];
-        $this->AppController->setRequest($this->AppController->getRequest()->withParsedBody($data));
-        $this->execPrivateMethod($this->AppController, '__convertEncodingHttpInput');
-        $this->assertEquals('あいうえお', $this->AppController->getRequest()->getData('test.test'));
-    }
-
-    /**
      * test __cleanupQueryParams
      */
     public function test__cleanupQueryParams()

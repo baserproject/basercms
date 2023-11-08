@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Test\Factory;
 
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
@@ -36,9 +37,36 @@ class ContentFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                // set the model's default values
-                // For example:
-                // 'name' => $faker->lastName
+                'name' => $faker->text(50),
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'entity_id' => $faker->randomNumber(1, 100),
+                'url' => '',
+                'site_id' => 1,
+                'alias_id' => null,
+                'main_site_content_id' => null,
+                'parent_id' => null,
+                'lft' => null,
+                'rght' => null,
+                'level' => 1,
+                'title' => $faker->title(50),
+                'description' => $faker->text(100),
+                'eyecatch' => null,
+                'author_id' => 1,
+                'layout_template' => 'default',
+                'status' => true,
+                'publish_begin' => null,
+                'publish_end' => null,
+                'self_status' => true,
+                'self_publish_begin' => null,
+                'self_publish_end' => null,
+                'exclude_search' => false,
+                'created_date' => FrozenTime::now(),
+                'modified_date' => FrozenTime::now(),
+                'site_root' => false,
+                'deleted_date' => null,
+                'exclude_menu' => false,
+                'blank_link' => false,
             ];
         });
     }
@@ -71,7 +99,7 @@ class ContentFactory extends CakephpBaseFactory
             ->setField('url', $url)
             ->setField('entity_id', $entityId)
             ->setField('status', true)
-            ->setField('title', $this->getFaker()->title)
+            ->setField('title', $this->getFaker()->title())
             ->setField('site_root', $siteRoot);
     }
 
