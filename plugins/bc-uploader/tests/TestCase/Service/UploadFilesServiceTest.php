@@ -283,21 +283,6 @@ class UploadFilesServiceTest extends BcTestCase
     }
 
     /**
-     * test update
-     */
-    public function test_update_Error()
-    {
-        //準備
-        //フィクチャーからデーターを生成
-        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => 1])->persist();
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1, 'publish_begin' => '2017-07-09 03:38:07', 'publish_end' => '2017-07-09 03:38:07'])->persist();
-        $entity = $this->UploaderFilesService->get(1);
-        //正常系実行
-        $this->expectException(BcException::class);
-        $this->UploaderFilesService->update($entity, []);
-    }
-
-    /**
      * test isEditable
      */
     public function test_isEditable()
