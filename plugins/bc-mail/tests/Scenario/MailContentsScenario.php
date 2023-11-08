@@ -53,7 +53,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'site_id' => 1,
             'title' => 'お問い合わせ',
             'entity_id' => 1,
-            'parent_id' => 1,
+            'parent_id' => 2,
             'rght' => 1,
             'lft' => 2,
             'status' => true,
@@ -71,6 +71,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'redirect_url' => '/',
         ])->persist();
         ContentFactory::make([
+            'id' => 2,
             'name' => 'name_test',
             'plugin' => 'BcMail',
             'type' => 'MailContent',
@@ -79,6 +80,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'title' => 'テスト',
             'entity_id' => 2,
             'rght' => 1,
+            'parent_id' => 0,
             'lft' => 2,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
