@@ -366,6 +366,8 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->post('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample333333/layout3');
         //ステータスを確認
         $this->assertResponseCode(500);
+        //テストファイルとフォルダを削除
+        $folder->delete();
     }
 
     /**
