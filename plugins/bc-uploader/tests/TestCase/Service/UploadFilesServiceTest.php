@@ -21,6 +21,7 @@ use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderConfigFactory;
+use BcUploader\Test\Scenario\UploaderFilesScenario;
 use Cake\Filesystem\File;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
@@ -271,7 +272,7 @@ class UploadFilesServiceTest extends BcTestCase
         //準備
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
         $entity = $this->UploaderFilesService->get(1);
         $postData = [
             'name' => 'test.jpg',
@@ -279,6 +280,24 @@ class UploadFilesServiceTest extends BcTestCase
         //正常系実行
         $entity = $this->UploaderFilesService->update($entity, $postData);
         $this->assertEquals('test.jpg', $entity->name);
+    }
+
+    /**
+     * test update
+     */
+    public function test_update_Error()
+    {
+        //準備
+        //フィクチャーからデーターを生成
+        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => 1])->persist();
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1, 'publish_begin' => '2017-07-09 03:38:07', 'publish_end' => '2017-07-09 03:38:07'])->persist();
+        $entity = $this->UploaderFilesService->get(1);
+        $postData = [
+            'name' => 'test.jpg',
+        ];
+        //正常系実行
+        $this->expectException(BcException::class);
+        $this->UploaderFilesService->update($entity, $postData);
     }
 
     /**
