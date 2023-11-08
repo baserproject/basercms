@@ -294,6 +294,7 @@ class UploadFilesServiceTest extends BcTestCase
         $entity = $this->UploaderFilesService->get(1);
         $postData = [
             'name' => 'test.jpg',
+            'user_id' => 999,
         ];
         //正常系実行
         $this->expectException(BcException::class);
