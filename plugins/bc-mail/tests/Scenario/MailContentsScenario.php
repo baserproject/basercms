@@ -53,7 +53,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'site_id' => 1,
             'title' => 'お問い合わせ',
             'entity_id' => 1,
-            'parent_id' => 0,
+            'parent_id' => 1,
             'rght' => 1,
             'lft' => 2,
             'status' => true,

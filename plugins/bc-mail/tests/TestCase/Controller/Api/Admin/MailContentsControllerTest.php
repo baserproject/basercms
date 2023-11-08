@@ -94,12 +94,15 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
+        //メールのコンテンツサービスをコル
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //Postデータを準備
         $data = [
             'content' => [
                 'name' => 'test_new',
                 'title' => 'add mail content',
                 'site_id' => 1,
-                'parent_id' => 0
+                'parent_id' => 1
             ]
         ];
         //APIを呼ぶ
