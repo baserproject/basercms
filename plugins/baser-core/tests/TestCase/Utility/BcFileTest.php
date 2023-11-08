@@ -82,4 +82,21 @@ class BcFileTest extends BcTestCase
         (new BcFolder(dirname($path)))->delete();
         $this->assertFalse($file->delete());
     }
+
+
+    /**
+     * test size
+     * @return void
+     */
+    public function testSize()
+    {
+        $path = TMP_TESTS . 'test' . DS . 'test.txt';
+        $file = new BcFile($path);
+        $file->create();
+        $this->assertEquals(0, $file->size());
+        $file->write('hello');
+        $this->assertEquals(5, $file->size());
+        (new BcFolder(dirname($path)))->delete();
+        $file->delete();
+    }
 }
