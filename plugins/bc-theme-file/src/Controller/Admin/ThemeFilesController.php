@@ -13,6 +13,7 @@ namespace BcThemeFile\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcFormFailedException;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\Admin\ThemeFilesAdminService;
 use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
@@ -619,9 +620,9 @@ class ThemeFilesController extends BcAdminAppController
             $args = array_merge($args);
         }
         if (!empty($args[1]) && !BcThemeFileUtil::getTemplateTypeName($args[1])) {
-            $folder = new Folder(BASER_PLUGINS);
-            $files = $folder->read(true, true);
-            foreach($files[0] as $file) {
+            $folder = new BcFolder(BASER_PLUGINS);
+            $files = $folder->getFolders();
+            foreach($files as $file) {
                 if ($args[1] !== Inflector::camelize($file, '-')) continue;
                 $data['plugin'] = $args[1];
                 unset($args[1]);
