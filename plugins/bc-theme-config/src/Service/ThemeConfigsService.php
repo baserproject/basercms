@@ -15,13 +15,13 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
 use BcThemeConfig\Model\Entity\ThemeConfig;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 
@@ -133,8 +133,8 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
     {
         $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
         if(!is_dir($saveDir)) {
-            $folder = new Folder();
-            $folder->create($saveDir);
+            $folder = new BcFolder($saveDir);
+            $folder->create();
         }
         $thumbSuffix = '_thumb';
         $oldEntity = $this->ThemeConfigs->getKeyValue();
@@ -211,7 +211,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
         if (!file_exists($configPath)) {
             return false;
         }
-        $File = new File($configPath);
+        $File = new BcFile($configPath);
         $config = $File->read();
         $settings = [
             'MAIN' => 'color_main',
@@ -228,9 +228,8 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
                 $settingExists = true;
             }
         }
-        $File = new File(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css', true, 0666);
+        $File = new BcFile(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css', true, 0666);
         $File->write($config);
-        $File->close();
         if (!$settingExists) {
             unlink($configPath);
         }

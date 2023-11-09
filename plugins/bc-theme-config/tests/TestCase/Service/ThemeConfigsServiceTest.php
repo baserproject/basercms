@@ -16,6 +16,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
 use BcThemeConfig\Model\Entity\ThemeConfig;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
@@ -220,9 +221,9 @@ class ThemeConfigsServiceTest extends BcTestCase
 }', $fileContentAfter);
 
         //config.cssの内容を元に戻る
-        $File = new File($configPath, true, 0666);
+        $File = new BcFile($configPath);
+        $File->create();
         $File->write($fileContentBefore);
-        $File->close();
     }
 
 }
