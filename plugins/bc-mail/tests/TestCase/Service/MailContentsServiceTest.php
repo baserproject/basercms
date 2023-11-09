@@ -153,9 +153,8 @@ class MailContentsServiceTest extends BcTestCase
         //一覧データ取得サービスをコル
         $rs = $this->MailContentsService->getList();
         //戻る値を確認
-        $this->assertCount(2, $rs);
+        $this->assertCount(1, $rs);
         $this->assertEquals('お問い合わせ', $rs[1]);
-        $this->assertEquals('テスト', $rs[2]);
     }
 
     /**

@@ -132,7 +132,7 @@ class MailContentsControllerTest extends BcTestCase
     /**
      * [API] メールコンテンツ API 編集
      */
-    public function testEditaaa()
+    public function testEdit()
     {
         //メールのコンテンツサービスをコル
         $mailContentServices = $this->getService(MailContentsServiceInterface::class);

@@ -42,8 +42,8 @@ class MailContentsScenario implements FixtureScenarioInterface
             'title' => 'baserCMSサンプル',
             'entity_id' => 1,
             'parent_id' => 0,
-            'rght' => 1,
-            'lft' => 6,
+            'rght' => 6,
+            'lft' => 1,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
@@ -72,8 +72,8 @@ class MailContentsScenario implements FixtureScenarioInterface
             'title' => 'お問い合わせ',
             'entity_id' => 1,
             'parent_id' => 1,
-            'rght' => 2,
-            'lft' => 3,
+            'rght' => 3,
+            'lft' => 2,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
@@ -96,9 +96,9 @@ class MailContentsScenario implements FixtureScenarioInterface
             'site_id' => 1,
             'title' => 'テスト',
             'entity_id' => 2,
-            'rght' => 4,
+            'rght' => 5,
             'parent_id' => 1,
-            'lft' => 5,
+            'lft' => 4,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
