@@ -14,8 +14,8 @@ namespace BcThemeFile\Test\TestCase\Service;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFolder;
 use BcThemeFile\Service\ThemeFoldersService;
-use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersServiceTest
@@ -147,7 +147,7 @@ class ThemeFoldersServiceTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
-        (new Folder())->create($fullpath . DS . 'delete_folder', 0777);
+        (new BcFolder($fullpath . DS . 'delete_folder'))->create();
         $rs = $this->ThemeFoldersService->delete($fullpath . DS . 'delete_folder');
         //戻る値を確認
         $this->assertTrue($rs);
@@ -162,7 +162,7 @@ class ThemeFoldersServiceTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/';
-        (new Folder())->create($fullpath . 'new_folder', 0777);
+        (new BcFolder($fullpath . 'new_folder'))->create();
 
         //対象のメソッドを確認
         $rs = $this->ThemeFoldersService->copy($fullpath . 'new_folder');
@@ -187,8 +187,8 @@ class ThemeFoldersServiceTest extends BcTestCase
     {
         //テストテーマフォルダパス
         $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout';
-        (new Folder())->create($fullpath . DS . 'folder_1', 0777);
-        (new Folder())->create($fullpath . DS . 'folder_2', 0777);
+        (new BcFolder($fullpath . DS . 'folder_1'))->create();
+        (new BcFolder($fullpath . DS . 'folder_2'))->create();
         //一括削除処理をテスト
         $paths = [
             $fullpath . DS . 'folder_1',
