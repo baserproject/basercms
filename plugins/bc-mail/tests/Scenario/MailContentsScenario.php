@@ -41,7 +41,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'site_id' => 1,
             'title' => 'baserCMSサンプル',
             'entity_id' => 1,
-            'parent_id' => 0,
+            'parent_id' => null,
             'rght' => 6,
             'lft' => 1,
             'status' => true,
