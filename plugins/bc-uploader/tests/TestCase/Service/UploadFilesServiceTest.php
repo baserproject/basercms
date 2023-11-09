@@ -283,6 +283,22 @@ class UploadFilesServiceTest extends BcTestCase
     }
 
     /**
+     * 異常系実行
+     */
+    public function test_update_error()
+    {
+        //準備
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1, 'publish_begin' => '2017-07-09 03:38:07', 'publish_end' => '2017-07-09 03:38:07'])->persist();
+        UploaderConfigFactory::make(['name' => 'use_permission', 'value' => true])->persist();
+        $entity = $this->UploaderFilesService->get(1);
+        $postData = [
+            'user_id' => 99,
+        ];
+        $this->expectException(BcException::class);
+        $this->UploaderFilesService->update($entity, $postData);
+    }
+
+    /**
      * test isEditable
      */
     public function test_isEditable()
@@ -296,6 +312,10 @@ class UploadFilesServiceTest extends BcTestCase
         $result = $this->UploaderFilesService->isEditable([]);
         $this->assertFalse($result);
 
+        // ログインしていない状態
+        $result = $this->UploaderFilesService->isEditable([]);
+        $this->assertFalse($result);
+
         // ログインしている状態、アップローダーファイルにuser_id が設定されている
         $result = $this->UploaderFilesService->isEditable(['user_id' => 1]);
         $this->assertTrue($result);
@@ -305,7 +325,7 @@ class UploadFilesServiceTest extends BcTestCase
             'user_id' => 99
         ];
         $result = $this->UploaderFilesService->isEditable($postData);
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 
     /**
