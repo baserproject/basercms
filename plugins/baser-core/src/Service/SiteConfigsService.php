@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
@@ -188,7 +189,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
         if (!$this->isWritableEnv()) {
             return false;
         }
-        $file = new File(CONFIG . '.env');
+        $file = new BcFile(CONFIG . '.env');
         $contents = $file->read();
         $newLine = "export $key=\"$value\"";
         if (isset($_ENV[$key])) {
