@@ -15,6 +15,7 @@ use App\Application;
 use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use Cake\Core\Configure;
@@ -23,7 +24,6 @@ use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Router;
-use Cake\Filesystem\File;
 
 /**
  * Class PluginTest
@@ -118,7 +118,7 @@ class PluginTest extends BcTestCase
 
         copy('config/.env','config/.env.bak');
 
-        $file = new File('config/.env');
+        $file = new BcFile('config/.env');
         $file->write('export APP_NAME="baserCMS"
 export DEBUG="true"
 export APP_ENCODING="UTF-8"
@@ -133,9 +133,8 @@ export ADMIN_PREFIX="admin"
 export BASER_CORE_PREFIX="baser"
 export SQL_LOG="false"
 ');
-        $file->close();
 
-        $fileSetting = new File('config/setting.php');
+        $fileSetting = new BcFile('config/setting.php');
         $fileSetting->write('<?php
 return [];
 ');
@@ -150,7 +149,7 @@ return [];
 
         $fileSetting->delete();
         copy('config/.env.bak','config/.env');
-        $fileEnvBak = new File('config/.env.bak');
+        $fileEnvBak = new BcFile('config/.env.bak');
         $fileEnvBak->delete();
     }
 
