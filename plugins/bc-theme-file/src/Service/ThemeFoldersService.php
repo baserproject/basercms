@@ -22,7 +22,6 @@ use BaserCore\Utility\BcUtil;
 use BcThemeFile\Form\ThemeFolderForm;
 use BcThemeFile\Model\Entity\ThemeFolder;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersService
@@ -210,12 +209,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
             }
             $newPath .= '_copy';
         }
-        $folder = new Folder();
-        $result = $folder->copy($newPath, [
-            'from' => $fullpath,
-            'chmod' => 0777,
-            'skip' => ['_notes'
-        ]]);
+        $folder = new BcFolder($fullpath);
+        $result = $folder->copy($fullpath, $newPath);
         $folder = null;
         if ($result) {
             return $newEntity;
@@ -302,9 +297,9 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
-        $folder = new Folder();
-        $folder->create(dirname($themePath), 0777);
-        if ($folder->copy($themePath, ['from' => $params['fullpath'], 'chmod' => 0777, 'skip' => ['_notes']])) {
+        $folder = new BcFolder(dirname($themePath));
+        $folder->create();
+        if ($folder->copy($params['fullpath'], $themePath)) {
             return str_replace(ROOT, '', $themePath);
         } else {
             return false;
