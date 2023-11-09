@@ -112,4 +112,16 @@ class BcFile
         }
         return unlink($this->path);
     }
+
+    /**
+     * ファイルのサイズを取得
+     * @return bool
+     */
+    public function size()
+    {
+        if (is_file($this->path)) {
+            return filesize($this->path);
+        }
+        return false;
+    }
 }

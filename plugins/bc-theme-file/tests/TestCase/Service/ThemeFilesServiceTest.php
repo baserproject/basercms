@@ -14,6 +14,8 @@ namespace BcThemeFile\Test\TestCase\Service;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcThemeFile\Service\ThemeFilesService;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -148,7 +150,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        new File($fullpath . 'test.php', true);
+        (new BcFile($fullpath . 'test.php'))->create();
         $data = [
             'fullpath' => $fullpath . 'test.php',
             'parent' => $fullpath,
@@ -183,7 +185,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/base_name_1.php';
-        new File($fullpath, true);
+        (new BcFile($fullpath))->create();
         $rs = $this->ThemeFileService->delete($fullpath);
         //戻る値を確認
         $this->assertTrue($rs);
@@ -203,7 +205,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        new File($fullpath . 'base_name_1.php', true);
+        (new BcFile($fullpath . 'base_name_1.php', true))->create();
         //サービスメソッドをコール
         $rs = $this->ThemeFileService->copy($fullpath . 'base_name_1.php');
         //戻る値を確認
@@ -223,13 +225,13 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new Folder())->create($fullpath . 'new_folder', 0777);
+        (new BcFolder($fullpath . 'new_folder'))->create();
 
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
-        (new Folder())->create($filePath, 0777);
+        (new BcFolder($filePath))->create();
         $testFile = $filePath . 'uploadTestFile.html';
-        new File($testFile, true);
+        (new BcFile($testFile))->create();
 
         //Postデータを生成
         $files = [
