@@ -29,7 +29,7 @@ class CustomTableFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BcCustomContent.CustomTables';
+        return 'custom_tables';
     }
 
     /**

@@ -29,7 +29,7 @@ class CustomFieldFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BcCustomContent.CustomFields';
+        return 'custom_fields';
     }
 
     /**
