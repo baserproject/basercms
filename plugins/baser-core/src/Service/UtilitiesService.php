@@ -242,8 +242,9 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         set_time_limit(0);
         $Folder = new BcFolder(LOGS);
-        $files = $Folder->getFolders();
-        if (count($files) === 0 && count($files[1]) === 0) {
+        $files = $Folder->getFiles();
+        $folders = $Folder->getFolders();
+        if (count($files) === 0 && count($folders) === 0) {
             return false;
         }
         // ZIP圧縮して出力
