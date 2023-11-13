@@ -139,7 +139,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals('BcThemeSample｜レイアウトテンプレート一覧', $pageTitle);
 
         //実行成功場合
-        $this->get('/baser/admin/bc-theme-file/theme_files/index');
+        $this->get('/baser/admin/bc-theme-file/theme_files/index222222');
         //ステータスを確認
         $this->assertResponseCode(404);
     }
@@ -281,7 +281,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals('BcThemeSample｜レイアウトテンプレート表示', $pageTitle);
 
         //エラーを発生した場合
-        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout3/default.php');
+        $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout3/default222222.php');
         //ステータスを確認
         $this->assertResponseCode(404);
     }
