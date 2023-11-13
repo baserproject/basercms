@@ -471,7 +471,28 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_view_folder()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
+        $folder = new BcFolder($fullpath . DS . 'new_folder');
+        $folder->create();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/view_folder/BcThemeSample/layout/new_folder');
+        //ステータスを確認
+        $this->assertResponseCode(200);
+        //取得データを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('BcThemeSample｜フォルダ表示', $vars['pageTitle']);
+        $this->assertEquals('/plugins/BcThemeSample/templates/layout/', $vars['currentPath']);
+        $this->assertEquals('BcThemeSample', $vars['theme']);
+        $this->assertArrayHasKey('themeFolderForm', $vars);
+        $this->assertArrayHasKey('themeFolder', $vars);
+        $this->assertArrayHasKey('isWritable', $vars);
+        $this->assertArrayHasKey('plugin', $vars);
+        $this->assertArrayHasKey('type', $vars);
+        $this->assertArrayHasKey('path', $vars);
     }
 
     /**
