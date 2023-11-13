@@ -493,6 +493,9 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertArrayHasKey('plugin', $vars);
         $this->assertArrayHasKey('type', $vars);
         $this->assertArrayHasKey('path', $vars);
+
+        //不要フォルダーを削除
+        $folder->delete();
     }
 
     /**
