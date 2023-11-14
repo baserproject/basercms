@@ -40,8 +40,7 @@ class ThemeFilesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        UserFactory::make()->admin()->persist();
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->ThemeFilesController = new ThemeFilesController($this->loginAdmin($this->getRequest()));
     }
 
