@@ -173,7 +173,7 @@ class BcFolder
         rmdir($this->path);
         return true;
     }
-    
+
     /**
      * ディレクトリをコピーする
      * @checked
@@ -185,12 +185,11 @@ class BcFolder
         if (!is_dir($source)) return false;
         if(is_dir($source)) {
             $dir_handle=opendir($source);
-            $sourceFolder = basename($source);
-            mkdir($dest."/".$sourceFolder);
+            mkdir($dest);
             while($file=readdir($dir_handle)){
                 if($file!="." && $file!=".."){
                     if(is_dir($source."/".$file)){
-                        self::copy($source."/".$file, $dest."/".$sourceFolder);
+                        self::copy($source .DS. $file, $dest .DS. $file);
                     } else {
                         copy($source."/".$file, $dest."/".$file);
                     }
@@ -202,7 +201,7 @@ class BcFolder
         }
         return true;
     }
-    
+
     /**
      * ディレクトリを移動する
      * @checked
