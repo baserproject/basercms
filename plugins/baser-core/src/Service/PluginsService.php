@@ -658,7 +658,7 @@ class PluginsService implements PluginsServiceInterface
             $dstName = Inflector::camelize($baseName) . $num;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move(TMP . $srcName, BASER_PLUGINS);
+        $folder->move(TMP . $srcName, BASER_PLUGINS. $dstName);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
