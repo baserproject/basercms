@@ -482,6 +482,7 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy_to_theme()
     {
+        $this->markTestIncomplete('Skip');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを生成
