@@ -534,7 +534,7 @@ class BcUtil extends CakeObject
 			'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link',
 			'map', 'meta', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 'samp', 'select',
 			'small', 'span', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead',
-			'title', 'tr', 'ul', 'var', 'style'
+			'title', 'tr', 'ul', 'var', 'style','ruby', 'rt', 'rp'
 		];
 		return strip_tags($value, '<' . implode('><', $allows) . '>');
 	}
