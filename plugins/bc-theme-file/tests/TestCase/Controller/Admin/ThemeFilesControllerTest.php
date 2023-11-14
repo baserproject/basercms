@@ -483,9 +483,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを生成
-        $this->getRequest()->getAttribute('currentSite');
-
-        //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'bc-front' . '/templates/layout/';
         $file = new BcFile($fullpath . 'base_name_1.php');
         $file->create();
