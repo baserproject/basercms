@@ -141,7 +141,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //異常系場合、
         $this->get('/baser/admin/bc-theme-file/theme_files/index');
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -283,7 +283,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //エラーを発生した場合
         $this->get('/baser/admin/bc-theme-file/theme_files/view/BcThemeSample/layout3/default.php');
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
     }
 
     /**
