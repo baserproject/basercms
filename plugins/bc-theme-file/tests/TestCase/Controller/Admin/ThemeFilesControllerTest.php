@@ -487,7 +487,29 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy_folder_to_theme()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $fullpath = BASER_PLUGINS . 'bc-front' . '/templates/layout/testCopy';
+        $newFolder = new BcFolder($fullpath);
+        $newFolder->create();
+
+        //フォルダがコピーできる場合、
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_folder_to_theme/BcFront/layout/testCopy');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('コアフォルダ testCopy を テーマ BcFront の次のパスとしてコピーしました。
+/plugins/bc-front/templates/layout/testCopy/');
+
+        //不要フォルダを削除
+        $newFolder->delete();
+        $copyFolder = new BcFolder(BASER_PLUGINS . 'bc-front' . '/templates/plugin/layout/testCopy');
+        $copyFolder->delete();
+
+        //異常系テスト：存在しないファイルをコピーする場合、
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_folder_to_theme/BcFront/layout/testCopy');        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('コアフォルダ testCopy のコピーに失敗しました。');
     }
 
     /**
