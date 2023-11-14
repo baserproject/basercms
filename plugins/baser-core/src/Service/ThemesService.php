@@ -24,7 +24,6 @@ use BaserCore\Utility\BcZip;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -230,7 +229,7 @@ class ThemesService implements ThemesServiceInterface
         $info = [];
         $themePath = BcUtil::getPluginPath($theme);
         $Folder = new BcFolder($themePath . 'plugins');
-        $files = $Folder->getFolders(true, true, false);
+        $files = $Folder->getFolders();
         if (!empty($files)) {
             $info = array_merge($info, [
                 __d('baser_core', 'このテーマは下記のプラグインを同梱しています。')
@@ -440,7 +439,7 @@ class ThemesService implements ThemesServiceInterface
         // プラグインのCSVを生成
         $plugins = Plugin::loaded();
         foreach($plugins as $plugin) {
-            $folder->create($tmpDir . $plugin);
+            (new BcFolder($tmpDir . $plugin))->create();
             BcUtil::emptyFolder($tmpDir . $plugin);
             $this->_writeCsv($plugin, $tmpDir . $plugin . DS, $excludes);
             $folder = new BcFolder($tmpDir . $plugin);
