@@ -51,6 +51,8 @@ class UploadConfigsServiceTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('uploader_files');
+        $this->truncateTable('uploader_categories');
     }
 
     /**

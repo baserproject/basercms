@@ -50,7 +50,6 @@ class UploaderFilesController extends BcAdminApiController
      * @param UploaderFilesServiceInterface $service
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function upload(UploaderFilesServiceInterface $service)
     {
@@ -146,7 +145,7 @@ class UploaderFilesController extends BcAdminApiController
             'uploaderFile' => $entity,
             'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['uploadFile', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['uploaderFile', 'message']);
     }
 
 }

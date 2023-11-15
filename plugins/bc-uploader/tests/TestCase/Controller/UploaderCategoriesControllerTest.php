@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcUploader\Test\TestCase\Controller\Api;
+namespace BcUploader\Test\TestCase\Controller;
 
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -64,6 +64,8 @@ class UploaderCategoriesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('uploader_categories');
+        $this->truncateTable('uploader_files');
     }
 
     /**
@@ -74,7 +76,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
     {
         $this->loadFixtureScenario(UploaderFilesScenario::class);
         //APIを呼ぶ
-        $this->get("/baser/api/bc-uploader/uploader_categories/index.json?token=" . $this->accessToken);
+        $this->get("/baser/api/admin/bc-uploader/uploader_categories/index.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -93,7 +95,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'name' => 'japan'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -106,7 +108,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'name' => null
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
@@ -119,7 +121,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'name' => 'name...................................................'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(500);
         //戻る値を確認
@@ -139,7 +141,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'name' => '更新!'
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -149,7 +151,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
         //無効なアップロードカテゴリIDを指定した場合、
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/edit/10.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/edit/10.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(404);
         //戻る値を確認
@@ -158,7 +160,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
         //入力内容はヌルの場合、
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, ['name' => '']);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, ['name' => '']);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
@@ -176,7 +178,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //テストデーターを生成
         $this->loadFixtureScenario(UploaderCategoriesScenario::class);
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/copy/1.json?token=" . $this->accessToken);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/copy/1.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -186,7 +188,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
         //無効なアップロードカテゴリIDを指定した場合、
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/copy/11.json?token=" . $this->accessToken);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/copy/11.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseCode(500);
         //戻る値を確認
@@ -203,7 +205,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //テストデーターを生成
         $this->loadFixtureScenario(UploaderCategoriesScenario::class);
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/delete/1.json?token=" . $this->accessToken);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/delete/1.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -213,7 +215,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
         //無効なアップロードカテゴリIDを指定した場合、
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/delete/10.json?token=" . $this->accessToken);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/delete/10.json?token=" . $this->accessToken);
         //ステータスを確認
         $this->assertResponseCode(404);
         //戻る値を確認
@@ -237,7 +239,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'batch_targets' => [1, 2, 3]
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -257,7 +259,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
         //存在しないアップロードカテゴリIDを指定した場合、
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(404);
         //戻る値を確認
@@ -270,7 +272,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'batch_targets' => [1, 2, 3]
         ];
         //APIを呼ぶ
-        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
         //ステータスを確認
         $this->assertResponseCode(500);
     }
