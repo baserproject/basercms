@@ -452,6 +452,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view_folder(ThemeFoldersAdminServiceInterface $service)
     {
