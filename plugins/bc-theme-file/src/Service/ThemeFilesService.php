@@ -251,7 +251,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         }
         $folder = new Folder();
         $folder->create(dirname($themePath), 0777);
-        if (copy($params['fullpath'], $themePath)) {
+        if (file_exists($params['fullpath']) && copy($params['fullpath'], $themePath)) {
             chmod($themePath, 0666);
             return str_replace(ROOT, '', $themePath);
         } else {
