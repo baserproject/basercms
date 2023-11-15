@@ -11,8 +11,8 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
-use Cake\Filesystem\File;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -52,7 +52,7 @@ class UpdatersController extends BcAdminAppController
         $updateLogFile = TMP . 'logs' . DS . 'update.log';
         $updateLog = '';
         if (file_exists($updateLogFile)) {
-            $File = new File(TMP . 'logs' . DS . 'update.log');
+            $File = new BcFile(TMP . 'logs' . DS . 'update.log');
             $updateLog = $File->read();
         }
 
