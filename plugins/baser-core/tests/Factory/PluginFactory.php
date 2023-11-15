@@ -41,7 +41,7 @@ class PluginFactory extends CakephpBaseFactory
                 'version' => '1.0.0',
                 'status' => true,
                 'db_init' => true,
-                'priority' => 1,
+                'priority' => $faker->unique()->randomNumber(),
             ];
         });
     }

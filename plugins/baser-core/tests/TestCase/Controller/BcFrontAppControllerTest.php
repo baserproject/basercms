@@ -15,6 +15,7 @@ use BaserCore\Controller\BcFrontAppController;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
+use Cake\Core\Configure;
 
 /**
  * BcFrontAppControllerTest
@@ -66,7 +67,7 @@ class BcFrontAppControllerTest extends BcTestCase
         // setUp でコンテナの初期化が行われるため、ここで再度初期化する
         BcContainer::clear();
         // どのプラグインが影響を与えるかわからないので全プラグイン有効化する
-        PluginFactory::make([
+        $plugins = [
             ['name' => 'BcBlog'],
             ['name' => 'BcContentLink'],
             ['name' => 'BcCustomContent'],
@@ -78,9 +79,13 @@ class BcFrontAppControllerTest extends BcTestCase
             ['name' => 'BcThemeFile'],
             ['name' => 'BcUploader'],
             ['name' => 'BcWidgetArea']
-        ])->persist();
+        ];
+        PluginFactory::make($plugins)->persist();
         $this->get('/aaa');
         $this->assertResponseCode(404);
+        foreach($plugins as $plugin) {
+            $this->Application->getPlugins()->remove($plugin['name']);
+        }
     }
 
     /**
