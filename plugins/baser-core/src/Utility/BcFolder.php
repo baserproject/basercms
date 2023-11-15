@@ -355,4 +355,11 @@ class BcFolder
         return $files;
     }
 
+    public function find(string $regexpPattern = '.*'): array
+    {
+        $files = $this->getFiles();
+
+        return array_values(preg_grep('/^' . $regexpPattern . '$/i', $files));
+    }
+
 }
