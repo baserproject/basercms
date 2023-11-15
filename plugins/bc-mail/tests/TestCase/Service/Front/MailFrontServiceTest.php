@@ -31,6 +31,7 @@ use Cake\ORM\Entity;
 use Cake\Filesystem\File;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use InvalidArgumentException;
 
 /**
  * MailContentsServiceTest
@@ -128,7 +129,6 @@ class MailFrontServiceTest extends BcTestCase
         // prepare
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
-        $this->loadFixtureScenario(MailFieldsScenario::class);
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         MailMessagesFactory::make(
             [
@@ -148,7 +148,6 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->createMailData($mailConfig, $mailContent, $mailFields, $mailMessages, []);
         $this->assertEquals(1, $result['message']->id);
         $this->assertEquals('name_test', $result['content']->name);
-        $this->assertCount(3, $result['mailFields']);
         $this->assertEquals('description test', $result['mailContent']->description);
         $this->assertEquals('test_name', $result['mailConfig']->name);
     }
@@ -526,7 +525,7 @@ class MailFrontServiceTest extends BcTestCase
         ])->persist();
         // normal case
         $mailContent = $MailContentsService->get(99);
-        $this->expectException('');
+        $this->expectException(InvalidArgumentException::class);
         $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
     }
 

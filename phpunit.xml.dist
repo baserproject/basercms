@@ -30,9 +30,9 @@
         <testsuite name="BcInstaller">
             <directory>plugins/bc-installer/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcMail">-->
-<!--            <directory>plugins/bc-mail/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcMail">
+            <directory>plugins/bc-mail/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcSearchIndex">
             <directory>plugins/bc-search-index/tests/TestCase</directory>
         </testsuite>
