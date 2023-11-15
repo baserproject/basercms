@@ -15,6 +15,8 @@ use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -388,9 +390,9 @@ EOF;
     {
         $path = BASER_PLUGINS . 'BcThemeSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new Folder();
-        $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcThemeSample2', ['from' => $path, 'mode' => 0777]);
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        $folder->copy($path, $zipSrcPath. 'BcThemeSample2');
         $plugin = 'BcThemeSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -415,8 +417,9 @@ EOF;
         $this->assertTrue(is_dir(ROOT . DS . 'plugins' . DS . $plugin));
 
         //  既に /plugins/ 内に同名のプラグインが存在する場合には、数字付きのディレクトリ名（PluginName2）にリネームする。
-        $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcThemeSample2', ['from' => $path, 'mode' => 0777]);
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        $folder->copy($path, $zipSrcPath . 'BcThemeSample2');
         $zip = new ZipArchiver();
         $zip->archive($zipSrcPath, $testFile, true);
         $this->setUploadFileToRequest('file', $testFile);
@@ -432,10 +435,12 @@ EOF;
         $this->assertEquals('BcThemeSample3', $rs);
 
         //テスト実行後不要ファイルを削除
-        $folder = new Folder();
-        $folder->delete(ROOT . DS . 'plugins' . DS . $plugin);
-        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
-        $folder->delete($zipSrcPath);
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
 
         // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
         // post_max_size　を超えた場合、サーバーに設定されているサイズ制限を超えた場合、
@@ -479,9 +484,8 @@ EOF;
         // BcApp.coreReleaseUrl を書き換える
         Configure::write('BcApp.coreReleaseUrl', $rssPath);
         // バージョンを書き換える
-        $file = new File($versionPath);
+        $file = new BcFile($versionPath);
         $file->write($currentVersion);
-        $file->close();
         // RSSを生成
         $this->createReleaseRss($releaseVersions);
         // キャッシュを削除
@@ -551,9 +555,8 @@ EOF;
   </channel>
 </rss>
 EOF;
-        $file = new File($url);
+        $file = new BcFile($url);
         $file->write($rss);
-        $file->close();
     }
 
 }

@@ -134,16 +134,17 @@ class BcFolderTest extends TestCase
         $path = TMP_TESTS . 'test';
         $folder1 = new BcFolder($path);
         $folder1->create();
+        (new BcFolder($path .DS. 'test1'))->create();
+        (new BcFile($path .DS. 'test1' .DS. 'test1.txt'))->create();
         $file = new BcFile($path. DS. 'test.txt');
         $file->create();
         $des = TMP_TESTS . 'test_des';
-        $folder2 = new BcFolder($des);
-        $folder2->create();
-        $result = $folder2->copy($path, $des);
+        $result = $folder1->copy($path, $des);
         $this->assertTrue($result);
         $this->assertFileExists($des. DS. 'test.txt');
+        $this->assertFileExists($des. DS. 'test1' .DS. 'test1.txt');
         $folder1->delete();
-        $folder2->delete();
+        (new BcFolder($des))->delete();
     }
 
     /**

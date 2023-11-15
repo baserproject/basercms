@@ -16,7 +16,6 @@ use BaserCore\Utility\BcFolder;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use Composer\Package\Archiver\ZipArchiver;
 
