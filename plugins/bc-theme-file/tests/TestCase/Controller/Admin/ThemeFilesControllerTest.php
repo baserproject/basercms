@@ -495,7 +495,13 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_img()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/img/BcColumn/img/logo.png');
+        //取得データを確認
+        $this->assertNotNull($this->_controller->getResponse());
     }
 
     /**
