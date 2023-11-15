@@ -597,6 +597,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function parseArgs($args)
     {
