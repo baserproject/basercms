@@ -10,6 +10,7 @@
  */
 
 namespace BcThemeFile\Test\TestCase\Controller\Admin;
+
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -135,7 +136,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
         $this->assertEquals('BcThemeSample｜レイアウトテンプレート一覧', $pageTitle);
 
-        //実行成功場合
+        //異常系場合、
         $this->get('/baser/admin/bc-theme-file/theme_files/index');
         //ステータスを確認
         $this->assertResponseCode(404);
@@ -479,7 +480,28 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy_to_theme()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $fullpath = BASER_PLUGINS . 'bc-front' . '/templates/layout/';
+        $file = new BcFile($fullpath . 'base_name_1.php');
+        $file->create();
+
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_to_theme/BcFront/layout/base_name_1.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('コアファイル base_name_1.php を テーマ BcFront の次のパスとしてコピーしました。
+/plugins/bc-front/templates/plugin//layout/base_name_1.php');
+
+        //不要ファイルを削除
+        unlink(BASER_PLUGINS . 'bc-front' . '/templates/layout/base_name_1.php');
+        unlink(BASER_PLUGINS . 'bc-front' . '/templates/plugin/layout/base_name_1.php');
+
+        //異常系テスト：存在しないファイルをコピーする場合、
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_to_theme/BcColumn/layout/base_name_1.php');
+        //戻る値を確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('コアファイル base_name_1.php のコピーに失敗しました。');
     }
 
     /**
