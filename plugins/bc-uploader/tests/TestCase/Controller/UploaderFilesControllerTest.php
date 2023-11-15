@@ -13,7 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Filesystem\File;
+use BaserCore\Utility\BcFile;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
 use BcUploader\Test\Factory\UploaderFileFactory;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -92,7 +92,7 @@ class UploaderFilesControllerTest extends BcTestCase
         $pathUpload = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
 
         //テストファイルを作成
-        new File($pathTest . 'testUpload.txt', true);
+        (new BcFile($pathTest . 'testUpload.txt'))->create();
         $testFile = $pathTest . 'testUpload.txt';
 
         //アップロードファイルを準備
@@ -146,7 +146,7 @@ class UploaderFilesControllerTest extends BcTestCase
     {
         $pathImg = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
         //テストファイルを作成
-        new File($pathImg . '2_2.jpg', true);
+        (new BcFile($pathImg . '2_2.jpg'))->create();
         //データを生成
         UploaderFileFactory::make(['id' => 1, 'name' => '2_2.jpg', 'atl' => '2_2.jpg', 'user_id' => 1])->persist();
         //APIを呼ぶ
