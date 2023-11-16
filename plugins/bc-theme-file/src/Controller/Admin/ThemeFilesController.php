@@ -569,6 +569,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param ThemeFilesAdminService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function img_thumb(ThemeFilesAdminServiceInterface $service)
     {
