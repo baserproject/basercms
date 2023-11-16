@@ -347,6 +347,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'new_folder/uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        $folder->delete();
+        (new BcFolder($filePath))->delete();
     }
 }
