@@ -612,13 +612,22 @@ class ThemeFilesControllerTest extends BcTestCase
             ],
             [
                 [
+                    'BcBlog',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
                     'BaserCore',
                     'BcThemeSample',
                     'layout',
-                    'css',
-                    'style.css',
+                    'new_folder',
+                    'default.php',
                 ],
-                '/var/www/html/plugins/BcThemeSample/templates/layout/css/style.css'
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder/default.php'
             ]
         ];
     }
