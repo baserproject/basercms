@@ -588,9 +588,53 @@ class ThemeFilesControllerTest extends BcTestCase
 
     /**
      * test parseArgs
+     * @dataProvider parseArgsDataProvider
      */
-    public function test_parseArgs()
+    public function test_parseArgs($args, $expected)
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $rs = $this->execPrivateMethod($this->ThemeFilesController, 'parseArgs', [$args]);
+        $this->assertEquals($rs['fullpath'], $expected);
+    }
+
+    public function parseArgsDataProvider()
+    {
+        return [
+            [
+                [
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BaserCore',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BcBlog',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BaserCore',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                    'default.php',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder/default.php'
+            ]
+        ];
     }
 }
