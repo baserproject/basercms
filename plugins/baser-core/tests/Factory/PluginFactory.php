@@ -36,9 +36,12 @@ class PluginFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                // set the model's default values
-                // For example:
-                // 'name' => $faker->lastName
+                'name' => $faker->word(),
+                'title' => $faker->word(),
+                'version' => '1.0.0',
+                'status' => true,
+                'db_init' => true,
+                'priority' => $faker->unique()->randomNumber(),
             ];
         });
     }

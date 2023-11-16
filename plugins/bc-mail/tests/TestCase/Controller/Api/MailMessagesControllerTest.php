@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Controller\Api;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -53,6 +54,10 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function test_validate()
     {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+
         //データを生成
         PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'name_1', 'valid' => 1, 'use_field' => 1, 'valid_ex'=>''])->persist();
@@ -74,5 +79,8 @@ class MailMessagesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertFalse($result->success);
         $this->assertEquals('必須項目です。', $result->errors->name_1->_empty);
+
+        //不要なテーブルを削除
+        $MailMessagesService->dropTable(1);
     }
 }

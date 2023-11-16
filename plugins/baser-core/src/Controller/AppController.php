@@ -149,7 +149,6 @@ class AppController extends BaseController
         $response = $this->redirectIfIsRequireMaintenance();
         if ($response) return $response;
 
-        $this->__convertEncodingHttpInput();
         $this->__cleanupQueryParams();
 
         // インストーラー、アップデーターの場合はテーマを設定して終了
@@ -234,6 +233,26 @@ class AppController extends BaseController
     {
         $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
         $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
+    }
+
+    /**
+     * Securityコンポーネントのブラックホールからのコールバック
+     *
+     * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
+     * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
+     *
+     * @param string $err エラーの種類
+     * @return void
+     * @throws BadRequestException
+     * @uses _blackHoleCallback
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function _blackHoleCallback($err, $exception)
+    {
+        $message = __d('baser_core', '不正なリクエストと判断されました。もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります') . "\n" . $exception->getMessage();
+        throw new BadRequestException($message);
     }
 
     /**

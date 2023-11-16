@@ -11,8 +11,7 @@
 
 namespace BcCustomContent\Test\Scenario;
 
-use BcCustomContent\Test\Factory\CustomFieldFactory;
-use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BcCustomContent\Test\Factory\CustomTableFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 

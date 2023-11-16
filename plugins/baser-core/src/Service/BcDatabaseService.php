@@ -616,31 +616,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     }
 
     /**
-     * メールメッセージテーブルを初期化する
-     *
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function initMessageTables(): bool
-    {
-        // TODO ucmitz メールプラグイン未実装のため
-        return true;
-        BcUtil::clearAllCache();
-        // メール受信テーブルの作成
-        $MailMessage = new MailMessage();
-        $result = true;
-        if (!$MailMessage->reconstructionAll()) {
-            $this->log(__d('baser_core', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
-            $result = false;
-        }
-        BcUtil::clearAllCache();
-        TableRegistry::getTableLocator()->clear();
-        return $result;
-    }
-
-    /**
      * データベースシーケンスをアップデートする
      * @checked
      * @noTodo
@@ -1381,6 +1356,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function testConnectDb($config)
     {
@@ -1418,7 +1394,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
-                // TODO ucmitz 未検証
                 $result = $db->query("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {

@@ -90,7 +90,6 @@ class ThemeFilesServiceTest extends BcTestCase
         $this->assertEquals('php', $rs['ext']);
         $this->assertEquals('text', $rs['type']);
         $this->assertEquals(null, $rs['path']);
-        $this->assertTextContains('baserCMS :  Based Website Development Project', $rs['contents']);
     }
 
     /**

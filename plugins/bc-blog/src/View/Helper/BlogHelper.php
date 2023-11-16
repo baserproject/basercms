@@ -117,7 +117,7 @@ class BlogHelper extends Helper
         parent::__construct($view, $config);
         // インストールが完了している場合のみ実行
         // インストール時に呼び出された際にサービスが利用できないため
-        if(BcUtil::isInstalled()) {
+        if(BcUtil::isInstalled() && $view->getName() !== 'Error') {
             $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
             $this->setContent();
         }

@@ -11,6 +11,9 @@
 
 namespace BcMail\Test\TestCase\Service\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcMail\Service\Admin\MailMessagesAdminService;
@@ -117,29 +120,43 @@ class MailMessagesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForDownloadCsv()
     {
+        //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
         // 準備
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
-        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable = TableRegistry::getTableLocator()->get('mail_message_1');
         $mailMessageTable->save(new Entity(['id' => 1]));
         $mailMessageTable->save(new Entity(['id' => 2]));
 
         // 正常系実行：Encodingを指定するケース
-        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?encoding=abc');
+        $request = $this->getRequest()->withQueryParams([
+            'Site' => SiteFactory::get(1),
+            'encoding' => 'abc',
+            'Content' => ContentFactory::get(1)
+        ]);
         $this->loginAdmin($request);
         $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
         $this->assertEquals('abc', $result['encoding']);
 
         // 正常系実行：Encodingを指定しないケース
-        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index?');
+        $request = $this->getRequest()->withQueryParams([
+            'Content' => ContentFactory::get(1)
+        ]);
         $this->loginAdmin($request);
         $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
         $this->assertEquals('utf-8', $result['encoding']);
         $this->assertCount(2, $result['messages']);
-        $this->assertEquals(1, $result['messages'][0]['NO']);
-        $this->assertEquals(2, $result['messages'][1]['NO']);
-        $this->assertEquals('name_test', $result['contentName']);
+        $this->assertEquals(1, $result['messages'][0]['MailMessage']['NO']);
+        $this->assertEquals(2, $result['messages'][1]['MailMessage']['NO']);
+        $this->assertArrayHasKey('contentName', $result);
+
+        //不要テーブルを削除
+        $MailMessagesService->dropTable(1);
     }
 
 }

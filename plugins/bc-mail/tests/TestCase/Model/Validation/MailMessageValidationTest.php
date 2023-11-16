@@ -64,7 +64,7 @@ class MailMessageValidationTest extends BcTestCase
         $result = $this->MailMessageValidation->checkdate($date_time);
         $this->assertFalse($result);
 
-        $date_time = '1990-01 09:00';
+        $date_time = '1990-01-00 09:00';
         $result = $this->MailMessageValidation->checkdate($date_time);
         $this->assertFalse($result);
 
