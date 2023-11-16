@@ -93,17 +93,16 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
 (new Migrator())->runMany([
-    ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
-    ['plugin' => 'BcEditorTemplate'],
-    ['plugin' => 'BcSearchIndex'],
-    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
+    ['plugin' => 'BcCustomContent'],
+    ['plugin' => 'BcEditorTemplate'],
+    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcMail'],
-    ['plugin' => 'BcWidgetArea'],
+    ['plugin' => 'BcSearchIndex'],
     ['plugin' => 'BcThemeConfig'],
     ['plugin' => 'BcThemeFile'],
     ['plugin' => 'BcUploader'],
-    ['plugin' => 'BcFront'],
+    ['plugin' => 'BcWidgetArea'],
 ]);
