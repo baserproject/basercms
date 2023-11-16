@@ -452,6 +452,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -470,6 +471,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_to_theme(ThemeFilesAdminServiceInterface $service)
     {
@@ -508,6 +510,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_folder_to_theme(ThemeFoldersServiceInterface $service)
     {
@@ -546,6 +549,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param ThemeFilesAdminService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function img(ThemeFilesAdminServiceInterface $service)
     {

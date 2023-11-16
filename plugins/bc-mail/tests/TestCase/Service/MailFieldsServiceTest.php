@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Service;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -148,11 +149,17 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function testCreate()
     {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $postData = [
             'id' => '1',
             'mail_content_id' => '1',
+            'source' => '正社員
+派遣
+アルバイト',
             'no' => '1',
             'name' => '姓漢字',
             'field_name' => 'test',
@@ -172,7 +179,8 @@ class MailFieldsServiceTest extends BcTestCase
             'sort' => '1',
         ];
         $result = $this->MailFieldsService->create($postData);
-        $this->assertEquals('name_1', $result->field_name);
+        $this->assertEquals('test', $result->field_name);
+        $MailMessagesService->dropTable(1);
     }
 
     /**
@@ -197,6 +205,7 @@ class MailFieldsServiceTest extends BcTestCase
         // 異常系実行
         $postData = [
             'field_name' => '',
+            'type' => 'text',
             'name' => '',
         ];
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
@@ -208,6 +217,9 @@ class MailFieldsServiceTest extends BcTestCase
      */
     public function testDelete()
     {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
         //データを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
@@ -222,6 +234,8 @@ class MailFieldsServiceTest extends BcTestCase
         //レコードの削除を確認する
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->MailFieldsService->get(1);
+
+        $MailMessagesService->dropTable(1);
     }
 
     /**
