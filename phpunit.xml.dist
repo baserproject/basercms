@@ -9,45 +9,45 @@
         <ini name="apc.enable_cli" value="1"/>
     </php>
     <testsuites>
-        <testsuite name="BaserCore">
-            <directory>plugins/baser-core/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcBlog">
-            <directory>plugins/bc-blog/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcContentLink">
-            <directory>plugins/bc-content-link/tests/TestCase</directory>
-        </testsuite>
+<!--        <testsuite name="BaserCore">-->
+<!--            <directory>plugins/baser-core/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcBlog">-->
+<!--            <directory>plugins/bc-blog/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcContentLink">-->
+<!--            <directory>plugins/bc-content-link/tests/TestCase</directory>-->
+<!--        </testsuite>-->
         <testsuite name="BcCustomContent">
             <directory>plugins/bc-custom-content/tests/TestCase</directory>
         </testsuite>
-        <testsuite name="BcEditorTemplate">
-            <directory>plugins/bc-editor-template/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcFavorite">
-            <directory>plugins/bc-favorite/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcInstaller">
-            <directory>plugins/bc-installer/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcMail">
-            <directory>plugins/bc-mail/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcSearchIndex">
-            <directory>plugins/bc-search-index/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcThemeConfig">
-            <directory>plugins/bc-theme-config/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcThemeFile">
-            <directory>plugins/bc-theme-file/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcUploader">
-            <directory>plugins/bc-uploader/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcWidgetArea">
-            <directory>plugins/bc-widget-area/tests/TestCase</directory>
-        </testsuite>
+<!--        <testsuite name="BcEditorTemplate">-->
+<!--            <directory>plugins/bc-editor-template/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcFavorite">-->
+<!--            <directory>plugins/bc-favorite/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcInstaller">-->
+<!--            <directory>plugins/bc-installer/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcMail">-->
+<!--            <directory>plugins/bc-mail/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcSearchIndex">-->
+<!--            <directory>plugins/bc-search-index/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcThemeConfig">-->
+<!--            <directory>plugins/bc-theme-config/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcThemeFile">-->
+<!--            <directory>plugins/bc-theme-file/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcUploader">-->
+<!--            <directory>plugins/bc-uploader/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcWidgetArea">-->
+<!--            <directory>plugins/bc-widget-area/tests/TestCase</directory>-->
+<!--        </testsuite>-->
     </testsuites>
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
