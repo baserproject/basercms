@@ -9,9 +9,9 @@
         <ini name="apc.enable_cli" value="1"/>
     </php>
     <testsuites>
-<!--        <testsuite name="BaserCore">-->
-<!--            <directory>plugins/baser-core/tests/TestCase</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BaserCore">
+            <directory>plugins/baser-core/tests/TestCase</directory>
+        </testsuite>
 <!--        <testsuite name="BcBlog">-->
 <!--            <directory>plugins/bc-blog/tests/TestCase</directory>-->
 <!--        </testsuite>-->
