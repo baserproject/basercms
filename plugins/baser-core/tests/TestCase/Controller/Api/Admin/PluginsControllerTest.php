@@ -208,7 +208,7 @@ class PluginsControllerTest extends BcTestCase
 
         $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new BcFolder($zipSrcPath. 'BcPluginSample2');
+        $folder = new BcFolder($zipSrcPath);
         $folder->create();
         $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
@@ -223,6 +223,8 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('新規プラグイン「' . $plugin . '」を追加しました。', $result->message);
 
         $folder = new BcFolder(BASER_PLUGINS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
         $folder->delete();
     }
 
