@@ -577,14 +577,64 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_img_thumb()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //GETメソッドを検証場合
+        $this->get('/baser/admin/bc-theme-file/theme_files/img_thumb/BcColumn/img/logo.png');
+        //取得データを確認
+        $this->assertNotNull($this->_controller->getResponse());
     }
 
     /**
      * test parseArgs
+     * @dataProvider parseArgsDataProvider
      */
-    public function test_parseArgs()
+    public function test_parseArgs($args, $expected)
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $rs = $this->execPrivateMethod($this->ThemeFilesController, 'parseArgs', [$args]);
+        $this->assertEquals($rs['fullpath'], $expected);
+    }
+
+    public function parseArgsDataProvider()
+    {
+        return [
+            [
+                [
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BaserCore',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BcBlog',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder'
+            ],
+            [
+                [
+                    'BaserCore',
+                    'BcThemeSample',
+                    'layout',
+                    'new_folder',
+                    'default.php',
+                ],
+                '/var/www/html/plugins/BcThemeSample/templates/layout/new_folder/default.php'
+            ]
+        ];
     }
 }

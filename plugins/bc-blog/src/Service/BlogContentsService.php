@@ -305,6 +305,19 @@ class BlogContentsService implements BlogContentsServiceInterface
     }
 
     /**
+     * コンテンツ名よりブログコンテンツを取得する
+     *
+     * Contents を含む
+     *
+     * @param string $name
+     * @return array|EntityInterface|null
+     */
+    public function findByName(string $name)
+    {
+        return $this->BlogContents->find()->where(['Contents.name' => $name])->contain('Contents')->first();
+    }
+
+    /**
      * 検索インデックスの再構築が必要か判定
      *
      * @param Content|EntityInterface $before

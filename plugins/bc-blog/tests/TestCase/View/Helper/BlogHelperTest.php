@@ -950,6 +950,7 @@ class BlogHelperTest extends BcTestCase
      * @param expected string 期待値
      * @param message string テスト失敗時に表示されるメッセージ
      * @dataProvider postsDataProvider
+     * @todo $this->currentContent が初期状態で固定ページになっている場合に正常に動作するテストを追加する
      */
     public function testPosts($currentUrl, $contentsName, $num, $options, $expected, $message = null)
     {
