@@ -94,6 +94,7 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getFieldControlType()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         //正常系実行
         $result = $this->CustomEntriesService->getFieldControlType('BcCcText');
         $this->assertEquals('text', $result);

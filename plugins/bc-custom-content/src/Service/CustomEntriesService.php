@@ -105,7 +105,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return string
      * @notodo
      * @checked
-     * @unitTest
      */
     public function getFieldControlType(string $type)
     {
