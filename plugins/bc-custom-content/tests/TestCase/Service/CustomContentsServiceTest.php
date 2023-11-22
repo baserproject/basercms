@@ -195,12 +195,21 @@ class CustomContentsServiceTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $this->loadFixtureScenario(CustomTablesScenario::class);
+
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTablesService->create([
+            'type' => 1,
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
 
         //$field = custom_table_id  コンテンツタイプのみ取得
         $result = $this->CustomContentsService->getControlSource('custom_table_id');
-        $this->assertEquals('求人情報', $result[1]);
+        $this->assertEquals('お問い合わせタイトル', $result[1]);
 
         //$field = list_order
         $options['custom_table_id'] = 1;
@@ -220,6 +229,9 @@ class CustomContentsServiceTest extends BcTestCase
         //$field = test
         $result = $this->CustomContentsService->getControlSource('test');
         $this->assertEquals([], $result);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
 
         //$field = list_order ＆ $optionsがない場合
         $this->expectException('BaserCore\Error\BcException');

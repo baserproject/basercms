@@ -1696,7 +1696,9 @@ class BlogHelper extends Helper
             $currentBlogContentId = $this->currentBlogContent->id;
         }
 
-        $this->setContent($blogContent->id);
+        if (isset($blogContent->id))
+            $this->setContent($blogContent->id);
+
         $this->BcBaser->element($template, $data);
 
         if($currentBlogContentId) {
