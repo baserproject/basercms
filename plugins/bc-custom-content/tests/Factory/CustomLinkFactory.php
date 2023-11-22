@@ -29,7 +29,7 @@ class CustomLinkFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'custom_links';
+        return 'BcCustomContent.CustomLinks';
     }
 
     /**
