@@ -600,6 +600,9 @@ class BcUtil
      * ログインしているユーザー名を取得
      *
      * @return string
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public static function loginUserName()
     {

@@ -414,20 +414,15 @@ class BcUtilTest extends BcTestCase
      */
     public function testLoginUserName()
     {
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
 
         // ログインしていない場合
         $result = BcUtil::loginUserName();
-        $this->assertEmpty($result, 'ログインユーザーのデータを正しく取得できません');
+        $this->assertEmpty($result);
 
         // ログインしている場合
-        $Session = new CakeSession();
-        $Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'hoge');
+        $this->loginAdmin($this->getRequest());
         $result = BcUtil::loginUserName();
-        $this->assertEquals('hoge', $result, 'ログインユーザーのデータを正しく取得できません');
+        $this->assertEquals('baser admin', $result);
     }
 
     /**
