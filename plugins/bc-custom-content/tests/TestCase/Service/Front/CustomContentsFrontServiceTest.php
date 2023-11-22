@@ -54,7 +54,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
-        PluginFactory::make(  [
+        PluginFactory::make([
             'name' => 'BcCustomContent',
             'title' => 'カスタムコンテンツ',
             'version' => '1.0.0',
@@ -73,6 +73,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
     {
         unset($this->CustomContentFrontService);
         parent::tearDown();
+        $this->truncateTable('custom_tables');
     }
 
     /**
@@ -105,7 +106,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
 
         //対象メソッドをコール
@@ -218,7 +218,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin/'));
@@ -257,7 +256,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getIndexTemplate($customContent->get(1));
@@ -324,7 +322,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
@@ -367,7 +364,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
-        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
 
         //対象メソッドをコール
         $request = $this->getRequest('/baser/admin')
