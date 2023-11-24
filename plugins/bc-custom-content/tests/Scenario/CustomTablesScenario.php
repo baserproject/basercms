@@ -28,8 +28,8 @@ class CustomTablesScenario implements FixtureScenarioInterface
     public function load(...$args)
     {
         CustomTableFactory::make([
-            'id' => 1,
-            'type' => 1,
+            'id' => 3,
+            'type' => 3,
             'name' => 'recruit',
             'title' => '求人情報',
             'display_field' => 'title',

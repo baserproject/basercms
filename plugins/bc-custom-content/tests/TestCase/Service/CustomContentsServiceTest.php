@@ -78,7 +78,7 @@ class CustomContentsServiceTest extends BcTestCase
         //テストメソッドを呼ぶ
         $result = $this->CustomContentsService->getIndex([])->toArray();
         //戻る値を確認
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result);
         $this->assertEquals('サービステスト', $result[0]->description);
         $this->assertEquals('/recruit/', $result[1]->content->url);
     }
@@ -120,12 +120,14 @@ class CustomContentsServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $postData = [
             'custom_table_id' => 1,
-            'content' =>
-                [
-                    'title' => 'test create',
-                    'site_id' => 1,
-                    'parent_id' => 1
-                ]
+            'description' => 'test create',
+            'template' => 'template_add',
+            'content' => [
+                'title' => 'test create',
+                'site_id' => 1,
+                'parent_id' => 0,
+                'content' => 'add content'
+            ]
         ];
         //正常ケースをテスト
         $result = $this->CustomContentsService->create($postData);
@@ -193,12 +195,21 @@ class CustomContentsServiceTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $this->loadFixtureScenario(CustomTablesScenario::class);
+
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTablesService->create([
+            'type' => 1,
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
 
         //$field = custom_table_id  コンテンツタイプのみ取得
         $result = $this->CustomContentsService->getControlSource('custom_table_id');
-        $this->assertEquals('求人情報', $result[1]);
+        $this->assertEquals('お問い合わせタイトル', $result[1]);
 
         //$field = list_order
         $options['custom_table_id'] = 1;
@@ -218,6 +229,9 @@ class CustomContentsServiceTest extends BcTestCase
         //$field = test
         $result = $this->CustomContentsService->getControlSource('test');
         $this->assertEquals([], $result);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
 
         //$field = list_order ＆ $optionsがない場合
         $this->expectException('BaserCore\Error\BcException');
@@ -268,11 +282,10 @@ class CustomContentsServiceTest extends BcTestCase
         //対象メソッドをコール
         $rs = $this->CustomContentsService->getListOrders(1);
         $listExpect = [
-            'id' => 'No',
             'created' => '登録日',
             'modified' => '編集日',
             'recruit_category' => '求人分類',
-            'feature' => 'この仕事の特徴',
+            'id' => 'No',
         ];
         //戻る値を確認
         $this->assertEquals($listExpect, $rs);
@@ -322,9 +335,6 @@ class CustomContentsServiceTest extends BcTestCase
         $entities1 = CustomContentFactory::get(1);
         $this->assertNull($entities1->custom_table_id);
 
-        $entities2 = CustomContentFactory::get(2);
-        $this->assertNull($entities2->custom_table_id);
-
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
@@ -339,7 +349,7 @@ class CustomContentsServiceTest extends BcTestCase
         //テストメソッドを呼ぶ
         $result = $this->CustomContentsService->getList();
         //戻る値を確認
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result);
         $this->assertEquals('サービスタイトル', $result[1]);
         $this->assertEquals('求人タイトル', $result[2]);
     }
