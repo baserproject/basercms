@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Service\Front;
 
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -24,6 +25,7 @@ use BcCustomContent\Service\Front\CustomContentFrontService;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -52,6 +54,16 @@ class CustomContentsFrontServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
+        PluginFactory::make([
+            'name' => 'BcCustomContent',
+            'title' => 'カスタムコンテンツ',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '1',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ]);
     }
 
     /**
@@ -61,6 +73,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
     {
         unset($this->CustomContentFrontService);
         parent::tearDown();
+        $this->truncateTable('custom_tables');
     }
 
     /**
@@ -126,13 +139,14 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getCustomEntries($customContent->get(1));
         //戻る値を確認
-        $this->assertEquals(6, $rs->count());
+        $this->assertEquals(3, $rs->count());
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -162,15 +176,17 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin/'));
         //対象メソッドをコール
-        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $customEntry->get(1));
+        $customEntry->setup(1);
+        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $customEntry->getIndex([])->all());
 
         //戻る値を確認
         $this->assertArrayHasKey('customContent', $rs);
-        $this->assertArrayHasKey('customEntry', $rs);
+        $this->assertArrayHasKey('customEntries', $rs);
         $this->assertArrayHasKey('currentWidgetAreaId', $rs);
         $this->assertArrayHasKey('editLink', $rs);
 
@@ -245,7 +261,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $rs = $this->CustomContentFrontService->getIndexTemplate($customContent->get(1));
 
         //戻る値を確認
-        $this->assertEquals('CustomContent' . DS . 'template_1' . DS . 'index', $rs);
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'index', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -273,12 +289,13 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         //対象メソッドをコール
         $rs = $this->CustomContentFrontService->getViewTemplate($customContent->get(1));
 
         //戻る値を確認
-        $this->assertEquals('CustomContent' . DS . 'template_1' . DS . 'view', $rs);
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'view', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -316,7 +333,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->CustomContentFrontService->setupPreviewForView($controller);
 
         //戻る値を確認
-        $this->assertEquals('CustomContent/template_1/view', $controller->viewBuilder()->getTemplate());
+        $this->assertEquals('CustomContent/default/view', $controller->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('customEntry', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customContent', $controller->viewBuilder()->getVars());
 
@@ -345,8 +362,9 @@ class CustomContentsFrontServiceTest extends BcTestCase
         ]);
 
         //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
 
         //対象メソッドをコール
         $request = $this->getRequest('/baser/admin')
@@ -355,7 +373,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->CustomContentFrontService->setupPreviewForIndex($controller);
 
         //戻る値を確認
-        $this->assertEquals('CustomContent/template_1/index', $controller->viewBuilder()->getTemplate());
+        $this->assertEquals('CustomContent/default/index', $controller->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('customContent', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customEntries', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customTable', $controller->viewBuilder()->getVars());

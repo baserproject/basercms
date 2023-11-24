@@ -29,6 +29,7 @@ class CustomEntriesScenario implements FixtureScenarioInterface
         CustomEntryFactory::make([
             [
                 'id' => 1,
+                'has_child' => true,
                 'custom_table_id' => 1,
                 'published' => '2023-02-14 13:57:29',
                 'modified' => '2023-02-14 13:57:29',

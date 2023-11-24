@@ -105,7 +105,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return string
      * @notodo
      * @checked
-     * @unitTest
      */
     public function getFieldControlType(string $type)
     {
@@ -634,7 +633,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return array
      * @notodo
      * @checked
-     * @unitTest
      */
     public function getParentTargetList($selfId, array $options = [])
     {
@@ -740,7 +738,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return mixed
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function moveUp(int $id)
     {
@@ -754,7 +751,6 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      * @return mixed
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function moveDown(int $id)
     {

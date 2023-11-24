@@ -319,7 +319,7 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath))->create();
+        (new BcFolder($fullpath . 'new_folder'))->create();
 
         //テストファイルを作成
         $filePath = TMP  . 'test_upload' . DS;

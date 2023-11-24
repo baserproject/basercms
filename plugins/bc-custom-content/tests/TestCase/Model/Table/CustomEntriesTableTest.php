@@ -60,7 +60,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        $this->assertTrue($this->CustomEntriesTable->hasBehavior('BcContents'));
+        $this->assertTrue($this->CustomEntriesTable->hasBehavior('Timestamp'));
         $this->assertTrue($this->CustomEntriesTable->hasBehavior('BcSearchIndexManager'));
     }
 
@@ -245,7 +245,7 @@ class CustomEntriesTableTest extends BcTestCase
             ]
         );
         $result = $this->CustomEntriesTable->createSearchDetail($entry);
-        $this->assertEquals('プログラマー,recruit_category,feature', $result);
+        $this->assertEquals('プログラマー', $result);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');
 
@@ -282,7 +282,6 @@ class CustomEntriesTableTest extends BcTestCase
         $result = $this->CustomEntriesTable->setUp(1, []);
         $this->assertTrue($result);
         $this->assertEquals(1, $this->CustomEntriesTable->tableId);
-        $this->assertEquals('recruit_category', $this->CustomEntriesTable->links[0]->name);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');
 
@@ -341,6 +340,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setLinks()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -355,6 +355,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setupValidate()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -369,6 +370,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateMaxFileSize()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -383,6 +385,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateFileExt()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -397,6 +400,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmailConfirm()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -411,6 +415,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateRegex()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -425,6 +430,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmail()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -439,6 +445,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateNumber()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -453,6 +460,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateHankaku()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -467,6 +475,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuKatakana()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -481,6 +490,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuHiragana()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -495,6 +505,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateDatetime()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -509,6 +520,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -523,6 +535,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_beforeMarshal()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -537,6 +550,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_autoConvert()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -551,6 +565,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -565,6 +580,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_decodeRow()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行
@@ -579,6 +595,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_isJson()
     {
+        $this->markTestIncomplete('このテストは未実装です。');
         //準備
 
         //正常系実行

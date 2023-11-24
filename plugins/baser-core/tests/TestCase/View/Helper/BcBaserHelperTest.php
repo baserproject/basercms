@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
-use BaserCore\Test\Scenario\MultiSiteScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Utility\BcFile;
 use ReflectionClass;

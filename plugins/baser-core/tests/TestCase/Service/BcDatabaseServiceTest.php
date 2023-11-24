@@ -779,12 +779,16 @@ class UserActionsSchema extends BcSchema
         $plugins = [
             'BaserCore',
             'BcBlog',
-            'BcSearchIndex',
             'BcContentLink',
+            'BcCustomContent',
+            'BcEditorTemplate',
+            'BcFavorite',
             'BcMail',
-            'BcWidgetArea',
+            'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',
+            'BcUploader',
+            'BcWidgetArea',
         ];
         foreach ($plugins as $plugin) {
             $migrate = $migrations->migrate([

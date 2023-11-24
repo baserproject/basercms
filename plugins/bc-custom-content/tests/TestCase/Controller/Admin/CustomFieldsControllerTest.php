@@ -220,7 +220,7 @@ class CustomFieldsControllerTest extends BcTestCase
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
         //対象URLをコル
-        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data);
+        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
         //イベントに入るかどうか確認
         $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
         $query = $customFields->find()->where(['title' => 'beforeEdit']);
@@ -247,7 +247,7 @@ class CustomFieldsControllerTest extends BcTestCase
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
         //対象URLをコル
-        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data);
+        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
         //イベントに入るかどうか確認
         $customFields = $this->getTableLocator()->get('BcCustomContent.CustomFields');
         $query = $customFields->find()->where(['title' => 'afterEdit']);

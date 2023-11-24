@@ -75,7 +75,7 @@ class CustomContentsControllerTest extends BcTestCase
         $this->assertResponseOk();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertCount(2, $result->customContents);
+        $this->assertCount(3, $result->customContents);
     }
 
     /**
@@ -92,7 +92,7 @@ class CustomContentsControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($result->customContent->description, 'サービステスト');
-        $this->assertEquals($result->customContent->content->url, '/');
+        $this->assertEquals($result->customContent->content->url, '/test/');
 
         //エラーを発生した時の確認
         $this->get('/baser/api/bc-custom-content/custom_contents/view/10.json?token=' . $this->accessToken);

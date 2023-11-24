@@ -151,7 +151,7 @@ class UploaderFilesControllerTest extends BcTestCase
     {
         $pathImg = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
         //テストファイルを作成
-//        (new BcFile($pathImg . 'social_new.jpg'))->create();
+        (new BcFile($pathImg . 'social_new.jpg'))->create();
         //データを生成
         $this->loadFixtureScenario(UploaderFilesScenario::class);
         //APIを呼ぶ

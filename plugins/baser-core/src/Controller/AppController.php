@@ -256,52 +256,6 @@ class AppController extends BaseController
     }
 
     /**
-     * http経由で送信されたデータを変換する
-     * とりあえず、UTF-8で固定
-     *
-     * @return    void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    private function __convertEncodingHttpInput(): void
-    {
-        if ($this->getRequest()->getData()) {
-            $this->setRequest($this->request->withParsedBody($this->_autoConvertEncodingByArray($this->getRequest()->getData(), 'UTF-8')));
-        }
-    }
-
-    /**
-     * 配列の文字コードを変換する
-     *
-     * @param array $data 変換前データ
-     * @param string $outenc 変換後の文字コード
-     * @return array 変換後データ
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function _autoConvertEncodingByArray($data, $outenc = 'UTF-8'): array
-    {
-        if (!$data) return [];
-        foreach($data as $key => $value) {
-            if (is_array($value)) {
-                $data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
-                continue;
-            }
-            $inenc = mb_detect_encoding((string)$value);
-            if (!$inenc) continue;
-            if (!in_array($inenc, Configure::read('BcEncode.detectOrder'))) continue;
-            if ($inenc === $outenc) continue;
-            // 半角カナは一旦全角に変換する
-            $value = mb_convert_kana($value, 'KV', $inenc);
-            $value = mb_convert_encoding($value, $outenc, $inenc);
-            $data[$key] = $value;
-        }
-        return $data;
-    }
-
-    /**
      * クエリーパラメーターの調整
      * 環境によって？キーにamp;が付加されてしまうため
      * @checked
