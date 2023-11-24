@@ -32,7 +32,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
-use Cake\I18n\FrozenTime;
 
 /**
  * BlogFrontService
@@ -397,9 +396,6 @@ class BlogFrontService implements BlogFrontServiceInterface
             if ($request->getQuery('preview') === 'draft') {
                 $postArray['detail'] = $postArray['detail_draft'];
             }
-            if (!empty($postArray['posted'])) $postArray['posted'] = new FrozenTime($postArray['posted']);
-            if (!empty($postArray['publish_begin'])) $postArray['publish_begin'] = new FrozenTime($postArray['publish_begin']);
-            if (!empty($postArray['publish_end'])) $postArray['publish_end'] = new FrozenTime($postArray['publish_end']);
 
             $vars['post'] = $this->BlogPostsService->BlogPosts->patchEntity(
                 $vars['post'] ?? $this->BlogPostsService->BlogPosts->newEmptyEntity(),
