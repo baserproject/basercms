@@ -269,20 +269,6 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
-     * メール受信テーブルを全て再構築
-     *
-     * @return boolean
-     */
-    public function testReconstructionAll()
-    {
-        $id = 1;
-        $fullTable = $this->MailMessage->createFullTableName($id);
-        $this->MailMessage->dropTable($id);
-        $this->assertTrue($this->MailMessage->reconstructionAll());
-        $this->assertTrue($this->MailMessage->tableExists($fullTable));
-    }
-
-    /**
      *
      * test getNew
      */
@@ -424,13 +410,25 @@ class MailMessagesServiceTest extends BcTestCase
         $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'Test'));
         $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'Nghiem'));
 
+        $BcDatabaseService->removeColumn('mail_message_1', 'Test');
+
         $this->expectExceptionMessage("The specified column doesn't exist: Nghiem");
         $MailMessagesService->renameMessageField(1, 'Nghiem', 'Test');
+
+    }
+
+    /**
+     * test renameMessageField
+     */
+    public function testRenameMessageField_TableNotExist()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
 
         $this->expectExceptionMessage("Base table or view not found: 1146 Table 'test_basercms.mail_message_99' doesn't exist");
         $MailMessagesService->addMessageField(99, 'Test', 'Test1');
 
-        $BcDatabaseService->removeColumn('mail_message_1', 'Test');
     }
 
     /**

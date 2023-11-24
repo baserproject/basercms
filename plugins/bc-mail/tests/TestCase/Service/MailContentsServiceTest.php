@@ -72,9 +72,9 @@ class MailContentsServiceTest extends BcTestCase
         //一覧データ取得サービスをコル
         $rs = $this->MailContentsService->getIndex([])->toArray();
         //戻る値を確認
-        $this->assertCount(2, $rs);
-        $this->assertEquals('description test 2', $rs[1]->description);
-        $this->assertEquals('テスト', $rs[1]->content->title);
+        $this->assertCount(1, $rs);
+        $this->assertEquals('description test', $rs[0]->description);
+        $this->assertEquals('お問い合わせ', $rs[0]->content->title);
     }
 
     /**
@@ -105,7 +105,6 @@ class MailContentsServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         $result = $this->MailContentsService->get(1, $options)->toArray();
         $this->assertEquals('description test', $result['description']);
-        $this->assertNull($result['content']);
 
         $options = [
             'contain' => [
@@ -154,9 +153,8 @@ class MailContentsServiceTest extends BcTestCase
         //一覧データ取得サービスをコル
         $rs = $this->MailContentsService->getList();
         //戻る値を確認
-        $this->assertCount(2, $rs);
+        $this->assertCount(1, $rs);
         $this->assertEquals('お問い合わせ', $rs[1]);
-        $this->assertEquals('テスト', $rs[2]);
     }
 
     /**
@@ -239,7 +237,7 @@ class MailContentsServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         //正常系実行
         $result = $this->MailContentsService->getPublishedAll(1);
-        $this->assertCount(2, $result);
+        $this->assertCount(1, $result);
         //レコードを追加した後、返するレコード数を確認する
         MailContentFactory::make([
             'id' => 3,
@@ -262,7 +260,7 @@ class MailContentsServiceTest extends BcTestCase
             'status' => true,
         ])->persist();
         $result = $this->MailContentsService->getPublishedAll(1);
-        $this->assertCount(3, $result);
+        $this->assertCount(2, $result);
         //異常系実行
         $result = $this->MailContentsService->getPublishedAll(99);
         $this->assertCount(0, $result);

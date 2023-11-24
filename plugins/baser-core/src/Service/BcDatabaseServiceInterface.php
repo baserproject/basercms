@@ -24,7 +24,7 @@ interface BcDatabaseServiceInterface
 
     /**
      * 初期データを読み込む
-     * 
+     *
      * @param $theme
      * @param $pattern
      * @param $excludes
@@ -75,7 +75,7 @@ interface BcDatabaseServiceInterface
 
     /**
      * テーブルのデータをリセットする
-     * 
+     *
      * @param $table
      * @return bool
      * @noTodo
@@ -95,18 +95,8 @@ interface BcDatabaseServiceInterface
     public function initSystemData($options = []): bool;
 
     /**
-     * メールメッセージテーブルを初期化する
-     * 
-     * @return bool
-     * @noTodo
-     * @checked
-     * @unitTest
-     */
-    public function initMessageTables(): bool;
-
-    /**
      * データベースシーケンスをアップデートする
-     * 
+     *
      * @noTodo
      * @checked
      * @unitTest
@@ -161,7 +151,7 @@ interface BcDatabaseServiceInterface
 
     /**
      * アプリケーションに関連するテーブルリストのキャッシュをクリアする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -183,7 +173,7 @@ interface BcDatabaseServiceInterface
 
     /**
      * スキーマを読み込む
-     * 
+     *
      * @param $options
      * @return bool
      * @unitTest

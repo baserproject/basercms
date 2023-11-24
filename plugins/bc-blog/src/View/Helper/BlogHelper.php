@@ -117,7 +117,7 @@ class BlogHelper extends Helper
         parent::__construct($view, $config);
         // インストールが完了している場合のみ実行
         // インストール時に呼び出された際にサービスが利用できないため
-        if(BcUtil::isInstalled()) {
+        if(BcUtil::isInstalled() && $view->getName() !== 'Error') {
             $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
             $this->setContent();
         }
@@ -226,11 +226,11 @@ class BlogHelper extends Helper
      *
      * @return string
      * @checked
+     * @noTodo
      */
     public function getBlogName()
     {
-        // TODO $this->currentContent に変更する
-        return $this->_View->getRequest()->getAttribute('currentContent')->name;
+        return $this->currentContent->name;
     }
 
     /**
@@ -250,11 +250,11 @@ class BlogHelper extends Helper
      *
      * @return string
      * @checked
+     * @noTodo
      */
     public function getTitle()
     {
-        // TODO $this->currentContent に変更する
-        return $this->_View->getRequest()->getAttribute('currentContent')->title;
+        return $this->currentContent->title;
     }
 
     /**
@@ -992,7 +992,7 @@ class BlogHelper extends Helper
             }
             $img = $this->BcBaser->getImg($url, $options);
             if ($link) {
-                return $this->BcBaser->getLink($img, $this->_View->getRequest()->getAttribute('currentContent')->url . 'archives/' . $post->no);
+                return $this->BcBaser->getLink($img, $this->currentContent->url . 'archives/' . $post->no);
             } else {
                 return $img;
             }
@@ -1684,7 +1684,24 @@ class BlogHelper extends Helper
         } else {
             $data = ['posts' => $blogPosts];
         }
+
+        if(is_array($contentsName)) {
+            $blogContent = $blogContentsService->findByName($contentsName[0]);
+        } else {
+            $blogContent = $blogContentsService->findByName($contentsName);
+        }
+
+        $currentBlogContentId = null;
+        if($this->currentBlogContent) {
+            $currentBlogContentId = $this->currentBlogContent->id;
+        }
+
+        $this->setContent($blogContent->id);
         $this->BcBaser->element($template, $data);
+
+        if($currentBlogContentId) {
+            $this->setContent($currentBlogContentId);
+        }
     }
 
     /**
@@ -1741,7 +1758,7 @@ class BlogHelper extends Helper
             }
         }
         if ($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
-            $currentContent = $this->_View->getRequest()->getAttribute('currentContent');
+            $currentContent = $this->currentContent;
             if ($this->isBlog() && !empty($currentContent->entity_id)) {
                 $options['contentId'] = $currentContent->entity_id;
             }
@@ -1878,11 +1895,11 @@ class BlogHelper extends Helper
      *
      * @return bool
      * @checked
+     * @noTodo
      */
     public function isBlog()
     {
-        // TODO $this->currentContent に変更
-        return (!empty($this->_View->getRequest()->getAttribute('currentContent')->plugin) && $this->_View->getRequest()->getAttribute('currentContent')->plugin == 'BcBlog');
+        return (!empty($this->currentContent->plugin) && $this->currentContent->plugin == 'BcBlog');
     }
 
     /**
@@ -1909,6 +1926,7 @@ class BlogHelper extends Helper
      * @param int $blogContentId ブログコンテンツID
      * @return bool
      * @checked
+     * @noTodo
      */
     public function isSameSiteBlogContent($blogContentId)
     {
@@ -1919,9 +1937,9 @@ class BlogHelper extends Helper
         ])->first();
         $siteId = $content->site_id;
         $currentSiteId = 0;
-        // TODO $this->currentContent に変更
-        if (!empty($this->_View->getRequest()->getAttribute('currentContent')->alias_id)) {
-            $content = $contentsTable->get($this->_View->getRequest()->getAttribute('currentContent')->alias_id);
+
+        if (!empty($this->currentContent->alias_id)) {
+            $content = $contentsTable->get($this->currentContent->alias_id);
             $currentSiteId = $content->site_id;
         } elseif ($this->_View->getRequest()->getAttribute('currentSite')->id) {
             $currentSiteId = $this->_View->getRequest()->getAttribute('currentSite')->id;

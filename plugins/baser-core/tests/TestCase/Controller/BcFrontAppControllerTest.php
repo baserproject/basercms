@@ -12,8 +12,10 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Event\Event;
+use BaserCore\Utility\BcContainer;
+use Cake\Core\Configure;
 
 /**
  * BcFrontAppControllerTest
@@ -51,6 +53,37 @@ class BcFrontAppControllerTest extends BcTestCase
     {
         parent::tearDown();
         unset($this->BcFrontAppController);
+    }
+
+    /**
+     * test Not Found
+     *
+     * ルーティングが存在しない場合に、404エラーが返ることを確認する
+     * エラー画面の表示の際に、内部的にエラーが発生すると 500エラーになるため確認する
+     * @return void
+     */
+    public function testNotFound()
+    {
+        // setUp でコンテナの初期化が行われるため、ここで再度初期化する
+        BcContainer::clear();
+        // どのプラグインが影響を与えるかわからないので全プラグイン有効化する
+        PluginFactory::make([
+            ['name' => 'BcBlog'],
+            ['name' => 'BcContentLink'],
+            ['name' => 'BcCustomContent'],
+            ['name' => 'BcEditorTemplate'],
+            ['name' => 'BcFavorite'],
+            ['name' => 'BcMail'],
+            ['name' => 'BcSearchIndex'],
+            ['name' => 'BcThemeConfig'],
+            ['name' => 'BcThemeFile'],
+            ['name' => 'BcUploader'],
+            ['name' => 'BcWidgetArea']
+        ])->persist();
+        $this->get('/aaa');
+        $this->assertResponseCode(404);
+        // BcCustomContentを削除しておかないと、他のテストに影響を与えるため削除する
+        $this->Application->getPlugins()->remove('BcCustomContent');
     }
 
     /**

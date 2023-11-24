@@ -129,28 +129,16 @@ class BlogCategoriesTable extends BlogAppTable
      * 関連する記事データをカテゴリ無所属に変更し保存する
      *
      * @param boolean $cascade
-     * @return boolean
+     * @return void
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
-        // TODO ucmitz 未実装
-        return true;
-        $ret = true;
-        if (!empty($this->data['BlogCategory']['id'])) {
-            $id = $this->data['BlogCategory']['id'];
-            $this->BlogPost->unBindModel(['belongsTo' => ['BlogCategory']]);
-            $datas = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_category_id' => $id]]);
-            if ($datas) {
-                foreach ($datas as $data) {
-                    $data['BlogPost']['blog_category_id'] = '';
-                    $this->BlogPost->set($data);
-                    if (!$this->BlogPost->save()) {
-                        $ret = false;
-                    }
-                }
-            }
-        }
-        return $ret;
+        $this->BlogPosts->find()
+            ->where(['BlogPosts.blog_category_id' => $entity->id])
+            ->each(function ($blogPost) {
+                $blogPost->blog_category_id = '';
+                $this->BlogPosts->save($blogPost);
+            });
     }
 
     /**

@@ -63,6 +63,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => $fullpath,
             'type' => 'layout',
             'path' => '',
             'base_name' => 'base_name_1',
@@ -346,8 +347,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'new_folder/uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        rmdir($filePath);
-        unlink($fullpath . 'new_folder/uploadTestFile.html');
-        rmdir($fullpath . 'new_folder');
+        (new BcFolder($filePath))->delete();
     }
 }

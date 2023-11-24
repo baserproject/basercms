@@ -44,12 +44,17 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        $request = $this->addDetectors($request);
+        if(BcUtil::isInstalled()) {
+            $response = $this->redirectIfIsDeviceFile($request);
+            if($response) return $response;
+        }
 
         if ($this->isAsset($request)) {
             Configure::write('BcRequest.asset', true);
             return new Response();
         }
+
+        $request = $this->addDetectors($request);
 
         /**
          * CGIモード等PHPでJWT認証で必要なAuthorizationヘッダーが取得出来ないできない場合、REDIRECT_HTTP_AUTHORIZATION環境変数より取得する
@@ -59,8 +64,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         if (empty($request->getHeader('Authorization')) && $request->getEnv('REDIRECT_HTTP_AUTHORIZATION')) {
             $request = $request->withHeader('Authorization', $request->getEnv('REDIRECT_HTTP_AUTHORIZATION'));
         }
-
-        if(BcUtil::isInstalled()) $this->redirectIfIsDeviceFile($request, $handler);
 
         return $handler->handle($request);
     }
@@ -72,17 +75,13 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * CMSで作成するページ内のリンクは、モバイルでアクセスすると、自動的に、/m/ 付のリンクに書き換えられてしまう為、
      * files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
      * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
      * @return ResponseInterface|void
      * @checked
      * @unitTest
-     * @note(value="マイルストーン３が終わってから動作確認する")
+     * @noTodo
      */
-    public function redirectIfIsDeviceFile(
-        ServerRequestInterface  $request,
-        RequestHandlerInterface $handler)
+    public function redirectIfIsDeviceFile(ServerRequestInterface $request)
     {
-        // TODO ucmitz ユニットテストでしか動作確認していない
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findByUrl($request->getPath());
         if ($site && $site->device) {

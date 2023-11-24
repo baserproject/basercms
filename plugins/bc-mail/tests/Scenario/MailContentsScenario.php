@@ -12,6 +12,7 @@
 namespace BcMail\Test\Scenario;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
 use BcMail\Test\Factory\MailContentFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
@@ -32,6 +33,24 @@ class MailContentsScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BaserCore',
+            'type' => 'ContentFolder',
+            'url' => '/',
+            'site_id' => 1,
+            'title' => 'baserCMSサンプル',
+            'entity_id' => 1,
+            'parent_id' => null,
+            'rght' => 6,
+            'lft' => 1,
+            'status' => true,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        ContentFolderFactory::make([
+            'id' => 1
+        ])->persist();
+
         MailContentFactory::make([
             'id' => 1,
             'description' => 'description test',
@@ -45,7 +64,6 @@ class MailContentsScenario implements FixtureScenarioInterface
             'save_info' => 1,
         ])->persist();
         ContentFactory::make([
-            'id' => 1,
             'name' => 'name_test',
             'plugin' => 'BcMail',
             'type' => 'MailContent',
@@ -54,14 +72,13 @@ class MailContentsScenario implements FixtureScenarioInterface
             'title' => 'お問い合わせ',
             'entity_id' => 1,
             'parent_id' => 1,
-            'rght' => 1,
+            'rght' => 3,
             'lft' => 2,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
 
         MailContentFactory::make([
-            'id' => 2,
             'description' => 'description test 2',
             'sender_name' => '送信先名を入力してください',
             'subject_user' => 'お問い合わせ頂きありがとうございます',
@@ -71,6 +88,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'redirect_url' => '/',
         ])->persist();
         ContentFactory::make([
+            'id' => 2,
             'name' => 'name_test',
             'plugin' => 'BcMail',
             'type' => 'MailContent',
@@ -78,8 +96,9 @@ class MailContentsScenario implements FixtureScenarioInterface
             'site_id' => 1,
             'title' => 'テスト',
             'entity_id' => 2,
-            'rght' => 1,
-            'lft' => 2,
+            'rght' => 5,
+            'parent_id' => 1,
+            'lft' => 4,
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();

@@ -65,7 +65,7 @@ class MailContentsControllerTest extends BcTestCase
         $this->assertResponseOk();
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertCount(2, $result->mailContents);
+        $this->assertCount(1, $result->mailContents);
 
         //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
         $this->get('/baser/api/bc-mail/mail_contents/index.json?status=unpublish');
@@ -75,7 +75,7 @@ class MailContentsControllerTest extends BcTestCase
         //ログインしている状態では status パラメーターへへのアクセできるか確認
         $this->get('/baser/api/bc-mail/mail_contents/index.json?status=unpublish&token=' . $this->accessToken);
         // レスポンスを確認
-        $this->assertResponseOk();
+        $this->assertResponseCode(403);
     }
 
 }

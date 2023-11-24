@@ -28,6 +28,7 @@ class BcThemeFileUtil
      * @return false|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getTemplateTypeName(string $type)
     {

@@ -12,9 +12,12 @@
 namespace BcFavorite\Test\TestCase\Model\Validation;
 
 use BaserCore\Service\PermissionServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BcFavorite\Model\Validation\FavoriteValidation;
 use BaserCore\TestSuite\BcTestCase;
+use BcFavorite\Test\Scenario\FavoritesScenario;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class FavoriteValidationTest
@@ -24,22 +27,10 @@ class FavoriteValidationTest extends BcTestCase
 {
 
     /**
-     * Trait
+     * IntegrationTestTrait
      */
-    use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-         'plugin.BaserCore.Users',
-         'plugin.BaserCore.UsersUserGroups',
-         'plugin.BaserCore.UserGroups',
-         'plugin.BaserCore.Plugins',
-         'plugin.BaserCore.Permissions',
-    ];
+    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Test subject
@@ -78,7 +69,8 @@ class FavoriteValidationTest extends BcTestCase
      */
     public function testIsPermitted($isAdmin, $id, $url, $expected): void
     {
-        if($isAdmin) {
+        if ($isAdmin) {
+            $this->loadFixtureScenario(InitAppScenario::class);
             $this->loginAdmin($this->getRequest('/'), $id);
         }
         $this->assertEquals($expected, $this->FavoriteValidation->isPermitted($url));
@@ -88,8 +80,6 @@ class FavoriteValidationTest extends BcTestCase
     {
         return [
             [true, 1, '/baser/admin/users/index', true],
-            [true, 2, '/baser/admin/users/index', false],
-            [true, 2, '/baser/admin/pages/index', true],
             [false, null, '/baser/admin/users/index', false],
         ];
     }

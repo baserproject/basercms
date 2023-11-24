@@ -99,7 +99,9 @@ include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
 (new Migrator())->runMany([
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
+    ['plugin' => 'BcEditorTemplate'],
     ['plugin' => 'BcSearchIndex'],
+    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
