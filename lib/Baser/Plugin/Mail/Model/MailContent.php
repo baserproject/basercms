@@ -292,7 +292,11 @@ class MailContent extends MailAppModel
 			$data['Content']['site_id'] = $newSiteId;
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
-		$this->getDataSource()->begin();
+		$db = $this->getDataSource();
+		$transactionBegun = false;
+		if ($db->nestedTransactionSupported()) {
+			$transactionBegun = $db->begin();
+		}
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
 			$data = $result;
@@ -331,10 +335,14 @@ class MailContent extends MailAppModel
 				'oldData' => $oldData,
 			]);
 
-			$this->getDataSource()->commit();
+			if ($transactionBegun) {
+				$db->commit();
+			}
 			return $result;
 		}
-		$this->getDataSource()->rollback();
+		if ($transactionBegun) {
+			$db->rollback();
+		}
 		return false;
 	}
 
