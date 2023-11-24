@@ -548,6 +548,22 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test getExistsTemplateDir
+     */
+    public function test_getExistsTemplateDir()
+    {
+        //正常系実行
+        $result = BcUtil::getExistsTemplateDir('BcThemeSample', 'BaserCore', '');
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/', $result);
+        $result = BcUtil::getExistsTemplateDir('BcThemeSample', 'BaserCore', 'layout');
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout', $result);
+        //異常系実行
+        $this->expectException('Cake\Core\Exception\MissingPluginException');
+        BcUtil::getExistsTemplateDir('BcThemeSample', 'abc', '');
+    }
+
+
+    /**
      * シリアライズ / アンシリアライズ
      */
     public function testSerialize()
