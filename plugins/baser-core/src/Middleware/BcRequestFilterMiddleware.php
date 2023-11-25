@@ -65,6 +65,15 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
             $request = $request->withHeader('Authorization', $request->getEnv('REDIRECT_HTTP_AUTHORIZATION'));
         }
 
+        /**
+         * リーバースプロキシを利用している場合、HTTPS ではなく HTTP_X_FORWARDED_SSL が true になるため
+         * そちらの値で判定するように調整
+         */
+        if(filter_var(env('TRUST_PROXY', false))) {
+            $request->trustProxy = true;
+            $request->addDetector('ssl', ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']]);
+        }
+
         return $handler->handle($request);
     }
 
