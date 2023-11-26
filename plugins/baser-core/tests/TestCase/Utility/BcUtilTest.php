@@ -1319,6 +1319,19 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test getFrontTemplatePaths
+     */
+    public function test_getFrontTemplatePaths()
+    {
+        $result = BcUtil::getFrontTemplatePaths(1, 'BcBlog');
+        $this->assertCount(5, $result);
+        $this->assertEquals('/var/www/html/plugins/bc-front/templates/', $result[0]);
+        $this->assertEquals('/var/www/html/plugins/bc-front/templates/plugin/BcBlog/', $result[1]);
+        $this->assertEquals('/var/www/html/plugins/bc-blog/templates/', $result[4]);
+    }
+
+
+    /**
      * 後方互換のための非推奨メッセージを生成する
      */
     public function testGetDeprecatedMessage()
