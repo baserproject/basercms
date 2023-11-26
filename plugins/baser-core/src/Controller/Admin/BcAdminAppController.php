@@ -194,7 +194,7 @@ class BcAdminAppController extends AppController
     {
         if (Configure::read('BcEnv.cmsUrl')) {
             $siteUrl = Configure::read('BcEnv.cmsUrl');
-        } elseif ($this->getRequest()->is('ssl')) {
+        } elseif ($this->getRequest()->is('https')) {
             $siteUrl = Configure::read('BcEnv.sslUrl');
         } else {
             $siteUrl = Configure::read('BcEnv.siteUrl');

@@ -759,7 +759,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
         }
 
-        $query = $db->query($sql);
+        $query = $db->execute($sql);
         $records = $query->fetchAll('assoc');
 
         $fp = fopen($options['path'], 'w');
@@ -1413,7 +1413,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
-                $result = $db->query("SELECT version() as version")->fetch();
+                $result = $db->execute("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
                     throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));

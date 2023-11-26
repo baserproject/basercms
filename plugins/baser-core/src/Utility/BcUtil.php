@@ -1152,7 +1152,7 @@ class BcUtil
         }
         $request = Router::getRequest();
         $protocol = 'http://';
-        if (!empty($request) && $request->is('ssl')) {
+        if (!empty($request) && $request->is('https')) {
             $protocol = 'https://';
         }
         $host = Configure::read('BcEnv.host');

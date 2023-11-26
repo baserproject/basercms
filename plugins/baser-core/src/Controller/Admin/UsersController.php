@@ -82,7 +82,7 @@ class UsersController extends BcAdminAppController
                     'loginRedirect' => $target
                 ]);
                 $service->removeLoginKey($user->id);
-                if ($this->request->is('ssl') && $this->request->getData('saved')) {
+                if ($this->request->is('https') && $this->request->getData('saved')) {
                     // 自動ログイン保存
                     $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
                 }
