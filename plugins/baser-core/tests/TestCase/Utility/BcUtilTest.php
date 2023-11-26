@@ -1336,4 +1336,15 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expect, BcUtil::getDeprecatedMessage('target', 'since', 'remove', 'note'));
     }
 
+    /**
+     * test getLoggedInUsers
+     */
+    public function test_getLoggedInUsers()
+    {
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $result = BcUtil::getLoggedInUsers();
+        $this->assertEquals('baser admin', $result['Api/Admin']->name);
+    }
+
+
 }
