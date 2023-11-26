@@ -146,7 +146,7 @@ if (!$fullBaseUrl) {
      *
      * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
      */
-    $trustProxy = filter_var(env('TRUST_PROXY', false));
+    $trustProxy = filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN);
 
     $s = null;
     if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {

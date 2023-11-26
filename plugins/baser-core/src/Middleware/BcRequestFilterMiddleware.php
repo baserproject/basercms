@@ -69,7 +69,8 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
          * リーバースプロキシを利用している場合、HTTPS ではなく HTTP_X_FORWARDED_SSL が true になるため
          * そちらの値で判定するように調整
          */
-        if(filter_var(env('TRUST_PROXY', false))) {
+         $a  = filter_var(env('TRUST_PROXY', false));
+        if(filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN)) {
             $request->trustProxy = true;
             $request->addDetector('ssl', ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']]);
         }
