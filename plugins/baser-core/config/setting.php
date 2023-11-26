@@ -128,7 +128,7 @@ return [
      */
     'Session' => [
         'defaults' => 'cake',
-        'cookie' => 'BASERCMS5',
+        'cookie' => 'BASERCMS',
         /**
          * セッションの有効期限（分）
          * デフォルト：2日間

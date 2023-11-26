@@ -34,6 +34,7 @@ class ThemeFileForm extends Form
      * @return Schema
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _buildSchema(Schema $schema): Schema
     {

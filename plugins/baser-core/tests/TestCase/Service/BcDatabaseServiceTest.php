@@ -480,9 +480,9 @@ class BcDatabaseServiceTest extends BcTestCase
     public function test_clearAppTableList()
     {
         $this->BcDatabaseService->getAppTableList();
-        $this->assertTrue(in_array('plugins', Cache::read('appTableList', '_bc_env_')['BaserCore']));
+        $this->assertTrue(in_array('plugins', Cache::read('appTableList.default', '_bc_env_')['BaserCore']));
         $this->BcDatabaseService->clearAppTableList();
-        $this->assertEquals(0, count(Cache::read('appTableList', '_bc_env_')));
+        $this->assertEquals(0, count(Cache::read('appTableList.default', '_bc_env_')));
     }
 
     /**
@@ -689,7 +689,7 @@ class UserActionsSchema extends BcSchema
             "username" => "root",
             "password" => "root",
             "schema" => "",
-            "prefix" => "mysite_",
+            "prefix" => "",
             "encoding" => "utf8"
         ];
 
@@ -813,7 +813,7 @@ class UserActionsSchema extends BcSchema
             "username" => "root",
             "password" => "root",
             "schema" => "",
-            "prefix" => "mysite_",
+            "prefix" => "",
             "encoding" => "utf8"
         ];
         //接続できる場合、エラを返さない
@@ -841,7 +841,7 @@ class UserActionsSchema extends BcSchema
             "username" => "root",
             "password" => "root",
             "schema" => "",
-            "prefix" => "mysite_",
+            "prefix" => "",
             "encoding" => "utf8"
         ];
         //接続できる場合、エラを返さない

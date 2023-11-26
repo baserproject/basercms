@@ -300,14 +300,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * 初期データを読み込む
      *
-     * @param $theme
-     * @param $pattern
-     * @param $excludes
+     * @param string $theme
+     * @param string $pattern
+     * @param string $dbConfigKeyName
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function loadDefaultDataPattern($theme, $pattern): bool
+    public function loadDefaultDataPattern(string $theme, string $pattern, string $dbConfigKeyName = 'default'): bool
     {
         $plugins = array_merge(
             ['BaserCore'],
@@ -315,19 +315,19 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             BcUtil::getCurrentThemesPlugins()
         );
 
-		$db = BcUtil::getCurrentDb();
+		$db = $this->getDataSource($dbConfigKeyName);
 		$db->begin();
 
         // データを削除する
         $excludes = ['plugins', 'dblogs', 'users'];
-        $this->resetAllTables($excludes);
+        $this->resetAllTables($excludes, $dbConfigKeyName);
 
         $result = true;
-        $this->clearAppTableList();
+        $this->clearAppTableList($dbConfigKeyName);
 
 		try {
 			foreach($plugins as $plugin) {
-				if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
+				if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes, $dbConfigKeyName)) {
 					$result = false;
 					$this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
 				}
@@ -338,12 +338,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 		}
 
         if (!$result) {
-            $this->resetAllTables($excludes);
+            $this->resetAllTables($excludes, $dbConfigKeyName);
             // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
             if ($theme !== Configure::read('BcApp.coreFrontTheme')) {
                 $theme = Configure::read('BcApp.coreFrontTheme');
                 foreach($plugins as $plugin) {
-                    if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
+                    if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes, $dbConfigKeyName)) {
                         $result = false;
                         $this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
                     }
@@ -374,7 +374,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    protected function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
+    protected function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [], $dbConfigKeyName = 'default')
     {
         $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return true;
@@ -383,7 +383,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $Folder->create();
         $files = $Folder->getFiles(['full'=>true]);
         $targetTables = $files;
-        $tableList = $this->getAppTableList($plugin);
+        $tableList = $this->getAppTableList($plugin, $dbConfigKeyName);
         $result = true;
         foreach($targetTables as $targetTable) {
             $targetTable = basename($targetTable, '.csv');
@@ -395,7 +395,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 $table = basename($file, '.csv');
                 if ($table !== $targetTable) continue;
                 try {
-					if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto'])) {
+					if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto', 'dbConfigKeyName' => $dbConfigKeyName])) {
 						$this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
 						$result = false;
 					} else {
@@ -424,7 +424,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     {
         $options = array_merge([
             'path' => null,
-            'encoding' => $this->_dbEncToPhp($this->getEncoding())
+            'encoding' => $this->_dbEncToPhp($this->getEncoding()),
+            'dbConfigKeyName' => 'default'
         ], $options);
 
         if (!$options['path']) {
@@ -435,6 +436,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $locator = TableRegistry::getTableLocator();
         $locator->setFallbackClassName(AppTable::class);
         $appTable = $locator->get(Inflector::camelize($table), ['allowFallbackClass' => true]);
+        $currentConnection = $appTable->getConnection();
+        $appTable->setConnection($this->getDatasource($options['dbConfigKeyName']));
+        $appTable->setTable($table);
         $schema = $appTable->getSchema();
 
         $indexField = $schema->getPrimaryKey()[0];
@@ -460,11 +464,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 try {
 					$appTable->saveOrFail($appTable->newEntity($record, ['validate' => false]), ['atomic' => false]);
 				} catch (\Throwable $e){
+				    $appTable->setConnection($currentConnection);
 					throw $e;
 				}
             }
         }
-
+        $appTable->setConnection($currentConnection);
+        $appTable->setTable($table);
         return true;
     }
 
@@ -480,13 +486,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function resetAllTables($excludes = []): bool
+    public function resetAllTables($excludes = [], string $dbConfigKeyName = 'default'): bool
     {
         $result = true;
-        $this->clearAppTableList();
+        $this->clearAppTableList($dbConfigKeyName);
         $plugins = Plugin::loaded();
         foreach($plugins as $plugin) {
-            if (!$this->resetTables($plugin, $excludes)) {
+            if (!$this->resetTables($plugin, $excludes, $dbConfigKeyName)) {
                 $result = false;
             }
         }
@@ -498,19 +504,20 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @param string $plugin
      * @param array $excludes
+     * @param string $dbConfigKeyName
      * @return boolean
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function resetTables($plugin = 'BaserCore', $excludes = []): bool
+    public function resetTables($plugin = 'BaserCore', $excludes = [], string $dbConfigKeyName = 'default'): bool
     {
         $result = true;
-        $tables = $this->getAppTableList($plugin);
+        $tables = $this->getAppTableList($plugin, $dbConfigKeyName);
         if (empty($tables)) return true;
         foreach($tables as $table) {
             if (!in_array($table, $excludes)) {
-                if (!$this->truncate($table)) {
+                if (!$this->truncate($table, $dbConfigKeyName)) {
                     $result = false;
                 }
             }
@@ -521,23 +528,31 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * テーブルのデータをリセットする
      *
-     * @param $table
+     * @param string $table
+     * @param string $dbConfigKeyName
      * @return bool
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function truncate($table): bool
+    public function truncate(string $table, string $dbConfigKeyName = 'default'): bool
     {
         $locator = TableRegistry::getTableLocator();
         $locator->setFallbackClassName(AppTable::class);
-        $table = TableRegistry::getTableLocator()->get(
+        $tableClass = TableRegistry::getTableLocator()->get(
             Inflector::camelize($table),
             ['allowFallbackClass' => true]
         );
-        $schema = $table->getSchema();
-        $db = $table->getConnection();
-        return (bool)$db->execute($schema->truncateSql($db)[0]);
+        $currentConnection = $tableClass->getConnection();
+        if($currentConnection->configName() !== $dbConfigKeyName) {
+            $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
+        }
+        $schema = $tableClass->getSchema();
+        $db = $tableClass->getConnection();
+        $result = (bool)$db->execute($schema->truncateSql($db)[0]);
+        $tableClass->setConnection($currentConnection);
+        $tableClass->setTable($table);
+        return $result;
     }
 
     /**
@@ -896,9 +911,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getAppTableList($plugin = ''): array
+    public function getAppTableList($plugin = '', string $dbConfigKeyName = 'default'): array
     {
-        $list = Cache::read('appTableList', '_bc_env_');
+        $list = Cache::read('appTableList.' . $dbConfigKeyName, '_bc_env_');
         if ($list) {
             if ($plugin) {
                 return (isset($list[$plugin]))? $list[$plugin] : [];
@@ -906,14 +921,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 return $list;
             }
         }
-        $tables = TableRegistry::getTableLocator()
-            ->get('BaserCore.App')
-            ->getConnection()
-            ->getSchemaCollection()
-            ->listTables();
+
+        $db = ConnectionManager::get($dbConfigKeyName);
+        $tables = $db->getSchemaCollection()->listTables();
         $plugins = Plugin::loaded();
         $list = [];
-        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        $prefix = $db->config()['prefix'];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
@@ -931,7 +944,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
             }
         }
-        Cache::write('appTableList', $list, '_bc_env_');
+        Cache::write('appTableList.' . $dbConfigKeyName, $list, '_bc_env_');
         if ($plugin) {
             return (isset($list[$plugin]))? $list[$plugin] : [];
         } else {
@@ -946,9 +959,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function clearAppTableList(): void
+    public function clearAppTableList(string $dbConfigKeyName = 'default'): void
     {
-        Cache::write('appTableList', [], '_bc_env_');
+        Cache::write('appTableList.' . $dbConfigKeyName, [], '_bc_env_');
     }
 
     /**
@@ -1223,7 +1236,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * テーブルを削除する
      *
      * @param string $dbConfigKeyName
-     * @param array $dbConfig
+     * @param null $dbConfig
+     * @param bool $deletePhinx
      * @return boolean
      * @checked
      * @noTodo
@@ -1233,17 +1247,19 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     {
         $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
-        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        $prefix = $dbConfig['prefix']?? '';
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         switch($datasource) {
             case 'mysql':
                 $sources = $db->getSchemaCollection()->listTables();
                 foreach($sources as $source) {
-                    if (!preg_match('/_phinxlog$/', $source) &&
-                        !preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
-                    try {
-                        $db->execute('DROP TABLE ' . $source);
-                    } catch (BcException $e) {
+                    if (preg_match('/_phinxlog$/', $source)
+                        || preg_match("/^" . $prefix . "([^_].+)$/", $source)
+                    ) {
+                        try {
+                            $db->execute('DROP TABLE ' . $source);
+                        } catch (BcException $e) {
+                        }
                     }
                 }
                 break;
@@ -1251,10 +1267,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             case 'postgres':
                 $sources = $db->getSchemaCollection()->listTables();
                 foreach($sources as $source) {
-                    if (!preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
-                    try {
-                        $db->execute('DROP TABLE ' . $source);
-                    } catch (BcException $e) {
+                    if (preg_match('/_phinxlog$/', $source)
+                        || preg_match("/^" . $prefix . "([^_].+)$/", $source)
+                    ) {
+                        try {
+                            $db->execute('DROP TABLE ' . $source);
+                        } catch (BcException $e) {
+                        }
                     }
                 }
                 // シーケンスも削除

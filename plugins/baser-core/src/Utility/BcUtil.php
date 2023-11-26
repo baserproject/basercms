@@ -173,6 +173,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getLoggedInUsers($assoc = true)
     {
@@ -598,6 +599,9 @@ class BcUtil
      * ログインしているユーザー名を取得
      *
      * @return string
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public static function loginUserName()
     {
@@ -821,6 +825,7 @@ class BcUtil
      * @return []|array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getFrontTemplatePaths($siteId, $plugin)
     {
@@ -1164,6 +1169,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getViewPath()
     {
@@ -1757,6 +1763,7 @@ class BcUtil
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getExistsTemplateDir(string $theme, string $plugin, string $path, string $type = '')
     {

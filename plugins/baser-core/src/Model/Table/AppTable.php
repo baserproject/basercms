@@ -127,7 +127,11 @@ class AppTable extends Table
      */
     public function addPrefix($table)
     {
-        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        if(BcUtil::isTest()) {
+            $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        } else {
+            $prefix = $this->getConnection()->config()['prefix'];
+        }
         if (!preg_match('/^' . $prefix . '/', $table)) {
             return $prefix . $table;
         }

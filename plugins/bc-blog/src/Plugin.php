@@ -48,7 +48,7 @@ class Plugin extends BcPlugin
     {
         $result = parent::install($options);
         // ブログ記事の投稿日を更新
-        $this->updateDateNow('BcBlog.BlogPosts', ['posted']);
+        $this->updateDateNow('BcBlog.BlogPosts', ['posted'], [], $options);
         return $result;
     }
 

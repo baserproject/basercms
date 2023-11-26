@@ -25,14 +25,14 @@ interface BcDatabaseServiceInterface
     /**
      * 初期データを読み込む
      *
-     * @param $theme
-     * @param $pattern
-     * @param $excludes
+     * @param string $theme
+     * @param string $pattern
+     * @param string $dbConfigKeyName
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function loadDefaultDataPattern($theme, $pattern): bool;
+    public function loadDefaultDataPattern(string $theme, string $pattern, string $dbConfigKeyName = 'default'): bool;
 
     /**
      * CSVファイルをDBに読み込む
@@ -66,23 +66,25 @@ interface BcDatabaseServiceInterface
      *
      * @param string $plugin
      * @param array $excludes
+     * @param string $dbConfigKeyName
      * @return boolean
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function resetTables($plugin = 'BaserCore', $excludes = []): bool;
+    public function resetTables($plugin = 'BaserCore', $excludes = [], string $dbConfigKeyName = 'default'): bool;
 
     /**
      * テーブルのデータをリセットする
      *
-     * @param $table
+     * @param string $table
+     * @param string $dbConfigKeyName
      * @return bool
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function truncate($table): bool;
+    public function truncate(string $table, string $dbConfigKeyName = 'default'): bool;
 
     /**
      * システムデータを初期化する
@@ -142,12 +144,14 @@ interface BcDatabaseServiceInterface
     /**
      * アプリケーションに関連するテーブルリストを取得する
      *
+     * @param string $plugin
+     * @param string $dbConfigKeyName
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getAppTableList($plugin = ''): array;
+    public function getAppTableList($plugin = '', string $dbConfigKeyName = 'default'): array;
 
     /**
      * アプリケーションに関連するテーブルリストのキャッシュをクリアする
@@ -155,8 +159,9 @@ interface BcDatabaseServiceInterface
      * @checked
      * @noTodo
      * @unitTest
+     * @param string $dbConfigKeyName
      */
-    public function clearAppTableList(): void;
+    public function clearAppTableList(string $dbConfigKeyName = 'default'): void;
 
     /**
      * モデル名を指定してスキーマファイルを生成する
