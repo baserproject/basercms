@@ -25,7 +25,10 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\ServerRequestFactory;
 use Cake\Http\Session;
+use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 /**
  * Class BcUtilTest
@@ -784,6 +787,25 @@ class BcUtilTest extends BcTestCase
             ['localhost', '', '', '引数を指定してサブドメイン名が取得できません。'],
         ];
     }
+
+    /**
+     * test getViewPath
+     */
+    public function test_getViewPath()
+    {
+        //ウェブ
+        $theme = Inflector::dasherize(BcUtil::getCurrentTheme());
+        $result = BcUtil::getViewPath();
+        $this->assertEquals('/var/www/html/plugins/'.$theme.DS, $result);
+        //管理側
+        $request = $this->getRequest('/baser/admin');
+        Router::setRequest($request);
+        $result = BcUtil::getViewPath();
+        $theme = Inflector::dasherize(BcUtil::getCurrentAdminTheme());
+        $this->assertEquals('/var/www/html/plugins/'.$theme.DS, $result);
+
+    }
+
 
     /**
      * testGetPluginPath
