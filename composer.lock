@@ -76,7 +76,6 @@
         },
         {
             "name": "cakephp/cakephp",
-<<<<<<< HEAD
             "version": "4.5.1",
             "source": {
                 "type": "git",
@@ -87,18 +86,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/cakephp/cakephp/zipball/d3d5417b4274777ebd93916a6fa4551e06273725",
                 "reference": "d3d5417b4274777ebd93916a6fa4551e06273725",
-=======
-            "version": "4.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "95e39ec60f78895d217c35c6f840f24f1f9ca3b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/95e39ec60f78895d217c35c6f840f24f1f9ca3b5",
-                "reference": "95e39ec60f78895d217c35c6f840f24f1f9ca3b5",
->>>>>>> dev-cake45
                 "shasum": ""
             },
             "require": {
