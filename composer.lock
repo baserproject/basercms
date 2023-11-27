@@ -185,11 +185,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-<<<<<<< HEAD
             "time": "2023-11-12T03:23:04+00:00"
-=======
-            "time": "2023-10-15T02:25:20+00:00"
->>>>>>> dev-cake45
         },
         {
             "name": "cakephp/chronos",
@@ -2535,7 +2531,6 @@
         },
         {
             "name": "cakephp/debug_kit",
-<<<<<<< HEAD
             "version": "4.10.1",
             "source": {
                 "type": "git",
@@ -2546,18 +2541,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/cakephp/debug_kit/zipball/c1cda97cd8ce434f8f8cf992e6eba82f45eb3368",
                 "reference": "c1cda97cd8ce434f8f8cf992e6eba82f45eb3368",
-=======
-            "version": "4.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cakephp/debug_kit.git",
-                "reference": "65918d04944af4c923d15c31ea60f941207788de"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/debug_kit/zipball/65918d04944af4c923d15c31ea60f941207788de",
-                "reference": "65918d04944af4c923d15c31ea60f941207788de",
->>>>>>> dev-cake45
                 "shasum": ""
             },
             "require": {
@@ -2611,11 +2594,7 @@
                 "issues": "https://github.com/cakephp/debug_kit/issues",
                 "source": "https://github.com/cakephp/debug_kit"
             },
-<<<<<<< HEAD
             "time": "2023-11-23T17:08:49+00:00"
-=======
-            "time": "2023-10-23T16:03:16+00:00"
->>>>>>> dev-cake45
         },
         {
             "name": "cakephp/twig-view",
@@ -6154,9 +6133,5 @@
     "platform-dev": {
         "ext-xdebug": "*"
     },
-<<<<<<< HEAD
     "plugin-api-version": "2.3.0"
-=======
-    "plugin-api-version": "2.6.0"
->>>>>>> dev-cake45
 }
