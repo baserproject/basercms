@@ -17,7 +17,6 @@
         "cakephp/migrations": "^3.2",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "6.1.0",
-        "imo-tikuwa/cakephp-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
@@ -56,7 +55,8 @@
             "BcThemeFile\\": "plugins/bc-theme-file/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "BcWidgetArea\\": "plugins/bc-widget-area/src/",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
+            "Cake\\Routing\\": "plugins/baser-core/src/Routing",
+            "SoftDelete\\": "plugins/cakephp-soft-delete/src"
         }
     },
     "autoload-dev": {
@@ -73,7 +73,8 @@
             "BcThemeConfig\\Test\\": "plugins/bc-theme-config/tests/",
             "BcThemeFile\\Test\\": "plugins/bc-theme-file/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/",
-            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
+            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/",
+            "SoftDelete\\Test\\": "plugins/cakephp-soft-delete/tests"
         }
     },
     "replace": {

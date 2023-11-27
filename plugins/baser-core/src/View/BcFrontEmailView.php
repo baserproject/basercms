@@ -38,7 +38,7 @@ class BcFrontEmailView extends View
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BaserCore.BcHtml');
+        $this->addHelper('BaserCore.BcHtml');
     }
 
 }

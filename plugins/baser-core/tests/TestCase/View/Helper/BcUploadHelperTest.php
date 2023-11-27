@@ -122,7 +122,7 @@ class BcUploadHelperTest extends BcTestCase
             'height' => '80',
         ];
         $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
-        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
+        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]*?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
@@ -132,7 +132,7 @@ class BcUploadHelperTest extends BcTestCase
             'eyecatch' => 'template1.jpg',
             'eyecatch_tmp' => 'test'
         ]), $options);
-        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt=""/>';
+        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt="">';
         $this->assertEquals($expects, $result);
 
         $options = [

@@ -234,7 +234,7 @@ class UploaderFilesTable extends AppTable
      * @checked
      * @noTodo
      */
-    public function beforeDelete(Event $event)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
         $entity = $event->getData('entity');
         $fileUploader = $this->getFileUploader();

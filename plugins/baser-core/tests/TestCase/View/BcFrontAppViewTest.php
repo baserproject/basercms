@@ -71,6 +71,7 @@ class BcFrontAppViewTest extends BcTestCase
         $siteService->update($site, ['status' => true]);
         $bcFrontAppView->setRequest($this->getRequest('/s/'));
         $bcFrontAppView->initialize();
+        $bcFrontAppView->loadHelpers();
         $this->assertTrue(isset($bcFrontAppView->BcSmartphone));
     }
 

@@ -75,6 +75,7 @@ nbproject/*
 !/plugins/bc-column
 !/plugins/BcPluginSample
 !/plugins/BcThemeSample
+!/plugins/cakephp-soft-delete
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant

@@ -222,7 +222,7 @@ class BcFormHelperTest extends BcTestCase
         // 引数が既存エンティティの場合の場合
         $user = $this->getTableLocator()->get('BaserCore.Users')->get(1);
         $result = $this->BcForm->create($user);
-        $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
+        $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"><\/div>.*/', $result);
         $this->assertEventFired('Helper.Form.beforeCreate');
         $this->assertEventFired('Helper.Form.afterCreate');
     }
@@ -277,7 +277,7 @@ class BcFormHelperTest extends BcTestCase
     public function testSubmit()
     {
         $result = $this->BcForm->submit('保存');
-        $this->assertMatchesRegularExpression('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
+        $this->assertMatchesRegularExpression('/<div class="submit"><input type="submit" value="保存"><\/div>/', $result);
         $this->assertEventFired('Helper.Form.afterSubmit');
     }
 

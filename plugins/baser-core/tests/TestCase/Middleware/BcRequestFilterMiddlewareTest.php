@@ -109,9 +109,27 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $detectors2 = $ref2->getProperty('_detectors');
         $detectors2->setAccessible(true);
         $detectors->setValue($detectors2->getValue());
-        $this->assertFalse($request->is('admin'));
         $request = $this->BcRequestFilterMiddleware->addDetectors($request);
         $this->assertTrue($request->is('admin'));
+    }
+
+    /**
+     * リクエスト検出器を追加する（例外）
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testAddDetectorsWithException()
+    {
+        $request = $this->getRequest('/baser/admin');
+        $ref = new ReflectionClass($request);
+        $detectors = $ref->getProperty('_detectors');
+        $detectors->setAccessible(true);
+        $ref2 = new ReflectionClass(BcUtil::class);
+        $detectors2 = $ref2->getProperty('_detectors');
+        $detectors2->setAccessible(true);
+        $detectors->setValue($detectors2->getValue());
+        $this->expectException(\InvalidArgumentException::class);
+        $request->is('admin');
     }
 
     /**

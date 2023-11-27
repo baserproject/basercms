@@ -11,7 +11,9 @@
 
 namespace BaserCore\Event;
 
+use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventListenerInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -187,7 +189,7 @@ class BcModelEventDispatcher implements EventListenerInterface
      * @noTodo
      * @unitTest
      */
-    public function beforeDelete(Event $event): bool
+    public function beforeDelete(EventInterface $event): bool
     {
         if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
             return true;

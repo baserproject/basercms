@@ -548,7 +548,7 @@ class BlogPostsTable extends BlogAppTable
      * @param array $options
      * @checked
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // 検索用テーブルへの登録・削除
         // ucmitz 未実装

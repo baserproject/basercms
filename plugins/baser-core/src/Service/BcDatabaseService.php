@@ -1200,7 +1200,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             }
         }
         $db = ConnectionManager::get($name);
-        $db->connect();
+        $db->getDriver()->connect();
         return $db;
     }
 
@@ -1399,7 +1399,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         /* @var Connection $db */
         $db = $this->connectDb($config);
 
-        if (!$db->isConnected()) {
+        if (!$db->getDriver()->isConnected()) {
             throw new BcException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
         }
 
@@ -1460,8 +1460,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         if ($datasource === 'sqlite') {
-            $db->connect();
-        } elseif (!$db->isConnected()) {
+            $db->getDriver()->connect();
+        } elseif (!$db->getDriver()->isConnected()) {
             return false;
         }
         return $this->migrate($plugin, $dbConfigKeyName);

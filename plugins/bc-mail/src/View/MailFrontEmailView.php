@@ -39,8 +39,8 @@ class MailFrontEmailView extends BcFrontEmailView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BcMail.Mailfield');
-        $this->loadHelper('BcMail.Maildata');
+        $this->addHelper('BcMail.Mailfield');
+        $this->addHelper('BcMail.Maildata');
     }
 
 }

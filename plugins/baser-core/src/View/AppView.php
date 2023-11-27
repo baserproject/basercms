@@ -49,15 +49,15 @@ class AppView extends View
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
-        $this->loadHelper('BaserCore.BcAdmin');
-        $this->loadHelper('BaserCore.BcContents');
-        $this->loadHelper('BaserCore.BcPage');
-        $this->loadHelper('BaserCore.BcBaser');
-        $this->loadHelper('BaserCore.BcUpload');
-        $this->loadHelper('BaserCore.BcToolbar');
-        $this->loadHelper('Paginator');
+        $this->addHelper('BaserCore.BcTime');
+        $this->addHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BaserCore.BcAdmin');
+        $this->addHelper('BaserCore.BcContents');
+        $this->addHelper('BaserCore.BcPage');
+        $this->addHelper('BaserCore.BcBaser');
+        $this->addHelper('BaserCore.BcUpload');
+        $this->addHelper('BaserCore.BcToolbar');
+        $this->addHelper('Paginator');
         $this->assign('title', $this->get('title'));
     }
 

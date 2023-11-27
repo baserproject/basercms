@@ -25,6 +25,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
+use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -65,7 +66,12 @@ class BcUtil
         'https' => ['env' => 'HTTPS', 'options' => [1, 'on']],
         'ajax' => ['env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'],
         'json' => ['accept' => ['application/json'], 'param' => '_ext', 'value' => 'json'],
-        'xml' => ['accept' => ['application/xml', 'text/xml'], 'param' => '_ext', 'value' => 'xml'],
+        'xml' => [
+            'accept' => ['application/xml', 'text/xml'],
+            'exclude' => ['text/html'],
+            'param' => '_ext',
+            'value' => 'xml',
+        ],
     ];
 
     /**
@@ -1604,7 +1610,7 @@ class BcUtil
      * Request を取得する
      *
      * @param string $url
-     * @return ServerRequest
+     * @return ServerRequestInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -1649,8 +1655,10 @@ class BcUtil
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
-        } catch (\Exception $e) {
+        } catch (MissingRouteException) {
             return $request;
+        } catch (\Throwable $e) {
+            throw $e;
         }
 
         if (!empty($params['?'])) {

@@ -41,9 +41,9 @@ class BcFrontAppView extends AppView
         parent::initialize();
         if (!empty($this->getRequest()->getAttribute('currentSite')->device)) {
             $agentHelper = Configure::read('BcAgent.' . $this->getRequest()->getAttribute('currentSite')->device . '.helper');
-            if ($agentHelper) $this->loadHelper($agentHelper);
+            if ($agentHelper) $this->addHelper($agentHelper);
         }
-        $this->loadHelper('BaserCore.BcText');
+        $this->addHelper('BaserCore.BcText');
         if (BcUtil::isInstalled()) {
             $this->setThemeHelpers();
         }
@@ -66,7 +66,7 @@ class BcFrontAppView extends AppView
         if (empty($files)) return;
 
         foreach($files as $file) {
-            $this->loadHelper(Inflector::camelize($theme, '-') . '.' . basename($file, 'Helper.php'));
+            $this->addHelper(Inflector::camelize($theme, '-') . '.' . basename($file, 'Helper.php'));
         }
     }
 
