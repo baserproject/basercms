@@ -11,12 +11,12 @@
 
 namespace BaserCore\Database\Migration;
 
-use BaserCore\Utility\BcUtil;
 use Migrations\AbstractMigration;
 use Migrations\Table;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * BcMigration
@@ -37,7 +37,7 @@ class BcMigration extends AbstractMigration
      */
     public function table(string $tableName, array $options = []): Table
     {
-        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        $prefix = ConnectionManager::get($this->input->getOption('connection'))->config()['prefix'];
         return parent::table($prefix . $tableName);
     }
 

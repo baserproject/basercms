@@ -12,6 +12,7 @@
 namespace BaserCore\Database\Migration;
 
 use BaserCore\Utility\BcUtil;
+use Cake\Datasource\ConnectionManager;
 use Migrations\AbstractSeed;
 use Phinx\Db\Table;
 use BaserCore\Annotation\NoTodo;
@@ -37,7 +38,7 @@ class BcSeed extends AbstractSeed
      */
     public function table(string $tableName, array $options = []): Table
     {
-        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        $prefix = ConnectionManager::get($this->input->getOption('connection'))->config()['prefix'];
         return parent::table($prefix . $tableName);
     }
 
