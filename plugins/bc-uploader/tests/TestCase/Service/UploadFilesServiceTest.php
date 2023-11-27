@@ -78,22 +78,20 @@ class UploadFilesServiceTest extends BcTestCase
     public function test_getIndex()
     {
         //準備
-        UploaderFileFactory::make(['id' => 1, 'name' => '2_a1.jpg', 'alt' => '2_1.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 2, 'name' => '2_a2.png', 'alt' => '2_2.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 3, 'name' => '2_3.txt', 'alt' => '2_3.txt', 'user_id' => 1])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
 
         //正常系実行: パラメータなしで
         $result = $this->UploaderFilesService->getIndex([])->all();
-        $this->assertCount(3, $result);
+        $this->assertCount(6, $result);
         //正常系実行: numパラメータを入れる
         $result = $this->UploaderFilesService->getIndex(['num' => 2])->all();
         $this->assertCount(2, $result);
         //正常系実行: nameパラメータを入れる
         $result = $this->UploaderFilesService->getIndex(['name' => 'a'])->all();
-        $this->assertCount(2, $result);
+        $this->assertCount(1, $result);
         //正常系実行: uploader_typeパラメータを入れる
         $result = $this->UploaderFilesService->getIndex(['uploader_type' => 'img'])->all();
-        $this->assertCount(2, $result);
+        $this->assertCount(6, $result);
 
     }
 
@@ -102,6 +100,7 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_createAdminIndexConditions()
     {
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
         //正常系実行
         $param = [
             'conditions' => [
@@ -198,8 +197,7 @@ class UploadFilesServiceTest extends BcTestCase
     {
         //準備
         //フィクチャーからデーターを生成: UploaderCategory
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
         //正常系実行
         $this->assertTrue($this->UploaderFilesService->delete(1));
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');

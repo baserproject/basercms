@@ -115,14 +115,20 @@ class CustomContentsControllerTest extends BcTestCase
             'custom_table_id' => 1,
             'list_count' => 1,
             'content' => [
+                'url' => '/test',
                 'title' => null
             ]
         ];
         $this->post('/baser/admin/bc-custom-content/custom_contents/edit/1', $data);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(200);
         //エラーを確認
-        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $error = $vars['entity']->getErrors();
+        $this->assertEquals(
+            ['content' => ['title' => ['_empty' => "タイトルを入力してください。"]]],
+            $vars['entity']->getErrors()
+        );
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
