@@ -1324,14 +1324,13 @@ class BcUtilTest extends BcTestCase
      */
     public function testMbBasename()
     {
-        $this->markTestIncomplete('このテストは未確認です。basics.phpより移行');
-        $result = mbBasename('/hoge/あいうえお.php');
+        $result = BcUtil::mbBasename('/hoge/あいうえお.php');
         $this->assertEquals('あいうえお.php', $result);
 
-        $result = mbBasename('/hoge/あいうえお.phptest', 'test');
-        $this->assertEquals('あいうえお.php', $result, 'suffixを取り除けません');
+        $result = BcUtil::mbBasename('/hoge/あいうえお.phptest', 'test');
+        $this->assertEquals('あいうえお.php', $result);
 
-        $result = mbBasename('/hoge/あいうえおtest.php', 'test');
+        $result = BcUtil::mbBasename('/hoge/あいうえおtest.php', 'test');
         $this->assertEquals('あいうえおtest.php', $result);
     }
 
