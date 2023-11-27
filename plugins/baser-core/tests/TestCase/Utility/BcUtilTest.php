@@ -16,6 +16,7 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\View\BcAdminAppView;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -820,6 +821,17 @@ class BcUtilTest extends BcTestCase
         $theme = Inflector::dasherize(BcUtil::getCurrentAdminTheme());
         $this->assertEquals('/var/www/html/plugins/'.$theme.DS, $result);
 
+    }
+
+
+    /**
+     * test getCurrentAdminTheme
+     */
+    public function test_getCurrentAdminTheme()
+    {
+        //正常系実行
+        $result = BcUtil::getCurrentAdminTheme();
+        $this->assertEquals('BcAdminThird',$result);
     }
 
 
