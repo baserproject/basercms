@@ -72,7 +72,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
          $a  = filter_var(env('TRUST_PROXY', false));
         if(filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN)) {
             $request->trustProxy = true;
-            $request->addDetector('ssl', ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']]);
+            $request->addDetector('https', ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']]);
         }
 
         return $handler->handle($request);
