@@ -465,7 +465,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         $db = BcUtil::getCurrentDb();
         $db->begin();
         // テーブルを削除する
-        foreach($files[1] as $file) {
+        foreach($files as $file) {
             if (!preg_match("/\.php$/", $file)) continue;
             try {
                 $dbService->loadSchema([
@@ -481,7 +481,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         }
 
         // テーブルを読み込む
-        foreach($files[1] as $file) {
+        foreach($files as $file) {
             if (!preg_match("/\.php$/", $file)) continue;
             try {
                 if (!$dbService->loadSchema([
@@ -499,7 +499,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         }
 
         /* CSVファイルを読み込む */
-        foreach($files[1] as $file) {
+        foreach($files as $file) {
             if (!preg_match("/\.csv$/", $file)) continue;
             try {
                 if (!$dbService->loadCsv([
