@@ -185,7 +185,9 @@ class BcFolder
         if (!is_dir($source)) return false;
         if(is_dir($source)) {
             $dir_handle=opendir($source);
-            mkdir($dest);
+            if(!file_exists($dest)){
+                mkdir($dest);
+            }
             while($file=readdir($dir_handle)){
                 if($file!="." && $file!=".."){
                     if(is_dir($source."/".$file)){
