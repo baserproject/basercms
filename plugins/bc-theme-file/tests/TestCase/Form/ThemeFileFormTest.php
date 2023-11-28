@@ -12,6 +12,7 @@
 namespace BcThemeFile\Test\TestCase\Form;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcThemeFile\Form\ThemeFileForm;
 use Cake\Form\Schema;
 
@@ -86,6 +87,35 @@ class ThemeFileFormTest extends BcTestCase
      */
     public function test_duplicateThemeFile()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //$value = false
+        $rs = $this->ThemeFileForm->duplicateThemeFile(false);
+        $this->assertTrue($rs);
+
+        //mode != create
+        $context['data']['mode'] = 'update';
+        $rs = $this->ThemeFileForm->duplicateThemeFile('test', $context);
+        $this->assertTrue($rs);
+
+        //テストの準備
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $context['data'] = [
+            'mode' => 'create',
+            'fullpath' => $fullpath,
+            'parent' => $fullpath,
+            'base_name' => 'test',
+            'ext' => 'php',
+            'contents' => "<?php echo 'test' ?>"
+        ];
+
+        //既にファイルが存在した場合、
+        $file = new BcFile($fullpath . 'test.php');
+        $file->create();
+        $rs = $this->ThemeFileForm->duplicateThemeFile('test', $context);
+        $this->assertFalse($rs);
+        unlink($fullpath . 'test.php');
+
+        //ファイルが存在しない場合
+        $rs = $this->ThemeFileForm->duplicateThemeFile('test', $context);
+        $this->assertTrue($rs);
     }
 }
