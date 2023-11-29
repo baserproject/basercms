@@ -129,7 +129,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             }
             $category->layered_title = sprintf(
                 "%s└%s",
-                str_replace('_', '&nbsp;&nbsp;&nbsp;&nbsp;', $matches[1]),
+                str_replace('_', '　', $matches[1]),
                 $category->title
             );
             $category->depth = strlen($matches[1]);
@@ -173,7 +173,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
                 foreach ($parents as $key => $parent) {
                     if (preg_match("/^([_]+)/i", $parent, $matches)) {
                         $parent = preg_replace("/^[_]+/i", '', $parent);
-                        $prefix = str_replace('_', '　　　', $matches[1]);
+                        $prefix = str_replace('_', '　', $matches[1]);
                         $parent = $prefix . '└' . $parent;
                     }
                     $controlSources['parent_id'][$key] = $parent;
