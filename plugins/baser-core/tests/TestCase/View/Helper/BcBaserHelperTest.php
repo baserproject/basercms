@@ -2092,10 +2092,10 @@ class BcBaserHelperTest extends BcTestCase
     public function setCanonicalUrlDataProvider()
     {
         return [
-            [1, '/', '<link href="https://localhost/" rel="canonical"/>'],
-            [1, '/index.html', '<link href="https://localhost/" rel="canonical"/>'],
-            [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical"/>'],
-            [2, '/s/', '<link href="https://localhost/" rel="canonical"/>'],
+            [1, '/', '<link href="https://localhost/" rel="canonical">'],
+            [1, '/index.html', '<link href="https://localhost/" rel="canonical">'],
+            [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical">'],
+            [2, '/s/', '<link href="https://localhost/" rel="canonical">'],
         ];
     }
 

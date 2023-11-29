@@ -437,7 +437,7 @@ EOF;
         //テスト実行後不要ファイルを削除
         $folder = new BcFolder(ROOT . DS . 'plugins' . DS . $plugin);
         $folder->delete();
-        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
+        $folder = new BcFolder(ROOT . DS . 'plugins' . DS . 'BcThemeSample3');
         $folder->delete();
         $folder = new BcFolder($zipSrcPath);
         $folder->delete();
