@@ -55,18 +55,19 @@ class ThemeFileForm extends Form
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execute(array $data): bool
     {
-        if(!in_array($data['mode'], ['create', 'update'])) return false;
+        if (!in_array($data['mode'], ['create', 'update'])) return false;
 
-        if($data['mode'] === 'create') {
+        if ($data['mode'] === 'create') {
             $oldPath = $newPath = $fullpath = $data['fullpath'] . $data['base_name'] . '.' . $data['ext'];
             if (!is_dir(dirname($fullpath))) {
                 $folder = new Folder();
                 $folder->create(dirname($fullpath), 0777);
             }
-        } elseif($data['mode'] === 'update') {
+        } elseif ($data['mode'] === 'update') {
             $oldPath = rawurldecode($data['fullpath']);
             $newPath = dirname($data['fullpath']) . DS . rawurldecode($data['base_name']);
             if ($data['ext']) $newPath .= '.' . $data['ext'];
@@ -76,7 +77,7 @@ class ThemeFileForm extends Form
         if ($entity->type === 'text') {
             $file = new File($oldPath);
             if ($file->open('w')) {
-                if (isset($data['contents'])){
+                if (isset($data['contents'])) {
                     $file->append($data['contents']);
                 }
                 $file->close();
