@@ -55,18 +55,19 @@ class ThemeFileForm extends Form
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execute(array $data): bool
     {
-        if(!in_array($data['mode'], ['create', 'update'])) return false;
+        if (!in_array($data['mode'], ['create', 'update'])) return false;
 
-        if($data['mode'] === 'create') {
+        if ($data['mode'] === 'create') {
             $oldPath = $newPath = $fullpath = $data['fullpath'] . $data['base_name'] . '.' . $data['ext'];
             if (!is_dir(dirname($fullpath))) {
                 $folder = new BcFolder(dirname($fullpath));
                 $folder->create();
             }
-        } elseif($data['mode'] === 'update') {
+        } elseif ($data['mode'] === 'update') {
             $oldPath = rawurldecode($data['fullpath']);
             $newPath = dirname($data['fullpath']) . DS . rawurldecode($data['base_name']);
             if ($data['ext']) $newPath .= '.' . $data['ext'];
@@ -100,6 +101,7 @@ class ThemeFileForm extends Form
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -129,6 +131,7 @@ class ThemeFileForm extends Form
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function duplicateThemeFile($value, $context = null)
     {
