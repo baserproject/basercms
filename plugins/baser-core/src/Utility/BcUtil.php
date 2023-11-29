@@ -1824,6 +1824,7 @@ class BcUtil
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getExistsWebrootDir(string $theme, string $plugin, string $path, string $type = '')
     {
