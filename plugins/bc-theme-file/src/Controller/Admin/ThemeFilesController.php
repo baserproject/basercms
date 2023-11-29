@@ -636,7 +636,6 @@ class ThemeFilesController extends BcAdminAppController
                 break;
             }
         }
-
         if ($data['plugin']) {
             if (!empty($args[0])) {
                 $data['theme'] = $args[0];
