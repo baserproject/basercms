@@ -145,7 +145,7 @@ class ThemeFilesController extends BcAdminAppController
     /**
      * テーマファイル作成
      *
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
      * @unitTest
@@ -153,6 +153,7 @@ class ThemeFilesController extends BcAdminAppController
     public function add(ThemeFilesAdminServiceInterface $service)
     {
         $args = $this->parseArgs(func_get_args());
+        if (!$args['theme']) $this->notFound();
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         $entity = $service->getNew($args['fullpath'], $args['type']);
@@ -163,7 +164,7 @@ class ThemeFilesController extends BcAdminAppController
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を作成しました。'), $entity->name));
-                $this->redirect(array_merge(
+                return $this->redirect(array_merge(
                     ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
                     [$entity->name]
@@ -655,6 +656,7 @@ class ThemeFilesController extends BcAdminAppController
                 unset($args[1]);
             }
         }
+        if(!$data['theme']) return $data;
 
         if (empty($data['type'])) $data['type'] = 'layout';
         if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));
