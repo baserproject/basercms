@@ -131,6 +131,7 @@ class ThemeFileForm extends Form
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function duplicateThemeFile($value, $context = null)
     {
