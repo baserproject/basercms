@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
+use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
@@ -28,6 +29,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\ServerRequestFactory;
 use Cake\Http\Session;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
@@ -829,9 +831,13 @@ class BcUtilTest extends BcTestCase
      */
     public function test_getCurrentAdminTheme()
     {
-        //正常系実行
+        //site_configs テーブルの admin_theme を変更した場合
+        $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        $siteConfig = $SiteConfig->get(16);
+        $siteConfig->value = 'test theme';
+        $SiteConfig->save($siteConfig);
         $result = BcUtil::getCurrentAdminTheme();
-        $this->assertEquals('BcAdminThird',$result);
+        $this->assertEquals('test theme',$result);
     }
 
 
