@@ -25,17 +25,6 @@ class BcFrontAppControllerTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.SiteConfigs'
-    ];
-
-    /**
      * set up
      */
     public function setUp(): void
