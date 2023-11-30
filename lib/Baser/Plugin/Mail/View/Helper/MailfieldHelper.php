@@ -70,7 +70,7 @@ class MailfieldHelper extends AppHelper
 				$values = explode("\n", str_replace('|', "\n", $data['source']));
 				$source = [];
 				foreach($values as $value) {
-					$source[$value] = $value;
+					$source[trim($value)] = trim($value);
 				}
 				return $source;
 			}
