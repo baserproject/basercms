@@ -152,7 +152,7 @@ class ContentsTable extends AppTable
             ->integer('parent_id')
             ->requirePresence('parent_id', 'create', __d('baser_core', 'content[parent_id] フィールドが存在しません。'))
             ->allowEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'), function(array $context){
-                return ($context['data']['id'] === 1);
+                return (isset($context['data']['id']) && $context['data']['id'] === 1);
             });
 
         $validator
