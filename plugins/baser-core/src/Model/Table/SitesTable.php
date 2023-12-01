@@ -124,7 +124,7 @@ class SitesTable extends AppTable
             ->scalar('alias')
             ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
             ->requirePresence('alias', 'create', __d('baser_core', 'エイリアスを入力してください。'))
-            ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
+            ->allowEmptyString('alias')
             ->add('alias', [
                 'aliasUnique' => [
                     'rule' => 'validateUnique',
