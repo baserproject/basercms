@@ -319,6 +319,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
                     'layout_template' => 'default',
+                    'created_date' => date('Y-m-d H:i:s')
                 ]
             ];
             $contentFolder = $this->create($data);
