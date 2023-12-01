@@ -539,9 +539,6 @@ class BlogPostsService implements BlogPostsServiceInterface
             ));
         }
         $postData['no'] = $this->BlogPosts->getMax('no', ['BlogPosts.blog_content_id' => $postData['blog_content_id']]) + 1;
-        if (!empty($postData['posted'])) $postData['posted'] = new FrozenTime($postData['posted']);
-        if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
-        if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
         $blogPost = $this->BlogPosts->patchEntity($this->BlogPosts->newEmptyEntity(), $postData);
         return $this->BlogPosts->saveOrFail($blogPost);
     }
@@ -566,9 +563,6 @@ class BlogPostsService implements BlogPostsServiceInterface
                 ini_get('post_max_size')
             ));
         }
-        if (!empty($postData['posted'])) $postData['posted'] = new FrozenTime($postData['posted']);
-        if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
-        if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
         $blogPost = $this->BlogPosts->patchEntity($post, $postData);
         return $this->BlogPosts->saveOrFail($blogPost);
     }
