@@ -52,7 +52,7 @@ $this->BcAdmin->setHelp('users_form');
         __d('baser_core', '削除'),
         ['action' => 'delete', $user->id],
         ['block' => true,
-          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $user->name),
+          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $user->getDisplayName()),
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm']
