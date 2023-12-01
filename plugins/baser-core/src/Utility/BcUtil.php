@@ -1244,6 +1244,7 @@ class BcUtil
      * @return mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentAdminTheme()
     {

@@ -81,7 +81,7 @@ class PreviewControllerTest extends BcTestCase
         $page->contents = "<p>test</p>";
         $page->title = "testView title";
         $page->content['title'] = "testView title";
-        $page->content['created_date'] = date('Y-m-d');
+        $page->content['created_date'] = date('Y-m-d H:i:s');
 
         $this->enableCsrfToken();
         $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=default', $page->toArray());
