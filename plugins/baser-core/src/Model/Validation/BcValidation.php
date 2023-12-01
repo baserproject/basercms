@@ -423,21 +423,6 @@ class BcValidation extends Validation
     }
 
     /**
-     * 日付の正当性チェック
-     *
-     * @param string $value 確認する値
-     * @return boolean
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public static function checkDate($value)
-    {
-        if (!$value instanceof FrozenTime) return false;
-        return true;
-    }
-
-    /**
      * 日時チェック
      * - 開始日時が終了日時より過去の場合、true を返す
      *
