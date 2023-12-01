@@ -637,7 +637,7 @@ class BlogPostsTableTest extends BcTestCase
 			$folder = new BcFolder(WWW_ROOT . '/files/blog/999');
 			$folder->delete();
 		}
-		copy(__DIR__ . '/../../Fixture/File/test1.png', __DIR__ . '/../../Fixture/File/test1_.png');
+		copy(__DIR__ . '/../../Images/File/test1.png', __DIR__ . '/../../Images/File/test1_.png');
 		$this->loadFixtureScenario(InitAppScenario::class);
 		BlogContentFactory::make()->forCopyEyeCatch()->persist();
 
@@ -659,7 +659,7 @@ class BlogPostsTableTest extends BcTestCase
 			'eye_catch' => [
 				'name' => 'test.png',
 				'type' => 'image/png',
-				'tmp_name' => __DIR__ . '/../../Fixture/File/test1_.png',
+				'tmp_name' => __DIR__ . '/../../Images/File/test1_.png',
 				'error' => 0,
 				'size' => 1,
 			],
