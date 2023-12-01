@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\MultiSiteScenario;
+use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -143,6 +144,7 @@ class BcRedirectSubSiteMiddlewareTest extends BcTestCase
     {
         //データ生成
         $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentFoldersScenario::class);
 
         //サイトが非公開を設定する
         $SitesService = $this->getService(SitesServiceInterface::class);

@@ -55,6 +55,7 @@ class BcPluginTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**

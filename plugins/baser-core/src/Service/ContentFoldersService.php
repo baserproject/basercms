@@ -300,8 +300,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false)
     {
-        if ($site->id === 1) return false;
-        $rootContentId = 1;
+        $rootContentId = ($site->id === 1) ? null : 1;
         if($site->main_site_id) {
             /* @var SitesTable $sitesTable */
             $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
@@ -320,6 +319,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
                     'layout_template' => 'default',
+                    'created_date' => date('Y-m-d H:i:s')
                 ]
             ];
             $contentFolder = $this->create($data);

@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Controller\Admin\ThemesController;
+use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Filesystem\Folder;
@@ -192,7 +193,7 @@ class ThemesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-
+        $this->loadFixtureScenario(SmallSetContentFoldersScenario::class);
         $theme = 'BcFront';
         $this->post('/baser/admin/baser-core/themes/apply/' . $theme);
         $this->assertResponseCode(302);
