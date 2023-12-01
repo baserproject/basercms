@@ -49,6 +49,16 @@ class BlogContentsTable extends BlogAppTable
         $validator->integer('id')
             ->allowEmptyString('id', null, 'create');
 
+        $validator
+            ->scalar('description')
+            ->add('description', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '説明文でスクリプトの入力は許可されていません。')
+                ]
+            ]);
+
         $validator->scalar('list_count')
             ->notEmptyString('list_count', __d('baser_core', '一覧表示件数を入力してください。'))
             ->range('list_count', [0, 101], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))

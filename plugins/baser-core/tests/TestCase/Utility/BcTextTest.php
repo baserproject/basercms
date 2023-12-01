@@ -19,30 +19,4 @@ use BaserCore\Utility\BcText;
  */
 class BcTextTest extends BcTestCase
 {
-
-	/**
-	 * test stripScriptTag
-	 * @return void
-	 * @dataProvider stripScriptTagDataProvider
-	 */
-	public function testStripScriptTag($content, $expect)
-	{
-		$result = BcText::stripScriptTag($content);
-		$this->assertEquals($expect, $result, 'scriptタグを削除できません。');
-	}
-
-	public function stripScriptTagDataProvider()
-	{
-		return [
-			[
-				'content' => '<script>hoge</script>',
-				'expect' => 'hoge'
-			],
-			[
-				'content' => '<a href="http://hoge.com" class="bca-action">hoge<script>hoge</script></a>',
-				'expect' => '<a href="http://hoge.com" class="bca-action">hogehoge</a>'
-			]
-		];
-	}
-
 }
