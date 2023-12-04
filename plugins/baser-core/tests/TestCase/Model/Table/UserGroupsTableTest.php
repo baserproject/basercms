@@ -12,8 +12,10 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UserGroupsTableTest
@@ -30,14 +32,9 @@ class UserGroupsTableTest extends BcTestCase
     public $UserGroups;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -80,6 +77,7 @@ class UserGroupsTableTest extends BcTestCase
      */
     public function testValidationDefault()
     {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
         $validator = $this->UserGroups->validationDefault(new Validator());
         $fields = [];
         foreach($validator->getIterator() as $key => $value) {
@@ -97,10 +95,11 @@ class UserGroupsTableTest extends BcTestCase
      */
     public function testCopy()
     {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
         $copied = $this->UserGroups->copy(3);
         $originalUserGroup = $this->UserGroups->get(3);
         $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
-        $this->assertEquals(1, $query->count());
+        $this->assertEquals(1, count($query->toArray()));
         $this->assertEquals(4, $copied->id);
     }
 
@@ -111,6 +110,7 @@ class UserGroupsTableTest extends BcTestCase
      */
     public function testGetAuthPrefix()
     {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
         $result = $this->UserGroups->getAuthPrefix(1);
         $this->assertEquals('Admin,Api/Admin', $result);
 

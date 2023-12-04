@@ -16,6 +16,7 @@ use BaserCore\Model\Table\UsersTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Model\Table\PasswordRequestsTable Test Case
@@ -32,22 +33,14 @@ class PasswordRequestsTableTest extends BcTestCase
     public $PasswordRequests;
 
     /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * @var Users
      */
     public $Users;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.PasswordRequests',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-    ];
 
     /**
      * Set Up

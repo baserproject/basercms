@@ -12,8 +12,14 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Model\Table\UsersTable Test Case
@@ -31,16 +37,9 @@ class UsersTableTest extends BcTestCase
     public $Users;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -108,6 +107,7 @@ class UsersTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // ユーザ更新時、自動ログインのデータを削除する
         $user = $this->Users->find('all')->first();
         $this->LoginStores->addKey('Admin', $user->id);
@@ -196,6 +196,7 @@ class UsersTableTest extends BcTestCase
      */
     public function testGetControlSource()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $list = $this->Users->getControlSource('user_group_id')->toList();
         $this->assertEquals('システム管理', $list[0]);
     }
@@ -207,6 +208,10 @@ class UsersTableTest extends BcTestCase
      */
     public function testGetUserList(): void
     {
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
         $result = $this->Users->getUserList(['name' => 'baser admin']);
         $this->assertCount(1, $result);
         $this->assertEquals('ニックネーム1', $result[1]);
@@ -217,6 +222,7 @@ class UsersTableTest extends BcTestCase
      */
     public function test_findAvailable()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->getRequest('/baser/admin');
         $entity = $this->Users->findAvailable($this->Users->find())->first();
         $this->assertTrue(isset($entity->user_groups));

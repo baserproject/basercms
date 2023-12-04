@@ -11,8 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
@@ -30,16 +32,9 @@ class PermissionsTableTest extends BcTestCase
     public $Permissions;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
+    use ScenarioAwareTrait;
 
         /**
      * Set Up
@@ -232,6 +227,7 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testCopy($id, $data, $expected, $message = null)
     {
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $record = $this->Permissions->copy($id, $data);
         $result = $expected ? $record->name : $record;
         $this->assertEquals($expected, $result, $message);
@@ -273,6 +269,7 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testGetTargetPermissionsAndSetTargetPermissions(): void
     {
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->Permissions->setTargetPermissions([2, 3]);
         $data = $this->Permissions->getTargetPermissions([2, 3]);
         $this->assertNotEmpty($data[2]);

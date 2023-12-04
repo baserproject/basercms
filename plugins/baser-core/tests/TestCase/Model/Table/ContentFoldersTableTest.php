@@ -12,10 +12,13 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\ORM\TableRegistry;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentFoldersTableTest
@@ -23,26 +26,9 @@ use Cake\ORM\TableRegistry;
 class ContentFoldersTableTest extends BcTestCase
 {
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Contents',
-//        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
-//        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
-//        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-    ];
-
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -105,6 +91,8 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testBeforeSave(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $data = new Entity(['id' => 1]);
         $this->ContentFolders->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
         $this->assertTrue($this->ContentFolders->beforeStatus);
@@ -150,6 +138,8 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testSetBeforeRecord(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->execPrivateMethod($this->ContentFolders, "setBeforeRecord", [1]);
         $this->assertTrue($this->ContentFolders->beforeStatus);
     }
@@ -159,6 +149,8 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testBeforeCopyEvent()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.beforeCopy', function (Event $event) {
             $data = $event->getData('data');
@@ -177,6 +169,8 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testAfterCopyEvent()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.afterCopy', function (Event $event) {
             $data = $event->getData('data');
