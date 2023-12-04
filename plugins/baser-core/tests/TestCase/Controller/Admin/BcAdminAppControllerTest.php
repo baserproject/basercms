@@ -11,6 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Model\Entity\Permission;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -18,6 +23,7 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use \Cake\Http\Exception\NotFoundException;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\BcAdminAppController Test Case
@@ -30,21 +36,7 @@ class BcAdminAppControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * BcAdminApp
@@ -58,6 +50,10 @@ class BcAdminAppControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $request = $this->loginAdmin($this->getRequest());
         Router::setRequest($request);
         $this->BcAdminApp = new BcAdminAppController($request);
