@@ -138,7 +138,7 @@ class BlogPostsTable extends BlogAppTable
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
             ->scalar('content')
-            ->add('contents', [
+            ->add('content', [
                 'containsScript' => [
                     'rule' => ['containsScript'],
                     'provider' => 'bc',
