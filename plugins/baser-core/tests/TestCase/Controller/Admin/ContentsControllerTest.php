@@ -17,11 +17,17 @@ use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentsControllerTest
@@ -39,22 +45,7 @@ class ContentsControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -63,6 +54,11 @@ class ContentsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/contents/'));
         $this->ContentsController = new ContentsController($this->request);
         $this->ContentsController->setName('Contents');
