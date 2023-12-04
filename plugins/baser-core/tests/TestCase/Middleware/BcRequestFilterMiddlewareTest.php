@@ -77,6 +77,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testRedirectIfIsDeviceFile()
     {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->_response = $this->BcRequestFilterMiddleware->redirectIfIsDeviceFile($this->getRequest(), $this->Application);
         $this->assertNull($this->_response);
         $url = '/s/files/test.png';
