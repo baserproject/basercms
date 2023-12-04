@@ -12,7 +12,9 @@
 namespace BaserCore\Test\TestCase\Middleware;
 
 use BaserCore\Middleware\BcRequestFilterMiddleware;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\MultiSiteScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -43,7 +45,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
             Configure::write('BcRequest.isInstalled', true);
         }
         parent::setUp();
-        $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->BcRequestFilterMiddleware = new BcRequestFilterMiddleware();
     }
 
@@ -63,6 +64,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testProcess(): void
     {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest(), $this->Application);
         $this->assertResponseOk();
         $url = '/img/test.png';
@@ -266,6 +268,8 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testIsPage($expect, $url)
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isPage($this->getRequest($url)));
     }
 
