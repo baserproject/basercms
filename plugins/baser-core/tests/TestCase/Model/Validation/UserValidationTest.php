@@ -12,7 +12,12 @@
 namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Model\Validation\UserValidation;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UserValidationTest
@@ -22,16 +27,9 @@ class UserValidationTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Test subject
@@ -72,6 +70,9 @@ class UserValidationTest extends BcTestCase
      */
     public function testWillChangeSelfGroup($userId, $value, $expected)
     {
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
         if($userId) {
             $this->loginAdmin($this->getRequest(), $userId);
         }
