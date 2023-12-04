@@ -11,27 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\DblogsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class DblogsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Dblogs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -41,6 +32,10 @@ class DblogsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(DblogsScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin'));
     }
 
