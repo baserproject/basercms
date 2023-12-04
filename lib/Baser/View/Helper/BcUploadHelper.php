@@ -343,10 +343,10 @@ class BcUploadHelper extends BcAppHelper
 
 					if ($fileExists || $options['force']) {
 						if ($check && !$mostSizeExists) {
-							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . mt_rand();
+							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
 							$mostSizeExists = true;
 						} elseif (!$mostSizeExists && !$maxSizeExists) {
-							$maxSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . mt_rand();
+							$maxSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
 							$maxSizeExists = true;
 						}
 					}
@@ -354,10 +354,22 @@ class BcUploadHelper extends BcAppHelper
 			}
 
 			if (!isset($mostSizeUrl)) {
-				$mostSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+				$mostSizeUrl = $fileUrl . $fileName;
 			}
+
+			if (file_exists(WWW_ROOT . ltrim($mostSizeUrl, DS))) {
+				$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
+			} elseif (file_exists(WWW_ROOT .DS. $mostSizeUrl)) {
+				$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
+			}
+
 			if (!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+				$maxSizeUrl = $fileUrl . $fileName;
+			}
+			if (file_exists(WWW_ROOT . ltrim($maxSizeUrl, DS))) {
+				$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
+			} elseif (file_exists(WWW_ROOT .DS. $maxSizeUrl)) {
+				$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
 			}
 		}
 
