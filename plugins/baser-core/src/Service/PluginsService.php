@@ -142,10 +142,12 @@ class PluginsService implements PluginsServiceInterface
      */
     public function install($name, bool $permission = true, $connection = 'default'): ?bool
     {
-        $options = ['permission' => $permission];
-        if ($connection) {
-            $options['connection'] = $connection;
-        }
+        $config = $this->Plugins->getPluginConfig($name);
+        $options = [
+            'permission' => $permission,
+            'connection' => $connection,
+            'db_init' => $config?->db_init
+        ];
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
