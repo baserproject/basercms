@@ -743,7 +743,7 @@ class SitesTable extends AppTable
         if($request) {
             $session = Router::getRequest()->getSession();
             $currentSite = $session->read('BcApp.Admin.currentSite');
-            if ($success->id === $currentSite->id) {
+            if ($currentSite && $success->id === $currentSite->id) {
                 $session->write('BcApp.Admin.currentSite', $success);
             }
         }
