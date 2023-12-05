@@ -238,12 +238,6 @@ class ContentsTable extends AppTable
         return $validator;
     }
 
-    public function checkParentId($value, $context)
-    {
-       $value = 1;
-       return false;
-    }
-
     /**
      * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
      * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
