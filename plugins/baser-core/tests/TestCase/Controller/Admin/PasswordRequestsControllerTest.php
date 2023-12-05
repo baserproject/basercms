@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\LoginStoresScenario;
 use BaserCore\Test\Scenario\PasswordRequestsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;

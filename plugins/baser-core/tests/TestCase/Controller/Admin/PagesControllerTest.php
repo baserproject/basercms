@@ -21,7 +21,6 @@ use Cake\Event\Event;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\Admin\PagesController;
-use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
