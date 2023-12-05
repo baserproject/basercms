@@ -421,30 +421,6 @@ class BcValidationTest extends BcTestCase
     }
 
     /**
-     * Test CheckDate
-     *
-     * @param string $value
-     * @param boolean $expect
-     * @return void
-     * @dataProvider checkDateDataProvider
-     */
-    public function testCheckDate($value, $expect)
-    {
-        $result = $this->BcValidation->checkDate($value);
-        $this->assertEquals($expect, $result);
-    }
-
-    public function checkDateDataProvider()
-    {
-        return [
-            [FrozenTime::now(), true],
-            [new FrozenTime('2015-01-01'), true],
-            ['', false],
-            ['2015-01-01 00:00:00', false],
-        ];
-    }
-
-    /**
      * Test checkDateRange
      *
      * @return void

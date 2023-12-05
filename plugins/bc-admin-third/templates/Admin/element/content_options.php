@@ -84,14 +84,14 @@ $this->BcUpload->setTable('BaserCore.Contents');
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.author_id", __d('baser_core', '作成者')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
-            <?php echo $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $authorList]) ?>
+            <?php echo $this->BcAdminForm->control('content.author_id', ['type' => 'select', 'options' => $authorList]) ?>
             <div style="white-space: nowrap">
               <small>[<?php echo __d('baser_core', '作成日') ?>]</small>
-              <?php echo $this->BcAdminForm->control('created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
+              <?php echo $this->BcAdminForm->control('content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
             </div>
             <div style="white-space: nowrap">
               <small>[<?php echo __d('baser_core', '更新日') ?>]</small>
-              <?php echo $this->BcAdminForm->control('modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $modified_date]); ?>
+              <?php echo $this->BcAdminForm->control('content.modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $modified_date]); ?>
             </div>
           <?php else: ?>
             <?php echo h($this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.author_id"), $authorList)) ?>

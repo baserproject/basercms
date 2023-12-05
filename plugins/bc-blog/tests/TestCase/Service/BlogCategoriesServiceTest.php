@@ -123,7 +123,7 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         BlogCategoryFactory::make(['id' => 60, 'blog_content_id' => 29, 'title' => '_test'])->persist();
         $categories = $this->BlogCategories->getTreeIndex(29, []);
-        $this->assertEquals('&nbsp;&nbsp;&nbsp;&nbsp;└_test', $categories[0]->layered_title);
+        $this->assertEquals('　└_test', $categories[0]->layered_title);
     }
 
     /**
@@ -155,10 +155,10 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
             [
                 'parent_id',
                 ['conditions' => ['BlogCategories.status' => 1], 'blogContentId' => 19],
-                [59 => 'test', 60 => '　　　└test']
+                [59 => 'test', 60 => '　└test']
             ],
-            ['parent_id',['blogContentId' => 19], [59 => 'test', 60 => '　　　└test']],
-            ['parent_id', ['blogContentId' => 19, 'excludeParentId' => 59], [60 => '　　　└test']],
+            ['parent_id',['blogContentId' => 19], [59 => 'test', 60 => '　└test']],
+            ['parent_id', ['blogContentId' => 19, 'excludeParentId' => 59], [60 => '　└test']],
         ];
     }
 

@@ -156,12 +156,12 @@ class BlogPostsTableTest extends BcTestCase
         //草稿欄
         $this->assertEquals('草稿欄でスクリプトの入力は許可されていません。', current($errors['detail_draft']));
         //公開開始日
-        $this->assertEquals('公開開始日の形式が不正です。', $errors['publish_begin']['checkDate']);
+        $this->assertEquals('公開開始日の形式が不正です。', $errors['publish_begin']['dateTime']);
         $this->assertEquals('公開期間が不正です。', $errors['publish_begin']['checkDateRange']);
         //公開終了日
-        $this->assertEquals('公開終了日の形式が不正です。', $errors['publish_end']['checkDate']);
+        $this->assertEquals('公開終了日の形式が不正です。', $errors['publish_end']['dateTime']);
         //投稿日
-        $this->assertEquals('投稿日の形式が不正です。', $errors['posted']['checkDate']);
+        $this->assertEquals('投稿日の形式が不正です。', $errors['posted']['dateTime']);
         //アイキャッチ画像
         $this->assertEquals('許可されていないファイルです。', $errors['eyecatch']['fileExt']);
     }
@@ -637,7 +637,7 @@ class BlogPostsTableTest extends BcTestCase
 			$folder = new BcFolder(WWW_ROOT . '/files/blog/999');
 			$folder->delete();
 		}
-		copy(__DIR__ . '/../../Fixture/File/test1.png', __DIR__ . '/../../Fixture/File/test1_.png');
+		copy(__DIR__ . '/../../Images/File/test1.png', __DIR__ . '/../../Images/File/test1_.png');
 		$this->loadFixtureScenario(InitAppScenario::class);
 		BlogContentFactory::make()->forCopyEyeCatch()->persist();
 
@@ -659,7 +659,7 @@ class BlogPostsTableTest extends BcTestCase
 			'eye_catch' => [
 				'name' => 'test.png',
 				'type' => 'image/png',
-				'tmp_name' => __DIR__ . '/../../Fixture/File/test1_.png',
+				'tmp_name' => __DIR__ . '/../../Images/File/test1_.png',
 				'error' => 0,
 				'size' => 1,
 			],

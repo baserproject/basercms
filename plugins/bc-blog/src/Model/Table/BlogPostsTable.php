@@ -166,15 +166,13 @@ class BlogPostsTable extends BlogAppTable
                 ]
             ]);
         $validator
-            ->dateTime('publish_begin')
-            ->allowEmptyDateTime('publish_begin')
             ->add('publish_begin', [
-                'checkDate' => [
-                    'rule' => ['checkDate'],
-                    'provider' => 'bc',
+                'dateTime' => [
+                    'rule' => ['dateTime'],
                     'message' => __d('baser_core', '公開開始日の形式が不正です。')
                 ]
             ])
+            ->allowEmptyDateTime('publish_begin')
             ->add('publish_begin', [
                 'checkDateRange' => [
                     'rule' => ['checkDateRange', ['publish_begin', 'publish_end']],
@@ -183,25 +181,21 @@ class BlogPostsTable extends BlogAppTable
                 ]
             ]);
         $validator
-            ->dateTime('publish_end')
-            ->allowEmptyDateTime('publish_end')
             ->add('publish_end', [
-                'checkDate' => [
-                    'rule' => ['checkDate'],
-                    'provider' => 'bc',
+                'dateTime' => [
+                    'rule' => ['dateTime'],
                     'message' => __d('baser_core', '公開終了日の形式が不正です。')
                 ]
-            ]);
+            ])
+            ->allowEmptyDateTime('publish_end');
         $validator
-            ->dateTime('posted')
-            ->notEmptyString('posted', __d('baser_core', '投稿日を入力してください。'))
             ->add('posted', [
-                'checkDate' => [
-                    'rule' => ['checkDate'],
-                    'provider' => 'bc',
+                'dateTime' => [
+                    'rule' => ['dateTime'],
                     'message' => __d('baser_core', '投稿日の形式が不正です。')
                 ]
-            ]);
+            ])
+            ->notEmptyDateTime('posted', __d('baser_core', '投稿日を入力してください。'));;
         $validator
             ->integer('user_id')
             ->notEmptyString('user_id', __d('baser_core', '投稿者を選択してください。'));
