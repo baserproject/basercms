@@ -11,10 +11,17 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PasswordRequestsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UsersScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\TestEmailTransport;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PasswordRequestsControllerTest
@@ -23,20 +30,7 @@ class PasswordRequestsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
     use EmailTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.PasswordRequests',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs'
-    ];
-
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -44,6 +38,11 @@ class PasswordRequestsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(UsersScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
+        $this->loadFixtureScenario(PasswordRequestsScenario::class);
     }
 
     /**
