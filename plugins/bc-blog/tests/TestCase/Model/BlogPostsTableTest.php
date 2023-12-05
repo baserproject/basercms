@@ -137,7 +137,7 @@ class BlogPostsTableTest extends BcTestCase
         BlogPostFactory::make(['name' => 'test'])->persist();
         $errors = $validator->validate([
             'name' => '1',                              //スラッグ
-            'contents' => '<?php echo $test; ?>',       //概要欄
+            'content' => '<?php echo $test; ?>',       //概要欄
             'detail' => '<?php echo $test; ?>',         //本稿欄
             'detail_draft' => '<?php echo $test; ?>',   //草稿欄
             'publish_begin' => '2022-02-29',            //公開開始日
@@ -150,7 +150,7 @@ class BlogPostsTableTest extends BcTestCase
         //スラッグ
         $this->assertEquals('数値だけのスラッグを登録することはできません。', current($errors['name']));
         //概要欄
-        $this->assertEquals('概要欄でスクリプトの入力は許可されていません。', current($errors['contents']));
+        $this->assertEquals('概要欄でスクリプトの入力は許可されていません。', current($errors['content']));
         //本稿欄
         $this->assertEquals('本稿欄でスクリプトの入力は許可されていません。', current($errors['detail']));
         //草稿欄
