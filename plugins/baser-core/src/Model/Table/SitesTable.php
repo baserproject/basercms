@@ -739,10 +739,13 @@ class SitesTable extends AppTable
     public function save(EntityInterface $entity, $options = [])
     {
         $success = parent::save($entity, $options);
-        $session = Router::getRequest()->getSession();
-        $currentSite = $session->read('BcApp.Admin.currentSite');
-        if($success->id === $currentSite->id) {
-            $session->write('BcApp.Admin.currentSite', $success);
+        $request = Router::getRequest();
+        if($request) {
+            $session = Router::getRequest()->getSession();
+            $currentSite = $session->read('BcApp.Admin.currentSite');
+            if ($success->id === $currentSite->id) {
+                $session->write('BcApp.Admin.currentSite', $success);
+            }
         }
         return $success;
     }
