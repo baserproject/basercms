@@ -12,11 +12,9 @@
 namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\Database\Schema\BcSchema;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcFile;
 use BaserCore\View\Helper\BcFormHelper;
@@ -52,10 +50,7 @@ class BcTestCaseTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
         $this->loadFixtureScenario(SitesScenario::class);
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
     }
 
     /**
@@ -93,6 +88,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testGetRequest(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         // デフォルトURL $url = '/'
         $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
@@ -180,6 +176,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testTearDownAfterClass()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         if (!file_exists(LOGS)) {
             mkdir(LOGS, 0777);
         }
