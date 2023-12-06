@@ -14,8 +14,15 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -49,8 +56,11 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
         $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->ContentsAdmin = $this->getService(ContentsAdminServiceInterface::class);
     }
 
@@ -101,8 +111,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         return [
             [1, true],
-            [4, true],
-            [5, false],
+            [2, true],
+            [3, false],
         ];
     }
 

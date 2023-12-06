@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
@@ -24,6 +25,7 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
 use Laminas\Diactoros\UploadedFile;
 
@@ -35,16 +37,9 @@ class PluginsServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.SiteConfigs'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var PluginsService|null
@@ -59,6 +54,7 @@ class PluginsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(PluginsScenario::class);
         $this->Plugins = new PluginsService();
     }
 
