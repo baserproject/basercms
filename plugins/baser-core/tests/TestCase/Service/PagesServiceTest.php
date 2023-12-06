@@ -17,16 +17,12 @@ use BaserCore\Service\PagesService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PagesScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Database\Expression\QueryExpression;
 use Cake\Database\ValueBinder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Closure;
@@ -193,11 +189,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetPageTemplateList($contetnId, $plugin, $expected)
     {
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         // BC frontに変更
         $result = $this->PagesService->getPageTemplateList($contetnId, $plugin);
         $this->assertEquals($expected, $result);
