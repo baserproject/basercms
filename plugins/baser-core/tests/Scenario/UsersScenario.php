@@ -20,7 +20,7 @@ use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * PasswordRequestsScenario
+ * UsersScenario
  *
  */
 class UsersScenario implements FixtureScenarioInterface
