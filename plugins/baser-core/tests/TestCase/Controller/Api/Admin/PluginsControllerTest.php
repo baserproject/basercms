@@ -170,7 +170,7 @@ class PluginsControllerTest extends BcTestCase
     /**
      * test reset_db
      */
-    public function testRestDb()
+    public function testResetDb()
     {
         $this->put('/baser/api/admin/baser-core/plugins/reset_db/BcBlog.json?token=' . $this->accessToken, ['connection' => 'test']);
         $this->assertResponseOk();
