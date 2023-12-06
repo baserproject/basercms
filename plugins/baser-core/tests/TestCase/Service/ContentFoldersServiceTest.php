@@ -12,6 +12,14 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\Content;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
@@ -19,6 +27,7 @@ use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Model\Table\ContentFoldersTable;
 use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Model\Table\ContentFoldersTable Test Case
@@ -38,19 +47,9 @@ class ContentFoldersServiceTest extends BcTestCase
     public $ContentFolders;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -60,6 +59,13 @@ class ContentFoldersServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->loginAdmin($this->getRequest());
         $this->ContentFoldersService = new ContentFoldersService();
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');

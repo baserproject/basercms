@@ -14,8 +14,11 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentsAdminServiceTest
@@ -29,6 +32,11 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     use BcContainerTrait;
 
     /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * ContentsAdminService
      * @var ContentsAdminService
      */
@@ -36,26 +44,13 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public $ContentsAdmin;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-    ];
-
-    /**
      * setUp
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->ContentsAdmin = $this->getService(ContentsAdminServiceInterface::class);
     }
 
@@ -78,10 +73,11 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $expected = [
             'ContentFolder' => 'フォルダー',
-            'ContentAlias' => 'エイリアス',
             'Page' => '固定ページ',
+            'ContentAlias' => 'エイリアス',
             'BlogContent' => 'ブログ',
             'ContentLink' => 'リンク',
+            'CustomContent' => 'カスタムコンテンツ',
             'MailContent' => 'メールフォーム'
         ];
         $this->assertEquals($expected, $this->ContentsAdmin->getTypes());
@@ -105,8 +101,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         return [
             [1, true],
-            [2, true],
-            [3, false],
+            [4, true],
+            [5, false],
         ];
     }
 

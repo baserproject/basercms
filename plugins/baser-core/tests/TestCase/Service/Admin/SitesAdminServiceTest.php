@@ -13,7 +13,9 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Service\Admin\SitesAdminService;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Utility\BcContainerTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SitesAdminServiceTest
@@ -27,16 +29,9 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites'
-    ];
-
-//    public $autoFixtures = false;
+    use ScenarioAwareTrait;
 
     /**
      * SitesAdminService
@@ -50,8 +45,8 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->SitesAdmin = new SitesAdminService();
-//        $this->fixtureStrategy->setupTest($this->getFixtures());
     }
 
     /**
