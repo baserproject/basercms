@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Test\Factory;
 
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
@@ -31,7 +32,12 @@ class DblogFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'message' => $faker->text(50),
+                'user_id' => $faker->randomNumber(1, 100),
+                'created' => FrozenTime::now(),
+                'modified' => FrozenTime::now()
+            ];
         });
     }
 
