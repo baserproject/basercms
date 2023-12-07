@@ -11,9 +11,7 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
-use BcMail\Test\Factory\MailContentFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
