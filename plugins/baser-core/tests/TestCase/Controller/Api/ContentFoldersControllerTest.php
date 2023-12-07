@@ -12,9 +12,14 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\Controller\Api\ContentFoldersController;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Service\ContentFoldersService;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\Api\ContentFoldersController Test Case
@@ -22,21 +27,7 @@ use BaserCore\Service\ContentFoldersService;
 class ContentFoldersControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -56,6 +47,10 @@ class ContentFoldersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
