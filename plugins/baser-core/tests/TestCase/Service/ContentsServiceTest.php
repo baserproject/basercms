@@ -633,7 +633,7 @@ class ContentsServiceTest extends BcTestCase
             ['id' => 20],
             ['id' => 21]
         ])->persist();
-        BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
+        BlogContentFactory::make(['id' => 32, 'description' => ''])->persist();
         $contents = $this->getTableLocator()->get('Contents');
 
         $content = $contents->find()->order(['id' => 'ASC'])->first();
