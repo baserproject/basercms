@@ -11,12 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
-use BaserCore\Controller\Api\ContentsController;
-use BaserCore\Test\Factory\PageFactory;
-use BcBlog\Test\Factory\BlogContentFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use Cake\Core\Configure;
 use BaserCore\Service\ContentsService;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * ContentsControllerTest
@@ -29,22 +32,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Pages',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -64,6 +52,11 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -163,7 +156,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/get_global_navi/4.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertCount(11, $result->contents);
+        $this->assertCount(13, $result->contents);
         $this->assertEquals(1, $result->contents[0]->site_id);
         $this->assertFalse($result->contents[10]->exclude_menu);
         //異常系実行
