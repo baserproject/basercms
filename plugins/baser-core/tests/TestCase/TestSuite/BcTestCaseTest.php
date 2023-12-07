@@ -12,6 +12,9 @@
 namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\Database\Schema\BcSchema;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcFile;
 use BaserCore\View\Helper\BcFormHelper;
@@ -28,6 +31,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -36,25 +40,17 @@ use BaserCore\Annotation\UnitTest;
 class BcTestCaseTest extends BcTestCase
 {
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * Set Up
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
     }
 
     /**
@@ -92,6 +88,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testGetRequest(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         // デフォルトURL $url = '/'
         $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
@@ -179,6 +176,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testTearDownAfterClass()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         if (!file_exists(LOGS)) {
             mkdir(LOGS, 0777);
         }
