@@ -43,6 +43,7 @@ class PagesScenario implements FixtureScenarioInterface
 <h2>NEWS RELEASE</h2>
 <?php $this->BcBaser->blogPosts(\'news\', 5) ?>
 </section>
+
 <section class="news2">
 <h2>BaserCMS NEWS</h2>
 <?php echo $this->BcBaser->js(\'/feed/ajax/1\'); ?>
