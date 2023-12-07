@@ -12,6 +12,11 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
@@ -22,6 +27,7 @@ use Cake\Core\Plugin;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PluginsController;
 use Cake\Event\Event;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
 
 /**
@@ -33,22 +39,7 @@ class PluginsControllerTest extends BcTestCase
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.LoginStores',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * PluginsController
@@ -62,6 +53,11 @@ class PluginsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
         $this->PluginsController = new PluginsController($this->loginAdmin($this->getRequest()));
     }
 

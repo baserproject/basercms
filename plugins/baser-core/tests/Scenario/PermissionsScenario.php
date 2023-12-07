@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PermissionFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
