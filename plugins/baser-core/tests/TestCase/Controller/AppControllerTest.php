@@ -12,6 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -20,6 +23,7 @@ use Cake\Http\Response;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AppController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 
 /**
@@ -30,23 +34,10 @@ class AppControllerTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups'
-    ];
-
-    /**
      * Trait
      */
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -54,6 +45,9 @@ class AppControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->AppController = new AppController($this->getRequest());
     }
 

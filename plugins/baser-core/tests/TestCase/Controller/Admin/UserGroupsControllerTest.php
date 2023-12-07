@@ -11,9 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsPaginationsScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UsersScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\Admin\UserGroupsController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\UserGroupsController Test Case
@@ -21,22 +30,8 @@ use BaserCore\Controller\Admin\UserGroupsController;
 class UserGroupsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Controller/UserGroupsController/UserGroupsPagination',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Permissions',
-    ];
     // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
 //    public $autoFixtures = false;
 
@@ -46,6 +41,14 @@ class UserGroupsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(UserGroupsPaginationsScenario::class);
         // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
 //        $this->loadFixtures('UsersUserGroups', 'Users', 'Sites', 'SiteConfigs', 'LoginStores', 'Permissions');
 //        if ($this->getName() == 'testIndex_pagination') {
