@@ -97,7 +97,6 @@ class BcShortCodeEventListener implements EventListenerInterface
                         if (isset($view->{$func[0]})) {
                             $Helper = $view->{$func[0]};
                         } else {
-                            $plugin .= '.';
                             $className = $plugin . "\\" . "View\\Helper\\" . $func[0] . 'Helper';
                             $Helper = new $className($view);
                         }
