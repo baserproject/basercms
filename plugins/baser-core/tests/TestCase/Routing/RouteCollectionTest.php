@@ -11,24 +11,21 @@
 
 namespace BaserCore\Test\TestCase\Routing;
 
+use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
+use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class RouteCollectionTest
  */
 class RouteCollectionTest extends BcTestCase
 {
-
     /**
-     * フィクスチャ
-     * @var array
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Routing\Route\BcContentsRoute\SiteBcContentsRoute',
-        'plugin.BaserCore.Routing\Route\BcContentsRoute\ContentBcContentsRoute',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * set up
      *
@@ -54,6 +51,8 @@ class RouteCollectionTest extends BcTestCase
      */
     public function testMatch()
     {
+        $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
+        $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
         $this->getRequest();
         $this->assertEquals('/', Router::url([
             'plugin' => 'BaserCore',

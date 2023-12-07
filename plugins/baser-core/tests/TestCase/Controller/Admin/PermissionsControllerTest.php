@@ -12,10 +12,15 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\PermissionGroupFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PermissionsController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 
 /**
@@ -23,22 +28,11 @@ use BaserCore\Controller\Admin\PermissionsController;
  */
 class PermissionsControllerTest extends BcTestCase
 {
-    use IntegrationTestTrait;
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * Trait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-    ];
+    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -46,6 +40,10 @@ class PermissionsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
         $this->PermissionsController = new PermissionsController($request);
