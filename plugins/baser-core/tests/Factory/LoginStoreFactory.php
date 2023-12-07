@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Test\Factory;
 
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
@@ -32,9 +33,11 @@ class LoginStoreFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                // set the model's default values
-                // For example:
-                // 'name' => $faker->lastName
+                'store_key' => $faker->text(50),
+                'user_id' => $faker->randomNumber(1, 100),
+                'prefix' => $faker->text(4),
+                'created' => FrozenTime::now(),
+                'modified' => FrozenTime::now(),
             ];
         });
     }
