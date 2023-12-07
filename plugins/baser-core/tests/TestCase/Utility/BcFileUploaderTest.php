@@ -12,9 +12,11 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Entity;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -36,22 +38,10 @@ class BcFileUploaderTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var ContentsTable|BcUploadBehavior
@@ -290,6 +280,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testDeleteFiles()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->BcFileUploader->settings['fields']['eyecatch'] = $this->eyecatchField;
         // 削除を実行
         $fileName = '00000006_eyecatch.gif';
@@ -318,6 +309,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testDeleteFileWhileChecking()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $fileName = '00000006_eyecatch.gif';
         $file = [
             'eyecatch' => [
@@ -765,6 +757,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testRenameToBasenameField()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->getRequest('/baser/admin/');
         touch($this->savePath . 'test.png');
         $entity = new Entity();
@@ -785,6 +778,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testRenameToFieldBasename($oldName, $ext, $copy, $imagecopy, $message = null)
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->getRequest('/baser/admin/');
         // 初期化
         $entity = $this->table->get(1);
@@ -1002,6 +996,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testGetUniqueFileName($fieldName, $fileName, $expected, $message = null)
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         // eyecatchでtemplate1.gifをすでに持つデータとして更新し、テスト
         // BcUpload-beforeSaveを回避するため新規データ挿入時にremoveBehavior('BcUpload')を実行
         if ($fileName === 'template1.gif') {
@@ -1075,6 +1070,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testDeleteExistingFiles()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $fileName = '00000006_eyecatch';
         $targetPath = $this->savePath . $fileName . '.' . $this->eyecatchField['ext'];
         // ダミーのファイルを生成
@@ -1104,6 +1100,7 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testDeleteExistingFile()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $fileName = '00000006_eyecatch';
         $targetPath = $this->savePath . $fileName . '.' . $this->eyecatchField['ext'];
         touch($targetPath);
