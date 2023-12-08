@@ -35,6 +35,8 @@ class DblogFactory extends CakephpBaseFactory
             return [
                 'message' => $faker->text(50),
                 'user_id' => $faker->randomNumber(1, 100),
+                'controller' => $faker->text(50),
+                'action' => $faker->text(50),
                 'created' => FrozenTime::now(),
                 'modified' => FrozenTime::now()
             ];
