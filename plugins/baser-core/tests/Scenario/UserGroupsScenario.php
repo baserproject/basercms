@@ -11,16 +11,11 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\DblogFactory;
-use BaserCore\Test\Factory\PasswordRequestFactory;
-use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
-use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * UserGroupsScenario
+ * PagesScenario
  *
  */
 class UserGroupsScenario implements FixtureScenarioInterface
@@ -31,20 +26,17 @@ class UserGroupsScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
-        UserGroupFactory::make(
-            [
-                'id' => 1,
-                'name' => 'admins',
-                'title' => 'システム管理',
-                'auth_prefix' => 'Admin,Api/Admin',
-                'auth_prefix_settings' => '',
-                'use_move_contents' => true,
-                'created' => '2017-05-03 10:57:07',
-                'modified' => '2017-05-03 10:57:07'
-            ]
-        )->persist();
-        UserGroupFactory::make(
-        [
+        UserGroupFactory::make([
+            'id' => 1,
+            'name' => 'admins',
+            'title' => 'システム管理',
+            'auth_prefix' => 'Admin,Api/Admin',
+            'auth_prefix_settings' => '',
+            'use_move_contents' => true,
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07'
+        ])->persist();
+        UserGroupFactory::make([
             'id' => 2,
             'name' => 'operators',
             'title' => 'サイト運営者',
@@ -54,8 +46,7 @@ class UserGroupsScenario implements FixtureScenarioInterface
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ])->persist();
-        UserGroupFactory::make(
-        [
+        UserGroupFactory::make([
             'id' => 3,
             'name' => 'others',
             'title' => 'その他のグループ',

@@ -12,7 +12,9 @@
 namespace BaserCore\Test\TestCase\Model\Table\Exception;
 
 use BaserCore\Model\Table\Exception\CopyFailedException;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class CopyFailedExceptionTest
@@ -28,13 +30,9 @@ class CopyFailedExceptionTest extends BcTestCase
     public $CopyFailedException;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.UserGroups',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -44,6 +42,7 @@ class CopyFailedExceptionTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->CopyFailedException = new CopyFailedException();
     }
 

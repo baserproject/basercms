@@ -12,8 +12,11 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use BaserCore\Test\Scenario\PermissionGroupsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class AppTableTest
@@ -27,15 +30,12 @@ class AppTableTest extends BcTestCase
      * @var AppTable
      */
     public $App;
-        /**
-     * Fixtures
-     *
-     * @var array
+
+    /**
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Plugins',
-    ];
+    use ScenarioAwareTrait;
+
     /**
      * Set Up
      *
@@ -65,10 +65,11 @@ class AppTableTest extends BcTestCase
      */
     public function testInitialize()
     {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
         $Permission = new TablePermissionsTable();
 
         $this->assertMatchesRegularExpression(
-            // yyyy-MM-dd HH:mm:ssのパターン
+        // yyyy-MM-dd HH:mm:ssのパターン
             '{^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$}',
             $Permission->find()->first()->created->__toString()
         );
@@ -105,9 +106,10 @@ class AppTableTest extends BcTestCase
      */
     public function testGetMax()
     {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
         $Permission = new TablePermissionsTable();
         $max = $Permission->getMax('no', []);
-        $this->assertEquals(23, $max);
+        $this->assertEquals(1, $max);
     }
 
     /**
@@ -135,6 +137,7 @@ class AppTableTest extends BcTestCase
      */
     public function testChangeSort()
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $Plugins = $this->getTableLocator()->get('BaserCore.Plugins');
         $Plugins->changeSort(1, 2, ['sortFieldName' => 'priority']);
         $this->assertEquals(3, $Plugins->get(1)->priority);

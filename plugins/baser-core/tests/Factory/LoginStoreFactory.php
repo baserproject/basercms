@@ -1,23 +1,15 @@
 <?php
 declare(strict_types=1);
 
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
- *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
- */
-
 namespace BaserCore\Test\Factory;
 
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
  * LoginStoreFactory
+ *
  */
 class LoginStoreFactory extends CakephpBaseFactory
 {
@@ -41,8 +33,12 @@ class LoginStoreFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
+                'user_id' => $faker->randomNumber(1, 100),
+                'store_key' => $faker->text(255),
+                'prefix' => $faker->text(5),
+                'created' => FrozenTime::now(),
+                'modified' => FrozenTime::now(),
             ];
         });
     }
-
 }

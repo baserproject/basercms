@@ -11,10 +11,7 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
-use BaserCore\Test\Factory\PluginFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
@@ -38,7 +35,6 @@ class PagesScenario implements FixtureScenarioInterface
 <span class="fcGreen">見やすくカッコいい</span>Webサイトへ！</h2>
 </section>
 <!-- /mainHeadline -->
-
 <div class="mainWidth" id="information">
 <section class="news1">
 <h2>NEWS RELEASE</h2>
@@ -57,15 +53,13 @@ class PagesScenario implements FixtureScenarioInterface
         )->persist();
         PageFactory::make(
             [
-            // NOTE: contentFixtureの会社案内
-            'id' => 16,
-            'contents' => '<div class="articleArea" id="company">
+                // NOTE: contentFixtureの会社案内
+                'id' => 16,
+                'contents' => '<div class="articleArea" id="company">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Company Profile <span>会社案内</span></h2>
-
 <section class="companyArea">
 <h3><span>会社概要</span></h3>
-
 <div class="profileArea">
 <dl>
 	<dt>会社名</dt>
@@ -85,11 +79,9 @@ class PagesScenario implements FixtureScenarioInterface
 </dl>
 </div>
 </section>
-
 <section class="companyArea access">
 <h3><span>交通<br />
 アクセス</span></h3>
-
 <div class="profileArea">
 <p>JR○○駅から徒歩6分<br />
 西鉄バス「○○」停のすぐ目の前</p>
@@ -97,36 +89,33 @@ class PagesScenario implements FixtureScenarioInterface
 </section>
 </article>
 <?php $this->BcBaser->googleMaps(array("width" => "100%","height" => 500)) ?></div>',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            // NOTE: contentFixtureのサンプル
-            'id' => 3,
-            'contents' => '<div class="articleArea bgGray" id="service">
+            [
+                // NOTE: contentFixtureのサンプル
+                'id' => 3,
+                'contents' => '<div class="articleArea bgGray" id="service">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Service <span>事業案内</span></h2>
-
 <div class="commentArea">
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
-
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
 </div>
-
 <figure class="imgArea"><?php $this->BcBaser->img(\'img_service.jpg\',array(\'alt\'=>\'事業内容の写真\')) ?></figure>
 </article>
 </div>',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            // NOTE: contentFixtureのサービス１
-            'id' => 5,
-            'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+            [
+                // NOTE: contentFixtureのサービス１
+                'id' => 5,
+                'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <span style="color:#8ABE08">■</span>
@@ -142,15 +131,15 @@ class PagesScenario implements FixtureScenarioInterface
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">baserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->BcBaser->feed(1) ?>',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            // NOTE: contentFixtureのサービス2
-            'id' => 6,
-            'contents' => '<div id="news" class="clearfix">
+            [
+                // NOTE: contentFixtureのサービス2
+                'id' => 6,
+                'contents' => '<div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
 <h2 id="newsHead01">NEWS RELEASE</h2>
 <div class="body">
@@ -164,15 +153,15 @@ class PagesScenario implements FixtureScenarioInterface
 </div>
 </div>
 </div>',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            // NOTE: contentFixtureのサービス3
-            'id' => 7,
-            'contents' => '<h2 class="contents-head">会社案内</h2>
+            [
+                // NOTE: contentFixtureのサービス3
+                'id' => 7,
+                'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
 <div class="section">
 <table class="row-table-01" cellspacing="0" cellpadding="0">
@@ -188,34 +177,34 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            'id' => 19,
-            'contents' => 'siteId3の固定ページ',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+            [
+                'id' => 19,
+                'contents' => 'siteId3の固定ページ',
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            'id' => 20,
-            'contents' => 'siteId3の固定ページ2',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+            [
+                'id' => 20,
+                'contents' => 'siteId3の固定ページ2',
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
         PageFactory::make(
-        [
-            'id' => 21,
-            'contents' => 'siteId3の固定ページ3',
-            'draft' => '',
-            'modified' => null,
-            'created' => '2015-01-27 12:56:52'
-        ])->persist();
+            [
+                'id' => 21,
+                'contents' => 'siteId3の固定ページ3',
+                'draft' => '',
+                'modified' => null,
+                'created' => '2015-01-27 12:56:52'
+            ])->persist();
 
     }
 

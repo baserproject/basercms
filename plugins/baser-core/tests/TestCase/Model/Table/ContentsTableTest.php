@@ -13,6 +13,9 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use Cake\ORM\Entity;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,25 +40,6 @@ class ContentsTableTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-//        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck'
-    ];
-
-    /**
-     * Auto Fixtures
-     * @var bool
-     */
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
-
     /**
      * set up
      *
@@ -64,6 +48,7 @@ class ContentsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
@@ -219,6 +204,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeMarshal($content, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
         $this->assertNotEmpty($result->getResult());
@@ -357,6 +343,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteRelateSubSiteContentWithAlias()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         $content = $this->Contents->get(6);
         $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 28, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
@@ -398,6 +385,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCopyContentFolderPath()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         // 他サイトにフォルダが存在する場合
         $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
         $this->assertEquals(6, $parent_id);
@@ -546,6 +534,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateSystemData()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         // idが1以外でnameがない場合はエラー
         $content = new Content(['id' => 100, 'name' => '']);
         $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);

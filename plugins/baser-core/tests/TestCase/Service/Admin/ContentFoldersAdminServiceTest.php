@@ -12,7 +12,10 @@
 namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\ContentFoldersAdminService;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentFoldersAdminServiceTest
@@ -22,18 +25,9 @@ class ContentFoldersAdminServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var ContentFoldersAdminService|null
@@ -67,6 +61,8 @@ class ContentFoldersAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $contentFolder = $this->ContentFolders->get(1);
         $vars = $this->ContentFolders->getViewVarsForEdit($contentFolder);
         $this->assertTrue(isset($vars['folderTemplateList']));

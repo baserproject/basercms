@@ -11,17 +11,12 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\DblogFactory;
-use BaserCore\Test\Factory\PasswordRequestFactory;
-use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Factory\UserFactory;
-use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\LoginStoreFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
  * UsersUserGroupsScenario
- *
  */
 class UsersUserGroupsScenario implements FixtureScenarioInterface
 {
@@ -31,25 +26,21 @@ class UsersUserGroupsScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
-        UsersUserGroupFactory::make(
-            [
-                'id' => 1,
-                'user_id' => 1,
-                'user_group_id' => 1,
-                'created' => '2017-05-03 10:57:07',
-                'modified' => '2017-05-03 10:57:07'
-            ]
-        )->persist();
-        UsersUserGroupFactory::make(
-        [
+        UsersUserGroupFactory::make([
+            'id' => 1,
+            'user_id' => 1,
+            'user_group_id' => 1,
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07'
+        ])->persist();
+        UsersUserGroupFactory::make([
             'id' => 2,
             'user_id' => 2,
             'user_group_id' => 2,
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ])->persist();
-        UsersUserGroupFactory::make(
-        [
+        UsersUserGroupFactory::make([
             'id' => 3,
             'user_id' => 3,
             'user_group_id' => 3,

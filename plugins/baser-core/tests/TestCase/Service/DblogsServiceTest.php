@@ -13,7 +13,10 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Model\Table\DblogsTable;
 use BaserCore\Service\DblogsService;
+use BaserCore\Test\Scenario\DblogsScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class DblogsServiceTest
@@ -22,17 +25,10 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class DblogsServiceTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Dblogs',
-        'plugin.BaserCore.Users',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * Set Up
      *
@@ -41,6 +37,8 @@ class DblogsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(DblogsScenario::class);
+        $this->loadFixtureScenario(UserScenario::class);
         $this->DblogsService = new DblogsService();
         $this->Dblogs = $this->getTableLocator()->get('Dblogs');
     }

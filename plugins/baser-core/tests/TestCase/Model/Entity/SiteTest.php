@@ -12,32 +12,21 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\Site;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SiteTest
  */
 class SiteTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-//        'plugin.BaserCore.Model/Entity/Site/ContentShouldRedirects',
-//        'plugin.BaserCore.Model/Entity/Site/SiteShouldRedirects'
-    ];
-
-    /**
-     * autoFixtures
-     * @var bool
-     */
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
+    use ScenarioAwareTrait;
 
     /**
      * @var Site
@@ -52,6 +41,8 @@ class SiteTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->Sites = $this->getTableLocator()->get('BaserCore.Sites');
     }
 

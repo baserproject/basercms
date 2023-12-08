@@ -32,7 +32,7 @@ class SiteConfigsScenario implements FixtureScenarioInterface
                 'value' => '福岡県',
                 'created' => '2021-01-27 12:56:52',
                 'modified' => '2021-01-27 13:01:58'
-        ]
+            ]
         )->persist();
         SiteConfigFactory::make([
                 'id' => '2',
@@ -216,11 +216,11 @@ q {}',
             ]
         )->persist();
         SiteConfigFactory::make([
-            'id' => '24',
-            'name' => 'version',
-            'value' => '3.0.6.1',
-            'created' => '2021-01-27 12:58:10',
-            'modified' => '2021-01-27 12:58:25'
+                'id' => '24',
+                'name' => 'version',
+                'value' => '3.0.6.1',
+                'created' => '2021-01-27 12:58:10',
+                'modified' => '2021-01-27 12:58:25'
             ]
         )->persist();
         SiteConfigFactory::make([
@@ -240,11 +240,11 @@ q {}',
             ]
         )->persist();
         SiteConfigFactory::make([
-            'id' => '29',
-            'name' => 'use_site_lang_setting',
-            'value' => '0',
-            'created' => '2021-01-27 12:58:10',
-            'modified' => '2021-01-27 12:58:25'
+                'id' => '29',
+                'name' => 'use_site_lang_setting',
+                'value' => '0',
+                'created' => '2021-01-27 12:58:10',
+                'modified' => '2021-01-27 12:58:25'
             ]
         )->persist();
         SiteConfigFactory::make([

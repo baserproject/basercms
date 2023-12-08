@@ -1,26 +1,18 @@
 <?php
 declare(strict_types=1);
 
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
- *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
- */
-
 namespace BaserCore\Test\Factory;
 
+use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * UsersUserGroupFactory
+ * DblogFactory
  */
 class DblogFactory extends CakephpBaseFactory
 {
+
     /**
      * Defines the Table Registry used to generate entities with
      *
@@ -41,7 +33,14 @@ class DblogFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
+                'message' => $faker->text(50),
+                'user_id' => $faker->randomNumber(1, 100),
+                'controller' => $faker->text(50),
+                'action' => $faker->text(50),
+                'created' => FrozenTime::now(),
+                'modified' => FrozenTime::now()
             ];
         });
     }
+
 }

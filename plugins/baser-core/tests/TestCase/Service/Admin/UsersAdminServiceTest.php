@@ -12,8 +12,13 @@
 namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\UsersAdminService;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UsersAdminServiceTest
@@ -23,16 +28,9 @@ class UsersAdminServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var UsersAdminService|null
@@ -47,6 +45,10 @@ class UsersAdminServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->Users = new UsersAdminService();
     }
 

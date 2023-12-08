@@ -12,9 +12,13 @@
 namespace BaserCore\Test\TestCase\Middleware;
 
 use BaserCore\Middleware\BcRequestFilterMiddleware;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\MultiSiteScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 
 /**
@@ -23,19 +27,10 @@ use ReflectionClass;
  */
 class BcRequestFilterMiddlewareTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -69,6 +64,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testProcess(): void
     {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest(), $this->Application);
         $this->assertResponseOk();
         $url = '/img/test.png';
@@ -81,6 +77,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testRedirectIfIsDeviceFile()
     {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->_response = $this->BcRequestFilterMiddleware->redirectIfIsDeviceFile($this->getRequest(), $this->Application);
         $this->assertNull($this->_response);
         $url = '/s/files/test.png';
@@ -272,6 +269,8 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testIsPage($expect, $url)
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isPage($this->getRequest($url)));
     }
 

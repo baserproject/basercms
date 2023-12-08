@@ -15,6 +15,7 @@ use BaserCore\Service\ContentsService;
 use BaserCore\Service\Front\BcFrontContentsService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcFrontContentsServiceTest
@@ -23,16 +24,10 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class BcFrontContentsServiceTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Contents'
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * Set Up
      *
@@ -98,10 +93,9 @@ class BcFrontContentsServiceTest extends BcTestCase
         $this->assertEquals('/test1', $result[0]['url']);
 
         $result = $this->execPrivateMethod($this->BcFrontContentsService, 'getCrumbs', [102, true]);
-        $this->assertCount(3, $result);
+        $this->assertCount(2, $result);
         $this->assertEquals('test title 1', $result[0]['name']);
         $this->assertEquals('/test1', $result[0]['url']);
-        $this->assertEquals('トップページ', $result[1]['name']);
-        $this->assertEquals('test title 2', $result[2]['name']);
+        $this->assertEquals('test title 2', $result[1]['name']);
     }
 }
