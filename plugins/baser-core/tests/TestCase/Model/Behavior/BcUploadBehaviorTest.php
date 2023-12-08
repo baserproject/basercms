@@ -11,12 +11,14 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
+use BaserCore\Test\Scenario\ContentsScenario;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
 use BaserCore\Service\ContentsServiceInterface;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcUploadBehaviorTest
@@ -29,26 +31,14 @@ class BcUploadBehaviorTest extends BcTestCase
 {
 
     /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * Trait
      */
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
 
     /**
      * @var ContentsTable|BcUploadBehavior
@@ -131,10 +121,10 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * After save
      *
-     * @return boolean
      */
     public function testAfterSave()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
        // 画像を新規追加する場合
         $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/';
         $fileName = 'baser.power';
@@ -187,6 +177,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeDelete()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->setupRequestData([]);
         $filePath = $this->savePath . 'test.png';
         touch($filePath);
@@ -237,6 +228,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetOldEntity()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $result = $this->BcUploadBehavior->getOldEntity(1);
         $this->assertEmpty($result->name);
     }
@@ -251,6 +243,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testRenameToBasenameFields($filename, $copy, $fileList)
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->getRequest('/baser/admin/');
         // 初期化
         $entity = $this->table->get(1);

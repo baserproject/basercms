@@ -15,7 +15,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * UserGroupsScenario
+ * PagesScenario
  *
  */
 class UserGroupsScenario implements FixtureScenarioInterface

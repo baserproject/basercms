@@ -11,18 +11,11 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\DblogFactory;
 use BaserCore\Test\Factory\LoginStoreFactory;
-use BaserCore\Test\Factory\PasswordRequestFactory;
-use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Factory\UserFactory;
-use BaserCore\Test\Factory\UserGroupFactory;
-use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * PasswordRequestsScenario
- *
+ * LoginStoresScenario
  */
 class LoginStoresScenario implements FixtureScenarioInterface
 {
@@ -32,16 +25,14 @@ class LoginStoresScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
-        LoginStoreFactory::make(
-            [
-                'id' => 1,
-                'store_key' => 'somethingkeystring',
-                'user_id' => 9999,
-                'prefix' => 'Admin',
-                'created' => '2021-04-03 10:57:07',
-                'modified' => '2021-04-04 11:20:33'
-            ]
-        )->persist();
+        LoginStoreFactory::make([
+            'id' => 1,
+            'store_key' => 'somethingkeystring',
+            'user_id' => 9999,
+            'prefix' => 'Admin',
+            'created' => '2021-04-03 10:57:07',
+            'modified' => '2021-04-04 11:20:33'
+        ])->persist();
     }
 
 }

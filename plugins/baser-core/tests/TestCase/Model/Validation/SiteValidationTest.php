@@ -14,21 +14,17 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 use BaserCore\Model\Validation\SiteValidation;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SiteValidationTest
  */
 class SiteValidationTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Test subject

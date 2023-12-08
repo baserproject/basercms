@@ -11,10 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Model\Validation;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Routing\Router;
 use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcValidationTest
@@ -22,17 +24,11 @@ use BaserCore\Model\Validation\BcValidation;
  */
 class BcValidationTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
+    use ScenarioAwareTrait;
+
     /**
      * Test subject
      *
@@ -485,6 +481,7 @@ class BcValidationTest extends BcTestCase
      */
     public function testContainsScript($value, $expect)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         if ($expect) Router::setRequest($this->loginAdmin($this->getRequest()));
         $result = $this->BcValidation->containsScript($value);
         $this->assertEquals($expect, $result);

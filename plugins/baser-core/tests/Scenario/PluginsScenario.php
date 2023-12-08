@@ -11,13 +11,11 @@
 
 namespace BaserCore\Test\Scenario;
 
-use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PluginFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * Plugin
+ * PluginsScenario
  *
  */
 class PluginsScenario implements FixtureScenarioInterface
@@ -38,56 +36,51 @@ class PluginsScenario implements FixtureScenarioInterface
             'priority' => '1',
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
-        ]
-        )->persist();
+        ])->persist();
         PluginFactory::make([
-                'id' => 2,
-                'name' => 'BcMail',
-                'title' => 'メール',
-                'version' => '1.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '2',
-                'created' => '2021-05-03 10:57:07',
-                'modified' => '2021-05-03 10:57:07'
-            ]
-        )->persist();
+            'id' => 2,
+            'name' => 'BcMail',
+            'title' => 'メール',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '2',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ])->persist();
         PluginFactory::make([
-                'id' => 3,
-                'name' => 'BcUploader',
-                'title' => 'アップローダー',
-                'version' => '1.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '3',
-                'created' => '2021-05-03 10:57:07',
-                'modified' => '2021-05-03 10:57:07'
-            ]
-        )->persist();
+            'id' => 3,
+            'name' => 'BcUploader',
+            'title' => 'アップローダー',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '3',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ])->persist();
         PluginFactory::make([
-                'id' => 4,
-                'name' => 'BcFavorite',
-                'title' => 'お気に入り',
-                'version' => '1.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '4',
-                'created' => '2021-05-03 10:57:07',
-                'modified' => '2021-05-03 10:57:07'
-            ]
-        )->persist();
+            'id' => 4,
+            'name' => 'BcFavorite',
+            'title' => 'お気に入り',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '4',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ])->persist();
         PluginFactory::make([
-                'id' => 5,
-                'name' => 'BcSearchIndex',
-                'title' => 'サイト内検索',
-                'version' => '1.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '4',
-                'created' => '2021-05-03 10:57:07',
-                'modified' => '2021-05-03 10:57:07'
-            ]
-        )->persist();
+            'id' => 5,
+            'name' => 'BcSearchIndex',
+            'title' => 'サイト内検索',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '4',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ])->persist();
     }
 
 }
