@@ -13,8 +13,13 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\AppService;
 use BaserCore\Service\SitesService;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * AppServiceTest
@@ -23,19 +28,9 @@ class AppServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * AppService
@@ -50,6 +45,8 @@ class AppServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->AppService = new AppService();
     }
 
@@ -68,6 +65,8 @@ class AppServiceTest extends BcTestCase
      */
     public function testGetCurrentSite()
     {
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $request = $this->loginAdmin($this->getRequest('/baser/admin'));
         $service = new SitesService();
         $site = $service->create([

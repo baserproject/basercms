@@ -22,15 +22,6 @@ class DashboardAdminServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Dblogs',
-    ];
-
-    /**
      * setUp method
      *
      * @return void

@@ -17,9 +17,14 @@ use BaserCore\Service\PagesService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Database\Expression\QueryExpression;
 use Cake\Database\ValueBinder;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Closure;
 
 /**
@@ -29,23 +34,10 @@ use Closure;
  */
 class PagesServiceTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * Set Up
      *
@@ -54,6 +46,8 @@ class PagesServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->PagesService = new PagesService();
         $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
@@ -114,6 +108,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testCreate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest('/'));
         $data = [
             'cotnents' => '<p>test</p>',
@@ -156,6 +151,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // containsScriptを通すためアドミンとしてログイン
         $this->loginAdmin($this->getRequest());
         $newPage = $this->PagesService->get(2);
@@ -193,6 +189,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetPageTemplateList($contetnId, $plugin, $expected)
     {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         // BC frontに変更
         $result = $this->PagesService->getPageTemplateList($contetnId, $plugin);
         $this->assertEquals($expected, $result);
@@ -221,6 +218,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected, $message = null)
     {
+        $this->loadFixtureScenario(UserScenario::class);
         $result = $this->PagesService->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
@@ -237,6 +235,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetEditLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/about');
         $this->assertEquals([
             'prefix' => 'Admin',

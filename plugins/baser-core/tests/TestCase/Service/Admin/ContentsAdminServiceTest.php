@@ -14,8 +14,18 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentsAdminServiceTest
@@ -29,6 +39,11 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     use BcContainerTrait;
 
     /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * ContentsAdminService
      * @var ContentsAdminService
      */
@@ -36,26 +51,16 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public $ContentsAdmin;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-    ];
-
-    /**
      * setUp
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->ContentsAdmin = $this->getService(ContentsAdminServiceInterface::class);
     }
 
@@ -78,8 +83,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $expected = [
             'ContentFolder' => 'フォルダー',
-            'ContentAlias' => 'エイリアス',
             'Page' => '固定ページ',
+            'ContentAlias' => 'エイリアス',
             'BlogContent' => 'ブログ',
             'ContentLink' => 'リンク',
             'MailContent' => 'メールフォーム'

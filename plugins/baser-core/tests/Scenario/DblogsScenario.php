@@ -12,14 +12,10 @@
 namespace BaserCore\Test\Scenario;
 
 use BaserCore\Test\Factory\DblogFactory;
-use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Factory\UserFactory;
-use BaserCore\Test\Factory\UserGroupFactory;
-use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
- * DblogsScenario
+ * Contents
  *
  */
 class DblogsScenario implements FixtureScenarioInterface
@@ -30,21 +26,17 @@ class DblogsScenario implements FixtureScenarioInterface
      */
     public function load(...$args)
     {
-        DblogFactory::make(
-            [
-                'id' => 1,
-                'message' => 'dblogs test message1',
-                'user_id' => '1',
-            ]
-        )->persist();
-        DblogFactory::make(
-        [
+        DblogFactory::make([
+            'id' => 1,
+            'message' => 'dblogs test message1',
+            'user_id' => '1',
+        ])->persist();
+        DblogFactory::make([
             'id' => 2,
             'message' => 'dblogs test message2',
             'user_id' => '2',
         ])->persist();
-        DblogFactory::make(
-        [
+        DblogFactory::make([
             'id' => 3,
             'message' => 'dblogs test message3',
             'user_id' => '3',

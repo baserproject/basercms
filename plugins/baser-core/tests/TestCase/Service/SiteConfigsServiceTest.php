@@ -13,7 +13,9 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainerTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * SiteConfigsServiceTest
@@ -27,13 +29,9 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var SiteConfigsService|null
@@ -174,6 +172,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getVersionAndClearCache()
     {
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
         $this->assertEquals('3.0.6.1', $this->SiteConfigs->getVersion());
         $this->SiteConfigs->clearCache();
         $this->SiteConfigs->setValue('version', '5.0.0');

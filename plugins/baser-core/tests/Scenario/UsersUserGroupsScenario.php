@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\Scenario;
 
+use BaserCore\Test\Factory\LoginStoreFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 

@@ -15,6 +15,14 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\SearchIndexesFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\MailContentsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -23,6 +31,7 @@ use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentFoldersService;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Model\Table\ContentsTable Test Case
@@ -38,22 +47,10 @@ class ContentsServiceTest extends BcTestCase
      * @var ContentsService
      */
     public $Contents;
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.MailContents',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -63,6 +60,13 @@ class ContentsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->ContentsService = new ContentsService();
         $this->ContentFoldersService = new ContentFoldersService();
     }
@@ -177,15 +181,15 @@ class ContentsServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=publish');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
-        $this->assertEquals(19, $contents->all()->count());
+        $this->assertEquals(20, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=publish&withTrash=true');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
-        $this->assertEquals(22, $contents->all()->count());
+        $this->assertEquals(24, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=publish&type!=Page');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
-        $this->assertEquals(11, $contents->all()->count());
+        $this->assertEquals(12, $contents->all()->count());
         // フォルダIDを指定する場合
         $request = $this->getRequest('/?status=publish&folder_id=6');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
@@ -593,6 +597,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testPublish()
     {
+        $this->loadFixtureScenario(MailContentsScenario::class);
         PageFactory::make([
             ['id' => 2],
             ['id' => 16],
@@ -622,6 +627,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testUnpublish()
     {
+        $this->loadFixtureScenario(MailContentsScenario::class);
         PageFactory::make([
             ['id' => 2],
             ['id' => 16],
@@ -933,9 +939,9 @@ class ContentsServiceTest extends BcTestCase
     {
         //正常系実行
         $result = $this->ContentsService->getLocalNavi(4)->toArray();
-        $this->assertCount(11, $result);
+        $this->assertCount(13, $result);
         $this->assertEquals(1, $result[0]->parent_id);
-        $this->assertEquals(24, $result[10]->id);
+        $this->assertEquals(21, $result[10]->id);
         //正常系実行: null返す
         $result = $this->ContentsService->getLocalNavi(1);
         $this->assertNull($result);
