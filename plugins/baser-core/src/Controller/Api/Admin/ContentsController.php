@@ -219,7 +219,7 @@ class ContentsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $content = $errors = null;
         try {
-            $content = $service->update($service->get($id), $this->request->getData());
+            $content = $service->update($service->get($id, ['contain' => []]), $this->request->getData());
             $message = __d('baser_core', 'コンテンツ「{0}」を更新しました。', $content->title);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {

@@ -20,6 +20,7 @@ use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
@@ -124,7 +125,7 @@ class SitesTable extends AppTable
             ->scalar('alias')
             ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
             ->requirePresence('alias', 'create', __d('baser_core', 'エイリアスを入力してください。'))
-            ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
+            ->allowEmptyString('alias')
             ->add('alias', [
                 'aliasUnique' => [
                     'rule' => 'validateUnique',
@@ -723,6 +724,30 @@ class SitesTable extends AppTable
             }
         }
         return true;
+    }
+
+    /**
+     * 保存時に管理画面のセッション中のカレントサイトと同じデータの保存の場合、
+     * セッションにも反映する
+     *
+     * @param EntityInterface $entity
+     * @param array $options
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function save(EntityInterface $entity, $options = [])
+    {
+        $success = parent::save($entity, $options);
+        $request = Router::getRequest();
+        if($request) {
+            $session = Router::getRequest()->getSession();
+            $currentSite = $session->read('BcApp.Admin.currentSite');
+            if ($currentSite && $success->id === $currentSite->id) {
+                $session->write('BcApp.Admin.currentSite', $success);
+            }
+        }
+        return $success;
     }
 
 }

@@ -151,7 +151,9 @@ class ContentsTable extends AppTable
         $validator
             ->integer('parent_id')
             ->requirePresence('parent_id', 'create', __d('baser_core', 'content[parent_id] フィールドが存在しません。'))
-            ->notEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'));
+            ->allowEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'), function(array $context){
+                return (isset($context['data']['id']) && $context['data']['id'] === 1);
+            });
 
         $validator
             ->scalar('name')

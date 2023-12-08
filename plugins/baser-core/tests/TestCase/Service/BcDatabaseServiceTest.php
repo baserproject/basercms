@@ -23,6 +23,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
@@ -36,6 +37,7 @@ use Cake\Database\Driver\Sqlite;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Utility\Inflector;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Migrations\Migrations;
 
 /**
@@ -50,6 +52,7 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     use BcContainerTrait;
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -357,6 +360,7 @@ class BcDatabaseServiceTest extends BcTestCase
         SiteFactory::make(['id' => '1', 'theme' => 'BcPluginSample'])->persist();
         // userデータを作成する
         UserFactory::make(['name' => 'C. Le'])->persist();
+        $this->loadFixtureScenario(SmallSetContentFoldersScenario::class);
 
         $result1 = $this->BcDatabaseService->initSystemData($options);
 

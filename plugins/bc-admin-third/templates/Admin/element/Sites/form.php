@@ -29,7 +29,7 @@ use BaserCore\View\BcAdminAppView;
  * @noTodo
  */
 $this->BcBaser->i18nScript([
-  'confirmMessage1' => __d('baser_core', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
+  'confirmMessage1' => __d('baser_core', "サイトを削除してもよろしいですか？\nサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
   'confirmMessage2' => __d('baser_core', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
   'confirmTitle1' => __d('baser_core', 'エイリアス変更')
 ], ['escape' => false]);
@@ -56,13 +56,13 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => '30', 'autofocus' => true]) ?>
       <i class="bca-icon--question-circle bca-help"></i>
       <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サブサイトを特定する事ができる識別名称を入力します。半角英数とハイフン（-）・アンダースコア（_）のみが利用できます。エイリアスを入力しない場合は、URLにも利用されます。') ?></div>
+        class="bca-helptext"><?php echo __d('baser_core', 'サイトを特定する事ができる識別名称を入力します。半角英数とハイフン（-）・アンダースコア（_）のみが利用できます。') ?></div>
       　<span
         style="white-space: nowrap;"><small>[<?php echo $this->BcAdminForm->label('alias', __d('baser_core', 'エイリアス')) ?>]</small>
 			<?php echo $this->BcAdminForm->control('alias', ['type' => 'text', 'size' => '10']) ?></span>
       <i class="bca-icon--question-circle bca-help"></i>
       <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サブサイトの識別名称とは別のURLにしたい場合、別名を入力する事ができます。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。') ?></div>
+        class="bca-helptext"><?php echo __d('baser_core', 'サイトのURLに利用します。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。空欄に設定した場合、自動的に識別名称と同じものを設定します。') ?></div>
       <?php echo $this->BcAdminForm->error('name') ?>
       <?php echo $this->BcAdminForm->error('alias') ?>
     </td>
@@ -75,7 +75,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->control('display_name', ['type' => 'text', 'size' => '60']) ?>
       <i class="bca-icon--question-circle bca-help"></i>
       <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サブサイト名を入力します。管理システムでの表示に利用されます。日本語の入力が可能ですのでわかりやすい名前をつけてください。') ?></div>
+        class="bca-helptext"><?php echo __d('baser_core', 'サイト名を入力します。管理システムでの表示に利用されます。日本語の入力が可能ですのでわかりやすい名前をつけてください。') ?></div>
       <?php echo $this->BcAdminForm->error('display_name') ?>
     </td>
   </tr>
@@ -85,7 +85,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
     <td class="bca-form-table__input">
       <?php echo $this->BcAdminForm->control('title', ['type' => 'text', 'size' => '60']) ?>
       <i class="bca-icon--question-circle bca-help"></i>
-      <div class="bca-helptext"><?php echo __d('baser_core', 'サブサイトのタイトルを入力します。タイトルタグに利用されます。') ?></div>
+      <div class="bca-helptext"><?php echo __d('baser_core', 'サイトのタイトルを入力します。タイトルタグに利用されます。') ?></div>
       <?php echo $this->BcAdminForm->error('title') ?>
     </td>
   </tr>
@@ -118,7 +118,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->control('relate_main_site', ['type' => 'checkbox', 'label' => __d('baser_core', 'エイリアスを利用してメインサイトと自動連携する')]) ?>
       <i class="bca-icon--question-circle bca-help"></i>
       <div class="bca-helptext">
-        <p><?php echo __d('baser_core', 'サブサイトの主として連携させたいサイトを選択します。') ?></p>
+        <p><?php echo __d('baser_core', '対象サイトの主として連携させたいサイトを選択します。') ?></p>
         <p><?php echo __d('baser_core', '「エイリアスを利用してメインサイトと自動連携する」にチェックを入れておくと、メインサイトでコンテンツの追加や削除が発生した場合、エイリアスを利用して自動的にサブサイトで同様の処理を実行します。') ?></p>
       </div>
       <?php echo $this->BcAdminForm->error('main_site_id') ?>
@@ -133,7 +133,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
           <small><?php echo __d('baser_core', '[デバイス]') ?></small>&nbsp;<?php echo $this->BcAdminForm->control('device', ['type' => 'select', 'options' => $selectableDevices]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div
-            class="bca-helptext"><?php echo __d('baser_core', 'サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?></div>
+            class="bca-helptext"><?php echo __d('baser_core', 'サイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?></div>
         <?php else: ?>
           <?php echo $this->BcAdminForm->control('device', ['type' => 'hidden']) ?>
         <?php endif ?>
@@ -141,7 +141,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
           <small><?php echo __d('baser_core', '[言語]') ?></small><?php echo $this->BcAdminForm->control('lang', ['type' => 'select', 'options' => $selectableLangs]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div
-            class="bca-helptext"><?php echo __d('baser_core', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?></div>
+            class="bca-helptext"><?php echo __d('baser_core', 'サイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?></div>
         <?php else: ?>
           <?php echo $this->BcAdminForm->control('lang', ['type' => 'hidden']) ?>
         <?php endif ?>
@@ -163,10 +163,10 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 				</span>
           <br>
           <span
-            id="SpanSiteAutoLink"><?php echo $this->BcAdminForm->control('auto_link', ['type' => 'checkbox', 'label' => __d('baser_core', '全てのリンクをサブサイト用に変換する')]) ?>&nbsp;
+            id="SpanSiteAutoLink"><?php echo $this->BcAdminForm->control('auto_link', ['type' => 'checkbox', 'label' => __d('baser_core', '全てのリンクをサイト用に変換する')]) ?>&nbsp;
 					<i class="bca-icon--question-circle bca-help"></i>
 					<span
-            class="bca-helptext"><?php echo __d('baser_core', 'メインサイトと別URLでアクセスし、エイリアスを利用して同一コンテンツを利用する場合、コンテンツ内の全てのリンクをサブサイト用に変換します。') ?></span>
+            class="bca-helptext"><?php echo __d('baser_core', 'メインサイトと別URLでアクセスし、エイリアスを利用して同一コンテンツを利用する場合、コンテンツ内の全てのリンクをサイト用に変換します。') ?></span>
 				</span>
         </div>
         <?php echo $this->BcAdminForm->error('device') ?>
@@ -180,7 +180,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->control('theme', ['type' => 'select', 'options' => $selectableThemes]) ?>
       <i class="bca-icon--question-circle bca-help"></i>
       <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サブサイトのテンプレートは、各テンプレートの配置フォルダ内にサイト名のサブフォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にしたい場合はここでテーマを指定します。') ?></div>
+        class="bca-helptext"><?php echo __d('baser_core', 'サイトのテンプレートは、各テンプレートの配置フォルダ内にサイト名のサブフォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にしたい場合はここでテーマを指定します。') ?></div>
       <?php echo $this->BcAdminForm->error('theme') ?>
     </td>
   </tr>

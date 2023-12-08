@@ -68,7 +68,12 @@ class BlogPost extends Entity
      * @unitTest
      */
     protected function _get_eyecatch(){
-        $BlogHelper = new BlogHelper(new View());
-        return $BlogHelper->getEyeCatch($this, ['output' => 'url']);
+        try {
+            $BlogHelper = new BlogHelper(new View());
+            return $BlogHelper->getEyeCatch($this, ['output' => 'url']);
+        } catch (\Throwable) {
+            return '';
+        }
     }
+
 }

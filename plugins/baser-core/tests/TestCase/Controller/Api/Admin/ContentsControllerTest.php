@@ -161,10 +161,12 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testEdit()
     {
-        $data = $this->ContentsService->getIndex(['name' => 'testEdit'])->first();
+        $data = $this->ContentsService->getIndex([
+            'name' => 'testEdit',
+            'contain' => []
+        ])->first();
         $id = $data->id;
         $data->name = 'ControllerEdit';
-        $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post("/baser/api/admin/baser-core/contents/edit/{$id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる

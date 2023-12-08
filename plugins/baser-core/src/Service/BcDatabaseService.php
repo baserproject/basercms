@@ -1123,14 +1123,17 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         require_once $options['path'] . $options['file'];
         /* @var BcSchema $schema */
         $schema = new $schemaName();
-        $schema->setTable($options['prefix'] . $schema->table);
+        $table = $options['prefix'] . $schema->table;
+        $schema->setTable($table);
 
         switch($options['type']) {
             case 'create':
                 $schema->create();
                 break;
             case 'drop':
-                $schema->drop();
+                if($this->tableExists($table)) {
+                    $schema->drop();
+                }
                 break;
         }
         return true;
