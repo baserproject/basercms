@@ -33,8 +33,8 @@ class LoginStoreFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                'store_key' => $faker->text(50),
                 'user_id' => $faker->randomNumber(1, 100),
+                'store_key' => $faker->text(255),
                 'prefix' => $faker->text(4),
                 'created' => FrozenTime::now(),
                 'modified' => FrozenTime::now(),
