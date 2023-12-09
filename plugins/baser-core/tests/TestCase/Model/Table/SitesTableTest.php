@@ -278,6 +278,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testResetDevice()
     {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->Sites->resetDevice();
         $sites = $this->Sites->find()->all();
         foreach($sites as $site) {
@@ -295,6 +296,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testResetLang()
     {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->Sites->resetLang();
         $sites = $this->Sites->find()->all();
         foreach($sites as $site) {
