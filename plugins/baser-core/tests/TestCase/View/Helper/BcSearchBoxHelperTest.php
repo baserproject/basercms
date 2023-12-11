@@ -11,11 +11,16 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcSearchBoxHelper;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcSearchBoxHelperTest
@@ -23,22 +28,8 @@ use Cake\TestSuite\IntegrationTestTrait;
  */
 class BcSearchBoxHelperTest extends BcTestCase
 {
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-    ];
 
-    /**
-     * Trait
-     */
-    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -48,7 +39,10 @@ class BcSearchBoxHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $BcAdminAppView = new BcAdminAppView();
         $BcAdminAppView->setRequest($this->getRequest()->withParam('action', 'index'));
         $this->BcSearchBoxHelper = new BcSearchBoxHelper($BcAdminAppView);

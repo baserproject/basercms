@@ -11,9 +11,11 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcSiteConfigHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcSiteConfigHelperTest
@@ -21,6 +23,8 @@ use BaserCore\View\Helper\BcSiteConfigHelper;
  */
 class BcSiteConfigHelperTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+
     /**
      * BcSiteConfigHelper
      * @var BcSiteConfigHelper
@@ -28,20 +32,12 @@ class BcSiteConfigHelperTest extends BcTestCase
     public $BcSiteConfig;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
-    /**
      * setUp
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->BcSiteConfig = new BcSiteConfigHelper(new BcAdminAppView($this->getRequest('/')));
     }
 

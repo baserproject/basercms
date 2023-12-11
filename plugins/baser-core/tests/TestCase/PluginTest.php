@@ -14,6 +14,12 @@ namespace BaserCore\Test\TestCase;
 use App\Application;
 use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
@@ -24,6 +30,7 @@ use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PluginTest
@@ -31,24 +38,12 @@ use Cake\Routing\Router;
  */
 class PluginTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+
     /**
      * @var Plugin
      */
     public $Plugin;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents'
-    ];
 
     /**
      * Set Up
@@ -58,6 +53,12 @@ class PluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
         $this->application = new Application(CONFIG);
         $this->Plugin = new Plugin(['name' => 'BaserCore']);
     }

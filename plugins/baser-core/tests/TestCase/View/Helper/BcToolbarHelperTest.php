@@ -11,17 +11,25 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcToolbarHelper;
 use Cake\Core\Configure;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcToolbarHelperTest
  */
 class BcToolbarHelperTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+
     /**
      * BcToolbarHelper
      * @var BcToolbarHelper
@@ -29,26 +37,17 @@ class BcToolbarHelperTest extends BcTestCase
     public $BcToolbar;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
-
-//    public $autoFixtures = false;
-
-    /**
      * setUp
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+
         $this->BcToolbar = new BcToolbarHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
