@@ -36,9 +36,9 @@ class PageFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                // set the model's default values
-                // For example:
-                // 'name' => $faker->lastName
+                'contents' => $faker->text(),
+                'draft' => $faker->text(),
+                'page_template' => 'default'
             ];
         });
     }

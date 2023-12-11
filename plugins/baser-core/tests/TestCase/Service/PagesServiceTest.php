@@ -345,6 +345,6 @@ class PagesServiceTest extends BcTestCase
         //親となる ContentFolder を作成
 
         $rs = $this->PagesService->getPageTemplate($this->PagesService->get(102));
-        $this->assertEquals('default 1', $rs);
+        $this->assertEquals('default', $rs);
     }
 }

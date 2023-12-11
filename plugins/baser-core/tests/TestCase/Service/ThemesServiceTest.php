@@ -20,6 +20,7 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
@@ -378,6 +379,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $beforeTheme = 'BcPluginSample';
         $afterTheme = 'BcFront';
+        $this->loadFixtureScenario(SmallSetContentFoldersScenario::class);
         SiteFactory::make(['id' => 1, 'title' => 'Test Title', 'name' => 'Test Site', 'theme'=> $beforeTheme, 'status' => 1])->persist();
         $site = SiteFactory::get(1);
         Router::setRequest($this->getRequest());
