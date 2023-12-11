@@ -14,8 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCkeditorHelper;
-use Cake\Core\Plugin;
-use Cake\Core\PluginCollection;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * text helper library.
@@ -24,19 +23,8 @@ use Cake\Core\PluginCollection;
  */
 class BcCkeditorHelperTest extends BcTestCase
 {
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Plugins',
-    ];
+    use ScenarioAwareTrait;
+
     /**
      * setUp
      */

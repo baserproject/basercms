@@ -10,9 +10,17 @@
  */
 
 namespace BaserCore\Test\TestCase\View\Helper;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\View\AppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcPageHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcPage helper library.
@@ -20,24 +28,7 @@ use BaserCore\View\Helper\BcPageHelper;
 class BcPageHelperTest extends BcTestCase
 {
 
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        // 'baser.View.Helper.BcPageHelper.PageBcPageHelper',
-        // 'baser.Default.Favorite',
-        // 'baser.Default.ThemeConfig',
-        // 'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp
@@ -47,6 +38,13 @@ class BcPageHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
         $this->BcPage = new BcPageHelper(new AppView());
         // $this->AppView = new AppView();

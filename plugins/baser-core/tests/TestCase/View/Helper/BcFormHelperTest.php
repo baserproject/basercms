@@ -11,6 +11,11 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventList;
@@ -21,6 +26,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\Event\BcContentsEventListener;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcFormHelperTest
@@ -29,18 +35,7 @@ use BaserCore\Event\BcContentsEventListener;
 class BcFormHelperTest extends BcTestCase
 {
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Pages',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp method
@@ -50,6 +45,11 @@ class BcFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $View = new BcAdminAppView($this->getRequest('/contacts/add'));
         $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
             'unlockedFields' => [],
