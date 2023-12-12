@@ -11,6 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use Cake\Controller\Controller;
 use Cake\Event\EventManager;
 use Cake\Routing\Router;
@@ -21,6 +27,7 @@ use BaserCore\Service\ContentFoldersService;
 use BaserCore\Controller\Admin\ContentsController;
 use BaserCore\Controller\Admin\ContentFoldersController;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcAdminContentsComponentTest
@@ -30,17 +37,9 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
 class BcAdminContentsComponentTest extends BcTestCase
 {
     /**
-     * Fixtures
-     *
-     * @var array
+     * Trait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Pages',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -49,6 +48,11 @@ class BcAdminContentsComponentTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $this->ComponentRegistry = new ComponentRegistry(new Controller($this->getRequest()));
         $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry, ['entityVarName' => 'test']);
         $this->ContentsService = new ContentsService();
