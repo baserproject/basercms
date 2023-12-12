@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcSiteConfigHelper;
@@ -37,7 +37,7 @@ class BcSiteConfigHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
         $this->BcSiteConfig = new BcSiteConfigHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
