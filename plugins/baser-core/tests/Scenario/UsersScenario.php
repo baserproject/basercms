@@ -32,24 +32,23 @@ class UsersScenario implements FixtureScenarioInterface
     public function load(...$args)
     {
         UserFactory::make(
-            [
-                'id' => 1,
-                'name' => 'baser admin',
-                'password' => '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G',
-                'real_name_1' => 'baser',
-                'real_name_2' => 'admin',
-                'email' => 'testuser1@example.com',
-                'nickname' => 'ニックネーム1',
-                'created' => '2017-05-03 10:57:07',
-                'modified' => '2017-05-03 10:57:07',
-                'status' => true
-            ]
-        )->persist();
+        [
+            'id' => 1,
+            'name' => 'baser admin',
+            'password' => 'password',
+            'real_name_1' => 'baser',
+            'real_name_2' => 'admin',
+            'email' => 'testuser1@example.com',
+            'nickname' => 'ニックネーム1',
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07',
+            'status' => true
+        ] )->persist();
         UserFactory::make(
         [
             'id' => 2,
             'name' => 'baser operator',
-            'password' => 'Lorem ipsum dolor sit amet',
+            'password' => 'password2',
             'real_name_1' => 'baser',
             'real_name_2' => 'operator',
             'email' => 'testuser2@example.com',
@@ -57,12 +56,12 @@ class UsersScenario implements FixtureScenarioInterface
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07',
             'status' => true
-        ])->persist();
+        ] )->persist();
         UserFactory::make(
         [
             'id' => 3,
             'name' => 'baser others',
-            'password' => 'Lorem ipsum dolor sit amet',
+            'password' => 'password3',
             'real_name_1' => 'baser',
             'real_name_2' => 'others',
             'email' => 'testuser3@example.com',
@@ -70,7 +69,7 @@ class UsersScenario implements FixtureScenarioInterface
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07',
             'status' => false
-        ])->persist();
+        ] )->persist();
     }
 
 }

@@ -13,10 +13,8 @@ namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\UsersController;
 use BaserCore\Test\Scenario\LoginStoresScenario;
-use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsPaginationsScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UsersScenario;
 use BaserCore\Test\Scenario\UsersUserGroupsScenario;
