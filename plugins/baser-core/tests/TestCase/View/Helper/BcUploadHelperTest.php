@@ -32,17 +32,6 @@ class BcUploadHelperTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
-    /**
      * setUp
      */
     public function setUp(): void
