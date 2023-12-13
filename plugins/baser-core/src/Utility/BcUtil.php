@@ -1983,6 +1983,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getRequestPrefix(ServerRequestInterface $request)
     {
