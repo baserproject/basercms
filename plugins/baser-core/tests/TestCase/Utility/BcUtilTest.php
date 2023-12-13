@@ -1401,7 +1401,8 @@ class BcUtilTest extends BcTestCase
     {
         $result = BcUtil::getAuthPrefixList();
         $this->assertEquals(['Admin'=>'管理システム', 'Api/Admin'=>'Admin Web API'], $result);
-
+        Configure::write('BcPrefixAuth.Admin.name', 'name test');
+        $this->assertEquals(['Admin'=>'name test', 'Api/Admin'=>'Admin Web API'], $result);
     }
 
 
