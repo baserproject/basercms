@@ -49,6 +49,9 @@
             <directory>plugins/bc-widget-area/tests/TestCase</directory>
         </testsuite>
     </testsuites>
+    <extensions>
+        <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
+    </extensions>
     <coverage>
         <include>
             <directory suffix=".php">plugins/*/src/</directory>
