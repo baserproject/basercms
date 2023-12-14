@@ -11,12 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFolder;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
 
 /**
@@ -25,21 +31,7 @@ use Composer\Package\Archiver\ZipArchiver;
 class PluginsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -59,6 +51,11 @@ class PluginsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
         Configure::config('baser', new PhpConfig());
         Configure::load('BaserCore.setting', 'baser');
         $token = $this->apiLoginAdmin(1);

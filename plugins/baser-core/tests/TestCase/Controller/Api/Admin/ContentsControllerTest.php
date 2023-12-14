@@ -13,9 +13,15 @@ namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Service\ContentsService;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * ContentsControllerTest
@@ -28,28 +34,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Pages',
-//        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
-//        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
-//        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-    ];
-
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -69,6 +54,11 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -171,7 +161,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseSuccess();
         // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる
         $query = $this->ContentsService->getIndex(['name' => 'ControllerEdit']);
-        $this->assertEquals(2, $query->count());
+        $this->assertEquals(1, $query->count());
     }
 
     /**
