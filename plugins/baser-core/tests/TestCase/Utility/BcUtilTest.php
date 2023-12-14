@@ -21,6 +21,7 @@ use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UsersScenario;
 use BaserCore\Test\Scenario\UsersUserGroupsScenario;
@@ -59,6 +60,7 @@ class BcUtilTest extends BcTestCase
         $this->loadFixtureScenario(UsersUserGroupsScenario::class);
         $this->loadFixtureScenario(UsersScenario::class);
         $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->request = $this->getRequest();
     }
 
