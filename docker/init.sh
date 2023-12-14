@@ -11,6 +11,7 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
     mkdir /var/www/html/app/webroot/files
     mkdir /var/www/html/docker
     chmod -R 777 /var/www/html/app/Config
+    chmod -R 777 /var/www/html/app/Plugin
     chmod -R 777 /var/www/html/app/tmp
     chmod -R 777 /var/www/html/app/View/Pages
     chmod -R 777 /var/www/html/app/webroot/files
