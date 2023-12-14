@@ -132,6 +132,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setContent($blogContentId = null)
     {
@@ -203,6 +204,7 @@ class BlogHelper extends Helper
      * @return integer
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentBlogId()
     {
