@@ -14,7 +14,16 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Http\Exception\NotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Utility\BcFile;
@@ -53,44 +62,6 @@ class BcBaserHelperTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Plugins',
-        // TODO: basercms4系より移植
-        // 'baser.Default.Page',    // メソッド内で読み込む
-        // 'baser.Default.Content',    // メソッド内で読み込む
-        // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',    // メソッド内で読み込む
-        // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',    // メソッド内で読み込む
-        // 'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
-        // 'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
-        // 'baser.Default.SearchIndex',
-        // 'baser.Default.User',
-        // 'baser.Default.UserGroup',
-        // 'baser.Default.ThemeConfig',
-        // 'baser.Default.WidgetArea',
-        // 'baser.Default.Plugin',
-        // 'baser.Default.BlogContent',
-        // 'baser.Default.BlogPost',
-        // 'baser.Default.BlogCategory',
-        // 'baser.Default.BlogTag',
-        // 'baser.Default.BlogPostsBlogTag',
-        // 'baser.Default.Site',
-        // 'baser.Default.BlogComment',
-        // 'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-    ];
-
-    /**
      * __construct
      * @param string $name
      * @param array $data
@@ -110,6 +81,15 @@ class BcBaserHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
         $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
             'name' => 'Pages',
             'plugin' => 'BaserCore'

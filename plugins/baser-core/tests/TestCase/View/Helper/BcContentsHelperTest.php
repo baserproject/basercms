@@ -12,11 +12,18 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Routing\Router;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcContents helper library.
@@ -25,19 +32,7 @@ use BaserCore\View\Helper\BcContentsHelper;
  */
 class BcContentsHelperTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
     /**
      * setUp method
      *
@@ -46,6 +41,12 @@ class BcContentsHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }
 

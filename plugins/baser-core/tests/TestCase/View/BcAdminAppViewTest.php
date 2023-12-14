@@ -11,12 +11,15 @@
 
 namespace BaserCore\Test\TestCase\View;
 
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BaserCore\View\BcAdminAppView;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 
 /**
@@ -25,16 +28,7 @@ use ReflectionClass;
  */
 class BcAdminAppViewTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Sites'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp method
@@ -44,6 +38,8 @@ class BcAdminAppViewTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
         $this->BcAdminAppView = new BcAdminAppView();
     }
 

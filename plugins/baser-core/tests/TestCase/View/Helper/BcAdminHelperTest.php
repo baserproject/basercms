@@ -13,6 +13,11 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcAdminAppView;
@@ -20,6 +25,7 @@ use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcAdminHelperTest
@@ -33,21 +39,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     use BcContainerTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Dblogs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp method
@@ -57,6 +49,11 @@ class BcAdminHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $BcAdminAppView = new BcAdminAppView($this->getRequest()->withParam('controller', 'users'));
         $BcAdminAppView->setTheme('BcAdminThird');
         $this->BcAdmin = new BcAdminHelper($BcAdminAppView);

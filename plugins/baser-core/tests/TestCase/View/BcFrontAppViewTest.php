@@ -12,9 +12,12 @@
 namespace BaserCore\Test\TestCase\View;
 
 use BaserCore\Service\SitesServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcFrontAppViewTest
@@ -22,22 +25,7 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class BcFrontAppViewTest extends BcTestCase
 {
-
-    /**
-     * Trait
-     */
-    use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -62,6 +50,9 @@ class BcFrontAppViewTest extends BcTestCase
      */
     public function testInitialize()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->getRequest();
         $bcFrontAppView = new BcFrontAppView();
         $this->assertFalse(isset($bcFrontAppView->BcSmartphone));
