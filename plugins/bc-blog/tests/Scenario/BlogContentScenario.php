@@ -38,8 +38,9 @@ class BlogContentScenario implements FixtureScenarioInterface
         $parentId = $args[2];
         $name = $args[3];
         $url = $args[4];
+        $tile = $args[5];
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
-            ->treeNode($id, $siteId, $parentId, $name, $url, $id, true)->persist();
+            ->treeNode($id, $siteId, $parentId, $name, $url, $id, true, $tile)->persist();
         BlogContentFactory::make(['id' => $id, 'description' => 'ディスクリプション', 'template' => 'homePage'])->persist();
     }
 
