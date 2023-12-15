@@ -29,6 +29,7 @@ use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Throwable;
 
 /**
  * Blog helper library.
@@ -82,6 +83,32 @@ class BlogHelperTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Blog->currentContent->id);
     }
+
+    /**
+     * test setContent
+     * @throws Throwable
+     */
+    public function test_setContent()
+    {
+        $this->Blog->setContent(22);
+        $this->assertNull($this->Blog->currentBlogContent);
+        $this->Blog->setContent(1);
+        $this->assertEquals(1, $this->Blog->currentBlogContent->id);
+    }
+
+    /**
+     * test getCurrentBlogId
+     */
+    public function test_getCurrentBlogId()
+    {
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
+        $result = $this->Blog->getCurrentBlogId();
+        $this->assertEquals(1, $result);
+    }
+
+
 
     /**
      * ブログIDを取得する

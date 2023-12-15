@@ -19,7 +19,6 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
@@ -43,6 +42,7 @@ use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -132,6 +132,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setContent($blogContentId = null)
     {
@@ -203,6 +204,7 @@ class BlogHelper extends Helper
      * @return integer
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentBlogId()
     {
@@ -891,13 +893,13 @@ class BlogHelper extends Helper
         $_templates = [];
         foreach($templatesPaths as $templatePath) {
             $templatePath .= 'Blog' . DS;
-            $folder = new BcFolder($templatePath);
-            $files = $folder->getFolders();
-            if ($files) {
+            $folder = new Folder($templatePath);
+            $files = $folder->read(true, true);
+            if ($files[0]) {
                 if ($_templates) {
-                    $_templates = array_merge($_templates, $files);
+                    $_templates = array_merge($_templates, $files[0]);
                 } else {
-                    $_templates = $files;
+                    $_templates = $files[0];
                 }
             }
         }
@@ -1695,8 +1697,10 @@ class BlogHelper extends Helper
         if($this->currentBlogContent) {
             $currentBlogContentId = $this->currentBlogContent->id;
         }
+
         if (isset($blogContent->id))
             $this->setContent($blogContent->id);
+
         $this->BcBaser->element($template, $data);
 
         if($currentBlogContentId) {
