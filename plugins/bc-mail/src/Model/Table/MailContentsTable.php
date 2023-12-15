@@ -142,6 +142,17 @@ class MailContentsTable extends MailAppTable
             ->scalar('redirect_url')
             ->maxLength('redirect_url', 255, __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。'));
 
+        // description
+        $validator
+            ->scalar('description')
+            ->add('description', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '説明文でスクリプトの入力は許可されていません。')
+                ]
+            ]);
+
         // sender_1
         $validator
             ->scalar('sender_1')

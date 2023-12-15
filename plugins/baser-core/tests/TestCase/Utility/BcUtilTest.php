@@ -1387,6 +1387,28 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test getAuthPrefixList
+     */
+    public function test_getAuthPrefixList()
+    {
+        $result = BcUtil::getAuthPrefixList();
+        $this->assertEquals(['Admin'=>'管理システム', 'Api/Admin'=>'Admin Web API'], $result);
+    }
+
+    /**
+     * test getRequestPrefix
+     */
+    public function test_getRequestPrefix()
+    {
+        $result = BcUtil::getRequestPrefix($this->getRequest());
+        $this->assertEquals('Front', $result);
+        $result = BcUtil::getRequestPrefix($this->getRequest('/baser/admin'));
+        $this->assertEquals('Admin', $result);
+    }
+
+
+
+    /**
      * test getFrontTemplatePaths
      */
     public function test_getFrontTemplatePaths()

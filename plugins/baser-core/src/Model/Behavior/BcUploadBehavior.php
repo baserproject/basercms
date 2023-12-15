@@ -116,19 +116,23 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * アップロード用のリクエストデータを変換する
+     * Before Marshal
      *
      * @param EventInterface $event
      * @param ArrayObject $data
+     * @param ArrayObject $options
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
+        // アップロード用のリクエストデータを変換する
         $this->BcFileUploader[$this->table()->getAlias()]->setupRequestData($data);
         $this->BcFileUploader[$this->table()->getAlias()]->setupTmpData($data);
         $this->oldEntity[$this->table()->getAlias()][$data['_bc_upload_id']] = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
+        // ファイルアップロード用のフィールドのエンティティ変換を許可する
+        $options['accessibleFields']['_bc_upload_id'] = true;
     }
 
     /**
