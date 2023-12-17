@@ -96,7 +96,7 @@ class PluginsService implements PluginsServiceInterface
     public function getIndex(string $sortMode): array
     {
         $plugins = $this->Plugins->find()
-            ->order(['priority'])
+            ->orderBy(['priority'])
             ->all()
             ->toArray();
         if ($sortMode) {

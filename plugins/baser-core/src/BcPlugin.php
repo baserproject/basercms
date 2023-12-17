@@ -614,7 +614,7 @@ class BcPlugin extends BasePlugin
             foreach($entities as $entity) {
                 $array = $entity->toArray();
                 foreach($fields as $field) {
-                    $array[$field] = FrozenTime::now();
+                    $array[$field] = \Cake\I18n\DateTime::now();
                 }
                 $entity = $table->patchEntity($entity, $array);
                 $table->save($entity);

@@ -150,7 +150,7 @@ class AppTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        \Cake\I18n\DateTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
     }
 
     /**
@@ -323,7 +323,7 @@ class AppTable extends Table
         $result = $this->find()
             ->where($conditions)
             ->select(["id", $options['sortFieldName']])
-            ->order($order)
+            ->orderBy($order)
             ->limit(abs($offset) + 1)
             ->all();
 

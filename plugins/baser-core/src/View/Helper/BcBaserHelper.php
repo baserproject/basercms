@@ -172,7 +172,7 @@ class BcBaserHelper extends Helper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Url', 'Js', 'Session', 'Flash',
         'BaserCore.BcHtml',
         'BaserCore.BcXml',

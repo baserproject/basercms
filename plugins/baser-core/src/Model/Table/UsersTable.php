@@ -280,16 +280,14 @@ class UsersTable extends AppTable
     {
         switch($field) {
             case 'id':
-                $controlSources['id'] = $this->find('list', [
-                    'keyField' => 'id',
-                    'valueField' => 'real_name_1'
-                ]);
+                $controlSources['id'] = $this->find('list',
+                keyField: 'id',
+                valueField: 'real_name_1');
                 break;
             case 'user_group_id':
-                $controlSources['user_group_id'] = $this->UserGroups->find('list', [
-                    'keyField' => 'id',
-                    'valueField' => 'title'
-                ]);
+                $controlSources['user_group_id'] = $this->UserGroups->find('list',
+                keyField: 'id',
+                valueField: 'title');
                 break;
         }
         if (isset($controlSources[$field])) {
@@ -311,10 +309,9 @@ class UsersTable extends AppTable
      */
     public function getUserList($conditions = [])
     {
-        $users = $this->find("all", [
-            'fields' => ['id', 'real_name_1', 'real_name_2', 'nickname'],
-            'conditions' => $conditions,
-        ]);
+        $users = $this->find("all",
+        fields: ['id', 'real_name_1', 'real_name_2', 'nickname'],
+        conditions: $conditions);
         $list = [];
         if ($users) {
             $appView = new BcAdminAppView();

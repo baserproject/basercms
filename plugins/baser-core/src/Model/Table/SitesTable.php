@@ -447,7 +447,7 @@ class SitesTable extends AppTable
                 'alias' => $domain,
             ];
         }
-        $result = $this->find()->where($where)->order(['alias DESC']);
+        $result = $this->find()->where($where)->orderBy(['alias DESC']);
         if ($result->count()) {
             return $result->first();
         } else {

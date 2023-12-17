@@ -44,7 +44,7 @@ class BcFormHelper extends FormHelper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Url',
         'Js',
         'Html',

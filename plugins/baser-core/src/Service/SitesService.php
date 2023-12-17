@@ -348,7 +348,7 @@ class SitesService implements SitesServiceInterface
 		}
 
         /* @var Content $content */
-        $content = $this->Sites->Contents->get($contentId, ['contain' => ['Sites']]);
+        $content = $this->Sites->Contents->get($contentId, contain: ['Sites']);
         $isMainSite = $this->Sites->isMain($content->site->id);
         $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
         $conditions = ['Sites.status' => true];
@@ -368,7 +368,7 @@ class SitesService implements SitesServiceInterface
             }
             $mainSiteContentId = $content->main_site_content_id ?? $content->id;
         }
-        $sites = $this->Sites->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
+        $sites = $this->Sites->find()->select($fields)->where($conditions)->orderBy('main_site_id')->toArray();
         $conditions = [
             'or' => [
                 ['Contents.id' => $mainSiteContentId],

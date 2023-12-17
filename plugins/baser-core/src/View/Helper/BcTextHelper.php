@@ -41,7 +41,7 @@ class BcTextHelper extends TextHelper
 // >>>
 //protected $helpers = ['Html'];
 // ---
-    protected $helpers = ['BaserCore.BcTime', 'BaserCore.BcForm', 'Html', 'BaserCore.BcAdminForm'];
+    protected array $helpers = ['BaserCore.BcTime', 'BaserCore.BcForm', 'Html', 'BaserCore.BcAdminForm'];
 // <<<
 
 // CUSTOMIZE ADD 2014/07/03 ryuring

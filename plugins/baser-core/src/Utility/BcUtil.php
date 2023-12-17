@@ -153,7 +153,7 @@ class BcUtil
                     $userModel = Configure::read("BcPrefixAuth.{$prefix}.userModel");
                     if ($userModel === 'BaserCore.Users') {
                         $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
-                        $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
+                        $user = $userTable->get($user->id, contain: ['UserGroups']);
                     }
                 }
                 return $user;
@@ -418,7 +418,7 @@ class BcUtil
             $prefix = self::getCurrentDbConfig()['prefix'];
             $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
             if (!is_array($sources) || in_array($prefix . strtolower('plugins'), array_map('strtolower', $sources))) {
-                $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
+                $plugins = $pluginsTable->find('all', conditions: ['status' => true], order: 'priority');
                 TableRegistry::getTableLocator()->remove('Plugin');
                 if ($plugins->count()) {
                     foreach($plugins as $key => $plugin) {

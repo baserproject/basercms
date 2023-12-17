@@ -185,7 +185,7 @@ class DblogsService implements DblogsServiceInterface
         return $this->Dblogs
             ->find('all')
             ->contain('Users')
-            ->order(['Dblogs.id' => 'DESC'])
+            ->orderBy(['Dblogs.id' => 'DESC'])
             ->limit($limit)
             ->all();
     }

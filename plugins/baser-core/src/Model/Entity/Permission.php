@@ -32,8 +32,8 @@ use BaserCore\Annotation\Checked;
  * @property bool $auth
  * @property string $method
  * @property bool $status
- * @property FrozenTime|null $modified
- * @property FrozenTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
  */
 class Permission extends Entity
 {
@@ -43,7 +43,7 @@ class Permission extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'no' => true,
         'sort' => true,
         'name' => true,

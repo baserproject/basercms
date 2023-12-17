@@ -29,8 +29,8 @@ use BaserCore\Annotation\Checked;
  * @property bool $status
  * @property bool $db_init
  * @property int $priority
- * @property FrozenTime|null $modified
- * @property FrozenTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
  */
 class Plugin extends Entity
 {
@@ -40,7 +40,7 @@ class Plugin extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'name' => true,
         'title' => true,
         'type' => true,
