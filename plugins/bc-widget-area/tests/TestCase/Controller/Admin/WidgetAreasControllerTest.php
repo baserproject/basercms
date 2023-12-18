@@ -63,8 +63,10 @@ class WidgetAreasControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->get('/baser/admin/bc-widget-area/widget_areas/i-n-d-e-x');
+        $this->get('/baser/admin/bc-widget-area/widget_areas/index');
         $this->assertResponseOk();
+        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
+        $this->assertEquals('ウィジェットエリア一覧', $pageTitle);
     }
 
     /**
