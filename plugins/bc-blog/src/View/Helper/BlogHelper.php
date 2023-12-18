@@ -58,6 +58,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcUploadHelper $BcUpload BcUploadヘルパ
  * @property BcContentsHelper $BcContents BcContentsヘルパ
  * @property Helper\HtmlHelper $Html
+ * @property Helper\UrlHelper $Url
  */
 class BlogHelper extends Helper
 {

@@ -315,7 +315,7 @@ class UsersTable extends AppTable
         $list = [];
         if ($users) {
             $appView = new BcAdminAppView();
-            $appView->loadHelper('BaserCore.BcBaser');
+            $appView->loadHelper('BcBaser', ['className' => 'BaserCore.BcBaser']);
             foreach($users as $user) {
                 $list[$user->id] = $appView->BcBaser->getUserName($user);
             }

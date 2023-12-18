@@ -67,7 +67,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
             /** @var View $view */
             $view = $event->getSubject();
             if (!$view->helpers()->has('Blog')) {
-                $view->loadHelper('BcBlog.Blog');
+                $view->loadHelper('Blog', ['className' => 'BcBlog.Blog']);
             }
         }
     }

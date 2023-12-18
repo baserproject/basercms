@@ -25,6 +25,7 @@ use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
@@ -73,7 +74,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function getViewVarsForIndex(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
+    public function getViewVarsForIndex(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet $posts): array
     {
         return [
             'blogContent' => $blogContent,
