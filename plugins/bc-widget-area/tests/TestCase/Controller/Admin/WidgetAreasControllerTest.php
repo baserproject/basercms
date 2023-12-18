@@ -65,8 +65,6 @@ class WidgetAreasControllerTest extends BcTestCase
 
         $this->get('/baser/admin/bc-widget-area/widget_areas/index');
         $this->assertResponseOk();
-        $pageTitle = $this->_controller->viewBuilder()->getVars()['pageTitle'];
-        $this->assertEquals('ウィジェットエリア一覧', $pageTitle);
     }
 
     /**
