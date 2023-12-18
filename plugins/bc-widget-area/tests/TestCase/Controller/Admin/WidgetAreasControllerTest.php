@@ -63,7 +63,7 @@ class WidgetAreasControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->get('/baser/admin/bc-widget-area/widget_areas/index');
+        $this->get('/baser/admin/bc-widget-area/widget_areas/i-n-d-e-x');
         $this->assertResponseOk();
     }
 
