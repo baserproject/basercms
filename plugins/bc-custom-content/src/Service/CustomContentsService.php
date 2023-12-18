@@ -106,10 +106,10 @@ class CustomContentsService implements CustomContentsServiceInterface
         if ($options['status'] === 'publish') {
             $conditions = $this->CustomContents->Contents->getConditionAllowPublish();
         }
-        return $this->CustomContents->get($id, [
-            'contain' => ['Contents' => ['Sites']],
-            'conditions' => $conditions
-        ]);
+        return $this->CustomContents->get($id,
+            contain:  ['Contents' => ['Sites']],
+            conditions: $conditions
+        );
     }
 
     /**
@@ -232,9 +232,9 @@ class CustomContentsService implements CustomContentsServiceInterface
     {
         $list = ['id' => 'No', 'created' => __d('baser_core', '登録日'), 'modified' => __d('baser_core', '編集日')];
         if(!$tableId) return $list;
-        $table = $this->CustomContents->CustomTables->get($tableId, ['contain' => [
+        $table = $this->CustomContents->CustomTables->get($tableId, contain: [
             'CustomLinks' => ['CustomFields']
-        ]]);
+        ]);
         if($table->custom_links) {
             foreach($table->custom_links as $customLink) {
                 if($customLink->custom_field->status && $customLink->custom_field->type !== 'group') {

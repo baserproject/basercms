@@ -45,6 +45,7 @@ use Migrations\Migrations;
 use PDO;
 use PDOException;
 use Phinx\Db\Adapter\AdapterFactory;
+use ReflectionProperty;
 
 /**
  *
@@ -104,8 +105,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        // CakePHP5で pdo へのアクセスができなくなってしまったため
+        // 仕方なく Reflection を利用
+        $pdoProperty = new ReflectionProperty($db->getDriver(), 'pdo');
+        $pdoProperty->setAccessible(true);
         /* @var PDO $pdo */
-        $pdo = $db->getDriver()->getConnection();
+        $pdo = $pdoProperty->getValue($db->getDriver());
         $adapter->setConnection($pdo);
         $adapter = new CakeAdapter($adapter, $db);
         $this->_adapter = $adapter;

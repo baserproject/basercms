@@ -15,6 +15,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogCommentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\ORM\ResultSet;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -44,7 +45,7 @@ class BlogCommentsAdminService extends BlogCommentsService implements BlogCommen
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(int $blogContentId, $blogPostId, ResultSet $blogComments): array
+    public function getViewVarsForIndex(int $blogContentId, $blogPostId, PaginatedResultSet $blogComments): array
     {
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);

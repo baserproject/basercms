@@ -87,14 +87,6 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
-     * プラグインの初期化テスト
-     */
-    public function testInitialize()
-    {
-        $this->assertNotEmpty($this->PluginsController->RequestHandler);
-    }
-
-    /**
      * beforeFilterテスト
      */
     public function testBeforeFilter()

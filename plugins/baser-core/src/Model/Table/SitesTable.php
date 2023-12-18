@@ -736,8 +736,10 @@ class SitesTable extends AppTable
      * @checked
      * @noTodo
      */
-    public function save(EntityInterface $entity, $options = [])
-    {
+    public function save(
+        EntityInterface $entity,
+        array $options = []
+    ): EntityInterface|false {
         $success = parent::save($entity, $options);
         $request = Router::getRequest();
         if($request) {

@@ -32,7 +32,7 @@ class BcCcDateHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = [
+    public array $helpers = [
         'BaserCore.BcAdminForm' => ['templates' => 'BaserCore.bc_form'],
         'BaserCore.BcTime'
     ];

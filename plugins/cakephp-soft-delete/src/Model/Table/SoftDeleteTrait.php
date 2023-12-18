@@ -45,7 +45,7 @@ trait SoftDeleteTrait
      */
     public function SelectQuery(): SelectQuery
     {
-        return new SelectQuery($this->getConnection(), $this);
+        return new SelectQuery($this);
     }
 
     /**

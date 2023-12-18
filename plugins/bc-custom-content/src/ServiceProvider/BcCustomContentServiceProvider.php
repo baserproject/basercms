@@ -48,7 +48,7 @@ class BcCustomContentServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         CustomContentsServiceInterface::class,
         CustomTablesServiceInterface::class,
         CustomFieldsServiceInterface::class,

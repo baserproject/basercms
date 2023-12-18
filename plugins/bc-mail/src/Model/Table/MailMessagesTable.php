@@ -20,6 +20,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
 use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -606,12 +607,12 @@ class MailMessagesTable extends MailAppTable
      * find
      *
      * @param String $type
-     * @param mixed $query
-     * @return Array
+     * @param mixed $args
+     * @return SelectQuery
      */
-    public function find(string $type = 'all', array $options = []): Query
+    public function find(string $type = 'all', mixed ...$args): SelectQuery
     {
-        return parent::find($type, $options);
+        return parent::find($type, ...$args);
         // TODO ucmitz 以下、未検証
         // テーブルを共用しているため、環境によってはデータ取得に失敗する。
         // その原因のキャッシュメソッドをfalseに設定。

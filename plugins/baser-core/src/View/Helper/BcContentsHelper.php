@@ -201,7 +201,7 @@ class BcContentsHelper extends Helper
                 }
             }
         }
-        $contents = $this->_Contents->find('all', ['withDeleted'])->select(['plugin', 'type', 'title'])->where([$conditions]);
+        $contents = $this->_Contents->find('all', ...['withDeleted'])->select(['plugin', 'type', 'title'])->where([$conditions]);
         $existContents = [];
         foreach($contents as $content) {
             $existContents[$content->plugin . '.' . $content->type] = $content->title;

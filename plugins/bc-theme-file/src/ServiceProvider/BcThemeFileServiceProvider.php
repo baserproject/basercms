@@ -34,7 +34,7 @@ class BcThemeFileServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         ThemeFilesServiceInterface::class,
         ThemeFilesAdminServiceInterface::class,
         ThemeFoldersServiceInterface::class,
