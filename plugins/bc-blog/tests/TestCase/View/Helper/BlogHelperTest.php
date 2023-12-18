@@ -57,7 +57,8 @@ class BlogHelperTest extends BcTestCase
             1, // siteId
             1, // parentId
             'news', // name
-            '/news/' // url
+            '/news/', // url
+            'test title'
         );
         $view = new AppView();
         $blogContent = BlogContentFactory::get(1);
@@ -109,13 +110,15 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * ブログのコンテンツ名を取得する
+     * @throws \Throwable
      */
     public function testGetBlogName()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getBlogName();
-        $expects = 'news';
-        $this->assertEquals($expects, $result, 'ブログのコンテンツ名を正しく取得できません');
+        $this->assertEquals('news', $result);
     }
 
     /**
@@ -123,10 +126,11 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetTitle()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getTitle();
-        $expects = '新着情報';
-        $this->assertEquals($expects, $result, 'タイトルを正しく取得できません');
+        $this->assertEquals('test title', $result);
     }
 
     /**

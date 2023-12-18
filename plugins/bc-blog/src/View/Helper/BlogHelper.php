@@ -229,6 +229,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogName()
     {
@@ -253,6 +254,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitle()
     {
