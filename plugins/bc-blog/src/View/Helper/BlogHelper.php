@@ -267,6 +267,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription()
     {
@@ -291,6 +292,7 @@ class BlogHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function descriptionExists()
     {
