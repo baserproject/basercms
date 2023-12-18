@@ -85,7 +85,7 @@ class BcPageHelperTest extends BcTestCase
             'fields' => $fields,
             'recursive' => 0
         ];
-        $pages = $this->Page->find('all', $options);
+        $pages = $this->Page->find('all', ...$options);
         if (empty($pages)) {
             return false;
         } else {

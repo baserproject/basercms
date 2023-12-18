@@ -517,7 +517,7 @@ class BlogPostsTable extends BlogAppTable
             $options['conditions'] = $this->getConditionAllowPublish();
         }
         // 毎秒抽出条件が違うのでキャッシュしない
-        $datas = $this->find('all', $options);
+        $datas = $this->find('all', ...$options);
         return $datas;
     }
 
@@ -732,7 +732,7 @@ class BlogPostsTable extends BlogAppTable
         }
 
         if (!empty($data['BlogTag']['BlogTag'])) {
-            $tags = $this->BlogTag->find('all', [
+            $tags = $this->BlogTag->find('all', ...[
                 'conditions' => ['BlogTag.id' => $data['BlogTag']['BlogTag']],
                 'recursive' => -1
             ]);

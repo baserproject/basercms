@@ -184,7 +184,7 @@ class UserGroupsTable extends AppTable
         if (!empty($this->data['UserGroup']['id'])) {
             $id = $this->data['UserGroup']['id'];
             $this->User->unBindModel(['belongsTo' => ['UserGroup']]);
-            $datas = $this->User->find('all', ['conditions' => ['User.user_group_id' => $id]]);
+            $datas = $this->User->find('all', ...['conditions' => ['User.user_group_id' => $id]]);
             if ($datas) {
                 foreach($datas as $data) {
                     $data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');

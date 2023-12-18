@@ -365,7 +365,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if ($blogContentId) {
             $categoryConditions['BlogCategories.blog_content_id'] = $blogContentId;
         } elseif ($contentUrl) {
-            $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['Contents.url' => $contentUrl])->first();
+            $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ...['Contents.url' => $contentUrl])->first();
             $categoryConditions['BlogCategories.blog_content_id'] = $entityIdData->entity_id;
         } elseif (!$force) {
             trigger_error(__d('baser_core', 'blog_content_id を指定してください。'), E_USER_WARNING);

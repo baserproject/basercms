@@ -221,7 +221,7 @@ class BlogPostsServiceTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
         set_error_handler(function ($no, $str, $file, $line, $context) {
         });
-        $result = $this->BlogPost->find('all', $options);
+        $result = $this->BlogPost->find('all', ...$options);
         if ($type == 'count') {
             $this->assertEquals($expected, count($result));
         } elseif ($type == 'name') {

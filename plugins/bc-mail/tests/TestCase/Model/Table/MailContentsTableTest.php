@@ -270,7 +270,7 @@ class MailContentTest extends BaserTestCase
 
         // SearchIndexチェック
         $this->SearchIndex = ClassRegistry::init('SearchIndex');
-        $result = $this->SearchIndex->find('all', [
+        $result = $this->SearchIndex->find('all', ...[
             'conditions' => ['type' => 'メール', 'model_id' => 1]
         ]);
         $this->assertEmpty($result, '関連したSearchIndexを削除できません');

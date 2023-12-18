@@ -588,7 +588,7 @@ class MailMessagesTable extends MailAppTable
 
         // メール受信テーブルの作成
         $MailContent = ClassRegistry::init('BcMail.MailContent');
-        $contents = $MailContent->find('all', ['recursive' => -1]);
+        $contents = $MailContent->find('all', ...['recursive' => -1]);
 
         $result = true;
         foreach($contents as $content) {

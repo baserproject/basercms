@@ -264,7 +264,7 @@ class ContentsTable extends AppTable
         // if ($parents) {
         //     $baseUrl = '/' . implode('/', $parents) . '/';
         // }
-        // $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
+        // $sites = $this->Sites->find('all', ...['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
         // // URLを取得
         // $urlAry = [];
         // foreach($sites as $site) {

@@ -108,7 +108,7 @@ class BcContentsBehavior extends Behavior
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (empty($entity->content)) {
-            $entity->content = $this->Contents->find('all', ['withDeleted'])
+            $entity->content = $this->Contents->find('all', ...['withDeleted'])
                 ->where(['entity_id' => $entity->id])
                 ->first();
         }

@@ -1856,7 +1856,7 @@ class BlogHelper extends Helper
             $BlogPost->getConditionAllowPublish()
         );
 
-        $postCountsData = $BlogPost->find('all', [
+        $postCountsData = $BlogPost->find('all', ...[
             'fields' => [
                 'BlogPost.blog_content_id',
                 'COUNT(BlogPost.id) as post_count',
