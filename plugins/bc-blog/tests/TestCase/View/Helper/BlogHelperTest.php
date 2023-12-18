@@ -121,11 +121,32 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetDescription()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getDescription();
-        $expects = 'baserCMS inc. [デモ] の最新の情報をお届けします。';
-        $this->assertEquals($expects, $result, 'ブログの説明文を正しく取得できません');
+        $this->assertEquals('ディスクリプション', $result);
     }
+
+    /**
+     * test descriptionExists
+     */
+    public function test_descriptionExists()
+    {
+        //準備
+        $this->Blog->setContent(1);
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
+            ->treeNode(2, 1, 1, 'name', '/test', 2, true)->persist();
+        BlogContentFactory::make(['id' => 2, 'template' => 'homePage2'])->persist();
+        //正常系実行: true
+        $result = $this->Blog->descriptionExists();
+        $this->assertTrue($result);
+        //正常系実行: false
+        $this->Blog->setContent(2);
+        $result = $this->Blog->descriptionExists();
+        $this->assertFalse($result);
+    }
+
 
     /**
      * 記事タイトルを取得する
