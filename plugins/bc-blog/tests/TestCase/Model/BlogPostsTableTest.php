@@ -388,16 +388,16 @@ class BlogPostsTableTest extends BcTestCase
             [null, null, false, false],
             [null, null, true, true],
 
-            [null, new FrozenTime('+1 hour'), true, true],
-            [new FrozenTime('-1 hour'), null, true, true],
-            [null, new FrozenTime('-1 hour'), true, false],
-            [new FrozenTime('+1 hour'), null, true, false],
+            [null, new \Cake\I18n\DateTime('+1 hour'), true, true],
+            [new \Cake\I18n\DateTime('-1 hour'), null, true, true],
+            [null, new \Cake\I18n\DateTime('-1 hour'), true, false],
+            [new \Cake\I18n\DateTime('+1 hour'), null, true, false],
 
-            [new FrozenTime('-1 hour'), new FrozenTime('+1 hour'), true, true],
-            [new FrozenTime('-1 hour'), new FrozenTime('+1 hour'), false, false],
-            [new FrozenTime('-1 hour'), new FrozenTime('-1 hour'), true, false],
-            [new FrozenTime('+1 hour'), new FrozenTime('-1 hour'), true, false],
-            [new FrozenTime('+1 hour'), new FrozenTime('+2 hour'), true, false],
+            [new \Cake\I18n\DateTime('-1 hour'), new \Cake\I18n\DateTime('+1 hour'), true, true],
+            [new \Cake\I18n\DateTime('-1 hour'), new \Cake\I18n\DateTime('+1 hour'), false, false],
+            [new \Cake\I18n\DateTime('-1 hour'), new \Cake\I18n\DateTime('-1 hour'), true, false],
+            [new \Cake\I18n\DateTime('+1 hour'), new \Cake\I18n\DateTime('-1 hour'), true, false],
+            [new \Cake\I18n\DateTime('+1 hour'), new \Cake\I18n\DateTime('+2 hour'), true, false],
         ];
     }
 

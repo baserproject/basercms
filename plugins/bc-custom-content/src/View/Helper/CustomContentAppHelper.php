@@ -44,7 +44,7 @@ class CustomContentAppHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser'];
+    public array $helpers = ['BaserCore.BcBaser'];
 
     /**
      * Constructor

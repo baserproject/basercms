@@ -300,7 +300,7 @@ class BlogPostsTable extends BlogAppTable
         $posts = $this->find()
             ->contain(['BlogCategories'])
             ->where($conditions)
-            ->order(['BlogPosts.posted DESC'])
+            ->orderBy(['BlogPosts.posted DESC'])
             ->all();
 
         $postedDates = [];
@@ -372,7 +372,7 @@ class BlogPostsTable extends BlogAppTable
             'viewCount' => false
         ], $options);
         $users = $this->Users->find()
-            ->order(['Users.id'])
+            ->orderBy(['Users.id'])
             ->select([
                 'Users.id',
                 'Users.name',
@@ -658,7 +658,7 @@ class BlogPostsTable extends BlogAppTable
         $data->title .= '_copy';
         $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
         $data->status = false;
-        $data->posted = FrozenTime::now();
+        $data->posted = \Cake\I18n\DateTime::now();
         $data->id = null;
         $data->created = null;
         $data->modified = null;

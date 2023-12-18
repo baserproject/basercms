@@ -264,7 +264,7 @@ class BlogCategoriesTable extends BlogAppTable
             ->contain(['BlogPosts' => ['BlogContents' => ['Contents']]])
             ->where($conditions)
             ->select($fields)
-            ->order($options['order']);
+            ->orderBy($options['order']);
         if ($distinct) {
             $query->distinct($distinct);
         }
@@ -275,7 +275,7 @@ class BlogCategoriesTable extends BlogAppTable
             foreach ($entities as $entity) {
                 // 表示件数
                 if ($viewCount) {
-                    $childrenIds = $this->find('list', ['keyField' => 'id', 'valueField' => 'id'])
+                    $childrenIds = $this->find('list', keyField: 'id', valueField: 'id')
                         ->where([
                             ['BlogCategories.lft > ' => $entity->lft],
                             ['BlogCategories.rght < ' => $entity->rght]

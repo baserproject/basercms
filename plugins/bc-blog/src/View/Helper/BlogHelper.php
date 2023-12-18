@@ -73,7 +73,7 @@ class BlogHelper extends Helper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Html',
         'Url',
         'BaserCore.BcTime',
@@ -689,7 +689,7 @@ class BlogHelper extends Helper
         ], $options);
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
         $blogCategory = $blogCategoriesTable->get($blogCategoryId);
-        $categoryPath = $blogCategoriesTable->find('path', ['for' => $blogCategoryId]);
+        $categoryPath = $blogCategoriesTable->find('path', for: $blogCategoryId);
         $blogContentId = $blogCategory->blog_content_id;
         $this->setContent($blogContentId);
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');

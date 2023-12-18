@@ -207,7 +207,7 @@ class BlogFrontService implements BlogFrontServiceInterface
     public function getCategoryCrumbs(string $baseUrl, int $categoryId, $isCategoryPage = true): array
     {
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
-        $query = $blogCategoriesTable->find('path', ['for' => $categoryId])->select(['name', 'title']);
+        $query = $blogCategoriesTable->find('path', for: $categoryId)->select(['name', 'title']);
         $count = $query->count();
         $crumbs = [];
         if ($count <= 1 && $isCategoryPage) return $crumbs;

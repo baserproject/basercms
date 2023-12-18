@@ -812,7 +812,7 @@ class CustomEntriesServiceTest extends BcTestCase
         //正常系実行: 将来の開始日を指定する
         $entity = new Entity([
             'status' => true,
-            'publish_begin' => FrozenTime::tomorrow(),
+            'publish_begin' => \Cake\I18n\DateTime::tomorrow(),
             'publish_end' => '',
         ]);
         $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
@@ -821,7 +821,7 @@ class CustomEntriesServiceTest extends BcTestCase
         $entity = new Entity([
             'status' => true,
             'publish_begin' => '',
-            'publish_end' => FrozenTime::yesterday(),
+            'publish_end' => \Cake\I18n\DateTime::yesterday(),
         ]);
         $this->assertFalse($this->CustomEntriesService->isAllowPublish($entity));
 

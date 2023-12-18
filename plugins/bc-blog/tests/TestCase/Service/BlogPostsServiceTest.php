@@ -607,7 +607,7 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals("1", $result->user_id);
 
         //postedが生成できるか確認
-        $this->assertEquals(FrozenTime::now()->i18nFormat('yyyy-MM-dd'), $result->posted->i18nFormat('yyyy-MM-dd'));
+        $this->assertEquals(\Cake\I18n\DateTime::now()->i18nFormat('yyyy-MM-dd'), $result->posted->i18nFormat('yyyy-MM-dd'));
 
         //statusが生成できるか確認
         $this->assertEquals(false, $result->status);

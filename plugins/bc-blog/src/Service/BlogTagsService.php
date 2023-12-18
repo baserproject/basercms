@@ -122,7 +122,7 @@ class BlogTagsService implements BlogTagsServiceInterface
     {
         $order = ["BlogTags.{$params['sort']} {$params['direction']}"];
         if (!empty($params['order'])) $order = array_merge($order, $params['order']);
-        return $query->order($order);
+        return $query->orderBy($order);
     }
 
     /**

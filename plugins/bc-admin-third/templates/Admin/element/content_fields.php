@@ -128,7 +128,7 @@ $editable = $this->BcContents->isEditable($content);
           <?php if (!$content->site_root): ?>
             <?php // サイトルートの場合はコンテンツ名を表示しない ?>
             <?php echo h($contentsName) ?>
-          <?php endif ?>
+<?php endif ?>
           <?php echo $this->BcAdminForm->hidden("content.name") ?>
         <?php endif ?>
         <?php echo $this->BcAdminForm->error("content.name") ?>

@@ -21,8 +21,8 @@ use BaserCore\Annotation\Checked;
  * Class ContentLink
  * @property int $id
  * @property string $url
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class ContentLink extends EntityAlias
 {
@@ -32,7 +32,7 @@ class ContentLink extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

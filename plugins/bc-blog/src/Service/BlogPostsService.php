@@ -510,7 +510,7 @@ class BlogPostsService implements BlogPostsServiceInterface
     {
         return $this->BlogPosts->newEntity([
             'user_id' => $userId,
-            'posted' => FrozenTime::now(),
+            'posted' => \Cake\I18n\DateTime::now(),
             'status' => false,
             'blog_content_id' => $blogContentId
         ]);

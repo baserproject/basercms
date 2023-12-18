@@ -241,8 +241,8 @@ class UploadFilesServiceTest extends BcTestCase
                 'type' => 'etc',
                 'size' => 100,
             ],
-            'publish_begin' => FrozenTime::yesterday(),
-            'publish_end' => FrozenTime::tomorrow(),
+            'publish_begin' => \Cake\I18n\DateTime::yesterday(),
+            'publish_end' => \Cake\I18n\DateTime::tomorrow(),
         ];
         //正常系実行
         $result = $this->UploaderFilesService->create($postData);

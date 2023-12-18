@@ -120,11 +120,10 @@ class BlogTagsTable extends BlogAppTable
      */
     public function getByName($name)
     {
-        return $this->find('first', [
-            'conditions' => ['BlogTag.name' => $name],
-            'recursive' => -1,
-            'callbacks' => false,
-        ]);
+        return $this->find('first',
+        conditions: ['BlogTag.name' => $name],
+        recursive: -1,
+        callbacks: false);
     }
 
     /**

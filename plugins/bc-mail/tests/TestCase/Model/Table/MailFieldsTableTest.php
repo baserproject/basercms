@@ -20,7 +20,7 @@ use BcMail\Model\Table\MailFieldsTable;
 class MailFieldsTableTest extends BcTestCase
 {
 
-    public $fixtures = [
+    public array $fixtures = [
 
     ];
 
