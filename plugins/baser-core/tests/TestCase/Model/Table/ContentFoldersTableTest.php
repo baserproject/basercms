@@ -111,7 +111,7 @@ class ContentFoldersTableTest extends BcTestCase
             'Service\SearchIndexesService\PagesReconstruct',
             'Service\SearchIndexesService\ContentFoldersReconstruct',
         );
-        $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
+        $contentFolder = $this->ContentFolders->get(1, contain: ['Contents']);
         $this->SearchIndexes->deleteAll([]);
         // $this->Pages->delete($page);
         $this->ContentFolders->dispatchEvent('Model.afterSave', ['entity' => $contentFolder, 'options' => new ArrayObject(['reconstructSearchIndices' => true])]);

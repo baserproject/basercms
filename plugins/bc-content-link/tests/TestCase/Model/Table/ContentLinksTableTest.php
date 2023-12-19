@@ -135,7 +135,7 @@ class ContentLinksTableTest extends BcTestCase
         $this->assertEquals(2, $rs->id);
 
         //DBに存在するか確認
-        $copiedContentLink = $this->ContentLinks->get(2, ['contain' => ['Contents']]);
+        $copiedContentLink = $this->ContentLinks->get(2, contain: ['Contents']);
         //コピー後の url の値の確認
         $this->assertEquals('/new_title', $copiedContentLink->content->url);
     }

@@ -98,9 +98,10 @@ class BlogPostsService implements BlogPostsServiceInterface
             $conditions = $this->BlogPosts->getConditionAllowPublish();
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
         }
-        $entity = $this->BlogPosts->get($id, [
-            'conditions' => $conditions,
-            'contain' => $options['contain']]);
+        $entity = $this->BlogPosts->get($id,
+            conditions: $conditions,
+            contain: $options['contain']
+        );
         if ($options['draft'] === false) {
             unset($entity->content_draft);
             unset($entity->detail_draft);

@@ -578,14 +578,14 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
         BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
 
-        $blogPost = $this->BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $blogPost = $this->BlogPostsService->BlogPosts->get(1, contain: ['BlogTags']);
         $result = $this->BlogPostsService->getRelatedPosts($blogPost)->toArray();
         //戻り値を確認
         $this->assertEquals(1, $result[0]["blog_content_id"]);
         $this->assertEquals(2, $result[0]["id"]);
 
         //blog_tagsがNULLを確認すること
-        $blogPost = $this->BlogPostsService->BlogPosts->get(3, ['contain' => ['BlogTags']]);
+        $blogPost = $this->BlogPostsService->BlogPosts->get(3, contain: ['BlogTags']);
         $result = $this->BlogPostsService->getRelatedPosts($blogPost);
         //結果はnullになる
         $this->assertCount(0, $result);

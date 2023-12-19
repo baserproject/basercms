@@ -75,16 +75,16 @@ class UsersService implements UsersServiceInterface
      * ユーザーを取得する
      *
      * @param int $id
-     * @return User
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get($id): User
+    public function get($id): EntityInterface
     {
-        return $this->Users->get($id, [
-            'contain' => ['UserGroups'],
-        ]);
+        return $this->Users->get($id,
+            contain: ['UserGroups'],
+        );
     }
 
     /**

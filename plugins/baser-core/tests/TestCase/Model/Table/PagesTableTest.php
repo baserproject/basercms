@@ -188,7 +188,7 @@ class PagesTableTest extends BcTestCase
         $this->loadFixtureScenario(ContentsScenario::class);
         $this->loginAdmin($this->getRequest());
         $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
-        $page = $this->Pages->get($result->id, ['contain' => ['Contents' => ['Sites']]]);
+        $page = $this->Pages->get($result->id, contain: ['Contents' => ['Sites']]);
         $this->assertStringContainsString("_2", $page->content->name);
         $this->assertEquals("hoge1", $page->content->title);
         $this->assertEquals(10, $page->content->author_id);

@@ -40,7 +40,7 @@ class UserTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, ['contain' => 'UserGroups']);
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
     }
 
     /**

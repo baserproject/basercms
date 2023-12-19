@@ -69,10 +69,10 @@ class MailFieldsService implements MailFieldsServiceInterface
             $conditions['use_field'] = true;
         }
 
-        return $this->MailFields->get($id, [
-            'contain' => ['MailContents' => ['Contents']],
-            'conditions' => $conditions
-        ]);
+        return $this->MailFields->get($id,
+            contain: ['MailContents' => ['Contents']],
+            conditions: $conditions
+        );
     }
 
     /**

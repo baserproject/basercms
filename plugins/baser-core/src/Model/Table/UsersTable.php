@@ -31,14 +31,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * Class UsersTable
  * @property BelongsTo $UserGroups
- * @method User get($primaryKey, $options = [])
- * @method User newEntity($data = null, array $options = [])
- * @method User[] newEntities(array $data, array $options = [])
- * @method User|bool save(EntityInterface $entity, $options = [])
- * @method User patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method User[] patchEntities($entities, array $data, array $options = [])
- * @method User findOrCreate($search, callable $callback = null, $options = [])
- * @mixin TimestampBehavior
  */
 class UsersTable extends AppTable
 {

@@ -61,10 +61,10 @@ class ContentLinksService implements ContentLinksServiceInterface
         if($options['status'] === 'publish') {
             $conditions = $this->ContentLinks->Contents->getConditionAllowPublish();
         }
-        return $this->ContentLinks->get($id, [
-            'contain' => $options['contain'],
-            'conditions' => $conditions
-        ]);
+        return $this->ContentLinks->get($id,
+            contain: $options['contain'],
+            conditions: $conditions
+        );
     }
 
     /**
