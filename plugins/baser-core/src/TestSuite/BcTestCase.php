@@ -135,40 +135,6 @@ class BcTestCase extends TestCase
     }
 
     /**
-     * setup FixtureManager
-     *
-     * CakePHP4系より、FixtureManagerが非推奨となったが、$this->autoFixtures = false を利用した動的フィクスチャーを
-     * 利用するために FixtureManager が必要となる。phpunit.xml.dist からは、FixtureManager の定義を除外し、
-     * 基本的に利用しない方針だが、動的フィクスチャーが必要なテストの場合にだけ利用する。
-     * 動的フィクスチャーを FixtureFactory に移管後、廃止とする
-     * @deprecated 5.1.0
-     */
-    public function setUpFixtureManager()
-    {
-        $this->FixtureManager = new FixtureManager();
-        $this->FixtureInjector = new FixtureInjector($this->FixtureManager);
-        $this->FixtureInjector->startTest($this);
-    }
-
-    /**
-     * tear down FixtureManager
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function tearDownFixtureManager()
-    {
-        $this->FixtureInjector->endTest($this, 0);
-        $fixtures = $this->FixtureManager->loaded();
-        foreach($fixtures as $fixture) {
-            $fixture->truncate(ConnectionManager::get($fixture->connection()));
-        }
-        self::$fixtureManager = null;
-    }
-
-    /**
      * Set Up
      * @checked
      * @noTodo
@@ -179,9 +145,6 @@ class BcTestCase extends TestCase
         // ユニットテストの全体テストでメソッド名を表示する際に利用
         if(filter_var(env('SHOW_TEST_METHOD', false), FILTER_VALIDATE_BOOLEAN)) {
             $this->classMethod();
-        }
-        if (!$this->autoFixtures) {
-            $this->setUpFixtureManager();
         }
         parent::setUp();
         $this->Application = new Application(CONFIG);
@@ -214,7 +177,7 @@ class BcTestCase extends TestCase
      */
     public function classMethod()
     {
-        $test = $this->providedTests[0];
+        $test = $this->provides()[0];
         echo "\n" . $test->getTarget() . ' ';
         ob_end_flush();
         ob_start();
@@ -228,9 +191,6 @@ class BcTestCase extends TestCase
      */
     public function tearDown(): void
     {
-        if (!$this->autoFixtures) {
-            $this->tearDownFixtureManager();
-        }
         BcContainer::clear();
         $_FILES = [];
         parent::tearDown();
