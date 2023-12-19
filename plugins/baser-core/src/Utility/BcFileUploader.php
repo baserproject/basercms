@@ -204,9 +204,9 @@ class BcFileUploader
                     'type' => $uploadFile->getClientMediaType(),
                     'error' => $uploadFile->getError(),
                     'tmp_name' => ($uploadFile->getError() === UPLOAD_ERR_OK)? $uploadFile->getStream()->getMetadata('uri') : '',
-                    'uploadable' => $this->isUploadable($setting['type'], $uploadFile->getClientMediaType(), $file),
                     'ext' => BcUtil::decodeContent($uploadFile->getClientMediaType(), $uploadFile->getClientFilename())
                 ];
+                $file['uploadable'] = $this->isUploadable($setting['type'], $uploadFile->getClientMediaType(), $file);
                 if (isset($file['error']) && (int)$file['error'] === UPLOAD_ERR_NO_FILE) {
                     if (isset($data[$name . '_'])) {
                         // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す

@@ -422,9 +422,7 @@ class AppTable extends Table
         if (!isset($this->tmpEvents[$eventKey])) return;
         $eventManager = $this->getEventManager();
         foreach($this->tmpEvents[$eventKey] as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on($eventKey, [], $listener['callable']);
-            }
+            $eventManager->on($eventKey, [], $listener['callable']);
         }
         unset($this->tmpEvents[$eventKey]);
     }

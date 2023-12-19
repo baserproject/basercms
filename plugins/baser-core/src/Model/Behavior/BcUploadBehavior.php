@@ -185,14 +185,10 @@ class BcUploadBehavior extends Behavior
         $eventManager->off('Model.afterSave');
         $this->table()->save($entity, ['validate' => false]);
         foreach($beforeSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.beforeSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.beforeSave', [], $listener['callable']);
         }
         foreach($afterSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.afterSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.afterSave', [], $listener['callable']);
         }
     }
 
