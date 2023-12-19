@@ -26,7 +26,7 @@ class BlogTagsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         BlogTagFactory::make([[
             'id' => 1,

@@ -30,7 +30,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         MailFieldsFactory::make([
             'id' => 1,

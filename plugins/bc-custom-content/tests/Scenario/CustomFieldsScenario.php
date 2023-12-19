@@ -26,7 +26,7 @@ class CustomFieldsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         CustomFieldFactory::make([
             'id' => 1,

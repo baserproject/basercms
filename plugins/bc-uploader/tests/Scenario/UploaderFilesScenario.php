@@ -29,7 +29,7 @@ class UploaderFilesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         //アップローダープラグインデータを生成
         UploaderConfigFactory::make(['name' => 'large_width', 'value' => 500])->persist();

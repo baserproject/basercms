@@ -24,7 +24,7 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         EditorTemplateFactory::make([
             'id' => '11',

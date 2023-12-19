@@ -29,7 +29,7 @@ class BlogCommentsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         BlogCommentFactory::make([[
             'id' => 1,

@@ -25,7 +25,7 @@ class CustomTablesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         CustomTableFactory::make([
             'id' => 3,

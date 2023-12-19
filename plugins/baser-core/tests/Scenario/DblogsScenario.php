@@ -24,7 +24,7 @@ class DblogsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         DblogFactory::make([
             'id' => 1,

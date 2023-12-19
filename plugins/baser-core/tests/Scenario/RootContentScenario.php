@@ -31,7 +31,7 @@ class RootContentScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $id = $args[0];
         $siteId = $args[1];

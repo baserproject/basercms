@@ -32,7 +32,7 @@ class SearchIndexesServiceScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(SmallSetContentsScenario::class);

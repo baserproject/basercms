@@ -29,7 +29,7 @@ class UserGroupsPaginationsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         for($i = 1; $i <= 21; $i++) {
             UserFactory::make(

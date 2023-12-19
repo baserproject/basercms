@@ -23,7 +23,7 @@ class LoginStoresScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         LoginStoreFactory::make([
             'id' => 1,

@@ -29,7 +29,7 @@ class WidgetAreasScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         WidgetAreaFactory::make([
             'id' => 1,

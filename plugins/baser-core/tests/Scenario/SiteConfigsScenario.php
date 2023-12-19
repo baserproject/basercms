@@ -24,7 +24,7 @@ class SiteConfigsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SiteConfigFactory::make([
                 'id' => '1',

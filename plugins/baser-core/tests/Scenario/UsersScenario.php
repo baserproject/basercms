@@ -29,7 +29,7 @@ class UsersScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         UserFactory::make(
         [

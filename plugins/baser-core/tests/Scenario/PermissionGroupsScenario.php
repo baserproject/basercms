@@ -28,7 +28,7 @@ class PermissionGroupsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         PermissionGroupFactory::make([
             'id' => 1,

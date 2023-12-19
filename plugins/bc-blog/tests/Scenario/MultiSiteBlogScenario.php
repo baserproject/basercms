@@ -46,7 +46,7 @@ class MultiSiteBlogScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();

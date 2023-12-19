@@ -24,7 +24,7 @@ class UsersUserGroupsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         UsersUserGroupFactory::make([
             'id' => 1,

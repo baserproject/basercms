@@ -27,7 +27,7 @@ class SearchIndexesSearchScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SearchIndexFactory::make([
             'id' => 1,

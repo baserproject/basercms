@@ -24,7 +24,7 @@ class PluginsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         PluginFactory::make([
             'id' => 1,

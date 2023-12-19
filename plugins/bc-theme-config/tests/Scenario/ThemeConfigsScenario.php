@@ -24,7 +24,7 @@ class ThemeConfigsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ThemeConfigFactory::make(['name' => 'color_main', 'value' => '001800'])->persist();
         ThemeConfigFactory::make(['name' => 'color_sub', 'value' => '001800'])->persist();

@@ -24,7 +24,7 @@ class ContentFoldersScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ContentFolderFactory::make(
             [

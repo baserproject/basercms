@@ -25,7 +25,7 @@ class SiteBcContentsRouteScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SiteFactory::make([
             'id' => '1',
