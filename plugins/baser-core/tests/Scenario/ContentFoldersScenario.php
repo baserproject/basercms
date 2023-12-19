@@ -107,6 +107,7 @@ class ContentFoldersScenario implements FixtureScenarioInterface
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ])->persist();
+        return null;
     }
 
 }

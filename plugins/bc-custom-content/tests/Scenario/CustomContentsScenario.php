@@ -100,5 +100,6 @@ class CustomContentsScenario implements FixtureScenarioInterface
             'layout_template' => 'default',
             'status' => true
         ])->persist();
+        return null;
     }
 }

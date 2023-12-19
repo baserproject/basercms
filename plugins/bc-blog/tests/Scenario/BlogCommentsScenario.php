@@ -70,6 +70,7 @@ class BlogCommentsScenario implements FixtureScenarioInterface
             'created' => '2015-08-10 18:57:47',
             'modified' => NULL,
         ]])->persist();
+        return null;
     }
 
 }

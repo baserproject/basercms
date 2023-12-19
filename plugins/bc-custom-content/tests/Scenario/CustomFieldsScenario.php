@@ -140,5 +140,6 @@ class CustomFieldsScenario implements FixtureScenarioInterface
             'status' => 1,
             'required' => 1,
         ])->persist();
+        return null;
     }
 }

@@ -71,6 +71,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
             ])->persist();
+        return null;
     }
 
 }

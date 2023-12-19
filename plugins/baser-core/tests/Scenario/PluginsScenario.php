@@ -81,6 +81,7 @@ class PluginsScenario implements FixtureScenarioInterface
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
         ])->persist();
+        return null;
     }
 
 }

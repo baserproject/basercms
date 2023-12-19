@@ -43,6 +43,7 @@ class UserGroupsPaginationsScenario implements FixtureScenarioInterface
                 ]
             )->persist();
         }
+        return null;
     }
 
 }

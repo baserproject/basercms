@@ -93,6 +93,7 @@ class PermissionGroupsScenario implements FixtureScenarioInterface
             'method' => 'ALL',
             'modified' => null,
         ])->persist();
+        return null;
     }
 
 }

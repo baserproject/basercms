@@ -67,5 +67,6 @@ class FavoritesScenario implements FixtureScenarioInterface
             'url' => 'javascript:credit();',
             'sort' => 6,
         ])->persist();
+        return null;
     }
 }

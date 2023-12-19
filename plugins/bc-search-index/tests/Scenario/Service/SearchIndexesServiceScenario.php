@@ -38,6 +38,7 @@ class SearchIndexesServiceScenario implements FixtureScenarioInterface
         $this->loadFixtureScenario(SmallSetContentsScenario::class);
         SearchIndexFactory::make(1)->persist();
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        return null;
     }
 
 }

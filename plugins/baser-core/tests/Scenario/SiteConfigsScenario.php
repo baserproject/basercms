@@ -263,6 +263,7 @@ q {}',
                 'modified' => '2021-01-27 12:58:25'
             ]
         )->persist();
+        return null;
     }
 
 }

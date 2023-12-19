@@ -73,6 +73,7 @@ class SmallSetContentFoldersScenario implements FixtureScenarioInterface
         ContentFolderFactory::make(['id' => 1, 'folder_template' => 'default'])->persist();
         ContentFolderFactory::make(['id' => 2, 'folder_template' => 'test 1'])->persist();
         ContentFolderFactory::make(['id' => 3])->persist();
+        return null;
     }
 
 }

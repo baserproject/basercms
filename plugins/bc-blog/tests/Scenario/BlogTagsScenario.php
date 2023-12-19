@@ -46,6 +46,7 @@ class BlogTagsScenario implements FixtureScenarioInterface
             'created' => '2022-08-10 18:57:47',
             'modified' => NULL,
         ]])->persist();
+        return null;
     }
 
 }

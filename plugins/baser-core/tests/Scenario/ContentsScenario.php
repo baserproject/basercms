@@ -876,6 +876,7 @@ class ContentsScenario implements FixtureScenarioInterface
                 'modified' => '2016-08-12 00:59:06',
             ]
         )->persist();
+        return null;
     }
 
 }

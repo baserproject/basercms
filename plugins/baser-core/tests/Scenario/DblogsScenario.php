@@ -41,6 +41,7 @@ class DblogsScenario implements FixtureScenarioInterface
             'message' => 'dblogs test message3',
             'user_id' => '3',
         ])->persist();
+        return null;
     }
 
 }

@@ -70,6 +70,7 @@ class UsersScenario implements FixtureScenarioInterface
             'modified' => '2017-05-03 10:57:07',
             'status' => false
         ] )->persist();
+        return null;
     }
 
 }

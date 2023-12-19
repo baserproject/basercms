@@ -1538,6 +1538,7 @@ class ContentBcContentsRouteScenario implements FixtureScenarioInterface
             'created' => '2016-11-04 19:44:33',
             'modified' => '2017-01-22 17:37:47'
         ])->persist();
+        return null;
     }
 
 }

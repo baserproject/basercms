@@ -31,6 +31,7 @@ class UploaderCategoriesScenario implements FixtureScenarioInterface
         UploaderCategoryFactory::make(['id' => 1, 'name' => 'blog'])->persist();
         UploaderCategoryFactory::make(['id' => 2, 'name' => 'contact'])->persist();
         UploaderCategoryFactory::make(['id' => 3, 'name' => 'service'])->persist();
+        return null;
     }
 
 }

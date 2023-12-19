@@ -41,6 +41,7 @@ class RootContentScenario implements FixtureScenarioInterface
         ContentFactory::make(['plugin' => 'BaserCore', 'type' => 'ContentFolder'])
             ->treeNode($id, $siteId, $parentId, $name, $url, $id, true)->persist();
         ContentFolderFactory::make(['id' => $id])->persist();
+        return null;
     }
 
 }

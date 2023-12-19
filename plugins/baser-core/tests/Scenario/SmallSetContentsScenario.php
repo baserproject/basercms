@@ -121,6 +121,7 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
         PageFactory::make(['id' => 1])->persist();
         PageFactory::make(['id' => 2])->persist();
         PageFactory::make(['id' => 3])->persist();
+        return null;
     }
 
 }

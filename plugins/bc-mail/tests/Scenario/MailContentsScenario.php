@@ -102,5 +102,6 @@ class MailContentsScenario implements FixtureScenarioInterface
             'status' => true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
+        return null;
     }
 }

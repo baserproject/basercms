@@ -52,6 +52,7 @@ class ContentLinksServiceScenario implements FixtureScenarioInterface
             'id' => 1,
             'url' => '/',
         ])->persist();
+        return null;
     }
 
 }

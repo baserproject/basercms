@@ -88,5 +88,6 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ])->persist();
+        return null;
     }
 }

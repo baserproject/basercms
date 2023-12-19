@@ -46,6 +46,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'created' => '2015-01-27 12:56:53',
             'modified' => null
         ])->persist();
+        return null;
     }
 
 }

@@ -92,6 +92,7 @@ class MultiSiteScenario implements FixtureScenarioInterface
         );
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $contentsTable->recover();
+        return null;
     }
 
 }

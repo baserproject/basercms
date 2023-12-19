@@ -56,6 +56,7 @@ class UserGroupsScenario implements FixtureScenarioInterface
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ])->persist();
+        return null;
     }
 
 }

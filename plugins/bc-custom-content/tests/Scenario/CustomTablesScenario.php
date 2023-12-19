@@ -48,5 +48,6 @@ class CustomTablesScenario implements FixtureScenarioInterface
             'created' => null,
             'modified' => null
         ])->persist();
+        return null;
     }
 }

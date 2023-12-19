@@ -158,6 +158,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'プレスリリース',
             'status' => 1,
         ])->persist();
+        return null;
     }
 
 }

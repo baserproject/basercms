@@ -35,7 +35,7 @@ class PrefixOrmResolver extends OrmResolver implements ResolverInterface
      * @checked
      * @noTodo
      */
-    public function find(array $conditions, $type = self::TYPE_AND)
+    public function find(array $conditions, $type = self::TYPE_AND): \ArrayAccess|array|null
     {
         $prefix = '';
         foreach($conditions as $field => $value) {

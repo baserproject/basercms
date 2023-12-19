@@ -165,6 +165,7 @@ class SitesScenario implements FixtureScenarioInterface
                 'created' => '2021-07-01 21:20:15',
                 'modified' => null
             ])->persist();
+        return null;
     }
 
 }

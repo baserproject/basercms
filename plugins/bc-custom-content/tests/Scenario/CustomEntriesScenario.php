@@ -435,5 +435,6 @@ class CustomEntriesScenario implements FixtureScenarioInterface
 エンジニアが開発に集中できるように、コミュニケーション力のあるディレクターが積極的にサポートしてくれます。',
             ]
         ])->persist();
+        return null;
     }
 }
