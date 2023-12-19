@@ -90,7 +90,7 @@ class ContentFactory extends CakephpBaseFactory
      * TreeBehavior::recover() でセットすること
      * @return ContentFactory
      */
-    public function treeNode($id, $siteId, $parentId, $name, $url, $entityId, $siteRoot = false)
+    public function treeNode($id, $siteId, $parentId, $name, $url, $entityId, $siteRoot = false, $title='title')
     {
         return $this->setField('id', $id)
             ->setField('site_id', $siteId)
@@ -99,7 +99,7 @@ class ContentFactory extends CakephpBaseFactory
             ->setField('url', $url)
             ->setField('entity_id', $entityId)
             ->setField('status', true)
-            ->setField('title', $this->getFaker()->title())
+            ->setField('title', $title)
             ->setField('site_root', $siteRoot);
     }
 

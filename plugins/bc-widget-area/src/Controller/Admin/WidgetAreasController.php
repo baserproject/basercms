@@ -35,6 +35,7 @@ class WidgetAreasController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(WidgetAreasServiceInterface $service)
     {

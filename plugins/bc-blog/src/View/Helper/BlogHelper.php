@@ -133,6 +133,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setContent($blogContentId = null)
     {
@@ -204,6 +205,7 @@ class BlogHelper extends Helper
      * @return integer
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentBlogId()
     {
@@ -228,6 +230,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogName()
     {
@@ -252,6 +255,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitle()
     {
@@ -264,6 +268,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription()
     {
@@ -288,6 +293,7 @@ class BlogHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function descriptionExists()
     {

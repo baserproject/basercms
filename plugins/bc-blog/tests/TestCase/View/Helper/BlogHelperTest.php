@@ -29,6 +29,7 @@ use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Throwable;
 
 /**
  * Blog helper library.
@@ -56,7 +57,8 @@ class BlogHelperTest extends BcTestCase
             1, // siteId
             1, // parentId
             'news', // name
-            '/news/' // url
+            '/news/', // url
+            'test title'
         );
         $view = new AppView();
         $blogContent = BlogContentFactory::get(1);
@@ -82,27 +84,41 @@ class BlogHelperTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Blog->currentContent->id);
     }
+    /**
+     * test setContent
+     * @throws Throwable
+     */
+    public function test_setContent()
+    {
+        $this->Blog->setContent(22);
+        $this->assertNull($this->Blog->currentBlogContent);
+        $this->Blog->setContent(1);
+        $this->assertEquals(1, $this->Blog->currentBlogContent->id);
+    }
 
     /**
      * ブログIDを取得する
      */
     public function testGetCurrentBlogId()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getCurrentBlogId();
-        $expects = '1';
-        $this->assertEquals($expects, $result, 'ブログIDを正しく取得できません');
+        $this->assertEquals(1, $result);
     }
 
     /**
      * ブログのコンテンツ名を取得する
+     * @throws \Throwable
      */
     public function testGetBlogName()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getBlogName();
-        $expects = 'news';
-        $this->assertEquals($expects, $result, 'ブログのコンテンツ名を正しく取得できません');
+        $this->assertEquals('news', $result);
     }
 
     /**
@@ -110,10 +126,11 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetTitle()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getTitle();
-        $expects = '新着情報';
-        $this->assertEquals($expects, $result, 'タイトルを正しく取得できません');
+        $this->assertEquals('test title', $result);
     }
 
     /**
@@ -121,11 +138,32 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetDescription()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getDescription();
-        $expects = 'baserCMS inc. [デモ] の最新の情報をお届けします。';
-        $this->assertEquals($expects, $result, 'ブログの説明文を正しく取得できません');
+        $this->assertEquals('ディスクリプション', $result);
     }
+
+    /**
+     * test descriptionExists
+     */
+    public function test_descriptionExists()
+    {
+        //準備
+        $this->Blog->setContent(1);
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
+            ->treeNode(2, 1, 1, 'name', '/test', 2, true)->persist();
+        BlogContentFactory::make(['id' => 2, 'template' => 'homePage2'])->persist();
+        //正常系実行: true
+        $result = $this->Blog->descriptionExists();
+        $this->assertTrue($result);
+        //正常系実行: false
+        $this->Blog->setContent(2);
+        $result = $this->Blog->descriptionExists();
+        $this->assertFalse($result);
+    }
+
 
     /**
      * 記事タイトルを取得する
