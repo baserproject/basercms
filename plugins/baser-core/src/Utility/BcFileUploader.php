@@ -214,6 +214,8 @@ class BcFileUploader
                     } else {
                         $data[$name] = '';
                     }
+                } else {
+                    $data[$name] = $file['name'];
                 }
                 if (isset($data[$setting['name'] . '_'])) unset($data[$setting['name'] . '_']);
             }
