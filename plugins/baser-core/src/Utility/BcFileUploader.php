@@ -493,6 +493,11 @@ class BcFileUploader
         $uploadInfo['uploadable'] = true;
         $uploadInfo['ext'] = BcUtil::decodeContent($fileType, $fileName);
         $uploadedFile[$fieldName] = $uploadInfo;
+
+        // 一時ファイルを一度に複数扱う場合に1ファイルしかアップロードされない問題への対応
+        // 例: メールフォームのファイルフィールドなど
+        $uploadedFile = array_merge($this->getUploadingFiles($data['_bc_upload_id']), $uploadedFile);
+
         $this->setUploadingFiles($uploadedFile, $data['_bc_upload_id']);
         return true;
     }
