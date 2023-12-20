@@ -75,7 +75,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function textDataProvider()
+    public static function textDataProvider()
     {
         return [
             [false, 'baser', [], '<input name="data[baser]" type="text" id="baser"/>'],

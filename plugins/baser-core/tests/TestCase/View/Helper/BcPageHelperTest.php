@@ -113,7 +113,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [1, '/index'],

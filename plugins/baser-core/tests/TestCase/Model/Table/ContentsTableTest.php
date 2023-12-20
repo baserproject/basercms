@@ -117,7 +117,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertSame($messages, $contents->getErrors());
     }
 
-    public function validationDefaultWithEntityDataProvider()
+    public static function validationDefaultWithEntityDataProvider()
     {
         return [
             [
@@ -184,7 +184,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $this->Content->duplicateRelatedSiteContent(['name' => $data['name']]));
     }
 
-    public function duplicateRelatedSiteContentDataProvider()
+    public static function duplicateRelatedSiteContentDataProvider()
     {
         return [
             [['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 1], true],        // 新規・存在しない
@@ -225,7 +225,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function beforeMarshalDataProvider()
+    public static function beforeMarshalDataProvider()
     {
         return [
             // idがない場合
@@ -271,7 +271,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getUniqueNameDataProvider()
+    public static function getUniqueNameDataProvider()
     {
         return [
             ['', 1, ''],
@@ -436,7 +436,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function pureUrlDataProvider()
+    public static function pureUrlDataProvider()
     {
         return [
             ['', '', '/'],
@@ -472,7 +472,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($this->Contents->createUrl($id), $expects);
     }
 
-    public function createUrlDataProvider()
+    public static function createUrlDataProvider()
     {
         return [
             ["hogehoge'/@<>1", ''],
@@ -662,7 +662,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function findByTypeDataProvider()
+    public static function findByTypeDataProvider()
     {
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
@@ -736,7 +736,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function updatePublishDateDataProvider()
+    public static function updatePublishDateDataProvider()
     {
         return [
             // 日付更新の場合
@@ -776,7 +776,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isPublishDataProvider()
+    public static function isPublishDataProvider()
     {
         return [
             [true, '', '', true],
@@ -812,7 +812,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expects, $this->Content->isMovable($currentId, $parentId));
     }
 
-    public function isMovableDataProvider()
+    public static function isMovableDataProvider()
     {
         return [
             [false, 2, 3, false],    // ファイルを移動、同じファイル名が存在
@@ -842,7 +842,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($decodedExpected, rawurldecode($encoded));
     }
 
-    public function urlencodeDataProvider()
+    public static function urlencodeDataProvider()
     {
         return [
             ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
@@ -869,7 +869,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function moveOffsetDataProvider()
+    public static function moveOffsetDataProvider()
     {
         return [
             // サービス2でテスト
@@ -990,7 +990,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function findByUrlDataProvider()
+    public static function findByUrlDataProvider()
     {
         return [
             [true, '/about', true],

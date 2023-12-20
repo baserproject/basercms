@@ -59,7 +59,7 @@ class BcXmlHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function headerDataProvider()
+    public static function headerDataProvider()
     {
         return [
             [

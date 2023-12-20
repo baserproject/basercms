@@ -68,7 +68,7 @@ class MailBaserHelperTest extends BaserTestCase
         $this->assertEquals($expected, $this->BcBaser->isMail());
     }
 
-    public function isMailDataProvider()
+    public static function isMailDataProvider()
     {
         return [
             //PC

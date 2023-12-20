@@ -228,7 +228,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($expected, $result, '正しくブログの月別一覧を取得できません');
     }
 
-    public function getPostedDatesDataProvider()
+    public static function getPostedDatesDataProvider()
     {
         return [
             [1, [], [['year' => '2016', 'month' => '02'], ['year' => '2015', 'month' => '01']]],
@@ -263,7 +263,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getEntryDatesDataProvider()
+    public static function getEntryDatesDataProvider()
     {
         return [
             [6, 2015, 1, ['2015-01-27']],
@@ -359,7 +359,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($expected, $result, '正しくコントロールソースを取得できません');
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             [['blogContentId' => 1], [1 => 'プレスリリース', 2 => '　　　└子カテゴリ', 3 => '親子関係なしカテゴリ']],
@@ -382,7 +382,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($this->BlogPostsTable->allowPublish($post), $expected);
     }
 
-    public function allowPublishDataProvider()
+    public static function allowPublishDataProvider()
     {
         return [
             [null, null, false, false],
@@ -531,7 +531,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($expected, $result['SearchIndex']['status'], 'ブログ記事用の検索用データを正しく生成できません');
     }
 
-    public function createSearchIndexStatusDataProvider()
+    public static function createSearchIndexStatusDataProvider()
     {
         return [
             [true, true, true],
@@ -572,7 +572,7 @@ class BlogPostsTableTest extends BcTestCase
         ], 'ブログ記事用の検索用データを正しく生成できません');
     }
 
-    public function createSearchIndexPublishDataProvider()
+    public static function createSearchIndexPublishDataProvider()
     {
         return [
             [['begin' => '', 'end' => ''], ['begin' => '', 'end' => ''], ['begin' => '', 'end' => '']],

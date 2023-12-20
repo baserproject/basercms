@@ -242,7 +242,7 @@ class MailContentTest extends BaserTestCase
         }
     }
 
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             [false],
@@ -322,7 +322,7 @@ class MailContentTest extends BaserTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
-    public function createContentDataProvider()
+    public static function createContentDataProvider()
     {
         return [
             [1, 2, 1, '検索用データを正しく生成できません'],
@@ -369,7 +369,7 @@ class MailContentTest extends BaserTestCase
         }
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [1, 1, 'hogeName', 1, 0]

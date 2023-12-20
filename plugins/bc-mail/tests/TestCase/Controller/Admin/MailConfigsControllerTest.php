@@ -68,7 +68,7 @@ class MailConfigsControllerTest extends BaserTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/', $url);
     }
 
-    public function admin_formDataProvider()
+    public static function admin_formDataProvider()
     {
         return [
             [[], '\/admin\/users\/login'],

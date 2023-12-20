@@ -296,7 +296,7 @@ class BlogContentsServiceTest extends BcTestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             [null, false], //$field = null; return false

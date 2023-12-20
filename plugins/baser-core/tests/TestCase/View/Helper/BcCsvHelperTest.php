@@ -69,7 +69,7 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertEquals($expectedBody, $body);
     }
 
-    public function addModelDataDataProvider()
+    public static function addModelDataDataProvider()
     {
         return [
             [
@@ -142,7 +142,7 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertEquals($expectedBody, $body);
     }
 
-    public function addModelDatasDataProvider()
+    public static function addModelDatasDataProvider()
     {
         return [
             [
@@ -203,7 +203,7 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function downloadDataProvider()
+    public static function downloadDataProvider()
     {
         return [
             ['testcsv', true,

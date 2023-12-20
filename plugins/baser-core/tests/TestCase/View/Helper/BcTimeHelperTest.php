@@ -43,7 +43,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result);
     }
 
-    public function nengoDataProvider()
+    public static function nengoDataProvider()
     {
         return [
             ['m', '明治'],

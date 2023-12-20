@@ -151,7 +151,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expectedTitle, $resultTitle, 'タイトルエラー：' . $message);
     }
 
-    public function getPageListDataProvider()
+    public static function getPageListDataProvider()
     {
         return [
             // PC版
@@ -175,7 +175,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function isSiteRelatedDataProvider()
+    public static function isSiteRelatedDataProvider()
     {
         return [
             [true, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => 1, 'type' => 'BlogContent']]],
@@ -205,7 +205,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function isActionAvailableDataProvider()
+    public static function isActionAvailableDataProvider()
     {
         return [
             // 管理ユーザー
@@ -273,7 +273,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getCurrentRelatedSiteUrlDataProvider()
+    public static function getCurrentRelatedSiteUrlDataProvider()
     {
         return [
             // 戻り値が空でないもの（）
@@ -306,7 +306,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getRelatedSiteContentsDataProvider()
+    public static function getRelatedSiteContentsDataProvider()
     {
         return [
             // コンテンツIDが空 オプションも空
@@ -341,7 +341,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getRelatedSiteLinksDataProvider()
+    public static function getRelatedSiteLinksDataProvider()
     {
         return [
             // IDが空 オプションも空
@@ -403,7 +403,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getJsonItemsDataProvider()
+    public static function getJsonItemsDataProvider()
     {
         return [
             ['無所属コンテンツ', 'Default'],
@@ -440,7 +440,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getParentDataProvider()
+    public static function getParentDataProvider()
     {
         return [
             [1, 4, true],            // ダイレクト ROOT直下
@@ -483,7 +483,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getContentByEntityIdDataProvider()
+    public static function getContentByEntityIdDataProvider()
     {
         return [
             // 存在するID（0~2）を指定した場合
@@ -527,7 +527,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
-    public function isParentIdDataProvider()
+    public static function isParentIdDataProvider()
     {
         return [
             [2, 1, true],
@@ -555,7 +555,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcContents->isFolder());
     }
 
-    public function isFolderDataProvider()
+    public static function isFolderDataProvider()
     {
         return [
             ['/', false],    // index あり

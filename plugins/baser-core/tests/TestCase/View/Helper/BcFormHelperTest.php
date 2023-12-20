@@ -110,7 +110,7 @@ class BcFormHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
-    public function datePickerDataProvider()
+    public static function datePickerDataProvider()
     {
         return [
             ['baser', [], 'type="text".*"#baser"', 'datepicker()が出力できません'],

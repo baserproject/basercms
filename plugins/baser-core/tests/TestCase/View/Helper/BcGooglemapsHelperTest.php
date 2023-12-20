@@ -78,7 +78,7 @@ class BcGooglemapsHelperTest extends BcTestCase
 
     }
 
-//	public function loadDataProvider()
+//	public static function loadDataProvider()
 //	{
 //		return [
 //			['福岡', null, null, '<div id="map">'],

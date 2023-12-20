@@ -183,7 +183,7 @@ class MailHelperTest extends BaserTestCase
         $this->assertEquals((bool)($this->Mail->mailContent), $expect);
     }
 
-    public function setMailContentDataProvider()
+    public static function setMailContentDataProvider()
     {
         return [
             [1, true],

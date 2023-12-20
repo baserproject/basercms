@@ -185,7 +185,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, '記事タイトルを正しく取得できません');
     }
 
-    public function getPostTitleDataProvider()
+    public static function getPostTitleDataProvider()
     {
         return [
             ['test-name', true, [], '<a href="/news/archives/4">test-name</a>'],
@@ -253,7 +253,7 @@ class BlogHelperTest extends BcTestCase
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
-    public function getPostLinkUrlDataProvider()
+    public static function getPostLinkUrlDataProvider()
     {
         return [
             'コンテンツURLなし' => [11, '', false, ''],
@@ -285,7 +285,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
     }
 
-    public function getPostContentDataProvider()
+    public static function getPostContentDataProvider()
     {
         return [
             [true, false, false, '<div class="post-body">test-content</div><div id="post-detail">test-detail</div>'],
@@ -406,7 +406,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, $result, 'タグを正しく取得できません');
     }
 
-    public function getTagDataProvider()
+    public static function getTagDataProvider()
     {
         return [
             [['separator' => ' , '], '<a href="/news/archives/tag/test1">test1</a> , <a href="/news/archives/tag/test2">test2</a>'],
@@ -450,7 +450,7 @@ class BlogHelperTest extends BcTestCase
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
-    public function getCategoryUrlDataProvider()
+    public static function getCategoryUrlDataProvider()
     {
         return [
             [1, '', false, '/news/archives/category/release'],
@@ -496,7 +496,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
     }
 
-    public function getCategoryListDataProvider()
+    public static function getCategoryListDataProvider()
     {
         return [
             [
@@ -546,7 +546,7 @@ class BlogHelperTest extends BcTestCase
         $this->Blog->prevLink($post);
     }
 
-    public function prevLinkDataProvider()
+    public static function prevLinkDataProvider()
     {
         return [
             [1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/4" class="prev-link">≪ ４記事目</a>'],
@@ -576,7 +576,7 @@ class BlogHelperTest extends BcTestCase
         $this->Blog->nextLink($post);
     }
 
-    public function nextLinkDataProvider()
+    public static function nextLinkDataProvider()
     {
         return [
             [1, 1, '9000-08-10 18:58:07', ''],
@@ -601,7 +601,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
     }
 
-    public function getBlogTemplatesDataProvider()
+    public static function getBlogTemplatesDataProvider()
     {
         return [
             ['nada-icons', ['default' => 'default']]
@@ -653,7 +653,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, '記事中の画像を正しく取得できません');
     }
 
-    public function getPostImgDataProvider()
+    public static function getPostImgDataProvider()
     {
         return [
             [1, false, '<img src="/img/test1.jpg" alt="test-name "/>'],
@@ -862,7 +862,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getTagListDataProvider()
+    public static function getTagListDataProvider()
     {
         return [
             [['タグ１'], 'blog1'],
@@ -894,7 +894,7 @@ class BlogHelperTest extends BcTestCase
     }
 
 
-    public function tagListDataProvider()
+    public static function tagListDataProvider()
     {
         return [
             ['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
@@ -926,7 +926,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function getTagLinkUrlDataProvider()
+    public static function getTagLinkUrlDataProvider()
     {
         return [
             ['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
@@ -961,7 +961,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function getTagLinkDataProvider()
+    public static function getTagLinkDataProvider()
     {
         return [
             ['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
@@ -1009,7 +1009,7 @@ class BlogHelperTest extends BcTestCase
         $this->Blog->posts($contentsName, $num, $options);
     }
 
-    public function postsDataProvider()
+    public static function postsDataProvider()
     {
         return [
             ['', 'news', 5, [], '/name1.*name2.*name3/s', '記事が出力されません'], // 通常
@@ -1121,7 +1121,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 
-    public function isBlogDataProvider()
+    public static function isBlogDataProvider()
     {
         return [
             //PC
@@ -1220,7 +1220,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, $isArchive);
     }
 
-    public function getBlogArchiveTypeDataProvider()
+    public static function getBlogArchiveTypeDataProvider()
     {
         return [
             ['/news/archives/category/release', 'category', true],
@@ -1245,7 +1245,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function isTagDataProvider()
+    public static function isTagDataProvider()
     {
         return [
             ['category', false],
@@ -1275,7 +1275,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function getCurrentBlogTagDataProvider()
+    public static function getCurrentBlogTagDataProvider()
     {
         return [
             ['/news/archives/tag/新製品', 'tag', true, [

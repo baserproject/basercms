@@ -195,7 +195,7 @@ class PagesServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getPageTemplateListDataProvider()
+    public static function getPageTemplateListDataProvider()
     {
         return [
             [1, 'BcFront', ['default' => 'default']],
@@ -223,7 +223,7 @@ class PagesServiceTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             ['author_id', [1 => 'ニックネーム1', 2 => 'ニックネーム2', 3 => 'ニックネーム3'], 'コントロールソースを取得できません'],

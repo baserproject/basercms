@@ -232,7 +232,7 @@ class BlogPostsServiceTest extends BcTestCase
         }
     }
 
-    public function findIndexDataProvider()
+    public static function findIndexDataProvider()
     {
         return [
             ['count', [], 6],                                            // 公開状態全件取得
@@ -447,7 +447,7 @@ class BlogPostsServiceTest extends BcTestCase
 //        $this->assertEquals($expected, $result);
 //    }
 //
-//    public function createIndexConditionsDataProvider(): array
+//    public static function createIndexConditionsDataProvider(): array
 //    {
 //        $blogPost = new BlogPostsTable();
 //        return [

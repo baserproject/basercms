@@ -247,7 +247,7 @@ class MailFieldsTableTest extends BcTestCase
         }
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [1, [], false],
@@ -294,7 +294,7 @@ class MailFieldsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function formatSourceDataProvider()
+    public static function formatSourceDataProvider()
     {
         return [
             ["  １|２|３|４|５", "１\n２\n３\n４\n５"],

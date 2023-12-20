@@ -190,7 +190,7 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($this->BlogContent->alphaNumeric($key), $expected);
     }
 
-    public function alphaNumericDataProvider()
+    public static function alphaNumericDataProvider()
     {
         return [
             [['key' => 'abc'], true],
@@ -252,7 +252,7 @@ class BlogContentsTableTest extends BcTestCase
         }
     }
 
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             ['', 0],
