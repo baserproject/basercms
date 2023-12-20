@@ -185,7 +185,7 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getPostTitle($post, false, ['escape' => false]);
         $this->assertEquals('プレスリリース', $result);
         $result = $this->Blog->getPostTitle($post, true);
-        $this->assertEquals('<a href="/news/archives/release">プレスリリース</a>', $result);
+        $this->assertEquals('<a href="https://localhost/news/archives/release">プレスリリース</a>', $result);
 
     }
 
@@ -219,7 +219,7 @@ class BlogHelperTest extends BcTestCase
             'posted' => '2023-01-27 12:57:59',
         ]);
         $result = $this->Blog->getPostLink($post, 'test-title');
-        $this->assertEquals('<a href="/news/archives/release">test-title</a>', $result);
+        $this->assertEquals('<a href="https://localhost/news/archives/release">test-title</a>', $result);
     }
 
     /**
