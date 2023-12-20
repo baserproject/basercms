@@ -328,6 +328,7 @@ class BlogHelper extends Helper
      * @return string 記事タイトル
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostTitle($post, $link = true, $options = [])
     {
