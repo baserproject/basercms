@@ -55,6 +55,7 @@ class WidgetAreasController extends BcAdminAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(WidgetAreasServiceInterface $service)
     {
