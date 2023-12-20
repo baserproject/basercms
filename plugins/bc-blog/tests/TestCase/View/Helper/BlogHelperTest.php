@@ -170,6 +170,9 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostTitle()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
         $post = new BlogPost([
             'id' => 1,
             'blog_content_id' => 1,
@@ -181,6 +184,9 @@ class BlogHelperTest extends BcTestCase
         ]);
         $result = $this->Blog->getPostTitle($post, false, ['escape' => false]);
         $this->assertEquals('プレスリリース', $result);
+        $result = $this->Blog->getPostTitle($post, true);
+        $this->assertEquals('<a href="/news/archives/release">プレスリリース</a>', $result);
+
     }
 
     public function getPostTitleDataProvider()
@@ -200,13 +206,20 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostLink()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
             'blog_content_id' => 1,
-            'no' => 3,
-        ]];
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
         $result = $this->Blog->getPostLink($post, 'test-title');
-        $this->assertEquals('<a href="/news/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
+        $this->assertEquals('<a href="/news/archives/release">test-title</a>', $result);
     }
 
     /**

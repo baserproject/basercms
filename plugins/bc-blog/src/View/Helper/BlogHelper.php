@@ -356,6 +356,7 @@ class BlogHelper extends Helper
      * @return string 記事へのリンク
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostLink($post, $title, $options = [])
     {
