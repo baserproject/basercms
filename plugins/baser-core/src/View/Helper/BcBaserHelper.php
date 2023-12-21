@@ -528,7 +528,7 @@ class BcBaserHelper extends Helper
         if (!is_array($url)) {
             $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
-        $out = $this->BcHtml->link($title, $url, $options);
+        $out = $this->BcHtml->link($title?? '', $url, $options);
 
         // EVENT Html.afterGetLink
         $event = $this->dispatchLayerEvent('afterGetLink', [

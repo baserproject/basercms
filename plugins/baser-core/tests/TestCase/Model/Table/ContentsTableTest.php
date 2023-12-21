@@ -784,11 +784,11 @@ class ContentsTableTest extends BcTestCase
             [true, '0000-00-00 00:00:00', '', true],
             [true, '0000-00-00 00:00:01', '', true],
             [true, date('Y-m-d H:i:s', strtotime("+1 hour")), '', false],
-            [true, FrozenTime::now()->addHour(), '', false],
+            [true, FrozenTime::now()->addHours(1), '', false],
             [true, '', '0000-00-00 00:00:00', true],
             [true, '', '0000-00-00 00:00:01', false],
             [true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
-            [true, '', FrozenTime::now()->addHour(), true],
+            [true, '', FrozenTime::now()->addHours(1), true],
         ];
     }
 
