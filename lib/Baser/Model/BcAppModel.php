@@ -574,12 +574,13 @@ class BcAppModel extends Model
 
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$this->recursive = -1;
+		$tmpCacheQueries = $this->cacheQueries;
 		if ($db->config['datasource'] == 'Database/BcCsv') {
 			// CSVDBの場合はMAX関数が利用できない為、プログラムで処理する
 			// TODO dboでMAX関数の実装できたらここも変更する
 			$this->cacheQueries = false;
 			$dbDatas = $this->find('all', ['conditions' => $conditions, 'fields' => [$modelName . '.' . $field]]);
-			$this->cacheQueries = true;
+			$this->cacheQueries = $tmpCacheQueries;
 			$max = 0;
 			if ($dbDatas) {
 				foreach($dbDatas as $dbData) {
@@ -593,7 +594,7 @@ class BcAppModel extends Model
 			$this->cacheQueries = false;
 			// SQLiteの場合、Max関数にmodel名を含むと、戻り値の添字が崩れる（CakePHPのバグ）
 			$dbData = $this->find('all', ['conditions' => $conditions, 'fields' => ['MAX(' . $modelName . '.' . $field . ') AS max']]);
-			$this->cacheQueries = true;
+			$this->cacheQueries = $tmpCacheQueries;
 			if (isset($dbData[0][0]['max'])) {
 				return $dbData[0][0]['max'];
 			} else {
