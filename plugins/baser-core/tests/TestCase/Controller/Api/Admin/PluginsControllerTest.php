@@ -127,7 +127,7 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals($message, $result->message);
         $folder->delete();
     }
-    public function installDataProvider()
+    public static function installDataProvider()
     {
         return [
             ["BcUploader", 200, "プラグイン「BcUploader」をインストールしました。"],

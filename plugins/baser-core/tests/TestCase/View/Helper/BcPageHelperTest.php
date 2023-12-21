@@ -149,7 +149,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function allowPublishDataProvider()
+    public static function allowPublishDataProvider()
     {
         return [
             [true, 0, 0, true, 'statusの値がそのままかえってきません'],
@@ -174,7 +174,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function getPageListDataProvider()
+    public static function getPageListDataProvider()
     {
         return [
             [1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],    // トップフォルダ

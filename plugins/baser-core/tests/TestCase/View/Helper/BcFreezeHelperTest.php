@@ -111,7 +111,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function selectDataProvider()
+    public static function selectDataProvider()
     {
         return [
             [false, 'baser', [], [], "<select name=\"data\[baser\]\" id=\"baser\">.<option value=\"\">"],
@@ -148,7 +148,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function dateTimeDataProvider()
+    public static function dateTimeDataProvider()
     {
         return [
             [false, 'test', 'YMD', '12', [], 'id="testYear".*id="testMonth".*id="testDay".*id="testHour".*id="testMin".*id="testMeridian"'],
@@ -191,7 +191,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function wyearDataProvider()
+    public static function wyearDataProvider()
     {
         return [
             [false, 'test', null, null, null, [], true, 'id="testYear">.*<option value="r-17">'],
@@ -227,7 +227,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function checkboxDataProvider()
+    public static function checkboxDataProvider()
     {
         return [
             [false, 'baser', [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\" value=\"1\" id=\"baser\""],
@@ -260,7 +260,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function textareaDataProvider()
+    public static function textareaDataProvider()
     {
         return [
             [false, 'baser', [], "<textarea name=\"data\[baser\]\" id=\"baser\"><\/textarea>"],
@@ -293,7 +293,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function radioDataProvider()
+    public static function radioDataProvider()
     {
         return [
             [false, 'baser', [], [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""],
@@ -337,7 +337,7 @@ class BcFreezeHelperTest extends BcTestCase
 
     }
 
-    public function fileDataProvider()
+    public static function fileDataProvider()
     {
         return [
             [false, 'baser', [], '<input type="file" name="data\[baser\]" id="baser"'],
@@ -376,7 +376,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function imageDataProvider()
+    public static function imageDataProvider()
     {
         return [
             [false, null, null, 'test.image', [], [], '<input type="file" name="data\[test\]\[image\]" id="testImage"'],
@@ -416,7 +416,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function datepickerDataProvider()
+    public static function datepickerDataProvider()
     {
         return [
             [false, null, 'baser', [], 'type="text".*id="baser".*("#baser")'],
@@ -449,7 +449,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function freezeControllDataProvider()
+    public static function freezeControllDataProvider()
     {
         return [
             ['baser.freezed', [], [], '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'],

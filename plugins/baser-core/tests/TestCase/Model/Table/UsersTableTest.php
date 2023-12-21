@@ -158,7 +158,7 @@ class UsersTableTest extends BcTestCase
         }
     }
 
-    public function validationPasswordUpdateDataProvider()
+    public static function validationPasswordUpdateDataProvider()
     {
         $exceedMax = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
         return [

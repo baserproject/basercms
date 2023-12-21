@@ -468,7 +468,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function convertFieldToCsvDataProvider()
+    public static function convertFieldToCsvDataProvider()
     {
         return [
             ['test', '"test"'],
@@ -557,7 +557,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function dbEncToPhpDataProvider()
+    public static function dbEncToPhpDataProvider()
     {
         return [
             ['utf8', 'UTF-8'],
@@ -588,7 +588,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function phpEncToDbDataProvider()
+    public static function phpEncToDbDataProvider()
     {
         return [
             ['UTF-8', 'utf8'],
@@ -655,7 +655,7 @@ class UserActionsSchema extends BcSchema
         $this->assertEquals($this->BcDatabaseService->getDatasourceName($value), $expected);
     }
 
-    public function getDatasourceNameDataProvider()
+    public static function getDatasourceNameDataProvider()
     {
         return [
             ['postgres', Postgres::class],

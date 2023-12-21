@@ -122,7 +122,7 @@ class PagesTableTest extends BcTestCase
         Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowedPhpOtherThanAdmins);
     }
 
-    public function cotainsScriptRegularDataProvider()
+    public static function cotainsScriptRegularDataProvider()
     {
         return [
             ['<?php echo "正しい"; ?>', false],
@@ -194,7 +194,7 @@ class PagesTableTest extends BcTestCase
         $this->assertEquals(10, $page->content->author_id);
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [2, 1, 'hoge1', 10, 1]

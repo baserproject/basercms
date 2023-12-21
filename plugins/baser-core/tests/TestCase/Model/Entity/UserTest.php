@@ -93,7 +93,7 @@ class UserTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getUserNameDataProvider()
+    public static function getUserNameDataProvider()
     {
         return [
             ['aiueo', 'yamada', 'tarou', 'aiueo'],

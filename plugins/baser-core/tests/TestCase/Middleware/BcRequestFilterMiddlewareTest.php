@@ -147,7 +147,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      *
      * @return array
      */
-    public function isAdminDataProvider()
+    public static function isAdminDataProvider()
     {
         return [
             [true, '/baser/admin'],
@@ -178,7 +178,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      *
      * @return array
      */
-    public function isAssetDataProvider()
+    public static function isAssetDataProvider()
     {
         return [
             [false, '/'],
@@ -216,7 +216,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      *
      * @return array
      */
-    public function isInstallDataProvider()
+    public static function isInstallDataProvider()
     {
         return [
             [true, '/install'],
@@ -246,7 +246,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      *
      * @return array
      */
-    public function isMaintenanceDataProvider()
+    public static function isMaintenanceDataProvider()
     {
         return [
             [true, '/maintenance'],
@@ -279,7 +279,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      *
      * @return array
      */
-    public function isPageDataProvider()
+    public static function isPageDataProvider()
     {
         return [
             [false, '/admin/'],

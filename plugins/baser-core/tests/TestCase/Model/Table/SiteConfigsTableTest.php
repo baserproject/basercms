@@ -122,7 +122,7 @@ class SiteConfigsTableTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             ['mode', [
@@ -150,7 +150,7 @@ class SiteConfigsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isChangedContentsSortLastModifiedDataProvider()
+    public static function isChangedContentsSortLastModifiedDataProvider()
     {
         return [
             [false, '', '2021/08/01', false], // 保存値なし
@@ -207,7 +207,7 @@ class SiteConfigsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isChangeDataProvider()
+    public static function isChangeDataProvider()
     {
         return [
             ['use_site_device_setting', "1", false],

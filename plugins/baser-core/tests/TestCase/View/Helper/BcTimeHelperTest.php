@@ -66,7 +66,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result);
     }
 
-    public function warekiDataProvider()
+    public static function warekiDataProvider()
     {
         return [
             ['s-48/5/10', 's'],
@@ -84,7 +84,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result);
     }
 
-    public function wyearDataProvider()
+    public static function wyearDataProvider()
     {
         return [
             ['s-48/5/10', '48'],
@@ -103,7 +103,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiYearDataProvider()
+    public static function convertToWarekiYearDataProvider()
     {
         return [
             [1867, false, '明治以前'],
@@ -131,7 +131,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToSeirekiYearDataProvider()
+    public static function convertToSeirekiYearDataProvider()
     {
         return [
             ['m-1', 1868, '明治元年'],
@@ -161,7 +161,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiArrayDataProvider()
+    public static function convertToWarekiArrayDataProvider()
     {
         return [
             [null, '', '未入力'],
@@ -188,7 +188,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiDataProvider()
+    public static function convertToWarekiDataProvider()
     {
         return [
             [null, '', '未入力'],
@@ -215,7 +215,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function minutesDataProvider()
+    public static function minutesDataProvider()
     {
         return [
             ['invalid time', null, '不正な日付形式'],
@@ -235,7 +235,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function formatDataProvider()
+    public static function formatDataProvider()
     {
         return [
             ['Y-m-d', '2012-03-04 05:06:07', '2012-03-04', '日付'],
@@ -260,7 +260,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function pastDaysDataProvider()
+    public static function pastDaysDataProvider()
     {
         return [
             ['2012-10-03 00:00:00', 1, '2012-10-04 00:00:01', true, '指定日から1日経過している'],
@@ -283,7 +283,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->assertSame($expects, $result, $message);
     }
 
-    public function getJpWeekDataProvider()
+    public static function getJpWeekDataProvider()
     {
         return [
             ['2015-8-11', '', '火', '火曜日'],
@@ -305,7 +305,7 @@ class BcTimeHelperTest extends BcTestCase
         $this->Helper->jpWeek($dateStr, $suffix);
     }
 
-    public function jpWeekDataProvider()
+    public static function jpWeekDataProvider()
     {
         return [
             ['2015-8-11', '', '火', '火曜日'],

@@ -133,7 +133,7 @@ class PluginsTableTest extends BcTestCase
         }
     }
 
-    public function validationDefaultDataProvider()
+    public static function validationDefaultDataProvider()
     {
         $exceedMax = "123456789012345678901234567890123456789012345678901234567890"; // 60文字
         return [

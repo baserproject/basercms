@@ -172,7 +172,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $this->assertEquals($exist, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
     }
 
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             // exclude_searchがある場合削除されているかを確認

@@ -266,7 +266,7 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * @return array[]
      */
-    public function renameToBasenameFieldsDataProvider(): array
+    public static function renameToBasenameFieldsDataProvider(): array
     {
         return [
             // copyがfalseの場合、ファイルネームを変更する

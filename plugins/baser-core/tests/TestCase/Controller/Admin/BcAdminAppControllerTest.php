@@ -182,7 +182,7 @@ class BcAdminAppControllerTest extends BcTestCase
         unset($_SERVER['HTTP_REFERER']);
     }
 
-    public function checkRefererDataProvider()
+    public static function checkRefererDataProvider()
     {
         return [
             // refererがnullの場合　

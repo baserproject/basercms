@@ -76,7 +76,7 @@ class BcWidgetAreaHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function showDataProvider()
+    public static function showDataProvider()
     {
         return [
             ['test', 1, ''],
@@ -103,7 +103,7 @@ class BcWidgetAreaHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
     }
 
-    public function getWidgetAreaDataProvider()
+    public static function getWidgetAreaDataProvider()
     {
         return [
             ['/company', 1, '<div class="widget-area widget-area-1">'],

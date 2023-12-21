@@ -106,7 +106,7 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals($expected, $this->ContentsAdmin->isContentDeletable());
     }
 
-    public function isContentDeletableDataProvider()
+    public static function isContentDeletableDataProvider()
     {
         return [
             [1, true],

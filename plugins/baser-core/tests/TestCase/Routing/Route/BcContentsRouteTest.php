@@ -83,7 +83,7 @@ class BcContentsRouteTest extends BcTestCase
         $this->assertEquals($expects, Router::url($params));
     }
 
-    public function reverseRoutingDataProvider()
+    public static function reverseRoutingDataProvider()
     {
         return [
             // Page
@@ -127,7 +127,7 @@ class BcContentsRouteTest extends BcTestCase
         $siteConfig->putEnv('SITE_URL', $siteUrl);
     }
 
-    public function routerParseDataProvider()
+    public static function routerParseDataProvider()
     {
         return [
             // PC（ノーマル : デバイス設定無）

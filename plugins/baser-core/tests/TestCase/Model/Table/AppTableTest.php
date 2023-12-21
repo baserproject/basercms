@@ -88,7 +88,7 @@ class AppTableTest extends BcTestCase
         $this->assertEquals($expect, $this->App->getUrlPattern($url));
     }
 
-    public function getUrlPatternDataProvider()
+    public static function getUrlPatternDataProvider()
     {
         return [
             ['/news', ['/news']],

@@ -583,7 +583,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($result, $this->BcContents->isEditable($content));
     }
 
-    public function isEditableDataProvider()
+    public static function isEditableDataProvider()
     {
         return [
             // データがない場合false
@@ -609,7 +609,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getSiteRootIdDataProvider()
+    public static function getSiteRootIdDataProvider()
     {
         return [
             // 存在するサイトID（0~2）を指定した場合
@@ -634,7 +634,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
     }
 
-    public function getFolderLinkedUrlDataProvider()
+    public static function getFolderLinkedUrlDataProvider()
     {
         return [
             ['/', 'https://localhost/'],
@@ -661,7 +661,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getNextLinkDataProvider()
+    public static function getNextLinkDataProvider()
     {
         return [
             ['/company', '', ['overFolder' => false], false], // PC
@@ -713,7 +713,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getPrevLinkDataProvider()
+    public static function getPrevLinkDataProvider()
     {
         return [
             ['/company', '', ['overFolder' => false], false], // PC
@@ -756,7 +756,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($neighbors['next']['title'], $title['next']);
     }
 
-    public function getPageNeighborsDataProvider()
+    public static function getPageNeighborsDataProvider()
     {
         return [
             [false, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "お問い合わせ(※関連Fixture未完了)"]],

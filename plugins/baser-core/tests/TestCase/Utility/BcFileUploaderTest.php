@@ -410,7 +410,7 @@ class BcFileUploaderTest extends BcTestCase
 
     }
 
-    public function saveFilesCanCopyDataProvider()
+    public static function saveFilesCanCopyDataProvider()
     {
         return [
             [
@@ -461,7 +461,7 @@ class BcFileUploaderTest extends BcTestCase
 
     }
 
-    public function saveFilesCanResizeDataProvider()
+    public static function saveFilesCanResizeDataProvider()
     {
         return [
             [['width' => 20, 'height' => 10, 'thumb' => false], ['width' => 20, 'height' => 2], 'saveFiles()でファイルをリサイズできません'],
@@ -616,7 +616,7 @@ class BcFileUploaderTest extends BcTestCase
         @unlink($targetPath);
     }
 
-    public function copyImageDataProvider()
+    public static function copyImageDataProvider()
     {
         return [
             ['', '', '画像ファイルをコピーできません'],
@@ -656,7 +656,7 @@ class BcFileUploaderTest extends BcTestCase
 
     }
 
-    public function resizeImageDataProvider()
+    public static function resizeImageDataProvider()
     {
         return [
             [false, false, false, null, '画像ファイルをコピーできません'],
@@ -680,7 +680,7 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertEquals($expected, $result, '画像のサイズを正しく取得できません');
     }
 
-    public function getImageSizeDataProvider()
+    public static function getImageSizeDataProvider()
     {
         return [
             ['baser.power.gif', ['width' => 98, 'height' => 13], '画像のサイズを正しく取得できません'],
@@ -735,7 +735,7 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertFileDoesNotExist($targetPath, $message);
     }
 
-    public function deleteFileDataProvider()
+    public static function deleteFileDataProvider()
     {
         return [
             [null, null, null, 'ファイルを削除できません'],
@@ -834,7 +834,7 @@ class BcFileUploaderTest extends BcTestCase
 
     }
 
-    public function renameToFieldBasenameDataProvider()
+    public static function renameToFieldBasenameDataProvider()
     {
         return [
             ['oldName', 'gif', false, false, 'ファイル名をフィールド値ベースのファイル名に変更できません'],
@@ -902,7 +902,7 @@ class BcFileUploaderTest extends BcTestCase
 
     }
 
-    public function getFieldBasenameDataProvider()
+    public static function getFieldBasenameDataProvider()
     {
         return [
             ['namefield', 'basename', 'modelId', ['name' => 'name'],
@@ -946,7 +946,7 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getFileNameDataProvider()
+    public static function getFileNameDataProvider()
     {
         return [
             [null, null, 'hoge.gif', 'ベースファイル名からファイル名を取得できません'],
@@ -977,7 +977,7 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getBasenameDataProvider()
+    public static function getBasenameDataProvider()
     {
         return [
             [null, null, 'pre-hoge-suf', 'ファイル名からベースファイル名を正しく取得できません'],
@@ -1012,7 +1012,7 @@ class BcFileUploaderTest extends BcTestCase
         @unlink($this->savePath . 'template1.gif');
     }
 
-    public function getUniqueFileNameDataProvider()
+    public static function getUniqueFileNameDataProvider()
     {
         return [
             ['eyecatch', 'hoge.gif', 'hoge.gif', '一意のファイル名を正しく取得できません'],
@@ -1146,7 +1146,7 @@ class BcFileUploaderTest extends BcTestCase
         @unlink($targetPath);
     }
 
-    public function copyImagesDataProvider()
+    public static function copyImagesDataProvider()
     {
         return [
             // コピー画像が元画像より大きい場合はスキップして作成しない

@@ -598,7 +598,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals($rs['fullpath'], $expected);
     }
 
-    public function parseArgsDataProvider()
+    public static function parseArgsDataProvider()
     {
         return [
             [

@@ -497,7 +497,7 @@ EOF;
         unlink($rssPath);
     }
 
-    public function getAvailableCoreVersionInfoDataProvider()
+    public static function getAvailableCoreVersionInfoDataProvider()
     {
         return [
             // 通常
