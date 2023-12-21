@@ -17,6 +17,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -266,23 +267,39 @@ class BlogHelperTest extends BcTestCase
     /**
      * 記事の本文を取得する
      *
-     * @param bool $moreText 詳細データを表示するかどうか
-     * @param bool $moreLink 詳細ページへのリンクを表示するかどうか
-     * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力
-     * @param string $expected
-     * @dataProvider getPostContentDataProvider
      */
-    public function testGetPostContent($moreText, $moreLink, $cut, $expected)
+    public function testGetPostContent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'content' => 'test-content',
-            'detail' => 'test-detail',
-            'no' => 3,
-            'blog_content_id' => 1
-        ]];
-        $result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
-        $this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
+        // 準備
+        $templateDir = ROOT . DS . 'plugins' . DS . 'bc-admin-third' . DS . 'templates'. DS;
+        $blog_post_content = new BcFile($templateDir . 'element' . DS . 'blog_post_content.php');
+        $blog_post_content->create();
+        $blog_post_content->write('blog content test in file');
+        $blog_post_content_more = new BcFile($templateDir . 'element' . DS . 'blog_post_content_more.php');
+        $blog_post_content_more->create();
+        $blog_post_content_more->write('blog content more test in file');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        // ファイルからコンテンツを取得
+        $result = $this->Blog->getPostContent($post);
+        $this->assertEquals('blog content test in file', $result);
+        // blog_post_contentからコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, false, true);
+        $this->assertEquals('リ', $result);
+        // blog_post_content_more からコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, true, true);
+        $this->assertEquals('リblog content more test in file', $result);
     }
 
     public function getPostContentDataProvider()
