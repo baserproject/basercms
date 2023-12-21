@@ -81,6 +81,7 @@ class WidgetAreasController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(WidgetAreasAdminServiceInterface $service, int $id)
     {
