@@ -167,22 +167,26 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 記事タイトルを取得する
-     * @param string $name タイトル
-     * @param bool $link リンクをつけるかどうか
-     * @param array $options オプション
-     * @param string $expected 期待値
-     * @dataProvider getPostTitleDataProvider
      */
-    public function testGetPostTitle($name, $link, $options, $expected)
+    public function testGetPostTitle()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
             'blog_content_id' => 1,
-            'name' => $name,
-            'no' => 4,
-        ]];
-        $result = $this->Blog->getPostTitle($post, $link, $options);
-        $this->assertEquals($expected, $result, '記事タイトルを正しく取得できません');
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        $result = $this->Blog->getPostTitle($post, false, ['escape' => false]);
+        $this->assertEquals('プレスリリース', $result);
+        $result = $this->Blog->getPostTitle($post, true);
+        $this->assertEquals('<a href="https://localhost/news/archives/release">プレスリリース</a>', $result);
+
     }
 
     public function getPostTitleDataProvider()
@@ -202,13 +206,20 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostLink()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
             'blog_content_id' => 1,
-            'no' => 3,
-        ]];
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
         $result = $this->Blog->getPostLink($post, 'test-title');
-        $this->assertEquals('<a href="/news/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
+        $this->assertEquals('<a href="https://localhost/news/archives/release">test-title</a>', $result);
     }
 
     /**
