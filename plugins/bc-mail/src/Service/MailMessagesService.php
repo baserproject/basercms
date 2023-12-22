@@ -339,6 +339,35 @@ class MailMessagesService implements MailMessagesServiceInterface
     }
 
     /**
+     * 全てのメール受信テーブルの再構築を行う
+     * @return bool
+     */
+    public function reconstructionAll(): bool
+    {
+        $mailContentsTable = TableRegistry::getTableLocator()->get('BcMail.MailContents');
+        $mailContents = $mailContentsTable->find()->all();
+        $mailContentsTable->getConnection()->begin();
+        $result = true;
+        foreach($mailContents as $mailContent) {
+            if ($this->createTable($mailContent->id)) {
+                if (!$this->construction($mailContent->id)) {
+                    $result = false;
+                    break;
+                }
+            } else {
+                $result = false;
+                break;
+            }
+        }
+        if($result) {
+            $mailContentsTable->getConnection()->commit();
+        } else {
+            $mailContentsTable->getConnection()->rollback();
+        }
+        return $result;
+    }
+
+    /**
      * 初期値の設定をする
      *
      * @param int $mailContentId

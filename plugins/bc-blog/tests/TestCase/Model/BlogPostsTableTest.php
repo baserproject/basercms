@@ -143,7 +143,7 @@ class BlogPostsTableTest extends BcTestCase
             'publish_begin' => '2022-02-29',            //公開開始日
             'publish_end' => '2022-02-29',              //公開終了日
             'posted' => '2022-02-29',                   //投稿日
-            'eyecatch' => 'a.aa',                   //アイキャッチ画像
+            'eye_catch' => 'a.aa',                   //アイキャッチ画像
         ]);
 
         //戻り値を確認
@@ -163,7 +163,7 @@ class BlogPostsTableTest extends BcTestCase
         //投稿日
         $this->assertEquals('投稿日の形式が不正です。', $errors['posted']['dateTime']);
         //アイキャッチ画像
-        $this->assertEquals('許可されていないファイルです。', $errors['eyecatch']['fileExt']);
+        $this->assertEquals('許可されていないファイルです。', $errors['eye_catch']['fileExt']);
     }
 
     /**

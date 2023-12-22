@@ -25,7 +25,7 @@ interface ThemesServiceInterface
 
     /**
      * 単一データ取得
-     * 
+     *
      * @param string $theme
      * @return EntityInterface
      * @checked
@@ -36,7 +36,7 @@ interface ThemesServiceInterface
 
     /**
      * 一覧データ取得
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -45,7 +45,7 @@ interface ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
-     * 
+     *
      * @param array $postData
      * @return string
      * @checked
@@ -56,7 +56,7 @@ interface ThemesServiceInterface
 
     /**
      * テーマを適用する
-     * 
+     *
      * @param string $theme
      * @checked
      * @noTodo
@@ -66,18 +66,18 @@ interface ThemesServiceInterface
 
     /**
      * 初期データを読み込む
-     * 
+     *
      * @param string $theme
      * @param string $pattern
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function loadDefaultDataPattern(string $theme, string $pattern): bool;
+    public function loadDefaultDataPattern(string $currentTheme, string $dbDataPattern): bool;
 
     /**
      * コピーする
-     * 
+     *
      * @param string $theme
      * @checked
      * @noTodo
@@ -87,7 +87,7 @@ interface ThemesServiceInterface
 
     /**
      * 削除する
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -96,7 +96,7 @@ interface ThemesServiceInterface
 
     /**
      * baserマーケットのテーマ一覧を取得する
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -105,7 +105,7 @@ interface ThemesServiceInterface
 
     /**
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
-     * 
+     *
      * @param string $theme
      * @return string
      * @checked
