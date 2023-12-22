@@ -419,7 +419,7 @@ class BlogHelperTest extends BcTestCase
         //'link'=>true
         $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
         $result = $this->Blog->getTag($post, ['link'=>true]);
-        $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a> , <a href="/news/archives/tag/tag2">tag2</a>', $result);
+        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a> , <a href="https://localhost/news/archives/tag/tag2">tag2</a>', $result);
     }
 
     public function getTagDataProvider()
