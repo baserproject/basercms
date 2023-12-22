@@ -88,8 +88,8 @@ class UploaderConfigsTable extends AppTable
             ->notEmptyString('mobile_small_width', __d('baser_core', 'モバイルサイズ（小）[幅] を入力してください。'));
         $validator
             ->scalar('mobile_small_height')
-            ->naturalNumber('mobile_small_height', __d('baser_core', 'モバイルサイズ（小）[幅]に不正な値が利用されています。'))
-            ->notEmptyString('mobile_small_height', __d('baser_core', 'モバイルサイズ（小）[幅] を入力してください。'));
+            ->naturalNumber('mobile_small_height', __d('baser_core', 'モバイルサイズ（小）[高さ]に不正な値が利用されています。'))
+            ->notEmptyString('mobile_small_height', __d('baser_core', 'モバイルサイズ（小）[高さ] を入力してください。'));
         return $validator;
     }
 
