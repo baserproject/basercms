@@ -63,6 +63,8 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
         $options = array_merge([
             'contain' => ['UploaderFiles']
         ], $queryParams);
+        if (is_null($options['contain']))
+            $options['contain'] = [];
         return $this->UploaderCategories->find()->contain($options['contain']);
     }
 
