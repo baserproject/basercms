@@ -287,6 +287,7 @@ class BlogHelperTest extends BcTestCase
             'no' => 1,
             'name' => 'release',
             'content' => 'リリースコンテンツ',
+            'detail' => 'detail test',
             'title' => 'プレスリリース',
             'status' => 1,
             'posted' => '2023-01-27 12:57:59',
@@ -295,11 +296,11 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getPostContent($post);
         $this->assertEquals('blog content test in file', $result);
         // blog_post_contentからコンテンツを取得
-        $result = $this->Blog->getPostContent($post, true, false, true);
-        $this->assertEquals('リ', $result);
+        $result = $this->Blog->getPostContent($post, true, false, 4);
+        $this->assertEquals('リリース', $result);
         // blog_post_content_more からコンテンツを取得
-        $result = $this->Blog->getPostContent($post, true, true, true);
-        $this->assertEquals('リblog content more test in file', $result);
+        $result = $this->Blog->getPostContent($post, true, true, 2);
+        $this->assertEquals('リリblog content more test in file', $result);
     }
 
     public function getPostContentDataProvider()
