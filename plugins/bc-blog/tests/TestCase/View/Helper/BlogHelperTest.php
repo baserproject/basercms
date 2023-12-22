@@ -311,19 +311,28 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostDetail()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $BlogPost = ClassRegistry::init('BlogPost');
-        $post = $BlogPost->find('first', ['conditions' => ['BlogPost.id' => 1]]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'title' => 'プレスリリース',
+            'detail' => 'detail リリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
 
         $result = $this->Blog->getPostDetail($post);
-        $expects = $post['BlogPost']['detail'];
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail リリース', $result);
 
-        //30文字限定
-        $options = ['cut' => 30];
+        //6文字限定
+        $options = ['cut' => 6];
         $result = $this->Blog->getPostDetail($post, $options);
-        $expects = '詳細が入ります。詳細が入ります。詳細が入ります。詳細が入りま';
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail', $result);
     }
 
     /**
