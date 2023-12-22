@@ -68,3 +68,4 @@ class WidgetAreasTable extends AppTable
     }
 
 }
+
