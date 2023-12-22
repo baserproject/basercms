@@ -193,6 +193,13 @@ class ContentsTable extends AppTable
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'ファイルのアップロードに失敗しました。')
                 ]
+            ])
+            ->add('eyecatch', [
+                'fileExt' => [
+                    'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '許可されていないファイルです。')
+                ]
             ]);
         $validator
             ->add('self_publish_begin', [

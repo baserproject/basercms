@@ -208,7 +208,7 @@ class BlogPostsTable extends BlogAppTable
                     'message' => __d('baser_core', 'ファイルのアップロード制限を超えています。')
                 ]
             ])
-            ->add('eyecatch', [
+            ->add('eye_catch', [
                 'fileExt' => [
                     'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
                     'provider' => 'bc',
