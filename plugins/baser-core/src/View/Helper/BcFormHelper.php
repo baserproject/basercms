@@ -1634,7 +1634,21 @@ DOC_END;
             }
             unset($options['counter']);
         }
-        return parent::control($fieldName, $options);
+         $output = parent::control($fieldName, $options);
+
+        // EVENT Form.afterControl
+        $event = $this->dispatchLayerEvent('afterControl', [
+            'formId' => $this->__id,
+            'data' => $this->getView()->getRequest()->getData(),
+            'fieldName' => $fieldName,
+            'out' => $output
+        ], ['class' => 'Form', 'plugin' => '']);
+
+        if ($event !== false) {
+            $output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
+        }
+
+        return $output;
     }
 // <<<
 
