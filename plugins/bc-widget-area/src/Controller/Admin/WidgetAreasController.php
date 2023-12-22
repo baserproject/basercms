@@ -96,6 +96,7 @@ class WidgetAreasController extends BcAdminAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(WidgetAreasServiceInterface $service, $id)
     {
