@@ -310,19 +310,18 @@ class BlogHelperTest extends BcTestCase
             'name' => 'release',
             'content' => 'リリースコンテンツ',
             'title' => 'プレスリリース',
+            'detail' => 'detail リリース',
             'status' => 1,
             'posted' => '2023-01-27 12:57:59',
         ]);
 
         $result = $this->Blog->getPostDetail($post);
-        $expects = $post['BlogPost']['detail'];
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail リリース', $result);
 
-        //30文字限定
-        $options = ['cut' => 30];
+        //6文字限定
+        $options = ['cut' => 6];
         $result = $this->Blog->getPostDetail($post, $options);
-        $expects = '詳細が入ります。詳細が入ります。詳細が入ります。詳細が入りま';
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail', $result);
     }
 
     /**
