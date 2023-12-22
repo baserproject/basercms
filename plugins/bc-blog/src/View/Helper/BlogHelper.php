@@ -329,6 +329,7 @@ class BlogHelper extends Helper
      * @return string 記事タイトル
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostTitle($post, $link = true, $options = [])
     {
@@ -356,6 +357,7 @@ class BlogHelper extends Helper
      * @return string 記事へのリンク
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostLink($post, $title, $options = [])
     {
@@ -530,6 +532,7 @@ class BlogHelper extends Helper
      * @return string 記事本文
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostDetail(BlogPost $post, array $options = [])
     {

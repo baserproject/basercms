@@ -154,6 +154,12 @@ interface MailMessagesServiceInterface
     public function construction(int $mailContentId): bool;
 
     /**
+     * 全てのメール受信テーブルの再構築を行う
+     * @return bool
+     */
+    public function reconstructionAll(): bool;
+
+    /**
      * 初期値の設定をする
      *
      * @param int $mailContentId
