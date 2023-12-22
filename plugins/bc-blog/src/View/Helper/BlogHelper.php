@@ -529,6 +529,7 @@ class BlogHelper extends Helper
      * @return string 記事本文
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostDetail(BlogPost $post, array $options = [])
     {
