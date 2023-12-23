@@ -163,7 +163,7 @@ class MailMessagesControllerTest extends BcTestCase
         // レスポンスのコードを確認する
         $this->assertResponseCode(500);
         // レスポンスのメッセージ内容を確認する
-        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value `text` of type `string` to int', $result->message);
 
         //404エラーテスト
         $data = ['id' => 2, 'message' => 'test message'];
@@ -227,7 +227,7 @@ class MailMessagesControllerTest extends BcTestCase
         // レスポンスのコードを確認する
         $this->assertResponseCode(500);
         // レスポンスのメッセージ内容を確認する
-        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value `text` of type `string` to int', $result->message);
 
         //不要なテーブルを削除
         $MailMessagesService->dropTable(1);

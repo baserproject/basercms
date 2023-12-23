@@ -38,7 +38,7 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(int $mailContentId, PaginatedResultSet $mailMessages): array
+    public function getViewVarsForIndex(int $mailContentId, PaginatedResultSet|ResultSet $mailMessages): array
     {
         /** @var MailContentsService $mailContentsService */
         $mailContentsService = $this->getService(MailContentsServiceInterface::class);
