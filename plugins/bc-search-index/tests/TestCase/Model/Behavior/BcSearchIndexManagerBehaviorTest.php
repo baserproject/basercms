@@ -110,7 +110,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
     {
         $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
         $this->assertTrue($this->table->deleteSearchIndex(1));
-        $this->assertTrue($this->BcSearchIndexManager->SearchIndexes->findByModelId(1)->isEmpty());
+        $this->assertEquals(0, $this->BcSearchIndexManager->SearchIndexes->findByModelId(1)->count());
     }
 
     /**
@@ -123,7 +123,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $event = new Event("afterSave");
         $page = $this->table->find()->contain(['Contents' => ['Sites']])->first();
         $this->BcSearchIndexManager->afterDelete($event, $page, new \ArrayObject());
-        $this->assertEquals(true, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
+        $this->assertEquals(0, $this->SearchIndexes->findByModelId($page->id)->count());
     }
 
     /**
@@ -156,7 +156,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      * @param array $options
      * @dataProvider afterSaveDataProvider
      */
-    public function testAfterSave($exclude_search, $exist)
+    public function testAfterSave($exclude_search, $count)
     {
         $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
         $event = new Event("afterSave");
@@ -169,16 +169,16 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         }
 
         $this->BcSearchIndexManager->afterSave($event, $page, new \ArrayObject());
-        $this->assertEquals($exist, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
+        $this->assertEquals($count, $this->SearchIndexes->findByModelId($page->id)->count());
     }
 
     public static function afterSaveDataProvider()
     {
         return [
             // exclude_searchがある場合削除されているかを確認
-            [1, true],
+            [1, 0],
             // exclude_searchがなく、なおかつ新規の場合索引が作成されて存在するかをテスト
-            [0, false]
+            [0, 1]
         ];
     }
 }
