@@ -22,8 +22,10 @@ use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
@@ -410,20 +412,34 @@ class BlogHelperTest extends BcTestCase
      *
      * @dataProvider getTagDataProvider
      */
-    public function testGetTag($options, $expects)
+    public function testGetTag()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = [
-            'BlogTag' => [
-                ['name' => 'test1'],
-                ['name' => 'test2'],
-            ],
-            'BlogContent' => [
-                'name' => 'news'
-            ]
-        ];
-        $result = $this->Blog->getTag($post, $options);
-        $this->assertEquals($expects, $result, 'タグを正しく取得できません');
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2015-01-27 12:57:59',
+        ])->persist();
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 1, 'blog_tag_id' => 2])->persist();
+
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //'link'=>false
+        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $result = $this->Blog->getTag($post, ['link'=>false]);
+        $this->assertEquals('tag1', $result[0]['name']);
+        //'link'=>true
+        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $result = $this->Blog->getTag($post, ['link'=>true]);
+        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a> , <a href="https://localhost/news/archives/tag/tag2">tag2</a>', $result);
     }
 
     public function getTagDataProvider()
