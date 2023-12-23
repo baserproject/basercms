@@ -633,6 +633,7 @@ class BlogHelper extends Helper
      * @return mixed ''|string|array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTag($post, $options = [])
     {
