@@ -172,7 +172,11 @@ $(function () {
                     processData: false,
                     contentType: false,
                     cache: false,
-                    success: uploadSuccessHandler
+                    success: uploadSuccessHandler,
+                    error: function (response) {
+                        $.bcUtil.showApiError(response);
+                        $.bcUtil.hideLoader()
+                    },
                 });
             }, {useUpdate: false, hideLoader: false});
         }
