@@ -354,22 +354,19 @@ class BcUploadHelper extends BcAppHelper
 			}
 
 			if (!isset($mostSizeUrl)) {
-				$mostSizeUrl = $fileUrl . $fileName;
-			}
-
-			if (file_exists(WWW_ROOT . ltrim($mostSizeUrl, DS))) {
-				$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
-			} elseif (file_exists(WWW_ROOT .DS. $mostSizeUrl)) {
-				$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
+				$mostSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+			} else {
+				if (file_exists(WWW_ROOT . ltrim($mostSizeUrl, DS))) {
+					$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
+				}
 			}
 
 			if (!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl . $fileName;
-			}
-			if (file_exists(WWW_ROOT . ltrim($maxSizeUrl, DS))) {
-				$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
-			} elseif (file_exists(WWW_ROOT .DS. $maxSizeUrl)) {
-				$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
+				$maxSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+			} else {
+				if (file_exists(WWW_ROOT . ltrim($maxSizeUrl, DS))) {
+					$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
+				}
 			}
 		}
 
