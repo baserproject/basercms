@@ -491,7 +491,7 @@ class BlogContentsTableTest extends BcTestCase
         ]);
         $this->assertSame([
             'id' => [
-                'integer' => 'The provided value is invalid'
+                'integer' => 'The provided value must be an integer'
             ],
             'content' => [
                 '_required' => '関連するコンテンツがありません'

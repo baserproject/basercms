@@ -1210,7 +1210,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, (bool)$result);
     }
 
-    public function getCategoryByName()
+    public static function getCategoryByName()
     {
         return [
             [1, 'category', 'child', '', true],

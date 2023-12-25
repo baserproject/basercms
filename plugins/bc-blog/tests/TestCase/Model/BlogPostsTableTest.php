@@ -337,7 +337,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($rs["BlogPosts.blog_content_id"], 1);
     }
 
-    public function _getEntryDatesConditionsProvider()
+    public static function _getEntryDatesConditionsProvider()
     {
         return [
             [1, 2027, 1, 2027, 1],      //日付を設定する場合、
