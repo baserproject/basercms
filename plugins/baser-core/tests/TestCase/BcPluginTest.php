@@ -104,7 +104,7 @@ class BcPluginTest extends BcTestCase
         $pluginDir = dirname($from);
         $folder = new BcFolder($from);
         $to = $pluginDir . DS . 'BcBlogBak';
-        $folder->copy($from, $to);
+        $folder->copy($to);
         $folder->create();
         $this->BcPlugin->uninstall(['connection' => 'test']);
         $this->assertFalse(is_dir($from));

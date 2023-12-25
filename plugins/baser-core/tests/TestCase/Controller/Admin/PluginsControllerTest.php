@@ -179,7 +179,7 @@ class PluginsControllerTest extends BcTestCase
         $folder = new BcFolder($from);
         $folder->create();
         $to = $pluginDir . DS . 'BcBlogBak';
-        $folder->copy($from, $to);
+        $folder->copy($to);
         $this->post('/baser/admin/baser-core/plugins/uninstall/BcBlog', $data);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
@@ -305,7 +305,9 @@ class PluginsControllerTest extends BcTestCase
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';

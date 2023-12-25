@@ -139,7 +139,7 @@ class BcFolderTest extends TestCase
         $file = new BcFile($path. DS. 'test.txt');
         $file->create();
         $des = TMP_TESTS . 'test_des';
-        $result = $folder1->copy($path, $des);
+        $result = $folder1->copy($des);
         $this->assertTrue($result);
         $this->assertFileExists($des. DS. 'test.txt');
         $this->assertFileExists($des. DS. 'test1' .DS. 'test1.txt');

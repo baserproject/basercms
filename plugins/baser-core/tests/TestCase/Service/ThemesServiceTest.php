@@ -80,7 +80,9 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy( $zipSrcPath . 'BcPluginSample2');
         $theme = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
@@ -109,7 +111,9 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         // 既に存在するテーマと同じテーマをアップロードした場合の戻り値の変化
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
         $zip = new ZipArchiver();
         $zip->archive($zipSrcPath, $testFile, true);
         $this->setUploadFileToRequest('file', $testFile);

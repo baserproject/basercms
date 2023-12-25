@@ -128,7 +128,9 @@ class BlogContentsController extends BlogAdminAppController
             if (is_dir($source)) {
                 $folder = new BcFolder(dirname($target));
                 $folder->create();
-                $folder->copy($source, $target);
+                //copy
+                $folder = new BcFolder($source);
+                $folder->copy($target);
             }
         }
         $path = str_replace(DS, '/', $path);

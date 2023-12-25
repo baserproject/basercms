@@ -83,8 +83,7 @@ class UtilitiesControllerTest extends BcTestCase
         // ログが存在しないテスト
         $logsFolder = new BcFolder(LOGS);
         $backupPath = ROOT . DS . 'logsBackup' . DS;
-        $logsFolder->copy(LOGS, $backupPath); // 念の為ログフォルダをバックアップする
-        $logsFolder->delete();
+        $logsFolder->move($backupPath); // 念の為ログフォルダをバックアップする
         $this->get('/baser/admin/baser-core/utilities/log_maintenance/download');
         // ステータスを確認
         $this->assertResponseCode(302);
@@ -98,8 +97,7 @@ class UtilitiesControllerTest extends BcTestCase
         // ログが存在しない場合のメッセージを確認
         $this->assertFlashMessage("エラーログが存在しません。");
         $backupFolder = new BcFolder($backupPath);
-        $backupFolder->copy($backupPath, LOGS); // ログフォルダのファイルを復元する
-        $backupFolder->delete(); // バックアップフォルダを削除する
+        $backupFolder->move( LOGS); // ログフォルダのファイルを復元する
         // ---- 引数 $mode が download の場合 end ----
 
         // ---- 引数 $mode が delete の場合 start ----
