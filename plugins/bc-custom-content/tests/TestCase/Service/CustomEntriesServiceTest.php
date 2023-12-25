@@ -644,7 +644,7 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->assertTrue($result);
         $this->assertFalse($this->BcDatabaseService->tableExists('custom_entry_1_recruit_categories'));
         //異常系実行
-        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->expectExceptionMessage('Record not found in table `custom_tables`');
         $this->CustomEntriesService->dropTable(99);
 
     }
@@ -701,7 +701,7 @@ class CustomEntriesServiceTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
 
         //異常系実行
-        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->expectExceptionMessage('Record not found in table `custom_tables`');
         $this->CustomEntriesService->addFields(99, $links);
     }
 

@@ -287,7 +287,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //存在しないIDを指定した場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/delete/1111');
         $this->assertResponseCode(302);
-        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table "custom_fields"');
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `custom_fields`');
         $this->assertRedirect(['action' => 'index']);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');
