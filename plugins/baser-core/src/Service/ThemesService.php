@@ -158,7 +158,7 @@ class ThemesService implements ThemesServiceInterface
             $num++;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move(TMP . $srcName, BASER_THEMES . $dstName,);
+        $folder->move( BASER_THEMES . $dstName,);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;

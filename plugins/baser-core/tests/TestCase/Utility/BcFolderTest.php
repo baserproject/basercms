@@ -160,7 +160,7 @@ class BcFolderTest extends TestCase
         $des = TMP_TESTS . 'test_des';
         $folder2 = new BcFolder($des);
         $folder2->create();
-        $result = $folder1->move($path, $des);
+        $result = $folder1->move($des);
         $this->assertTrue($result);
         $this->assertFileDoesNotExist($path. DS. 'test.txt');
         $this->assertFileExists($des. DS. 'test.txt');

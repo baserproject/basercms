@@ -188,7 +188,7 @@ class PluginsControllerTest extends BcTestCase
             'action' => 'index'
         ]);
         $this->assertFlashMessage('プラグイン「BcBlog」を削除しました。');
-        $folder->move($from, $to);
+        $folder->move($to);
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 

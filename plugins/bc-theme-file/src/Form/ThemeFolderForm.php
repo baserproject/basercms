@@ -57,7 +57,7 @@ class ThemeFolderForm extends Form
             $newPath = dirname($data['fullpath']) . DS . $data['name'] . DS;
             if($newPath === $data['fullpath']) return true;
             $folder = new BcFolder($data['fullpath']);
-            return $folder->move($data['fullpath'], $newPath);
+            return $folder->move($newPath);
         }
         return false;
     }

@@ -110,7 +110,7 @@ class BcPluginTest extends BcTestCase
         $this->assertFalse(is_dir($from));
         $plugins = $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertNull($plugins);
-        $folder->move($from, $to);
+        $folder->move( $to);
         $this->BcPlugin->install(['connection' => 'test']);
     }
 
