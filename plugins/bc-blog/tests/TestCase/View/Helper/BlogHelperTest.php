@@ -271,13 +271,6 @@ class BlogHelperTest extends BcTestCase
     public function testGetPostContent()
     {
         // 準備
-        $templateDir = ROOT . DS . 'plugins' . DS . 'bc-admin-third' . DS . 'templates'. DS;
-        $blog_post_content = new BcFile($templateDir . 'element' . DS . 'blog_post_content.php');
-        $blog_post_content->create();
-        $blog_post_content->write('blog content test in file');
-        $blog_post_content_more = new BcFile($templateDir . 'element' . DS . 'blog_post_content_more.php');
-        $blog_post_content_more->create();
-        $blog_post_content_more->write('blog content more test in file');
         $this->loadFixtureScenario(InitAppScenario::class);
         $site = SiteFactory::get(1);
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
@@ -294,7 +287,10 @@ class BlogHelperTest extends BcTestCase
         ]);
         // ファイルからコンテンツを取得
         $result = $this->Blog->getPostContent($post);
-        $this->assertEquals('blog content test in file', $result);
+        $this->assertEquals('
+
+<div id="post-detail">detail test</div>
+', $result);
         // blog_post_contentからコンテンツを取得
         $result = $this->Blog->getPostContent($post, true, false, 4);
         $this->assertEquals('リリース', $result);

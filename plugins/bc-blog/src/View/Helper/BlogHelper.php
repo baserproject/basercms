@@ -491,7 +491,7 @@ class BlogHelper extends Helper
                 $out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
             }
         } else {
-            $out = $this->BcBaser->getElement('blog_post_content', [
+            $out = $this->BcBaser->getElement('BcBlog.blog_post_content', [
                 'moreText' => $moreText,
                 'useContent' => $this->currentBlogContent->use_content,
                 'post' => $post
@@ -499,7 +499,7 @@ class BlogHelper extends Helper
         }
         if ($moreLink && trim($post->detail) != "<br>") {
             if ($moreLink === true) $moreLink = __d('baser_core', '≫ 続きを読む');
-            $out .= $this->BcBaser->getElement('blog_post_content_more', [
+            $out .= $this->BcBaser->getElement('BcBlog.blog_post_content_more', [
                 'moreLink' => $moreLink,
                 'post' => $post
             ]);
