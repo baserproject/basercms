@@ -70,7 +70,7 @@ class ContentLinksTableTest extends BcTestCase
         $contentLink = $this->ContentLinks->newEntity(['id' => 'test']);
         $this->assertSame([
             'id' => [
-                'integer' => 'The provided value is invalid',
+                'integer' => 'The provided value must be an integer',
             ],
             // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
             'content' => [
