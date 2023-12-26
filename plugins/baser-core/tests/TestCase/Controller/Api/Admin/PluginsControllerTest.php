@@ -207,7 +207,9 @@ class PluginsControllerTest extends BcTestCase
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';

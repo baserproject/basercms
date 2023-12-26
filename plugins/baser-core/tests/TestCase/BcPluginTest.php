@@ -104,13 +104,13 @@ class BcPluginTest extends BcTestCase
         $pluginDir = dirname($from);
         $folder = new BcFolder($from);
         $to = $pluginDir . DS . 'BcBlogBak';
-        $folder->copy($from, $to);
+        $folder->copy($to);
         $folder->create();
         $this->BcPlugin->uninstall(['connection' => 'test']);
         $this->assertFalse(is_dir($from));
         $plugins = $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertNull($plugins);
-        $folder->move($from, $to);
+        $folder->move( $to);
         $this->BcPlugin->install(['connection' => 'test']);
     }
 

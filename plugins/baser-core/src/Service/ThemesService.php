@@ -161,7 +161,7 @@ class ThemesService implements ThemesServiceInterface
             $num++;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move(TMP . $srcName, BASER_THEMES . $dstName,);
+        $folder->move( BASER_THEMES . $dstName,);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
@@ -365,7 +365,7 @@ class ThemesService implements ThemesServiceInterface
             $newTheme .= 'Copy';
         }
         $folder = new BcFolder(BASER_THEMES . $theme);
-        if (!$folder->copy(BASER_THEMES . $theme, BASER_THEMES . $newTheme)) {
+        if (!$folder->copy( BASER_THEMES . $newTheme)) {
             return false;
         }
         if(!BcUtil::changePluginNameSpace($newTheme)) return false;
@@ -421,7 +421,7 @@ class ThemesService implements ThemesServiceInterface
             $folder->create();
         }
         $folder = new BcFolder(BcUtil::getPluginPath($theme));
-        $folder->copy(BcUtil::getPluginPath($theme), $tmpDir . $theme);
+        $folder->copy($tmpDir . $theme);
         return $tmpDir;
     }
 

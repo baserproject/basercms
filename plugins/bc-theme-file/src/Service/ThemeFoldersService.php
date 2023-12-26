@@ -210,7 +210,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
             $newPath .= '_copy';
         }
         $folder = new BcFolder($fullpath);
-        $result = $folder->copy($fullpath, $newPath);
+        $result = $folder->copy($newPath);
         $folder = null;
         if ($result) {
             return $newEntity;
@@ -297,9 +297,9 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
-        $folder = new BcFolder(dirname($themePath));
-        $folder->create();
-        if ($folder->copy($params['fullpath'], $themePath)) {
+        (new BcFolder(dirname($themePath)))->create();
+        $folder = new BcFolder($params['fullpath']);
+        if ($folder->copy($themePath)) {
             return str_replace(ROOT, '', $themePath);
         } else {
             return false;

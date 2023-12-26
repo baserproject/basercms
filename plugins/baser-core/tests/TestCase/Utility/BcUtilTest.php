@@ -276,7 +276,7 @@ class BcUtilTest extends BcTestCase
 //        $folder->create();
         $backup = str_replace('cache', 'cache_backup', CACHE);
         (new BcFolder($backup))->create();
-        $folder->move($origin, $backup);
+        $folder->move($backup);
 
         // cache環境準備
         $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
@@ -300,7 +300,8 @@ class BcUtilTest extends BcTestCase
         }
 
         // cacheファイル復元
-        $folder->move($backup, $origin);
+        $folder = new BcFolder($backup);
+        $folder->move($origin);
         $folder->chmod(0777);
     }
 
