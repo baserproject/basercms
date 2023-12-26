@@ -358,15 +358,29 @@ class BlogPostsService implements BlogPostsServiceInterface
         array $conditions,
         string $category,
         int $blogContentId = null,
-        string $contentUrl = null,
+        array|string $contentUrl = null,
         bool $force = false)
     {
         $categoryConditions = ['BlogCategories.name' => $category];
         if ($blogContentId) {
             $categoryConditions['BlogCategories.blog_content_id'] = $blogContentId;
         } elseif ($contentUrl) {
-            $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['Contents.url' => $contentUrl])->first();
-            $categoryConditions['BlogCategories.blog_content_id'] = $entityIdData->entity_id;
+            $query = $this->BlogPosts->BlogContents->Contents->find()
+                ->select(['Contents.entity_id']);
+
+            // $contentUrl が配列の場合は IN 句を使う
+            if (is_array($contentUrl)) {
+                $query->where(['Contents.url IN' => $contentUrl]);
+            } else {
+                $query->where(['Contents.url' => $contentUrl]);
+            }
+            // find() で取得した entity_id を配列で取得
+            $entityIds = Hash::extract($query->toArray(), '{n}.entity_id');
+            if (count($entityIds) > 1) { // $contentUrlが配列の場合
+                $categoryConditions['BlogCategories.blog_content_id IN'] = $entityIds;
+            } elseif(count($entityIds) === 1) { // $contentUrlが文字列の場合
+                $categoryConditions['BlogCategories.blog_content_id'] = $entityIds[0];
+            }
         } elseif (!$force) {
             trigger_error(__d('baser_core', 'blog_content_id を指定してください。'), E_USER_WARNING);
         }
