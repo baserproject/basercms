@@ -600,4 +600,17 @@ class BcValidation extends Validation
         return ($length >= $min && $length <= $max);
     }
 
+    /**
+     * スペースしかない文字列
+     *
+     * @param $string
+     * @return bool
+     * @checked
+     * @notodo
+     */
+    public static function notBlankOnlyString($string): bool
+    {
+        return (preg_replace("/( |　)/", '', $string) !== '');
+    }
+
 }
