@@ -160,6 +160,9 @@ class DblogsService implements DblogsServiceInterface
             'contain' => ['Users']
         ], $queryParams);
 
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
+
         $query = $this->Dblogs->find()->contain($queryParams['contain']);
 
         if (!empty($queryParams['message'])) {

@@ -293,6 +293,9 @@ class ContentsService implements ContentsServiceInterface
             'contain' => ['Sites'],
         ], $queryParams);
 
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
+
         $query = $this->Contents->find($type)->contain($queryParams['contain']);
 
         if (!empty($queryParams['withTrash'])) {

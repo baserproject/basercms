@@ -131,7 +131,7 @@ class PluginsControllerTest extends BcTestCase
     {
         return [
             ["BcUploader", 200, "プラグイン「BcUploader」をインストールしました。"],
-            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin UnKnown could not be found."],
+            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin `UnKnown` could not be found."],
             ["BcTest", 500, "データベース処理中にエラーが発生しました。プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
         ];
     }

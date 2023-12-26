@@ -150,6 +150,8 @@ class PermissionsService implements PermissionsServiceInterface
         if (!empty($queryParams['permission_group_type'])) {
             $conditions['PermissionGroups.type'] = $queryParams['permission_group_type'];
         }
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
         $query = $this->Permissions->find()
             ->contain($queryParams['contain'])
             ->where($conditions)

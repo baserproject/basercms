@@ -165,6 +165,8 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                 ->select($fields)
                 ->where($this->ContentFolders->Contents->getConditionAllowPublish());
         } else {
+            if (is_null($options['contain']))
+                $options['contain'] = [];
             $query = $this->ContentFolders->find()->contain($options['contain']);
         }
 
