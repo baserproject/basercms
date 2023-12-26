@@ -358,18 +358,25 @@ class BlogPostsService implements BlogPostsServiceInterface
         array $conditions,
         string $category,
         int $blogContentId = null,
-        $contentUrl = null,
+        array|string $contentUrl = null,
         bool $force = false)
     {
         $categoryConditions = ['BlogCategories.name' => $category];
         if ($blogContentId) {
             $categoryConditions['BlogCategories.blog_content_id'] = $blogContentId;
         } elseif ($contentUrl) {
-            $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', [['Contents.url' => $contentUrl]])->toList();
-            if (!empty($entityIdData)) {
-                $categoryConditions['BlogCategories.blog_content_id'] = Hash::extract($entityIdData, '{n}.entity_id');
+            if (is_array($contentUrl)) {
+                $entityQuery = $this->BlogPosts->BlogContents->Contents->find('all', [
+                    'fields' => ['Contents.entity_id'],
+                    'conditions' => ['Contents.url IN' => $contentUrl],
+                ]);
+                $entityIdData = $entityQuery->toList();
+                if (!empty($entityIdData)) {
+                    $categoryConditions['BlogCategories.blog_content_id IN'] = Hash::extract($entityIdData, '{n}.entity_id');
+                }
             } else {
-                $categoryConditions['BlogCategories.blog_content_id'] = [];
+                $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['Contents.url' => $contentUrl])->first();
+                $categoryConditions['BlogCategories.blog_content_id'] = $entityIdData->entity_id;
             }
         } elseif (!$force) {
             trigger_error(__d('baser_core', 'blog_content_id を指定してください。'), E_USER_WARNING);
