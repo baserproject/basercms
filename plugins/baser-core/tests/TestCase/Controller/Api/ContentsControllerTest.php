@@ -96,7 +96,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         // indexテスト
         $this->get('/baser/api/baser-core/contents.json?token=' . $this->accessToken);
-//        $this->assertResponseOk();
+        $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('', $result->contents[0]->name);
         // treeテスト
