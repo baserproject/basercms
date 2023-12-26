@@ -375,7 +375,7 @@ class BlogPostsService implements BlogPostsServiceInterface
                     $categoryConditions['BlogCategories.blog_content_id IN'] = Hash::extract($entityIdData, '{n}.entity_id');
                 }
             } else {
-                $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['Contents.url' => $contentUrl])->first();
+                $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['conditions' => ['Contents.url' => $contentUrl]])->first();
                 $categoryConditions['BlogCategories.blog_content_id'] = $entityIdData->entity_id;
             }
         } elseif (!$force) {
