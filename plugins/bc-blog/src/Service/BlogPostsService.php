@@ -145,10 +145,12 @@ class BlogPostsService implements BlogPostsServiceInterface
         unset($options['num'], $options['sort']);
 
         if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
+        if ($options['contain'] == null)
+            $options['contain'] = [];
         $query = $this->BlogPosts->find()->contain($options['contain']);
 
         if ($options['order']) {
-            $query->order($this->createOrder($options['order'], $options['direction']));
+            $query->orderBy($this->createOrder($options['order'], $options['direction']));
             unset($options['order'], $options['direction']);
         }
         if (!empty($options['limit'])) {

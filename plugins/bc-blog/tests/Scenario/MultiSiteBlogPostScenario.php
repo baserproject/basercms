@@ -52,6 +52,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();
         $this->createBlogPosts();
+        return null;
     }
 
     /**

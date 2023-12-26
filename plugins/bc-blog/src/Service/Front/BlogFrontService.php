@@ -74,7 +74,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function getViewVarsForIndex(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet $posts): array
+    public function getViewVarsForIndex(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet|ResultSet $posts): array
     {
         return [
             'blogContent' => $blogContent,

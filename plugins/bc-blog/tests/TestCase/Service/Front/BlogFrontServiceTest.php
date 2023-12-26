@@ -736,7 +736,7 @@ class BlogFrontServiceTest extends BcTestCase
         $this->assertEquals($prevExpected, $rs['prev']);
     }
 
-    private function getViewVarsForBlogCalendarWidgetDataProvider()
+    private static function getViewVarsForBlogCalendarWidgetDataProvider()
     {
         return [
             [6, 2014, 12, true, false],

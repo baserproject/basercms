@@ -180,7 +180,7 @@ class BlogTagsServiceTest extends BcTestCase
         ];
         $result = $this->BlogTagsService->getIndex($params);
         $whereSql = $result->clause('where')->sql(new ValueBinder());
-        $this->assertStringContainsString('BlogTags.name like', $whereSql);
+        $this->assertStringContainsString('BlogTags.name LIKE', $whereSql);
         $this->assertStringContainsString('Contents.site_id =', $whereSql);
         $this->assertStringContainsString('Contents.url =', $whereSql);
         $sortSql = $result->clause('order')->sql(new ValueBinder());
@@ -212,7 +212,7 @@ class BlogTagsServiceTest extends BcTestCase
         $query = $this->BlogTags->find();
         $result = $this->BlogTagsService->createIndexConditions($query, $params);
         $sql = $result->clause('where')->sql(new ValueBinder());
-        $this->assertStringContainsString('BlogTags.name like', $sql);
+        $this->assertStringContainsString('BlogTags.name LIKE', $sql);
         $this->assertStringContainsString('Contents.site_id =', $sql);
         $this->assertStringContainsString('Contents.url =', $sql);
 
