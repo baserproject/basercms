@@ -82,8 +82,8 @@ class BcControllerEventListenerTest extends BcTestCase
     public static function addHelperDataProvider()
     {
         return [
-            ['BcBaser', ['BcBaser']],
-            [['BcBaser', 'BcTime'], ['BcBaser', 'BcTime']]
+            ['BcBaser', ['BcBaser' => []]],
+            [['BcBaser', 'BcTime'], ['BcBaser' => [], 'BcTime' => []]]
         ];
     }
 

@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\MultiSiteScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -31,7 +32,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-
+    use BcContainerTrait;
     /**
      * Set Up
      *
@@ -39,11 +40,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function setUp(): void
     {
-        if (preg_match('/^testIsInstall/', $this->getName())) {
-            Configure::write('BcRequest.isInstalled', false);
-        } else {
-            Configure::write('BcRequest.isInstalled', true);
-        }
         parent::setUp();
         $this->BcRequestFilterMiddleware = new BcRequestFilterMiddleware();
     }
@@ -208,6 +204,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testIsInstall($expect, $url)
     {
+        Configure::write('BcRequest.isInstalled', false);
         $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isInstall($this->getRequest($url)));
     }
 
