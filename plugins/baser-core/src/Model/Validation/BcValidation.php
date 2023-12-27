@@ -607,6 +607,7 @@ class BcValidation extends Validation
      * @return bool
      * @checked
      * @notodo
+     * @unitTest
      */
     public static function notBlankOnlyString($string): bool
     {
