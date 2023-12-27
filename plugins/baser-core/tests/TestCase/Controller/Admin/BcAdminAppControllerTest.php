@@ -57,7 +57,6 @@ class BcAdminAppControllerTest extends BcTestCase
         $request = $this->loginAdmin($this->getRequest());
         Router::setRequest($request);
         $this->BcAdminApp = new BcAdminAppController($request);
-//        $this->RequestHandler = $this->BcAdminApp->components()->load('RequestHandler');
     }
 
     /**
