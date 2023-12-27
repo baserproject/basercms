@@ -506,11 +506,22 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $post = ['BlogPost' => [
-            'posts_date' => '2015-08-10 18:58:07'
-        ]];
-        $this->Blog->getPostDate($post);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'title' => 'プレスリリース',
+            'detail' => 'detail リリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        $result = $this->Blog->getPostDate($post);
+        $this->assertEquals('2023/01/27', $result);
     }
 
     /**
@@ -581,6 +592,54 @@ class BlogHelperTest extends BcTestCase
         ]];
         $this->Blog->prevLink($post);
     }
+
+    /**
+     * test hasPrevLink
+     */
+    public function test_hasPrevLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'no' => 100,
+            'title' => 'blog post 1',
+            'posted' => '2020-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-10-01 09:00:00',
+            'publish_end' => '9999-11-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'no' => 101,
+            'title' => 'blog post 2',
+            'posted' => '2022-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-02-01 09:00:00',
+            'publish_end' => '9999-12-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 3,
+            'blog_content_id' => 3,
+            'no' => 102,
+            'title' => 'blog post 3',
+            'posted' => '2022-08-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-05-06 09:00:00',
+            'publish_end' => '9999-02-01 09:00:00'
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasPrevLink(BlogPostFactory::get(2));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasPrevLink(BlogPostFactory::get(1));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasPrevLink(BlogPostFactory::get(111));
+    }
+
 
     public function prevLinkDataProvider()
     {

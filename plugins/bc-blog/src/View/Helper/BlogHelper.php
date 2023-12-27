@@ -748,6 +748,7 @@ class BlogHelper extends Helper
      * @return string 登録日
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostDate(BlogPost $post, $format = 'Y/m/d')
     {
@@ -834,6 +835,7 @@ class BlogHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasPrevLink(BlogPost $post)
     {
