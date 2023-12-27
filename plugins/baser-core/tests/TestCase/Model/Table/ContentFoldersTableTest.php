@@ -74,7 +74,7 @@ class ContentFoldersTableTest extends BcTestCase
         $contentFolder = $this->ContentFolders->newEntity(['id' => 'test']);
         $this->assertSame([
             'id' => [
-                'integer' => 'The provided value is invalid',
+                'integer' => 'The provided value must be an integer',
                 'valid' => 'IDに不正な値が利用されています。'
             ],
             // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
