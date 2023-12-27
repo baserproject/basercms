@@ -57,7 +57,6 @@ class BcAdminAppControllerTest extends BcTestCase
         $request = $this->loginAdmin($this->getRequest());
         Router::setRequest($request);
         $this->BcAdminApp = new BcAdminAppController($request);
-        $this->RequestHandler = $this->BcAdminApp->components()->load('RequestHandler');
     }
 
     /**
@@ -69,7 +68,7 @@ class BcAdminAppControllerTest extends BcTestCase
     {
         parent::tearDown();
         Router::reload();
-        unset($this->BcAdminApp, $this->RequestHandler);
+        unset($this->BcAdminApp);
     }
 //
 //    /**

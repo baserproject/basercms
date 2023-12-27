@@ -102,6 +102,9 @@ class UsersService implements UsersServiceInterface
             'contain' => ['UserGroups']
         ], $queryParams);
 
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
+
         $query = $this->Users->find()->contain($queryParams['contain']);
 
         if (!empty($queryParams['limit'])) {
