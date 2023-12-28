@@ -126,7 +126,7 @@ class AppView extends View
             throw new RuntimeException('Template name not provided');
         }
 
-        // CUSTOMIZE ADD 2013/08/27 ryuring
+        // CUSTOMIZE ADD 2023/06/16 kaburk
         // イベントを追加
         // >>>
         // EVENT beforeGetTemplateFileName
@@ -187,7 +187,7 @@ class AppView extends View
             $name = $this->layout;
         }
 
-        // CUSTOMIZE ADD 2013/08/27 ryuring
+        // CUSTOMIZE ADD 2023/06/16 kaburk
         // イベントを追加
         // >>>
         // EVENT beforeGetLayoutFileName
@@ -224,7 +224,7 @@ class AppView extends View
      */
     protected function _getElementFileName(string $name, bool $pluginCheck = true)
     {
-        // CUSTOMIZE ADD 2013/08/27 ryuring
+        // CUSTOMIZE ADD 2023/06/16 kaburk
         // イベントを追加
         // >>>
         // EVENT beforeGetElementFileName
