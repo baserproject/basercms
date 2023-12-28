@@ -55,6 +55,7 @@ class AppView extends View
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
+        $this->loadHelper('BaserCore.BcArray');
         $this->loadHelper('BaserCore.BcUpload');
         $this->loadHelper('BaserCore.BcToolbar');
         $this->loadHelper('Paginator');
