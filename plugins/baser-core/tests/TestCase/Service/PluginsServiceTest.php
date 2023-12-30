@@ -388,7 +388,9 @@ EOF;
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath. 'BcThemeSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy( $zipSrcPath. 'BcThemeSample2');
         $plugin = 'BcThemeSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -415,7 +417,9 @@ EOF;
         //  既に /plugins/ 内に同名のプラグインが存在する場合には、数字付きのディレクトリ名（PluginName2）にリネームする。
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcThemeSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcThemeSample2');
         $zip = new ZipArchiver();
         $zip->archive($zipSrcPath, $testFile, true);
         $this->setUploadFileToRequest('file', $testFile);
