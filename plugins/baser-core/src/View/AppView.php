@@ -58,7 +58,7 @@ class AppView extends View
         $this->addHelper('BaserCore.BcContents');
         $this->addHelper('BaserCore.BcPage');
         $this->addHelper('BaserCore.BcBaser');
-        $this->loadHelper('BaserCore.BcArray');
+        $this->addHelper('BaserCore.BcArray');
         $this->addHelper('BaserCore.BcUpload');
         $this->addHelper('BaserCore.BcToolbar');
         $this->addHelper('Paginator');
@@ -225,7 +225,7 @@ class AppView extends View
      * @param bool $pluginCheck - if false will ignore the request's plugin if parsed plugin is not loaded
      * @return string|false Either a string to the element filename or false when one can't be found.
      */
-    protected function _getElementFileName(string $name, bool $pluginCheck = true)
+    protected function _getElementFileName(string $name, bool $pluginCheck = true): string|false
     {
         // CUSTOMIZE ADD 2023/06/16 kaburk
         // イベントを追加
