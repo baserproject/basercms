@@ -81,7 +81,7 @@ return [
     'radioWrapper' => '<span class="{{class}}">{{label}}</span>',
     'radioFormGroup' => '<span class="{{groupClass}}">{{input}}</span>',
     // Textarea input element,
-    'textarea' => "<textarea name=\"{{name}}\"{{attrs}}>{{value}}</textarea>",
+    'textarea' => "<textarea name=\"{{name}}\"{{attrs}}>\n{{value}}</textarea>",
     // Container for submit buttons.
     // 'submitContainer' => '<div class="submit">{{content}}</div>' NOTE: formAfterCreateにてデザインが崩れるため一旦コメントアウト
     'submitContainer' => '{{content}}',
