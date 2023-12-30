@@ -924,8 +924,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = ConnectionManager::get($dbConfigKeyName);
         $tables = $db->getSchemaCollection()->listTables();
         $plugins = Plugin::loaded();
-        $list = [];
         $prefix = $db->config()['prefix'];
+
+        $checkNames = [];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
@@ -937,12 +938,28 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             foreach($files[1] as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $tableName = Inflector::tableize($matches[1]);
-                $checkName = $prefix . $tableName;
-                if (in_array($checkName, $tables)) {
-                    $list[$value][] = $tableName;
-                }
+                $checkNames[$value][] = $prefix . $tableName;
             }
         }
+
+        $list = [];
+        foreach($tables as $table) {
+            $hasTablePluginName = (function() use($checkNames, $table){
+                foreach($checkNames as $plugin => $value) {
+                    foreach($value as $checkName) {
+                        $singularize = Inflector::singularize($checkName);
+                        if (preg_match('/^(' . preg_quote($checkName, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+                            return $plugin;
+                        }
+                    }
+                }
+                return false;
+            })();
+            if($hasTablePluginName) {
+                $list[$hasTablePluginName][] = $table;
+            }
+        }
+
         Cache::write('appTableList.' . $dbConfigKeyName, $list, '_bc_env_');
         if ($plugin) {
             return (isset($list[$plugin]))? $list[$plugin] : [];
