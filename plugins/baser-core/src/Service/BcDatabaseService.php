@@ -542,6 +542,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             Inflector::camelize($table),
             ['allowFallbackClass' => true]
         );
+        // mail_message_1 など、数値のテーブルの場合、mail_messages1 として、
+        // テーブル名がセットされてしまうため、明示的にテーブル名をセットする
+        $tableClass->setTable($table);
         $currentConnection = $tableClass->getConnection();
         if($currentConnection->configName() !== $dbConfigKeyName) {
             $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
@@ -550,7 +553,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = $tableClass->getConnection();
         $result = (bool)$db->execute($schema->truncateSql($db)[0]);
         $tableClass->setConnection($currentConnection);
-        $tableClass->setTable($table);
         return $result;
     }
 
