@@ -598,4 +598,28 @@ class BcValidationTest extends BcTestCase
         ];
     }
 
+
+    /**
+     * test notBlankOnlyString
+     */
+    public function test_notBlankOnlyString()
+    {
+        //戻り＝falseケース：半角スペース
+        $str = " ";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝falseケース：全角スペース
+        $str = "　";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝falseケース：半角・全角
+        $str = "　 ";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝trueケース
+        $str = "あa　";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertTrue($result);
+    }
+
 }
