@@ -384,7 +384,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testBatchUnpublish()
     {
-        $this->truncateTable('blog_Contents');
+        $this->truncateTable('blog_contents');
         BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         // unpublish
         $data = [
