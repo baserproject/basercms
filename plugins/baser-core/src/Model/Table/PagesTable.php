@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -197,8 +198,12 @@ class PagesTable extends AppTable
         $url = $content->url;
         if (!$content->site) {
             $site = $this->Sites->get($content->site_id);
-        } else {
-            $site = $content->site;
+        } elseif($content->site) {
+            if (is_array($content->site)) {
+                $site = new Site($content->site);
+            } else {
+                $site = $content->site->toArray();
+            }
         }
         if ($site && $site->useSubDomain) {
             $host = $site->alias;
