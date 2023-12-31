@@ -37,7 +37,8 @@ class BcMigration extends AbstractMigration
      */
     public function table(string $tableName, array $options = []): Table
     {
-        $prefix = ConnectionManager::get($this->input->getOption('connection'))->config()['prefix'];
+        $connection = $this->input->getOption('connection')?? 'default';
+        $prefix = ConnectionManager::get($connection)->config()['prefix'];
         return parent::table($prefix . $tableName);
     }
 
