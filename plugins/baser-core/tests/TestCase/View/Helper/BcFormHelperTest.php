@@ -87,7 +87,7 @@ class BcFormHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getControlSourceProvider()
+    public static function getControlSourceProvider()
     {
         return [
             ['hoge', []],

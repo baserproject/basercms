@@ -110,7 +110,7 @@ class PluginsServiceTest extends BcTestCase
             $this->assertNotContains('BcTest', $pluginNames);
         }
     }
-    public function indexDataprovider()
+    public static function indexDataprovider()
     {
         return [
             // 普通の場合 | DBに登録されてるプラグインとプラグインファイル全て
