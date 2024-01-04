@@ -331,7 +331,7 @@ class BlogPostsTableTest extends BcTestCase
     {
         $rs = $this->execPrivateMethod($this->BlogPostsTable, '_getEntryDatesConditions', [$blogContentId, $year, $month]);
         //戻る値を確認
-        $this->assertEquals(2024, $rs["YEAR(`BlogPosts`.`posted`)"]);
+        $this->assertEquals($rs["YEAR(`BlogPosts`.`posted`)"], $expectYear);
         $this->assertEquals($rs["MONTH(`BlogPosts`.`posted`)"], $expertMonth);
         $this->assertTrue($rs["BlogPosts.status"]);
         $this->assertEquals($rs["BlogPosts.blog_content_id"], 1);
