@@ -1385,4 +1385,84 @@ class BlogHelperTest extends BcTestCase
             ['/news/archives/category/test2', 'category', false, []],
         ];
     }
+
+    /**
+     * test getCategoryName
+     */
+    public function test_getCategoryName()
+    {
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name',
+            'blog_category_id' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+
+        // サービスを取得する
+        /** @var BlogPostsService $service */
+        $service = $this->getService(BlogPostsServiceInterface::class);
+
+        // カテゴリある場合
+        $blogPost = $service->get(1, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryName($blogPost);
+        $this->assertEquals('category_name', $result);
+        //　カテゴリなし場合
+        $blogPost = $service->get(2, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryName($blogPost);
+        $this->assertEmpty($result);
+
+    }
+
+    public function test_getCategoryTitle()
+    {
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name',
+            'blog_category_id' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+
+        // サービスを取得する
+        /** @var BlogPostsService $service */
+        $service = $this->getService(BlogPostsServiceInterface::class);
+
+        // カテゴリある場合
+        $blogPost = $service->get(1, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryTitle($blogPost);
+        $this->assertEquals('category title', $result);
+        //　カテゴリなし場合
+        $blogPost = $service->get(2, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryTitle($blogPost);
+        $this->assertEmpty($result);
+    }
 }
