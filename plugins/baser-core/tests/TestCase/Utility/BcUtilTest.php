@@ -1259,7 +1259,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($extension, $ext);
     }
 
-    public function decodeContentProvider(): array
+    public static function decodeContentProvider(): array
     {
         return [
             ['image/gif', null, 'gif'],
