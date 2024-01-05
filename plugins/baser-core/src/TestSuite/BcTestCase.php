@@ -91,24 +91,6 @@ class BcTestCase extends TestCase
     const EVENT_LAYER_HELPER = 'Helper';
 
     /**
-     * FixtureManager
-     * 古いフィクスチャーの後方互換用
-     * @var FixtureManager
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     */
-    public $FixtureManager;
-
-    /**
-     * FixtureInjector
-     * 古いフィクスチャーの後方互換用
-     * @var FixtureInjector
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     */
-    public $FixtureInjector;
-
-    /**
      * FixtureStrategy にて、TruncateStrategy を利用するかどうかを設定
      * @checked
      * @noTodo

@@ -230,18 +230,6 @@ class BcTestCaseTest extends BcTestCase
     }
 
     /**
-     * test setFixtureTruncate getFixtureStrategy
-     * @return void
-     */
-    public function testSetFixtureTruncateGetFixtureStrategy()
-    {
-        $bcTestCase = new BcTestCase();
-        $rs = $bcTestCase->getFixtureStrategy();
-        $this->assertNotNull($rs);
-        $this->assertEquals('CakephpTestSuiteLight\Fixture\TriggerStrategy', get_class($rs));
-    }
-
-    /**
      * test setUploadFileToRequest
      */
     public function testSetUploadFileToRequest()

@@ -1542,7 +1542,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }
 
-    public function getIsPageProvider()
+    public static function getIsPageProvider()
     {
         return [
             // PCページ

@@ -117,7 +117,7 @@ class BcSchema extends TableSchema
         }
         if (!empty($this->fields['_constraints'])) {
             foreach($this->fields['_constraints'] as $name => $data) {
-                if (!$connection->supportsDynamicConstraints() || $data['type'] !== TableSchema::CONSTRAINT_FOREIGN) {
+                if ($data['type'] !== TableSchema::CONSTRAINT_FOREIGN) {
                     $this->addConstraint($name, $data);
                 } else {
                     $this->_constraints[$name] = $data;
