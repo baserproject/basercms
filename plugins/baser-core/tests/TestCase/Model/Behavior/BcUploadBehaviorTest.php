@@ -19,6 +19,8 @@ use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
 use BaserCore\Service\ContentsServiceInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Laminas\Diactoros\UploadedFile;
+use function Laminas\Diactoros\normalizeUploadedFiles;
 
 /**
  * Class BcUploadBehaviorTest
@@ -58,9 +60,13 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->addBehavior('BaserCore.BcUpload');
         $this->BcUploadBehavior = $this->table->getBehavior('BcUpload');
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);
-        $this->uploadedData = [
+
+        $srcPath = '/var/www/html/webroot/img/basercms.png';
+        $targetPath = '/tmp/testBcUpload.png';
+        copy($srcPath, $targetPath);
+        $this->uploadedData = normalizeUploadedFiles([
             'eyecatch' => [
-                "tmp_name" => "/tmp/testBcUpload.png",
+                "tmp_name" => $targetPath,
                 "error" => 0,
                 "name" => "test.png",
                 "type" => "image/png",
@@ -70,7 +76,8 @@ class BcUploadBehaviorTest extends BcTestCase
                 'uploadable' => true,
                 'ext' => 'png'
             ]
-        ];
+        ]);
+
         $this->eyecatchField = [
             'name' => 'eyecatch',
             'ext' => 'gif',
