@@ -138,7 +138,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->dispatchEvent('Model.buildValidator',
             ['validator' => $validator, 'name' => 'test']);
         $rules = $this->table->getValidator()->field('eyecatch');
-        $this->assertNotNull($rules['checkDirectoryTraversal']);
+        $this->assertNotNull($rules['checkFilePath']);
     }
 
 
