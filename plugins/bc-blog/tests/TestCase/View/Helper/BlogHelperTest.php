@@ -893,35 +893,42 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategories()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogCategoryTree');
-        // １階層、かつ、siteId=0
-        $categories = $this->Blog->getCategories(['siteId' => 0]);
-        $this->assertEquals(1, count($categories));
-        // サイトフィルター解除
-        $categories = $this->Blog->getCategories(['siteId' => false]);
-        $this->assertEquals(2, count($categories));
-        // 深さ指定（子）
-        $categories = $this->Blog->getCategories(['siteId' => 0, 'depth' => 2]);
-        $this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
-        // 深さ指定（孫）
-        $categories = $this->Blog->getCategories(['depth' => 3]);
-        $this->assertEquals(1, count($categories[0]['BlogCategory']['children'][0]['BlogCategory']['children']));
-        // ブログコンテンツID指定
-        $categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
-        $this->assertEquals(1, count($categories));
-        // 並べ替え指定
-        $categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'BlogCategory.name']);
-        $this->assertEquals(4, $categories[0]['BlogCategory']['id']);
-        // 親指定
-        $categories = $this->Blog->getCategories(['parentId' => 2]);
-        $this->assertEquals(3, $categories[0]['BlogCategory']['id']);
-        // スレッド形式
-        $categories = $this->Blog->getCategories(['threaded' => true]);
-        $this->assertEquals(3, $categories[0]['children'][0]['children'][0]['BlogCategory']['id']);
-        // ID指定
-        $categories = $this->Blog->getCategories(['id' => 3]);
-        $this->assertEquals('孫カテゴリ', $categories[0]['BlogCategory']['title']);
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+
+        // 正常:　$blogContentId = null
+        $result = $this->Blog->getCategories();
+        $this->assertCount(2, $result);
+
+        // 正常:　$blogContentId = 1
+        $result = $this->Blog->getCategories(['blogContentId'=>1]);
+        $this->assertCount(1, $result);
+
+        // 存在しないID
+        $result = $this->Blog->getCategories(['blogContentId'=>0]);
+        $this->assertEmpty($result);
+
+        // option depth 2
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'depth' => 2]);
+        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
+
+        // option type year
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
+        $this->assertEquals('name-1', $result['2015'][0]->name);
+
+        // option viewCount true
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
+        $this->assertEquals(2, $result->toArray()[0]->count);
+
+        // option limit true
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year', 'limit' => 1, 'viewCount' => true]);
+        $this->assertEquals(1, $result['2015'][0]->count);
     }
 
     /**
