@@ -90,9 +90,9 @@ trait SoftDeleteTrait
             ['_primary' => false] + $options->getArrayCopy()
         );
 
-        $query = $this->query();
+        $query = $this->updateQuery();
         $conditions = (array)$entity->extract($primaryKey);
-        $statement = $query->update()
+        $statement = $query->update($this->getTable())
             ->set([$this->getSoftDeleteField() => date('Y-m-d H:i:s')])
             ->where($conditions)
             ->execute();
@@ -117,8 +117,8 @@ trait SoftDeleteTrait
      */
     public function deleteAll($conditions): int
     {
-        $query = $this->query()
-            ->update()
+        $query = $this->updateQuery()
+            ->update($this->getTable())
             ->set([$this->getSoftDeleteField() => date('Y-m-d H:i:s')])
             ->where($conditions);
         $statement = $query->execute();
@@ -137,9 +137,9 @@ trait SoftDeleteTrait
             return false;
         }
         $primaryKey = (array)$this->getPrimaryKey();
-        $query = $this->query();
+        $query = $this->deleteQuery();
         $conditions = (array)$entity->extract($primaryKey);
-        $statement = $query->delete()
+        $statement = $query->delete($this->getTable())
             ->where($conditions)
             ->execute();
 
