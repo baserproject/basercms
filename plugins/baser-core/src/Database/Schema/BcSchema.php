@@ -117,7 +117,6 @@ class BcSchema extends TableSchema
         }
         if (!empty($this->fields['_constraints'])) {
             foreach($this->fields['_constraints'] as $name => $data) {
-                //!$connection->supportsDynamicConstraints() cakephp5をサポートしないから削除します。
                 if ($data['type'] !== TableSchema::CONSTRAINT_FOREIGN) {
                     $this->addConstraint($name, $data);
                 } else {
