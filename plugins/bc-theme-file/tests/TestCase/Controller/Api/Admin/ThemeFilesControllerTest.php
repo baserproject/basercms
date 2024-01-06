@@ -348,5 +348,6 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //テストファイルとフォルダを削除
         (new BcFolder($filePath))->delete();
+        unlink($fullpath . 'new_folder/uploadTestFile.html');
     }
 }
