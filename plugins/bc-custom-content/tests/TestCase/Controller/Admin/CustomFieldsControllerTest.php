@@ -129,13 +129,9 @@ class CustomFieldsControllerTest extends BcTestCase
 
         //タイトルを指定しない場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/add', ['name' => '']);
-        $this->assertResponseCode(200);
         //エラーを確認
-        $vars = $this->_controller->viewBuilder()->getVars();
-        $this->assertEquals(
-            ['name' => ['_empty' => "フィールド名を入力してください。"]],
-            $vars['entity']->getErrors()
-        );
+        $this->assertResponseCode(500);
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
     }
 
     /**
@@ -192,13 +188,9 @@ class CustomFieldsControllerTest extends BcTestCase
 
         //タイトルを指定しない場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', ['title' => '']);
-        $this->assertResponseCode(200);
+        $this->assertResponseCode(500);
         //エラーを確認
-        $vars = $this->_controller->viewBuilder()->getVars();
-        $this->assertEquals(
-            ['title' => ['_empty' => "項目見出しを入力してください。"]],
-            $vars['entity']->getErrors()
-        );
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
     }
 
     /**
@@ -287,7 +279,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //存在しないIDを指定した場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/delete/1111');
         $this->assertResponseCode(302);
-        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `custom_fields`');
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `custom_fields`.');
         $this->assertRedirect(['action' => 'index']);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit');

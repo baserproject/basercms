@@ -234,7 +234,7 @@ class PluginsServiceTest extends BcTestCase
 
         // コア
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('10.0.0');
         $this->Plugins->update('BaserCore', 'test');
         $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
