@@ -73,13 +73,13 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->control('list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('list_count') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', '公開サイトの一覧に表示する件数を指定します。') ?></li>
               <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('list_count') ?>
         </td>
       </tr>
       <tr>
@@ -89,13 +89,13 @@ use Cake\Routing\Router;
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser_core', '新しい記事順'), 'ASC' => __d('baser_core', '古い記事順')]]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('list_direction') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', '公開サイトの一覧における記事の並び方向を指定します。') ?></li>
               <li><?php echo __d('baser_core', '新しい・古いの判断は投稿日が基準となります。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('list_direction') ?>
         </td>
       </tr>
       <tr>
@@ -107,7 +107,6 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->control('feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('feed_count') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'RSSフィードに出力する件数を指定します。') ?></li>
@@ -119,6 +118,7 @@ use Cake\Routing\Router;
               <?php endif ?>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('feed_count') ?>
         </td>
       </tr>
       <tr>
@@ -137,8 +137,8 @@ use Cake\Routing\Router;
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('comment_approve', ['type' => 'checkbox', 'label' => __d('baser_core', '利用する')]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('comment_approve') ?>
           <div class="bca-helptext"><?php echo __d('baser_core', '承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。') ?></div>
+          <?php echo $this->BcAdminForm->error('comment_approve') ?>
         </td>
       </tr>
 
@@ -147,13 +147,13 @@ use Cake\Routing\Router;
 				<td class="col-input bca-form-table__input">
 					<?php echo $this->BcAdminForm->control('auth_captcha', ['type' => 'checkbox', 'label' => __d('baser_core', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
-					<?php echo $this->BcAdminForm->error('auth_captcha') ?>
 					<div class="bca-helptext">
 						<ul>
 							<li><?php echo __d('baser_core', 'ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
 							<li><?php echo __d('baser_core', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。') ?></li>
 						</ul>
 					</div>
+					<?php echo $this->BcAdminForm->error('auth_captcha') ?>
 				</td>
 			</tr>
 
@@ -180,7 +180,6 @@ use Cake\Routing\Router;
             'empty' => __d('baser_core', 'サイト基本設定に従う')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser_core', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
@@ -188,6 +187,7 @@ use Cake\Routing\Router;
               <li><?php //$this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']) ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>
       </tr>
       <tr>
@@ -210,13 +210,13 @@ use Cake\Routing\Router;
             ]) ?>
           <?php endif ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('template') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'ブログの本体のテンプレートを指定します。') ?></li>
               <li><?php echo __d('baser_core', '「編集する」からテンプレートの内容を編集する事ができます。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('template') ?>
         </td>
       </tr>
       <tr>
