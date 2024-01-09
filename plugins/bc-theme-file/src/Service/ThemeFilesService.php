@@ -208,13 +208,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         $Folder = new BcFolder($fullpath);
         $Folder->create();
         $name = $postData['file']->getClientFilename();
-        $tmpName = $postData['file']->getStream()->getMetadata('uri');
-        $filePath = $fullpath.DS . $name;
-        if (is_uploaded_file($tmpName)) {
-            move_uploaded_file($tmpName, $filePath);
-        } elseif (BcUtil::isTest()) {
-            copy($tmpName, $filePath);
-        }
+        $postData['file']->moveTo($fullpath . DS . $name);
     }
 
     /**

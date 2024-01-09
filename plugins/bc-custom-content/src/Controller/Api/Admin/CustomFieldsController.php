@@ -37,7 +37,7 @@ class CustomFieldsController extends BcAdminApiController
     {
         $this->request->allowMethod('get');
         $this->set([
-            'customFields' =>  $service->getIndex()
+            'customFields' => $this->paginate($service->getIndex())
         ]);
         $this->viewBuilder()->setOption('serialize', ['customFields']);
     }

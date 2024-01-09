@@ -16,8 +16,6 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFilesControllerTest extends BcTestCase
@@ -348,6 +346,6 @@ class ThemeFilesControllerTest extends BcTestCase
 
         //テストファイルとフォルダを削除
         (new BcFolder($filePath))->delete();
-        unlink($fullpath . 'new_folder/uploadTestFile.html');
+        (new BcFolder($fullpath . 'new_folder'))->delete();
     }
 }

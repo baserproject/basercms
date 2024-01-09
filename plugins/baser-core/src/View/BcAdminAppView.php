@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BcCcRelated\View\Helper\BcCcRelatedHelper;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -43,6 +44,7 @@ use BaserCore\View\Helper\BcSiteConfigHelper;
  * @property BcAuthHelper $BcAuth
  * @property BcContentsHelper $BcContents
  * @property BcSiteConfigHelper $BcSiteConfig
+ * @property BcCcRelatedHelper $BcCcRelated
  */
 class BcAdminAppView extends AppView
 {
@@ -65,6 +67,7 @@ class BcAdminAppView extends AppView
         $this->addHelper('BaserCore.BcSiteConfig');
         $this->addHelper('BaserCore.BcSearchBox');
         $this->addHelper('BaserCore.BcFormTable');
+        $this->addHelper('BcCcRelated.BcCcRelated');
         if (!$this->get('title')) {
             $this->set('title', 'Undefined');
         }

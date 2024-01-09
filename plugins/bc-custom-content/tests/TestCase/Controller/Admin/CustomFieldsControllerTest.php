@@ -130,8 +130,13 @@ class CustomFieldsControllerTest extends BcTestCase
         //タイトルを指定しない場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/add', ['name' => '']);
         //エラーを確認
-        $this->assertResponseCode(500);
-        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        $this->assertResponseCode(200);
+        //エラーを確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['name' => ['_empty' => "フィールド名を入力してください。"]],
+            $vars['entity']->getErrors()
+        );
     }
 
     /**
@@ -188,9 +193,13 @@ class CustomFieldsControllerTest extends BcTestCase
 
         //タイトルを指定しない場合、
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', ['title' => '']);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(200);
         //エラーを確認
-        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(
+            ['title' => ['_empty' => "項目見出しを入力してください。"]],
+            $vars['entity']->getErrors()
+        );
     }
 
     /**
