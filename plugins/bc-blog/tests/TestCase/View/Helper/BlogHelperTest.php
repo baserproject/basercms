@@ -16,6 +16,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogPostsService;
@@ -30,6 +31,7 @@ use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
+use Cake\Database\ValueBinder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Throwable;
 
@@ -942,19 +944,28 @@ class BlogHelperTest extends BcTestCase
      * @param array $options
      * @dataProvider getTagListDataProvider
      */
-    public function testGetTagList($expected, $name, $options = [])
+    public function testGetTagList()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
-        $result = $this->Blog->getTagList($name, $options);
-        if ($result) {
-            $result = Hash::extract($result, '{n}.BlogTag.name');
-        }
-        $this->assertEquals($expected, $result);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $params = [
+            'conditions' => [],
+            'direction' => 'ASC',
+            'sort' => 'name',
+            'siteId' => 1,
+        ];
+        $result = $this->Blog->getTagList('tag',$params);
+        dd($result);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name like', $whereSql);
+        $this->assertStringContainsString('Contents.site_id =', $whereSql);
+        $this->assertStringContainsString('Contents.url =', $whereSql);
+        $sortSql = $result->clause('order')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.name ASC', $sortSql);
+        $params['direction'] = 'DESC';
+        $params['sort'] = 'id';
+        $result = $this->Blog->getTagList('tag', $params);
+        $sortSql = $result->clause('order')->sql(new ValueBinder());
+        $this->assertStringContainsString('BlogTags.id DESC', $sortSql);
     }
 
     public function getTagListDataProvider()

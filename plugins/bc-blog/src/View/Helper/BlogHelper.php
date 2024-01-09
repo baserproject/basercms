@@ -1411,6 +1411,7 @@ class BlogHelper extends Helper
      * @return array|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTagList($name, $options = [])
     {
@@ -1437,6 +1438,7 @@ class BlogHelper extends Helper
         /** @var BlogTagsService $blogTagsService */
         $blogTagsService = $this->getService(BlogTagsServiceInterface::class);
         $tags = $blogTagsService->getIndex($options)->all();
+        dd($tags);
         // 公開記事数のカウントを追加
         if ($options['postCount']) {
             $tags = $this->_mergePostCountToTagsData($tags, $options);
