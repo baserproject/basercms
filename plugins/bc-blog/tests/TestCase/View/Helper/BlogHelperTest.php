@@ -297,7 +297,11 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals('リリース', $result);
         // blog_post_content_more からコンテンツを取得
         $result = $this->Blog->getPostContent($post, true, true, 2);
-        $this->assertEquals('リリblog content more test in file', $result);
+        $this->assertEquals('リリ
+
+        <p class="more">
+        <a href="/news/archives/1#post-detail">≫ 続きを読む</a></p>
+', $result);
     }
 
     public function getPostContentDataProvider()
