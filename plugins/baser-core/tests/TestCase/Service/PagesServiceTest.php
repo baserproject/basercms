@@ -85,7 +85,7 @@ class PagesServiceTest extends BcTestCase
     {
         $page = $this->PagesService->get(2);
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $page->contents);
-        $this->expectExceptionMessage('Record not found in table "pages"');
+        $this->expectExceptionMessage('Record not found in table `pages`.');
         $this->PagesService->getTrash(1);
     }
 
@@ -99,7 +99,7 @@ class PagesServiceTest extends BcTestCase
         $page = $this->PagesService->getTrash(3);
         $this->assertMatchesRegularExpression('/<div class="articleArea bgGray" id="service">/', $page->contents);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "pages"');
+        $this->expectExceptionMessage('Record not found in table `pages`.');
         $this->PagesService->getTrash(2);
     }
 
@@ -273,8 +273,8 @@ class PagesServiceTest extends BcTestCase
         $this->assertNotNull($result->clause('where'));
         $sql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('status =', $sql);
-        $this->assertStringContainsString('contents like', $sql);
-        $this->assertStringContainsString('draft like', $sql);
+        $this->assertStringContainsString('contents LIKE', $sql);
+        $this->assertStringContainsString('draft LIKE', $sql);
     }
 
     /**

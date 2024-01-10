@@ -206,7 +206,7 @@ class CustomEntriesServiceTest extends BcTestCase
         ];
         $result = $this->CustomEntriesService->createIndexConditions($query, $params);
         $whereSql = $result->clause('where')->sql(new ValueBinder());
-        $this->assertStringContainsString('title like', $whereSql);
+        $this->assertStringContainsString('title LIKE', $whereSql);
         $this->assertStringContainsString('CustomEntries.status =', $whereSql);
         $this->assertStringContainsString('CustomEntries.publish_begin <=', $whereSql);
     }

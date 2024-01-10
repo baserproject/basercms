@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
@@ -183,7 +184,7 @@ class SitesService implements SitesServiceInterface
     {
         $site = $this->get($id);
         if(!$site->main_site_id) {
-            throw new Exception(__d('baser_core', 'メインサイトは削除できません。'));
+            throw new BcException(__d('baser_core', 'メインサイトは削除できません。'));
         }
         return $this->Sites->delete($site);
     }

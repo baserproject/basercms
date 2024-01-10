@@ -74,7 +74,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertNotEmpty($this->BcContents->request);
         $this->assertNotEmpty($this->BcContents->ContentsService);
         $this->assertNotEmpty($this->BcContents->PermissionsService);
-        $this->assertContains('BcBaser', $this->BcContents->helpers);
+        $this->assertArrayHasKey('BcBaser', $this->BcContents->helpers);
 
     }
 

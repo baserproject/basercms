@@ -207,13 +207,14 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         }
         $Folder = new BcFolder($fullpath);
         $Folder->create();
-        $filePath = $fullpath . DS . $postData['file']['name'];
-        if (!move_uploaded_file($postData['file']['tmp_name'], $filePath)) {
-            // ユニットテストの際に何故か失敗してしまうので応急措置
-            if(!rename($postData['file']['tmp_name'], $filePath)) {
-                throw new BcException(__d('baser_core', '書き込み権限に問題がある可能性があります。'));
-            }
+
+        try {
+            $name = $postData['file']->getClientFilename();
+            $postData['file']->moveTo($fullpath . DS . $name);
+        }catch (\Exception $e){
+            throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
+
     }
 
     /**

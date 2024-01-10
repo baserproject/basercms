@@ -133,12 +133,12 @@ class BlogCategoriesTable extends BlogAppTable
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
-        $this->BlogPosts->find()
-            ->where(['BlogPosts.blog_category_id' => $entity->id])
-            ->each(function ($blogPost) {
-                $blogPost->blog_category_id = '';
-                $this->BlogPosts->save($blogPost);
-            });
+        $blogPosts = $this->BlogPosts->find()
+            ->where(['BlogPosts.blog_category_id' => $entity->id])->toArray();
+        foreach ($blogPosts as $item) {
+            $item->blog_category_id = '';
+            $this->BlogPosts->save($item);
+        }
     }
 
     /**
