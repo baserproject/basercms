@@ -207,14 +207,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         }
         $Folder = new BcFolder($fullpath);
         $Folder->create();
-
-        try {
-            $name = $postData['file']->getClientFilename();
-            $postData['file']->moveTo($fullpath . DS . $name);
-        }catch (\Exception $e){
-            throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
-        }
-
+        $name = $postData['file']->getClientFilename();
+        $postData['file']->moveTo($fullpath . DS . $name);
     }
 
     /**
