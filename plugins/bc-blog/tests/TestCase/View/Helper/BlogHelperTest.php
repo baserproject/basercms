@@ -299,8 +299,8 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getPostContent($post, true, true, 2);
         $this->assertEquals('リリ
 
-        <p class="more">
-        <a href="/news/archives/1#post-detail">≫ 続きを読む</a></p>
+<p class="more">
+<a href="/news/archives/1#post-detail">≫ 続きを読む</a></p>
 ', $result);
     }
 
