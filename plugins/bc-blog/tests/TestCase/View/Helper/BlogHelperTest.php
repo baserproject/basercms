@@ -901,6 +901,33 @@ class BlogHelperTest extends BcTestCase
         BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+        // １階層、かつ、siteId=0
+        $categories = $this->Blog->getCategories(['siteId' => 0]);
+        $this->assertCount(1, $categories);
+        // サイトフィルター解除
+        $categories = $this->Blog->getCategories(['siteId' => false]);
+        $this->assertEquals(2, count($categories));
+        // 深さ指定（子）
+        $categories = $this->Blog->getCategories(['siteId' => 0, 'depth' => 2]);
+        $this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
+        // 深さ指定（孫）
+        $categories = $this->Blog->getCategories(['depth' => 3]);
+        $this->assertEquals(1, count($categories[0]['BlogCategory']['children'][0]['BlogCategory']['children']));
+        // ブログコンテンツID指定
+        $categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
+        $this->assertEquals(1, count($categories));
+        // 並べ替え指定
+        $categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'BlogCategory.name']);
+        $this->assertEquals(4, $categories[0]['BlogCategory']['id']);
+        // 親指定
+        $categories = $this->Blog->getCategories(['parentId' => 2]);
+        $this->assertEquals(3, $categories[0]['BlogCategory']['id']);
+        // スレッド形式
+        $categories = $this->Blog->getCategories(['threaded' => true]);
+        $this->assertEquals(3, $categories[0]['children'][0]['children'][0]['BlogCategory']['id']);
+        // ID指定
+        $categories = $this->Blog->getCategories(['id' => 3]);
+        $this->assertEquals('孫カテゴリ', $categories[0]['BlogCategory']['title']);
 
         // 正常:　$blogContentId = null
         $result = $this->Blog->getCategories();
