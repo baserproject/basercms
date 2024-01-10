@@ -902,13 +902,13 @@ class BlogHelperTest extends BcTestCase
         BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
         // １階層、かつ、siteId=0
-        $categories = $this->Blog->getCategories(['siteId' => 0]);
-        $this->assertCount(1, $categories);
+        $categories = $this->Blog->getCategories(['siteId' => 1]);
+        $this->assertCount(3, $categories);
         // サイトフィルター解除
         $categories = $this->Blog->getCategories(['siteId' => false]);
-        $this->assertEquals(2, count($categories));
+        $this->assertEquals(4, count($categories));
         // 深さ指定（子）
-        $categories = $this->Blog->getCategories(['siteId' => 0, 'depth' => 2]);
+        $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 2]);
         $this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
         // 深さ指定（孫）
         $categories = $this->Blog->getCategories(['depth' => 3]);
