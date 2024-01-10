@@ -18,6 +18,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -29,6 +30,7 @@ use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
+use BcBlog\View\BlogFrontAppView;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
 use Cake\Database\ValueBinder;
@@ -64,7 +66,7 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url
             'test title'
         );
-        $view = new AppView();
+        $view = new BlogFrontAppView();
         $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
@@ -281,23 +283,40 @@ class BlogHelperTest extends BcTestCase
     /**
      * 記事の本文を取得する
      *
-     * @param bool $moreText 詳細データを表示するかどうか
-     * @param bool $moreLink 詳細ページへのリンクを表示するかどうか
-     * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力
-     * @param string $expected
-     * @dataProvider getPostContentDataProvider
      */
-    public function testGetPostContent($moreText, $moreLink, $cut, $expected)
+    public function testGetPostContent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'content' => 'test-content',
-            'detail' => 'test-detail',
-            'no' => 3,
-            'blog_content_id' => 1
-        ]];
-        $result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
-        $this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'detail' => 'detail test',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        // ファイルからコンテンツを取得
+        $result = $this->Blog->getPostContent($post);
+        $this->assertEquals('
+
+<div id="post-detail">detail test</div>
+', $result);
+        // blog_post_contentからコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, false, 4);
+        $this->assertEquals('リリース', $result);
+        // blog_post_content_more からコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, true, 2);
+        $this->assertEquals('リリ
+
+<p class="more">
+<a href="/news/archives/1#post-detail">≫ 続きを読む</a></p>
+', $result);
     }
 
     public function getPostContentDataProvider()
