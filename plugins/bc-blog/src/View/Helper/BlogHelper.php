@@ -1495,6 +1495,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTagLinkUrl($blogContentId, $tag, $base = true)
     {

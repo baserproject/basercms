@@ -19,12 +19,14 @@ use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BcBlog\Model\Entity\BlogPost;
+use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
@@ -64,7 +66,7 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url
             'test title'
         );
-        $view = new BlogFrontAppView();
+        $view = new AppView();
         $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
@@ -1021,23 +1023,14 @@ class BlogHelperTest extends BcTestCase
     /**
      * ブログタグ記事一覧へのリンクURLを取得する
      *
-     * @param string $expected
-     * @param int $blogContentId
-     * @param string $name
-     * @dataProvider getTagLinkUrlDataProvider
      */
-    public function testGetTagLinkUrl($currentUrl, $blogContentId, $name, $base, $useBase, $expected)
+    public function testGetTagLinkUrl()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
-        BcSite::flash();
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->Blog->request->base = $base;
-        $url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]], $useBase);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
-        $this->assertEquals($expected, $url);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLinkUrl(1, $tag, true);
+        $this->assertEquals('/news/archives/tag', $url);
     }
 
     public function getTagLinkUrlDataProvider()
