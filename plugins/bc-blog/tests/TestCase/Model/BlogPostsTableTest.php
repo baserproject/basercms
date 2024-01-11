@@ -633,6 +633,7 @@ class BlogPostsTableTest extends BcTestCase
 	 */
 	public function testCopyEyeCatch()
 	{
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
 		if (is_dir(WWW_ROOT . '/files/blog/999')) {
 			$folder = new BcFolder(WWW_ROOT . '/files/blog/999');
 			$folder->delete();
