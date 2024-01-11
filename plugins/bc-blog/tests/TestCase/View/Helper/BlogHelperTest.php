@@ -958,10 +958,6 @@ class BlogHelperTest extends BcTestCase
     /**
      * タグリストを取得する
      *
-     * @param mixed $expected
-     * @param mixed $name
-     * @param array $options
-     * @dataProvider getTagListDataProvider
      */
     public function testGetTagList()
     {
