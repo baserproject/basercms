@@ -973,7 +973,6 @@ class BlogHelperTest extends BcTestCase
             'siteId' => 1,
         ];
         $result = $this->Blog->getTagList('tag',$params);
-        dd($result);
         $whereSql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('BlogTags.name like', $whereSql);
         $this->assertStringContainsString('Contents.site_id =', $whereSql);
