@@ -1031,8 +1031,8 @@ class BlogHelperTest extends BcTestCase
         $tag = BlogTagFactory::get(1);
         $url = $this->Blog->getTagLinkUrl(1, $tag);
         $this->assertEquals('https://localhost/news/archives/tag/tag1', $url);
-        $url = $this->Blog->getTagLinkUrl(1, $tag, false);
-        $this->assertEquals('/news/archives/tag/tag1', $url);
+        $url = $this->Blog->getTagLinkUrl(0, $tag);
+        $this->assertEquals('/tags/tag1', $url);
     }
 
     public function getTagLinkUrlDataProvider()
