@@ -25,6 +25,7 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
@@ -64,7 +65,7 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url
             'test title'
         );
-        $view = new BlogFrontAppView();
+        $view = new AppView();
         $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
@@ -1056,23 +1057,14 @@ class BlogHelperTest extends BcTestCase
     /**
      * タグ記事一覧へのリンクタグを取得する
      *
-     * @param string $expected
-     * @param string $currentUrl
-     * @param int $blogContentId
-     * @param $name
-     * @dataProvider getTagLinkDataProvider
      */
-    public function testGetTagLink($expected, $currentUrl, $blogContentId, $name)
+    public function testGetTagLink()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
-        $url = $this->Blog->getTagLink($blogContentId, ['BlogTag' => ['name' => $name]]);
-        $this->assertEquals($expected, $url);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLink(1, $tag);
+        $this->assertEquals('tag1', $url);
     }
 
     public function getTagLinkDataProvider()
