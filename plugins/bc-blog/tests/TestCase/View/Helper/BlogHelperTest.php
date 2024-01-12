@@ -1064,7 +1064,7 @@ class BlogHelperTest extends BcTestCase
         $this->loadFixtureScenario(BlogTagsScenario::class);
         $tag = BlogTagFactory::get(1);
         $url = $this->Blog->getTagLink(1, $tag);
-        $this->assertEquals('tag1', $url);
+        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a>', $url);
     }
 
     public function getTagLinkDataProvider()
