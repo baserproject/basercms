@@ -65,7 +65,7 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url
             'test title'
         );
-        $view = new AppView();
+        $view = new BlogFrontAppView();
         $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
