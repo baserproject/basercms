@@ -194,7 +194,6 @@ class PagesTable extends AppTable
         }
         $modelId = $page->id;
 
-        $host = '';
         $url = $content->url;
         if (!$content->site) {
             $site = $this->Sites->get($content->site_id);
@@ -202,14 +201,10 @@ class PagesTable extends AppTable
             if (is_array($content->site)) {
                 $site = new Site($content->site);
             } else {
-                $site = $content->site->toArray();
+                $site = $content->site;
             }
         }
         if ($site && isset($site->useSubDomain) && $site->useSubDomain) {
-            $host = $site->alias;
-            if ($site->domainType == 1) {
-                $host .= '.' . BcUtil::getMainDomain();
-            }
             $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
         }
         $detail = $page->contents;
