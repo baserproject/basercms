@@ -1655,7 +1655,6 @@ class BcUtil
             Router::setRequest($request);
             $params = Router::parseRequest($request);
         } catch (MissingRouteException) {
-            return $request;
         } catch (\Throwable $e) {
             throw $e;
         }
