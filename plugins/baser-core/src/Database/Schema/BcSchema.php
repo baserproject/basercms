@@ -146,9 +146,7 @@ class BcSchema extends TableSchema
         $connection = ConnectionManager::get($this->connection());
         $queries = $this->createSql($connection);
         foreach($queries as $query) {
-            $stmt = $connection->prepare($query);
-            $stmt->execute();
-            $stmt->closeCursor();
+            $connection->execute($query);
         }
     }
 
