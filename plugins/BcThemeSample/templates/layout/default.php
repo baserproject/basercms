@@ -34,6 +34,7 @@ $base = $attributes['base'];
 		'colorbox/colorbox-1.6.1',
 		'editor'
 	]) ?>
+  <?= $this->BcBaser->declarationI18n() ?>
 	<?php $this->BcBaser->js([
 		'vendor/jquery-1.11.3.min',
 		'vendor/jquery-ui-1.11.4.min',

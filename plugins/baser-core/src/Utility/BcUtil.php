@@ -1654,6 +1654,7 @@ class BcUtil
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
 
+        $params = [];
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
@@ -1671,7 +1672,7 @@ class BcUtil
         if ($request->getParam('prefix') === 'Admin') {
             $bcAdmin = new BcAdminMiddleware();
             $request = $bcAdmin->setCurrentSite($request);
-        } else {
+        } elseif($params) {
             $bcAdmin = new BcFrontMiddleware();
             $request = $bcAdmin->setCurrent($request);
         }
