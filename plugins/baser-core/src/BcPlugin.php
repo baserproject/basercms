@@ -459,7 +459,7 @@ class BcPlugin extends BasePlugin
                 $routes->setRouteClass('BaserCore.BcContentsRoute');
                 $routes->connect('/', []);
                 $routes->connect('/{controller}/index', []);
-                $routes->connect('/:controller/:action/*', []);
+                $routes->connect('/{controller}/{action}/*', []);
             }
         );
         return $routes;
