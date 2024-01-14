@@ -1281,9 +1281,13 @@ class ContentsTable extends AppTable
         $this->updatingRelated = false;
 
         $beforeSaveListeners = $this->getEventManager()->listeners('Model.beforeSave');
-        $this->getEventManager()->off('Model.beforeSave', $beforeSaveListeners);
+        foreach($beforeSaveListeners as $listener) {
+            $this->getEventManager()->off('Model.beforeSave', $listener['callable']);
+        }
         $afterSaveListeners = $this->getEventManager()->listeners('Model.afterSave');
-        $this->getEventManager()->off('Model.afterSave', $afterSaveListeners);
+        foreach($beforeSaveListeners as $listener) {
+            $this->getEventManager()->off('Model.afterSave', $listener['callable']);
+        }
 
         $this->getConnection()->begin();
         $result = true;
@@ -1310,7 +1314,7 @@ class ContentsTable extends AppTable
                     $content->rght = $count;
                     $content->level = $siteRoot->level + 1;
                     $content->parent_id = $siteRoot->id;
-                    if (!$this->save($content, false)) $result = false;
+                    if (!$this->save($content)) $result = false;
                 }
             }
             if ($siteRoot->id == 1) {
@@ -1329,8 +1333,12 @@ class ContentsTable extends AppTable
         $this->addBehavior('Tree');
         $this->updatingRelated = true;
 
-        $this->getEventManager()->on('Model.beforeSave', $beforeSaveListeners);
-        $this->getEventManager()->on('Model.afterSave', $afterSaveListeners);
+        foreach($beforeSaveListeners as $listener) {
+            $this->getEventManager()->on('Model.beforeSave', $listener['callable']);
+        }
+        foreach($afterSaveListeners as $listener) {
+            $this->getEventManager()->on('Model.afterSave', $listener['callable']);
+        }
 
         $contents = $this->find()->orderBy(['lft'])->all();
         if ($contents) {
