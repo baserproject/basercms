@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 use ArrayObject;
 use BaserCore\Test\Scenario\ContentsScenario;
 use Cake\ORM\Entity;
+use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
@@ -124,6 +125,19 @@ class BcUploadBehaviorTest extends BcTestCase
                 ->getUploadingFiles($data['_bc_upload_id'])
         );
     }
+
+    /**
+     * Build Validator
+     */
+    public function testBuildValidator()
+    {
+        $validator = new Validator();
+        $this->table->dispatchEvent('Model.buildValidator',
+            ['validator' => $validator, 'name' => 'test']);
+        $rules = $this->table->getValidator()->field('eyecatch');
+        $this->assertNotNull($rules['checkFilePath']);
+    }
+
 
     /**
      * After save

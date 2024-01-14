@@ -193,6 +193,7 @@ class BcTestCase extends TestCase
         $request->getSession()->start();
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
+        /* @var ServerRequest $request */
         Router::setRequest($request);
         return $request;
     }

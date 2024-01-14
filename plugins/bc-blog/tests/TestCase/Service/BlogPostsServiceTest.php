@@ -828,7 +828,8 @@ class BlogPostsServiceTest extends BcTestCase
     public function testDelete()
     {
         //データ 生成
-        BlogPostFactory::make(['id' => '1'])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'news1', '/news/');
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => 1])->persist();
 
         // //存在しているBlogPostIdを削除
         $result = $this->BlogPostsService->delete(1);
@@ -885,6 +886,7 @@ class BlogPostsServiceTest extends BcTestCase
     public function testBatch()
     {
         // データを生成
+        $this->loadFixtureScenario(BlogContentScenario::class, 5, 1, null, 'news1', '/news/');
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '2', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '3', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();

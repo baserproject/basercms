@@ -692,6 +692,7 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function delete(int $id): bool
     {
         $blogPost = $this->BlogPosts->get($id);
+        $this->setupUpload($blogPost->blog_content_id);
         return $this->BlogPosts->delete($blogPost);
     }
 
