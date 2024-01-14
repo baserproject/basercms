@@ -74,7 +74,7 @@ class CustomContentAppHelper extends Helper
             $pluginPath = Plugin::path($plugin);
             if (file_exists($pluginPath . 'src' . DS . 'View' . DS . 'Helper' . DS . $plugin . 'Helper.php')) {
                 $this->{$plugin} = $this->_View->loadHelper(
-                    "$plugin.$plugin",
+                    "$plugin",
                     ['className' => "$plugin.$plugin"]
                 );
             }
