@@ -109,7 +109,7 @@ class ContentFoldersServiceTest extends BcTestCase
         $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
         // 論理削除されているコンテンツに紐付いている場合
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "content_folders"');
+        $this->expectExceptionMessage('Record not found in table `content_folders`.');
         $this->ContentFoldersService->getTrash(1);
     }
 
