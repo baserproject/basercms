@@ -187,7 +187,7 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getPostTitle($post, false, ['escape' => false]);
         $this->assertEquals('プレスリリース', $result);
         $result = $this->Blog->getPostTitle($post, true);
-        $this->assertEquals('<a href="https://localhost/news/archives/release">プレスリリース</a>', $result);
+        $this->assertEquals('<a href="/news/archives/release">プレスリリース</a>', $result);
 
     }
 
@@ -221,7 +221,7 @@ class BlogHelperTest extends BcTestCase
             'posted' => '2023-01-27 12:57:59',
         ]);
         $result = $this->Blog->getPostLink($post, 'test-title');
-        $this->assertEquals('<a href="https://localhost/news/archives/release">test-title</a>', $result);
+        $this->assertEquals('<a href="/news/archives/release">test-title</a>', $result);
     }
 
     /**
@@ -456,7 +456,7 @@ class BlogHelperTest extends BcTestCase
         //'link'=>true
         $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
         $result = $this->Blog->getTag($post, ['link'=>true]);
-        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a> , <a href="https://localhost/news/archives/tag/tag2">tag2</a>', $result);
+        $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a> , <a href="/news/archives/tag/tag2">tag2</a>', $result);
     }
 
     public function getTagDataProvider()
