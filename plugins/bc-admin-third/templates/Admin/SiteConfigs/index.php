@@ -74,11 +74,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
             'disabled' => !$isWritableEnv]
         ) ?> <small>[SSL]</small>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_url') ?>
-        <?php echo $this->BcAdminForm->error('ssl_url') ?>
         <div class="bca-helptext">
           <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。') ?>
         </div>
+        <?php echo $this->BcAdminForm->error('site_url') ?>
+        <?php echo $this->BcAdminForm->error('ssl_url') ?>
       </td>
     </tr>
 
@@ -152,10 +152,10 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
             'disabled' => !$isWritableEnv
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('admin_ssl') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br>また、SSL用のWebサイトURLの指定が必要です。') ?>
           </div>
+          <?php echo $this->BcAdminForm->error('admin_ssl') ?>
         </td>
       </tr>
       <tr>
@@ -444,7 +444,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
             'data-input-text-size' => 'full-counter'
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('editor_styles') ?>
           <div class="bca-helptext">
             <p><?php echo __d('baser_core', '固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができます。') ?></p>
             <pre># <?php echo __d('baser_core', 'タイトル') ?>
@@ -465,6 +464,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
 h2 {}
 					</pre>
           </div>
+          <?php echo $this->BcAdminForm->error('editor_styles') ?>
         </td>
       </tr>
 

@@ -124,12 +124,12 @@ $authPrefixes = $this->BcAdminForm->getControlSource('BaserCore.UserGroups.auth_
           </table>
           <?php $this->BcAdminForm->unlockField('auth_prefix') ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('auth_prefix') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', '認証プレフィックスの設定を指定します。<br>
                 システム管理グループの場合、管理システムの設定は変更できず、管理システム以外を有効にしたとしてもフルアクセスが前提となります。<br><br>
                 なお、限定アクセスの場合、詳細な設定はアクセスルール設定より行います。') ?>
           </div>
+          <?php echo $this->BcAdminForm->error('auth_prefix') ?>
         </td>
       </tr>
     <?php endif ?>
