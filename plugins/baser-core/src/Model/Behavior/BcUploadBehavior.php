@@ -16,6 +16,7 @@ use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Behavior;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\Validation\Validator;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -150,6 +151,26 @@ class BcUploadBehavior extends Behavior
     {
         if ($entity->getErrors()) {
             $this->BcFileUploader[$this->table()->getAlias()]->rollbackFile($entity);
+        }
+    }
+
+    /**
+     * Build Validator
+     *
+     * @param EventInterface $event
+     * @param Validator $validator
+     * @param string $name
+     */
+    public function buildValidator(EventInterface $event, Validator $validator, $name)
+    {
+        $settings = $this->getSettings();
+        foreach ($settings['fields'] as $field => $fieldSettings) {
+            $validator->add($field, 'checkFilePath', [
+                'rule' => function ($value) {
+                    return (!is_string($value) || !str_contains($value, '../'));
+                },
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]);
         }
     }
 

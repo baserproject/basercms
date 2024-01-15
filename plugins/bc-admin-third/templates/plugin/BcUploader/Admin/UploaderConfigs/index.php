@@ -196,10 +196,10 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップローダープラグイン
             'between' => '&nbsp;'
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('use_permission') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', '管理者以外のユーザーは、自分がアップロードしたファイル以外、編集・削除をできないようにします。') ?>
           </div>
+          <?php echo $this->BcAdminForm->error('use_permission') ?>
         </td>
       </tr>
       <?php echo $this->BcAdminForm->dispatchAfterForm('option') ?>

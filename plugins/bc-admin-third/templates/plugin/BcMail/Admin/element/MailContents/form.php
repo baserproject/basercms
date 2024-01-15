@@ -68,8 +68,8 @@
           'placeholder' => __d('baser_core', '送信先名を入力してください。')
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('sender_name') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '自動返信メールの送信者に表示します。入力がない場合、サイト名が設定されます。') ?></div>
+        <?php echo $this->BcAdminForm->error('sender_name') ?>
       </td>
     </tr>
     <tr>
@@ -80,12 +80,12 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('subject_user', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('subject_user') ?>
         <div class="bca-helptext"><?php
            echo __d('baser_core', 'ユーザー宛の自動返信メールの件名に表示します。');
            echo '<br>';
            echo __d('baser_core', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
            ?></div>
+        <?php echo $this->BcAdminForm->error('subject_user') ?>
       </td>
     </tr>
     <tr>
@@ -96,13 +96,13 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('subject_admin', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('subject_admin') ?>
         <div class="bca-helptext"><?php
            echo __d('baser_core', '管理者宛の自動送信メールの件名に表示します。');
            echo '<br>';
            echo __d('baser_core', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
            ?></div>
       </td>
+      <?php echo $this->BcAdminForm->error('subject_admin') ?>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
@@ -111,13 +111,13 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('redirect_url', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('redirect_url') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', 'メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。') ?></li>
             <li><?php echo __d('baser_core', 'https からの完全なURLを指定してください。') ?></li>
           </ul>
         </div>
+        <?php echo $this->BcAdminForm->error('redirect_url') ?>
       </td>
     </tr>
     <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
@@ -176,13 +176,13 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('save_info', ['type' => 'radio', 'options' => [1 => __d('baser_core', '送信情報をデータベースに保存する'), 0 => __d('baser_core', '送信情報をデータベースに保存しない')]]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('save_info') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'メールフォームから送信された情報をデータベースに保存するかどうかを指定できます。') ?></li>
               <li><?php echo __d('baser_core', 'メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('save_info') ?>
         </td>
       </tr>
 
@@ -191,13 +191,13 @@
 				<td class="col-input bca-form-table__input">
 					<?php echo $this->BcAdminForm->control('auth_captcha', ['type' => 'checkbox', 'label' => __d('baser_core', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
-					<?php echo $this->BcAdminForm->error('auth_captcha') ?>
 					<div class="bca-helptext">
 						<ul>
 							<li><?php echo __d('baser_core', 'メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
 							<li><?php echo __d('baser_core', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。') ?></li>
 						</ul>
 					</div>
+					<?php echo $this->BcAdminForm->error('auth_captcha') ?>
 				</td>
 			</tr>
 
@@ -226,13 +226,13 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('sender_2') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。') ?></li>
               <li><?php echo __d('baser_core', '複数の送信先を指定するには、カンマで区切って入力します。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('sender_2') ?>
         </td>
       </tr>
       <?php if (\Cake\Core\Plugin::isLoaded('BcWidgetArea')): ?>
@@ -248,10 +248,10 @@
             'empty' => __d('baser_core', 'サイト基本設定に従う')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
             <?php echo sprintf(__d('baser_core', 'メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser_core', 'ウィジェットエリア管理'), ['plugin' => 'BcWidgetArea', 'controller' => 'WidgetAreas', 'action' => 'index'])) ?>
           </div>
+          <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>
       </tr>
       <?php endif ?>
@@ -271,12 +271,12 @@
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser_core', '編集する'), 'javascript:void(0)', ['id' => 'EditForm', 'escape' => false]) ?>
           <?php endif ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('form_template') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'メールフォーム本体のテンプレートを指定します。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('form_template') ?>
         </td>
       </tr>
       <tr>
@@ -292,12 +292,12 @@
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser_core', '編集する'), 'javascript:void(0)', ['id' => 'EditMail', 'escape' => false]) ?>
           <?php endif ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('mail_template') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', '送信するメールのテンプレートを指定します。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('mail_template') ?>
         </td>
       </tr>
       <?php echo $this->BcAdminForm->dispatchAfterForm('option') ?>
