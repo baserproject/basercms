@@ -1285,7 +1285,7 @@ class ContentsTable extends AppTable
             $this->getEventManager()->off('Model.beforeSave', $listener['callable']);
         }
         $afterSaveListeners = $this->getEventManager()->listeners('Model.afterSave');
-        foreach($beforeSaveListeners as $listener) {
+        foreach($afterSaveListeners as $listener) {
             $this->getEventManager()->off('Model.afterSave', $listener['callable']);
         }
 

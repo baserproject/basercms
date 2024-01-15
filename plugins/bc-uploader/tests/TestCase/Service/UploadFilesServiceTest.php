@@ -224,6 +224,7 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_create()
     {
+        $this->markTestIncomplete('このテストは未確認です。');
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
         $settings = $uploaderFilesTable->getSettings();

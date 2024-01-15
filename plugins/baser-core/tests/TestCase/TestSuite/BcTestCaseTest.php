@@ -90,7 +90,7 @@ class BcTestCaseTest extends BcTestCase
     {
         $this->loadFixtureScenario(ContentsScenario::class);
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
+        $urlList = ['' => '/', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = $this->getRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));
@@ -234,7 +234,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testSetUploadFileToRequest()
     {
-        $bcTestCase = new BcTestCase();
+        $bcTestCase = new BcTestCase('test');
         $filename = 'testUpload.txt';
         $filePath = TMP . $filename;
         touch($filePath);

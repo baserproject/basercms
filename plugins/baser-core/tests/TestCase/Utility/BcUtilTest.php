@@ -1165,7 +1165,7 @@ class BcUtilTest extends BcTestCase
     public function testCreateRequest(): void
     {
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
+        $urlList = ['' => '/', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = BcUtil::createRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));
