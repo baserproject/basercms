@@ -99,12 +99,12 @@ $(function () {
         }
     }
     // サブサイトにドメイン（サブドメイン）を使用するかどうかの表示
-    chengeUseDomein($("input[name='use_subdomain']:checked").val());
+    chengeUseDomain($("input[name='use_subdomain']:checked").val());
     $("input[name='use_subdomain']").click(function() {
         //変数valueにcheckedされたradioボタンのvalue値を取得する
-        chengeUseDomein($("input[name='use_subdomain']:checked").val());
+        chengeUseDomain($("input[name='use_subdomain']:checked").val());
     });
-    function chengeUseDomein(useSubdomain) {
+    function chengeUseDomain(useSubdomain) {
         if (useSubdomain == 0) {
             //ドメインを利用しない場合は、ドメインタイプは利用しない
             $("#DomainType").hide();
