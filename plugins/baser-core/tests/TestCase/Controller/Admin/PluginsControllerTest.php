@@ -306,12 +306,6 @@ class PluginsControllerTest extends BcTestCase
         $testFile = $zipSrcPath . $plugin . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);
 
-        $this->setUploadFileToRequest('file', $testFile, '', 1);
-        $this->setUnlockedFields(['file']);
-        $this->post('/baser/admin/baser-core/plugins/add');
-        $this->assertResponseCode(302);
-        $this->assertFlashMessage('ファイルのアップロードに失敗しました。Cannot retrieve stream due to upload error: The uploaded file exceeds the upload_max_filesize directive in php.ini');
-
         $this->setUploadFileToRequest('file', $testFile);
         $this->setUnlockedFields(['file']);
         $this->post('/baser/admin/baser-core/plugins/add');
@@ -324,6 +318,38 @@ class PluginsControllerTest extends BcTestCase
             'action' => 'index'
         ]);
         $this->assertFlashMessage('新規プラグイン「' . $plugin . '」を追加しました。');
+
+        $folder = new BcFolder(BASER_PLUGINS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+    }
+
+    /**
+     * test add
+     */
+    public function test_add_fail()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $path = BASER_PLUGINS . 'BcPluginSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
+        $plugin = 'BcPluginSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $plugin . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+
+        $this->setUploadFileToRequest('file', $testFile, '', 1);
+        $this->setUnlockedFields(['file']);
+        $this->post('/baser/admin/baser-core/plugins/add');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイルのアップロードに失敗しました。Cannot retrieve stream due to upload error: The uploaded file exceeds the upload_max_filesize directive in php.ini');
 
         $folder = new BcFolder(BASER_PLUGINS . $plugin);
         $folder->delete();

@@ -131,7 +131,7 @@ class BcContentsRouteTest extends BcTestCase
     {
         return [
             // PC（ノーマル : デバイス設定無）
-            [0, '', '', '/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/*']],
+            [0, '', '', '/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/']],
             [0, '', '', '/index', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/*']],
             // TODO ucmitz 未移行
             // 以下、ブログプラグインなどのコントローラークラスを参照するためそちらを移行してから移行する
