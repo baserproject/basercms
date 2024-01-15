@@ -960,6 +960,18 @@ class BlogHelperTest extends BcTestCase
     public function testGetTagList()
     {
         $this->loadFixtureScenario(BlogTagsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2015-01-27 12:57:59',
+        ])->persist();
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 1, 'blog_tag_id' => 2])->persist();
         $params = [
             'conditions' => [],
             'direction' => 'ASC',
