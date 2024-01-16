@@ -51,7 +51,6 @@ const permissionGroupsIndex = {
      * イベント登録
      */
     registerEvents() {
-        console.log('event');
         $("input[name='permission_group_type']").click(this.initPermissionGroups);
     },
 
@@ -59,7 +58,8 @@ const permissionGroupsIndex = {
      * パーミッショングループ初期化
      */
     initPermissionGroups() {
-        const $permissionGroupId = $("select[name='permission_group_id']");
+        const $permissionGroupId = $("#permission-group-id");
+        const selectedGroupId = $permissionGroupId.val();
         $permissionGroupId.empty();
         const type = $("input[name='permission_group_type']:checked").val();
 
@@ -76,6 +76,7 @@ const permissionGroupsIndex = {
                     .text(value.name)
             );
         });
+        $permissionGroupId.val(selectedGroupId);
     }
 
 }
