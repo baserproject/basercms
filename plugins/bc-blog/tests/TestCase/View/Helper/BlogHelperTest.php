@@ -547,8 +547,19 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategoryList()
     {
-        $categories = $this->Blog->getCategories();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+        $categories = $this->Blog->getCategories(['blogContentId'=>1]);
         $result = $this->Blog->getCategoryList($categories);
+        $this->assertEquals('<ul class="bc-blog-category-list depth-1">
+        <li class="bc-blog-category-list__item">
+      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+</ul>', trim($result));
     }
 
     public function getCategoryListDataProvider()
