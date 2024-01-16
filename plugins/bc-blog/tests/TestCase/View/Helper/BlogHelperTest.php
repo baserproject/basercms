@@ -30,6 +30,7 @@ use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Throwable;
 
@@ -961,15 +962,22 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetTagList($expected, $name, $options = [])
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
+        // 準備
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('contents');
+        $this->truncateTable('sites');
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
+        // 実行
         $result = $this->Blog->getTagList($name, $options);
-        if ($result) {
-            $result = Hash::extract($result, '{n}.BlogTag.name');
+        if ($result->count()) {
+            $result = Hash::extract($result->toArray(), '{n}.name');
+        } else {
+            $result = null;
         }
         $this->assertEquals($expected, $result);
     }
@@ -977,11 +985,10 @@ class BlogHelperTest extends BcTestCase
     public function getTagListDataProvider()
     {
         return [
-            [['タグ１'], 'blog1'],
-            [['タグ１', 'タグ２'], 'blog2'],
-            [['タグ１', 'タグ２', 'タグ３', 'タグ４', 'タグ５'], null],
-            [['タグ１', 'タグ２', 'タグ３'], null, ['siteId' => 2]],
-            [['タグ１', 'タグ２', 'タグ３'], ['/s/blog3/']],
+            [['tag1'], 'news'],
+            [['tag1', 'tag2'], '/s/news/'],
+            [['tag1', 'tag2', 'tag3'], null],
+            [['tag1', 'tag2'], null, ['siteId' => 2]],
         ];
     }
 
