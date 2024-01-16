@@ -454,7 +454,9 @@ class MailController extends MailAppController
 				$this->set('freezed', false);
 				$this->set('error', true);
 
-				$this->BcMessage->setError('Error : Confirm your entries and send again.');
+				$this->BcMessage->setError(
+					__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。')
+				);
 				$this->request->data['MailMessage']['auth_captcha'] = null;
 				$this->request->data['MailMessage']['captcha_id'] = null;
 				$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
