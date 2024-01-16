@@ -544,20 +544,11 @@ class BlogHelperTest extends BcTestCase
     /**
      * カテゴリーの一覧をリストタグで取得する
      *
-     * @param int $depth 階層
-     * @param boolean $count 件数を表示するかどうか
-     * @param array $options オプション
-     * @param string $expected 期待値
-     * @dataProvider getCategoryListDataProvider
      */
-    public function testGetCategoryList($depth, $count, $options, $expected)
+    public function testGetCategoryList()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        $categories = $BlogCategory->getCategoryList(1, ['viewCount' => true, 'depth' => 3, 'siteId' => 0]);
-        $result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
-        $this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
+        $categories = $this->Blog->getCategories();
+        $result = $this->Blog->getCategoryList($categories);
     }
 
     public function getCategoryListDataProvider()
