@@ -332,7 +332,6 @@ class BcTestCase extends TestCase
      *
      * @param $events
      * @checked
-     * @unitTest
      * @noTodo
      */
     public function attachEvent($events)
@@ -346,7 +345,6 @@ class BcTestCase extends TestCase
     /**
      * イベントをリセットする
      * @checked
-     * @unitTest
      * @noTodo
      */
     public function resetEvent()

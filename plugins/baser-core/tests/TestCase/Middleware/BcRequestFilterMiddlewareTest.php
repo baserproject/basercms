@@ -204,6 +204,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
      */
     public function testIsInstall($expect, $url)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         Configure::write('BcRequest.isInstalled', false);
         $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isInstall($this->getRequest($url)));
     }

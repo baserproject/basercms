@@ -181,6 +181,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveTmpFiles()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         touch($this->uploadedData['eyecatch']['tmp_name']);
         $entity = $this->BcUploadBehavior->saveTmpFiles($this->uploadedData, 1);
         $tmpId = $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->tmpId;

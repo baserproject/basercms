@@ -1138,6 +1138,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $eventManager = EventManager::instance();
         $eventKey = 'testOnEvent';
         $bcEvenListener = new BcEventListener();

@@ -237,7 +237,6 @@ class BcUploadBehavior extends Behavior
      * @return mixed false|array
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function saveTmpFiles($data, $tmpId)
     {
