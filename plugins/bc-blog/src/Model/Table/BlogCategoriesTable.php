@@ -268,6 +268,7 @@ class BlogCategoriesTable extends BlogAppTable
         if ($distinct) {
             $query->distinct($distinct);
         }
+        $query->matching('BlogPosts.BlogContents.Contents');
         $entities = $query->all();
 
         // all の場合に、付属情報を追加
