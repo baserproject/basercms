@@ -27,6 +27,8 @@ use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Database\Exception;
@@ -63,15 +65,10 @@ class BcUtil
         'delete' => ['env' => 'REQUEST_METHOD', 'value' => 'DELETE'],
         'head' => ['env' => 'REQUEST_METHOD', 'value' => 'HEAD'],
         'options' => ['env' => 'REQUEST_METHOD', 'value' => 'OPTIONS'],
-        'https' => ['env' => 'HTTPS', 'options' => [1, 'on']],
+        'ssl' => ['env' => 'HTTPS', 'options' => [1, 'on']],
         'ajax' => ['env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'],
         'json' => ['accept' => ['application/json'], 'param' => '_ext', 'value' => 'json'],
-        'xml' => [
-            'accept' => ['application/xml', 'text/xml'],
-            'exclude' => ['text/html'],
-            'param' => '_ext',
-            'value' => 'xml',
-        ],
+        'xml' => ['accept' => ['application/xml', 'text/xml'], 'param' => '_ext', 'value' => 'xml'],
     ];
 
     /**
@@ -287,7 +284,7 @@ class BcUtil
                 return false;
             }
         }
-        $versionFile = new BcFile($path);
+        $versionFile = new File($path);
         $versionData = $versionFile->read();
         $aryVersionData = explode("\n", $versionData);
         if (!empty($aryVersionData[0])) {
@@ -645,10 +642,10 @@ class BcUtil
     {
         $path = BcUtil::getPluginPath($theme) . 'plugins';
         if (!file_exists($path)) return [];
-        $Folder = new BcFolder($path);
-        $files = $Folder->getFolders();
-        if (!empty($files)) {
-            return $files;
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, false);
+        if (!empty($files[0])) {
+            return $files[0];
         }
         return [];
     }
@@ -789,8 +786,8 @@ class BcUtil
                 self::getTemplatePath(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-')) . 'plugin' . DS . $plugin . DS
             ];
             foreach($templatePaths as $templatePath) {
-                $folder = new BcFolder($templatePath . $path . DS);
-                $files = $folder->getFiles();
+                $folder = new Folder($templatePath . $path . DS);
+                $files = $folder->read(true, true)[1];
                 if ($files) {
                     $templates = array_merge($templates, $files);
                 }
@@ -870,12 +867,12 @@ class BcUtil
         $paths = [ROOT . DS . 'plugins'];
         $themes = [];
         foreach($paths as $path) {
-            $Folder = new BcFolder($path);
-            $folders = $Folder->getFolders();
-            if (!$folders) {
+            $folder = new Folder($path);
+            $files = $folder->read(true);
+            if (!$files[0]) {
                 continue;
             }
-            foreach($folders as $name) {
+            foreach($files[0] as $name) {
                 $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
                 if ($name === '_notes' || !file_exists($appConfigPath)) {
                     continue;
@@ -1158,7 +1155,7 @@ class BcUtil
         }
         $request = Router::getRequest();
         $protocol = 'http://';
-        if (!empty($request) && $request->is('https')) {
+        if (!empty($request) && $request->is('ssl')) {
             $protocol = 'https://';
         }
         $host = Configure::read('BcEnv.host');
@@ -1512,10 +1509,10 @@ class BcUtil
     public static function emptyFolder($path)
     {
         $result = true;
-        $Folder = new BcFolder($path);
-        $files = $Folder->getFiles(['full'=>true]);
-        if (is_array($files)) {
-            foreach($files as $file) {
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, true);
+        if (is_array($files[1])) {
+            foreach($files[1] as $file) {
                 if ($file != 'empty') {
                     if (!@unlink($file)) {
                         $result = false;
@@ -1523,10 +1520,9 @@ class BcUtil
                 }
             }
         }
-        $folders = $Folder->getFolders(['full'=>true]);
-        if (is_array($folders)) {
-            foreach($folders as $folder) {
-                if (!BcUtil::emptyFolder($folder)) {
+        if (is_array($files[0])) {
+            foreach($files[0] as $file) {
+                if (!BcUtil::emptyFolder($file)) {
                     $result = false;
                 }
             }
@@ -1612,7 +1608,7 @@ class BcUtil
      * Request を取得する
      *
      * @param string $url
-     * @return ServerRequestInterface
+     * @return ServerRequest
      * @checked
      * @noTodo
      * @unitTest
@@ -1654,11 +1650,11 @@ class BcUtil
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
 
+        $params = [];
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
         } catch (MissingRouteException) {
-            return $request;
         } catch (\Throwable $e) {
             throw $e;
         }
@@ -1671,7 +1667,7 @@ class BcUtil
         if ($request->getParam('prefix') === 'Admin') {
             $bcAdmin = new BcAdminMiddleware();
             $request = $bcAdmin->setCurrentSite($request);
-        } else {
+        } elseif($params) {
             $bcAdmin = new BcFrontMiddleware();
             $request = $bcAdmin->setCurrent($request);
         }
@@ -1705,11 +1701,12 @@ class BcUtil
         if (!is_writable(TMP)) {
             return;
         }
-        (new BcFolder(TMP . 'sessions'))->create();
-        (new BcFolder(CACHE))->create();
-        (new BcFolder(CACHE . 'models'))->create();
-        (new BcFolder(CACHE . 'persistent'))->create();
-        (new BcFolder(CACHE . 'environment'))->create();
+        $folder = new Folder();
+        $folder->create(TMP . 'sessions', 0777);
+        $folder->create(CACHE, 0777);
+        $folder->create(CACHE . 'models', 0777);
+        $folder->create(CACHE . 'persistent', 0777);
+        $folder->create(CACHE . 'environment', 0777);
     }
 
     /**
@@ -1724,9 +1721,10 @@ class BcUtil
     {
         $pluginPath = BcUtil::getPluginPath($newPlugin);
         if (!$pluginPath) return false;
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
+        $file->close();
         return true;
     }
 

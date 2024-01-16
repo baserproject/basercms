@@ -36,8 +36,8 @@ $this->BcAdmin->setHelp('mail_configs_form');
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('site_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_name') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '自動送信メールの署名に挿入されます。') ?></div>
+        <?php echo $this->BcAdminForm->error('site_name') ?>
       </td>
     </tr>
     <tr>
@@ -47,8 +47,8 @@ $this->BcAdmin->setHelp('mail_configs_form');
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_url') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '自動送信メールの署名に挿入されます。') ?></div>
+        <?php echo $this->BcAdminForm->error('site_url') ?>
       </td>
     </tr>
     <tr>
@@ -58,13 +58,13 @@ $this->BcAdmin->setHelp('mail_configs_form');
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('site_email', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_email') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', '自動送信メールの署名に挿入されます。') ?></li>
             <li><?php echo __d('baser_core', 'メールの送信先ではありません。') ?></li>
           </ul>
         </div>
+        <?php echo $this->BcAdminForm->error('site_email') ?>
       </td>
     </tr>
     <tr>
@@ -74,8 +74,8 @@ $this->BcAdmin->setHelp('mail_configs_form');
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('site_tel', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_tel') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '自動送信メールの署名に挿入されます。') ?></div>
+        <?php echo $this->BcAdminForm->error('site_tel') ?>
       </td>
     </tr>
     <tr>
@@ -85,8 +85,8 @@ $this->BcAdmin->setHelp('mail_configs_form');
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('site_fax', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_fax') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '自動送信メールの署名に挿入されます。') ?></div>
+        <?php echo $this->BcAdminForm->error('site_fax') ?>
       </td>
     </tr>
     <?php echo $this->BcAdminForm->dispatchAfterForm() ?>

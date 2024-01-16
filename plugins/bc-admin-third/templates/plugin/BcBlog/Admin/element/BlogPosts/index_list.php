@@ -56,7 +56,9 @@ $this->BcListTable->setColumnNumber(9);
   <thead class="bca-table-listup__thead">
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
+      <?php if ($this->BcBaser->isAdminUser()): ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
+      <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th"><?php // No ?>
       <?php echo $this->Paginator->sort('no', [
