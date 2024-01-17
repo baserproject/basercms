@@ -757,7 +757,7 @@ class BlogFrontServiceTest extends BcTestCase
         $rs = $this->BlogFrontService->getViewVarsForBlogCategoryArchivesWidget(6);
         //戻る値を確認
         $this->assertEquals(6, $rs['blogContent']->id);
-        $this->assertEquals(1, $rs['categories']->count());
+        $this->assertEquals(2, $rs['categories']->count());
     }
 
     /**

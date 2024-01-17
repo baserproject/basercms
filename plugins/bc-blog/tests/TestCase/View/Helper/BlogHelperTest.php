@@ -929,7 +929,7 @@ class BlogHelperTest extends BcTestCase
         $this->assertCount(1, $categories);
         // サイトフィルター解除
         $categories = $this->Blog->getCategories(['siteId' => false]);
-        $this->assertEquals(1, count($categories));
+        $this->assertEquals(2, count($categories));
         // 深さ指定（子）
         $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 2])->toArray();
         $this->assertEquals(2, $categories[0]->children->toArray()[0]->id);

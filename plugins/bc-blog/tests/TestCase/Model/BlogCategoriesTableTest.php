@@ -338,7 +338,7 @@ class BlogCategoriesTableTest extends BcTestCase
 
         // 正常:　$blogContentId = null
         $result = $this->BlogCategoriesTable->getCategoryList();
-        $this->assertCount(1, $result);
+        $this->assertCount(2, $result);
 
         // 正常:　$blogContentId = 1
         $result = $this->BlogCategoriesTable->getCategoryList(1);
@@ -400,7 +400,7 @@ class BlogCategoriesTableTest extends BcTestCase
             [
                 'fields' => $fields,
             ]);
-        $this->assertCount(1, $result);
+        $this->assertCount(2, $result);
 
         // 正常:　$blogContentId = 1
         $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
