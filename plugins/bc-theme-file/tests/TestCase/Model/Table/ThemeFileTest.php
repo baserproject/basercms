@@ -51,6 +51,7 @@ class ThemeFileTest extends BcTestCase
 
     public function test必須チェック正常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFile->create([
             'ThemeFile' => [
                 'name' => 'baser',

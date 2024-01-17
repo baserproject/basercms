@@ -19,7 +19,7 @@ use BcMail\Model\Entity\MailContent;
  *
  * @property MailContent $MailContent
  */
-class MailContentTest extends BcTestCase
+class MailContentsTableTest extends BcTestCase
 {
     /**
      * Set Up

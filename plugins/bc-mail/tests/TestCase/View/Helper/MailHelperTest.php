@@ -144,7 +144,7 @@ class MailHelperTest extends BcTestCase
         $this->Mail->link($title, $contentsName, $datas = [], $options = []);
     }
 
-    public function linkProvider()
+    public static function linkProvider()
     {
         return [
             ['タイトル', 'Members', '<a href="/Members">タイトル</a>'],
