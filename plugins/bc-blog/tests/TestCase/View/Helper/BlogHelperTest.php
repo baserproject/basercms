@@ -1060,24 +1060,16 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * タグ記事一覧へのリンクタグを取得する
-     *
-     * @param string $expected
-     * @param string $currentUrl
-     * @param int $blogContentId
-     * @param $name
-     * @dataProvider getTagLinkDataProvider
      */
-    public function testGetTagLink($expected, $currentUrl, $blogContentId, $name)
+    public function testGetTagLink()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
-        $url = $this->Blog->getTagLink($blogContentId, ['BlogTag' => ['name' => $name]]);
-        $this->assertEquals($expected, $url);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLink(1, $tag);
+        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a>', $url);
     }
 
     public function getTagLinkDataProvider()
