@@ -1070,7 +1070,7 @@ class BlogHelperTest extends BcTestCase
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
         $tag = BlogTagFactory::get(1);
         $url = $this->Blog->getTagLink(1, $tag);
-        $this->assertEquals('<a href="https://localhost/news/archives/tag/tag1">tag1</a>', $url);
+        $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a>', $url);
     }
 
     public function getTagLinkDataProvider()
