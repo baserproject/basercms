@@ -271,9 +271,7 @@ class ToolsController extends AppController
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
-			foreach($plugins as $plugin) {
-				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
-			}
+			$this->_writeBackup($tmpDir . 'plugin' . DS, 'blog', $encoding);
 		}
 		
 		// ZIP圧縮して出力
