@@ -1039,6 +1039,9 @@ class BlogHelper extends Helper
      *
      * @param array $post ブログ記事
      * @return array $parentCategory 親カテゴリ
+     * @unitTest
+     * @noTodo
+     * @checked
      */
     public function getParentCategory($post)
     {

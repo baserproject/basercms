@@ -796,15 +796,40 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetParentCategory()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '正しく親カテゴリーを取得できません';
-        $post = ['BlogCategory' => ['id' => 1]];
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name 2',
+            'blog_category_id' => 2,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 2,
+            'parent_id' => 1,
+            'blog_content_id' => 1,
+            'name' => '',
+            'title' => 'category title 2',
+            'lft' => 2,
+            'rght' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $post = BlogPostFactory::get(2);
         $result = $this->Blog->getParentCategory($post);
-        $this->assertEmpty($result, $message);
-
-        $post['BlogCategory']['id'] = 2;
-        $result = $this->Blog->getParentCategory($post);
-        $this->assertEquals('release', $result['BlogCategory']['name'], $message);
+        dd($result);
+        $this->assertEmpty($result);
     }
 
     /**
