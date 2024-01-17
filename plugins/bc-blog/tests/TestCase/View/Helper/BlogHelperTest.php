@@ -23,6 +23,7 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
@@ -1061,7 +1062,7 @@ class BlogHelperTest extends BcTestCase
     /**
      * タグ記事一覧へのリンクタグを取得する
      */
-    public function testGetTagLink()
+    public function testGetTagLink1()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogTagsScenario::class);
