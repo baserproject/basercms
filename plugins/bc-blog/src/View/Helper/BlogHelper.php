@@ -1412,6 +1412,7 @@ class BlogHelper extends Helper
      * @return array|null
      * @checked
      * @noTodo
+     * @checked
      */
     public function getTagList($name, $options = [])
     {

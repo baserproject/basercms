@@ -11,7 +11,6 @@
 
 namespace BcBlog\Test\TestCase\View\Helper;
 
-use App\View\AppView;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -22,14 +21,18 @@ use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Throwable;
 
 /**
  * Blog helper library.
@@ -57,7 +60,8 @@ class BlogHelperTest extends BcTestCase
             1, // siteId
             1, // parentId
             'news', // name
-            '/news/' // url
+            '/news/', // url
+            'test title'
         );
         $view = new BlogFrontAppView($this->getRequest());
         $blogContent = BlogContentFactory::get(1);
@@ -83,27 +87,41 @@ class BlogHelperTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Blog->currentContent->id);
     }
+    /**
+     * test setContent
+     * @throws Throwable
+     */
+    public function test_setContent()
+    {
+        $this->Blog->setContent(22);
+        $this->assertNull($this->Blog->currentBlogContent);
+        $this->Blog->setContent(1);
+        $this->assertEquals(1, $this->Blog->currentBlogContent->id);
+    }
 
     /**
      * ブログIDを取得する
      */
     public function testGetCurrentBlogId()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getCurrentBlogId();
-        $expects = '1';
-        $this->assertEquals($expects, $result, 'ブログIDを正しく取得できません');
+        $this->assertEquals(1, $result);
     }
 
     /**
      * ブログのコンテンツ名を取得する
+     * @throws \Throwable
      */
     public function testGetBlogName()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getBlogName();
-        $expects = 'news';
-        $this->assertEquals($expects, $result, 'ブログのコンテンツ名を正しく取得できません');
+        $this->assertEquals('news', $result);
     }
 
     /**
@@ -111,10 +129,11 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetTitle()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getTitle();
-        $expects = '新着情報';
-        $this->assertEquals($expects, $result, 'タイトルを正しく取得できません');
+        $this->assertEquals('test title', $result);
     }
 
     /**
@@ -122,30 +141,55 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetDescription()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        //準備
+        $this->Blog->setContent(1);
+        //正常系実行
         $result = $this->Blog->getDescription();
-        $expects = 'baserCMS inc. [デモ] の最新の情報をお届けします。';
-        $this->assertEquals($expects, $result, 'ブログの説明文を正しく取得できません');
+        $this->assertEquals('ディスクリプション', $result);
     }
 
     /**
-     * 記事タイトルを取得する
-     * @param string $name タイトル
-     * @param bool $link リンクをつけるかどうか
-     * @param array $options オプション
-     * @param string $expected 期待値
-     * @dataProvider getPostTitleDataProvider
+     * test descriptionExists
      */
-    public function testGetPostTitle($name, $link, $options, $expected)
+    public function test_descriptionExists()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
+        //準備
+        $this->Blog->setContent(1);
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
+            ->treeNode(2, 1, 1, 'name', '/test', 2, true)->persist();
+        BlogContentFactory::make(['id' => 2, 'template' => 'homePage2'])->persist();
+        //正常系実行: true
+        $result = $this->Blog->descriptionExists();
+        $this->assertTrue($result);
+        //正常系実行: false
+        $this->Blog->setContent(2);
+        $result = $this->Blog->descriptionExists();
+        $this->assertFalse($result);
+    }
+
+
+    /**
+     * 記事タイトルを取得する
+     */
+    public function testGetPostTitle()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
             'blog_content_id' => 1,
-            'name' => $name,
-            'no' => 4,
-        ]];
-        $result = $this->Blog->getPostTitle($post, $link, $options);
-        $this->assertEquals($expected, $result, '記事タイトルを正しく取得できません');
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        $result = $this->Blog->getPostTitle($post, false, ['escape' => false]);
+        $this->assertEquals('プレスリリース', $result);
+        $result = $this->Blog->getPostTitle($post, true);
+        $this->assertEquals('<a href="/news/archives/release">プレスリリース</a>', $result);
+
     }
 
     public function getPostTitleDataProvider()
@@ -165,13 +209,20 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostLink()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
             'blog_content_id' => 1,
-            'no' => 3,
-        ]];
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
         $result = $this->Blog->getPostLink($post, 'test-title');
-        $this->assertEquals('<a href="/news/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
+        $this->assertEquals('<a href="/news/archives/release">test-title</a>', $result);
     }
 
     /**
@@ -229,23 +280,40 @@ class BlogHelperTest extends BcTestCase
     /**
      * 記事の本文を取得する
      *
-     * @param bool $moreText 詳細データを表示するかどうか
-     * @param bool $moreLink 詳細ページへのリンクを表示するかどうか
-     * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力
-     * @param string $expected
-     * @dataProvider getPostContentDataProvider
      */
-    public function testGetPostContent($moreText, $moreLink, $cut, $expected)
+    public function testGetPostContent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'content' => 'test-content',
-            'detail' => 'test-detail',
-            'no' => 3,
-            'blog_content_id' => 1
-        ]];
-        $result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
-        $this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
+        // 準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'detail' => 'detail test',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        // ファイルからコンテンツを取得
+        $result = $this->Blog->getPostContent($post);
+        $this->assertEquals('
+
+<div id="post-detail">detail test</div>
+', $result);
+        // blog_post_contentからコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, false, 4);
+        $this->assertEquals('リリース', $result);
+        // blog_post_content_more からコンテンツを取得
+        $result = $this->Blog->getPostContent($post, true, true, 2);
+        $this->assertEquals('リリ
+
+<p class="more">
+<a href="/news/archives/1#post-detail">≫ 続きを読む</a></p>
+', $result);
     }
 
     public function getPostContentDataProvider()
@@ -263,19 +331,28 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostDetail()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $BlogPost = ClassRegistry::init('BlogPost');
-        $post = $BlogPost->find('first', ['conditions' => ['BlogPost.id' => 1]]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'title' => 'プレスリリース',
+            'detail' => 'detail リリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
 
         $result = $this->Blog->getPostDetail($post);
-        $expects = $post['BlogPost']['detail'];
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail リリース', $result);
 
-        //30文字限定
-        $options = ['cut' => 30];
+        //6文字限定
+        $options = ['cut' => 6];
         $result = $this->Blog->getPostDetail($post, $options);
-        $expects = '詳細が入ります。詳細が入ります。詳細が入ります。詳細が入りま';
-        $this->assertEquals($expects, $result);
+        $this->assertEquals('detail', $result);
     }
 
     /**
@@ -353,20 +430,34 @@ class BlogHelperTest extends BcTestCase
      *
      * @dataProvider getTagDataProvider
      */
-    public function testGetTag($options, $expects)
+    public function testGetTag()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = [
-            'BlogTag' => [
-                ['name' => 'test1'],
-                ['name' => 'test2'],
-            ],
-            'BlogContent' => [
-                'name' => 'news'
-            ]
-        ];
-        $result = $this->Blog->getTag($post, $options);
-        $this->assertEquals($expects, $result, 'タグを正しく取得できません');
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2015-01-27 12:57:59',
+        ])->persist();
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 1, 'blog_tag_id' => 2])->persist();
+
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //'link'=>false
+        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $result = $this->Blog->getTag($post, ['link'=>false]);
+        $this->assertEquals('tag1', $result[0]['name']);
+        //'link'=>true
+        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $result = $this->Blog->getTag($post, ['link'=>true]);
+        $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a> , <a href="/news/archives/tag/tag2">tag2</a>', $result);
     }
 
     public function getTagDataProvider()
@@ -433,11 +524,22 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $post = ['BlogPost' => [
-            'posts_date' => '2015-08-10 18:58:07'
-        ]];
-        $this->Blog->getPostDate($post);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'content' => 'リリースコンテンツ',
+            'title' => 'プレスリリース',
+            'detail' => 'detail リリース',
+            'status' => 1,
+            'posted' => '2023-01-27 12:57:59',
+        ]);
+        $result = $this->Blog->getPostDate($post);
+        $this->assertEquals('2023/01/27', $result);
     }
 
     /**
@@ -508,6 +610,54 @@ class BlogHelperTest extends BcTestCase
         ]];
         $this->Blog->prevLink($post);
     }
+
+    /**
+     * test hasPrevLink
+     */
+    public function test_hasPrevLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'no' => 100,
+            'title' => 'blog post 1',
+            'posted' => '2020-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-10-01 09:00:00',
+            'publish_end' => '9999-11-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'no' => 101,
+            'title' => 'blog post 2',
+            'posted' => '2022-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-02-01 09:00:00',
+            'publish_end' => '9999-12-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 3,
+            'blog_content_id' => 3,
+            'no' => 102,
+            'title' => 'blog post 3',
+            'posted' => '2022-08-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-05-06 09:00:00',
+            'publish_end' => '9999-02-01 09:00:00'
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasPrevLink(BlogPostFactory::get(2));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasPrevLink(BlogPostFactory::get(1));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasPrevLink(BlogPostFactory::get(111));
+    }
+
 
     public function prevLinkDataProvider()
     {
@@ -812,15 +962,22 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetTagList($expected, $name, $options = [])
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
+        // 準備
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('contents');
+        $this->truncateTable('sites');
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
+        // 実行
         $result = $this->Blog->getTagList($name, $options);
-        if ($result) {
-            $result = Hash::extract($result, '{n}.BlogTag.name');
+        if ($result->count()) {
+            $result = Hash::extract($result->toArray(), '{n}.name');
+        } else {
+            $result = null;
         }
         $this->assertEquals($expected, $result);
     }
@@ -828,11 +985,10 @@ class BlogHelperTest extends BcTestCase
     public function getTagListDataProvider()
     {
         return [
-            [['タグ１'], 'blog1'],
-            [['タグ１', 'タグ２'], 'blog2'],
-            [['タグ１', 'タグ２', 'タグ３', 'タグ４', 'タグ５'], null],
-            [['タグ１', 'タグ２', 'タグ３'], null, ['siteId' => 2]],
-            [['タグ１', 'タグ２', 'タグ３'], ['/s/blog3/']],
+            [['tag1'], 'news'],
+            [['tag1', 'tag2'], '/s/news/'],
+            [['tag1', 'tag2', 'tag3'], null],
+            [['tag1', 'tag2'], null, ['siteId' => 2]],
         ];
     }
 
