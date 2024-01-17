@@ -963,7 +963,7 @@ class BlogHelperTest extends BcTestCase
 
         // option type year
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
-        $this->assertEquals('name-2', $result['2015'][0]->name);
+        $this->assertEquals('name-3', $result['2015'][0]->name);
 
         // option viewCount true
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
