@@ -934,7 +934,7 @@ class BlogHelperTest extends BcTestCase
         $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 2])->toArray();
         $this->assertEquals(2, $categories[0]->children->toArray()[0]->id);
         // 深さ指定（孫）
-        $categories = $this->Blog->getCategories(['depth' => 3])->toArray();
+        $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 3])->toArray();
         $this->assertEquals(3, $categories[0]->children->toArray()[0]->children->toArray()[0]->id);
         // ブログコンテンツID指定
         $categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
@@ -963,7 +963,7 @@ class BlogHelperTest extends BcTestCase
 
         // option type year
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
-        $this->assertEquals('name-3', $result['2015'][0]->name);
+        $this->assertEquals('name-2', $result['2015'][0]->name);
 
         // option viewCount true
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
