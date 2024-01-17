@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,37 +8,34 @@ return;
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
+namespace BcMail\Test\TestCase\Controller\Admin;
+use BaserCore\TestSuite\BcTestCase;
 
-App::uses('MailAppController', 'BcMail.Controller');
-App::uses('MailConfigsController', 'BcMail.Controller');
-App::uses('SessionComponent', 'Controller/Component');
-
-class MailConfigsControllerTest extends BaserTestCase
+class MailConfigsControllerTest extends BcTestCase
 {
-
-    public $fixtures = [
-        // 'baser.Default.SiteConfig',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Plugin',
-        'baser.Default.Permission',
-        'baser.Default.Favorite',
-        'plugin.mail.Default/MailConfig',
-    ];
-
-    public function setUp()
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
-
-        $this->Case = $this->getMockForAbstractClass('ControllerTestCase');
+//        $this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
+//
+//        $this->Case = $this->getMockForAbstractClass('ControllerTestCase');
 
         parent::setUp();
     }
 
-    public function tearDown()
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->MailConfigs);
-        unset($this->Case);
+//        unset($this->MailConfigs);
+//        unset($this->Case);
         parent::tearDown();
     }
 
@@ -50,7 +45,7 @@ class MailConfigsControllerTest extends BaserTestCase
      * @param array $data requestのdata
      * @dataProvider admin_formDataProvider
      */
-    public function testAdmin_form($data, $expected)
+    public function test_index($data, $expected)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
 

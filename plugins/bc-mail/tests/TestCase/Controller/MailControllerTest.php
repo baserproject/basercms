@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,24 +9,28 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailController', 'BcMail.Controller');
-App::uses('MailMessage', 'BcMail.Model');
+namespace BcMail\Test\TestCase\Controller;
 
-class MailControllerTest extends BaserTestCase
+use BaserCore\TestSuite\BcTestCase;
+
+class MailControllerTest extends BcTestCase
 {
-
-    public $fixtures = [
-        'baser.Default.SiteConfig',
-        'baser.Default.Page',
-        'plugin.mail.Default/MailMessage',
-    ];
-
-    public function setUp()
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
         parent::setUp();
     }
 
-    public function tearDown()
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -55,7 +57,7 @@ class MailControllerTest extends BaserTestCase
      */
     public function test_index()
     {
-        // $result = $this->testAction('/contact/index');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**

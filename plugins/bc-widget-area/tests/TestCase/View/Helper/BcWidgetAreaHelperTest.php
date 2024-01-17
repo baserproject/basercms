@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,8 +9,11 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
-App::uses('BcWidgetAreaHelper', 'View/Helper');
+namespace BcWidgetArea\Test\TestCase\View\Helper;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcTextHelper;
+use BcWidgetArea\View\Helper\BcWidgetAreaHelper;
 
 /**
  * text helper library.
@@ -23,22 +24,14 @@ App::uses('BcWidgetAreaHelper', 'View/Helper');
 class BcWidgetAreaHelperTest extends BcTestCase
 {
 
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'baser.Default.WidgetArea',
-    ];
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $View = new View();
-        $this->BcWidgetArea = new BcWidgetAreaHelper($View);
+//        $View = new View();
+//        $this->BcWidgetArea = new BcWidgetAreaHelper($View);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->BcWidgetArea);
         parent::tearDown();

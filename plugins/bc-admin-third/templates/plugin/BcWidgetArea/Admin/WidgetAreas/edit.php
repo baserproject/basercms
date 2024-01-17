@@ -75,8 +75,8 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
               <?php
               $widgets = [];
               foreach($widgetInfo['paths'] as $path) {
-                $Folder = new \Cake\Filesystem\Folder($path);
-                $files = $Folder->read(true, true, true);
+                $Folder = new \BaserCore\Utility\BcFolder($path);
+                $files = $Folder->getFiles();
                 $widgets = [];
                 foreach($files[1] as $file) {
                   $widget = ['name' => '', 'title' => '', 'description' => '', 'setting' => ''];

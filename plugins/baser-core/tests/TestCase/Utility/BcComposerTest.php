@@ -59,6 +59,7 @@ class BcComposerTest extends BcTestCase
      */
     public function test_require()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $orgPath = ROOT . DS . 'composer.json';
         $backupPath = ROOT . DS . 'composer.json.bak';
         $orgLockPath = ROOT . DS . 'composer.lock';

@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,52 +8,34 @@ return;
  * @since           baserCMS v 4.0.3
  * @license         https://basercms.net/license/index.html
  */
-
-App::uses('MailHelper', 'BcMail.View/Helper');
-App::uses('BcBaserHelper', 'View/Helper');
-App::uses('BcAppView', 'View');
+namespace BcMail\Test\TestCase\View\Helper;
+use BaserCore\TestSuite\BcTestCase;
+use BcMail\View\Helper\MailHelper;
 
 /**
  * Class MailHelperTest
  *
  * @property MailHelper $Mail
  */
-class MailHelperTest extends BaserTestCase
+class MailHelperTest extends BcTestCase
 {
-
-    /**
-     * Fixture
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'baser.Default.User',
-        'baser.Default.SiteConfig',
-        'plugin.Mail.Default/MailContent',
-        'plugin.Mail.Default/MailField',
-        'plugin.Mail.Default/MailMessage',
-        'plugin.Mail.Default/MailConfig'
-    ];
-
     /**
      * set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->View = new BcAppView(null);
-        $this->View->request = $this->_getRequest('/');
-        $this->Mail = new MailHelper($this->View);
+//        $this->View = new BcAppView(null);
+//        $this->View->request = $this->_getRequest('/');
+//        $this->Mail = new MailHelper($this->View);
     }
 
     /**
      * tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        unset($this->Mail);
+//        unset($this->Mail);
         parent::tearDown();
     }
 
@@ -72,6 +52,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetDescription()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         ClassRegistry::flush();
         $this->Mail->setMailContent(1);
         $expected = '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>';
@@ -84,6 +65,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testDescriptionExists()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Mail->setMailContent(1);
         $result = $this->Mail->descriptionExists();
         $this->assertTrue($result, "メールの説明文が指定されていません。");
@@ -94,6 +76,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetForm()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $MailMessage = ClassRegistry::init('BcMail.MailMessage');
         $MailMessage->createTable(1);
         ClassRegistry::flush();
@@ -107,6 +90,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetFormTemplates()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $View = new View(null);
         $View->set('siteConfig', Configure::read('BcSite'));
         $this->Mail->BcBaser = new BcBaserHelper($View);
@@ -123,6 +107,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetMailTemplates()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $View = new View(null);
         $View->set('siteConfig', Configure::read('BcSite'));
         $this->Mail->BcBaser = new BcBaserHelper($View);
@@ -142,6 +127,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetToken()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Mail->getToken();
         $expected = '/<script.*<\/script>.*/s';
         $this->assertMatchesRegularExpression($expected, $result, 'スクリプトが取得できません。');
@@ -153,11 +139,12 @@ class MailHelperTest extends BaserTestCase
      */
     public function testLink($title, $contentsName, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->expectOutputString($expected);
         $this->Mail->link($title, $contentsName, $datas = [], $options = []);
     }
 
-    public function linkProvider()
+    public static function linkProvider()
     {
         return [
             ['タイトル', 'Members', '<a href="/Members">タイトル</a>'],
@@ -178,6 +165,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testSetMailContent($id, $expect)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         unset($this->Mail->mailContent);
         $this->Mail->setMailContent($id);
         $this->assertEquals((bool)($this->Mail->mailContent), $expect);

@@ -68,7 +68,7 @@ class CustomLinksService implements CustomLinksServiceInterface
             $conditions = $this->CustomLinks->CustomTables->CustomContents->Contents->getConditionAllowPublish();
             $conditions = array_merge($conditions, ['CustomLinks.status' => true]);
         }
-        return $this->CustomLinks->get($id, 
+        return $this->CustomLinks->get($id,
             contain: $options['contain'],
             conditions: $conditions
         );
@@ -119,6 +119,8 @@ class CustomLinksService implements CustomLinksServiceInterface
             );
         }
 
+        if (is_null($options['contain']))
+            $options['contain'] = [];
         return $query->where($conditions)->contain($options['contain']);
     }
 

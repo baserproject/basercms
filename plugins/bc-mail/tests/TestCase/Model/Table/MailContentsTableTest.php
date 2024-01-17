@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,37 +9,37 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailContent', 'BcMail.Model');
+namespace BcMail\Test\TestCase\Model\Table;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailContent;
 
 /**
  * Class MailContentTest
  *
  * @property MailContent $MailContent
  */
-class MailContentTest extends BaserTestCase
+class MailContentsTableTest extends BcTestCase
 {
-
-    public $fixtures = [
-        'baser.Default.SiteConfig',
-        'baser.Default.SearchIndex',
-        'baser.Default.Site',
-        'baser.Default.Content',
-        'baser.Default.User',
-        'plugin.mail.Default/MailMessage',
-        'plugin.mail.Default/MailConfig',
-        'plugin.mail.Default/MailContent',
-        'plugin.mail.Default/MailField',
-    ];
-
-    public function setUp()
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->MailContent = ClassRegistry::init('BcMail.MailContent');
+//        $this->MailContent = ClassRegistry::init('BcMail.MailContent');
         parent::setUp();
     }
 
-    public function tearDown()
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->MailContent);
+//        unset($this->MailContent);
         parent::tearDown();
     }
 
@@ -50,6 +48,7 @@ class MailContentTest extends BaserTestCase
      */
     public function test正常チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'name' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
@@ -72,6 +71,7 @@ class MailContentTest extends BaserTestCase
 
     public function test空白チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'name' => '',
@@ -100,6 +100,7 @@ class MailContentTest extends BaserTestCase
 
     public function test桁数チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'sender_name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
@@ -128,6 +129,7 @@ class MailContentTest extends BaserTestCase
 
     public function test半角英数チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'form_template' => '１２３ａｂｃ',
@@ -146,6 +148,7 @@ class MailContentTest extends BaserTestCase
 
     public function test形式チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'redirect_url' => 'hoge',
@@ -165,6 +168,7 @@ class MailContentTest extends BaserTestCase
 
     public function testSSLチェック正常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'ssl_on' => ['on'],
@@ -177,6 +181,7 @@ class MailContentTest extends BaserTestCase
 
     public function testSSLチェック異常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->MailContent->create([
             'MailContent' => [
                 'ssl_on' => ['on'],
@@ -211,6 +216,7 @@ class MailContentTest extends BaserTestCase
      */
     public function testAfterSave($exclude_search)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $data = [
             'MailContent' => [
@@ -255,7 +261,7 @@ class MailContentTest extends BaserTestCase
      */
     public function testBeforeDelete()
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 削除実行
         $this->MailContent->data = ['MailContent' => ['name' => 'contact']];
         $this->MailContent->delete(1);
@@ -343,7 +349,7 @@ class MailContentTest extends BaserTestCase
      */
     public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $db = $this->MailContent->getDataSource();
         switch ($db->config['datasource']) {
             case 'Database/BcSqlite':

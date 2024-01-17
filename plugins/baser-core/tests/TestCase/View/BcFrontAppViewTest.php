@@ -63,7 +63,7 @@ class BcFrontAppViewTest extends BcTestCase
         $bcFrontAppView->setRequest($this->getRequest('/s/'));
         $bcFrontAppView->initialize();
         $bcFrontAppView->loadHelpers();
-        $this->assertTrue(isset($bcFrontAppView->BcSmartphone));
+        $this->assertNotNull($bcFrontAppView->BcSmartphone);
     }
 
 }

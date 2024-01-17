@@ -157,7 +157,7 @@ class BlogFrontService implements BlogFrontServiceInterface
     /**
      * カテゴリー別アーカイブ一覧の view 変数を取得する
      *
-     * @param ResultSet $posts
+     * @param ResultSet|PaginatedResultSet $posts
      * @param string $category
      * @param ServerRequest $request
      * @param EntityInterface $blogContent
@@ -168,7 +168,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @unitTest
      */
     public function getViewVarsForArchivesByCategory(
-        ResultSet $posts,
+        ResultSet|PaginatedResultSet $posts,
         string $category,
         ServerRequest $request,
         EntityInterface $blogContent,
@@ -228,14 +228,15 @@ class BlogFrontService implements BlogFrontServiceInterface
 
     /**
      * 著者別アーカイブ一覧の view 用変数を取得する
-     * @param ResultSet $posts
+     * @param ResultSet|PaginatedResultSet $posts
      * @param string $author
+     * @param BlogContent $blogContent
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByAuthor(ResultSet $posts, string $author, BlogContent $blogContent): array
+    public function getViewVarsForArchivesByAuthor(ResultSet|PaginatedResultSet $posts, string $author, BlogContent $blogContent): array
     {
         $usersTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
         $author = $usersTable->find('available')->where(['Users.name' => $author])->first();
@@ -253,7 +254,7 @@ class BlogFrontService implements BlogFrontServiceInterface
     /**
      * タグ別アーカイブ一覧の view 用変数を取得する
      *
-     * @param ResultSet $posts
+     * @param ResultSet|PaginatedResultSet $posts
      * @param string $tag
      * @param BlogContent $blogContent
      * @return array
@@ -261,7 +262,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByTag(ResultSet $posts, string $tag, BlogContent $blogContent): array
+    public function getViewVarsForArchivesByTag(ResultSet|PaginatedResultSet $posts, string $tag, BlogContent $blogContent): array
     {
         $tagsTable = TableRegistry::getTableLocator()->get('BcBlog.BlogTags');
         $tag = $tagsTable->find()->where(['name' => urldecode($tag)])->first();
@@ -277,17 +278,18 @@ class BlogFrontService implements BlogFrontServiceInterface
     /**
      * 日付別アーカイブ一覧の view 用変数を取得する
      *
-     * @param ResultSet $posts
+     * @param ResultSet|PaginatedResultSet $posts
      * @param string $year
      * @param string $month
      * @param string $day
+     * @param BlogContent $blogContent
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getViewVarsForArchivesByDate(
-        ResultSet $posts,
+        ResultSet|PaginatedResultSet $posts,
         string $year,
         string $month,
         string $day,
