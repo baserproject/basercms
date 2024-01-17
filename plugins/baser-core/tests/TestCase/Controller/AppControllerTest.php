@@ -337,7 +337,7 @@ class AppControllerTest extends BcTestCase
         $this->assertSame(1, $query->count());
     }
 
-    public function saveDblogDataProvider(): array
+    public static function saveDblogDataProvider(): array
     {
         return [
             ['dblogs testSaveDblog message guest', null],

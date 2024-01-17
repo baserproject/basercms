@@ -44,7 +44,7 @@ class CustomContentAppHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser'];
+    public array $helpers = ['BaserCore.BcBaser'];
 
     /**
      * Constructor
@@ -73,7 +73,10 @@ class CustomContentAppHelper extends Helper
             if ($plugin === 'group') continue;
             $pluginPath = Plugin::path($plugin);
             if (file_exists($pluginPath . 'src' . DS . 'View' . DS . 'Helper' . DS . $plugin . 'Helper.php')) {
-                $this->{$plugin} = $this->_View->loadHelper($plugin . '.' . $plugin);
+                $this->{$plugin} = $this->_View->loadHelper(
+                    "$plugin",
+                    ['className' => "$plugin.$plugin"]
+                );
             }
         }
     }

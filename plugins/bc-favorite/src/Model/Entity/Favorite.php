@@ -24,7 +24,7 @@ class Favorite extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

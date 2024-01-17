@@ -24,8 +24,8 @@ use BaserCore\Annotation\Checked;
  * @property string $user_id
  * @property string $controller
  * @property string $action
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class Dblog extends EntityAlias
 {
@@ -35,7 +35,7 @@ class Dblog extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

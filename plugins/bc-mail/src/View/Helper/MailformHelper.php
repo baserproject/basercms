@@ -33,7 +33,7 @@ class MailformHelper extends BcFreezeHelper
      *
      * @var array
      */
-    public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray', 'Url'];
+    public array $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray', 'Url'];
 
     /**
      * メールフィールドのデータよりコントロールを生成する

@@ -447,7 +447,7 @@ class SitesTable extends AppTable
                 'alias' => $domain,
             ];
         }
-        $result = $this->find()->where($where)->order(['alias DESC']);
+        $result = $this->find()->where($where)->orderBy(['alias DESC']);
         if ($result->count()) {
             return $result->first();
         } else {
@@ -736,8 +736,10 @@ class SitesTable extends AppTable
      * @checked
      * @noTodo
      */
-    public function save(EntityInterface $entity, $options = [])
-    {
+    public function save(
+        EntityInterface $entity,
+        array $options = []
+    ): EntityInterface|false {
         $success = parent::save($entity, $options);
         $request = Router::getRequest();
         if($request) {

@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,33 +8,39 @@ return;
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
+namespace BaserCore\Test\TestCase\View\Helper;
 
-App::uses('View', 'View');
-App::uses('BcArrayHelper', 'View/Helper');
-App::uses('AppHelper', 'View/Helper');
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcAdminHelper;
+use BaserCore\View\Helper\BcArrayHelper;
+use Cake\View\View;
 
 /**
  * Admin helper library.
  *
  * 管理画面用のヘルパー
  *
- * @property      BcAdminHelper $Helper
+ * @property BcAdminHelper $Helper
  */
 class BcArrayHelperTest extends BcTestCase
 {
-
-    private $data;
-
-    public function setUp()
+    /**
+     * set up
+     */
+    public function setUp(): void
     {
         parent::setUp();
         $this->Helper = new BcArrayHelper(new View(null));
         $this->data = ['b' => 'カンジ', 'd' => 'リュウジ', 'a' => 'スナオ', 'c' => 'ゴンチャン'];
     }
 
-    public function tearDown()
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->Helper);
         parent::tearDown();
     }
 
@@ -46,6 +50,7 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testFirst()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertTrue($this->Helper->first($this->data, 'b'));
         $this->assertFalse($this->Helper->first($this->data, 'c'));
     }
@@ -56,6 +61,7 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testLast()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertTrue($this->Helper->last($this->data, 'c'));
         $this->assertFalse($this->Helper->last($this->data, 'd'));
     }
@@ -66,6 +72,7 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testAddText()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // prefixとsuffix両方指定
         $result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
         $expect = [

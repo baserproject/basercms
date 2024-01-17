@@ -190,7 +190,7 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($this->BlogContent->alphaNumeric($key), $expected);
     }
 
-    public function alphaNumericDataProvider()
+    public static function alphaNumericDataProvider()
     {
         return [
             [['key' => 'abc'], true],
@@ -252,7 +252,7 @@ class BlogContentsTableTest extends BcTestCase
         }
     }
 
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             ['', 0],
@@ -491,7 +491,7 @@ class BlogContentsTableTest extends BcTestCase
         ]);
         $this->assertSame([
             'id' => [
-                'integer' => 'The provided value is invalid'
+                'integer' => 'The provided value must be an integer'
             ],
             'content' => [
                 '_required' => '関連するコンテンツがありません'

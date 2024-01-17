@@ -24,7 +24,7 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         EditorTemplateFactory::make([
             'id' => '11',
@@ -88,5 +88,6 @@ class EditorTemplatesScenario implements FixtureScenarioInterface
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ])->persist();
+        return null;
     }
 }

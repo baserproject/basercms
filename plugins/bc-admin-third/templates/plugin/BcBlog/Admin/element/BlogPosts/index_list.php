@@ -82,7 +82,7 @@ $this->BcListTable->setColumnNumber(9);
       <th class="bca-table-listup__thead-th"><?php // タグ ?>
         <?php echo __d('baser_core', 'タグ') ?>
       </th>
-    <?php endif ?>
+<?php endif ?>
     <?php if ($blogContent->comment_use): ?>
       <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'コメント') ?></th>
     <?php endif ?>

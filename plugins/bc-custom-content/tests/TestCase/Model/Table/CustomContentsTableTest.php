@@ -35,4 +35,19 @@ class CustomContentsTableTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test validationWithTable
+     */
+    public function test_validationWithTable()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

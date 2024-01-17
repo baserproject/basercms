@@ -64,7 +64,7 @@ class PageValidationTest extends BcTestCase
         $this->assertTrue($this->PageValidation->phpValidSyntax($code));
     }
 
-    public function phpValidSyntaxDataProvider()
+    public static function phpValidSyntaxDataProvider()
     {
         return [
             [''],
@@ -86,7 +86,7 @@ class PageValidationTest extends BcTestCase
         $this->assertStringContainsString("on line {$line}", $this->PageValidation->phpValidSyntax($code));
     }
 
-    public function phpValidSyntaxWithInvalidDataProvider()
+    public static function phpValidSyntaxWithInvalidDataProvider()
     {
         return [
             [1, '<?php echo \'test'],

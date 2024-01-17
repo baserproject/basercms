@@ -28,7 +28,7 @@ class BcEditorTemplateServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         EditorTemplatesServiceInterface::class
     ];
 

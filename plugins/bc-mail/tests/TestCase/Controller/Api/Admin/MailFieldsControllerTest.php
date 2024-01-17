@@ -208,8 +208,8 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertNotNull($result->mailField);
         $this->assertEquals($result->message, 'メールフィールド「性」をコピーしました。');
         //メールフィルドがコピーできるか確認
-        $mailField = $MailFieldsService->getIndex(1)->last();
-        $this->assertEquals('性_copy', $mailField->name);
+        $mailFields = $MailFieldsService->getIndex(1)->toArray();
+        $this->assertEquals('性_copy', $mailFields[count($mailFields) - 1]['name']);
 
         //不要テーブルを削除
         $MailMessagesService->dropTable(1);

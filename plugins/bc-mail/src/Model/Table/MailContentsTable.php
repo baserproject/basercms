@@ -333,7 +333,7 @@ class MailContentsTable extends MailAppTable
             // メールフィールドコピー
             $mailFields = $this->MailFields->find()
                 ->where(['MailFields.mail_content_id' => $id])
-                ->order(['MailFields.sort'])
+                ->orderBy(['MailFields.sort'])
                 ->all();
             if($mailFields) {
                 foreach($mailFields as $field) {

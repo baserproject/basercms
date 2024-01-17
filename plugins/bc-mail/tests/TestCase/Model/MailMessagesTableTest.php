@@ -122,7 +122,7 @@ class MailMessagesTableTest extends BcTestCase
         $this->assertEquals($expected, $this->MailMessage->validationErrors, $message);
     }
 
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             // 正常系
@@ -211,7 +211,7 @@ class MailMessagesTableTest extends BcTestCase
         $this->assertEquals('a|b|c', $result->multi_check);
     }
 
-    public function convertToDbDataProvider()
+    public static function convertToDbDataProvider()
     {
         return [
             [null, 'hoge', 'hoge'],
@@ -288,7 +288,7 @@ class MailMessagesTableTest extends BcTestCase
         }
     }
 
-    public function convertDatasToMailDataProvider()
+    public static function convertDatasToMailDataProvider()
     {
         return [
             [0, null],

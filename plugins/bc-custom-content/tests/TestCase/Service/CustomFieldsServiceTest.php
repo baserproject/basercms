@@ -97,7 +97,7 @@ class CustomFieldsServiceTest extends BcTestCase
 
         //存在しないIDを指定した場合、
         $this->expectException(RecordNotFoundException::class);
-        $this->expectExceptionMessage('Record not found in table "custom_fields"');
+        $this->expectExceptionMessage('Record not found in table `custom_fields`');
         $this->CustomFieldsService->get(111);
     }
 

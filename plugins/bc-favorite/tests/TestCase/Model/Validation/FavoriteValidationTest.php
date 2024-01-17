@@ -76,7 +76,7 @@ class FavoriteValidationTest extends BcTestCase
         $this->assertEquals($expected, $this->FavoriteValidation->isPermitted($url));
     }
 
-    public function isPermittedDataProvider()
+    public static function isPermittedDataProvider()
     {
         return [
             [true, 1, '/baser/admin/users/index', true],

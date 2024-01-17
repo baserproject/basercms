@@ -135,7 +135,7 @@ class ContentFoldersTable extends AppTable
      */
     private function setBeforeRecord($id)
     {
-        $record = $this->get($id, ['contain' => ['Contents']]);
+        $record = $this->get($id, contain: ['Contents']);
         if ($record->content->url) {
             $this->beforeStatus = $record->content->status;
         }
@@ -155,7 +155,7 @@ class ContentFoldersTable extends AppTable
      */
     public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
-        $entity = $this->get($id, ['contain' => ['Contents']]);
+        $entity = $this->get($id, contain: ['Contents']);
         $oldEntity = clone $entity;
 
         // EVENT ContentFolders.beforeCopy

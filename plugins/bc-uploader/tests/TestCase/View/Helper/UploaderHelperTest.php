@@ -1,6 +1,8 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
+namespace BcUploader\Test\TestCase\View\Helper;
+use BcUploader\View\Helper\UploaderHelper;
+use BaserCore\TestSuite\BcTestCase;
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,31 +13,25 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderHelper', 'BcUploader.View.Helper');
-
 /**
  * Class UploaderHelperTest
  *
  * @property  UploaderHelper $UploaderHelper
  */
-class UploaderHelperTest extends BaserTestCase
+class UploaderHelperTest extends BcTestCase
 {
     /**
      * set up
-     *
-     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
 
     /**
-     * tearDown
-     *
-     * @return void
+     * tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

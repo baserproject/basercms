@@ -40,7 +40,7 @@ class UserTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, ['contain' => 'UserGroups']);
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
     }
 
     /**
@@ -93,7 +93,7 @@ class UserTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getUserNameDataProvider()
+    public static function getUserNameDataProvider()
     {
         return [
             ['aiueo', 'yamada', 'tarou', 'aiueo'],

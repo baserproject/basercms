@@ -24,7 +24,7 @@ class DblogsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         DblogFactory::make([
             'id' => 1,
@@ -41,6 +41,7 @@ class DblogsScenario implements FixtureScenarioInterface
             'message' => 'dblogs test message3',
             'user_id' => '3',
         ])->persist();
+        return null;
     }
 
 }

@@ -23,7 +23,7 @@ class FavoritesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         FavoriteFactory::make([
             'id' => 1,
@@ -67,5 +67,6 @@ class FavoritesScenario implements FixtureScenarioInterface
             'url' => 'javascript:credit();',
             'sort' => 6,
         ])->persist();
+        return null;
     }
 }

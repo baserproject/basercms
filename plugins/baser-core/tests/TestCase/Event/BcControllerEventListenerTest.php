@@ -79,11 +79,11 @@ class BcControllerEventListenerTest extends BcTestCase
         $this->assertEquals($expected, $controller->viewBuilder()->getHelpers());
     }
 
-    public function addHelperDataProvider()
+    public static function addHelperDataProvider()
     {
         return [
-            ['BcBaser', ['BcBaser']],
-            [['BcBaser', 'BcTime'], ['BcBaser', 'BcTime']]
+            ['BcBaser', ['BcBaser' => []]],
+            [['BcBaser', 'BcTime'], ['BcBaser' => [], 'BcTime' => []]]
         ];
     }
 

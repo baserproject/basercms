@@ -32,12 +32,13 @@ class SearchIndexesServiceScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(SmallSetContentsScenario::class);
         SearchIndexFactory::make(1)->persist();
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        return null;
     }
 
 }

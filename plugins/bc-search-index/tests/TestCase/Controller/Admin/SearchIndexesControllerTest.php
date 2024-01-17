@@ -71,7 +71,7 @@ class SearchIndexesControllerTest extends BcTestCase
     {
         $event = new Event('Controller.beforeRender', $this->SearchIndexesController);
         $this->SearchIndexesController->beforeRender($event);
-        $this->assertEquals('BcSearchIndex.BcSearchIndex', $this->SearchIndexesController->viewBuilder()->getHelpers()[0]);
+        $this->assertEquals('BcSearchIndex.BcSearchIndex', $this->SearchIndexesController->viewBuilder()->getHelpers()['BcSearchIndex']['className']);
     }
 
     /**

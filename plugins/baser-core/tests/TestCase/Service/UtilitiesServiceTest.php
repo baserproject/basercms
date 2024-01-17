@@ -178,7 +178,7 @@ class UtilitiesServiceTest extends BcTestCase
 
     }
 
-    public function verityContentsTreeProvider()
+    public static function verityContentsTreeProvider()
     {
         return
             [
@@ -222,7 +222,7 @@ class UtilitiesServiceTest extends BcTestCase
 
     }
 
-    public function _verifyProvider()
+    public static function _verifyProvider()
     {
 
         return

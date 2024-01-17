@@ -184,7 +184,7 @@ class CustomContentsServiceTest extends BcTestCase
 
         //削除したコンテンツが存在するか確認
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "custom_contents"');
+        $this->expectExceptionMessage('Record not found in table `custom_contents`');
         $this->CustomContentsService->get(1);
     }
 

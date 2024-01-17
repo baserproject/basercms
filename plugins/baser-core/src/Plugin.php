@@ -594,7 +594,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     ['path' => '/baser-core'],
                     function(RouteBuilder $routes) {
                         $routes->setExtensions(['json']);
-                        $routes->connect('/.well-known/:controller/*', ['action' => 'index'], ['controller' => '(jwks)']);
+                        $routes->connect('/.well-known/{controller}/*', ['action' => 'index'], ['controller' => '(jwks)']);
                     }
                 );
             }

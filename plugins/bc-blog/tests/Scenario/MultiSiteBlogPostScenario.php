@@ -47,11 +47,12 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();
         $this->createBlogPosts();
+        return null;
     }
 
     /**
@@ -163,6 +164,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'プレスリリース',
             'status' => 1,
         ])->persist();
+        return null;
     }
 
 }

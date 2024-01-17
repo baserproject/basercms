@@ -83,9 +83,11 @@ class CustomLinksTableTest extends BcTestCase
         //既に登録のケース
         CustomLinkFactory::make([
             'name' => 'recruit_category',
+            'custom_table_id' => 1,
         ])->persist();
         $errors = $validator->validate([
             'name' => 'recruit_category',
+            'custom_table_id' => 1,
         ]);
         $this->assertEquals('既に登録のあるフィールド名です。', current($errors['name']));
 

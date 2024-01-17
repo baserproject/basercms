@@ -120,7 +120,7 @@ class BcMailer extends Mailer
      * @checked
      * @noTodo
      */
-    public function deliver(string $content = '')
+    public function deliver(string $content = ''): array
     {
         $this->dispatchLayerEvent('beforeDeliver');
         return parent::deliver($content);
