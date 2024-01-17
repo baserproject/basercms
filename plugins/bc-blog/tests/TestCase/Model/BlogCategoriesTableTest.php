@@ -425,7 +425,6 @@ class BlogCategoriesTableTest extends BcTestCase
                 'fields' => $fields,
                 'depth' => 2,
             ]);
-//        dd($result->toArray()[0]->children);
         $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
         // option viewCount true
         $result = $this->execPrivateMethod($this->BlogCategoriesTable, '_getCategoryList',
