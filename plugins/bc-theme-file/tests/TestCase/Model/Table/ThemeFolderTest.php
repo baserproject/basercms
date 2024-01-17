@@ -9,7 +9,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-namespace BcThemeFile\Test\TestCase\Modal\Table;
+namespace BcThemeFile\Test\TestCase\Model\Table;
 use BaserCore\TestSuite\BcTestCase;
 
 /**

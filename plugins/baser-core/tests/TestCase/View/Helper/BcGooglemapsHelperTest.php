@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,36 +9,37 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
-App::uses('BcGooglemapsHelper', 'View/Helper');
-App::uses('Component', 'Controller');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcGoogleMapsHelper;
+use BaserCore\View\Helper\BcTextHelper;
 
 /**
  * text helper library.
  *
  * @property BcTextHelper $Helper
- * @property BcGooglemapsHelper $BcGooglemaps
+ * @property BcGoogleMapsHelper $BcGooglemaps
  */
 class BcGooglemapsHelperTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     * @var array
+     * set up
      */
-    public $fixtures = [
-        'baser.Default.Site',
-        'baser.Default.SiteConfig'
-    ];
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $View = new View();
-        $this->BcGooglemaps = new BcGooglemapsHelper($View);
+//        $View = new View();
+//        $this->BcGooglemaps = new BcGooglemapsHelper($View);
     }
 
-    public function tearDown()
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
         unset($this->BcGooglemaps);
         parent::tearDown();

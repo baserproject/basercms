@@ -9,7 +9,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-namespace BcMail\Test\TestCase\Model;
+namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Table\MailFieldsTable;
@@ -19,10 +19,6 @@ use BcMail\Model\Table\MailFieldsTable;
  */
 class MailFieldsTableTest extends BcTestCase
 {
-
-    public array $fixtures = [
-
-    ];
 
     /**
      * Set Up

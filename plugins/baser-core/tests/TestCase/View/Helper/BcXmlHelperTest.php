@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,9 +8,10 @@ return;
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
+namespace BaserCore\Test\TestCase\View\Helper;
 
-App::uses('View', 'View');
-App::uses('BcXmlHelper', 'View/Helper');
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcTextHelper;
 
 /**
  * text helper library.
@@ -21,21 +20,22 @@ App::uses('BcXmlHelper', 'View/Helper');
  */
 class BcXmlHelperTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     * @var array
+     * set up
      */
-    public $fixtures = [];
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $View = new View();
-        $this->BcXml = new BcXmlHelper($View);
+//        $View = new View();
+//        $this->BcXml = new BcXmlHelper($View);
     }
 
-    public function tearDown()
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
         unset($this->BcXml);
         parent::tearDown();
@@ -52,7 +52,7 @@ class BcXmlHelperTest extends BcTestCase
      */
     public function testHeader($attrib, $agent, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $_SERVER['HTTP_USER_AGENT'] = $agent;
 
         $result = $this->BcXml->header($attrib);
