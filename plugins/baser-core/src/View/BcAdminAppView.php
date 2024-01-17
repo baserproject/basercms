@@ -56,15 +56,15 @@ class BcAdminAppView extends AppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
-        $this->loadHelper('BaserCore.BcAuth');
-        $this->loadHelper('BaserCore.BcText');
-        $this->loadHelper('BaserCore.BcContents');
-        $this->loadHelper('BaserCore.BcListTable');
-        $this->loadHelper('BaserCore.BcHtml');
-        $this->loadHelper('BaserCore.BcSiteConfig');
-        $this->loadHelper('BaserCore.BcSearchBox');
-        $this->loadHelper('BaserCore.BcFormTable');
+        $this->addHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BaserCore.BcAuth');
+        $this->addHelper('BaserCore.BcText');
+        $this->addHelper('BaserCore.BcContents');
+        $this->addHelper('BaserCore.BcListTable');
+        $this->addHelper('BaserCore.BcHtml');
+        $this->addHelper('BaserCore.BcSiteConfig');
+        $this->addHelper('BaserCore.BcSearchBox');
+        $this->addHelper('BaserCore.BcFormTable');
         if (!$this->get('title')) {
             $this->set('title', 'Undefined');
         }

@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
 
 return;
@@ -164,17 +166,17 @@ class BcBasicsTest extends BcTestCase
     {
         $viewCachePath = CACHE . 'views' . DS;
         if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
-            $cache = new File($viewCachePath . DS . strtolower(Inflector::slug($url)) . $ext, true);
+            $cache = new BcFile($viewCachePath . DS . strtolower(Inflector::slug($url)) . $ext);
             // 削除実行
             clearViewCache($url, $ext);
 
         } elseif ($url) {
             // ダミーのキャッシュファイルを生成
-            $cache = new File($viewCachePath . DS . strtolower(Inflector::slug($url)) . $ext, true);
-            $cacheHoge = new File($viewCachePath . DS . strtolower(Inflector::slug($url)) . '.hoge', true);
+            $cache = new BcFile($viewCachePath . DS . strtolower(Inflector::slug($url)) . $ext);
+            $cacheHoge = new BcFile($viewCachePath . DS . strtolower(Inflector::slug($url)) . '.hoge');
             if (preg_match('/\/index$/', $url)) {
                 $replacedUrl = preg_replace('/\/index$/', '', $url);
-                $replacedCache = new File($viewCachePath . DS . strtolower(Inflector::slug($replacedUrl)) . $ext, true);
+                $replacedCache = new BcFile($viewCachePath . DS . strtolower(Inflector::slug($replacedUrl)) . $ext);
             }
             // 削除実行
             clearViewCache($url, $ext);
@@ -191,8 +193,8 @@ class BcBasicsTest extends BcTestCase
 
         } else {
             // ダミーのキャッシュファイルを生成
-            $cache = new File($viewCachePath . DS . 'cache', true);
-            $empty = new File($viewCachePath . DS . 'empty', true);
+            $cache = new BcFile($viewCachePath . DS . 'cache');
+            $empty = new BcFile($viewCachePath . DS . 'empty');
 
             // 削除実行
             clearViewCache($url, $ext);
@@ -240,26 +242,20 @@ class BcBasicsTest extends BcTestCase
         $envConf = Cache::config('_bc_env_');
         $envConf = $envConf['settings'];
 
-        $coreCache = new File($coreConf['path'] . $coreConf['prefix'] . 'cache', true);
-        $modelCache = new File($modelConf['path'] . $modelConf['prefix'] . 'cache', true);
-        $envCache = new File($envConf['path'] . $envConf['prefix'] . 'cache', true);
-        $viewCache = new File(CACHE . 'views' . DS . 'cache', true);
-        $dataCache = new File(CACHE . 'datas' . DS . 'cache', true);
+        $coreCache = new BcFile($coreConf['path'] . $coreConf['prefix'] . 'cache');
+        $modelCache = new BcFile($modelConf['path'] . $modelConf['prefix'] . 'cache');
+        $envCache = new BcFile($envConf['path'] . $envConf['prefix'] . 'cache');
+        $viewCache = new BcFile(CACHE . 'views' . DS . 'cache');
+        $dataCache = new BcFile(CACHE . 'datas' . DS . 'cache');
 
         // キャッシュ削除
         BcUtil::clearAllCache();
 
-        $this->assertFalse($coreCache->exists());
-        $this->assertFalse($modelCache->exists());
-        $this->assertFalse($envCache->exists());
-        $this->assertFalse($viewCache->exists());
-        $this->assertFalse($dataCache->exists());
-
-        $coreCache->close();
-        $modelCache->close();
-        $envCache->close();
-        $viewCache->close();
-        $dataCache->close();
+        $this->assertFalse(is_file($coreCache->getPath()));
+        $this->assertFalse(is_file($modelCache->getPath()));
+        $this->assertFalse(is_file($envCache->getPath()));
+        $this->assertFalse(is_file($viewCache->getPath()));
+        $this->assertFalse(is_file($dataCache->getPath()));
     }
 
     /**

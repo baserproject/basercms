@@ -85,7 +85,6 @@ class BcErrorController extends BcFrontAppController
      */
     public function initialize(): void
     {
-        $this->loadComponent('RequestHandler');
         // エラー時にはサービスプロバイダーが登録されず、エラー画面表示時にヘルパーでサービスが見つからずにエラーとなってしまう。
         // 画面表示時にさらにエラーになるとテーマが適用されなくなってしまうためここでサービスプロバイダーを登録する
         BcContainer::get()->addServiceProvider(new BcServiceProvider());

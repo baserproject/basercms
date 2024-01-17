@@ -12,29 +12,22 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\Controller\BcErrorController;
+use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcErrorControllerTest Test Case
  */
 class BcErrorControllerTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Sites',
-    ];
-
     /**
      * Trait
      */
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -42,6 +35,7 @@ class BcErrorControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->BcErrorController = new BcErrorController($this->getRequest());
     }
 
@@ -53,16 +47,6 @@ class BcErrorControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-    }
-
-    /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->assertNotEmpty($this->BcErrorController->RequestHandler);
     }
 
     /**

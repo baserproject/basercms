@@ -13,7 +13,7 @@
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
-		
+
 <!--[if lt IE 9]>
 	<script src="js/IE9.js"></script>
 	<script src="js/html5shiv-printshiv.js"></script>
@@ -52,7 +52,7 @@
         <?php $this->BcBaser->mainImage(array('all' => false, 'num' => 5)) ?>
     </div>
 	<?php else: ?>
-	
+
 	<div id="PageTitle">
 	    <div class="body-wrap">
 	    <?php if (!empty($this->Blog)): ?>
@@ -93,7 +93,7 @@
 		</div>
 		<?php endif ?>
 	</div>
-	
+
 	<div id="TopLink"><?php $this->BcBaser->img('footer/btn_pagetop.png', array('alt' => 'PAGE TOP')) ?></div>
 
 <?php $this->BcBaser->footer() ?>

@@ -283,9 +283,8 @@ class BlogCategoriesTableTest extends BcTestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function duplicateBlogCategoryDataProvider()
+    public static function duplicateBlogCategoryDataProvider()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         return [
             [['id' => 0], true],
             [['id' => 1], false],
@@ -506,7 +505,7 @@ class BlogCategoriesTableTest extends BcTestCase
         $this->assertEquals($expects, (bool)$result);
     }
 
-    public function getByNameDataProvider()
+    public static function getByNameDataProvider()
     {
         return [
             [1, 'child', true],

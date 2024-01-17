@@ -11,9 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\SiteConfigsTable;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SiteConfigsTableTest
@@ -21,17 +24,10 @@ use BaserCore\Model\Table\SiteConfigsTable;
  */
 class SiteConfigsTableTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     * @var string[]
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp
@@ -126,7 +122,7 @@ class SiteConfigsTableTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             ['mode', [
@@ -147,13 +143,14 @@ class SiteConfigsTableTest extends BcTestCase
      */
     public function testIsChangedContentsSortLastModified($isLogin, $saveValue, $listDisplayed, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         if($isLogin) Router::setRequest($this->loginAdmin($this->getRequest()));
         $this->SiteConfigs->saveValue('contents_sort_last_modified', $saveValue);
         $result = $this->SiteConfigs->isChangedContentsSortLastModified($listDisplayed);
         $this->assertEquals($expected, $result);
     }
 
-    public function isChangedContentsSortLastModifiedDataProvider()
+    public static function isChangedContentsSortLastModifiedDataProvider()
     {
         return [
             [false, '', '2021/08/01', false], // 保存値なし
@@ -169,6 +166,7 @@ class SiteConfigsTableTest extends BcTestCase
      */
     public function testUpdateContentsSortLastModified()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 未ログイン
         $this->SiteConfigs->saveValue('contents_sort_last_modified', '');
         $this->SiteConfigs->updateContentsSortLastModified();
@@ -187,6 +185,7 @@ class SiteConfigsTableTest extends BcTestCase
      */
     public function testResetContentsSortLastModified()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $this->SiteConfigs->updateContentsSortLastModified();
         $this->SiteConfigs->resetContentsSortLastModified();
@@ -203,11 +202,12 @@ class SiteConfigsTableTest extends BcTestCase
      */
     public function testIsChange($field, $value, $expected)
     {
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
         $result = $this->SiteConfigs->isChange($field, $value);
         $this->assertEquals($expected, $result);
     }
 
-    public function isChangeDataProvider()
+    public static function isChangeDataProvider()
     {
         return [
             ['use_site_device_setting', "1", false],

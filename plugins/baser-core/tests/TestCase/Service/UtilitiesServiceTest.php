@@ -22,12 +22,12 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -171,14 +171,14 @@ class UtilitiesServiceTest extends BcTestCase
         $this->assertEquals($rs, $expect);
 
         if (file_exists($logPath)) {
-            $file = new File($logPath);
+            $file = new BcFile($logPath);
             $logData = $file->read();
             $this->assertStringContainsString($logDataExpect, $logData);
         }
 
     }
 
-    public function verityContentsTreeProvider()
+    public static function verityContentsTreeProvider()
     {
         return
             [
@@ -222,7 +222,7 @@ class UtilitiesServiceTest extends BcTestCase
 
     }
 
-    public function _verifyProvider()
+    public static function _verifyProvider()
     {
 
         return
@@ -337,10 +337,11 @@ class UtilitiesServiceTest extends BcTestCase
         $this->UtilitiesService->backupDb('utf8');
         $this->UtilitiesService->resetTmpSchemaFolder();
         $tmpDir = TMP . 'schema' . DS;
-        $Folder = new Folder($tmpDir);
-        $files = $Folder->read(true, true, false);
-        $this->assertEquals(0, count($files[0]));
-        $this->assertEquals(0, count($files[1]));
+        $Folder = new BcFolder($tmpDir);
+        $files = $Folder->getFiles();
+        $folders = $Folder->getFolders();
+        $this->assertEquals(0, count($files));
+        $this->assertEquals(0, count($folders));
     }
 
     /**

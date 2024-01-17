@@ -11,7 +11,7 @@
 
 namespace BcThemeFile\Form;
 
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFolder;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
@@ -50,13 +50,14 @@ class ThemeFolderForm extends Form
      */
     protected function _execute(array $data): bool
     {
-        $folder = new Folder();
+        $folder = new BcFolder($data['fullpath'] . DS . $data['name'] . DS);
         if($data['mode'] === 'create') {
-            return $folder->create($data['fullpath'] . DS . $data['name'] . DS, 0777);
+            return $folder->create();
         } elseif($data['mode'] === 'update') {
             $newPath = dirname($data['fullpath']) . DS . $data['name'] . DS;
             if($newPath === $data['fullpath']) return true;
-            return $folder->move($newPath, ['from' => $data['fullpath'], 'chmod' => 0777, 'skip' => ['_notes']]);
+            $folder = new BcFolder($data['fullpath']);
+            return $folder->move($newPath);
         }
         return false;
     }

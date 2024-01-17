@@ -13,10 +13,13 @@ namespace BaserCore\Test\TestCase\Routing\Route;
 
 use BaserCore\Routing\Route\BcContentsRoute;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
+use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcContentsRoute
@@ -30,19 +33,10 @@ class BcContentsRouteTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
-
     /**
-     * フィクスチャ
-     * @var array
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Routing\Route\BcContentsRoute\SiteBcContentsRoute',
-        'plugin.BaserCore.Routing/Route/BcContentsRoute/ContentBcContentsRoute',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.Plugins',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * set up
      *
@@ -83,11 +77,13 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testMatch($current, $params, $expects)
     {
+        $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
+        $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
         Router::setRequest($this->getRequest($current));
         $this->assertEquals($expects, Router::url($params));
     }
 
-    public function reverseRoutingDataProvider()
+    public static function reverseRoutingDataProvider()
     {
         return [
             // Page
@@ -111,6 +107,8 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testParse($useSiteDeviceSetting, $host, $ua, $url, $expects)
     {
+        $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
+        $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
         $siteUrl = env('SITE_URL');
         $siteConfig = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig->putEnv('SITE_URL', 'http://main.com');
@@ -129,11 +127,11 @@ class BcContentsRouteTest extends BcTestCase
         $siteConfig->putEnv('SITE_URL', $siteUrl);
     }
 
-    public function routerParseDataProvider()
+    public static function routerParseDataProvider()
     {
         return [
             // PC（ノーマル : デバイス設定無）
-            [0, '', '', '/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/*']],
+            [0, '', '', '/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/']],
             [0, '', '', '/index', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'view', 'entityId' => 1, 'pass' => ['index'], 'named' => [], '_matchedRoute' => '/*']],
             // TODO ucmitz 未移行
             // 以下、ブログプラグインなどのコントローラークラスを参照するためそちらを移行してから移行する

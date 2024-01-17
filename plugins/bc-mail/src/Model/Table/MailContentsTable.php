@@ -16,6 +16,8 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
@@ -220,7 +222,7 @@ class MailContentsTable extends MailAppTable
      *
      * @return void
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
         // TODO ucmitz 未実装
         return;
@@ -331,7 +333,7 @@ class MailContentsTable extends MailAppTable
             // メールフィールドコピー
             $mailFields = $this->MailFields->find()
                 ->where(['MailFields.mail_content_id' => $id])
-                ->order(['MailFields.sort'])
+                ->orderBy(['MailFields.sort'])
                 ->all();
             if($mailFields) {
                 foreach($mailFields as $field) {

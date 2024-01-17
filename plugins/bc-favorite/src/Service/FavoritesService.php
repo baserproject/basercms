@@ -68,7 +68,7 @@ class FavoritesService implements FavoritesServiceInterface
         if (!empty($queryParams['num'])) {
             $options = ['limit' => $queryParams['num']];
         }
-        $query = $this->Favorites->find('all', $options)->order(['sort']);
+        $query = $this->Favorites->find('all', ...$options)->orderBy(['sort']);
         return $query;
     }
 

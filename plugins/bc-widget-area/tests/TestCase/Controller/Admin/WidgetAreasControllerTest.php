@@ -1,52 +1,60 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('WidgetAreasController', 'Controller');
+namespace BcWidgetArea\Test\TestCase\Controller\Admin;
+
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BcWidgetArea\Controller\Admin\WidgetAreasController;
+use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
+use BcWidgetArea\Test\Factory\WidgetAreaFactory;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class WidgetAreasControllerTest
  *
- * @property  WidgetAreasController $WidgetAreasController
  */
 class WidgetAreasControllerTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
-     * set up
+     * Test subject
      *
-     * @return void
+     * @var WidgetAreasController
      */
-    public function setUp()
+    public $WidgetAreasController;
+
+    /**
+     * Set up
+     */
+    public function setUp(): void
     {
         parent::setUp();
+
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->WidgetAreasController = new WidgetAreasController($this->getRequest());;
     }
 
     /**
-     * tearDown
-     *
-     * @return void
+     * Tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
+        unset($this->WidgetAreasController);
         parent::tearDown();
-    }
-
-    /**
-     * beforeFilter
-     */
-    public function testBeforeFilter()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -54,7 +62,12 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdmin_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-widget-area/widget_areas/index');
+        $this->assertResponseOk();
     }
 
     /**
@@ -70,55 +83,39 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // データ生成
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //対象メソッドを呼ぶ
+        $this->get('/baser/admin/bc-widget-area/widget_areas/edit/1');
+        // ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $vars = $this->_controller->viewBuilder()->getVars()['widgetArea'];
+        $this->assertEquals("標準サイドバー", $vars->name);
     }
 
-    /**
-     * [ADMIN] 削除処理　(ajax)
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 
     /**
-     * [AJAX] タイトル更新
+     * 削除
      */
-    public function testAdmin_update_title()
+    public function testAdmin_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [AJAX] ウィジェット更新
-     */
-    public function testAdmin_update_widget()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 並び順を更新する
-     */
-    public function testAdmin_update_sort()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [AJAX] ウィジェットを削除
-     */
-    public function testAdmin_del_widget()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * ウィジェットを並び替えた上で取得する
-     */
-    public function testGet_widgets()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // データ生成
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //対象メソッドを呼ぶ
+        $this->post('/baser/admin/bc-widget-area/widget_areas/delete/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ウィジェットエリア「標準サイドバー」を削除しました。');
+        // データが削除できるか確認
+        $this->expectException(RecordNotFoundException::class);
+        WidgetAreaFactory::get(1);
     }
 
 }

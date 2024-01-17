@@ -12,7 +12,10 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcKeyValueBehaviorTest
@@ -20,15 +23,10 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class BcKeyValueBehaviorTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var SiteConfigsTable
@@ -62,6 +60,7 @@ class BcKeyValueBehaviorTest extends BcTestCase
      */
     public function testGetKeyValue()
     {
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
         $result = $this->SiteConfigs->getKeyValue();
         $this->assertArrayHasKey('version', $result);
     }

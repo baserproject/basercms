@@ -15,7 +15,7 @@ use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Filesystem\File;
+use BaserCore\Utility\BcFile;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
@@ -171,7 +171,7 @@ class UtilitiesControllerTest extends BcTestCase
     {
         $logPath = LOGS . 'error.log';
         if (!file_exists($logPath)) {
-            new File($logPath, true);
+            (new BcFile($logPath))->create();
         }
 
         $this->post('/baser/api/admin/baser-core/utilities/delete_log.json?token=' . $this->accessToken);

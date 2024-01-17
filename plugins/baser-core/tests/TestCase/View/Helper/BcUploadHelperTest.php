@@ -13,9 +13,14 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Page;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcUploadHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * test for BcUploadHelper
@@ -24,17 +29,7 @@ use BaserCore\View\Helper\BcUploadHelper;
  */
 class BcUploadHelperTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp
@@ -42,6 +37,10 @@ class BcUploadHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
         $this->BcUpload = new BcUploadHelper(new BcAdminAppView($this->getRequest()));
         $this->BcUpload->setTable('BaserCore.Contents');
     }
@@ -122,7 +121,7 @@ class BcUploadHelperTest extends BcTestCase
             'height' => '80',
         ];
         $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
-        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
+        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]*?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
@@ -132,7 +131,7 @@ class BcUploadHelperTest extends BcTestCase
             'eyecatch' => 'template1.jpg',
             'eyecatch_tmp' => 'test'
         ]), $options);
-        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt=""/>';
+        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt="">';
         $this->assertEquals($expects, $result);
 
         $options = [

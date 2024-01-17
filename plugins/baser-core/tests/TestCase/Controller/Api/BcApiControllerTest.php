@@ -14,10 +14,14 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 use Authentication\Authenticator\Result;
 use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\ApiControllerTest Test Case
@@ -30,20 +34,7 @@ class BcApiControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -51,6 +42,9 @@ class BcApiControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
     }
 
     /**

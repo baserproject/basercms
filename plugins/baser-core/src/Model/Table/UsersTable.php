@@ -31,14 +31,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * Class UsersTable
  * @property BelongsTo $UserGroups
- * @method User get($primaryKey, $options = [])
- * @method User newEntity($data = null, array $options = [])
- * @method User[] newEntities(array $data, array $options = [])
- * @method User|bool save(EntityInterface $entity, $options = [])
- * @method User patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method User[] patchEntities($entities, array $data, array $options = [])
- * @method User findOrCreate($search, callable $callback = null, $options = [])
- * @mixin TimestampBehavior
  */
 class UsersTable extends AppTable
 {
@@ -111,10 +103,10 @@ class UsersTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function afterSave(\Cake\Event\EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // ユーザデータが変更された場合は自動ログインのデータを削除する
-        $loginStores = TableRegistry::get('BaserCore.LoginStores');
+        $loginStores = TableRegistry::getTableLocator()->get('BaserCore.LoginStores');
         $loginStores->deleteAll([
             'user_id' => $entity->id
         ]);
@@ -280,16 +272,14 @@ class UsersTable extends AppTable
     {
         switch($field) {
             case 'id':
-                $controlSources['id'] = $this->find('list', [
-                    'keyField' => 'id',
-                    'valueField' => 'real_name_1'
-                ]);
+                $controlSources['id'] = $this->find('list',
+                keyField: 'id',
+                valueField: 'real_name_1');
                 break;
             case 'user_group_id':
-                $controlSources['user_group_id'] = $this->UserGroups->find('list', [
-                    'keyField' => 'id',
-                    'valueField' => 'title'
-                ]);
+                $controlSources['user_group_id'] = $this->UserGroups->find('list',
+                keyField: 'id',
+                valueField: 'title');
                 break;
         }
         if (isset($controlSources[$field])) {
@@ -311,14 +301,13 @@ class UsersTable extends AppTable
      */
     public function getUserList($conditions = [])
     {
-        $users = $this->find("all", [
-            'fields' => ['id', 'real_name_1', 'real_name_2', 'nickname'],
-            'conditions' => $conditions,
-        ]);
+        $users = $this->find("all",
+        fields: ['id', 'real_name_1', 'real_name_2', 'nickname'],
+        conditions: $conditions);
         $list = [];
         if ($users) {
             $appView = new BcAdminAppView();
-            $appView->loadHelper('BaserCore.BcBaser');
+            $appView->loadHelper('BcBaser', ['className' => 'BaserCore.BcBaser']);
             foreach($users as $user) {
                 $list[$user->id] = $appView->BcBaser->getUserName($user);
             }

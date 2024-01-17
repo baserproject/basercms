@@ -148,7 +148,7 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals($expected, $result, 'コントロールソースを正しく取得できません');
     }
 
-    public function getControlSourceDataProvider(): array
+    public static function getControlSourceDataProvider(): array
     {
         return [
             ['parent_id', [], false],

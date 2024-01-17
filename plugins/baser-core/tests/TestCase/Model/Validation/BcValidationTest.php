@@ -11,10 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Model\Validation;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Routing\Router;
 use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcValidationTest
@@ -22,17 +24,11 @@ use BaserCore\Model\Validation\BcValidation;
  */
 class BcValidationTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
+    use ScenarioAwareTrait;
+
     /**
      * Test subject
      *
@@ -78,7 +74,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function alphaNumericPlusDataProvider()
+    public static function alphaNumericPlusDataProvider()
     {
         return [
             ['あいうえお', [], false],
@@ -118,7 +114,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function bcUtileUrlencodeBlankDataProvider()
+    public static function bcUtileUrlencodeBlankDataProvider()
     {
         return [
             ['あいうえお', true],
@@ -143,7 +139,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function minLengthDataProvider()
+    public static function minLengthDataProvider()
     {
         return [
             ['あいう', 4, false],
@@ -167,7 +163,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function maxLengthDataProvider()
+    public static function maxLengthDataProvider()
     {
         return [
             ['あいう', 4, true],
@@ -192,7 +188,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function maxByteDataProvider()
+    public static function maxByteDataProvider()
     {
         return [
             ['あいう', 10, true],
@@ -216,7 +212,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function notInListDataProvider()
+    public static function notInListDataProvider()
     {
         return [
             ['test1', ['test1', 'test2'], false],
@@ -246,7 +242,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function fileCheckDataProvider()
+    public static function fileCheckDataProvider()
     {
         return [
             ["test.jpg", 1048576, 0, true],
@@ -277,7 +273,7 @@ class BcValidationTest extends BcTestCase
     }
 
 
-    public function fileExtDataProvider()
+    public static function fileExtDataProvider()
     {
         return [
             ["test.jpg", "image/jpeg", true],
@@ -302,7 +298,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function notFileEmptyDataProvider()
+    public static function notFileEmptyDataProvider()
     {
         return [
             [['size' => 0], false],
@@ -332,7 +328,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result, $message);
     }
 
-    public function confirmDataProvider()
+    public static function confirmDataProvider()
     {
         return [
             ['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'value'], true, '2つのフィールドが同じ値の場合の判定が正しくありません'],
@@ -357,7 +353,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result, $message);
     }
 
-    public function emailsDataProvider()
+    public static function emailsDataProvider()
     {
         return [
             ['test1@co.jp', true],
@@ -412,7 +408,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function halfTextDataProvider()
+    public static function halfTextDataProvider()
     {
         return [
             ['test', true],
@@ -467,7 +463,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function checkDataAfterThanDataProvider()
+    public static function checkDataAfterThanDataProvider()
     {
         return [
             [new FrozenTime('2015-01-01 00:00:00'), new FrozenTime('2015-01-01 00:00:00'), false],
@@ -485,12 +481,13 @@ class BcValidationTest extends BcTestCase
      */
     public function testContainsScript($value, $expect)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         if ($expect) Router::setRequest($this->loginAdmin($this->getRequest()));
         $result = $this->BcValidation->containsScript($value);
         $this->assertEquals($expect, $result);
     }
 
-    public function containsScriptDataProvider()
+    public static function containsScriptDataProvider()
     {
         return [
             // phpコードの場合
@@ -591,7 +588,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function betweenDataProvider()
+    public static function betweenDataProvider()
     {
         return [
             ["あいう", 2, 4, true],

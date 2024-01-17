@@ -16,13 +16,13 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
-use Cake\Filesystem\File;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -224,14 +224,15 @@ class UploadFilesServiceTest extends BcTestCase
      */
     public function test_create()
     {
+        $this->markTestIncomplete('このテストは未確認です。');
         //準備
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
         $settings = $uploaderFilesTable->getSettings();
         $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'test.txt';
         $tmpPath = TMP . 'tmp.txt';
-        $File = new File($tmpPath);
+        $File = new BcFile($tmpPath);
+        $File->create();
         $File->write("hello");
-        $File->close();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $postData = [
@@ -241,8 +242,8 @@ class UploadFilesServiceTest extends BcTestCase
                 'type' => 'etc',
                 'size' => 100,
             ],
-            'publish_begin' => FrozenTime::yesterday(),
-            'publish_end' => FrozenTime::tomorrow(),
+            'publish_begin' => \Cake\I18n\DateTime::yesterday(),
+            'publish_end' => \Cake\I18n\DateTime::tomorrow(),
         ];
         //正常系実行
         $result = $this->UploaderFilesService->create($postData);

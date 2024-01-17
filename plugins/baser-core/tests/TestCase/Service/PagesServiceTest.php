@@ -17,9 +17,14 @@ use BaserCore\Service\PagesService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Database\Expression\QueryExpression;
 use Cake\Database\ValueBinder;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Closure;
 
 /**
@@ -29,23 +34,10 @@ use Closure;
  */
 class PagesServiceTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
+    use ScenarioAwareTrait;
     /**
      * Set Up
      *
@@ -54,6 +46,8 @@ class PagesServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->PagesService = new PagesService();
         $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
@@ -91,7 +85,7 @@ class PagesServiceTest extends BcTestCase
     {
         $page = $this->PagesService->get(2);
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $page->contents);
-        $this->expectExceptionMessage('Record not found in table "pages"');
+        $this->expectExceptionMessage('Record not found in table `pages`.');
         $this->PagesService->getTrash(1);
     }
 
@@ -105,7 +99,7 @@ class PagesServiceTest extends BcTestCase
         $page = $this->PagesService->getTrash(3);
         $this->assertMatchesRegularExpression('/<div class="articleArea bgGray" id="service">/', $page->contents);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "pages"');
+        $this->expectExceptionMessage('Record not found in table `pages`.');
         $this->PagesService->getTrash(2);
     }
 
@@ -114,6 +108,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testCreate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest('/'));
         $data = [
             'cotnents' => '<p>test</p>',
@@ -156,6 +151,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // containsScriptを通すためアドミンとしてログイン
         $this->loginAdmin($this->getRequest());
         $newPage = $this->PagesService->get(2);
@@ -193,12 +189,13 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetPageTemplateList($contetnId, $plugin, $expected)
     {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         // BC frontに変更
         $result = $this->PagesService->getPageTemplateList($contetnId, $plugin);
         $this->assertEquals($expected, $result);
     }
 
-    public function getPageTemplateListDataProvider()
+    public static function getPageTemplateListDataProvider()
     {
         return [
             [1, 'BcFront', ['default' => 'default']],
@@ -221,11 +218,12 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected, $message = null)
     {
+        $this->loadFixtureScenario(UserScenario::class);
         $result = $this->PagesService->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getControlSourceDataProvider()
+    public static function getControlSourceDataProvider()
     {
         return [
             ['author_id', [1 => 'ニックネーム1', 2 => 'ニックネーム2', 3 => 'ニックネーム3'], 'コントロールソースを取得できません'],
@@ -237,6 +235,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function testGetEditLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/about');
         $this->assertEquals([
             'prefix' => 'Admin',
@@ -274,8 +273,8 @@ class PagesServiceTest extends BcTestCase
         $this->assertNotNull($result->clause('where'));
         $sql = $result->clause('where')->sql(new ValueBinder());
         $this->assertStringContainsString('status =', $sql);
-        $this->assertStringContainsString('contents like', $sql);
-        $this->assertStringContainsString('draft like', $sql);
+        $this->assertStringContainsString('contents LIKE', $sql);
+        $this->assertStringContainsString('draft LIKE', $sql);
     }
 
     /**

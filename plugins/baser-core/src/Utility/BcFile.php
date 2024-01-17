@@ -101,4 +101,27 @@ class BcFile
         return (bool) file_put_contents($this->path, $data);
     }
 
+    /**
+     * ファイルを削除
+     * @return bool
+     */
+    public function delete()
+    {
+        if(!is_file($this->path)) {
+            return false;
+        }
+        return unlink($this->path);
+    }
+
+    /**
+     * ファイルのサイズを取得
+     * @return bool
+     */
+    public function size()
+    {
+        if (is_file($this->path)) {
+            return filesize($this->path);
+        }
+        return false;
+    }
 }

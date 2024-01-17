@@ -12,6 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller\Component;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use Cake\Controller\Controller;
 use Cake\Routing\Router;
 use BaserCore\Service\PagesService;
@@ -21,6 +24,7 @@ use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\AppController;
 use BaserCore\Controller\PagesController;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcFrontContentsComponentTest
@@ -30,15 +34,9 @@ use BaserCore\Controller\Component\BcFrontContentsComponent;
 class BcFrontContentsComponentTest extends BcTestCase
 {
     /**
-     * Fixtures
-     *
-     * @var array
+     * Trait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Pages',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -47,8 +45,11 @@ class BcFrontContentsComponentTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->getRequest('baser/admin');
-        $this->ComponentRegistry = new ComponentRegistry(new Controller());
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        $request = $this->getRequest('baser/admin');
+        $this->ComponentRegistry = new ComponentRegistry(new Controller($request));
         $this->BcFrontContents = new BcFrontContentsComponent($this->ComponentRegistry);
         $this->PagesService = new PagesService();
         $this->ContentsService = new ContentsService();

@@ -37,7 +37,7 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
      * ヘルパー
      * @var array
      */
-    public $helpers = ['BcBlog.Blog'];
+    public array $helpers = ['BcBlog.Blog'];
 
     /**
      * メソッド一覧取得

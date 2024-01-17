@@ -22,9 +22,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
-
 use RuntimeException;
-use Cake\View\Exception\MissingElementException;
 use Cake\View\Exception\MissingLayoutException;
 use Cake\View\Exception\MissingTemplateException;
 
@@ -54,16 +52,16 @@ class AppView extends View
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
-        $this->loadHelper('BaserCore.BcAdmin');
-        $this->loadHelper('BaserCore.BcContents');
-        $this->loadHelper('BaserCore.BcPage');
-        $this->loadHelper('BaserCore.BcBaser');
-        $this->loadHelper('BaserCore.BcArray');
-        $this->loadHelper('BaserCore.BcUpload');
-        $this->loadHelper('BaserCore.BcToolbar');
-        $this->loadHelper('Paginator');
+        $this->addHelper('BaserCore.BcTime');
+        $this->addHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BaserCore.BcAdmin');
+        $this->addHelper('BaserCore.BcContents');
+        $this->addHelper('BaserCore.BcPage');
+        $this->addHelper('BaserCore.BcBaser');
+        $this->addHelper('BaserCore.BcArray');
+        $this->addHelper('BaserCore.BcUpload');
+        $this->addHelper('BaserCore.BcToolbar');
+        $this->addHelper('Paginator');
         $this->assign('title', $this->get('title'));
     }
 
@@ -227,7 +225,7 @@ class AppView extends View
      * @param bool $pluginCheck - if false will ignore the request's plugin if parsed plugin is not loaded
      * @return string|false Either a string to the element filename or false when one can't be found.
      */
-    protected function _getElementFileName(string $name, bool $pluginCheck = true)
+    protected function _getElementFileName(string $name, bool $pluginCheck = true): string|false
     {
         // CUSTOMIZE ADD 2023/06/16 kaburk
         // イベントを追加
@@ -255,4 +253,5 @@ class AppView extends View
 
         return false;
     }
+
 }

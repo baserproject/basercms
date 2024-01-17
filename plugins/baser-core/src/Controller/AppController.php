@@ -25,8 +25,6 @@ use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
-use Cake\Controller\Component\PaginatorComponent;
-use Cake\Controller\Component\SecurityComponent;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -43,8 +41,6 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class AppController
  * @property BcMessageComponent $BcMessage
- * @property SecurityComponent $Security
- * @property PaginatorComponent $Paginator
  * @property AuthenticationComponent $Authentication
  */
 class AppController extends BaseController
@@ -120,11 +116,12 @@ class AppController extends BaseController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcMessage');
-        $this->loadComponent('Security', [
-            'blackHoleCallback' => '_blackHoleCallback',
-            'validatePost' => true,
-            'requireSecure' => false,
-            'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE']
+        $this->loadComponent('FormProtection', [
+            'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE'],
+            'validationFailureCallback' => function (BadRequestException $exception) {
+                $message = __d('baser_core', '不正なリクエストと判断されました。<br>もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。') . "<br>" . $exception->getMessage();
+                throw new BadRequestException($message);
+            }
         ]);
     }
 

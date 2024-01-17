@@ -30,7 +30,7 @@ class MaildataHelper extends BcTextHelper
      * ヘルパー
      * @var string[]
      */
-    public $helpers = ['BcTime', 'BcBaser'];
+    public array $helpers = ['BcTime', 'BcBaser'];
 
     /**
      * メール表示用のデータを出力する

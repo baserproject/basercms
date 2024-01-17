@@ -146,11 +146,22 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
-     * @checked
      */
     public static function require(string $package, string $version)
     {
-        return self::execCommand("require baserproject/{$package}:{$version} --with-all-dependencies");
+        if(strpos($package, '/') === false) {
+            $package = 'baserproject/' . $package;
+        }
+        return self::execCommand("require {$package}:{$version} --with-all-dependencies");
+    }
+
+    /**
+     * composer update 実行
+     * @return array
+     */
+    public static function update()
+    {
+        return self::execCommand('update');
     }
 
     /**

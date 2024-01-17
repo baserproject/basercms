@@ -18,6 +18,7 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\PermissionGroupsService;
 use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
@@ -25,7 +26,6 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequestFactory;
 use Cake\I18n\FrozenTime;
 use Cake\Log\LogTrait;
@@ -245,12 +245,12 @@ class BcPlugin extends BasePlugin
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
-        $folder = new Folder($path);
-        $files = $folder->read(true, true);
+        $folder = new BcFolder($path);
+        $files = $folder->getFolders();
         $updaters = [];
         $updateVerPoints = [];
-        if (!empty($files[0])) {
-            foreach($files[0] as $folder) {
+        if (!empty($files)) {
+            foreach($files as $folder) {
                 $updateVersion = $folder;
                 $updateVerPoints[$updateVersion] = BcUtil::verpoint($updateVersion);
             }
@@ -293,12 +293,12 @@ class BcPlugin extends BasePlugin
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
-        $folder = new Folder($path);
-        $files = $folder->read(true, true);
+        $folder = new BcFolder($path);
+        $files = $folder->getFolders();
         $messages = [];
         $updateVerPoints = [];
-        if (!empty($files[0])) {
-            foreach($files[0] as $folder) {
+        if (!empty($files)) {
+            foreach($files as $folder) {
                 $updateVersion = $folder;
                 $updateVerPoints[$updateVersion] = BcUtil::verpoint($updateVersion);
             }
@@ -340,8 +340,8 @@ class BcPlugin extends BasePlugin
 
         $pluginPath = BcUtil::getPluginPath($pluginName);
         if ($pluginPath) {
-            $Folder = new Folder();
-            $Folder->delete($pluginPath);
+            $Folder = new BcFolder($pluginPath);
+            $Folder->delete();
         }
         /** @var PermissionGroupsService $permissionGroupsService */
         $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
@@ -459,7 +459,7 @@ class BcPlugin extends BasePlugin
                 $routes->setRouteClass('BaserCore.BcContentsRoute');
                 $routes->connect('/', []);
                 $routes->connect('/{controller}/index', []);
-                $routes->connect('/:controller/:action/*', []);
+                $routes->connect('/{controller}/{action}/*', []);
             }
         );
         return $routes;
@@ -614,7 +614,7 @@ class BcPlugin extends BasePlugin
             foreach($entities as $entity) {
                 $array = $entity->toArray();
                 foreach($fields as $field) {
-                    $array[$field] = FrozenTime::now();
+                    $array[$field] = \Cake\I18n\DateTime::now();
                 }
                 $entity = $table->patchEntity($entity, $array);
                 $table->save($entity);

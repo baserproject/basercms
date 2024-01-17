@@ -91,8 +91,7 @@ class MailController extends MailFrontAppController
         // 2013/03/14 ryuring
         // baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
         if (Configure::read('debug') > 0) {
-            $this->Security->validatePost = false;
-            $this->Security->csrfCheck = false;
+            $this->FormProtection->setConfig('validate', false);
         } else {
             // PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
             // 詳細はコンポーネント設定のコメントを参照
@@ -103,14 +102,7 @@ class MailController extends MailFrontAppController
                     $disabledFields[] = $field['MailField']['field_name'];
                 }
             }
-            $this->Security->requireAuth('confirm', 'submit');
-            $this->set('unlockedFields', array_merge($this->Security->unlockedFields, $disabledFields));
-
-            // SSL設定
-            if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
-                $this->Security->blackHoleCallback = 'sslFail';
-                $this->Security->requireSecure = am($this->Security->requireSecure, ['index', 'confirm', 'submit']);
-            }
+            $this->set('unlockedFields', array_merge($this->FormProtection->getConfig('unlockedFields'), $disabledFields));
         }
     }
 

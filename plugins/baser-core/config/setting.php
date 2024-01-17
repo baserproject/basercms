@@ -66,7 +66,7 @@ return [
      * エラー構成
      */
     'Error' => [
-        'errorLevel' => E_ALL & ~E_USER_DEPRECATED,
+        'errorLevel' => E_ALL,
         'exceptionRenderer' => BcExceptionRenderer::class,
     ],
 

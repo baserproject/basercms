@@ -16,14 +16,14 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
 use BcThemeFile\Form\ThemeFileForm;
 use BcThemeFile\Model\Entity\ThemeFile;
 use BcThemeFile\Utility\BcThemeFileUtil;
 use Cake\Core\Plugin;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Inflector;
 
@@ -205,15 +205,10 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
                 ini_get('post_max_size')
             ));
         }
-        $Folder = new Folder();
-        $Folder->create($fullpath, 0777);
-        $filePath = $fullpath . DS . $postData['file']['name'];
-        if (!move_uploaded_file($postData['file']['tmp_name'], $filePath)) {
-            // ユニットテストの際に何故か失敗してしまうので応急措置
-            if(!rename($postData['file']['tmp_name'], $filePath)) {
-                throw new BcException(__d('baser_core', '書き込み権限に問題がある可能性があります。'));
-            }
-        }
+        $Folder = new BcFolder($fullpath);
+        $Folder->create();
+        $name = $postData['file']->getClientFilename();
+        $postData['file']->moveTo($fullpath . DS . $name);
     }
 
     /**
@@ -249,8 +244,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
                 $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['path'];
             }
         }
-        $folder = new Folder();
-        $folder->create(dirname($themePath), 0777);
+        $folder = new BcFolder(dirname($themePath));
+        $folder->create();
         if (file_exists($params['fullpath']) && copy($params['fullpath'], $themePath)) {
             chmod($themePath, 0666);
             return str_replace(ROOT, '', $themePath);
@@ -278,8 +273,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
             throw new NotFoundException();
         }
 
-        $file = new File($args['fullpath']);
-        if (!$file->open('r')) {
+        $file = new BcFile($args['fullpath']);
+        if (!$file->read()) {
             throw new NotFoundException();
         }
 

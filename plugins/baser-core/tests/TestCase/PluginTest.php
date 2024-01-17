@@ -14,7 +14,14 @@ namespace BaserCore\Test\TestCase;
 use App\Application;
 use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use Cake\Core\Configure;
@@ -23,7 +30,7 @@ use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Router;
-use Cake\Filesystem\File;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PluginTest
@@ -31,24 +38,12 @@ use Cake\Filesystem\File;
  */
 class PluginTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+
     /**
      * @var Plugin
      */
     public $Plugin;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents'
-    ];
 
     /**
      * Set Up
@@ -58,6 +53,12 @@ class PluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
         $this->application = new Application(CONFIG);
         $this->Plugin = new Plugin(['name' => 'BaserCore']);
     }
@@ -118,7 +119,7 @@ class PluginTest extends BcTestCase
 
         copy('config/.env','config/.env.bak');
 
-        $file = new File('config/.env');
+        $file = new BcFile('config/.env');
         $file->write('export APP_NAME="baserCMS"
 export DEBUG="true"
 export APP_ENCODING="UTF-8"
@@ -133,9 +134,8 @@ export ADMIN_PREFIX="admin"
 export BASER_CORE_PREFIX="baser"
 export SQL_LOG="false"
 ');
-        $file->close();
 
-        $fileSetting = new File('config/setting.php');
+        $fileSetting = new BcFile('config/setting.php');
         $fileSetting->write('<?php
 return [];
 ');
@@ -150,7 +150,7 @@ return [];
 
         $fileSetting->delete();
         copy('config/.env.bak','config/.env');
-        $fileEnvBak = new File('config/.env.bak');
+        $fileEnvBak = new BcFile('config/.env.bak');
         $fileEnvBak->delete();
     }
 
@@ -210,7 +210,7 @@ return [];
             $this->assertNotEmpty($service->identifiers()->get($identifiers));
         }
     }
-    public function getAuthenticationServiceDataProvider()
+    public static function getAuthenticationServiceDataProvider()
     {
         return [
             // Api/Admin の場合

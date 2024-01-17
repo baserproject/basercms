@@ -13,9 +13,13 @@ namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\ApiControllerTest Test Case
@@ -28,20 +32,7 @@ class BcAdminApiControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -49,6 +40,10 @@ class BcAdminApiControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
+
     }
 
     /**
@@ -59,8 +54,8 @@ class BcAdminApiControllerTest extends BcTestCase
     public function testInitialize()
     {
         $controller = new BcAdminApiController($this->getRequest());
-        $this->assertTrue(isset($controller->Authentication));
-        $this->assertFalse($controller->Security->getConfig('validatePost'));
+        $this->assertNotNull($controller->Authentication);
+        $this->assertFalse($controller->FormProtection->getConfig('validate'));
     }
 
     /**

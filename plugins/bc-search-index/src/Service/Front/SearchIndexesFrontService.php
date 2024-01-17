@@ -17,6 +17,7 @@ use BcSearchIndex\Service\SearchIndexesService;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Http\ServerRequest;
 
@@ -43,7 +44,7 @@ class SearchIndexesFrontService extends SearchIndexesService implements SearchIn
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForSearch(ResultSetInterface $searchIndexes, ServerRequest $request): array
+    public function getViewVarsForSearch(PaginatedInterface|ResultSetInterface $searchIndexes, ServerRequest $request): array
     {
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $currentSiteId = $request->getAttribute('currentSite')->id;

@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,23 +8,31 @@ return;
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
+namespace BaserCore\Test\TestCase\View\Helper;
 
-App::uses('View', 'View');
-App::uses('BcTimeHelper', 'View/Helper');
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcTimeHelper;
 
 /**
  * @property BcTimeHelper $Helper
  */
 class BcTimeHelperTest extends BcTestCase
 {
-
-    public function setUp()
+    /**
+     * set up
+     */
+    public function setUp(): void
     {
         parent::setUp();
-        $this->Helper = new BcTimeHelper(new View(null));
+//        $this->Helper = new BcTimeHelper(new View(null));
     }
 
-    public function tearDown()
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
         unset($this->Helper);
         parent::tearDown();
@@ -39,11 +45,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testNengo($data, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->nengo($data);
         $this->assertSame($expects, $result);
     }
 
-    public function nengoDataProvider()
+    public static function nengoDataProvider()
     {
         return [
             ['m', '明治'],
@@ -61,12 +68,13 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWareki($data, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = 's-48/5/10';
         $result = $this->Helper->wareki($data);
         $this->assertSame($expects, $result);
     }
 
-    public function warekiDataProvider()
+    public static function warekiDataProvider()
     {
         return [
             ['s-48/5/10', 's'],
@@ -80,11 +88,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWyear($data, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->wyear($data);
         $this->assertSame($expects, $result);
     }
 
-    public function wyearDataProvider()
+    public static function wyearDataProvider()
     {
         return [
             ['s-48/5/10', '48'],
@@ -99,11 +108,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWarekiYear($data, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWarekiYear($data);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiYearDataProvider()
+    public static function convertToWarekiYearDataProvider()
     {
         return [
             [1867, false, '明治以前'],
@@ -127,11 +137,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToSeirekiYear($data, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToSeirekiYear($data);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToSeirekiYearDataProvider()
+    public static function convertToSeirekiYearDataProvider()
     {
         return [
             ['m-1', 1868, '明治元年'],
@@ -157,11 +168,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWarekiArray($data, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWarekiArray($data);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiArrayDataProvider()
+    public static function convertToWarekiArrayDataProvider()
     {
         return [
             [null, '', '未入力'],
@@ -184,11 +196,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWareki($data, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWareki($data);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function convertToWarekiDataProvider()
+    public static function convertToWarekiDataProvider()
     {
         return [
             [null, '', '未入力'],
@@ -211,11 +224,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testMinutes($data, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->minutes($data);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function minutesDataProvider()
+    public static function minutesDataProvider()
     {
         return [
             ['invalid time', null, '不正な日付形式'],
@@ -231,11 +245,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testFormat($format, $date, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->format($format, $date);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function formatDataProvider()
+    public static function formatDataProvider()
     {
         return [
             ['Y-m-d', '2012-03-04 05:06:07', '2012-03-04', '日付'],
@@ -255,12 +270,13 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testPastDays($date, $days, $nowDate, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $now = strtotime($nowDate);
         $result = $this->Helper->pastDays($date, $days, $now);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function pastDaysDataProvider()
+    public static function pastDaysDataProvider()
     {
         return [
             ['2012-10-03 00:00:00', 1, '2012-10-04 00:00:01', true, '指定日から1日経過している'],
@@ -279,11 +295,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testGetJpWeek($dateStr, $suffix, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->getJpWeek($dateStr, $suffix);
         $this->assertSame($expects, $result, $message);
     }
 
-    public function getJpWeekDataProvider()
+    public static function getJpWeekDataProvider()
     {
         return [
             ['2015-8-11', '', '火', '火曜日'],
@@ -301,11 +318,12 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testJpWeek($dateStr, $suffix, $expects, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->expectOutputString($expects);
         $this->Helper->jpWeek($dateStr, $suffix);
     }
 
-    public function jpWeekDataProvider()
+    public static function jpWeekDataProvider()
     {
         return [
             ['2015-8-11', '', '火', '火曜日'],

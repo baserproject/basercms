@@ -12,24 +12,19 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UserTest
  */
 class UserTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var User
@@ -44,7 +39,8 @@ class UserTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, ['contain' => 'UserGroups']);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
     }
 
     /**
@@ -97,7 +93,7 @@ class UserTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getUserNameDataProvider()
+    public static function getUserNameDataProvider()
     {
         return [
             ['aiueo', 'yamada', 'tarou', 'aiueo'],

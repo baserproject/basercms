@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
@@ -24,7 +25,6 @@ use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -97,10 +97,10 @@ class ThemesService implements ThemesServiceInterface
         }
 
         $patterns = [];
-        $Folder = new Folder($dataPath);
-        $files = $Folder->read(true, true);
-        if ($files[0]) {
-            foreach($files[0] as $pattern) {
+        $Folder = new BcFolder($dataPath);
+        $files = $Folder->getFolders();
+        if ($files) {
+            foreach($files as $pattern) {
                 if ($options['useTitle']) {
                     if(BcUtil::isInstalled()) {
                         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
@@ -160,8 +160,8 @@ class ThemesService implements ThemesServiceInterface
             $dstName = Inflector::camelize($srcName) . $num;
             $num++;
         }
-        $folder = new Folder(TMP . $srcName);
-        $folder->move(BASER_THEMES . $dstName, ['mode' => 0777]);
+        $folder = new BcFolder(TMP . $srcName);
+        $folder->move( BASER_THEMES . $dstName,);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
@@ -231,13 +231,13 @@ class ThemesService implements ThemesServiceInterface
     {
         $info = [];
         $themePath = BcUtil::getPluginPath($theme);
-        $Folder = new Folder($themePath . 'plugins');
-        $files = $Folder->read(true, true, false);
-        if (!empty($files[0])) {
+        $Folder = new BcFolder($themePath . 'plugins');
+        $files = $Folder->getFolders();
+        if (!empty($files)) {
             $info = array_merge($info, [
                 __d('baser_core', 'このテーマは下記のプラグインを同梱しています。')
             ]);
-            foreach($files[0] as $file) {
+            foreach($files as $file) {
                 $info[] = '	・' . $file;
             }
         }
@@ -364,10 +364,8 @@ class ThemesService implements ThemesServiceInterface
             if (!is_dir(BASER_THEMES . $newTheme)) break;
             $newTheme .= 'Copy';
         }
-        $folder = new Folder(BASER_THEMES . $theme);
-        if (!$folder->copy(BASER_THEMES . $newTheme, [
-            'mode' => 0777
-        ])) {
+        $folder = new BcFolder(BASER_THEMES . $theme);
+        if (!$folder->copy( BASER_THEMES . $newTheme)) {
             return false;
         }
         if(!BcUtil::changePluginNameSpace($newTheme)) return false;
@@ -386,8 +384,8 @@ class ThemesService implements ThemesServiceInterface
     {
         $path = BcUtil::getPluginPath($theme);
         if (!is_writable($path)) throw new BcException($path . ' に書込み権限がありません。');
-        $folder = new Folder();
-        if (!$folder->delete($path)) {
+        $folder = new BcFolder($path);
+        if (!$folder->delete()) {
             return false;
         }
         return true;
@@ -419,13 +417,11 @@ class ThemesService implements ThemesServiceInterface
     {
         $tmpDir = TMP . 'theme' . DS;
         if (!is_dir($tmpDir)) {
-            $folder = new Folder($tmpDir);
-            $folder->create($tmpDir);
+            $folder = new BcFolder($tmpDir);
+            $folder->create();
         }
-        $folder = new Folder(BcUtil::getPluginPath($theme));
-        $folder->copy($tmpDir . $theme, [
-            'chmod' => 0777
-        ]);
+        $folder = new BcFolder(BcUtil::getPluginPath($theme));
+        $folder->copy($tmpDir . $theme);
         return $tmpDir;
     }
 
@@ -443,20 +439,21 @@ class ThemesService implements ThemesServiceInterface
         ini_set('memory_limit', -1);
         // コアのCSVを生成
         $tmpDir = TMP . 'csv' . DS;
-        $folder = new Folder();
-        $folder->create($tmpDir);
+        $folder = new BcFolder($tmpDir);
+        $folder->create();
         BcUtil::emptyFolder($tmpDir);
         BcUtil::clearAllCache();
         $excludes = ['plugins', 'dblogs', 'users'];
         // プラグインのCSVを生成
         $plugins = Plugin::loaded();
         foreach($plugins as $plugin) {
-            $folder->create($tmpDir . $plugin);
+            (new BcFolder($tmpDir . $plugin))->create();
             BcUtil::emptyFolder($tmpDir . $plugin);
             $this->_writeCsv($plugin, $tmpDir . $plugin . DS, $excludes);
-            $folder = new Folder($tmpDir . $plugin);
-            $files = $folder->read();
-            if (!$files[0] && !$files[1]) $folder->delete($tmpDir . $plugin);
+            $folder = new BcFolder($tmpDir . $plugin);
+            $files = $folder->getFiles();
+            $folders = $folder->getFolders();
+            if (!$files && !$folders) $folder->delete();
         }
         // site_configs 調整
         $this->_modifySiteConfigsCsv($tmpDir . 'BaserCore' . DS . 'site_configs.csv');
@@ -542,13 +539,13 @@ class ThemesService implements ThemesServiceInterface
         if (!$path) return false;
         $corePath = BcUtil::getDefaultDataPath(Configure::read('BcApp.coreFrontTheme'), 'default');
 
-        $Folder = new Folder($corePath . DS . 'BaserCore');
-        $files = $Folder->read(true, true);
-        $coreTables = $files[1];
-        $Folder = new Folder($path . DS . 'BaserCore');
-        $files = $Folder->read(true, true);
-        if (empty($files[1])) return false;
-        $targetTables = $files[1];
+        $Folder = new BcFolder($corePath . DS . 'BaserCore');
+        $files = $Folder->getFiles();
+        $coreTables = $files;
+        $Folder = new BcFolder($path . DS . 'BaserCore');
+        $files = $Folder->getFiles();
+        if (empty($files)) return false;
+        $targetTables = $files;
         foreach($coreTables as $coreTable) {
             if (!in_array($coreTable, $targetTables)) {
                 return false;

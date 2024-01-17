@@ -15,7 +15,8 @@
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
+# Icon must end with two \r
+Icon
 ehthumbs.db
 Thumbs.db
 .directory
@@ -23,7 +24,9 @@ Thumbs.db
 # Tool specific files #
 #######################
 # PHPUnit
+.phpunit.cache
 .phpunit.result.cache
+tests.sqlite
 # vim
 *~
 *.swp
@@ -41,9 +44,15 @@ Thumbs.db
 nbproject/*
 # Visual Studio Code
 .vscode
+# nova
+.nova
 # Sass preprocessor
 .sass-cache/
-
+# node
+/node_modules/*
+# yarn
+yarn-debug.log
+yarn-error.log
 
 # baserCMS
 ######################
@@ -75,6 +84,7 @@ nbproject/*
 !/plugins/bc-column
 !/plugins/BcPluginSample
 !/plugins/BcThemeSample
+!/plugins/cakephp-soft-delete
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant

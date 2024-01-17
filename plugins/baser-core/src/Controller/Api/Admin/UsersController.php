@@ -69,7 +69,7 @@ class UsersController extends BcAdminApiController
                 'user' => $user
             ]);
             $service->removeLoginKey($user->id);
-            if ($this->request->is('ssl') && $this->request->getData('saved')) {
+            if ($this->request->is('https') && $this->request->getData('saved')) {
                 $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
             }
             $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));

@@ -12,8 +12,15 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\UsersController;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UsersScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\Api\UsersController Test Case
@@ -21,20 +28,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 class UsersControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -54,6 +48,12 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -77,8 +77,7 @@ class UsersControllerTest extends BcTestCase
         $request = $this->getRequest('/baser/api/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
         $usersController = new UsersController($request);
-
-        $this->assertEquals($usersController->Authentication->unauthenticatedActions, ['login']);
+        $this->assertEquals($usersController->Authentication->getUnauthenticatedActions(), ['login']);
     }
 
     public function testLoginAndRefreshToken()

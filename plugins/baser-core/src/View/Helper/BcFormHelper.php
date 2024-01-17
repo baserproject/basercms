@@ -44,7 +44,7 @@ class BcFormHelper extends FormHelper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Url',
         'Js',
         'Html',
@@ -717,8 +717,9 @@ SCRIPT_END;
             return $bcCkeditor->editor($fieldName, $options);
         }
 
-        $this->_View->loadHelper($options['editor']);
+        $className = $options['editor'];
         [, $editor] = pluginSplit($options['editor']);
+        $this->_View->loadHelper($editor, ['className' => $className]);
         if (!empty($this->getView()->{$editor})) {
             return $this->getView()->{$editor}->editor($fieldName, $options);
         } elseif ($editor === 'none') {

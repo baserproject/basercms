@@ -32,7 +32,7 @@ class CustomContentAdminAppView extends BcAdminAppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BcCustomContent.CustomContentAdmin');
+        $this->addHelper('BcCustomContent.CustomContentAdmin');
     }
 
 }

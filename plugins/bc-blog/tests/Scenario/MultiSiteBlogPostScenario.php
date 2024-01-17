@@ -47,11 +47,12 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();
         $this->createBlogPosts();
+        return null;
     }
 
     /**
@@ -65,7 +66,8 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             1, // siteId
             1, // parentId
             'news1', // name
-            '/news/' // url
+            '/news/', // url,
+            'News 1' // title
         );
         $this->loadFixtureScenario(
             BlogContentScenario::class,
@@ -73,7 +75,8 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             2, // siteId
             1, // parentId
             'news2', // name
-            '/s/news/' // url
+            '/s/news/', // url
+            'News 2' // title
         );
         $this->loadFixtureScenario(
             BlogContentScenario::class,
@@ -81,7 +84,8 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             3, // siteId
             1, // parentId
             'news3', // name
-            '/en/news/' // url
+            '/en/news/', // url
+            'News 3' // title
         );
         $this->loadFixtureScenario(
             BlogContentScenario::class,
@@ -89,7 +93,8 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             4, // siteId
             1, // parentId
             'news4', // name
-            '/example.com/news/' // url
+            '/example.com/news/', // url
+            'News 4' // title
         );
         $this->loadFixtureScenario(
             BlogContentScenario::class,
@@ -97,7 +102,8 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             5, // siteId
             1, // parentId
             'news5', // name
-            '/sub/' // url
+            '/sub/', // url
+            'News 5' // title
         );
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $contentsTable->recover();
@@ -158,6 +164,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'プレスリリース',
             'status' => 1,
         ])->persist();
+        return null;
     }
 
 }

@@ -38,11 +38,11 @@ class MailAdminAppView extends BcAdminAppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadHelper('BcMail.Mail');
-        $this->loadHelper('BcMail.Mailfield');
-        $this->loadHelper('BcMail.Maildata');
-        $this->loadHelper('BaserCore.BcArray');
-        $this->loadHelper('BaserCore.BcCsv');
+        $this->addHelper('BcMail.Mail');
+        $this->addHelper('BcMail.Mailfield');
+        $this->addHelper('BcMail.Maildata');
+        $this->addHelper('BaserCore.BcArray');
+        $this->addHelper('BaserCore.BcCsv');
     }
 
 }

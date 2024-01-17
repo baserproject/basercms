@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Routing;
 
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFolder;
 use Cake\Routing\Asset;
 
 /**
@@ -52,12 +52,12 @@ class AssetTest extends BcTestCase
         $result = Asset::webroot('css/style.css', ['theme' => 'BcThemeSample']);
         $this->assertEquals('/bc_front/css/style.css', $result);
         $cssDir = ROOT . DS . 'plugins' . DS . 'BcPluginSample' . DS . 'webroot' . DS . 'css' . DS;
-        $folder = new Folder();
-        $folder->create($cssDir);
+        $folder = new BcFolder($cssDir);
+        $folder->create();
         touch($cssDir . 'style.css');
         $result = Asset::webroot('css/style.css', ['theme' => 'BcPluginSample']);
         $this->assertEquals('/bc_plugin_sample/css/style.css', $result);
-        $folder->delete($cssDir);
+        $folder->delete();
     }
 
 }

@@ -13,9 +13,11 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validator;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PluginsTableTest
@@ -30,14 +32,9 @@ class PluginsTableTest extends BcTestCase
     public $Plugins;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.SiteConfigs'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -76,6 +73,7 @@ class PluginsTableTest extends BcTestCase
      */
     public function testInstallAndUninstall()
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         // test Install
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
@@ -90,6 +88,7 @@ class PluginsTableTest extends BcTestCase
      */
     public function testGetPluginConfig()
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $plugin = $this->Plugins->getPluginConfig('BaserCore');
         $this->assertEquals('BaserCore', $plugin->name);
     }
@@ -99,6 +98,7 @@ class PluginsTableTest extends BcTestCase
      */
     public function testDetach()
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $plugin = 'BcBlog';
         $this->assertFalse($this->Plugins->detach(''));
         $this->Plugins->detach($plugin);
@@ -109,6 +109,7 @@ class PluginsTableTest extends BcTestCase
      */
     public function testAttach()
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $plugin = 'BcBlog';
         $this->Plugins->detach($plugin);
         $this->Plugins->attach($plugin);
@@ -122,6 +123,7 @@ class PluginsTableTest extends BcTestCase
      */
     public function testValidationDefault($isValid, $data)
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $validator = $this->Plugins->validationDefault(new Validator());
         $validator->setProvider('table', $this->Plugins);
         if ($isValid) {
@@ -131,7 +133,7 @@ class PluginsTableTest extends BcTestCase
         }
     }
 
-    public function validationDefaultDataProvider()
+    public static function validationDefaultDataProvider()
     {
         $exceedMax = "123456789012345678901234567890123456789012345678901234567890"; // 60文字
         return [

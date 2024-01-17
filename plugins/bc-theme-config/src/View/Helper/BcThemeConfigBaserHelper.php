@@ -28,7 +28,7 @@ class BcThemeConfigBaserHelper extends Helper implements BcPluginBaserHelperInte
      *
      * @var string[]
      */
-    public $helpers = ['BcThemeConfig.BcThemeConfig'];
+    public array $helpers = ['BcThemeConfig.BcThemeConfig'];
 
     /**
      * メソッド一覧取得

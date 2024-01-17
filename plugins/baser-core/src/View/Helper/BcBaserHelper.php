@@ -14,7 +14,6 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
-use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
@@ -172,7 +171,7 @@ class BcBaserHelper extends Helper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Url', 'Js', 'Session', 'Flash',
         'BaserCore.BcHtml',
         'BaserCore.BcXml',
@@ -529,7 +528,7 @@ class BcBaserHelper extends Helper
         if (!is_array($url)) {
             $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
-        $out = $this->BcHtml->link($title, $url, $options);
+        $out = $this->BcHtml->link($title?? '', $url, $options);
 
         // EVENT Html.afterGetLink
         $event = $this->dispatchLayerEvent('afterGetLink', [
@@ -1468,7 +1467,7 @@ class BcBaserHelper extends Helper
      */
     public function isSSL()
     {
-        return $this->_View->getRequest()->is('ssl');
+        return $this->_View->getRequest()->is('https');
     }
 
     /**

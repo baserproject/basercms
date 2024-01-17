@@ -15,7 +15,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
 
-use BaserCore\Error\BcException;
+use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorTrap;
@@ -69,6 +69,9 @@ ConnectionManager::setConfig('test_debug_kit', [
 
 ConnectionManager::alias('test_debug_kit', 'debug_kit');
 
+// Fixate now to avoid one-second-leap-issues
+Chronos::setTestNow(Chronos::now());
+
 // Fixate sessionid early on, as php7.2+
 // does not allow the sessionid to be set after stdout
 // has been written to.
@@ -81,6 +84,11 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
     exit(__d('baser_core', 'ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変更してください。') . "\n");
 }
+
+/**
+ * パス定義
+ */
+include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
 
 // Use migrations to build test database schema.
 //
@@ -95,6 +103,9 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 (new Migrator())->runMany([
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
+    ['plugin' => 'BcEditorTemplate'],
+    ['plugin' => 'BcSearchIndex'],
+    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcEditorTemplate'],

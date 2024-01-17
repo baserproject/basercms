@@ -12,7 +12,10 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Chronos\ChronosDate;
 use Cake\View\Helper\TimeHelper;
+use DateTimeInterface;
+use DateTimeZone;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\UnitTest;
@@ -290,8 +293,12 @@ class BcTimeHelper extends TimeHelper
      * @checked
      * @noTodo
      */
-    public function format($date = null, $format = 'yyyy-MM-dd', $invalid = false, $timezone = null)
-    {
+    public function format(
+        ChronosDate|DateTimeInterface|string|int|null $date,
+        array|string|int|null $format = null,
+        string|false $invalid = false,
+        DateTimeZone|string|null $timezone = null
+    ): string|int|false {
         if ($format === 'Y-m-d') {
             $format = 'yyyy-MM-dd';
         } elseif ($format === 'Y/m/d') {

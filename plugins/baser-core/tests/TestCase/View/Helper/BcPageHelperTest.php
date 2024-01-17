@@ -10,9 +10,17 @@
  */
 
 namespace BaserCore\Test\TestCase\View\Helper;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\View\AppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcPageHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcPage helper library.
@@ -20,24 +28,7 @@ use BaserCore\View\Helper\BcPageHelper;
 class BcPageHelperTest extends BcTestCase
 {
 
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        // 'baser.View.Helper.BcPageHelper.PageBcPageHelper',
-        // 'baser.Default.Favorite',
-        // 'baser.Default.ThemeConfig',
-        // 'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp
@@ -47,6 +38,13 @@ class BcPageHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
         $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
         $this->BcPage = new BcPageHelper(new AppView());
         // $this->AppView = new AppView();
@@ -87,7 +85,7 @@ class BcPageHelperTest extends BcTestCase
             'fields' => $fields,
             'recursive' => 0
         ];
-        $pages = $this->Page->find('all', $options);
+        $pages = $this->Page->find('all', ...$options);
         if (empty($pages)) {
             return false;
         } else {
@@ -115,7 +113,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [1, '/index'],
@@ -151,7 +149,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function allowPublishDataProvider()
+    public static function allowPublishDataProvider()
     {
         return [
             [true, 0, 0, true, 'statusの値がそのままかえってきません'],
@@ -176,7 +174,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function getPageListDataProvider()
+    public static function getPageListDataProvider()
     {
         return [
             [1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],    // トップフォルダ

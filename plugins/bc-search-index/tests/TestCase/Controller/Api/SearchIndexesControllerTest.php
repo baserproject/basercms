@@ -68,7 +68,7 @@ class SearchIndexesControllerTest extends BcTestCase
 
         $event = new Event('filter');
         $searchIndexes->beforeFilter($event);
-        $this->assertFalse($searchIndexes->Security->getConfig('validatePost'));
+        $this->assertFalse($searchIndexes->FormProtection->getConfig('validate'));
     }
 
     /**

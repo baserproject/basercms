@@ -11,10 +11,13 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcFormHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcAdminFormHelperTest
@@ -23,21 +26,7 @@ use BaserCore\View\Helper\BcFormHelper;
  */
 class BcAdminFormHelperTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * setUp method
@@ -47,6 +36,8 @@ class BcAdminFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
         $View = new BcAdminAppView($this->getRequest());
         $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
             'unlockedFields' => [],

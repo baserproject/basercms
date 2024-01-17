@@ -14,21 +14,17 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 use BaserCore\Model\Validation\SiteValidation;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SiteValidationTest
  */
 class SiteValidationTest extends BcTestCase
 {
-
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Sites',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Test subject
@@ -75,7 +71,7 @@ class SiteValidationTest extends BcTestCase
         $result = $this->SiteValidation->aliasSlashChecks($alias);
         $this->assertEquals($expected, $result);
     }
-    public function checkUrlDataProvider()
+    public static function checkUrlDataProvider()
     {
         return [
             ['en', true],

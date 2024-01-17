@@ -13,11 +13,11 @@ namespace BcBlog\Controller\Admin;
 
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -126,9 +126,11 @@ class BlogContentsController extends BlogAdminAppController
         if (!file_exists($target . DS . 'index' . $ext)) {
             $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcBlog' . DS . $path;
             if (is_dir($source)) {
-                $folder = new Folder();
-                $folder->create(dirname($target), 0777);
-                $folder->copy($target, ['from' => $source, 'chmod' => 0777]);
+                $folder = new BcFolder(dirname($target));
+                $folder->create();
+                //copy
+                $folder = new BcFolder($source);
+                $folder->copy($target);
             }
         }
         $path = str_replace(DS, '/', $path);

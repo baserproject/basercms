@@ -41,7 +41,7 @@ class PreviewController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Security->setConfig('unlockedActions', ['view']);
+        $this->FormProtection->setConfig('unlockedActions', ['view']);
     }
 
     /**
@@ -110,24 +110,12 @@ class PreviewController extends BcAdminAppController
         // メールフォームのフォームを生成する際、$this->>formProtector が存在しないとエラーとなる。
         // formProtector をセットするには、FormHelper::create() 内にて、生成する必要があるが、
         // 生成条件として $request の attribute に formTokenData がセットされていないといけない。
-        //
-        // $request の attribute に formTokenData をセットするためには、
-        // FormProtectionComponent を有効にするか、SecurityComponent で生成する必要がある。
-        //
-        // FormProtectionComponent では、_Tokenを送っても「_Token was not found in request data.」
-        // となり、理由がわからず断念。SecurityComponent を利用する。
-        //
-        // SecurityComponent は、SecurityComponent::_validatePost() で引っかかってしまうため、
-        // initialize でアンロックしている。
-        // $this->Security->setConfig('unlockedActions', ['view']);
-        //
-        // そのため、自動で formTokenData が生成されないため、明示的にここで生成する。
         //========================================================================
-        $request = $this->Security->generateToken($request);
+        $request = $request->withAttribute('formTokenData', $this->getRequest()->getAttribute('formTokenData'));
 
         //========================================================================
         // 2022/12/02 by ryuring
-        // 上記に続き、メールフォームの FormHelper::create() 内にて、formProtector を生成するには、
+        // メールフォームの FormHelper::create() 内にて、formProtector を生成するには、
         // セッションが「正常に」スタートしている事が前提となる。
         //
         // リクエストの早い段階にてセッションはスタートしているが、$request を模倣する前提のため

@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class DblogsTableTest
@@ -20,13 +21,10 @@ class DblogsTableTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Dblogs',
-    ];
+    use ScenarioAwareTrait;
+
 
     /**
      * Set Up

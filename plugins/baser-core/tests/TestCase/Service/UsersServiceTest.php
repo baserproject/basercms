@@ -13,6 +13,9 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\SuspendedUsersScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use BaserCore\Service\UsersService;
@@ -33,17 +36,9 @@ class UsersServiceTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Sites',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var UsersService|null
@@ -58,6 +53,9 @@ class UsersServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
         $this->Users = new UsersService();
     }
 
@@ -182,7 +180,7 @@ class UsersServiceTest extends BcTestCase
     public function testLastAdminDelete()
     {
         $this->loginAdmin($this->getRequest());
-        $this->expectException("Cake\Core\Exception\Exception");
+        $this->expectException("BaserCore\Error\BcException");
         $this->Users->delete(1);
     }
 

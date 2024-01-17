@@ -40,7 +40,7 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
         $driver = $db->config()['driver'];
         $sqlMode = '';
         if($driver === Mysql::class) {
-            $sqlMode = $db->query('SELECT @@global.sql_mode;')->fetch()[0];
+            $sqlMode = $db->execute('SELECT @@global.sql_mode;')->fetch()[0];
         }
         return [
             'datasource' => $this->_getDriver(),

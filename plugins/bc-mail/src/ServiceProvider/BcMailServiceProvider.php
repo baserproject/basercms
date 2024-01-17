@@ -42,7 +42,7 @@ class BcMailServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         MailConfigsServiceInterface::class,
         MailContentsServiceInterface::class,
         MailContentsAdminServiceInterface::class,

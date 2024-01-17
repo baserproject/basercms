@@ -14,13 +14,13 @@ namespace BcCustomContent;
 
 use BaserCore\BcPlugin;
 use BaserCore\Utility\BcEvent;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcCustomContent\ServiceProvider\BcCustomContentServiceProvider;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use \Cake\Core\Plugin as CakePlugin;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Filesystem\Folder;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -91,17 +91,17 @@ class Plugin extends BcPlugin
             [$path]
         ));
 
-        $Folder = new Folder($path);
-        $files = $Folder->read(true, true, false);
-        if (empty($files[0])) return;
+        $Folder = new BcFolder($path);
+        $files = $Folder->getFolders();
+        if (empty($files)) return;
 
         if (Configure::read('BcRequest.asset')) {
             // TODO ucmitz 検証要
-            foreach($files[0] as $pluginName) {
+            foreach($files as $pluginName) {
                 BcUtil::includePluginClass($pluginName);
             }
         } else {
-            foreach($files[0] as $pluginName) {
+            foreach($files as $pluginName) {
                 // 設定ファイルを読み込む
                 if (!BcUtil::includePluginClass($pluginName)) continue;
                 $pluginCollection = CakePlugin::getCollection();

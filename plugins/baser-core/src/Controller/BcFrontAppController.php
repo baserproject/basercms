@@ -81,9 +81,7 @@ class BcFrontAppController extends AppController
             // ショートコード
             $this->getEventManager()->on(new BcShortCodeEventListener());
         }
-        if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->setupFrontView();
-        }
+        $this->setupFrontView();
     }
 
 }

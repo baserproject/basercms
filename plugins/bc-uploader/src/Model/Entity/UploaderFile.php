@@ -27,10 +27,10 @@ use Cake\ORM\TableRegistry;
  * @property string $alt
  * @property int $uploader_category_id
  * @property int $user_id
- * @property FrozenTime $publish_begin
- * @property FrozenTime $publish_end
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $publish_begin
+ * @property \Cake\I18n\DateTime $publish_end
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class UploaderFile extends Entity
 {
@@ -40,7 +40,7 @@ class UploaderFile extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

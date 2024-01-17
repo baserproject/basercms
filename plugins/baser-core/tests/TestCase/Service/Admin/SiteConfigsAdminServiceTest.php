@@ -28,15 +28,6 @@ class SiteConfigsAdminServiceTest extends BcTestCase
     use BcContainerTrait;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-    ];
-
-    /**
      * SiteConfigsAdmin
      * @var SiteConfigsAdminService
      */

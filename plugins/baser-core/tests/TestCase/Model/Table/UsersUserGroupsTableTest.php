@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersUserGroupsTable;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UsersUserGroupsTableTest
@@ -21,11 +22,10 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class UsersUserGroupsTableTest extends BcTestCase
 {
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-    ];
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * set up

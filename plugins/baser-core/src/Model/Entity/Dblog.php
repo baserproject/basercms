@@ -11,8 +11,8 @@
 
 namespace BaserCore\Model\Entity;
 
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity as EntityAlias;
-use Cake\I18n\Time as TimeAlias;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -24,8 +24,8 @@ use BaserCore\Annotation\Checked;
  * @property string $user_id
  * @property string $controller
  * @property string $action
- * @property TimeAlias $created
- * @property TimeAlias $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class Dblog extends EntityAlias
 {
@@ -35,7 +35,7 @@ class Dblog extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

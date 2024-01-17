@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcBlog\Controller\BlogController;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -28,7 +29,6 @@ use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\Filesystem\File;
 
 /**
  * Class BlogControllerTest
@@ -106,9 +106,8 @@ class BlogControllerTest extends BcTestCase
         if (!file_exists($fullPath)){
             mkdir($fullPath, recursive: true);
         }
-        $file = new File($fullPath .DS. 'index.php');
+        $file = new BcFile($fullPath .DS. 'index.php');
         $file->write('html');
-        $file->close();
         //正常系実行
         $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
         $controller = new BlogController($request);

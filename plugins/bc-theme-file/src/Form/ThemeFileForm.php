@@ -11,9 +11,9 @@
 
 namespace BcThemeFile\Form;
 
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcThemeFile\Model\Entity\ThemeFile;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
@@ -64,8 +64,8 @@ class ThemeFileForm extends Form
         if ($data['mode'] === 'create') {
             $oldPath = $newPath = $fullpath = $data['fullpath'] . $data['base_name'] . '.' . $data['ext'];
             if (!is_dir(dirname($fullpath))) {
-                $folder = new Folder();
-                $folder->create(dirname($fullpath), 0777);
+                $folder = new BcFolder(dirname($fullpath));
+                $folder->create();
             }
         } elseif ($data['mode'] === 'update') {
             $oldPath = rawurldecode($data['fullpath']);
@@ -75,12 +75,11 @@ class ThemeFileForm extends Form
 
         $entity = new ThemeFile(['fullpath' => $newPath]);
         if ($entity->type === 'text') {
-            $file = new File($oldPath);
-            if ($file->open('w')) {
-                if (isset($data['contents'])) {
-                    $file->append($data['contents']);
+            $file = new BcFile($oldPath);
+            if ($file) {
+                if (isset($data['contents'])){
+                    $file->write($data['contents']);
                 }
-                $file->close();
                 unset($file);
                 $result = true;
             } else {

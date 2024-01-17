@@ -65,7 +65,7 @@ class ContentsController extends BcAdminAppController
     {
         $response = parent::beforeFilter($event);
         if($response) return $response;
-        $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
+        $this->FormProtection->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
     /**

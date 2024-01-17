@@ -14,9 +14,11 @@ namespace BaserCore\Test\TestCase\Event;
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcControllerEventListener;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcControllerEventDispatcherTest
@@ -27,16 +29,9 @@ class BcControllerEventDispatcherTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites'
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var EventManager|null
@@ -61,6 +56,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->eventManager = EventManager::instance();
         $this->bcControllerEventDispatcher = new BcControllerEventDispatcher();
         foreach($this->bcControllerEventDispatcher->implementedEvents() as $key => $event) {

@@ -15,6 +15,8 @@ use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -27,8 +29,6 @@ use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Event\EventManager;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
@@ -45,6 +45,7 @@ use Migrations\Migrations;
 use PDO;
 use PDOException;
 use Phinx\Db\Adapter\AdapterFactory;
+use ReflectionProperty;
 
 /**
  *
@@ -104,8 +105,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        // CakePHP5で pdo へのアクセスができなくなってしまったため
+        // 仕方なく Reflection を利用
+        $pdoProperty = new ReflectionProperty($db->getDriver(), 'pdo');
+        $pdoProperty->setAccessible(true);
         /* @var PDO $pdo */
-        $pdo = $db->getDriver()->getConnection();
+        $pdo = $pdoProperty->getValue($db->getDriver());
         $adapter->setConnection($pdo);
         $adapter = new CakeAdapter($adapter, $db);
         $this->_adapter = $adapter;
@@ -379,9 +384,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return true;
 
-        $Folder = new Folder($path . DS . $plugin);
-        $files = $Folder->read(true, true, true);
-        $targetTables = $files[1];
+        $Folder = new BcFolder($path . DS . $plugin);
+        $Folder->create();
+        $files = $Folder->getFiles(['full'=>true]);
+        $targetTables = $files;
         $tableList = $this->getAppTableList($plugin, $dbConfigKeyName);
         $result = true;
         foreach($targetTables as $targetTable) {
@@ -389,7 +395,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             if (in_array($targetTable, $excludes)) continue;
             if (!in_array($targetTable, $tableList)) continue;
             // 初期データ投入
-            foreach($files[1] as $file) {
+            foreach($files as $file) {
                 if (!preg_match('/\.csv$/', $file)) continue;
                 $table = basename($file, '.csv');
                 if ($table !== $targetTable) continue;
@@ -760,7 +766,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
         }
 
-        $query = $db->query($sql);
+        $query = $db->execute($sql);
         $records = $query->fetchAll('assoc');
 
         $fp = fopen($options['path'], 'w');
@@ -934,10 +940,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             if (!$pluginPath) continue;
             $path = $pluginPath . 'config' . DS . 'Migrations';
             if (!is_dir($path)) continue;
-            $folder = new Folder($path);
-            $files = $folder->read(true, true);
-            if (empty($files[1])) continue;
-            foreach($files[1] as $file) {
+            $folder = new BcFolder($path);
+            $files = $folder->getFiles();
+            if (empty($files)) continue;
+            foreach($files as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $tableName = Inflector::tableize($matches[1]);
                 $checkNames[$value][] = $prefix . $tableName;
@@ -1004,8 +1010,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $dir = dirname($options['path']);
         if (!is_dir($dir)) {
-            $folder = new Folder();
-            $folder->create($dir);
+            $folder = new BcFolder($dir);
+            $folder->create();
         }
         $describe = TableRegistry::getTableLocator()
             ->get('BaserCore.App')
@@ -1031,13 +1037,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         BcUtil::onEvent($eventManager, 'View.afterRender', $afterRenderListeners);
 
         if (!is_dir($options['path'])) {
-            $folder = new Folder();
-            $folder->create($options['path']);
+            $folder = new BcFolder($options['path']);
+            $folder->create();
         }
 
-        $file = new File($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
+        $file = new BcFile($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
         $file->write($content);
-        $file->close();
         return true;
     }
 
@@ -1217,12 +1222,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ]);
         if($config['datasource'] === 'sqlite') {
             if(!is_dir(ROOT . DS . 'db' . DS . 'sqlite')) {
-                $folder = new Folder(ROOT . DS . 'db' . DS . 'sqlite');
-                $folder->create(ROOT . DS . 'db' . DS . 'sqlite', 0777);
+                $folder = new BcFolder(ROOT . DS . 'db' . DS . 'sqlite');
+                $folder->create();
             }
         }
         $db = ConnectionManager::get($name);
-        $db->connect();
+        $db->getDriver()->connect();
         return $db;
     }
 
@@ -1421,7 +1426,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         /* @var Connection $db */
         $db = $this->connectDb($config);
 
-        if (!$db->isConnected()) {
+        if (!$db->getDriver()->isConnected()) {
             throw new BcException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
         }
 
@@ -1435,7 +1440,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
-                $result = $db->query("SELECT version() as version")->fetch();
+                $result = $db->execute("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
                     throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
@@ -1482,8 +1487,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         if ($datasource === 'sqlite') {
-            $db->connect();
-        } elseif (!$db->isConnected()) {
+            $db->getDriver()->connect();
+        } elseif (!$db->getDriver()->isConnected()) {
             return false;
         }
         return $this->migrate($plugin, $dbConfigKeyName);

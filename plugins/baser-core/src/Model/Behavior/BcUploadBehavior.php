@@ -206,14 +206,10 @@ class BcUploadBehavior extends Behavior
         $eventManager->off('Model.afterSave');
         $this->table()->save($entity, ['validate' => false]);
         foreach($beforeSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.beforeSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.beforeSave', [], $listener['callable']);
         }
         foreach($afterSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.afterSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.afterSave', [], $listener['callable']);
         }
     }
 
@@ -227,7 +223,7 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function beforeDelete(EventInterface $event, EntityInterface $entity)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
         $oldEntity = $this->getOldEntity($entity->id);
         $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($oldEntity, $entity, true);
@@ -241,7 +237,6 @@ class BcUploadBehavior extends Behavior
      * @return mixed false|array
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function saveTmpFiles($data, $tmpId)
     {

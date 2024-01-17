@@ -14,10 +14,15 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use ArrayObject;
 use BaserCore\Model\Entity\Page;
 use BaserCore\Model\Table\PagesTable;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PagesTable Test
@@ -27,18 +32,10 @@ use BaserCore\TestSuite\BcTestCase;
 class PagesTableTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages'
-    ];
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * setUp
@@ -125,7 +122,7 @@ class PagesTableTest extends BcTestCase
         Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowedPhpOtherThanAdmins);
     }
 
-    public function cotainsScriptRegularDataProvider()
+    public static function cotainsScriptRegularDataProvider()
     {
         return [
             ['<?php echo "正しい"; ?>', false],
@@ -158,6 +155,9 @@ class PagesTableTest extends BcTestCase
      */
     public function testCreateSearchIndex()
     {
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $page = $this->Pages->find()->contain(['Contents' => ['Sites']])->first();
         $expected = [
             'model_id' => $page->id,
@@ -183,15 +183,18 @@ class PagesTableTest extends BcTestCase
      */
     public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->loginAdmin($this->getRequest());
         $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
-        $page = $this->Pages->get($result->id, ['contain' => ['Contents' => ['Sites']]]);
+        $page = $this->Pages->get($result->id, contain: ['Contents' => ['Sites']]);
         $this->assertStringContainsString("_2", $page->content->name);
         $this->assertEquals("hoge1", $page->content->title);
         $this->assertEquals(10, $page->content->author_id);
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [2, 1, 'hoge1', 10, 1]

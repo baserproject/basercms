@@ -313,7 +313,7 @@ class BcFreezeHelper extends BcFormHelper
      * @checked
      * @noTodo
      */
-    public function checkbox($fieldName, $options = [])
+    public function checkbox(string $fieldName, array $options = []): array|string
     {
         if ($this->freezed) {
             $label = '';

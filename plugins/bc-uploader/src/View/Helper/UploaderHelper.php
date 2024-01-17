@@ -43,7 +43,7 @@ class UploaderHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html'];
+    public array $helpers = ['Html'];
 
     /**
      * Before Render

@@ -15,12 +15,13 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Filesystem\File;
 use Cake\Http\Client;
 use Cake\Http\Client\Exception\NetworkException;
 use Cake\ORM\TableRegistry;
@@ -29,7 +30,6 @@ use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
-use Cake\Filesystem\Folder;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Xml;
@@ -96,7 +96,7 @@ class PluginsService implements PluginsServiceInterface
     public function getIndex(string $sortMode): array
     {
         $plugins = $this->Plugins->find()
-            ->order(['priority'])
+            ->orderBy(['priority'])
             ->all()
             ->toArray();
         if ($sortMode) {
@@ -109,9 +109,9 @@ class PluginsService implements PluginsServiceInterface
             }
             $paths = App::path('plugins');
             foreach($paths as $path) {
-                $Folder = new Folder($path);
-                $files = $Folder->read(true, true, true);
-                foreach($files[0] as $file) {
+                $Folder = new BcFolder($path);
+                $files = $Folder->getFolders(['full'=>true]);
+                foreach($files as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
                     if (in_array(Inflector::camelize(basename($file), '-'), Configure::read('BcApp.core'))) continue;
                     if (in_array($name, $registeredName)) {
@@ -663,8 +663,8 @@ class PluginsService implements PluginsServiceInterface
             $num++;
             $dstName = Inflector::camelize($baseName) . $num;
         }
-        $folder = new Folder(TMP . $srcName);
-        $folder->move(BASER_PLUGINS . $dstName, ['mode' => 0777]);
+        $folder = new BcFolder(TMP . $srcName);
+        $folder->move( BASER_PLUGINS. $dstName);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
@@ -700,7 +700,7 @@ class PluginsService implements PluginsServiceInterface
                 $body = $response->getStringBody();
             } catch (InvalidArgumentException $e) {
                 // ユニットテストの場合にhttpでアクセスできないので、ファイルから直接読み込む
-                $file = new File($releaseUrl);
+                $file = new BcFile($releaseUrl);
                 $body = $file->read();
             } catch (NetworkException $e) {
                 return [];

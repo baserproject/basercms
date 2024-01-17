@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Service\Front;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcMail\Controller\MailFrontAppController;
 use BcMail\Model\Entity\MailConfig;
 use BcMail\Model\Entity\MailMessage;
@@ -28,7 +29,6 @@ use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\ORM\Entity;
-use Cake\Filesystem\File;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use InvalidArgumentException;
@@ -327,7 +327,7 @@ class MailFrontServiceTest extends BcTestCase
         )->persist();
         $pathTest = TMP . 'test' . DS;
         //テストファイルを作成
-        new File($pathTest . 'test.txt', true);
+        (new BcFile($pathTest . 'test.txt'))->create();
         $testFile = $pathTest . 'test.txt';
 
         // normal case

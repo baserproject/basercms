@@ -33,7 +33,6 @@ class MailFrontAppController extends BcFrontAppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-        if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
         $this->viewBuilder()->setClassName('BcMail.MailFrontApp');
     }
 

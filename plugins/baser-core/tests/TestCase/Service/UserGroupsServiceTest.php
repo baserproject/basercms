@@ -12,7 +12,9 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\UserGroupsService;
+use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UserGroupsServiceTest
@@ -22,17 +24,9 @@ class UserGroupsServiceTest extends BcTestCase
 {
 
     /**
-     * Fixtures
-     *
-     * @var array
+     * ScenarioAwareTrait
      */
-    protected $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * @var UserGroupsService|null
@@ -47,6 +41,7 @@ class UserGroupsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserGroupsScenario::class);
         $this->UserGroups = new UserGroupsService();
     }
 
@@ -112,7 +107,7 @@ class UserGroupsServiceTest extends BcTestCase
         $this->assertEquals($group->all()->last()->name, $data['name']);
         $this->assertEquals($group->all()->last()->auth_prefix, $expected);
     }
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             // auth_prefixがすでにある場合

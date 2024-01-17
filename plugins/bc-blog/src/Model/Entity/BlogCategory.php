@@ -28,8 +28,8 @@ use Cake\ORM\Entity;
  * @property int $parent_id
  * @property int $lft
  * @property int $rght
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class BlogCategory extends Entity
 {
@@ -53,7 +53,7 @@ class BlogCategory extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

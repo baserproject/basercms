@@ -11,7 +11,7 @@
 
 namespace BcThemeFile\Model\Entity;
 
-use Cake\Filesystem\File;
+use BaserCore\Utility\BcFile;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -36,7 +36,7 @@ class ThemeFile extends \Cake\ORM\Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -46,7 +46,7 @@ class ThemeFile extends \Cake\ORM\Entity
      *
      * @var string[]
      */
-    protected $_virtual = [
+    protected array $_virtual = [
         'name',
         'base_name',
         'ext',
@@ -163,7 +163,7 @@ class ThemeFile extends \Cake\ORM\Entity
     {
         if ($this->type === 'text') {
             if(file_exists($this->fullpath)) {
-                $file = new File($this->fullpath);
+                $file = new BcFile($this->fullpath);
                 return $file->read();
             }
         }

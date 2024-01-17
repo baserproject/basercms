@@ -38,7 +38,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAdminForm'];
+    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAdminForm'];
 
     /**
      * 管理画面のエントリー一覧に表示するかどうか判定する

@@ -36,18 +36,6 @@ class LoginStoresTableTest extends BcTestCase
     public $Users;
 
     /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
-        'plugin.BaserCore.LoginStores',
-        // 'plugin.BaserCore.Users',
-        // 'plugin.BaserCore.UsersUserGroups',
-        // 'plugin.BaserCore.UserGroups',
-    ];
-
-    /**
      * Set Up
      *
      * @return void

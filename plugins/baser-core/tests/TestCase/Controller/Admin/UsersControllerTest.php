@@ -12,6 +12,15 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Test\Scenario\DblogsScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsPaginationsScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UsersScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
@@ -19,6 +28,7 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\Admin\UsersController Test Case
@@ -31,22 +41,8 @@ class UsersControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Controller/UsersController/UsersPagination',
-        'plugin.BaserCore.Dblogs',
-    ];
     // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
 //    public $autoFixtures = false;
 
@@ -62,6 +58,14 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
+        $this->loadFixtureScenario(DblogsScenario::class);
+        $this->loadFixtureScenario(UserGroupsPaginationsScenario::class);
             // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
 //        $this->loadFixtures('UsersUserGroups', 'UserGroups', 'Dblogs', 'SiteConfigs', 'Sites');
 //        if ($this->getName() == 'testIndex_pagination') {
@@ -280,7 +284,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/users/delete/1');
+        $this->post('/baser/admin/baser-core/users/delete/2');
         $this->assertResponseSuccess();
         $this->assertRedirect([
             'plugin' => 'BaserCore',

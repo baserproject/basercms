@@ -35,7 +35,7 @@ class PrefixOrmResolver extends OrmResolver implements ResolverInterface
      * @checked
      * @noTodo
      */
-    public function find(array $conditions, $type = self::TYPE_AND)
+    public function find(array $conditions, $type = self::TYPE_AND): \ArrayAccess|array|null
     {
         $prefix = '';
         foreach($conditions as $field => $value) {
@@ -51,7 +51,7 @@ class PrefixOrmResolver extends OrmResolver implements ResolverInterface
 
         $table = $this->getTableLocator()->get($this->_config['userModel']);
 
-        $query = $table->query();
+        $query = $table->selectQuery();
         $finders = (array)$this->_config['finder'];
         foreach($finders as $finder => $options) {
             if (is_string($options)) {

@@ -11,12 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\SitesAdminServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
-use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -226,7 +226,7 @@ class SitesController extends BcAdminAppController
                 }
                 $this->BcMessage->setSuccess(__d('baser_core', 'サイト: {0} を削除しました。', $site->name));
             }
-        } catch (Exception $e) {
+        } catch (BcException $e) {
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);

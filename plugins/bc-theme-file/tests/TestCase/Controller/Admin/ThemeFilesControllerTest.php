@@ -129,7 +129,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //実行成功場合
-        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample');
+        $this->get('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample/layout');
         //ステータスを確認
         $this->assertResponseCode(200);
         //取得データを確認
@@ -163,11 +163,11 @@ class ThemeFilesControllerTest extends BcTestCase
             'contents' => 'test content',
         ];
         //Postメソッドを検証場合
-        $this->post('/baser/admin/bc-theme-file/theme_files/add', $postData);
+        $this->post('/baser/admin/bc-theme-file/theme_files/add/BcThemeSample', $postData);
         //戻る値を確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ファイル test.php を作成しました。');
-        $this->assertRedirect(['action' => 'edit/layout/test.php']);
+        $this->assertRedirect(['action' => 'edit/BcThemeSample/layout/test.php']);
         unlink('/var/www/html/plugins/BcThemeSample/templates/layout/test.php');
 
         $postData = [
@@ -177,7 +177,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'contents' => 'test content',
         ];
         //エラーを発生した場合
-        $this->post('/baser/admin/bc-theme-file/theme_files/add', $postData);
+        $this->post('/baser/admin/bc-theme-file/theme_files/add/BcThemeSample', $postData);
         //戻る値を確認
         $this->assertResponseCode(200);
         $themeFileFormVar = $this->_controller->viewBuilder()->getVar('themeFileForm');
@@ -358,7 +358,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        rmdir($filePath);
         unlink($fullpath . 'uploadTestFile.html');
 
         $folder->create();
@@ -598,7 +597,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals($rs['fullpath'], $expected);
     }
 
-    public function parseArgsDataProvider()
+    public static function parseArgsDataProvider()
     {
         return [
             [

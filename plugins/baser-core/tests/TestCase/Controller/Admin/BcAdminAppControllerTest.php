@@ -11,6 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Model\Entity\Permission;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -18,6 +23,7 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use \Cake\Http\Exception\NotFoundException;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaserCore\Controller\BcAdminAppController Test Case
@@ -30,21 +36,7 @@ class BcAdminAppControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * BcAdminApp
@@ -58,10 +50,13 @@ class BcAdminAppControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
         $request = $this->loginAdmin($this->getRequest());
         Router::setRequest($request);
         $this->BcAdminApp = new BcAdminAppController($request);
-        $this->RequestHandler = $this->BcAdminApp->components()->load('RequestHandler');
     }
 
     /**
@@ -73,7 +68,7 @@ class BcAdminAppControllerTest extends BcTestCase
     {
         parent::tearDown();
         Router::reload();
-        unset($this->BcAdminApp, $this->RequestHandler);
+        unset($this->BcAdminApp);
     }
 //
 //    /**
@@ -85,14 +80,11 @@ class BcAdminAppControllerTest extends BcTestCase
 //    {
 //        $this->assertNotEmpty($this->BcAdminApp->BcMessage);
 //        $this->assertNotEmpty($this->BcAdminApp->Authentication);
-//        $this->assertNotEmpty($this->BcAdminApp->Paginator);
-//        $this->assertFalse($this->BcAdminApp->Security->getConfig('validatePost'));
-//        $this->assertFalse($this->BcAdminApp->Security->getConfig('requireSecure'));
+//        $this->assertFalse($this->BcAdminApp->FormProtection->getConfig('validate'));
 //        $components = $this->BcAdminApp->components();
-//        $components->unload('Security');
+//        $components->unload('FormProtection');
 //        $_ENV['IS_CONSOLE'] = false;
 //        $this->BcAdminApp->initialize();
-//        $this->assertEquals([0 => '*'], $this->BcAdminApp->Security->getConfig('requireSecure'));
 //    }
 //
 //    /**
@@ -189,7 +181,7 @@ class BcAdminAppControllerTest extends BcTestCase
         unset($_SERVER['HTTP_REFERER']);
     }
 
-    public function checkRefererDataProvider()
+    public static function checkRefererDataProvider()
     {
         return [
             // refererがnullの場合　

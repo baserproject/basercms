@@ -13,6 +13,9 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use Cake\ORM\Entity;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -37,25 +40,6 @@ class ContentsTableTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-//        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck'
-    ];
-
-    /**
-     * Auto Fixtures
-     * @var bool
-     */
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
-
     /**
      * set up
      *
@@ -64,6 +48,7 @@ class ContentsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(ContentsScenario::class);
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
@@ -132,7 +117,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertSame($messages, $contents->getErrors());
     }
 
-    public function validationDefaultWithEntityDataProvider()
+    public static function validationDefaultWithEntityDataProvider()
     {
         return [
             [
@@ -199,7 +184,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $this->Content->duplicateRelatedSiteContent(['name' => $data['name']]));
     }
 
-    public function duplicateRelatedSiteContentDataProvider()
+    public static function duplicateRelatedSiteContentDataProvider()
     {
         return [
             [['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 1], true],        // 新規・存在しない
@@ -219,6 +204,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeMarshal($content, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
         $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
         $this->assertNotEmpty($result->getResult());
@@ -239,7 +225,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function beforeMarshalDataProvider()
+    public static function beforeMarshalDataProvider()
     {
         return [
             // idがない場合
@@ -285,7 +271,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getUniqueNameDataProvider()
+    public static function getUniqueNameDataProvider()
     {
         return [
             ['', 1, ''],
@@ -357,6 +343,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteRelateSubSiteContentWithAlias()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         $content = $this->Contents->get(6);
         $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 28, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
@@ -398,6 +385,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCopyContentFolderPath()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         // 他サイトにフォルダが存在する場合
         $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
         $this->assertEquals(6, $parent_id);
@@ -448,7 +436,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function pureUrlDataProvider()
+    public static function pureUrlDataProvider()
     {
         return [
             ['', '', '/'],
@@ -484,7 +472,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($this->Contents->createUrl($id), $expects);
     }
 
-    public function createUrlDataProvider()
+    public static function createUrlDataProvider()
     {
         return [
             ["hogehoge'/@<>1", ''],
@@ -546,6 +534,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateSystemData()
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         // idが1以外でnameがない場合はエラー
         $content = new Content(['id' => 100, 'name' => '']);
         $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
@@ -673,7 +662,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function findByTypeDataProvider()
+    public static function findByTypeDataProvider()
     {
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
@@ -747,7 +736,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function updatePublishDateDataProvider()
+    public static function updatePublishDateDataProvider()
     {
         return [
             // 日付更新の場合
@@ -787,7 +776,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isPublishDataProvider()
+    public static function isPublishDataProvider()
     {
         return [
             [true, '', '', true],
@@ -795,11 +784,11 @@ class ContentsTableTest extends BcTestCase
             [true, '0000-00-00 00:00:00', '', true],
             [true, '0000-00-00 00:00:01', '', true],
             [true, date('Y-m-d H:i:s', strtotime("+1 hour")), '', false],
-            [true, FrozenTime::now()->addHour(), '', false],
+            [true, FrozenTime::now()->addHours(1), '', false],
             [true, '', '0000-00-00 00:00:00', true],
             [true, '', '0000-00-00 00:00:01', false],
             [true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
-            [true, '', FrozenTime::now()->addHour(), true],
+            [true, '', FrozenTime::now()->addHours(1), true],
         ];
     }
 
@@ -823,7 +812,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expects, $this->Content->isMovable($currentId, $parentId));
     }
 
-    public function isMovableDataProvider()
+    public static function isMovableDataProvider()
     {
         return [
             [false, 2, 3, false],    // ファイルを移動、同じファイル名が存在
@@ -853,7 +842,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($decodedExpected, rawurldecode($encoded));
     }
 
-    public function urlencodeDataProvider()
+    public static function urlencodeDataProvider()
     {
         return [
             ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
@@ -880,7 +869,7 @@ class ContentsTableTest extends BcTestCase
         }
     }
 
-    public function moveOffsetDataProvider()
+    public static function moveOffsetDataProvider()
     {
         return [
             // サービス2でテスト
@@ -1001,7 +990,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function findByUrlDataProvider()
+    public static function findByUrlDataProvider()
     {
         return [
             [true, '/about', true],

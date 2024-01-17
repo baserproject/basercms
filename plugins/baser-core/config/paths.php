@@ -131,3 +131,9 @@ if (!defined('BASER_THEMES')) {
     define('BASER_THEMES', BASER_PLUGINS);
 }
 
+/**
+ * テスト用の一時フォルダ
+ */
+if(!defined('TMP_TESTS')) {
+    define('TMP_TESTS', TMP . 'tests' . DS);
+}

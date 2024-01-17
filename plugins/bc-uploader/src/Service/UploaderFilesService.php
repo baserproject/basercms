@@ -138,7 +138,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
                 return $usersTable->getUserList($options);
             case 'uploader_category_id':
                 $uploaderCategoriesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderCategories');
-                return $uploaderCategoriesTable->find('list')->order(['UploaderCategories.id'])->toArray();
+                return $uploaderCategoriesTable->find('list')->orderBy(['UploaderCategories.id'])->toArray();
         }
         return false;
     }
@@ -182,7 +182,6 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function create(array $postData)
     {
@@ -192,8 +191,8 @@ class UploaderFilesService implements UploaderFilesServiceInterface
                 ini_get('post_max_size')
             ));
         }
-        if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
-        if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
+        if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new \Cake\I18n\DateTime($postData['publish_begin']);
+        if (!empty($postData['publish_end'])) $postData['publish_end'] = new \Cake\I18n\DateTime($postData['publish_end']);
 
         if (!isset($postData['file'])){
             throw new BcException(__d('baser_core', 'ファイルが存在しません。'));
@@ -222,10 +221,10 @@ class UploaderFilesService implements UploaderFilesServiceInterface
             throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
         if (!empty($postData['publish_begin'])) {
-            $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
+            $postData['publish_begin'] = new \Cake\I18n\DateTime($postData['publish_begin']);
         }
         if (!empty($postData['publish_end'])) {
-            $postData['publish_end'] = new FrozenTime($postData['publish_end']);
+            $postData['publish_end'] = new \Cake\I18n\DateTime($postData['publish_end']);
         }
         $entity = $this->UploaderFiles->patchEntity($entity, $postData);
         return $this->UploaderFiles->saveOrFail($entity);

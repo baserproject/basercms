@@ -17,6 +17,7 @@ use BaserCore\Plugin;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
 use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
@@ -32,7 +33,6 @@ use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
-use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
@@ -46,6 +46,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Utility\Inflector;
 use CakephpTestSuiteLight\Fixture\TruncateDirtyTables;
+use Couchbase\LookupGetSpec;
 use ReflectionClass;
 use BaserCore\Utility\BcContainer;
 use BaserCore\ServiceProvider\BcServiceProvider;
@@ -90,24 +91,6 @@ class BcTestCase extends TestCase
     const EVENT_LAYER_HELPER = 'Helper';
 
     /**
-     * FixtureManager
-     * 古いフィクスチャーの後方互換用
-     * @var FixtureManager
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     */
-    public $FixtureManager;
-
-    /**
-     * FixtureInjector
-     * 古いフィクスチャーの後方互換用
-     * @var FixtureInjector
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     */
-    public $FixtureInjector;
-
-    /**
      * FixtureStrategy にて、TruncateStrategy を利用するかどうかを設定
      * @checked
      * @noTodo
@@ -134,40 +117,6 @@ class BcTestCase extends TestCase
     }
 
     /**
-     * setup FixtureManager
-     *
-     * CakePHP4系より、FixtureManagerが非推奨となったが、$this->autoFixtures = false を利用した動的フィクスチャーを
-     * 利用するために FixtureManager が必要となる。phpunit.xml.dist からは、FixtureManager の定義を除外し、
-     * 基本的に利用しない方針だが、動的フィクスチャーが必要なテストの場合にだけ利用する。
-     * 動的フィクスチャーを FixtureFactory に移管後、廃止とする
-     * @deprecated 5.1.0
-     */
-    public function setUpFixtureManager()
-    {
-        $this->FixtureManager = new FixtureManager();
-        $this->FixtureInjector = new FixtureInjector($this->FixtureManager);
-        $this->FixtureInjector->startTest($this);
-    }
-
-    /**
-     * tear down FixtureManager
-     * @deprecated 5.1.0
-     * @see setUpFixtureManager
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function tearDownFixtureManager()
-    {
-        $this->FixtureInjector->endTest($this, 0);
-        $fixtures = $this->FixtureManager->loaded();
-        foreach($fixtures as $fixture) {
-            $fixture->truncate(ConnectionManager::get($fixture->connection()));
-        }
-        self::$fixtureManager = null;
-    }
-
-    /**
      * Set Up
      * @checked
      * @noTodo
@@ -178,9 +127,6 @@ class BcTestCase extends TestCase
         // ユニットテストの全体テストでメソッド名を表示する際に利用
         if(filter_var(env('SHOW_TEST_METHOD', false), FILTER_VALIDATE_BOOLEAN)) {
             $this->classMethod();
-        }
-        if (!$this->autoFixtures) {
-            $this->setUpFixtureManager();
         }
         parent::setUp();
         $this->Application = new Application(CONFIG);
@@ -213,7 +159,7 @@ class BcTestCase extends TestCase
      */
     public function classMethod()
     {
-        $test = $this->providedTests[0];
+        $test = $this->provides()[0];
         echo "\n" . $test->getTarget() . ' ';
         ob_end_flush();
         ob_start();
@@ -227,9 +173,6 @@ class BcTestCase extends TestCase
      */
     public function tearDown(): void
     {
-        if (!$this->autoFixtures) {
-            $this->tearDownFixtureManager();
-        }
         BcContainer::clear();
         $_FILES = [];
         parent::tearDown();
@@ -389,7 +332,6 @@ class BcTestCase extends TestCase
      *
      * @param $events
      * @checked
-     * @unitTest
      * @noTodo
      */
     public function attachEvent($events)
@@ -403,7 +345,6 @@ class BcTestCase extends TestCase
     /**
      * イベントをリセットする
      * @checked
-     * @unitTest
      * @noTodo
      */
     public function resetEvent()
@@ -425,9 +366,10 @@ class BcTestCase extends TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        $folder = new Folder();
-        $folder->chmod(LOGS, 0777);
-        $folder->chmod(TMP, 0777);
+        $folder = new BcFolder(LOGS);
+        $folder->chmod( 0777);
+        $folder = new BcFolder(TMP);
+        $folder->chmod(0777);
     }
 
     /**

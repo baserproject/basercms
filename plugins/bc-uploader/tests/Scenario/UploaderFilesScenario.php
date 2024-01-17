@@ -29,7 +29,7 @@ class UploaderFilesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         //アップローダープラグインデータを生成
         UploaderConfigFactory::make(['name' => 'large_width', 'value' => 500])->persist();
@@ -58,6 +58,7 @@ class UploaderFilesScenario implements FixtureScenarioInterface
         UploaderFileFactory::make(['id' => 4, 'name' => '2_1.jpg', 'atl' => '2_1.jpg', 'user_id' => 1])->persist();
         UploaderFileFactory::make(['id' => 5, 'name' => '2_2.jpg', 'atl' => '2_2.jpg', 'user_id' => 1])->persist();
         UploaderFileFactory::make(['id' => 6, 'name' => '2_3.jpg', 'atl' => '2_3.jpg', 'user_id' => 1])->persist();
+        return null;
     }
 
 }

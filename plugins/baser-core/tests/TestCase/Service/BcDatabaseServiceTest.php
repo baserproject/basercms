@@ -26,16 +26,16 @@ use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\Filesystem\File;
 use Cake\Utility\Inflector;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Migrations\Migrations;
@@ -264,7 +264,8 @@ class BcDatabaseServiceTest extends BcTestCase
         // csvフォルダーを作成する
         $csvFolder = TMP . 'csv' . DS;
         if (!is_dir($csvFolder)) {
-            new Folder($csvFolder, true, 0777);
+            $csv = new BcFolder($csvFolder);
+            $csv->create();
         }
         // csvファイルを作成する
         $table = 'pages';
@@ -337,7 +338,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals('メインサイト', $rs[0]['title']);
         $this->assertTrue(mb_check_encoding($rs[0]['title'], 'UTF-8'));
 
-        $file = new File($path);
+        $file = new BcFile($path);
         $file->delete();
     }
 
@@ -426,9 +427,9 @@ class BcDatabaseServiceTest extends BcTestCase
             $this->execPrivateMethod($this->BcDatabaseService, '_loadDefaultDataPattern', [$pattern, $theme]);
             $path = BcUtil::getDefaultDataPath($theme, $pattern);
             $this->assertNotNull($path);
-            $Folder = new Folder($path . DS . $plugin);
-            $files = $Folder->read(true, true, true);
-            $csvList = $files[1];
+            $Folder = new BcFolder($path . DS . $plugin);
+            $files = $Folder->getFiles(['full'=>true]);
+            $csvList = $files;
             foreach ($csvList as $path) {
                 $table = basename($path, '.csv');
                 if (!in_array($table, $tableList)) continue;
@@ -467,7 +468,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function convertFieldToCsvDataProvider()
+    public static function convertFieldToCsvDataProvider()
     {
         return [
             ['test', '"test"'],
@@ -541,7 +542,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals('', $rs[0]['modified']);
         $this->assertEquals('', $rs[0]['created']);
 
-        $file = new File($path);
+        $file = new BcFile($path);
         $file->delete();
     }
     /**
@@ -556,7 +557,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function dbEncToPhpDataProvider()
+    public static function dbEncToPhpDataProvider()
     {
         return [
             ['utf8', 'UTF-8'],
@@ -587,7 +588,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public function phpEncToDbDataProvider()
+    public static function phpEncToDbDataProvider()
     {
         return [
             ['UTF-8', 'utf8'],
@@ -603,7 +604,7 @@ class BcDatabaseServiceTest extends BcTestCase
     {
         $path = TMP . 'schema' . DS;
         $fileName = 'UserActionsSchema.php';
-        $schemaFile = new File($path . $fileName, true);
+        $schemaFile = new BcFile($path . $fileName, true);
         $table = 'user_actions';
         // スキーマファイルを生成
         $schemaFile->write("<?php
@@ -654,7 +655,7 @@ class UserActionsSchema extends BcSchema
         $this->assertEquals($this->BcDatabaseService->getDatasourceName($value), $expected);
     }
 
-    public function getDatasourceNameDataProvider()
+    public static function getDatasourceNameDataProvider()
     {
         return [
             ['postgres', Postgres::class],
@@ -674,7 +675,7 @@ class UserActionsSchema extends BcSchema
         ]);
         $expectedFile = TMP . 'schema/UsersSchema.php';
         $this->assertFileExists($expectedFile);
-        $file = new File($expectedFile);
+        $file = new BcFile($expectedFile);
         $file->delete();
     }
 
@@ -701,7 +702,7 @@ class UserActionsSchema extends BcSchema
 
         // 接続できていること
         $this->assertNotEmpty($db);
-        $this->assertTrue($db->isConnected());
+        $this->assertTrue($db->getDriver()->isConnected());
     }
 
     /**

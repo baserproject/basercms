@@ -13,6 +13,7 @@ namespace BcThemeFile\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcFormFailedException;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\Admin\ThemeFilesAdminService;
 use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
@@ -144,7 +145,7 @@ class ThemeFilesController extends BcAdminAppController
     /**
      * テーマファイル作成
      *
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
      * @unitTest
@@ -152,6 +153,7 @@ class ThemeFilesController extends BcAdminAppController
     public function add(ThemeFilesAdminServiceInterface $service)
     {
         $args = $this->parseArgs(func_get_args());
+        if (!$args['theme']) $this->notFound();
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         $entity = $service->getNew($args['fullpath'], $args['type']);
@@ -162,7 +164,7 @@ class ThemeFilesController extends BcAdminAppController
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を作成しました。'), $entity->name));
-                $this->redirect(array_merge(
+                return $this->redirect(array_merge(
                     ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
                     [$entity->name]
@@ -625,16 +627,15 @@ class ThemeFilesController extends BcAdminAppController
             $args = array_merge($args);
         }
         if (!empty($args[1]) && !BcThemeFileUtil::getTemplateTypeName($args[1])) {
-            $folder = new Folder(BASER_PLUGINS);
-            $files = $folder->read(true, true);
-            foreach($files[0] as $file) {
+            $folder = new BcFolder(BASER_PLUGINS);
+            $files = $folder->getFolders();
+            foreach($files as $file) {
                 if ($args[1] !== Inflector::camelize($file, '-')) continue;
                 $data['plugin'] = $args[1];
                 unset($args[1]);
                 break;
             }
         }
-
         if ($data['plugin']) {
             if (!empty($args[0])) {
                 $data['theme'] = $args[0];
@@ -654,6 +655,7 @@ class ThemeFilesController extends BcAdminAppController
                 unset($args[1]);
             }
         }
+        if(!$data['theme']) return $data;
 
         if (empty($data['type'])) $data['type'] = 'layout';
         if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));

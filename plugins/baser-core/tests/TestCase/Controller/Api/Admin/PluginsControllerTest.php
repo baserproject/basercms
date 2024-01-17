@@ -11,12 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\LoginStoresScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFolder;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
 
 /**
@@ -25,21 +31,7 @@ use Composer\Package\Archiver\ZipArchiver;
 class PluginsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs',
-    ];
+    use ScenarioAwareTrait;
 
     /**
      * Access Token
@@ -59,6 +51,11 @@ class PluginsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SiteConfigsScenario::class);
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(LoginStoresScenario::class);
         Configure::config('baser', new PhpConfig());
         Configure::load('BaserCore.setting', 'baser');
         $token = $this->apiLoginAdmin(1);
@@ -122,19 +119,19 @@ class PluginsControllerTest extends BcTestCase
             'permission' => "1"
         ];
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
         $this->post('/baser/api/admin/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, $data);
         $this->assertResponseCode($statusCode);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($message, $result->message);
-        $folder->delete($pluginPath);
+        $folder->delete();
     }
-    public function installDataProvider()
+    public static function installDataProvider()
     {
         return [
             ["BcUploader", 200, "プラグイン「BcUploader」をインストールしました。"],
-            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin UnKnown could not be found."],
+            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin `UnKnown` could not be found."],
             ["BcTest", 500, "データベース処理中にエラーが発生しました。プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
         ];
     }
@@ -208,9 +205,11 @@ class PluginsControllerTest extends BcTestCase
 
         $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
-        $folder = new Folder();
-        $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -222,9 +221,10 @@ class PluginsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('新規プラグイン「' . $plugin . '」を追加しました。', $result->message);
 
-        $folder = new Folder();
-        $folder->delete(BASER_PLUGINS . $plugin);
-        $folder->delete($zipSrcPath);
+        $folder = new BcFolder(BASER_PLUGINS . $plugin);
+        $folder->delete();
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
     }
 
     /**

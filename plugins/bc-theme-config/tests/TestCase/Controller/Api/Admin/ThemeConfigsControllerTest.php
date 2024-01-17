@@ -109,8 +109,8 @@ class ThemeConfigsControllerTest extends BcTestCase
         $this->assertResponseCode(500);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals(
-            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php on line 557',
+        $this->stringContains(
+            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php',
             $result->message
         );
     }

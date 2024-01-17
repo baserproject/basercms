@@ -12,11 +12,18 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Routing\Router;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcContents helper library.
@@ -25,19 +32,7 @@ use BaserCore\View\Helper\BcContentsHelper;
  */
 class BcContentsHelperTest extends BcTestCase
 {
-
-    /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Permissions',
-    ];
+    use ScenarioAwareTrait;
     /**
      * setUp method
      *
@@ -46,6 +41,12 @@ class BcContentsHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
@@ -73,7 +74,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertNotEmpty($this->BcContents->request);
         $this->assertNotEmpty($this->BcContents->ContentsService);
         $this->assertNotEmpty($this->BcContents->PermissionsService);
-        $this->assertContains('BcBaser', $this->BcContents->helpers);
+        $this->assertArrayHasKey('BcBaser', $this->BcContents->helpers);
 
     }
 
@@ -150,7 +151,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expectedTitle, $resultTitle, 'タイトルエラー：' . $message);
     }
 
-    public function getPageListDataProvider()
+    public static function getPageListDataProvider()
     {
         return [
             // PC版
@@ -174,7 +175,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function isSiteRelatedDataProvider()
+    public static function isSiteRelatedDataProvider()
     {
         return [
             [true, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => 1, 'type' => 'BlogContent']]],
@@ -204,7 +205,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function isActionAvailableDataProvider()
+    public static function isActionAvailableDataProvider()
     {
         return [
             // 管理ユーザー
@@ -272,7 +273,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getCurrentRelatedSiteUrlDataProvider()
+    public static function getCurrentRelatedSiteUrlDataProvider()
     {
         return [
             // 戻り値が空でないもの（）
@@ -305,7 +306,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getRelatedSiteContentsDataProvider()
+    public static function getRelatedSiteContentsDataProvider()
     {
         return [
             // コンテンツIDが空 オプションも空
@@ -340,7 +341,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getRelatedSiteLinksDataProvider()
+    public static function getRelatedSiteLinksDataProvider()
     {
         return [
             // IDが空 オプションも空
@@ -402,7 +403,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getJsonItemsDataProvider()
+    public static function getJsonItemsDataProvider()
     {
         return [
             ['無所属コンテンツ', 'Default'],
@@ -439,7 +440,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getParentDataProvider()
+    public static function getParentDataProvider()
     {
         return [
             [1, 4, true],            // ダイレクト ROOT直下
@@ -482,7 +483,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getContentByEntityIdDataProvider()
+    public static function getContentByEntityIdDataProvider()
     {
         return [
             // 存在するID（0~2）を指定した場合
@@ -526,7 +527,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
-    public function isParentIdDataProvider()
+    public static function isParentIdDataProvider()
     {
         return [
             [2, 1, true],
@@ -554,7 +555,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcContents->isFolder());
     }
 
-    public function isFolderDataProvider()
+    public static function isFolderDataProvider()
     {
         return [
             ['/', false],    // index あり
@@ -582,7 +583,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($result, $this->BcContents->isEditable($content));
     }
 
-    public function isEditableDataProvider()
+    public static function isEditableDataProvider()
     {
         return [
             // データがない場合false
@@ -608,7 +609,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function getSiteRootIdDataProvider()
+    public static function getSiteRootIdDataProvider()
     {
         return [
             // 存在するサイトID（0~2）を指定した場合
@@ -633,7 +634,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
     }
 
-    public function getFolderLinkedUrlDataProvider()
+    public static function getFolderLinkedUrlDataProvider()
     {
         return [
             ['/', 'https://localhost/'],
@@ -660,7 +661,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getNextLinkDataProvider()
+    public static function getNextLinkDataProvider()
     {
         return [
             ['/company', '', ['overFolder' => false], false], // PC
@@ -712,7 +713,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getPrevLinkDataProvider()
+    public static function getPrevLinkDataProvider()
     {
         return [
             ['/company', '', ['overFolder' => false], false], // PC
@@ -755,7 +756,7 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($neighbors['next']['title'], $title['next']);
     }
 
-    public function getPageNeighborsDataProvider()
+    public static function getPageNeighborsDataProvider()
     {
         return [
             [false, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "お問い合わせ(※関連Fixture未完了)"]],
