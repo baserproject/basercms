@@ -118,10 +118,18 @@ use Cake\Utility\Hash;
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php endif ?>
-    <?php $this->BcBaser->link('',
-      $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no,
-      ['title' => __d('baser_core', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']
-    ) ?>
+    <?php if ($this->Blog->allowPublish($post)): ?>
+      <?php $this->BcBaser->link('',
+        $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no, [
+          'title' => __d('baser_core', '確認'),
+          'target' => '_blank',
+          'class' => 'bca-btn-icon',
+          'data-bca-btn-type' => 'preview',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+    <?php else: ?>
+      <a title="確認" class="btn bca-btn-icon" data-bca-btn-type="preview" data-bca-btn-size="lg" data-bca-btn-status="gray"></a>
+    <?php endif ?>
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $post->blog_content->id, $post->id],
       ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
