@@ -544,9 +544,13 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * カテゴリーの一覧をリストタグで取得する
-     *
+     * @param int $depth 階層
+     * @param boolean $count 件数を表示するかどうか
+     * @param array $options オプション
+     * @param string $expected 期待値
+     * @dataProvider getCategoryListDataProvider
      */
-    public function testGetCategoryList()
+    public function testGetCategoryList($depth, $count, $options, $expected)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $site = SiteFactory::get(1);
@@ -556,11 +560,13 @@ class BlogHelperTest extends BcTestCase
         BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
         $categories = $this->Blog->getCategories(['blogContentId'=>1]);
-        $result = $this->Blog->getCategoryList($categories);
-        $this->assertEquals('<ul class="bc-blog-category-list depth-1">
-        <li class="bc-blog-category-list__item">
-      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
-</ul>', trim($result));
+        $result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
+        $this->assertEquals(trim($result), $expected);
+//        $result = $this->Blog->getCategoryList($categories);
+//        $this->assertEquals('<ul class="bc-blog-category-list depth-1">
+//        <li class="bc-blog-category-list__item">
+//      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+//</ul>', trim($result));
     }
 
     public function getCategoryListDataProvider()
