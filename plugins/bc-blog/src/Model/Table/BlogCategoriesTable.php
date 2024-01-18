@@ -266,8 +266,9 @@ class BlogCategoriesTable extends BlogAppTable
             $query->distinct($distinct);
         }
         if ($options['siteId'] !== false && !is_null($options['siteId'])) {
-            $query->matching('BlogPosts.BlogContents.Contents');
-            $query->where(['Contents.site_id' => $options['siteId']]);
+            $query->matching('BlogPosts.BlogContents.Contents', function ($q) use ($options) {
+                return $q->where(['Contents.site_id' => $options['siteId']]);
+            });
         }
         $entities = $query->all();
 
