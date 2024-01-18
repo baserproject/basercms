@@ -235,9 +235,6 @@ class BlogCategoriesTable extends BlogAppTable
         } elseif ($parentId !== false) {    // 親を指定する場合
             $conditions['BlogCategories.parent_id'] = $parentId;
         }
-        if ($options['siteId'] !== false && !is_null($options['siteId'])) {
-            $conditions['Contents.site_id'] = $options['siteId'];
-        }
         if (!is_null($blogContentId)) {
             $conditions['BlogCategories.blog_content_id'] = $blogContentId;
         }
@@ -270,6 +267,7 @@ class BlogCategoriesTable extends BlogAppTable
         }
         if ($options['siteId'] !== false && !is_null($options['siteId'])) {
             $query->matching('BlogPosts.BlogContents.Contents');
+            $query->where(['Contents.site_id' => $options['siteId']]);
         }
         $entities = $query->all();
 
