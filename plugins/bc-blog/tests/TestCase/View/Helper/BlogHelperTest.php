@@ -801,6 +801,7 @@ class BlogHelperTest extends BcTestCase
             'id' => 1,
             'name' => 'test name',
             'blog_category_id' => 1,
+            'blog_content_id' => 1,
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 1,
@@ -814,6 +815,7 @@ class BlogHelperTest extends BcTestCase
             'id' => 2,
             'name' => 'test name 2',
             'blog_category_id' => 2,
+            'blog_content_id' => 1,
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 2,
