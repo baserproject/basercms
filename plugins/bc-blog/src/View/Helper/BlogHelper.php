@@ -692,6 +692,7 @@ class BlogHelper extends Helper
      * @return string カテゴリ一覧へのURL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryUrl($blogCategoryId, $options = [])
     {
@@ -1325,6 +1326,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryName(BlogPost $post)
     {
@@ -1342,6 +1344,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryTitle(BlogPost $post)
     {
@@ -1376,6 +1379,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategories($options = [])
     {
