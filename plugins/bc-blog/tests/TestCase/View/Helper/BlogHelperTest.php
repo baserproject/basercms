@@ -544,7 +544,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * カテゴリーの一覧をリストタグで取得する
-     *
      * @param int $depth 階層
      * @param boolean $count 件数を表示するかどうか
      * @param array $options オプション
@@ -553,28 +552,31 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategoryList($depth, $count, $options, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        $categories = $BlogCategory->getCategoryList(1, ['viewCount' => true, 'depth' => 3, 'siteId' => 0]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        $categories = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => $count]);
         $result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
-        $this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
+        $this->assertEquals($expected, trim($result));
     }
 
     public static function getCategoryListDataProvider()
     {
         return [
             [
-                3,
-                false,
-                [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'
-            ],
-            [
                 1,
                 false,
                 [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'
+                '<ul class="bc-blog-category-list depth-1">
+        <li class="bc-blog-category-list__item">
+      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+</ul>'
             ],
             [
                 0,
@@ -583,10 +585,13 @@ class BlogHelperTest extends BcTestCase
                 ''
             ],
             [
-                3,
+                2,
                 true,
                 [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース(3)</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'
+                '<ul class="bc-blog-category-list depth-1">
+        <li class="bc-blog-category-list__item">
+      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1(2)</a>          </li>
+</ul>'
             ],
         ];
     }
