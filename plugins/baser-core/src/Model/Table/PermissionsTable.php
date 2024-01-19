@@ -105,7 +105,14 @@ class PermissionsTable extends AppTable
             ->scalar('url')
             ->maxLength('url', 255, __d('baser_core', '設定URLは255文字以内で入力してください。'))
             ->notEmptyString('url', __d('baser_core', '設定URLを入力してください。'))
-            ->requirePresence('user_group_id');
+            ->requirePresence('url')
+            ->regex('url', '/\A\//', __d('baser_core', '設定URLはスラッシュから始まるURLを入力してください。'))
+            ->add('url', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus', '/.*{}'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '設定URLに使用できない文字列が含まれています。')
+                ]]);
         return $validator;
     }
 

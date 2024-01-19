@@ -71,7 +71,7 @@ $(function () {
                             $.bcUtil.showNoticeMessage(result.message);
                             $("#PermissionDialog").dialog('close');
                         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                            $.bcUtil.showAjaxError(bcI18n.commonSaveFailedMessage, XMLHttpRequest, errorThrown);
+                            alert(bcI18n.commonSaveFailedMessage);
                         }).always(function(){
                             $.bcUtil.hideLoader();
                         });
