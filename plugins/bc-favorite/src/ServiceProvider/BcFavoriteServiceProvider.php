@@ -28,7 +28,7 @@ class BcFavoriteServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         FavoritesServiceInterface::class,
     ];
 

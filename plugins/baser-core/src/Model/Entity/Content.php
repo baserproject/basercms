@@ -37,20 +37,20 @@ use Cake\ORM\Entity;
  * @property integer $author_id
  * @property string $layout_template
  * @property bool $status
- * @property FrozenTime $publish_begin
- * @property FrozenTime $publish_end
+ * @property \Cake\I18n\DateTime $publish_begin
+ * @property \Cake\I18n\DateTime $publish_end
  * @property bool $self_status
- * @property FrozenTime $self_publish_begin
- * @property FrozenTime $self_publish_end
+ * @property \Cake\I18n\DateTime $self_publish_begin
+ * @property \Cake\I18n\DateTime $self_publish_end
  * @property bool $exclude_search
- * @property FrozenTime $created_date
- * @property FrozenTime $modified_date
+ * @property \Cake\I18n\DateTime $created_date
+ * @property \Cake\I18n\DateTime $modified_date
  * @property bool $site_root
- * @property FrozenTime $deleted_date
+ * @property \Cake\I18n\DateTime $deleted_date
  * @property bool $exclude_menu
  * @property bool $blank_link
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  * @property Site $site
  */
 class Content extends Entity
@@ -61,7 +61,7 @@ class Content extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true
     ];
 

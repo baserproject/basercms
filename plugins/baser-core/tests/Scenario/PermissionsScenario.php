@@ -24,7 +24,7 @@ class PermissionsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         PermissionFactory::make([
             'id' => 1,
@@ -278,6 +278,7 @@ class PermissionsScenario implements FixtureScenarioInterface
             'created' => '2021-07-07 15:25:59',
             'modified' => '2021-07-07 15:25:59',
         ])->persist();
+        return null;
     }
 
 }

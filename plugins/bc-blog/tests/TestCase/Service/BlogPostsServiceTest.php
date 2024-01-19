@@ -221,7 +221,7 @@ class BlogPostsServiceTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
         set_error_handler(function ($no, $str, $file, $line, $context) {
         });
-        $result = $this->BlogPost->find('all', $options);
+        $result = $this->BlogPost->find('all', ...$options);
         if ($type == 'count') {
             $this->assertEquals($expected, count($result));
         } elseif ($type == 'name') {
@@ -232,7 +232,7 @@ class BlogPostsServiceTest extends BcTestCase
         }
     }
 
-    public function findIndexDataProvider()
+    public static function findIndexDataProvider()
     {
         return [
             ['count', [], 6],                                            // 公開状態全件取得
@@ -447,7 +447,7 @@ class BlogPostsServiceTest extends BcTestCase
 //        $this->assertEquals($expected, $result);
 //    }
 //
-//    public function createIndexConditionsDataProvider(): array
+//    public static function createIndexConditionsDataProvider(): array
 //    {
 //        $blogPost = new BlogPostsTable();
 //        return [
@@ -578,14 +578,14 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
         BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
 
-        $blogPost = $this->BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $blogPost = $this->BlogPostsService->BlogPosts->get(1, contain: ['BlogTags']);
         $result = $this->BlogPostsService->getRelatedPosts($blogPost)->toArray();
         //戻り値を確認
         $this->assertEquals(1, $result[0]["blog_content_id"]);
         $this->assertEquals(2, $result[0]["id"]);
 
         //blog_tagsがNULLを確認すること
-        $blogPost = $this->BlogPostsService->BlogPosts->get(3, ['contain' => ['BlogTags']]);
+        $blogPost = $this->BlogPostsService->BlogPosts->get(3, contain: ['BlogTags']);
         $result = $this->BlogPostsService->getRelatedPosts($blogPost);
         //結果はnullになる
         $this->assertCount(0, $result);
@@ -607,7 +607,7 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals("1", $result->user_id);
 
         //postedが生成できるか確認
-        $this->assertEquals(FrozenTime::now()->i18nFormat('yyyy-MM-dd'), $result->posted->i18nFormat('yyyy-MM-dd'));
+        $this->assertEquals(\Cake\I18n\DateTime::now()->i18nFormat('yyyy-MM-dd'), $result->posted->i18nFormat('yyyy-MM-dd'));
 
         //statusが生成できるか確認
         $this->assertEquals(false, $result->status);

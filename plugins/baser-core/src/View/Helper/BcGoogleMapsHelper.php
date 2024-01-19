@@ -38,7 +38,7 @@ class BcGoogleMapsHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['BcBaser'];
+    public array $helpers = ['BcBaser'];
 
     /**
      * Google マップ を読み込む

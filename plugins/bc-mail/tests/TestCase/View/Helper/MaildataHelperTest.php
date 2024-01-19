@@ -1,36 +1,27 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
-App::uses('MaildataHelper', 'BcMail.View/Helper');
-App::uses('BcAppView', 'View');
+namespace BcMail\Test\TestCase\View\Helper;
+use BaserCore\TestSuite\BcTestCase;
 
-class MaildataHelperTest extends BaserTestCase
+class MaildataHelperTest extends BcTestCase
 {
-    public $View = null;
-    public $fixtures = [
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'baser.Default.User',
-        'baser.Default.SiteConfig'
-    ];
 
     /**
      * set up
      */
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
-        $this->View = new BcAppView(null);
-        $this->View->request = $this->_getRequest('/');
-        $this->Maildata = new MaildataHelper($this->View);
+//        $this->View = new BcAppView(null);
+//        $this->View->request = $this->_getRequest('/');
+//        $this->Maildata = new MaildataHelper($this->View);
     }
 
     /**
      * tear down
      */
-    public function tearDown()
+    public function tearDown():void
     {
-        unset($this->Maildata);
+//        unset($this->Maildata);
         parent::tearDown();
     }
     /**
@@ -47,6 +38,7 @@ class MaildataHelperTest extends BaserTestCase
      */
     public function testToDisplayString($type, $value, $options, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         if ($type == 'file') {
             $this->View->set('mailContent', ['MailContent' => ['id' => 1]]);
         }
@@ -55,7 +47,7 @@ class MaildataHelperTest extends BaserTestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function toDisplayStringProvider()
+    public static function toDisplayStringProvider()
     {
         $options = [
             '資料請求' => '資料請求',

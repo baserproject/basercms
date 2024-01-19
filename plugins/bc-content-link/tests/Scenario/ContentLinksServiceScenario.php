@@ -28,7 +28,7 @@ class ContentLinksServiceScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SiteFactory::make()->main()->persist();
         SiteFactory::make()->smartphone(2)->persist();
@@ -52,6 +52,7 @@ class ContentLinksServiceScenario implements FixtureScenarioInterface
             'id' => 1,
             'url' => '/',
         ])->persist();
+        return null;
     }
 
 }

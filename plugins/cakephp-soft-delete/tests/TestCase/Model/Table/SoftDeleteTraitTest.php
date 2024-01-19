@@ -126,7 +126,7 @@ class SoftDeleteTraitTest extends TestCase
         $post = $this->postsTable->get(1);
         $this->postsTable->delete($post);
 
-        $posts = $this->postsTable->find('all', ['withDeleted'])->where(['id' => 1]);
+        $posts = $this->postsTable->find('all', ...['withDeleted'])->where(['id' => 1]);
         $this->assertEquals(1, $posts->count());
 
         $users = $this->usersTable->find()
@@ -144,11 +144,11 @@ class SoftDeleteTraitTest extends TestCase
     {
         $this->usersTable->deleteAll([]);
         $this->assertEquals(0, $this->usersTable->find()->count());
-        $this->assertNotEquals(0, $this->usersTable->find('all', ['withDeleted'])->count());
+        $this->assertNotEquals(0, $this->usersTable->find('all', ...['withDeleted'])->count());
 
         $this->postsTable->deleteAll([]);
         $this->assertEquals(0, $this->postsTable->find()->count());
-        $this->assertNotEquals(0, $this->postsTable->find('all', ['withDeleted'])->count());
+        $this->assertNotEquals(0, $this->postsTable->find('all', ...['withDeleted'])->count());
     }
 
     /**
@@ -161,7 +161,7 @@ class SoftDeleteTraitTest extends TestCase
         $user = $this->usersTable->findById(1)->first();
         $this->assertEquals(null, $user);
 
-        $user = $this->usersTable->find('all', ['withDeleted'])->where(['id' => 1])->first();
+        $user = $this->usersTable->find('all', ...['withDeleted'])->where(['id' => 1])->first();
         $this->assertNotEquals(null, $user);
         $this->assertNotEquals(null, $user->deleted);
     }
@@ -177,7 +177,7 @@ class SoftDeleteTraitTest extends TestCase
         $count = $this->postsTable->find()->where(['user_id' => 1])->count();
         $this->assertEquals(0, $count);
 
-        $count = $this->postsTable->find('all', ['withDeleted'])->where(['user_id' => 1])->count();
+        $count = $this->postsTable->find('all', ...['withDeleted'])->where(['user_id' => 1])->count();
         $this->assertEquals(2, $count);
     }
 
@@ -188,7 +188,7 @@ class SoftDeleteTraitTest extends TestCase
     {
         $post = $this->postsTable->get(1);
         $this->postsTable->delete($post);
-        $this->assertNotEquals(null, $this->postsTable->find('all', ['withDeleted'])->where(['id' => 1])->first());
+        $this->assertNotEquals(null, $this->postsTable->find('all', ...['withDeleted'])->where(['id' => 1])->first());
         $this->assertEquals(null, $this->postsTable->findById(1)->first());
 
         $user = $this->usersTable->get(1);
@@ -202,7 +202,7 @@ class SoftDeleteTraitTest extends TestCase
         $user = $this->usersTable->findById(1)->first();
         $this->assertEquals(null, $user);
 
-        $user = $this->usersTable->find('all', ['withDeleted'])->where(['id' => 1])->first();
+        $user = $this->usersTable->find('all', ...['withDeleted'])->where(['id' => 1])->first();
         $this->assertEquals(null, $user);
     }
 
@@ -214,13 +214,13 @@ class SoftDeleteTraitTest extends TestCase
         $affectedRows = $this->postsTable->hardDeleteAll(new \DateTime('now'));
         $this->assertEquals(0, $affectedRows);
 
-        $postsRowsCount = $this->postsTable->find('all', ['withDeleted'])->count();
+        $postsRowsCount = $this->postsTable->find('all', ...['withDeleted'])->count();
 
         $this->postsTable->delete($this->postsTable->get(1));
         $affectedRows = $this->postsTable->hardDeleteAll(new \DateTime('now'));
         $this->assertEquals(1, $affectedRows);
 
-        $newpostsRowsCount = $this->postsTable->find('all', ['withDeleted'])->count();
+        $newpostsRowsCount = $this->postsTable->find('all', ...['withDeleted'])->count();
         $this->assertEquals($postsRowsCount - 1, $newpostsRowsCount);
     }
 
@@ -235,7 +235,7 @@ class SoftDeleteTraitTest extends TestCase
         $query = $this->tagsTable->find();
         $this->assertEquals(2, $query->count());
 
-        $query = $this->tagsTable->find('all', ['withDeleted' => true]);
+        $query = $this->tagsTable->find('all', ...['withDeleted' => true]);
         $this->assertEquals(3, $query->count());
     }
 
@@ -262,13 +262,13 @@ class SoftDeleteTraitTest extends TestCase
      */
     public function testHardDeleteWithCustomField()
     {
-        $tag = $this->tagsTable->find('all', ['withDeleted'])
+        $tag = $this->tagsTable->find('all', ...['withDeleted'])
             ->where(['id' => 2])
             ->first();
 
         $this->tagsTable->hardDelete($tag);
 
-        $tag = $this->tagsTable->find('all', ['withDeleted'])
+        $tag = $this->tagsTable->find('all', ...['withDeleted'])
             ->where(['id' => 2])
             ->first();
 
@@ -287,7 +287,7 @@ class SoftDeleteTraitTest extends TestCase
         $user = $this->usersTable->findById(1)->first();
         $this->assertNull($user);
 
-        $user = $this->usersTable->find('all', ['withDeleted'])->where(['id' => 1])->first();
+        $user = $this->usersTable->find('all', ...['withDeleted'])->where(['id' => 1])->first();
         $this->usersTable->restore($user);
         $user = $this->usersTable->findById(1)->first();
         $this->assertNotNull($user);

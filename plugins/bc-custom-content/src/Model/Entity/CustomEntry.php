@@ -29,9 +29,9 @@ use BaserCore\Annotation\Checked;
  * @property string $name
  * @property bool $status
  * @property int creator_id
- * @property FrozenDate $published
- * @property FrozenDate $publish_begin
- * @property FrozenDate $publish_end
+ * @property \Cake\I18n\Date $published
+ * @property \Cake\I18n\Date $publish_begin
+ * @property \Cake\I18n\Date $publish_end
  * @property CustomTable $custom_table
  */
 class CustomEntry extends Entity

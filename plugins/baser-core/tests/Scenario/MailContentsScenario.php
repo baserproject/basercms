@@ -25,7 +25,7 @@ class MailContentsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         MailContentFactory::make([
             'id' => '30',
@@ -46,6 +46,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'created' => '2015-01-27 12:56:53',
             'modified' => null
         ])->persist();
+        return null;
     }
 
 }

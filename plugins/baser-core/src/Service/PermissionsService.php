@@ -122,9 +122,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function get($id): EntityInterface
     {
-        return $this->Permissions->get($id, [
-            'contain' => ['UserGroups', 'PermissionGroups'],
-        ]);
+        return $this->Permissions->get($id, contain: ['UserGroups', 'PermissionGroups']);
     }
 
     /**
@@ -152,10 +150,12 @@ class PermissionsService implements PermissionsServiceInterface
         if (!empty($queryParams['permission_group_type'])) {
             $conditions['PermissionGroups.type'] = $queryParams['permission_group_type'];
         }
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
         $query = $this->Permissions->find()
             ->contain($queryParams['contain'])
             ->where($conditions)
-            ->order('sort', 'ASC');
+            ->orderBy('sort', 'ASC');
         return $query;
     }
 
@@ -607,7 +607,7 @@ class PermissionsService implements PermissionsServiceInterface
 
         $result = $this->Permissions->find()
             ->where($conditions)
-            ->order($order)
+            ->orderBy($order)
             ->limit(abs($offset) + 1)
             ->all();
 
@@ -686,10 +686,9 @@ class PermissionsService implements PermissionsServiceInterface
             return BcUtil::getAuthPrefixList();
         } elseif($field === 'user_group_id') {
             $userGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
-            $groupList = $userGroups->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'title',
-            ])->where([
+            $groupList = $userGroups->find('list',
+            keyField: 'id',
+            valueField: 'title')->where([
                 'UserGroups.id !=' => Configure::read('BcApp.adminGroupId')
             ]);
             return $groupList->toArray();

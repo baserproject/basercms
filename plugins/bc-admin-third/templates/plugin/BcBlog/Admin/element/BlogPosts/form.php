@@ -107,7 +107,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <!--          --><?php //$this->BcAdminForm->unlockField('BlogCategories') ?>
         </td>
       </tr>
-    <?php endif ?>
+<?php endif ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('eye_catch', __d('baser_core', 'アイキャッチ画像')) ?>

@@ -79,7 +79,7 @@ class UserValidationTest extends BcTestCase
         $result = $this->UserValidation->willChangeSelfGroup($value, ['data' => ['id' => '2', 'login_user_id' => $userId]]);
         $this->assertEquals($expected, $result);
     }
-    public function willChangeSelfGroupDataProvider()
+    public static function willChangeSelfGroupDataProvider()
     {
         return [
             [1, ['_ids' => [2]], true],

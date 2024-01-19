@@ -20,8 +20,8 @@ use BaserCore\Annotation\Checked;
 /**
  * Class MailMessage
  * @property int $id
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class MailMessage extends Entity
 {
@@ -31,7 +31,7 @@ class MailMessage extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

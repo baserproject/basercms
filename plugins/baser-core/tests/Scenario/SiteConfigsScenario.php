@@ -24,7 +24,7 @@ class SiteConfigsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SiteConfigFactory::make([
                 'id' => '1',
@@ -263,6 +263,7 @@ q {}',
                 'modified' => '2021-01-27 12:58:25'
             ]
         )->persist();
+        return null;
     }
 
 }

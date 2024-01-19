@@ -66,10 +66,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $contain = ['BlogContents' => ['Contents']];
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
         }
-        return $this->BlogCategories->get($id, [
-            'conditions' => $conditions,
-            'contain' => $contain
-        ]);
+        return $this->BlogCategories->get($id,
+        conditions: $conditions,
+        contain: $contain);
     }
 
     /**
@@ -116,7 +115,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      */
     public function getTreeIndex(int $blogContentId, array $queryParams): array
     {
-        $srcCategories = $this->getIndex($blogContentId, $queryParams, 'treeList')->order(['lft'])->all();
+        $srcCategories = $this->getIndex($blogContentId, $queryParams, 'treeList')->orderBy(['lft'])->all();
         $categories = [];
         foreach ($srcCategories->toArray() as $key => $value) {
             /* @var BlogCategory $category */
@@ -161,14 +160,14 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
                 }
                 $conditions['BlogCategories.blog_content_id'] = $options['blogContentId'];
                 if (!empty($options['excludeParentId'])) {
-                    $children = $this->BlogCategories->find('children', ['for' => $options['excludeParentId']]);
+                    $children = $this->BlogCategories->find('children', for: $options['excludeParentId']);
                     $excludeIds = [$options['excludeParentId']];
                     foreach ($children as $child) {
                         $excludeIds[] = $child->id;
                     }
                     $conditions['NOT']['BlogCategories.id IN'] = $excludeIds;
                 }
-                $parents = $this->BlogCategories->find('treeList')->where($conditions)->order(['lft'])->all();
+                $parents = $this->BlogCategories->find('treeList')->where($conditions)->orderBy(['lft'])->all();
                 $controlSources['parent_id'] = [];
                 foreach ($parents as $key => $parent) {
                     if (preg_match("/^([_]+)/i", $parent, $matches)) {
@@ -314,7 +313,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             'status' => ''
         ], $queryParams);
 
-        $query = $this->BlogCategories->find('list', ['keyField' => 'id', 'valueField' => 'title'])
+        $query = $this->BlogCategories->find('list', keyField: 'id', valueField: 'title')
             ->contain(['BlogContents' => ['Contents']]);
 
         if ($queryParams['status'] === 'publish') {

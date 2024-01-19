@@ -127,7 +127,7 @@ class UploaderConfigsControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php on line 579',
+            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php on line 619',
             $result->message
         );
     }

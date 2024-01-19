@@ -167,7 +167,7 @@ class MailContentsService implements MailContentsServiceInterface
                 'MailFields'
             ]
         ], $options);
-        return $this->MailContents->get($id, ['contain' => $options['contain']]);
+        return $this->MailContents->get($id, contain: $options['contain']);
     }
 
     /**

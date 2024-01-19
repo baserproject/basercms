@@ -25,7 +25,7 @@ class SiteBcContentsRouteScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SiteFactory::make([
             'id' => '1',
@@ -147,6 +147,7 @@ class SiteBcContentsRouteScenario implements FixtureScenarioInterface
             'created' => '2016-11-04 19:41:47',
             'modified' => '2016-11-04 19:41:47'
         ])->persist();
+        return null;
     }
 
 }

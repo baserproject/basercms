@@ -45,7 +45,7 @@ class BcAdminHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
+    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
 
     /**
      * ログインユーザーがシステム管理者かチェックする

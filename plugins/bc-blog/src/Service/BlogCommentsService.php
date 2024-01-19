@@ -115,10 +115,10 @@ class BlogCommentsService implements BlogCommentsServiceInterface
             $conditions = array_merge($conditions, ['BlogComments.status' => true]);
         }
 
-        return $this->BlogComments->get($id, [
-            'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]],
-            'conditions' => $conditions
-        ]);
+        return $this->BlogComments->get($id,
+            contain: ['BlogPosts' => ['BlogContents' => ['Contents']]],
+            conditions: $conditions
+        );
     }
 
     /**

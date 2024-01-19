@@ -40,7 +40,7 @@ class BcHtmlHelper extends HtmlHelper
      *
      * @var array
      */
-    public $helpers = ['Url', 'Breadcrumbs'];
+    public array $helpers = ['Url', 'Breadcrumbs'];
 
     /**
      * タグにラッピングされていないパンくずデータを取得する

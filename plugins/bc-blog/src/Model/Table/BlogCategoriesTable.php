@@ -133,12 +133,12 @@ class BlogCategoriesTable extends BlogAppTable
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
-        $this->BlogPosts->find()
-            ->where(['BlogPosts.blog_category_id' => $entity->id])
-            ->each(function ($blogPost) {
-                $blogPost->blog_category_id = '';
-                $this->BlogPosts->save($blogPost);
-            });
+        $blogPosts = $this->BlogPosts->find()
+            ->where(['BlogPosts.blog_category_id' => $entity->id])->toArray();
+        foreach ($blogPosts as $item) {
+            $item->blog_category_id = '';
+            $this->BlogPosts->save($item);
+        }
     }
 
     /**
@@ -235,9 +235,6 @@ class BlogCategoriesTable extends BlogAppTable
         } elseif ($parentId !== false) {    // 親を指定する場合
             $conditions['BlogCategories.parent_id'] = $parentId;
         }
-        if ($options['siteId'] !== false && !is_null($options['siteId'])) {
-            $conditions['Contents.site_id'] = $options['siteId'];
-        }
         if (!is_null($blogContentId)) {
             $conditions['BlogCategories.blog_content_id'] = $blogContentId;
         }
@@ -264,9 +261,14 @@ class BlogCategoriesTable extends BlogAppTable
             ->contain(['BlogPosts' => ['BlogContents' => ['Contents']]])
             ->where($conditions)
             ->select($fields)
-            ->order($options['order']);
+            ->orderBy($options['order']);
         if ($distinct) {
             $query->distinct($distinct);
+        }
+        if ($options['siteId'] !== false && !is_null($options['siteId'])) {
+            $query->matching('BlogPosts.BlogContents.Contents', function ($q) use ($options) {
+                return $q->where(['Contents.site_id' => $options['siteId']]);
+            });
         }
         $entities = $query->all();
 
@@ -275,7 +277,7 @@ class BlogCategoriesTable extends BlogAppTable
             foreach ($entities as $entity) {
                 // 表示件数
                 if ($viewCount) {
-                    $childrenIds = $this->find('list', ['keyField' => 'id', 'valueField' => 'id'])
+                    $childrenIds = $this->find('list', keyField: 'id', valueField: 'id')
                         ->where([
                             ['BlogCategories.lft > ' => $entity->lft],
                             ['BlogCategories.rght < ' => $entity->rght]

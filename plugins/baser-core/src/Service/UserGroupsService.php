@@ -64,9 +64,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function get($id): EntityInterface
     {
-        return $this->UserGroups->get($id, [
-            'contain' => ['Users'],
-        ]);
+        return $this->UserGroups->get($id, contain: ['Users']);
     }
 
     /**
@@ -110,7 +108,7 @@ class UserGroupsService implements UserGroupsServiceInterface
             $query->where(['id <>' => Configure::read('BcApp.adminGroupId')]);
         }
 
-        if(!is_null($options['order'])) $query->order($options['order']);
+        if(!is_null($options['order'])) $query->orderBy($options['order']);
 
         return $query;
     }
@@ -188,7 +186,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function getList(): array
     {
-        return $this->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
+        return $this->UserGroups->find('list', keyField: 'id', valueField: 'title')->toArray();
     }
 
     /**

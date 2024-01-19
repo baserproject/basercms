@@ -109,7 +109,7 @@ class ContentFoldersServiceTest extends BcTestCase
         $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
         // 論理削除されているコンテンツに紐付いている場合
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "content_folders"');
+        $this->expectExceptionMessage('Record not found in table `content_folders`.');
         $this->ContentFoldersService->getTrash(1);
     }
 
@@ -168,7 +168,7 @@ class ContentFoldersServiceTest extends BcTestCase
         }
         $this->assertEquals($errors, $contentFolder->getErrors());
     }
-    public function createWithFailureDataProvider()
+    public static function createWithFailureDataProvider()
     {
         return [
             // contentがフィールドとして存在しない場合
@@ -245,7 +245,7 @@ class ContentFoldersServiceTest extends BcTestCase
         }
         $this->assertEquals($errors, $contentFolder->getErrors());
     }
-    public function updateWithFailureDataProvider()
+    public static function updateWithFailureDataProvider()
     {
         return [
             // contentがフィールドとして存在しない場合
@@ -269,7 +269,7 @@ class ContentFoldersServiceTest extends BcTestCase
         $this->assertEquals($expected, $this->ContentFoldersService->getParentTemplate($id, $type));
     }
 
-    public function getParentTemplateDataProvider()
+    public static function getParentTemplateDataProvider()
     {
         return [
             [1, 'folder', 'default'],
@@ -297,7 +297,7 @@ class ContentFoldersServiceTest extends BcTestCase
         $this->assertEquals($expected,  $result);
     }
 
-    public function getFolderTemplateListDataProvider()
+    public static function getFolderTemplateListDataProvider()
     {
         return [
             // idが1ならgetParentTemplateに関しての処理を飛ばす

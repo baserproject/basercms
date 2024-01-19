@@ -120,8 +120,8 @@ class FavoritesServiceTest extends BcTestCase
             'name' => 'テスト新規登録',
             'url' => '/baser/admin/test/index/1',
         ]);
-        $expected = $this->FavoritesService->Favorites->find('all')->last();
-        $this->assertEquals($expected->name, $result->name);
+        $expected = $this->FavoritesService->Favorites->find('all')->toArray();
+        $this->assertEquals($expected[count($expected) - 1]->name, $result->name);
     }
 
     /**

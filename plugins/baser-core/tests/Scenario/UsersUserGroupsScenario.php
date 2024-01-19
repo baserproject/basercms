@@ -24,7 +24,7 @@ class UsersUserGroupsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         UsersUserGroupFactory::make([
             'id' => 1,
@@ -47,6 +47,7 @@ class UsersUserGroupsScenario implements FixtureScenarioInterface
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ])->persist();
+        return null;
     }
 
 }

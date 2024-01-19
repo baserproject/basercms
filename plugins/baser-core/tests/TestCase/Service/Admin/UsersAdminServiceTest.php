@@ -88,7 +88,7 @@ class UsersAdminServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isEditableDataProvider()
+    public static function isEditableDataProvider()
     {
         return [
             [null, null, false],  // 未ログイン新規
@@ -116,7 +116,7 @@ class UsersAdminServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isDeletableDataProvider()
+    public static function isDeletableDataProvider()
     {
         return [
             [null, null, false],  // 未ログインデータ不完全
@@ -145,7 +145,7 @@ class UsersAdminServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isSelfUpdateDataProvider()
+    public static function isSelfUpdateDataProvider()
     {
         return [
             [1, 1, true],        // 自身を更新

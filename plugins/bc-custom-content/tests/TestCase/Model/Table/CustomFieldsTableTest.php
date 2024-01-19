@@ -35,4 +35,35 @@ class CustomFieldsTableTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test validationDefault
+     */
+    public function test_validationDefault()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test beforeMarshal
+     */
+    public function test_beforeMarshal()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test findAll
+     */
+    public function test_findAll()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

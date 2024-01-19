@@ -33,6 +33,7 @@ use Cake\ORM\Query;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * CustomEntriesTable
@@ -266,7 +267,12 @@ class CustomEntriesTable extends AppTable
     {
         if (empty($link->custom_field->meta['BcCustomContent']['max_file_size'])) return $validator;
         $maxFileSize = $link->custom_field->meta['BcCustomContent']['max_file_size'];
-        if (isset($postData[$link->name]['error']) && $postData[$link->name]['error'] !== UPLOAD_ERR_NO_FILE) {
+
+        /** @var UploadedFile $uploadedFile */
+        $uploadedFile = $postData[$link->name]?? null;
+        if(!$uploadedFile) return $validator;
+
+        if ($uploadedFile->getError() !== UPLOAD_ERR_NO_FILE) {
             $validator->add($link->name, [
                 'fileCheck' => [
                     'provider' => 'bc',

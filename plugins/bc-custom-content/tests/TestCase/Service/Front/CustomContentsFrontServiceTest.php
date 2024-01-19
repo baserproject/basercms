@@ -161,7 +161,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         $customContent = $this->getService(CustomContentsServiceInterface::class);
         $customEntry = $this->getService(CustomEntriesServiceInterface::class);
-
+        $controller = new CustomContentController($this->getRequest());
         //カスタムテーブルとカスタムエントリテーブルを生成
         $customTable->create([
             'id' => 1,
@@ -182,7 +182,7 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->loginAdmin($this->getRequest('/baser/admin/'));
         //対象メソッドをコール
         $customEntry->setup(1);
-        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $customEntry->getIndex([])->all());
+        $rs = $this->CustomContentFrontService->getViewVarsForIndex($customContent->get(1), $controller->paginate($customEntry->getIndex([])));
 
         //戻る値を確認
         $this->assertArrayHasKey('customContent', $rs);

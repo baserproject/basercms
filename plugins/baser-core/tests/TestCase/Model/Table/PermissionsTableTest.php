@@ -82,7 +82,7 @@ class PermissionsTableTest extends BcTestCase
         $permission = $this->Permissions->newEntity($fields);
         $this->assertSame($messages, $permission->getErrors());
     }
-    public function validationDefaultDataProvider()
+    public static function validationDefaultDataProvider()
     {
         $maxName = str_repeat("a", 255);
         $maxUrl = '/' . str_repeat("a", 254);
@@ -208,7 +208,7 @@ class PermissionsTableTest extends BcTestCase
         $this->assertEquals($expected, $result->url, $message);
     }
 
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['hoge', '/hoge', 'urlが絶対パスになっていません'],
@@ -233,7 +233,7 @@ class PermissionsTableTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             // id指定の場合

@@ -28,8 +28,8 @@ use Cake\ORM\Entity;
  * @property string|null $auth_prefix
  * @property bool|null $use_move_contents
  * @property string $auth_prefix_settings
- * @property FrozenTime|null $modified
- * @property FrozenTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
  * @property User[] $users
  */
 class UserGroup extends Entity
@@ -40,7 +40,7 @@ class UserGroup extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
     ];
 

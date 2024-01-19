@@ -47,7 +47,7 @@ $this->Paginator->setTemplates([
       <?php // ToDo : 我流 アイコンのリンクがHTMLで指定できるように
       //echo $this->Paginator->next('<span class="bca-icon--allow-right"><span class="bca-icon-label">次へ</span></span>', array_merge(['class' => 'next', 'escape' => false], $options)) ?>
     </div>
-  <?php endif ?>
+<?php endif ?>
   <div class="page-result bca-page-result">
     <?php echo $this->Paginator->counter(sprintf(__d('baser_core', '%s～%s 件'), '<span class="page-start-num">{{start}}</span>', '<span class="page-end-num">{{end}}</span>') . ' ／ ' . sprintf(__d('baser_core', '%s 件'), '<span class="page-total-num">{{count}}</span>')) ?>
   </div>

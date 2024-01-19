@@ -32,19 +32,6 @@ class PluginsController extends BcAdminAppController
 {
 
     /**
-     * initialize
-     * @throws \Exception
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->loadComponent('RequestHandler');
-    }
-
-    /**
      * Before Filter
      * @param \Cake\Event\EventInterface $event An Event instance
      * @checked

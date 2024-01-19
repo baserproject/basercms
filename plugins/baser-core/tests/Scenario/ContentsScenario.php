@@ -24,7 +24,7 @@ class ContentsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ContentFactory::make(
             [
@@ -876,6 +876,7 @@ class ContentsScenario implements FixtureScenarioInterface
                 'modified' => '2016-08-12 00:59:06',
             ]
         )->persist();
+        return null;
     }
 
 }

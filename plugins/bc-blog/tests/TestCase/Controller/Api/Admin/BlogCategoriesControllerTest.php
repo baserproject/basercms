@@ -240,7 +240,7 @@ class BlogCategoriesControllerTest extends BcTestCase
     public function test_delete()
     {
         BlogCategoryFactory::make(
-            ['id' => 11, 'name' => 'blog-category-delete', 'blog_content_id' => 1, 'title' => 'test title delete', 'lft' => 1, 'rght' => 2]
+            ['id' => 11, 'name' => 'blog-category-delete', 'blog_category_id' => 1, 'blog_content_id' => 1, 'title' => 'test title delete', 'lft' => 1, 'rght' => 2]
         )->persist();
         $this->post('/baser/api/admin/bc-blog/blog_categories/delete/11.json?token=' . $this->accessToken);
         $this->assertResponseOk();

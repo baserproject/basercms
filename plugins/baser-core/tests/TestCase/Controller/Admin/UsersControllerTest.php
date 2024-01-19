@@ -284,7 +284,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/users/delete/1');
+        $this->post('/baser/admin/baser-core/users/delete/2');
         $this->assertResponseSuccess();
         $this->assertRedirect([
             'plugin' => 'BaserCore',

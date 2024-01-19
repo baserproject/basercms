@@ -312,7 +312,7 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function checkDataProvider()
+    public static function checkDataProvider()
     {
         return [
             ['hoge', [1], true],
@@ -395,7 +395,7 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
 
     }
-    public function addCheckDataProvider()
+    public static function addCheckDataProvider()
     {
         return [
             ["/baser/admin/test1/*", false, false],
@@ -479,7 +479,7 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertEquals($this->execPrivateMethod($this->PermissionsService, 'checkDefaultAllow', [$url]), $expect);
     }
 
-    public function setDefaultAllowDataProvider()
+    public static function setDefaultAllowDataProvider()
     {
         return [
             ['/baser/admin/baser-core/dashboard/test', true],
