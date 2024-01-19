@@ -692,6 +692,7 @@ class BlogHelper extends Helper
      * @return string カテゴリ一覧へのURL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryUrl($blogCategoryId, $options = [])
     {
@@ -786,6 +787,7 @@ class BlogHelper extends Helper
      * @return string HTMLのカテゴリ一覧
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryList($categories, $depth = 3, $count = false, $options = [])
     {
@@ -1324,6 +1326,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryName(BlogPost $post)
     {
@@ -1341,6 +1344,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryTitle(BlogPost $post)
     {
@@ -1375,6 +1379,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategories($options = [])
     {
@@ -1497,6 +1502,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTagLinkUrl($blogContentId, $tag, $base = true)
     {
@@ -1535,6 +1541,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTagLink($blogContentId, $tag, $options = [])
     {

@@ -23,6 +23,7 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
@@ -544,7 +545,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * カテゴリーの一覧をリストタグで取得する
-     *
      * @param int $depth 階層
      * @param boolean $count 件数を表示するかどうか
      * @param array $options オプション
@@ -553,28 +553,31 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategoryList($depth, $count, $options, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        $categories = $BlogCategory->getCategoryList(1, ['viewCount' => true, 'depth' => 3, 'siteId' => 0]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        $categories = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => $count]);
         $result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
-        $this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
+        $this->assertEquals($expected, trim($result));
     }
 
     public static function getCategoryListDataProvider()
     {
         return [
             [
-                3,
-                false,
-                [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'
-            ],
-            [
                 1,
                 false,
                 [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'
+                '<ul class="bc-blog-category-list depth-1">
+        <li class="bc-blog-category-list__item">
+      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+</ul>'
             ],
             [
                 0,
@@ -583,10 +586,13 @@ class BlogHelperTest extends BcTestCase
                 ''
             ],
             [
-                3,
+                2,
                 true,
                 [],
-                '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース(3)</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'
+                '<ul class="bc-blog-category-list depth-1">
+        <li class="bc-blog-category-list__item">
+      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1(2)</a>          </li>
+</ul>'
             ],
         ];
     }
@@ -910,35 +916,67 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategories()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogCategoryTree');
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 2, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 2, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 3, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 3, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 4, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 2, 'blog_category_id'=> 4, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 5, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 5, 'user_id'=>1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'title' => 'title 4', 'name' => 'name-4', 'blog_content_id' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 5,  'parent_id'=> 3,'title' => 'title 5', 'name' => 'name-5', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 6,  'parent_id'=> 3,'title' => 'title 6', 'name' => 'name-6', 'blog_content_id' => 1])->persist();
         // １階層、かつ、siteId=0
-        $categories = $this->Blog->getCategories(['siteId' => 0]);
-        $this->assertEquals(1, count($categories));
+        $categories = $this->Blog->getCategories(['siteId' => 1]);
+        $this->assertCount(1, $categories);
         // サイトフィルター解除
         $categories = $this->Blog->getCategories(['siteId' => false]);
         $this->assertEquals(2, count($categories));
         // 深さ指定（子）
-        $categories = $this->Blog->getCategories(['siteId' => 0, 'depth' => 2]);
-        $this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
+        $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 2])->toArray();
+        $this->assertEquals(2, $categories[0]->children->toArray()[0]->id);
         // 深さ指定（孫）
-        $categories = $this->Blog->getCategories(['depth' => 3]);
-        $this->assertEquals(1, count($categories[0]['BlogCategory']['children'][0]['BlogCategory']['children']));
+        $categories = $this->Blog->getCategories(['siteId' => 1, 'depth' => 3])->toArray();
+        $this->assertEquals(3, $categories[0]->children->toArray()[0]->children->toArray()[0]->id);
         // ブログコンテンツID指定
         $categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
         $this->assertEquals(1, count($categories));
         // 並べ替え指定
-        $categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'BlogCategory.name']);
-        $this->assertEquals(4, $categories[0]['BlogCategory']['id']);
+        $categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'BlogCategories.name'])->toArray();
+        $this->assertEquals(1, $categories[0]->id);
         // 親指定
-        $categories = $this->Blog->getCategories(['parentId' => 2]);
-        $this->assertEquals(3, $categories[0]['BlogCategory']['id']);
-        // スレッド形式
-        $categories = $this->Blog->getCategories(['threaded' => true]);
-        $this->assertEquals(3, $categories[0]['children'][0]['children'][0]['BlogCategory']['id']);
+        $categories = $this->Blog->getCategories(['parentId' => 2])->toArray();
+        $this->assertEquals(3, $categories[0]->id);
         // ID指定
-        $categories = $this->Blog->getCategories(['id' => 3]);
-        $this->assertEquals('孫カテゴリ', $categories[0]['BlogCategory']['title']);
+        $categories = $this->Blog->getCategories(['id' => 3])->toArray();
+        $this->assertEquals('title 3', $categories[0]->title);
+
+        // 正常:　$blogContentId = 1
+        $result = $this->Blog->getCategories(['blogContentId'=>1]);
+        $this->assertCount(1, $result);
+
+        // 存在しないID
+        $result = $this->Blog->getCategories(['blogContentId'=>0]);
+        $this->assertEmpty($result);
+
+        // option depth 2
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'depth' => 2]);
+        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
+
+        // option type year
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
+        $this->assertEquals('name-5', $result['2015'][0]->name);
+
+        // option viewCount true
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
+        $this->assertEquals(1, $result->toArray()[0]->count);
+
+        // option limit true
+        $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year', 'limit' => 1, 'viewCount' => true]);
+        $this->assertEquals(1, $result['2015'][0]->count);
     }
 
     /**
@@ -1024,68 +1062,52 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * ブログタグ記事一覧へのリンクURLを取得する
-     *
      * @param string $expected
      * @param int $blogContentId
-     * @param string $name
+     * @param string $base
      * @dataProvider getTagLinkUrlDataProvider
      */
-    public function testGetTagLinkUrl($currentUrl, $blogContentId, $name, $base, $useBase, $expected)
+    public function testGetTagLinkUrl($blogContentId, $base, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
-        BcSite::flash();
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->Blog->request->base = $base;
-        $url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]], $useBase);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLinkUrl($blogContentId, $tag, $base);
         $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkUrlDataProvider()
     {
         return [
-            ['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-            ['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
-            ['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
-            ['/', null, 'タグ１', '', false, '/tags/タグ１'],
-            ['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
+            [1, false, 'https://localhost/news/archives/tag/tag1'],
+            [0, false, '/tags/tag1'],
         ];
     }
 
     /**
      * タグ記事一覧へのリンクタグを取得する
-     *
      * @param string $expected
-     * @param string $currentUrl
      * @param int $blogContentId
-     * @param $name
+     * @param array $option
      * @dataProvider getTagLinkDataProvider
      */
-    public function testGetTagLink($expected, $currentUrl, $blogContentId, $name)
+    public function testGetTagLink1($expected, $blogContentId, $option)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
-        $url = $this->Blog->getTagLink($blogContentId, ['BlogTag' => ['name' => $name]]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLink($blogContentId, $tag, $option);
         $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkDataProvider()
     {
         return [
-            ['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
-            ['<a href="/s/blog3/archives/tag/タグ２">タグ２</a>', '/s/', 3, 'タグ２'],
-            ['<a href="/tags/タグ１">タグ１</a>', '/', null, 'タグ１'],
-            ['<a href="/s/tags/タグ２">タグ２</a>', '/s/', null, 'タグ２']
+            ['<a href="/news/archives/tag/tag1">tag1</a>', 1, []],
+            ['<a href="/tags/tag1">tag1</a>', 0, []],
+            ['<a href="https://localhost/news/archives/tag/tag1">tag1</a>', 1, ['ssl'=>true]],
         ];
     }
 
@@ -1407,5 +1429,85 @@ class BlogHelperTest extends BcTestCase
             ['/news/archives/tag/test1', 'tag', true, []],
             ['/news/archives/category/test2', 'category', false, []],
         ];
+    }
+
+    /**
+     * test getCategoryName
+     */
+    public function test_getCategoryName()
+    {
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name',
+            'blog_category_id' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+
+        // サービスを取得する
+        /** @var BlogPostsService $service */
+        $service = $this->getService(BlogPostsServiceInterface::class);
+
+        // カテゴリある場合
+        $blogPost = $service->get(1, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryName($blogPost);
+        $this->assertEquals('category_name', $result);
+        //　カテゴリなし場合
+        $blogPost = $service->get(2, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryName($blogPost);
+        $this->assertEmpty($result);
+
+    }
+
+    public function test_getCategoryTitle()
+    {
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name',
+            'blog_category_id' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+
+        // サービスを取得する
+        /** @var BlogPostsService $service */
+        $service = $this->getService(BlogPostsServiceInterface::class);
+
+        // カテゴリある場合
+        $blogPost = $service->get(1, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryTitle($blogPost);
+        $this->assertEquals('category title', $result);
+        //　カテゴリなし場合
+        $blogPost = $service->get(2, ['contain' => ['BlogCategories']]);
+        $result = $this->Blog->getCategoryTitle($blogPost);
+        $this->assertEmpty($result);
     }
 }

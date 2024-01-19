@@ -752,6 +752,7 @@ class BlogFrontServiceTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        BlogPostFactory::make(['id' => 1, 'posted'=> '2015-01-27 12:57:59', 'blog_content_id'=> 6, 'blog_category_id'=> 1, 'user_id'=>1, 'status' => true])->persist();
         //対象メソッドをコール
         $rs = $this->BlogFrontService->getViewVarsForBlogCategoryArchivesWidget(6);
         //戻る値を確認
