@@ -1097,25 +1097,28 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * タグ記事一覧へのリンクタグを取得する
+     * @param string $expected
+     * @param int $blogContentId
+     * @param array $option
+     * @dataProvider getTagLinkDataProvider
      */
-    public function testGetTagLink1()
+    public function testGetTagLink1($expected, $blogContentId, $option)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogTagsScenario::class);
         $site = SiteFactory::get(1);
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
         $tag = BlogTagFactory::get(1);
-        $url = $this->Blog->getTagLink(1, $tag);
-        $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a>', $url);
+        $url = $this->Blog->getTagLink($blogContentId, $tag, $option);
+        $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkDataProvider()
     {
         return [
-            ['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
-            ['<a href="/s/blog3/archives/tag/タグ２">タグ２</a>', '/s/', 3, 'タグ２'],
-            ['<a href="/tags/タグ１">タグ１</a>', '/', null, 'タグ１'],
-            ['<a href="/s/tags/タグ２">タグ２</a>', '/s/', null, 'タグ２']
+            ['<a href="/news/archives/tag/tag1">tag1</a>', 1, []],
+            ['<a href="/tags/tag1">tag1</a>', 0, []],
+            ['<a href="https://localhost/news/archives/tag/tag1">tag1</a>', 1, ['ssl'=>true]],
         ];
     }
 
