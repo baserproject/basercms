@@ -804,7 +804,7 @@ class BlogHelperTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 1,
             'name' => 'test name',
-            'blog_category_id' => 1,
+            'blog_category_id' => 2,
             'blog_content_id' => 1,
         ])->persist();
         BlogCategoryFactory::make([
@@ -832,10 +832,10 @@ class BlogHelperTest extends BcTestCase
         ])->persist();
         SiteFactory::make(['id' => 1, 'status' => true])->persist();
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
-        $post = BlogPostFactory::get(2);
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $post = $BlogPostsService->get(1);
         $result = $this->Blog->getParentCategory($post);
-        dd($result);
-        $this->assertEmpty($result);
+        $this->assertEquals(1, $result->id);
     }
 
     /**
