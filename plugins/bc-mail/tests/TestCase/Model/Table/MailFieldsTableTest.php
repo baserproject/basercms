@@ -9,7 +9,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-namespace BcMail\Test\TestCase\Model;
+namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Table\MailFieldsTable;
@@ -19,10 +19,6 @@ use BcMail\Model\Table\MailFieldsTable;
  */
 class MailFieldsTableTest extends BcTestCase
 {
-
-    public $fixtures = [
-
-    ];
 
     /**
      * Set Up
@@ -247,7 +243,7 @@ class MailFieldsTableTest extends BcTestCase
         }
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [1, [], false],
@@ -294,7 +290,7 @@ class MailFieldsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function formatSourceDataProvider()
+    public static function formatSourceDataProvider()
     {
         return [
             ["  １|２|３|４|５", "１\n２\n３\n４\n５"],

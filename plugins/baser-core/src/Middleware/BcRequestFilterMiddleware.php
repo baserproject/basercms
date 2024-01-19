@@ -116,13 +116,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     public function getDetectorConfigs()
     {
         $configs = [];
-        $configs['admin'] = [$this, 'isAdmin'];
-        $configs['asset'] = [$this, 'isAsset'];
-        $configs['install'] = [$this, 'isInstall'];
-        $configs['maintenance'] = [$this, 'isMaintenance'];
-        $configs['update'] = [$this, 'isUpdate'];
-        $configs['page'] = [$this, 'isPage'];
-        $configs['requestview'] = [$this, 'isRequestView'];
+        $configs['admin'] = $this->isAdmin(...);
+        $configs['asset'] = $this->isAsset(...);
+        $configs['install'] = $this->isInstall(...);
+        $configs['maintenance'] = $this->isMaintenance(...);
+        $configs['page'] = $this->isPage(...);
+        $configs['requestview'] = $this->isRequestView(...);
 		$configs['rss'] = ['param' => '_ext', 'value' => 'rss'];
 
         $agents = BcAgent::findAll();
@@ -195,7 +194,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function isInstall(ServerRequestInterface $request)
     {

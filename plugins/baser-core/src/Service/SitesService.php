@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
@@ -183,7 +184,7 @@ class SitesService implements SitesServiceInterface
     {
         $site = $this->get($id);
         if(!$site->main_site_id) {
-            throw new Exception(__d('baser_core', 'メインサイトは削除できません。'));
+            throw new BcException(__d('baser_core', 'メインサイトは削除できません。'));
         }
         return $this->Sites->delete($site);
     }
@@ -348,7 +349,7 @@ class SitesService implements SitesServiceInterface
 		}
 
         /* @var Content $content */
-        $content = $this->Sites->Contents->get($contentId, ['contain' => ['Sites']]);
+        $content = $this->Sites->Contents->get($contentId, contain: ['Sites']);
         $isMainSite = $this->Sites->isMain($content->site->id);
         $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
         $conditions = ['Sites.status' => true];
@@ -368,7 +369,7 @@ class SitesService implements SitesServiceInterface
             }
             $mainSiteContentId = $content->main_site_content_id ?? $content->id;
         }
-        $sites = $this->Sites->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
+        $sites = $this->Sites->find()->select($fields)->where($conditions)->orderBy('main_site_id')->toArray();
         $conditions = [
             'or' => [
                 ['Contents.id' => $mainSiteContentId],

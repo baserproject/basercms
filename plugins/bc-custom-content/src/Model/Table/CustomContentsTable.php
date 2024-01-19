@@ -29,7 +29,6 @@ class CustomContentsTable extends AppTable
      *
      * @param array $config テーブル設定
      * @checked
-     * @unitTest
      * @noTodo
      */
     public function initialize(array $config): void

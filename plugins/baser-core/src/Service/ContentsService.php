@@ -102,10 +102,9 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getList(): array
     {
-        return $this->Contents->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'title'
-        ])->toArray();
+        return $this->Contents->find('list',
+        keyField: 'id',
+        valueField: 'title')->toArray();
     }
 
     /**
@@ -143,10 +142,9 @@ class ContentsService implements ContentsServiceInterface
         if ($queryParams['status'] === 'publish') {
             $conditions = $this->Contents->getConditionAllowPublish();
         }
-        return $this->Contents->get($id, [
-            'contain' => $queryParams['contain'],
-            'conditions' => $conditions
-        ]);
+        return $this->Contents->get($id,
+        contain: $queryParams['contain'],
+        conditions: $conditions);
     }
 
     /**
@@ -177,7 +175,7 @@ class ContentsService implements ContentsServiceInterface
     public function getChildren($id, $conditions = [])
     {
         try {
-            $query = $this->Contents->find('children', ['for' => $id])->where($conditions);
+            $query = $this->Contents->find('children', for: $id)->where($conditions);
         } catch (\Exception $e) {
             return null;
         }
@@ -204,7 +202,7 @@ class ContentsService implements ContentsServiceInterface
             $queryParams['limit'],
             $queryParams['withTrash']
         );
-        return $this->getIndex($queryParams, 'threaded')->order(['lft']);
+        return $this->getIndex($queryParams, 'threaded')->orderBy(['lft']);
     }
 
     /**
@@ -295,6 +293,9 @@ class ContentsService implements ContentsServiceInterface
             'contain' => ['Sites'],
         ], $queryParams);
 
+        if (is_null($queryParams['contain']))
+            $queryParams['contain'] = [];
+
         $query = $this->Contents->find($type)->contain($queryParams['contain']);
 
         if (!empty($queryParams['withTrash'])) {
@@ -370,7 +371,7 @@ class ContentsService implements ContentsServiceInterface
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        $folders = $this->Contents->find('treeList', ['valuePath' => 'title'])->where([$conditions]);
+        $folders = $this->Contents->find('treeList', valuePath: 'title')->where([$conditions]);
         if ($folders) {
             return $this->convertTreeList($folders->all()->toArray());
         }
@@ -422,7 +423,7 @@ class ContentsService implements ContentsServiceInterface
         unset($data['id'], $data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified'], $data['site']);
         $alias = $this->Contents->newEntity($data);
         $alias->name = $postData['name'] ?? $postData['title'];
-        $alias->created_date = FrozenTime::now();
+        $alias->created_date = \Cake\I18n\DateTime::now();
         $alias->author_id = BcUtil::loginUser()->id ?? null;
         return $this->Contents->saveOrFail($alias);
     }
@@ -730,7 +731,7 @@ class ContentsService implements ContentsServiceInterface
                 return false;
             }
         }
-        $contents = $this->Contents->find('path', ['for' => $id])->all()->toArray();
+        $contents = $this->Contents->find('path', for: $id)->all()->toArray();
         $contents = array_reverse($contents);
         unset($contents[0]);
         if (!$contents) {
@@ -1057,9 +1058,9 @@ class ContentsService implements ContentsServiceInterface
         if ($currentContent->type === 'ContentFolder') {
             $contents = array_merge(
                 $contents,
-                $this->Contents->find('children', ['for' => $currentContent->id])
+                $this->Contents->find('children', for: $currentContent->id)
                     ->select(['plugin', 'type', 'entity_id'])
-                    ->order('lft')
+                    ->orderBy('lft')
                     ->all()
                     ->toArray()
             );
@@ -1073,7 +1074,7 @@ class ContentsService implements ContentsServiceInterface
                 );
             }
             if ($content->type === 'ContentFolder' || !$tables[$content->type]->hasBehavior('BcSearchIndexManager')) continue;
-            $entity = $tables[$content->type]->get($content->entity_id, ['contain' => 'Contents']);
+            $entity = $tables[$content->type]->get($content->entity_id, contain: 'Contents');
             $entity->setDirty('id', true);
             if ($currentContent->type === 'ContentFolder') {
                 $entity->content->status = $currentContent->status;
@@ -1103,9 +1104,9 @@ class ContentsService implements ContentsServiceInterface
         if ($currentContent->type === 'ContentFolder' && $this->Contents->hasBehavior('Tree')) {
             $contents = array_merge(
                 $contents,
-                $this->Contents->find('children', ['for' => $currentContent->id])
+                $this->Contents->find('children', for: $currentContent->id)
                     ->select(['plugin', 'type', 'entity_id'])
-                    ->order('lft')
+                    ->orderBy('lft')
                     ->all()
                     ->toArray()
             );
@@ -1281,8 +1282,8 @@ class ContentsService implements ContentsServiceInterface
         }
         $allowPublish = $content[$fields['status']];
         // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-        $invalidBegin = $content[$fields['publish_begin']] instanceof FrozenTime && $content[$fields['publish_begin']]->isFuture();
-        $invalidEnd = $content[$fields['publish_end']] instanceof FrozenTime && $content[$fields['publish_end']]->isPast();
+        $invalidBegin = $content[$fields['publish_begin']] instanceof \Cake\I18n\DateTime && $content[$fields['publish_begin']]->isFuture();
+        $invalidEnd = $content[$fields['publish_end']] instanceof \Cake\I18n\DateTime && $content[$fields['publish_end']]->isPast();
         if ($invalidBegin || $invalidEnd) {
             $allowPublish = false;
         }
@@ -1388,19 +1389,19 @@ class ContentsService implements ContentsServiceInterface
         $fieldName = $options['field'];
         $previous = $this->Contents->find()
             ->contain('Sites')
-            ->order(['Contents.lft' => 'DESC'])
+            ->orderBy(['Contents.lft' => 'DESC'])
             ->where(['Contents.' . $fieldName . ' <' => $options['value']]);
         $next = $this->Contents->find()
             ->contain('Sites')
-            ->order(['Contents.lft' => 'ASC'])
+            ->orderBy(['Contents.lft' => 'ASC'])
             ->where(['Contents.' . $fieldName . ' >' => $options['value']]);
         if (isset($options['conditions'])) {
             $previous = $previous->where($options['conditions']);
             $next = $next->where($options['conditions']);
         }
         if (isset($options['order'])) {
-            $previous = $previous->order($options['order']);
-            $next = $next->order($options['order']);
+            $previous = $previous->orderBy($options['order']);
+            $next = $next->orderBy($options['order']);
         }
         return ['prev' => $previous->first(), 'next' => $next->first()];
     }
@@ -1442,7 +1443,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getPath($id): QueryInterface
     {
-        return $this->Contents->find('path', ['for' => $id]);
+        return $this->Contents->find('path', for: $id);
     }
 
     /**
@@ -1544,7 +1545,7 @@ class ContentsService implements ContentsServiceInterface
     public function getPrev(int $id)
     {
         $current = $this->get($id);
-        $query = $this->Contents->find()->order(['Contents.lft DESC']);
+        $query = $this->Contents->find()->orderBy(['Contents.lft DESC']);
         $query->where([
             'Contents.lft <' => $current->lft,
             'Contents.site_id' => $current->site_id,
@@ -1570,7 +1571,7 @@ class ContentsService implements ContentsServiceInterface
     public function getNext(int $id)
     {
         $current = $this->get($id);
-        $query = $this->Contents->find()->order(['Contents.lft']);
+        $query = $this->Contents->find()->orderBy(['Contents.lft']);
         $query->where([
             'Contents.lft >' => $current->lft,
             'Contents.site_id' => $current->site_id,
@@ -1602,7 +1603,7 @@ class ContentsService implements ContentsServiceInterface
             $this->Contents->getConditionAllowPublish()
         ])->first();
         if(!$root) return false;
-        $query = $this->Contents->find('children', ['for' => $root->id, 'direct' => true]);
+        $query = $this->Contents->find('children', for: $root->id, direct: true);
         return $query->where([
             'Contents.exclude_menu' => false,
             $this->Contents->getConditionAllowPublish()
@@ -1619,7 +1620,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getCrumbs(int $id)
     {
-        $query = $this->Contents->find('path', ['for' => $id]);
+        $query = $this->Contents->find('path', for: $id);
         return $query->where([
             'Contents.exclude_menu' => false,
             $this->Contents->getConditionAllowPublish()
@@ -1639,7 +1640,7 @@ class ContentsService implements ContentsServiceInterface
     {
         $parent = $this->getParent($id);
         if (!$parent) return;
-        $query = $this->Contents->find('children', ['for' => $parent->id, 'direct' => true]);
+        $query = $this->Contents->find('children', for: $parent->id, direct: true);
         return $query->where([
             'Contents.exclude_menu' => false,
             $this->Contents->getConditionAllowPublish()

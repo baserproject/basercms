@@ -35,4 +35,11 @@ class BcCustomContentServiceProviderTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test services
+     */
+    public function test_services()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

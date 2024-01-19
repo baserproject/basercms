@@ -71,7 +71,7 @@ class SiteValidationTest extends BcTestCase
         $result = $this->SiteValidation->aliasSlashChecks($alias);
         $this->assertEquals($expected, $result);
     }
-    public function checkUrlDataProvider()
+    public static function checkUrlDataProvider()
     {
         return [
             ['en', true],

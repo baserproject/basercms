@@ -30,7 +30,7 @@ class BcWidgetAreaServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         WidgetAreasServiceInterface::class,
         WidgetAreasAdminServiceInterface::class
     ];

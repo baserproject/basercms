@@ -130,7 +130,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($expected, $result->count());
     }
 
-    public function getTableIndexDataProvider()
+    public static function getTableIndexDataProvider()
     {
         return [
             [[
@@ -430,7 +430,7 @@ class ContentsServiceTest extends BcTestCase
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
-    public function getUrlByIdDataProvider()
+    public static function getUrlByIdDataProvider()
     {
         return [
             // ノーマルURL
@@ -468,7 +468,7 @@ class ContentsServiceTest extends BcTestCase
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             //NOTE: another.comがそもそもSiteに無いため一旦コメントアウト
@@ -520,7 +520,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($result, $expects);
     }
 
-    public function getUrlBaseDataProvider()
+    public static function getUrlBaseDataProvider()
     {
         return [
             ['/news/archives/1', '', true, '/news/archives/1'],
@@ -559,7 +559,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($result['author_id'], $newAuthorId);
     }
 
-    public function copyDataProvider()
+    public static function copyDataProvider()
     {
         return [
             [1, 2, 'hoge', 3, 4, 'hoge'],
@@ -746,7 +746,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function getSiteRootDataProvider()
+    public static function getSiteRootDataProvider()
     {
         return [
             [1, 1],
@@ -772,7 +772,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($expected, $this->ContentsService->isChangedStatus($id, $newData));
     }
 
-    public function isChangedStatusDataProvider()
+    public static function isChangedStatusDataProvider()
     {
         return [
             // idが存在しない場合はtrueを返す
@@ -851,7 +851,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($expected, $result["path"]);
     }
 
-    public function encodeParsedUrlDataProvider()
+    public static function encodeParsedUrlDataProvider()
     {
         // サブサイトはすべて同じpathに変換されているかテスト
         return [

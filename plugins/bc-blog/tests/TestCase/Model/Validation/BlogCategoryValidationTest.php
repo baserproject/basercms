@@ -63,7 +63,7 @@ class BlogCategoryValidationTest extends BcTestCase
         $this->assertEquals($expected, $this->BlogCategoryValidation::duplicateBlogCategory($value, $context));
     }
 
-    public function duplicateBlogCategoryDataProvider(): array
+    public static function duplicateBlogCategoryDataProvider(): array
     {
         return [
             [

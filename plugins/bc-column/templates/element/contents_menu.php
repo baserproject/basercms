@@ -61,8 +61,8 @@ if(!isset($currentId)) {
                             <?php endif ?>
                                 </li>
                         <?php endif ?>
-                    <?php endif ?>
-                <?php endif ?>
+<?php endif ?>
+<?php endif ?>
             <?php endforeach; ?>
         <?php endif ?>
     </ul>

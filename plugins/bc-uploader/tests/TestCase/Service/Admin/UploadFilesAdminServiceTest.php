@@ -99,7 +99,8 @@ class UploadFilesAdminServiceTest extends BcTestCase
     {
         //limitedフォルダーと.htaccessファイルが存在しない場合、
         $limitPath = '/var/www/html/webroot/files/uploads/limited';
-        unlink($limitPath . DS . '.htaccess');
+        if (file_exists($limitPath . DS . '.htaccess'))
+            unlink($limitPath . DS . '.htaccess');
         rmdir($limitPath);
         //対象メソッドをコール
         $rs = $this->execPrivateMethod($this->UploaderFilesAdminService, 'checkInstall', []);

@@ -22,7 +22,7 @@ class BlogContentValidationTest extends BcTestCase
         $this->assertEquals($rs, $expected);
     }
 
-    public function checkEyeCatchSizeDataProvider()
+    public static function checkEyeCatchSizeDataProvider()
     {
         return [
             [600, 600, 100, 100, true],

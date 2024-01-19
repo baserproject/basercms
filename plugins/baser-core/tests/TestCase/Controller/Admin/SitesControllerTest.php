@@ -255,7 +255,7 @@ class SitesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/sites/delete/1');
+        $this->post('/baser/admin/baser-core/sites/delete/2');
         $this->assertResponseSuccess();
         $this->assertRedirect([
             'plugin' => 'BaserCore',

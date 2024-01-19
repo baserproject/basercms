@@ -380,7 +380,7 @@ class InstallationsService implements InstallationsServiceInterface
         $contents = $contentsTable->find()->all();
         $result = true;
         foreach($contents as $content) {
-            $content->created_date = new FrozenTime();
+            $content->created_date = new \Cake\I18n\DateTime();
             if (!$contentsTable->save($content)) {
                 $result = false;
             }
@@ -401,7 +401,7 @@ class InstallationsService implements InstallationsServiceInterface
         $entities = $table->find()->all();
         $result = true;
         foreach($entities as $entity) {
-            $entity->posted = new FrozenTime();
+            $entity->posted = new \Cake\I18n\DateTime();
             if (!$table->save($entity)) {
                 $result = false;
             }

@@ -33,7 +33,7 @@ class BcSearchIndexServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         SearchIndexesServiceInterface::class,
         SearchIndexesAdminServiceInterface::class,
         SearchIndexesFrontServiceInterface::class

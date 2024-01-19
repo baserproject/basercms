@@ -13,6 +13,7 @@ namespace BaserCore\Controller;
 
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
+use Cake\View\JsonView;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Exception;
 use ReflectionClass;
@@ -39,6 +40,17 @@ class AnalyseController extends AppController
     private const CONVERT_CLASS_NAME = [
         '\BaserCore\Routing\RouteCollection' => '\Cake\Routing\RouteCollection'
     ];
+
+    /**
+     * View classes
+     * @return string[]
+     * @checked
+     * @noTodo
+     */
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
+    }
 
     /**
      * 解析したファイル情報一覧

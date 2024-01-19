@@ -33,10 +33,10 @@ use BaserCore\Annotation\Checked;
  * @property string $url
  * @property bool $status
  * @property string $priority
- * @property FrozenTime $publish_begin
- * @property FrozenTime $publish_end
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $publish_begin
+ * @property \Cake\I18n\DateTime $publish_end
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class SearchIndex extends EntityAlias
 {
@@ -46,7 +46,7 @@ class SearchIndex extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

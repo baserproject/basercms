@@ -41,7 +41,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * ヘルパ
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcTime'];
+    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcTime'];
 
     /**
      * カスタムリンクのキャッシュ

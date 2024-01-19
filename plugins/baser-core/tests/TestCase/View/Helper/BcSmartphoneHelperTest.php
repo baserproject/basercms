@@ -1,8 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-use BaserCore\Service\BcFrontServiceInterface;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -13,9 +9,11 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BcAppView', 'View');
-App::uses('Helper', 'View');
-App::uses('BcSmartphoneHelper', 'View/Helper');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\View\Helper\BcSmartphoneHelper;
 
 /**
  * BcSmartphoneHelper Test Case
@@ -28,34 +26,25 @@ class BcSmartphoneHelperTest extends BcTestCase
     /**
      * Trait
      */
-    use \BaserCore\Utility\BcContainerTrait;
-
-    public $fixtures = [
-        'baser.Default.Content',
-        'baser.Default.SiteConfig',
-        'baser.Default.User',
-        'baser.Default.Site',
-    ];
+    use BcContainerTrait;
 
 
     /**
-     * setUp method
-     *
-     * @return void
+     * set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->View = new BcAppView();
-        $this->BcSmartphone = new BcSmartphoneHelper($this->View);
+//        $this->View = new BcAppView();
+//        $this->BcSmartphone = new BcSmartphoneHelper($this->View);
     }
 
     /**
-     * tearDown method
+     * tearDown
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->BcSmartphone);
 

@@ -38,6 +38,8 @@ class BcExceptionRenderer extends WebExceptionRenderer
         $request = $controller->getRequest();
         if (!$request->is('json') && !$controller->viewBuilder()->getTheme()) {
             return new BcErrorController($request);
+        } elseif($request->is('json')) {
+            $controller->viewBuilder()->setClassName('Json');
         }
         return $controller;
     }

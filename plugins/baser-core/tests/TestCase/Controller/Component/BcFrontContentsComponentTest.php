@@ -48,8 +48,8 @@ class BcFrontContentsComponentTest extends BcTestCase
         $this->loadFixtureScenario(ContentsScenario::class);
         $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(PagesScenario::class);
-        $this->getRequest('baser/admin');
-        $this->ComponentRegistry = new ComponentRegistry(new Controller());
+        $request = $this->getRequest('baser/admin');
+        $this->ComponentRegistry = new ComponentRegistry(new Controller($request));
         $this->BcFrontContents = new BcFrontContentsComponent($this->ComponentRegistry);
         $this->PagesService = new PagesService();
         $this->ContentsService = new ContentsService();

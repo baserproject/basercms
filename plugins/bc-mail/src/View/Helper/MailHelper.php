@@ -45,7 +45,7 @@ class MailHelper extends Helper
      * ヘルパー
      * @var array
      */
-    public $helpers = ['BcBaser', 'BcContents'];
+    public array $helpers = ['BcBaser', 'BcContents'];
 
     /**
      * 現在のメールコンテンツ

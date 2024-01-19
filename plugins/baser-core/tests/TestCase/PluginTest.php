@@ -210,7 +210,7 @@ return [];
             $this->assertNotEmpty($service->identifiers()->get($identifiers));
         }
     }
-    public function getAuthenticationServiceDataProvider()
+    public static function getAuthenticationServiceDataProvider()
     {
         return [
             // Api/Admin の場合

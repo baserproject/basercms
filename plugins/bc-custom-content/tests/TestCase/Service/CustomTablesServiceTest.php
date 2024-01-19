@@ -111,7 +111,7 @@ class CustomTablesServiceTest extends BcTestCase
 
         //異常系をテスト
         $this->expectException(RecordNotFoundException::class);
-        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->expectExceptionMessage('Record not found in table `custom_tables`');
         $this->CustomTablesService->get(111);
     }
 
@@ -400,7 +400,7 @@ class CustomTablesServiceTest extends BcTestCase
 
         //エラーを発生した時をテスト
         $this->expectException(RecordNotFoundException::class);
-        $this->expectExceptionMessage('Record not found in table "custom_tables"');
+        $this->expectExceptionMessage('Record not found in table `custom_tables`');
         $this->CustomTablesService->delete(1);
     }
 

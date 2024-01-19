@@ -79,7 +79,7 @@ class SearchIndexesTableTest extends BcTestCase
 		$this->assertEquals($this->SearchIndexes->allowPublish($data), $expected);
 	}
 
-	public function allowPublishDataProvider()
+	public static function allowPublishDataProvider()
 	{
 		return [
 			[null, null, false, false],

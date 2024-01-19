@@ -11,7 +11,7 @@
 
 namespace BaserCore\Model\Table\Exception;
 
-use Cake\Core\Exception\Exception;
+use \Exception;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;

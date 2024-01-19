@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,7 +9,11 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BcFreezeHelper', 'View/Helper');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\View\Helper\BcFreezeHelper;
 
 /**
  * Class FormHelperTest
@@ -23,32 +25,29 @@ class BcFreezeHelperTest extends BcTestCase
 {
 
     /**
-     * setUp method
-     *
-     * @return void
+     * set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        Configure::write('Config.language', 'jp');
-        Configure::write('App.base', '');
-        Configure::delete('Asset');
-        $this->BcFreeze = new BcFreezeHelper(new View);
-        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
-        $this->BcFreeze->request->here = '/contacts/add';
-        $this->BcFreeze->request['action'] = 'add';
-        $this->BcFreeze->request->webroot = '';
-        $this->BcFreeze->request->base = '';
+//        Configure::write('Config.language', 'jp');
+//        Configure::write('App.base', '');
+//        Configure::delete('Asset');
+//        $this->BcFreeze = new BcFreezeHelper(new View);
+//        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
+//        $this->BcFreeze->request->here = '/contacts/add';
+//        $this->BcFreeze->request['action'] = 'add';
+//        $this->BcFreeze->request->webroot = '';
+//        $this->BcFreeze->request->base = '';
     }
 
     /**
-     * tearDown method
+     * tearDown
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        unset($this->BcFreeze);
         parent::tearDown();
     }
 
@@ -63,7 +62,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testText($freezed, $fieldName, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -75,7 +74,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function textDataProvider()
+    public static function textDataProvider()
     {
         return [
             [false, 'baser', [], '<input name="data[baser]" type="text" id="baser"/>'],
@@ -101,7 +100,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testSelect($freezed, $fieldName, $options, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -111,7 +110,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function selectDataProvider()
+    public static function selectDataProvider()
     {
         return [
             [false, 'baser', [], [], "<select name=\"data\[baser\]\" id=\"baser\">.<option value=\"\">"],
@@ -138,7 +137,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testDateTime($freezed, $fieldName, $dateFormat, $timeFormat, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -148,7 +147,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function dateTimeDataProvider()
+    public static function dateTimeDataProvider()
     {
         return [
             [false, 'test', 'YMD', '12', [], 'id="testYear".*id="testMonth".*id="testDay".*id="testHour".*id="testMin".*id="testMeridian"'],
@@ -180,7 +179,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testWyear($freezed, $fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -191,7 +190,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function wyearDataProvider()
+    public static function wyearDataProvider()
     {
         return [
             [false, 'test', null, null, null, [], true, 'id="testYear">.*<option value="r-17">'],
@@ -217,7 +216,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testCheckbox($freezed, $fieldName, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -227,7 +226,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function checkboxDataProvider()
+    public static function checkboxDataProvider()
     {
         return [
             [false, 'baser', [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\" value=\"1\" id=\"baser\""],
@@ -248,7 +247,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testTextarea($freezed, $fieldName, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -260,7 +259,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function textareaDataProvider()
+    public static function textareaDataProvider()
     {
         return [
             [false, 'baser', [], "<textarea name=\"data\[baser\]\" id=\"baser\"><\/textarea>"],
@@ -283,7 +282,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testRadio($freezed, $fieldName, $options, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -293,7 +292,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function radioDataProvider()
+    public static function radioDataProvider()
     {
         return [
             [false, 'baser', [], [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""],
@@ -318,7 +317,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testFile($freezed, $fieldName, $options, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             // $this->markTestIncomplete('このテストは、一部未完成です。');
@@ -337,7 +336,7 @@ class BcFreezeHelperTest extends BcTestCase
 
     }
 
-    public function fileDataProvider()
+    public static function fileDataProvider()
     {
         return [
             [false, 'baser', [], '<input type="file" name="data\[baser\]" id="baser"'],
@@ -361,7 +360,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testImage($freezed, $name, $exist, $fieldName, $attributes, $imageAttributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         [$model, $field] = explode('.', $fieldName);
         $this->BcFreeze->request->data[$model][$field]['name'] = $name;
         $this->BcFreeze->request->data[$model][$field . '_exists'] = $exist;
@@ -376,7 +375,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function imageDataProvider()
+    public static function imageDataProvider()
     {
         return [
             [false, null, null, 'test.image', [], [], '<input type="file" name="data\[test\]\[image\]" id="testImage"'],
@@ -404,7 +403,7 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testDatepicker($freezed, $date, $fieldName, $attributes, $expected)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
@@ -416,7 +415,7 @@ class BcFreezeHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function datepickerDataProvider()
+    public static function datepickerDataProvider()
     {
         return [
             [false, null, 'baser', [], 'type="text".*id="baser".*("#baser")'],
@@ -429,6 +428,7 @@ class BcFreezeHelperTest extends BcTestCase
 
     public function testFreeze()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertFalse($this->BcFreeze->freezed);
         $this->BcFreeze->freeze();
         $this->assertTrue($this->BcFreeze->freezed);
@@ -445,11 +445,12 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testFreezeControll($fieldName, $options, $attributes, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcFreeze->freezeControll($fieldName, $options, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
-    public function freezeControllDataProvider()
+    public static function freezeControllDataProvider()
     {
         return [
             ['baser.freezed', [], [], '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'],

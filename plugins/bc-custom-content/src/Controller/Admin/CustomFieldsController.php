@@ -34,7 +34,7 @@ class CustomFieldsController extends CustomContentAdminAppController
      */
     public function index(CustomFieldsAdminServiceInterface $service)
     {
-        $this->set(['entities' => $service->getIndex($this->getRequest()->getQueryParams())]);
+        $this->set(['entities' => $this->paginate($service->getIndex($this->getRequest()->getQueryParams()))]);
     }
 
     /**

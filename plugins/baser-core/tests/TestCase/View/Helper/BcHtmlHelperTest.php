@@ -76,7 +76,7 @@ class BcHtmlHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function setScriptDataProvider()
+    public static function setScriptDataProvider()
     {
         return [
             ['</script>', false, true, '<script>var test = "<\/script>";</script>'],

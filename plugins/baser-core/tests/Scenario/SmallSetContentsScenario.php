@@ -38,7 +38,7 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ContentFactory::make([
             'id' => 1,
@@ -121,6 +121,7 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
         PageFactory::make(['id' => 1])->persist();
         PageFactory::make(['id' => 2])->persist();
         PageFactory::make(['id' => 3])->persist();
+        return null;
     }
 
 }

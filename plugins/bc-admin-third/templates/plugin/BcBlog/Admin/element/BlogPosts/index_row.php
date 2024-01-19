@@ -65,7 +65,7 @@ use Cake\Utility\Hash;
         <span class="tag"><?php echo implode('</span><span class="tag">', h($tags)) ?></span>
       <?php endif ?>
     </td>
-  <?php endif ?>
+<?php endif ?>
 
   <?php if ($post->blog_content->comment_use): ?>
     <td class="bca-table-listup__tbody-td"><?php // コメント ?>
@@ -84,7 +84,7 @@ use Cake\Utility\Hash;
         <?php echo $comment ?>
       <?php endif ?>
     </td>
-  <?php endif ?>
+<?php endif ?>
 
   <td class="bca-table-listup__tbody-td"><?php // 作者 ?>
     <?php echo ($post->user)? h($this->BcBaser->getUserName($post->user)) : null ?>

@@ -260,7 +260,7 @@ class BlogContentsTable extends BlogAppTable
             $newBlogContent = clone $result;
             $blogPosts = $this->BlogPosts->find()
                 ->where(['BlogPosts.blog_content_id' => $id])
-                ->order(['BlogPosts.id'])
+                ->orderBy(['BlogPosts.id'])
                 ->all();
             if ($blogPosts) {
                 foreach($blogPosts as $blogPost) {

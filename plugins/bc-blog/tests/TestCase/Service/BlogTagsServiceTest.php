@@ -180,7 +180,7 @@ class BlogTagsServiceTest extends BcTestCase
         ];
         $result = $this->BlogTagsService->getIndex($params);
         $sql = $result->sql();
-        $this->assertStringContainsString('BlogTags.name like', $sql);
+        $this->assertStringContainsString('BlogTags.name LIKE', $sql);
         $this->assertStringContainsString('Contents.site_id =', $sql);
         $this->assertStringContainsString('Contents.url =', $sql);
         $this->assertStringContainsString('BlogTags.name ASC', $sql);
@@ -210,7 +210,7 @@ class BlogTagsServiceTest extends BcTestCase
         $query = $this->BlogTags->find();
         $query = $this->BlogTagsService->createIndexConditions($query, $params);
         $sql = $query->sql();
-        $this->assertStringContainsString('BlogTags.name like', $sql);
+        $this->assertStringContainsString('BlogTags.name LIKE', $sql);
         $this->assertStringContainsString('Contents.site_id =', $sql);
         $this->assertStringContainsString('Contents.url =', $sql);
 

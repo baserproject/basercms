@@ -58,6 +58,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcUploadHelper $BcUpload BcUploadヘルパ
  * @property BcContentsHelper $BcContents BcContentsヘルパ
  * @property Helper\HtmlHelper $Html
+ * @property Helper\UrlHelper $Url
  */
 class BlogHelper extends Helper
 {
@@ -73,7 +74,7 @@ class BlogHelper extends Helper
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Html',
         'Url',
         'BaserCore.BcTime',
@@ -691,6 +692,7 @@ class BlogHelper extends Helper
      * @return string カテゴリ一覧へのURL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryUrl($blogCategoryId, $options = [])
     {
@@ -700,7 +702,7 @@ class BlogHelper extends Helper
         ], $options);
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
         $blogCategory = $blogCategoriesTable->get($blogCategoryId);
-        $categoryPath = $blogCategoriesTable->find('path', ['for' => $blogCategoryId]);
+        $categoryPath = $blogCategoriesTable->find('path', for: $blogCategoryId);
         $blogContentId = $blogCategory->blog_content_id;
         $this->setContent($blogContentId);
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
@@ -785,6 +787,7 @@ class BlogHelper extends Helper
      * @return string HTMLのカテゴリ一覧
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryList($categories, $depth = 3, $count = false, $options = [])
     {
@@ -1326,6 +1329,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryName(BlogPost $post)
     {
@@ -1343,6 +1347,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryTitle(BlogPost $post)
     {
@@ -1377,6 +1382,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategories($options = [])
     {
@@ -1872,7 +1878,7 @@ class BlogHelper extends Helper
             $BlogPost->getConditionAllowPublish()
         );
 
-        $postCountsData = $BlogPost->find('all', [
+        $postCountsData = $BlogPost->find('all', ...[
             'fields' => [
                 'BlogPost.blog_content_id',
                 'COUNT(BlogPost.id) as post_count',

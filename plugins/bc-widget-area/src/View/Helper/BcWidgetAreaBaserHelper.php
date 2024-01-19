@@ -29,7 +29,7 @@ class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInter
      * Helpers
      * @var string[]
      */
-    public $helpers = ['BcWidgetArea.BcWidgetArea'];
+    public array $helpers = ['BcWidgetArea.BcWidgetArea'];
 
     /**
      * メソッド一覧取得

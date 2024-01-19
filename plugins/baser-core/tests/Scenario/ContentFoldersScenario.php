@@ -24,7 +24,7 @@ class ContentFoldersScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ContentFolderFactory::make(
             [
@@ -107,6 +107,7 @@ class ContentFoldersScenario implements FixtureScenarioInterface
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ])->persist();
+        return null;
     }
 
 }

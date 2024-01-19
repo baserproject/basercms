@@ -196,7 +196,7 @@ class CustomLinksTable extends AppTable
         $contents = $this->find()
             ->select(['id', 'parent_id', 'title'])
             ->where($conditions)
-            ->order('lft');
+            ->orderBy('lft');
         $order = null;
         if (!$contents->all()->isEmpty()) {
             foreach($contents as $key => $data) {
@@ -248,7 +248,7 @@ class CustomLinksTable extends AppTable
         $entities = $this->find()
             ->select('name')
             ->where(['name LIKE' => $name . '%', 'custom_table_id' => $tableId])
-            ->order('name')
+            ->orderBy('name')
             ->all()
             ->toArray();
         if (!$entities) return $name;
