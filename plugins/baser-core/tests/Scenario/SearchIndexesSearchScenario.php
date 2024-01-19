@@ -27,7 +27,7 @@ class SearchIndexesSearchScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         SearchIndexFactory::make([
             'id' => 1,
@@ -125,6 +125,7 @@ class SearchIndexesSearchScenario implements FixtureScenarioInterface
             'created' => '2016-07-29 18:02:53',
             'modified' => '2020-09-14 21:10:41',
         ])->persist();
+        return null;
     }
 
 }

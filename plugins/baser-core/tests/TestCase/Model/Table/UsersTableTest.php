@@ -158,7 +158,7 @@ class UsersTableTest extends BcTestCase
         }
     }
 
-    public function validationPasswordUpdateDataProvider()
+    public static function validationPasswordUpdateDataProvider()
     {
         $exceedMax = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
         return [
@@ -197,8 +197,8 @@ class UsersTableTest extends BcTestCase
     public function testGetControlSource()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $list = $this->Users->getControlSource('user_group_id')->toList();
-        $this->assertEquals('システム管理', $list[0]);
+        $list = $this->Users->getControlSource('user_group_id')->toArray();
+        $this->assertEquals('システム管理', $list[1]);
     }
 
     /**

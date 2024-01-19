@@ -16,6 +16,7 @@ use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Behavior;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\Validation\Validator;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -154,6 +155,26 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
+     * Build Validator
+     *
+     * @param EventInterface $event
+     * @param Validator $validator
+     * @param string $name
+     */
+    public function buildValidator(EventInterface $event, Validator $validator, $name)
+    {
+        $settings = $this->getSettings();
+        foreach ($settings['fields'] as $field => $fieldSettings) {
+            $validator->add($field, 'checkFilePath', [
+                'rule' => function ($value) {
+                    return (!is_string($value) || !str_contains($value, '../'));
+                },
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]);
+        }
+    }
+
+    /**
      * After Save
      *
      * @param EventInterface $event
@@ -185,14 +206,10 @@ class BcUploadBehavior extends Behavior
         $eventManager->off('Model.afterSave');
         $this->table()->save($entity, ['validate' => false]);
         foreach($beforeSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.beforeSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.beforeSave', [], $listener['callable']);
         }
         foreach($afterSaveListeners as $listener) {
-            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.afterSave', [], $listener['callable']);
-            }
+            $eventManager->on('Model.afterSave', [], $listener['callable']);
         }
     }
 
@@ -220,7 +237,6 @@ class BcUploadBehavior extends Behavior
      * @return mixed false|array
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function saveTmpFiles($data, $tmpId)
     {

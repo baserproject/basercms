@@ -29,7 +29,7 @@ class BlogCommentsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         BlogCommentFactory::make([[
             'id' => 1,
@@ -70,6 +70,7 @@ class BlogCommentsScenario implements FixtureScenarioInterface
             'created' => '2015-08-10 18:57:47',
             'modified' => NULL,
         ]])->persist();
+        return null;
     }
 
 }

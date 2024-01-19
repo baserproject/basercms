@@ -21,6 +21,7 @@ use BcBlog\Service\BlogCommentsService;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * ブログコメントコントローラー
@@ -35,7 +36,7 @@ class BlogCommentsController extends BlogAdminAppController
      *
      * @param BlogCommentsAdminService $service
      * @param int $blogContentId
-     * @return void
+     * @return void|ResponseInterface
      * @checked
      * @noTodo
      * @unitTest

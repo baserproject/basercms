@@ -313,7 +313,7 @@ class CustomEntriesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'データベース処理中にエラーが発生しました。Record not found in table "custom_tables"',
+            'データベース処理中にエラーが発生しました。Record not found in table `custom_tables`.',
             $result->message
         );
     }

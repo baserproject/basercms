@@ -50,16 +50,6 @@ class BcErrorControllerTest extends BcTestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->assertNotEmpty($this->BcErrorController->RequestHandler);
-    }
-
-    /**
      * Test beforeRender
      */
     public function testBeforeRender()

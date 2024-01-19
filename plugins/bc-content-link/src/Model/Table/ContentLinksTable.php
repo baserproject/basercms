@@ -87,7 +87,7 @@ class ContentLinksTable extends AppTable
      */
     public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
-        $entity = $this->get($id, ['contain' => ['Contents']]);
+        $entity = $this->get($id, contain: ['Contents']);
         $oldEntity = clone $entity;
 
         // EVENT ContentLinks.beforeCopy

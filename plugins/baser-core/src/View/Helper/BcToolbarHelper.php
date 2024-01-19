@@ -40,7 +40,7 @@ class BcToolbarHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcAdmin'];
+    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcAdmin'];
 
     /**
      * 編集画面へのリンクが利用可能かどうか

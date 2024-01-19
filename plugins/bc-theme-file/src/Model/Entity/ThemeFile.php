@@ -36,7 +36,7 @@ class ThemeFile extends \Cake\ORM\Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -46,7 +46,7 @@ class ThemeFile extends \Cake\ORM\Entity
      *
      * @var string[]
      */
-    protected $_virtual = [
+    protected array $_virtual = [
         'name',
         'base_name',
         'ext',

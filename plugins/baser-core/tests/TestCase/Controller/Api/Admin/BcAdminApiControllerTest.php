@@ -54,7 +54,7 @@ class BcAdminApiControllerTest extends BcTestCase
     public function testInitialize()
     {
         $controller = new BcAdminApiController($this->getRequest());
-        $this->assertTrue(isset($controller->Authentication));
+        $this->assertNotNull($controller->Authentication);
         $this->assertFalse($controller->FormProtection->getConfig('validate'));
     }
 

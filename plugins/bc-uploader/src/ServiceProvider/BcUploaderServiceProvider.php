@@ -34,7 +34,7 @@ class BcUploaderServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         UploaderCategoriesServiceInterface::class,
         UploaderConfigsServiceInterface::class,
         UploaderFilesServiceInterface::class,

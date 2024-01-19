@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,16 +8,17 @@ return;
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
+namespace BcMail\Test\TestCase\View\Helper;
 
-App::uses('MailfieldHelper', 'BcMail.View/Helper');
+use BaserCore\TestSuite\BcTestCase;
 
-class MailfieldHelperTest extends BaserTestCase
+class MailfieldHelperTest extends BcTestCase
 {
 
     /**
      * set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -27,7 +26,7 @@ class MailfieldHelperTest extends BaserTestCase
     /**
      * tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

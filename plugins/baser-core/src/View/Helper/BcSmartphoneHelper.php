@@ -36,7 +36,7 @@ class BcSmartphoneHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['BcHtml'];
+    public array $helpers = ['BcHtml'];
 
     /**
      * afterLayout

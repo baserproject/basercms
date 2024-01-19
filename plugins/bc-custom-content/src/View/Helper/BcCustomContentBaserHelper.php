@@ -29,7 +29,7 @@ class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperIn
      * ヘルパー
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'BcCustomContent.CustomContent',
     ];
 

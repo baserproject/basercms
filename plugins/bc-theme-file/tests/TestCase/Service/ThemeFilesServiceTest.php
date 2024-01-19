@@ -19,6 +19,7 @@ use BaserCore\Utility\BcFolder;
 use BcThemeFile\Service\ThemeFilesService;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemeFilesServiceTest
@@ -234,13 +235,13 @@ class ThemeFilesServiceTest extends BcTestCase
 
         //Postデータを生成
         $files = [
-            'file' => [
-                'error' => 0,
-                'name' => 'uploadTestFile.html',
-                'size' => 1,
-                'tmp_name' => $testFile,
-                'type' => 'html'
-            ]
+            'file' => new UploadedFile(
+                $testFile,
+                10,
+                UPLOAD_ERR_OK,
+                'uploadTestFile.html',
+                "html",
+            )
         ];
         //テスト対象メソッドをコール
         $this->ThemeFileService->upload($fullpath . 'new_folder', $files);

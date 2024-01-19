@@ -69,10 +69,10 @@ class MailFieldsService implements MailFieldsServiceInterface
             $conditions['use_field'] = true;
         }
 
-        return $this->MailFields->get($id, [
-            'contain' => ['MailContents' => ['Contents']],
-            'conditions' => $conditions
-        ]);
+        return $this->MailFields->get($id,
+            contain: ['MailContents' => ['Contents']],
+            conditions: $conditions
+        );
     }
 
     /**
@@ -92,9 +92,12 @@ class MailFieldsService implements MailFieldsServiceInterface
         $conditions = ['MailFields.mail_content_id' => $mailContentId];
         if (!is_null($options['use_field'])) $conditions['use_field'] = $options['use_field'];
 
+        if (is_null($options['contain']))
+            $options['contain'] = [];
+
         $query = $this->MailFields->find()
             ->contain($options['contain'])
-            ->order(['MailFields.sort']);
+            ->orderBy(['MailFields.sort']);
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
         }

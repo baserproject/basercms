@@ -24,8 +24,8 @@ use Cake\I18n\FrozenTime;
  * @property string $name
  * @property string $widgets
  * @property array $widgets_array
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class WidgetArea extends \Cake\ORM\Entity
 {
@@ -35,7 +35,7 @@ class WidgetArea extends \Cake\ORM\Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -45,7 +45,7 @@ class WidgetArea extends \Cake\ORM\Entity
      *
      * @var string[]
      */
-    protected $_virtual = ['widgets_array'];
+    protected array $_virtual = ['widgets_array'];
 
     /**
      * ウィジェットを取り出す

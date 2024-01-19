@@ -193,7 +193,7 @@ if (!$customTable->isContentTable()) {
             ?>
           </td>
         </tr>
-      <?php endforeach ?>
+<?php endforeach ?>
     <?php endif ?>
   </table>
 </div>

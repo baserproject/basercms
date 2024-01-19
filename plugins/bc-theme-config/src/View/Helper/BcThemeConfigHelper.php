@@ -30,7 +30,7 @@ class BcThemeConfigHelper extends Helper
      *
      * @var string[]
      */
-    public $helpers = ['BcBaser'];
+    public array $helpers = ['BcBaser'];
 
     /**
      * メインイメージを出力する

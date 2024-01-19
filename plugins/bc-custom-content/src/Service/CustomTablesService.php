@@ -74,7 +74,10 @@ class CustomTablesService implements CustomTablesServiceInterface
      */
     public function get(int $id, $options = [])
     {
-        return $this->CustomTables->get($id, $options);
+        $options = array_merge([
+            'contain' => []
+        ], $options);
+        return $this->CustomTables->get($id, contain: $options['contain']);
     }
 
     /**

@@ -88,10 +88,9 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      */
     public function getList(): array
     {
-        return $this->ContentFolders->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'content.title'
-        ])->contain(['Contents'])->toArray();
+        return $this->ContentFolders->find('list',
+        keyField: 'id',
+        valueField: 'content.title')->contain(['Contents'])->toArray();
     }
 
     /**
@@ -113,10 +112,9 @@ class ContentFoldersService implements ContentFoldersServiceInterface
         if ($queryParams['status'] === 'publish') {
             $conditions = $this->ContentFolders->Contents->getConditionAllowPublish();
         }
-        return $this->ContentFolders->get($id, [
-            'contain' => $queryParams['contain'],
-            'conditions' => $conditions
-        ]);
+        return $this->ContentFolders->get($id,
+        contain: $queryParams['contain'],
+        conditions: $conditions);
     }
 
     /**
@@ -167,6 +165,8 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                 ->select($fields)
                 ->where($this->ContentFolders->Contents->getConditionAllowPublish());
         } else {
+            if (is_null($options['contain']))
+                $options['contain'] = [];
             $query = $this->ContentFolders->find()->contain($options['contain']);
         }
 
@@ -272,7 +272,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      */
     public function getParentTemplate($id, $type)
     {
-        $contents = $this->Contents->find('path', ['for' => $id])->all()->toArray();
+        $contents = $this->Contents->find('path', for: $id)->all()->toArray();
         $contents = array_reverse($contents);
         unset($contents[0]);
         // 配列の場合一番上のものからコンテンツフォルダーを取得する

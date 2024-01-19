@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,32 +9,30 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderViewEventListener', 'BcUploader.Event');
+namespace BcUploader\Test\TestCase\Event;
+use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Event\BcUploaderViewEventListener;
 
 /**
  * Class UploaderViewEventListenerTest
  *
- * @property  UploaderViewEventListener $UploaderViewEventListener
+ * @property  BcUploaderViewEventListener $UploaderViewEventListener
  */
-class UploaderViewEventListenerTest extends BaserTestCase
+class UploaderViewEventListenerTest extends BcTestCase
 {
 
     /**
      * set up
-     *
-     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
 
     /**
-     * tearDown
-     *
-     * @return void
+     * tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

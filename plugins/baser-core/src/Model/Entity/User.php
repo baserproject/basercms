@@ -31,8 +31,8 @@ use Cake\Utility\Hash;
  * @property string $email
  * @property string $nickname
  * @property bool $status
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class User extends EntityAlias
 {
@@ -42,7 +42,7 @@ class User extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -52,7 +52,7 @@ class User extends EntityAlias
      *
      * @var array
      */
-    protected $_hidden = [
+    protected array $_hidden = [
         'password'
     ];
 

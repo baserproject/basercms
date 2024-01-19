@@ -23,8 +23,8 @@ use BaserCore\Annotation\Checked;
  * @property string $contents
  * @property string $draft
  * @property string $page_template
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class Page extends EntityAlias
 {
@@ -34,7 +34,7 @@ class Page extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

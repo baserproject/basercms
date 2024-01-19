@@ -132,7 +132,7 @@ class AnalyseControllerTest extends BcTestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function pathToClassDataProvider()
+    public static function pathToClassDataProvider()
     {
         return [
             // rootを取り除く

@@ -127,7 +127,7 @@ class BlogTagsTableTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function findCustomParamsDataProvider()
+    public static function findCustomParamsDataProvider()
     {
         return [
             ['count', 5, []],
@@ -154,7 +154,7 @@ class BlogTagsTableTest extends BcTestCase
         $this->assertEquals($expects, (bool)$result);
     }
 
-    public function getByNameDataProvider()
+    public static function getByNameDataProvider()
     {
         return [
             ['タグ１', true],
