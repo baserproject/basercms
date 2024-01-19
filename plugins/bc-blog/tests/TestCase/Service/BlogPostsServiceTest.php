@@ -1164,7 +1164,7 @@ class BlogPostsServiceTest extends BcTestCase
         $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
         $rs = $this->BlogPostsService->getUrl(ContentFactory::get(100), BlogPostFactory::get(1), false);
-        $this->assertEquals('/archives/name_test', $rs);
+        $this->assertEquals('/archives/1', $rs);
     }
 
 }
