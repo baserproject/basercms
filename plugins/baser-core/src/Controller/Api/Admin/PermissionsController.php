@@ -277,6 +277,9 @@ class PermissionsController extends BcAdminApiController
         $conditions = [
             'user_group_id' => $userGroupId,
         ];
+        if ($this->request->getQuery('permission_group_id')) {
+            $conditions['permission_group_id'] = $this->request->getQuery('permission_group_id');
+        }
         $permission = null;
         try {
             $permission = $service->get($this->request->getData('id'));
