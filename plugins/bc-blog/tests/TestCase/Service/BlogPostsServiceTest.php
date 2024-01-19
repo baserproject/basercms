@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Service;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Model\Table\BlogPostsTable;
@@ -25,6 +26,7 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\BlogPostsAdminServiceScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -1152,6 +1154,17 @@ class BlogPostsServiceTest extends BcTestCase
         $result = $this->BlogPostsService->getNextPost(BlogPostFactory::get(2));
         //戻り値を確認
         $this->assertNull($result);
+    }
+
+    /**
+     * test getUrl
+     */
+    public function test_getUrl()
+    {
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $rs = $this->BlogPostsService->getUrl(ContentFactory::get(100), BlogPostFactory::get(1), false);
+        $this->assertEquals('/archives/name_test', $rs);
     }
 
 }

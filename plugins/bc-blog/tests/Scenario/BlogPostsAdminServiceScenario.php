@@ -45,7 +45,7 @@ class BlogPostsAdminServiceScenario implements FixtureScenarioInterface
             'publish_begin' => '2020-01-27 12:00:00',
             'publish_end' => '9000-01-27 12:00:00'
         ])->persist();
-        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'name' => 'name_test', 'status' => true])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         return null;
     }
