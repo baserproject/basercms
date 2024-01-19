@@ -38,7 +38,8 @@ class PermissionGroupsTable extends AppTable
             'className' => 'BaserCore.Permissions',
             'order' => 'id',
             'foreignKey' => 'permission_group_id',
-            'dependent' => true
+            'dependent' => true,
+            'sort' => ['Permissions.sort' => 'ASC'],
         ]);
     }
 

@@ -30,6 +30,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,
     'id' => 'PermissionAjaxAddForm',
+    'valueSources' => [],
   ]); ?>
 
   <dl>
@@ -68,7 +69,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
         'type' => 'text',
         'size' => 50,
         'class' => 'required',
-        'value' => Router::url(),
+        'value' => $this->request->getPath(),
         'id' => 'permission-url'
       ]) ?>
     </dd>

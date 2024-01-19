@@ -22,11 +22,17 @@ const permissionGroupsIndex = {
     userGroupId: null,
 
     /**
+     * アクセスルールグループ
+     */
+    permissionGroupId: null,
+
+    /**
      * mounted
      */
     mounted() {
         const $script = $("#AdminPermissionsIndexScript");
         this.userGroupId = $script.attr('data-userGroupId');
+        this.permissionGroupId = $script.attr('data-permissionGroupId');
         this.permissionGroups =  JSON.parse($script.attr('data-permissionGroups'));
         this.initView();
     },
@@ -37,7 +43,7 @@ const permissionGroupsIndex = {
     initView() {
         // 並び替え機能実装
         $.bcSortable.init({
-            updateSortUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/permissions/update_sort/' + this.userGroupId + '.json'
+            updateSortUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/permissions/update_sort/' + this.userGroupId + '.json?permission_group_id=' + this.permissionGroupId
         });
         // 一括処理実装
         $.bcBatch.init({
@@ -51,7 +57,6 @@ const permissionGroupsIndex = {
      * イベント登録
      */
     registerEvents() {
-        console.log('event');
         $("input[name='permission_group_type']").click(this.initPermissionGroups);
     },
 
@@ -59,7 +64,8 @@ const permissionGroupsIndex = {
      * パーミッショングループ初期化
      */
     initPermissionGroups() {
-        const $permissionGroupId = $("select[name='permission_group_id']");
+        const $permissionGroupId = $("#permission-group-id");
+        const selectedGroupId = $permissionGroupId.val();
         $permissionGroupId.empty();
         const type = $("input[name='permission_group_type']:checked").val();
 
@@ -76,6 +82,7 @@ const permissionGroupsIndex = {
                     .text(value.name)
             );
         });
+        $permissionGroupId.val(selectedGroupId);
     }
 
 }

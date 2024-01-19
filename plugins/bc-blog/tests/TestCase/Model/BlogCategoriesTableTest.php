@@ -116,14 +116,14 @@ class BlogCategoriesTableTest extends BcTestCase
         $this->assertSame([
             'name' => ['_empty' => 'カテゴリ名を入力してください。'],
         ], $blogCategory->getErrors());
-        // name alphaNumericDashUnderscore　テスト
+        // name alphaNumericPlus　テスト
         $blogCategory = $this->BlogCategoriesTable->newEntity([
             'name' => 'test 123',
             'blog_content_id' => 1,
             'title' => 'test'
         ]);
         $this->assertSame([
-            'name' => ['alphaNumericDashUnderscore' => 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。'],
+            'name' => ['alphaNumericPlus' => 'カテゴリ名は半角英数字とハイフン、アンダースコアのみが利用可能です。'],
         ], $blogCategory->getErrors());
         // name duplicateBlogCategory　テスト
         BlogCategoryFactory::make([

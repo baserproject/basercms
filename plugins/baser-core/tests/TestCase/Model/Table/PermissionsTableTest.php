@@ -88,16 +88,21 @@ class PermissionsTableTest extends BcTestCase
         $maxUrl = '/' . str_repeat("a", 254);
 
         return [
+            // 正常
+            [
+                [
+                    'name' => 'test',
+                    'user_group_id' => '1',
+                    'url' => '/test'
+                ], []
+            ],
             // 空の場合
             [
-                // フィールド
                 [
                     'name' => '',
                     'user_group_id' => '',
                     'url' => ''
-                ],
-                // エラーメッセージ
-                [
+                ], [
                     'name' => ['_empty' => '設定名を入力してください。'],
                     'user_group_id' => ['_empty' => 'ユーザーグループを選択してください。'],
                     'url' => ['_empty' => '設定URLを入力してください。'],
@@ -105,17 +110,50 @@ class PermissionsTableTest extends BcTestCase
             ],
             // 文字数が超過する場合&&user_group_idフィールドが存在しない場合&&checkUrl失敗
             [
-                // フィールド
                 [
                     'name' => $maxName . 'a',
                     'url' => $maxUrl . 'a'
-                ],
-                // エラーメッセージ
-                [
+                ], [
                     'name' => ['maxLength' => '設定名は255文字以内で入力してください。'],
                     'user_group_id' => ['_required' => 'This field is required'],
                     'url' => [
                         'maxLength' => '設定URLは255文字以内で入力してください。'
+                    ],
+                ]
+            ],
+            // URL形式正常
+            [
+                [
+                    'name' => 'test',
+                    'user_group_id' => '1',
+                    'url' => '/baser/admin/baser-core/users/edit/{loginUserId}'
+                ], []
+            ], [
+                [
+                    'name' => 'test',
+                    'user_group_id' => '1',
+                    'url' => '/baser/api/admin/baser-core/contents/view/*.json'
+                ], []
+            ],
+            // URL形式異常
+            [
+                [
+                    'name' => 'test',
+                    'user_group_id' => '1',
+                    'url' => 'test'
+                ], [
+                    'url' => [
+                        'regex' => '設定URLはスラッシュから始まるURLを入力してください。'
+                    ],
+                ]
+            ], [
+                [
+                    'name' => 'test',
+                    'user_group_id' => '1',
+                    'url' => '/test?test=1'
+                ], [
+                    'url' => [
+                        'nameAlphaNumericPlus' => '設定URLに使用できない文字列が含まれています。',
                     ],
                 ]
             ],

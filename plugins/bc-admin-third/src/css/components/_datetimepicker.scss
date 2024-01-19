@@ -93,6 +93,9 @@
   &:has(.form-error) input {
     border: 1px solid $color_danger;
   }
+  &:has(.form-error) input:focus {
+    box-shadow: $focus_shadow_error;
+  }
 
   &__date {
     &-label {
