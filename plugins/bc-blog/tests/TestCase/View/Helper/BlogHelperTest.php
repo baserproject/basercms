@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Entity\BlogPost;
+use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -1062,36 +1063,25 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * ブログタグ記事一覧へのリンクURLを取得する
-     *
      * @param string $expected
      * @param int $blogContentId
-     * @param string $name
+     * @param string $base
      * @dataProvider getTagLinkUrlDataProvider
      */
-    public function testGetTagLinkUrl($currentUrl, $blogContentId, $name, $base, $useBase, $expected)
+    public function testGetTagLinkUrl($blogContentId, $base, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
-        BcSite::flash();
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->Blog->request->base = $base;
-        $url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]], $useBase);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLinkUrl($blogContentId, $tag, $base);
         $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkUrlDataProvider()
     {
         return [
-            ['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-            ['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
-            ['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
-            ['/', null, 'タグ１', '', false, '/tags/タグ１'],
-            ['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
+            [1, false, 'https://localhost/news/archives/tag/tag1'],
+            [0, false, '/tags/tag1'],
         ];
     }
 
