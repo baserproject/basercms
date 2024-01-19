@@ -80,28 +80,21 @@ class BcValidationTest extends BcTestCase
 
     public function alphaNumericPlusDataProvider()
     {
-        return [
-            ['あいうえお', [], false],
-            ['あいうえお', ['あ'], false],
-            ['あいうえお', ['あいうえお'], true],
-            ['あいうえお_', ['あいうえお'], true],
-        ];
-    }
-
-    /**
-     * Test alphaNumericDashUnderscore
-     *
-     * @return void
-     */
-    public function testAlphaNumericDashUnderscore()
-    {
         $alpha = implode('', array_merge(range('a', 'z'), range('A', 'Z')));
         $numeric = implode('', range(0, 9));
         $mark = '-_';
         $allowedChars = $alpha . $numeric . $mark;
 
-        $this->assertEquals(true, $this->BcValidation->alphaNumericDashUnderscore($allowedChars));
-        $this->assertEquals(false, $this->BcValidation->alphaNumericDashUnderscore($allowedChars . '!'));
+        return [
+            ['test', [], true],
+            ['test!', [], false],
+            [$allowedChars, [], true],
+            [$allowedChars . '!', [], false],
+            ['あいうえお', [], false],
+            ['あいうえお', ['あ'], false],
+            ['あいうえお', ['あいうえお'], true],
+            ['あいうえお_', ['あいうえお'], true],
+        ];
     }
 
     /**

@@ -194,8 +194,8 @@ class BlogCategoriesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals(
-            'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。',
-            $result->errors->name->alphaNumericDashUnderscore);
+            'カテゴリ名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $result->errors->name->alphaNumericPlus);
     }
 
     /**

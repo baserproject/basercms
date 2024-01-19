@@ -62,20 +62,6 @@ class BcValidation extends Validation
     }
 
     /**
-     * 半角英数字+アンダーバー＋ハイフンのチェック
-     *
-     * @param string $value 確認する値を含む配列。先頭の要素のみチェックされる
-     * @return boolean
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public static function alphaNumericDashUnderscore($value)
-    {
-        return (bool)preg_match('|^[0-9a-zA-Z_-]*$|', $value);
-    }
-
-    /**
      * 削除文字チェック
      *
      * BcUtile::urlencode で、削除される文字のみで構成されているかチェック(結果ブランクになるためnotBlankになる確認)

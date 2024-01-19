@@ -106,10 +106,10 @@ class BlogCategoriesTable extends BlogAppTable
             ->requirePresence('name', 'create', __d('baser_core', 'カテゴリ名を入力してください。'))
             ->notEmptyString('name', __d('baser_core', 'カテゴリ名を入力してください。'))
             ->add('name', [
-                'alphaNumericDashUnderscore' => [
-                    'rule' => ['alphaNumericDashUnderscore'],
+                'alphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。')]])
+                    'message' => __d('baser_core', 'カテゴリ名は半角英数字とハイフン、アンダースコアのみが利用可能です。')]])
             ->add('name', [
                 'duplicateBlogCategory' => [
                     'rule' => ['duplicateBlogCategory'],
