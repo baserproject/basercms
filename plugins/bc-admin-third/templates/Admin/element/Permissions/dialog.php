@@ -30,6 +30,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,
     'id' => 'PermissionAjaxAddForm',
+    'valueSources' => [],
   ]); ?>
 
   <dl>
