@@ -30,7 +30,8 @@ $this->BcBaser->js('admin/permissions/index.bundle', false, [
   'id' => 'AdminPermissionsIndexScript',
   'defer' => true,
   'data-userGroupId' => $userGroupId,
-  'data-permissionGroups' => json_encode($permissionGroups)
+  'data-permissionGroupId' => $this->request->getQuery('permission_group_id'),
+  'data-permissionGroups' => json_encode($permissionGroups),
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $userGroupId],

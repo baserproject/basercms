@@ -23,6 +23,7 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
@@ -1088,68 +1089,52 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * ブログタグ記事一覧へのリンクURLを取得する
-     *
      * @param string $expected
      * @param int $blogContentId
-     * @param string $name
+     * @param string $base
      * @dataProvider getTagLinkUrlDataProvider
      */
-    public function testGetTagLinkUrl($currentUrl, $blogContentId, $name, $base, $useBase, $expected)
+    public function testGetTagLinkUrl($blogContentId, $base, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
-        BcSite::flash();
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->Blog->request->base = $base;
-        $url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]], $useBase);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLinkUrl($blogContentId, $tag, $base);
         $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkUrlDataProvider()
     {
         return [
-            ['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-            ['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
-            ['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
-            ['/', null, 'タグ１', '', false, '/tags/タグ１'],
-            ['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
+            [1, false, 'https://localhost/news/archives/tag/tag1'],
+            [0, false, '/tags/tag1'],
         ];
     }
 
     /**
      * タグ記事一覧へのリンクタグを取得する
-     *
      * @param string $expected
-     * @param string $currentUrl
      * @param int $blogContentId
-     * @param $name
+     * @param array $option
      * @dataProvider getTagLinkDataProvider
      */
-    public function testGetTagLink($expected, $currentUrl, $blogContentId, $name)
+    public function testGetTagLink1($expected, $blogContentId, $option)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($currentUrl);
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
-        $url = $this->Blog->getTagLink($blogContentId, ['BlogTag' => ['name' => $name]]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        $site = SiteFactory::get(1);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $tag = BlogTagFactory::get(1);
+        $url = $this->Blog->getTagLink($blogContentId, $tag, $option);
         $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkDataProvider()
     {
         return [
-            ['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
-            ['<a href="/s/blog3/archives/tag/タグ２">タグ２</a>', '/s/', 3, 'タグ２'],
-            ['<a href="/tags/タグ１">タグ１</a>', '/', null, 'タグ１'],
-            ['<a href="/s/tags/タグ２">タグ２</a>', '/s/', null, 'タグ２']
+            ['<a href="/news/archives/tag/tag1">tag1</a>', 1, []],
+            ['<a href="/tags/tag1">tag1</a>', 0, []],
+            ['<a href="https://localhost/news/archives/tag/tag1">tag1</a>', 1, ['ssl'=>true]],
         ];
     }
 

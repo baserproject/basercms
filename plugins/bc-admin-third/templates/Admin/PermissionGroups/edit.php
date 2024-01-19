@@ -56,6 +56,17 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
         'data-bca-btn-width' => 'lg',
         'id' => 'BtnSave']
     ) ?>
+    <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスルール一覧に移動'), [
+      'controller' => 'Permissions',
+      'action' => 'index',
+      $userGroupId,
+      '?' => [
+        'permission_group_type' => $entity->type,
+        'permission_group_id' => $entity->id,
+      ],
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+    ]) ?>
   </div>
   <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(

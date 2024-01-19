@@ -41,6 +41,10 @@
   border:1px solid $color_danger!important;
 }
 
+.form-error:focus {
+  box-shadow: $focus_shadow_error !important;
+}
+
 .error {
   color: #C30;
 }

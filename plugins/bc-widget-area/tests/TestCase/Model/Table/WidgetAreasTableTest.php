@@ -62,7 +62,26 @@ class WidgetAreasTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $validator = $this->WidgetAreasTable->getValidator('default');
+
+        // name notEmptyString　テスト
+        $errors = $validator->validate([
+            'name' => ''
+        ]);
+        $this->assertEquals('ウィジェットエリア名を入力してください。', current($errors['name']));
+
+        // name notBlankOnlyString　テスト
+        $errors = $validator->validate([
+            'name' => ' '
+        ]);
+        $this->assertEquals('ウィジェットエリア名を入力してください。', current($errors['name']));
+
+
+        // name notBlankOnlyString　テスト
+        $errors = $validator->validate([
+            'name' => str_repeat('a', 256)
+        ]);
+        $this->assertEquals('ウィジェットエリア名は255文字以内で入力してください。', current($errors['name']));
     }
 
 }
