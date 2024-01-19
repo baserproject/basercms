@@ -1063,29 +1063,25 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * ブログタグ記事一覧へのリンクURLを取得する
-     *
+     * @param string $expected
+     * @param int $blogContentId
+     * @param string $base
+     * @dataProvider getTagLinkUrlDataProvider
      */
-    public function testGetTagLinkUrl()
+    public function testGetTagLinkUrl($blogContentId, $base, $expected)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogTagsScenario::class);
         $tag = BlogTagFactory::get(1);
-        $url = $this->Blog->getTagLinkUrl(1, $tag);
-        $this->assertEquals('https://localhost/news/archives/tag/tag1', $url);
-        $url = $this->Blog->getTagLinkUrl(0, $tag);
-        $this->assertEquals('/tags/tag1', $url);
+        $url = $this->Blog->getTagLinkUrl($blogContentId, $tag, $base);
+        $this->assertEquals($expected, $url);
     }
 
     public static function getTagLinkUrlDataProvider()
     {
         return [
-            ['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
-            ['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-            ['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
-            ['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
-            ['/', null, 'タグ１', '', false, '/tags/タグ１'],
-            ['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
+            [1, false, 'https://localhost/news/archives/tag/tag1'],
+            [0, false, '/tags/tag1'],
         ];
     }
 
