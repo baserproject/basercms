@@ -1,55 +1,51 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
-namespace BcBlog\View\Helper;
+namespace BcBlog\Test\TestCase\View\Helper;
 
-use BaserCore\View\Helper\BcPluginBaserHelperInterface;
-use Cake\View\Helper;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\Helper\BcBlogBaserHelper;
+use Cake\View\View;
 
 /**
- * BlogBaserヘルパー
+ * BcBlogBaserHelper test
  *
- * BcBaserHelper より透過的に呼び出される
- *
- * 《利用例》
- * $this->BcBaser->blogPosts('news')
- *
- * BcBaserHeleper へのインターフェイスを提供する役割だけとし、
- * 実装をできるだけこのクラスで持たないようにし、BlogHelper 等で実装する
- *
- * @property BlogHelper $Blog
+ * @property BcBlogBaserHelper $BcBlogBaserHelper
  */
-class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
+class BcBlogBaserHelperTest extends BcTestCase
 {
-
     /**
-     * ヘルパー
-     * @var array
-     */
-    public array $helpers = ['BcBlog.Blog'];
-
-    /**
-     * メソッド一覧取得
+     * setUp
      *
-     * @return array[]
-     * @checked
-     * @noTodo
-     * @unitTest
+     * @return void
      */
-    public function methods(): array
+    public function setUp(): void
     {
-        return [
+        parent::setUp();
+        $this->BcBlogBaserHelper = new BcBlogBaserHelper(new View());
+    }
+
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
+    public function test_methods()
+    {
+        $expected = [
             'blogPosts' => ['Blog', 'posts'],
             'getBlogPosts' => ['Blog', 'getPosts'],
             'isBlogCategory' => ['Blog', 'isCategory'],
@@ -80,6 +76,7 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
             'blogPostPrevLink' => ['Blog', 'prevLink'],
             'blogPostNextLink' => ['Blog', 'nextLink'],
         ];
+        $methods = $this->BcBlogBaserHelper->methods();
+        $this->assertEquals($expected, $methods);
     }
-
 }
