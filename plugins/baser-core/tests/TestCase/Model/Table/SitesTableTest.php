@@ -88,7 +88,7 @@ class SitesTableTest extends BcTestCase
         $this->assertEquals($expects, $result, $message);
     }
 
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
 //            [null, [], [1 => 'メインサイト', 3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], '全てのサイトリストの取得ができません。'],
@@ -193,7 +193,7 @@ class SitesTableTest extends BcTestCase
         $this->assertEquals($expected, $site->id);
     }
 
-    public function findByUrlDataProvider()
+    public static function findByUrlDataProvider()
     {
         return [
             ['', 1],

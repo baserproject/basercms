@@ -180,8 +180,9 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function copy($source, $dest): bool
+    public function copy($dest): bool
     {
+        $source=$this->path;
         if (!is_dir($source)) return false;
         if(is_dir($source)) {
             $dir_handle=opendir($source);
@@ -191,7 +192,8 @@ class BcFolder
             while($file=readdir($dir_handle)){
                 if($file!="." && $file!=".."){
                     if(is_dir($source."/".$file)){
-                        self::copy($source .DS. $file, $dest .DS. $file);
+                        $this->path = $source .DS. $file;
+                        self::copy( $dest .DS. $file);
                     } else {
                         copy($source."/".$file, $dest."/".$file);
                     }
@@ -210,10 +212,11 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function move($source, $dest): bool
+    public function move($dest): bool
     {
+        $source = $this->path;
         if (!is_dir($source)) return false;
-        return $this->copy($source, $dest) && $this->delete();
+        return $this->copy($dest) && $this->delete();
     }
 
     /**

@@ -159,7 +159,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->js($url);
     }
 
-    public function jsDataProvider()
+    public static function jsDataProvider()
     {
         return [
             ['<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup'],
@@ -308,7 +308,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getImgDataProvider()
+    public static function getImgDataProvider()
     {
         return [
             ['baser.power.gif', ['alt' => "baserCMSロゴ"], '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'],
@@ -357,7 +357,7 @@ class BcBaserHelperTest extends BcTestCase
         Configure::write('BcEnv.sslUrl', '');
     }
 
-    public function getLinkDataProvider()
+    public static function getLinkDataProvider()
     {
         return [
             ['', '/', [], '<a href="/"></a>'],
@@ -388,7 +388,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function isAdminUserDataProvider()
+    public static function isAdminUserDataProvider()
     {
         return [
             // 管理者グループ
@@ -570,7 +570,7 @@ class BcBaserHelperTest extends BcTestCase
      * @param string $expects コンテンツ名
      * @dataProvider getContentsNameDataProvider
      */
-    public function getContentsNameDataProvider()
+    public static function getContentsNameDataProvider()
     {
         return [
             //PC
@@ -609,7 +609,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->getUrl($url, $full));
     }
 
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             // ノーマル
@@ -795,7 +795,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->getKeywords());
     }
 
-    public function getKeywordsDataProvider()
+    public static function getKeywordsDataProvider()
     {
         return [
             ['baser,CMS,コンテンツマネジメントシステム,開発支援'],
@@ -821,7 +821,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->getDescription());
     }
 
-    public function getDescriptionDataProvider()
+    public static function getDescriptionDataProvider()
     {
         return [
             ['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
@@ -1022,7 +1022,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->isHome());
     }
 
-    public function isHomeDataProvider()
+    public static function isHomeDataProvider()
     {
         return [
             //PC
@@ -1210,7 +1210,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->xmlHeader();
     }
 
-    public function xmlDataProvider()
+    public static function xmlDataProvider()
     {
         return [
             ['<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/']
@@ -1323,7 +1323,7 @@ class BcBaserHelperTest extends BcTestCase
         }
     }
 
-    public function charsetDataProvider()
+    public static function charsetDataProvider()
     {
         return [
             ['<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'],
@@ -1346,7 +1346,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->copyYear($begin);
     }
 
-    public function copyYearDataProvider()
+    public static function copyYearDataProvider()
     {
         $year = date('Y');
         return [
@@ -1433,7 +1433,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $type . '/', $ContentType, 'キャッシュの対象を指定できません');
     }
 
-    public function cacheHeaderDataProvider()
+    public static function cacheHeaderDataProvider()
     {
         return [
             [null, 'html', 'Cache-Control: max-age=14'],
@@ -1461,7 +1461,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getUriDataProvider()
+    public static function getUriDataProvider()
     {
         return [
             ['/', true, 'localhost', '', 'http://localhost/'],
@@ -1489,7 +1489,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function markDataProvider()
+    public static function markDataProvider()
     {
         return [
             ['大切', 'とても大切です', 'strong', [], false, 'とても<strong>大切</strong>です'],
@@ -1519,7 +1519,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $this->BcBaser->getSitemap($siteId));
     }
 
-    public function getSitemapDataProvider()
+    public static function getSitemapDataProvider()
     {
         return [
             [0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
@@ -1542,7 +1542,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }
 
-    public function getIsPageProvider()
+    public static function getIsPageProvider()
     {
         return [
             // PCページ
@@ -1567,7 +1567,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->getHere());
     }
 
-    public function getHereDataProvider()
+    public static function getHereDataProvider()
     {
         return [
             ['/', '/'],
@@ -1591,7 +1591,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->isCategoryTop());
     }
 
-    public function isCategoryTopDataProvider()
+    public static function isCategoryTopDataProvider()
     {
         return [
             // PCページ
@@ -1642,7 +1642,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
     }
 
-    public function isCurrentUrlDataProvider()
+    public static function isCurrentUrlDataProvider()
     {
         return [
             ['/', '/', true],
@@ -1700,7 +1700,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcBaser->getBaseUrl());
     }
 
-    public function getBaseUrlDataProvider()
+    public static function getBaseUrlDataProvider()
     {
         return [
             // ノーマル
@@ -2010,7 +2010,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->_View->fetch('meta'));
     }
 
-    public function setAlternateUrlDataProvider()
+    public static function setAlternateUrlDataProvider()
     {
         return [
             ['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
@@ -2050,7 +2050,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals($expected, $this->BcBaser->getView()->fetch('meta'));
     }
 
-    public function setCanonicalUrlDataProvider()
+    public static function setCanonicalUrlDataProvider()
     {
         return [
             [1, '/', '<link href="https://localhost/" rel="canonical">'],

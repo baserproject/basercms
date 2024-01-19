@@ -36,7 +36,7 @@ class BcMessageComponent extends Component
     /**
      * @var array
      */
-    public $components = ['Flash'];
+    public array $components = ['Flash'];
 
     /**
      * メッセージをセットする

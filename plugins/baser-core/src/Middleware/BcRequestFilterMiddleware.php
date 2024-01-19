@@ -73,6 +73,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         if(filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN)) {
             $request->trustProxy = true;
             $request->addDetector('https', ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']]);
+            $request->addDetector('https', ['env' => 'HTTP_X_FORWARDED_PROTO', 'options' => [1, 'https']]);
         }
 
         return $handler->handle($request);
@@ -115,13 +116,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     public function getDetectorConfigs()
     {
         $configs = [];
-        $configs['admin'] = [$this, 'isAdmin'];
-        $configs['asset'] = [$this, 'isAsset'];
-        $configs['install'] = [$this, 'isInstall'];
-        $configs['maintenance'] = [$this, 'isMaintenance'];
-        $configs['update'] = [$this, 'isUpdate'];
-        $configs['page'] = [$this, 'isPage'];
-        $configs['requestview'] = [$this, 'isRequestView'];
+        $configs['admin'] = $this->isAdmin(...);
+        $configs['asset'] = $this->isAsset(...);
+        $configs['install'] = $this->isInstall(...);
+        $configs['maintenance'] = $this->isMaintenance(...);
+        $configs['page'] = $this->isPage(...);
+        $configs['requestview'] = $this->isRequestView(...);
 		$configs['rss'] = ['param' => '_ext', 'value' => 'rss'];
 
         $agents = BcAgent::findAll();
@@ -194,7 +194,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function isInstall(ServerRequestInterface $request)
     {

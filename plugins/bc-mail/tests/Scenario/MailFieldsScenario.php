@@ -30,7 +30,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         MailFieldsFactory::make([
             'id' => 1,
@@ -124,6 +124,6 @@ class MailFieldsScenario implements FixtureScenarioInterface
         ])->persist();
         ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent'])
             ->treeNode(100, 1, 0, 'test', '/contact/', 100, true)->persist();
-
+        return null;
     }
 }

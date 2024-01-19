@@ -74,7 +74,7 @@ class ContentFoldersTableTest extends BcTestCase
         $contentFolder = $this->ContentFolders->newEntity(['id' => 'test']);
         $this->assertSame([
             'id' => [
-                'integer' => 'The provided value is invalid',
+                'integer' => 'The provided value must be an integer',
                 'valid' => 'IDに不正な値が利用されています。'
             ],
             // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
@@ -111,7 +111,7 @@ class ContentFoldersTableTest extends BcTestCase
             'Service\SearchIndexesService\PagesReconstruct',
             'Service\SearchIndexesService\ContentFoldersReconstruct',
         );
-        $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
+        $contentFolder = $this->ContentFolders->get(1, contain: ['Contents']);
         $this->SearchIndexes->deleteAll([]);
         // $this->Pages->delete($page);
         $this->ContentFolders->dispatchEvent('Model.afterSave', ['entity' => $contentFolder, 'options' => new ArrayObject(['reconstructSearchIndices' => true])]);

@@ -33,6 +33,7 @@ class WidgetAreasTable extends AppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -61,9 +62,17 @@ class WidgetAreasTable extends AppTable
         $validator
             ->scalar('name')
             ->notEmptyString('name', __d('baser_core', 'ウィジェットエリア名を入力してください。'))
+            ->add('name', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'ウィジェットエリア名を入力してください。')
+                ]
+            ])
             ->maxLength('name', 255, __d('baser_core', 'ウィジェットエリア名は255文字以内で入力してください。'));
 
         return $validator;
     }
 
 }
+

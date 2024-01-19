@@ -14,7 +14,9 @@ namespace BcWidgetArea\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcWidgetArea\Controller\Admin\WidgetAreasController;
+use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -109,7 +111,18 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // データ生成
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //対象メソッドを呼ぶ
+        $this->get('/baser/admin/bc-widget-area/widget_areas/edit/1');
+        // ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $vars = $this->_controller->viewBuilder()->getVars()['widgetArea'];
+        $this->assertEquals("標準サイドバー", $vars->name);
     }
 
 
@@ -118,7 +131,19 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdmin_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // データ生成
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        //対象メソッドを呼ぶ
+        $this->post('/baser/admin/bc-widget-area/widget_areas/delete/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ウィジェットエリア「標準サイドバー」を削除しました。');
+        // データが削除できるか確認
+        $this->expectException(RecordNotFoundException::class);
+        WidgetAreaFactory::get(1);
     }
 
 }

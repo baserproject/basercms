@@ -271,7 +271,7 @@ class BcAuthHelperTest extends BcTestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function isAdminUserDataProvider()
+    public static function isAdminUserDataProvider()
     {
         return [
             // ログインしない場合

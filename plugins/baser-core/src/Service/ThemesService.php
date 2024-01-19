@@ -21,9 +21,11 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcZip;
+use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
+use Cake\Log\LogTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -39,6 +41,7 @@ class ThemesService implements ThemesServiceInterface
      * Trait
      */
     use BcContainerTrait;
+    use LogTrait;
 
     /**
      * 単一データ取得
@@ -158,7 +161,7 @@ class ThemesService implements ThemesServiceInterface
             $num++;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move(TMP . $srcName, BASER_THEMES . $dstName,);
+        $folder->move( BASER_THEMES . $dstName,);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
@@ -313,6 +316,13 @@ class ThemesService implements ThemesServiceInterface
             throw $e;
         }
 
+        /** @var MailMessagesServiceInterface $mailMessagesService */
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+		if (!$mailMessagesService->reconstructionAll()) {
+			$this->log(__d('baser_core', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
+			$result = false;
+		}
+
         // システムデータの初期化
         if (!$dbService->initSystemData([
             'excludeUsers' => true,
@@ -323,6 +333,7 @@ class ThemesService implements ThemesServiceInterface
             'theme' => $currentTheme,
             'adminTheme' => BcSiteConfig::get('admin_theme')
         ])) {
+            $this->log(__d('baser_core', 'システムデータの初期化に失敗しました。'));
             $result = false;
         }
 
@@ -354,7 +365,7 @@ class ThemesService implements ThemesServiceInterface
             $newTheme .= 'Copy';
         }
         $folder = new BcFolder(BASER_THEMES . $theme);
-        if (!$folder->copy(BASER_THEMES . $theme, BASER_THEMES . $newTheme)) {
+        if (!$folder->copy( BASER_THEMES . $newTheme)) {
             return false;
         }
         if(!BcUtil::changePluginNameSpace($newTheme)) return false;
@@ -410,7 +421,7 @@ class ThemesService implements ThemesServiceInterface
             $folder->create();
         }
         $folder = new BcFolder(BcUtil::getPluginPath($theme));
-        $folder->copy(BcUtil::getPluginPath($theme), $tmpDir . $theme);
+        $folder->copy($tmpDir . $theme);
         return $tmpDir;
     }
 

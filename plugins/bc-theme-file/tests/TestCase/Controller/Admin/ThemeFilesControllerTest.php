@@ -358,7 +358,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        rmdir($filePath);
         unlink($fullpath . 'uploadTestFile.html');
 
         $folder->create();
@@ -598,7 +597,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals($rs['fullpath'], $expected);
     }
 
-    public function parseArgsDataProvider()
+    public static function parseArgsDataProvider()
     {
         return [
             [

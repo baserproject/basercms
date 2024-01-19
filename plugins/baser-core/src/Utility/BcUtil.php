@@ -25,6 +25,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
+use Cake\Http\UriFactory;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
@@ -153,7 +154,7 @@ class BcUtil
                     $userModel = Configure::read("BcPrefixAuth.{$prefix}.userModel");
                     if ($userModel === 'BaserCore.Users') {
                         $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
-                        $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
+                        $user = $userTable->get($user->id, contain: ['UserGroups']);
                     }
                 }
                 return $user;
@@ -418,7 +419,7 @@ class BcUtil
             $prefix = self::getCurrentDbConfig()['prefix'];
             $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
             if (!is_array($sources) || in_array($prefix . strtolower('plugins'), array_map('strtolower', $sources))) {
-                $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
+                $plugins = $pluginsTable->find('all', conditions: ['status' => true], order: 'priority');
                 TableRegistry::getTableLocator()->remove('Plugin');
                 if ($plugins->count()) {
                     foreach($plugins as $key => $plugin) {
@@ -1576,7 +1577,6 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
-     * @unitTest
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
@@ -1596,7 +1596,6 @@ class BcUtil
      * @param EventListenerInterface[] $eventListeners
      * @checked
      * @noTodo
-     * @unitTest
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
@@ -1634,12 +1633,12 @@ class BcUtil
             $queryParameters = [];
             if ($query) parse_str($query, $queryParameters);
             $defaultConfig = [
-                'uri' => ServerRequestFactory::createUri([
+                'uri' => UriFactory::marshalUriAndBaseFromSapi([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
                     'HTTPS' => (preg_match('/^https/', $url))? 'on' : '',
                     'QUERY_STRING' => $query
-                ]),
+                ])['uri'],
                 'query' => $queryParameters,
                 'environment' => [
                     'REQUEST_METHOD' => $method
@@ -1654,11 +1653,11 @@ class BcUtil
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
 
+        $params = [];
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
         } catch (MissingRouteException) {
-            return $request;
         } catch (\Throwable $e) {
             throw $e;
         }
@@ -1671,7 +1670,7 @@ class BcUtil
         if ($request->getParam('prefix') === 'Admin') {
             $bcAdmin = new BcAdminMiddleware();
             $request = $bcAdmin->setCurrentSite($request);
-        } else {
+        } elseif($params) {
             $bcAdmin = new BcFrontMiddleware();
             $request = $bcAdmin->setCurrent($request);
         }

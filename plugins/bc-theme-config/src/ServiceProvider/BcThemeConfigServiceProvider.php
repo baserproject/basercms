@@ -30,7 +30,7 @@ class BcThemeConfigServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         ThemeConfigsServiceInterface::class
     ];
 

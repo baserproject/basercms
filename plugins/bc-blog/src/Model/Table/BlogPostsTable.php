@@ -208,7 +208,7 @@ class BlogPostsTable extends BlogAppTable
                     'message' => __d('baser_core', 'ファイルのアップロード制限を超えています。')
                 ]
             ])
-            ->add('eyecatch', [
+            ->add('eye_catch', [
                 'fileExt' => [
                     'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
                     'provider' => 'bc',
@@ -300,7 +300,7 @@ class BlogPostsTable extends BlogAppTable
         $posts = $this->find()
             ->contain(['BlogCategories'])
             ->where($conditions)
-            ->order(['BlogPosts.posted DESC'])
+            ->orderBy(['BlogPosts.posted DESC'])
             ->all();
 
         $postedDates = [];
@@ -372,7 +372,7 @@ class BlogPostsTable extends BlogAppTable
             'viewCount' => false
         ], $options);
         $users = $this->Users->find()
-            ->order(['Users.id'])
+            ->orderBy(['Users.id'])
             ->select([
                 'Users.id',
                 'Users.name',
@@ -517,7 +517,7 @@ class BlogPostsTable extends BlogAppTable
             $options['conditions'] = $this->getConditionAllowPublish();
         }
         // 毎秒抽出条件が違うのでキャッシュしない
-        $datas = $this->find('all', $options);
+        $datas = $this->find('all', ...$options);
         return $datas;
     }
 
@@ -658,7 +658,7 @@ class BlogPostsTable extends BlogAppTable
         $data->title .= '_copy';
         $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
         $data->status = false;
-        $data->posted = FrozenTime::now();
+        $data->posted = \Cake\I18n\DateTime::now();
         $data->id = null;
         $data->created = null;
         $data->modified = null;
@@ -732,7 +732,7 @@ class BlogPostsTable extends BlogAppTable
         }
 
         if (!empty($data['BlogTag']['BlogTag'])) {
-            $tags = $this->BlogTag->find('all', [
+            $tags = $this->BlogTag->find('all', ...[
                 'conditions' => ['BlogTag.id' => $data['BlogTag']['BlogTag']],
                 'recursive' => -1
             ]);

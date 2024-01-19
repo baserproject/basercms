@@ -47,7 +47,7 @@ class BcUploadHelper  extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'BaserCore.BcAdminForm'];
+    public array $helpers = ['Html', 'BaserCore.BcAdminForm'];
 
     /**
      * BcUploadHelperで使用するテーブル
@@ -155,6 +155,10 @@ class BcUploadHelper  extends Helper
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);
             $basePath = '/baser-core/uploads/tmp/';
+        }
+
+        if (is_array($value)) {
+            return false;
         }
 
         /* ファイルのパスを取得 */

@@ -43,8 +43,8 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('field_name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('field_name') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '重複しない半角英数字で入力してください。') ?></div>
+        <?php echo $this->BcAdminForm->error('field_name') ?>
       </td>
     </tr>
     <tr id="RowName">
@@ -55,8 +55,8 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('name') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', '項目を特定しやすいわかりやすい名前を入力してください。日本語可。') ?></div>
+        <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
     <tr id="RowType">
@@ -67,7 +67,6 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('MailFields.type')]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('type') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', 'Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信メールを送信します。') ?><br/>
@@ -75,6 +74,7 @@
             <li><?php echo __d('baser_core', '自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。') ?></li>
           </ul>
         </div>
+        <?php echo $this->BcAdminForm->error('type') ?>
       </td>
     </tr>
     <tr id="RowHead">
@@ -83,8 +83,8 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('head', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('head') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', ' グループとして設定する場合、同グループの２番目以降のフィールドについてこの項目の入力は不要です。 ') ?></div>
+        <?php echo $this->BcAdminForm->error('head') ?>
       </td>
     </tr>
     <tr id="RowNotEmpty">
@@ -103,17 +103,17 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('valid_ex', ['type' => 'multiCheckbox', 'options' => $this->BcAdminForm->getControlSource('MailFields.valid_ex')]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('valid_ex') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。') ?></li>
             <li><?php echo __d('baser_core', 'グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
             <li><?php echo __d('baser_core', '日付チェック：日付形式かどうかのチェックです。') ?></li>
             <li><?php echo __d('baser_core', 'ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」') ?></li>
-            <li><?php echo __d('baser_core', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」') ?></li>
+            <li><?php echo __d('baser_core', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」<br>未設定の場合は「gif,jpg,jpeg,png,pdf」を許可します。') ?></li>
             <li><?php echo __d('baser_core', '正規表現チェック：利用するには、オプション項目に、regex と正規表現を次の形式のように |（パイプ） 区切りで入力します。「regex|正規表現の内容」 入力した正規表現は以下の書式で実行されます。「/\A正規表現の内容\z/us」　（入力例）「regex|\d+」') ?></li>
           </ul>
         </div>
+        <?php echo $this->BcAdminForm->error('valid_ex') ?>
       </td>
     </tr>
     <tr id="RowAttention">
@@ -154,7 +154,6 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('source', ['type' => 'textarea', 'cols' => 35, 'rows' => 4]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('source') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', 'ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定します。') ?></li>
@@ -162,6 +161,7 @@
             <li><?php echo __d('baser_core', 'リストは　|　で区切って入力します。') ?></li>
           </ul>
         </div>
+        <?php echo $this->BcAdminForm->error('source') ?>
       </td>
     </tr>
     <tr id="RowSize">
@@ -178,8 +178,8 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('text_rows', ['type' => 'text', 'size' => 10, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('text_rows') ?>
         <div class="bca-helptext"><?php echo __d('baser_core', 'テキストボックスの場合の行数を指定します。') ?></div>
+        <?php echo $this->BcAdminForm->error('text_rows') ?>
       </td>
     </tr>
     <tr id="RowMaxlength">
@@ -216,13 +216,13 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('group_field', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('group_field') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', '各項目を同じグループとするには同じグループ名を入力します。') ?></li>
               <li><?php echo __d('baser_core', '半角英数字で入力してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('group_field') ?>
         </td>
       </tr>
       <tr id="RowGroupValid">
@@ -231,7 +231,6 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('group_valid', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('group_valid') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
@@ -239,6 +238,7 @@
               <li><?php echo __d('baser_core', '半角英数字で入力してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('group_valid') ?>
         </td>
       </tr>
       <tr id="RowOptions">

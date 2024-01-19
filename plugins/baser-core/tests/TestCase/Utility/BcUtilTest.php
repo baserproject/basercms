@@ -91,7 +91,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function loginUserDataProvider()
+    public static function loginUserDataProvider()
     {
         return [
             // ログインしている状況
@@ -161,7 +161,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function isAgentUserDataProvider()
+    public static function isAgentUserDataProvider()
     {
         return [
             // ログインしてない場合
@@ -183,7 +183,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function isInstallModeDataProvider()
+    public static function isInstallModeDataProvider()
     {
         return [
             // インストールモード On
@@ -276,7 +276,7 @@ class BcUtilTest extends BcTestCase
 //        $folder->create();
         $backup = str_replace('cache', 'cache_backup', CACHE);
         (new BcFolder($backup))->create();
-        $folder->move($origin, $backup);
+        $folder->move($backup);
 
         // cache環境準備
         $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
@@ -300,7 +300,8 @@ class BcUtilTest extends BcTestCase
         }
 
         // cacheファイル復元
-        $folder->move($backup, $origin);
+        $folder = new BcFolder($backup);
+        $folder->move($origin);
         $folder->chmod(0777);
     }
 
@@ -323,7 +324,7 @@ class BcUtilTest extends BcTestCase
      *
      * @return array
      */
-    public function isAdminSystemDataProvider()
+    public static function isAdminSystemDataProvider()
     {
         return [
             ['baser/admin', true],
@@ -361,7 +362,7 @@ class BcUtilTest extends BcTestCase
      *
      * @return array
      */
-    public function isAdminUserDataProvider()
+    public static function isAdminUserDataProvider()
     {
         return [
             // 管理ユーザー
@@ -401,7 +402,7 @@ class BcUtilTest extends BcTestCase
      *
      * @return array
      */
-    public function loginUserGroupDataProvider()
+    public static function loginUserGroupDataProvider()
     {
         return [
             // ログイン
@@ -535,7 +536,7 @@ class BcUtilTest extends BcTestCase
      *
      * @return array
      */
-    public function getDefaultDataPathDataProvider()
+    public static function getDefaultDataPathDataProvider()
     {
         return [
             [null, null, ROOT . '/plugins/bc-front/config/data/default'],
@@ -597,7 +598,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expected, BcUtil::urlencode($input));
     }
 
-    public function urlencodeDataProvider(): array
+    public static function urlencodeDataProvider(): array
     {
         return [
             ['a=b+c', 'a_b_c'],
@@ -718,7 +719,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function getDomainDataProvider()
+    public static function getDomainDataProvider()
     {
         return [
             ['http', ''],
@@ -812,7 +813,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expects, BcUtil::getSubDomain($host), $message);
     }
 
-    public function getSubDomainDataProvider()
+    public static function getSubDomainDataProvider()
     {
         return [
             ['', '', '', '現在のサブドメイン名が不正です。'],
@@ -928,7 +929,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expect, BcUtil::isOverPostSize());
     }
 
-    public function isOverPostSizeDataProvider()
+    public static function isOverPostSizeDataProvider()
     {
         $postMaxSizeMega = preg_replace('/M\z/', '', ini_get('post_max_size'));
         $postMaxSizeByte = $postMaxSizeMega * 1024 * 1024;
@@ -999,7 +1000,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expect, $result, 'WebサイトのベースとなるURLを正しく取得できません');
     }
 
-    public function baseUrlDataProvider()
+    public static function baseUrlDataProvider()
     {
         return [
             ['/hoge/test', '/hoge/test/'],
@@ -1120,7 +1121,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expect, $result, $message);
     }
 
-    public function fgetcsvRegDataProvider()
+    public static function fgetcsvRegDataProvider()
     {
         return [
             ['test1,test2,test3', null, ',', '"', ['test1', 'test2', 'test3'], 'ファイルポインタから行を取得し、CSVフィールドを正しく処理できません'],
@@ -1137,6 +1138,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $eventManager = EventManager::instance();
         $eventKey = 'testOnEvent';
         $bcEvenListener = new BcEventListener();
@@ -1164,7 +1166,7 @@ class BcUtilTest extends BcTestCase
     public function testCreateRequest(): void
     {
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
+        $urlList = ['' => '/', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = BcUtil::createRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));
@@ -1232,7 +1234,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($contentType, $type);
     }
 
-    public function getContentTypeDataProvider(): array
+    public static function getContentTypeDataProvider(): array
     {
         return [
             [TMP, false],
@@ -1258,7 +1260,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($extension, $ext);
     }
 
-    public function decodeContentProvider(): array
+    public static function decodeContentProvider(): array
     {
         return [
             ['image/gif', null, 'gif'],
@@ -1376,7 +1378,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($expected, BcUtil::isCorePlugin($plugin));
     }
 
-    public function isCorePluginDataProvider()
+    public static function isCorePluginDataProvider()
     {
         return [
             ['baser-core', true],

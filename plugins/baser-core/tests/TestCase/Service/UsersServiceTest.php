@@ -180,7 +180,7 @@ class UsersServiceTest extends BcTestCase
     public function testLastAdminDelete()
     {
         $this->loginAdmin($this->getRequest());
-        $this->expectException("Cake\Core\Exception\Exception");
+        $this->expectException("BaserCore\Error\BcException");
         $this->Users->delete(1);
     }
 

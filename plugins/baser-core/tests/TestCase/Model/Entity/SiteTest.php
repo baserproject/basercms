@@ -136,7 +136,7 @@ class SiteTest extends BcTestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function makeUrlDataProvider()
+    public static function makeUrlDataProvider()
     {
         return [
             ['', '/', '/'],
@@ -161,7 +161,7 @@ class SiteTest extends BcTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function existsUrlDataProvider()
+    public static function existsUrlDataProvider()
     {
         return [
             ['/', true],
@@ -193,7 +193,7 @@ class SiteTest extends BcTestCase
         $this->assertEquals($expect, $this->Sites->get(2)->shouldRedirects($request));
     }
 
-    public function shouldRedirectsDataProvider()
+    public static function shouldRedirectsDataProvider()
     {
         return [
             [true, '/'],

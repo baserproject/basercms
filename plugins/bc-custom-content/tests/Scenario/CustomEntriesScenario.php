@@ -24,7 +24,7 @@ class CustomEntriesScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         CustomEntryFactory::make([
             [
@@ -435,5 +435,6 @@ class CustomEntriesScenario implements FixtureScenarioInterface
 エンジニアが開発に集中できるように、コミュニケーション力のあるディレクターが積極的にサポートしてくれます。',
             ]
         ])->persist();
+        return null;
     }
 }

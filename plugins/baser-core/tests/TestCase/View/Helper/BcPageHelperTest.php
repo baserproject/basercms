@@ -85,7 +85,7 @@ class BcPageHelperTest extends BcTestCase
             'fields' => $fields,
             'recursive' => 0
         ];
-        $pages = $this->Page->find('all', $options);
+        $pages = $this->Page->find('all', ...$options);
         if (empty($pages)) {
             return false;
         } else {
@@ -113,7 +113,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [1, '/index'],
@@ -149,7 +149,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function allowPublishDataProvider()
+    public static function allowPublishDataProvider()
     {
         return [
             [true, 0, 0, true, 'statusの値がそのままかえってきません'],
@@ -174,7 +174,7 @@ class BcPageHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
-    public function getPageListDataProvider()
+    public static function getPageListDataProvider()
     {
         return [
             [1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],    // トップフォルダ

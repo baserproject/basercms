@@ -32,9 +32,9 @@ class BcSchemaTest extends BcTestCase
     /**
      * スキームファイル
      *
-     * @var File
+     * @var BcFile
      */
-    private $schemaFile;
+    private BcFile $schemaFile;
 
     /**
      * set up

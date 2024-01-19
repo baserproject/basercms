@@ -30,7 +30,7 @@ class BcInstallerServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         InstallationsServiceInterface::class,
         InstallationsAdminServiceInterface::class
     ];

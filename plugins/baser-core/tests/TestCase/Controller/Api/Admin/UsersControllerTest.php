@@ -77,8 +77,7 @@ class UsersControllerTest extends BcTestCase
         $request = $this->getRequest('/baser/api/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
         $usersController = new UsersController($request);
-
-        $this->assertEquals($usersController->Authentication->unauthenticatedActions, ['login']);
+        $this->assertEquals($usersController->Authentication->getUnauthenticatedActions(), ['login']);
     }
 
     public function testLoginAndRefreshToken()

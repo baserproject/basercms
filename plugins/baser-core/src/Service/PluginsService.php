@@ -96,7 +96,7 @@ class PluginsService implements PluginsServiceInterface
     public function getIndex(string $sortMode): array
     {
         $plugins = $this->Plugins->find()
-            ->order(['priority'])
+            ->orderBy(['priority'])
             ->all()
             ->toArray();
         if ($sortMode) {
@@ -664,7 +664,7 @@ class PluginsService implements PluginsServiceInterface
             $dstName = Inflector::camelize($baseName) . $num;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move(TMP . $srcName, BASER_PLUGINS. $dstName);
+        $folder->move( BASER_PLUGINS. $dstName);
         unlink(TMP . $name);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;

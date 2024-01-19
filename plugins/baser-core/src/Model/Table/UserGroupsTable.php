@@ -26,20 +26,6 @@ use BaserCore\Annotation\Checked;
 /**
  * Class UserGroupsTable
  * @property UsersTable&BelongsToMany $Users
- * @method UserGroup newEmptyEntity()
- * @method UserGroup newEntity(array $data, array $options = [])
- * @method UserGroup[] newEntities(array $data, array $options = [])
- * @method UserGroup get($primaryKey, $options = [])
- * @method UserGroup findOrCreate($search, ?callable $callback = null, $options = [])
- * @method UserGroup patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method UserGroup[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method UserGroup|false save(EntityInterface $entity, $options = [])
- * @method UserGroup saveOrFail(EntityInterface $entity, $options = [])
- * @method UserGroup[]|ResultSetInterfaceAlias|false saveMany(iterable $entities, $options = [])
- * @method UserGroup[]|ResultSetInterfaceAlias saveManyOrFail(iterable $entities, $options = [])
- * @method UserGroup[]|ResultSetInterfaceAlias|false deleteMany(iterable $entities, $options = [])
- * @method UserGroup[]|ResultSetInterfaceAlias deleteManyOrFail(iterable $entities, $options = [])
- * @mixin TimestampBehaviorAlias
  * @uses UserGroupsTable
  */
 class UserGroupsTable extends AppTable
@@ -184,7 +170,7 @@ class UserGroupsTable extends AppTable
         if (!empty($this->data['UserGroup']['id'])) {
             $id = $this->data['UserGroup']['id'];
             $this->User->unBindModel(['belongsTo' => ['UserGroup']]);
-            $datas = $this->User->find('all', ['conditions' => ['User.user_group_id' => $id]]);
+            $datas = $this->User->find('all', ...['conditions' => ['User.user_group_id' => $id]]);
             if ($datas) {
                 foreach($datas as $data) {
                     $data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');

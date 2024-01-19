@@ -107,7 +107,7 @@ class UserGroupsServiceTest extends BcTestCase
         $this->assertEquals($group->all()->last()->name, $data['name']);
         $this->assertEquals($group->all()->last()->auth_prefix, $expected);
     }
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             // auth_prefixがすでにある場合

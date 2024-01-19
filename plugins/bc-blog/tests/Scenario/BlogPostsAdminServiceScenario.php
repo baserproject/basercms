@@ -30,7 +30,7 @@ class BlogPostsAdminServiceScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         ContentFactory::make([
             'id' => 100,
@@ -47,6 +47,7 @@ class BlogPostsAdminServiceScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'status' => true])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
+        return null;
     }
 
 }

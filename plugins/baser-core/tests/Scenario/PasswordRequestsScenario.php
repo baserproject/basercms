@@ -29,7 +29,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         PasswordRequestFactory::make(
             [
@@ -39,7 +39,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
                 'used' => 1,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
-                // –³Œø: ŠúŒÀØ‚ê
+                // ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½
             ]
         )->persist();
         PasswordRequestFactory::make(
@@ -50,7 +50,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
                 'used' => 0,
                 'created' => date('Y-m-d H:i:s', strtotime('-2 days')),
                 'modified' => '2021-02-20 12:54:00'
-                // —LŒø
+                // ï¿½Lï¿½ï¿½
             ])->persist();
             PasswordRequestFactory::make(
             [
@@ -60,7 +60,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
                 'used' => 0,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
-                // —LŒø
+                // ï¿½Lï¿½ï¿½
             ])->persist();
                 PasswordRequestFactory::make(
             [
@@ -71,6 +71,7 @@ class PasswordRequestsScenario implements FixtureScenarioInterface
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
             ])->persist();
+        return null;
     }
 
 }

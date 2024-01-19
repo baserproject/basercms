@@ -159,7 +159,7 @@ class ContentsControllerTest extends BcTestCase
         }
     }
 
-    public function indexDataProvider()
+    public static function indexDataProvider()
     {
         return [
             [1, "index"],

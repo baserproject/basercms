@@ -26,8 +26,8 @@ use BaserCore\Annotation\Checked;
  * @property int $user_id
  * @property string $request_key
  * @property int $used
- * @property FrozenTime|null $modified
- * @property FrozenTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
  */
 class PasswordRequest extends Entity
 {
@@ -37,7 +37,7 @@ class PasswordRequest extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'id' => true,
         'user_id' => true,
         'auth_prefix' => true,

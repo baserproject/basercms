@@ -39,7 +39,7 @@ class BcCkeditorHelper extends Helper
      * ヘルパー
      * @var array
      */
-    public $helpers = ['BcHtml', 'BcAdminForm', 'Url', 'BcBaser'];
+    public array $helpers = ['BcHtml', 'BcAdminForm', 'Url', 'BcBaser'];
 
     /**
      * スクリプト

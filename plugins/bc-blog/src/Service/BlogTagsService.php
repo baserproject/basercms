@@ -122,7 +122,7 @@ class BlogTagsService implements BlogTagsServiceInterface
     {
         $order = ["BlogTags.{$params['sort']} {$params['direction']}"];
         if (!empty($params['order'])) $order = array_merge($order, $params['order']);
-        return $query->order($order);
+        return $query->orderBy($order);
     }
 
     /**
@@ -141,7 +141,9 @@ class BlogTagsService implements BlogTagsServiceInterface
         $conditions = $params['conditions'];
         if (!is_null($params['siteId'])) {
             $assocContent = true;
-            $conditions['Contents.site_id'] = $params['siteId'];
+            $query->matching('BlogPosts.BlogContents.Contents', function ($q) use ($params) {
+                return $q->where(['Contents.site_id' => $params['siteId']]);
+            });
         }
         if ($params['contentId']) {
             $contentId = $params['contentId'];
@@ -155,8 +157,15 @@ class BlogTagsService implements BlogTagsServiceInterface
             });
         }
         if ($params['contentUrl']) {
+            $contentUrl = $params['contentUrl'];
             $assocContent = true;
-            $conditions['Contents.url'] = $params['contentUrl'];
+            $query->matching('BlogPosts.BlogContents.Contents', function ($q) use ($contentUrl) {
+                if(is_array($contentUrl)) {
+                    return $q->where(['Contents.url IN' => $contentUrl]);
+                } else {
+                    return $q->where(['Contents.url' => $contentUrl]);
+                }
+            });
         }
         if (!empty($params['name'])) {
             $conditions['BlogTags.name LIKE'] = '%' . urldecode($params['name']) . '%';
@@ -167,8 +176,10 @@ class BlogTagsService implements BlogTagsServiceInterface
             $query->contain($params['contain']);
             if (!empty($params['fields'])) {
                 if (is_array($query['fields'])) {
+                    $query->select($params['fields'][0]);
                     $query->distinct($params['fields'][0]);
                 } else {
+                    $query->select($params['fields']);
                     $query->distinct($params['fields']);
                 }
             } else {
@@ -177,6 +188,7 @@ class BlogTagsService implements BlogTagsServiceInterface
                 // DISTINCT * と指定するとSQLの解析でけされてしまっていたので
                 // フィールドを明示的に指定
                 //============================================================
+                $query->select(['BlogTags.id', 'BlogTags.name']);
                 $query->distinct(['BlogTags.id', 'BlogTags.name']);
             }
         }

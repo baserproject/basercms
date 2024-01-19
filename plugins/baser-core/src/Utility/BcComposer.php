@@ -146,7 +146,6 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
-     * @checked
      */
     public static function require(string $package, string $version)
     {

@@ -40,8 +40,8 @@ use Psr\Http\Message\ServerRequestInterface;
  * @property bool $auto_link
  * @property bool $use_subdomain
  * @property int $domain_type
- * @property FrozenTime $created
- * @property FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class Site extends EntityAlias
 {
@@ -51,7 +51,7 @@ class Site extends EntityAlias
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];

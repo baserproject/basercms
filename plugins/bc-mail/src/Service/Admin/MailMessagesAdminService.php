@@ -18,6 +18,7 @@ use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\ServerRequest;
 use Cake\ORM\ResultSet;
 
@@ -37,7 +38,7 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(int $mailContentId, ResultSet $mailMessages): array
+    public function getViewVarsForIndex(int $mailContentId, PaginatedResultSet|ResultSet $mailMessages): array
     {
         /** @var MailContentsService $mailContentsService */
         $mailContentsService = $this->getService(MailContentsServiceInterface::class);

@@ -74,7 +74,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function alphaNumericPlusDataProvider()
+    public static function alphaNumericPlusDataProvider()
     {
         return [
             ['あいうえお', [], false],
@@ -114,7 +114,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function bcUtileUrlencodeBlankDataProvider()
+    public static function bcUtileUrlencodeBlankDataProvider()
     {
         return [
             ['あいうえお', true],
@@ -139,7 +139,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function minLengthDataProvider()
+    public static function minLengthDataProvider()
     {
         return [
             ['あいう', 4, false],
@@ -163,7 +163,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function maxLengthDataProvider()
+    public static function maxLengthDataProvider()
     {
         return [
             ['あいう', 4, true],
@@ -188,7 +188,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function maxByteDataProvider()
+    public static function maxByteDataProvider()
     {
         return [
             ['あいう', 10, true],
@@ -212,7 +212,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function notInListDataProvider()
+    public static function notInListDataProvider()
     {
         return [
             ['test1', ['test1', 'test2'], false],
@@ -242,7 +242,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function fileCheckDataProvider()
+    public static function fileCheckDataProvider()
     {
         return [
             ["test.jpg", 1048576, 0, true],
@@ -273,7 +273,7 @@ class BcValidationTest extends BcTestCase
     }
 
 
-    public function fileExtDataProvider()
+    public static function fileExtDataProvider()
     {
         return [
             ["test.jpg", "image/jpeg", true],
@@ -298,7 +298,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function notFileEmptyDataProvider()
+    public static function notFileEmptyDataProvider()
     {
         return [
             [['size' => 0], false],
@@ -328,7 +328,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result, $message);
     }
 
-    public function confirmDataProvider()
+    public static function confirmDataProvider()
     {
         return [
             ['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'value'], true, '2つのフィールドが同じ値の場合の判定が正しくありません'],
@@ -353,7 +353,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result, $message);
     }
 
-    public function emailsDataProvider()
+    public static function emailsDataProvider()
     {
         return [
             ['test1@co.jp', true],
@@ -408,7 +408,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function halfTextDataProvider()
+    public static function halfTextDataProvider()
     {
         return [
             ['test', true],
@@ -463,7 +463,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function checkDataAfterThanDataProvider()
+    public static function checkDataAfterThanDataProvider()
     {
         return [
             [new FrozenTime('2015-01-01 00:00:00'), new FrozenTime('2015-01-01 00:00:00'), false],
@@ -487,7 +487,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function containsScriptDataProvider()
+    public static function containsScriptDataProvider()
     {
         return [
             // phpコードの場合
@@ -588,7 +588,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function betweenDataProvider()
+    public static function betweenDataProvider()
     {
         return [
             ["あいう", 2, 4, true],
@@ -596,6 +596,30 @@ class BcValidationTest extends BcTestCase
             ["あいう", 4, 3, false],
             [["あいう", "あいうえお"], 2, 4, true],
         ];
+    }
+
+
+    /**
+     * test notBlankOnlyString
+     */
+    public function test_notBlankOnlyString()
+    {
+        //戻り＝falseケース：半角スペース
+        $str = " ";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝falseケース：全角スペース
+        $str = "　";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝falseケース：半角・全角
+        $str = "　 ";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertFalse($result);
+        //戻り＝trueケース
+        $str = "あa　";
+        $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertTrue($result);
     }
 
 }

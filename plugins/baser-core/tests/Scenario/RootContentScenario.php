@@ -31,7 +31,7 @@ class RootContentScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         $id = $args[0];
         $siteId = $args[1];
@@ -41,6 +41,7 @@ class RootContentScenario implements FixtureScenarioInterface
         ContentFactory::make(['plugin' => 'BaserCore', 'type' => 'ContentFolder'])
             ->treeNode($id, $siteId, $parentId, $name, $url, $id, true)->persist();
         ContentFolderFactory::make(['id' => $id])->persist();
+        return null;
     }
 
 }

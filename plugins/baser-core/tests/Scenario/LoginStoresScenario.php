@@ -23,7 +23,7 @@ class LoginStoresScenario implements FixtureScenarioInterface
     /**
      * load
      */
-    public function load(...$args)
+    public function load(...$args): mixed
     {
         LoginStoreFactory::make([
             'id' => 1,
@@ -33,6 +33,7 @@ class LoginStoresScenario implements FixtureScenarioInterface
             'created' => '2021-04-03 10:57:07',
             'modified' => '2021-04-04 11:20:33'
         ])->persist();
+        return null;
     }
 
 }

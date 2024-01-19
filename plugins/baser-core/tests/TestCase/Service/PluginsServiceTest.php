@@ -22,8 +22,6 @@ use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
@@ -91,11 +89,10 @@ class PluginsServiceTest extends BcTestCase
     {
         // テスト用のプラグインフォルダ作成
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
-        $file = new File($pluginPath . DS . 'config.php');
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
+        $file = new BcFile($pluginPath . DS . 'config.php');
         $file->write("<?php return ['type' => 'Plugin'];");
-        $file->close();
 
         $plugins = $this->Plugins->getIndex($sortMode);
         $pluginNames = [];
@@ -110,7 +107,7 @@ class PluginsServiceTest extends BcTestCase
             $this->assertNotContains('BcTest', $pluginNames);
         }
     }
-    public function indexDataprovider()
+    public static function indexDataprovider()
     {
         return [
             // 普通の場合 | DBに登録されてるプラグインとプラグインファイル全て
@@ -203,10 +200,10 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('既にインストール済のプラグインです。', $this->Plugins->getInstallStatusMessage('BcBlog'));
         $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->Plugins->getInstallStatusMessage('BcTest'));
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
         $this->assertEquals('', $this->Plugins->getInstallStatusMessage('BcTest'));
-        $folder->delete($pluginPath);
+        $folder->delete();
     }
 
     /**
@@ -229,7 +226,7 @@ class PluginsServiceTest extends BcTestCase
         $this->Plugins->install('BcPluginSample', true, 'test');
         $pluginPath = Plugin::path('BcPluginSample');
         rename($pluginPath . 'VERSION.txt', $pluginPath . 'VERSION.bak.txt');
-        $file = new File($pluginPath . 'VERSION.txt');
+        $file = new BcFile($pluginPath . 'VERSION.txt');
         $file->write('10.0.0');
         $this->Plugins->update('BcPluginSample', 'test');
         $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcPluginSample'));
@@ -237,7 +234,7 @@ class PluginsServiceTest extends BcTestCase
 
         // コア
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('10.0.0');
         $this->Plugins->update('BaserCore', 'test');
         $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
@@ -255,7 +252,7 @@ class PluginsServiceTest extends BcTestCase
     public function test_updateCoreFails()
     {
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
+        $file = new BcFile(BASER . 'VERSION.txt');
         $file->write('10.0.0');
 
         // 失敗用のマイグレーションファイルを作成
@@ -283,7 +280,7 @@ class PluginsServiceTest extends BcTestCase
     protected function createFailMigration()
     {
         $path = Plugin::path('BaserCore') . 'config' . DS . 'Migrations' . DS . '20230328000000_TestMigration.php';
-        $file = new File($path);
+        $file = new BcFile($path);
         $data = <<< EOF
 <?php
 use BaserCore\Database\Migration\BcMigration;
@@ -293,7 +290,6 @@ class TestMigration extends BcMigration
 }
 EOF;
         $file->write($data);
-        $file->close();
         return $path;
     }
 
@@ -388,7 +384,9 @@ EOF;
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath. 'BcThemeSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy( $zipSrcPath. 'BcThemeSample2');
         $plugin = 'BcThemeSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
@@ -415,7 +413,9 @@ EOF;
         //  既に /plugins/ 内に同名のプラグインが存在する場合には、数字付きのディレクトリ名（PluginName2）にリネームする。
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcThemeSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcThemeSample2');
         $zip = new ZipArchiver();
         $zip->archive($zipSrcPath, $testFile, true);
         $this->setUploadFileToRequest('file', $testFile);
@@ -497,7 +497,7 @@ EOF;
         unlink($rssPath);
     }
 
-    public function getAvailableCoreVersionInfoDataProvider()
+    public static function getAvailableCoreVersionInfoDataProvider()
     {
         return [
             // 通常

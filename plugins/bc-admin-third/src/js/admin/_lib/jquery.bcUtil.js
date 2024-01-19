@@ -258,6 +258,26 @@ import Cookies from 'js-cookie'
         },
 
         /**
+         * APIのエラーメッセージを表示
+         * @param response
+         */
+        showApiError: function (response) {
+            let message = response.responseJSON.message;
+            let errors = response.responseJSON.errors;
+            if(errors !== undefined) {
+                message += "<br>";
+                Object.keys(errors).forEach(function (key) {
+                    message += "<ul>"
+                    Object.keys(errors[key]).forEach(function (index) {
+                        message += "<li>" + errors[key][index] + "</li>";
+                    });
+                    message += "</ul>"
+                });
+            }
+            $.bcUtil.showAlertMessage(message);
+        },
+
+        /**
          * フラッシュメッセージをセットする
          *
          * 一度しか表示できないメッセージ

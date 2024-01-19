@@ -107,10 +107,10 @@ class BlogContentsService implements BlogContentsServiceInterface
         if ($options['status'] === 'publish') {
             $conditions = array_merge($conditions, $this->BlogContents->Contents->getConditionAllowPublish());
         }
-        return $this->BlogContents->get($id, [
-            'conditions' => $conditions,
-            'contain' => $options['contain']
-        ]);
+        return $this->BlogContents->get($id,
+            conditions: $conditions,
+            contain: $options['contain']
+        );
     }
 
     /**

@@ -135,7 +135,7 @@ class LoginStoresTable extends AppTable
     {
         $loginStoreList = $this->find()
             ->where(['store_key' => $key])
-            ->orderAsc('created');
+            ->orderByAsc('created');
         foreach($loginStoreList as $loginStore) {
             $expired = strtotime(self::EXPIRE, strtotime($loginStore->created));
             if ($expired < time()) {

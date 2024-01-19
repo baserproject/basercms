@@ -45,6 +45,7 @@ use Migrations\Migrations;
 use PDO;
 use PDOException;
 use Phinx\Db\Adapter\AdapterFactory;
+use ReflectionProperty;
 
 /**
  *
@@ -104,8 +105,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        // CakePHP5で pdo へのアクセスができなくなってしまったため
+        // 仕方なく Reflection を利用
+        $pdoProperty = new ReflectionProperty($db->getDriver(), 'pdo');
+        $pdoProperty->setAccessible(true);
         /* @var PDO $pdo */
-        $pdo = $db->getDriver()->getConnection();
+        $pdo = $pdoProperty->getValue($db->getDriver());
         $adapter->setConnection($pdo);
         $adapter = new CakeAdapter($adapter, $db);
         $this->_adapter = $adapter;
@@ -543,6 +548,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             Inflector::camelize($table),
             ['allowFallbackClass' => true]
         );
+        // mail_message_1 など、数値のテーブルの場合、mail_messages1 として、
+        // テーブル名がセットされてしまうため、明示的にテーブル名をセットする
+        $tableClass->setTable($table);
         $currentConnection = $tableClass->getConnection();
         if($currentConnection->configName() !== $dbConfigKeyName) {
             $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
@@ -551,7 +559,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = $tableClass->getConnection();
         $result = (bool)$db->execute($schema->truncateSql($db)[0]);
         $tableClass->setConnection($currentConnection);
-        $tableClass->setTable($table);
         return $result;
     }
 
@@ -925,8 +932,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = ConnectionManager::get($dbConfigKeyName);
         $tables = $db->getSchemaCollection()->listTables();
         $plugins = Plugin::loaded();
-        $list = [];
         $prefix = $db->config()['prefix'];
+
+        $checkNames = [];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
@@ -938,12 +946,28 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             foreach($files as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $tableName = Inflector::tableize($matches[1]);
-                $checkName = $prefix . $tableName;
-                if (in_array($checkName, $tables)) {
-                    $list[$value][] = $tableName;
-                }
+                $checkNames[$value][] = $prefix . $tableName;
             }
         }
+
+        $list = [];
+        foreach($tables as $table) {
+            $hasTablePluginName = (function() use($checkNames, $table){
+                foreach($checkNames as $plugin => $value) {
+                    foreach($value as $checkName) {
+                        $singularize = Inflector::singularize($checkName);
+                        if (preg_match('/^(' . preg_quote($checkName, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+                            return $plugin;
+                        }
+                    }
+                }
+                return false;
+            })();
+            if($hasTablePluginName) {
+                $list[$hasTablePluginName][] = $table;
+            }
+        }
+
         Cache::write('appTableList.' . $dbConfigKeyName, $list, '_bc_env_');
         if ($plugin) {
             return (isset($list[$plugin]))? $list[$plugin] : [];

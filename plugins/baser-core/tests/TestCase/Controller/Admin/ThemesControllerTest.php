@@ -72,7 +72,9 @@ class ThemesControllerTest extends BcTestCase
         $theme = 'BcPluginSample2';
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath. 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath. 'BcPluginSample2');
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);

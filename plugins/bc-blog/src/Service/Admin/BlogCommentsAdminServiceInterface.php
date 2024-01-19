@@ -11,6 +11,7 @@
 
 namespace BcBlog\Service\Admin;
 
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\ORM\ResultSet;
 
 /**
@@ -30,6 +31,6 @@ interface BlogCommentsAdminServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(int $blogContentId, int $blogPostId, ResultSet $blogComments): array;
+    public function getViewVarsForIndex(int $blogContentId, int $blogPostId, PaginatedResultSet $blogComments): array;
 
 }

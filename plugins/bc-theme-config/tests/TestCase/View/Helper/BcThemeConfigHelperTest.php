@@ -75,7 +75,7 @@ class BcThemeConfigHelperTest extends BcTestCase
      * 10. 適当な名前のパラメータを渡す
      * @return array
      */
-    public function mainImageDataProvider()
+    public static function mainImageDataProvider()
     {
         return [
             [[], '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'],

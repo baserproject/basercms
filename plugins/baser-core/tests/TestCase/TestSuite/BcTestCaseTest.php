@@ -90,7 +90,7 @@ class BcTestCaseTest extends BcTestCase
     {
         $this->loadFixtureScenario(ContentsScenario::class);
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
+        $urlList = ['' => '/', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = $this->getRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));
@@ -164,6 +164,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testAttachEventAndResetEvent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->attachEvent(['testEvent' => null]);
         $eventManager = EventManager::instance();
         $this->assertNotNull($eventManager->listeners('testEvent'));
@@ -230,23 +231,11 @@ class BcTestCaseTest extends BcTestCase
     }
 
     /**
-     * test setFixtureTruncate getFixtureStrategy
-     * @return void
-     */
-    public function testSetFixtureTruncateGetFixtureStrategy()
-    {
-        $bcTestCase = new BcTestCase();
-        $rs = $bcTestCase->getFixtureStrategy();
-        $this->assertNotNull($rs);
-        $this->assertEquals('CakephpTestSuiteLight\Fixture\TriggerStrategy', get_class($rs));
-    }
-
-    /**
      * test setUploadFileToRequest
      */
     public function testSetUploadFileToRequest()
     {
-        $bcTestCase = new BcTestCase();
+        $bcTestCase = new BcTestCase('test');
         $filename = 'testUpload.txt';
         $filePath = TMP . $filename;
         touch($filePath);

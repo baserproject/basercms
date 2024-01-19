@@ -53,7 +53,7 @@ class BcEvent
                         $pluginEvent->events[$options] = ['priority' => $priority];
                     }
                 }
-                $event->on($pluginEvent, null);
+                $event->on($pluginEvent);
             }
         }
     }

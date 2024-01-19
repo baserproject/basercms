@@ -127,11 +127,11 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals($message, $result->message);
         $folder->delete();
     }
-    public function installDataProvider()
+    public static function installDataProvider()
     {
         return [
             ["BcUploader", 200, "プラグイン「BcUploader」をインストールしました。"],
-            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin UnKnown could not be found."],
+            ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin `UnKnown` could not be found."],
             ["BcTest", 500, "データベース処理中にエラーが発生しました。プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
         ];
     }
@@ -207,7 +207,9 @@ class PluginsControllerTest extends BcTestCase
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new BcFolder($zipSrcPath);
         $folder->create();
-        $folder->copy($path, $zipSrcPath . 'BcPluginSample2');
+        //copy
+        $folder = new BcFolder($path);
+        $folder->copy($zipSrcPath . 'BcPluginSample2');
         $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
