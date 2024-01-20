@@ -1379,8 +1379,9 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsTag($type, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->View->set('blogArchiveType', $type);
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
         $result = $this->Blog->isTag();
         $this->assertEquals($expects, $result);
     }
