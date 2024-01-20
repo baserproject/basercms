@@ -1077,6 +1077,7 @@ class BlogHelper extends Helper
      * @return string ブログのアーカイブタイプ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogArchiveType()
     {
