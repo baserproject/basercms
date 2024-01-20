@@ -4499,7 +4499,7 @@ msgstr ""
 #: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:56
 #: ./plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/submenus.php:22
 #: ./plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/help/theme_files_index.php:33
-#: ./plugins/bc-column/templates/element/blog_comments.php:53
+#: ./plugins/BcColumn/templates/element/blog_comments.php:53
 #: ./plugins/bc-custom-content/plugins/BcCcEmail/config/setting.php:27
 #: ./plugins/bc-front/templates/Users/login.php:35
 #: ./plugins/bc-mail/src/Model/Table/MailFieldsTable.php:159
@@ -5571,7 +5571,7 @@ msgstr ""
 #: ./plugins/bc-admin-third/templates/Admin/element/Users/form.php:73
 #: ./plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:62
 #: ./plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:63
-#: ./plugins/bc-column/templates/element/blog_comments.php:48
+#: ./plugins/BcColumn/templates/element/blog_comments.php:48
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
 msgid "ニックネーム"
 msgstr ""
@@ -5860,8 +5860,8 @@ msgid "ルール追加"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/Admin/element/crumbs.php:16
-#: ./plugins/bc-column/templates/element/crumbs.php:6
-#: ./plugins/bc-column/templates/element/crumbs.php:22
+#: ./plugins/BcColumn/templates/element/crumbs.php:6
+#: ./plugins/BcColumn/templates/element/crumbs.php:22
 #: ./plugins/bc-front/templates/element/crumbs.php:22
 msgid "ホーム"
 msgstr ""
@@ -6949,7 +6949,7 @@ msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_list.php:85
 #: ./plugins/bc-blog/src/Event/BcBlogViewEventListener.php:116
-#: ./plugins/bc-column/templates/element/blog_comments.php:65
+#: ./plugins/BcColumn/templates/element/blog_comments.php:65
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:87
 msgid "コメント"
 msgstr ""
@@ -8588,7 +8588,7 @@ msgid "メール送信"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:316
-#: ./plugins/bc-column/templates/element/blog_comments.php:80
+#: ./plugins/BcColumn/templates/element/blog_comments.php:80
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:113
 #: ./plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:53
 msgid "送信する"
@@ -9712,72 +9712,72 @@ msgstr ""
 msgid "$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:8
+#: ./plugins/BcColumn/templates/element/blog_comments.php:8
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:23
 msgid "お名前を入力してください"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:9
+#: ./plugins/BcColumn/templates/element/blog_comments.php:9
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:24
 msgid "コメントを入力してください"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:10
-#: ./plugins/bc-column/templates/element/blog_comments.php:76
+#: ./plugins/BcColumn/templates/element/blog_comments.php:10
+#: ./plugins/BcColumn/templates/element/blog_comments.php:76
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:25
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:108
 #: ./plugins/bc-front/templates/plugin/BcMail/element/auth_captcha.php:35
 msgid "画像の文字を入力してください"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:11
+#: ./plugins/BcColumn/templates/element/blog_comments.php:11
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:26
 msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:12
+#: ./plugins/BcColumn/templates/element/blog_comments.php:12
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:27
 msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:48
+#: ./plugins/BcColumn/templates/element/blog_comments.php:48
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
 msgid "お名前"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:57
+#: ./plugins/BcColumn/templates/element/blog_comments.php:57
 msgid "Eメールは公開されません"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:73
+#: ./plugins/BcColumn/templates/element/blog_comments.php:73
 #: ./plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:97
 msgid "認証画象"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/contents_menu.php:45
+#: ./plugins/BcColumn/templates/element/contents_menu.php:45
 msgid "トップページ"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/toppage.php:12
+#: ./plugins/BcColumn/templates/element/toppage.php:12
 msgid "実績"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:5
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:5
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:5
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/archives.php:5
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/archives.php:5
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/archives.php:5
 #: ./plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:38
 msgid "のアーカイブ一覧です。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:35
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/posts.php:23
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:46
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:43
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/posts.php:31
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:37
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:35
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/posts.php:31
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/archives.php:39
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/index.php:35
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/posts.php:23
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/archives.php:46
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/index.php:43
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/posts.php:31
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/archives.php:37
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/index.php:35
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/posts.php:31
 #: ./plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:65
 #: ./plugins/bc-front/templates/plugin/BcBlog/Blog/default/index.php:53
 #: ./plugins/bc-front/templates/plugin/BcBlog/Blog/default/posts.php:53
@@ -9785,70 +9785,70 @@ msgstr ""
 msgid "記事がありません。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:20
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:29
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:27
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:33
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:31
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/index.php:20
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/archives.php:29
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/index.php:27
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/archives.php:33
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/index.php:31
 msgid "詳細ページへ"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:31
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/single.php:39
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/single.php:39
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/single.php:31
 msgid "前の記事"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:41
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:41
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:33
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/single.php:41
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/single.php:41
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/single.php:33
 msgid "一覧へ"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:42
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:42
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:35
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/default/single.php:42
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/topics/single.php:42
+#: ./plugins/BcColumn/templates/plugin/BcBlog/Blog/works/single.php:35
 msgid "後の記事"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:18
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/confirm.php:18
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:30
 msgid "入力内容の確認"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:19
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/confirm.php:19
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:31
 msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:21
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/index.php:14
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/confirm.php:21
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/index.php:14
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:33
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/index.php:28
 msgid "入力フォーム"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:14
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/submit.php:14
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:34
 msgid "メール送信完了"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:16
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/submit.php:16
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:37
 msgid "お問い合わせ頂きありがとうございました。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:17
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/submit.php:17
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:38
 msgid "確認次第、ご連絡させて頂きます。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:19
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/submit.php:19
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:40
 msgid "{0} 秒後にトップページへ自動的に移動します。"
 msgstr ""
 
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:20
+#: ./plugins/BcColumn/templates/plugin/BcMail/Mail/default/submit.php:20
 #: ./plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:41
 msgid "移動しない場合はコチラをクリックしてください。"
 msgstr ""

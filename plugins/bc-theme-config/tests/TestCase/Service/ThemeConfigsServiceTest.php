@@ -121,14 +121,14 @@ class ThemeConfigsServiceTest extends BcTestCase
     public function test_saveImage()
     {
         // データを生成
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
 
         // ThemeConfigsService::entity の値を設定する
         $this->ThemeConfigsService->get();
 
         // アップロードファイルを準備
-        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
+        $logoPath = '/var/www/html/plugins/BcColumn/webroot/img/logo.png';
         $this->setUploadFileToRequest('file', $logoPath);
 
         // 実行
@@ -165,7 +165,7 @@ class ThemeConfigsServiceTest extends BcTestCase
         //$entityが値を設定する
         $this->ThemeConfigsService->get();
         //テーマロゴを設定する
-        $logoPath = '/var/www/html/plugins/bc-column/webroot/img/logo.png';
+        $logoPath = '/var/www/html/plugins/BcColumn/webroot/img/logo.png';
         $pathTest = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
         copy($logoPath, $pathTest);
 
@@ -187,7 +187,7 @@ class ThemeConfigsServiceTest extends BcTestCase
     {
         //データを生成
         $this->getRequest()->getAttribute('currentSite');
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
 
         //元に戻るため、変更する前内容を取得する

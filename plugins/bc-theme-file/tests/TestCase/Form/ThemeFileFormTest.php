@@ -71,7 +71,7 @@ class ThemeFileFormTest extends BcTestCase
      */
     public function test_execute()
     {
-        $fullpath = '/var/www/html/plugins/bc-column/templates/layout/';
+        $fullpath = '/var/www/html/plugins/BcColumn/templates/layout/';
         //新規追加テスト
         $data = [
             'mode' => 'create',
