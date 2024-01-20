@@ -104,6 +104,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        $adapter->setSchemaTableName('baser_core_phinxlog');
         /* @var PDO $pdo */
         $pdo = $db->getDriver()->getConnection();
         $adapter->setConnection($pdo);
@@ -517,7 +518,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (empty($tables)) return true;
         $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         foreach($tables as $table) {
-            if (!in_array(preg_replace('/^' . $prefix . '/', '', $table), $excludes)) {
+            $table = preg_replace('/^' . $prefix . '/', '', $table);
+            if (!in_array($table, $excludes)) {
                 if (!$this->truncate($table, $dbConfigKeyName)) {
                     $result = false;
                 }
@@ -550,6 +552,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $currentConnection = $tableClass->getConnection();
         if($currentConnection->configName() !== $dbConfigKeyName) {
             $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
+            // プレフィックスを再設定するため再度テーブル名をセットする
+            $tableClass->setTable($table);
         }
         $schema = $tableClass->getSchema();
         $db = $tableClass->getConnection();
