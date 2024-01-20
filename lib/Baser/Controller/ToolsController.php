@@ -97,7 +97,7 @@ class ToolsController extends AppController
 		if (!$zipEnable) {
 			$this->notFound();
 		}
-		
+
 		switch($mode) {
 			case 'backup':
 				$this->_backupDb($this->request->query['backup_encoding']);
@@ -159,7 +159,7 @@ class ToolsController extends AppController
 		if (!move_uploaded_file($data['Tool']['backup']['tmp_name'], $targetPath)) {
 			return false;
 		}
-		
+
 		/* ZIPファイルを解凍する */
 		$bcZip = new BcZip();
 		if (!$bcZip->extract($targetPath, $tmpPath)) {
@@ -260,33 +260,30 @@ class ToolsController extends AppController
 	protected function _backupDb($encoding)
 	{
 		set_time_limit(0);
-		
+
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$tmpDir = TMP . 'schemas' . DS;
 		$distPath = TMP . 'baserbackup_' . $version . '_' . date('Ymd_His') . '.zip';
-		
+
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
-		$this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
+		$this->_writeBackup($tmpDir . 'core' . DS, false, $encoding);
 		$Plugin = ClassRegistry::init('Plugin');
-		$plugins = $Plugin->find('all');
-		if ($plugins) {
-			foreach($plugins as $plugin) {
-				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
-			}
+		if ($Plugin->find('count')) {
+			$this->_writeBackup($tmpDir . 'plugin' . DS, true, $encoding);
 		}
-		
+
 		// ZIP圧縮して出力
 		$bcZip = new BcZip();
 		$bcZip->create($tmpDir, $distPath);
-		
+
 		header("Cache-Control: no-store");
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
 		header("Content-Length: " . filesize($distPath));
 		while (ob_get_level()) { ob_end_clean(); }
 		echo readfile($distPath);
-		
+
 		unlink($distPath);
 		$this->_resetTmpSchemaFolder();
 		return true;
@@ -296,25 +293,25 @@ class ToolsController extends AppController
 	 * バックアップファイルを書きだす
 	 *
 	 * @param string $path
-	 * @param string $plugin
-	 * @param $encoding
+	 * @param bool $isPlugin
+	 * @param string $encoding
 	 * @return boolean
 	 */
-	protected function _writeBackup($path, $plugin = '', $encoding)
+	protected function _writeBackup($path, $isPlugin = false, $encoding = 'UTF-8')
 	{
 		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		$tableList = getTableList();
 		foreach($tables as $table) {
-			if ((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
-				$table = str_replace($db->config['prefix'], '', $table);
-				if (!$db->writeSchema(['path' => $path, 'table' => $table, 'plugin' => $plugin])) {
-					return false;
-				}
-				if (!$db->writeCsv(['path' => $path . $table . '.csv', 'encoding' => $encoding])) {
-					return false;
-				}
+			if(!$isPlugin && !in_array($table, $tableList['core'])) continue;
+			if($isPlugin && !in_array($table, $tableList['plugin'])) continue;
+			$table = str_replace($db->config['prefix'], '', $table);
+			if (!$db->writeSchema(['path' => $path, 'table' => $table])) {
+				return false;
+			}
+			if (!$db->writeCsv(['path' => $path . $table . '.csv', 'encoding' => $encoding])) {
+				return false;
 			}
 		}
 		return true;
@@ -356,21 +353,21 @@ class ToolsController extends AppController
 		// ZIP圧縮して出力
 		set_time_limit(0);
 		$this->autoRender = false;
-		
+
 		// 不要ディレクトリの削除
 		rmdir($path . 'core');
 		rmdir($path . 'plugin');
-		
+
 		$bcZip = new BcZip();
 		$bcZip->create($path, $distPath);
-		
+
 		header("Cache-Control: no-store");
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
 		header("Content-Length: " . filesize($distPath));
 		while (ob_get_level()) { ob_end_clean(); }
 		echo readfile($distPath);
-		
+
 		unlink($distPath);
 		return true;
 	}
@@ -490,7 +487,7 @@ class ToolsController extends AppController
 	protected function _downloadErrorLog()
 	{
 		set_time_limit(0);
-		
+
 		$tmpDir = TMP . 'logs' . DS;
 		$distPath = TMP . 'basercms_logs_' . date('Ymd_His') . '.zip';
 		$Folder = new Folder($tmpDir);
@@ -501,14 +498,14 @@ class ToolsController extends AppController
 		// ZIP圧縮して出力
 		$bcZip = new BcZip();
 		$bcZip->create($tmpDir, $distPath);
-		
+
 		header("Cache-Control: no-store");
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
 		header("Content-Length: " . filesize($distPath));
 		while (ob_get_level()) { ob_end_clean(); }
 		echo readfile($distPath);
-		
+
 		unlink($distPath);
 		return true;
 	}

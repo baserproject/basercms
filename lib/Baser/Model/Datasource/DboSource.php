@@ -41,7 +41,7 @@ class DboSource extends DataSource {
  */
 	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
 // <<<
-	
+
 /**
  * Description string for this Database Data Source.
  *
@@ -3930,10 +3930,6 @@ class DboSource extends DataSource {
 
 		$Schema = ClassRegistry::init('CakeSchema');
 
-		if (!empty($plugin)) {
-			$Schema->plugin = $plugin;
-		}
-
 		if (isset($connection)) {
 			$Schema->connection = $connection;
 		} else {
@@ -3958,7 +3954,7 @@ class DboSource extends DataSource {
 		if (!empty($options['tables'][$basename])) {
 			$options = array('tables' => array($basename => $options['tables'][$basename]));
 		}
-		
+
 		$options = array_merge($options, array('name' => $name, 'file' => $file, 'path' => $path));
 
 		$result = $Schema->write($options);
@@ -4386,7 +4382,7 @@ class DboSource extends DataSource {
 		}
 
 		$CakeSchema = ClassRegistry::init([
-			'class' => 'CakeSchema', 
+			'class' => 'CakeSchema',
 			'plugin' => $options['plugin']
 		]);
 		$CakeSchema->connection = $this->configKeyName;
@@ -4419,18 +4415,18 @@ class DboSource extends DataSource {
  * @return boolean
  */
 	public function loadCsv($options) {
-		
+
 		$options = array_merge(array(
 			'path'		=> null,
 			'encoding'	=> $this->_dbEncToPhp($this->getEncoding())
 		), $options);
-		
+
 		extract($options);
-		
+
 		if (!$path) {
 			return false;
 		}
-		
+
 		$table = basename($path, '.csv');
 		$fullTableName = $this->name($this->config['prefix'] . $table);
 		$schema = $this->readSchema(basename($path, '.csv'));
@@ -4450,7 +4446,7 @@ class DboSource extends DataSource {
 					if ($key == $indexField && !$value) {
 						continue;
 					}
-					
+
 					if ($key == 'created' && !$value) {
 						$value = date('Y-m-d H:i:s');
 					}
@@ -4465,7 +4461,7 @@ class DboSource extends DataSource {
 					'values' => implode(', ', $values)
 				);
 				$sql = $this->renderStatement('create', $query);
-				
+
 				try {
 					if (!$this->execute($sql)) {
 						return false;
@@ -4479,22 +4475,22 @@ class DboSource extends DataSource {
 					$this->log($e->getMessage());
 					return false;
 				}
-				
+
 			}
 		}
 
 		return true;
-		
+
 	}
-	
+
 /**
  * CSVよりデータを配列として読み込む
- * 
+ *
  * @param string $path
  * @return mixed boolean Or array
  */
 	public function loadCsvToArray($path, $encoding = null) {
-		
+
 		if(!$encoding) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
@@ -4504,7 +4500,7 @@ class DboSource extends DataSource {
 			$data = null;
 		}
 		$appEncoding = Configure::read('App.encoding');
-		
+
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
 		if (!$fp) {
@@ -4514,7 +4510,7 @@ class DboSource extends DataSource {
 		$head = fgetcsv($fp, 10240);
 		// UTF-8（BOM付）で何故か、配列の最初のキーに""が付加されてしまう
 		$head[0] = preg_replace('/^﻿"(.+)"$/', "$1", $head[0]);
-		
+
 		$datas = array();
 		while (($record = fgetcsvReg($fp, 10240)) !== false) {
 			if ($appEncoding != $encoding) {
@@ -4529,9 +4525,9 @@ class DboSource extends DataSource {
 		fclose($fp);
 
 		return $datas;
-		
+
 	}
-	
+
 /**
  * CSV用のフィールドデータに変換する
  *
@@ -4582,7 +4578,7 @@ class DboSource extends DataSource {
 			'init' => false,
 			'plugin' => null
 		], $options);
-		
+
 		if (empty($options['path'])) {
 			return false;
 		}
@@ -4594,7 +4590,7 @@ class DboSource extends DataSource {
 		}
 
 		$schemas = $this->readSchema($options['table'], [
-			'plugin' => $options['plugin'], 
+			'plugin' => $options['plugin'],
 			'cache' => false
 		]);
 
@@ -4730,5 +4726,5 @@ class DboSource extends DataSource {
 		return 'utf8';
 	}
 // <<<
-	
+
 }
