@@ -515,8 +515,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $result = true;
         $tables = $this->getAppTableList($plugin, $dbConfigKeyName);
         if (empty($tables)) return true;
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         foreach($tables as $table) {
-            if (!in_array($table, $excludes)) {
+            if (!in_array(preg_replace('/^' . $prefix . '/', '', $table), $excludes)) {
                 if (!$this->truncate($table, $dbConfigKeyName)) {
                     $result = false;
                 }
