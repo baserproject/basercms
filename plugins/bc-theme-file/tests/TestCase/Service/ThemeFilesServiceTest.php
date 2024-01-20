@@ -258,7 +258,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //データを生成
         $this->getRequest()->getAttribute('currentSite');
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
         //パラメーターを作成
         $param = [
             'plugin' => 'BaserCore',
