@@ -383,11 +383,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $files = $Folder->read(true, true, true);
         $targetTables = $files[1];
         $tableList = $this->getAppTableList($plugin, $dbConfigKeyName);
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         $result = true;
         foreach($targetTables as $targetTable) {
             $targetTable = basename($targetTable, '.csv');
             if (in_array($targetTable, $excludes)) continue;
-            if (!in_array($targetTable, $tableList)) continue;
+            if (!in_array($prefix . $targetTable, $tableList)) continue;
             // 初期データ投入
             foreach($files[1] as $file) {
                 if (!preg_match('/\.csv$/', $file)) continue;
