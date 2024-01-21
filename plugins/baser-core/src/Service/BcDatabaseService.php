@@ -677,7 +677,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadCsvToArray($path, $encoding = 'auto')
     {
-
+        if(!file_exists($path)) return [];
         if (!$encoding) {
             $encoding = $this->_dbEncToPhp($this->getEncoding());
         }
@@ -694,7 +694,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $head = fgetcsv($fp, 10240);
         // UTF-8（BOM付）で何故か、配列の最初のキーに""が付加されてしまう
-        $head[0] = preg_replace('/^﻿"(.+)"$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^﻿(.+)$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^"(.+)"$/', "$1", $head[0]);
 
         $records = [];
         while(($record = BcUtil::fgetcsvReg($fp, 10240)) !== false) {
