@@ -1051,7 +1051,8 @@ class BlogHelper extends Helper
         if (empty($post->blog_category->id)) {
             return null;
         }
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
+
+        $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
         return $BlogCategory->getParentNode($post->blog_category->id);
     }
 
