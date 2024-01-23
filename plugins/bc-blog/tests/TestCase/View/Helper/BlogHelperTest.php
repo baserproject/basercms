@@ -1386,6 +1386,35 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals($expects, $result);
     }
 
+
+    /**
+     * test isArchive
+     * @dataProvider isCategoryDataProvider
+     *
+     */
+    public function test_isCategory($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isCategory();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isCategoryDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', false],
+            ['yearly', false],
+            ['monthly', false],
+            ['daily', false],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+
     public static function isTagDataProvider()
     {
         return [
