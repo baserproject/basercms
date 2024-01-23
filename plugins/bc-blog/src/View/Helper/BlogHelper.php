@@ -1933,6 +1933,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsUrl(int $blogContentId, $base = true)
     {

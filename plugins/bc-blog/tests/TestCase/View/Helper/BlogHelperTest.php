@@ -1289,7 +1289,12 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetContentsUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        //ブログコンテンツのURLメソッドをコール
+        $rs = $this->Blog->getContentsUrl(1);
+        //戻る値を確認
+        $this->assertEquals('https://localhost/news/', $rs);
     }
 
     /**
