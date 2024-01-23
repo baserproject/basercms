@@ -1467,6 +1467,31 @@ class BlogHelperTest extends BcTestCase
         ];
     }
 
+    /**
+     * test isDate
+     * @dataProvider isYearDataProvider
+     */
+    public function test_isYear($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isYear();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isYearDataProvider()
+    {
+        return [
+            ['category', false],
+            ['tag', false],
+            ['yearly', true],
+            ['monthly', false],
+            ['daily', false],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
 
     public static function isTagDataProvider()
     {
