@@ -1298,20 +1298,25 @@ class BlogHelperTest extends BcTestCase
     public function testIsSameSiteBlogContent()
     {
         //データ生成
-        $this->loadFixtureScenario(BlogContentScenario::class,
-            2,  // id
-            2, // siteId
-            2, // parentId
-            'news-2', // name
-            '/news-2/', // url
-            'test title 2'
-        );
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(2, 1, 2, 'news-2', '/news-2/', 2, true, 'test title 2')->persist();
+        BlogContentFactory::make(['id' => 2, 'description' => 'ディスクリプション', 'template' => 'homePage'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(3, 2, 3, 'news-2', '/news-2/', 3, true, 'test title 2')->persist();
+        BlogContentFactory::make(['id' => 3, 'description' => 'ディスクリプション', 'template' => 'homePage'])->persist();
+
+        //currentContentをリセット
+        $view = new BlogFrontAppView($this->getRequest());
+        $blogContent = BlogContentFactory::get(1);
+        $blogContent->content = ContentFactory::get(2);
+        $view->set('blogContent', $blogContent);
+        $this->Blog = new BlogHelper($view);
 
         //現在のサイトと同じいテスト
-        $this->assertTrue($this->Blog->isSameSiteBlogContent(1));
+        $this->assertTrue($this->Blog->isSameSiteBlogContent(2));
 
         //現在のサイト異なるテスト
-        $this->assertFalse($this->Blog->isSameSiteBlogContent(2));
+        $this->assertFalse($this->Blog->isSameSiteBlogContent(3));
     }
 
     /**
