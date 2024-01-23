@@ -64,7 +64,7 @@ class UtilitiesController extends BcAdminAppController
         if ((new BcPlugin())->createAssetsSymlink()) {
             $this->BcMessage->setInfo(__d('baser_core', 'プラグインアセットのシンボリックリンクを作成しました。'));
         } else {
-            $this->BcMessage->setInfo(__d('baser_core', 'プラグインアセットのシンボリックリンクの作成に失敗しました。'), true);
+            $this->BcMessage->setError(__d('baser_core', 'プラグインアセットのシンボリックリンクの作成に失敗しました。'), true);
         }
         $this->redirect(['action' => 'index']);
     }

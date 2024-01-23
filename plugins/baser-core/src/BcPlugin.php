@@ -200,8 +200,8 @@ class BcPlugin extends BasePlugin
     public function createAssetsSymlink(): bool
     {
         $command = ROOT . DS . 'bin' . DS . 'cake plugin assets symlink';
-        if (exec($command)) return true;
-        return false;
+        exec($command, $out, $code);
+        return ($code === 0);
     }
 
     /**
