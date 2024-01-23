@@ -1144,6 +1144,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが月別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMonth()
     {
