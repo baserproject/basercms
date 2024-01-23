@@ -1299,11 +1299,11 @@ class BlogHelperTest extends BcTestCase
     {
         //データ生成
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
-            ->treeNode(2, 1, 2, 'news-2', '/news-2/', 2, true, 'test title 2')->persist();
-        BlogContentFactory::make(['id' => 2, 'description' => 'ディスクリプション', 'template' => 'homePage'])->persist();
+            ->treeNode(2, 1, 2, 'news-2', '/news-2/', 2)->persist();
+        BlogContentFactory::make(['id' => 2])->persist();
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
-            ->treeNode(3, 2, 3, 'news-2', '/news-2/', 3, true, 'test title 2')->persist();
-        BlogContentFactory::make(['id' => 3, 'description' => 'ディスクリプション', 'template' => 'homePage'])->persist();
+            ->treeNode(3, 2, 3, 'news-2', '/news-2/', 3)->persist();
+        BlogContentFactory::make(['id' => 3])->persist();
 
         //currentContentをリセット
         $view = new BlogFrontAppView($this->getRequest());
