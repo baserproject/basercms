@@ -1297,7 +1297,21 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsSameSiteBlogContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        $this->loadFixtureScenario(BlogContentScenario::class,
+            2,  // id
+            2, // siteId
+            2, // parentId
+            'news-2', // name
+            '/news-2/', // url
+            'test title 2'
+        );
+
+        //現在のサイトと同じいテスト
+        $this->assertTrue($this->Blog->isSameSiteBlogContent(1));
+
+        //現在のサイト異なるテスト
+        $this->assertFalse($this->Blog->isSameSiteBlogContent(2));
     }
 
     /**
