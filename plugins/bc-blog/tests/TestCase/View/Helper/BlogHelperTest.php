@@ -1257,6 +1257,7 @@ class BlogHelperTest extends BcTestCase
     public function testIsBlog($expected, $url)
     {
         if (!$expected) {
+            //currentContentを変更
             $view = new BlogFrontAppView($this->getRequest($url));
             $blogContent = BlogContentFactory::get(1);
             $blogContent->content = ContentFactory::get(1);
@@ -1265,6 +1266,7 @@ class BlogHelperTest extends BcTestCase
             $this->Blog = new BlogHelper($view);
         }
         $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $url ? ['base' => $url] : []));
+        //戻るを確認
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 
