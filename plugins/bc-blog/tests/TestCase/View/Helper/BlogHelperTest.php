@@ -713,16 +713,26 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetBlogTemplates($theme, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        SiteFactory::make(
+            [
+                'id' => 1,
+                'status' => true,
+                'name' => 'test',
+                'theme' => 'nada-icons'
+            ]
+        )->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
         $this->Blog->BcBaser->siteConfig['theme'] = $theme;
-        $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
+        $result = $this->Blog->getBlogTemplates(1);
+        $this->assertEquals($expected, $result);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->getBlogTemplates(0);
     }
 
     public static function getBlogTemplatesDataProvider()
     {
         return [
-            ['nada-icons', ['default' => 'default']]
+            ['nada-icons', ['Blog' => 'Blog','default' => 'default']]
         ];
     }
 
