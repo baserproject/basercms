@@ -957,6 +957,7 @@ class BlogHelperTest extends BcTestCase
         BlogPostFactory::make(['id' => 3, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 3, 'user_id'=>1, 'status' => true])->persist();
         BlogPostFactory::make(['id' => 4, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 2, 'blog_category_id'=> 4, 'user_id'=>1, 'status' => true])->persist();
         BlogPostFactory::make(['id' => 5, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 5, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 6, 'posted'=> '2013-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 5, 'user_id'=>1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
@@ -1002,7 +1003,7 @@ class BlogHelperTest extends BcTestCase
 
         // option type year
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
-        $this->assertEquals('name-5', $result['2015'][0]->name);
+        $this->assertEquals('name-5', $result['2013'][0]->name);
 
         // option viewCount true
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
