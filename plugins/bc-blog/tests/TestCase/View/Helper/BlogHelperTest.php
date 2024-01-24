@@ -1256,8 +1256,15 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsBlog($expected, $url)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
+        if (!$expected) {
+            $view = new BlogFrontAppView($this->getRequest($url));
+            $blogContent = BlogContentFactory::get(1);
+            $blogContent->content = ContentFactory::get(1);
+            $blogContent->content->plugin = 'BcCore';
+            $view->set('blogContent', $blogContent);
+            $this->Blog = new BlogHelper($view);
+        }
+        $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $url ? ['base' => $url] : []));
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 
