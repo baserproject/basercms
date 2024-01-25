@@ -802,6 +802,9 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals('test-content1', $result);
         $result = $this->Blog->getHtmlById($post, 'test-id123');
         $this->assertEquals('', $result);
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
     }
 
     /**
