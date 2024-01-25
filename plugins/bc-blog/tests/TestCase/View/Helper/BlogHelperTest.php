@@ -815,16 +815,17 @@ class BlogHelperTest extends BcTestCase
             'title' => 'category title',
             'lft' => 1,
             'rght' => 1,
+            'parent_id' => 0,
         ])->persist();
         BlogPostFactory::make([
             'id' => 12,
             'name' => 'test name 2',
-            'blog_category_id' => 12,
+            'blog_category_id' => 11,
             'blog_content_id' => 1,
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 12,
-            'parent_id' => 1,
+            'parent_id' => 11,
             'blog_content_id' => 1,
             'name' => '',
             'title' => 'category title 2',
@@ -834,9 +835,15 @@ class BlogHelperTest extends BcTestCase
         SiteFactory::make(['id' => 1, 'status' => true])->persist();
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
         $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //正常系
         $post = $BlogPostsService->get(11);
         $result = $this->Blog->getParentCategory($post);
         $this->assertEquals(11, $result->id);
+        //異常系
+        $post = $BlogPostsService->get(12);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->getParentCategory($post);
+
     }
 
     /**

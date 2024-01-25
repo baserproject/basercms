@@ -1053,7 +1053,7 @@ class BlogHelper extends Helper
         }
 
         $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
-        return $BlogCategory->getParentNode($post->blog_category->id);
+        return $BlogCategory->get($post->blog_category->parent_id);
     }
 
     /**
