@@ -1757,6 +1757,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function parseContentName($contentsName, $options)
     {

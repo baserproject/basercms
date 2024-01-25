@@ -1196,7 +1196,41 @@ class BlogHelperTest extends BcTestCase
      */
     public function testParseContentName()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$optionsはデフォルト場合
+        $rs = $this->Blog->parseContentName('news', []);
+        //戻る値を確認
+        $this->assertEquals(['/news/'], $rs['contentUrl']);
+        $this->assertEquals([], $rs['contentId']);
+        $this->assertTrue($rs['autoSetCurrentBlog']);
+
+        //$optionsはある場合
+        $options = [
+            'contentUrl' => ['index/news'],
+            'contentId' => [1],
+            'autoSetCurrentBlog' => false
+        ];
+        $rs = $this->Blog->parseContentName('news', $options);
+        //戻る値を確認
+        $this->assertEquals(['index/news', '/news/'], $rs['contentUrl']);
+        $this->assertEquals([1], $rs['contentId']);
+        $this->assertFalse($rs['autoSetCurrentBlog']);
+
+        //autoSetCurrentBlog = true; contentUrl&contentId == null 場合、
+        $rs = $this->Blog->parseContentName(null, []);
+        //戻る値を確認
+        $this->assertEquals('/news/', $rs['contentUrl']);
+        $this->assertEquals(1, $rs['contentId']);
+        $this->assertTrue($rs['autoSetCurrentBlog']);
+
+        //autoSetCurrentBlog = false; contentUrl&contentId == null 場合、
+        $options = [
+            'autoSetCurrentBlog' => false
+        ];
+        $rs = $this->Blog->parseContentName(null, $options);
+        //戻る値を確認
+        $this->assertEquals([], $rs['contentUrl']);
+        $this->assertEquals([], $rs['contentId']);
+        $this->assertFalse($rs['autoSetCurrentBlog']);
     }
 
     /**
