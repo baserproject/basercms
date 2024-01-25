@@ -1025,6 +1025,7 @@ class BlogHelper extends Helper
      * @return string 指定したIDの内容
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getHtmlById($post, $id)
     {
