@@ -1188,7 +1188,24 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPosts()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        //$contentsNameを設定しない場合、currentContentを取得
+        $rs = $this->Blog->getPosts([], 1, []);
+        $this->assertCount(1, $rs);
+
+        //$contentsNameを設定した場合、
+        $rs = $this->Blog->getPosts(['/news/'])->toArray();
+        $this->assertEquals('プレスリリース', $rs[0]['title']);
+
+        //$contentsNameを間違った場合、
+        $rs = $this->Blog->getPosts(['news5'])->toArray();
+        $this->assertCount(0, $rs);
     }
 
     /**
