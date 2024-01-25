@@ -977,6 +977,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostImg($post, $options = [])
     {
