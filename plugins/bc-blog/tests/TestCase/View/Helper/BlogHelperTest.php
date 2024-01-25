@@ -759,7 +759,7 @@ class BlogHelperTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         BlogPostFactory::make(
             [
-                'id' => 1,
+                'id' => 111,
                 'name' => 'test-name ',
                 'blog_content_id'=> 1,
                 'content'=>'<img src="test1.jpg"><img src="test2.jpg">',
@@ -768,7 +768,7 @@ class BlogHelperTest extends BcTestCase
                 'no' => '',
                 'status' => true
             ])->persist();
-        $post = BlogPostFactory::get(1);
+        $post = BlogPostFactory::get(111);
         $options = [
             'num' => $num,
             'link' => $link,
