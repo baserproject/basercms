@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogFrontAppView;
 use BcBlog\View\Helper\RssHelper;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -36,6 +37,8 @@ class RssRssHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $view = new BlogFrontAppView($this->getRequest());
+        $this->RssHelper = new RssHelper($view);
     }
 
     /**
@@ -47,5 +50,25 @@ class RssRssHelperTest extends BcTestCase
     {
         parent::tearDown();
     }
+
+
+    /**
+     * test elem
+     */
+    public function test_elem()
+    {
+        // 準備
+        $name = 'testElem';
+        $attrib = ['attribute' => 'value'];
+        $content = 'Test Content';
+        $endTag = true;
+
+        // 呼び出し
+        $result = $this->RssHelper->elem($name, $attrib, $content, $endTag);
+        // 結果チェック
+        $this->assertEquals('<testElem attribute="value">Test Content</testElem>', $result);
+
+    }
+
 
 }
