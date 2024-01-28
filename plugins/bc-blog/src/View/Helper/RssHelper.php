@@ -185,6 +185,9 @@ class RssHelper extends Helper
      * @param array $att The attributes of the `<item />` element
      * @param array $elements The list of elements contained in this `<item />`
      * @return string An RSS `<item />` element
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function item($att = [], $elements = [])
     {
