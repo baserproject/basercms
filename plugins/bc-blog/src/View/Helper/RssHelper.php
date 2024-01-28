@@ -278,6 +278,9 @@ class RssHelper extends Helper
      * @param int|string|\DateTime $time UNIX timestamp or valid time string or DateTime object.
      * @return string An RSS-formatted timestamp
      * @see \Cake\View\Helper\TimeHelper::toRSS
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function time($time)
     {
