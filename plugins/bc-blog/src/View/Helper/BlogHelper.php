@@ -1677,6 +1677,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function posts($contentsName = [], $num = 5, $options = [])
     {
