@@ -54,19 +54,27 @@ class RssRssHelperTest extends BcTestCase
 
     /**
      * test elem
+     * @param string $name
+     * @param array $attrib
+     * @param string|array|null $content
+     * @param bool $endTag
+     * @param string $expect
+     * @dataProvider elemDataProvider
      */
-    public function test_elem()
+    public function test_elem($name, $attrib , $content, $endTag, $expect)
     {
-        // 準備
-        $name = 'testElem';
-        $attrib = ['attribute' => 'value'];
-        $content = 'Test Content';
-        $endTag = true;
-
         // 呼び出し
         $result = $this->RssHelper->elem($name, $attrib, $content, $endTag);
         // 結果チェック
-        $this->assertEquals('<testElem attribute="value">Test Content</testElem>', $result);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function elemDataProvider()
+    {
+        return[
+            ['testElem', ['attribute' => 'value'], 'Test Content', true,  '<testElem attribute="value">Test Content</testElem>'],
+            ['testElem', ['attribute' => 'value', 'namespace'=>'namespace'], ['cdata'=>'cdata', 'value'=> 'content value'], true,  '<testElem xmlns="namespace" attribute="value"><![CDATA[content value]]></testElem>'],
+        ];
 
     }
 
