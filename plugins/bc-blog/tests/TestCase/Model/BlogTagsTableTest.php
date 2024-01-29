@@ -205,6 +205,25 @@ class BlogTagsTableTest extends BcTestCase
     }
 
     /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //データを生成
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        //対象メソッドを呼ぶ
+        $rs = $this->BlogTagsTable->copy(1);
+
+        //戻る値を確認
+        $this->assertEquals('test_copy', $rs['name']);
+
+        //DBに存在するか確認すること
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'test_copy']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
      * test hasNewTagAddablePermission
      */
     public function test_hasNewTagAddablePermission()

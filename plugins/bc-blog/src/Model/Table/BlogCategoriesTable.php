@@ -340,10 +340,12 @@ class BlogCategoriesTable extends BlogAppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasChild($id)
     {
-        return (bool)$this->childCount($id);
+        $entity = $this->find()->where(['id' => $id])->first();
+        return (bool)$this->childCount($entity);
     }
 
     /**
