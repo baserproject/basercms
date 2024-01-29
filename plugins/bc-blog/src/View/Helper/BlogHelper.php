@@ -1106,6 +1106,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがカテゴリー別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCategory()
     {
@@ -1118,6 +1119,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがタグ別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isTag()
     {
@@ -1130,6 +1132,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが日別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDate()
     {
@@ -1142,6 +1145,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが月別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMonth()
     {
@@ -1154,6 +1158,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが年別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isYear()
     {
