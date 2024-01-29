@@ -1163,8 +1163,14 @@ class BlogPostsServiceTest extends BcTestCase
     {
         $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
         $this->loadFixtureScenario(InitAppScenario::class);
+
+        //第３引き数が false の場合
         $rs = $this->BlogPostsService->getUrl(ContentFactory::get(100), BlogPostFactory::get(1), false);
         $this->assertEquals('/archives/1', $rs);
+
+        //第３引き数が true の場合
+        $rs = $this->BlogPostsService->getUrl(ContentFactory::get(100), BlogPostFactory::get(1), true);
+        $this->assertEquals('https://localhost/archives/1', $rs);
     }
 
 }
