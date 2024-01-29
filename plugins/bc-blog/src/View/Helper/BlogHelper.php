@@ -1742,6 +1742,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPosts($contentsName = [], $num = 5, $options = [])
     {
