@@ -1150,7 +1150,7 @@ class BlogHelperTest extends BcTestCase
         }
 
         $this->Blog->posts($contentsName, $num, $options);
-        $this->expectOutputRegex($expected);
+        $this->expectOutputString($expected);
     }
 
     public static function postsDataProvider()
@@ -1166,7 +1166,7 @@ class BlogHelperTest extends BcTestCase
               </li>
       </ul>
   <div class="bs-top-post-to-list"><a href="/">VIEW ALL</a></div>
-', '記事が出力されません'], // 通常
+', '記事が出力される'], // 通常
             ['', 'news2', 5, [], '
 
   <p class="bs-top-post-no-data">記事がありません。</p>
