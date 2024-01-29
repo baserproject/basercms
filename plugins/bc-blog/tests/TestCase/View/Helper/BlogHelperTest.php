@@ -1297,7 +1297,26 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsSameSiteBlogContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(2, 1, 2, 'news-2', '/news-2/', 2)->persist();
+        BlogContentFactory::make(['id' => 2])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(3, 2, 3, 'news-2', '/news-2/', 3)->persist();
+        BlogContentFactory::make(['id' => 3])->persist();
+
+        //currentContentをリセット
+        $view = new BlogFrontAppView($this->getRequest());
+        $blogContent = BlogContentFactory::get(1);
+        $blogContent->content = ContentFactory::get(2);
+        $view->set('blogContent', $blogContent);
+        $this->Blog = new BlogHelper($view);
+
+        //現在のサイトと同じいテスト
+        $this->assertTrue($this->Blog->isSameSiteBlogContent(2));
+
+        //現在のサイト異なるテスト
+        $this->assertFalse($this->Blog->isSameSiteBlogContent(3));
     }
 
     /**
