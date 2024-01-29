@@ -1347,9 +1347,10 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetBlogArchiveType($url, $type, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
-        $this->View->set('blogArchiveType', $type);
+        $this->Blog->request = $this->getRequest($url);
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
         $result = $this->Blog->getBlogArchiveType();
         $this->assertEquals($type, $result);
 
