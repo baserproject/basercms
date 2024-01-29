@@ -1266,7 +1266,7 @@ class BlogHelperTest extends BcTestCase
             $this->Blog = new BlogHelper($view);
         }
         $this->Blog->getView()->setRequest($this->getRequest($url));
-        //戻るを確認
+        //戻り値を確認
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 
