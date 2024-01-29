@@ -1265,7 +1265,7 @@ class BlogHelperTest extends BcTestCase
             $view->set('blogContent', $blogContent);
             $this->Blog = new BlogHelper($view);
         }
-        $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $url ? ['base' => $url] : []));
+        $this->Blog->getView()->setRequest($this->getRequest($url));
         //戻るを確認
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
