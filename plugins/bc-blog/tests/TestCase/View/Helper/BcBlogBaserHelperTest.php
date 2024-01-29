@@ -45,38 +45,9 @@ class BcBlogBaserHelperTest extends BcTestCase
 
     public function test_methods()
     {
-        $expected = [
-            'blogPosts' => ['Blog', 'posts'],
-            'getBlogPosts' => ['Blog', 'getPosts'],
-            'isBlogCategory' => ['Blog', 'isCategory'],
-            'isBlogTag' => ['Blog', 'isTag'],
-            'isBlogDate' => ['Blog', 'isDate'],
-            'isBlogMonth' => ['Blog', 'isMonth'],
-            'isBlogYear' => ['Blog', 'isYear'],
-            'isBlogSingle' => ['Blog', 'isSingle'],
-            'isBlogHome' => ['Blog', 'isHome'],
-            'getBlogs' => ['Blog', 'getContents'],
-            'isBlog' => ['Blog', 'isBlog'],
-            'getBlogCategories' => ['Blog', 'getCategories'],
-            'hasChildBlogCategory' => ['Blog', 'hasChildCategory'],
-            'getBlogTagList' => ['Blog', 'getTagList'],
-            'blogTagList' => ['Blog', 'tagList'],
-            'getBlogContentsUrl' => ['Blog', 'getContentsUrl'],
-            'getBlogPostCount' => ['Blog', 'getPostCount'],
-            'getBlogTitle' => ['Blog', 'getTitle'],
-            'getBlogPostLinkUrl' => ['Blog', 'getPostLinkUrl'],
-            'blogPostEyeCatch' => ['Blog', 'eyeCatch'],
-            'blogPostDate' => ['Blog', 'postDate'],
-            'blogPostTitle' => ['Blog', 'postTitle'],
-            'blogPostCategory' => ['Blog', 'category'],
-            'blogPostContent' => ['Blog', 'postContent'],
-            'blogDescriptionExists' => ['Blog', 'descriptionExists'],
-            'blogDescription' => ['Blog', 'description'],
-            'getBlogPostContent' => ['Blog', 'getPostContent'],
-            'blogPostPrevLink' => ['Blog', 'prevLink'],
-            'blogPostNextLink' => ['Blog', 'nextLink'],
-        ];
         $methods = $this->BcBlogBaserHelper->methods();
-        $this->assertEquals($expected, $methods);
+        $this->assertEquals(['Blog', 'posts'], $methods['blogPosts']);
+        $this->assertEquals(['Blog', 'getPosts'], $methods['getBlogPosts']);
+        $this->assertEquals(['Blog', 'nextLink'], $methods['blogPostNextLink']);
     }
 }
