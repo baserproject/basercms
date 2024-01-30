@@ -155,5 +155,29 @@ class RssRssHelperTest extends BcTestCase
     }
 
 
+    /**
+     * test items
+     */
+    public function test_items()
+    {
+        //準備
+        $items = [
+            ['title' => 'Item 1', 'link' => 'http://example.com/item1'],
+            ['title' => 'Item 2', 'link' => 'http://example.com/item2'],
+            // Add more test data as needed
+        ];
+        //正常系実行
+        $result = $this->RssHelper->items($items);
+        $this->assertStringContainsString('<item><title>Item 1', $result);
+        $this->assertStringContainsString('<link>http://example.com/item2', $result);
+        //callback test
+        $callbackMock = function ($item) {
+            return ['title' => strtoupper($item['title'])];
+        };
+        $result = $this->RssHelper->items($items, $callbackMock);
+        $this->assertStringContainsString('<item><title>ITEM 1', $result);
+    }
+
+
 
 }
