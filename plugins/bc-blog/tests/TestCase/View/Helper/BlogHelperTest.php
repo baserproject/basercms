@@ -781,20 +781,6 @@ class BlogHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * 記事中のタグで指定したIDの内容を取得する
-     */
-    public function testGetHtmlById()
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'content' => '<p id="test-id1">test-content1</p><div id="test-id2">test-content1</div>',
-            'detail' => '<p id="test-id1">test-content2</p>',
-        ]];
-        $result = $this->Blog->getHtmlById($post, 'test-id1');
-        $expected = 'test-content1';
-        $this->assertEquals($expected, $result, '記事中のタグで指定したIDの内容を正しく取得できません');
-    }
 
     /**
      * 親カテゴリを取得する
@@ -979,6 +965,28 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals(1, $result['2015'][0]->count);
     }
 
+    /**
+     * 記事中のタグで指定したIDの内容を取得する
+     */
+    public function testGetHtmlById()
+    {
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make(
+            [
+                'id' => 123,
+                'name' => 'test-name ',
+                'blog_content_id'=> 1,
+                'content' => '<p id="test-id1">test-content1</p><div id="test-id2">test-content1</div>',
+                'detail' => '<p id="test-id22">test-content2</p>',
+                'status' => true
+            ])->persist();
+        $post = BlogPostFactory::get(123);
+        $result = $this->Blog->getHtmlById($post, 'test-id1');
+        $this->assertEquals('test-content1', $result);
+        $result = $this->Blog->getHtmlById($post, 'test-id123');
+        $this->assertEquals('', $result);
+    }
     /**
      * 子カテゴリを持っているかどうか
      *
