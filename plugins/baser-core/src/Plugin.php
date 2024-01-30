@@ -286,9 +286,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->add(new BcRedirectSubSiteMiddleware());
 
         if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem()) {
-            $middlewareQueue->add(new HttpsEnforcerMiddleware([
-                'redirect' => false
-            ]));
+            $config = ['redirect' => false];
+            if(filter_var(env('TRUST_PROXY', false))) {
+                $config['trustProxies'] = !empty($_SERVER['HTTP_X_FORWARDED_FOR'])? [$_SERVER['HTTP_X_FORWARDED_FOR']] : [];
+            }
+            $middlewareQueue->add(new HttpsEnforcerMiddleware($config));
         }
 
         // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
