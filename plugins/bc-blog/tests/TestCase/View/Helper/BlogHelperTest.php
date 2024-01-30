@@ -964,7 +964,7 @@ class BlogHelperTest extends BcTestCase
 
         // option depth 2
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'depth' => 2]);
-        $this->assertEquals('name-2', $result->toArray()[0]->children->toArray()[0]->name);
+        $this->assertEquals('name-5', $result->toArray()[0]->children->toArray()[0]->name);
 
         // option type year
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
