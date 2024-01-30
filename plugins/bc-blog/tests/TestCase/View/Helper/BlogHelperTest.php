@@ -723,10 +723,8 @@ class BlogHelperTest extends BcTestCase
         )->persist();
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
         $this->Blog->BcBaser->siteConfig['theme'] = $theme;
-        $result = $this->Blog->getBlogTemplates(1);
+        $result = $this->Blog->getBlogTemplates();
         $this->assertEquals($expected, $result);
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Blog->getBlogTemplates(0);
     }
 
     public static function getBlogTemplatesDataProvider()

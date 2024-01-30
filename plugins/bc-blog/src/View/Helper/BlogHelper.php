@@ -50,6 +50,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Exception;
 
 /**
  * ブログヘルパー
@@ -902,10 +903,14 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getBlogTemplates($siteId = 0)
+    public function getBlogTemplates($siteId = 1)
     {
-        $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcBlog');
         $_templates = [];
+        try {
+            $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcBlog');
+        }catch (Exception $ex) {
+            return $_templates;
+        }
         foreach($templatesPaths as $templatePath) {
             $templatePath .= 'Blog' . DS;
             $folder = new BcFolder($templatePath);
