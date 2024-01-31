@@ -179,5 +179,31 @@ class RssRssHelperTest extends BcTestCase
     }
 
 
+    /**
+     * test channel
+     */
+    public function test_channel()
+    {
+        //準備
+        $attrib = ['attribute' => 'value'];
+        $elements = [
+            'link' => '/news',
+            'title' => 'Channel Title',
+            'description' => 'Channel Description',
+            'customElement' => 'Custom Value',
+        ];
+        $content = 'Channel Content';
+        //正常系実行
+        $result = $this->RssHelper->channel($attrib, $elements, $content);
+        $this->assertStringContainsString('<channel attribute="value">', $result);
+        $this->assertStringContainsString('Channel Content</channel>', $result);
+        $this->assertStringContainsString('<link>https://localhost/news</link>', $result);
+        $this->assertStringContainsString('<title>Channel Title', $result);
+        $this->assertStringContainsString('<description>Channel Description', $result);
+        $this->assertStringContainsString('<customElement>Custom Value', $result);
+    }
+
+
+
 
 }
