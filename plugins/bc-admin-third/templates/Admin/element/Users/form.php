@@ -134,7 +134,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php if ($this->request->getParam('action') == 'edit'): ?><small>
           [<?php echo __d('baser_core', 'パスワードは変更する場合のみ入力してください') ?>]</small><br/><?php endif ?>
         <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
-        <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off', 'placeholder' => __d('baser-core', 'もう一度入力')]) ?>
+        <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off', 'placeholder' => __d('baser_core', 'もう一度入力')]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
           <ul>

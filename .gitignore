@@ -85,6 +85,7 @@ yarn-error.log
 !/plugins/BcPluginSample
 !/plugins/BcThemeSample
 !/plugins/cakephp-soft-delete
+!/plugins/BcColumn
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant

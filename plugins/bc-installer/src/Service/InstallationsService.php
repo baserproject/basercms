@@ -502,6 +502,7 @@ class InstallationsService implements InstallationsServiceInterface
             if($key === 'datasource' || $key === 'dataPattern') continue;
             $installCoreData[] = '        \'' . $key . '\' => \'' . $value . '\',';
         }
+        $installCoreData[] = '        \'log\' => filter_var(env(\'SQL_LOG\', false), FILTER_VALIDATE_BOOLEAN)';
         $installCoreData[] = '    ],';
         $installCoreData[] = '    \'Datasources.test\' => [';
         foreach($dbConfig as $key => $value) {
@@ -515,6 +516,7 @@ class InstallationsService implements InstallationsServiceInterface
             if($key === 'datasource' || $key === 'dataPattern') continue;
             $installCoreData[] = '        \'' . $key . '\' => \'' . $value . '\',';
         }
+        $installCoreData[] = '        \'log\' => filter_var(env(\'SQL_LOG\', false), FILTER_VALIDATE_BOOLEAN)';
         $installCoreData[] = '    ]';
         $installCoreData[] = '];';
 

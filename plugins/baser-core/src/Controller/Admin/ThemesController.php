@@ -118,8 +118,11 @@ class ThemesController extends BcAdminAppController
         $this->request->allowMethod(['post']);
         if (!$theme) $this->notFound();
         try {
-            $service->copy($theme);
-            $this->BcMessage->setInfo(__d('baser_core', 'テーマ「{0}」をコピーしました。', $theme));
+            if($service->copy($theme)) {
+                $this->BcMessage->setInfo(__d('baser_core', 'テーマ「{0}」をコピーしました。', $theme));
+            } else {
+                $this->BcMessage->setError(__d('baser_core', 'テーマ「{0}」のコピーに失敗しました。', $theme));
+            }
         } catch (BcException $e) {
             $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
         }

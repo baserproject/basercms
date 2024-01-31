@@ -24,7 +24,7 @@ jobs:
                         local_path: 'bc-blog'
                         split_repository: 'bc-blog'
                     -
-                        local_path: 'bc-column'
+                        local_path: 'BcColumn'
                         split_repository: 'bc-column'
                     -
                         local_path: 'bc-content-link'

@@ -48,7 +48,9 @@ class UsersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login']);
+        if(isset($this->Authentication)) {
+            $this->Authentication->allowUnauthenticated(['login']);
+        }
     }
 
     /**
