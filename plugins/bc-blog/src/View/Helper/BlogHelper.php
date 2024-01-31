@@ -1025,6 +1025,7 @@ class BlogHelper extends Helper
      * @return string 指定したIDの内容
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getHtmlById($post, $id)
     {
@@ -1077,6 +1078,7 @@ class BlogHelper extends Helper
      * @return string ブログのアーカイブタイプ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogArchiveType()
     {
@@ -1105,6 +1107,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがカテゴリー別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCategory()
     {
@@ -1117,6 +1120,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがタグ別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isTag()
     {
@@ -1129,6 +1133,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが日別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDate()
     {
@@ -1141,6 +1146,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが月別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMonth()
     {
@@ -1153,6 +1159,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが年別記事一覧ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isYear()
     {
@@ -1736,6 +1743,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPosts($contentsName = [], $num = 5, $options = [])
     {
@@ -1933,6 +1941,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsUrl(int $blogContentId, $base = true)
     {
@@ -1949,6 +1958,7 @@ class BlogHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isSameSiteBlogContent($blogContentId)
     {
