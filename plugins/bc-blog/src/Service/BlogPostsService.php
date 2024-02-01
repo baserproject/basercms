@@ -939,6 +939,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUrl(Content $content, BlogPost $post, $full)
     {
