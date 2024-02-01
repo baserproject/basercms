@@ -1026,7 +1026,9 @@
                         $.bcTree.settings[data.contentType]['exists'] = true;
                         $.bcTree.settings[data.contentType]['existsTitle'] = data.contentTitle;
                         data.contentId = result.content.id;
+                        data.name = result.content.name;
                         data.contentEntityId = result.content.entity_id;
+                        data.contentTitle = result.content.title;
                         data.contentTitle = data.contentTitle.replace(/&/g, '&amp;')
                             .replace(/"/g, '&quot;')
                             .replace(/'/g, '&#039;')

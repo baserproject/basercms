@@ -21,6 +21,7 @@ use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -487,9 +488,12 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testHasChild()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->assertFalse($this->BlogCategory->hasChild(2));
-        $this->assertTrue($this->BlogCategory->hasChild(1));
+        //データ生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        //子カテゴリを持っていない場合
+        $this->assertFalse($this->BlogCategoriesTable->hasChild(2));
+        //子カテゴリを持っている場合
+        $this->assertTrue($this->BlogCategoriesTable->hasChild(1));
     }
 
     /**

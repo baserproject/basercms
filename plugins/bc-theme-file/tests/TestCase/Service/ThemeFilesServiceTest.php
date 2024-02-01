@@ -261,7 +261,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //データを生成
         $this->getRequest()->getAttribute('currentSite');
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'bc-column'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
         //パラメーターを作成
         $param = [
             'plugin' => 'BaserCore',
@@ -274,8 +274,8 @@ class ThemeFilesServiceTest extends BcTestCase
         //対象メソッドをコール
         $rs = $this->ThemeFileService->copyToTheme($param);
         //戻る値を確認
-        $this->assertEquals($rs, '/plugins/bc-column/webroot/css/bge_style.css');
-        $copiedFilePath = '/var/www/html/plugins/bc-column/webroot/css/bge_style.css';
+        $this->assertEquals($rs, '/plugins/BcColumn/webroot/css/bge_style.css');
+        $copiedFilePath = '/var/www/html/plugins/BcColumn/webroot/css/bge_style.css';
         //実際にファイルが作成されいてるか確認すること
         $this->assertTrue(file_exists($copiedFilePath));
         //ファイルの中身を確認

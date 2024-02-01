@@ -18,7 +18,6 @@ use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
@@ -48,7 +47,9 @@ class UsersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login']);
+        if($this->components()->has('Authentication')) {
+            $this->Authentication->allowUnauthenticated(['login']);
+        }
     }
 
     /**
