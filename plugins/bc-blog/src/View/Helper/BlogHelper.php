@@ -1789,6 +1789,7 @@ class BlogHelper extends Helper
                 $options['contentUrl'] = $currentContent->url;
             }
         }
+        unset($options['autoSetCurrentBlog']);
         return $options;
     }
 

@@ -1198,10 +1198,10 @@ class BlogHelperTest extends BcTestCase
     {
         //$optionsはデフォルト場合
         $rs = $this->Blog->parseContentName('news', []);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals(['/news/'], $rs['contentUrl']);
         $this->assertEquals([], $rs['contentId']);
-        $this->assertTrue($rs['autoSetCurrentBlog']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
 
         //$optionsはある場合
         $options = [
@@ -1213,14 +1213,14 @@ class BlogHelperTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals(['index/news', '/news/'], $rs['contentUrl']);
         $this->assertEquals([1], $rs['contentId']);
-        $this->assertFalse($rs['autoSetCurrentBlog']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
 
         //autoSetCurrentBlog = true; contentUrl&contentId == null 場合、
         $rs = $this->Blog->parseContentName(null, []);
         //戻り値を確認
         $this->assertEquals('/news/', $rs['contentUrl']);
         $this->assertEquals(1, $rs['contentId']);
-        $this->assertTrue($rs['autoSetCurrentBlog']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
 
         //autoSetCurrentBlog = false; contentUrl&contentId == null 場合、
         $options = [
@@ -1230,7 +1230,7 @@ class BlogHelperTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals([], $rs['contentUrl']);
         $this->assertEquals([], $rs['contentId']);
-        $this->assertFalse($rs['autoSetCurrentBlog']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
 
         //autoSetCurrentBlog = false; contentUrl&contentId == null 場合、
         $options = [
@@ -1240,7 +1240,7 @@ class BlogHelperTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals('/news/', $rs['contentUrl']);
         $this->assertEquals(1, $rs['contentId']);
-        $this->assertTrue($rs['autoSetCurrentBlog']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
     }
 
     /**
