@@ -45,6 +45,7 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
      * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function methods(): array
     {

@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Test\Scenario\DblogsScenario;
 use BaserCore\Test\Scenario\LoginStoresScenario;
-use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\UserGroupsPaginationsScenario;
@@ -43,9 +42,6 @@ class UsersControllerTest extends BcTestCase
     use BcContainerTrait;
     use ScenarioAwareTrait;
 
-    // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//    public $autoFixtures = false;
-
     /**
      * UsersController
      * @var UsersController
@@ -66,13 +62,7 @@ class UsersControllerTest extends BcTestCase
         $this->loadFixtureScenario(LoginStoresScenario::class);
         $this->loadFixtureScenario(DblogsScenario::class);
         $this->loadFixtureScenario(UserGroupsPaginationsScenario::class);
-            // TODO loadFixtures を利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要
-//        $this->loadFixtures('UsersUserGroups', 'UserGroups', 'Dblogs', 'SiteConfigs', 'Sites');
-//        if ($this->getName() == 'testIndex_pagination') {
-//            $this->loadFixtures('Controller\UsersController\UsersPagination');
-//        } else {
-//            $this->loadFixtures('Users', 'LoginStores');
-//        }
+
         $request = $this->getRequest('/baser/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
         $this->UsersController = new UsersController($request);

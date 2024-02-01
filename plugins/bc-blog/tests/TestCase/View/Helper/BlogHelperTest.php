@@ -782,20 +782,6 @@ class BlogHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * 記事中のタグで指定したIDの内容を取得する
-     */
-    public function testGetHtmlById()
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'content' => '<p id="test-id1">test-content1</p><div id="test-id2">test-content1</div>',
-            'detail' => '<p id="test-id1">test-content2</p>',
-        ]];
-        $result = $this->Blog->getHtmlById($post, 'test-id1');
-        $expected = 'test-content1';
-        $this->assertEquals($expected, $result, '記事中のタグで指定したIDの内容を正しく取得できません');
-    }
 
     /**
      * 親カテゴリを取得する
@@ -924,6 +910,7 @@ class BlogHelperTest extends BcTestCase
         BlogPostFactory::make(['id' => 3, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 3, 'user_id'=>1, 'status' => true])->persist();
         BlogPostFactory::make(['id' => 4, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 2, 'blog_category_id'=> 4, 'user_id'=>1, 'status' => true])->persist();
         BlogPostFactory::make(['id' => 5, 'posted'=> '2015-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 5, 'user_id'=>1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 6, 'posted'=> '2013-01-28 12:57:59', 'blog_content_id'=> 1, 'blog_category_id'=> 5, 'user_id'=>1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 1, 'title' => 'title 1', 'name' => 'name-1', 'blog_content_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         BlogCategoryFactory::make(['id' => 2, 'parent_id'=> 1, 'title' => 'title 2', 'name' => 'name-2', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 3, 'parent_id'=> 2, 'title' => 'title 3', 'name' => 'name-3', 'lft' => 1, 'rght' => 2, 'blog_content_id' => 1])->persist();
@@ -969,7 +956,7 @@ class BlogHelperTest extends BcTestCase
 
         // option type year
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'type' => 'year']);
-        $this->assertEquals('name-5', $result['2015'][0]->name);
+        $this->assertEquals('name-5', $result['2013'][0]->name);
 
         // option viewCount true
         $result = $this->Blog->getCategories(['blogContentId'=>1, 'viewCount' => true]);
@@ -980,6 +967,28 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals(1, $result['2015'][0]->count);
     }
 
+    /**
+     * 記事中のタグで指定したIDの内容を取得する
+     */
+    public function testGetHtmlById()
+    {
+        //データ準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make(
+            [
+                'id' => 123,
+                'name' => 'test-name ',
+                'blog_content_id'=> 1,
+                'content' => '<p id="test-id1">test-content1</p><div id="test-id2">test-content1</div>',
+                'detail' => '<p id="test-id22">test-content2</p>',
+                'status' => true
+            ])->persist();
+        $post = BlogPostFactory::get(123);
+        $result = $this->Blog->getHtmlById($post, 'test-id1');
+        $this->assertEquals('test-content1', $result);
+        $result = $this->Blog->getHtmlById($post, 'test-id123');
+        $this->assertEquals('', $result);
+    }
     /**
      * 子カテゴリを持っているかどうか
      *
@@ -1189,7 +1198,24 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPosts()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        //$contentsNameを設定しない場合、currentContentを取得
+        $rs = $this->Blog->getPosts([], 1, []);
+        $this->assertCount(1, $rs);
+
+        //$contentsNameを設定した場合、
+        $rs = $this->Blog->getPosts(['/news/'])->toArray();
+        $this->assertEquals('プレスリリース', $rs[0]['title']);
+
+        //$contentsNameを間違った場合、
+        $rs = $this->Blog->getPosts(['news5'])->toArray();
+        $this->assertCount(0, $rs);
     }
 
     /**
@@ -1290,7 +1316,12 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetContentsUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        //ブログコンテンツのURLメソッドをコール
+        $rs = $this->Blog->getContentsUrl(1);
+        //戻る値を確認
+        $this->assertEquals('https://localhost/news/', $rs);
     }
 
     /**
@@ -1298,7 +1329,26 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsSameSiteBlogContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(2, 1, 2, 'news-2', '/news-2/', 2)->persist();
+        BlogContentFactory::make(['id' => 2])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode(3, 2, 3, 'news-2', '/news-2/', 3)->persist();
+        BlogContentFactory::make(['id' => 3])->persist();
+
+        //currentContentをリセット
+        $view = new BlogFrontAppView($this->getRequest());
+        $blogContent = BlogContentFactory::get(1);
+        $blogContent->content = ContentFactory::get(2);
+        $view->set('blogContent', $blogContent);
+        $this->Blog = new BlogHelper($view);
+
+        //現在のサイトと同じいテスト
+        $this->assertTrue($this->Blog->isSameSiteBlogContent(2));
+
+        //現在のサイト異なるテスト
+        $this->assertFalse($this->Blog->isSameSiteBlogContent(3));
     }
 
     /**
@@ -1348,9 +1398,10 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetBlogArchiveType($url, $type, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
-        $this->View->set('blogArchiveType', $type);
+        $this->Blog->request = $this->getRequest($url);
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
         $result = $this->Blog->getBlogArchiveType();
         $this->assertEquals($type, $result);
 
@@ -1380,10 +1431,118 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsTag($type, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->View->set('blogArchiveType', $type);
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
         $result = $this->Blog->isTag();
         $this->assertEquals($expects, $result);
+    }
+
+
+    /**
+     * test isArchive
+     * @dataProvider isCategoryDataProvider
+     *
+     */
+    public function test_isCategory($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isCategory();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isCategoryDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', false],
+            ['yearly', false],
+            ['monthly', false],
+            ['daily', false],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+
+    /**
+     * test isDate
+     * @dataProvider isDateDataProvider
+     */
+    public function test_isDate($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isDate();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isDateDataProvider()
+    {
+        return [
+            ['category', false],
+            ['tag', false],
+            ['yearly', false],
+            ['monthly', false],
+            ['daily', true],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isDate
+     * @dataProvider isMonthDataProvider
+     */
+    public function test_isMonth($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isMonth();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isMonthDataProvider()
+    {
+        return [
+            ['category', false],
+            ['tag', false],
+            ['yearly', false],
+            ['monthly', true],
+            ['daily', false],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isDate
+     * @dataProvider isYearDataProvider
+     */
+    public function test_isYear($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isYear();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isYearDataProvider()
+    {
+        return [
+            ['category', false],
+            ['tag', false],
+            ['yearly', true],
+            ['monthly', false],
+            ['daily', false],
+            ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
     }
 
     public static function isTagDataProvider()

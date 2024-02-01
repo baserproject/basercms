@@ -215,6 +215,8 @@
                         debug: (debug.length) ? debug : null
                     }
                 }
+                // key を null にしておくことで、トークンを再取得時の loading が表示されるようになる
+                $.bcToken.key = null;
                 $.bcToken.submitToken(url, options);
                 return false;
             });

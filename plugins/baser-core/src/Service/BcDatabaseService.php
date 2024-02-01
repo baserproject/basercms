@@ -105,6 +105,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        $adapter->setSchemaTableName('baser_core_phinxlog');
         // CakePHP5で pdo へのアクセスができなくなってしまったため
         // 仕方なく Reflection を利用
         $pdoProperty = new ReflectionProperty($db->getDriver(), 'pdo');
@@ -389,11 +390,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $files = $Folder->getFiles(['full'=>true]);
         $targetTables = $files;
         $tableList = $this->getAppTableList($plugin, $dbConfigKeyName);
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         $result = true;
         foreach($targetTables as $targetTable) {
             $targetTable = basename($targetTable, '.csv');
             if (in_array($targetTable, $excludes)) continue;
-            if (!in_array($targetTable, $tableList)) continue;
+            if (!in_array($prefix . $targetTable, $tableList)) continue;
             // 初期データ投入
             foreach($files as $file) {
                 if (!preg_match('/\.csv$/', $file)) continue;
@@ -520,7 +522,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $result = true;
         $tables = $this->getAppTableList($plugin, $dbConfigKeyName);
         if (empty($tables)) return true;
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         foreach($tables as $table) {
+            $table = preg_replace('/^' . $prefix . '/', '', $table);
             if (!in_array($table, $excludes)) {
                 if (!$this->truncate($table, $dbConfigKeyName)) {
                     $result = false;
@@ -554,6 +558,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $currentConnection = $tableClass->getConnection();
         if($currentConnection->configName() !== $dbConfigKeyName) {
             $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
+            // プレフィックスを再設定するため再度テーブル名をセットする
+            $tableClass->setTable($table);
         }
         $schema = $tableClass->getSchema();
         $db = $tableClass->getConnection();
@@ -677,7 +683,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadCsvToArray($path, $encoding = 'auto')
     {
-
+        if(!file_exists($path)) return [];
         if (!$encoding) {
             $encoding = $this->_dbEncToPhp($this->getEncoding());
         }
@@ -694,7 +700,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $head = fgetcsv($fp, 10240);
         // UTF-8（BOM付）で何故か、配列の最初のキーに""が付加されてしまう
-        $head[0] = preg_replace('/^﻿"(.+)"$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^﻿(.+)$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^"(.+)"$/', "$1", $head[0]);
 
         $records = [];
         while(($record = BcUtil::fgetcsvReg($fp, 10240)) !== false) {
