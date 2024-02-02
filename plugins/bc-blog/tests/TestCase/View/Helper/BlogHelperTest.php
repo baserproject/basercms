@@ -1326,8 +1326,13 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsBlog($expected, $url)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
+        if (!$expected) {
+            //currentContentを変更
+            $view = new BlogFrontAppView($this->getRequest($url));
+            $this->Blog = new BlogHelper($view);
+        }
+        $this->Blog->getView()->setRequest($this->getRequest($url));
+        //戻り値を確認
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 
