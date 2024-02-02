@@ -227,7 +227,7 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $fullpath = BASER_PLUGINS . 'bc-column' . '/templates/layout/';
+        $fullpath = BASER_PLUGINS . 'BcColumn' . '/templates/layout/';
         $file = new BcFile($fullpath . 'base_name_1.php');
         $file->create();
 

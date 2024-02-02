@@ -341,7 +341,7 @@ class BlogPostsTableTest extends BcTestCase
     {
         return [
             [1, 2027, 1, 2027, 1],      //日付を設定する場合、
-            [1, null, null, 2023, date('m')],   //日付を設定ない場合、
+            [1, null, null, date('Y'), date('m')],   //日付を設定していない場合、
         ];
     }
 

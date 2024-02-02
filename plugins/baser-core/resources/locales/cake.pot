@@ -4,8 +4,8 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CakePHP 4.4.12\n"
-"POT-Creation-Date: 2023-04-24 13:31+0900\n"
+"Project-Id-Version: CakePHP 4.4.17\n"
+"POT-Creation-Date: 2024-01-22 17:44+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -13,71 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1104
-msgid "January"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1105
-msgid "February"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1106
-msgid "March"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1107
-msgid "April"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1108
-msgid "May"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1109
-msgid "June"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1110
-msgid "July"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1111
-msgid "August"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1112
-msgid "September"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1113
-msgid "October"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1114
-msgid "November"
-msgstr ""
-
-#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1115
-msgid "December"
-msgstr ""
-
-#: ./templates/Error/error400.php:36
-#: ./templates/Error/error500.php:40
-#: ./tmp/basercms/templates/Error/error400.php:36
-#: ./tmp/basercms/templates/Error/error500.php:40
-msgid "Error"
-msgstr ""
-
-#: ./templates/Error/error400.php:37
-#: ./tmp/basercms/templates/Error/error400.php:37
-msgid "The requested address {0} was not found on this server."
-msgstr ""
-
-#: ./templates/Error/error500.php:38
-#: ./tmp/basercms/templates/Error/error500.php:38
-msgid "An Internal Error Has Occurred"
-msgstr ""
 
 #: ./vendor/cakephp/cakephp/src/Controller/Component/AuthComponent.php:462
 msgid "You are not authorized to access that location."

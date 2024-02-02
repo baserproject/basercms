@@ -49,12 +49,12 @@ $action = $this->getRequest()->getParam('action');
           <?php echo h($themeFile->ext) ?>
           <?php echo $this->BcAdminForm->control('ext', ['type' => 'hidden']) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('base_name') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'ファイル名は半角で入力してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('base_name') ?>
         <?php else: ?>
           <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $themeFile->ext ?>
           <?php echo $this->BcAdminForm->control('ext', ['type' => 'hidden']) ?>

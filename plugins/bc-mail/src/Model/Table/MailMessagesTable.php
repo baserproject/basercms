@@ -236,6 +236,17 @@ class MailMessagesTable extends MailAppTable
                 $validator->allowEmpty($mailField->field_name);
             }
 
+            // ファイル拡張子チェックデフォルト設定
+            if ($mailField->type === 'file') {
+                $validator->add($mailField->field_name, [
+                    'fileExt' => [
+                        'provider' => 'bc',
+                        'rule' => ['fileExt', 'gif,jpg,jpeg,png,pdf'],
+                        'message' => __d('baser_core', 'ファイル形式が無効です。')
+                    ]
+                ]);
+            }
+
             // ### 拡張バリデーション
             if ($mailField->valid_ex && !empty($mailField->use_field)) {
                 $valids = explode(',', $mailField->valid_ex);

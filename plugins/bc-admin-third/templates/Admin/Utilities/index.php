@@ -49,6 +49,24 @@ $this->BcBaser->js('admin/utilities/index.bundle', false);
     ['class' => 'bca-btn', 'confirm' => __d('baser_core', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
   ) ?>
 </div>
+
+<div class="section bca-main__section">
+  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'アセットファイル') ?></h2>
+  <p class="bca-main__text">
+    <?php echo __d('baser_core', 'テーマ・プラグインのアセットファイルへのシンボリックリンクを再作成します。別環境への移設などで、テーマやプラグインの画像、CSS、Javascriptへのリンク切れが発生した際に利用します。') ?>
+  </p>
+  <?php echo $this->BcAdminForm->postLink(__d('baser_core', 'シンボリックリンクを再作成する'),
+    [
+      'controller' => 'utilities',
+      'action' => 'assets_symlink'
+    ],
+    [
+      'class' => 'bca-submit-token bca-btn',
+      'data-bca-btn-type' => 'clear',
+      'confirm' => __d('baser_core', 'テーマ・プラグインへのシンボリックリンクを再作成します。本当によろしいですか？')
+    ]) ?>
+</div>
+
 <?php echo $this->BcAdminForm->secure() ?>
 <div class="section bca-main__section">
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'スペシャルサンクスクレジット') ?></h2>

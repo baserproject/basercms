@@ -104,6 +104,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter($options['adapter'], $options);
+        $adapter->setSchemaTableName('baser_core_phinxlog');
         /* @var PDO $pdo */
         $pdo = $db->getDriver()->getConnection();
         $adapter->setConnection($pdo);
@@ -383,11 +384,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $files = $Folder->read(true, true, true);
         $targetTables = $files[1];
         $tableList = $this->getAppTableList($plugin, $dbConfigKeyName);
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         $result = true;
         foreach($targetTables as $targetTable) {
             $targetTable = basename($targetTable, '.csv');
             if (in_array($targetTable, $excludes)) continue;
-            if (!in_array($targetTable, $tableList)) continue;
+            if (!in_array($prefix . $targetTable, $tableList)) continue;
             // 初期データ投入
             foreach($files[1] as $file) {
                 if (!preg_match('/\.csv$/', $file)) continue;
@@ -514,7 +516,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $result = true;
         $tables = $this->getAppTableList($plugin, $dbConfigKeyName);
         if (empty($tables)) return true;
+        $prefix = ConnectionManager::get($dbConfigKeyName)->config()['prefix'];
         foreach($tables as $table) {
+            $table = preg_replace('/^' . $prefix . '/', '', $table);
             if (!in_array($table, $excludes)) {
                 if (!$this->truncate($table, $dbConfigKeyName)) {
                     $result = false;
@@ -542,15 +546,19 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             Inflector::camelize($table),
             ['allowFallbackClass' => true]
         );
+        // mail_message_1 など、数値のテーブルの場合、mail_messages1 として、
+        // テーブル名がセットされてしまうため、明示的にテーブル名をセットする
+        $tableClass->setTable($table);
         $currentConnection = $tableClass->getConnection();
         if($currentConnection->configName() !== $dbConfigKeyName) {
             $tableClass->setConnection(ConnectionManager::get($dbConfigKeyName));
+            // プレフィックスを再設定するため再度テーブル名をセットする
+            $tableClass->setTable($table);
         }
         $schema = $tableClass->getSchema();
         $db = $tableClass->getConnection();
         $result = (bool)$db->execute($schema->truncateSql($db)[0]);
         $tableClass->setConnection($currentConnection);
-        $tableClass->setTable($table);
         return $result;
     }
 
@@ -669,7 +677,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadCsvToArray($path, $encoding = 'auto')
     {
-
+        if(!file_exists($path)) return [];
         if (!$encoding) {
             $encoding = $this->_dbEncToPhp($this->getEncoding());
         }
@@ -686,7 +694,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $head = fgetcsv($fp, 10240);
         // UTF-8（BOM付）で何故か、配列の最初のキーに""が付加されてしまう
-        $head[0] = preg_replace('/^﻿"(.+)"$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^﻿(.+)$/', "$1", $head[0]);
+        $head[0] = preg_replace('/^"(.+)"$/', "$1", $head[0]);
 
         $records = [];
         while(($record = BcUtil::fgetcsvReg($fp, 10240)) !== false) {
@@ -924,8 +933,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = ConnectionManager::get($dbConfigKeyName);
         $tables = $db->getSchemaCollection()->listTables();
         $plugins = Plugin::loaded();
-        $list = [];
         $prefix = $db->config()['prefix'];
+
+        $checkNames = [];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
@@ -937,12 +947,28 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             foreach($files[1] as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $tableName = Inflector::tableize($matches[1]);
-                $checkName = $prefix . $tableName;
-                if (in_array($checkName, $tables)) {
-                    $list[$value][] = $tableName;
-                }
+                $checkNames[$value][] = $prefix . $tableName;
             }
         }
+
+        $list = [];
+        foreach($tables as $table) {
+            $hasTablePluginName = (function() use($checkNames, $table){
+                foreach($checkNames as $plugin => $value) {
+                    foreach($value as $checkName) {
+                        $singularize = Inflector::singularize($checkName);
+                        if (preg_match('/^(' . preg_quote($checkName, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+                            return $plugin;
+                        }
+                    }
+                }
+                return false;
+            })();
+            if($hasTablePluginName) {
+                $list[$hasTablePluginName][] = $table;
+            }
+        }
+
         Cache::write('appTableList.' . $dbConfigKeyName, $list, '_bc_env_');
         if ($plugin) {
             return (isset($list[$plugin]))? $list[$plugin] : [];

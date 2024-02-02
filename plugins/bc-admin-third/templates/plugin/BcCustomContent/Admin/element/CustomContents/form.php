@@ -101,13 +101,13 @@
           <?php echo $this->BcAdminForm->control('list_count', ['type' => 'text', 'size' => 10, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('list_count') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', 'フロントエンドの一覧に表示する件数を指定します。') ?></li>
               <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('list_count') ?>
         </td>
       </tr>
 
@@ -129,11 +129,11 @@
               'ASC' => __d('baser_core', '昇順')
             ]]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('list_order') ?>
-          <?php echo $this->BcAdminForm->error('list_direction') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', 'フロントエンドの一覧におけるエントリーの並び順を指定します。') ?>
           </div>
+          <?php echo $this->BcAdminForm->error('list_order') ?>
+          <?php echo $this->BcAdminForm->error('list_direction') ?>
         </td>
       </tr>
 
@@ -149,10 +149,10 @@
             ]),
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('template') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', 'フロントエンドで利用するテンプレートを指定します。') ?>
           </div>
+          <?php echo $this->BcAdminForm->error('template') ?>
         </td>
       </tr>
 
@@ -168,7 +168,6 @@
             'empty' => __d('baser_core', 'サイト基本設定に従う')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
             <?php echo __d('baser_core', 'フロントエンドで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser_core', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
@@ -180,6 +179,7 @@
               ]) ?></li>
             </ul>
           </div>
+          <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>
       </tr>
       <?php endif ?>

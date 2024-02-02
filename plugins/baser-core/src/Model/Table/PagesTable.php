@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -193,18 +194,17 @@ class PagesTable extends AppTable
         }
         $modelId = $page->id;
 
-        $host = '';
         $url = $content->url;
         if (!$content->site) {
             $site = $this->Sites->get($content->site_id);
-        } else {
-            $site = $content->site;
-        }
-        if ($site && $site->useSubDomain) {
-            $host = $site->alias;
-            if ($site->domainType == 1) {
-                $host .= '.' . BcUtil::getMainDomain();
+        } elseif($content->site) {
+            if (is_array($content->site)) {
+                $site = new Site($content->site);
+            } else {
+                $site = $content->site;
             }
+        }
+        if ($site && isset($site->useSubDomain) && $site->useSubDomain) {
             $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
         }
         $detail = $page->contents;
@@ -257,7 +257,7 @@ class PagesTable extends AppTable
         $page->content = new Content([
 			'name' => $page->content->name,
 			'parent_id' => $newParentId,
-			'title' => $newTitle ?? $oldPage->title . '_copy',
+			'title' => $newTitle ?? __d('baser_core', '{0} のコピー', $oldPage->content->title),
 			'author_id' => $newAuthorId,
 			'site_id' => $newSiteId,
 			'description' => $page->content->description,
