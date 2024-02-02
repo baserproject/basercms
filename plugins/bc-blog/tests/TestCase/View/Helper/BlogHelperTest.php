@@ -1285,10 +1285,6 @@ class BlogHelperTest extends BcTestCase
         if (!$expected) {
             //currentContentを変更
             $view = new BlogFrontAppView($this->getRequest($url));
-            $blogContent = BlogContentFactory::get(1);
-            $blogContent->content = ContentFactory::get(1);
-            $blogContent->content->plugin = 'BcCore';
-            $view->set('blogContent', $blogContent);
             $this->Blog = new BlogHelper($view);
         }
         $this->Blog->getView()->setRequest($this->getRequest($url));
