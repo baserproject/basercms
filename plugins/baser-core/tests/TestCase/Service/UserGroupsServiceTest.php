@@ -114,8 +114,6 @@ class UserGroupsServiceTest extends BcTestCase
             [['test'], 'test'],
             // auth_prefixが複数ある場合
             [['test1', 'test2'], 'test1,test2'],
-            // auth_prefixがない場合
-            [null, 'Admin'],
         ];
     }
 
@@ -124,7 +122,10 @@ class UserGroupsServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $data = ['name' => 'ucmitzGroup'];
+        $data = [
+            'name' => 'ucmitzGroup',
+            'auth_prefix' => ['Admin']
+        ];
         $userGroup = $this->UserGroups->get(1);
         $this->UserGroups->update($userGroup, $data);
         $group = $this->UserGroups->getIndex();

@@ -151,7 +151,7 @@ class ContentsTable extends AppTable
         $validator
             ->integer('parent_id')
             ->requirePresence('parent_id', 'create', __d('baser_core', 'content[parent_id] フィールドが存在しません。'))
-            ->allowEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'), function(array $context){
+            ->allowEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'), function(array $context) {
                 return (isset($context['data']['id']) && $context['data']['id'] === 1);
             });
 
@@ -159,6 +159,13 @@ class ContentsTable extends AppTable
             ->scalar('name')
             ->requirePresence('name', 'create', __d('baser_core', 'content[name] フィールドが存在しません。'))
             ->maxLength('name', 230, __d('baser_core', '名前は230文字以内で入力してください。'))
+            ->add('name', 'notBlankIfNonTop', [
+                'rule' => 'notBlank',
+                'on' => function ($context) {
+                    return !empty($context['data']['parent_id']);
+                },
+                'message' => __d('baser_core', 'URLを入力してください。')
+            ])
             ->add('name', [
                 'bcUtileUrlencodeBlank' => [
                     'rule' => ['bcUtileUrlencodeBlank'],
@@ -243,6 +250,24 @@ class ContentsTable extends AppTable
             ])
             ->notEmptyDateTime('modified_date', __d('baser_core', '更新日が空になってます。'), 'update');
         return $validator;
+    }
+
+    /**
+     * 最大のバイト数チェック
+     * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+     *
+     * @param mixed $value 対象となる値
+     * @param int $max バイト数の最大値
+     * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function notEmptyString($value, $max)
+    {
+        $value = (is_array($value))? current($value) : $value;
+        $byte = strlen($value);
+        return ($byte <= $max);
     }
 
     /**
