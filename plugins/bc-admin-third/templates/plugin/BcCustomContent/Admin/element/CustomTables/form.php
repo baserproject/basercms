@@ -26,6 +26,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_tables/form.bundle', false, [
   'data-setting' => json_encode(\Cake\Core\Configure::read('BcCustomContent.fieldTypes')),
   'data-links' => json_encode($flatLinks),
   'data-tableId' => $entity->id,
+  'data-isAdd' => $this->getRequest()->getParam('action') === 'add',
   'defer' => true
 ]);
 $this->BcBaser->i18nScript([
