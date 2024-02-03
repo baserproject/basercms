@@ -334,6 +334,7 @@ class CustomTablesServiceTest extends BcTestCase
 
         //カスタムリンクを追加するテスト
         $postData = [
+            'id' => 1,
             'name' => 'contact_edit_2',
             'new' => [
                 [
