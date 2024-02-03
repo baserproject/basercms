@@ -27,7 +27,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'リンク編集'));
   <tr>
     <th class="bca-form-table__label"><?php echo __d('baser_core', 'リンク先URL') ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 60, 'placeholder' => 'httpssrc/Controller/ContentLinksController://']) ?>
+      <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 60, 'placeholder' => 'https://']) ?>
       <br>
       <?php echo $this->BcAdminForm->error('url') ?>
     </td>
