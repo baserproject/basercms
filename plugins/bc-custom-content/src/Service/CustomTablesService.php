@@ -212,7 +212,20 @@ class CustomTablesService implements CustomTablesServiceInterface
                     $postData['custom_links'][] = $new;
                 }
             }
-            if(empty($postData['custom_links'])) $postData['custom_links'] = [];
+
+            if(empty($postData['custom_links'])) {
+                $postData['custom_links'] = [];
+            } else {
+                $no = $this->CustomTables->CustomLinks->getMax('no', [
+                    'CustomLinks.custom_table_id' => $postData['id']
+                ]);
+                foreach($postData['custom_links'] as $key => $customLink) {
+                    if(empty($customLink['no'])) {
+                        $postData['custom_links'][$key]['no'] = ++$no;
+                    }
+                }
+            }
+
             /** @var CustomTable $entity */
             $entity = $this->CustomTables->patchEntity($entity, $postData);
             $entity = $this->CustomTables->saveOrFail($entity);
