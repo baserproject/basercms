@@ -23,6 +23,7 @@ use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use BaserCore\Model\Table\Exception\CopyFailedException;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class UserGroupsController
@@ -80,9 +81,11 @@ class UserGroupsController extends BcAdminAppController
                 $userGroup = $service->create($this->request->getData());
                 $this->BcMessage->setSuccess(__d('baser_core', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
-            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            } catch (PersistenceFailedException $e) {
                 $userGroup = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set('userGroup', $userGroup ?? $service->getNew());
@@ -110,8 +113,11 @@ class UserGroupsController extends BcAdminAppController
                 $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 $usersService->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);
-            } catch (\Exception $e) {
+            } catch (PersistenceFailedException $e) {
+                $userGroup = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set('userGroup', $userGroup);

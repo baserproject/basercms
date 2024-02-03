@@ -130,7 +130,7 @@ class UserGroupsService implements UserGroupsServiceInterface
         if(!empty($postData['auth_prefix_settings'])) {
             $postData['auth_prefix_settings'] = json_encode($postData['auth_prefix_settings']);
         }
-        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
+        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
         $userGroup = $this->UserGroups->saveOrFail($userGroup);
@@ -158,7 +158,7 @@ class UserGroupsService implements UserGroupsServiceInterface
             if($current) $postData = array_merge($current, $postData);
             $postData['auth_prefix_settings'] = json_encode($postData['auth_prefix_settings']);
         }
-        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
+        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "";
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
         return $this->UserGroups->saveOrFail($userGroup);
     }
