@@ -1765,6 +1765,7 @@ class BlogHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function parseContentName($contentsName, $options)
     {
@@ -1796,6 +1797,7 @@ class BlogHelper extends Helper
                 $options['contentUrl'] = $currentContent->url;
             }
         }
+        unset($options['autoSetCurrentBlog']);
         return $options;
     }
 
@@ -1926,6 +1928,7 @@ class BlogHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isBlog()
     {
