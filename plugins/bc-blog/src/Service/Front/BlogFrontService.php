@@ -146,6 +146,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             $controller->getRequest(),
             $blogContent,
             $controller->paginate($this->BlogPostsService->getIndex([
+                'blog_content_id' => $blogContent->id,
                 'limit' => $blogContent->list_count,
                 'status' => 'publish'
             ]))
