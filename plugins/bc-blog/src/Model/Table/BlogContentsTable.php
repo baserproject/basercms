@@ -67,6 +67,14 @@ class BlogContentsTable extends BlogAppTable
                 'rule' => 'halfText',
                 'message' => __d('baser_core', '一覧表示件数は半角で入力してください。')]);
 
+        $validator->scalar('feed_count')
+            ->notEmptyString('feed_count', __d('baser_core', 'RSSフィード出力件数を入力してください。'))
+            ->range('feed_count', [0, 101], __d('baser_core', 'RSSフィード出力件数は100までの数値で入力してください。'))
+            ->add('feed_count', 'halfText', [
+                'provider' => 'bc',
+                'rule' => 'halfText',
+                'message' => __d('baser_core', 'RSSフィード出力件数は半角で入力してください。')]);
+
         $validator->scalar('template')
             ->maxLength('template', 20, __d('baser_core', 'コンテンツテンプレート名は半角で入力してください。'))
             ->notEmptyString('template', __d('baser_core', 'コンテンツテンプレート名を入力してください。'))
