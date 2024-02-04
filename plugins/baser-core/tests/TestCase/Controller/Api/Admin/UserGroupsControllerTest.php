@@ -85,6 +85,7 @@ class UserGroupsControllerTest extends BcTestCase
             'name' => 'ucmitzGroup',
             'title' => 'ucmitzグループ',
             'use_move_contents' => '1',
+            'auth_prefix' => ['Admin']
         ];
         $this->post('/baser/api/admin/baser-core/user_groups/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
@@ -103,7 +104,8 @@ class UserGroupsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = [
-            'name' => 'Test_test_Man'
+            'name' => 'Test_test_Man',
+            'auth_prefix' => ['Admin']
         ];
         $this->post('/baser/api/admin/baser-core/user_groups/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
