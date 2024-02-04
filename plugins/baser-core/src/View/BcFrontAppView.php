@@ -13,6 +13,7 @@ namespace BaserCore\View;
 
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcTextHelper;
+use BcWidgetArea\View\Helper\BcWidgetAreaHelper;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,6 +27,7 @@ use Cake\Utility\Inflector;
  * BcFrontAppView
  * @uses BcFrontAppView
  * @property BcTextHelper $BcText
+ * @property BcWidgetAreaHelper $BcWidgetArea
  */
 class BcFrontAppView extends AppView
 {
