@@ -105,6 +105,7 @@ class UserGroupsControllerTest extends BcTestCase
             'name' => 'addtestgroup',
             'title' => 'テストグループ',
             'use_move_contents' => '1',
+            'auth_prefix' => ['Admin']
         ]);
         $this->assertFlashMessage('新規ユーザーグループ「addtestgroup」を追加しました。');
 
@@ -133,7 +134,8 @@ class UserGroupsControllerTest extends BcTestCase
             'id' => '1',
             'name' => 'test',
             'title' => 'test',
-            'use_move_contents' => '1'
+            'use_move_contents' => '1',
+            'auth_prefix' => ['Admin']
         ];
         $this->loginAdmin($this->getRequest('/'));
         $this->post('/baser/admin/baser-core/user_groups/edit/1', $data);
