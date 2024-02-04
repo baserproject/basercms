@@ -28,7 +28,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/';
 ?>
 <div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2><?php echo h($name) ?></h2>
 	<?php endif ?>
 	<?php if ($recentEntries): ?>
 		<ul>

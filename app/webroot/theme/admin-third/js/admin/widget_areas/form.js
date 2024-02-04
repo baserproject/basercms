@@ -319,7 +319,12 @@ $(function () {
                     if (result != '1') {
                         $("#BcSystemMessage").html(bcI18n.alertMessage4);
                     } else {
-                        $("#Setting" + id + ' .head').html($("#Setting" + id + ' .name').val());
+                        let name = $("#Setting" + id + ' .name').val().replace(/&/g, '&amp;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/'/g, '&#039;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;');
+                        $("#Setting" + id + ' .head').html(name);
                         $("#BcSystemMessage").html(bcI18n.infoMessage3);
                     }
                     $("#BcMessageBox").slideDown();

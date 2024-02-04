@@ -47,7 +47,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 
 <div class="widget widget-blog-yearly-archives widget-blog-yearly-archives-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2><?php echo h($name) ?></h2>
 	<?php endif ?>
 	<?php if (!empty($postedDates)): ?>
 		<ul>
