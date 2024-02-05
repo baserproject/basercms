@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogCommentsService;
+use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
@@ -215,6 +216,41 @@ class BlogCommentsServiceTest extends BcTestCase
         $result = $this->BlogCommentsService->batch('delete', $ids);
         $this->assertTrue($result);
         $this->assertEquals($count - 3, $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count());
+    }
+
+    /**
+     * testAdd
+     * @return void
+     */
+    public function testAdd(){
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
+        $data = [
+            'id' => 1,
+            'no' => 1,
+            'status' => 1,
+            'name' => 'baserCMS',
+            'email' => '',
+            'url' => 'https://basercms.net',
+            'message' => 'ホームページの開設おめでとうございます。（ダミー）',
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ];
+
+        $result = $this->BlogCommentsService->add(1, 1, $data);
+        //check result return
+        $this->assertEquals('baserCMS', $result['name']);
+        //confirm result add
+        $comment = BlogCommentFactory::get(1);
+        $this->assertEquals($data['name'], $comment['name']);
+        $this->assertEquals(1, $comment['blog_content_id']);
     }
 
 }
