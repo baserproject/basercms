@@ -217,4 +217,25 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->assertEquals($count - 3, $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count());
     }
 
+    /**
+     * getBlogContent
+     * @return void
+     */
+    public function testGetBlogContent(){
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
+        $blogContent = $this->BlogCommentsService->getBlogContent(1);
+        $this->assertEquals('ディスクリプション', $blogContent['description']);
+        $this->assertEquals('homePage', $blogContent['template']);
+    }
+
+
+
 }
