@@ -265,6 +265,9 @@ class BcContentsHelper extends Helper
      * @param int $id カテゴリID
      * @param int $level 関連データの階層
      * @param array $options
+     *  - `type` : コンテンツタイプ
+     *  - `order` : ソート順（初期値：['Contents.site_id', 'Contents.lft']）
+     *  - `siteId` : サイトID
      * @checked
      * @noTodo
      */
@@ -272,7 +275,8 @@ class BcContentsHelper extends Helper
     {
         $options = array_merge([
             'type' => '',
-            'order' => ['Contents.site_id', 'Contents.lft']
+            'order' => ['Contents.site_id', 'Contents.lft'],
+            'siteId' => null
         ], $options);
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Contents.id' => $id]);
         $content = $this->_Contents->find()->where($conditions)->first();
@@ -284,6 +288,9 @@ class BcContentsHelper extends Helper
             'rght <' => $content->rght,
             'lft >' => $content->lft
         ]);
+        if($options['siteId']) {
+            $conditions['Contents.site_id'] = $options['siteId'];
+        }
         if ($level) {
             $level = $level + $content->level + 1;
             $conditions['Contents.level <'] = $level;
