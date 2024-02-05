@@ -39,7 +39,11 @@ class BlogContentValidation extends Validation
             empty($data['eye_catch_size_thumb_width']) ||
             empty($data['eye_catch_size_thumb_height']) ||
             empty($data['eye_catch_size_mobile_thumb_width']) ||
-            empty($data['eye_catch_size_mobile_thumb_height'])
+            empty($data['eye_catch_size_mobile_thumb_height']) ||
+            !is_numeric($data['eye_catch_size_thumb_width']) ||
+            !is_numeric($data['eye_catch_size_thumb_height']) ||
+            !is_numeric($data['eye_catch_size_mobile_thumb_width']) ||
+            !is_numeric($data['eye_catch_size_mobile_thumb_height'])
         ) {
             return false;
         }

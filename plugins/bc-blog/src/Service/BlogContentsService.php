@@ -18,7 +18,6 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
-use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Model\Table\BlogContentsTable;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -252,9 +251,9 @@ class BlogContentsService implements BlogContentsServiceInterface
         switch($field) {
             case 'id':
                 $controlSources['id'] = $this->BlogContents->find('list', [
-                        'keyField' => 'id',
-                        'valueField' => 'content.title'
-                    ])
+                    'keyField' => 'id',
+                    'valueField' => 'content.title'
+                ])
                     ->contain(['Contents'])
                     ->where([
                         'plugin' => 'BcBlog',
@@ -329,10 +328,10 @@ class BlogContentsService implements BlogContentsServiceInterface
      */
     public function checkRequireSearchIndexReconstruction(EntityInterface $before, EntityInterface $after)
     {
-        if(!Plugin::isLoaded('BcSearchIndex')) return false;
-        if($before->name !== $after->name) return true;
-        if($before->status !== $after->status) return true;
-        if($before->parent_id !== $after->parent_id) return true;
+        if (!Plugin::isLoaded('BcSearchIndex')) return false;
+        if ($before->name !== $after->name) return true;
+        if ($before->status !== $after->status) return true;
+        if ($before->parent_id !== $after->parent_id) return true;
         return false;
     }
 

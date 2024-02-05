@@ -1223,7 +1223,51 @@ class BlogHelperTest extends BcTestCase
      */
     public function testParseContentName()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$optionsはデフォルト場合
+        $rs = $this->Blog->parseContentName('news', []);
+        //戻り値を確認
+        $this->assertEquals(['/news/'], $rs['contentUrl']);
+        $this->assertEquals([], $rs['contentId']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
+
+        //$optionsはある場合
+        $options = [
+            'contentUrl' => ['index/news'],
+            'contentId' => [1],
+            'autoSetCurrentBlog' => false
+        ];
+        $rs = $this->Blog->parseContentName('news', $options);
+        //戻り値を確認
+        $this->assertEquals(['index/news', '/news/'], $rs['contentUrl']);
+        $this->assertEquals([1], $rs['contentId']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
+
+        //autoSetCurrentBlog = true; contentUrl&contentId == null 場合、
+        $rs = $this->Blog->parseContentName(null, []);
+        //戻り値を確認
+        $this->assertEquals('/news/', $rs['contentUrl']);
+        $this->assertEquals(1, $rs['contentId']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
+
+        //autoSetCurrentBlog = false; contentUrl&contentId == null 場合、
+        $options = [
+            'autoSetCurrentBlog' => false
+        ];
+        $rs = $this->Blog->parseContentName(null, $options);
+        //戻り値を確認
+        $this->assertEquals([], $rs['contentUrl']);
+        $this->assertEquals([], $rs['contentId']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
+
+        //autoSetCurrentBlog = false; contentUrl&contentId == null 場合、
+        $options = [
+            'autoSetCurrentBlog' => true
+        ];
+        $rs = $this->Blog->parseContentName(null, $options);
+        //戻り値を確認
+        $this->assertEquals('/news/', $rs['contentUrl']);
+        $this->assertEquals(1, $rs['contentId']);
+        $this->assertArrayNotHasKey('autoSetCurrentBlog', $rs);
     }
 
     /**
@@ -1283,8 +1327,13 @@ class BlogHelperTest extends BcTestCase
      */
     public function testIsBlog($expected, $url)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
+        if (!$expected) {
+            //currentContentを変更
+            $view = new BlogFrontAppView($this->getRequest($url));
+            $this->Blog = new BlogHelper($view);
+        }
+        $this->Blog->getView()->setRequest($this->getRequest($url));
+        //戻り値を確認
         $this->assertEquals($expected, $this->Blog->isBlog());
     }
 

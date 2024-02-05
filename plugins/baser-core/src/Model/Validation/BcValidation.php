@@ -89,17 +89,17 @@ class BcValidation extends Validation
      * 最短の長さチェック
      * - 対象となる値の長さが、指定した最短値より長い場合、trueを返す
      *
-     * @param mixed $value 対象となる値
+     * @param mixed $check 対象となる値
      * @param int $min 値の最短値
      * @return boolean
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function minLength($value, $min): bool
+    public static function minLength($check, int $min): bool
     {
-        $value = (is_array($value))? current($value) : $value;
-        $length = mb_strlen($value, Configure::read('App.encoding'));
+        $check = (is_array($check))? current($check) : $check;
+        $length = mb_strlen($check, Configure::read('App.encoding'));
         return ($length >= $min);
     }
 
@@ -107,17 +107,17 @@ class BcValidation extends Validation
      * 最長の長さチェック
      * - 対象となる値の長さが、指定した最長値より短い場合、trueを返す
      *
-     * @param mixed $value 対象となる値
+     * @param mixed $check 対象となる値
      * @param int $max 値の最長値
      * @return boolean
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function maxLength($value, $max): bool
+    public static function maxLength($check, int $max): bool
     {
-        $value = (is_array($value))? current($value) : $value;
-        $length = mb_strlen($value, Configure::read('App.encoding'));
+        $check = (is_array($check))? current($check) : $check;
+        $length = mb_strlen($check, Configure::read('App.encoding'));
         return ($length <= $max);
     }
 
