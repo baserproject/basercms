@@ -143,4 +143,44 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * test add
+     * @return void
+     */
+    public function testAdd()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-uploader/uploader_categories/add');
+        $this->assertResponseOk();
+
+        $this->post('/baser/admin/bc-uploader/uploader_categories/add', [
+            'name' => 'uploader add test',
+        ]);
+
+        //Redirect url
+        $this->assertResponseCode(302);
+        $this->assertRedirect(['action' => 'index']);
+
+        //check message
+        $this->assertFlashMessage('アップロードカテゴリ「uploader add test」を追加しました。');
+
+        //get data after when add and compare data
+        $uploads = $this->getTableLocator()->get('BcUploader.UploaderCategories');
+        $item = $uploads->find()->where([
+            'name' => 'uploader add test',
+        ])->first();
+        $this->assertEquals($item['name'], 'uploader add test');
+
+        $data = [
+            'name' => null
+        ];
+        $this->post('/baser/admin/bc-uploader/uploader_categories/add', $data);
+        //check message
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "カテゴリ名を入力してください。"]], $vars['uploaderCategory']->getErrors());
+        $this->assertResponseCode(200);
+    }
 }

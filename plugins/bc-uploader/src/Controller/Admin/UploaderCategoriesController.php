@@ -46,6 +46,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(UploaderCategoriesServiceInterface $service)
     {
