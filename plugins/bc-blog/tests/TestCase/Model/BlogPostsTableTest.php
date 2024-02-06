@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -21,9 +22,10 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
+use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-
+use ArrayObject;
 /**
  * Class BlogPostsTableTest
  *
