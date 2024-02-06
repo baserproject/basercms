@@ -1891,7 +1891,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function getGlobalMenu($level = 1, $options = [])
+    public function getGlobalMenu($level = 5, $options = [])
     {
         $siteId = 1;
         if (!empty($this->_View->getRequest()->getAttribute('currentContent')->site_id)) {
@@ -1904,7 +1904,7 @@ class BcBaserHelper extends Helper
             $currentId = $this->_View->getRequest()->getAttribute('currentContent')->id;
         }
         $options = array_merge([
-            'tree' => $this->BcContents->getTree($id, $level),
+            'tree' => $this->BcContents->getTree($id, $level, ['siteId' => $siteId]),
             'currentId' => $currentId,
             'data' => [],
             'cache' => false
