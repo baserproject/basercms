@@ -525,7 +525,7 @@ class BcBaserHelper extends Helper
             $options = [];
         }
 
-        if (!is_array($url)) {
+        if (!is_array($url) && !is_null($url)) {
             $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
         $out = $this->BcHtml->link($title?? '', $url, $options);

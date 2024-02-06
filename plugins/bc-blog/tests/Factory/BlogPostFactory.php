@@ -50,6 +50,7 @@ class BlogPostFactory extends CakephpBaseFactory
                 'blog_category_id' => $faker->randomNumber(),
                 'user_id' => $faker->randomNumber(),
                 'posted' => $faker->date(),
+                'status' => 1,
                 'content_draft' => $faker->randomHtml(),
                 'detail_draft' => $faker->randomHtml(),
                 'publish_begin' => null,
