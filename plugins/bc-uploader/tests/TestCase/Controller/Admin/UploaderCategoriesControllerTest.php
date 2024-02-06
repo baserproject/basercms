@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -42,6 +43,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/uploader_categories/');
         $this->loginAdmin($request);
+        $this->uploaderCategoryService = new UploaderCategoriesService();
     }
 
     /**
@@ -142,5 +144,36 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
         $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test edit
+     * @return void
+     */
+    public function testEdit()
+    {
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //get record first
+        $data = $this->uploaderCategoryService->getIndex()->first();
+        $this->post("/baser/admin/bc-uploader/uploader_categories/edit/".$data->id,[
+            'name' => 'test updated'
+        ]);
+        $this->assertResponseSuccess();
+
+        //updated data success
+        $item = $this->uploaderCategoryService->get($data->id);
+        $this->assertEquals('test updated', $item->name);
+        //check message
+        $this->assertFlashMessage('アップロードカテゴリ「test updated」を更新しました。');
+
+        //updated data fail
+        $data['name'] = 'edited name';
+        $this->post("/baser/admin/bc-uploader/uploader_categories/edit/".$data->id, $data);
+        //check message
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
+
     }
 }
