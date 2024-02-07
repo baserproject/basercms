@@ -1159,8 +1159,8 @@ class BlogHelperTest extends BcTestCase
             'News 1' // title
         );
         BlogPostFactory::make(['id'=> 1, 'blog_content_id' => 1, 'title' => 'title test'])->persist();
-        BlogPostFactory::make(['blog_content_id' => 1, 'posted' => '2016-01-27 12:57:59'])->persist();
-        BlogPostFactory::make(['blog_content_id' => 1, 'posted' => '2017-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog1', 'posted' => '2016-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog2', 'posted' => '2017-01-27 12:57:59'])->persist();
         BlogPostFactory::make(['blog_content_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
         BlogTagFactory::make(['id' => 1, 'name' => '新製品'])->persist();
         BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
@@ -1194,7 +1194,7 @@ class BlogHelperTest extends BcTestCase
             ['', '/news/', 5, ['id' => 1], '/^(?!.*post-3).*(?=post-1).*(?!.*post-2).*/s', '記事のIDを正しく指定できません'], // ID指定
             ['', '/news/', 5, ['id' => 99], '/記事がありません/', '記事のIDを正しく指定できません'], // 存在しないID指定  OK
             ['', '/news/', 5, ['keyword' => 'title test'], '/^(?!.*post-3).*(?=post-1).*(?!.*post-2).*/s', '記事のキーワードを正しく指定できません'], // キーワード指定
-            ['', '/news/', 5, ['keyword' => '1'], '/post-1.*post-2.*post-3/s', '記事のキーワードを正しく指定できません'], // キーワード指定
+            ['', '/news/', 5, ['keyword' => '記事のキーワード'], '/(?=no-data)/', '記事のキーワードを正しく指定できません'], // キーワード指定
             ['', '/news/', 5, ['contentsTemplate' => 'default'], '/post-1.*post-2.*post-3/s', 'contentsTemplateを正しく指定できません'], // contentsTemplateを指定
             ['', '/news/', 5, ['template' => 'archives', 'data' => ['blogArchiveType' => 'yearly', 'year' => '2016']], '/bs-blog-title/s', 'templateを正しく指定できません'], // template指定
             ['', '/news/', 5, ['direction' => 'ASC'], '/post-1.*post-2.*post-3/s', 'templateを正しく指定できません'], // 昇順指定
