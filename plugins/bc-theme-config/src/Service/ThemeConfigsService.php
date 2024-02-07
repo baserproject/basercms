@@ -132,15 +132,16 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
     public function saveImage($entity)
     {
         $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-        if(!is_dir($saveDir)) {
+        if (!is_dir($saveDir)) {
             $folder = new BcFolder($saveDir);
             $folder->create();
         }
         $thumbSuffix = '_thumb';
         $oldEntity = $this->ThemeConfigs->getKeyValue();
 
-        foreach(['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'] as $image) {
-            if (!empty($entity->{$image}['tmp_name'])) {
+        foreach (['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'] as $image) {
+            $imageEntity = $entity->{$image};
+            if (!is_null($imageEntity) && !empty($imageEntity->getClientFileName())) {
                 // 古い本体ファイルを削除
                 @unlink($saveDir . $oldEntity[$image]);
 
@@ -149,16 +150,10 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
                 @unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
 
                 // 本体ファイルを保存
-                $ext = pathinfo($entity->{$image}['name'], PATHINFO_EXTENSION);
+                $ext = BcUtil::decodeContent($imageEntity->getClientMediaType(), $imageEntity->getClientFilename());
                 $fileName = $image . '.' . $ext;
                 $filePath = $saveDir . $fileName;
-                if(is_uploaded_file($entity->{$image}['tmp_name'])) {
-                    move_uploaded_file($entity->{$image}['tmp_name'], $filePath);
-                } elseif(BcUtil::isTest()) {
-                    copy($entity->{$image}['tmp_name'], $filePath);
-                } else {
-                    continue;
-                }
+                $imageEntity->moveTo($filePath);
 
                 // サムネイルを保存
                 $imageresizer = new Imageresizer();
