@@ -44,7 +44,7 @@ class BlogPostFactory extends CakephpBaseFactory
             return [
                 'blog_content_id' => $faker->randomNumber(),
                 'no' => $faker->unique()->randomNumber(),
-                'title' => $faker->title(),
+                'title' => $faker->text(10),
                 'content' => $faker->randomHtml(),
                 'detail' => $faker->randomHtml(),
                 'blog_category_id' => $faker->randomNumber(),
