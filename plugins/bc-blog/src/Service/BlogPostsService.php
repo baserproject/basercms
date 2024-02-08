@@ -339,7 +339,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if ($params['author']) {
             $conditions = $this->createAuthorCondition($conditions, $params['author']);
         }
-        return $query->where($conditions);
+        return $query->where($conditions)->distinct('BlogPosts.id');
     }
 
     /**
