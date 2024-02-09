@@ -17,6 +17,7 @@ use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class BcValidationTest
@@ -253,15 +254,11 @@ class BcValidationTest extends BcTestCase
      * @param boolean $expect
      * @dataProvider fileExtDataProvider
      */
-    public function testFileExt($fileName, $fileType, $expect)
+    public function testFileExt($fileType, $expect)
     {
-        $check = [
-            "name" => $fileName,
-            "type" => $fileType
-        ];
         $ext = "jpg,png";
 
-        $result = $this->BcValidation->fileExt($check, $ext);
+        $result = $this->BcValidation->fileExt($fileType, $ext);
         $this->assertEquals($expect, $result);
     }
 
@@ -269,10 +266,40 @@ class BcValidationTest extends BcTestCase
     public static function fileExtDataProvider()
     {
         return [
-            ["test.jpg", "image/jpeg", true],
-            ["test.png", "image/png", true],
-            ["test.gif", "image/gif", false],
-            ["test", "image/png", true],
+            [
+                new UploadedFile(
+                    'test.jpg',
+                    1,
+                    UPLOAD_ERR_OK,
+                    'test.jpg',
+                    'image/jpeg'),
+                true
+            ],
+            [
+                new UploadedFile(
+                    'test.png',
+                    1,
+                    UPLOAD_ERR_OK,
+                    'test.png',
+                    'image/jpeg'),
+                true
+            ],
+            [
+                new UploadedFile('test.gif',
+                    1,
+                    UPLOAD_ERR_OK,
+                    'test.gif',
+                    'image/jpeg'),
+                true
+            ],
+            [
+                new UploadedFile('test',
+                    1,
+                    UPLOAD_ERR_OK,
+                    'test.png',
+                    'image/jpeg'),
+                true
+            ]
         ];
     }
 
