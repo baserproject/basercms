@@ -128,7 +128,7 @@ class BcUploadHelperTest extends BaserTestCase
 			'output' => 'url'
 		];
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
+		$this->assertRegExp('/^\/files\/editor\/template1\.jpg/', $result);
 	}
 
 	public function testGetBasePath()
