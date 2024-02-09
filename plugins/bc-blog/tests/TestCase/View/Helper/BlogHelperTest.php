@@ -26,6 +26,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
+use BcBlog\Test\Scenario\MultiBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
@@ -163,7 +164,7 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->descriptionExists();
         $this->assertTrue($result);
         //正常系実行: false
-        $this->Blog->setContent(2);
+        $this->Blog->setContent(3);
         $result = $this->Blog->descriptionExists();
         $this->assertFalse($result);
     }
@@ -303,6 +304,7 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getPostContent($post);
         $this->assertEquals('
 
+<div class="post-body">リリースコンテンツ</div>
 <div id="post-detail">detail test</div>
 ', $result);
         // blog_post_contentからコンテンツを取得
@@ -1131,64 +1133,79 @@ class BlogHelperTest extends BcTestCase
     /**
      * ブログ記事一覧出力
      *
+     * @param $currentUrl
      * @param string | array $contentsName 管理システムで指定したコンテンツ名
      * @param int $num 記事件数
      * @param array $options オプション
-     * @param expected string 期待値
-     * @param message string テスト失敗時に表示されるメッセージ
+     * @param $expected string 期待値
+     * @param $message string テスト失敗時に表示されるメッセージ
      * @dataProvider postsDataProvider
      * @todo $this->currentContent が初期状態で固定ページになっている場合に正常に動作するテストを追加する
      */
     public function testPosts($currentUrl, $contentsName, $num, $options, $expected, $message = null)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogPostBlogBaserHelper', 'BlogPostsBlogTag');
-        $this->View->loadHelper('BcTime');
-        $url = null;
-        if ($contentsName) {
-            if (!is_array($contentsName)) {
-                $contentsName = [$contentsName];
-            }
-            $url = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $contentsName[0]) . '/';
-        }
-        if ($currentUrl) {
-            $this->Blog->request = $this->_getRequest($currentUrl);
-        }
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+
+        // データ生成
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            1, // parentId
+            'news1', // name
+            '/news/', // url,
+            'News 1' // title
+        );
+        BlogPostFactory::make(['id'=> 1, 'blog_content_id' => 1, 'title' => 'title test'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog1', 'posted' => '2016-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog2', 'posted' => '2017-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
+        BlogTagFactory::make(['id' => 1, 'name' => '新製品'])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+
         $this->expectOutputRegex($expected);
+
+        if ($currentUrl) {
+            $this->Blog->request = $this->getRequest($currentUrl);
+        }
+
         $this->Blog->posts($contentsName, $num, $options);
+        $this->expectOutputString($expected);
     }
 
     public static function postsDataProvider()
     {
         return [
-            ['', 'news', 5, [], '/name1.*name2.*name3/s', '記事が出力されません'], // 通常
+            ['', '/news/', 5, [], '/post-1.*post-2.*post-3/s', '記事が出力されません'], // 通常
             ['', 'news2', 5, [], '/(?=no-data)/', '存在しないコンテンツが存在しています'],    // 存在しないコンテンツ
-            ['', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // 件数指定
-            ['', 'news', 5, ['category' => 'release'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定（子カテゴリあり）
-            ['', 'news', 5, ['category' => 'child'], '/^(?!.*name3).*(?!.*name1).*(?=name2).*/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定(子カテゴリなし)
-            ['', 'news', 5, ['tag' => '新製品'], '/^(?!.*name3).*(?!.*name1).*(?=name2).*/s', '記事のタグを正しく指定できません'], // tag指定
-            ['', 'news', 5, ['tag' => 'テスト'], '/記事がありません/', '記事のタグを正しく指定できません'], // 存在しないtag指定
-            ['', 'news', 5, ['year' => '2016'], '/^(?!.*name1).*(?=name2).*(?=name3).*/s', '記事の年を正しく指定できません'], // 年指定
-            ['', 'news', 5, ['year' => '2017'], '/^(?!.*name3).*(?!.*name2).*(?=name1).*/s', '記事の年を正しく指定できません'], // 年指定
-            ['', 'news', 5, ['year' => '2999'], '/記事がありません/', '記事の年を正しく指定できません'], // 記事がない年指定
-            ['', 'news', 5, ['month' => '2'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の月を正しく指定できません'], // 月指定
-            ['', 'news', 5, ['day' => '2'], '/^(?!.*name1).*(?=name2).*(?=name3).*/s', '記事の日を正しく指定できません'], // 日指定
-            ['', 'news', 5, ['year' => '2016', 'month' => '02', 'day' => '02'], '/^(?!.*name1).*(?!.*name3).*(?=name2).*/s', '記事の年月日を正しく指定できません'], // 年月日指定
-            ['', 'news', 5, ['id' => 2], '/^(?!.*name1).*(?!.*name3).*(?=name2).*/s', '記事のIDを正しく指定できません'], // ID指定
-            ['', 'news', 5, ['id' => 99], '/記事がありません/', '記事のIDを正しく指定できません'], // 存在しないID指定
-            ['', 'news', 5, ['keyword' => '1'], '/^(?!.*name2).*(?!.*name3).*(?=name1).*/s', '記事のキーワードを正しく指定できません'], // キーワード指定
-            ['', 'news', 5, ['keyword' => 'content'], '/name1.*name2.*name3/s', '記事のキーワードを正しく指定できません'], // キーワード指定
-            ['', null, 5, ['contentsTemplate' => 'default'], '/name1.*name2.*name3/s', 'contentsTemplateを正しく指定できません'], // contentsTemplateを指定
-            ['', 'news', 5, ['template' => 'archives'], '/プレスリリース/s', 'templateを正しく指定できません'], // template指定
-            ['', 'news', 5, ['direction' => 'ASC'], '/name3.*name2.*name1/s', 'templateを正しく指定できません'], // 昇順指定
-            ['', 'news', 5, ['direction' => 'DESC'], '/name1.*name2.*name3/s', 'templateを正しく指定できません'], // 降順指定
-            ['', 'news', 5, ['sort' => 'posts_date', 'direction' => 'ASC'], '/name3.*name2.*name1/s', 'sortを正しく指定できません'], // modifiedでソート
-            ['', 'news', 2, ['page' => 1], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', 'pageを正しく指定できません'], // ページ指定
-            ['', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">(?!.*name1).*(?!.*name2).*(?=name3).*/s', 'pageを正しく指定できません'], // ページ指定
-            ['/s/', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">name3<\/span>.*/s', 'pageを正しく指定できません'], // ページ指定
-            ['/service', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 失敗
-            ['/news/', '', 2, ['contentsTemplate' => 'default'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
-            ['/s/news/', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
+            ['', '/news/', 2, [], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の件数を正しく指定できません'], // 件数指定
+            ['', '/news/', 5, ['category' => 'release'], '/post-1.*post-2.*post-3/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定（子カテゴリあり）
+            ['', '/news/', 5, ['category' => 'child'], '/post-1.*post-2.*post-3/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定(子カテゴリなし)
+            ['', '/news/', 5, ['tag' => '新製品'], '/^(?!.*post-3).*(?=post-1).*(?!.post-2).*/s', '記事のタグを正しく指定できません'], // tag指定
+            ['', '/news/', 5, ['tag' => 'テスト'], '/記事がありません/', '記事のタグを正しく指定できません'], // 存在しないtag指定
+            ['', '/news/', 5, ['year' => '2016'], '/^(?!.*post-3).*(?=post-1).*(?!.post-2).*/s', '記事の年を正しく指定できません'], // 年指定
+            ['', '/news/', 5, ['year' => '2017'], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の年を正しく指定できません'], // 年指定
+            ['', '/news/', 5, ['year' => '2999'], '/記事がありません/', '記事の年を正しく指定できません'], // 記事がない年指定  OK
+            ['', '/news/', 5, ['month' => '1'], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の月を正しく指定できません'], // 月指定
+            ['', '/news/', 5, ['day' => '27'], '/post-1.*post-2.*post-3/s', '記事の日を正しく指定できません'], // 日指定
+            ['', '/news/', 5, ['year' => '2016', 'month' => '01', 'day' => '27'], '/^(?!.*post-3).*(?=post-1).*(?!.post-2).*/s', '記事の年月日を正しく指定できません'], // 年月日指定
+            ['', '/news/', 5, ['id' => 1], '/^(?!.*post-3).*(?=post-1).*(?!.*post-2).*/s', '記事のIDを正しく指定できません'], // ID指定
+            ['', '/news/', 5, ['id' => 99], '/記事がありません/', '記事のIDを正しく指定できません'], // 存在しないID指定  OK
+            ['', '/news/', 5, ['keyword' => 'title test'], '/^(?!.*post-3).*(?=post-1).*(?!.*post-2).*/s', '記事のキーワードを正しく指定できません'], // キーワード指定
+            ['', '/news/', 5, ['keyword' => '記事のキーワード'], '/(?=no-data)/', '記事のキーワードを正しく指定できません'], // キーワード指定
+            ['', '/news/', 5, ['contentsTemplate' => 'default'], '/post-1.*post-2.*post-3/s', 'contentsTemplateを正しく指定できません'], // contentsTemplateを指定
+            ['', '/news/', 5, ['template' => 'archives', 'data' => ['blogArchiveType' => 'yearly', 'year' => '2016']], '/bs-blog-title/s', 'templateを正しく指定できません'], // template指定
+            ['', '/news/', 5, ['direction' => 'ASC'], '/post-1.*post-2.*post-3/s', 'templateを正しく指定できません'], // 昇順指定
+            ['', '/news/', 5, ['direction' => 'DESC'], '/post-1.*post-2.*post-3/s', 'templateを正しく指定できません'], // 降順指定
+            ['', '/news/', 5, ['sort' => 'posted', 'direction' => 'ASC'], '/post-1.*post-2.*post-3/s', 'sortを正しく指定できません'], // modifiedでソート
+            ['', '/news/', 2, ['page' => 1], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', 'pageを正しく指定できません'], // ページ指定
+            ['', '/news/', 2, ['page' => 2], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', 'pageを正しく指定できません'], // ページ指定
+            ['/s/', '/news/', 2, ['page' => 2], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', 'pageを正しく指定できません'], // ページ指定
+            ['/service', '/news/', 2, [], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 失敗
+            ['/news/', '', 2, ['contentsTemplate' => 'default'], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
+            ['/s/news/', '/news/', 2, [], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
         ];
     }
 
