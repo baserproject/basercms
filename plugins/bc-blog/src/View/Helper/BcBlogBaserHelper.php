@@ -58,6 +58,7 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
             'isBlogYear' => ['Blog', 'isYear'],
             'isBlogSingle' => ['Blog', 'isSingle'],
             'isBlogHome' => ['Blog', 'isHome'],
+            'isBlogArchive' => ['Blog', 'isArchive'],
             'getBlogs' => ['Blog', 'getContents'],
             'isBlog' => ['Blog', 'isBlog'],
             'getBlogCategories' => ['Blog', 'getCategories'],

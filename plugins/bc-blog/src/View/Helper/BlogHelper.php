@@ -254,6 +254,33 @@ class BlogHelper extends Helper
      */
     public function getTitle()
     {
+        if ($this->isArchive()) { // ブログ 各絞り込み一覧
+            $archiveType = $this->getBlogArchiveType();
+            switch ($archiveType) {
+                case 'category':
+                    return $this->_View->get('blogCategory')->title;
+                    break;
+                case 'tag':
+                    return $this->_View->get('blogTag')->name;
+                    break;
+                case 'yearly':
+                    return $this->_View->get('year').'年';
+                    break;
+                case 'monthly':
+                    return $this->_View->get('year').'年 '. $this->_View->get('month').'月';
+                    break;
+                case 'daily':
+                    return $this->_View->get('year').'年 '. $this->_View->get('month').'月 '. $this->_View->get('day').'日';
+                    break;
+                case 'author':
+                    return $this->_View->get('author')->real_name_1. ' '. $this->_View->get('author')->real_name_2;
+                    break;
+                default:
+                    break;
+            }
+        } elseif ($this->isSingle()) { // ブログ記事
+            return $this->_View->get('post')->title;
+        }
         return $this->currentContent->title;
     }
 

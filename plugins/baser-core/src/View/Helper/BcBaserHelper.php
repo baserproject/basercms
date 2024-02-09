@@ -646,6 +646,10 @@ class BcBaserHelper extends Helper
      */
     public function getContentsTitle()
     {
+        // ブログアーカイブ一覧のときはカテゴリ名や年などがタイトルに
+        if ($this->isBlogArchive() || $this->isBlogSingle()) {
+            return($this->getBlogTitle());
+        }
         return $this->_View->fetch('title');
     }
 
