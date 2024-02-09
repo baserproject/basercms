@@ -354,19 +354,11 @@ class BcUploadHelper extends BcAppHelper
 			}
 
 			if (!isset($mostSizeUrl)) {
-				$mostSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
-			} else {
-				if (file_exists(WWW_ROOT . ltrim($mostSizeUrl, DS))) {
-					$mostSizeUrl = $mostSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($mostSizeUrl, DS));
-				}
+				$mostSizeUrl = $fileUrl . $fileName;
 			}
 
 			if (!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
-			} else {
-				if (file_exists(WWW_ROOT . ltrim($maxSizeUrl, DS))) {
-					$maxSizeUrl = $maxSizeUrl .'?'. @filemtime(WWW_ROOT . ltrim($maxSizeUrl, DS));
-				}
+				$maxSizeUrl = $fileUrl . $fileName;
 			}
 		}
 
