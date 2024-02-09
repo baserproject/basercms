@@ -41,7 +41,18 @@ class BlogCommentFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'blog_content_id' => $faker->randomNumber(),
+                'blog_post_id' => $faker->randomNumber(),
+                'no' => $faker->unique()->randomNumber(),
+                'status' => true,
+                'name' => $faker->name(),
+                'email' => $faker->email(),
+                'url' => $faker->url(),
+                'message' => $faker->text(10),
+                'created' => $faker->date(),
+                'modified' => $faker->date()
+            ];
         });
     }
 
