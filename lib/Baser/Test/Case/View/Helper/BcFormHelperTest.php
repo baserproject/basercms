@@ -835,6 +835,7 @@ class BcFormHelperTest extends BaserTestCase
 			'/figcaption',
 			'/figure',
 		];
+
 		$this->assertTags($result, $expected);
 	}
 
