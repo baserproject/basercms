@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Entity\BlogPost;
+use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -1083,6 +1084,7 @@ class BlogHelperTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogTagsScenario::class);
         $tag = BlogTagFactory::get(1);
+        /** @var BlogTag $tag */
         $url = $this->Blog->getTagLinkUrl($blogContentId, $tag, $base);
         $this->assertEquals($expected, $url);
     }

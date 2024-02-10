@@ -22,7 +22,6 @@ use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\Filesystem\File;
 use Laminas\Diactoros\UploadedFile;
 
 /**
@@ -134,7 +133,7 @@ class ThemeConfigsServiceTest extends BcTestCase
         $filePath = TMP . 'test_upload' . DS;
         (new BcFolder($filePath))->create();
         $testFile = $filePath . 'logo.png';
-        (new BcFile($testFile))->create();
+        copy(ROOT . '/plugins/bc-front/webroot/img/logo.png', $testFile);
         $this->setUploadFileToRequest('file', $testFile);
         // 実行
         $rs = $this->ThemeConfigsService->saveImage(new ThemeConfig([
@@ -147,14 +146,17 @@ class ThemeConfigsServiceTest extends BcTestCase
             )
         ]));
         $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
+        $uploadedThumbPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_thumb.png';
 
         // 戻り値を確認
         $this->assertEquals($rs['logo'], 'logo.png');
         // サムネイルが作成されたことを確認
         $this->assertFileExists($uploadedPath);
+        $this->assertFileExists($uploadedThumbPath);
 
         // 初期化処理
         unlink($uploadedPath);
+        unlink($uploadedThumbPath);
     }
 
     /**

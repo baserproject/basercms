@@ -1974,11 +1974,12 @@ class BlogHelper extends Helper
         $siteId = $content->site_id;
         $currentSiteId = 0;
 
+        $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
         if (!empty($this->currentContent->alias_id)) {
             $content = $contentsTable->get($this->currentContent->alias_id);
             $currentSiteId = $content->site_id;
-        } elseif ($this->_View->getRequest()->getAttribute('currentSite')->id) {
-            $currentSiteId = $this->_View->getRequest()->getAttribute('currentSite')->id;
+        } elseif ($currentSite && $currentSite->id) {
+            $currentSiteId = $currentSite->id;
         }
         return ($currentSiteId == $siteId);
     }
