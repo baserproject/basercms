@@ -203,8 +203,9 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
       <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['action' => 'delete', $uploaderFile->id], [
         'block' => true,
         'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
-        'class' =>
-          'bca-btn', 'data-bca-btn-type' => 'delete'
+        'class' => 'bca-btn',
+        'data-bca-btn-type' => 'delete',
+        'data-bca-btn-color' => "danger"
       ]) ?>
     </div>
   </div>
