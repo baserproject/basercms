@@ -75,7 +75,7 @@ $this->BcAdmin->setTitle($pageTitle);
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm'
-        ], sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('ThemeFolder.name'))) ?>
+        ], sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('name'))) ?>
     </div>
   <?php endif ?>
 </div>
