@@ -84,7 +84,7 @@ class AppControllerTest extends BcTestCase
         $this->assertEquals(['x', 'y', 'MAX_FILE_SIZE'], $this->AppController->FormProtection->getConfig('unlockedFields'));
         $callback = $this->AppController->FormProtection->getConfig('validationFailureCallback');
         $this->expectException("Cake\Http\Exception\BadRequestException");
-        $this->expectExceptionMessage("不正なリクエストと判断されました。<br>もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。<br>不正なリクエストです。");
+        $this->expectExceptionMessage("不正なリクエストと判断されました\nもしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。\n不正なリクエストです。");
         $callback(new BadRequestException('不正なリクエストです。'));
     }
 
