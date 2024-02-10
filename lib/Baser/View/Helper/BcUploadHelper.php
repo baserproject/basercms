@@ -380,14 +380,17 @@ class BcUploadHelper extends BcAppHelper
 
 		switch($output) {
 			case 'url' :
-				$out = $mostSizeUrl;
+				$out = $this->Html->assetUrl($mostSizeUrl, array_merge($options, $imgOptions));
 				break;
 			case 'tag' :
 				$out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));
 				break;
 			default :
 				if ($link && !($noimage == $fileName)) {
-					$out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, array_merge($options, $linkOptions));
+					$out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions),
+								$this->Html->assetUrl($maxSizeUrl, array_merge($options, $imgOptions)),
+								array_merge($options, $linkOptions)
+							);
 				} else {
 					$out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));
 				}
