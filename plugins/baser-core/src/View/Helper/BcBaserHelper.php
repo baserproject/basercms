@@ -1296,7 +1296,7 @@ class BcBaserHelper extends Helper
      */
     public function scripts()
     {
-        if (BcUtil::isInstalled() && !BcUtil::isAdminSystem()) {
+        if (BcUtil::isInstalled() && !BcUtil::isAdminSystem() && $this->getView()->getName() !== 'Error') {
             echo BcSiteConfig::get('outer_service_output_header');
         }
 

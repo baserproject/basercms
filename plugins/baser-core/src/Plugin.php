@@ -38,6 +38,7 @@ use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\PluginApplicationInterface;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\Middleware\HttpsEnforcerMiddleware;
@@ -199,7 +200,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-'));
         if (!BcUtil::isInstalled()) return;
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        try {
+            $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        } catch (MissingConnectionException) {
+            return;
+        }
+
         $path = [];
         foreach($sites as $site) {
             if ($site->theme) {
@@ -229,20 +235,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         $admin = Configure::read('BcApp.coreAdminTheme');
         $front = Configure::read('BcApp.coreFrontTheme');
-        if (BcUtil::isAdminSystem() && empty($_REQUEST['preview'])) {
-            Configure::write('App.paths.templates', array_merge([
-                ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,
-                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $admin . DS . 'templates' . DS
-            ], Configure::read('App.paths.templates')));
-        } else {
-            Configure::write('App.paths.templates', array_merge([
-                ROOT . DS . 'plugins' . DS . $front . DS . 'templates' . DS,
-                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $front . DS . 'templates' . DS,
-                ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,
-                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $admin . DS . 'templates' . DS
-            ], Configure::read('App.paths.templates')));
-        }
-
+        Configure::write('App.paths.templates', array_merge([
+            ROOT . DS . 'plugins' . DS . $front . DS . 'templates' . DS,
+            ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $front . DS . 'templates' . DS,
+            ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,
+            ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $admin . DS . 'templates' . DS
+        ], Configure::read('App.paths.templates')));
     }
 
     /**
