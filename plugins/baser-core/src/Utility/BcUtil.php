@@ -1742,7 +1742,6 @@ class BcUtil
         return true;
     }
 
-
     /**
      * httpからのフルURLを取得する
      *
