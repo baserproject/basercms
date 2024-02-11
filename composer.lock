@@ -2823,16 +2823,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "96d107e2bfe61bb9eafe55a9d45bd7faed1dd461"
+                "reference": "aaf6ed5ccd27c23f79a545e351b4d7842a99d0bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/96d107e2bfe61bb9eafe55a9d45bd7faed1dd461",
-                "reference": "96d107e2bfe61bb9eafe55a9d45bd7faed1dd461",
+                "url": "https://api.github.com/repos/composer/composer/zipball/aaf6ed5ccd27c23f79a545e351b4d7842a99d0bc",
+                "reference": "aaf6ed5ccd27c23f79a545e351b4d7842a99d0bc",
                 "shasum": ""
             },
             "require": {
@@ -2917,7 +2917,7 @@
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
                 "security": "https://github.com/composer/composer/security/policy",
-                "source": "https://github.com/composer/composer/tree/2.7.0"
+                "source": "https://github.com/composer/composer/tree/2.7.1"
             },
             "funding": [
                 {
@@ -2933,7 +2933,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T14:09:19+00:00"
+            "time": "2024-02-09T14:26:28+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -6076,21 +6076,21 @@
         },
         {
             "name": "vierge-noire/cakephp-fixture-factories",
-            "version": "v2.9.2",
+            "version": "v2.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vierge-noire/cakephp-fixture-factories.git",
-                "reference": "59af217779c16d7601469d5ffc48438d6d228db8"
+                "reference": "9bb9ee5eb198877185a69dcdce3471dbb77c190d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierge-noire/cakephp-fixture-factories/zipball/59af217779c16d7601469d5ffc48438d6d228db8",
-                "reference": "59af217779c16d7601469d5ffc48438d6d228db8",
+                "url": "https://api.github.com/repos/vierge-noire/cakephp-fixture-factories/zipball/9bb9ee5eb198877185a69dcdce3471dbb77c190d",
+                "reference": "9bb9ee5eb198877185a69dcdce3471dbb77c190d",
                 "shasum": ""
             },
             "require": {
                 "cakephp/orm": "^4.2",
-                "fakerphp/faker": "^1.15",
+                "fakerphp/faker": "^1.23",
                 "php": ">=7.2",
                 "vierge-noire/cakephp-test-suite-light": "^2.1"
             },
@@ -6133,9 +6133,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vierge-noire/cakephp-fixture-factories/issues",
-                "source": "https://github.com/vierge-noire/cakephp-fixture-factories/tree/v2.9.2"
+                "source": "https://github.com/vierge-noire/cakephp-fixture-factories/tree/v2.9.3"
             },
-            "time": "2023-08-23T14:03:11+00:00"
+            "time": "2024-02-09T08:58:59+00:00"
         },
         {
             "name": "vierge-noire/cakephp-test-suite-light",
