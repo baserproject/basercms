@@ -388,7 +388,7 @@ class BcUploadHelper extends BcAppHelper
 			default :
 				if ($link && !($noimage == $fileName)) {
 					$out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions),
-								$this->Html->assetUrl($maxSizeUrl, array_merge($options, $imgOptions)),
+								$this->Html->assetUrl($maxSizeUrl, $options),
 								array_merge($options, $linkOptions)
 							);
 				} else {
