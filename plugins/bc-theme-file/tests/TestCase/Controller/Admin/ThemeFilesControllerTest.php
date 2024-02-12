@@ -410,7 +410,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
         $this->assertEquals(
-            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
             $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
         );
     }
@@ -458,7 +458,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         $themeFolderForm = $this->_controller->viewBuilder()->getVar('themeFolderForm');
         $this->assertEquals(
-            'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。',
             $themeFolderForm->getErrors()['name']['nameAlphaNumericPlus']
         );
 
