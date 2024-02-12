@@ -343,10 +343,10 @@ class BcUploadHelper extends BcAppHelper
 
 					if ($fileExists || $options['force']) {
 						if ($check && !$mostSizeExists) {
-							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . mt_rand();
+							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
 							$mostSizeExists = true;
 						} elseif (!$mostSizeExists && !$maxSizeExists) {
-							$maxSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . mt_rand();
+							$maxSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
 							$maxSizeExists = true;
 						}
 					}
@@ -354,10 +354,11 @@ class BcUploadHelper extends BcAppHelper
 			}
 
 			if (!isset($mostSizeUrl)) {
-				$mostSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+				$mostSizeUrl = $fileUrl . $fileName;
 			}
+
 			if (!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl . $fileName . '?' . mt_rand();
+				$maxSizeUrl = $fileUrl . $fileName;
 			}
 		}
 
@@ -379,14 +380,17 @@ class BcUploadHelper extends BcAppHelper
 
 		switch($output) {
 			case 'url' :
-				$out = $mostSizeUrl;
+				$out = $this->Html->assetUrl($mostSizeUrl, array_merge($options, $imgOptions));
 				break;
 			case 'tag' :
 				$out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));
 				break;
 			default :
 				if ($link && !($noimage == $fileName)) {
-					$out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, array_merge($options, $linkOptions));
+					$out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions),
+								$this->Html->assetUrl($maxSizeUrl, $options),
+								array_merge($options, $linkOptions)
+							);
 				} else {
 					$out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));
 				}
