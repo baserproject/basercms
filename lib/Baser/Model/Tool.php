@@ -124,10 +124,7 @@ class Tool extends AppModel
 	{
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if (move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
-			include $path;
-			$schemaName = basename(Inflector::classify(basename($path)), '.php') . 'Schema';
-			$Schema = new $schemaName();
-			$db = ConnectionManager::getDataSource($Schema->connection);
+			$db = ConnectionManager::getDataSource('default');
 			if ($db->loadSchema(['type' => $data['Tool']['schema_type'], 'path' => $tmpPath, 'file' => $data['Tool']['schema_file']['name']])) {
 				return true;
 			} else {
