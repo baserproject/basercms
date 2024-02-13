@@ -790,15 +790,37 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetParentCategory()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '正しく親カテゴリーを取得できません';
-        $post = ['BlogCategory' => ['id' => 1]];
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 11,
+            'blog_category_id' => 11,
+            'blog_content_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 11,
+            'blog_content_id' => 1,
+            'parent_id' => 0,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 12,
+            'blog_category_id' => 12,
+            'blog_content_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 12,
+            'parent_id' => 11,
+            'blog_content_id' => 1,
+        ])->persist();
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        //正常系
+        $post = $BlogPostsService->get(12);
         $result = $this->Blog->getParentCategory($post);
-        $this->assertEmpty($result, $message);
-
-        $post['BlogCategory']['id'] = 2;
+        $this->assertEquals(11, $result[0]->id);
+        //異常系
+        $post = $BlogPostsService->get(11);
+        $this->Blog->getParentCategory($post);
         $result = $this->Blog->getParentCategory($post);
-        $this->assertEquals('release', $result['BlogCategory']['name'], $message);
+        $this->assertCount(0, $result);
     }
 
     /**

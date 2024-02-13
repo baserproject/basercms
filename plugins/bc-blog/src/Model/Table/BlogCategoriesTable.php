@@ -417,4 +417,18 @@ class BlogCategoriesTable extends BlogAppTable
             throw $e;
         }
     }
+
+    /**
+     * 親カテゴリを取得する
+     * @param $category
+     * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getParent($category)
+    {
+        return $this->find()->where(['id' => $category->parent_id])->toArray();
+    }
 }
