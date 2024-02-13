@@ -579,27 +579,12 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function test_getParent()
     {
-        BlogPostFactory::make([
-            'id' => 11,
-            'blog_category_id' => 11,
-            'blog_content_id' => 1,
-        ])->persist();
-        BlogCategoryFactory::make([
-            'id' => 11,
-            'blog_content_id' => 1,
-            'parent_id' => 0,
-        ])->persist();
-        BlogPostFactory::make([
-            'id' => 12,
-            'blog_category_id' => 12,
-            'blog_content_id' => 1,
-        ])->persist();
-        BlogCategoryFactory::make([
-            'id' => 12,
-            'parent_id' => 11,
-            'blog_content_id' => 1,
-        ])->persist();
-        $rs = $this->BlogCategoriesTable->getParent($this->BlogCategoriesTable->get(12));
+        //データ生成
+        BlogCategoryFactory::make(['id' => 11])->persist();
+        //テストメソッドをコール
+        $rs = $this->BlogCategoriesTable->getParent(11);
+        //戻り値を確認
+        $this->assertCount(1, $rs);
         $this->assertEquals(11, $rs[0]->id);
     }
 }

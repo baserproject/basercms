@@ -420,15 +420,15 @@ class BlogCategoriesTable extends BlogAppTable
 
     /**
      * 親カテゴリを取得する
-     * @param $category
+     * @param $parent_id
      * @return array
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getParent($category)
+    public function getParent($parent_id)
     {
-        return $this->find()->where(['id' => $category->parent_id])->toArray();
+        return $this->find()->where(['id' => $parent_id])->toArray();
     }
 }
