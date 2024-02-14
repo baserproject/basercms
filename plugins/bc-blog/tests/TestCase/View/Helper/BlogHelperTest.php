@@ -758,28 +758,29 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostImg($num, $link, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'blog_content_id' => 1,
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 111,
             'name' => 'test-name ',
+            'no' => 1,
+            'blog_content_id' => 1,
             'content' => '<img src="test1.jpg"><img src="test2.jpg">',
-            'detail' => '',
-            'no' => '',
-        ]];
+        ])->persist();
+        $post = BlogPostFactory::get(111);
         $options = [
             'num' => $num,
             'link' => $link,
         ];
         $result = $this->Blog->getPostImg($post, $options);
-        $this->assertEquals($expected, $result, '記事中の画像を正しく取得できません');
+        $this->assertEquals($expected, $result);
     }
 
     public static function getPostImgDataProvider()
     {
         return [
-            [1, false, '<img src="/img/test1.jpg" alt="test-name "/>'],
-            [2, false, '<img src="/img/test2.jpg" alt="test-name "/>'],
-            [1, true, '<a href="/news/archives/"><img src="/img/test1.jpg" alt="test-name "/></a>'],
+            [1, false, '<img src="/img/test1.jpg" alt="test-name ">'],
+            [2, false, '<img src="/img/test2.jpg" alt="test-name ">'],
+            [1, true, '<a href="/news/archives/1"><img src="/img/test1.jpg" alt="test-name "></a>'],
             [3, false, ''],
         ];
     }

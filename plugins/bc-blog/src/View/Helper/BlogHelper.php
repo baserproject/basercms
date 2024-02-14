@@ -977,6 +977,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostImg($post, $options = [])
     {
@@ -1002,13 +1003,16 @@ class BlogHelper extends Helper
 
         if (isset($matches[1][$num - 1])) {
             $url = $matches[1][$num - 1];
-            $url = preg_replace('/^' . preg_quote($this->base, '/') . '/', '', $url);
+            if (!is_null($this->base)){
+                $url = preg_replace('/^' . preg_quote($this->base, '/') . '/', '', $url);
+            }
+
             if ($output == 'url') {
                 return $url; // 出力形式 が urlなら、URLを返す
             }
             $img = $this->BcBaser->getImg($url, $options);
             if ($link) {
-                return $this->BcBaser->getLink($img, $this->currentContent->url . 'archives/' . $post->no);
+                return $this->BcBaser->getLink($img, $this->currentContent->url . 'archives/' . $post->no, ['escape' => false]);
             } else {
                 return $img;
             }
