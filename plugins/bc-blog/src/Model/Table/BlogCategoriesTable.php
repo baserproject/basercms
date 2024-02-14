@@ -422,7 +422,7 @@ class BlogCategoriesTable extends BlogAppTable
     /**
      * 親カテゴリを取得する
      * @param $parent_id
-     * @return SelectQuery
+     * @return EntityInterface
      *
      * @checked
      * @noTodo

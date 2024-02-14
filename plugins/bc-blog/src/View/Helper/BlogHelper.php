@@ -1046,7 +1046,7 @@ class BlogHelper extends Helper
      * 親カテゴリを取得する
      *
      * @param array $post ブログ記事
-     * @return array $parentCategory 親カテゴリ
+     * @return EntityInterface $parentCategory 親カテゴリ
      *
      * @checked
      * @noTodo
