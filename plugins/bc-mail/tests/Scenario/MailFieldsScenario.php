@@ -45,7 +45,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
             'after_attachment' => '',
             'source' => '資料請求|問い合わせ|その他',
             'size' => 1,
-            'text_rows' => '0',
+            'text_rows' => 1,
             'maxlength' => 1,
             'options' => '',
             'class' => '',
