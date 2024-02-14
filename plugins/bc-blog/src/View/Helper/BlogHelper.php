@@ -1047,14 +1047,18 @@ class BlogHelper extends Helper
      *
      * @param array $post ブログ記事
      * @return array $parentCategory 親カテゴリ
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getParentCategory($post)
     {
         if (empty($post->blog_category->id)) {
             return null;
         }
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        return $BlogCategory->getParentNode($post->blog_category->id);
+        $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $BlogCategory->getParent($post->blog_category->parent_id);
     }
 
     /**

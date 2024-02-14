@@ -573,4 +573,18 @@ class BlogCategoriesTableTest extends BcTestCase
         $query = $blogCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * test getParent
+     */
+    public function test_getParent()
+    {
+        //データ生成
+        BlogCategoryFactory::make(['id' => 11])->persist();
+        //テストメソッドをコール
+        $rs = $this->BlogCategoriesTable->getParent(11);
+        //戻り値を確認
+        $this->assertCount(1, $rs);
+        $this->assertEquals(11, $rs[0]->id);
+    }
 }
