@@ -584,7 +584,6 @@ class BlogCategoriesTableTest extends BcTestCase
         //テストメソッドをコール
         $rs = $this->BlogCategoriesTable->getParent(11);
         //戻り値を確認
-        $this->assertCount(1, $rs);
-        $this->assertEquals(11, $rs[0]->id);
+        $this->assertEquals(11, $rs->id);
     }
 }

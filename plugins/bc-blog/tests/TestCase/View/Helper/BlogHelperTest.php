@@ -819,12 +819,12 @@ class BlogHelperTest extends BcTestCase
         //正常系
         $result = $this->Blog->getParentCategory($BlogPostsService->get(12));
         //戻り値を確認
-        $this->assertEquals(11, $result[0]->id);
+        $this->assertEquals(11, $result->id);
 
         //異常系
         $result = $this->Blog->getParentCategory($BlogPostsService->get(11));
         //戻り値を確認
-        $this->assertCount(0, $result);
+        $this->assertEmpty($result);
     }
 
     /**
