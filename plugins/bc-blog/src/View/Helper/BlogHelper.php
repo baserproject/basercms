@@ -1046,7 +1046,7 @@ class BlogHelper extends Helper
      * 親カテゴリを取得する
      *
      * @param array $post ブログ記事
-     * @return array $parentCategory 親カテゴリ
+     * @return EntityInterface $parentCategory 親カテゴリ
      *
      * @checked
      * @noTodo
@@ -1057,8 +1057,8 @@ class BlogHelper extends Helper
         if (empty($post->blog_category->id)) {
             return null;
         }
-        $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
-        return $BlogCategory->getParent($post->blog_category->parent_id);
+        $blogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategory->getParent($post->blog_category->parent_id);
     }
 
     /**
