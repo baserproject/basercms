@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
@@ -27,7 +28,6 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
-use BcBlog\Test\Scenario\MultiBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
@@ -716,10 +716,17 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetBlogTemplates($theme, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
+        SiteFactory::make([
+            'id' => 1,
+            'status' => true,
+            'theme' => $theme
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'theme',
+            'value' => $theme
+        ])->persist();
         $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
+        $this->assertEquals($expected, $result);
     }
 
     public static function getBlogTemplatesDataProvider()
