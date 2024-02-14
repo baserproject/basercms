@@ -155,7 +155,7 @@ class MailContentsTable extends MailAppTable
         $validator
             ->scalar('sender_1')
             ->allowEmptyString('sender_1')
-            ->add('sender_2', [
+            ->add('sender_1', [
                 'emails' => [
                     'rule' => 'emails',
                     'provider' => 'bc',
