@@ -214,7 +214,7 @@ class CustomContentHelper extends CustomContentAppHelper
 
         $customLink = $this->getLink($entry->custom_table_id, $fieldName);
 
-        if (empty($customLink->display_front) || !$customLink->display_front) return '';
+        if (empty($customLink->display_front)) return '';
         /** @var CustomField $field */
         $field = $customLink->custom_field;
 
