@@ -678,6 +678,33 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * test hasNextLink
+     */
+    public function test_hasNextLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(1));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(2));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasNextLink(BlogPostFactory::get(111));
+    }
+
+    /**
      * 次の記事へのリンクを出力する
      *
      * @param int $blogContentId ブログコンテンツID
