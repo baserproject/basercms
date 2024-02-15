@@ -601,6 +601,35 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * 前の記事へのリンクを出力する
+     *　ラッパーメソッドのためユニットテストは不要
+     * @param int $blogContentId ブログコンテンツID
+     * @param int $id 記事ID
+     * @param int $posts_date 日付
+     */
+//    public function testPrevLink($blogContentId, $id, $posts_date, $expected)
+//    {
+//        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+//        $this->expectOutputString($expected);
+//        $post = ['BlogPost' => [
+//            'blog_content_id' => $blogContentId,
+//            'id' => $id,
+//            'posts_date' => $posts_date
+//        ]];
+//        $this->Blog->prevLink($post);
+//    }
+
+//    public static function prevLinkDataProvider()
+//    {
+//        return [
+//            [1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/4" class="prev-link">≪ ４記事目</a>'],
+//            [1, 3, '1000-08-10 18:58:07', ''],
+//            [2, 2, '9000-08-10 18:58:07', '<a href="/" class="prev-link">≪ ８記事目</a>'],    // 存在しないブログコンテンツ
+//            [2, 1, '1000-08-10 18:58:07', ''],
+//        ];
+//    }
+
+    /**
      * test hasPrevLink
      */
     public function test_hasPrevLink()
@@ -695,6 +724,35 @@ class BlogHelperTest extends BcTestCase
             ['nada-icons', ['default' => 'default']]
         ];
     }
+
+    /**
+     * 次の記事へのリンクを出力する
+     *　ラッパーメソッドのためユニットテストは不要
+     * @param int $blogContentId ブログコンテンツID
+     * @param int $id 記事ID
+     * @param int $posts_date 日付
+     */
+//    public function testNextLink($blogContentId, $id, $posts_date, $expected)
+//    {
+//        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+//        $this->expectOutputString($expected);
+//        $post = ['BlogPost' => [
+//            'blog_content_id' => $blogContentId,
+//            'id' => $id,
+//            'posts_date' => $posts_date
+//        ]];
+//        $this->Blog->nextLink($post);
+//    }
+
+//    public static function nextLinkDataProvider()
+//    {
+//        return [
+//            [1, 1, '9000-08-10 18:58:07', ''],
+//            [1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'],
+//            [2, 3, '9000-08-10 18:58:07', ''],
+//            [2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'], // 存在しないブログコンテンツ
+//        ];
+//    }
 
     /**
      * 公開状態を取得する
