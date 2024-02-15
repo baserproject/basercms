@@ -865,7 +865,9 @@ SCRIPT_END;
 
         // PHP5.3対応のため、is_string($value) 判別を実行
         $delCheckTag = '';
-        if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) || (is_object($value) && $value->getError() == UPLOAD_ERR_NO_FILE))) {
+        if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) ||
+                (is_array($value) && empty($value['session_key'])) ||
+                (is_object($value) && $value->getError() == UPLOAD_ERR_NO_FILE))) {
             $delCheckTag = $this->Html->tag('span', $this->checkbox($fieldName . '_delete', $deleteCheckboxOptions) . $this->label($fieldName . '_delete', __d('baser_core', '削除する'), $deleteLabelOptions), $deleteSpanOptions);
         }
         $hiddenValue = $this->getSourceValue($fieldName . '_');
