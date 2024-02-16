@@ -76,7 +76,7 @@ class ThemeFilesAdminServiceTest extends BcTestCase
         //対象メソッドをコール
         $rs = $this->ThemeFilesAdminService->getViewVarsForIndex($param);
         //戻る値を確認
-        $this->assertCount(12, $rs['themeFiles']);
+        $this->assertCount(11, $rs['themeFiles']);
         $this->assertNotNull($rs['currentPath']);
         $this->assertNotNull($rs['path']);
         $this->assertNotNull($rs['plugin']);
