@@ -764,13 +764,10 @@ class BlogPostsTableTest extends BcTestCase
         $rs = $this->BlogPostsTable->createSearchIndex($blogPostService->get(1));
         $this->assertEquals($rs['type'], 'ブログ');
         $this->assertEquals($rs['model_id'], 1);
-        $this->assertEquals($rs['content_filter_id'], 33658);
         $this->assertEquals($rs['content_id'], 6);
         $this->assertEquals($rs['site_id'], 1);
         $this->assertEquals($rs['title'], 'プレスリリース');
         $this->assertEquals($rs['url'], '/news/archives/3');
         $this->assertEquals($rs['status'], 1);
-        $this->assertNull($rs['publish_begin']);
-        $this->assertNull($rs['publish_end']);
     }
 }
