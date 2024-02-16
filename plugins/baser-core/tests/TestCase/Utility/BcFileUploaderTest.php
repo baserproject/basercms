@@ -288,7 +288,8 @@ class BcFileUploaderTest extends BcTestCase
             'name' => 'uploadTestFile.png',
             'size' => 1,
             'tmp_name' => $testFile,
-            'ext' => 'png'
+            'ext' => 'png',
+            'type' => 'image/png'
         ];
 
         $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $data);

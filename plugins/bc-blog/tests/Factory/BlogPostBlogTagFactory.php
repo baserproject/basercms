@@ -41,7 +41,12 @@ class BlogPostBlogTagFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'blog_post_id' => $faker->randomNumber(),
+                'blog_tag_id' => $faker->randomNumber(),
+                'created' => $faker->date(),
+                'modified' => $faker->date()
+            ];
         });
     }
 }

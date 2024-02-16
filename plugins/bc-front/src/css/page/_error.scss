@@ -1,0 +1,24 @@
+/**
+ * Error
+ */
+
+/* Error Body
+----------------------------------------------- */
+.bs-error-body {
+
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  &__description {
+    line-height: 1.5!important;
+    color:#888;
+    margin-bottom: 40px!important;
+    margin-top:-20px!important;
+  }
+  &__message {
+    line-height: 1.5!important;;
+    strong {
+      font-weight: bold!important;
+      font-style: normal!important;
+      text-decoration: none;
+    }
+  }
+}

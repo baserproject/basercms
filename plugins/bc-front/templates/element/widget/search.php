@@ -37,7 +37,7 @@ if(empty($searchIndexesFront)) $searchIndexesFront = null;
 
 
 <div class="bs-widget bs-widget-search-box bs-widget-search-box-<?php echo h($id) ?>">
-    <h2 class="bs-widget-head"><?php echo $name ?></h2>
+    <h2 class="bs-widget-head"><?php echo h($name) ?></h2>
     <div class="bs-widget-form">
         <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get', 'url' => $url]) ?>
         <?php if ($folders): ?>

@@ -26,7 +26,7 @@
 
 <section class="bca-section" data-bca-section-type='form-group'>
   <table id="FormTable" class="form-table bca-form-table">
-    <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
+    <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
       <tr>
         <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('no', 'No') ?></th>
         <td class="col-input bca-form-table__input">

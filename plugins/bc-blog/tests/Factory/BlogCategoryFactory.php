@@ -41,7 +41,18 @@ class BlogCategoryFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'blog_content_id' => $faker->randomNumber(),
+                'no' => $faker->unique()->randomNumber(),
+                'name' => $faker->text(5),
+                'title' => $faker->title(),
+                'status' => true,
+                'parent_id' => null,
+                'lft' => null,
+                'rght' => null,
+                'created' => $faker->date(),
+                'modified' => $faker->date()
+            ];
         });
     }
 

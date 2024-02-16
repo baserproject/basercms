@@ -525,7 +525,7 @@ class BcBaserHelper extends Helper
             $options = [];
         }
 
-        if (!is_array($url)) {
+        if (!is_array($url) && !is_null($url)) {
             $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
         $out = $this->BcHtml->link($title?? '', $url, $options);
@@ -1296,7 +1296,7 @@ class BcBaserHelper extends Helper
      */
     public function scripts()
     {
-        if (BcUtil::isInstalled() && !BcUtil::isAdminSystem()) {
+        if (BcUtil::isInstalled() && !BcUtil::isAdminSystem() && $this->getView()->getName() !== 'Error') {
             echo BcSiteConfig::get('outer_service_output_header');
         }
 
@@ -1891,7 +1891,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function getGlobalMenu($level = 1, $options = [])
+    public function getGlobalMenu($level = 5, $options = [])
     {
         $siteId = 1;
         if (!empty($this->_View->getRequest()->getAttribute('currentContent')->site_id)) {
@@ -1904,7 +1904,7 @@ class BcBaserHelper extends Helper
             $currentId = $this->_View->getRequest()->getAttribute('currentContent')->id;
         }
         $options = array_merge([
-            'tree' => $this->BcContents->getTree($id, $level),
+            'tree' => $this->BcContents->getTree($id, $level, ['siteId' => $siteId]),
             'currentId' => $currentId,
             'data' => [],
             'cache' => false

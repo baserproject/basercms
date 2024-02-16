@@ -18,6 +18,7 @@ use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Service\UploaderFilesService;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\ORM\ResultSet;
 
 /**
@@ -55,7 +56,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForAjaxList(ResultSet $entities, int $listId = null)
+    public function getViewVarsForAjaxList(PaginatedResultSet $entities, int $listId = null)
     {
         $uploaderConfig = $this->uploaderConfigsService->get();
         return [

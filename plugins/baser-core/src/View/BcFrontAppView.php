@@ -14,6 +14,7 @@ namespace BaserCore\View;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcTextHelper;
+use BcWidgetArea\View\Helper\BcWidgetAreaHelper;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,6 +27,7 @@ use Cake\Utility\Inflector;
  * BcFrontAppView
  * @uses BcFrontAppView
  * @property BcTextHelper $BcText
+ * @property BcWidgetAreaHelper $BcWidgetArea
  */
 class BcFrontAppView extends AppView
 {
@@ -65,7 +67,7 @@ class BcFrontAppView extends AppView
         $files = $Folder->getFiles();
         if (empty($files)) return;
 
-        foreach($files[1] as $file) {
+        foreach($files as $file) {
             try {
                 $this->addHelper(Inflector::camelize($theme, '-') . '.' . basename($file, 'Helper.php'));
             } catch (\Exception) {

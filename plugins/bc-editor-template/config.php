@@ -15,5 +15,5 @@ return [
     'description' => __d('baser_core', 'CKEditorのテンプレート管理機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
-    'installMessage' => ''
+    'installMessage' => __d('baser_core', 'インストール後、ユーティリティよりエディターテンプレートに移動してください。')
 ];

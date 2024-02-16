@@ -97,8 +97,7 @@ class Plugin extends BcPlugin
          */
         $routes->connect('/tags/*', [
             'plugin' => 'BcBlog',
-            'controller' =>
-            'blog',
+            'controller' => 'blog',
             'action' => 'tags'
         ]);
 

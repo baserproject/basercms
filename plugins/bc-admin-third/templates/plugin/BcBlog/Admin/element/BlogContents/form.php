@@ -111,7 +111,7 @@ use Cake\Routing\Router;
             <ul>
               <li><?php echo __d('baser_core', 'RSSフィードに出力する件数を指定します。') ?></li>
               <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
-              <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
+              <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
                 <li><?php echo __d('baser_core', 'RSSフィードのURL') ?>&nbsp;
                   <?php $this->BcBaser->link(Router::url('/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', true), '/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', ['target' => '_blank']) ?>
                 </li>
