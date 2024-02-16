@@ -923,7 +923,6 @@ class BlogHelper extends Helper
         $excludes = array_keys($excludes);
 
         $excludes[] = 'rss';
-        $excludes[] = 'Blog';
         $templates = [];
         foreach($_templates as $template) {
             if (!in_array($template, $excludes)) {

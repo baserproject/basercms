@@ -718,12 +718,7 @@ class BlogHelperTest extends BcTestCase
     {
         SiteFactory::make([
             'id' => 1,
-            'status' => true,
             'theme' => $theme
-        ])->persist();
-        SiteConfigFactory::make([
-            'name' => 'theme',
-            'value' => $theme
         ])->persist();
         $result = $this->Blog->getBlogTemplates();
         $this->assertEquals($expected, $result);
@@ -732,7 +727,7 @@ class BlogHelperTest extends BcTestCase
     public static function getBlogTemplatesDataProvider()
     {
         return [
-            ['nada-icons', ['default' => 'default']]
+            ['BcThemeSample', ['default' => 'default']]
         ];
     }
 
