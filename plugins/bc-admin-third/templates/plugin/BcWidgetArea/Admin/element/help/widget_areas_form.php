@@ -11,6 +11,8 @@
 
 /**
  * [ADMIN] ウィジェットエリア一覧　ヘルプ
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcWidgetArea\Model\Entity\WidgetArea $widgetArea
  * @checked
  * @noTodo
  * @unitTest
@@ -29,10 +31,10 @@
 <ul>
   <li><?php echo __d('baser_core', '「利用中のウィジェット」はドラッグアンドドロップで並び替える事ができます。') ?></li>
   <li><?php echo __d('baser_core', '一時的に利用しない場合は、削除せずにウィジェット設定の「利用する」チェックを外しておくと同じ設定のまま後で利用する事ができます。') ?></li>
-  <?php if ($this->request->action == 'admin_edit'): ?>
+  <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
     <li>
       <?php echo __d('baser_core', 'システム設定より設定できる標準ウィジェットエリアの他、個別にウィジェットを配置する場合は、テンプレートや、ページ記事中（ソース）に次のコードを貼り付けます。') ?>
-      <pre>&lt;?php $this->BcBaser->element('widget_area', array('no'=> <?php echo $this->BcAdminForm->getSourceValue('WidgetArea.id') ?> )) ?&gt;</pre>
+      <pre>&lt;?php $this->BcBaser->widgetArea(<?php echo $widgetArea->id ?>) ?&gt;</pre>
     </li>
   <?php endif ?>
 </ul>

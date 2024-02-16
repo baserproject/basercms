@@ -40,7 +40,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 
 <table class="form-table bca-form-table">
-  <?php if ($this->request->getParam('action') === 'admin_edit'): ?>
+  <?php if ($this->request->getParam('action') === 'edit'): ?>
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('id', 'No') ?></th>
       <td class=" bca-form-table__input">
