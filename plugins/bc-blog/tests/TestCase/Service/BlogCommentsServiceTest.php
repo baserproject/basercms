@@ -221,7 +221,9 @@ class BlogCommentsServiceTest extends BcTestCase
      * getBlogContent
      * @return void
      */
-    public function testGetBlogContent(){
+    public function testGetBlogContent()
+    {
+        //created blogPost
         $this->loadFixtureScenario(
             BlogContentScenario::class,
             1,  // id
@@ -231,11 +233,14 @@ class BlogCommentsServiceTest extends BcTestCase
             '/news/' // url
         );
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
+
+        //check getBlogContent
         $blogContent = $this->BlogCommentsService->getBlogContent(1);
+
+        //check description
         $this->assertEquals('ディスクリプション', $blogContent['description']);
+
+        //check template
         $this->assertEquals('homePage', $blogContent['template']);
     }
-
-
-
 }
