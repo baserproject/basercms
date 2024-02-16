@@ -605,6 +605,7 @@ class BlogHelperTest extends BcTestCase
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
+     * @dataProvider prevLinkDataProvider
      */
     public function testPrevLink($blogContentId, $id, $posts_date, $expected)
     {
@@ -729,6 +730,7 @@ class BlogHelperTest extends BcTestCase
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
+     * @dataProvider nextLinkDataProvider
      */
     public function testNextLink($blogContentId, $id, $posts_date, $expected)
     {
