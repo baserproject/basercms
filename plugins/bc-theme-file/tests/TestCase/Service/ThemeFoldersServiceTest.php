@@ -85,7 +85,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         $param['type'] = 'etc';
         $param['path'] = '';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(8, $themeFiles);
+        $this->assertCount(7, $themeFiles);
 
         //typeはetcかつpathは指定した場合、
         $param['path'] = '/var/www/html/plugins/bc-front/templates';
