@@ -19,7 +19,7 @@
 
 
 <p><?php echo __d('baser_core', 'ウィジェットとは簡単にWebページの指定した場所に部品の追加・削除ができる仕組みです。<br />その部品の一つ一つをウィジェットと呼び、ウィジェットが集まった一つのグループをウィジェットエリアと呼びます。') ?></p>
-<p><?php echo sprintf(__d('baser_core', '全体で利用するウィジェットエリアは、「%s」で設定できます。また、標準プラグインである、ブログ、メールではそれぞれ別のウィジェットエリアを個別に指定する事もできます。'), $this->BcBaser->getLink(__d('baser_core', 'サイト基本設定'), ['controller' => 'site_configs', 'action' => 'form'])) ?></p>
+<p><?php echo sprintf(__d('baser_core', '全体で利用するウィジェットエリアは、「%s」で設定できます。また、標準プラグインである、ブログ、メールではそれぞれ別のウィジェットエリアを個別に指定する事もできます。'), $this->BcBaser->getLink(__d('baser_core', 'システム基本設定'), ['plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'index'])) ?></p>
 <ul>
   <li><?php echo __d('baser_core', '新しいウィジェットエリアを作成するには、「新規追加」ボタンをクリックします。') ?></li>
   <li><?php echo sprintf(__d('baser_core', '既存のウィジェットエリアを編集するには、対象のウィジェットエリアの操作欄にある %s をクリックします。'), '<i class="bca-btn-icon" data-bca-btn-type="edit"></i>') ?></li>

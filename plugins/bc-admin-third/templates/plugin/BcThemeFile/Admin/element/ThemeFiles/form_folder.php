@@ -45,7 +45,7 @@
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             <ul>
-              <li><?php echo __d('baser_core', 'フォルダ名は半角で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', 'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。') ?></li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('name') ?>

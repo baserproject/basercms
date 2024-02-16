@@ -14,11 +14,12 @@ use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\ComponentRegistry;
-use Cake\Datasource\Exception\MissingDatasourceConfigException;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Event\EventManager;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -60,14 +61,14 @@ class BcErrorController extends BcFrontAppController
      */
     protected function getCurrent(ServerRequest $request): ServerRequest
     {
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $url = BcUtil::fullUrl($request->getUri()->getPath());
         try {
-            $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        } catch(MissingDatasourceConfigException $e) {
+            $site = $sitesTable->findByUrl($url);
+        } catch(MissingConnectionException) {
             return $request;
         }
-        $url = BcUtil::fullUrl($request->getUri()->getPath());
-        $site = $sitesTable->findByUrl($url);
         $url = '/';
         if($site->alias) $url .= $site->alias . '/';
         $content = $contentsTable->findByUrl($url);
@@ -103,6 +104,8 @@ class BcErrorController extends BcFrontAppController
     {
         parent::beforeRender($event);
         $this->viewBuilder()->setTemplatePath('Error');
+        // プラグイン等のイベントが残っているとエラー画面が正常に表示されない場合があるため、イベントを削除する
+        EventManager::instance()->off('View.beforeRender');
     }
 
 }

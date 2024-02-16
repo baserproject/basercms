@@ -119,7 +119,7 @@ class AppController extends BaseController
         $this->loadComponent('FormProtection', [
             'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE'],
             'validationFailureCallback' => function (BadRequestException $exception) {
-                $message = __d('baser_core', '不正なリクエストと判断されました。<br>もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。') . "<br>" . $exception->getMessage();
+                $message = __d('baser_core', "不正なリクエストと判断されました\nもしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。") . "\n" . $exception->getMessage();
                 throw new BadRequestException($message);
             }
         ]);

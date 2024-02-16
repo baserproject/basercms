@@ -66,11 +66,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
       __d('baser_core', '削除'),
       ['action' => 'delete', $mailContent->id, $mailField->id],
       [
-        'class' => 'bca-submit-token button bca-btn bca-actions__item',
+        'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',
         'block' => true,
-        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $mailField->name)
+        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $mailField->name),
+        'data-bca-btn-color' => "danger"
       ]
     ) ?>
   </div>

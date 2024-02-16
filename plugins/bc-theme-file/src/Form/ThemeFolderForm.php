@@ -73,19 +73,19 @@ class ThemeFolderForm extends Form
     {
         $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser_core', 'テーマフォルダー名を入力してください。'))
-            ->notEmptyString('name', __d('baser_core', 'テーマフォルダー名を入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'フォルダ名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'フォルダ名を入力してください。'))
             ->add('name', [
                 'duplicateThemeFolder' => [
                     'provider' => 'form',
                     'rule' => ['duplicateThemeFolder'],
-                    'message' => __d('baser_core', '入力されたテーマフォルダー名は、同一階層に既に存在します。')
+                    'message' => __d('baser_core', '入力されたフォルダ名は、同一階層に既に存在します。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+                    'message' => __d('baser_core', 'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
         return $validator;
     }

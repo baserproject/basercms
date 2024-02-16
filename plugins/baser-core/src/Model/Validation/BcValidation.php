@@ -260,8 +260,8 @@ class BcValidation extends Validation
         }
 
         // FILES形式のチェック
-        if (!empty($file['name'])) {
-            $ext = BcUtil::decodeContent($file['type'], $file['name']);
+        if (!is_string($file) && !empty($file->getClientMediaType())) {
+            $ext = BcUtil::decodeContent($file->getClientMediaType(), $file->getClientMediaType());
             if (!in_array($ext, $exts)) {
                 return false;
             }

@@ -14,7 +14,9 @@ namespace BaserCore\Middleware;
 use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -92,8 +94,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      */
     public function redirectIfIsDeviceFile(ServerRequestInterface $request)
     {
-        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findByUrl($request->getPath());
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        try {
+            $site = $sites->findByUrl($request->getPath());
+        } catch (MissingConnectionException) {
+            return;
+        }
         if ($site && $site->device) {
             $param = preg_replace('/^\/' . $site->alias . '\//', '', $request->getPath());
             if (preg_match('/^files/', $param)) {

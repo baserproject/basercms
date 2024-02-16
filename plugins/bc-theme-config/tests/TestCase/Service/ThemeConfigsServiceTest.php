@@ -16,12 +16,13 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcThemeConfig\Model\Entity\ThemeConfig;
 use BcThemeConfig\Service\ThemeConfigsService;
 use BcThemeConfig\Service\ThemeConfigsServiceInterface;
 use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\Filesystem\File;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemeConfigsServiceTest
@@ -129,31 +130,33 @@ class ThemeConfigsServiceTest extends BcTestCase
         $this->ThemeConfigsService->get();
 
         // アップロードファイルを準備
-        $logoPath = '/var/www/html/plugins/BcColumn/webroot/img/logo.png';
-        $this->setUploadFileToRequest('file', $logoPath);
-
+        $filePath = TMP . 'test_upload' . DS;
+        (new BcFolder($filePath))->create();
+        $testFile = $filePath . 'logo.png';
+        copy(ROOT . '/plugins/bc-front/webroot/img/logo.png', $testFile);
+        $this->setUploadFileToRequest('file', $testFile);
         // 実行
         $rs = $this->ThemeConfigsService->saveImage(new ThemeConfig([
-            'logo' => [
-                'tmp_name' => $logoPath,
-                'error' => 0,
-                'name' => 'logo.png',
-                'type' => 'image/x-png',
-                'size' => 2962,
-            ]
+            'logo' => new UploadedFile(
+                $testFile,
+                1000,
+                UPLOAD_ERR_OK,
+                'logo.png',
+                "image/png",
+            )
         ]));
-        // saveImage の内部で実行される move_uploaded_file() が、
-        // 実際にファイルをアップロードしないと失敗してしまうため、copy() で代替処理とする
-        $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS. 'logo.png';
-        copy($logoPath, $uploadedPath);
+        $uploadedPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
+        $uploadedThumbPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_thumb.png';
 
         // 戻り値を確認
         $this->assertEquals($rs['logo'], 'logo.png');
         // サムネイルが作成されたことを確認
         $this->assertFileExists($uploadedPath);
+        $this->assertFileExists($uploadedThumbPath);
 
         // 初期化処理
         unlink($uploadedPath);
+        unlink($uploadedThumbPath);
     }
 
     /**

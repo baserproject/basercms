@@ -21,7 +21,7 @@
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <table class="list-table bca-form-table" id="ListTable">
-  <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
+  <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('id', 'No') ?></th>
       <td class="bca-form-table__input">

@@ -263,6 +263,7 @@ class BcAdminHelper extends Helper
     public function isAvailableSideBar()
     {
         if(!BcUtil::isInstalled()) return false;
+        if($this->getView()->getName() === 'Error') return false;
         $prefix = $this->_View->getRequest()->getParam('prefix');
         $loginAction = Router::url(Configure::read('BcPrefixAuth.' . $prefix . '.loginAction'));
         $name = $this->_View->getName();
@@ -375,6 +376,7 @@ class BcAdminHelper extends Helper
     public function contentsMenu(): void
     {
         if(!BcUtil::isInstalled()) return;
+        if($this->getView()->getName() === 'Error') return;
         echo $this->_View->element('contents_menu', [
             'isHelp' => (bool)($this->_View->get('help')),
             'isLogin' => (bool)(BcUtil::loginUser()),
