@@ -752,24 +752,29 @@ class BlogPostsTableTest extends BcTestCase
         $rs = $this->BlogPostsTable->getPublishByNo(6, 3);
         $this->assertNull($rs);
     }
+
     /**
      * beforeSave
      * @return void
      */
-    public function test_beforeSave(){
+    public function test_beforeSave()
+    {
+        //サービスクラス
         $PluginsService = $this->getService(PluginsServiceInterface::class);
         $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
         $PluginsService->attach('BcSearchIndex');
 
+        //データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
+        // id:1
         $blogPost = $BlogPostsService->get(1);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertFalse($this->BlogPostsTable->isExcluded());
 
+        // id:2
         $blogPost = $BlogPostsService->get(2);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertFalse($this->BlogPostsTable->isExcluded());
-
     }
 }
