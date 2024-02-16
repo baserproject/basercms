@@ -1122,7 +1122,7 @@ class BlogHelper extends Helper
      */
     public function isArchive()
     {
-        return ($this->getBlogArchiveType() == 'archive');
+        return ($this->getBlogArchiveType());
     }
 
     /**

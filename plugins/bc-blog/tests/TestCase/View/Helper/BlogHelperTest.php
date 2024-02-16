@@ -1575,13 +1575,12 @@ class BlogHelperTest extends BcTestCase
     public static function isArchiveDataProvider()
     {
         return [
-            ['archive', true],
-            ['category', false],
-            ['tag', false],
-            ['yearly', false],
-            ['monthly', false],
-            ['daily', false],
-            ['hoge', false], // 存在しないアーカイブの場合
+            ['category', true],
+            ['tag', true],
+            ['yearly', true],
+            ['monthly', true],
+            ['daily', true],
+            ['hoge', true], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
     }
