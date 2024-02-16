@@ -241,6 +241,6 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->assertEquals('ディスクリプション', $blogContent['description']);
 
         //check template
-        $this->assertEquals('homePage', $blogContent['template']);
+        $this->assertEquals('default', $blogContent['template']);
     }
 }
