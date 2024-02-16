@@ -23,6 +23,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BcBlog\Service\BlogPostsService;
 
 /**
  * Class BlogPostsTableTest
@@ -755,17 +756,21 @@ class BlogPostsTableTest extends BcTestCase
      * createSearchIndex
      * @return void
      */
-    public function test_createSearchIndex(){
+    public function test_createSearchIndex()
+    {
         $blogPostService = new BlogPostsService();
+        //データを作成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
         $rs = $this->BlogPostsTable->createSearchIndex($blogPostService->get(1));
         $this->assertEquals($rs['type'], 'ブログ');
         $this->assertEquals($rs['model_id'], 1);
-        $this->assertEquals($rs['content_filter_id'], 178104);
+        $this->assertEquals($rs['content_filter_id'], 33658);
         $this->assertEquals($rs['content_id'], 6);
         $this->assertEquals($rs['site_id'], 1);
         $this->assertEquals($rs['title'], 'プレスリリース');
         $this->assertEquals($rs['url'], '/news/archives/3');
-        $this->assertNotNull($rs['status']);
+        $this->assertEquals($rs['status'], 1);
+        $this->assertNull($rs['publish_begin']);
+        $this->assertNull($rs['publish_end']);
     }
 }
