@@ -186,7 +186,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
   </tr>
   <?php if(!$isMainOnCurrentDisplay): ?>
     <tr>
-      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('use_subdomain', __d('baser_core', '外部ドメイン（サブドメイン）利用')) ?></th>
+      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('use_subdomain', __d('baser_core', '外部ドメイン利用')) ?></th>
       <td class=" bca-form-table__input">
         <?php echo $this->BcAdminForm->control('use_subdomain', ['type' => 'radio', 'options' => [0 => __d('baser_core', '利用しない'), 1 => __d('baser_core', '利用する')], 'default' => 0]) ?>
         <?php echo $this->BcAdminForm->error('use_subdomain') ?>
