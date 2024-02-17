@@ -22,6 +22,7 @@ use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use SoftDelete\ORM\SelectQuery;
 
 /**
  * BlogCategoriesTable
@@ -416,5 +417,19 @@ class BlogCategoriesTable extends BlogAppTable
         } catch (\Throwable $e) {
             throw $e;
         }
+    }
+
+    /**
+     * 親カテゴリを取得する
+     * @param $parent_id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getParent($parent_id)
+    {
+        return $this->find()->where(['id' => $parent_id])->first();
     }
 }

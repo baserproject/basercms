@@ -865,7 +865,9 @@ SCRIPT_END;
 
         // PHP5.3対応のため、is_string($value) 判別を実行
         $delCheckTag = '';
-        if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) || empty($value['session_key']))) {
+        if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) ||
+                (is_array($value) && empty($value['session_key'])) ||
+                (is_object($value) && $value->getError() == UPLOAD_ERR_NO_FILE))) {
             $delCheckTag = $this->Html->tag('span', $this->checkbox($fieldName . '_delete', $deleteCheckboxOptions) . $this->label($fieldName . '_delete', __d('baser_core', '削除する'), $deleteLabelOptions), $deleteSpanOptions);
         }
         $hiddenValue = $this->getSourceValue($fieldName . '_');
@@ -873,10 +875,10 @@ SCRIPT_END;
 
         $hiddenTag = '';
         if ($fileLinkTag) {
-            if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
+            if (is_object($fileValue) && empty($fileValue->getClientFileName()) && $hiddenValue) {
                 $hiddenTag = $this->hidden($fieldName . '_', ['value' => $hiddenValue]);
             } else {
-                if (is_array($fileValue)) {
+                if (is_array($fileValue) || is_object($fileValue)) {
                     $fileValue = null;
                 }
                 $hiddenTag = $this->hidden($fieldName . '_', ['value' => $fileValue]);

@@ -602,7 +602,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 前の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -678,8 +677,56 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * 次の記事へのリンクを出力する
+     * test hasNextLink
+     */
+    public function test_hasNextLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(1));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(2));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasNextLink(BlogPostFactory::get(111));
+    }
+
+    /**
+     * ブログテンプレートを取得
      *
+     * @param string $theme テーマ名
+     * @param array $expected 期待値
+     * @dataProvider getBlogTemplatesDataProvider
+     */
+    public function testGetBlogTemplates($theme, $expected)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
+        $result = $this->Blog->getBlogTemplates();
+        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
+    }
+
+    public static function getBlogTemplatesDataProvider()
+    {
+        return [
+            ['nada-icons', ['default' => 'default']]
+        ];
+    }
+
+    /**
+     * 次の記事へのリンクを出力する
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -704,28 +751,6 @@ class BlogHelperTest extends BcTestCase
             [1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'],
             [2, 3, '9000-08-10 18:58:07', ''],
             [2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'], // 存在しないブログコンテンツ
-        ];
-    }
-
-    /**
-     * ブログテンプレートを取得
-     *
-     * @param string $theme テーマ名
-     * @param array $expected 期待値
-     * @dataProvider getBlogTemplatesDataProvider
-     */
-    public function testGetBlogTemplates($theme, $expected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
-        $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
-    }
-
-    public static function getBlogTemplatesDataProvider()
-    {
-        return [
-            ['nada-icons', ['default' => 'default']]
         ];
     }
 
@@ -758,28 +783,29 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetPostImg($num, $link, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'blog_content_id' => 1,
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 111,
             'name' => 'test-name ',
+            'no' => 1,
+            'blog_content_id' => 1,
             'content' => '<img src="test1.jpg"><img src="test2.jpg">',
-            'detail' => '',
-            'no' => '',
-        ]];
+        ])->persist();
+        $post = BlogPostFactory::get(111);
         $options = [
             'num' => $num,
             'link' => $link,
         ];
         $result = $this->Blog->getPostImg($post, $options);
-        $this->assertEquals($expected, $result, '記事中の画像を正しく取得できません');
+        $this->assertEquals($expected, $result);
     }
 
     public static function getPostImgDataProvider()
     {
         return [
-            [1, false, '<img src="/img/test1.jpg" alt="test-name "/>'],
-            [2, false, '<img src="/img/test2.jpg" alt="test-name "/>'],
-            [1, true, '<a href="/news/archives/"><img src="/img/test1.jpg" alt="test-name "/></a>'],
+            [1, false, '<img src="/img/test1.jpg" alt="test-name ">'],
+            [2, false, '<img src="/img/test2.jpg" alt="test-name ">'],
+            [1, true, '<a href="/news/archives/1"><img src="/img/test1.jpg" alt="test-name "></a>'],
             [3, false, ''],
         ];
     }
@@ -790,15 +816,40 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetParentCategory()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '正しく親カテゴリーを取得できません';
-        $post = ['BlogCategory' => ['id' => 1]];
-        $result = $this->Blog->getParentCategory($post);
-        $this->assertEmpty($result, $message);
+        // テストデータを作る
+        //親カテゴリー
+        BlogPostFactory::make([
+            'id' => 11,
+            'blog_category_id' => 11,
+            'blog_content_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 11,
+            'blog_content_id' => 1,
+            'parent_id' => 0,
+        ])->persist();
+        //子カテゴリー
+        BlogPostFactory::make([
+            'id' => 12,
+            'blog_category_id' => 12,
+            'blog_content_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 12,
+            'parent_id' => 11,
+            'blog_content_id' => 1,
+        ])->persist();
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
 
-        $post['BlogCategory']['id'] = 2;
-        $result = $this->Blog->getParentCategory($post);
-        $this->assertEquals('release', $result['BlogCategory']['name'], $message);
+        //正常系
+        $result = $this->Blog->getParentCategory($BlogPostsService->get(12));
+        //戻り値を確認
+        $this->assertEquals(11, $result->id);
+
+        //異常系
+        $result = $this->Blog->getParentCategory($BlogPostsService->get(11));
+        //戻り値を確認
+        $this->assertEmpty($result);
     }
 
     /**
@@ -1507,7 +1558,7 @@ class BlogHelperTest extends BcTestCase
 
 
     /**
-     * test isArchive
+     * test isCategory
      * @dataProvider isCategoryDataProvider
      *
      */
@@ -1529,6 +1580,32 @@ class BlogHelperTest extends BcTestCase
             ['monthly', false],
             ['daily', false],
             ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isArchive
+     * @dataProvider isArchiveDataProvider
+     */
+    public function test_isArchive($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isArchive();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isArchiveDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', true],
+            ['yearly', true],
+            ['monthly', true],
+            ['daily', true],
+            ['hoge', true], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
     }
