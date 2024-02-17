@@ -602,7 +602,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 前の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -678,8 +677,56 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * 次の記事へのリンクを出力する
+     * test hasNextLink
+     */
+    public function test_hasNextLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(1));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(2));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasNextLink(BlogPostFactory::get(111));
+    }
+
+    /**
+     * ブログテンプレートを取得
      *
+     * @param string $theme テーマ名
+     * @param array $expected 期待値
+     * @dataProvider getBlogTemplatesDataProvider
+     */
+    public function testGetBlogTemplates($theme, $expected)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
+        $result = $this->Blog->getBlogTemplates();
+        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
+    }
+
+    public static function getBlogTemplatesDataProvider()
+    {
+        return [
+            ['nada-icons', ['default' => 'default']]
+        ];
+    }
+
+    /**
+     * 次の記事へのリンクを出力する
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -704,28 +751,6 @@ class BlogHelperTest extends BcTestCase
             [1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'],
             [2, 3, '9000-08-10 18:58:07', ''],
             [2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'], // 存在しないブログコンテンツ
-        ];
-    }
-
-    /**
-     * ブログテンプレートを取得
-     *
-     * @param string $theme テーマ名
-     * @param array $expected 期待値
-     * @dataProvider getBlogTemplatesDataProvider
-     */
-    public function testGetBlogTemplates($theme, $expected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
-        $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
-    }
-
-    public static function getBlogTemplatesDataProvider()
-    {
-        return [
-            ['nada-icons', ['default' => 'default']]
         ];
     }
 
