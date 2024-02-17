@@ -184,6 +184,22 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->error('theme') ?>
     </td>
   </tr>
+  <?php if(!$isMainOnCurrentDisplay): ?>
+    <tr>
+      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('use_subdomain', __d('baser_core', '外部ドメイン利用')) ?></th>
+      <td class=" bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('use_subdomain', ['type' => 'radio', 'options' => [0 => __d('baser_core', '利用しない'), 1 => __d('baser_core', '利用する')], 'default' => 0]) ?>
+        <?php echo $this->BcAdminForm->error('use_subdomain') ?>
+      </td>
+    </tr>
+    <tr id="DomainType">
+      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('domain_type', __d('baser_core', 'ドメインタイプ')) ?></th>
+      <td class=" bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('domain_type', ['type' => 'radio', 'options' => [0 => __d('baser', '利用しない'), 1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '外部ドメイン')], 'default' => 0]) ?>
+        <?php echo $this->BcAdminForm->error('domain_type') ?>
+      </td>
+    </tr>
+  <?php endif ?>
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('status', __d('baser_core', '公開状態')) ?></th>
     <td class=" bca-form-table__input">

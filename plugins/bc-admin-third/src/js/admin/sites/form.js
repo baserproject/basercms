@@ -98,5 +98,17 @@ $(function () {
             }
         }
     }
-
+    // サブサイトにドメイン（サブドメイン）を使用するかどうかの表示
+    chengeUseDomain();
+    $("input[name='use_subdomain']").click('chengeUseDomain');
+    function chengeUseDomain() {
+        if ($("input[name='use_subdomain']:checked").val() == 0) {
+            //ドメインを利用しない場合は、ドメインタイプは利用しない
+            $("#DomainType").hide();
+            $("#domain-type-0").prop("checked", true);
+        } else {
+            //ドメインを利用する場合は、ドメインタイプのラジオボタンを表示
+            $("#DomainType").show('slow');
+        }
+    }
 });
