@@ -72,7 +72,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'フィールド名は半角英数字のみで入力してください。')
+                    'message' => __d('baser_core', 'フィールド名は半角英数字、ハイフン、アンダースコアのみで入力してください。')
                 ]])
             ->add('field_name', [
                 'duplicateMailField' => [
@@ -117,10 +117,22 @@ class MailFieldsTable extends MailAppTable
             ->maxLength('options', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
         $validator
             ->scalar('group_field')
-            ->maxLength('group_field', 255, __d('baser_core', 'グループフィールドは255文字以内で入力してください。'));
+            ->maxLength('group_field', 255, __d('baser_core', 'グループ名は255文字以内で入力してください。'))
+            ->add('group_field', [
+                'halfTextMailField' => [
+                    'rule' => 'halfTextMailField',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', 'グループ名は半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                ]]);
         $validator
             ->scalar('group_valid')
-            ->maxLength('group_valid', 255, __d('baser_core', 'グループ入力チェックは255文字以内で入力してください。'));
+            ->maxLength('group_valid', 255, __d('baser_core', 'グループ入力チェックは255文字以内で入力してください。'))
+            ->add('group_valid', [
+                'halfTextMailField' => [
+                    'rule' => 'halfTextMailField',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', 'グループ入力チェックは半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                ]]);
         $validator
             ->scalar('size')
             ->allowEmptyString('size')
