@@ -1119,6 +1119,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがアーカイブページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isArchive()
     {

@@ -1558,7 +1558,7 @@ class BlogHelperTest extends BcTestCase
 
 
     /**
-     * test isArchive
+     * test isCategory
      * @dataProvider isCategoryDataProvider
      *
      */
@@ -1580,6 +1580,32 @@ class BlogHelperTest extends BcTestCase
             ['monthly', false],
             ['daily', false],
             ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isArchive
+     * @dataProvider isArchiveDataProvider
+     */
+    public function test_isArchive($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isArchive();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isArchiveDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', true],
+            ['yearly', true],
+            ['monthly', true],
+            ['daily', true],
+            ['hoge', true], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
     }
