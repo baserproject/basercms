@@ -242,5 +242,9 @@ class BlogCommentsServiceTest extends BcTestCase
 
         //check template
         $this->assertEquals('default', $blogContent['template']);
+
+        //check content no exist
+        $blogContent = $this->BlogCommentsService->getIndex(['id' => 2])->count();
+        $this->assertEquals(0, $blogContent);
     }
 }
