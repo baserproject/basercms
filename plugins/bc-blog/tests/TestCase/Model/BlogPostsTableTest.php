@@ -12,10 +12,12 @@
 namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFolder;
+use BcBlog\Model\Table\BlogContentsTable;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -765,16 +767,63 @@ class BlogPostsTableTest extends BcTestCase
         $PluginsService->attach('BcSearchIndex');
 
         //データを生成
-        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        BlogContentFactory::make([
+            'id' => 1,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 1,
+            'url' => '/test',
+            'exclude_search' => null,
+            'status' => true,
+        ])->persist();
 
-        // id:1
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'exclude_search' => 1,
+            'status' => true,
+        ])->persist();
+
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 3,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2015-01-27 12:57:59',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 2,
+            'no' => 4,
+            'name' => 'smartphone_release',
+            'title' => 'スマホサイトリリース',
+            'status' => 1,
+            'posted' => '2016-02-10 12:57:59',
+        ])->persist();
+
         $blogPost = $BlogPostsService->get(1);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertFalse($this->BlogPostsTable->isExcluded());
 
-        // id:2
         $blogPost = $BlogPostsService->get(2);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
-        $this->assertFalse($this->BlogPostsTable->isExcluded());
+        $this->assertTrue($this->BlogPostsTable->isExcluded());
     }
 }
