@@ -782,7 +782,6 @@ class BlogPostsTableTest extends BcTestCase
             'exclude_search' => null,
             'status' => true,
         ])->persist();
-
         BlogContentFactory::make([
             'id' => 2,
             'description' => 'test',
@@ -798,7 +797,6 @@ class BlogPostsTableTest extends BcTestCase
             'exclude_search' => 1,
             'status' => true,
         ])->persist();
-
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 1,
