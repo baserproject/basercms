@@ -12,6 +12,8 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\ORM\Query;
+use Cake\ORM\ResultSet;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -32,14 +34,17 @@ class BcArrayHelper extends Helper
     /**
      * 配列の最初の要素かどうか調べる
      *
-     * @param array $array 配列
-     * @param mixed $key 現在のキー
+     * @param mixed $array 配列
+     * @param int $key 現在のキー
      * @return boolean
      * @checked
      * @noTodo
      */
-    public function first($array, $key)
+    public function first($array, int $key)
     {
+        if($array instanceof Query) {
+            $array = $array->toArray();
+        }
         reset($array);
         $first = key($array);
         if ($key === $first) {
@@ -52,14 +57,17 @@ class BcArrayHelper extends Helper
     /**
      * 配列の最後の要素かどうか調べる
      *
-     * @param array $array 配列
-     * @param mixed $key 現在のキー
+     * @param mixed $array 配列
+     * @param int $key 現在のキー
      * @return boolean
      * @checked
      * @noTodo
      */
     public function last($array, $key)
     {
+        if($array instanceof Query) {
+            $array = $array->toArray();
+        }
         end($array);
         $end = key($array);
         if ($key === $end) {

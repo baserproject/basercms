@@ -157,8 +157,13 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertFlashMessage('記事「test」を追加しました。');
         $this->assertRedirect(['action' => 'edit/1/1']);
 
+        //失敗テスト
         $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => '']);
-        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        //レスポンスを確認
+        $this->assertResponseCode(200);
+        $errors = $this->_controller->viewBuilder()->getVars()['post']->getErrors();
+        //エラー内容を確認
+        $this->assertEquals(['_empty' => 'タイトルを入力してください。'], $errors['title']);
     }
 
     /**

@@ -320,7 +320,7 @@ class BlogContentsServiceTest extends BcTestCase
 
         //contentsTemplateは値がない、かつBlogContentsにcontentUrlが存在する場合、
         $rs = $this->BlogContentsService->getContentsTemplateRelativePath(['contentUrl' => ['/test']]);
-        $this->assertEquals($rs, 'BcBlog.../Blog/homePage/posts');
+        $this->assertEquals($rs, 'BcBlog.../Blog/default/posts');
 
         //contentsTemplateは値がない、かつBlogContentsにcontentUrlが存在しない場合、
         $rs = $this->BlogContentsService->getContentsTemplateRelativePath(['contentUrl' => ['/test3']]);

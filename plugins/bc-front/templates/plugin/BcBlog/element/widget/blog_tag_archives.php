@@ -29,7 +29,7 @@ $id = '';
 
 <div class="widget widget-blog-authors widget-blog-authors-<?php echo h($id) ?> blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2><?php echo h($name) ?></h2>
 	<?php endif ?>
 	<?php $this->BcBaser->blogTagList((int)$blog_content_id, ['postCount' => $view_count]) ?>
 </div>

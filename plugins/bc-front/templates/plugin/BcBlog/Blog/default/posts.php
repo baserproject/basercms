@@ -17,12 +17,14 @@
  * （例）<?php $this->BcBaser->blogPosts('news', 3) ?>
  *
  * @var \BaserCore\View\BcFrontAppView $this
- * @var array $posts ブログ記事リスト
+ * @var mixed $posts ブログ記事リスト
  */
 ?>
 
-
-<?php if ($posts->count()): ?>
+<?php
+if (!is_array($posts)) $posts = $posts->toArray();
+?>
+<?php if (count($posts)):  ?>
   <ul class="bs-top-post">
     <?php foreach($posts as $key => $post): ?>
       <?php

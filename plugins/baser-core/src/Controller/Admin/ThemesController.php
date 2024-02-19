@@ -54,8 +54,8 @@ class ThemesController extends BcAdminAppController
                 $name = $service->add($this->getRequest()->getUploadedFiles());
                 $this->BcMessage->setInfo(__d('baser_core', 'テーマファイル「{0}」を追加しました。', $name));
                 $this->redirect(['action' => 'index']);
-            } catch (BcException $e) {
-                $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . "\n" . $e->getMessage());
             }
         }
     }
