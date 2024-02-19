@@ -225,7 +225,5 @@ class BlogCommentsServiceTest extends BcTestCase
     {
         $result = $this->BlogCommentsService->getNew();
         $this->assertEquals('NO NAME', $result['name']);
-
     }
-
 }
