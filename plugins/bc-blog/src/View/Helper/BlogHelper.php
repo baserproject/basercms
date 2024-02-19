@@ -915,8 +915,9 @@ class BlogHelper extends Helper
      * @return array ブログテンプレート一覧
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getBlogTemplates($siteId = 0)
+    public function getBlogTemplates($siteId = 1)
     {
         $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcBlog');
         $_templates = [];

@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
@@ -27,7 +28,6 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
-use BcBlog\Test\Scenario\MultiBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
@@ -733,28 +733,6 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * ブログテンプレートを取得
-     *
-     * @param string $theme テーマ名
-     * @param array $expected 期待値
-     * @dataProvider getBlogTemplatesDataProvider
-     */
-    public function testGetBlogTemplates($theme, $expected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
-        $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
-    }
-
-    public static function getBlogTemplatesDataProvider()
-    {
-        return [
-            ['nada-icons', ['default' => 'default']]
-        ];
-    }
-
-    /**
      * 次の記事へのリンクを出力する
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
@@ -780,6 +758,30 @@ class BlogHelperTest extends BcTestCase
             [1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'],
             [2, 3, '9000-08-10 18:58:07', ''],
             [2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'], // 存在しないブログコンテンツ
+        ];
+    }
+
+    /**
+     * ブログテンプレートを取得
+     *
+     * @param string $theme テーマ名
+     * @param array $expected 期待値
+     * @dataProvider getBlogTemplatesDataProvider
+     */
+    public function testGetBlogTemplates($theme, $expected)
+    {
+        SiteFactory::make([
+            'id' => 1,
+            'theme' => $theme
+        ])->persist();
+        $result = $this->Blog->getBlogTemplates();
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getBlogTemplatesDataProvider()
+    {
+        return [
+            ['BcThemeSample', ['default' => 'default']]
         ];
     }
 
