@@ -602,7 +602,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 前の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -678,8 +677,34 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * test hasNextLink
+     */
+    public function test_hasNextLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(1));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(2));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasNextLink(BlogPostFactory::get(111));
+    }
+
+    /**
      * 次の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -821,12 +846,12 @@ class BlogHelperTest extends BcTestCase
         //正常系
         $result = $this->Blog->getParentCategory($BlogPostsService->get(12));
         //戻り値を確認
-        $this->assertEquals(11, $result[0]->id);
+        $this->assertEquals(11, $result->id);
 
         //異常系
         $result = $this->Blog->getParentCategory($BlogPostsService->get(11));
         //戻り値を確認
-        $this->assertCount(0, $result);
+        $this->assertEmpty($result);
     }
 
     /**
@@ -1535,7 +1560,7 @@ class BlogHelperTest extends BcTestCase
 
 
     /**
-     * test isArchive
+     * test isCategory
      * @dataProvider isCategoryDataProvider
      *
      */
@@ -1557,6 +1582,32 @@ class BlogHelperTest extends BcTestCase
             ['monthly', false],
             ['daily', false],
             ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isArchive
+     * @dataProvider isArchiveDataProvider
+     */
+    public function test_isArchive($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isArchive();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isArchiveDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', true],
+            ['yearly', true],
+            ['monthly', true],
+            ['daily', true],
+            ['hoge', true], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
     }

@@ -193,6 +193,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function currentBlogId()
     {
@@ -218,6 +219,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function blogName()
     {
@@ -243,6 +245,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function title()
     {
@@ -281,6 +284,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function description()
     {
@@ -312,6 +316,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postTitle(BlogPost $post, bool $link = true, array $options = []): void
     {
@@ -431,6 +436,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postLink($post, $title, $options = [])
     {
@@ -450,6 +456,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postContent(
         BlogPost $post,
@@ -518,6 +525,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postDetail(BlogPost $post, array $options = [])
     {
@@ -560,6 +568,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function category(BlogPost $post, array $options = [])
     {
@@ -613,6 +622,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function tag($post, $separator = ' , ')
     {
@@ -737,6 +747,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postDate(BlogPost $post, string $format = 'Y/m/d')
     {
@@ -768,6 +779,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function author(BlogPost $post)
     {
@@ -817,6 +829,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function prevLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
@@ -860,6 +873,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function nextLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
@@ -882,6 +896,7 @@ class BlogHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasNextLink($post)
     {
@@ -960,6 +975,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function postImg($post, $options = [])
     {
@@ -1047,7 +1063,7 @@ class BlogHelper extends Helper
      * 親カテゴリを取得する
      *
      * @param array $post ブログ記事
-     * @return array $parentCategory 親カテゴリ
+     * @return EntityInterface $parentCategory 親カテゴリ
      *
      * @checked
      * @noTodo
@@ -1058,8 +1074,8 @@ class BlogHelper extends Helper
         if (empty($post->blog_category->id)) {
             return null;
         }
-        $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
-        return $BlogCategory->getParent($post->blog_category->parent_id);
+        $blogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategory->getParent($post->blog_category->parent_id);
     }
 
     /**
@@ -1104,6 +1120,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがアーカイブページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isArchive()
     {
@@ -1228,6 +1245,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function eyeCatch(BlogPost $post, array $options = [])
     {
@@ -1574,6 +1592,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function tagLink($blogContentId, $tag, $options = [])
     {
