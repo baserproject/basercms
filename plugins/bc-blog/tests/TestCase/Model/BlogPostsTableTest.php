@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -766,13 +767,39 @@ class BlogPostsTableTest extends BcTestCase
         $PluginsService->attach('BcSearchIndex');
 
         //データを生成
-        $this->loadFixtureScenario(BlogPostsScenario::class);
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
         $blogPost = $BlogPostsService->get(1);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertFalse($this->BlogPostsTable->isExcluded());
 
-        $blogPost = $BlogPostsService->get(2);
+        //isExcluded true
+        BlogContentFactory::make([
+            'id' => 11,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 11,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 11,
+            'url' => '/test',
+            'exclude_search' => 1,
+            'status' => true,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 8,
+            'blog_content_id' => 11,
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'posted' => '2015-01-27 12:57:59',
+        ])->persist();
+
+        $blogPost = $BlogPostsService->get(8);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertTrue($this->BlogPostsTable->isExcluded());
     }
