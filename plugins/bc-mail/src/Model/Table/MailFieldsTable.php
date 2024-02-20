@@ -72,7 +72,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'フィールド名は小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'フィールド名は小文字の半角英数字、アンダースコアのみで入力してください。')
                 ]])
             ->add('field_name', [
                 'duplicateMailField' => [
@@ -122,7 +122,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ名は小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ名は小文字の半角英数字、アンダースコアのみで入力してください。')
                 ]]);
         $validator
             ->scalar('group_valid')
@@ -131,7 +131,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ入力チェックは小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ入力チェックは小文字の半角英数字、アンダースコアのみで入力してください。')
                 ]]);
         $validator
             ->scalar('size')
@@ -235,7 +235,7 @@ class MailFieldsTable extends MailAppTable
      */
     public function halfTextMailField(string $value)
     {
-        $pattern = "/^[a-z0-9-_]*$/";
+        $pattern = "/^[a-z0-9_]*$/";
         return !!(preg_match($pattern, $value) === 1);
     }
 
