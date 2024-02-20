@@ -84,7 +84,7 @@ class BcFolder
         $parent = dirname($path);
         if (!is_dir($parent)) {
             $this->path = $parent;
-            if($this->create($mask)) {
+            if ($this->create($mask)) {
                 $this->path = $path;
             } else {
                 $this->path = $path;
@@ -113,7 +113,7 @@ class BcFolder
         ], $options);
         $files = [];
         $dir = new \DirectoryIterator($this->path);
-        foreach ($dir as $fileInfo) {
+        foreach($dir as $fileInfo) {
             $filename = $fileInfo->getFilename();
             if ($fileInfo->isFile() && !in_array($filename, $options['exclude'])) {
                 $files[] = $options['full']? $fileInfo->getPathname() : $fileInfo->getFilename();;
@@ -140,7 +140,7 @@ class BcFolder
         $folders = [];
         $dir = new \DirectoryIterator($this->path);
         /** @var $fileInfo \SplFileInfo */
-        foreach ($dir as $fileInfo) {
+        foreach($dir as $fileInfo) {
             $filename = $fileInfo->getFilename();
             if ($fileInfo->isDir() && !$fileInfo->isDot() && !in_array($filename, $options['exclude'])) {
                 $folders[] = $options['full']? $fileInfo->getPathname() : $fileInfo->getFilename();
@@ -160,12 +160,12 @@ class BcFolder
     {
         if (!is_dir($this->path)) return false;
         $files = $this->getFiles(['full' => true]);
-        foreach ($files as $file) {
+        foreach($files as $file) {
             unlink($file);
         }
         $folders = $this->getFolders(['full' => true]);
         $path = $this->path;
-        foreach ($folders as $folder) {
+        foreach($folders as $folder) {
             $this->path = $folder;
             $this->delete();
         }
@@ -180,28 +180,31 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function copy($dest): bool
+    public function copy($dest, $mode = 0777): bool
     {
-        $source=$this->path;
+        $source = $this->path;
         if (!is_dir($source)) return false;
-        if(is_dir($source)) {
-            $dir_handle=opendir($source);
-            if(!file_exists($dest)){
-                mkdir($dest);
+        if (is_dir($source)) {
+            $dir_handle = opendir($source);
+            if (!file_exists($dest)) {
+                (new BcFolder($dest))->create();
+                chmod($dest, $mode);
             }
-            while($file=readdir($dir_handle)){
-                if($file!="." && $file!=".."){
-                    if(is_dir($source."/".$file)){
-                        $this->path = $source .DS. $file;
-                        self::copy( $dest .DS. $file);
+            while($file = readdir($dir_handle)) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($source . "/" . $file)) {
+                        $this->path = $source . DS . $file;
+                        self::copy($dest . DS . $file);
                     } else {
-                        copy($source."/".$file, $dest."/".$file);
+                        copy($source . "/" . $file, $dest . "/" . $file);
+                        chmod($dest . "/" . $file, $mode);
                     }
                 }
             }
             closedir($dir_handle);
         } else {
             copy($source, $dest);
+            chmod($dest, $mode);
         }
         return true;
     }
@@ -249,8 +252,8 @@ class BcFolder
         if (is_dir($path)) {
             $paths = $this->tree($path);
 
-            foreach ($paths as $type) {
-                foreach ($type as $fullpath) {
+            foreach($paths as $type) {
+                foreach($type as $fullpath) {
                     $check = explode(DIRECTORY_SEPARATOR, $fullpath);
                     $count = count($check);
 
@@ -321,7 +324,7 @@ class BcFolder
          * @var string $itemPath
          * @var RecursiveDirectoryIterator $fsIterator
          */
-        foreach ($iterator as $itemPath => $fsIterator) {
+        foreach($iterator as $itemPath => $fsIterator) {
             if ($skipHidden) {
                 $subPathName = $fsIterator->getSubPathname();
                 if ($subPathName[0] === '.' || str_contains($subPathName, DIRECTORY_SEPARATOR . '.')) {

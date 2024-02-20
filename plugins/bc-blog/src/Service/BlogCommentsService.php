@@ -188,6 +188,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogContent($blogContentId)
     {
