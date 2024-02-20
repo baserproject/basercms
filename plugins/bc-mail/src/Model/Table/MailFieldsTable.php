@@ -72,7 +72,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'フィールド名は半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'フィールド名は小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
                 ]])
             ->add('field_name', [
                 'duplicateMailField' => [
@@ -122,7 +122,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ名は半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ名は小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
                 ]]);
         $validator
             ->scalar('group_valid')
@@ -131,7 +131,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ入力チェックは半角英数字、ハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ入力チェックは小文字の半角英数字、ハイフン、アンダースコアのみで入力してください。')
                 ]]);
         $validator
             ->scalar('size')
@@ -224,7 +224,9 @@ class MailFieldsTable extends MailAppTable
 
     /**
      * メールフィールドの値として正しい文字列か検証する
-     * 半角英数-_
+     * 半角小文字英数-_
+     * メールフィールドは、DBテーブルのフィールドとして利用されるため、
+     * 大文字を利用した場合にクォートを入れないとエラーとなってしまう
      *
      * @param string $value
      * @return boolean
@@ -233,7 +235,7 @@ class MailFieldsTable extends MailAppTable
      */
     public function halfTextMailField(string $value)
     {
-        $pattern = "/^[a-zA-Z0-9-_]*$/";
+        $pattern = "/^[a-z0-9-_]*$/";
         return !!(preg_match($pattern, $value) === 1);
     }
 

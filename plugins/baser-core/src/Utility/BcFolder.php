@@ -180,14 +180,15 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function copy($dest): bool
+    public function copy($dest, $mode = 0777): bool
     {
         $source=$this->path;
         if (!is_dir($source)) return false;
         if(is_dir($source)) {
             $dir_handle=opendir($source);
             if(!file_exists($dest)){
-                mkdir($dest);
+                (new BcFolder($dest))->create();
+                chmod($dest, $mode);
             }
             while($file=readdir($dir_handle)){
                 if($file!="." && $file!=".."){
@@ -196,12 +197,14 @@ class BcFolder
                         self::copy( $dest .DS. $file);
                     } else {
                         copy($source."/".$file, $dest."/".$file);
+                        chmod($dest."/".$file, $mode);
                     }
                 }
             }
             closedir($dir_handle);
         } else {
             copy($source, $dest);
+            chmod($dest, $mode);
         }
         return true;
     }
