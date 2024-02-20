@@ -773,7 +773,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
         $this->assertFalse($this->BlogPostsTable->isExcluded());
 
-        //isExcluded true
+        //set seisExcluded true
         BlogContentFactory::make([
             'id' => 11,
             'description' => 'test',
