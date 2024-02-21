@@ -91,7 +91,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
         __d('baser_core', '削除'),
         ['action' => 'delete', $blogContent->id, $post->id],
         ['block' => true,
-          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->name),
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->title),
           'class' => 'bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm',
