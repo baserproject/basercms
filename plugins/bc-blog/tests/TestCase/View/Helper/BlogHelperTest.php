@@ -757,7 +757,7 @@ class BlogHelperTest extends BcTestCase
         BlogPostFactory::make([
             'id' => 3,
             'no' => 3,
-            'blog_content_id' => $blogContentId,
+            'blog_content_id' => 30,
             'title' => 'title 3',
             'posted' => $posts_date
         ])->persist();
@@ -779,7 +779,7 @@ class BlogHelperTest extends BcTestCase
             [4, 3, '9000-08-10 18:58:07', ''],
             [4, 1, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">title 2 ≫</a>'],
             [2, 3, '9000-08-10 18:58:07', ''],
-            [3, 2, '1000-08-10 18:58:07', '<a href="/news/archives/3" class="next-link">title 3 ≫</a>'], // 存在しないブログコンテンツ
+            [3, 3, '1000-08-10 18:58:07', ''], // 存在しないブログコンテンツ
         ];
     }
 
