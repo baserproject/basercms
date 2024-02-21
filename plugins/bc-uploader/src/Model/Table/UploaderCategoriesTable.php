@@ -68,6 +68,13 @@ class UploaderCategoriesTable extends AppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
+            ->add('name', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'カテゴリ名を入力してください。')
+                ]
+            ])
             ->notEmptyString('name', __d('baser_core', 'カテゴリ名を入力してください。'));
         return $validator;
     }
