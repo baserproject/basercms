@@ -82,6 +82,10 @@ $this->BcAdmin->setHelp('custom_tables_form');
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
+          <?php echo __d('baser_core', '半角英数字とアンダースコアのみ利用できます。') ?>
+        </div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
