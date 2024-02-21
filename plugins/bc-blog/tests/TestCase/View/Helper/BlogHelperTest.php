@@ -736,36 +736,36 @@ class BlogHelperTest extends BcTestCase
     {
         //データ生成
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
-            ->treeNode(3, 1, 3, 'news-2', '/news/', 3)->persist();
-        BlogContentFactory::make(['id' => 3])->persist();
+            ->treeNode($blogContentId, 1, 3, 'news-2', '/news/', $blogContentId)->persist();
+        BlogContentFactory::make(['id' => $blogContentId])->persist();
         SiteFactory::make()->main()->persist();
 
         BlogPostFactory::make([
             'id' => 1,
             'no' => 1,
-            'blog_content_id' => 3,
+            'blog_content_id' => $blogContentId,
             'title' => 'title 1',
-            'posted' => '2022-10-02 09:00:00'
+            'posted' => $posts_date
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
             'no' => 2,
-            'blog_content_id' => 3,
+            'blog_content_id' => $blogContentId,
             'title' => 'title 2',
-            'posted' => '2022-10-02 09:00:00'
+            'posted' => $posts_date
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
             'no' => 3,
-            'blog_content_id' => 3,
+            'blog_content_id' => $blogContentId,
             'title' => 'title 3',
-            'posted' => '2022-08-02 09:00:00'
+            'posted' => $posts_date
         ])->persist();
 
         //currentContentをリセット
         $view = new BlogFrontAppView($this->getRequest());
-        $blogContent = BlogContentFactory::get(3);
-        $blogContent->content = ContentFactory::get(3);
+        $blogContent = BlogContentFactory::get($blogContentId);
+        $blogContent->content = ContentFactory::get($blogContentId);
         $view->set('blogContent', $blogContent);
         $this->Blog = new BlogHelper($view);
 
@@ -776,10 +776,10 @@ class BlogHelperTest extends BcTestCase
     public static function nextLinkDataProvider()
     {
         return [
-            [1, 2, '9000-08-10 18:58:07', ''],
-            [1, 1, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">title 2 ≫</a>'],
-            [2, 2, '9000-08-10 18:58:07', ''],
-            [3, 3, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">title 1 ≫</a>'], // 存在しないブログコンテンツ
+            [4, 3, '9000-08-10 18:58:07', ''],
+            [4, 1, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">title 2 ≫</a>'],
+            [2, 3, '9000-08-10 18:58:07', ''],
+            [3, 2, '1000-08-10 18:58:07', '<a href="/news/archives/3" class="next-link">title 3 ≫</a>'], // 存在しないブログコンテンツ
         ];
     }
 
