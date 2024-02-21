@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
@@ -27,7 +28,6 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogTagsScenario;
-use BcBlog\Test\Scenario\MultiBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\BlogFrontAppView;
@@ -602,7 +602,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 前の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -678,8 +677,34 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * test hasNextLink
+     */
+    public function test_hasNextLink()
+    {
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'posted' => '2022-10-02 09:00:00',
+        ])->persist();
+        //true戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(1));
+        $this->assertTrue($result);
+        //false戻りケース
+        $result = $this->Blog->hasNextLink(BlogPostFactory::get(2));
+        $this->assertFalse($result);
+        //異常系
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Blog->hasNextLink(BlogPostFactory::get(111));
+    }
+
+    /**
      * 次の記事へのリンクを出力する
-     *
      * @param int $blogContentId ブログコンテンツID
      * @param int $id 記事ID
      * @param int $posts_date 日付
@@ -716,16 +741,18 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetBlogTemplates($theme, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->BcBaser->siteConfig['theme'] = $theme;
+        SiteFactory::make([
+            'id' => 1,
+            'theme' => $theme
+        ])->persist();
         $result = $this->Blog->getBlogTemplates();
-        $this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
+        $this->assertEquals($expected, $result);
     }
 
     public static function getBlogTemplatesDataProvider()
     {
         return [
-            ['nada-icons', ['default' => 'default']]
+            ['BcThemeSample', ['default' => 'default']]
         ];
     }
 
@@ -1533,7 +1560,7 @@ class BlogHelperTest extends BcTestCase
 
 
     /**
-     * test isArchive
+     * test isCategory
      * @dataProvider isCategoryDataProvider
      *
      */
@@ -1555,6 +1582,32 @@ class BlogHelperTest extends BcTestCase
             ['monthly', false],
             ['daily', false],
             ['hoge', false], // 存在しないアーカイブの場合
+            ['', false], // アーカイブ指定がない場合
+        ];
+    }
+
+    /**
+     * test isArchive
+     * @dataProvider isArchiveDataProvider
+     */
+    public function test_isArchive($type, $expects)
+    {
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        $result = $this->Blog->isArchive();
+        $this->assertEquals($expects, $result);
+    }
+
+    public static function isArchiveDataProvider()
+    {
+        return [
+            ['category', true],
+            ['tag', true],
+            ['yearly', true],
+            ['monthly', true],
+            ['daily', true],
+            ['hoge', true], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
     }

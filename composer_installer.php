@@ -50,6 +50,7 @@ function whichPhp()
 
 function command($phpPath)
 {
+    $phpPath = escapeshellarg($phpPath);
     if (!$phpPath) $phpPath = 'php';
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');

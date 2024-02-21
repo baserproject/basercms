@@ -219,10 +219,51 @@ class BlogCommentsServiceTest extends BcTestCase
     }
 
     /**
-     * testAdd
+     * getBlogContent
      * @return void
      */
-    public function testAdd(){
+    public function testGetBlogContent()
+    {
+        //created blogPost
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
+
+        //check getBlogContent
+        $blogContent = $this->BlogCommentsService->getBlogContent(1);
+
+        //check description
+        $this->assertEquals('ディスクリプション', $blogContent['description']);
+
+        //check template
+        $this->assertEquals('default', $blogContent['template']);
+
+        //check content no exist
+        $blogContent = $this->BlogCommentsService->getIndex(['id' => 2])->count();
+        $this->assertEquals(0, $blogContent);
+    }
+    /**
+     * getNew
+     * @return void
+     */
+    public function testGetNew()
+    {
+        $result = $this->BlogCommentsService->getNew();
+        $this->assertEquals('NO NAME', $result['name']);
+    }
+    /**
+     * add
+     * @return void
+     */
+    public function testAdd()
+    {
+        //data test
         $this->loadFixtureScenario(
             BlogContentScenario::class,
             1,  // id
@@ -237,20 +278,31 @@ class BlogCommentsServiceTest extends BcTestCase
             'no' => 1,
             'status' => 1,
             'name' => 'baserCMS',
-            'email' => '',
-            'url' => 'https://basercms.net',
-            'message' => 'ホームページの開設おめでとうございます。（ダミー）',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
         ];
-
         $result = $this->BlogCommentsService->add(1, 1, $data);
+
         //check result return
         $this->assertEquals('baserCMS', $result['name']);
+
         //confirm result add
         $comment = BlogCommentFactory::get(1);
         $this->assertEquals($data['name'], $comment['name']);
         $this->assertEquals(1, $comment['blog_content_id']);
+
+        // null name
+        $data = [
+            'id' => 1,
+            'no' => 1,
+            'status' => 1,
+            'name' => null,
+        ];
+        $this->expectExceptionMessage("お名前を入力してください。");
+        $this->BlogCommentsService->add(1, 1, $data);
+
+        //Exception
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->BlogCommentsService->add(1, 1, []);
     }
 
 }

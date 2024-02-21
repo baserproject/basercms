@@ -896,6 +896,7 @@ class BlogHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasNextLink($post)
     {
@@ -914,8 +915,9 @@ class BlogHelper extends Helper
      * @return array ブログテンプレート一覧
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getBlogTemplates($siteId = 0)
+    public function getBlogTemplates($siteId = 1)
     {
         $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcBlog');
         $_templates = [];
@@ -1118,6 +1120,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがアーカイブページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isArchive()
     {
