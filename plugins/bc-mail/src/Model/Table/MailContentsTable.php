@@ -139,7 +139,9 @@ class MailContentsTable extends MailAppTable
 
         // redirect_url
         $validator
+            ->allowEmptyString('redirect_url')
             ->scalar('redirect_url')
+            ->regex('redirect_url', '/^http|^\/.*/', __d('baser_core', 'リダイレクトURLはURLの形式を入力してください。'))
             ->maxLength('redirect_url', 255, __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。'));
 
         // description
