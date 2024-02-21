@@ -11,6 +11,8 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -20,10 +22,12 @@ use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogPostsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
+use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-
+use ArrayObject;
 /**
  * Class BlogPostsTableTest
  *
@@ -749,5 +753,39 @@ class BlogPostsTableTest extends BcTestCase
         //preview が false の場合に取得できない
         $rs = $this->BlogPostsTable->getPublishByNo(6, 3);
         $this->assertNull($rs);
+    }
+
+    /**
+     * beforeSave
+     * @return void
+     */
+    public function test_beforeSave()
+    {
+        //サービスクラス
+        $PluginsService = $this->getService(PluginsServiceInterface::class);
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $PluginsService->attach('BcSearchIndex');
+
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        $blogPost = $BlogPostsService->get(1);
+        $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
+        $this->assertFalse($this->BlogPostsTable->isExcluded());
+
+        //set isExcluded true
+        BlogContentFactory::make(['id' => 11])->persist();
+        ContentFactory::make([
+            'id' => 11,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 11,
+            'exclude_search' => 1,
+        ])->persist();
+        BlogPostFactory::make(['id' => 8, 'blog_content_id' => 11])->persist();
+
+        $blogPost = $BlogPostsService->get(8);
+        $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
+        $this->assertTrue($this->BlogPostsTable->isExcluded());
     }
 }
