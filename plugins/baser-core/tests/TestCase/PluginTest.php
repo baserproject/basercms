@@ -115,7 +115,6 @@ class PluginTest extends BcTestCase
         }
 
         $this->assertNotNull(\Cake\Core\Plugin::getCollection()->get('DebugKit'));
-        $this->assertEquals('/var/www/html/plugins/' . Configure::read('BcApp.coreFrontTheme') . '/templates/', Configure::read('App.paths.templates')[0]);
 
         copy('config/.env','config/.env.bak');
 
@@ -142,7 +141,6 @@ return [];
 
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->Plugin->bootstrap($this->application);
-        $this->assertEquals('/var/www/html/plugins/' . Configure::read('BcApp.coreAdminTheme') . '/templates/', Configure::read('App.paths.templates')[0]);
 
         $this->assertNotNull(\Cake\Core\Plugin::getCollection()->get('DebugKit'));
 

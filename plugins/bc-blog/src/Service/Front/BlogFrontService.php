@@ -187,6 +187,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         return [
             'posts' => $posts,
             'blogCategory' => $blogCategory,
+            'blogContent' => $blogContent,
             'blogArchiveType' => 'category',
             'crumbs' => array_merge($crumbs, $this->getCategoryCrumbs(
                 $request->getAttribute('currentContent')->url,
@@ -246,6 +247,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         }
         return [
             'posts' => $posts,
+            'blogContent' => $blogContent,
             'blogArchiveType' => 'author',
             'author' => $author,
             'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
@@ -270,6 +272,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         if (!$blogContent->tag_use || !$tag) throw new NotFoundException();
         return [
             'posts' => $posts,
+            'blogContent' => $blogContent,
             'blogArchiveType' => 'tag',
             'blogTag' => $tag,
             'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
@@ -313,7 +316,8 @@ class BlogFrontService implements BlogFrontServiceInterface
             'year' => $year,
             'month' => $month,
             'day' => $day,
-            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area'),
+            'blogContent' => $blogContent
         ];
     }
 

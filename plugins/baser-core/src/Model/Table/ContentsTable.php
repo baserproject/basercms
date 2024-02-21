@@ -1288,7 +1288,7 @@ class ContentsTable extends AppTable
         if ($children) {
             foreach($children as $child) {
                 // サイト全体を更新する為、サイト規模によってはかなり時間がかかる為、SQLを利用
-                $connection->update('contents', ['url' => $this->createUrl($child->id)], ['id' => $child->id]);
+                $connection->update($this->getTable(), ['url' => $this->createUrl($child->id)], ['id' => $child->id]);
             }
         }
         return true;

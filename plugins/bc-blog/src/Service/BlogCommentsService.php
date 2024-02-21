@@ -127,6 +127,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return EntityInterface 初期値データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -187,6 +188,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogContent($blogContentId)
     {

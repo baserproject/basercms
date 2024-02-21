@@ -296,6 +296,10 @@ $this->BcAdmin->setHelp('custom_fields_form');
           'rows' => 2,
           'v-model' => 'entity.default_value'
         ]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
+          <?php echo __d('baser_core', '日付（年月日時間）の場合は、2024/02/14 10:00 のように、日付と時間をスペースで区切ってください。') ?>
+        </div>
         <?php echo $this->BcAdminForm->error('default_value') ?>
       </td>
     </tr>

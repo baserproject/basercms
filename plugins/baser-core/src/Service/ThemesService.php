@@ -148,12 +148,11 @@ class ThemesService implements ThemesServiceInterface
         }
         $name = $postData['file']->getClientFileName();
         $postData['file']->moveTo(TMP . $name);
-        $srcName = basename($name, '.zip');
         $zip = new BcZip();
-        if (!$zip->extract(TMP . $name, TMP)) {
+        $srcName = $zip->extract(TMP . $name, TMP);
+        if (!$srcName) {
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
-
         $num = 2;
         $dstName = Inflector::camelize($srcName);
         while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
@@ -161,10 +160,16 @@ class ThemesService implements ThemesServiceInterface
             $num++;
         }
         $folder = new BcFolder(TMP . $srcName);
-        $folder->move( BASER_THEMES . $dstName,);
+        $folder->move(BASER_THEMES . $dstName);
         unlink(TMP . $name);
-        BcUtil::changePluginNameSpace($dstName);
-        return $dstName;
+        $pluginPath = BcUtil::getPluginPath($dstName);
+        if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
+            BcUtil::changePluginNameSpace($dstName);
+            return $dstName;
+        } else {
+            (new BcFolder(BASER_THEMES . $dstName))->delete();
+            throw new BcException(__d('baser_core', 'テーマに Plugin クラスが存在しません。テーマのバージョンが違う可能性があります。'));
+        }
     }
 
     /**

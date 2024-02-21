@@ -1,11 +1,12 @@
 <?php
 /**
- * CuCustomField : baserCMS Custom Field Text Plugin
- * Copyright (c) Catchup, Inc. <https://catchup.co.jp>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright        Copyright (c) Catchup, Inc.
- * @link             https://catchup.co.jp
- * @license          MIT LICENSE
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 namespace BcCcFile\View\Helper;
@@ -14,6 +15,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\View\Helper\BcAdminFormHelper;
+use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Model\Entity\CustomField;
 use BcCustomContent\Model\Entity\CustomLink;
 use Cake\ORM\TableRegistry;
@@ -98,6 +100,9 @@ class BcCcFileHelper extends Helper
 			} elseif($options['output'] === 'url') {
 			    if(is_string($fieldValue)) {
                     $entriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+                    if(!$entriesTable->hasBehavior('BaserCore.BcUpload')) {
+                        BcCcFileUtil::setupUploader($link->custom_table_id);
+                    }
                     $setting = $entriesTable->getSettings();
 			        $output = '/files/' . $setting['saveDir'] . '/' . $fieldValue;
 			    } else {
