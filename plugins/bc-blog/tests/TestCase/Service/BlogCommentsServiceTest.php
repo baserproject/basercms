@@ -247,4 +247,13 @@ class BlogCommentsServiceTest extends BcTestCase
         $blogContent = $this->BlogCommentsService->getIndex(['id' => 2])->count();
         $this->assertEquals(0, $blogContent);
     }
+    /**
+     * getNew
+     * @return void
+     */
+    public function testGetNew()
+    {
+        $result = $this->BlogCommentsService->getNew();
+        $this->assertEquals('NO NAME', $result['name']);
+    }
 }
