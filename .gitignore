@@ -62,6 +62,7 @@ yarn-error.log
 /docker/volumes
 /docker/docker-compose.yml
 /docker_inited
+/docker/.env
 # plugins
 /plugins/*
 !/plugins/baser-core
