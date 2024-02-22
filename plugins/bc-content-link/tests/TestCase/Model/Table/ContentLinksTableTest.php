@@ -80,6 +80,47 @@ class ContentLinksTableTest extends BcTestCase
     }
 
     /**
+     * Test testValidationURL
+     */
+    public function testValidationURL()
+    {
+        $validator = $this->ContentLinks->getValidator('default');
+        //エラー場合、
+        //スペースだけ入力
+        $errors = $validator->validate([
+            'url' => '        '
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLはURLの形式を入力してください。', current($errors['url']));
+        //スラッシュがない場合
+        $errors = $validator->validate([
+            'url' => 'あああああ'
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLはURLの形式を入力してください。', current($errors['url']));
+
+        //長いURLを入力場合
+        $errors = $validator->validate([
+            'url' => '/' . str_repeat('a', 255)
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLは255文字以内で入力してください。', current($errors['url']));
+
+        //正常場合、
+        $errors = $validator->validate([
+            'url' => '/test'
+        ]);
+        //戻り値を確認
+        $this->assertCount(0, $errors);
+
+        $errors = $validator->validate([
+            'url' => 'https://basercms.net/'
+        ]);
+        //戻り値を確認
+        $this->assertCount(0, $errors);
+    }
+
+    /**
      * test beforeCopyEvent
      */
     public function testBeforeCopyEvent()
