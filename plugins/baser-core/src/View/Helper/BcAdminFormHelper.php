@@ -63,7 +63,7 @@ class BcAdminFormHelper extends BcFormHelper
                         'deleteLabel' => ['class' => 'bca-file__delete-label'],
                         'figure' => ['class' => 'bca-file__figure'],
                         'img' => ['class' => 'bca-file__img'],
-                        'figcaption' => ['class' => 'bca-file__figcaption']
+                        'figcaption' => ['class' => 'bca-file__figcaption', 'escape' => true]
                     ], $options);
                     break;
                 case 'dateTimePicker':
