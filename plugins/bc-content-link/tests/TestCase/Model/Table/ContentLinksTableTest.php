@@ -129,13 +129,13 @@ class ContentLinksTableTest extends BcTestCase
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.beforeCopy', function (Event $event) {
             $data = $event->getData('data');
-            $data['url'] = 'beforeCopy';
+            $data['url'] = '/beforeCopy';
             $event->setData('data', $data);
         });
         $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
-        $query = $contentLinks->find()->where(['url' => 'beforeCopy']);
+        $query = $contentLinks->find()->where(['url' => '/beforeCopy']);
         $this->assertEquals(1, $query->count());
     }
 
@@ -149,13 +149,13 @@ class ContentLinksTableTest extends BcTestCase
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.afterCopy', function (Event $event) {
             $data = $event->getData('data');
             $contentLinks = TableRegistry::getTableLocator()->get('BcContentLink.ContentLinks');
-            $data->url = 'AfterCopy';
+            $data->url = '/AfterCopy';
             $contentLinks->save($data);
         });
         $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
-        $query = $contentLinks->find()->where(['url' => 'AfterCopy']);
+        $query = $contentLinks->find()->where(['url' => '/AfterCopy']);
         $this->assertEquals(1, $query->count());
     }
 
