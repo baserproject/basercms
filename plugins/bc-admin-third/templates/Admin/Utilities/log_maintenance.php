@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser_core', 'データメンテナンス'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ログメンテナンス'));
 $this->BcAdmin->setHelp('tools_log');
 ?>
 
