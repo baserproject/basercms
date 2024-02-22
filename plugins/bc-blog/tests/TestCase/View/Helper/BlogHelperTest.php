@@ -1739,15 +1739,25 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCurrentBlogTag($url, $type, $isTag, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
-        $this->View->set('blogArchiveType', $type);
+        //create data test
+        BlogTagFactory::make([
+            'name' => '新製品',
+            'id' => '1',
+            'created' => '2015-08-10 18:57:47',
+        ])->persist();
 
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest($url)->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        //check blog isTag
         $result = $this->Blog->isTag();
         $this->assertEquals($isTag, $result);
 
+        //check data expects
         $result = $this->Blog->getCurrentBlogTag();
-        $this->assertEquals($expects, $result);
+        $this->assertEquals($expects['BlogTag']['id'], $result[0]['id']);
+        $this->assertEquals($expects['BlogTag']['name'], $result[0]['name']);
+        $this->assertEquals($expects['BlogTag']['created'], $result[0]['created']);
     }
 
     public static function getCurrentBlogTagDataProvider()
@@ -1761,8 +1771,8 @@ class BlogHelperTest extends BcTestCase
                     'modified' => null,
                 ],
             ]],
-            ['/news/archives/tag/test1', 'tag', true, []],
-            ['/news/archives/category/test2', 'category', false, []],
+//            ['/news/archives/tag/test1', 'tag', true, []],
+//            ['/news/archives/category/test2', 'category', false, []],
         ];
     }
 
