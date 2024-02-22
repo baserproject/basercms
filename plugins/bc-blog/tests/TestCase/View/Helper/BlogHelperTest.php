@@ -653,7 +653,7 @@ class BlogHelperTest extends BcTestCase
         return [
             [4, 2, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ title 1</a>'],
             [4, 1, '1000-08-10 18:58:07', ''],
-            [3, 3, '9000-08-10 18:58:07', ''],    // 存在しないブログコンテンツ
+            [3, 3, '9000-08-10 18:58:07', ''],
             [3, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ title 1</a>'],
         ];
     }
