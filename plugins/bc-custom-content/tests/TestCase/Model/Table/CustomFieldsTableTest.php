@@ -12,9 +12,12 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Table\CustomFieldsTable;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 
 /**
  * CustomFieldsTableTest
+ * @property CustomFieldsTable $customFieldsTable
  */
 class CustomFieldsTableTest extends BcTestCase
 {
@@ -25,6 +28,7 @@ class CustomFieldsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->customFieldsTable = $this->getTableLocator()->get('BcCustomContent.CustomFields');
     }
 
     /**
@@ -32,6 +36,7 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->customFieldsTable);
         parent::tearDown();
     }
 
@@ -48,7 +53,62 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $validator = $this->customFieldsTable->getValidator('default');
+        //バリディションを発生しない テスト
+        $errors = $validator->validate([
+            'name' => 'a',
+            'title' => 'a',
+            'type' => 'group',
+            'size' => '',
+            'max_length' => '',
+            'source' => '',
+        ]);
+        $this->assertCount(0, $errors);
+
+        //notEmptyString テスト
+        $errors = $validator->validate([
+            'name' => '',
+            'title' => '',
+            'type' => '',
+            'size' => '',
+            'max_length' => '',
+            'source' => '',
+        ]);
+        $this->assertEquals('フィールド名を入力してください。', current($errors['name']));
+        $this->assertEquals('項目見出しを入力してください。', current($errors['title']));
+        $this->assertEquals('タイプを入力してください。', current($errors['type']));
+
+        //maxLength テスト
+        $errors = $validator->validate([
+            'name' => str_repeat('a', 256),
+            'title' => str_repeat('a', 256)
+        ]);
+        $this->assertEquals('フィールド名は255文字以内で入力してください。', current($errors['name']));
+        $this->assertEquals('項目見出しは255文字以内で入力してください。', current($errors['title']));
+
+        //フィールド名は半角英数字とアンダースコア & 横幅サイズと最大文字数は整数ではない　テスト
+        $errors = $validator->validate([
+            'name' => 'あ',
+            'size' => 'a',
+            'max_length' => 'b',
+        ]);
+        $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        $this->assertEquals('横幅サイズは整数を入力してください。', current($errors['size']));
+        $this->assertEquals('最大文字数は整数を入力してください。', current($errors['max_length']));
+
+        //validateUnique　テスト
+        CustomFieldFactory::make(['name' => 'test'])->persist();
+        $errors = $validator->validate([
+            'name' => 'test',
+        ]);
+        $this->assertEquals('既に登録のあるフィールド名です。', current($errors['name']));
+
+        //validate checkSelectList　テスト
+        CustomFieldFactory::make(['name' => 'test'])->persist();
+        $errors = $validator->validate([
+            'source' => "あ\rべ\r\nあ\nべ\ntest",
+        ]);
+        $this->assertEquals('選択リストに同じ項目を複数登録できません。', current($errors['source']));
     }
 
     /**

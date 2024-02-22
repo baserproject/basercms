@@ -13,6 +13,7 @@ namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailContent;
+use Cake\Core\Configure;
 
 /**
  * Class MailContentTest
@@ -28,7 +29,7 @@ class MailContentsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-//        $this->MailContent = ClassRegistry::init('BcMail.MailContent');
+        $this->MailContent = $this->getTableLocator()->get('BcMail.MailContents');
         parent::setUp();
     }
 
@@ -39,157 +40,157 @@ class MailContentsTableTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->MailContent);
+        unset($this->MailContent);
         parent::tearDown();
     }
 
     /**
      * validate
      */
-    public function test正常チェック()
+    public function testNotErrors()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'name' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
-                'sender_name' => '01234567890123456789012345678901234567890123456789',
-                'subject_user' => '01234567890123456789012345678901234567890123456789',
-                'subject_admin' => '01234567890123456789012345678901234567890123456789',
-                'layout_template' => '01234567890123456789',
-                'form_template' => '01234567890123456789',
-                'mail_template' => '01234567890123456789',
-                'redirect_url' => 'https://basercms.net/',
-                'sender_1' => 'test1@example.co.jp',
-                'sender_2' => 'test2@example.co.jp',
-                'ssl_on' => ''
-            ]
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'name' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
+            'sender_name' => '01234567890123456789012345678901234567890123456789',
+            'subject_user' => '01234567890123456789012345678901234567890123456789',
+            'subject_admin' => '01234567890123456789012345678901234567890123456789',
+            'layout_template' => '01234567890123456789',
+            'form_template' => '01234567890123456789',
+            'mail_template' => '01234567890123456789',
+            'redirect_url' => 'https://basercms.net/',
+            'sender_1' => 'test1@example.co.jp',
+            'sender_2' => 'test2@example.co.jp',
+            'ssl_on' => ''
         ]);
 
-        $this->assertTrue($this->MailContent->validates());
-        $this->assertEmpty($this->MailContent->validationErrors);
+        $this->assertCount(0, $errors);
     }
 
-    public function test空白チェック()
+    public function testEmptyErrors()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'name' => '',
-                'title' => '',
-                'sender_name' => '',
-                'subject_user' => '',
-                'subject_admin' => '',
-                'layout_template' => '',
-                'form_template' => '',
-                'mail_template' => '',
-                'redirect_url' => '',
-                'sender_1' => '',
-                'sender_2' => '',
-                'ssl_on' => ''
-            ]
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'name' => '',
+            'title' => '',
+            'sender_name' => '',
+            'subject_user' => '',
+            'subject_admin' => '',
+            'layout_template' => '',
+            'form_template' => '',
+            'mail_template' => '',
+            'redirect_url' => '',
+            'sender_1' => '',
+            'sender_2' => '',
+            'ssl_on' => ''
         ]);
-        $this->assertFalse($this->MailContent->validates());
-        $expected = [
-            'subject_user' => ['自動返信メール件名[ユーザー宛]を入力してください。'],
-            'subject_admin' => ['自動送信メール件名[管理者宛]を入力してください。'],
-            'form_template' => ['メールフォームテンプレート名は半角のみで入力してください。'],
-            'mail_template' => ['送信メールテンプレートは半角のみで入力してください。']
-        ];
-        $this->assertEquals($expected, $this->MailContent->validationErrors);
+        $this->assertEquals('自動返信メール件名[ユーザー宛]を入力してください。', current($errors['subject_user']));
+        $this->assertEquals('自動返信メール件名[管理者宛]を入力してください。', current($errors['subject_admin']));
     }
 
-    public function test桁数チェック()
+    public function testCheckMaxLength()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'sender_name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
-                'subject_user' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
-                'subject_admin' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
-                'form_template' => '012345678901234567890123456789012345678901234567890',
-                'mail_template' => '012345678901234567890123456789012345678901234567890',
-                'redirect_url' => 'http://01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.co.jp',
-                'sender_1' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
-                'sender_2' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
-                'ssl_on' => ''
-            ]
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'sender_name' => str_repeat('a', 256),
+            'subject_user' => str_repeat('a', 256),
+            'subject_admin' => str_repeat('a', 256),
+            'form_template' => str_repeat('a', 21),
+            'mail_template' => str_repeat('a', 21),
+            'redirect_url' => '/' . str_repeat('a', 256),
+            'sender_1' => str_repeat('a', 256) . '@example.com',
+            'sender_2' => str_repeat('a', 256) . '@example.com',
+            'ssl_on' => ''
         ]);
-        $this->assertFalse($this->MailContent->validates());
 
-        $expected = [
-            'sender_name' => ['送信先名は255文字以内で入力してください。'],
-            'subject_user' => ['自動返信メール件名[ユーザー宛]は255文字以内で入力してください。'],
-            'subject_admin' => ['自動返信メール件名[管理者宛]は255文字以内で入力してください。'],
-            'form_template' => ['フォームテンプレート名は20文字以内で入力してください。'],
-            'mail_template' => ['メールテンプレート名は20文字以内で入力してください。'],
-            'redirect_url' => ['リダイレクトURLは255文字以内で入力してください。'],
-        ];
-        $this->assertEquals($expected, $this->MailContent->validationErrors);
+        $this->assertEquals('自動返信メール件名[ユーザー宛]は255文字以内で入力してください。', current($errors['subject_user']));
+        $this->assertEquals('自動返信メール件名[管理者宛]は255文字以内で入力してください。', current($errors['subject_admin']));
+        $this->assertEquals('フォームテンプレート名は20文字以内で入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレート名は20文字以内で入力してください。', current($errors['mail_template']));
+        $this->assertEquals('リダイレクトURLは255文字以内で入力してください。', current($errors['redirect_url']));
     }
 
-    public function test半角英数チェック()
+    public function testHalfTextErrors()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'form_template' => '１２３ａｂｃ',
-                'mail_template' => '１２３ａｂｃ',
-                'ssl_on' => ''
-            ]
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'form_template' => '１２３ａｂｃ',
+            'mail_template' => '１２３ａｂｃ',
+            'ssl_on' => ''
         ]);
-        $this->assertFalse($this->MailContent->validates());
 
-        $expected = [
-            'form_template' => ['メールフォームテンプレート名は半角のみで入力してください。'],
-            'mail_template' => ['送信メールテンプレートは半角のみで入力してください。']
-        ];
-        $this->assertEquals($expected, $this->MailContent->validationErrors);
+        $this->assertEquals('メールフォームテンプレート名は半角のみで入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレートは半角のみで入力してください。', current($errors['mail_template']));
     }
 
-    public function test形式チェック()
+    public function testInputTypeErrors()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'redirect_url' => 'hoge',
-                'sender_1' => 'hoge',
-                'sender_2' => 'hoge',
-                'ssl_on' => ''
-            ]
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'redirect_url' => 'hoge',
+            'sender_1' => 'hoge',
+            'sender_2' => 'hoge',
+            'ssl_on' => ''
         ]);
-        $this->assertFalse($this->MailContent->validates());
 
-        $expected = [
-            'sender_1' => ['送信先メールアドレスの形式が不正です。'],
-            'sender_2' => ['送信先メールアドレスの形式が不正です。']
-        ];
-        $this->assertEquals($expected, $this->MailContent->validationErrors);
+        $this->assertEquals('送信先メールアドレスのEメールの形式が不正です。', current($errors['sender_1']));
+        $this->assertEquals('BCC用送信先メールアドレスのEメールの形式が不正です。', current($errors['sender_2']));
+        $this->assertEquals('リダイレクトURLはURLの形式を入力してください。', current($errors['redirect_url']));
     }
 
-    public function testSSLチェック正常系()
+    public function testSSLTrue()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'ssl_on' => ['on'],
-            ]
-        ]);
         Configure::write('BcEnv.sslUrl', 'on');
-        $this->assertTrue($this->MailContent->validates());
-        $this->assertEmpty($this->MailContent->validationErrors);
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'ssl_on' => ['on'],
+        ]);
+        $this->assertCount(0, $errors);
     }
 
-    public function testSSLチェック異常系()
+    public function testSSLFalse()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->MailContent->create([
-            'MailContent' => [
-                'ssl_on' => ['on'],
-            ]
-        ]);
         Configure::write('BcEnv.sslUrl', '');
-        $this->assertFalse($this->MailContent->validates());
-        $this->assertContains('SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。', $this->MailContent->validationErrors['ssl_on']);
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'ssl_on' => ['on'],
+        ]);
+
+        $this->assertEquals('SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。', current($errors['ssl_on']));
+    }
+
+    public function testURLErrors()
+    {
+        //エラーテスト
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'redirect_url' => 'hoge',
+        ]);
+
+        $this->assertEquals('リダイレクトURLはURLの形式を入力してください。', current($errors['redirect_url']));
+
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'redirect_url' => 'あああ',
+        ]);
+
+        $this->assertEquals('リダイレクトURLはURLの形式を入力してください。', current($errors['redirect_url']));
+
+        //正常テスト
+        $validator = $this->MailContent->getValidator('default');
+        //スラッシュから始まるURL
+        $errors = $validator->validate([
+            'redirect_url' => '/baser/admin/baser-core/users/index',
+        ]);
+        $this->assertCount(0, $errors);
+
+        //httpから始まるURL
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate([
+            'redirect_url' => 'https://basercms.net',
+        ]);
+
+        $this->assertCount(0, $errors);
     }
 
     /**
@@ -308,13 +309,13 @@ class MailContentsTableTest extends BcTestCase
         $result = $this->MailContent->createContent($data);
         $expected = [
             'SearchIndex' => [
-                'type'     => 'メール',
+                'type' => 'メール',
                 'model_id' => $expected,
                 'category' => '',
-                'title'    => 'タイトル',
-                'detail'   => '説明',
-                'url'      => '/名前/index',
-                'status'   => 'ステータス'
+                'title' => 'タイトル',
+                'detail' => '説明',
+                'url' => '/名前/index',
+                'status' => 'ステータス'
             ]
         ];
         $this->assertEquals($expected, $result, $message);
