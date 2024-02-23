@@ -169,6 +169,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
             if ($widget[$key]['status']) {
               $enabled = ' enabled';
             }
+
+            // baserCMS４系よりデータを移行した場合に、プラグインが設定されていないため、コアのテーマを設定
+            if(empty($widget[$key]['plugin'])) {
+              $widget[$key]['plugin'] = \Cake\Utility\Inflector::camelize(Cake\Core\Configure::read('BcApp.coreAdminTheme'), '-');
+            }
+
             $this->setRequest($this->getRequest()->withParsedBody(array_merge(
               $this->getRequest()->getData(),
               [$key => $widget[$key]]
