@@ -167,7 +167,7 @@ $this->BcBaser->js([
 
           <?php if ($this->BcToolbar->isAvailableClearCache()): ?>
             <li>
-              <?php $this->BcBaser->link(
+              <?= $this->BcAdminForm->postLink(
                 __d('baser_core', 'キャッシュクリア'),
                 ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'clear_cache'],
                 ['confirm' => __d('baser_core', 'キャッシュクリアします。いいですか？')]

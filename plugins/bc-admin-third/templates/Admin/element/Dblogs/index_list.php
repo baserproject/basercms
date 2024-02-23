@@ -23,7 +23,7 @@ $this->BcListTable->setColumnNumber(4);
   <?php if ($this->BcBaser->isAdminUser() && $dblogs->count()): ?>
     <div class="submit clear bca-update-log__delete">
       <?php echo $this->BcAdminForm->postLink(__d('baser_core', 'ログを全て削除'), ['action' => 'delete_all'], [
-          'class' => 'bca-btn bca-loading',
+          'class' => 'bca-btn',
           'data-bca-btn-type' => 'delete',
           'confirm' => __d('baser_core', '最近の動きのログを削除します。いいですか？')
       ]) ?>
