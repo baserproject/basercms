@@ -52,7 +52,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     ['action' => 'delete', $entity->id], [
       'block' => true,
       'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\n利用しているテーブルのフィールドもデータごと削除されてしまいますのでご注意ください。", $entity->title),
-      'class' => 'bca-submit-token button bca-btn bca-actions__item',
+      'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',
       'data-bca-btn-color' => 'danger'

@@ -27,7 +27,7 @@ $this->BcBaser->js('admin/utilities/index.bundle', false);
     <?php echo __d('baser_core', 'baserCMSは、表示速度向上のため、サーバーサイドのキャッシュ機構を利用しています。<br>これによりテンプレートを直接編集した際など、変更内容が反映されない場合がありますので、その際には、サーバーサイドのキャッシュを削除します。') ?>
   </p>
   <?php echo $this->BcAdminForm->postLink(__d('baser_core', 'サーバーキャッシュを削除する'), ['controller' => 'utilities', 'action' => 'clear_cache'], [
-    'class' => 'bca-submit-token bca-btn',
+    'class' => 'bca-btn',
     'data-bca-btn-type' => 'clear',
     'confirm' => __d('baser_core', 'サーバーキャッシュを削除します。いいですか？')
   ]) ?>
@@ -61,7 +61,7 @@ $this->BcBaser->js('admin/utilities/index.bundle', false);
       'action' => 'assets_symlink'
     ],
     [
-      'class' => 'bca-submit-token bca-btn',
+      'class' => 'bca-btn',
       'data-bca-btn-type' => 'clear',
       'confirm' => __d('baser_core', 'テーマ・プラグインへのシンボリックリンクを再作成します。本当によろしいですか？')
     ]) ?>
