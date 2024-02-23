@@ -1784,24 +1784,23 @@ class BlogHelperTest extends BcTestCase
 
         //check data expects
         $result = $this->Blog->getCurrentBlogTag();
-        $this->assertEquals($expects['BlogTag']['id'], $result[0]['id']);
-        $this->assertEquals($expects['BlogTag']['name'], $result[0]['name']);
-        $this->assertEquals($expects['BlogTag']['created'], $result[0]['created']);
+        $actual = (!empty($result)) ? $result->toArray() : [];
+        unset($actual['created']);
+        unset($actual['modified']);
+        $this->assertEquals($expects, $actual);
     }
 
     public static function getCurrentBlogTagDataProvider()
     {
         return [
-            ['/news/archives/tag/新製品', 'tag', true, [
-                'BlogTag' => [
-                    'name' => '新製品',
+            ['/news/archives/tag/新製品', 'tag', true,
+                [
                     'id' => '1',
-                    'created' => '2015-08-10 18:57:47',
-                    'modified' => null,
-                ],
-            ]],
-//            ['/news/archives/tag/test1', 'tag', true, []],
-//            ['/news/archives/category/test2', 'category', false, []],
+                    'name' => '新製品',
+                ]
+            ],
+            ['/news/archives/tag/test1', 'tag', true, []],
+            ['/news/archives/category/test2', 'category', false, []],
         ];
     }
 

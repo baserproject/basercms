@@ -2058,11 +2058,8 @@ class BlogHelper extends Helper
         if ($this->isTag()) {
             $pass = $this->_View->getRequest()->getParam('pass');
             $name = isset($pass[1]) ? $pass[1] : '';
-            $BlogTagModel = TableRegistry::getTableLocator()->get('Blog.BlogTags');
-//            $blogTag = $BlogTagModel->getByName(rawurldecode($name));
-            $blogTag = $BlogTagModel->find()->where([
-                'BlogTags.name' => rawurldecode($name),
-            ])->toArray();
+            $BlogTagModel = TableRegistry::getTableLocator()->get('BcBlog.BlogTags');
+            $blogTag = $BlogTagModel->getByName(rawurldecode($name));
         }
         return $blogTag;
     }
