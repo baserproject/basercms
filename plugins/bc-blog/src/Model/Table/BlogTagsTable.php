@@ -118,12 +118,13 @@ class BlogTagsTable extends BlogAppTable
      * @param string $name
      * @return array
      */
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getByName($name)
     {
-        return $this->find('first',
-        conditions: ['BlogTag.name' => $name],
-        recursive: -1,
-        callbacks: false);
+        return $this->find()->where(['BlogTags.name' => $name])->first();
     }
 
     /**

@@ -142,16 +142,15 @@ class BlogTagsTableTest extends BcTestCase
     }
 
     /**
-     * 指定した名称のブログタグ情報を取得する
-     * @dataProvider getByNameDataProvider
-     * @param string $name
-     * @param bool $expects
+     * @return void
      */
-    public function testGetByName($name, $expects)
+    public function testGetByName()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->BlogTag->getByName($name);
-        $this->assertEquals($expects, (bool)$result);
+        //データを生成
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+        $rs = $this->BlogTagsTable->getByName("test");
+        //戻る値を確認
+        $this->assertEquals('test', $rs['name']);
     }
 
     public static function getByNameDataProvider()
