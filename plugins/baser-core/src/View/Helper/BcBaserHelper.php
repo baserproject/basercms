@@ -14,7 +14,6 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
-use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
@@ -34,6 +33,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Cake\View\Exception\MissingElementException;
 use Cake\View\Helper\BreadcrumbsHelper;
 use Cake\View\View;
 use Cake\View\Helper;
@@ -323,7 +323,13 @@ class BcBaserHelper extends Helper
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
 
-        $out = $this->_View->element($name, $data, $options);
+        $out = '';
+        try {
+            $out = $this->_View->element($name, $data, $options);
+        } catch (MissingElementException $e) {
+            echo __d('baser_core', 'エレメントテンプレート「{0}」が見つかりませんでした。', $name);
+            $this->log($e->getMessage());
+        }
 
         // EVENT afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
