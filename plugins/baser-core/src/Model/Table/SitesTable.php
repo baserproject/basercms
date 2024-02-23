@@ -202,7 +202,7 @@ class SitesTable extends AppTable
                 unset($options['excludeIds'][$excludeKey]);
             }
             if ($options['excludeIds']) {
-                $conditions[]['id NOT IN'] = $options['excludeIds'];
+                $conditions[]['Sites.id NOT IN'] = $options['excludeIds'];
             }
         }
 
@@ -215,7 +215,7 @@ class SitesTable extends AppTable
                 unset($options['includeIds'][$includeKey]);
             }
             if ($options['includeIds']) {
-                $conditions[]['id IN'] = $options['includeIds'];
+                $conditions[]['Sites.id IN'] = $options['includeIds'];
             }
         }
         $this->setDisplayField('display_name');
@@ -364,7 +364,7 @@ class SitesTable extends AppTable
     {
         if (is_null($id)) return '';
 
-        $site = $this->find()->select(['name', 'alias'])->where(['id' => $id])->first();
+        $site = $this->find()->select(['name', 'alias'])->where(['Sites.id' => $id])->first();
         if (!$site) {
             return false;
         }
@@ -390,7 +390,7 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $contents = $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
+        $contents = $Contents->find()->select(['Contents.id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
         if (!$contents->all()->isEmpty()) return $contents->first()->id;
         return 1;
     }
@@ -467,7 +467,7 @@ class SitesTable extends AppTable
     {
         $site = $this->findByUrl($url);
         if ($site->main_site_id) {
-            return $this->find()->where(['id' => $site->main_site_id])->first();
+            return $this->find()->where(['Sites.id' => $site->main_site_id])->first();
         }
         return null;
     }
@@ -550,7 +550,7 @@ class SitesTable extends AppTable
      */
     public function getMain($id)
     {
-        $currentSite = $this->find()->where(['id' => $id])->first();
+        $currentSite = $this->find()->where(['Sites.id' => $id])->first();
         if (!$currentSite) {
             return false;
         }
@@ -558,7 +558,7 @@ class SitesTable extends AppTable
             return $this->getRootMain();
         }
         $mainSite = $this->find()->where([
-            'id' => $currentSite->main_site_id
+            'Sites.id' => $currentSite->main_site_id
         ])->first();
         if (!$mainSite) {
             return false;
@@ -584,7 +584,7 @@ class SitesTable extends AppTable
         $devices = ['' => __d('baser_core', '指定しない')];
         $this->setDisplayField('device');
         $conditions = [
-            'id IS NOT' => $currentSiteId
+            'Sites.id IS NOT' => $currentSiteId
         ];
         if ($mainSiteId) {
             $conditions['main_site_id'] = $mainSiteId;
@@ -618,7 +618,7 @@ class SitesTable extends AppTable
         $devices = ['' => __d('baser_core', '指定しない')];
         $this->setDisplayField('lang');
         $conditions = [
-            'id IS NOT' => $currentSiteId
+            'Sites.id IS NOT' => $currentSiteId
         ];
         if ($mainSiteId) {
             $conditions['main_site_id'] = $mainSiteId;
@@ -718,7 +718,7 @@ class SitesTable extends AppTable
     {
         // エイリアスに変更があったかチェックする
         if ($entity->id && $entity->alias) {
-            $oldSite = $this->find()->where(['id' => $entity->id])->first();
+            $oldSite = $this->find()->where(['Sites.id' => $entity->id])->first();
             if ($oldSite && $oldSite->alias !== $entity->alias) {
                 $this->changedAlias = true;
             }
