@@ -18,7 +18,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $contents
  */
 $this->BcListTable->setColumnNumber(8);
-$this->BcBaser->js('admin/contents/index_table.bundle');
+$this->BcBaser->js('admin/contents/index_table.bundle', false, [
+  'defer' => true
+]);
 ?>
 
 
