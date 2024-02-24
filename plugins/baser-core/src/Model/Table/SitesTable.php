@@ -740,7 +740,7 @@ class SitesTable extends AppTable
     {
         $success = parent::save($entity, $options);
         $request = Router::getRequest();
-        if($request) {
+        if($success && $request) {
             $session = Router::getRequest()->getSession();
             $currentSite = $session->read('BcApp.Admin.currentSite');
             if ($currentSite && $success->id === $currentSite->id) {
