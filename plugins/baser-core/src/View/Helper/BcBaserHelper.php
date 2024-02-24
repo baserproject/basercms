@@ -494,7 +494,8 @@ class BcBaserHelper extends Helper
             $url = $this->getUrl($srcUrl, $full, ['escape' => false]);
         } else {
             $site = $this->getCurrentSite();
-            $url = $this->BcContents->getUrl($srcUrl, $full, $site->use_subdomain, (bool) $request->getAttribute('base'));
+            $useSubdomain = ($site)? $site->use_subdomain : false;
+            $url = $this->BcContents->getUrl($srcUrl, $full, $useSubdomain, (bool) $request->getAttribute('base'));
         }
 
         if (!$full) {
