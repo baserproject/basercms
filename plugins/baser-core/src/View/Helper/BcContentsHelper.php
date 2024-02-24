@@ -675,13 +675,14 @@ class BcContentsHelper extends Helper
             }
         }
         if ($content->site->use_subdomain) {
-            $host = $this->getUrl('/' . $urlArray[0] . '/', true, $content->site->use_subdomain);
+            $host = $this->getUrl('/' . $content->site->alias . '/', true, $content->site->use_subdomain);
             array_shift($urlArray);
+            $checkUrl = '/' . $content->site->alias . '/';
         } else {
             $host = $this->getUrl('/', true, $content->site->use_subdomain);
+            $checkUrl = '/';
         }
 
-        $checkUrl = '/';
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
