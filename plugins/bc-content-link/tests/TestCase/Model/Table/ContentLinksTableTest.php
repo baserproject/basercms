@@ -80,6 +80,47 @@ class ContentLinksTableTest extends BcTestCase
     }
 
     /**
+     * Test testValidationURL
+     */
+    public function testValidationURL()
+    {
+        $validator = $this->ContentLinks->getValidator('default');
+        //エラー場合、
+        //スペースだけ入力
+        $errors = $validator->validate([
+            'url' => '        '
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLはURLの形式を入力してください。', current($errors['url']));
+        //スラッシュがない場合
+        $errors = $validator->validate([
+            'url' => 'あああああ'
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLはURLの形式を入力してください。', current($errors['url']));
+
+        //長いURLを入力場合
+        $errors = $validator->validate([
+            'url' => '/' . str_repeat('a', 255)
+        ]);
+        //戻り値を確認
+        $this->assertEquals('リンク先URLは255文字以内で入力してください。', current($errors['url']));
+
+        //正常場合、
+        $errors = $validator->validate([
+            'url' => '/test'
+        ]);
+        //戻り値を確認
+        $this->assertCount(0, $errors);
+
+        $errors = $validator->validate([
+            'url' => 'https://basercms.net/'
+        ]);
+        //戻り値を確認
+        $this->assertCount(0, $errors);
+    }
+
+    /**
      * test beforeCopyEvent
      */
     public function testBeforeCopyEvent()
@@ -88,13 +129,13 @@ class ContentLinksTableTest extends BcTestCase
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.beforeCopy', function (Event $event) {
             $data = $event->getData('data');
-            $data['url'] = 'beforeCopy';
+            $data['url'] = '/beforeCopy';
             $event->setData('data', $data);
         });
         $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
-        $query = $contentLinks->find()->where(['url' => 'beforeCopy']);
+        $query = $contentLinks->find()->where(['url' => '/beforeCopy']);
         $this->assertEquals(1, $query->count());
     }
 
@@ -108,13 +149,13 @@ class ContentLinksTableTest extends BcTestCase
         $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.afterCopy', function (Event $event) {
             $data = $event->getData('data');
             $contentLinks = TableRegistry::getTableLocator()->get('BcContentLink.ContentLinks');
-            $data->url = 'AfterCopy';
+            $data->url = '/AfterCopy';
             $contentLinks->save($data);
         });
         $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
-        $query = $contentLinks->find()->where(['url' => 'AfterCopy']);
+        $query = $contentLinks->find()->where(['url' => '/AfterCopy']);
         $this->assertEquals(1, $query->count());
     }
 
