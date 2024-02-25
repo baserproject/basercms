@@ -14,6 +14,7 @@ namespace BaserCore\Model\Table;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Validation\Validator;
 
 class PermissionGroupsTable extends AppTable
 {
@@ -41,6 +42,30 @@ class PermissionGroupsTable extends AppTable
             'dependent' => true,
             'sort' => ['Permissions.sort' => 'ASC'],
         ]);
+    }
+
+    /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        // id
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 60, __d('baser_core', 'ルールグループ名は60文字以内で入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'ルールグループ名を入力してください。'));
+
+        return $validator;
     }
 
 }

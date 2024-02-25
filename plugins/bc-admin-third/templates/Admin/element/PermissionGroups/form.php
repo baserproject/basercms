@@ -50,6 +50,7 @@
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text','size' => 60]) ?>
+        <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
 
