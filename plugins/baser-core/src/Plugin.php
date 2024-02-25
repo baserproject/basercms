@@ -202,7 +202,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $path = [];
         foreach($sites as $site) {
             if ($site->theme) {
-                BcUtil::includePluginClass($site->theme);
+                if(!BcUtil::includePluginClass($site->theme)) continue;
                 try {
                     $application->addPlugin($site->theme);
                     $pluginPath = CorePlugin::path($site->theme) . 'plugins' . DS;
