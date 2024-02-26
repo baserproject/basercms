@@ -1396,6 +1396,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostId(BlogPost $post)
     {
