@@ -72,12 +72,14 @@ services:
     user: root
 
   bc-pga:
-    image: dpage/pgadmin4:6
+    image: dpage/pgadmin4:7.8
     container_name: bc-pga
     ports:
-      - 10080:80
+      - 8000:80
     volumes:
       - ./pgadmin:/var/lib/pgadmin/storage
     environment:
       PGADMIN_DEFAULT_EMAIL: foo@example.com
       PGADMIN_DEFAULT_PASSWORD: root
+    depends_on:
+      - bc-pg
