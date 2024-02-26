@@ -14,13 +14,16 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentsService;
+use BaserCore\Utility\BcPluginUtil;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
@@ -86,6 +89,9 @@ class SitesTable extends AppTable
     /**
      * Validation Default
      *
+     * name / alias は、利用しているプラグインをハイフン区切りにした名称と同じ名称は利用できない
+     * フロントエンドのルーティングの際に、プラグインルーティングに奪われてしまい表示できないため
+     *
      * @param Validator $validator
      * @return Validator
      * @checked
@@ -115,6 +121,12 @@ class SitesTable extends AppTable
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
                     'message' => __d('baser_core', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
+                ]])
+            ->add('name', [
+                'pluginExistsByDasherize' => [
+                    'rule' => ['pluginExistsByDasherize'],
+                    'provider' => 'table',
+                    'message' => __d('baser_core', '識別名称は、利用しているプラグイン名をハイフン区切りにした名称と同じ名称は利用できません。別の名称に変更してください。')
                 ]]);
         $validator
             ->scalar('display_name')
@@ -143,6 +155,12 @@ class SitesTable extends AppTable
                     'rule' => 'checkContentExists',
                     'provider' => 'site',
                     'message' => __d('baser_core', 'コンテンツ管理上にエイリアスと同名のコンテンツ、またはフォルダが存在するため利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてください。')
+                ]])
+            ->add('alias', [
+                'pluginExistsByDasherize' => [
+                    'rule' => ['pluginExistsByDasherize'],
+                    'provider' => 'table',
+                    'message' => __d('baser_core', 'エイリアスは、利用しているプラグイン名をハイフン区切りにした名称と同じ名称は利用できません。別の名称に変更してください。')
                 ]]);
         $validator
             ->scalar('title')
@@ -150,6 +168,28 @@ class SitesTable extends AppTable
             ->requirePresence('title', 'create', __d('baser_core', 'サイトタイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'サイトタイトルを入力してください。'));
         return $validator;
+    }
+
+    /**
+     * プラグインが存在するかどうか
+     *
+     * プラグイン名はダッシュライズに変換する前提とする
+     * ルーティング衝突の回避のため、プラグイン名と同じ名称は利用できない
+     * プラグインルーティングは、ダッシュライズ前提のため
+     *
+     * @param $value
+     * @return bool
+     */
+    public function pluginExistsByDasherize($value)
+    {
+        $plugins = Plugin::loaded();
+        foreach($plugins as $plugin) {
+            if(!BcPluginUtil::isPlugin($plugin)) continue;
+            if($value === Inflector::dasherize($plugin)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -742,7 +782,7 @@ class SitesTable extends AppTable
     ): EntityInterface|false {
         $success = parent::save($entity, $options);
         $request = Router::getRequest();
-        if($request) {
+        if($success && $request) {
             $session = Router::getRequest()->getSession();
             $currentSite = $session->read('BcApp.Admin.currentSite');
             if ($currentSite && $success->id === $currentSite->id) {

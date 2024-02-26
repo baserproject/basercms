@@ -47,7 +47,7 @@
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser_core', 'URLに利用されます') ?></li>
-            <li><?php echo __d('baser_core', '半角のみで入力してください') ?></li>
+            <li><?php echo __d('baser_core', '半角英数字、ハイフン、アンダースコアで入力してください') ?></li>
           </ul>
         </div>
         <?php echo $this->BcAdminForm->error('name') ?>

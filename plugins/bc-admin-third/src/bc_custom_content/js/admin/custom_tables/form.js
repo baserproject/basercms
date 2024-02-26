@@ -457,6 +457,11 @@ $(function () {
                 $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
                 $(`#${inUseFieldId} input[name='template[status]']`).attr('name', `custom_links[new-${baseId}][status]`);
 
+                const $nameInput = $(`#${inUseFieldId} input[name='custom_links[new-${baseId}][name]']`);
+                if($nameInput.val() === 'group') {
+                    $nameInput.val('group_field');
+                }
+
                 registerEventToInUseField(inUseFieldId);
                 updateSort();
             },

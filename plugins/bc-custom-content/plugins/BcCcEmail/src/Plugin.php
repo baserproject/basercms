@@ -20,6 +20,15 @@ use BaserCore\BcPlugin;
 /**
  * Plugin
  */
-class Plugin extends BcPlugin{
+class Plugin extends BcPlugin
+{
+
+    /**
+     * Routes
+     * プラグインのルーティンを追加しないように空のメソッドとする
+     * @param \Cake\Routing\RouteBuilder $routes
+     * @return void
+     */
+    public function routes(\Cake\Routing\RouteBuilder $routes): void {}
 
 }
