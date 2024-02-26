@@ -951,7 +951,7 @@ class ContentsTable extends AppTable
             }
         }
         if ($content->site_id) {
-            $site = $this->Sites->find()->where(['id' => $content->site_id])->first();
+            $site = $this->Sites->find()->where(['Sites.id' => $content->site_id])->first();
         }
         // URLを更新
         $content->url = $this->createUrl($content->id);
@@ -961,7 +961,10 @@ class ContentsTable extends AppTable
         }
         $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
-            $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
+            $parent = $this->find()
+                ->select(['Contents.name', 'Contents.status', 'Contents.publish_begin', 'Contents.publish_end'])
+                ->where(['Contents.id' => $content->parent_id])
+                ->first();
             // 親フォルダが非公開の場合は自身も非公開
             if (!$parent->status) {
                 $content->status = $parent->status;
@@ -988,7 +991,10 @@ class ContentsTable extends AppTable
             }
             // main_site_content_id を更新
             if (!$content->isNew() && $site->main_site_id) {
-                $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $site->main_site_id, 'url' => $url])->first();
+                $mainSiteContent = $this->find()
+                    ->select(['Contents.id'])
+                    ->where(['Contents.site_id' => $site->main_site_id, 'Contents.url' => $url])
+                    ->first();
                 $content->main_site_content_id = $mainSiteContent->id ?? null;
             } else {
                 $content->main_site_content_id = null;
@@ -1052,7 +1058,7 @@ class ContentsTable extends AppTable
      */
     public function updateChildren($id)
     {
-        $children = $this->find('children', ['for' => $id])->order('lft');
+        $children = $this->find('children', ['for' => $id])->order('Contents.lft');
         $result = true;
         if (!$children->all()->isEmpty()) {
             foreach($children as $child) {
@@ -1105,16 +1111,16 @@ class ContentsTable extends AppTable
             $plugin = 'BaserCore';
         }
         $conditions = [
-            'plugin' => $plugin,
-            'type' => $type,
-            'alias_id' => null
+            'Contents.plugin' => $plugin,
+            'Contents.type' => $type,
+            'Contents.alias_id' => null
         ];
         if ($entityId) {
             $conditions['Content.entity_id'] = $entityId;
         }
         $softDelete = $this->softDelete(null);
         $this->softDelete(false);
-        $id = $this->field('id', $conditions);
+        $id = $this->field('Contents.id', $conditions);
         $result = $this->removeFromTree($id, true);
         $this->softDelete($softDelete);
         return $result;
