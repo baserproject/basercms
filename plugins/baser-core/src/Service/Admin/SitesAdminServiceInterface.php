@@ -14,6 +14,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Paging\PaginatedInterface;
 
 /**
  * SitesAdminServiceInterface
@@ -23,7 +24,7 @@ interface SitesAdminServiceInterface
 
     /**
      * 一覧画面用のデータを取得する
-     * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface $sites
+     * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface|PaginatedInterface $sites
      * @return array
      * @checked
      * @noTodo
