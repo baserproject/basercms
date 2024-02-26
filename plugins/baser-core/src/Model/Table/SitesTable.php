@@ -752,10 +752,10 @@ class SitesTable extends AppTable
     ): EntityInterface|false {
         $success = parent::save($entity, $options);
         $request = Router::getRequest();
-        if($request) {
+        if($success && $request) {
             $session = Router::getRequest()->getSession();
             $currentSite = $session->read('BcApp.Admin.currentSite');
-            if ($success && $currentSite && $success->id === $currentSite->id) {
+            if ($currentSite && $success->id === $currentSite->id) {
                 $session->write('BcApp.Admin.currentSite', $success);
             }
         }
