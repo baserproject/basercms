@@ -274,9 +274,6 @@ class BlogCommentsServiceTest extends BcTestCase
         );
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
         $data = [
-            'id' => 1,
-            'no' => 1,
-            'status' => 1,
             'name' => 'baserCMS',
         ];
         $result = $this->BlogCommentsService->add(1, 1, $data);
@@ -291,9 +288,6 @@ class BlogCommentsServiceTest extends BcTestCase
 
         // null name
         $data = [
-            'id' => 1,
-            'no' => 1,
-            'status' => 1,
             'name' => null,
         ];
         $this->expectExceptionMessage("お名前を入力してください。");
