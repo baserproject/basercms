@@ -40,6 +40,7 @@ use BaserCore\Annotation\Doc;
  * @property ContentsTable $_Contents
  * @property PermissionsService $PermissionsService
  * @property ContentsServiceInterface|ContentsService $ContentsService
+ * @property Helper\UrlHelper $Url
  */
 class BcContentsHelper extends Helper
 {
@@ -56,7 +57,7 @@ class BcContentsHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['BcBaser'];
+    public array $helpers = ['BcBaser', 'Url'];
 
     /**
      * initialize
@@ -624,7 +625,11 @@ class BcContentsHelper extends Helper
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
-        return $this->ContentsService->getUrl($url, $full, $useSubDomain, $base);
+        if(BcUtil::isInstalled()) {
+            return $this->ContentsService->getUrl($url, $full, $useSubDomain, $base);
+        } else {
+            return $this->Url->build($url, ['fullBase' => $full]);
+        }
     }
 
     /**
