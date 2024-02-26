@@ -64,7 +64,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
   <td class="bca-table-listup__tbody-td" style="min-width:200px;"><?php echo h($plugin->description) ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->author): ?>
-      <?php if ($plugin->url): ?>
+      <?php if (!$plugin->url): ?>
         <?php echo h($plugin->author) ?>
       <?php else: ?>
         <?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank', 'escape' => true]) ?>

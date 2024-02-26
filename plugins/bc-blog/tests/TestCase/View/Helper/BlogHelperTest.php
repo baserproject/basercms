@@ -609,23 +609,52 @@ class BlogHelperTest extends BcTestCase
      */
     public function testPrevLink($blogContentId, $id, $posts_date, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->expectOutputString($expected);
-        $post = ['BlogPost' => [
+        //データ生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode($blogContentId, 1, 3, 'news-2', '/news/', $blogContentId)->persist();
+        BlogContentFactory::make(['id' => $blogContentId])->persist();
+        SiteFactory::make()->main()->persist();
+
+        BlogPostFactory::make([
+            'id' => 1,
+            'no' => 1,
             'blog_content_id' => $blogContentId,
-            'id' => $id,
-            'posts_date' => $posts_date
-        ]];
-        $this->Blog->prevLink($post);
+            'title' => 'title 1',
+            'posted' => $posts_date
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'no' => 2,
+            'blog_content_id' => $blogContentId,
+            'title' => 'title 2',
+            'posted' => $posts_date
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 3,
+            'no' => 3,
+            'blog_content_id' => 30,
+            'title' => 'title 3',
+            'posted' => $posts_date
+        ])->persist();
+
+        //currentContentをリセット
+        $view = new BlogFrontAppView($this->getRequest());
+        $blogContent = BlogContentFactory::get($blogContentId);
+        $blogContent->content = ContentFactory::get($blogContentId);
+        $view->set('blogContent', $blogContent);
+        $this->Blog = new BlogHelper($view);
+
+        $this->expectOutputString($expected);
+        $this->Blog->prevLink(BlogPostFactory::get($id));
     }
 
     public static function prevLinkDataProvider()
     {
         return [
-            [1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/4" class="prev-link">≪ ４記事目</a>'],
-            [1, 3, '1000-08-10 18:58:07', ''],
-            [2, 2, '9000-08-10 18:58:07', '<a href="/" class="prev-link">≪ ８記事目</a>'],    // 存在しないブログコンテンツ
-            [2, 1, '1000-08-10 18:58:07', ''],
+            [4, 2, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ title 1</a>'],
+            [4, 1, '1000-08-10 18:58:07', ''],
+            [3, 3, '9000-08-10 18:58:07', ''],
+            [3, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ title 1</a>'],
         ];
     }
 
@@ -712,23 +741,52 @@ class BlogHelperTest extends BcTestCase
      */
     public function testNextLink($blogContentId, $id, $posts_date, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->expectOutputString($expected);
-        $post = ['BlogPost' => [
+        //データ生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'alias_id' => 1])
+            ->treeNode($blogContentId, 1, 3, 'news-2', '/news/', $blogContentId)->persist();
+        BlogContentFactory::make(['id' => $blogContentId])->persist();
+        SiteFactory::make()->main()->persist();
+
+        BlogPostFactory::make([
+            'id' => 1,
+            'no' => 1,
             'blog_content_id' => $blogContentId,
-            'id' => $id,
-            'posts_date' => $posts_date
-        ]];
-        $this->Blog->nextLink($post);
+            'title' => 'title 1',
+            'posted' => $posts_date
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'no' => 2,
+            'blog_content_id' => $blogContentId,
+            'title' => 'title 2',
+            'posted' => $posts_date
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 3,
+            'no' => 3,
+            'blog_content_id' => 30,
+            'title' => 'title 3',
+            'posted' => $posts_date
+        ])->persist();
+
+        //currentContentをリセット
+        $view = new BlogFrontAppView($this->getRequest());
+        $blogContent = BlogContentFactory::get($blogContentId);
+        $blogContent->content = ContentFactory::get($blogContentId);
+        $view->set('blogContent', $blogContent);
+        $this->Blog = new BlogHelper($view);
+
+        $this->expectOutputString($expected);
+        $this->Blog->nextLink(BlogPostFactory::get($id));
     }
 
     public static function nextLinkDataProvider()
     {
         return [
-            [1, 1, '9000-08-10 18:58:07', ''],
-            [1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'],
+            [4, 3, '9000-08-10 18:58:07', ''],
+            [4, 1, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">title 2 ≫</a>'],
             [2, 3, '9000-08-10 18:58:07', ''],
-            [2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'], // 存在しないブログコンテンツ
+            [3, 3, '1000-08-10 18:58:07', ''], // 存在しないブログコンテンツ
         ];
     }
 

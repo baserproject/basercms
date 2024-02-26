@@ -74,6 +74,14 @@ class CustomFieldsTable extends AppTable
         $validator
             ->scalar('type')
             ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
+
+        $validator
+            ->allowEmptyString('size')
+            ->integer('size', __d('baser_core', '横幅サイズは整数を入力してください。'));
+        $validator
+            ->allowEmptyString('max_length')
+            ->integer('max_length', __d('baser_core', '最大文字数は整数を入力してください。'));
+
         $validator
             ->add('source', [
                 'checkSelectList' => [

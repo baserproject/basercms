@@ -94,7 +94,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
     ['action' => 'delete', $tableId, $entity->id], [
       'block' => true,
       'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $entity->{$entity->custom_table->display_field}),
-      'class' => 'bca-submit-token button bca-btn bca-actions__item',
+      'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',
       'data-bca-btn-color' => 'danger'

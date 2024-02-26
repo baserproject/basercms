@@ -28,15 +28,18 @@ class BcAdminFormHelper extends BcFormHelper
 
     /**
      * control
-     * @param string $name
+     * @param string $fieldName
      * @param array $options
      * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function control(string $name, array $options = []): string
+    public function control(string $fieldName, array $options = []): string
     {
+        if (empty($options['type'])) {
+            $options['type'] = $this->_inputType($fieldName, $options);
+        }
         if (!empty($options['type'])) {
             $options = array_replace_recursive([
                 'label' => false,
@@ -60,7 +63,7 @@ class BcAdminFormHelper extends BcFormHelper
                         'deleteLabel' => ['class' => 'bca-file__delete-label'],
                         'figure' => ['class' => 'bca-file__figure'],
                         'img' => ['class' => 'bca-file__img'],
-                        'figcaption' => ['class' => 'bca-file__figcaption']
+                        'figcaption' => ['class' => 'bca-file__figcaption', 'escape' => true]
                     ], $options);
                     break;
                 case 'dateTimePicker':
@@ -94,6 +97,7 @@ class BcAdminFormHelper extends BcFormHelper
                     $class = 'bca-checkbox__input';
                     $containerClass = 'bca-checkbox';
                     $labelClass = 'bca-checkbox__label';
+                    if(empty($options['label'])) $options['label'] = '';
                     break;
                 case 'multiCheckbox':
                     $class = 'bca-checkbox__input';
@@ -132,8 +136,7 @@ class BcAdminFormHelper extends BcFormHelper
 
         }
 
-        return parent::control($name, $options);
-
+        return parent::control($fieldName, $options);
     }
 
     /**

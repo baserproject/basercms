@@ -829,7 +829,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
-     * @unitTest ラッパーメソッドのためユニットテストはスキップする
+     * @unitTest
      */
     public function prevLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
@@ -873,7 +873,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
-     * @unitTest ラッパーメソッドのためユニットテストはスキップする
+     * @unitTest
      */
     public function nextLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
