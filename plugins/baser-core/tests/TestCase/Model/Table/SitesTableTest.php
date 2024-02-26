@@ -68,14 +68,20 @@ class SitesTableTest extends BcTestCase
         //バリデーションを発生した場合
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
-            'alias' => '漢字',
+            'alias' => '漢字'
         ]);
         $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => str_repeat('a', 51)
+        ]);
+        $this->assertEquals('エイリアスは50文字以内で入力してください。', current($errors['alias']));
 
         //バリデーションを発生しない場合
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
-            'alias' => 'aaaaaaa',
+            'alias' => 'aaaaaaa'
         ]);
         $this->assertArrayNotHasKey('alias', $errors);
     }
