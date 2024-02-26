@@ -129,6 +129,16 @@ class SitesTable extends AppTable
                     'message' => __d('baser_core', '識別名称は、利用しているプラグイン名をハイフン区切りにした名称と同じ名称は利用できません。別の名称に変更してください。')
                 ]]);
         $validator
+            ->scalar('alias')
+            ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
+            ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
+            ->add('alias', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
+                ]]);
+        $validator
             ->scalar('display_name')
             ->maxLength('display_name', 50, __d('baser_core', 'サイト名は50文字以内で入力してください。'))
             ->requirePresence('display_name', 'create', __d('baser_core', 'サイト名を入力してください。'))
