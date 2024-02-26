@@ -1775,7 +1775,7 @@ class BlogHelperTest extends BcTestCase
             'created' => '2015-08-10 18:57:47',
         ])->persist();
 
-        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        SiteFactory::make(['id' => 1])->persist();
         $this->Blog->getView()->setRequest($this->getRequest($url)->withAttribute('currentSite', SiteFactory::get(1)));
         $this->Blog->getView()->set('blogArchiveType', $type);
         //check blog isTag
