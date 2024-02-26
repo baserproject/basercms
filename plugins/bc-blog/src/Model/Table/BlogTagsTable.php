@@ -116,7 +116,7 @@ class BlogTagsTable extends BlogAppTable
      * 指定した名称のブログタグ情報を取得する
      *
      * @param $name
-     * @return mixed
+     * @return EntityInterface
      */
     public function getByName($name)
     {
