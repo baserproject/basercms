@@ -1311,14 +1311,9 @@ class ContentsTable extends AppTable
         $this->removeBehavior('Tree');
         $this->updatingRelated = false;
 
-        $beforeSaveListeners = $this->getEventManager()->listeners('Model.beforeSave');
-        foreach($beforeSaveListeners as $listener) {
-            $this->getEventManager()->off('Model.beforeSave', $listener['callable']);
-        }
-        $afterSaveListeners = $this->getEventManager()->listeners('Model.afterSave');
-        foreach($afterSaveListeners as $listener) {
-            $this->getEventManager()->off('Model.afterSave', $listener['callable']);
-        }
+        $eventManager = $this->getEventManager();
+        $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeSave');
+        $afterSaveListeners = BcUtil::offEvent($eventManager, 'Model.afterSave');
 
         $this->getConnection()->begin();
         $result = true;
@@ -1364,19 +1359,14 @@ class ContentsTable extends AppTable
         $this->addBehavior('Tree');
         $this->updatingRelated = true;
 
-        foreach($beforeSaveListeners as $listener) {
-            $this->getEventManager()->on('Model.beforeSave', $listener['callable']);
-        }
-        foreach($afterSaveListeners as $listener) {
-            $this->getEventManager()->on('Model.afterSave', $listener['callable']);
-        }
+        BcUtil::onEvent($eventManager, 'Model.beforeSave', $beforeSaveListeners);
+        BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveListeners);
 
         $contents = $this->find()->orderBy(['Contents.lft'])->all();
         if ($contents) {
             foreach($contents as $content) {
-                // バリデーションをオンにする事で同名コンテンツを強制的にリネームする
-                // beforeValidate でリネーム処理を入れている為
-                // （第二引数を false に設定しない）
+                // setDirty を利用して同名コンテンツを強制的にリネームする
+                $content->setDirty('name', true);
                 if (!$this->save($content)) $result = false;
             }
         }
