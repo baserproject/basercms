@@ -82,7 +82,7 @@ class CreateCustomFields extends BcMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('max_length', 'boolean', [
+            ->addColumn('max_length', 'integer', [
                 'default' => false,
                 'limit' => null,
                 'null' => true,
