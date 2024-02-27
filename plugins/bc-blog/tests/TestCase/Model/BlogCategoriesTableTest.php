@@ -505,8 +505,9 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testGetByName($blogCategoryId, $name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->BlogCategory->getByName($blogCategoryId, $name);
+        //データ生成
+        BlogCategoryFactory::make(['blog_content_id' => 1, 'name' => 'child'])->persist();
+        $result = $this->BlogCategoriesTable->getByName($blogCategoryId, $name);
         $this->assertEquals($expects, (bool)$result);
     }
 
