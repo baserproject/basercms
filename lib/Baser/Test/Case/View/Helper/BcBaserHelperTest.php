@@ -1967,6 +1967,12 @@ class BcBaserHelperTest extends BaserTestCase
 		$this->siteConfig['theme'] = 'nada-icons';
 		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
 		$this->assertEquals($expects, $this->BcBaser->getThemeUrl());
+
+		if (!empty($this->BcBaser->request->params['Site']['theme'])) {
+			$theme = $this->BcBaser->request->params['Site']['theme'];
+		}
+		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $theme . '/';
+		$this->assertEquals($expects, $this->BcBaser->getThemeUrl());
 	}
 
 	/**

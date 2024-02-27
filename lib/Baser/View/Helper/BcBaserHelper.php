@@ -2454,7 +2454,11 @@ END_FLASH;
 	 */
 	public function getThemeUrl()
 	{
-		return $this->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+		$theme = $this->siteConfig['theme'];
+		if ($this->theme) {
+			$theme = $this->theme;
+		}
+		return $this->request->webroot . 'theme' . DS . $theme . DS;
 	}
 
 	/**
