@@ -1770,9 +1770,8 @@ class BlogHelperTest extends BcTestCase
     {
         //create data test
         BlogTagFactory::make([
-            'name' => '新製品',
             'id' => '1',
-            'created' => '2015-08-10 18:57:47',
+            'name' => '新製品',
         ])->persist();
 
         SiteFactory::make(['id' => 1])->persist();

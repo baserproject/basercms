@@ -149,10 +149,10 @@ class BlogTagsTableTest extends BcTestCase
      */
     public function testGetByName($name, $expects)
     {
-        BlogTagFactory::make(['id' => 1, 'name' => 'タグ１'])->persist();
-        BlogTagFactory::make(['id' => 2, 'name' => 'タグ２'])->persist();
+        BlogTagFactory::make(['name' => 'タグ１'])->persist();
+        BlogTagFactory::make(['name' => 'タグ２'])->persist();
         $rs = $this->BlogTagsTable->getByName($name);
-        //戻る値を確認
+        //戻り値を確認」を変更してください。
         $this->assertEquals($expects, (bool)$rs);
     }
 
