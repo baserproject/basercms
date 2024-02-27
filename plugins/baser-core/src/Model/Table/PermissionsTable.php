@@ -158,8 +158,9 @@ class PermissionsTable extends AppTable
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $data = $event->getData();
-        if (preg_match('/^[^\/]/is', $data["entity"]->get("url"))) {
-            $data["entity"]->set("url", '/' . $data["entity"]->get("url"));
+        $url = $data["entity"]->get("url");
+        if ($url && preg_match('/^[^\/]/is', $url)) {
+            $data["entity"]->set("url", '/' . $url);
         }
         return true;
     }
