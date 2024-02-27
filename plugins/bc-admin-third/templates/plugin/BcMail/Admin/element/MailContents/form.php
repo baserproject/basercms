@@ -101,8 +101,8 @@
            echo '<br>';
            echo __d('baser_core', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
            ?></div>
+        <?php echo $this->BcAdminForm->error('subject_admin') ?>
       </td>
-      <?php echo $this->BcAdminForm->error('subject_admin') ?>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
