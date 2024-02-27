@@ -84,6 +84,22 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
+        // テーマカラー
+        $validator
+            ->scalar('color_main')
+            ->regex('color_main', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[メイン]はカラーコード形式を入力してください。'));
+
+        $validator
+            ->scalar('color_sub')
+            ->regex('color_sub', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[サブ]はカラーコード形式を入力してください。'));
+
+        $validator
+            ->scalar('color_link')
+            ->regex('color_link', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[テキストリンク]はカラーコード形式を入力してください。'));
+        $validator
+            ->scalar('color_hover')
+            ->regex('color_hover', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[テキストホバー]はカラーコード形式を入力してください。'));
+
         // main_image_1
         $validator->add('main_image_1', [
             'fileExt' => [

@@ -18,7 +18,7 @@ use BcThemeConfig\Model\Table\ThemeConfigsTable;
  * Class BcThemeConfigTest
  * @property ThemeConfigsTable $ThemeConfigsTable
  */
-class ThemeConfigTest extends BcTestCase
+class ThemeConfigTableTest extends BcTestCase
 {
 
     /**
@@ -106,6 +106,34 @@ class ThemeConfigTest extends BcTestCase
         $this->assertEquals('許可されていないファイルです。', current($errors['main_image_4']));
         $this->assertArrayHasKey('main_image_5', $errors);
         $this->assertEquals('許可されていないファイルです。', current($errors['main_image_5']));
+    }
+
+    /**
+     * test validationKeyValue color
+     */
+    public function test_validationKeyValue_color()
+    {
+        $validator = $this->ThemeConfigsTable->getValidator('keyValue');
+        //値は3桁と6桁ではない場合
+        $errors = $validator->validate([
+            'color_main' => '1',
+            'color_sub' => '12',
+            'color_link' => '1234',
+            'color_hover' => '1234567',
+        ]);
+        $this->assertEquals('[メイン]はカラーコード形式を入力してください。', current($errors['color_main']));
+        $this->assertEquals('[サブ]はカラーコード形式を入力してください。', current($errors['color_sub']));
+        $this->assertEquals('[テキストリンク]はカラーコード形式を入力してください。', current($errors['color_link']));
+        $this->assertEquals('[テキストホバー]はカラーコード形式を入力してください。', current($errors['color_hover']));
+
+        //値は3桁と6桁場合
+        $errors = $validator->validate([
+            'color_main' => '123',
+            'color_sub' => 'abc',
+            'color_link' => 'ABCFFF',
+            'color_hover' => '123456',
+        ]);
+        $this->assertCount(0, $errors);
     }
 
 }
