@@ -21,6 +21,7 @@ if (!$blogContent->comment_use) return;
 $captchaId = mt_rand(0, 99999999);
 $this->BcBaser->i18nScript([
   'alertMessageName' => __d('baser_core', 'お名前を入力してください'),
+  'alertMessageEmail' => __d('baser_core', 'メールアドレスを入力してください'),
   'alertMessageComment' => __d('baser_core', 'コメントを入力してください'),
   'alertMessageAuthImage' => __d('baser_core', '画像の文字を入力してください'),
   'alertMessageAuthComplete' => __d('baser_core', '送信が完了しました。送信された内容は確認後公開させて頂きます。'),

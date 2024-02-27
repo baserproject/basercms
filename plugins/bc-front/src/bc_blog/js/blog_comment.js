@@ -151,6 +151,9 @@ const bcBlog = {
         if (!$("#name").val()) {
             msg += bcI18n.alertMessageName + '\n';
         }
+        if (!$("#email").val()) {
+            msg += bcI18n.alertMessageEmail + '\n';
+        }
         if (!$("#message").val()) {
             msg += bcI18n.alertMessageComment + '\n';
         }
