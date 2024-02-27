@@ -1313,10 +1313,9 @@ class ContentsTable extends AppTable
         $this->removeBehavior('Tree');
         $this->updatingRelated = false;
 
-        $beforeSaveListeners = $this->getEventManager()->listeners('Model.beforeSave');
-        $this->getEventManager()->off('Model.beforeSave', $beforeSaveListeners);
-        $afterSaveListeners = $this->getEventManager()->listeners('Model.afterSave');
-        $this->getEventManager()->off('Model.afterSave', $afterSaveListeners);
+        $eventManager = $this->getEventManager();
+        $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeSave');
+        $afterSaveListeners = BcUtil::offEvent($eventManager, 'Model.afterSave');
 
         $this->getConnection()->begin();
         $result = true;
@@ -1343,7 +1342,7 @@ class ContentsTable extends AppTable
                     $content->rght = $count;
                     $content->level = $siteRoot->level + 1;
                     $content->parent_id = $siteRoot->id;
-                    if (!$this->save($content, false)) $result = false;
+                    if (!$this->save($content)) $result = false;
                 }
             }
             if ($siteRoot->id == 1) {
@@ -1362,15 +1361,14 @@ class ContentsTable extends AppTable
         $this->addBehavior('Tree');
         $this->updatingRelated = true;
 
-        $this->getEventManager()->on('Model.beforeSave', $beforeSaveListeners);
-        $this->getEventManager()->on('Model.afterSave', $afterSaveListeners);
+        BcUtil::onEvent($eventManager, 'Model.beforeSave', $beforeSaveListeners);
+        BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveListeners);
 
         $contents = $this->find()->order(['lft'])->all();
         if ($contents) {
             foreach($contents as $content) {
-                // バリデーションをオンにする事で同名コンテンツを強制的にリネームする
-                // beforeValidate でリネーム処理を入れている為
-                // （第二引数を false に設定しない）
+                // setDirty を利用して同名コンテンツを強制的にリネームする
+                $content->setDirty('name', true);
                 if (!$this->save($content)) $result = false;
             }
         }
