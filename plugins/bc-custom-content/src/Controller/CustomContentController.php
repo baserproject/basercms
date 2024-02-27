@@ -36,7 +36,11 @@ class CustomContentController extends BcFrontAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
+        if ($this->getRequest()->getParam('action') === 'index') {
+            $this->loadComponent('BaserCore.BcFrontContents');
+        } else {
+            $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
+        }
     }
 
     /**

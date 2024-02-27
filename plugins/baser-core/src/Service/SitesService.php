@@ -97,10 +97,10 @@ class SitesService implements SitesServiceInterface
             $query->limit($queryParams['limit']);
         }
         if (!empty($queryParams['name'])) {
-            $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+            $query->where(['Sites.name LIKE' => '%' . $queryParams['name'] . '%']);
         }
         if (isset($queryParams['status'])) {
-            $query->where(['status' => $queryParams['status']]);
+            $query->where(['Sites.status' => $queryParams['status']]);
         }
         return $query;
     }

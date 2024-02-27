@@ -1882,4 +1882,28 @@ class BlogHelperTest extends BcTestCase
         $result = $this->Blog->getCategoryTitle($blogPost);
         $this->assertEmpty($result);
     }
+
+    /**
+     * getPostId
+     */
+    public function test_getPostId()
+    {
+        // テストデータを作る
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $post = new BlogPost([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'release',
+        ]);
+
+        //check exits id
+        $result = $this->Blog->getPostId($post);
+        $this->assertEquals(1, $result);
+
+        //check not exits id
+        $post = new BlogPost([]);
+        $result = $this->Blog->getPostId($post);
+        $this->assertEmpty($result);
+    }
 }

@@ -1396,6 +1396,7 @@ class BlogHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostId(BlogPost $post)
     {
@@ -1453,6 +1454,7 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getTagList($name, $options = [])
     {

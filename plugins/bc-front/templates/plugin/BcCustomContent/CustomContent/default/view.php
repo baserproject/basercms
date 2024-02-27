@@ -20,6 +20,7 @@
  * @unitTest
  */
 $customLinks = $this->BcBaser->getCustomLinks($customContent->custom_table_id);
+$this->BcBaser->setTitle($customEntry->title);
 ?>
 
 

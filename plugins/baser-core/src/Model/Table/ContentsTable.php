@@ -951,7 +951,7 @@ class ContentsTable extends AppTable
             }
         }
         if ($content->site_id) {
-            $site = $this->Sites->find()->where(['id' => $content->site_id])->first();
+            $site = $this->Sites->find()->where(['Sites.id' => $content->site_id])->first();
         }
         // URLを更新
         $content->url = $this->createUrl($content->id);
@@ -961,7 +961,10 @@ class ContentsTable extends AppTable
         }
         $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
-            $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
+            $parent = $this->find()
+                ->select(['Contents.name', 'Contents.status', 'Contents.publish_begin', 'Contents.publish_end'])
+                ->where(['Contents.id' => $content->parent_id])
+                ->first();
             // 親フォルダが非公開の場合は自身も非公開
             if (!$parent->status) {
                 $content->status = $parent->status;
@@ -988,7 +991,10 @@ class ContentsTable extends AppTable
             }
             // main_site_content_id を更新
             if (!$content->isNew() && $site->main_site_id) {
-                $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $site->main_site_id, 'url' => $url])->first();
+                $mainSiteContent = $this->find()
+                    ->select(['Contents.id'])
+                    ->where(['Contents.site_id' => $site->main_site_id, 'Contents.url' => $url])
+                    ->first();
                 $content->main_site_content_id = $mainSiteContent->id ?? null;
             } else {
                 $content->main_site_content_id = null;
@@ -1052,7 +1058,7 @@ class ContentsTable extends AppTable
      */
     public function updateChildren($id)
     {
-        $children = $this->find('children', for: $id)->orderBy('lft');
+        $children = $this->find('children', for: $id)->orderBy('Contents.lft');
         $result = true;
         if (!$children->all()->isEmpty()) {
             foreach($children as $child) {
@@ -1105,16 +1111,16 @@ class ContentsTable extends AppTable
             $plugin = 'BaserCore';
         }
         $conditions = [
-            'plugin' => $plugin,
-            'type' => $type,
-            'alias_id' => null
+            'Contents.plugin' => $plugin,
+            'Contents.type' => $type,
+            'Contents.alias_id' => null
         ];
         if ($entityId) {
             $conditions['Content.entity_id'] = $entityId;
         }
         $softDelete = $this->softDelete(null);
         $this->softDelete(false);
-        $id = $this->field('id', $conditions);
+        $id = $this->field('Contents.id', $conditions);
         $result = $this->removeFromTree($id, true);
         $this->softDelete($softDelete);
         return $result;
@@ -1318,7 +1324,7 @@ class ContentsTable extends AppTable
         $result = true;
         $siteRoots = $this->find()
             ->where(['Contents.site_root' => true])
-            ->orderBy('lft')
+            ->orderBy('Contents.lft')
             ->all();
         $count = 0;
         $mainSite = [];
@@ -1329,7 +1335,7 @@ class ContentsTable extends AppTable
             $siteRoot->parent_id = ($siteRoot->id == 1)? null : 1;
             $contents = $this->find()
                 ->where(['Contents.site_id' => $siteRoot->site_id, 'Contents.site_root' => false])
-                ->orderBy('lft')
+                ->orderBy('Contents.lft')
                 ->all();
             if ($contents) {
                 foreach($contents as $content) {
@@ -1365,7 +1371,7 @@ class ContentsTable extends AppTable
             $this->getEventManager()->on('Model.afterSave', $listener['callable']);
         }
 
-        $contents = $this->find()->orderBy(['lft'])->all();
+        $contents = $this->find()->orderBy(['Contents.lft'])->all();
         if ($contents) {
             foreach($contents as $content) {
                 // バリデーションをオンにする事で同名コンテンツを強制的にリネームする
@@ -1399,7 +1405,7 @@ class ContentsTable extends AppTable
     public function findByUrl($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
         $url = preg_replace('/^\//', '', $url);
-        $query = $this->find()->orderBy(['url' => 'DESC'])->contain('Sites');
+        $query = $this->find()->orderBy(['Contents.url' => 'DESC'])->contain('Sites');
         if ($extend) {
             $params = explode('/', $url);
             $condUrls = [];
@@ -1455,7 +1461,10 @@ class ContentsTable extends AppTable
      */
     public function getOrderSameParent($id, $parentId)
     {
-        $contents = $this->find()->select(['id', 'parent_id', 'title'])->where(['parent_id' => $parentId])->orderBy('lft');
+        $contents = $this->find()
+            ->select(['Contents.id', 'Contents.parent_id', 'Contents.title'])
+            ->where(['Contents.parent_id' => $parentId])
+            ->orderBy('Contents.lft');
         $order = null;
         if (!$contents->all()->isEmpty()) {
             if ($id) {

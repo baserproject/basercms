@@ -144,6 +144,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @param array $postData
      * @return EntityInterface
      * @checked
+     * @unitTest 
      */
     public function add(int $blogContentId, int $blogPostId, array $postData)
     {

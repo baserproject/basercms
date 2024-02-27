@@ -12,9 +12,11 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Table\CustomContentsTable;
 
 /**
  * CustomContentsTableTest
+ * @property CustomContentsTable $CustomContentsTable
  */
 class CustomContentsTableTest extends BcTestCase
 {
@@ -25,6 +27,7 @@ class CustomContentsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->CustomContentsTable = $this->getTableLocator()->get('BcCustomContent.CustomContents');
     }
 
     /**
@@ -32,6 +35,7 @@ class CustomContentsTableTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->CustomContentsTable);
         parent::tearDown();
     }
 
@@ -40,7 +44,10 @@ class CustomContentsTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->CustomContentsTable->hasBehavior('BcContents'));
+        $this->assertTrue($this->CustomContentsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->CustomContentsTable->hasBehavior('BcContents'));
+        $this->assertTrue($this->CustomContentsTable->hasAssociation('CustomTables'));
     }
 
     /**
@@ -48,6 +55,32 @@ class CustomContentsTableTest extends BcTestCase
      */
     public function test_validationWithTable()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //全角文字を入力した場合
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate([
+            'list_count' => '漢字'
+        ]);
+        $this->assertEquals([
+            'range' => '一覧表示件数は100までの数値で入力してください。',
+            'halfText' => '一覧表示件数は半角で入力してください。'
+        ], $errors['list_count']);
+
+        //101を入力した場合
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate([
+            'list_count' => '101'
+        ]);
+        $this->assertEquals([
+            'range' => '一覧表示件数は100までの数値で入力してください。',
+        ], $errors['list_count']);
+
+        //何も入力しない場合
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate([
+            'list_count' => ''
+        ]);
+        $this->assertEquals([
+            '_empty' => '一覧表示件数は必須項目です。',
+        ], $errors['list_count']);
     }
 }
