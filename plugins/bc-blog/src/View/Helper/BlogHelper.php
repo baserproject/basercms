@@ -2031,12 +2031,8 @@ class BlogHelper extends Helper
             $pass = $this->_View->getRequest()->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
-
         $blogCategoriesModel =  TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
-        return $blogCategoriesModel->find()->where([
-            'BlogCategories.blog_content_id' => $blogContentId,
-            'BlogCategories.name' => urlencode($categoryName),
-        ])->first();
+        return $blogCategoriesModel->getByName($blogContentId, $categoryName, $options);
     }
 
     /**
