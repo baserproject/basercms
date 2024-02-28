@@ -107,6 +107,14 @@ class PermissionGroupsControllerTest extends BcTestCase
         $this->loadFixtureScenario(PermissionGroupsScenario::class);
         $data = [
             'name' => 'システム基本設定　Update',
+            'permissions' => [[
+                'id' => "1",
+                'name' => "一覧",
+                'user_group_id' => "2",
+                'method' => "GET",
+                'auth' => "1",
+                'status' => "1"
+            ]]
         ];
         $this->post('/baser/admin/baser-core/permission_groups/edit/1/1', $data);
         //メッセージを確認
