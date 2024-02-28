@@ -2023,6 +2023,8 @@ class BlogHelper extends Helper
      * @param string $categoryName
      * @param array $options
      * @return EntityInterface
+     * @notodo
+     * @checked
      * @unitTest
      */
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])

@@ -355,6 +355,9 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId
      * @param string $name
      * @param array $options
+     * @notodo
+     * @checked
+     * @unitTest
      * @return EntityInterface
      */
     public function getByName($blogContentId, $name, $options = [])

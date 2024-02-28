@@ -498,6 +498,7 @@ class BlogCategoriesTableTest extends BcTestCase
 
     /**
      * カテゴリ名よりカテゴリを取得する
+     * getByName
      * @dataProvider getByNameDataProvider
      * @param int $blogCategoryId
      * @param string $name
@@ -505,8 +506,11 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testGetByName($blogCategoryId, $name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->BlogCategory->getByName($blogCategoryId, $name);
+        //データ生成
+        BlogCategoryFactory::make(['name' => 'child', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['name' => 'name', 'blog_content_id' => 2])->persist();
+        $result = $this->BlogCategoriesTable->getByName($blogCategoryId, $name);
+        //戻り値を確認
         $this->assertEquals($expects, (bool)$result);
     }
 
