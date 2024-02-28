@@ -1530,23 +1530,33 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * testGetCategoryByName
-     * @dataProvider getCategoryByName
+     * getCategoryByName
+     * @dataProvider getCategoryByNameDataprovider
      */
     public function testGetCategoryByName($blogCategoryId, $type, $pass, $name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest('/');
-        $this->View->set('blogArchiveType', $type);
-        $this->Blog->request->params['pass'][1] = $pass;
+        //データ生成
+        BlogCategoryFactory::make([
+            'blog_content_id' => 1,
+            'name' => 'child',
+        ])->persist();
+
+        SiteFactory::make(['id' => 1])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest('/')->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+
+        //pass param
+        $this->Blog->getView()->setRequest($this->getRequest()->withParam('pass', $pass));
         $result = $this->Blog->getCategoryByName($blogCategoryId, $name);
+
+        //check result
         $this->assertEquals($expects, (bool)$result);
     }
 
-    public static function getCategoryByName()
+    public static function getCategoryByNameDataprovider()
     {
         return [
-            [1, 'category', 'child', '', true],
+            [1, 'category', ['child'], '', true],
             [1, 'hoge', '', 'child', true],
             [1, 'hoge', '', '', false]
         ];

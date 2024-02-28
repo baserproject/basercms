@@ -2022,7 +2022,8 @@ class BlogHelper extends Helper
      * @param int $blogContentId
      * @param string $categoryName
      * @param array $options
-     * @return array
+     * @return EntityInterface
+     * @unitTest
      */
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])
     {
@@ -2030,7 +2031,12 @@ class BlogHelper extends Helper
             $pass = $this->_View->getRequest()->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
-        return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
+
+        $blogCategoriesModel =  TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategoriesModel->find()->where([
+            'BlogCategories.blog_content_id' => $blogContentId,
+            'BlogCategories.name' => urlencode($categoryName),
+        ])->first();
     }
 
     /**
