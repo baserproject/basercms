@@ -62,7 +62,7 @@
   background: #f0f0f0;
   border-radius: 10px;
   line-height: 48.3px;
-  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 .bs-main-contents h3:first-child,
 .bge-contents h3:first-child,
