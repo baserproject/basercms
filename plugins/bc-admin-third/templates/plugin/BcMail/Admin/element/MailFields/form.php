@@ -43,7 +43,7 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('field_name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <div class="bca-helptext"><?php echo __d('baser_core', '重複しない半角英数字、ハイフン、アンダースコアで入力してください。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser_core', '重複しない半角英数字、アンダースコアで入力してください。') ?></div>
         <?php echo $this->BcAdminForm->error('field_name') ?>
       </td>
     </tr>
