@@ -364,7 +364,6 @@ class BlogCategoriesTable extends BlogAppTable
             'BlogCategories.name' => urlencode($name),
         ])->first();
     }
-
     /**
      * コピーする
      *
