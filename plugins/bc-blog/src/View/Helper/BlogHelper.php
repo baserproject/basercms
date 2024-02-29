@@ -1317,6 +1317,7 @@ class BlogHelper extends Helper
      * 文字列から制御文字を取り除く
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function removeCtrlChars($string)
     {
