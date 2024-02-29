@@ -51,7 +51,7 @@
 				<li><a href="https://www.facebook.com/basercms"
 					   target="_blank"><?php echo __d('baser', 'baserCMS Facebook') ?></a></li>
 				<li><a href="https://twitter.com/basercms"
-					   target="_blank"><?php echo __d('baser', 'baserCMS Twitter') ?></a></li>
+					   target="_blank"><?php echo __d('baser', 'baserCMS X') ?></a></li>
 			</ul>
 		</div>
 
