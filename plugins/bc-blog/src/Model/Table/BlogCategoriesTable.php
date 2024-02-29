@@ -362,10 +362,12 @@ class BlogCategoriesTable extends BlogAppTable
      */
     public function getByName($blogContentId, $name, $options = [])
     {
-        return $this->find()->where([
+        $conditions = array_merge([
             'BlogCategories.blog_content_id' => $blogContentId,
             'BlogCategories.name' => urlencode($name),
-        ])->first();
+        ], $options);
+        return $this->find('all')->where($conditions)->first();
+
     }
     /**
      * コピーする
