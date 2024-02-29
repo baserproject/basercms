@@ -1004,7 +1004,6 @@ class BlogHelperTest extends BcTestCase
 
     /**
      * 文字列から制御文字を取り除く
-     * removeCtrlChars
      */
     public function testRemoveCtrlChars()
     {

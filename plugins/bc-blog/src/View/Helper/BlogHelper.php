@@ -1315,6 +1315,7 @@ class BlogHelper extends Helper
 
     /**
      * 文字列から制御文字を取り除く
+     * @return string
      * @checked
      * @noTodo
      * @unitTest
