@@ -5,14 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: 2023-04-24 13:30+0900\n"
-"PO-Revision-Date: 2023-04-24 13:41+0900\n"
+"PO-Revision-Date: 2024-02-29 12:03+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: plugins/baser-core/config/permission.php:22
 msgid "コンテンツフォルダ管理"
@@ -7415,8 +7415,8 @@ msgid "いいね！をクリックして普及にご協力ください。"
 msgstr "Please support spreading by clicking Like!"
 
 #: plugins/bc-admin-third/templates/email/text/installed.php:87
-msgid "baserCMS公式Twitter"
-msgstr "baserCMS Official Twitter"
+msgid "baserCMS公式X"
+msgstr "baserCMS Official X"
 
 #: plugins/bc-admin-third/templates/email/text/installed.php:89
 msgid "TIPSや最新情報をつぶやいてます。Follow Me！"
@@ -9396,8 +9396,8 @@ msgid "フォーラムにインストールの不具合を報告する"
 msgstr "Report bug in installation to forum"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:44
-msgid "公式Twitterをフォローする"
-msgstr "Follow official Twitter"
+msgid "公式TXをフォローする"
+msgstr "Follow official X"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:46
 msgid "Facebookでいいね！する"
@@ -14929,8 +14929,8 @@ msgstr ""
 #~ msgid "baserCMS Facebook"
 #~ msgstr "baserCMS Facebook"
 
-#~ msgid "baserCMS Twitter"
-#~ msgstr "baserCMS Twitter"
+#~ msgid "baserCMS X"
+#~ msgstr "baserCMS X"
 
 #~ msgid "baserCMS管理システム"
 #~ msgstr "baserCMS Management System"
