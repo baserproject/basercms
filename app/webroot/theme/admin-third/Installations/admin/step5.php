@@ -36,8 +36,8 @@ $adminPrefix = Configure::read('Routing.prefixes.0');
 					   class="outside-link"><?php echo __d('baser', 'baserCMS公式ガイドで学ぶ') ?></a></li>
 				<li><a href="https://forum.basercms.net" title="baserCMSユーザーズフォーラム" target="_blank"
 					   class="outside-link"><?php echo __d('baser', 'フォーラムにインストールの不具合を報告する') ?></a></li>
-				<li><a href="https://twitter.com/#!/basercms" title="baserCMS公式Twitter" target="_blank"
-					   class="outside-link"><?php echo __d('baser', '公式Twitterをフォローする') ?></a></li>
+				<li><a href="https://twitter.com/basercms" title="baserCMS公式X" target="_blank"
+					   class="outside-link"><?php echo __d('baser', '公式Xをフォローする') ?></a></li>
 				<li><a href="https://facebook.com/basercms" title="baserCMS公式Facebookページ" target="_blank"
 					   class="outside-link"><?php echo __d('baser', 'Facebookでいいね！する') ?></a></li>
 			</ul>

@@ -82,7 +82,7 @@ https://basercms.net/community
 https://www.facebook.com/basercms
 <?php echo __d('baser', 'いいね！をクリックして普及にご協力ください。')?>　
 
-■ <?php echo __d('baser', 'baserCMS公式Twitter')?>　
+■ <?php echo __d('baser', 'baserCMS公式X')?>　
 https://twitter.com/basercms
 <?php echo __d('baser', 'TIPSや最新情報をつぶやいてます。Follow Me！')?>　
 
