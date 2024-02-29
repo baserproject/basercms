@@ -498,7 +498,6 @@ class BlogCategoriesTableTest extends BcTestCase
 
     /**
      * カテゴリ名よりカテゴリを取得する
-     * getByName
      * @dataProvider getByNameDataProvider
      * @param int $blogCategoryId
      * @param string $name
