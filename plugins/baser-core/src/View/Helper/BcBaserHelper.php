@@ -490,7 +490,7 @@ class BcBaserHelper extends Helper
             $full = true;
         }
 
-        if (preg_match('{^' . BcUtil::getPrefix(true) . '\/}', $srcUrl)) {
+        if (preg_match('{^' . BcUtil::getPrefix(true) . '\/}', $srcUrl) || !isset($this->BcContents)) {
             $url = $this->getUrl($srcUrl, $full, ['escape' => false]);
         } else {
             $site = $this->getCurrentSite();
