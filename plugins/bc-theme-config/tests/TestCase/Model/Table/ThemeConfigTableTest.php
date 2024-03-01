@@ -121,10 +121,10 @@ class ThemeConfigTableTest extends BcTestCase
             'color_link' => '1234',
             'color_hover' => '1234567',
         ]);
-        $this->assertEquals('[メイン]はカラーコード形式を入力してください。', current($errors['color_main']));
-        $this->assertEquals('[サブ]はカラーコード形式を入力してください。', current($errors['color_sub']));
-        $this->assertEquals('[テキストリンク]はカラーコード形式を入力してください。', current($errors['color_link']));
-        $this->assertEquals('[テキストホバー]はカラーコード形式を入力してください。', current($errors['color_hover']));
+        $this->assertEquals('[メイン]はカラーコード形式で入力してください。', current($errors['color_main']));
+        $this->assertEquals('[サブ]はカラーコード形式で入力してください。', current($errors['color_sub']));
+        $this->assertEquals('[テキストリンク]はカラーコード形式で入力してください。', current($errors['color_link']));
+        $this->assertEquals('[テキストホバー]はカラーコード形式で入力してください。', current($errors['color_hover']));
 
         //値は3桁と6桁場合
         $errors = $validator->validate([
