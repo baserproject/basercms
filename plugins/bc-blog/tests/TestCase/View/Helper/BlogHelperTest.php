@@ -1763,6 +1763,22 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * isHome
+     */
+    public function test_isHome()
+    {
+        SiteFactory::make(['id' => 1])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        //param is empty
+        $result = $this->Blog->isHome();
+        $this->assertFalse($result);
+        //param is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/'));
+        $result = $this->Blog->isHome();
+        $this->assertTrue($result);
+    }
+
+    /**
      * 現在のブログタグアーカイブのブログタグ情報を取得する
      * @dataProvider getCurrentBlogTagDataProvider
      */
