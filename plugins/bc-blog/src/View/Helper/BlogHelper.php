@@ -1198,6 +1198,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページが個別ページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isSingle()
     {
@@ -1206,8 +1207,7 @@ class BlogHelper extends Helper
         }
         return ($this->_View->getRequest()->getParam('plugin') == 'BcBlog' &&
             $this->_View->getRequest()->getParam('controller') == 'Blog' &&
-            $this->_View->getRequest()->getParam('action') == 'archives' &&
-            !$this->getBlogArchiveType());
+            $this->_View->getRequest()->getParam('action') == 'archives' && !$this->getBlogArchiveType());
     }
 
     /**
