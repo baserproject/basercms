@@ -17,6 +17,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Entity\BlogCategory;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
@@ -301,16 +302,14 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testBeforeDelete()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogCategory->data = ['BlogCategory' => [
-            'id' => '1'
-        ]];
-        $this->BlogCategory->delete();
-
-        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
-        $result = $BlogPost->find('first', [
-            'conditions' => ['blog_category_id' => 1]
+        $data = $this->BlogCategoriesTable->newEntity([
+            'id' > '1'
         ]);
+        $this->BlogCategoriesTable->delete($data);
+
+        //テストメソッドをコール
+        $blogCategories = $this->getTableLocator()->get('BcBlog.BlogCategories');
+        $result = $blogCategories->find()->where(['id' => 1])->first();
         $this->assertEmpty($result);
     }
 

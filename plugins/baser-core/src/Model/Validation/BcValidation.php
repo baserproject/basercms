@@ -436,7 +436,7 @@ class BcValidation extends Validation
     /**
      * 指定した日付よりも新しい日付かどうかチェックする
      *
-     * @param \Cake\I18n\DateTime $fieldValue 対象となる日付
+     * @param string $fieldValue 対象となる日付
      * @param array $context
      * @return bool
      * @checked
@@ -445,8 +445,10 @@ class BcValidation extends Validation
      */
     public static function checkDateAfterThan($fieldValue, $target, $context)
     {
-        if ($fieldValue instanceof \Cake\I18n\DateTime && !empty($context['data'][$target])) {
-            return $fieldValue->greaterThan($context['data'][$target]);
+        if (!empty($fieldValue) && !empty($context['data'][$target])) {
+            $startDate = new FrozenTime($fieldValue);
+            $endDate = new FrozenTime($context['data'][$target]);
+            return $startDate->greaterThan($endDate);
         }
         return true;
     }
