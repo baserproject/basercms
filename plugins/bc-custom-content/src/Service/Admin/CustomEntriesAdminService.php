@@ -94,11 +94,16 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
             $customTable = $customTables->getWithLinks($tableId);
             $availablePreview = false;
         }
+        $entryUrl = null;
+        if($customTable->isContentTable()) {
+            $entryUrl = $this->getUrl($customTable->custom_content->content, $entity);
+        }
         return [
             'entity' => $entity,
             'tableId' => $tableId,
             'customTable' => $customTable,
-            'availablePreview' => $availablePreview
+            'availablePreview' => $availablePreview,
+            'entryUrl' => $entryUrl,
         ];
     }
 
@@ -121,18 +126,20 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
         } else {
             $customTable = $customTables->getWithLinks($tableId);
         }
-        $publishLink = null;
+        $publishLink = $entryUrl = null;
         $availablePreview = false;
         if($customTable->isContentTable()) {
             $publishLink = $this->getPublishLinkForEdit($customTable->custom_content->content, $entity);
             $availablePreview = true;
+            $entryUrl = $this->getUrl($customTable->custom_content->content, $entity);
         }
         return [
             'entity' => $entity,
             'tableId' => $tableId,
             'customTable' => $customTable,
             'publishLink' => $publishLink,
-            'availablePreview' => $availablePreview
+            'availablePreview' => $availablePreview,
+            'entryUrl' => $entryUrl
         ];
     }
 
