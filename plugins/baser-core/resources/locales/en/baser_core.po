@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: 2023-04-24 13:30+0900\n"
-"PO-Revision-Date: 2024-02-29 12:03+0900\n"
+"PO-Revision-Date: 2024-03-04 18:30+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -9396,7 +9396,7 @@ msgid "フォーラムにインストールの不具合を報告する"
 msgstr "Report bug in installation to forum"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:44
-msgid "公式TXをフォローする"
+msgid "公式Xをフォローする"
 msgstr "Follow official X"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:46
