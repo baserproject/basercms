@@ -66,7 +66,7 @@ class AppService
         $site = Router::getRequest()->getAttribute('currentSite');
         if($site) {
             $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            return $sitesTable->find()->where(['id' => $site->id])->first();
+            return $sitesTable->find()->where(['Sites.id' => $site->id])->first();
         } else {
             return null;
         }
