@@ -1007,8 +1007,10 @@ class BlogHelperTest extends BcTestCase
      */
     public function testRemoveCtrlChars()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $string = "\ebaserCMS \t\tHello \v\vWorld\0\f";
+        $result = $this->Blog->removeCtrlChars($string);
+        //戻り値を確認
+        $this->assertEquals('baserCMS Hello World', $result);
     }
 
     /**
