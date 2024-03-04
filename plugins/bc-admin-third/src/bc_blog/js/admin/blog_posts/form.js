@@ -51,8 +51,8 @@ $(function () {
         } else {
             previewurl += '?url=' + fullUrl +  '&preview=' + previewMode;
         }
-        if (typeof $.bcCkeditor.editor['editor_detail_tmp'] !== undefined) {
-            $.bcCkeditor.editor['editor_detail_tmp'].execCommand('synchronize');
+        if (typeof $.bcCkeditor.editor.editor_detail_tmp !== "undefined") {
+            $.bcCkeditor.editor.editor_detail_tmp.execCommand('synchronize');
         }
         form.attr('target', 'preview');
         form.attr('action', previewurl);
@@ -70,8 +70,8 @@ $(function () {
      */
     $("#BtnSave").click(function () {
         $.bcUtil.showLoader();
-        if (typeof $.bcCkeditor.editor['editor_detail_tmp'] !== undefined) {
-            $.bcCkeditor.editor['editor_detail_tmp'].execCommand('synchronize');
+        if (typeof $.bcCkeditor.editor.editor_detail_tmp !== "undefined") {
+            $.bcCkeditor.editor.editor_detail_tmp.execCommand('synchronize');
         }
         $("#BlogPostMode").val('save');
         $.bcToken.check(function () {
