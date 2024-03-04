@@ -51,6 +51,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator
             ->scalar('description')
+            ->allowEmptyString('description')
             ->add('description', [
                 'containsScript' => [
                     'rule' => ['containsScript'],
@@ -61,7 +62,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator->scalar('list_count')
             ->notEmptyString('list_count', __d('baser_core', '一覧表示件数を入力してください。'))
-            ->range('list_count', [0, 101], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
+            ->range('list_count', [0, 100], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
             ->add('list_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',
@@ -69,7 +70,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator->scalar('feed_count')
             ->notEmptyString('feed_count', __d('baser_core', 'RSSフィード出力件数を入力してください。'))
-            ->range('feed_count', [0, 101], __d('baser_core', 'RSSフィード出力件数は100までの数値で入力してください。'))
+            ->range('feed_count', [0, 100], __d('baser_core', 'RSSフィード出力件数は100までの数値で入力してください。'))
             ->add('feed_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',

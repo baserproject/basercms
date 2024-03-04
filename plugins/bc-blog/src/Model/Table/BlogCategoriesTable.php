@@ -131,6 +131,9 @@ class BlogCategoriesTable extends BlogAppTable
      *
      * @param boolean $cascade
      * @return void
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {

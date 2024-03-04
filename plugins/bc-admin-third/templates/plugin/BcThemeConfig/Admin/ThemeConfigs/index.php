@@ -66,6 +66,10 @@ $this->BcAdmin->setHelp('theme_configs_form');
       　
       <small>[<?php echo __d('baser_core', 'テキストホバー') ?>]</small>
       #<?php echo $this->BcAdminForm->control('color_hover', ['type' => 'text', 'size' => 6, 'class' => 'bca-textbox__input color-picker']) ?>
+      <?php echo $this->BcAdminForm->error('color_main') ?>
+      <?php echo $this->BcAdminForm->error('color_sub') ?>
+      <?php echo $this->BcAdminForm->error('color_link') ?>
+      <?php echo $this->BcAdminForm->error('color_hover') ?>
     </td>
   </tr>
   <tr>
