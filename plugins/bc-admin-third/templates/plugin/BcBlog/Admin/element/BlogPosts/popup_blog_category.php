@@ -31,7 +31,7 @@
       <div class="bca-helptext">
         <ul>
           <li><?php echo __d('baser_core', 'URLに利用されます') ?></li>
-          <li><?php echo __d('baser_core', '半角のみで入力してください') ?></li>
+          <li><?php echo __d('baser_core', 'カテゴリ名は半角英数字とハイフン、アンダースコアのみ入力可能です') ?></li>
           <li><?php echo __d('baser_core', '空の場合はカテゴリタイトルから値が自動で設定されます') ?></li>
         </ul>
       </div>
