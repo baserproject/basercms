@@ -358,18 +358,21 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId
      * @param string $name
      * @param array $options
-     * @notodo
-     * @checked
-     * @unitTest
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getByName($blogContentId, $name, $options = [])
     {
-        $conditions = array_merge([
-            'BlogCategories.blog_content_id' => $blogContentId,
-            'BlogCategories.name' => urlencode($name),
+        $options = array_merge([
+            'conditions' => [
+                'BlogCategories.blog_content_id' => $blogContentId,
+                'BlogCategories.name' => urlencode($name),
+            ],
+            'recursive' => -1
         ], $options);
-        return $this->find('all')->where($conditions)->first();
+        return $this->find('all', $options)->first();
 
     }
     /**
