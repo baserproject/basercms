@@ -424,7 +424,15 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testCreateOrder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //昇順
+        $result = $this->BlogPostsService->createOrder('test', 'ASC');
+        $this->assertEquals('BlogPosts.test ASC, BlogPosts.id ASC', $result);
+        //降順
+        $result = $this->BlogPostsService->createOrder('test', 'DESC');
+        $this->assertEquals('BlogPosts.test DESC, BlogPosts.id DESC', $result);
+        //random
+        $result = $this->BlogPostsService->createOrder('test', 'random');
+        $this->assertEquals('RAND()', $result);
     }
 
     /**
