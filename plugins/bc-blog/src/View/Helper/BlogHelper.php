@@ -2024,15 +2024,20 @@ class BlogHelper extends Helper
      * @param int $blogContentId
      * @param string $categoryName
      * @param array $options
-     * @return array
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
+
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])
     {
         if (!$categoryName && $this->getBlogArchiveType() === 'category') {
             $pass = $this->_View->getRequest()->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
-        return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
+        $blogCategoriesTable =  TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategoriesTable->getByName($blogContentId, $categoryName, $options);
     }
 
     /**
