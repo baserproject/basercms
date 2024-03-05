@@ -171,7 +171,6 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @param string $direction
      * @return string
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function createOrder($sort, $direction)
