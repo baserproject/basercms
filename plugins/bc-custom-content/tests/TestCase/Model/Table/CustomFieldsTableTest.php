@@ -90,10 +90,12 @@ class CustomFieldsTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'あ',
             'size' => 'a',
+            'line' => 'a',
             'max_length' => 'b',
         ]);
         $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
         $this->assertEquals('横幅サイズは整数を入力してください。', current($errors['size']));
+        $this->assertEquals('行数は整数を入力してください。', current($errors['line']));
         $this->assertEquals('最大文字数は整数を入力してください。', current($errors['max_length']));
 
         //validateUnique　テスト
