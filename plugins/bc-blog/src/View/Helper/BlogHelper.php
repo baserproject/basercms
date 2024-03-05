@@ -1216,6 +1216,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがインデックスページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isHome()
     {
