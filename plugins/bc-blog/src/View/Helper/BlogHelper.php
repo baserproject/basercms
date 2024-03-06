@@ -1498,6 +1498,7 @@ class BlogHelper extends Helper
      *    ※ オプションのパラーメーターは、BlogHelper::getTagList() に準ずる
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tagList($name, $options = [])
     {
@@ -1627,10 +1628,10 @@ class BlogHelper extends Helper
             /** @var BlogContentsService $blogContentsService */
             $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
             $blogContents = $blogContentsService->BlogContents->find()
-                ->select(['BlogContent.id'])
+                ->select(['BlogContents.id'])
                 ->where(array_merge(
-                    $blogContentsService->BlogContents->Content->getConditionAllowPublish(),
-                    ['Contents.url' => $options['contentUrl']]
+                    $blogContentsService->BlogContents->Contents->getConditionAllowPublish(),
+                    ['BlogContents.Contents.url IN' => $options['contentUrl']]
                 ))->all();
             $blogContentIds = Hash::extract($blogContents->toArray(), "{n}.id");
         }
@@ -2054,7 +2055,7 @@ class BlogHelper extends Helper
      * 現在のブログタグアーカイブのブログタグ情報を取得する
      *
      * @return array
-     * @unitTest 
+     * @unitTest
      */
     public function getCurrentBlogTag()
     {
