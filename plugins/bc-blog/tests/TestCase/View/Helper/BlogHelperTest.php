@@ -1007,8 +1007,10 @@ class BlogHelperTest extends BcTestCase
      */
     public function testRemoveCtrlChars()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $string = "\ebaserCMS \t\tHello \v\vWorld\0\f";
+        $result = $this->Blog->removeCtrlChars($string);
+        //戻り値を確認
+        $this->assertEquals('baserCMS Hello World', $result);
     }
 
     /**
@@ -1530,23 +1532,33 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
-     * testGetCategoryByName
-     * @dataProvider getCategoryByName
+     * getCategoryByName
+     * @dataProvider getCategoryByNameDataprovider
      */
     public function testGetCategoryByName($blogCategoryId, $type, $pass, $name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest('/');
-        $this->View->set('blogArchiveType', $type);
-        $this->Blog->request->params['pass'][1] = $pass;
+        //データ生成
+        BlogCategoryFactory::make([
+            'blog_content_id' => 1,
+            'name' => 'child',
+        ])->persist();
+
+        SiteFactory::make(['id' => 1])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest('/')->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+
+        //pass param
+        $this->Blog->getView()->setRequest($this->getRequest()->withParam('pass', $pass));
         $result = $this->Blog->getCategoryByName($blogCategoryId, $name);
+
+        //check result
         $this->assertEquals($expects, (bool)$result);
     }
 
-    public static function getCategoryByName()
+    public static function getCategoryByNameDataprovider()
     {
         return [
-            [1, 'category', 'child', '', true],
+            [1, 'category', ['child'], '', true],
             [1, 'hoge', '', 'child', true],
             [1, 'hoge', '', '', false]
         ];
@@ -1787,33 +1799,57 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * isHome
+     */
+    public function test_isHome()
+    {
+        SiteFactory::make(['id' => 1])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        //param is empty
+        $result = $this->Blog->isHome();
+        $this->assertFalse($result);
+        //param is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/'));
+        $result = $this->Blog->isHome();
+        $this->assertTrue($result);
+    }
+
+    /**
      * 現在のブログタグアーカイブのブログタグ情報を取得する
      * @dataProvider getCurrentBlogTagDataProvider
      */
     public function testGetCurrentBlogTag($url, $type, $isTag, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->Blog->request = $this->_getRequest($url);
-        $this->View->set('blogArchiveType', $type);
+        //create data test
+        BlogTagFactory::make([
+            'id' => '1',
+            'name' => '新製品',
+        ])->persist();
 
+        SiteFactory::make(['id' => 1])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest($url)->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', $type);
+        //check blog isTag
         $result = $this->Blog->isTag();
         $this->assertEquals($isTag, $result);
 
+        //check data expects
         $result = $this->Blog->getCurrentBlogTag();
-        $this->assertEquals($expects, $result);
+        $actual = (!empty($result)) ? $result->toArray() : [];
+        unset($actual['created']);
+        unset($actual['modified']);
+        $this->assertEquals($expects, $actual);
     }
 
     public static function getCurrentBlogTagDataProvider()
     {
         return [
-            ['/news/archives/tag/新製品', 'tag', true, [
-                'BlogTag' => [
-                    'name' => '新製品',
+            ['/news/archives/tag/新製品', 'tag', true,
+                [
                     'id' => '1',
-                    'created' => '2015-08-10 18:57:47',
-                    'modified' => null,
-                ],
-            ]],
+                    'name' => '新製品',
+                ]
+            ],
             ['/news/archives/tag/test1', 'tag', true, []],
             ['/news/archives/category/test2', 'category', false, []],
         ];

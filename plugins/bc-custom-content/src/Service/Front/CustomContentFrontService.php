@@ -168,11 +168,15 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     {
         $this->entriesService->setup($customContent->custom_table_id);
         if($preview) {
-            $options = [];
+            $entity = null;
+            if($entryId) {
+                $entity = $this->entriesService->get($entryId);
+            }
         } else {
             $options = ['status' => 'publish'];
+            $entity = $this->entriesService->get($entryId, $options);
         }
-        $entity = $this->entriesService->get($entryId, $options);
+
         /** @var CustomContent $customContent */
         return [
             'customContent' => $customContent,
@@ -183,8 +187,8 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
                 'plugin' => 'BcCustomContent',
                 'controller' => 'CustomEntries',
                 'action' => 'edit',
-                $entity->custom_table_id,
-                $entity->id
+                $customContent->custom_table_id,
+                $entity->id?? null
             ] : '',
         ];
     }
@@ -229,12 +233,12 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     {
         $request = $controller->getRequest();
         $entryId = $request->getParam('pass.0');
-        if(!$entryId) throw new NotFoundException();
 
         $customContent = $this->contentsService->get($request->getParam('entityId'));
         $controller->set($this->getViewVarsForView($customContent, $entryId, true));
+        $customEntry = $controller->viewBuilder()->getVar('customEntry');
         $entity = $this->entriesService->CustomEntries->patchEntity(
-            $controller->viewBuilder()->getVar('customEntry'),
+            $customEntry?? $this->entriesService->CustomEntries->newEmptyEntity(),
             $request->getData()
         );
         $entity = $this->entriesService->CustomEntries->decodeRow($entity);

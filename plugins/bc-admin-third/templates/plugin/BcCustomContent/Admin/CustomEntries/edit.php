@@ -13,6 +13,7 @@
  * @var \BcCustomContent\View\CustomContentAdminAppView $this
  * @var \BcCustomContent\Model\Entity\CustomTable $customTable
  * @var \BcCustomContent\Model\Entity\CustomEntry $entity
+ * @var string $entryUrl
  * @var int $tableId
  * @var bool $availablePreview
  * @checked
@@ -24,10 +25,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $tableId],
   'title' => __d('baser_core', '新規追加'),
 ]);
-$entryUrl = '';
-if($customTable->isContentTable()) {
-  $entryUrl = $this->CustomContentAdmin->getEntryUrl($entity);
-}
 $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
   'defer' => true,
   'id' => 'AdminCustomEntriesFormScript',

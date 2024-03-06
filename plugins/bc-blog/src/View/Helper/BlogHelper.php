@@ -1216,6 +1216,7 @@ class BlogHelper extends Helper
      * @return boolean 現在のページがインデックスページの場合は true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isHome()
     {
@@ -1315,8 +1316,10 @@ class BlogHelper extends Helper
 
     /**
      * 文字列から制御文字を取り除く
+     * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function removeCtrlChars($string)
     {
@@ -2022,15 +2025,20 @@ class BlogHelper extends Helper
      * @param int $blogContentId
      * @param string $categoryName
      * @param array $options
-     * @return array
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
+
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])
     {
         if (!$categoryName && $this->getBlogArchiveType() === 'category') {
             $pass = $this->_View->getRequest()->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
-        return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
+        $blogCategoriesTable =  TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategoriesTable->getByName($blogContentId, $categoryName, $options);
     }
 
     /**
@@ -2052,14 +2060,15 @@ class BlogHelper extends Helper
      * 現在のブログタグアーカイブのブログタグ情報を取得する
      *
      * @return array
+     * @unitTest 
      */
     public function getCurrentBlogTag()
     {
         $blogTag = [];
         if ($this->isTag()) {
             $pass = $this->_View->getRequest()->getParam('pass');
-            $name = isset($pass[1])? $pass[1] : '';
-            $BlogTagModel = ClassRegistry::init('Blog.BlogTag');
+            $name = isset($pass[1]) ? $pass[1] : '';
+            $BlogTagModel = TableRegistry::getTableLocator()->get('BcBlog.BlogTags');
             $blogTag = $BlogTagModel->getByName(rawurldecode($name));
         }
         return $blogTag;

@@ -15,11 +15,17 @@
  * @var \BcCustomContent\Model\Entity\CustomEntry $entity
  * @var int $tableId
  * @var bool $availablePreview
+ * @var string $entryUrl
  * @checked
  * @noTodo
  * @unitTest
  */
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規エントリー登録', $customTable->title));
+$this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
+  'defer' => true,
+  'id' => 'AdminCustomEntriesFormScript',
+  'data-fullUrl' => $entryUrl,
+]);
 ?>
 
 <?php echo $this->BcAdminForm->create($entity, ['type' => 'file', 'novalidate' => true]) ?>
