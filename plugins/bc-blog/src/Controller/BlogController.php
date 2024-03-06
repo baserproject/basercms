@@ -178,7 +178,7 @@ class BlogController extends BlogFrontAppController
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction
-                    ], $this->getRequest()->getQueryParams()))),
+                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $category,
                     $this->getRequest(),
                     $blogContent,
@@ -190,11 +190,11 @@ class BlogController extends BlogFrontAppController
                 if (count($pass) > 2) $this->notFound();
                 $author = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByAuthor(
-                    $this->paginate($blogPostsService->getIndexByAuthor($author, [
+                    $this->paginate($blogPostsService->getIndexByAuthor($author, array_merge([
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
-                        'direction' => $blogContent->list_direction
-                    ])),
+                        'direction' => $blogContent->list_direction,
+                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $author,
                     $blogContent
                 ));
@@ -204,11 +204,11 @@ class BlogController extends BlogFrontAppController
                 if (count($pass) > 2) $this->notFound();
                 $tag = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByTag(
-                    $this->paginate($blogPostsService->getIndexByTag($tag, [
+                    $this->paginate($blogPostsService->getIndexByTag($tag, array_merge([
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
-                        'direction' => $blogContent->list_direction
-                    ])),
+                        'direction' => $blogContent->list_direction,
+                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $tag,
                     $blogContent
                 ));
@@ -227,11 +227,11 @@ class BlogController extends BlogFrontAppController
                     }
                 }
                 $this->set($service->getViewVarsForArchivesByDate(
-                    $this->paginate($blogPostsService->getIndexByDate($year, $month, $day, [
+                    $this->paginate($blogPostsService->getIndexByDate($year, $month, $day, array_merge([
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
-                        'direction' => $blogContent->list_direction
-                    ])),
+                        'direction' => $blogContent->list_direction,
+                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $year,
                     $month,
                     $day,
