@@ -11,6 +11,7 @@
 namespace BcBlog\Test\TestCase\Model;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -19,7 +20,9 @@ use BcBlog\Service\BlogContentsService;
 use ArrayObject;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Event\Event;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogContentsTableTest
@@ -33,6 +36,7 @@ class BlogContentsTableTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Setup
@@ -363,6 +367,27 @@ class BlogContentsTableTest extends BcTestCase
             'conditions' => ['BlogContent.id' => $this->BlogContent->getLastInsertID()]
         ]);
         $this->assertEquals($result['Content']['title'], 'test-title');
+    }
+
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //init data
+        UserFactory::make()->admin()->persist();
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loginAdmin($this->getRequest());
+        //サービスクラス
+        $blogContentService = $this->getService(BlogContentsServiceInterface::class);
+        //check data before copy
+        $result = $blogContentService->get(6);
+        $this->assertEquals('News 1', $result->content->title);
+        //copy
+        $this->BlogContentsTable->copy(6, 1, 'title_copy', 1, 0);
+        //check data after copy
+        $result = $blogContentService->get(11);
+        $this->assertEquals('title_copy', $result->content->title);
     }
 
     /**

@@ -213,6 +213,7 @@ class BlogContentsTable extends BlogAppTable
      * @param int $newSiteId 新しいサイトID
      * @return mixed EntityInterface|false
      * @checked
+     * @unitTest
      */
     public function copy(
         int $id,
