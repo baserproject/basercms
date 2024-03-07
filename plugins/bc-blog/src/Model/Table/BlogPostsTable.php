@@ -283,6 +283,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array 月別リストデータ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostedDates($blogContentId = null, $options = [])
     {
