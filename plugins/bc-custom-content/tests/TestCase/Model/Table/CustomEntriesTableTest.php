@@ -343,15 +343,11 @@ class CustomEntriesTableTest extends BcTestCase
         //準備
         CustomFieldFactory::make([
             'id' => 1,
-            'title' => '求人分類',
-            'name' => 'recruit_category',
-            'type' => 'text',
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
             'custom_table_id' => 1,
             'custom_field_id' => 1,
-            'parent_id' => null,
         ])->persist();
         $this->CustomEntriesTable->setLinks(1);
         $result = $this->CustomEntriesTable->links;
@@ -361,7 +357,7 @@ class CustomEntriesTableTest extends BcTestCase
         //check is not set links
         $this->CustomEntriesTable->setLinks(2);
         $result = $this->CustomEntriesTable->links;
-        $this->assertEquals(0, $result->count());
+        $this->assertEmpty($result);
     }
 
     /**
