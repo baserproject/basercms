@@ -184,4 +184,29 @@ class ContentFoldersTableTest extends BcTestCase
         $query = $contentFolders->find()->where(['folder_template' => 'AfterCopy']);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * test copy
+     */
+    public function test_copy()
+    {
+        //データを生成
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+
+        //コピーする前にDBのデータを確認
+        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $query = $contentFolders->find()->where(['folder_template' => 'baserCMSサンプル']);
+        $this->assertEquals(1, $query->count());
+
+        //対象メソッドを呼ぶ
+        $rs = $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
+
+        //戻り値を確認
+        $this->assertEquals('new title', $rs->content->title);
+
+        //DBに存在するか確認すること
+        $query = $contentFolders->find()->where(['folder_template' => 'baserCMSサンプル']);
+        $this->assertEquals(2, $query->count());
+    }
 }
