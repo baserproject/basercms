@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
@@ -118,7 +119,13 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeSave()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //check is not isNew
+        $entity = $this->CustomLinksTable->newEmptyEntity();
+        $entity->set('name', 'test');
+        $entity->set('custom_table_id', 1);
+        $this->CustomLinksTable->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
+        $this->assertNotEmpty($entity->get('name'));
+        $this->assertNotEmpty($entity->get('custom_table_id'));
     }
 
     /**
