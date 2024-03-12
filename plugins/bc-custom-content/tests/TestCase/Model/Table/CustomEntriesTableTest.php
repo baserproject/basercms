@@ -595,14 +595,10 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_isJson()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        //check is isJson
+        $this->assertTrue($this->CustomEntriesTable->isJson('{"name":"Nghiem"}'));
+        //check is not isJson
+        $this->assertFalse($this->CustomEntriesTable->isJson('{"name":"Nghiem"'));
     }
 
 

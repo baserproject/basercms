@@ -618,6 +618,7 @@ class CustomEntriesTable extends AppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     function isJson(string $string)
     {
