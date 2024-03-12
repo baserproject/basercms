@@ -200,6 +200,7 @@ class CustomEntriesTable extends AppTable
      * @param int $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setLinks(int $tableId)
     {
