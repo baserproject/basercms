@@ -15,6 +15,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -68,7 +69,14 @@ class FavoritesService implements FavoritesServiceInterface
         if (!empty($queryParams['num'])) {
             $options = ['limit' => $queryParams['num']];
         }
-        $query = $this->Favorites->find('all', $options)->order(['sort']);
+        $loginUserId = '';
+        $loginUser = BcUtil::loginUser();
+        if(!empty($loginUser['id'])) {
+            $loginUserId = $loginUser['id'];
+        }
+        $query = $this->Favorites->find('all', $options)->where(
+            ['user_id' => $loginUserId]
+        )->order(['sort']);
         return $query;
     }
 
