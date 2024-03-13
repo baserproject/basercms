@@ -146,6 +146,8 @@ class FavoritesServiceTest extends BcTestCase
     public function testDelete()
     {
         $this->loadFixtureScenario(FavoritesScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         $this->FavoritesService->delete(1);
         $users = $this->FavoritesService->getIndex([]);
         $this->assertEquals(5, $users->all()->count());
