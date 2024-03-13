@@ -340,14 +340,24 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setLinks()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
         //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        CustomFieldFactory::make([
+            'id' => 1,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+        ])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+        $result = $this->CustomEntriesTable->links;
+        $this->assertEquals(1, $result[0]->id);
+        //不要なテーブルを削除
+        $this->CustomEntriesTable->links = null;
+        //check is not set links
+        $this->CustomEntriesTable->setLinks(2);
+        $result = $this->CustomEntriesTable->links;
+        $this->assertEmpty($result);
     }
 
     /**
