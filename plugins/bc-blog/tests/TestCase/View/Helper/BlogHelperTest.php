@@ -1184,7 +1184,7 @@ class BlogHelperTest extends BcTestCase
             ['/(?=\/tag\/tag1).*?(?!.*\/tag\/tag2).*?(?!.*\/tag\/tag3)/s', 'news'],
             ['/(?=\/tag\/tag1).*?(?=\/tag\/tag2).*?(?!.*\/tag\/tag3)/s', '/s/news/'],
             ['/(?=\/tags\/tag1).*?(?=\/tags\/tag2).*?(?=\/tags\/tag3)/s', null],
-//            ['/(?=\/tag\/タグ１).*?\(2\)/s', '/news/', ['postCount' => true]],
+            ['/(?=\/tag\/tag1).*?\(1\)/s', '/news/', ['postCount' => true]],
         ];
     }
 

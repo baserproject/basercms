@@ -1629,13 +1629,14 @@ class BlogHelper extends Helper
             $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
             $blogContents = $blogContentsService->BlogContents->find()
                 ->select(['BlogContents.id'])
+                ->contain(['Contents'])
                 ->where(array_merge(
                     $blogContentsService->BlogContents->Contents->getConditionAllowPublish(),
-                    ['BlogContents.Contents.url IN' => $options['contentUrl']]
+                    ['Contents.url IN' => $options['contentUrl']]
                 ))->all();
             $blogContentIds = Hash::extract($blogContents->toArray(), "{n}.id");
         }
-        if (!empty($blogContentIds)) $conditions[] = ['BlogPosts.blog_content_id' => $blogContentIds];
+        if (!empty($blogContentIds)) $conditions[] = ['BlogPosts.blog_content_id IN' => $blogContentIds];
 
         $tagIds = [];
         if (!empty($conditions['BlogTags.id IN'])) {
