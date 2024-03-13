@@ -39,11 +39,11 @@
 			</div>
 
 			<ul class="bca-footer__sns">
-				<li class="bca-footer__sns__item"><a href="http://www.facebook.com/basercms" target="_blank"
+				<li class="bca-footer__sns__item"><a href="https://www.facebook.com/basercms" target="_blank"
 													 class="bca-footer__sns__link bca-footer__sns__link--facebook">Facebook</a>
 				</li>
-				<li class="bca-footer__sns__item"><a href="http://twitter.com/basercms" target="_blank"
-													 class="bca-footer__sns__link bca-footer__sns__link--twitter">Twitter</a>
+				<li class="bca-footer__sns__item"><a href="https://twitter.com/basercms" target="_blank"
+													 class="bca-footer__sns__link bca-footer__sns__link--twitter">X</a>
 				</li>
 			</ul>
 
