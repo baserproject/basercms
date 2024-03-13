@@ -249,6 +249,7 @@ class PluginsController extends BcAdminApiController
      * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(PluginsServiceInterface $service)
     {
@@ -329,6 +330,7 @@ class PluginsController extends BcAdminApiController
      * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(PluginsServiceInterface $service)
     {
@@ -370,6 +372,7 @@ class PluginsController extends BcAdminApiController
      * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_available_core_version_info(PluginsServiceInterface $service)
     {

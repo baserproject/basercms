@@ -264,4 +264,13 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
     }
 
+    /**
+     * test get_available_core_version_info
+     */
+    public function test_get_available_core_version_info()
+    {
+        $this->get('/baser/api/admin/baser-core/plugins/get_available_core_version_info.json?token=' . $this->accessToken);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertIsArray($result->availableCoreVersionInfo);
+    }
 }
