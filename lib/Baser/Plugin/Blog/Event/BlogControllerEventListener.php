@@ -139,18 +139,14 @@ class BlogControllerEventListener extends BcControllerEventListener
 			return;
 		}
 		$dataSource = $this->BlogContent->getDataSource();
-		$dataSource->begin();
 		$id = $event->data['id'];
 		$data = $this->BlogContent->find('first', ['conditions' => ['Content.id' => $id]]);
+		if(!$data) return;
+		$dataSource->begin();
 		if (empty($data['Content']['exclude_search'])) {
 			$this->BlogContent->saveSearchIndex($this->BlogContent->createSearchIndex($data));
 		} else {
 			$this->BlogContent->deleteSearchIndex($data['BlogContent']['id']);
-		}
-
-		if (empty($data['BlogContent']['id'])) {
-			$dataSource->commit();
-			return;
 		}
 
 		$posts = $this->BlogPost->find('all', [
