@@ -1761,6 +1761,30 @@ class BlogHelperTest extends BcTestCase
         ];
     }
 
+    /**
+     * test isSingle
+     */
+    public function test_isSingle()
+    {
+        SiteFactory::make(['id' => 1])->persist();
+        //param is empty
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $result = $this->Blog->isSingle();
+        $this->assertFalse($result);
+
+        //param is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/archives/1')->withAttribute('currentSite', SiteFactory::get(1)));
+        $result = $this->Blog->isSingle();
+        $this->assertTrue($result);
+
+        //BlogArchiveType is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/archives/2016/02/10/post-1')->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', 'daily');
+        $result = $this->Blog->isSingle();
+        $this->assertFalse($result);
+
+    }
+
     public static function isTagDataProvider()
     {
         return [

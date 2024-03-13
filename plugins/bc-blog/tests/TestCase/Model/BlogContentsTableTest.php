@@ -21,6 +21,7 @@ use ArrayObject;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -504,6 +505,27 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($rs['status'], 1);
         $this->assertNotNull($rs['publish_begin']);
         $this->assertNotNull($rs['publish_end']);
+    }
+
+    /**
+     * test createRelatedSearchIndexes
+     */
+    public function test_createRelatedSearchIndexes()
+    {
+        //データを生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        //クラスサービス
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $searchIndexesService = $this->getService(SearchIndexesServiceInterface::class);
+
+        //対象メソッドをコール
+        $this->BlogContentsTable->createRelatedSearchIndexes($blogContentsService->get(6));
+
+        //search_indexesテーブルにデータがあるか確認する
+        $data = $searchIndexesService->get(1);
+        $this->assertEquals('ブログ', $data['type']);
+        $this->assertEquals('BlogPost', $data['model']);
+        $this->assertEquals('/news/archives/3', $data['url']);
     }
 
     /**
