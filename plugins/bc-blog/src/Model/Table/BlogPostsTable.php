@@ -509,7 +509,11 @@ class BlogPostsTable extends BlogAppTable
      * 公開状態の記事を取得する
      *
      * @param array $options
-     * @return array
+     * @return Query\SelectQuery
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPublishes($options)
     {
@@ -519,8 +523,7 @@ class BlogPostsTable extends BlogAppTable
             $options['conditions'] = $this->getConditionAllowPublish();
         }
         // 毎秒抽出条件が違うのでキャッシュしない
-        $datas = $this->find('all', ...$options);
-        return $datas;
+        return $this->find('all', ...$options);
     }
 
     /**

@@ -411,17 +411,16 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testGetPublishes()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $message = '正しく公開状態の記事を取得できません';
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
-        $result = count($this->BlogPost->getPublishes([]));
-        $this->assertEquals($result, 6, $message);
+        $result = $this->BlogPostsTable->getPublishes([]);
+        $this->assertCount(6, $result);
 
         $options = ['conditions' => [
             'publish_begin' => '9000-01-27 12:00:00'
         ]];
-        $result = $this->BlogPost->getPublishes($options);
-        $this->assertEmpty($result);
+        $result = $this->BlogPostsTable->getPublishes($options);
+        $this->assertCount(0, $result);
     }
 
     /**
