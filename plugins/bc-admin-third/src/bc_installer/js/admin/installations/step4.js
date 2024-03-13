@@ -23,14 +23,8 @@ $(function () {
             } else if ($("#admin-email").val() === "") {
                 alert(bcI18n.message1);
                 result = false;
-            } else if ($("#admin-password").val().length < 6) {
-                alert(bcI18n.message4);
-                result = false;
-            } else if ($("#admin-password").val() !== $("#admin-confirm-password").val()) {
-                alert(bcI18n.message5);
-                result = false;
-            } else if (!$("#admin-password").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
-                alert(bcI18n.message6);
+            } else if ($("#admin-password").val() === "" || $("#admin-confirm-password").val() === "") {
+                alert(bcI18n.message2);
                 result = false;
             }
         } else if (this.id === 'BtnBack') {

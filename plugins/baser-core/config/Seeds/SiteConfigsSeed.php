@@ -246,6 +246,13 @@ q {}',
                 'created' => '',
                 'modified' => ''
             ],
+            [
+                'id' => '30',
+                'name' => 'allow_simple_password',
+                'value' => '0',
+                'created' => '',
+                'modified' => ''
+            ],
         ];
         $table = $this->table('site_configs');
         $table->insert($data)->save();

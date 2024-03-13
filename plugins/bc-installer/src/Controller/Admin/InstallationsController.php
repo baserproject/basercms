@@ -161,6 +161,12 @@ class InstallationsController extends BcAdminAppController
                 try {
                     $db = $service->connectDb($this->getRequest());
                     $db->begin();
+                    $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+                    if ($this->request->getData('allow_simple_password')) {
+                        $siteConfigsService->setValue('allow_simple_password', 1);
+                    } else {
+                        $siteConfigsService->setValue('allow_simple_password', 0);
+                    }
                     $service->initAdmin($this->getRequest());
                     $service->sendCompleteMail($this->getRequest()->getData());
                     $db->commit();
