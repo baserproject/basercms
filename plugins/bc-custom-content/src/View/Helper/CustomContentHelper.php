@@ -59,6 +59,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitle()
     {
@@ -69,6 +70,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * カスタムコンテンツのタイトルを出力する
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
      */
     public function title(): void
     {
