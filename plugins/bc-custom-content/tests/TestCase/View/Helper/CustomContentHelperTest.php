@@ -11,8 +11,10 @@
 
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomContentsServiceInterface;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
@@ -78,7 +80,33 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_descriptionExists()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //currentContentをセット
+        $customContentsService = $this->getService(CustomContentsServiceInterface::class);
+        $customContent = $customContentsService->get(1);
+        //対象メソッドをコール
+        $rs = $this->CustomContentHelper->descriptionExists($customContent);
+        //戻り値を確認
+        $this->assertTrue($rs);
+
+        //check description not exists
+        CustomContentFactory::make([
+            'id' => 4,
+            'description' => null,
+        ])->persist();
+        ContentFactory::make([
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'entity_id' => 4,
+        ])->persist();
+        $customContent = $customContentsService->get(4);
+        //対象メソッドをコール
+        $rs = $this->CustomContentHelper->descriptionExists($customContent);
+        //戻り値を確認
+        $this->assertFalse($rs);
     }
 
     /**
