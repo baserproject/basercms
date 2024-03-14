@@ -125,7 +125,6 @@ class CustomContentHelperTest extends BcTestCase
         $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
-
         $customEntriesService->setup(1);
 
         //対象メソッドをコール
