@@ -103,10 +103,6 @@ class CustomContentHelperTest extends BcTestCase
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
 
-        //データ生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $this->loadFixtureScenario(CustomEntriesScenario::class);
-
         //カスタムテーブルとカスタムエントリテーブルを生成
         $customTable->create([
             'id' => 1,
@@ -116,6 +112,11 @@ class CustomContentHelperTest extends BcTestCase
             'display_field' => 'title',
             'has_child' => 0
         ]);
+
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
         $customEntriesService->setup(1);
 
         //対象メソッドをコール
