@@ -40,7 +40,6 @@ class CustomContentAdminHelperTest extends BcTestCase
     {
         //customField is null
         $customLink = new CustomLink([
-            'id' => 1,
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1
@@ -49,14 +48,12 @@ class CustomContentAdminHelperTest extends BcTestCase
         $this->assertFalse($rs);
         //customField is not null and empty children
         $customField = new CustomField([
-            'id' => 1,
             'name' => 'test custom field',
             'status' => 1,
             'custom_table_id' => 1,
             'type' => 'group',
         ]);
         $customLink = new CustomLink([
-            'id' => 1,
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1,
@@ -67,14 +64,12 @@ class CustomContentAdminHelperTest extends BcTestCase
         $this->assertFalse($rs);
         //customField is not null and not empty children
         $customField = new CustomField([
-            'id' => 1,
             'name' => 'test custom field',
             'status' => 1,
             'custom_table_id' => 1,
             'type' => 'group',
         ]);
         $customLink = new CustomLink([
-            'id' => 1,
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1,
@@ -82,7 +77,6 @@ class CustomContentAdminHelperTest extends BcTestCase
             'custom_field' => $customField,
             'children' => [
                 new CustomLink([
-                    'id' => 1,
                     'name' => 'test custom link',
                     'status' => 1,
                     'custom_table_id' => 1,
