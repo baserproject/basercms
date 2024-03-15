@@ -168,8 +168,13 @@ class CustomContentHelperTest extends BcTestCase
             'display_field' => 'お問い合わせ'
         ]);
 
-        //対象メソッドをコール
+        //$isThreaded = false 場合、
         $rs = $this->CustomContentHelper->getLinks(1, false);
+        //戻り値を確認
+        $this->assertCount(2, $rs);
+
+        //$isThreaded = true 場合、
+        $rs = $this->CustomContentHelper->getLinks(1);
         //戻り値を確認
         $this->assertCount(2, $rs);
 
