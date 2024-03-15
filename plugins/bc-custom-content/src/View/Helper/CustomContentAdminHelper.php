@@ -78,7 +78,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @param CustomLink $link
      * @return string
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function label(CustomLink $link, array $options = []): string
     {
