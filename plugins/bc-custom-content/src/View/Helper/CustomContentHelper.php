@@ -122,6 +122,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryTitle(CustomEntry $entry)
     {
