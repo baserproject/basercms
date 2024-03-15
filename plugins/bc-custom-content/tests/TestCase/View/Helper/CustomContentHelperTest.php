@@ -11,10 +11,10 @@
 
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
-use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Service\CustomContentsServiceInterface;
-use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
@@ -80,32 +80,35 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_descriptionExists()
     {
-        //データ生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-
-        //currentContentをセット
-        $customContentsService = $this->getService(CustomContentsServiceInterface::class);
-        $customContent = $customContentsService->get(1);
-        //対象メソッドをコール
+        //check description exists
+        $content = new Content([
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'entity_id' => 1,
+        ]);
+        $customContent = new CustomContent([
+            'id' => 1,
+            'description' => 'description',
+            'content' => $content,
+        ]);
         $rs = $this->CustomContentHelper->descriptionExists($customContent);
-        //戻り値を確認
+        //check result value
         $this->assertTrue($rs);
-
         //check description not exists
-        CustomContentFactory::make([
-            'id' => 4,
-            'description' => null,
-        ])->persist();
-        ContentFactory::make([
+        $content = new Content([
             'plugin' => 'BcCustomContent',
             'type' => 'CustomContent',
             'site_id' => 1,
             'entity_id' => 4,
-        ])->persist();
-        $customContent = $customContentsService->get(4);
-        //対象メソッドをコール
+        ]);
+        $customContent = new CustomContent([
+            'id' => 4,
+            'description' => null,
+            'content' => $content,
+        ]);
         $rs = $this->CustomContentHelper->descriptionExists($customContent);
-        //戻り値を確認
+        //check result value
         $this->assertFalse($rs);
     }
 
