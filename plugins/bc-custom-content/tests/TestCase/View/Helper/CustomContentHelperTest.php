@@ -260,11 +260,11 @@ class CustomContentHelperTest extends BcTestCase
         $this->assertTrue($rs);
 
         //Falseを返す場合
-        $rs = $this->CustomContentHelper->isDisplayField($customEntriesService->get(1), 'recruit_category_false');
+        $rs = $this->CustomContentHelper->isDisplayField($customEntriesService->get(1), 'feature');
         $this->assertFalse($rs);
 
         //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_contact');
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
 }
