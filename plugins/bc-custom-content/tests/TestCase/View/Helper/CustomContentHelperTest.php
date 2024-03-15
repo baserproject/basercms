@@ -203,13 +203,13 @@ class CustomContentHelperTest extends BcTestCase
         //$fieldNameが存在した場合、
         $rs = $this->CustomContentHelper->getLink(1, 'recruit_category');
         //戻り値を確認
-        $this->assertCount('recruit_category', $rs->name);
-        $this->assertCount('求人分類', $rs->title);
+        $this->assertEquals('recruit_category', $rs->name);
+        $this->assertEquals('求人分類', $rs->title);
 
         //$fieldNameが存在しない場合、
         $rs = $this->CustomContentHelper->getLink(1, 'category');
         //戻り値を確認
-        $this->assertFalse('recruit_category', $rs->name);
+        $this->assertFalse($rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_contact');
