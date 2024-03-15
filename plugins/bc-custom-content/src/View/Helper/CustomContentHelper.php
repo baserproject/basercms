@@ -351,6 +351,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDisplayField(CustomEntry $entry, string $fieldName)
     {

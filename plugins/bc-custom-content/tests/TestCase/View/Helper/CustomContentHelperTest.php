@@ -18,6 +18,7 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -232,7 +233,38 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_isDisplayField()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $customEntriesService->setup(1);
+
+        //Trueを返す場合
+        $rs = $this->CustomContentHelper->isDisplayField($customEntriesService->get(1), 'recruit_category');
+        $this->assertTrue($rs);
+
+        //Falseを返す場合
+        $rs = $this->CustomContentHelper->isDisplayField($customEntriesService->get(1), 'recruit_category_false');
+        $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
 }

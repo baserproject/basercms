@@ -35,6 +35,7 @@ class CustomEntriesScenario implements FixtureScenarioInterface
                 'modified' => '2023-02-14 13:57:29',
                 'created' => '2023-01-30 07:09:22',
                 'name' => 'プログラマー',
+                'display_front' => 1,
                 'recruit_category' => '1',
                 'feature' => '["土日祝日休み","交通費支給"]',
                 'main_visual' => '',
