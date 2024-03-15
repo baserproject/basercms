@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomFieldsTable;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
@@ -118,7 +119,30 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_beforeMarshal()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //case true
+        $data = [
+            'meta' => [
+                'test' => 'test'
+            ],
+            'validate' => [
+                'test' => 'test'
+            ]
+        ];
+        $options = new \ArrayObject();
+        $content = new \ArrayObject($data);
+        $this->customFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
+        $this->assertEquals('{"test":"test"}', $content['meta']);
+        $this->assertEquals('{"test":"test"}', $content['validate']);
+        //case false
+        $data = [
+            'meta' => '',
+            'validate' => ''
+        ];
+        $options = new \ArrayObject();
+        $content = new \ArrayObject($data);
+        $this->customFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
+        $this->assertEquals('', $content['meta']);
+        $this->assertEquals('', $content['validate']);
     }
 
     /**

@@ -14,9 +14,11 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomContentsServiceInterface;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -97,7 +99,34 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getEntryTitle()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $customEntriesService->setup(1);
+
+        //対象メソッドをコール
+        $rs = $this->CustomContentHelper->getEntryTitle($customEntriesService->get(1));
+        //戻り値を確認
+        $this->assertEquals('Webエンジニア・Webプログラマー', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
@@ -105,7 +134,34 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getPublished()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $customEntriesService->setup(1);
+
+        //対象メソッドをコール
+        $rs = $this->CustomContentHelper->getPublished($customEntriesService->get(1));
+        //戻り値を確認
+        $this->assertEquals('2023-01-30 07:09:22', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**

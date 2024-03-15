@@ -122,6 +122,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryTitle(CustomEntry $entry)
     {
@@ -159,6 +160,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublished(CustomEntry $entry)
     {
@@ -171,6 +173,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @param CustomEntry $entry
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
      */
     public function published(CustomEntry $entry)
     {
