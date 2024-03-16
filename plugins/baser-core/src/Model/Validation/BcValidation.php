@@ -446,8 +446,12 @@ class BcValidation extends Validation
     public static function checkDateAfterThan($fieldValue, $target, $context)
     {
         if (!empty($fieldValue) && !empty($context['data'][$target])) {
-            $startDate = new FrozenTime($fieldValue);
-            $endDate = new FrozenTime($context['data'][$target]);
+            try {
+                $startDate = new FrozenTime($fieldValue);
+                $endDate = new FrozenTime($context['data'][$target]);
+            } catch (\Exception) {
+                return false;
+            }
             return $startDate->greaterThan($endDate);
         }
         return true;
