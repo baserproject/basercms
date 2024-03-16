@@ -18,6 +18,7 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -184,7 +185,34 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getLink()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        //$fieldNameが存在した場合、
+        $rs = $this->CustomContentHelper->getLink(1, 'recruit_category');
+        //戻り値を確認
+        $this->assertEquals('recruit_category', $rs->name);
+        $this->assertEquals('求人分類', $rs->title);
+
+        //$fieldNameが存在しない場合、
+        $rs = $this->CustomContentHelper->getLink(1, 'category');
+        //戻り値を確認
+        $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
