@@ -8,189 +8,435 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-$(function () {
+/**
+ * mail fields form
+ */
+const mailFieldsForm = {
 
-    // タイプを選択すると入力するフィールドが切り替わる
-    $("#type").change(function () {
-        loadSetting($("#type").val(), true);
-    });
+    /**
+     * Eメールチェックコントロール
+     */
+    $validEmail: null,
 
-    // 項目名を入力時に項目見出しを自動入力
-    $("#name").change(function () {
-        if (!$("#head").val()) {
-            $("#head").val($("#name").val());
+    /**
+     * 数値チェックコントロール
+     */
+    $validNumber: null,
+
+    /**
+     * Eメール確認チェックコントロール
+     */
+    $validEmailConfirm: null,
+
+    /**
+     * 日時チェックコントロール
+     */
+    $validDatetime: null,
+
+    /**
+     * ファイルサイズチェックコントロール
+     */
+    $validMaxFileSize: null,
+
+    /**
+     * ファイル拡張子チェックコントロール
+     */
+    $validFileExt: null,
+
+    /**
+     * 全角カタカナチェックコントロール
+     */
+    $validZenkakuKatakana: null,
+
+    /**
+     * 全角ひらがなチェックコントロール
+     */
+    $validZenkakuHiragana: null,
+
+    /**
+     * 正規表現チェックコントロール
+     */
+    $validRegex: null,
+
+    /**
+     * グループ完了チェックコントロール
+     */
+    $validGroupComplete: null,
+
+    /**
+     * 行数コントロール
+     */
+    $textRows: null,
+
+    /**
+     * ソースコントロール
+     */
+    $source: null,
+
+    /**
+     * 最大文字数コントロール
+     */
+    $maxlength: null,
+
+    /**
+     * サイズコントロール
+     */
+    $size: null,
+
+    /**
+     * 自動変換コントロール
+     */
+    $autoConvert: null,
+
+    /**
+     * EメールチェックSPAN
+     */
+    $spanValidEmail: null,
+
+    /**
+     * 数値チェックSPAN
+     */
+    $spanValidNumber: null,
+
+    /**
+     * Eメール確認チェックSPAN
+     */
+    $spanValidEmailConfirm: null,
+
+    /**
+     * 日時チェックSPAN
+     */
+    $spanValidDatetime: null,
+
+    /**
+     * ファイルサイズチェックSPAN
+     */
+    $spanValidMaxFileSize: null,
+
+    /**
+     * ファイル拡張子チェックSPAN
+     */
+    $spanValidFileExt: null,
+
+    /**
+     * 全角カタカナチェックSPAN
+     */
+    $spanValidZenkakuKatakana: null,
+
+    /**
+     * 全角ひらがなチェックSPAN
+     */
+    $spanValidZenkakuHiragana: null,
+
+    /**
+     * 正規表現チェックSPAN
+     */
+    $spanValidRegex: null,
+
+    /**
+     * グループ完了チェックSPAN
+     */
+    $spanValidGroupComplete: null,
+
+    /**
+     * サイズROW
+     */
+    $rowSize: null,
+
+    /**
+     * 行数ROW
+     */
+    $rowRows: null,
+
+    /**
+     * 最大文字数ROW
+     */
+    $rowMaxlength: null,
+
+    /**
+     * ソースROW
+     */
+    $rowSource: null,
+
+    /**
+     * 自動変換ROW
+     */
+    $rowAutoConvert: null,
+
+    /**
+     * Mounted
+     */
+    mounted() {
+        this.$validEmail = $("#valid-ex-valid_email");
+        this.$validNumber = $("#valid-ex-valid_number");
+        this.$validEmailConfirm = $("#valid-ex-valid_email_confirm");
+        this.$validDatetime = $("#valid-ex-valid_datetime");
+        this.$validMaxFileSize = $("#valid-ex-valid_max_file_size");
+        this.$validFileExt = $("#valid-ex-valid_file_ext");
+        this.$validZenkakuKatakana = $("#valid-ex-valid_zenkaku_katakana");
+        this.$validZenkakuHiragana = $("#valid-ex-valid_zenkaku_hiragana");
+        this.$validRegex = $("#valid-ex-valid_regex");
+        this.$validGroupComplete = $("#valid-ex-valid_group_complate");
+        this.$textRows = $("#text-rows");
+        this.$source = $("#source");
+        this.$maxlength = $("#max-length");
+        this.$size = $("#size");
+        this.$autoConvert = $("#auto-convert");
+        this.$spanValidEmail = this.$validEmail.parent();
+        this.$spanValidNumber = this.$validNumber.parent();
+        this.$spanValidEmailConfirm = this.$validEmailConfirm.parent();
+        this.$spanValidDatetime = this.$validDatetime.parent();
+        this.$spanValidMaxFileSize = this.$validMaxFileSize.parent();
+        this.$spanValidFileExt = this.$validFileExt.parent();
+        this.$spanValidZenkakuKatakana = this.$validZenkakuKatakana.parent();
+        this.$spanValidZenkakuHiragana = this.$validZenkakuHiragana.parent();
+        this.$spanValidRegex = this.$validRegex.parent();
+        this.$spanValidGroupComplete = this.$validGroupComplete.parent();
+        this.$rowSize = $("#RowSize");
+        this.$rowRows = $("#RowRows");
+        this.$rowMaxlength = $("#RowMaxlength");
+        this.$rowSource = $("#RowSource");
+        this.$rowAutoConvert = $("#RowAutoConvert");
+        this.initView();
+    },
+
+    /**
+     * 表示初期化
+     */
+    initView() {
+        this.registerEvents();
+        this.loadSetting($("#type").val(), false);
+    },
+
+    /**
+     * コントロールの初期化
+     * @param changed
+     */
+    initControls(changed) {
+        if(changed) {
+            this.$validEmail.prop('checked', false);
+            this.$validNumber.prop('checked', false);
+            this.$validEmailConfirm.prop('checked', false);
+            this.$validDatetime.prop('checked', false);
+            this.$validMaxFileSize.prop('checked', false);
+            this.$validFileExt.prop('checked', false);
+            this.$validZenkakuKatakana.prop('checked', false);
+            this.$validZenkakuHiragana.prop('checked', false);
+            this.$validRegex.prop('checked', false);
+            this.$validGroupComplete.prop('checked', false);
         }
-    });
+        this.$spanValidEmail.hide();
+        this.$spanValidNumber.hide();
+        this.$spanValidEmailConfirm.hide();
+        this.$spanValidDatetime.hide();
+        this.$spanValidMaxFileSize.hide();
+        this.$spanValidFileExt.hide();
+        this.$spanValidZenkakuKatakana.hide();
+        this.$spanValidZenkakuHiragana.hide();
+        this.$spanValidRegex.hide();
+        this.$spanValidGroupComplete.show();
+        this.$rowSize.hide();
+        this.$rowRows.hide();
+        this.$rowMaxlength.hide();
+        this.$rowSource.hide();
+        this.$rowAutoConvert.hide();
+    },
 
-    $("#BtnSave").click(function () {
-        $.bcUtil.showLoader();
-    });
-
-    loadSetting($("#type").val(), false);
+    /**
+     * イベント登録
+     */
+    registerEvents() {
+        // タイプを選択すると入力するフィールドが切り替わる
+        $("#type").change(function () {
+            mailFieldsForm.loadSetting($("#type").val(), true);
+        });
+        // 項目名を入力時に項目見出しを自動入力
+        $("#name").change(function () {
+            const $head = $("#head");
+            if (!$head.val()) {
+                $head.val($("#name").val());
+            }
+        });
+        $("#BtnSave").click(function () {
+            $.bcUtil.showLoader();
+        });
+    },
 
     /**
      * タイプの値によってフィールドの表示設定を行う
      */
-    function loadSetting(value, changed) {
-        let $validEmail, $validNumber, $validEmailConfirm, $validDatetime, $validMaxFileSize, $validFileExt, $validZenkakuKatakana, $validZenkakuHiragana, $validRegex;
-        if(changed) {
-            $validEmail = $("#valid-ex-valid_email").prop('checked', false).parent().hide();
-            $validNumber = $("#valid-ex-valid_number").prop('checked', false).parent().hide();
-            $validEmailConfirm = $("#valid-ex-valid_email_confirm").prop('checked', false).parent().hide();
-            $validDatetime = $("#valid-ex-valid_datetime").prop('checked', false).parent().hide();
-            $validMaxFileSize = $("#valid-ex-valid_max_file_size").prop('checked', false).parent().hide();
-            $validFileExt = $("#valid-ex-valid_file_ext").prop('checked', false).parent().hide();
-            $validZenkakuKatakana = $("#valid-ex-valid_zenkaku_katakana").prop('checked', false).parent().hide();
-            $validZenkakuHiragana = $("#valid-ex-valid_zenkaku_hiragana").prop('checked', false).parent().hide();
-            $validRegex = $("#valid-ex-valid_regex").prop('checked', false).parent().hide();
-            $("#valid-ex-valid_group_complate").prop('checked', false).parent().show();
-        } else {
-            $validEmail = $("#valid-ex-valid_email").parent().hide();
-            $validNumber = $("#valid-ex-valid_number").parent().hide();
-            $validEmailConfirm = $("#valid-ex-valid_email_confirm").parent().hide();
-            $validDatetime = $("#valid-ex-valid_datetime").parent().hide();
-            $validMaxFileSize = $("#valid-ex-valid_max_file_size").parent().hide();
-            $validFileExt = $("#valid-ex-valid_file_ext").parent().hide();
-            $validZenkakuKatakana = $("#valid-ex-valid_zenkaku_katakana").parent().hide();
-            $validZenkakuHiragana = $("#valid-ex-valid_zenkaku_hiragana").parent().hide();
-            $validRegex = $("#valid-ex-valid_regex").parent().hide();
-            $("#valid-ex-valid_group_complate").parent().show();
-        }
-
-        switch (value) {
+    loadSetting(type, changed) {
+        this.initControls(changed);
+        switch (type) {
             case 'text':
+            case 'number':
             case 'password':
-                $validEmail.show();
-                $validNumber.show();
-                $validDatetime.show();
-                $validZenkakuKatakana.show();
-                $validZenkakuHiragana.show();
-                $validRegex.show();
-                $("#RowSize").show();
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").show();
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").show();
+                this.initViewForText();
                 break;
             case 'email':
-                $validEmail.show();
-                $validNumber.show();
-                $validEmailConfirm.show();
-                $validRegex.show();
-                $("#RowSize").show();
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").show();
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").show();
+                this.initViewForEmail();
                 break;
             case 'tel':
-                $validEmail.hide();
-                $validNumber.show();
-                $("#RowSize").show();
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").show();
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").show();
+                this.initViewForTel();
                 break;
             case 'textarea':
-                $validEmail.show();
-                $validNumber.show();
-                $validDatetime.show();
-                $validZenkakuKatakana.show();
-                $validZenkakuHiragana.show();
-                $validRegex.show();
-                $("#RowSize").show();
-                $("#RowRows").show();
-                $("#RowMaxlength").show();
-                $("#max-length").val('');
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").show();
-                break;
-            case 'radio':
-            case 'multi_check':
-                $("#RowSize").hide();
-                $("#size").val('');
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").hide();
-                $("#max-length").val('');
-                $("#RowSource").show();
-                $("#RowAutoConvert").hide();
-                $("#auto-convert").val('');
+                this.initViewForTextarea();
                 break;
             case 'select':
-                $("#RowSize").hide();
-                $("#size").val('');
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").hide();
-                $("#max-length").val('');
-                $("#RowSource").show();
-                $("#RowAutoConvert").hide();
-                $("#auto-convert").val('');
+            case 'radio':
+            case 'multi_check':
+                this.initViewForSelect();
                 break;
             case 'date_time_wareki':
             case 'date_time_calender':
-                $validDatetime.show();
-                $("#RowSize").hide();
-                $("#size").val('');
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").hide();
-                $("#max-length").val('');
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").hide();
-                $("#auto-convert").val('');
+                this.initViewForDatetime();
                 break;
             case 'file':
-                $validMaxFileSize.show();
-                $validFileExt.show();
-                $("#RowSize").hide();
-                $("#size").val('');
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").hide();
-                $("#max-length").val('');
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").hide();
-                $("#auto-convert").val('');
+                this.initViewForFile();
                 break;
             case 'pref':
-                $("#RowSize").hide();
-                $("#size").val('');
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").hide();
-                $("#max-length").val('');
-                $("#RowSource").hide();
-                $("#source").val('');
-                $("#RowAutoConvert").hide();
-                $("#auto-convert").val('');
+                this.initViewForPref();
                 break;
             case 'autozip':
-                $validRegex.show();
-                $("#RowSize").show();
-                $("#RowRows").hide();
-                $("#text-rows").val('');
-                $("#RowMaxlength").show();
-                $("#RowSource").show();
-                $("#RowAutoConvert").show();
-                $("#auto-convert").val('CONVERT_HANKAKU');
+                this.initViewForAutozip();
                 break;
             case 'hidden':
-                $validEmail.show();
-                $validNumber.show();
-                $validRegex.show();
+                this.initViewForHidden();
                 break;
         }
+    },
+
+    /**
+     * テキストフィールド用の表示設定
+     */
+    initViewForText() {
+        this.$spanValidEmail.show();
+        this.$spanValidNumber.show();
+        this.$spanValidDatetime.show();
+        this.$spanValidZenkakuKatakana.show();
+        this.$spanValidZenkakuHiragana.show();
+        this.$spanValidRegex.show();
+        this.$rowSize.show();
+        this.$rowMaxlength.show();
+        this.$rowAutoConvert.show();
+        this.$textRows.val('');
+        this.$source.val('');
+    },
+
+    /**
+     * Eメールフィールド用の表示設定
+     */
+    initViewForEmail() {
+        this.$spanValidEmail.show();
+        this.$spanValidNumber.show();
+        this.$spanValidEmailConfirm.show();
+        this.$spanValidRegex.show();
+        this.$rowSize.show();
+        this.$rowMaxlength.show();
+        this.$rowAutoConvert.show();
+        this.$textRows.val('');
+        this.$source.val('');
+    },
+
+    /**
+     * 電話番号フィールド用の表示設定
+     */
+    initViewForTel() {
+        this.$spanValidNumber.show();
+        this.$rowSize.show();
+        this.$rowMaxlength.show();
+        this.$rowAutoConvert.show();
+        this.$textRows.val('');
+        this.$source.val('');
+    },
+
+    /**
+     * テキストエリアフィールド用の表示設定
+     */
+    initViewForTextarea() {
+        this.$spanValidEmail.show();
+        this.$spanValidNumber.show();
+        this.$spanValidDatetime.show();
+        this.$spanValidZenkakuKatakana.show();
+        this.$spanValidZenkakuHiragana.show();
+        this.$spanValidRegex.show();
+        this.$rowSize.show();
+        this.$rowRows.show();
+        this.$rowMaxlength.show();
+        this.$rowAutoConvert.show();
+        this.$maxlength.val('');
+        this.$source.val('');
+    },
+
+    /**
+     * セレクトボックスフィールド用の表示設定
+     */
+    initViewForSelect() {
+        this.$rowSource.show();
+        this.$size.val('');
+        this.$textRows.val('');
+        this.$maxlength.val('');
+        this.$autoConvert.val('');
+    },
+
+    /**
+     * 日時フィールド用の表示設定
+     */
+    initViewForDatetime() {
+        this.$spanValidDatetime.show();
+        this.$size.val('');
+        this.$textRows.val('');
+        this.$maxlength.val('');
+        this.$source.val('');
+        this.$autoConvert.val('');
+    },
+
+    /**
+     * ファイルフィールド用の表示設定
+     */
+    initViewForFile() {
+        this.$spanValidMaxFileSize.show();
+        this.$spanValidFileExt.show();
+        this.$size.val('');
+        this.$textRows.val('');
+        this.$maxlength.val('');
+        this.$source.val('');
+        this.$autoConvert.val('');
+    },
+
+    /**
+     * 都道府県フィールド用の表示設定
+     */
+    initViewForPref() {
+        this.$size.val('');
+        this.$textRows.val('');
+        this.$maxlength.val('');
+        this.$source.val('');
+        this.$autoConvert.val('');
+    },
+
+    /**
+     * 自動変換フィールド用の表示設定
+     */
+    initViewForAutozip() {
+        this.$spanValidRegex.show();
+        this.$rowSize.show();
+        this.$rowMaxlength.show();
+        this.$rowSource.show();
+        this.$rowAutoConvert.show();
+        this.$textRows.val('');
+        this.$autoConvert.val('CONVERT_HANKAKU');
+    },
+
+    /**
+     * 隠しフィールド用の表示設定
+     */
+    initViewForHidden() {
+        this.$spanValidEmail.show();
+        this.$spanValidNumber.show();
+        this.$spanValidRegex.show();
     }
-});
+
+}
+
+mailFieldsForm.mounted();
