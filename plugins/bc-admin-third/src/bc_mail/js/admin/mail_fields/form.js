@@ -73,8 +73,6 @@ $(function () {
                 $("#RowSource").hide();
                 $("#source").val('');
                 $("#RowAutoConvert").show();
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'email':
                 $validEmail.show();
@@ -88,8 +86,6 @@ $(function () {
                 $("#RowSource").hide();
                 $("#source").val('');
                 $("#RowAutoConvert").show();
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'tel':
                 $validEmail.hide();
@@ -101,8 +97,6 @@ $(function () {
                 $("#RowSource").hide();
                 $("#source").val('');
                 $("#RowAutoConvert").show();
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'textarea':
                 $validEmail.show();
@@ -118,8 +112,6 @@ $(function () {
                 $("#RowSource").hide();
                 $("#source").val('');
                 $("#RowAutoConvert").show();
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'radio':
             case 'multi_check':
@@ -132,7 +124,6 @@ $(function () {
                 $("#RowSource").show();
                 $("#RowAutoConvert").hide();
                 $("#auto-convert").val('');
-                $("#RowSeparator").show();
                 break;
             case 'select':
                 $("#RowSize").hide();
@@ -144,8 +135,6 @@ $(function () {
                 $("#RowSource").show();
                 $("#RowAutoConvert").hide();
                 $("#auto-convert").val('');
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'date_time_wareki':
             case 'date_time_calender':
@@ -160,8 +149,6 @@ $(function () {
                 $("#source").val('');
                 $("#RowAutoConvert").hide();
                 $("#auto-convert").val('');
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'file':
                 $validMaxFileSize.show();
@@ -176,8 +163,6 @@ $(function () {
                 $("#source").val('');
                 $("#RowAutoConvert").hide();
                 $("#auto-convert").val('');
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'pref':
                 $("#RowSize").hide();
@@ -190,8 +175,6 @@ $(function () {
                 $("#source").val('');
                 $("#RowAutoConvert").hide();
                 $("#auto-convert").val('');
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'autozip':
                 $validRegex.show();
@@ -202,8 +185,6 @@ $(function () {
                 $("#RowSource").show();
                 $("#RowAutoConvert").show();
                 $("#auto-convert").val('CONVERT_HANKAKU');
-                $("#RowSeparator").hide();
-                $("#delimiter").val('');
                 break;
             case 'hidden':
                 $validEmail.show();
