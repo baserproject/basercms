@@ -389,7 +389,10 @@ class MailMessagesService implements MailMessagesServiceInterface
                 // 対象フィールドがあれば、バリデートグループごとに配列に格納する
                 if (is_null($mailField->default_value) || $mailField->default_value === "") continue;
                 if ($mailField->type === 'multi_check') {
-                    $messageArray[$mailField['field_name']][0] = $mailField->default_value;
+                    $messageArray[$mailField['field_name']] = array_map(function($value) {
+                        // \r が含まれている可能性があるため除外する
+                        return trim($value);
+                    }, explode("\n", $mailField->default_value));
                 } else {
                     $messageArray[$mailField['field_name']] = $mailField->default_value;
                 }
@@ -401,7 +404,9 @@ class MailMessagesService implements MailMessagesServiceInterface
                 $messageArray[$key] = h(BcUtil::base64UrlSafeDecode($value));
             }
         }
-        return $this->MailMessages->newEntity($messageArray, ['validate' => false]);
+
+        // 配列が除外されてしまうため newEntity() は利用しない
+        return new MailMessage($messageArray, ['source' => 'BcMail.MailMessages']);
     }
 
     /**
