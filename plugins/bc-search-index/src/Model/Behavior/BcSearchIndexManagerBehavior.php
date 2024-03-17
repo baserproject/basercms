@@ -12,9 +12,13 @@
 namespace BcSearchIndex\Model\Behavior;
 
 use ArrayObject;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Table\SiteConfigsTable;
+use BcSearchIndex\Model\Table\SearchIndexesTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Behavior;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Datasource\ConnectionManager;
@@ -32,6 +36,30 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcSearchIndexManagerBehavior extends Behavior
 {
+
+    /**
+     * Table
+     * @var Table
+     */
+    public Table $table;
+
+    /**
+     * ContentsTable
+     * @var ContentsTable|Table
+     */
+    public ContentsTable|Table $Contents;
+
+    /**
+     * SiteConfigsTable
+     * @var SiteConfigsTable|Table
+     */
+    public SiteConfigsTable|Table $SiteConfigs;
+
+    /**
+     * SearchIndexesTable
+     * @var SearchIndexesTable|Table
+     */
+    public SearchIndexesTable|Table $SearchIndexes;
 
     /**
      * 無視状態かどうか

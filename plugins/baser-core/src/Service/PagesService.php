@@ -12,8 +12,11 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Table\UsersTable;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Model\Entity\Page;
@@ -42,7 +45,19 @@ class PagesService implements PagesServiceInterface
      * Pages Table
      * @var PagesTable
      */
-    public $Pages;
+    public PagesTable|Table $Pages;
+
+    /**
+     * Contents Table
+     * @var ContentsTable|Table
+     */
+    public ContentsTable|Table $Contents;
+
+    /**
+     * Users Table
+     * @var UsersTable|Table
+     */
+    public UsersTable|Table $Users;
 
     /**
      * Pageservice constructor.

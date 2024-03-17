@@ -172,7 +172,9 @@ class AppController extends BaseController
                 }
                 // リファラが存在する場合はリファラにリダイレクトする
                 // $this->referer() で判定した場合、リファラがなくてもトップのURLが返却されるため ServerRequest で判定
-                if ($this->getRequest()->getEnv('HTTP_REFERER')) {
+                if ($this->getRequest()->getEnv('HTTP_REFERER') &&
+                    $this->getRequest()->getAttribute('here') !== $this->referer()
+                ) {
                     $url = $this->referer();
                 } else {
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
