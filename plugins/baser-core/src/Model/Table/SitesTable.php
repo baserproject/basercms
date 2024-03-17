@@ -449,12 +449,12 @@ class SitesTable extends AppTable
      * URLよりサイトを取得する
      *
      * @param string $url
-     * @return EntityInterface
+     * @return Site|EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function findByUrl($url)
+    public function findByUrl(string $url): Site|EntityInterface
     {
         if (!$url) {
             $url = '/';
