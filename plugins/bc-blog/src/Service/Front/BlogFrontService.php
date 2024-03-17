@@ -49,6 +49,24 @@ class BlogFrontService implements BlogFrontServiceInterface
     use BcContainerTrait;
 
     /**
+     * BlogContentsService
+     * @var BlogContentsService|BlogContentsServiceInterface
+     */
+    public BlogContentsService|BlogContentsServiceInterface $BlogContentsService;
+
+    /**
+     * BlogPostsService
+     * @var BlogPostsService|BlogPostsServiceInterface
+     */
+    public BlogPostsService|BlogPostsServiceInterface $BlogPostsService;
+
+    /**
+     * BlogCategoriesService
+     * @var BlogCategoriesService|BlogCategoriesServiceInterface
+     */
+    public BlogCategoriesService|BlogCategoriesServiceInterface $BlogCategoriesService;
+
+    /**
      * Constructor
      *
      * サービスクラスを初期化する

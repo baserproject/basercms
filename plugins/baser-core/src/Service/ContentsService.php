@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Cake\Core\Plugin;
 use Cake\Datasource\QueryInterface;
+use Cake\ORM\Table;
 use Exception;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
@@ -56,14 +57,14 @@ class ContentsService implements ContentsServiceInterface
      *
      * @var ContentsTable
      */
-    public $Contents;
+    public ContentsTable|Table $Contents;
 
     /**
      * Sites
      *
      * @var SitesTable
      */
-    public $Sites;
+    public SitesTable|Table $Sites;
 
     /**
      * Construct

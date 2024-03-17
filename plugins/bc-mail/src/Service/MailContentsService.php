@@ -20,6 +20,7 @@ use BaserCore\Utility\BcUtil;
 use BcMail\Model\Table\MailContentsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -33,6 +34,12 @@ class MailContentsService implements MailContentsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * MailContentsTable
+     * @var MailContentsTable|Table
+     */
+    public MailContentsTable|Table $MailContents;
 
     /**
      * Construct

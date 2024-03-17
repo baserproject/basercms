@@ -40,6 +40,18 @@ class MailMessagesService implements MailMessagesServiceInterface
     use BcContainerTrait;
 
     /**
+     * BcDatabaseService
+     * @var BcDatabaseServiceInterface|BcDatabaseService
+     */
+    public BcDatabaseServiceInterface|BcDatabaseService $BcDatabaseService;
+
+    /**
+     * BcDatabaseService
+     * @var MailMessagesTable|\Cake\ORM\Table
+     */
+    public MailMessagesTable|\Cake\ORM\Table $MailMessages;
+
+    /**
      * Constructor
      * @checked
      * @noTodo

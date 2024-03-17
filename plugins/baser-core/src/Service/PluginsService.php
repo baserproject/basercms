@@ -23,6 +23,7 @@ use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Filesystem\File;
 use Cake\Http\Client;
 use Cake\Http\Client\Exception\NetworkException;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -54,9 +55,9 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * Plugins Table
-     * @var \Cake\ORM\Table
+     * @var PluginsTable|\Cake\ORM\Table
      */
-    public $Plugins;
+    public PluginsTable|Table $Plugins;
 
     /**
      * PluginsService constructor.

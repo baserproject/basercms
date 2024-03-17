@@ -60,6 +60,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     use ConfigurationTrait;
 
     /**
+     * Cake Adapter
+     * @var CakeAdapter
+     */
+    public CakeAdapter $_adapter;
+
+    /**
      * PHP←→DBエンコーディングマップ
      *
      * @var array

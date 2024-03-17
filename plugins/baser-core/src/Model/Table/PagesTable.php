@@ -15,9 +15,9 @@ use ArrayObject;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
@@ -36,6 +36,18 @@ class PagesTable extends AppTable
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * Contents Table
+     * @var ContentsTable|Table
+     */
+    public ContentsTable|Table $Contents;
+
+    /**
+     * Sites Table
+     * @var SitesTable|Table
+     */
+    public SitesTable|Table $Sites;
 
     /**
      * 検索テーブルへの保存可否
