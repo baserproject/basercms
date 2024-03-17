@@ -612,6 +612,9 @@ class BcPlugin extends BasePlugin
             'connection' => 'default'
         ], $options);
         $table = TableRegistry::getTableLocator()->get($table, ['connectionName' => $options['connection']]);
+        $beforeSaveEvents = BcUtil::offEvent($table->getEventManager(), 'Model.beforeSave');
+        $afterSaveEvents = BcUtil::offEvent($table->getEventManager(), 'Model.afterSave');
+
         $entities = $table->find()->where($conditions)->all();
         if($entities->count()) {
             foreach($entities as $entity) {
@@ -623,6 +626,8 @@ class BcPlugin extends BasePlugin
                 $table->save($entity);
             }
         }
+        BcUtil::onEvent($table->getEventManager(), 'Model.beforeSave', $beforeSaveEvents);
+        BcUtil::onEvent($table->getEventManager(), 'Model.afterSave', $afterSaveEvents);
     }
 
 }

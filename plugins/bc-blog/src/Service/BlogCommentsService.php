@@ -24,6 +24,7 @@ use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Table\BlogCommentsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
@@ -40,6 +41,12 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      */
     use MailerAwareTrait;
     use BcContainerTrait;
+
+    /**
+     * BlogComments Table
+     * @var BlogCommentsTable|Table
+     */
+    public BlogCommentsTable|Table $BlogComments;
 
     /**
      * ブログコメントを初期化する

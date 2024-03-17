@@ -124,17 +124,17 @@ class MailFieldsTable extends MailAppTable
         $validator
             ->scalar('size')
             ->allowEmptyString('size')
-            ->naturalNumber('size', __d('baser_core', '表示サイズは半角数字のみで入力してください。'))
+            ->naturalNumber('size', __d('baser_core', '表示サイズは1以上の半角数字のみで入力してください。'))
             ->maxLength('size', 9, __d('baser_core', '表示サイズは9文字以内で入力してください。'));
         $validator
             ->scalar('text_rows')
             ->allowEmptyString('text_rows')
-            ->naturalNumber('text_rows', __d('baser_core', '行数は半角数字のみで入力してください。'))
+            ->naturalNumber('text_rows', __d('baser_core', '行数は1以上の半角数字のみで入力してください。'))
             ->maxLength('text_rows', 9, __d('baser_core', '行数は9文字以内で入力してください。'));
         $validator
             ->scalar('maxlength')
             ->allowEmptyString('maxlength')
-            ->naturalNumber('maxlength', __d('baser_core', '最大値は半角数字のみで入力してください。'))
+            ->naturalNumber('maxlength', __d('baser_core', '最大値は1以上の半角数字のみで入力してください。'))
             ->maxLength('maxlength', 9, __d('baser_core', '最大値は9文字以内で入力してください。'));
         return $validator;
     }

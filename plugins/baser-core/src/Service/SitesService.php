@@ -18,6 +18,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
@@ -35,7 +36,7 @@ class SitesService implements SitesServiceInterface
      * Sites Table
      * @var SitesTable
      */
-    public $Sites;
+    public SitesTable|Table $Sites;
 
     /**
      * SitesService constructor.

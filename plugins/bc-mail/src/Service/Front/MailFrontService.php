@@ -50,6 +50,11 @@ class MailFrontService implements MailFrontServiceInterface
     use BcContainerTrait;
     use MailerAwareTrait;
 
+    /**
+     * MailContentsService
+     * @var MailContentsServiceInterface|MailContentsService
+     */
+    public MailContentsServiceInterface|MailContentsService $MailContentsService;
 
     /**
      * Constructor

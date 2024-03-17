@@ -21,6 +21,7 @@ use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -38,6 +39,12 @@ class CustomContentsService implements CustomContentsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * CustomContents Table
+     * @var CustomContentsTable|Table
+     */
+    public CustomContentsTable|Table $CustomContents;
 
     /**
      * Constructor

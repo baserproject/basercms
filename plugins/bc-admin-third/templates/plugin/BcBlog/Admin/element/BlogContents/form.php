@@ -166,6 +166,7 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->error('tag_use') ?>
         </td>
       </tr>
+<?php if(\Cake\Core\Plugin::isLoaded('BcWidgetArea')): ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('widget_area', __d('baser_core', 'ウィジェットエリア')) ?>&nbsp;
@@ -190,6 +191,7 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>
       </tr>
+<?php endif ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('template', __d('baser_core', 'コンテンツテンプレート名')) ?>&nbsp;

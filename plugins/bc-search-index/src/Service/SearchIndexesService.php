@@ -14,6 +14,7 @@ namespace BcSearchIndex\Service;
 use BaserCore\Error\BcException;
 use Cake\Core\Plugin;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -39,7 +40,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * SearchIndexes Table
      * @var SearchIndexesTable
      */
-    public $SearchIndexes;
+    public SearchIndexesTable|Table $SearchIndexes;
 
     /**
      * SearchIndexesService constructor.

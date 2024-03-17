@@ -60,6 +60,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     use ConfigurationTrait;
 
     /**
+     * Cake Adapter
+     * @var CakeAdapter
+     */
+    public CakeAdapter $_adapter;
+
+    /**
      * PHP←→DBエンコーディングマップ
      *
      * @var array
@@ -1280,6 +1286,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         switch($datasource) {
             case 'mysql':
+            case 'sqlite':
                 $sources = $db->getSchemaCollection()->listTables();
                 foreach($sources as $source) {
                     if (preg_match('/_phinxlog$/', $source)
@@ -1322,12 +1329,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                         } catch (BcException $e) {
                         }
                     }
-                }
-                break;
-
-            case 'sqlite':
-                if(file_exists($dbConfig['database'])) {
-                    unlink($dbConfig['database']);
                 }
                 break;
         }

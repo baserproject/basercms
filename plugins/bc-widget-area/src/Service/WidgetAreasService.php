@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BcWidgetArea\Model\Entity\WidgetArea;
 use BcWidgetArea\Model\Table\WidgetAreasTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Throwable;
 
@@ -28,6 +29,12 @@ use Throwable;
  */
 class WidgetAreasService implements WidgetAreasServiceInterface
 {
+
+    /**
+     * WidgetAreas Table
+     * @var WidgetAreasTable|Table
+     */
+    public WidgetAreasTable|Table $WidgetAreas;
 
     /**
      * Constructor

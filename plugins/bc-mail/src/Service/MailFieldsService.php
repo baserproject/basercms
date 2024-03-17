@@ -20,6 +20,7 @@ use BcMail\Model\Entity\MailField;
 use BcMail\Model\Table\MailFieldsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Throwable;
 
@@ -35,6 +36,18 @@ class MailFieldsService implements MailFieldsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * MailFieldsTable
+     * @var MailFieldsTable|Table
+     */
+    public MailFieldsTable|Table $MailFields;
+
+    /**
+     * MailMessagesService
+     * @var MailMessagesServiceInterface|MailMessagesService
+     */
+    public MailMessagesServiceInterface|MailMessagesService $MailMessagesService;
 
     /**
      * Constructor

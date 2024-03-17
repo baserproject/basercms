@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BcMail\Model\Entity\MailConfig;
 use BcMail\Model\Table\MailConfigsTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -29,7 +30,7 @@ class MailConfigsService implements MailConfigsServiceInterface
      * MailConfigs Table
      * @var MailConfigsTable
      */
-    public $MailConfigs;
+    public MailConfigsTable|Table $MailConfigs;
 
     /**
      * キャッシュ用 Entity
