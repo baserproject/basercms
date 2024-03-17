@@ -230,10 +230,10 @@ class MailMessagesTable extends MailAppTable
                     }
                 } else {
                     $validator->requirePresence($mailField->field_name)
-                        ->notEmpty($mailField->field_name, __d('baser_core', '必須項目です。'));
+                        ->notEmptyString($mailField->field_name, __d('baser_core', '必須項目です。'));
                 }
             } else {
-                $validator->allowEmpty($mailField->field_name);
+                $validator->allowEmptyString($mailField->field_name);
             }
 
             // ファイル拡張子チェックデフォルト設定
@@ -530,8 +530,8 @@ class MailMessagesTable extends MailAppTable
                 }
             }
             if (!is_array($message->{$fieldName})) {
-                $mailContent->subject_user = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_user);
-                $mailContent->subject_admin = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_admin);
+                $mailContent->subject_user = str_replace('{$' . $fieldName . '}', $message->{$fieldName}?? '', $mailContent->subject_user);
+                $mailContent->subject_admin = str_replace('{$' . $fieldName . '}', $message->{$fieldName}?? '', $mailContent->subject_admin);
             }
             // パスワードは入力値をマスクした値を表示
             if ($value->type === 'password' && $message->{$fieldName} && !empty($options['maskedPasswords'][$fieldName])) {
