@@ -17,8 +17,6 @@ const mapId = $script.attr('data-mapId');
 const title = $script.attr('data-title');
 const markerText = $script.attr('data-markerText');
 
-console.log(zoom);
-
 var geo = new google.maps.Geocoder();
 var lat = latitude;
 var lng = longitude;

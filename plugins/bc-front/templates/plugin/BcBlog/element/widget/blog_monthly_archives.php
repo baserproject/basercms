@@ -29,7 +29,7 @@ if (isset($blogContent)) {
 $data = $this->Blog->getViewVarsBlogMonthlyArchivesWidget($id, $limit, $view_count);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
+$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id, false) . 'archives/date/';
 ?>
 
 
@@ -52,7 +52,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 				} else {
 					$title = $postedDate['year'] . '/' . $postedDate['month'];
 				}
-				$url = $this->BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month'];
+				$url = $this->BcBaser->getBlogContentsUrl($blogContent->id, false) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month'];
 				?>
 				<li class="<?php echo implode(' ', $class) ?>">
 					<?php $this->BcBaser->link($title, $url, ['class' => 'bs-widget-list__item-title']) ?>

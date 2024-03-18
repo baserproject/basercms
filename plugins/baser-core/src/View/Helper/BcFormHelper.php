@@ -719,8 +719,8 @@ SCRIPT_END;
 
         $className = $options['editor'];
         [, $editor] = pluginSplit($options['editor']);
-        $this->_View->loadHelper($editor, ['className' => $className]);
-        if (!empty($this->getView()->{$editor})) {
+        $this->getView()->loadHelper($editor, ['className' => $className]);
+        if (isset($this->getView()->helpers()->{$editor})) {
             return $this->getView()->{$editor}->editor($fieldName, $options);
         } elseif ($editor === 'none') {
             $_options = [];

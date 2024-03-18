@@ -31,6 +31,7 @@ use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -52,6 +53,24 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     use BcContainerTrait;
     use CustomContentArrayTrait;
+
+    /**
+     * CustomEntries Table
+     * @var CustomEntriesTable|Table
+     */
+    public CustomEntriesTable|Table $CustomEntries;
+
+    /**
+     * CustomTables Table
+     * @var CustomTablesTable|Table
+     */
+    public CustomTablesTable|Table $CustomTables;
+
+    /**
+     * BcDatabaseService
+     * @var BcDatabaseServiceInterface|BcDatabaseService
+     */
+    public BcDatabaseServiceInterface|BcDatabaseService $BcDatabaseService;
 
     /**
      * Constructor

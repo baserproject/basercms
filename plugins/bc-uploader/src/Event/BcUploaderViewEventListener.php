@@ -39,6 +39,12 @@ class BcUploaderViewEventListener extends BcViewEventListener
     ];
 
     /**
+     * BcHtmlHelper
+     * @var BcHtmlHelper
+     */
+    public BcHtmlHelper $BcHtml;
+
+    /**
      * After Layout
      * @param Event $event
      * @checked

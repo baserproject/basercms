@@ -127,7 +127,7 @@ class PermissionsTable extends AppTable
     public function validationPlain($validator)
     {
         $collection = ConnectionManager::get('default')->getSchemaCollection();
-        $columns = $collection->describe('permissions')->columns();
+        $columns = $collection->describe($this->getTable())->columns();
         $required = ['user_group_id'];
 
         $validator
