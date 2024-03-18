@@ -640,4 +640,13 @@ class BcPlugin extends BasePlugin
         BcUtil::onEvent($table->getEventManager(), 'Model.afterSave', $afterSaveEvents);
     }
 
+    /**
+     * カレントサイトを初期化する
+     * @return void
+     */
+    public function clearCurrentSite(): void
+    {
+        self::$currentSite = null;
+    }
+
 }
