@@ -188,6 +188,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return array|bool|float|int|mixed|string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldTitle(mixed $entry, string $fieldName)
     {
