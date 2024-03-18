@@ -454,7 +454,7 @@ class SitesTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function findByUrl(string $url): Site|EntityInterface
+    public function findByUrl(string $url): ?EntityInterface
     {
         if (!$url) {
             $url = '/';
