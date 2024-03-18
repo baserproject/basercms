@@ -129,7 +129,7 @@ class CustomFieldsScenario implements FixtureScenarioInterface
             'search_target_front' => 1,
             'before_linefeed' => 0,
             'after_linefeed' => 0,
-            'display_front' => 1,
+            'display_front' => 0,
             'search_target_admin' => 1,
             'description' => NULL,
             'attention' => NULL,

@@ -23,6 +23,7 @@ use Cake\Core\Exception\Exception;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
@@ -39,6 +40,18 @@ use Cake\Http\Response;
  */
 class UsersService implements UsersServiceInterface
 {
+
+    /**
+     * Users Table
+     * @var UsersTable|Table
+     */
+    public UsersTable|Table $Users;
+
+    /**
+     * LoginStores Table
+     * @var LoginStoresTable|Table
+     */
+    public LoginStoresTable|Table $LoginStores;
 
     /**
      * UsersService constructor.

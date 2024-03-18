@@ -530,14 +530,24 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        //title required
+        $errors = $validator->validate([
+            'title' => '',
+        ]);
+        $this->assertEquals('タイトルは必須項目です。', current($errors['title']));
+        //name number only
+        $errors = $validator->validate([
+            'title' => 'test',
+            'name' => 243435435,
+        ]);
+        $this->assertEquals('数値だけのスラッグを登録することはできません。', current($errors['name']));
         //正常系実行
-
-        //異常系実行
-
-
+        $errors = $validator->validate([
+            'title' => 'test',
+            'name' => 'test 2324',
+        ]);
+        $this->assertEmpty($errors);
     }
 
     /**

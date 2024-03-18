@@ -86,7 +86,7 @@ class BcViewEventDispatcher implements EventListenerInterface
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return $event->getData(1);
             }
-            $currentEvent = $event->getSubject()->dispatchLayerEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
+            $currentEvent = $event->getSubject()->dispatchLayerEvent('afterRenderFile', $event->getData());
             if ($currentEvent) {
                 return $currentEvent->getData(1);
             }

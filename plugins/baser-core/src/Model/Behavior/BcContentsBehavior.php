@@ -16,6 +16,7 @@ use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\Behavior;
+use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
@@ -34,6 +35,12 @@ class BcContentsBehavior extends Behavior
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * Table
+     * @var Table
+     */
+    public Table $table;
 
     /**
      * Contents
