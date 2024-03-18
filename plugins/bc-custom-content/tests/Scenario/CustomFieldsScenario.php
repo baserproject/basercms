@@ -56,6 +56,7 @@ class CustomFieldsScenario implements FixtureScenarioInterface
             'rght' => 20,
             'name' => 'feature',
             'title' => 'この仕事の特徴',
+            'display_front' => 0,
         ])->persist();
         return null;
     }
