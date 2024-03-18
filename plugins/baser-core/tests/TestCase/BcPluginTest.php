@@ -181,6 +181,7 @@ class BcPluginTest extends BcTestCase
         Router::reload();
         $routes = Router::createRouteBuilder('');
         $_SERVER['REQUEST_URI'] = '/s/';
+        $this->BcPlugin->clearCurrentSite();
         $this->BcPlugin->routes($routes);
         $result = Router::parseRequest($this->getRequest('/s/bc-blog/blog_contents/index'));
         $this->assertEquals('BlogContents', $result['controller']);
@@ -197,6 +198,7 @@ class BcPluginTest extends BcTestCase
         $this->assertEquals('BlogContents', $result['controller']);
         $this->assertEquals('json', $result['_ext']);
         unset($_SERVER['REQUEST_URI']);
+        $this->BcPlugin->clearCurrentSite();
     }
 
     /**
