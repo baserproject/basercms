@@ -268,6 +268,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getField(int $tableId, string $fieldName)
     {

@@ -220,7 +220,28 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getField()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        //$fieldNameが存在した場合、
+        $rs = $this->CustomContentHelper->getField(1, 'recruit_category');
+        $this->assertEquals('recruit_category', $rs->name);
+
+        //$fieldNameが存在しない場合、
+        $rs = $this->CustomContentHelper->getField(1, 'category');
+        $this->assertFalse($rs);
     }
 
     /**
