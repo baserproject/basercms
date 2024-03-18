@@ -47,6 +47,7 @@ class CustomField extends Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTypeTitle(): string
     {

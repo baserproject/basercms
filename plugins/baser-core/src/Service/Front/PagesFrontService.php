@@ -11,7 +11,7 @@
 
 namespace BaserCore\Service\Front;
 
-use BaserCore\Model\Validation\BcValidation;
+use BaserCore\Model\Entity\Page;
 use BaserCore\Service\PagesService;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;

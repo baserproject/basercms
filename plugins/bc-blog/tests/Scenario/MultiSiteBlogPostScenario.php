@@ -117,6 +117,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 6,
+            'blog_category_id' => 6,
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',

@@ -340,14 +340,24 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setLinks()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
         //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        CustomFieldFactory::make([
+            'id' => 1,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+        ])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+        $result = $this->CustomEntriesTable->links;
+        $this->assertEquals(1, $result[0]->id);
+        //不要なテーブルを削除
+        $this->CustomEntriesTable->links = null;
+        //check is not set links
+        $this->CustomEntriesTable->setLinks(2);
+        $result = $this->CustomEntriesTable->links;
+        $this->assertEmpty($result);
     }
 
     /**
@@ -520,14 +530,24 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_validationDefault()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        //title required
+        $errors = $validator->validate([
+            'title' => '',
+        ]);
+        $this->assertEquals('タイトルは必須項目です。', current($errors['title']));
+        //name number only
+        $errors = $validator->validate([
+            'title' => 'test',
+            'name' => 243435435,
+        ]);
+        $this->assertEquals('数値だけのスラッグを登録することはできません。', current($errors['name']));
         //正常系実行
-
-        //異常系実行
-
-
+        $errors = $validator->validate([
+            'title' => 'test',
+            'name' => 'test 2324',
+        ]);
+        $this->assertEmpty($errors);
     }
 
     /**
@@ -595,14 +615,10 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_isJson()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        //check is isJson
+        $this->assertTrue($this->CustomEntriesTable->isJson('{"name":"Nghiem"}'));
+        //check is not isJson
+        $this->assertFalse($this->CustomEntriesTable->isJson('{"name":"Nghiem"'));
     }
 
 

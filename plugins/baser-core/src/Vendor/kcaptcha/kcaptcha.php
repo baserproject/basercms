@@ -20,6 +20,8 @@
 class KCAPTCHA{
 	// generates keystring and image
 
+    public string $keystring;
+
 	//function KCAPTCHA(){ // old PHP declaration
 	function __construct(){ // new PHP declaration
 

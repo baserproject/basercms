@@ -14,6 +14,7 @@ namespace BcCustomContent\Service;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Table\CustomLinksTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -32,6 +33,12 @@ class CustomLinksService implements CustomLinksServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * CustomLinks Table
+     * @var CustomLinksTable|Table
+     */
+    public CustomLinksTable|Table $CustomLinks;
 
     /**
      * Constructor

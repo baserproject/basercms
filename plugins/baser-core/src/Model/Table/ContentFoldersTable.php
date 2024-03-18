@@ -152,6 +152,7 @@ class ContentFoldersTable extends AppTable
      * @return mixed page Or false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
