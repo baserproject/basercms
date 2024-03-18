@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Utility\BcContainerTrait;
@@ -33,6 +34,12 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * UserGroups Service
+     * @var UserGroupsServiceInterface|UserGroupsService
+     */
+    public UserGroupsServiceInterface|UserGroupsService $UserGroupsService;
 
     /**
      * Pageservice constructor.

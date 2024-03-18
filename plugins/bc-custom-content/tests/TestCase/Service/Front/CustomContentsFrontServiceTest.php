@@ -81,8 +81,8 @@ class CustomContentsFrontServiceTest extends BcTestCase
      */
     public function test__construct()
     {
-        $this->assertTrue(isset($this->CustomContentFrontService->entriesService));
-        $this->assertTrue(isset($this->CustomContentFrontService->contentsService));
+        $this->assertTrue(isset($this->CustomContentFrontService->EntriesService));
+        $this->assertTrue(isset($this->CustomContentFrontService->ContentsService));
     }
 
     /**

@@ -30,7 +30,7 @@ if (isset($blogContent)) {
 $data = $this->Blog->getViewVarsForBlogYearlyArchivesWidget($id, $limit, $view_count);
 $postedDates = $data['postedDates'];
 $blogcontent = $data['blogContent'];
-$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
+$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id, false) . 'archives/date/';
 ?>
 
 
@@ -55,7 +55,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 				}
 				?>
 				<li class="<?php echo implode(' ', $class) ?>">
-					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $postedDate['year']) ?>
+					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($id, false) . 'archives/date/' . $postedDate['year']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

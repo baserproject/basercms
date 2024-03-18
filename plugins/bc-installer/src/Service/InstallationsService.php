@@ -58,6 +58,12 @@ class InstallationsService implements InstallationsServiceInterface
     use MailerAwareTrait;
 
     /**
+     * BcDatabase Service
+     * @var BcDatabaseServiceInterface|BcDatabaseService
+     */
+    public BcDatabaseServiceInterface|BcDatabaseService $BcDatabase;
+
+    /**
      * Constructor
      *
      * @checked

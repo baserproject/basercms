@@ -246,6 +246,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return false|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLink(int $tableId, string $fieldName)
     {
@@ -351,6 +352,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDisplayField(CustomEntry $entry, string $fieldName)
     {

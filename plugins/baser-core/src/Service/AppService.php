@@ -68,7 +68,7 @@ class AppService
         if($site) {
             $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             try {
-                return $sitesTable->find()->where(['id' => $site->id])->first();
+                return $sitesTable->find()->where(['Sites.id' => $site->id])->first();
             } catch (MissingConnectionException) {
                 return null;
             }

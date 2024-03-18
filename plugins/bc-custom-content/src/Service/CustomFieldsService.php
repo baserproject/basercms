@@ -16,6 +16,7 @@ use BcCustomContent\Model\Table\CustomEntriesTable;
 use BcCustomContent\Model\Table\CustomFieldsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -34,6 +35,18 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * CustomEntries Table
+     * @var CustomEntriesTable|Table
+     */
+    public CustomFieldsTable|Table $CustomFields;
+
+    /**
+     * CustomEntries Table
+     * @var CustomEntriesTable|Table
+     */
+    public CustomEntriesTable|Table $CustomEntries;
 
     /**
      * Constructor

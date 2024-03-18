@@ -17,10 +17,11 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcUploader\Model\Table\UploaderFilesTable;
 use Cake\Datasource\EntityInterface;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Laminas\Diactoros\UploadedFile;
+use Cake\ORM\Table;
 
 /**
  * UploaderFilesService
@@ -32,6 +33,18 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * UploaderFiles Table
+     * @var UploaderFilesTable|Table
+     */
+    public UploaderFilesTable|Table $UploaderFiles;
+
+    /**
+     * UploaderConfigs Service
+     * @var UploaderConfigsServiceInterface|UploaderConfigsService
+     */
+    public UploaderConfigsServiceInterface|UploaderConfigsService $uploaderConfigsService;
 
     /**
      * constructor.

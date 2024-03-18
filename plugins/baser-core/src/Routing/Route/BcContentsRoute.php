@@ -12,6 +12,7 @@
 namespace BaserCore\Routing\Route;
 
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Table\SitesTable;
 use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -58,6 +59,7 @@ class BcContentsRoute extends Route
         }
 
         $sameUrl = false;
+        /** @var SitesTable $sites */
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->getSubByUrl($url, true);
         if ($site) {

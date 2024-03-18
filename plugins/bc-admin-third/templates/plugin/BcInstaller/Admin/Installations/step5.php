@@ -40,8 +40,8 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール完了�
             <?php echo __d('baser_core', 'baserCMS公式ガイドで学ぶ') ?></a></li>
         <li><a href="https://forum.basercms.net" title="baserCMSユーザーズフォーラム" target="_blank" class="outside-link">
             <?php echo __d('baser_core', 'フォーラムにインストールの不具合を報告する') ?></a></li>
-        <li><a href="https://twitter.com/#!/basercms" title="baserCMS公式Twitter" target="_blank" class="outside-link">
-            <?php echo __d('baser_core', '公式Twitterをフォローする') ?></a></li>
+        <li><a href="https://twitter.com/basercms" title="baserCMS公式X" target="_blank" class="outside-link">
+            <?php echo __d('baser_core', '公式Xをフォローする') ?></a></li>
         <li><a href="https://facebook.com/basercms" title="baserCMS公式Facebookページ" target="_blank" class="outside-link">
             <?php echo __d('baser_core', 'Facebookでいいね！する') ?></a></li>
       </ul>

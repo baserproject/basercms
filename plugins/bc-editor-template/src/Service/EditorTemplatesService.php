@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use BcEditorTemplate\Model\Table\EditorTemplatesTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -27,6 +28,12 @@ use Cake\ORM\TableRegistry;
  */
 class EditorTemplatesService implements EditorTemplatesServiceInterface
 {
+
+    /**
+     * EditorTemplates Table
+     * @var \Cake\ORM\Table|EditorTemplatesTable
+     */
+    public EditorTemplatesTable|Table $EditorTemplates;
 
     /**
      * Constructor
