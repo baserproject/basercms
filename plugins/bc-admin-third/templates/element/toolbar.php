@@ -96,11 +96,13 @@ $this->BcBaser->js([
         </div>
       <?php endif ?>
 			<?php
-			// EVENT leftOfToolbar
-			$event = $this->dispatchLayerEvent('leftOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
-			if ($event !== false) {
-				echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
-			}
+			if(method_exists($this, 'dispatchLayerEvent')) {
+        // EVENT leftOfToolbar
+        $event = $this->dispatchLayerEvent('leftOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        if ($event !== false) {
+          echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
+        }
+      }
 		 	?>
       <?php if ($this->BcToolbar->isAvailableMode()): ?>
         <div class="bca-toolbar__tools-mode">
