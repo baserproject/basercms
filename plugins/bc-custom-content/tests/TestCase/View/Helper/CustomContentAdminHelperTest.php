@@ -3,10 +3,8 @@
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
-use BcCustomContent\Model\Entity\CustomField;
-use BcCustomContent\Model\Entity\CustomLink;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
-use Cake\View\Helper;
 use Cake\View\View;
 
 class CustomContentAdminHelperTest extends BcTestCase
@@ -39,52 +37,47 @@ class CustomContentAdminHelperTest extends BcTestCase
     public function test_isDisplayEntryList()
     {
         //customField is null
-        $customLink = new CustomLink([
+        $customLink = CustomLinkFactory::make([
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1
-        ]);
+        ])->getEntity();
         $rs = $this->CustomContentAdminHelper->isDisplayEntryList($customLink);
         $this->assertFalse($rs);
         //customField is not null and empty children
-        $customField = new CustomField([
-            'name' => 'test custom field',
-            'status' => 1,
-            'custom_table_id' => 1,
-            'type' => 'group',
-        ]);
-        $customLink = new CustomLink([
+        $customLink = CustomLinkFactory::make([
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1,
             'display_admin_list' => 1,
-            'custom_field' => $customField
-        ]);
+            'custom_field' => [
+                'name' => 'test custom field',
+                'status' => 1,
+                'custom_table_id' => 1,
+                'type' => 'group',
+            ]
+        ])->getEntity();
         $rs = $this->CustomContentAdminHelper->isDisplayEntryList($customLink);
         $this->assertFalse($rs);
         //customField is not null and not empty children
-        $customField = new CustomField([
-            'name' => 'test custom field',
-            'status' => 1,
-            'custom_table_id' => 1,
-            'type' => 'group',
-        ]);
-        $customLink = new CustomLink([
+        $customLink = CustomLinkFactory::make([
             'name' => 'test custom link',
             'status' => 1,
             'custom_table_id' => 1,
             'display_admin_list' => 1,
-            'custom_field' => $customField,
+            'custom_field' => [
+                'name' => 'test custom field',
+                'status' => 1,
+                'custom_table_id' => 1,
+                'type' => 'group',
+            ],
             'children' => [
-                new CustomLink([
-                    'name' => 'test custom link',
-                    'status' => 1,
-                    'custom_table_id' => 1,
-                    'display_admin_list' => 1,
-                    'custom_field' => $customField
-                ])
+                'name' => 'test custom link',
+                'status' => 1,
+                'custom_table_id' => 1,
+                'display_admin_list' => 1,
             ]
-        ]);
+        ])->getEntity();
         $rs = $this->CustomContentAdminHelper->isDisplayEntryList($customLink);
         $this->assertTrue($rs);
     }
