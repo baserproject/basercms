@@ -242,6 +242,9 @@ class CustomContentHelperTest extends BcTestCase
         //$fieldNameが存在しない場合、
         $rs = $this->CustomContentHelper->getField(1, 'category');
         $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
