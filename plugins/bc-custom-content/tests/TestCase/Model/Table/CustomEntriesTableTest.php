@@ -17,11 +17,15 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Table\CustomEntriesTable;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -585,14 +589,40 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
 
-        //正常系実行
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
 
-        //異常系実行
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
 
+        //Queryを生成
+        $customLinksTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks');
+        $links = $customLinksTable->find()
+            ->contain(['CustomFields'])
+            ->where([
+                'CustomLinks.custom_table_id' => 1,
+                'CustomFields.status' => true
+            ]);
+        //対象メソッドをコール
+        $rs = $this->CustomEntriesTable->findAll($links);
+        //戻り値を確認
+        $this->assertEquals(2, $rs->count());
 
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
