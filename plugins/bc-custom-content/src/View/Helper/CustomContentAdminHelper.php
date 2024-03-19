@@ -47,6 +47,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDisplayEntryList(CustomLink $customLink)
     {
