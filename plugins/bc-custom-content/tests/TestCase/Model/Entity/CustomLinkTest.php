@@ -3,22 +3,24 @@
 namespace BcCustomContent\Test\TestCase\Model\Entity;
 
 use BaserCore\TestSuite\BcTestCase;
-use BcCustomContent\Model\Entity\CustomField;
-use BcCustomContent\Model\Entity\CustomLink;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class CustomLinkTest extends BcTestCase
 {
     use ScenarioAwareTrait;
 
+    protected $CustomLink;
 
     public function setUp(): void
     {
         parent::setUp();
+        $this->CustomLink = $this->getTableLocator()->get('BcCustomContent.CustomLinks');
     }
 
     public function tearDown(): void
     {
+        unset($this->CustomLink);
         parent::tearDown();
     }
 
@@ -27,27 +29,26 @@ class CustomLinkTest extends BcTestCase
      */
     public function test_isGroupSelectable()
     {
+        //check is not custom_field
+        $customLink = CustomLinkFactory::make([
+            'id' => 1,
+        ])->getEntity();
+        $this->assertTrue($customLink->isGroupSelectable());
         //check if custom_field is not group
-        $customLink = new CustomLink([
+        $customLink = CustomLinkFactory::make([
             'id' => 1,
-            'custom_table_id' => 1,
-            'custom_field_id' => 1,
-        ]);
-        $result = $this->execPrivateMethod($customLink, 'isGroupSelectable', []);
-        $this->assertTrue($result);
+            'custom_field' => [
+                'type' => 'text'
+            ]
+        ])->getEntity();
+        $this->assertTrue($customLink->isGroupSelectable());
         //check if custom_field is group
-        $customField = new CustomField([
+        $customLink = CustomLinkFactory::make([
             'id' => 1,
-            'name' => 'test',
-            'type' => 'group'
-        ]);
-        $customLink = new CustomLink([
-            'id' => 1,
-            'custom_table_id' => 1,
-            'custom_field_id' => 1,
-            'custom_field' => $customField
-        ]);
-        $result = $this->execPrivateMethod($customLink, 'isGroupSelectable', []);
-        $this->assertFalse($result);
+            'custom_field' => [
+                'type' => 'group'
+            ]
+        ])->getEntity();
+        $this->assertFalse($customLink->isGroupSelectable());
     }
 }
