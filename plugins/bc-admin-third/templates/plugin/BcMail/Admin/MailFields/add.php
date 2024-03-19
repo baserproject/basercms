@@ -18,7 +18,9 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
+$this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false, [
+  'defer' => true
+]);
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規メールフィールド登録', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_form');
 ?>

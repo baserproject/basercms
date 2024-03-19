@@ -12,9 +12,15 @@
 const permissionGroupsIndex = {
 
     /**
+     * 初期のユーザーグループID
+     */
+    initialUserGroupId: 0,
+
+    /**
      * 初期化
      */
     mounted() {
+        this.initialUserGroupId = $('#filter-user-group-id').val();
         this.registerEvents();
     },
 
@@ -33,10 +39,11 @@ const permissionGroupsIndex = {
         $.bcUtil.showLoader();
         let userGroupId = $('#filter-user-group-id').val();
         let listType = $('input[name="list_type"]:checked').val();
-        if(userGroupId === '0') {
-            listType = 'Front';
+        if (permissionGroupsIndex.initialUserGroupId === userGroupId) {
+            location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}?list_type=${listType}`;
+        } else {
+            location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}`;
         }
-        location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}?list_type=${listType}`;
     }
 
 }

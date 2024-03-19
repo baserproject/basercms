@@ -200,6 +200,7 @@ class CustomEntriesTable extends AppTable
      * @param int $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setLinks(int $tableId)
     {
@@ -518,6 +519,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -618,6 +620,7 @@ class CustomEntriesTable extends AppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     function isJson(string $string)
     {

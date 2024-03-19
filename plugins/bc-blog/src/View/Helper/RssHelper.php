@@ -292,6 +292,9 @@ class RssHelper extends Helper
      * @param string|array|null $content XML element content
      * @param bool $endTag Whether the end tag of the element should be printed
      * @return string XML
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function elem($name, $attrib = [], $content = null, $endTag = true)
     {

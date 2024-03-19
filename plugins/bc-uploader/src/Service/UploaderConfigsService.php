@@ -15,7 +15,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BcUploader\Model\Entity\UploaderConfig;
+use BcUploader\Model\Table\UploaderConfigsTable;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Table;
 
 /**
  * UploaderConfigsService
@@ -28,6 +30,12 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      * @var UploaderConfig
      */
     protected $entity;
+
+    /**
+     * UploaderConfigs Table
+     * @var UploaderConfigsTable|Table
+     */
+    public UploaderConfigsTable|Table $UploaderConfigs;
 
     /**
      * constructor.

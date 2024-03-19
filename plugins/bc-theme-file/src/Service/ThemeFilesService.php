@@ -36,6 +36,12 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
 {
 
     /**
+     * ThemeFile Form
+     * @var ThemeFileForm
+     */
+    public ThemeFileForm $ThemeFileForm;
+
+    /**
      * Constructor
      *
      * @checked

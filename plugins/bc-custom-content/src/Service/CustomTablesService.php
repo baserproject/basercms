@@ -16,6 +16,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Entity\CustomTable;
 use BcCustomContent\Model\Table\CustomTablesTable;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -33,6 +34,12 @@ class CustomTablesService implements CustomTablesServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * CustomTables Table
+     * @var CustomTablesTable|Table
+     */
+    public CustomTablesTable|Table $CustomTables;
 
     /**
      * Constructor
