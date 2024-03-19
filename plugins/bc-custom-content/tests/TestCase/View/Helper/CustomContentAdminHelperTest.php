@@ -81,4 +81,76 @@ class CustomContentAdminHelperTest extends BcTestCase
         $rs = $this->CustomContentAdminHelper->isDisplayEntryList($customLink);
         $this->assertTrue($rs);
     }
+
+    /**
+     * test getFieldName
+     */
+    public function test_getFieldName()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /**
+     * test label
+     */
+    public function test_label()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /**
+     * test required
+     */
+    public function test_required()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+    /**
+     * test attention
+     */
+    public function test_attention()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /*
+     * test preview
+     */
+    public function test_preview()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /*
+     * test getEntryIndexTitle
+     */
+    public function test_getEntryIndexTitle()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /*
+     * test description
+     */
+    public function test_description()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /*
+     * test beforeHead
+     */
+    public function test_beforeHead()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /*
+     * test afterHead
+     */
+    public function test_afterHead()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
 }
