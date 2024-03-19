@@ -219,6 +219,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function description(CustomLink $link)
     {
