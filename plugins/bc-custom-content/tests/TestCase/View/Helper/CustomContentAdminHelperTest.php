@@ -110,7 +110,18 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_attention()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case attention is empty
+        $customLink = CustomLinkFactory::make([
+            'attention' => '',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->attention($customLink);
+        $this->assertEquals('', $result);
+        //case attention is not empty
+        $customLink = CustomLinkFactory::make([
+            'attention' => 'test attention',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->attention($customLink);
+        $this->assertEquals('<div class="bca-attention"><small>test attention</small></div>', $result);
     }
 
     /*
