@@ -125,7 +125,10 @@ class BcAuthConfigureComponent extends Component
 		// 認証プレフィックスによるスコープ設定
 		$UserModel = ClassRegistry::init($config['userModel']);
 		if (isset($UserModel->belongsTo['UserGroup']) && $config['auth_prefix'] && !$config['userScope']) {
-			$BcAuth->authenticate['Form']['scope'] = ['UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%'];
+			$BcAuth->authenticate['Form']['scope'] = [
+				'UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%',
+				'User.status' => true
+			];
 		} elseif ($config['userScope']) {
 			$BcAuth->authenticate['Form']['scope'] = $config['userScope'];
 		}
