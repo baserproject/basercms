@@ -98,9 +98,6 @@ class CustomContentAdminHelperTest extends BcTestCase
         $options = [
             'fieldName' => 'fieldName option',
         ];
-        $customLink = CustomLinkFactory::make([
-            'name' => 'test',
-        ])->getEntity();
         $result = $this->CustomContentAdminHelper->getFieldName($customLink, $options);
         //check result return
         $this->assertEquals('fieldName option', $result);
