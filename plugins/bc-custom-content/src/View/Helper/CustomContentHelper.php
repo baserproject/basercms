@@ -84,6 +84,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function descriptionExists(CustomContent $content)
     {
