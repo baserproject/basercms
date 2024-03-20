@@ -111,7 +111,7 @@ class CustomLinksService implements CustomLinksServiceInterface
         }
 
         $query = $this->CustomLinks->find($options['finder'], ...$findOptions)
-            ->order('CustomLinks.lft ASC');
+            ->orderBy('CustomLinks.lft ASC');
 
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
 

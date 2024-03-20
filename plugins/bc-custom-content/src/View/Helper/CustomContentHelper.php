@@ -300,6 +300,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLinks(int $tableId, bool $isThreaded = true)
     {

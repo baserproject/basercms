@@ -12,15 +12,17 @@
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -265,7 +267,48 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getLinks()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        CustomLinkFactory::make([
+            'id' => 3,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'parent_id' => 2,
+            'lft' => 2,
+            'rght' => 3,
+        ])->persist();
+
+        //$isThreaded = false 場合、
+        $rs = $this->CustomContentHelper->getLinks(1, false);
+        //戻り値を確認
+        $this->assertCount(3, $rs);
+        //親子関係のデータが取得しないか確認すること
+        $customLinks = $rs->toArray();
+        $this->assertArrayNotHasKey('children', $customLinks[1]);
+
+        //$isThreaded = true 場合、
+        $rs = $this->CustomContentHelper->getLinks(1);
+        //戻り値を確認
+        $this->assertCount(2, $rs);
+        //親子関係のデータが取得できるか確認すること
+        $customLinks = $rs->toArray();
+        $this->assertCount(1, $customLinks[1]->children);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
