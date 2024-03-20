@@ -12,10 +12,12 @@
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
@@ -83,7 +85,34 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_descriptionExists()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //check description exists
+        $customContent = CustomContentFactory::make([
+            'id' => 1,
+            'description' => 'test',
+            'content' => ContentFactory::make([
+                'plugin' => 'BcCustomContent',
+                'type' => 'CustomContent',
+                'site_id' => 1,
+                'entity_id' => 4,
+            ])->getEntity()
+        ])->getEntity();
+        $rs = $this->CustomContentHelper->descriptionExists($customContent);
+        //check result value
+        $this->assertTrue($rs);
+        //check description not exists
+        $customContent = CustomContentFactory::make([
+            'id' => 1,
+            'description' => null,
+            'content' => ContentFactory::make([
+                'plugin' => 'BcCustomContent',
+                'type' => 'CustomContent',
+                'site_id' => 1,
+                'entity_id' => 4,
+            ])->getEntity()
+        ])->getEntity();
+        $rs = $this->CustomContentHelper->descriptionExists($customContent);
+        //check result value
+        $this->assertFalse($rs);
     }
 
     /**
