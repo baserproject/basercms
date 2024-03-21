@@ -614,7 +614,7 @@ class CustomEntriesTableTest extends BcTestCase
         //戻り値を確認
         $this->assertCount(2, $rs);
         //JSONデータが配列に交換できるか確認すること
-        $this->assertIsArray($rs['1']['options']);
+        $this->assertIsArray($rs['1']->options);
     }
 
     /**
