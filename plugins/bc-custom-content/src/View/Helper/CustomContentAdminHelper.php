@@ -390,6 +390,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFields()
     {

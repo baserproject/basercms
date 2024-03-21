@@ -178,4 +178,14 @@ class CustomContentAdminHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストはまだ実装されていません。');
     }
 
+    /*
+     * test getFields
+     */
+    public function test_getFields()
+    {
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(0, $rs->count());
+    }
+
 }
