@@ -176,7 +176,7 @@ class CustomContentAdminHelperTest extends BcTestCase
     public function test_afterHead()
     {
         $customLink = CustomLinkFactory::make([
-            'after_head' => '',
+            'after_head' => ''
         ])->getEntity();
         //case after_head is empty
         $result = $this->CustomContentAdminHelper->afterHead($customLink);
