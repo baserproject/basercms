@@ -22,6 +22,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -570,6 +571,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_autoConvert()
     {
+        Configure::write('BcCustomContent.fieldTypes.BcCcFile.controlType', 'file');
         //データ生成
         CustomFieldFactory::make([
             'id' => 1,
@@ -612,15 +614,15 @@ class CustomEntriesTableTest extends BcTestCase
             'BcCcCheckbox' => ['label' => '']
         ], $rs['meta']);
 
-//        //$controlType !== 'file'
-//        $this->CustomEntriesTable->setLinks(1);
-//        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
-//        //戻り値を確認
-//        $this->assertEquals('プログラマー', $rs['name']);
-//        //配列場合、
-//        //__loop-src__がunsetされたか確認すること
-//        //json_encodeができるか確認すること
-//        $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $rs['meta']);
+        //$controlType !== 'file'
+        $this->CustomEntriesTable->setLinks(1);
+        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        //戻り値を確認
+        $this->assertEquals('プログラマー', $rs['name']);
+        //配列場合、
+        //__loop-src__がunsetされたか確認すること
+        //json_encodeができるか確認すること
+        $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $rs['meta']);
     }
 
     /**
