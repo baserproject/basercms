@@ -555,14 +555,25 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_beforeMarshal()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        //データを生成
+        CustomFieldFactory::make([
+            'id' => 1,
+            'type' => 'BcCcRelated'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1
+        ])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+        $customEntry = $this->CustomEntriesTable->newEntity([
+            'meta' => [
+                '__loop-src__' => 'aaa',
+                'BcCcCheckbox' => ['label' => '']
+            ]
+        ]);
+        //TypeはBcCcRelatedなのでJsonに交換されるか確認すること
+        $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $customEntry->meta);
     }
 
     /**

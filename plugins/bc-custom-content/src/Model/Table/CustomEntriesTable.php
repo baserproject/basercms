@@ -519,7 +519,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -540,6 +540,7 @@ class CustomEntriesTable extends AppTable
      * @param ArrayObject $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
