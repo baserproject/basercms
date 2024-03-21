@@ -112,7 +112,7 @@ class CustomContentAdminHelperTest extends BcTestCase
     {
         //case attention is empty
         $customLink = CustomLinkFactory::make([
-            'attention' => '',
+            'attention' => ''
         ])->getEntity();
         $result = $this->CustomContentAdminHelper->attention($customLink);
         $this->assertEquals('', $result);
