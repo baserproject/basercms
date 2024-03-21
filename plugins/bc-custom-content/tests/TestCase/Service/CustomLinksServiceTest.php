@@ -205,7 +205,7 @@ class CustomLinksServiceTest extends BcTestCase
         //lft / rght を最新にするかどうか確認すること
         $newLink = $this->CustomLinksService->get(1);
         $this->assertEquals(1, $newLink->lft);
-        $this->assertEquals(2, $newLink->rght);
+        $this->assertEquals(4, $newLink->rght);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_category');
     }

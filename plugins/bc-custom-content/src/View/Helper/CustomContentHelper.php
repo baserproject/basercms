@@ -84,6 +84,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function descriptionExists(CustomContent $content)
     {
@@ -188,6 +189,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return array|bool|float|int|mixed|string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldTitle(mixed $entry, string $fieldName)
     {
@@ -268,6 +270,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getField(int $tableId, string $fieldName)
     {
@@ -299,6 +302,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLinks(int $tableId, bool $isThreaded = true)
     {
