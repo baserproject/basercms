@@ -600,14 +600,15 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_decodeRow()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        CustomLinkFactory::make([
+            'id' => 1,
+            'options' => '{"name":"abc"}'
+        ])->persist();
 
-        //正常系実行
-
-        //異常系実行
-
-
+        $rs = $this->CustomEntriesTable->decodeRow(CustomLinkFactory::get(1));
+        //Jsonデータが配列に交換できるか確認すること
+        $this->assertIsArray($rs['options']);
+        $this->assertEquals('abc', $rs['options']['name']);
     }
 
     /**

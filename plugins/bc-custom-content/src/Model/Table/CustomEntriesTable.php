@@ -519,7 +519,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -601,6 +601,7 @@ class CustomEntriesTable extends AppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function decodeRow(EntityInterface $row)
     {
