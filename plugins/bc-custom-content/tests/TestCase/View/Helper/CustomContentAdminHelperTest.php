@@ -103,7 +103,41 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_required()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        /**
+         * case children is not exists
+         * and required is false
+         */
+        $customLink = CustomLinkFactory::make([
+            'required' => 0
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+        /**
+         * case children is not exists
+         * and required is true
+         */
+        $customLink['required'] = 1;
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+        /**
+         * case children is exists
+         * and required of children is false
+         */
+        $customLink['children'] = [
+            'required' => 0
+        ];
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+        /**
+         * case children is exists
+         * and required of children is true
+         */
+        $customLink['children'] = [
+            'required' => 1,
+        ];
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+
     }
     /**
      * test attention
