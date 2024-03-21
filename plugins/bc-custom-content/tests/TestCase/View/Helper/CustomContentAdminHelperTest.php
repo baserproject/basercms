@@ -145,7 +145,21 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_description()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case description is not empty
+        $customLink = CustomLinkFactory::make([
+            'description' => 'test description',
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->description($customLink);
+        //check result return
+        $this->assertEquals('<i class="bca-icon--question-circle bca-help"></i><div class="bca-helptext">test description</div>', $rs);
+        //case description is empty
+        $customLink = CustomLinkFactory::make([
+            'description' => '',
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->description($customLink);
+        //check result return
+        $this->assertEquals('', $rs);
+
     }
 
     /*
