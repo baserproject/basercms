@@ -19,6 +19,7 @@ use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Table\CustomEntriesTable;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
@@ -589,24 +590,16 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
-        //サービスクラス
-        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
-        $customTable = $this->getService(CustomTablesServiceInterface::class);
-
-        //カスタムテーブルとカスタムエントリテーブルを生成
-        $customTable->create([
-            'id' => 1,
-            'name' => 'recruit_categories',
-            'title' => '求人情報',
-            'type' => '1',
-            'display_field' => 'title',
-            'has_child' => 0
-        ]);
-
         //データ生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $this->loadFixtureScenario(CustomFieldsScenario::class);
-        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make(['custom_table_id' => 1, 'custom_field_id' => 1])->persist();
+
+        CustomFieldFactory::make(['id' => 2])->persist();
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'options' => '{"name":"abc"}'
+        ])->persist();
 
         //Queryを生成
         $customLinksTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks');
@@ -617,12 +610,11 @@ class CustomEntriesTableTest extends BcTestCase
                 'CustomFields.status' => true
             ]);
         //対象メソッドをコール
-        $rs = $this->CustomEntriesTable->findAll($links);
+        $rs = $this->CustomEntriesTable->findAll($links)->toArray();
         //戻り値を確認
-        $this->assertEquals(2, $rs->count());
-
-        //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+        $this->assertCount(2, $rs);
+        //JSONデータが配列に交換できるか確認すること
+        $this->assertIsArray($rs['1']['options']);
     }
 
     /**
