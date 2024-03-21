@@ -62,6 +62,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryColumnsNum(array $customLinks)
     {
