@@ -592,11 +592,12 @@ class CustomEntriesTableTest extends BcTestCase
     {
         //データ生成
         CustomFieldFactory::make(['id' => 1])->persist();
-        CustomLinkFactory::make(['custom_table_id' => 11, 'custom_field_id' => 1])->persist();
+        CustomLinkFactory::make(['id' => 1, 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
 
         CustomFieldFactory::make(['id' => 2])->persist();
         CustomLinkFactory::make([
-            'custom_table_id' => 11,
+            'id' => 2,
+            'custom_table_id' => 1,
             'custom_field_id' => 2,
             'options' => '{"name":"abc"}'
         ])->persist();
