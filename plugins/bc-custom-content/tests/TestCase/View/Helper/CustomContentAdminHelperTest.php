@@ -4,12 +4,15 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class CustomContentAdminHelperTest extends BcTestCase
 {
 
+    use ScenarioAwareTrait;
     /**
      * setUp
      *
@@ -183,9 +186,18 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getFields()
     {
+        //case customFields is empty
         $rs = $this->CustomContentAdminHelper->getFields();
         //check result return
         $this->assertEquals(0, $rs->count());
+        /**
+         * case customFields is not empty
+         * load fixture scenario
+         */
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(2, $rs->count());
     }
 
 }
