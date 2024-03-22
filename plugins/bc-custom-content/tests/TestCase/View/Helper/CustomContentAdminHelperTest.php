@@ -187,7 +187,7 @@ class CustomContentAdminHelperTest extends BcTestCase
         $arr_customLink = [
             CustomLinkFactory::make([
                 'display_admin_list' => 1
-            ])->getEntity(),
+            ])->getEntity()
         ];
         $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arr_customLink);
         $this->assertEquals(6, $rs);
@@ -196,12 +196,12 @@ class CustomContentAdminHelperTest extends BcTestCase
             CustomLinkFactory::make([
                 'display_admin_list' => 1,
                 'custom_field' => [
-                    'type' => 'group',
+                    'type' => 'group'
                 ],
                 'children' => [
                     'name' => 'test children'
                 ]
-            ])->getEntity(),
+            ])->getEntity()
         ];
         $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arr_customLink);
         $this->assertEquals(7, $rs);
