@@ -11,9 +11,14 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomTablesTableTest
@@ -21,6 +26,10 @@ use BcCustomContent\Test\Factory\CustomLinkFactory;
  */
 class CustomLinksTableTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set up
@@ -158,7 +167,19 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getUniqueName()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
+
+        //nameが登録したことがない場合、
+        $rs = $this->CustomLinksTable->getUniqueName('email', 1);
+        $this->assertEquals('email', $rs);
+
+        //nameが登録した場合、
+        $rs = $this->CustomLinksTable->getUniqueName('recruit_category', 1);
+        $this->assertEquals('recruit_category_2', $rs);
     }
 
 

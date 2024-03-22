@@ -241,6 +241,7 @@ class CustomLinksTable extends AppTable
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUniqueName(string $name, int $tableId)
     {
