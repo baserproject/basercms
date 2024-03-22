@@ -607,7 +607,7 @@ class CustomEntriesTableTest extends BcTestCase
         $links = $customLinksTable->find()
             ->contain(['CustomFields'])
             ->where([
-                'CustomLinks.custom_table_id' => 11,
+                'CustomLinks.custom_table_id' => 1,
                 'CustomFields.status' => true
             ]);
         //対象メソッドをコール
