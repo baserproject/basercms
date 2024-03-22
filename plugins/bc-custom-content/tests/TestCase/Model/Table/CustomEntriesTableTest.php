@@ -17,15 +17,11 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Table\CustomEntriesTable;
-use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
-use BcCustomContent\Test\Scenario\CustomEntriesScenario;
-use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
