@@ -186,7 +186,7 @@ class CustomContentAdminHelperTest extends BcTestCase
         //case isDisplayEntryList is false
         $arr_customLink = [
             CustomLinkFactory::make([
-                'display_admin_list' => 1,
+                'display_admin_list' => 1
             ])->getEntity(),
         ];
         $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arr_customLink);
@@ -199,7 +199,7 @@ class CustomContentAdminHelperTest extends BcTestCase
                     'type' => 'group',
                 ],
                 'children' => [
-                    'name' => 'test children',
+                    'name' => 'test children'
                 ]
             ])->getEntity(),
         ];
