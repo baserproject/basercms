@@ -11,14 +11,9 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
-use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
-use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
-use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomFieldsScenario;
-use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomTablesTableTest
@@ -26,10 +21,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
  */
 class CustomLinksTableTest extends BcTestCase
 {
-    /**
-     * Trait
-     */
-    use ScenarioAwareTrait;
 
     /**
      * Set up
