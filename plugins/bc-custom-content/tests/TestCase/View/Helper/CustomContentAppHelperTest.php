@@ -3,6 +3,7 @@
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\View\Helper\CustomContentAppHelper;
 use Cake\View\View;
@@ -65,7 +66,7 @@ class CustomContentAppHelperTest extends BcTestCase
          */
         $customLink['status'] = 1;
         $customLink['children'] = ['name' => 'child'];
-        $customLink['custom_field'] = ['type' => 'group'];
+        $customLink['custom_field'] = new CustomLink(['type' => 'group']);
         $rs = $this->CustomContentAppHelper->isEnableField($customLink);
         $this->assertTrue($rs);
     }
