@@ -555,11 +555,11 @@ class MailMessage extends MailAppModel
 
 				// 半角処理
 				if ($mailField['auto_convert'] === 'CONVERT_HANKAKU') {
+					$value = str_replace('ー', '-', $value); // 全角ハイフンを半角ハイフンに置換
 					$value = mb_convert_kana($value, 'a');
 				}
 				// 全角処理
 				if ($mailField['auto_convert'] === 'CONVERT_ZENKAKU') {
-					$value = str_replace('ー', '-', $value); // 全角ハイフンを半角ハイフンに置換
 					$value = mb_convert_kana($value, 'AK');
 				}
 				// サニタイズ
