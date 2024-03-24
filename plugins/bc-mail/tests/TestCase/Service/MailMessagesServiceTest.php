@@ -335,13 +335,13 @@ class MailMessagesServiceTest extends BcTestCase
         $data = [
             'name_1' => '   hello world   ',
             'name_2' => '<!--hello world',
-            'name_3' => 'ｈｅｌｌｏ　ｗｏｒｌｄ',
+            'name_3' => 'ｈｅｌｌｏ　ｗｏｒｌｄー',
             'test' => '   Nghiem   ',
         ];
         $result = $MailMessagesService->autoConvert(1, $data);
         $this->assertEquals('hello world', $result['name_1']);
         $this->assertEquals('&lt;!--hello world', $result['name_2']);
-        $this->assertEquals('hello　world', $result['name_3']);
+        $this->assertEquals('hello　world-', $result['name_3']);
         $this->assertEquals('   Nghiem   ', $result['test']);
     }
 
