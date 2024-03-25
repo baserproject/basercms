@@ -203,7 +203,50 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_moveOffset()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customLinks = $this->getService(CustomLinksServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact'
+        ]);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'no' => 2,
+            'sort' => 4
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'no' => 1,
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+
+        //$offset > 0、
+        $rs = $this->CustomLinksTable->moveOffset($customLinks->get(1), 1);
+        //並び順を更新するできるか確認すること
+        $this->assertEquals(2, $rs->no);
+        //lft: 1->3
+        $this->assertEquals(3, $rs->lft);
+        //rght: 2->4
+        $this->assertEquals(4, $rs->rght);
+
+        //$offset < 0、
+        $rs = $this->CustomLinksTable->moveOffset($customLinks->get(2), -1);
+        $this->assertEquals(1, $rs->no);
+        //lft: 3->1
+        $this->assertEquals(1, $rs->lft);
+        //rght: 4->2
+        $this->assertEquals(2, $rs->rght);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
