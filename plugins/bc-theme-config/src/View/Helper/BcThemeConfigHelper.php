@@ -176,7 +176,7 @@ class BcThemeConfigHelper extends Helper
                 if (file_exists($imgDir . $name . '.' . $ext)) {
                     $url = BcUtil::getCurrentTheme() . '.' . $name . '.' . $ext;
                     $imgPath = $imgDir . $name . '.' . $ext;
-                    $originUrl = $url;
+                    $originUrl = $this->BcBaser->Url->assetUrl(BcUtil::getCurrentTheme() . '.img/' . $name . '.' . $ext);
                 }
             }
         }
