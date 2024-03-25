@@ -99,6 +99,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldName(CustomLink $link, array $options = [])
     {

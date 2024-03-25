@@ -87,7 +87,20 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getFieldName()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case option is empty
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink);
+        //check result return
+        $this->assertEquals('test', $result);
+        //case option is not empty
+        $options = [
+            'fieldName' => 'fieldName option',
+        ];
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink, $options);
+        //check result return
+        $this->assertEquals('fieldName option', $result);
     }
 
     /**

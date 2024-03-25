@@ -520,6 +520,7 @@ class BcBaserHelper extends Helper
      * リンクが有効化どうか
      *
      * ログインしているユーザーの権限によって判定する
+     * ログインしていない場合、ユーザーグループがユーザーに関連付けられていない場合は、常に有効とする
      * @param string $link
      * @return true
      * @noTodo
@@ -530,13 +531,11 @@ class BcBaserHelper extends Helper
         if (!BcUtil::isInstalled()) return true;
         $user = Bcutil::loginUser();
         if(!$user) return true;
-        if($user->user_groups) {
-            $userGroups = array_column($user->user_groups, 'id');
-        } else {
-            $userGroups = [];
-        }
+        if(!$user->user_groups) return true;
+        $userGroups = array_column($user->user_groups, 'id');
         return $this->PermissionsService->check($link, $userGroups);
     }
+
 
     /**
      * 管理者グループかどうかチェックする
