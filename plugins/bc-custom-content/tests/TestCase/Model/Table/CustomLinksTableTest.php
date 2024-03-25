@@ -11,9 +11,15 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomTablesTableTest
@@ -21,6 +27,10 @@ use BcCustomContent\Test\Factory\CustomLinkFactory;
  */
 class CustomLinksTableTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set up
@@ -134,7 +144,50 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_updateSort()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customLinks = $this->getService(CustomLinksServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact'
+        ]);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'no' => 2,
+            'sort' => 4
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'no' => 1,
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+
+        //$fieldNameが存在した場合、
+        $this->CustomLinksTable->updateSort($customLinks->getIndex(1)->toArray());
+        //並び順を更新するできるか確認すること
+        $customLink1 = $customLinks->get(1);
+        $this->assertEquals(2, $customLink1->no);
+        //lft: 1->3
+        $this->assertEquals(3, $customLink1->lft);
+        //rght: 2->4
+        $this->assertEquals(4, $customLink1->rght);
+
+        $customLink2 = $customLinks->get(2);
+        $this->assertEquals(1, $customLink2->no);
+        //lft: 3->1
+        $this->assertEquals(1, $customLink2->lft);
+        //rght: 4->2
+        $this->assertEquals(2, $customLink2->rght);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
