@@ -2,14 +2,21 @@
 
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class CustomContentAdminHelperTest extends BcTestCase
 {
 
+    use ScenarioAwareTrait;
     /**
      * setUp
      *
@@ -176,6 +183,34 @@ class CustomContentAdminHelperTest extends BcTestCase
     public function test_afterHead()
     {
         $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
+
+    /**
+     * test isAllowPublishEntry
+     */
+    public function test_isAllowPublishEntry()
+    {
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => 'title',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->setup(1);
+        //case customEntry exists
+        $rs = $this->CustomContentAdminHelper->isAllowPublishEntry($customEntriesService->get(1));
+        $this->assertTrue($rs);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
 }
