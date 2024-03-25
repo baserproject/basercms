@@ -2,14 +2,22 @@
 
 namespace BcCustomContent\Test\TestCase\View\Helper;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class CustomContentAdminHelperTest extends BcTestCase
 {
 
+    use ScenarioAwareTrait;
     /**
      * setUp
      *
@@ -87,7 +95,20 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getFieldName()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case option is empty
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink);
+        //check result return
+        $this->assertEquals('test', $result);
+        //case option is not empty
+        $options = [
+            'fieldName' => 'fieldName option',
+        ];
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink, $options);
+        //check result return
+        $this->assertEquals('fieldName option', $result);
     }
 
     /**
@@ -112,14 +133,12 @@ class CustomContentAdminHelperTest extends BcTestCase
     {
         //case attention is empty
         $customLink = CustomLinkFactory::make([
-            'attention' => '',
+            'attention' => ''
         ])->getEntity();
         $result = $this->CustomContentAdminHelper->attention($customLink);
         $this->assertEquals('', $result);
         //case attention is not empty
-        $customLink = CustomLinkFactory::make([
-            'attention' => 'test attention',
-        ])->getEntity();
+        $customLink['attention'] = 'test attention';
         $result = $this->CustomContentAdminHelper->attention($customLink);
         $this->assertEquals('<div class="bca-attention"><small>test attention</small></div>', $result);
     }
@@ -167,7 +186,18 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_beforeHead()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case before_head is empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => ''
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('', $result);
+        //case before_head is not empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => 'test before head',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('test before head&nbsp;', $result);
     }
 
     /*
@@ -175,7 +205,63 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_afterHead()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $customLink = CustomLinkFactory::make([
+            'after_head' => ''
+        ])->getEntity();
+        //case after_head is empty
+        $result = $this->CustomContentAdminHelper->afterHead($customLink);
+        $this->assertEquals('', $result);
+        //case after_head is not empty
+        $customLink['after_head'] = 'test after head';
+        $result = $this->CustomContentAdminHelper->afterHead($customLink);
+        $this->assertEquals('&nbsp;test after head', $result);
+    }
+
+    /**
+     * test isAllowPublishEntry
+     */
+    public function test_isAllowPublishEntry()
+    {
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => 'title',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->setup(1);
+        //case customEntry exists
+        $rs = $this->CustomContentAdminHelper->isAllowPublishEntry($customEntriesService->get(1));
+        $this->assertTrue($rs);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /*
+     * test getFields
+     */
+    public function test_getFields()
+    {
+        //case customFields is empty
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(0, $rs->count());
+        /**
+         * case customFields is not empty
+         * load fixture scenario
+         */
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(2, $rs->count());
     }
 
 }

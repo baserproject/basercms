@@ -162,6 +162,7 @@ class CustomLinksTable extends AppTable
      * @param array $customLinks
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSort(array $customLinks)
     {
@@ -185,6 +186,7 @@ class CustomLinksTable extends AppTable
      * @return bool|int|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurentSort(int $id, int $tableId, $parentId)
     {
@@ -215,11 +217,12 @@ class CustomLinksTable extends AppTable
     /**
      * オフセットを元に関連フィールドを移動する
      *
-     * @param $id
+     * @param $field
      * @param $offset
      * @return EntityInterface|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function moveOffset($field, $offset)
     {
@@ -242,6 +245,7 @@ class CustomLinksTable extends AppTable
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUniqueName(string $name, int $tableId)
     {
