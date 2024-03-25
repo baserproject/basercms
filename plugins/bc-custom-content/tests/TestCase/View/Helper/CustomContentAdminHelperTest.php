@@ -7,6 +7,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
@@ -242,6 +243,25 @@ class CustomContentAdminHelperTest extends BcTestCase
         $rs = $this->CustomContentAdminHelper->isAllowPublishEntry($customEntriesService->get(1));
         $this->assertTrue($rs);
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /*
+     * test getFields
+     */
+    public function test_getFields()
+    {
+        //case customFields is empty
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(0, $rs->count());
+        /**
+         * case customFields is not empty
+         * load fixture scenario
+         */
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(2, $rs->count());
     }
 
 }
