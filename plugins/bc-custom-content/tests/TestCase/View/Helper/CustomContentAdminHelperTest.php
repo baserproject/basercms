@@ -116,7 +116,54 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_label()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is true
+         * and $options is not exist
+         */
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test custom link',
+            'display_admin_list' => 1,
+            'status' => 1,
+            'custom_field' => [
+                'type' => 'BcCcTextarea',
+            ],
+            'parent_id' => 1,
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label><br>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is true
+         * and exist $options
+         */
+        $options = ['fieldName' => 'is fieldName'];
+        $rs = $this->CustomContentAdminHelper->label($customLink, $options);
+        //check result return
+        $this->assertEquals('<label for="is-fieldname">Is Field Name</label><br>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is false
+         * and options is not exist
+         */
+        $customLink['parent_id'] = 0;
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is false
+         * and exist options
+         */
+        $options = ['fieldName' => 'is fieldName is not empty'];
+        $rs = $this->CustomContentAdminHelper->label($customLink, $options);
+        //check result return
+        $this->assertEquals('<label for="is-fieldname-is-not-empty">Is Field Name Is Not Empty</label>', $rs);
+        /**
+         * case customField type not is BcCcTextarea and customLink parent_id is true
+         * and options is not exist
+         */
+        $customLink['custom_field']['type'] = 'BcCcText';
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label>', $rs);
     }
 
     /**
