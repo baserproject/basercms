@@ -122,6 +122,7 @@ class CustomContentAdminHelperTest extends BcTestCase
          */
         $customLink = CustomLinkFactory::make([
             'name' => 'test custom link',
+            'title' => null,
             'display_admin_list' => 1,
             'status' => 1,
             'custom_field' => [
