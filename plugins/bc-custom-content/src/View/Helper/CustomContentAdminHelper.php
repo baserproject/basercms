@@ -240,6 +240,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeHead(CustomLink $link): string
     {

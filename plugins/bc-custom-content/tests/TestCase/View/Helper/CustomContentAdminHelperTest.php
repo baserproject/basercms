@@ -185,7 +185,18 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_beforeHead()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case before_head is empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => ''
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('', $result);
+        //case before_head is not empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => 'test before head',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('test before head&nbsp;', $result);
     }
 
     /*
