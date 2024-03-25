@@ -14,6 +14,7 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use Cake\Event\Event;
 
 /**
  * CustomTablesTableTest
@@ -126,7 +127,13 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeDelete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make(['id' => 1])->persist();
+        //対象メソッドをコール
+        $this->CustomLinksTable->beforeDelete(new Event('beforeDelete'), CustomLinkFactory::get(1), new \ArrayObject());
+        //スコープが設定できるか確認
+        $result = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
+        $this->assertEquals(['custom_table_id' => 1], $result);
     }
 
     /**
