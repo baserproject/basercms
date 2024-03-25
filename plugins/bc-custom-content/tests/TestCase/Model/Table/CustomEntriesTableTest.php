@@ -22,6 +22,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -630,14 +631,32 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        //データ生成
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make(['id' => 1, 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
 
-        //正常系実行
+        CustomFieldFactory::make(['id' => 2])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'options' => '{"name":"abc"}'
+        ])->persist();
 
-        //異常系実行
-
-
+        //Queryを生成
+        $customLinksTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks');
+        $links = $customLinksTable->find()
+            ->contain(['CustomFields'])
+            ->where([
+                'CustomLinks.custom_table_id' => 1,
+                'CustomFields.status' => true
+            ]);
+        //対象メソッドをコール
+        $rs = $this->CustomEntriesTable->findAll($links)->toArray();
+        //戻り値を確認
+        $this->assertCount(2, $rs);
+        //JSONデータが配列に交換できるか確認すること
+        $this->assertIsArray($rs[1]->options);
     }
 
     /**
