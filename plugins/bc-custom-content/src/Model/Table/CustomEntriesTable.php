@@ -519,7 +519,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -554,6 +554,7 @@ class CustomEntriesTable extends AppTable
      * @return ArrayObject
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function autoConvert(ArrayObject $content)
     {
@@ -583,6 +584,7 @@ class CustomEntriesTable extends AppTable
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function findAll(Query $query, array $options = []): Query
     {

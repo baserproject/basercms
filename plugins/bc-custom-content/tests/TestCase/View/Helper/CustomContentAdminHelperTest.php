@@ -94,7 +94,20 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getFieldName()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case option is empty
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink);
+        //check result return
+        $this->assertEquals('test', $result);
+        //case option is not empty
+        $options = [
+            'fieldName' => 'fieldName option',
+        ];
+        $result = $this->CustomContentAdminHelper->getFieldName($customLink, $options);
+        //check result return
+        $this->assertEquals('fieldName option', $result);
     }
 
     /**
@@ -119,14 +132,12 @@ class CustomContentAdminHelperTest extends BcTestCase
     {
         //case attention is empty
         $customLink = CustomLinkFactory::make([
-            'attention' => '',
+            'attention' => ''
         ])->getEntity();
         $result = $this->CustomContentAdminHelper->attention($customLink);
         $this->assertEquals('', $result);
         //case attention is not empty
-        $customLink = CustomLinkFactory::make([
-            'attention' => 'test attention',
-        ])->getEntity();
+        $customLink['attention'] = 'test attention';
         $result = $this->CustomContentAdminHelper->attention($customLink);
         $this->assertEquals('<div class="bca-attention"><small>test attention</small></div>', $result);
     }
@@ -182,7 +193,16 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_afterHead()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $customLink = CustomLinkFactory::make([
+            'after_head' => ''
+        ])->getEntity();
+        //case after_head is empty
+        $result = $this->CustomContentAdminHelper->afterHead($customLink);
+        $this->assertEquals('', $result);
+        //case after_head is not empty
+        $customLink['after_head'] = 'test after head';
+        $result = $this->CustomContentAdminHelper->afterHead($customLink);
+        $this->assertEquals('&nbsp;test after head', $result);
     }
 
     /**
