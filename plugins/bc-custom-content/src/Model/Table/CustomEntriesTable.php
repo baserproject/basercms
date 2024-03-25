@@ -540,6 +540,7 @@ class CustomEntriesTable extends AppTable
      * @param ArrayObject $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
