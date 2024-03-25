@@ -11,9 +11,15 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomTablesTableTest
@@ -21,6 +27,10 @@ use BcCustomContent\Test\Factory\CustomLinkFactory;
  */
 class CustomLinksTableTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set up
@@ -142,7 +152,33 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getCurentSort()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make([
+            'id' => 1,
+            'lft' => 1,
+            'rght' => 6,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'parent_id' => 1,
+            'lft' => 2,
+            'rght' => 3
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 3,
+            'parent_id' => 1,
+            'lft' => 4,
+            'rght' => 5
+        ])->persist();
+
+        $rs = $this->CustomLinksTable->getCurentSort(1, 1, null);
+        $this->assertEquals(1, $rs);
+
+        $rs = $this->CustomLinksTable->getCurentSort(2, 1, 1);
+        $this->assertEquals(1, $rs);
+
+        $rs = $this->CustomLinksTable->getCurentSort(3, 1, 1);
+        $this->assertEquals(2, $rs);
     }
 
     /**

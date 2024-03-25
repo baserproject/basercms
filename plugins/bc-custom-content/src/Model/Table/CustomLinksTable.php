@@ -184,6 +184,7 @@ class CustomLinksTable extends AppTable
      * @return bool|int|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurentSort(int $id, int $tableId, $parentId)
     {
