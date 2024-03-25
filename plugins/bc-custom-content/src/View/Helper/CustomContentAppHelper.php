@@ -90,6 +90,7 @@ class CustomContentAppHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnableField(CustomLink $customLink): bool
     {

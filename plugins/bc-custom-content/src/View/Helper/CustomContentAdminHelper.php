@@ -99,6 +99,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldName(CustomLink $link, array $options = [])
     {
@@ -239,6 +240,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeHead(CustomLink $link): string
     {
@@ -255,6 +257,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterHead(CustomLink $link): string
     {
@@ -377,6 +380,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAllowPublishEntry(CustomEntry $entry)
     {
