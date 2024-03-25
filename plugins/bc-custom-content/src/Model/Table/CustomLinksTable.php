@@ -161,6 +161,7 @@ class CustomLinksTable extends AppTable
      * @param array $customLinks
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSort(array $customLinks)
     {
