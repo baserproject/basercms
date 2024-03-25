@@ -215,12 +215,11 @@ class CustomLinksTable extends AppTable
     /**
      * オフセットを元に関連フィールドを移動する
      *
-     * @param $field
+     * @param $id
      * @param $offset
-     * @return bool
+     * @return EntityInterface|bool
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function moveOffset($field, $offset)
     {
