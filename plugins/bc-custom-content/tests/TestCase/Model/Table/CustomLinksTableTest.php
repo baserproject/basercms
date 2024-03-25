@@ -158,7 +158,19 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getUniqueName()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
+
+        //nameが登録したことがない場合、
+        $rs = $this->CustomLinksTable->getUniqueName('email', 1);
+        $this->assertEquals('email', $rs);
+
+        //nameが登録した場合、
+        $rs = $this->CustomLinksTable->getUniqueName('recruit_category', 1);
+        $this->assertEquals('recruit_category_2', $rs);
     }
 
 
