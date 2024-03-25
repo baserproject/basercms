@@ -107,6 +107,7 @@ class CustomContentAppHelper extends Helper
      * @return mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryUrl(CustomEntry $entry, $full = true)
     {

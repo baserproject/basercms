@@ -7,6 +7,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
@@ -115,7 +116,54 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_label()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is true
+         * and $options is not exist
+         */
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test custom link',
+            'display_admin_list' => 1,
+            'status' => 1,
+            'custom_field' => [
+                'type' => 'BcCcTextarea',
+            ],
+            'parent_id' => 1,
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label><br>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is true
+         * and exist $options
+         */
+        $options = ['fieldName' => 'is fieldName'];
+        $rs = $this->CustomContentAdminHelper->label($customLink, $options);
+        //check result return
+        $this->assertEquals('<label for="is-fieldname">Is Field Name</label><br>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is false
+         * and options is not exist
+         */
+        $customLink['parent_id'] = 0;
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label>', $rs);
+        /**
+         * case customField type BcCcTextarea and customLink parent_id is false
+         * and exist options
+         */
+        $options = ['fieldName' => 'is fieldName is not empty'];
+        $rs = $this->CustomContentAdminHelper->label($customLink, $options);
+        //check result return
+        $this->assertEquals('<label for="is-fieldname-is-not-empty">Is Field Name Is Not Empty</label>', $rs);
+        /**
+         * case customField type not is BcCcTextarea and customLink parent_id is true
+         * and options is not exist
+         */
+        $customLink['custom_field']['type'] = 'BcCcText';
+        $rs = $this->CustomContentAdminHelper->label($customLink);
+        //check result return
+        $this->assertEquals('<label for="test-custom-link">Test Custom Link</label>', $rs);
     }
 
     /**
@@ -185,7 +233,18 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_beforeHead()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //case before_head is empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => ''
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('', $result);
+        //case before_head is not empty
+        $customLink = CustomLinkFactory::make([
+            'before_head' => 'test before head',
+        ])->getEntity();
+        $result = $this->CustomContentAdminHelper->beforeHead($customLink);
+        $this->assertEquals('test before head&nbsp;', $result);
     }
 
     /*
@@ -231,6 +290,25 @@ class CustomContentAdminHelperTest extends BcTestCase
         $rs = $this->CustomContentAdminHelper->isAllowPublishEntry($customEntriesService->get(1));
         $this->assertTrue($rs);
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /*
+     * test getFields
+     */
+    public function test_getFields()
+    {
+        //case customFields is empty
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(0, $rs->count());
+        /**
+         * case customFields is not empty
+         * load fixture scenario
+         */
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $rs = $this->CustomContentAdminHelper->getFields();
+        //check result return
+        $this->assertEquals(2, $rs->count());
     }
 
 }
