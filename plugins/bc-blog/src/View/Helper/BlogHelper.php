@@ -1612,6 +1612,7 @@ class BlogHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _mergePostCountToTagsData(ResultSetInterface $tags, $options)
     {
@@ -1648,7 +1649,7 @@ class BlogHelper extends Helper
         $query = $blogPostsService->BlogPosts->find()
             ->where($conditions)
             ->leftJoinWith('BlogTags')
-            ->group(['BlogTags.id'])
+            ->groupBy(['BlogTags.id'])
             ->select(['BlogTags.id']);
         $query = $query->select([
             'post_count' => $query->func()->count('BlogPosts.id')

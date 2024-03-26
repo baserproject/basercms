@@ -21,6 +21,7 @@ use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Service\BlogTagsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
@@ -1186,6 +1187,38 @@ class BlogHelperTest extends BcTestCase
             ['/(?=\/tags\/tag1).*?(?=\/tags\/tag2).*?(?=\/tags\/tag3)/s', null],
             ['/(?=\/tag\/tag1).*?\(1\)/s', '/news/', ['postCount' => true]],
         ];
+    }
+
+    /**
+     * test _mergePostCountToTagsData
+     */
+    public function test_mergePostCountToTagsData()
+    {
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('contents');
+        $this->truncateTable('sites');
+
+        //データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
+        //サービス
+        $blogTagsService = $this->getService(BlogTagsServiceInterface::class);
+
+        $tags = $blogTagsService->getIndex([])->all();
+        $options = array_merge([
+            'direction' => 'ASC',
+            'sort' => 'name',
+            'siteId' => null,
+            'contentUrl' => ['/news/']
+        ]);
+        //対象メソッドをコール
+        $rs = $this->execPrivateMethod($this->Blog, '_mergePostCountToTagsData', [$tags, $options]);
+        //戻り値を確認
+        $this->assertCount(3, $rs);
     }
 
     /**
