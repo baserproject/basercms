@@ -131,32 +131,22 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeSave()
     {
-        /**
-         * event beforeSave
-         */
+        //データを生成
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
         $entity = CustomLinkFactory::make([
             'custom_table_id' => 1,
             'name' => 'recruit_category'
         ])->getEntity();
         $this->CustomLinksTable->dispatchEvent('Model.beforeSave',
-            ['entity' => $entity, 'options' => new ArrayObject()]);
-        $this->assertNotEmpty($entity->get('name'));
-        $this->assertNotEmpty($entity->get('custom_table_id'));
-        /**
-         * check setTreeScope
-         */
-        $this->CustomLinksTable->setTreeScope(1);
-        $result = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
-        $this->assertEquals(['custom_table_id' => 1], $result);
-        /**
-         * check getUniqueName
-         */
-        CustomLinkFactory::make([
-            'custom_table_id' => 1,
-            'name' => 'recruit_category'
-        ])->persist();
-        $rs = $this->CustomLinksTable->getUniqueName('recruit_category', 1);
-        $this->assertEquals('recruit_category_2', $rs);
+            ['entity' => $entity, 'options' => new \ArrayObject()]);
+        //check unique name
+        $this->assertEquals('recruit_category_2', $entity->get('name'));
+        //check tree scope
+        $treeScope = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
+        $this->assertEquals(['custom_table_id' => 1], $treeScope);
     }
 
     /**
