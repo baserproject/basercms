@@ -80,7 +80,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @param CustomLink $link
      * @return string
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function label(CustomLink $link, array $options = []): string
     {
@@ -100,6 +100,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldName(CustomLink $link, array $options = [])
     {
@@ -240,6 +241,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeHead(CustomLink $link): string
     {
@@ -256,6 +258,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterHead(CustomLink $link): string
     {
@@ -378,6 +381,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAllowPublishEntry(CustomEntry $entry)
     {
@@ -391,6 +395,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFields()
     {
