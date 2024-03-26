@@ -675,12 +675,9 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_decodeRow()
     {
-        CustomLinkFactory::make([
-            'id' => 1,
-            'options' => '{"name":"abc"}'
-        ])->persist();
+        $customLink = CustomLinkFactory::make(['options' => '{"name":"abc"}'])->getEntity();
 
-        $rs = $this->CustomEntriesTable->decodeRow(CustomLinkFactory::get(1));
+        $rs = $this->CustomEntriesTable->decodeRow($customLink);
         //Jsonデータが配列に交換できるか確認すること
         $this->assertIsArray($rs['options']);
         $this->assertEquals('abc', $rs['options']['name']);
