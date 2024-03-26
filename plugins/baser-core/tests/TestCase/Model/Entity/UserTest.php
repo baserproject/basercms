@@ -59,8 +59,10 @@ class UserTest extends BcTestCase
      */
     public function testSetPassword()
     {
-        $this->User->set('password', 'testtest');
+        $beforePasswordModified = $this->User->password_modified;
+        $this->User->set('password', 'testtest123A!');
         $this->assertNotEquals('testtest', $this->User->password);
+        $this->assertGreaterThan($beforePasswordModified, $this->User->password_modified);
     }
 
     /**

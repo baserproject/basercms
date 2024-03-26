@@ -99,6 +99,9 @@ class SiteConfigsTable extends AppTable
                     'provider' => 'siteConfig',
                     'message' => __d('baser_core', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')
                 ]]);
+        $validator
+            ->allowEmptyString('password_reset_days')
+            ->nonNegativeInteger('password_reset_days', __d('baser_core', 'パスワードの再設定日数は0以上の整数を入力してください。'));
         return $validator;
     }
 

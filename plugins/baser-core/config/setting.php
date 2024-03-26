@@ -540,6 +540,7 @@ return [
             '/baser/admin/baser-core/dashboard/*',
             '/baser/admin/baser-core/dblogs/*',
             '/baser/admin/baser-core/users/back_agent',
+            '/baser/admin/baser-core/users/edit_password',
             '/baser/admin/baser-core/preview/*',
             '/baser/admin/baser-core/utilities/credit',
             '/',

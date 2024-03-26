@@ -253,6 +253,13 @@ q {}',
                 'created' => '',
                 'modified' => ''
             ],
+            [
+                'id' => '31',
+                'name' => 'password_reset_days',
+                'value' => '',
+                'created' => '',
+                'modified' => ''
+            ],
         ];
         $table = $this->table('site_configs');
         $table->insert($data)->save();

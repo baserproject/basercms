@@ -243,6 +243,22 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('allow_simple_password') ?>
         </td>
       </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('password_reset_days', __d('baser_core', 'ログインパスワードの再設定日数')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+
+          <?php echo $this->BcAdminForm->control('password_reset_days', [
+            'type' => 'text',
+            'size' => 10,
+            'maxlength' => 255
+          ]) ?>日
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'ユーザーのパスワードが設定した日数以上更新されていない場合に再設定画面を表示します。再設定を行うまで管理画面の利用は不可となります。') ?></div>
+          <?php echo $this->BcAdminForm->error('password_reset_days') ?>
+        </td>
+      </tr>
 
       <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
 
