@@ -90,6 +90,7 @@ class CustomContentAppHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnableField(CustomLink $customLink): bool
     {
@@ -106,6 +107,7 @@ class CustomContentAppHelper extends Helper
      * @return mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryUrl(CustomEntry $entry, $full = true)
     {
