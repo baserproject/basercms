@@ -22,6 +22,8 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -555,14 +557,25 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_beforeMarshal()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        //データを生成
+        CustomFieldFactory::make([
+            'id' => 1,
+            'type' => 'BcCcRelated'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1
+        ])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+        $customEntry = $this->CustomEntriesTable->newEntity([
+            'meta' => [
+                '__loop-src__' => 'aaa',
+                'BcCcCheckbox' => ['label' => '']
+            ]
+        ]);
+        //TypeはBcCcRelatedなのでJsonに交換されるか確認すること
+        $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $customEntry->meta);
     }
 
     /**
@@ -570,14 +583,58 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_autoConvert()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        Configure::write('BcCustomContent.fieldTypes.BcCcFile.controlType', 'file');
+        //データ生成
+        CustomFieldFactory::make([
+            'id' => 1,
+            'type' => 'BcCcRelated'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 2,
+            'type' => 'BcCcFile'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'custom_table_id' => 2,
+            'custom_field_id' => 2
+        ])->persist();
 
-        //正常系実行
+        //ArrayObject
+        $arrayObject = new \ArrayObject([
+            'name' => 'プログラマー',
+            'meta' => [
+                '__loop-src__' => 'aaa',
+                'BcCcCheckbox' => ['label' => '']
+            ],
+        ]);
 
-        //異常系実行
+        //$controlType === 'file'
+        $this->CustomEntriesTable->setLinks(2);
+        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        //戻り値を確認
+        $this->assertEquals('プログラマー', $rs['name']);
+        //配列場合、
+        //__loop-src__がunsetされないか確認すること
+        //配列はjson_encodeを交換しないか確認すること
+        $this->assertEquals([
+            '__loop-src__' => 'aaa',
+            'BcCcCheckbox' => ['label' => '']
+        ], $rs['meta']);
 
-
+        //$controlType !== 'file'
+        $this->CustomEntriesTable->setLinks(1);
+        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        //戻り値を確認
+        $this->assertEquals('プログラマー', $rs['name']);
+        //配列場合、
+        //__loop-src__がunsetされたか確認すること
+        //json_encodeができるか確認すること
+        $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $rs['meta']);
     }
 
     /**
@@ -585,14 +642,32 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_findAll()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        //データ生成
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make(['id' => 1, 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
 
-        //正常系実行
+        CustomFieldFactory::make(['id' => 2])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'options' => '{"name":"abc"}'
+        ])->persist();
 
-        //異常系実行
-
-
+        //Queryを生成
+        $customLinksTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks');
+        $links = $customLinksTable->find()
+            ->contain(['CustomFields'])
+            ->where([
+                'CustomLinks.custom_table_id' => 1,
+                'CustomFields.status' => true
+            ]);
+        //対象メソッドをコール
+        $rs = $this->CustomEntriesTable->findAll($links)->toArray();
+        //戻り値を確認
+        $this->assertCount(2, $rs);
+        //JSONデータが配列に交換できるか確認すること
+        $this->assertIsArray($rs[1]->options);
     }
 
     /**

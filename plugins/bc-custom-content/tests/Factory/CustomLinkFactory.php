@@ -44,8 +44,8 @@ class CustomLinkFactory extends CakephpBaseFactory
         $this->setDefaultData(function (Generator $faker) {
             return [
                 'no' => NULL,
-                'custom_table_id' => $faker->randomNumber(1, 100),
-                'custom_field_id' => $faker->randomNumber(1, 100),
+                'custom_table_id' => 1,
+                'custom_field_id' => 1,
                 'parent_id' => NULL,
                 'lft' => 1,
                 'rght' => 2,
