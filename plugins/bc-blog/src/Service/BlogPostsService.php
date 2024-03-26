@@ -30,6 +30,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
@@ -45,6 +46,12 @@ class BlogPostsService implements BlogPostsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * BlogPostsTable
+     * @var BlogPostsTable|Table
+     */
+    public BlogPostsTable|Table $BlogPosts;
 
     /**
      * Constructor
@@ -171,6 +178,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @param string $direction
      * @return string
      * @checked
+     * @unitTest
      */
     public function createOrder($sort, $direction)
     {

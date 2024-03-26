@@ -39,6 +39,7 @@ class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperIn
      * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function methods(): array
     {

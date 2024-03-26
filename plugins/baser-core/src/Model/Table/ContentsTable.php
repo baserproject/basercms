@@ -366,7 +366,14 @@ class ContentsTable extends AppTable
             }
         } else {
             if (isset($content['name'])) {
-                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+                try {
+                    $oldName = $this->get($content['id'])->name;
+                } catch (\Exception $e) {
+                    $oldName = null;
+                }
+                if($content['name'] !== $oldName) {
+                    $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+                }
             }
             if (empty($content['modified_date'])) {
                 $content['modified_date'] = \Cake\I18n\DateTime::now();

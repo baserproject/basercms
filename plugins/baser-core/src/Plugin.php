@@ -287,7 +287,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->add(new BcFrontMiddleware())
             ->add(new BcRedirectSubSiteMiddleware());
 
-        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem()) {
+        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem() && BcUtil::isInstalled()) {
             $config = ['redirect' => false];
             if(filter_var(env('TRUST_PROXY', false))) {
                 $config['trustedProxies'] = !empty($_SERVER['HTTP_X_FORWARDED_FOR'])? [$_SERVER['HTTP_X_FORWARDED_FOR']] : [];

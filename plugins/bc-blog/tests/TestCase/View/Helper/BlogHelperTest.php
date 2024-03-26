@@ -1164,12 +1164,15 @@ class BlogHelperTest extends BcTestCase
      */
     public function testTagList($expected, $name, $options = [])
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-        $this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-        $this->loadFixtures('ContentBlogTagFindCustomPrams');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('contents');
+        $this->truncateTable('sites');
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loadFixtureScenario(BlogTagsScenario::class);
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
         $this->expectOutputRegex($expected);
         $this->Blog->tagList($name, $options);
     }
@@ -1178,10 +1181,10 @@ class BlogHelperTest extends BcTestCase
     public static function tagListDataProvider()
     {
         return [
-            ['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
-            ['/(?=\/tag\/タグ１).*?(?=\/tag\/タグ２).*?(?=\/tag\/タグ３)/s', '/s/blog3/'],
-            ['/(?=\/tags\/タグ１).*?(?=\/tags\/タグ２).*?(?=\/tags\/タグ３).*?(?=\/tags\/タグ４).*?(?=\/tags\/タグ５)/s', null],
-            ['/(?=\/tag\/タグ１).*?\(2\)/s', 'blog1', ['postCount' => true]],
+            ['/(?=\/tag\/tag1).*?(?!.*\/tag\/tag2).*?(?!.*\/tag\/tag3)/s', 'news'],
+            ['/(?=\/tag\/tag1).*?(?=\/tag\/tag2).*?(?!.*\/tag\/tag3)/s', '/s/news/'],
+            ['/(?=\/tags\/tag1).*?(?=\/tags\/tag2).*?(?=\/tags\/tag3)/s', null],
+            ['/(?=\/tag\/tag1).*?\(1\)/s', '/news/', ['postCount' => true]],
         ];
     }
 
@@ -1759,6 +1762,30 @@ class BlogHelperTest extends BcTestCase
             ['hoge', false], // 存在しないアーカイブの場合
             ['', false], // アーカイブ指定がない場合
         ];
+    }
+
+    /**
+     * test isSingle
+     */
+    public function test_isSingle()
+    {
+        SiteFactory::make(['id' => 1])->persist();
+        //param is empty
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+        $result = $this->Blog->isSingle();
+        $this->assertFalse($result);
+
+        //param is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/archives/1')->withAttribute('currentSite', SiteFactory::get(1)));
+        $result = $this->Blog->isSingle();
+        $this->assertTrue($result);
+
+        //BlogArchiveType is not empty
+        $this->Blog->getView()->setRequest($this->getRequest('/news/archives/2016/02/10/post-1')->withAttribute('currentSite', SiteFactory::get(1)));
+        $this->Blog->getView()->set('blogArchiveType', 'daily');
+        $result = $this->Blog->isSingle();
+        $this->assertFalse($result);
+
     }
 
     public static function isTagDataProvider()

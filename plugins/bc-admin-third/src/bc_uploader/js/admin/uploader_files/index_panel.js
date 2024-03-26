@@ -174,7 +174,11 @@ $(function () {
                     cache: false,
                     success: uploadSuccessHandler,
                     error: function (response) {
-                        $.bcUtil.showApiError(response);
+                        if (response.responseJSON) {
+                            $.bcUtil.showApiError(response);
+                        } else {
+                            $.bcUtil.showAlertMessage('処理中にエラーが発生しました。ファイルが大きすぎる可能性があります。');
+                        }
                         $.bcUtil.hideLoader()
                     },
                 });

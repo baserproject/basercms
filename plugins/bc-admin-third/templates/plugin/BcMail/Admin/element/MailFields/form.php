@@ -270,21 +270,6 @@
           <?php echo $this->BcAdminForm->error('class') ?>
         </td>
       </tr>
-      <tr id="RowSeparator">
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('delimiter', __d('baser_core', '区切り文字')) ?></th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('delimiter', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext">
-            <ul>
-              <li><?php echo __d('baser_core', '空白の場合は自動で「＆nbsp;＆nbsp;」が挿入されます') ?></li>
-              <li><?php echo __d('baser_core', '空にしたいときは半角スペースを入力してください。') ?></li>
-            </ul>
-          </div>
-          <?php echo $this->BcAdminForm->error('delimiter') ?>
-        </td>
-      </tr>
       <tr id="RowDefault">
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('default_value', __d('baser_core', '初期値')) ?></th>

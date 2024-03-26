@@ -100,11 +100,11 @@ $entryDates = $data['entryDates'];
   //カレンダーを表示するHTML
   echo '<table class="bs-widget-body"><tr><td colspan=7>';
   if ($data['prev']) {
-    echo $this->BcBaser->getLink('≪', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
+    echo $this->BcBaser->getLink('≪', $this->BcBaser->getBlogContentsUrl($id, false) . 'archives/date/' . $year3 . '/' . $month3, null, false);
   }
   echo "　" . $year . "/" . $month . "　";
   if ($data['next']) {
-    echo $this->BcBaser->getLink('≫', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
+    echo $this->BcBaser->getLink('≫', $this->BcBaser->getBlogContentsUrl($id, false) . 'archives/date/' . $year4 . '/' . $month4, null, false);
   }
   echo "</td></tr>";
 
@@ -162,13 +162,13 @@ $entryDates = $data['entryDates'];
   {
     if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
       if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-        $change = '<td class="today">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
+        $change = '<td class="today">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id, false) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
       } elseif ($w == 0) {
-        $change = '<td class="sunday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
+        $change = '<td class="sunday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id, false) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
       } elseif ($w == 6) {
-        $change = '<td class="saturday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
+        $change = '<td class="saturday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id, false) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
       } else {
-        $change = '<td>' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
+        $change = '<td>' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent->id, false) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
       }
     } else {
       if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {

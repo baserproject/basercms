@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Table\SitesTable;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Model\Entity\Site;
@@ -44,13 +45,13 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * ContentFolders Table
      * @var ContentFoldersTable
      */
-    public $ContentFolders;
+    public ContentFoldersTable|Table $ContentFolders;
 
     /**
      * ContentFolders Table
      * @var ContentsTable
      */
-    public $Contents;
+    public ContentsTable|Table $Contents;
 
     /**
      * ContentFoldersService constructor.
