@@ -146,7 +146,7 @@ class PagesService implements PagesServiceInterface
         $options = array_merge([
             'status' => '',
             'contain' => ['Contents' => ['Sites']],
-            'draft' => false
+            'draft' => null
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {

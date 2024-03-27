@@ -829,7 +829,7 @@ class BlogPostsTable extends BlogAppTable
                 ['BlogPosts.name' => rawurldecode($no)]
             );
         }
-        return $this->find()->where($conditions)
+        $entity = $this->find()->where($conditions)
             ->contain([
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
@@ -838,6 +838,11 @@ class BlogPostsTable extends BlogAppTable
                 'Users'
             ])
             ->first();
+        if($entity) {
+            unset($entity->content_draft);
+            unset($entity->detail_draft);
+        }
+        return $entity;
     }
 
 }

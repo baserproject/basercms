@@ -110,7 +110,8 @@ class BlogController extends BlogFrontAppController
             $entities = $this->paginate($blogPostsService->getIndex([
                 'blog_content_id' => $blogContentId,
                 'limit' => $listCount,
-                'status' => 'publish'
+                'status' => 'publish',
+                'draft' => false
             ]));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index']);
@@ -178,7 +179,8 @@ class BlogController extends BlogFrontAppController
                     $this->paginate($blogPostsService->getIndexByCategory($category, array_merge([
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
-                        'direction' => $blogContent->list_direction
+                        'direction' => $blogContent->list_direction,
+                        'draft' => false
                     ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $category,
                     $this->getRequest(),
@@ -195,6 +197,7 @@ class BlogController extends BlogFrontAppController
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
+                        'draft' => false
                     ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $author,
                     $blogContent
@@ -209,6 +212,7 @@ class BlogController extends BlogFrontAppController
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
+                        'draft' => false
                     ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $tag,
                     $blogContent
@@ -232,6 +236,7 @@ class BlogController extends BlogFrontAppController
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
+                        'draft' => false
                     ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
                     $year,
                     $month,
