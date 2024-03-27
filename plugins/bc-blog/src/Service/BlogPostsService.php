@@ -27,6 +27,7 @@ use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\QueryInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
@@ -324,7 +325,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         }
         // タグ名
         if ($params['tag']) {
-            $conditions = $this->createTagCondition($conditions, $params['tag']);
+            $query = $this->createTagCondition($query, $params['tag']);
         }
         // 年月日
         if ($params['year'] || $params['month'] || $params['day']) {
@@ -417,30 +418,23 @@ class BlogPostsService implements BlogPostsServiceInterface
     /**
      * タグ条件を生成する
      *
-     * @param array $conditions
+     * @param Query $query
      * @param mixed $tag タグ（配列可）
-     * @return array
+     * @return QueryInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function createTagCondition($conditions, $tag)
+    public function createTagCondition(Query $query, $tag): QueryInterface
     {
         if (!is_array($tag)) $tag = [$tag];
         foreach($tag as $key => $value) {
             $tag[$key] = rawurldecode($value);
         }
-        $tags = $this->BlogPosts->BlogTags->find()
-            ->where(['BlogTags.name IN' => $tag])
-            ->contain(['BlogPosts'])
-            ->all()->toArray();
-        $postIds = Hash::extract($tags, '{n}.blog_posts.{n}.id');
-        if ($postIds) {
-            $conditions['BlogPosts.id IN'] = $postIds;
-        } else {
-            $conditions['BlogPosts.id IS'] = null;
-        }
-        return $conditions;
+        $query->matching('BlogTags', function($q) use ($tag) {
+            return $q->where(['BlogTags.name IN' => $tag]);
+        });
+        return $query;
     }
 
     /**
