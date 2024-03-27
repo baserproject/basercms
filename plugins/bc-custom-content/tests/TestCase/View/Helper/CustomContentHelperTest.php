@@ -18,6 +18,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
@@ -304,7 +306,47 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_isLoop()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories'
+        ]);
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'type' => 'group'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'use_loop' => true,
+            'name' => 'recruit_category'
+        ])->persist();
+        CustomEntryFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1
+        ])->persist();
+
+        $customEntriesService->setup(1);
+
+        //trueを返す場合
+        $rs = $this->CustomContentHelper->isLoop($customEntriesService->get(1), 'recruit_category');
+        $this->assertTrue($rs);
+
+        //falseを返す場合
+        $rs = $this->CustomContentHelper->isLoop($customEntriesService->get(1), 'recruit');
+        $this->assertFalse($rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**

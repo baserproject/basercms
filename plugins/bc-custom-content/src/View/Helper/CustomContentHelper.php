@@ -84,7 +84,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function descriptionExists(CustomContent $content)
     {
@@ -286,6 +286,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isLoop(CustomEntry $customEntry, string $fieldName): bool
     {
