@@ -604,6 +604,7 @@ class CustomEntriesTable extends AppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function decodeRow(EntityInterface $row)
     {

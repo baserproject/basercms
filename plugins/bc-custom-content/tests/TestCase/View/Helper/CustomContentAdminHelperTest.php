@@ -312,4 +312,32 @@ class CustomContentAdminHelperTest extends BcTestCase
         $this->assertEquals(2, $rs->count());
     }
 
+    /*
+     * test getEntryColumnsNum
+     */
+    public function test_getEntryColumnsNum()
+    {
+        //case isDisplayEntryList is false
+        $arrCustomLink = [
+            CustomLinkFactory::make([
+                'display_admin_list' => 1
+            ])->getEntity()
+        ];
+        $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arrCustomLink);
+        $this->assertEquals(6, $rs);
+        //case isDisplayEntryList is true
+        $arrCustomLink = [
+            CustomLinkFactory::make([
+                'display_admin_list' => 1,
+                'custom_field' => [
+                    'type' => 'group'
+                ],
+                'children' => [
+                    'name' => 'test children'
+                ]
+            ])->getEntity()
+        ];
+        $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arrCustomLink);
+        $this->assertEquals(7, $rs);
+    }
 }
