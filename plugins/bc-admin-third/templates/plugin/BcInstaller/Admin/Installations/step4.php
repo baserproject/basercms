@@ -16,9 +16,7 @@
 $this->BcBaser->i18nScript([
   'message0' => __d('baser_core', 'サイト名を入力してください。'),
   'message1' => __d('baser_core', '管理用メールアドレスを入力してください。'),
-  'message4' => __d('baser_core', 'あなたのパスワードを６文字以上で入力してください。'),
-  'message5' => __d('baser_core', 'パスワードが確認欄のパスワードと同じではありません。'),
-  'message6' => __d('baser_core', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+  'message2' => __d('baser_core', 'パスワードを入力してください。'),
 ]);
 $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール｜ステップ４'));
 $this->BcBaser->js('BcInstaller.admin/installations/step4.bundle', false);
@@ -52,14 +50,20 @@ $this->BcBaser->js('BcInstaller.admin/installations/step4.bundle', false);
         </li>
         <li class="clearfix">
           <label><?php echo __d('baser_core', 'パスワード') ?></label>&nbsp;<small><?php echo __d('baser_core', '半角英数字（英字は大文字小文字を区別）とスペース、記号（._-:/()#,@[]+=&amp;;{}!$*）') ?></small><br>
-          <div class="float-left">
-            <?php echo $this->BcAdminForm->control('admin_password', ['type' => 'password']); ?>
+          <div class="bca-panel-box__inline-fields">
+            <div>
+              <?php echo $this->BcAdminForm->control('admin_password', ['type' => 'password']); ?>
+            </div>
+            <div>
+              <?php echo $this->BcAdminForm->control('admin_confirm_password', ['type' => 'password']); ?>
+              <br>
+              <small><?php echo __d('baser_core', '確認のためもう一度入力してください') ?></small>
+            </div>
           </div>
-          <div class="float-left">
-            <?php echo $this->BcAdminForm->control('admin_confirm_password', ['type' => 'password']); ?>
-            <br>
-            <small><?php echo __d('baser_core', '確認のためもう一度入力してください') ?></small>
-          </div>
+            <?php echo $this->BcAdminForm->control('allow_simple_password', [
+              'type' => 'checkbox',
+              'label' => __d('baser_core', 'ログインパスワードの複雑性のチェックを行わない')
+            ]) ?>
         </li>
       </ul>
     </div>

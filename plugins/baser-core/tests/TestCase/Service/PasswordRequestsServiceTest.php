@@ -82,8 +82,8 @@ class PasswordRequestsServiceTest extends BcTestCase
 
         $passwordRequest = $this->service->get(3);
         $this->assertNotEmpty($this->service->updatePassword($passwordRequest, [
-            'password_1' => 'testtest',
-            'password_2' => 'testtest'
+            'password_1' => 'Testtest1234',
+            'password_2' => 'Testtest1234'
         ]));
 
         $passwordRequest = $this->service->PasswordRequests
@@ -101,12 +101,12 @@ class PasswordRequestsServiceTest extends BcTestCase
 
         $this->assertNotEquals($beforePassword, $afterPassword);
 
-        // 変更後のパスワードでログインw
+        // 変更後のパスワードでログイン
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->post(Configure::read('BcPrefixAuth.Admin.loginAction'), [
             'email' => 'admin@example.com',
-            'password' => 'testtest'
+            'password' => 'Testtest1234'
         ]);
         $this->assertSession(1, 'AuthAdmin.id');
     }

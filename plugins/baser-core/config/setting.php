@@ -506,7 +506,26 @@ return [
                     ]
                 ]
             ]
-        ]
+        ],
+
+        /*
+         * パスワードの設定ルール
+         */
+        'passwordRule' => [
+            // 最小文字数
+            'minLength' => 12,
+            // 入力必須な文字種
+            'requiredCharacterTypes' => [
+                // 数値
+                'numeric',
+                // 大文字英字
+                'uppercase',
+                // 小文字英字
+                'lowercase',
+                // 記号
+                // 'symbol',
+            ],
+        ],
     ],
 
     /**
