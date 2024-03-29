@@ -37,4 +37,12 @@ class CustomContentArrayTraitTest extends BcTestCase
         ];
         $this->assertEquals('value1', $this->arrayValue('key1', $array));
     }
+
+    /**
+     * test textToArray
+     */
+    public function test_textToArray()
+    {
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
+    }
 }
