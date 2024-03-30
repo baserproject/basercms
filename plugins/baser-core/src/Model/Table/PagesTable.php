@@ -244,13 +244,22 @@ class PagesTable extends AppTable
      * 固定ページテンプレートの生成処理を実行する必要がある為、
      * Content::copy() は利用しない
      *
-     * @param array $postData
+     * @param int $id
+     * @param int $newParentId
+     * @param string $newTitle
+     * @param int $newAuthorId
+     * @param int|null $newSiteId
      * @return EntityInterface|false $result
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null)
+    public function copy(
+        int $id,
+        int $newParentId,
+        string $newTitle,
+        int $newAuthorId,
+        int $newSiteId = null)
     {
         $page = $this->get($id, ['contain' => ['Contents']]);
         $oldPage = clone $page;
