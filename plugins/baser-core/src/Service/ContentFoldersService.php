@@ -246,11 +246,10 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getFolderTemplateList($contentId, $plugins)
+    public function getFolderTemplateList(int $contentId, array|string $theme)
     {
-        $folderTemplates = BcUtil::getTemplateList('ContentFolders', $plugins);
-
-        if ($contentId != 1) {
+        $folderTemplates = BcUtil::getTemplateList('ContentFolders', $theme);
+        if ($contentId !== 1) {
             $parentTemplate = $this->getParentTemplate($contentId, 'folder');
             $searchKey = array_search($parentTemplate, $folderTemplates);
             if ($searchKey !== false) {

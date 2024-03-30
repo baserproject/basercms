@@ -26,7 +26,7 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * コンテンツフォルダーをゴミ箱から取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface|array
      * @checked
@@ -38,14 +38,14 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
     /**
      * フォルダのテンプレートリストを取得する
      *
-     * @param $contentId
-     * @param $theme
+     * @param int $contentId
+     * @param array|string $theme
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getFolderTemplateList($contentId, $theme);
+    public function getFolderTemplateList(int $contentId, array|string $theme);
 
     /**
      * 親のテンプレートを取得する
@@ -73,7 +73,7 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 物理削除
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
