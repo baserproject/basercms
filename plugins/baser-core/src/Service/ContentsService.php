@@ -443,32 +443,25 @@ class ContentsService implements ContentsServiceInterface
     {
         /* @var Content $content */
         $content = $this->get($id);
-        $content->parent_id = null;
-        $content->url = '';
-        $content->status = false;
-        $content->self_status = false;
-        // lft / rght をリセットしておかないと 複数データの save() 実行時、
-        // 2つ目以降の lft / rght がおかしくなる
-        unset($content->lft);
-        unset($content->rght);
-
         $this->Contents->disableUpdatingSystemData();
         $this->Contents->updatingRelated = false;
-        $afterEventListener = BcUtil::offEvent($this->Contents->getEventManager(), 'Model.afterSave');
-        $beforeEventListener = BcUtil::offEvent($this->Contents->getEventManager(), 'Model.beforeSave');
-
-        $content = $this->Contents->save($content, ['validate' => false]);
 
         if(!$content->alias_id) {
+            $this->deleteSearchIndex($id);
             $this->Contents->deleteRelateSubSiteContent($content);
             $this->Contents->deleteAlias($content);
-            // TreeBehavior　をオフにした上で、一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-            $this->Contents->Behaviors()->unload('Tree');
-            $content->lft = null;
-            $content->rght = null;
-            $content->level = null;
+            // 最上位に移動して保存
+            $content->parent_id = null;
+            $content->url = '';
+            $content->status = false;
+            $content->self_status = false;
+            // lft rght は unset しないと自動更新できない
+            unset($content->lft);
+            unset($content->rght);
             $this->Contents->save($content, ['validate' => false]);
-            $this->deleteSearchIndex($id);
+
+            // TreeBehavior　をオフにした上で、一旦階層構造から除外したい上でゴミ箱に移動（論理削除）
+            $this->Contents->Behaviors()->unload('Tree');
             $result = $this->Contents->delete($content);
             $this->Contents->Behaviors()->load('Tree');
         } else {
@@ -476,8 +469,6 @@ class ContentsService implements ContentsServiceInterface
             $result = $this->Contents->hardDelete($content);
         }
 
-        BcUtil::onEvent($this->Contents->getEventManager(), 'Model.afterSave', $afterEventListener);
-        BcUtil::onEvent($this->Contents->getEventManager(), 'Model.beforeSave', $beforeEventListener);
         $this->Contents->enableUpdatingSystemData();
         $this->Contents->updatingRelated = true;
         return $result;
