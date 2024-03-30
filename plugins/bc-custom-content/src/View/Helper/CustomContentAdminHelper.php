@@ -25,6 +25,7 @@ use BcCustomContent\Service\CustomFieldsService;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
 
 /**
  * CustomContentAdminHelper
@@ -122,17 +123,18 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function required(CustomLink $link): string
+    public function required(CustomLink|EntityInterface $link): string
     {
         if (!$link->children) {
-            return ($link->required)? $this->BcBaser->getElement('required') : '';
+            return ($link->required)? $this->BcBaser->getElement('BcCustomContent.required') : '';
         } else {
             $hasRequired = false;
             foreach($link->children as $child) {
                 if ($child->required) $hasRequired = true;
             }
-            return ($hasRequired)? $this->BcBaser->getElement('required') : '';
+            return ($hasRequired)? $this->BcBaser->getElement('BcCustomContent.required') : '';
         }
     }
 
