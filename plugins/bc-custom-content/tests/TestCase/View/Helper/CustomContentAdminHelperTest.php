@@ -18,7 +18,7 @@ class CustomContentAdminHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $view = new View($this->getRequest());
+        $view = new View($this->getRequest('/baser/admin'));
         $this->CustomContentAdminHelper = new CustomContentAdminHelper($view);
     }
     /**
@@ -116,28 +116,27 @@ class CustomContentAdminHelperTest extends BcTestCase
          * case children is not exists
          * and required is true
          */
-        $customLink['required'] = 1;
+        $customLink->required = 1;
         $rs = $this->CustomContentAdminHelper->required($customLink);
-        $this->assertEquals('', $rs);
+        $this->assertEquals("<span class=\"bca-label\" data-bca-label-type=\"required\">必須</span>\n", $rs);
         /**
          * case children is exists
          * and required of children is false
          */
-        $customLink['children'] = [
+        $customLink->children = [CustomLinkFactory::make([
             'required' => 0
-        ];
+        ])->getEntity()];
         $rs = $this->CustomContentAdminHelper->required($customLink);
         $this->assertEquals('', $rs);
         /**
          * case children is exists
          * and required of children is true
          */
-        $customLink['children'] = [
-            'required' => 1,
-        ];
+        $customLink->children = [CustomLinkFactory::make([
+            'required' => 1
+        ])->getEntity()];
         $rs = $this->CustomContentAdminHelper->required($customLink);
-        $this->assertEquals('', $rs);
-
+        $this->assertEquals("<span class=\"bca-label\" data-bca-label-type=\"required\">必須</span>\n", $rs);
     }
     /**
      * test attention
