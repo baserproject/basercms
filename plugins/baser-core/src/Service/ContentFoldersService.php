@@ -319,7 +319,8 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
                     'layout_template' => 'default',
-                    'created_date' => date('Y-m-d H:i:s')
+                    'description' => $site->description,
+                    'created_date' => date('Y-m-d H:i:s'),
                 ]
             ];
             $contentFolder = $this->create($data);
@@ -333,6 +334,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'parent_id' => $rootContentId,
                     'title' => $site->display_name,
                     'self_status' => $site->status,
+                    'description' => $site->description,
                 ]
             ];
             $contentFolder = $this->update($contentFolder, $data);

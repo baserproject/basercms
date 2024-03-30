@@ -52,11 +52,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
           <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("content.description", ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
           <?php else: ?>
-            <?php if ($this->BcAdminForm->getSourceValue("content.exclude_search")): ?>
-              <?php echo h($this->BcAdminForm->getSourceValue("content.description")) ?>
-            <?php else: ?>
-              <?php echo h($this->BcSiteConfig->getValue("description")) ?>
-            <?php endif ?>
+            <?php echo h($this->BcAdminForm->getSourceValue("content.description")) ?>
             <?php echo $this->BcAdminForm->hidden("content.description") ?>
           <?php endif ?>
           <?php echo $this->BcAdminForm->error("content.description") ?>
