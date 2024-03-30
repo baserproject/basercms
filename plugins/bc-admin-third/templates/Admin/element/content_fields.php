@@ -155,8 +155,8 @@ $editable = $this->BcContents->isEditable($content);
       </td>
     </tr>
     <tr>
-      <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開状態')) ?>
+      <th class="col-head bca-form-table__label">
+        <?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開状態')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -173,9 +173,11 @@ $editable = $this->BcContents->isEditable($content);
         <?php endif ?>
       </td>
     </tr>
+<?php if(!$content->site_root): ?>
     <tr>
-      <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開日時')) ?></th>
+      <th class="col-head bca-form-table__label">
+        <?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開日時')) ?>
+      </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
           <?php echo $this->BcAdminForm->control("content.self_publish_begin", [
@@ -212,6 +214,7 @@ $editable = $this->BcContents->isEditable($content);
         <?php endif ?>
       </td>
     </tr>
+<?php endif ?>
   </table>
 </section>
 

@@ -62,9 +62,11 @@ $this->BcUpload->setTable('BaserCore.Contents');
           <?php echo $this->BcAdminForm->error("content.description") ?>
         </td>
       </tr>
+<?php if(!$content->site_root): ?>
       <tr>
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.eyecatch", __d('baser_core', 'アイキャッチ')) ?></th>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label("content.eyecatch", __d('baser_core', 'アイキャッチ')) ?>
+        </th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("content.eyecatch", [
@@ -79,6 +81,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
           <?php echo $this->BcAdminForm->error("content.eyecatch") ?>
         </td>
       </tr>
+<?php endif ?>
       <tr>
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.author_id", __d('baser_core', '作成者')) ?></th>
@@ -119,9 +122,9 @@ $this->BcUpload->setTable('BaserCore.Contents');
           <?php echo $this->BcAdminForm->error("content.layout_template") ?>
         </td>
       </tr>
+<?php if(!$content->site_root): ?>
       <tr>
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.exclude_search", __d('baser_core', 'その他設定')) ?></th>
+        <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.exclude_search", __d('baser_core', 'その他設定')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php if (Cake\Core\Plugin::isloaded('BcSearchIndex')): ?>
@@ -168,6 +171,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
           <?php endif ?>
         </td>
       </tr>
+<?php endif ?>
     </table>
   </div>
 </section>
