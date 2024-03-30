@@ -416,6 +416,9 @@ class UtilitiesService implements UtilitiesServiceInterface
         }
 
         $tmpPath = TMP . 'schema' . DS;
+        if(!is_dir($tmpPath)) {
+            (new Folder())->create($tmpPath, 0777);
+        }
         $name = $uploaded['backup']->getClientFileName();
         $uploaded['backup']->moveTo($tmpPath . $name);
         $bcZip = new BcZip();
