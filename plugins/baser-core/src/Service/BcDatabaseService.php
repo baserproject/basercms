@@ -569,7 +569,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
         $schema = $tableClass->getSchema();
         $db = $tableClass->getConnection();
-        $result = (bool)$db->execute($schema->truncateSql($db)[0]);
+        $result = true;
+        foreach($schema->truncateSql($db) as $sql) {
+            if(!$db->execute($sql)) $result = false;
+        }
         $tableClass->setConnection($currentConnection);
         return $result;
     }

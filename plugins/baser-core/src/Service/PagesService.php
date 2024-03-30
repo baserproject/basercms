@@ -103,6 +103,7 @@ class PagesService implements PagesServiceInterface
 				'content' => [
                     'name' => $name,
                     'title' => $title,
+                    'url' => '',
                     'type' => 'Page',
                     'plugin' => 'BaserCore',
                     'alias_id' => null,
