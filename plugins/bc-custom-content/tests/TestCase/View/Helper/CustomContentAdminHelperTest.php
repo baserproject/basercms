@@ -6,6 +6,7 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
@@ -237,7 +238,56 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getEntryIndexTitle()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        /**
+         * case has_child is true
+         * and customTable with display_field is title
+         */
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => 'title',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 1
+        ]);
+        $customTableService->create([
+            'id' => 2,
+            'name' => 'recruit_categories_2',
+            'title' => 'title',
+            'type' => '1',
+            'display_field' => 'text',
+            'has_child' => 0
+        ]);
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->setup(1);
+        $customTable = $customTableService->get(1);
+        $customEntry = $customEntriesService->get(1);
+        //case customEntry exists
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        //check result return
+        $this->assertEquals('<a href="/baser/admin/baser-core/dashboard/edit/1/1">Webエンジニア・Webプログラマー</a>', $rs);
+        /**
+         * case has_child is false
+         * and customTable with display_field is not title
+         */
+        CustomEntryFactory::make([
+            'id' => 4,
+            'custom_table_id' => 2,
+            'title' => 'プログラマー 4',
+        ])->persist();
+        $customTable = $customTableService->get(2);
+        $customEntry = $customEntriesService->get(4);
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        //check result return
+        $this->assertEquals('プログラマー 4', $rs);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /*
