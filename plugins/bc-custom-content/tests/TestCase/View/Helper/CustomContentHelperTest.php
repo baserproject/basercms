@@ -15,6 +15,7 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
@@ -403,7 +404,42 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getLinkChildren()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        CustomLinkFactory::make([
+            'id' => 3,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'parent_id' => 2,
+            'lft' => 2,
+            'rght' => 3,
+        ])->persist();
+
+        //カスタムリンクの子がある場合、
+        $rs = $this->CustomContentHelper->getLinkChildren(new CustomEntry(['custom_table_id' => 1]), 'feature')->toArray();
+        //カスタムリンクの子を取得するできるか確認すること
+        $this->assertEquals(3, $rs[0]->id);
+
+        //カスタムリンクの子がない場合、
+        $rs = $this->CustomContentHelper->getLinkChildren(new CustomEntry(['custom_table_id' => 1]), 'recruit_category');
+        //カスタムリンクの子を取得するできるか確認すること
+        $this->assertCount(0, $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
