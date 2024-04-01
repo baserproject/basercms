@@ -250,16 +250,12 @@ class CustomContentAdminHelperTest extends BcTestCase
         $customTableService->create([
             'id' => 1,
             'name' => 'recruit_categories',
-            'title' => 'title',
-            'type' => '1',
             'display_field' => 'title',
             'has_child' => 1
         ]);
         $customTableService->create([
             'id' => 2,
             'name' => 'recruit_categories_2',
-            'title' => 'title',
-            'type' => '1',
             'display_field' => 'text',
             'has_child' => 0
         ]);
@@ -288,6 +284,7 @@ class CustomContentAdminHelperTest extends BcTestCase
         //check result return
         $this->assertEquals('プログラマー 4', $rs);
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+        $dataBaseService->dropTable('custom_entry_2_recruit_categories_2');
     }
 
     /*
