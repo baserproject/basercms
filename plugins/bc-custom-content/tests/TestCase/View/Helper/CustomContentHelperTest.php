@@ -411,7 +411,8 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_clearCacheLinks()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $this->CustomContentHelper->clearCacheLinks();
+        $this->assertEquals([], $this->getPrivateProperty($this->CustomContentHelper, 'cacheLinks'));
     }
 
     /**
