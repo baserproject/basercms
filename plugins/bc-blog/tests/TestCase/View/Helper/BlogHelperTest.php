@@ -1209,16 +1209,20 @@ class BlogHelperTest extends BcTestCase
         $blogTagsService = $this->getService(BlogTagsServiceInterface::class);
 
         $tags = $blogTagsService->getIndex([])->all();
-        $options = array_merge([
+        $options = [
             'direction' => 'ASC',
             'sort' => 'name',
             'siteId' => null,
             'contentUrl' => ['/news/']
-        ]);
+        ];
         //対象メソッドをコール
         $rs = $this->execPrivateMethod($this->Blog, '_mergePostCountToTagsData', [$tags, $options]);
         //戻り値を確認
         $this->assertCount(3, $rs);
+
+        //post_count の値をチェック
+        $tags = $rs->toArray();
+        $this->assertEquals(1, $tags[0]->post_count);
     }
 
     /**
