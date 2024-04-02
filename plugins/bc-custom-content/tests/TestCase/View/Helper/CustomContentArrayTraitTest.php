@@ -60,6 +60,16 @@ class CustomContentArrayTraitTest extends BcTestCase
      */
     public function test_textToArray()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        /**
+         * case array = 1
+         */
+        $str = "value1\nvalue2\nvalue3";
+        $this->assertEquals(['value1' => 'value1', 'value2' => 'value2', 'value3' => 'value3'],
+            $this->textToArray($str));
+        /**
+         * case array > 1
+         */
+        $str = "item:item1";
+        $this->assertEquals(['item1' => 'item'], $this->textToArray($str));
     }
 }

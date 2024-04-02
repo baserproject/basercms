@@ -59,6 +59,7 @@ trait CustomContentArrayTrait
      * @return array
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function textToArray($str)
     {
