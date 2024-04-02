@@ -272,6 +272,7 @@ class CustomContentsServiceTest extends BcTestCase
             'display_field' => 'title',
             'publish_begin' => '2021-10-01 00:00:00',
             'publish_end' => '9999-11-30 23:59:59',
+            'published' => '2021-10-01 00:00:00',
             'has_child' => 0
         ]);
 
@@ -284,6 +285,7 @@ class CustomContentsServiceTest extends BcTestCase
         $listExpect = [
             'created' => '登録日',
             'modified' => '編集日',
+            'published' => '公開日付',
             'recruit_category' => '求人分類',
             'id' => 'No',
         ];
