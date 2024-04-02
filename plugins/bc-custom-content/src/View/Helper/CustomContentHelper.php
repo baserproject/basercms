@@ -327,6 +327,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return \Cake\Datasource\ResultSetInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLinkChildren(CustomEntry $customEntry, string $fieldName)
     {
