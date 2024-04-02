@@ -299,6 +299,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEntryIndexTitle(CustomTable $table, CustomEntry $entry)
     {
