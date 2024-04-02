@@ -216,6 +216,7 @@ class CustomContentsServiceTest extends BcTestCase
         $result = $this->CustomContentsService->getControlSource('list_order', $options);
         $listExpected = [
             'id' => 'No',
+            'published' => '公開日付',
             'created' => '登録日',
             'modified' => '編集日'
         ];
