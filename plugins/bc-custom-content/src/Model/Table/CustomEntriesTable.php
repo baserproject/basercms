@@ -263,6 +263,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateMaxFileSize(Validator $validator, CustomLink $link, array $postData)
     {
