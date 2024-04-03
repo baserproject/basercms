@@ -294,6 +294,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateFileExt(Validator $validator, CustomLink $link)
     {

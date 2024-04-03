@@ -397,14 +397,25 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateFileExt()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /**
+         * file_ext is null
+         */
+        $customField->meta = ['BcCustomContent' => ['file_ext' => null]];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
+        //check result return
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * file_ext is not null
+         */
+        $customField->meta = ['BcCustomContent' => ['file_ext' => 'jpg,png,gif']];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
+        //check result return
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**
