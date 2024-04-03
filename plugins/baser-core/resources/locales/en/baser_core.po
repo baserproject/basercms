@@ -11937,7 +11937,7 @@ msgstr "Field names cannot exceed 255 characters."
 
 #: plugins/bc-custom-content/src/Model/Table/CustomFieldsTable.php:67
 #: plugins/bc-custom-content/src/Model/Table/CustomLinksTable.php:72
-msgid "フィールド名は半角英数字とアンダースコアのみで入力してください。"
+msgid "フィールド名は半角小文字英数字とアンダースコアのみで入力してください。"
 msgstr ""
 "Please enter the field name only in single-byte alphanumeric characters and "
 "underscores."

@@ -59,7 +59,7 @@ class CustomFieldsTable extends AppTable
             ->scalar('name')
             ->notEmptyString('name', __d('baser_core', 'フィールド名を入力してください。'))
             ->maxLength('name', 255, __d('baser_core', 'フィールド名は255文字以内で入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角小文字英数字とアンダースコアのみで入力してください。'))
             ->add('name', [
                 'validateUnique' => [
                     'rule' => 'validateUnique',
