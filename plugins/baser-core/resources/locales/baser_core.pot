@@ -7344,7 +7344,7 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:60
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:118
-msgid "半角英数字とアンダースコア（ _ ）のみ利用可能です。"
+msgid "半角小文字英数字とアンダースコア（ _ ）のみ利用可能です。"
 msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:79

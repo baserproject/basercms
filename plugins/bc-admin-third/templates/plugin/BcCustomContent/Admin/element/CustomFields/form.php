@@ -57,7 +57,7 @@ $this->BcAdmin->setHelp('custom_fields_form');
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', '半角英数字とアンダースコア（ _ ）のみ利用可能です。') ?>
+          <?php echo __d('baser_core', '半角小文字英数字とアンダースコア（ _ ）のみ利用可能です。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
