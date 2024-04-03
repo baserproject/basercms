@@ -344,6 +344,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateRegex(Validator $validator, CustomLink $link): Validator
     {

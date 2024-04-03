@@ -427,14 +427,26 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateRegex()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        /**
+         * regex is empty
+         */
+        $customField = CustomFieldFactory::make([
+            'regex' => null
+        ])->getEntity();
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * regex is not empty
+         */
+        $customField = CustomFieldFactory::make([
+            'regex' => '/^[0-9]+$/'
+        ])->getEntity();
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**
