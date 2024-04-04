@@ -37,7 +37,7 @@ $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $thi
 		<?php echo $this->BcForm->input('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定しない')]) ?>
 		<br>
 	<?php endif ?>
-	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __d('baser', 'キーワード'), 'escape' => false]) ?>
+	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __d('baser', 'キーワード')]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $siteId]) ?>
 	<?php echo $this->BcForm->submit(__d('baser', '検索'), ['div' => false, 'class' => 'submit_button']) ?>
 	<?php echo $this->BcForm->end() ?>
