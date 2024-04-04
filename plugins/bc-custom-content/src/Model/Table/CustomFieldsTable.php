@@ -51,6 +51,7 @@ class CustomFieldsTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -80,6 +81,15 @@ class CustomFieldsTable extends AppTable
                     'provider' => 'bc',
                     'rule' => ['checkSelectList'],
                     'message' => __d('baser_core', '選択リストに同じ項目を複数登録できません。')
+                ]
+            ]);
+        $validator
+            ->scalar('meta.BcCustomContent.email_confirm')
+            ->add('meta', [
+                'checkAlphaNumericWithJson' => [
+                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.email_confirm'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
                 ]
             ]);
         return $validator;

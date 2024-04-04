@@ -132,11 +132,19 @@ $this->BcAdmin->setHelp('custom_fields_form');
           </ul>
         </div>
 
+        <?php
+        $emailConfirmClass = 'bca-textbox__input';
+        if (!empty($this->BcAdminForm->error('meta'))) {
+          $emailConfirmClass = 'bca-textbox__input form-error';
+        }
+        ?>
+
         <span v-show="showControlEmailConfirm" style="display: block">
           <?php echo $this->BcAdminForm->label('meta.BcCustomContent.email_confirm', __d('baser_core', 'Eメール比較先フィールド名')) ?>&nbsp;
           <?php echo $this->BcAdminForm->control('meta.BcCustomContent.email_confirm', [
             'type' => 'text',
             'size' => 20,
+            'class' => $emailConfirmClass
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
@@ -170,6 +178,7 @@ $this->BcAdmin->setHelp('custom_fields_form');
         </span>
 
         <?php echo $this->BcAdminForm->error('validate') ?>
+        <?php echo $this->BcAdminForm->error('meta') ?>
       </td>
     </tr>
 

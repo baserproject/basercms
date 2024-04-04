@@ -600,4 +600,29 @@ class BcValidation extends Validation
         return (preg_replace("/( |　)/", '', $string) !== '');
     }
 
+    /**
+     * Jsonをバリデーション
+     * 半角小文字英数字とアンダースコアを許容
+     * @param $string
+     * @param $key
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkAlphaNumericWithJson($string, $key)
+    {
+        $value = json_decode($string, true);
+        $keys = explode('.', $key);
+
+        foreach ($keys as $k) {
+            $value = $value[$k];
+        }
+
+        if (preg_match("/^[a-z0-9_]+$/", $value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
