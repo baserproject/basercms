@@ -137,8 +137,8 @@ class CustomFieldsTable extends AppTable
     public function decodeEntity(EntityInterface $entity): EntityInterface
     {
         if (!$entity) return $entity;
-        if (isset($entity->meta) && $entity->meta) $entity->meta = json_decode($entity->meta, true);
-        if (isset($entity->validate) && $entity->validate) $entity->validate = json_decode($entity->validate, true);
+        if (isset($row->meta) && $row->meta && is_string($row->meta)) $row->meta = json_decode($row->meta, true);
+        if (isset($row->validate) && $row->validate && is_string($row->validate)) $row->validate = json_decode($row->validate, true);
         return $entity;
     }
 
