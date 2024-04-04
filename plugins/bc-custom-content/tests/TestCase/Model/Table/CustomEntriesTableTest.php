@@ -416,6 +416,15 @@ class CustomEntriesTableTest extends BcTestCase
         $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
         //check result return
         $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message return
+         * after when setValidateFileExt
+         */
+        $errors = $validator->validate([
+            'title' => 'title',
+            'test' => 'jpg'
+        ]);
+        $this->assertEquals('ファイル形式が無効です。拡張子 jpg, png, gif のファイルをご利用ください。', current($errors['test']));
     }
 
     /**
