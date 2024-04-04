@@ -484,11 +484,18 @@ class CustomEntriesTableTest extends BcTestCase
          * regex is not empty
          */
         $customField = CustomFieldFactory::make([
-            'regex' => '/^[0-9]+$/'
+            'regex' => '[0-9]'
         ])->getEntity();
         $customLink->custom_field = $customField;
         $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
         $this->assertArrayHasKey('test', $rs);
+        //check after when setValidateRegex
+        $errors = $validator->validate([
+            'title' => 'test',
+            'name' => 'name',
+            'test' => 'test'
+        ]);
+        $this->assertEquals('形式が無効です。', current($errors['test']));
     }
 
     /**
