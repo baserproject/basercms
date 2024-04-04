@@ -28,6 +28,7 @@ class CustomContentAdminAppView extends BcAdminAppView
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
