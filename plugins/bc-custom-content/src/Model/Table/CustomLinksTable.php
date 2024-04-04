@@ -65,7 +65,7 @@ class CustomLinksTable extends AppTable
             ->scalar('name')
             ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', 'フィールド名を入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角小文字英数字とアンダースコアのみで入力してください。'))
             ->add('name', [
                 'validateUnique' => [
                     'rule' => ['validateUnique', ['scope' => 'custom_table_id']],
