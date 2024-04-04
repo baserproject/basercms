@@ -107,7 +107,7 @@ class CustomFieldsTable extends AppTable
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
         // beforeMarshal のタイミングで変換しないと配列が null になってしまう
-        $this->encodeArrayEntity($content);
+        $this->encodeEntity($content);
     }
 
     /**
@@ -134,7 +134,7 @@ class CustomFieldsTable extends AppTable
      * @param EntityInterface $entity
      * @return mixed
      */
-    public function decodeEntity(EntityInterface $entity): EntityInterface
+    public function decodeEntity(EntityInterface|array|null $entity): EntityInterface|array|null
     {
         if (!$entity) return $entity;
         if (isset($row->meta) && $row->meta && is_string($row->meta)) $row->meta = json_decode($row->meta, true);
@@ -150,7 +150,7 @@ class CustomFieldsTable extends AppTable
      * @checked
      * @noTodo
      */
-    public function encodeArrayEntity(ArrayObject $entity)
+    public function encodeEntity(ArrayObject $entity)
     {
         if (!empty($entity['meta'])) {
             $entity['meta'] = json_encode($entity['meta'], JSON_UNESCAPED_UNICODE);
