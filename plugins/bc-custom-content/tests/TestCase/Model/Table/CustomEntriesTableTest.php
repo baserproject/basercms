@@ -25,6 +25,7 @@ use BcCustomContent\Service\CustomEntriesService;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * CustomEntriesTableTest
@@ -382,12 +383,53 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateMaxFileSize()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        //CustomLinkを準備
+        $link = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        $customField->meta = ['BcCustomContent' => ['max_file_size' => null]];
+        $link->custom_field = $customField;
 
-        //正常系実行
+        $validator = $this->CustomEntriesTable->getValidator('default');
 
-        //異常系実行
+        //max_file_size == null 場合、ファイルアップロード上限バリデーションをセットアップしない。
+        $validator = $this->CustomEntriesTable->setValidateMaxFileSize($validator, $link, ['test' => '']);
+        //ファイルアップロード上限バリデーションをセットアップしないか確認すること
+        $this->assertArrayNotHasKey('test', $validator);
+
+        //metaを再セット
+        $customField->meta = ['BcCustomContent' => ['max_file_size' => 1]];
+        $link->custom_field = $customField;
+
+        //UPLOAD_ERR_NO_FILE == true 場合、ファイルアップロード上限バリデーションをセットアップしない。
+        //$postDataを準備
+        $files = new UploadedFile(
+            'image.png',
+            10,
+            UPLOAD_ERR_NO_FILE,
+            'image.png',
+            'png'
+        );
+        $validator = $this->CustomEntriesTable->setValidateMaxFileSize($validator, $link, ['test' => $files]);
+        //ファイルアップロード上限バリデーションをセットアップしないか確認すること
+        $this->assertArrayNotHasKey('test', $validator);
+
+        //$postData != $link->name 場合、ファイルアップロード上限バリデーションをセットアップしない。
+        $validator = $this->CustomEntriesTable->setValidateMaxFileSize($validator, $link, ['test2' => $files]);
+        //ファイルアップロード上限バリデーションをセットアップしないか確認すること
+        $this->assertArrayNotHasKey('test', $validator);
+
+        //ファイルアップロード上限バリデーションをセットアップできる
+        //$postDataを準備
+        $files = new UploadedFile(
+            'image.png',
+            10,
+            UPLOAD_ERR_FORM_SIZE,
+            'image.png',
+            'png'
+        );
+        $validator = $this->CustomEntriesTable->setValidateMaxFileSize($validator, $link, ['test' => $files]);
+        //ファイルアップロード上限バリデーションをセットアップできるか確認すること
+        $this->assertArrayHasKey('test', $validator);
 
 
     }
