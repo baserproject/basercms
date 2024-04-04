@@ -16,6 +16,7 @@ use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
@@ -111,12 +112,7 @@ class CustomFieldsTable extends AppTable
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
         // beforeMarshal のタイミングで変換しないと配列が null になってしまう
-        if (!empty($content['meta'])) {
-            $content['meta'] = json_encode($content['meta'], JSON_UNESCAPED_UNICODE);
-        }
-        if (!empty($content['validate'])) {
-            $content['validate'] = json_encode($content['validate'], JSON_UNESCAPED_UNICODE);
-        }
+        $this->encodeArrayEntity($content);
     }
 
     /**
@@ -133,13 +129,41 @@ class CustomFieldsTable extends AppTable
     public function findAll(Query $query, array $options = []): Query
     {
         return $query->formatResults(function(\Cake\Collection\CollectionInterface $results) {
-            return $results->map(function($row) {
-                if (!$row) return $row;
-                if (isset($row->meta) && $row->meta && is_string($row->meta)) $row->meta = json_decode($row->meta, true);
-                if (isset($row->validate) && $row->validate && is_string($row->validate)) $row->validate = json_decode($row->validate, true);
-                return $row;
-            });
+            return $results->map([$this, 'decodeEntity']);
         });
+    }
+
+    /**
+     * エンティティをデコードする
+     *
+     * @param EntityInterface $entity
+     * @return mixed
+     */
+    public function decodeEntity(EntityInterface $entity): EntityInterface
+    {
+        if (!$entity) return $entity;
+        if (isset($row->meta) && $row->meta && is_string($row->meta)) $row->meta = json_decode($row->meta, true);
+        if (isset($row->validate) && $row->validate && is_string($row->validate)) $row->validate = json_decode($row->validate, true);
+        return $entity;
+    }
+
+    /**
+     * エンティティをエンコードする
+     *
+     * @param ArrayObject $entity
+     * @return ArrayObject
+     * @checked
+     * @noTodo
+     */
+    public function encodeArrayEntity(ArrayObject $entity)
+    {
+        if (!empty($entity['meta'])) {
+            $entity['meta'] = json_encode($entity['meta'], JSON_UNESCAPED_UNICODE);
+        }
+        if (!empty($entity['validate'])) {
+            $entity['validate'] = json_encode($entity['validate'], JSON_UNESCAPED_UNICODE);
+        }
+        return $entity;
     }
 
 }

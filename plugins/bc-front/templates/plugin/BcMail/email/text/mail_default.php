@@ -23,7 +23,7 @@
 
                                            <?php echo $other['date'] ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　　　　　　　　　◆◇　<?php echo __d('baser_core', '受信完了メール') ?>　◇◆　
+　◆◇　<?php echo __d('baser_core', '受信完了メール') ?>　◇◆　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <?php if ($other['mode'] === 'user'): ?>
