@@ -490,7 +490,7 @@ class CustomEntriesTableTest extends BcTestCase
         $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
         $this->assertArrayHasKey('test', $rs);
         //check after when setValidateRegex
-        $errors = $validator->validate([
+        $errors = $rs->validate([
             'title' => 'test',
             'name' => 'name',
             'test' => 'test'
