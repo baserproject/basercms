@@ -74,7 +74,7 @@ class CustomLinksTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'aこんにちは',
         ]);
-        $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        $this->assertEquals('フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['name']));
         //システム予約名称のケース
         $errors = $validator->validate([
             'name' => 'option',
