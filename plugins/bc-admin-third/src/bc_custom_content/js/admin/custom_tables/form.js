@@ -179,6 +179,14 @@ let customLinks = new Vue({
     methods: {
 
         /**
+         * テーブルを保存する
+         * 保存ボタン部分が Vue.js で制御されていないため、ここで制御
+         */
+        saveTable: function () {
+            $.bcUtil.showLoader();
+        },
+
+        /**
          * 関連リンク詳細を開く
          *
          * @param index
