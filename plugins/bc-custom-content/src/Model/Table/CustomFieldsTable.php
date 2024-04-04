@@ -84,7 +84,6 @@ class CustomFieldsTable extends AppTable
                 ]
             ]);
         $validator
-            ->scalar('meta.BcCustomContent.email_confirm')
             ->add('meta', [
                 'checkAlphaNumericWithJson' => [
                     'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.email_confirm'],
