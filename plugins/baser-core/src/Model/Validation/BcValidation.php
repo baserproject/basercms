@@ -619,7 +619,7 @@ class BcValidation extends Validation
             $value = $value[$k];
         }
 
-        if (preg_match("/^[a-z0-9_]+$/", $value)) {
+        if (empty($value) || preg_match("/^[a-z0-9_]+$/", $value)) {
             return true;
         } else {
             return false;

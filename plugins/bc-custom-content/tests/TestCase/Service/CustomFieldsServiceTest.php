@@ -157,6 +157,7 @@ class CustomFieldsServiceTest extends BcTestCase
 
         //異常系をテスト
         $customField->title = null;
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'aa']];
         $this->expectException(PersistenceFailedException::class);
         $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "項目見出しを入力してください。")');
         $this->CustomFieldsService->update($customField, $customField->toArray());
