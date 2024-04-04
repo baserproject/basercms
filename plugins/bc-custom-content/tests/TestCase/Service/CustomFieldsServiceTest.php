@@ -150,6 +150,7 @@ class CustomFieldsServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
         $customField = $this->CustomFieldsService->get(1);
         $customField->title = 'test edit title';
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //正常系をテスト
         $rs = $this->CustomFieldsService->update($customField, $customField->toArray());
         //戻る値を確認
