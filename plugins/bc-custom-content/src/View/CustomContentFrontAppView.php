@@ -28,6 +28,7 @@ class CustomContentFrontAppView extends AppView
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

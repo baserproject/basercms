@@ -289,7 +289,7 @@ return [
          * インストール時に composer.json にセットするバージョン
          * @see \BaserCore\Command\CreateReleaseCommand::setupComposer()
          */
-        'setupVersion' => '5.*.*',
+        'setupVersion' => '5.1.*',
 
         /**
          * リリースパッケージに不要なファイル
