@@ -454,14 +454,35 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmailConfirm()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $link = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * customField validate is exists
+         * and empty
+         */
+        $customField->validate = ['EMAIL_CONFIRM'];
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => null]];
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * customField validate is exists
+         */
+        $customField->validate = ['EMAIL_CONFIRM'];
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'confirm']];
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**
