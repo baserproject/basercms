@@ -180,6 +180,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //Postデータを生成
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
+        $data['meta'] = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
         $this->assertResponseCode(302);
@@ -191,7 +192,7 @@ class CustomFieldsControllerTest extends BcTestCase
         $this->assertEquals(1, $query->count());
 
         //タイトルを指定しない場合、
-        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', ['title' => '']);
+        $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', ['title' => '', ]);
         $this->assertResponseCode(200);
         //エラーを確認
         $vars = $this->_controller->viewBuilder()->getVars();
