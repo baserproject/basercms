@@ -420,7 +420,7 @@ class CustomEntriesTableTest extends BcTestCase
          * check message return
          * after when setValidateFileExt
          */
-        $errors = $validator->validate([
+        $errors = $rs->validate([
             'title' => 'title',
             'test' => 'jpg'
         ]);
