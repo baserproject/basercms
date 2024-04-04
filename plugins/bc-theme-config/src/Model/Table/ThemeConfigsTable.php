@@ -75,6 +75,50 @@ class ThemeConfigsTable extends AppTable
      */
     public function validationKeyValue(Validator $validator): Validator
     {
+        // color_main
+        $validator
+            ->allowEmptyString('color_main')
+            ->add('color_main', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'メインはカラーコードを入力してください。')
+                ]
+            ]);
+
+        // color_sub
+        $validator
+            ->allowEmptyString('color_sub')
+            ->add('color_sub', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'サブはカラーコードを入力してください。')
+                ]
+            ]);
+
+        // color_link
+        $validator
+            ->allowEmptyString('color_link')
+            ->add('color_link', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストリンクはカラーコードを入力してください。')
+                ]
+            ]);
+
+        // color_hover
+        $validator
+            ->allowEmptyString('color_hover')
+            ->add('color_hover', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストホバーはカラーコードを入力してください。')
+                ]
+            ]);
+
         // logo
         $validator->add('logo', [
             'fileExt' => [
