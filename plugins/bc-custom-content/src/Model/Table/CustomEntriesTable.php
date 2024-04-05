@@ -415,6 +415,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateHankaku(Validator $validator, CustomLink $link): Validator
     {
