@@ -99,13 +99,13 @@ class ThemeConfigTest extends BcTestCase
             'main_image_5' => 'logo.ppp',
         ]);
         $this->assertArrayHasKey('color_main', $errors);
-        $this->assertEquals('メインはカラーコードを入力してください。', current($errors['color_main']));
+        $this->assertEquals('メインのカラーコードの形式が間違っています。', current($errors['color_main']));
         $this->assertArrayHasKey('color_sub', $errors);
-        $this->assertEquals('サブはカラーコードを入力してください。', current($errors['color_sub']));
+        $this->assertEquals('サブのカラーコードの形式が間違っています。', current($errors['color_sub']));
         $this->assertArrayHasKey('color_link', $errors);
-        $this->assertEquals('テキストリンクはカラーコードを入力してください。', current($errors['color_link']));
+        $this->assertEquals('テキストリンクのカラーコードの形式が間違っています。', current($errors['color_link']));
         $this->assertArrayHasKey('color_hover', $errors);
-        $this->assertEquals('テキストホバーはカラーコードを入力してください。', current($errors['color_hover']));
+        $this->assertEquals('テキストホバーのカラーコードの形式が間違っています。', current($errors['color_hover']));
         $this->assertArrayHasKey('logo', $errors);
         $this->assertEquals('許可されていないファイルです。', current($errors['logo']));
         $this->assertArrayHasKey('main_image_1', $errors);

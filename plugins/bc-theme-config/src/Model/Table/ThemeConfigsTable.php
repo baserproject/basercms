@@ -82,7 +82,7 @@ class ThemeConfigsTable extends AppTable
                 'hexColorPlus' => [
                     'rule' => 'hexColorPlus',
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'メインはカラーコードを入力してください。')
+                    'message' => __d('baser_core', 'メインのカラーコードの形式が間違っています。')
                 ]
             ]);
 
@@ -93,7 +93,7 @@ class ThemeConfigsTable extends AppTable
                 'hexColorPlus' => [
                     'rule' => 'hexColorPlus',
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'サブはカラーコードを入力してください。')
+                    'message' => __d('baser_core', 'サブのカラーコードの形式が間違っています。')
                 ]
             ]);
 
@@ -104,7 +104,7 @@ class ThemeConfigsTable extends AppTable
                 'hexColorPlus' => [
                     'rule' => 'hexColorPlus',
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'テキストリンクはカラーコードを入力してください。')
+                    'message' => __d('baser_core', 'テキストリンクのカラーコードの形式が間違っています。')
                 ]
             ]);
 
@@ -115,7 +115,7 @@ class ThemeConfigsTable extends AppTable
                 'hexColorPlus' => [
                     'rule' => 'hexColorPlus',
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'テキストホバーはカラーコードを入力してください。')
+                    'message' => __d('baser_core', 'テキストホバーのカラーコードの形式が間違っています。')
                 ]
             ]);
 
