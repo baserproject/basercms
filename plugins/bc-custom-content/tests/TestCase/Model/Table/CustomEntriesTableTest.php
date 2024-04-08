@@ -544,14 +544,31 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuHiragana()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuHiragana($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
 
-        //正常系実行
-
-        //異常系実行
-
-
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['ZENKAKU_HIRAGANA'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuHiragana($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message result
+         * after when setValidateZenkakuHiragana
+         */
+        $errors = $rs->validate([
+            'test' => 'test'
+        ]);
+        $this->assertEquals('全角ひらがなで入力してください。', current($errors['test']));
     }
 
     /**
