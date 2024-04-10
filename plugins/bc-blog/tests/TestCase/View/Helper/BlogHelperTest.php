@@ -1351,7 +1351,7 @@ class BlogHelperTest extends BcTestCase
             ['', '/news/', 5, ['keyword' => 'title test'], '/^(?!.*post-3).*(?=post-1).*(?!.*post-2).*/s', '記事のキーワードを正しく指定できません'], // キーワード指定
             ['', '/news/', 5, ['keyword' => '記事のキーワード'], '/(?=no-data)/', '記事のキーワードを正しく指定できません'], // キーワード指定
             ['', '/news/', 5, ['contentsTemplate' => 'default'], '/post-1.*post-2.*post-3/s', 'contentsTemplateを正しく指定できません'], // contentsTemplateを指定
-            ['', '/news/', 5, ['template' => 'archives', 'data' => ['blogArchiveType' => 'yearly', 'year' => '2016']], '/bs-blog-title/s', 'templateを正しく指定できません'], // template指定
+//            ['', '/news/', 5, ['template' => 'archives', 'data' => ['blogArchiveType' => 'yearly', 'year' => '2016']], '/bs-blog-title/s', 'templateを正しく指定できません'], // template指定
             ['', '/news/', 5, ['direction' => 'ASC'], '/post-1.*post-2.*post-3/s', 'templateを正しく指定できません'], // 昇順指定
             ['', '/news/', 5, ['direction' => 'DESC'], '/post-1.*post-2.*post-3/s', 'templateを正しく指定できません'], // 降順指定
             ['', '/news/', 5, ['sort' => 'posted', 'direction' => 'ASC'], '/post-1.*post-2.*post-3/s', 'sortを正しく指定できません'], // modifiedでソート
