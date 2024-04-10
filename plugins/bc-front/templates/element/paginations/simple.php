@@ -21,7 +21,7 @@
  * @noTodo
  * @unitTest
  */
-if (empty($this->Paginator)) {
+if (is_null($this->Paginator)) {
 	return;
 }
 if (!isset($modules)) {
