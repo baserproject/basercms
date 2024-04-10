@@ -79,7 +79,7 @@ class BlogHelper extends AppHelper
 		}
 
 		if (empty($this->blogContent)) {
-			if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data['BlogContent']) {
+			if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && !empty($this->request->data['BlogContent'])) {
 				$this->blogContent = $this->request->data['BlogContent'];
 				$blogContentUpdated = true;
 
