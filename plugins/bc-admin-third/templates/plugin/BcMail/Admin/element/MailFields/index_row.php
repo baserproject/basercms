@@ -70,14 +70,14 @@ if (!$mailField->use_field) {
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php if ($mailField->use_field): ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'unpublish', $mailContent->id, $mailField->id], [
-      'title' => __d('baser_core', '非公開'),
+      'title' => __d('baser_core', '無効'),
       'class' => 'btn-unpublish bca-btn-icon',
       'data-bca-btn-type' => 'unpublish',
       'data-bca-btn-size' => 'lg'
     ]) ?>
     <?php else: ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'publish', $mailContent->id, $mailField->id], [
-      'title' => __d('baser_core', '公開'),
+      'title' => __d('baser_core', '有効'),
       'class' => 'btn-publish bca-btn-icon',
       'data-bca-btn-type' => 'publish',
       'data-bca-btn-size' => 'lg'
