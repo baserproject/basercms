@@ -165,6 +165,9 @@ class RssHelper extends Helper
      * @param string|array|null $callback A string function name, or array containing an object
      *     and a string method name
      * @return string A set of RSS `<item />` elements
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function items($items, $callback = null)
     {

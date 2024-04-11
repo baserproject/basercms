@@ -100,7 +100,22 @@ class RssHelperTest extends BcTestCase
     public function test_items()
     {
         //準備
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $items = [
+            ['title' => 'Item 1', 'link' => 'http://example.com/item1'],
+            ['title' => 'Item 2', 'link' => 'http://example.com/item2'],
+            // Add more test data as needed
+        ];
+        //$callback = null場合、
+        $result = $this->RssHelper->items($items);
+        $this->assertStringContainsString('<item><title>Item 1', $result);
+        $this->assertStringContainsString('<link>http://example.com/item2', $result);
+
+        //$callback != null場合、
+        $callbackMock = function ($item) {
+            return ['title' => strtoupper($item['title'])];
+        };
+        $result = $this->RssHelper->items($items, $callbackMock);
+        $this->assertStringContainsString('<item><title>ITEM 1', $result);
     }
 
 
