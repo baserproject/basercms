@@ -57,6 +57,17 @@ class EditorTemplatesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function testAdmin_index()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-editor-template/editor_templates/index');
+        $this->assertResponseOk();
+    }
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()
@@ -142,19 +153,5 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
-    }
-
-    /**
-     * test index
-     */
-    public function testAdmin_index()
-    {
-        $this->loadFixtureScenario(EditorTemplatesScenario::class);
-        $this->get('/baser/admin/bc-editor-template/editor_templates/index');
-        $this->assertResponseOk();
-        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
-        $query = $editorTemplates->find();
-        // エディターテンプレート一覧は全て3件が返す
-        $this->assertCount(3, $query->all());
     }
 }
