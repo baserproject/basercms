@@ -119,6 +119,9 @@ class RssHelper extends Helper
      * @param array $elements Named array elements which are converted to tags
      * @param string|null $content Content (`<item />`'s belonging to this channel
      * @return string An RSS `<channel />`
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function channel($attrib = [], $elements = [], $content = null)
     {
