@@ -14,6 +14,7 @@ namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcEditorTemplate\Test\Factory\EditorTemplateFactory;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -142,5 +143,26 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+    /**
+     * Test edit
+     */
+    public function testAdmin_edit()
+    {
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
+        //check message
+        $this->assertFlashMessage('テンプレート「japan」を更新しました');
+        //check data
+        $editorTemplates = EditorTemplateFactory::get(11);
+        $this->assertEquals($data['name'], $editorTemplates['name']);
+        //check error
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
     }
 }
