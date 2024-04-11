@@ -141,7 +141,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             'contain' => [
                 'Users',
                 'BlogCategories',
-                'BlogContents',
+                'BlogContents' => ['Contents'],
                 'BlogComments',
                 'BlogTags',
             ],
