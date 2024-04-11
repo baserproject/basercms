@@ -14,6 +14,7 @@ namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcEditorTemplate\Test\Factory\EditorTemplateFactory;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -97,6 +98,28 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test add
+     */
+    public function testAdmin_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $data = ['name' => 'test', 'description' => 'test description'];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', $data);
+        // データが登録されたか確認
+        $editorTemplates = EditorTemplateFactory::get(1);
+        // 登録データを確認
+        $this->assertEquals($data['name'], $editorTemplates['name']);
+        $this->assertEquals($data['description'], $editorTemplates['description']);
+        //check message
+        $this->assertFlashMessage('テンプレート「test」を追加しました');
+        //check message error
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => '']);
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
     }
 
     /**
