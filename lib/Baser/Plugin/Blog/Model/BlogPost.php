@@ -1016,16 +1016,33 @@ class BlogPost extends BlogAppModel
 		if (!is_array($tag)) {
 			$tag = [$tag];
 		}
-		foreach($tag as $key => $value) {
+		foreach ($tag as $key => $value) {
 			$tag[$key] = urldecode($value);
 		}
-		$tags = $this->BlogTag->find('all', [
-			'conditions' => ['BlogTag.name' => $tag],
-			'recursive' => 1,
+
+		$tagIds = $this->BlogTag->find('list', [
+			'fields' => ['id'],
+			'conditions' => [
+				'name' => $tag
+			],
+			'recursive' => -1,
 			'cache' => false,
 		]);
-		if (isset($tags[0]['BlogPost'][0]['id'])) {
-			$conditions['BlogPost.id'] = Hash::extract($tags, '{n}.BlogPost.{n}.id');
+		if (!$tagIds) {
+			$conditions['BlogPost.id'] = null;
+			return $conditions;
+		}
+
+		$postIds = $this->BlogPostsBlogTag->find('list', [
+			'fields' => ['blog_post_id'],
+			'conditions' => [
+				'blog_tag_id' => $tagIds
+			],
+			'recursive' => -1,
+			'cache' => false,
+		]);
+		if ($postIds) {
+			$conditions['BlogPost.id'] = $postIds;
 		} else {
 			$conditions['BlogPost.id'] = null;
 		}
