@@ -75,6 +75,50 @@ class ThemeConfigsTable extends AppTable
      */
     public function validationKeyValue(Validator $validator): Validator
     {
+        // color_main
+        $validator
+            ->allowEmptyString('color_main')
+            ->add('color_main', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'メインのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_sub
+        $validator
+            ->allowEmptyString('color_sub')
+            ->add('color_sub', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'サブのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_link
+        $validator
+            ->allowEmptyString('color_link')
+            ->add('color_link', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストリンクのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_hover
+        $validator
+            ->allowEmptyString('color_hover')
+            ->add('color_hover', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストホバーのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
         // logo
         $validator->add('logo', [
             'fileExt' => [
