@@ -229,10 +229,84 @@ class CustomContentHelperTest extends BcTestCase
 
     /**
      * test getFieldValue
+     * @param string $displayFront
+     * @param string $fieldType
+     * @param string $requestUrl
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @param array $options
+     * @param string $expect
+     * @dataProvider getFieldValueDataProvider
      */
-    public function test_getFieldValue()
+    public function test_getFieldValue($displayFront, $fieldType, $requestUrl, $fieldName, $fieldValue, $options, $expect)
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'recruit_category',
+            'name' => 'recruit_categories',
+            'display_field' => 'name'
+        ]);
+        //データを生成
+        CustomContentFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'recruit_category' => 'test'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 100,
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'entity_id' => 1
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'type' => $fieldType,
+            'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}'
+        ])->persist();
+        CustomEntryFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'name' => 'プログラマー'
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'recruit_category',
+            'before_head' => true,
+            'before_linefeed' => true,
+            'after_head' => true,
+            'after_linefeed' => true,
+            'display_front' => $displayFront
+        ])->persist();
+
+        $this->getRequest($requestUrl);
+
+        $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => $fieldValue], $fieldName, $options);
+        //戻り値を確認
+        $this->assertEquals($expect, $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    public static function getFieldValueDataProvider()
+    {
+        return [
+            [null, 'group', '/', 'recruit_category', 'test', [], ''], //$customLink->display_front = null
+            [true, 'group', '/', 'recruit_category', 'test', [], 'test'], //$customLink->display_front != null && $field->type === 'group'
+            [true, 'BcCcRelated', '/', 'recruit_category', 1, [], 'プログラマー'], //$customLink->display_front != null && $field->type === 'group' && isAdminSystem = false
+            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, [], '<br>1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true &&　全て$options=true
+            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeHead' => false], '<br>プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeHead = false
+            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeLinefeed' => false], '1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeLinefeed = false
+            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterHead' => false], '<br>1&nbsp;プログラマー<br>'], //isAdminSystem = true && afterHead = false
+            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterLinefeed' => false], '<br>1&nbsp;プログラマー&nbsp;1'], //isAdminSystem = true && afterLinefeed = false
+        ];
     }
 
     /**

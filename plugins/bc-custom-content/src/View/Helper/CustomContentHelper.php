@@ -207,6 +207,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string|array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldValue(mixed $entry, string $fieldName, array $options = [])
     {
