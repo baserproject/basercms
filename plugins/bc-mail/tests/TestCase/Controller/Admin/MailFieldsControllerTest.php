@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Event\Event;
@@ -86,7 +87,45 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        //テストデータベースを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => 'test',
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //check data in database
+        $mailField = MailFieldsFactory::get(1);
+        $this->assertEquals($data['name'], $mailField['name']);
+        $this->assertEquals($data['field_name'], $mailField['field_name']);
+
+        //異常系のテスト
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => null,
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
