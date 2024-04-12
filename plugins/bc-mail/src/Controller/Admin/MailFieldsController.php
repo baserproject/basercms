@@ -174,6 +174,7 @@ class MailFieldsController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(MailFieldsAdminServiceInterface $service, int $mailContentId, int $id)
     {

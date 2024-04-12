@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Event\Event;
@@ -94,7 +95,41 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        //テストデータベースを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //data edit
+        $data = [
+            'name' => 'edit',
+            'type' => 'text'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
+        //check flash message
+        $this->assertFlashMessage('メールフィールド「edit」を更新しました。');
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //check data
+        $mailField = MailFieldsFactory::get(1);
+        $this->assertEquals($data['name'], $mailField['name']);
+        $data = [
+            'name' => null,
+            'type' => 'text'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
+        //check response code
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
