@@ -141,7 +141,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             'contain' => [
                 'Users',
                 'BlogCategories',
-                'BlogContents' => ['Contents'],
+                'BlogContents',
                 'BlogComments',
                 'BlogTags',
             ],
@@ -262,6 +262,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if (($params['status'] === 'publish' || (string)$params['status'] === '1') && !$params['preview']) {
             $conditions = $this->BlogPosts->getConditionAllowPublish();
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
+            $query->contain(['BlogContents' => ['Contents']]);
             if($params['draft'] === false) {
                 $query->selectAllExcept($this->BlogPosts, ['content_draft', 'detail_draft']);
                 $query = $this->selectContains($query);
