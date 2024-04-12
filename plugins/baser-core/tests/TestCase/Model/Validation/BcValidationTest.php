@@ -656,7 +656,7 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-    public function hexColorPlusDataProvider()
+    public static function hexColorPlusDataProvider()
     {
         return [
             ['000', true],
