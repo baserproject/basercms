@@ -11,6 +11,7 @@
 
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -107,9 +108,15 @@ class EditorTemplatesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-
+        //サービスクラス
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        //のバリューをリセットする
+        $siteConfigsService->resetValue('editor');
+        //set data
         $data = ['name' => 'test', 'description' => 'test description'];
         $this->post('/baser/admin/bc-editor-template/editor_templates/add', $data);
+        //check status code
+        $this->assertResponseCode(302);
         // データが登録されたか確認
         $editorTemplates = EditorTemplateFactory::get(1);
         // 登録データを確認
@@ -117,6 +124,8 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->assertEquals($data['description'], $editorTemplates['description']);
         //check message
         $this->assertFlashMessage('テンプレート「test」を追加しました');
+        //check redirect
+        $this->assertRedirect(['action' => 'index']);
         //check message error
         $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => '']);
         $this->assertFlashMessage('入力エラーです。内容を修正してください。');
