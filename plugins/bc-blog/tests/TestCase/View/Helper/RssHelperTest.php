@@ -80,10 +80,25 @@ class RssHelperTest extends BcTestCase
 
     /**
      * test time
+     * @param string $time
+     * @param string $expect
+     * @dataProvider timeDataProvider
      */
-    public function test_time()
+    public function test_time(string $time, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 呼び出し
+        $result = $this->RssHelper->time($time);
+        // 結果チェック
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function timeDataProvider()
+    {
+        return [
+            ['2024-1-1', 'Mon, 01 Jan 2024 00:00:00 +0900'],
+            ['2024-2-10 10:10:1', 'Sat, 10 Feb 2024 10:10:01 +0900'],
+        ];
+
     }
 
     /**
