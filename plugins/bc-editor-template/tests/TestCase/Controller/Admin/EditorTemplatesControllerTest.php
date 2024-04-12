@@ -11,6 +11,7 @@
 
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -149,15 +150,25 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->loadFixtureScenario(EditorTemplatesScenario::class);
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+        //サービスクラス
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        //のバリューをリセットする
+        $siteConfigsService->resetValue('editor');
+        //テストデータをセット
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
         $data = [
             'name' => 'japan'
         ];
         $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
+        //check status code
+        $this->assertResponseCode(302);
         //check message
         $this->assertFlashMessage('テンプレート「japan」を更新しました');
+        //check redirect
+        $this->assertRedirect(['action' => 'index']);
         //check data
         $editorTemplates = EditorTemplateFactory::get(11);
         $this->assertEquals($data['name'], $editorTemplates['name']);
