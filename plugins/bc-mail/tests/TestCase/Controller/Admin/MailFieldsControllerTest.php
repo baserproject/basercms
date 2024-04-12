@@ -78,7 +78,17 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find();
+        $this->assertEquals(3, $query->count());
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/index/1');
+        $this->assertResponseOk();
     }
 
     /**
