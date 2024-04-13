@@ -464,7 +464,7 @@ class MailFieldsController extends MailAppController
 			);
 			return;
 		}
-		$this->MailMessage->construction($mailContentId);
+		$this->MailMessage->addMessageField($mailContentId, $result['MailField']['field_name']);
 		$this->set('data', $result);
 	}
 
