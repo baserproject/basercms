@@ -568,14 +568,30 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateHankaku()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateHankaku($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['HANKAKU'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateHankaku($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check mesaage return
+         * after when setValidateHankaku
+         */
+        $errors = $rs->validate([
+            'test' => 'あいうえお'
+        ]);
+        $this->assertEquals('半角英数で入力してください。', current($errors['test']));
     }
 
     /**
