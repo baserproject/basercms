@@ -518,14 +518,28 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateNumber()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateNumber($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['NUMBER'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateNumber($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message return
+         * after when setValidateNumber
+         */
+        $errors = $rs->validate(['test' => 'abc']);
+        $this->assertEquals('数値形式で入力してください。', current($errors['test']));
     }
 
     /**
