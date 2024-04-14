@@ -455,14 +455,35 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmailConfirm()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $link = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * customField validate is exists
+         * and empty
+         */
+        $customField->validate = ['EMAIL_CONFIRM'];
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => null]];
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * customField validate is exists
+         */
+        $customField->validate = ['EMAIL_CONFIRM'];
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'confirm']];
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmailConfirm($validator, $link);
+        //check result return
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**
@@ -470,14 +491,33 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateRegex()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        /**
+         * regex is empty
+         */
+        $customField = CustomFieldFactory::make([
+            'regex' => null
+        ])->getEntity();
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /**
+         * regex is not empty
+         */
+        $customField = CustomFieldFactory::make([
+            'regex' => '[0-9]'
+        ])->getEntity();
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateRegex($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        //check after when setValidateRegex
+        $errors = $rs->validate([
+            'title' => 'test',
+            'name' => 'name',
+            'test' => 'test'
+        ]);
+        $this->assertEquals('形式が無効です。', current($errors['test']));
     }
 
     /**
@@ -500,14 +540,28 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateNumber()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateNumber($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['NUMBER'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateNumber($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message return
+         * after when setValidateNumber
+         */
+        $errors = $rs->validate(['test' => 'abc']);
+        $this->assertEquals('数値形式で入力してください。', current($errors['test']));
     }
 
     /**
@@ -515,14 +569,30 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateHankaku()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateHankaku($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['HANKAKU'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateHankaku($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check mesaage return
+         * after when setValidateHankaku
+         */
+        $errors = $rs->validate([
+            'test' => 'あいうえお'
+        ]);
+        $this->assertEquals('半角英数で入力してください。', current($errors['test']));
     }
 
     /**
@@ -530,14 +600,30 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuKatakana()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuKatakana($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['ZENKAKU_KATAKANA'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuKatakana($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check mesaage return
+         * after when setValidateZenkakuKatakana
+         */
+        $errors = $rs->validate([
+            'test' => 'あいうえお'
+        ]);
+        $this->assertEquals('全角カタカナで入力してください。', current($errors['test']));
     }
 
     /**
@@ -545,14 +631,31 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuHiragana()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuHiragana($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
 
-        //正常系実行
-
-        //異常系実行
-
-
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['ZENKAKU_HIRAGANA'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuHiragana($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message result
+         * after when setValidateZenkakuHiragana
+         */
+        $errors = $rs->validate([
+            'test' => 'test'
+        ]);
+        $this->assertEquals('全角ひらがなで入力してください。', current($errors['test']));
     }
 
     /**
@@ -560,14 +663,43 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateDatetime()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         * and postData is empty
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, []);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         * and postData is not empty
+         * postData is not array
+         */
+        $customField->validate = ['DATETIME'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, ['test']);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message return
+         * after when setValidateDatetime
+         */
+        $errors = $rs->validate(['test' => 'test']);
+        $this->assertEquals("日付の形式が無効です。", current($errors['test']));
+        /*
+        * customField validate is exists
+        * and postData is array
+        */
+        $postData = [
+            $customLink->name => [
+                'year' => '2023',
+                'month' => '02'
+            ]
+        ];
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, $postData);
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**

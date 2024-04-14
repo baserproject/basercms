@@ -318,6 +318,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateEmailConfirm(Validator $validator, CustomLink $link): Validator
     {
@@ -345,6 +346,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateRegex(Validator $validator, CustomLink $link): Validator
     {
@@ -392,6 +394,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateNumber(Validator $validator, CustomLink $link): Validator
     {
@@ -415,6 +418,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateHankaku(Validator $validator, CustomLink $link): Validator
     {
@@ -462,6 +466,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function setValidateZenkakuHiragana(Validator $validator, CustomLink $link): Validator
     {
@@ -486,9 +491,11 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateDatetime(Validator $validator, CustomLink $link, array $postData): Validator
     {
+
         $validator->setProvider('mailMessage', 'BcMail\Model\Validation\MailMessageValidation');
         $field = $link->custom_field;
         if ($field->type == "BcCcDate" || $field->type == "BcCcDateTime"

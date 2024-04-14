@@ -148,28 +148,31 @@ class ThemesService implements ThemesServiceInterface
         }
         $name = $postData['file']->getClientFileName();
         $postData['file']->moveTo(TMP . $name);
+        $srcDirName = basename($name, '.zip');
         $zip = new BcZip();
-        $srcName = $zip->extract(TMP . $name, TMP);
-        if (!$srcName) {
+        if (!$zip->extract(TMP . $name, TMP)) {
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
-        $num = 2;
-        $dstName = Inflector::camelize($srcName);
-        while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
-            $dstName = Inflector::camelize($srcName) . $num;
-            $num++;
+
+        $dstName = $srcName = Inflector::camelize($srcDirName);
+        if (preg_match('/^(.+?)([0-9]+)$/', $srcName, $matches)) {
+            $baseName = $matches[1];
+            $num = $matches[2];
+        } else {
+            $baseName = $srcName;
+            $num = null;
         }
-        $folder = new BcFolder(TMP . $srcName);
+        while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
+            if (is_null($num)) $num = 1;
+            $num++;
+            $dstName = $baseName . $num;
+        }
+        $folder = new BcFolder(TMP . $srcDirName);
         $folder->move(BASER_THEMES . $dstName);
         unlink(TMP . $name);
-        $pluginPath = BcUtil::getPluginPath($dstName);
-        if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
-            BcUtil::changePluginNameSpace($dstName);
-            return $dstName;
-        } else {
-            (new BcFolder(BASER_THEMES . $dstName))->delete();
-            throw new BcException(__d('baser_core', 'テーマに Plugin クラスが存在しません。テーマのバージョンが違う可能性があります。'));
-        }
+        BcUtil::changePluginClassName($srcName, $dstName);
+        BcUtil::changePluginNameSpace($dstName);
+        return $dstName;
     }
 
     /**
@@ -364,16 +367,31 @@ class ThemesService implements ThemesServiceInterface
         if (!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
 
         if (in_array($theme, Configure::read('BcApp.core'))) $theme = Inflector::dasherize($theme);
-        $newTheme = Inflector::camelize($theme, '-') . 'Copy';
+        $oldTheme = Inflector::camelize($theme, '-');
+        $newTheme = $oldTheme . 'Copy';
         while(true) {
             if (!is_dir(BASER_THEMES . $newTheme)) break;
             $newTheme .= 'Copy';
         }
         $folder = new BcFolder(BASER_THEMES . $theme);
-        if (!$folder->copy( BASER_THEMES . $newTheme)) {
+        if (!$folder->copy(BASER_THEMES . $newTheme)) {
             return false;
         }
-        if(!BcUtil::changePluginNameSpace($newTheme)) return false;
+        if(!file_exists(BASER_THEMES . $newTheme . DS . 'src' . DS . $newTheme . 'Plugin.php')) {
+            if (file_exists(BASER_THEMES . $newTheme . DS . 'src' . DS . 'Plugin.php')) {
+                rename(
+                    BASER_THEMES . $newTheme . DS . 'src' . DS . 'Plugin.php',
+                    BASER_THEMES . $newTheme . DS . 'src' . DS . $newTheme . 'Plugin.php'
+                );
+            } elseif (file_exists(BASER_THEMES . $newTheme . DS . 'src' . DS . $oldTheme . 'Plugin.php')) {
+                rename(
+                    BASER_THEMES . $newTheme . DS . 'src' . DS . $oldTheme . 'Plugin.php',
+                    BASER_THEMES . $newTheme . DS . 'src' . DS . $newTheme . 'Plugin.php'
+                );
+            }
+        }
+        BcUtil::changePluginClassName($oldTheme, $newTheme);
+        BcUtil::changePluginNameSpace($newTheme);
         return true;
     }
 
