@@ -645,14 +645,43 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateDatetime()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         * and postData is empty
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, []);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         * and postData is not empty
+         * postData is not array
+         */
+        $customField->validate = ['DATETIME'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, ['test']);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message return
+         * after when setValidateDatetime
+         */
+        $errors = $rs->validate(['test' => 'test']);
+        $this->assertEquals("日付の形式が無効です。", current($errors['test']));
+        /*
+        * customField validate is exists
+        * and postData is array
+        */
+        $postData = [
+            $customLink->name => [
+                'year' => '2023',
+                'month' => '02'
+            ]
+        ];
+        $rs = $this->CustomEntriesTable->setValidateDatetime($validator, $customLink, $postData);
+        $this->assertArrayHasKey('test', $rs);
     }
 
     /**

@@ -491,11 +491,14 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateDatetime(Validator $validator, CustomLink $link, array $postData): Validator
     {
+
         $validator->setProvider('mailMessage', 'BcMail\Model\Validation\MailMessageValidation');
         $field = $link->custom_field;
+
         if ($field->validate && in_array('DATETIME', $field->validate)) {
             if (isset($postData[$link->name]) && is_array($postData[$link->name])) {
                 $validator->add($link->name, [
