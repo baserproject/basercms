@@ -19,6 +19,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Filesystem\File;
 use Cake\Http\Client;
@@ -465,11 +466,15 @@ class PluginsService implements PluginsServiceInterface
         $name = rawurldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
-        $plugin = $plugins->create($name);
-        if (!$plugin->uninstall($options)) {
-            throw new Exception(__d('baser_core', 'プラグインの削除に失敗しました。'));
-        }
-        if (!method_exists($plugin, 'uninstall')) {
+        try {
+            $plugin = $plugins->create($name);
+            if (!$plugin->uninstall($options)) {
+                throw new Exception(__d('baser_core', 'プラグインの削除に失敗しました。'));
+            }
+            if (!method_exists($plugin, 'uninstall')) {
+                throw new Exception(__d('baser_core', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+            }
+        } catch (MissingPluginException) {
             throw new Exception(__d('baser_core', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
         }
     }
@@ -643,30 +648,29 @@ class PluginsService implements PluginsServiceInterface
         }
         $name = $postData['file']->getClientFileName();
         $postData['file']->moveTo(TMP . $name);
-        $srcName = basename($name, '.zip');
+        $srcDirName = basename($name, '.zip');
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
 
-        $dstName = Inflector::camelize($srcName);
-        if (preg_match('/^(.+?)([0-9]+)$/', $dstName, $matches)) {
+        $dstName = $srcName = Inflector::camelize($srcDirName);
+        if (preg_match('/^(.+?)([0-9]+)$/', $srcName, $matches)) {
             $baseName = $matches[1];
             $num = $matches[2];
         } else {
-            $baseName = $dstName;
+            $baseName = $srcName;
             $num = null;
         }
         while(is_dir(BASER_PLUGINS . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
-            if (is_null($num)) {
-                $num = 1;
-            }
+            if (is_null($num)) $num = 1;
             $num++;
-            $dstName = Inflector::camelize($baseName) . $num;
+            $dstName = $baseName . $num;
         }
-        $folder = new Folder(TMP . $srcName);
+        $folder = new Folder(TMP . $srcDirName);
         $folder->move(BASER_PLUGINS . $dstName, ['mode' => 0777]);
         unlink(TMP . $name);
+        BcUtil::changePluginClassName($srcName, $dstName);
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
     }

@@ -13,7 +13,7 @@
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
-		
+
 <!--[if lt IE 9]>
 	<script src="js/IE9.js"></script>
 	<script src="js/html5shiv-printshiv.js"></script>
@@ -39,7 +39,7 @@
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">
-<div id="Wrapper">	
+<div id="Wrapper">
 <?php $this->BcBaser->header() ?>
 
 	<?php if ($this->BcBaser->isHome()): ?>
@@ -52,10 +52,10 @@
         <?php $this->BcBaser->mainImage(array('all' => false, 'num' => 5)) ?>
     </div>
 	<?php else: ?>
-	
+
 	<div id="PageTitle">
 	    <div class="body-wrap">
-	    <?php if (!empty($this->Blog)): ?>
+	    <?php if (!empty($this->BcBaser->isBlog())): ?>
 	        <h1><?php echo h($this->Blog->getTitle()) ?></h1>
     	<?php else: ?>
 	        <h1><?php $this->BcBaser->contentsTitle() ?></h1>
@@ -93,7 +93,7 @@
 		</div>
 		<?php endif ?>
 	</div>
-	
+
 	<div id="TopLink"><?php $this->BcBaser->img('footer/btn_pagetop.png', array('alt' => 'PAGE TOP')) ?></div>
 
 <?php $this->BcBaser->footer() ?>

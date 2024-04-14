@@ -110,8 +110,14 @@ class BlogController extends BlogFrontAppController
                 'blog_content_id' => $blogContentId,
                 'limit' => $listCount,
                 'status' => 'publish',
-                'draft' => false
-            ]));
+                'draft' => false,
+                'contain' => [
+                    'Users',
+                    'BlogCategories',
+                    'BlogContents' => ['Contents'],
+                    'BlogComments',
+                    'BlogTags',
+            ]]));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index']);
         }

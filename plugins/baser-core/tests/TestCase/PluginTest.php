@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase;
 
 use App\Application;
-use BaserCore\Plugin;
+use BaserCore\BaserCorePlugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
@@ -27,12 +27,12 @@ use Cake\Filesystem\File;
 
 /**
  * Class PluginTest
- * @property Plugin $Plugin
+ * @property BaserCorePlugin $Plugin
  */
 class PluginTest extends BcTestCase
 {
     /**
-     * @var Plugin
+     * @var BaserCorePlugin
      */
     public $Plugin;
 
@@ -59,7 +59,7 @@ class PluginTest extends BcTestCase
     {
         parent::setUp();
         $this->application = new Application(CONFIG);
-        $this->Plugin = new Plugin(['name' => 'BaserCore']);
+        $this->Plugin = new BaserCorePlugin(['name' => 'BaserCore']);
     }
 
     /**
