@@ -12,12 +12,10 @@
 namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
-use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
-use BaserCore\View\BcAdminAppView;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -27,7 +25,6 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Http\ServerRequestFactory;
 use Cake\Http\Session;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -1311,7 +1308,7 @@ class BcUtilTest extends BcTestCase
         // 対象ファイルをopen
         $theme = 'BcFront';
         $pluginPath = BcUtil::getPluginPath($theme);
-        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new File($pluginPath . 'src' . DS . 'BcFrontPlugin.php');
         // テーマ名とネームスペースが違う状態を作る
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));

@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\ThemesAdminServiceInterface;
+use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcZip;
@@ -42,7 +43,7 @@ class ThemesController extends BcAdminAppController
 
     /**
      * テーマをアップロードして適用する
-     * @param ThemesServiceInterface $service
+     * @param ThemesServiceInterface|ThemesService $service
      * @checked
      * @noTodo
      * @unitTest
@@ -154,7 +155,7 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマを適用する
      *
-     * @param ThemesServiceInterface $service
+     * @param ThemesServiceInterface|ThemesService $service
      * @param string $theme
      * @return void
      * @checked
