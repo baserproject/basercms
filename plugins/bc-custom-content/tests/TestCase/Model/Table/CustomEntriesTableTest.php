@@ -22,6 +22,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -718,10 +719,24 @@ class CustomEntriesTableTest extends BcTestCase
             'name' => 243435435,
         ]);
         $this->assertEquals('数値だけのスラッグを登録することはできません。', current($errors['name']));
+
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        //日付
+        $errors = $validator->validate([
+            'published' => 'test',
+            'publish_begin' => 'test',
+            'publish_end' => 'test'
+        ]);
+        $this->assertEquals('公開日付に不正な文字列が入っています。', current($errors['published']));
+        $this->assertEquals('公開開始日に不正な文字列が入っています。', current($errors['publish_begin']));
+        $this->assertEquals('公開終了日に不正な文字列が入っています。', current($errors['publish_end']));
+
         //正常系実行
         $errors = $validator->validate([
             'title' => 'test',
             'name' => 'test 2324',
+            'published' => DateTime::now(),
+            'publish_begin' => DateTime::now()
         ]);
         $this->assertEmpty($errors);
     }
