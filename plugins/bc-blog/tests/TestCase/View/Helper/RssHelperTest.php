@@ -88,10 +88,55 @@ class RssHelperTest extends BcTestCase
 
     /**
      * test item
+     * @param array $att
+     * @param array $elements
+     * @param string $expect
+     * @dataProvider itemDataProvider
      */
-    public function test_item()
+    public function test_item(array $att, array $elements, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 呼び出し
+        $result = $this->RssHelper->item($att, $elements);
+        // 結果チェック
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function itemDataProvider()
+    {
+        return [
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2']
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category></item>'
+            ],
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2'],
+                    'convertEntities' => false
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category><convertEntities attribute="value"/></item>'
+            ],
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2'],
+                    'comments' => ['comment' => 'ok', 'url' => 'http://example.com/comment']
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category><comments comment="ok">http://example.com/comment</comments></item>'
+            ]
+        ];
     }
 
     /**
