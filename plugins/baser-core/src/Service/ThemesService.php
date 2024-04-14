@@ -479,7 +479,14 @@ class ThemesService implements ThemesServiceInterface
             $this->_writeCsv($plugin, $tmpDir . $plugin . DS, $excludes);
             $folder = new Folder($tmpDir . $plugin);
             $files = $folder->read();
-            if (!$files[0] && !$files[1]) $folder->delete($tmpDir . $plugin);
+            if (!$files[0] && !$files[1]) {
+                $folder->delete($tmpDir . $plugin);
+            } else {
+                $pluginClass = Plugin::getCollection()->get($plugin);
+                if(method_exists($pluginClass, 'modifyDownloadDefaultData')) {
+                    $pluginClass->modifyDownloadDefaultData($tmpDir . $plugin . DS);
+                }
+            }
         }
         // site_configs 調整
         $this->_modifySiteConfigsCsv($tmpDir . 'BaserCore' . DS . 'site_configs.csv');
