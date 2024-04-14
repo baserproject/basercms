@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase;
 
 use App\Application;
-use BaserCore\Plugin;
+use BaserCore\BaserCorePlugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
@@ -34,14 +34,14 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class PluginTest
- * @property Plugin $Plugin
+ * @property BaserCorePlugin $Plugin
  */
 class PluginTest extends BcTestCase
 {
     use ScenarioAwareTrait;
 
     /**
-     * @var Plugin
+     * @var BaserCorePlugin
      */
     public $Plugin;
 
@@ -60,7 +60,7 @@ class PluginTest extends BcTestCase
         $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(PluginsScenario::class);
         $this->application = new Application(CONFIG);
-        $this->Plugin = new Plugin(['name' => 'BaserCore']);
+        $this->Plugin = new BaserCorePlugin(['name' => 'BaserCore']);
     }
 
     /**

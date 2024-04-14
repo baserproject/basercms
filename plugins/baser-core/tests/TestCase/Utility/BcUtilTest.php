@@ -1307,7 +1307,7 @@ class BcUtilTest extends BcTestCase
         // 対象ファイルをopen
         $theme = 'BcFront';
         $pluginPath = BcUtil::getPluginPath($theme);
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new BcFile($pluginPath . 'src' . DS . 'BcFrontPlugin.php');
         // テーマ名とネームスペースが違う状態を作る
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));
