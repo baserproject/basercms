@@ -56,7 +56,7 @@ use Cake\Utility\Inflector;
     ]) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $theme->name], [
       'title' => __d('baser_core', 'テーマ削除'),
-      'confirm' => __d('baser_core', "このデータを本当に削除してもよろしいですか？\\n※ 削除したデータは元に戻すことができません。"),
+      'confirm' => __d('baser_core', "このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。"),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg',
