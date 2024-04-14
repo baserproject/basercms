@@ -166,8 +166,27 @@ class ThemesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if (!$theme) $this->notFound();
+
+        // EVENT Themes.beforeApply
+        $event = $this->dispatchLayerEvent('beforeApply', [
+            'theme' => $theme
+        ]);
+        if ($event !== false) {
+            if($event->getResult() === null || $event->getResult() === true) {
+                $theme = $event->getData('theme');
+            } else {
+                $theme = $event->getResult();
+            }
+        }
+
         try {
             $info = $service->apply($this->getRequest()->getAttribute('currentSite'), $theme);
+
+            // EVENT Themes.afterApply
+            $this->dispatchLayerEvent('afterApply', [
+                'theme' => $theme
+            ]);
+
             $message = [__d('baser_core', 'テーマ「{0}」を適用しました。', $theme)];
             if ($info) $message = array_merge($message, [''], $info);
             $this->BcMessage->setInfo(implode("\n", $message));
