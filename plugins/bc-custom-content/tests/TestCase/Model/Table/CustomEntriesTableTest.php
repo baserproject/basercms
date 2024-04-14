@@ -525,14 +525,40 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateEmail()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmail($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['EMAIL'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateEmail($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check message result
+         * after when setValidateEmail
+         * and invalid email
+         */
+        $errors = $rs->validate([
+            'title' => 'title',
+            'test' => 'test'
+        ]);
+        $this->assertEquals('Eメール形式で入力してください。', current($errors['test']));
+        /**
+         * 半角で入力してください
+         */
+        $errors = $rs->validate([
+            'title' => 'title',
+            'test' => '半角で入力@gmail.com'
+        ]);
+        $this->assertEquals('半角で入力してください。', current($errors['test']));
     }
 
     /**
