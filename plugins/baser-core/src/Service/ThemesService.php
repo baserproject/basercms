@@ -476,7 +476,14 @@ class ThemesService implements ThemesServiceInterface
             $folder = new BcFolder($tmpDir . $plugin);
             $files = $folder->getFiles();
             $folders = $folder->getFolders();
-            if (!$files && !$folders) $folder->delete();
+            if (!$files && !$folders) {
+                $folder->delete();
+            } else {
+                $pluginClass = Plugin::getCollection()->get($plugin);
+                if(method_exists($pluginClass, 'modifyDownloadDefaultData')) {
+                    $pluginClass->modifyDownloadDefaultData($tmpDir . $plugin . DS);
+                }
+            }
         }
         // site_configs 調整
         $this->_modifySiteConfigsCsv($tmpDir . 'BaserCore' . DS . 'site_configs.csv');
