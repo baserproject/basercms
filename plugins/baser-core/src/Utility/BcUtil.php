@@ -1781,10 +1781,9 @@ class BcUtil
                 return false;
             }
         }
-        $file = new File($newPath);
+        $file = new BcFile($newPath);
         $data = $file->read();
         $file->write(preg_replace('/class\s+.*?Plugin/', 'class ' . $newPlugin . 'Plugin', $data));
-        $file->close();
         return true;
     }
 
