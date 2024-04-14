@@ -318,6 +318,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateEmailConfirm(Validator $validator, CustomLink $link): Validator
     {
