@@ -465,6 +465,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function setValidateZenkakuHiragana(Validator $validator, CustomLink $link): Validator
     {

@@ -583,14 +583,30 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setValidateZenkakuKatakana()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        /*
+         * customField validate is not exists
+         */
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuKatakana($validator, $customLink);
+        $this->assertArrayNotHasKey('test', $rs);
+        /*
+         * customField validate is exists
+         */
+        $customField->validate = ['ZENKAKU_KATAKANA'];
+        $customLink->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateZenkakuKatakana($validator, $customLink);
+        $this->assertArrayHasKey('test', $rs);
+        /**
+         * check mesaage return
+         * after when setValidateZenkakuKatakana
+         */
+        $errors = $rs->validate([
+            'test' => 'あいうえお'
+        ]);
+        $this->assertEquals('全角カタカナで入力してください。', current($errors['test']));
     }
 
     /**
