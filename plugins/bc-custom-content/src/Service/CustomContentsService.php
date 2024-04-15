@@ -267,7 +267,7 @@ class CustomContentsService implements CustomContentsServiceInterface
         $site = $sites->get($siteId);
 
         $templatesPaths = array_merge(
-            [Plugin::templatePath($site->theme) . 'plugin' . DS . 'BcCustomContent' . DS],
+            [Plugin::templatePath($site->getAppliedTheme()) . 'plugin' . DS . 'BcCustomContent' . DS],
             App::path('templates'),
             [Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . 'plugin' . DS . 'BcCustomContent' . DS],
             [Plugin::templatePath('BcCustomContent')]
