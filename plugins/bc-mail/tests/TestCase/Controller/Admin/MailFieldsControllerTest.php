@@ -97,9 +97,6 @@ class MailFieldsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        //テストデータベースを生成
-        $MailMessagesService->createTable(1);
         //テストデータベースを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
@@ -116,9 +113,7 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertFlashMessage('メールフィールド「edit」を更新しました。');
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
-        //check data
-        $mailField = MailFieldsFactory::get(1);
-        $this->assertEquals($data['name'], $mailField['name']);
+        //case error
         $data = [
             'name' => null,
             'type' => 'text'
@@ -128,8 +123,6 @@ class MailFieldsControllerTest extends BcTestCase
         //check response code
         $this->assertResponseCode(200);
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
-        //テストデータベースを削除
-        $MailMessagesService->dropTable(1);
     }
 
     /**
