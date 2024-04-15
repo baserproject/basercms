@@ -63,7 +63,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
             'Contents.site_root' => false,
             'Contents.id' => $contentFolder->content->id
         ]] + $contentsService->getConditionAllowPublish());
-        $children = $contentsService->getChildren($contentFolder->content->id)->order(['lft']);
+        $children = $contentsService->getChildren($contentFolder->content->id);
         if (!$children) {
             $children = [];
         }
