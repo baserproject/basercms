@@ -80,18 +80,78 @@ class RssHelperTest extends BcTestCase
 
     /**
      * test time
+     * @param string $time
+     * @param string $expect
+     * @dataProvider timeDataProvider
      */
-    public function test_time()
+    public function test_time(string $time, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 呼び出し
+        $result = $this->RssHelper->time($time);
+        // 結果チェック
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function timeDataProvider()
+    {
+        return [
+            ['2024-1-1', 'Mon, 01 Jan 2024 00:00:00 +0900'],
+            ['2024-2-10 10:10:1', 'Sat, 10 Feb 2024 10:10:01 +0900'],
+        ];
+
     }
 
     /**
      * test item
+     * @param array $att
+     * @param array $elements
+     * @param string $expect
+     * @dataProvider itemDataProvider
      */
-    public function test_item()
+    public function test_item(array $att, array $elements, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 呼び出し
+        $result = $this->RssHelper->item($att, $elements);
+        // 結果チェック
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function itemDataProvider()
+    {
+        return [
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2']
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category></item>'
+            ],
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2'],
+                    'convertEntities' => false
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category><convertEntities attribute="value"/></item>'
+            ],
+            [
+                ['attribute' => 'value'],
+                [
+                    'link' => 'http://example.com',
+                    'guid' => 'http://example.com/guid',
+                    'pubDate' => '2024-01-26',
+                    'category' => ['domain' => 'example.com', 'category1', 'category2'],
+                    'comments' => ['comment' => 'ok', 'url' => 'http://example.com/comment']
+                ],
+                '<item attribute="value"><link>http://example.com</link><guid>http://example.com/guid</guid><pubDate>Fri, 26 Jan 2024 00:00:00 +0900</pubDate><category>example.com</category><category>category1</category><category>category2</category><comments comment="ok">http://example.com/comment</comments></item>'
+            ]
+        ];
     }
 
     /**
@@ -100,7 +160,22 @@ class RssHelperTest extends BcTestCase
     public function test_items()
     {
         //準備
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $items = [
+            ['title' => 'Item 1', 'link' => 'http://example.com/item1'],
+            ['title' => 'Item 2', 'link' => 'http://example.com/item2'],
+            // Add more test data as needed
+        ];
+        //$callback = null場合、
+        $result = $this->RssHelper->items($items);
+        $this->assertStringContainsString('<item><title>Item 1', $result);
+        $this->assertStringContainsString('<link>http://example.com/item2', $result);
+
+        //$callback != null場合、
+        $callbackMock = function ($item) {
+            return ['title' => strtoupper($item['title'])];
+        };
+        $result = $this->RssHelper->items($items, $callbackMock);
+        $this->assertStringContainsString('<item><title>ITEM 1', $result);
     }
 
 
@@ -109,6 +184,21 @@ class RssHelperTest extends BcTestCase
      */
     public function test_channel()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $attrib = ['attribute' => 'value'];
+        $elements = [
+            'link' => '/news',
+            'title' => 'Channel Title',
+            'description' => 'Channel Description',
+            'customElement' => 'Custom Value',
+        ];
+        $content = 'Channel Content';
+        //正常系実行
+        $result = $this->RssHelper->channel($attrib, $elements, $content);
+        $this->assertStringContainsString('<channel attribute="value">', $result);
+        $this->assertStringContainsString('Channel Content</channel>', $result);
+        $this->assertStringContainsString('<link>https://localhost/news</link>', $result);
+        $this->assertStringContainsString('<title>Channel Title', $result);
+        $this->assertStringContainsString('<description>Channel Description', $result);
+        $this->assertStringContainsString('<customElement>Custom Value', $result);
     }
 }

@@ -61,12 +61,14 @@ class PluginsController extends BcAdminAppController
     /**
      * インストール
      *
+     * @param PluginsAdminServiceInterface $service
      * @param string $name プラグイン名
+     * @return Response|void|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function install(PluginsAdminServiceInterface $service, $name)
+    public function install(PluginsAdminServiceInterface $service, string $name)
     {
         $this->set($service->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
         if ($service->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
