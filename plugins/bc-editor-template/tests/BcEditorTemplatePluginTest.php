@@ -8,7 +8,7 @@ use BcEditorTemplate\Service\EditorTemplatesServiceInterface;
 use Cake\Core\Container;
 use Cake\Core\Plugin;
 
-class PluginTest extends BcTestCase
+class BcEditorTemplatePluginTest extends BcTestCase
 {
     public function setUp(): void
     {
