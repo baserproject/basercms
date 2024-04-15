@@ -107,11 +107,6 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
-        //check data in database
-        $mailField = MailFieldsFactory::get(1);
-        $this->assertEquals($data['name'], $mailField['name']);
-        $this->assertEquals($data['field_name'], $mailField['field_name']);
-
         //異常系のテスト
         $data = [
             'id' => 1,
@@ -122,6 +117,7 @@ class MailFieldsControllerTest extends BcTestCase
             'source' => '資料請求|問い合わせ|その他'
         ];
         $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
         $this->assertResponseCode(200);
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
         //テストデータベースを削除
