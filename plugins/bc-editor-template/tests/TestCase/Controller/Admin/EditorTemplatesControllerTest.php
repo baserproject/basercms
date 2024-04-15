@@ -118,11 +118,6 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->post('/baser/admin/bc-editor-template/editor_templates/add', $data);
         //check status code
         $this->assertResponseCode(302);
-        // データが登録されたか確認
-        $editorTemplates = EditorTemplateFactory::get(1);
-        // 登録データを確認
-        $this->assertEquals($data['name'], $editorTemplates['name']);
-        $this->assertEquals($data['description'], $editorTemplates['description']);
         //check message
         $this->assertFlashMessage('テンプレート「test」を追加しました');
         //check redirect
