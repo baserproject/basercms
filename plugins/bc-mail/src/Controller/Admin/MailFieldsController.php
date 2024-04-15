@@ -221,6 +221,7 @@ class MailFieldsController extends MailAdminAppController
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
