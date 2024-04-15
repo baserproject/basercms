@@ -277,6 +277,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
 
         // custom_content_id
         if (!is_null($params['custom_content_id'])) {
+            $query->contain('CustomTables.CustomContents');
             $conditions['CustomContents.id'] = $params['custom_content_id'];
         }
 
