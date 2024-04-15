@@ -465,7 +465,13 @@ class CustomEntriesTableTest extends BcTestCase
          */
         $errors = $rs->validate([
             'title' => 'title',
-            'test' => 'jpg'
+            'test' => new UploadedFile(
+                'test.png',
+                10,
+                UPLOAD_ERR_EXTENSION,
+                'test.png',
+                'png'
+            )
         ]);
         $this->assertEquals('ファイル形式が無効です。拡張子 jpg, png, gif のファイルをご利用ください。', current($errors['test']));
     }
