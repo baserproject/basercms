@@ -103,7 +103,8 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             'status' => 'publish',
             'order' => $customContent->list_order,
             'direction' => $customContent->list_direction,
-            'limit' => $customContent->list_count
+            'limit' => $customContent->list_count,
+            'custom_content_id' => $customContent->id
         ], $queryParams);
         return $this->EntriesService->getIndex($params);
     }
