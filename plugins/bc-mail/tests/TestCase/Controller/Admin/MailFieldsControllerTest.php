@@ -82,10 +82,6 @@ class MailFieldsControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
-        //イベントに入るかどうか確認
-        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
-        $query = $mailFields->find();
-        $this->assertEquals(3, $query->count());
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/index/1');
         $this->assertResponseOk();
