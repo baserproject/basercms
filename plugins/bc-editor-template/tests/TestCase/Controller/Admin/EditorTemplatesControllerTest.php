@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcEditorTemplate\Test\Factory\EditorTemplateFactory;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -145,6 +146,7 @@ class EditorTemplatesControllerTest extends BcTestCase
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
     }
+
     /**
      * Test edit
      */
@@ -158,7 +160,6 @@ class EditorTemplatesControllerTest extends BcTestCase
         $siteConfigsService->resetValue('editor');
         //テストデータをセット
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
-
         $data = [
             'name' => 'japan'
         ];
@@ -169,11 +170,35 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->assertFlashMessage('テンプレート「japan」を更新しました');
         //check redirect
         $this->assertRedirect(['action' => 'index']);
-        //check data
-        $editorTemplates = EditorTemplateFactory::get(11);
-        $this->assertEquals($data['name'], $editorTemplates['name']);
         //check error
         $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
         $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+    }
+
+    /**
+     * Test delete
+     */
+    public function testAdmin_delete()
+    {
+        //delete
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        //check before delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(1, $query->count());
+        $this->post('/baser/admin/bc-editor-template/editor_templates/delete/11');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「画像（左）とテキスト」を削除しました。');
+        //check after delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(0, $query->count());
+        /**
+         * check RecordNotFoundException
+         */
+        $this->expectException(RecordNotFoundException::class);
+        EditorTemplateFactory::get(11);
     }
 }

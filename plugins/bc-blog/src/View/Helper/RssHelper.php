@@ -119,6 +119,9 @@ class RssHelper extends Helper
      * @param array $elements Named array elements which are converted to tags
      * @param string|null $content Content (`<item />`'s belonging to this channel
      * @return string An RSS `<channel />`
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function channel($attrib = [], $elements = [], $content = null)
     {
@@ -165,6 +168,9 @@ class RssHelper extends Helper
      * @param string|array|null $callback A string function name, or array containing an object
      *     and a string method name
      * @return string A set of RSS `<item />` elements
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function items($items, $callback = null)
     {
@@ -188,6 +194,9 @@ class RssHelper extends Helper
      * @param array $att The attributes of the `<item />` element
      * @param array $elements The list of elements contained in this `<item />`
      * @return string An RSS `<item />` element
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function item($att = [], $elements = [])
     {
@@ -281,6 +290,9 @@ class RssHelper extends Helper
      * @param int|string|\DateTime $time UNIX timestamp or valid time string or DateTime object.
      * @return string An RSS-formatted timestamp
      * @see \Cake\View\Helper\TimeHelper::toRSS
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function time($time)
     {

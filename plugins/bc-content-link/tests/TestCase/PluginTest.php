@@ -11,14 +11,14 @@
 
 namespace BcContentLink\Test\TestCase;
 
-use BcContentLink\Plugin;
+use BcContentLink\BcContentLinkPlugin;
 use BcContentLink\Service\ContentLinksServiceInterface;
 use Cake\Core\Container;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PluginTest
- * @property Plugin $Plugin
+ * @property BcContentLinkPlugin $Plugin
  */
 class PluginTest extends BcTestCase
 {
@@ -31,7 +31,7 @@ class PluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Plugin = new Plugin(['name' => 'BcContentLink']);
+        $this->Plugin = new BcContentLinkPlugin(['name' => 'BcContentLink']);
     }
 
     /**
