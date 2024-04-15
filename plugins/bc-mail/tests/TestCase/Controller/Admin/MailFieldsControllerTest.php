@@ -113,11 +113,7 @@ class MailFieldsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを生成
-        //メールメッセージサービスをコル
-        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
-        //メールメッセージフィルドを追加
-        $MailMessagesService->addMessageField(1, 'name_1');
         //メールフィルドのデータを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
         //対象URLをコル
@@ -136,7 +132,6 @@ class MailFieldsControllerTest extends BcTestCase
         $this->post('/baser/admin/bc-mail/mail_fields/delete/555/123');
         //check response code
         $this->assertResponseCode(500);
-
     }
 
     /**
