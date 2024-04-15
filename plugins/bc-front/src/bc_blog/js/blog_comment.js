@@ -89,11 +89,11 @@ const bcBlog = {
                 success: function (result) {
                     if(bcBlog.authCaptcha) {
                         bcBlog.loadAuthCaptcha();
-                        $("#BlogCommentAuthCaptcha").val('');
+                        $("#auth-captcha").val('');
                     }
                     if (result) {
                         bcBlog.initView()
-                        $("#BlogCommentAuthCaptcha").val('');
+                        $("#auth-captcha").val('');
                         let resultMessage = '';
                         if (bcBlog.commentApprove) {
                             resultMessage = bcI18n.alertMessageAuthComplete;
