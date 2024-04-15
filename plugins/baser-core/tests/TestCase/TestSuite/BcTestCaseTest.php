@@ -69,7 +69,7 @@ class BcTestCaseTest extends BcTestCase
         $this->assertEquals('App\Application', get_class($this->Application));
         $plugins = $this->Application->getPlugins();
         $this->assertTrue($plugins->has('BaserCore'));
-        $this->assertEquals('BaserCore\Plugin', get_class($this->BaserCore));
+        $this->assertEquals('BaserCore\BaserCorePlugin', get_class($this->BaserCore));
     }
 
     /**

@@ -345,6 +345,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * 関連リンクのエンティティキャッシュを削除する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCacheLinks()
     {

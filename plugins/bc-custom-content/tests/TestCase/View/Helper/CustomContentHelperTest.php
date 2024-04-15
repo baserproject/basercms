@@ -521,7 +521,33 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_clearCacheLinks()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        //getLink()メソッドを使ってcacheLinksをセット
+        $this->CustomContentHelper->getLink(1, 'recruit_category');
+        //関連リンクのエンティティキャッシュがあるか確認すること
+        $this->assertCount(2, $this->getPrivateProperty($this->CustomContentHelper, 'cacheLinks'));
+
+        //関連リンクのエンティティキャッシュを削除するメソッドをコール
+        $this->CustomContentHelper->clearCacheLinks();
+        //関連リンクのエンティティキャッシュが削除できるか確認すること
+        $this->assertEquals([], $this->getPrivateProperty($this->CustomContentHelper, 'cacheLinks'));
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**

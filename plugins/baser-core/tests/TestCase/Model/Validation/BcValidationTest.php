@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Routing\Router;
-use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;

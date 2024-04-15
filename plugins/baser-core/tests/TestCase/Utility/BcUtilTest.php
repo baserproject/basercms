@@ -1141,9 +1141,12 @@ class BcUtilTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $eventManager = EventManager::instance();
         $eventKey = 'testOnEvent';
-        $bcEvenListener = new BcEventListener();
-        $bcEvenListener->events = ['event 1', 'event 2'];
-
+        $bcEvenListener = new class extends BcEventListener {
+            public $events = ['event1'];
+            public function event1() {
+                return 'event1';
+            }
+        };
         // onEvent() でイベントを設定
         BcUtil::onEvent($eventManager, $eventKey, $bcEvenListener->implementedEvents());
         // listeners() イベントの登録を確認
@@ -1307,7 +1310,7 @@ class BcUtilTest extends BcTestCase
         // 対象ファイルをopen
         $theme = 'BcFront';
         $pluginPath = BcUtil::getPluginPath($theme);
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new BcFile($pluginPath . 'src' . DS . 'BcFrontPlugin.php');
         // テーマ名とネームスペースが違う状態を作る
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));
