@@ -56,16 +56,16 @@ $this->BcAdmin->setHelp('theme_configs_form');
     <th><?php echo __d('baser_core', 'テーマカラー') ?></th>
     <td>
       <small>[<?php echo __d('baser_core', 'メイン') ?>]</small>
-      #<?php echo $this->BcAdminForm->control('color_main', ['type' => 'text', 'size' => 6, 'class' => 'bca-textbox__input color-picker']) ?>
+      #<?php echo $this->BcAdminForm->control('color_main', ['type' => 'text', 'size' => 7, 'class' => 'bca-textbox__input color-picker']) ?>
       　
       <small>[<?php echo __d('baser_core', 'サブ') ?>]</small>
-      #<?php echo $this->BcAdminForm->control('color_sub', ['type' => 'text', 'size' => 6, 'class' => 'bca-textbox__input color-picker']) ?>
+      #<?php echo $this->BcAdminForm->control('color_sub', ['type' => 'text', 'size' => 7, 'class' => 'bca-textbox__input color-picker']) ?>
       <br>
       <small>[<?php echo __d('baser_core', 'テキストリンク') ?>]</small>
-      #<?php echo $this->BcAdminForm->control('color_link', ['type' => 'text', 'size' => 6, 'class' => 'bca-textbox__input color-picker']) ?>
+      #<?php echo $this->BcAdminForm->control('color_link', ['type' => 'text', 'size' => 7, 'class' => 'bca-textbox__input color-picker']) ?>
       　
       <small>[<?php echo __d('baser_core', 'テキストホバー') ?>]</small>
-      #<?php echo $this->BcAdminForm->control('color_hover', ['type' => 'text', 'size' => 6, 'class' => 'bca-textbox__input color-picker']) ?>
+      #<?php echo $this->BcAdminForm->control('color_hover', ['type' => 'text', 'size' => 7, 'class' => 'bca-textbox__input color-picker']) ?>
       <?php echo $this->BcAdminForm->error('color_main') ?>
       <?php echo $this->BcAdminForm->error('color_sub') ?>
       <?php echo $this->BcAdminForm->error('color_link') ?>

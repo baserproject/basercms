@@ -75,6 +75,50 @@ class ThemeConfigsTable extends AppTable
      */
     public function validationKeyValue(Validator $validator): Validator
     {
+        // color_main
+        $validator
+            ->allowEmptyString('color_main')
+            ->add('color_main', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'メインのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_sub
+        $validator
+            ->allowEmptyString('color_sub')
+            ->add('color_sub', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'サブのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_link
+        $validator
+            ->allowEmptyString('color_link')
+            ->add('color_link', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストリンクのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
+        // color_hover
+        $validator
+            ->allowEmptyString('color_hover')
+            ->add('color_hover', [
+                'hexColorPlus' => [
+                    'rule' => 'hexColorPlus',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テキストホバーのカラーコードの形式が間違っています。')
+                ]
+            ]);
+
         // logo
         $validator->add('logo', [
             'fileExt' => [
@@ -83,22 +127,6 @@ class ThemeConfigsTable extends AppTable
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
         ]);
-
-        // テーマカラー
-        $validator
-            ->scalar('color_main')
-            ->regex('color_main', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[メイン]はカラーコード形式で入力してください。'));
-
-        $validator
-            ->scalar('color_sub')
-            ->regex('color_sub', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[サブ]はカラーコード形式で入力してください。'));
-
-        $validator
-            ->scalar('color_link')
-            ->regex('color_link', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[テキストリンク]はカラーコード形式で入力してください。'));
-        $validator
-            ->scalar('color_hover')
-            ->regex('color_hover', '/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', __d('baser_core', '[テキストホバー]はカラーコード形式で入力してください。'));
 
         // main_image_1
         $validator->add('main_image_1', [

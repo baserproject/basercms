@@ -39,7 +39,7 @@
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">
-<div id="Wrapper">	
+<div id="Wrapper">
 <?php $this->BcBaser->header() ?>
 
 	<?php if ($this->BcBaser->isHome()): ?>
@@ -55,7 +55,7 @@
 
 	<div id="PageTitle">
 	    <div class="body-wrap">
-	    <?php if (!empty($this->Blog)): ?>
+	    <?php if (!empty($this->BcBaser->isBlog())): ?>
 	        <h1><?php echo h($this->Blog->getTitle()) ?></h1>
     	<?php else: ?>
 	        <h1><?php $this->BcBaser->contentsTitle() ?></h1>

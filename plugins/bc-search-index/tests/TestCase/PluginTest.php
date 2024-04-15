@@ -11,7 +11,7 @@
 
 namespace BcSearchIndex\Test\TestCase;
 
-use BcSearchIndex\Plugin;
+use BcSearchIndex\BcSearchIndexPlugin;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\Container;
@@ -19,7 +19,7 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PluginTest
- * @property Plugin $Plugin
+ * @property BcSearchIndexPlugin $Plugin
  */
 class PluginTest extends BcTestCase
 {
@@ -32,7 +32,7 @@ class PluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Plugin = new Plugin(['name' => 'BcSearchIndex']);
+        $this->Plugin = new BcSearchIndexPlugin(['name' => 'BcSearchIndex']);
     }
 
     /**
