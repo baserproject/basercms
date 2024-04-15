@@ -178,7 +178,7 @@ class ContentsService implements ContentsServiceInterface
         try {
             $query = $this->Contents->find('children', for: $id, order: ['Contents.lft' => 'ASC'])
                 ->where($conditions);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
         return $query->all()->isEmpty()? null : $query;
