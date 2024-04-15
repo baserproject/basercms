@@ -14,8 +14,10 @@ namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcEditorTemplate\Test\Factory\EditorTemplateFactory;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -142,5 +144,32 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test delete
+     */
+    public function testAdmin_delete()
+    {
+        //delete
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        //check before delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(1, $query->count());
+        $this->post('/baser/admin/bc-editor-template/editor_templates/delete/11');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「画像（左）とテキスト」を削除しました。');
+        //check after delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(0, $query->count());
+        /**
+         * check RecordNotFoundException
+         */
+        $this->expectException(RecordNotFoundException::class);
+        EditorTemplateFactory::get(11);
     }
 }

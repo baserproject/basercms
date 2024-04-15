@@ -137,6 +137,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(EditorTemplatesServiceInterface $service, $id)
     {

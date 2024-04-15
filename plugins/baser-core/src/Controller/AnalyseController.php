@@ -69,7 +69,7 @@ class AnalyseController extends AppController
     {
         $basePath = ROOT . DS . 'plugins' . DS;
 
-        $plugin = new \BcCustomContent\Plugin();
+        $plugin = new \BcCustomContent\BcCustomContentPlugin();
         $plugin->loadPlugin();
 
         if ($pluginName) {

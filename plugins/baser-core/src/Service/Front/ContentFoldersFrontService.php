@@ -52,18 +52,20 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
             $editLink = [
                 'prefix' => 'Admin',
                 'plugin' => 'BaserCore',
-                'controller' =>
-                'content_folders',
+                'controller' => 'content_folders',
                 'action' => 'edit',
                 $contentFolder->id,
                 'content_id' => $contentFolder->content->id
             ];
         }
         $contentsService = $this->getService(ContentsServiceInterface::class);
-        $contentsService->setTreeConfig('scope', ['site_root' => false] + $contentsService->getConditionAllowPublish());
-        $children = [];
-        if ($contentsService->getChildren($contentFolder->content->id)) {
-            $children = $contentsService->getChildren($contentFolder->content->id)->order(['lft']);
+        $contentsService->setTreeConfig('scope', ['or' => [
+            'Contents.site_root' => false,
+            'Contents.id' => $contentFolder->content->id
+        ]] + $contentsService->getConditionAllowPublish());
+        $children = $contentsService->getChildren($contentFolder->content->id);
+        if (!$children) {
+            $children = [];
         }
         $contentsService->setTreeConfig('scope', null);
         return [

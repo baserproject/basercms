@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Routing\Router;
-use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -640,6 +639,33 @@ class BcValidationTest extends BcTestCase
         $str = "あa　";
         $result = $this->BcValidation->notBlankOnlyString($str);
         $this->assertTrue($result);
+    }
+
+    /**
+     * test hexColorPlus
+     *
+     * @param string $value
+     * @param boolean $expect
+     * @return void
+     * @dataProvider hexColorPlusDataProvider
+     */
+    public function testHexColorPlus($value, $expect)
+    {
+        $result = $this->BcValidation->hexColorPlus($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function hexColorPlusDataProvider()
+    {
+        return [
+            ['000', true],
+            ['0fF', true],
+            ['123f', true],
+            ['123abc', true],
+            ['1234abcd', true],
+            ['black', false],
+            ['#000', false]
+        ];
     }
 
 }
