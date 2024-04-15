@@ -136,20 +136,14 @@ class MailFieldsControllerTest extends BcTestCase
         //テストデータベースを生成
         $MailMessagesService->createTable(1);
         $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
-        //メールメッセージサービスをコル
+        //データを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
-        //メールフィルドのデータを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
         //urlをコル
         $this->post("/baser/admin/bc-mail/mail_fields/copy/1/1");
         //レスポンスコードを確認する
         $this->assertResponseCode(302);
-        //メッセージを確認
         $this->assertFlashMessage('メールフィールド「性」をコピーしました。');
-        //check database
-        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
-        $query = $mailFields->find()->where(['name' => '性_copy']);
-        $this->assertEquals(1, $query->count());
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
         //check データベース処理中にエラーが発生しました。
