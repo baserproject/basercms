@@ -12,11 +12,13 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -119,6 +121,43 @@ class MailFieldsControllerTest extends BcTestCase
     public function testAdmin_ajax_copy()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test copy
+     */
+    public function testAdmin_copy()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+        //メールメッセージサービスをコル
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //メールフィルドのデータを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //urlをコル
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/1");
+        //レスポンスコードを確認する
+        $this->assertResponseCode(302);
+        //メッセージを確認
+        $this->assertFlashMessage('メールフィールド「性」をコピーしました。');
+        //check database
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => '性_copy']);
+        $this->assertEquals(1, $query->count());
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //check データベース処理中にエラーが発生しました。
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/12/12");
+        //レスポンスコードを確認する
+        $this->assertResponseCode(500);
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**

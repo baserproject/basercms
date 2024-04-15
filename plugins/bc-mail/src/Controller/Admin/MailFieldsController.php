@@ -247,6 +247,7 @@ class MailFieldsController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function copy(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
