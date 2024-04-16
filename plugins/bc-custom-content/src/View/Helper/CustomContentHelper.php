@@ -227,7 +227,8 @@ class CustomContentHelper extends CustomContentAppHelper
         $field = $customLink->custom_field;
 
         if ($field->type === 'group') return $entry->{$fieldName};
-
+        echo $field->type;
+        print_r( $this->{$field->type});
         if (method_exists($this->{$field->type}, 'get')) {
             $out = $this->{$field->type}->get($entry->{$fieldName}, $customLink, $options);
             if (BcUtil::isAdminSystem()) {
