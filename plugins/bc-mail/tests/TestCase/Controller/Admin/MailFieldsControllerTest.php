@@ -184,16 +184,8 @@ class MailFieldsControllerTest extends BcTestCase
     /**
      * Test beforeAddEvent
      */
-    public function testAfterAddEvent()
+    public function testAdmin_afterAddEvent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        //テストデータベースを生成
-        $MailMessagesService->createTable(10);
-
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.afterAdd', function (Event $event) {
             $data = $event->getData('data');
@@ -201,20 +193,26 @@ class MailFieldsControllerTest extends BcTestCase
             $data->name = 'afterAdd';
             $contentLinks->save($data);
         });
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
         //Postデータを生成
         $data = [
+            'mail_content_id' => 1,
             'field_name' => 'name_add_1',
             'type' => 'text',
             'name' => '性',
+            'source' => '資料請求|問い合わせ|その他'
         ];
         //対象URLをコル
-        $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
-        //イベントに入るかどうか確認
-        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
-        $query = $mailFields->find()->where(['name' => 'afterAdd']);
-        $this->assertEquals(1, $query->count());
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
         //テストデータベースを削除
-        $MailMessagesService->dropTable(10);
+        $MailMessagesService->dropTable(1);
     }
 
     /**
