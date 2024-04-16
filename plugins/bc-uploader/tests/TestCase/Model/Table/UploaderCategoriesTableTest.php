@@ -72,6 +72,13 @@ class UploaderCategoriesTableTest extends BcTestCase
         ]);
         //戻り値を確認
         $this->assertEquals('カテゴリ名を入力してください。', current($errors['name']));
+
+        //スペースだけ登録する
+        $errors = $validator->validate([
+            'name' => '     '
+        ]);
+        //戻り値を確認
+        $this->assertEquals('カテゴリ名を入力してください。', current($errors['name']));
     }
 
     /**
