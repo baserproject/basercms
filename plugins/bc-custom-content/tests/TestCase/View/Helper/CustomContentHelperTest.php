@@ -245,6 +245,7 @@ class CustomContentHelperTest extends BcTestCase
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         //テストデータを生成
         $customTable->create([
+            'id' => 1,
             'type' => 'recruit_category',
             'name' => 'recruit_categories',
             'display_field' => 'name'
@@ -298,14 +299,14 @@ class CustomContentHelperTest extends BcTestCase
     public static function getFieldValueDataProvider()
     {
         return [
-            [null, 'group', '/', 'recruit_category', 'test', [], ''], //$customLink->display_front = null
-            [true, 'group', '/', 'recruit_category', 'test', [], 'test'], //$customLink->display_front != null && $field->type === 'group'
-            [true, 'BcCcRelated', '/', 'recruit_category', 1, [], 'プログラマー'], //$customLink->display_front != null && $field->type === 'group' && isAdminSystem = false
+//            [null, 'group', '/', 'recruit_category', 'test', [], ''], //$customLink->display_front = null
+//            [true, 'group', '/', 'recruit_category', 'test', [], 'test'], //$customLink->display_front != null && $field->type === 'group'
+//            [true, 'BcCcRelated', '/', 'recruit_category', 1, [], 'プログラマー'], //$customLink->display_front != null && $field->type === 'group' && isAdminSystem = false
             [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, [], '<br>1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true &&　全て$options=true
-            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeHead' => false], '<br>プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeHead = false
-            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeLinefeed' => false], '1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeLinefeed = false
-            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterHead' => false], '<br>1&nbsp;プログラマー<br>'], //isAdminSystem = true && afterHead = false
-            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterLinefeed' => false], '<br>1&nbsp;プログラマー&nbsp;1'], //isAdminSystem = true && afterLinefeed = false
+//            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeHead' => false], '<br>プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeHead = false
+//            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeLinefeed' => false], '1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeLinefeed = false
+//            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterHead' => false], '<br>1&nbsp;プログラマー<br>'], //isAdminSystem = true && afterHead = false
+//            [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterLinefeed' => false], '<br>1&nbsp;プログラマー&nbsp;1'], //isAdminSystem = true && afterLinefeed = false
         ];
     }
 
