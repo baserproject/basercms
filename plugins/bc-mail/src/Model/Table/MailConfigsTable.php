@@ -76,7 +76,7 @@ class MailConfigsTable extends MailAppTable
                 'notBlankOnlyString' => [
                     'rule' => ['notBlankOnlyString'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'ウィジェットエリア名を入力してください。')
+                    'message' => __d('baser_core', 'Webサイト名を入力してください。')
                 ]
             ]);
         return $validator;
