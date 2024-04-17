@@ -11,158 +11,195 @@
 /**
  * 起動時処理
  */
-$(function () {
+uploaderFilesIndex = {
 
-    var listId = $("#ListId").html();
+    /**
+     * list id
+     */
+    listId: null,
 
-    //==========================================================================
-    // 複数のエディタよりリストが呼出される可能性がある為、#ListIdの値を読み込んだら削除する
-    // TODO 強引すぎるので他の方法がないか検討要
-    //==========================================================================
-    $("#ListId").remove();
+    /**
+     * all fields
+     */
+    allFields: null,
 
-    var allFields = $([]).add($("#name")).add($("#alt"));
-    var baseUrl = $.baseUrl() + '/';
-    var adminPrefix = $("#AdminPrefix").html();
-    var categoryId = null;
+    /**
+     * category id
+     */
+    categoryId: null,
 
-    // 一覧を更新する
-    updateFileList();
+    /**
+     * 起動処理
+     */
+    mounted() {
+        //==========================================================================
+        // 複数のエディタよりリストが呼出される可能性がある為、#ListIdの値を読み込んだら削除する
+        // TODO 強引すぎるので他の方法がないか検討要
+        //==========================================================================
+        const $listId = $("#ListId");
+        this.listId = $listId.html();
+        $listId.remove();
+        this.allFields = $([]).add($("#name")).add($("#alt"));
+        this.initView();
+        this.registerEvents();
+    },
 
-    $("#BtnFilter").click(function(){
-        updateFileList();
-        return false;
-    });
+    /**
+     * 表示を初期化
+     */
+    initView() {
+        // 一覧を更新する
+        this.updateFileList();
+        this.initDialog();
+    },
+    /**
+     * イベント登録
+     */
+    registerEvents() {
+        $("#BtnFilter").click(function () {
+            uploaderFilesIndex.updateFileList();
+            return false;
+        });
+    },
 
-    /* ダイアログを初期化 */
-    $("#EditDialog").dialog({
-        bgiframe: true,
-        autoOpen: false,
-        position: {at: "center center", of: window},
-        width: 960,
-        modal: true,
-        open: function () {
-            var name = $("#FileList" + listId + " .selected .name").html();
-            $("#UploaderFileImage" + listId + ' .uploader-file-image-inner').remove();
-            $("#UploadFileImageLoader" + listId).show();
-            $("#UploaderFileId" + listId).val($("#FileList" + listId + " .selected .id").html().trim());
-            $("#UploaderFileName" + listId).val(name);
-            $("#UploaderFileAlt" + listId).val($("#FileList" + listId + " .selected .alt").html());
+    /**
+     * ダイアログを初期化
+     */
+    initDialog() {
+        $("#EditDialog").dialog({
+            bgiframe: true,
+            autoOpen: false,
+            position: {at: "center center", of: window},
+            width: 960,
+            modal: true,
+            open: function () {
+                let listId = uploaderFilesIndex.listId;
+                var name = $("#FileList" + listId + " .selected .name").html();
+                $("#UploaderFileImage" + listId + ' .uploader-file-image-inner').remove();
+                $("#UploadFileImageLoader" + listId).show();
+                $("#UploaderFileId" + listId).val($("#FileList" + listId + " .selected .id").html().trim());
+                $("#UploaderFileName" + listId).val(name);
+                $("#UploaderFileAlt" + listId).val($("#FileList" + listId + " .selected .alt").html());
 
-            /* ダイアログ初期化時、hidden値が空になるため公開期間開始日時を取得して hidden値に入れ込む */
-            var publishBeginDate = $("#FileList" + listId + " .selected .publish-begin").html().trim();
-            var publishBeginTime = $("#FileList" + listId + " .selected .publish-begin-time").html().trim();
-            $("#UploaderFilePublishBegin-date").val(publishBeginDate);
-            $("#UploaderFilePublishBegin-time").val(publishBeginTime);
-            var publishBeginDateTime = publishBeginDate;
-            if (publishBeginTime) {
-                publishBeginDateTime += ' ' + publishBeginTime;
-            }
-            $("#UploaderFilePublishBegin").val(publishBeginDateTime);
-
-            /* ダイアログ初期化時、hidden値が空になるため公開期間終了日時を取得して hidden値に入れ込む */
-            var publishEndDate = $("#FileList" + listId + " .selected .publish-end").html().trim();
-            var publishEndTime = $("#FileList" + listId + " .selected .publish-end-time").html().trim();
-            $("#UploaderFilePublishEnd-date").val(publishEndDate);
-            $("#UploaderFilePublishEnd-time").val(publishEndTime);
-            var publishEndDateTime = publishEndDate;
-            if (publishEndTime) {
-                publishEndDateTime += ' ' + publishEndTime;
-            }
-            $("#UploaderFilePublishEnd").val(publishEndDateTime);
-
-            $("#UploaderFileUserId" + listId).val($("#FileList" + listId + " .selected .user-id").html());
-            $("#UploaderFileUserName" + listId).html($("#FileList" + listId + " .selected .user-name").html());
-            if ($("#_UploaderFileUploaderCategoryId" + listId).length) {
-                $("#_UploaderFileUploaderCategoryId" + listId).val($("#FileList" + listId + " .selected .uploader-category-id").html());
-            }
-            $.ajax({
-                url: $.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_image/' + name + '/large',
-                type: 'get',
-                dataType: 'html',
-                success: function (res) {
-                    $("#UploadFileImageLoader" + listId).hide();
-                    $("#UploadFileImageLoader" + listId).after(res);
+                /* ダイアログ初期化時、hidden値が空になるため公開期間開始日時を取得して hidden値に入れ込む */
+                var publishBeginDate = $("#FileList" + listId + " .selected .publish-begin").html().trim();
+                var publishBeginTime = $("#FileList" + listId + " .selected .publish-begin-time").html().trim();
+                $("#UploaderFilePublishBegin-date").val(publishBeginDate);
+                $("#UploaderFilePublishBegin-time").val(publishBeginTime);
+                var publishBeginDateTime = publishBeginDate;
+                if (publishBeginTime) {
+                    publishBeginDateTime += ' ' + publishBeginTime;
                 }
-            });
-        },
-        buttons: {
-            cancel: {
-                text: bcI18n.uploaderCancel,
-                click: function () {
-                    $(this).dialog('close');
+                $("#UploaderFilePublishBegin").val(publishBeginDateTime);
+
+                /* ダイアログ初期化時、hidden値が空になるため公開期間終了日時を取得して hidden値に入れ込む */
+                var publishEndDate = $("#FileList" + listId + " .selected .publish-end").html().trim();
+                var publishEndTime = $("#FileList" + listId + " .selected .publish-end-time").html().trim();
+                $("#UploaderFilePublishEnd-date").val(publishEndDate);
+                $("#UploaderFilePublishEnd-time").val(publishEndTime);
+                var publishEndDateTime = publishEndDate;
+                if (publishEndTime) {
+                    publishEndDateTime += ' ' + publishEndTime;
+                }
+                $("#UploaderFilePublishEnd").val(publishEndDateTime);
+
+                $("#UploaderFileUserId" + listId).val($("#FileList" + listId + " .selected .user-id").html());
+                $("#UploaderFileUserName" + listId).html($("#FileList" + listId + " .selected .user-name").html());
+                let $uploaderCategoryId = $("#_UploaderFileUploaderCategoryId" + listId);
+                if ($uploaderCategoryId.length) {
+                    $uploaderCategoryId.val($("#FileList" + listId + " .selected .uploader-category-id").html());
+                }
+                $.ajax({
+                    url: $.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_image/' + name + '/large',
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#UploadFileImageLoader" + listId).hide()
+                            .after(res);
+                    }
+                });
+            },
+            buttons: {
+                cancel: {
+                    text: bcI18n.uploaderCancel,
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                },
+                save: {
+                    text: bcI18n.uploaderSave,
+                    click: function () {
+                        let listId = uploaderFilesIndex.listId;
+                        // 保存処理
+                        let saveButton = $(this);
+                        let id = $("#UploaderFileId" + listId).val();
+                        $.bcToken.check(function () {
+                            // IEでform.serializeを利用した場合、Formタグの中にTableタグがあるとデータが取得できなかった
+                            var data = {
+                                "id": id,
+                                "name": $("#UploaderFileName" + listId).val(),
+                                "alt": $("#UploaderFileAlt" + listId).val(),
+                                "publish_begin": $("#UploaderFilePublishBegin" + listId).val(),
+                                "publish_end": $("#UploaderFilePublishEnd" + listId).val(),
+                                "user_id": $("#UploaderFileUserId" + listId).val(),
+                                "uploader_category_id": $("#_UploaderFileUploaderCategoryId" + listId).val(),
+                                "_csrfToken": $.bcToken.key
+                            };
+                            return $.ajax({
+                                url: $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
+                                type: 'post',
+                                data: data,
+                                dataType: 'json',
+                                success: function () {
+                                    uploaderFilesIndex.updateFileList();
+                                    uploaderFilesIndex.allFields.removeClass('ui-state-error');
+                                    saveButton.dialog('close');
+                                },
+                                error: function (response) {
+                                    const fields = {
+                                        name: bcI18n.uploaderFile,
+                                        publish_begin: bcI18n.uploaderPublishBegin,
+                                        publish_end: bcI18n.uploaderPublishEnd
+                                    };
+                                    let message = response.responseJSON.message;
+                                    if (response.responseJSON.errors !== undefined) {
+                                        message += "\n";
+                                        Object.keys(response.responseJSON.errors).forEach(function (key) {
+                                            Object.keys(response.responseJSON.errors[key]).forEach(function (field) {
+                                                message += "\n・" + fields[key] + '：' + response.responseJSON.errors[key][field];
+                                            });
+                                        });
+                                    }
+                                    alert(message);
+                                }
+                            });
+                        }, {hideLoader: false, useUpdate: false});
+                    }
                 }
             },
-            save: {
-                text: bcI18n.uploaderSave,
-                click: function () {
-                    // 保存処理
-                    let saveButton = $(this);
-                    let id = $("#UploaderFileId" + listId).val();
-                    $.bcToken.check(function () {
-                        // IEでform.serializeを利用した場合、Formタグの中にTableタグがあるとデータが取得できなかった
-                        var data = {
-                            "id": id,
-                            "name": $("#UploaderFileName" + listId).val(),
-                            "alt": $("#UploaderFileAlt" + listId).val(),
-                            "publish_begin": $("#UploaderFilePublishBegin" + listId).val(),
-                            "publish_end": $("#UploaderFilePublishEnd" + listId).val(),
-                            "user_id": $("#UploaderFileUserId" + listId).val(),
-                            "uploader_category_id": $("#_UploaderFileUploaderCategoryId" + listId).val(),
-                            "_csrfToken": $.bcToken.key
-                        };
-                        return $.ajax({
-                            url: $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
-                            type: 'post',
-                            data: data,
-                            dataType: 'json',
-                            success: function () {
-                                updateFileList();
-                                allFields.removeClass('ui-state-error');
-                                saveButton.dialog('close');
-                            },
-                            error: function (response) {
-                                const fields = {
-                                    name: bcI18n.uploaderFile,
-                                    publish_begin: bcI18n.uploaderPublishBegin,
-                                    publish_end: bcI18n.uploaderPublishEnd
-                                };
-                                let message = response.responseJSON.message;
-                                if(response.responseJSON.errors !== undefined) {
-                                    message += "\n";
-                                    Object.keys(response.responseJSON.errors).forEach(function (key) {
-                                        Object.keys(response.responseJSON.errors[key]).forEach(function (field) {
-                                            message += "\n・" + fields[key] + '：' + response.responseJSON.errors[key][field];
-                                        });
-                                    });
-                                }
-                                alert(message);
-                            }
-                        });
-                    }, {hideLoader: false, useUpdate: false});
-                }
+            close: function () {
+                uploaderFilesIndex.allFields.val('').removeClass('ui-state-error');
             }
-        },
-        close: function () {
-            allFields.val('').removeClass('ui-state-error');
-        }
 
-    });
+        });
+    },
 
     /**
      * アップロードファイル選択時イベント
      */
-    function uploaderFileFileChangeHandler() {
+    uploaderFileFileChangeHandler() {
         var url = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/upload.json';
         var $file = $(this);
+        let listId = uploaderFilesIndex.listId;
         $.bcUtil.showLoader();
         if ($('#UploaderFileFile' + listId).val()) {
             $.bcToken.check(function () {
                 let fd = new FormData();
                 fd.append('file', $file.prop('files')[0]);
                 fd.append('_csrfToken', $.bcToken.key);
-                if ($("#UploaderFileUploaderCategoryId" + listId).length) {
-                    fd.append('uploader_category_id', $("#UploaderFileUploaderCategoryId" + listId).val());
+                $uploaderCategoryId = $("#UploaderFileUploaderCategoryId" + listId);
+                if ($uploaderCategoryId.length) {
+                    fd.append('uploader_category_id', $uploaderCategoryId.val());
                 }
                 return $.ajax({
                     url: url,
@@ -172,7 +209,10 @@ $(function () {
                     processData: false,
                     contentType: false,
                     cache: false,
-                    success: uploadSuccessHandler,
+                    beforeSend: function () {
+                        $.bcUtil.hideMessage();
+                    },
+                    success: uploaderFilesIndex.uploadSuccessHandler,
                     error: function (response) {
                         if (response.responseJSON) {
                             $.bcUtil.showApiError(response);
@@ -184,19 +224,20 @@ $(function () {
                 });
             }, {useUpdate: false, hideLoader: false});
         }
-    }
+    },
 
     /**
      * アップロード完了後イベント
      */
-    function uploadSuccessHandler(res) {
-
+    uploadSuccessHandler(res) {
+        let listId = uploaderFilesIndex.listId;
         if (res) {
-            if ($('#UploaderFileUploaderCategoryId' + listId).length) {
-                $('#FilterUploaderCategoryId' + listId).val($('#UploaderFileUploaderCategoryId' + listId).val());
-                categoryId = $('#UploaderFileUploaderCategoryId' + listId).val();
+            let $uploaderCategoryId = $('#UploaderFileUploaderCategoryId' + listId);
+            if ($uploaderCategoryId.length) {
+                $('#FilterUploaderCategoryId' + listId).val($uploaderCategoryId.val());
+                uploaderFilesIndex.categoryId = $uploaderCategoryId.val();
             }
-            updateFileList();
+            uploaderFilesIndex.updateFileList();
         } else {
             $('#ErrorMessage').remove();
             $('#FileList' + listId).prepend('<p id="ErrorMessage" class="message">' + bcI18n.uploaderAlertMessage2 + '</p>');
@@ -207,17 +248,15 @@ $(function () {
         // spanタグ内に新しく作りなおす。
         $("#UploaderFileFile" + listId).remove();
         $("#SpanUploadFile" + listId).append('<input id="UploaderFileFile' + listId + '" type="file" value="" name="data[UploaderFile][file]" class="uploader-file-file" />');
-        $('#UploaderFileFile' + listId).change(uploaderFileFileChangeHandler);
+        $('#UploaderFileFile' + listId).change(uploaderFilesIndex.uploaderFileFileChangeHandler);
         $.bcToken.key = null;
-
-    }
-
+    },
     /**
      * 一覧を更新する
      */
-    function updateFileList() {
-        $.bcUtil.ajax(getListUrl(), updateFileListCompleteHander, {hideLoader: false, type: 'GET'});
-    }
+    updateFileList() {
+        $.bcUtil.ajax(uploaderFilesIndex.getListUrl(), uploaderFilesIndex.updateFileListCompleteHandler, {hideLoader: false, type: 'GET'});
+    },
 
     /**
      * 指定したファイルの編集ができない状態か確認
@@ -225,48 +264,48 @@ $(function () {
      * @param fileUserId
      * @returns {boolean}
      */
-    function isFileEditDisabled(fileUserId) {
+    isFileEditDisabled(fileUserId) {
         var loginUserId = $("#LoginUserId").html();
         var loginUserGroupId = $("#LoginUserGroupId").html();
         var usePermission = Number($("#UsePermission").html());
         var disabled = false;
-        if (loginUserGroupId != 1 && usePermission) {
-            if (loginUserId != fileUserId) {
+        if (parseInt(loginUserGroupId) !== 1 && usePermission) {
+            if (parseInt(loginUserId) !== fileUserId) {
                 disabled = true;
             }
         }
         return disabled;
-    }
+    },
 
     /**
      * 選択イベントを初期化する
      */
-    function initFileList() {
-
-        var usePermission = $("#UsePermission").html();
-
-        if (categoryId) {
-            $('#UploaderFileUploaderCategoryId' + listId).val(categoryId);
+    initFileList() {
+        let listId = uploaderFilesIndex.listId;
+        if (uploaderFilesIndex.categoryId) {
+            $('#UploaderFileUploaderCategoryId' + listId).val(uploaderFilesIndex.categoryId);
         }
+        let $selectableFile = $(".selectable-file");
         /* 一旦イベントを全て解除 */
-        $(".selectable-file").unbind('click.selectEvent');
-        $(".selectable-file").unbind('mouseenter.selectEvent');
-        $(".selectable-file").unbind('mouseleave.selectEvent');
+        $selectableFile.unbind('click.selectEvent');
+        $selectableFile.unbind('mouseenter.selectEvent');
+        $selectableFile.unbind('mouseleave.selectEvent');
+        $selectableFile.unbind('dblclick.dblclickEvent');
         $(".page-numbers a").unbind('click.paginationEvent');
-        $(".selectable-file").unbind('dblclick.dblclickEvent');
         $(".filter-control").unbind('click.filterEvent');
         $(".btn-delete").unbind('click');
 
         /* 公開制限期間にあるファイルの背景色を定義 */
         var unpublishBackGroundColor = '#bbb';
 
-        if ($.fn.contextMenu && !listId && $("#DivPanelList").length) {
+        $divPanelList = $("#DivPanelList");
+        if ($.fn.contextMenu && !listId && $divPanelList.length) {
             /* 右クリックメニューを追加 */
-            $("#DivPanelList").contextMenu({
+            $divPanelList.contextMenu({
                 selector: '.selectable-file',
-                callback: contextMenuHander,
+                callback: uploaderFilesIndex.contextMenuHandler,
                 build: function ($trigger, e) {
-                    var disabled = isFileEditDisabled($($trigger).find('.user-id').html());
+                    var disabled = uploaderFilesIndex.isFileEditDisabled($($trigger).find('.user-id').html());
                     return {
                         items: {
                             edit: {
@@ -289,10 +328,10 @@ $(function () {
             });
         }
 
-        $("#DivPanelList .selectable-file").each(function () {
-
+        $selectableFileInPanelList = $("#DivPanelList .selectable-file");
+        $selectableFileInPanelList.each(function () {
             if ($.fn.contextMenu && !listId) {
-                if (!isFileEditDisabled($(this).find('.user-id').html())) {
+                if (!uploaderFilesIndex.isFileEditDisabled($(this).find('.user-id').html())) {
                     $(this).bind('dblclick.dblclickEvent', function () {
                         $('#EditDialog').dialog('open');
                     });
@@ -314,39 +353,39 @@ $(function () {
         });
 
         // ファイルアップロードイベントを登録
-        $('#UploaderFileFile' + listId).change(uploaderFileFileChangeHandler);
+        $('#UploaderFileFile' + listId).change(uploaderFilesIndex.uploaderFileFileChangeHandler);
 
         if (listId) {
-            $(".selectable-file").bind('mouseenter.selectEvent', function () {
+            $selectableFile.bind('mouseenter.selectEvent', function () {
                 $(this).css('background-color', '#fffae7');
             });
-            $(".selectable-file").bind('mouseleave.selectEvent', function () {
+            $selectableFile.bind('mouseleave.selectEvent', function () {
                 $(this).css('background-color', '#FFFFFF');
                 if ($(this).hasClass('unpublish')) {
                     $(this).css('background-color', unpublishBackGroundColor);
                 }
             });
-            $(".selectable-file").each(function () {
+            $selectableFile.each(function () {
                 // IEの場合contextmenuを検出できなかったので、mousedownに変更した
                 $(this).bind('mousedown', function () {
-                    $(".selectable-file").removeClass('selected');
+                    $selectableFile.removeClass('selected');
                     $(this).addClass('selected');
                 });
             });
         } else {
-            $("#DivPanelList .selectable-file").bind('mouseenter.selectEvent', function () {
+            $selectableFileInPanelList.bind('mouseenter.selectEvent', function () {
                 $(this).css('background-color', '#fffae7');
             });
-            $("#DivPanelList .selectable-file").bind('mouseleave.selectEvent', function () {
+            $selectableFileInPanelList.bind('mouseleave.selectEvent', function () {
                 $(this).css('background-color', '#FFFFFF');
                 if ($(this).hasClass('unpublish')) {
                     $(this).css('background-color', unpublishBackGroundColor);
                 }
             });
-            $("#DivPanelList .selectable-file").each(function () {
+            $selectableFileInPanelList.each(function () {
                 // IEの場合contextmenuを検出できなかったので、mousedownに変更した
                 $(this).bind('mousedown', function () {
-                    $(".selectable-file").removeClass('selected');
+                    $selectableFile.removeClass('selected');
                     $(this).addClass('selected');
                 });
             });
@@ -355,77 +394,81 @@ $(function () {
         /* ページネーションイベントを追加 */
         $('.page-numbers a').bind('click.paginationEvent', function () {
             $("#Waiting").show();
-            $.get($(this).attr('href'), updateFileListCompleteHander);
+            $.get($(this).attr('href'), uploaderFilesIndex.updateFileListCompleteHandler);
             return false;
         });
 
-        $('.bca-list-num a').on('click.listNumEvent', function(){
+        $('.bca-list-num a').on('click.listNumEvent', function () {
             $("#Waiting").show();
-            $.get($(this).attr('href'), updateFileListCompleteHander);
+            $.get($(this).attr('href'), uploaderFilesIndex.updateFileListCompleteHandler);
             return false;
         });
 
         /*$('#FilterUploaderCategoryId'+listId).bind('change.filterEvent', function() {
             $("#Waiting").show();
-            $.get(getListUrl(),updateFileListCompleteHander);
+            $.get(uploaderFilesIndex.getListUrl(), uploaderFilesIndex.updateFileListCompleteHandler);
         });
         $('input[name="data[Filter][uploader_type]"]').bind('click.filterEvent', function() {
             $("#Waiting").show();
-            $.get(getListUrl(),updateFileListCompleteHander);
+            $.get(uploaderFilesIndex.getListUrl(), uploaderFilesIndex.updateFileListCompleteHandler);
         });*/
-
-        $("#FileList" + listId).trigger("filelistload");
-        $("#FileList" + listId).effect("highlight", {}, 1500);
-
-    }
+        let $fileList = $("#FileList" + listId);
+        $fileList.trigger("filelistload");
+        $fileList.effect("highlight", {}, 1500);
+    },
 
     /**
      * ファイルリスト取得完了イベント
      */
-    function updateFileListCompleteHander(result) {
-
-        $("#FileList" + listId).html(result);
-        initFileList();
-        $("#FileList" + listId).trigger('loadTableComplete');
+    updateFileListCompleteHandler(result) {
+        let listId = uploaderFilesIndex.listId;
+        let $fileList = $("#FileList" + listId);
+        $fileList.html(result);
+        uploaderFilesIndex.initFileList();
+        $fileList.trigger('loadTableComplete');
         $("#Waiting").hide();
-
-    }
+    },
 
     /**
      * Ajax List 取得用のURLを取得する
      */
-    function getListUrl() {
+    getListUrl() {
+        let listId = uploaderFilesIndex.listId;
         let listUrl = $("#ListUrl" + listId).attr('href');
         let query = [];
-        if ($('#FilterUploaderCategoryId' + listId).length) {
-            query.push('uploader_category_id=' + $('#FilterUploaderCategoryId' + listId).val());
+        let $filterUploaderCategoryId = $('#FilterUploaderCategoryId' + listId);
+        if ($filterUploaderCategoryId.length) {
+            query.push('uploader_category_id=' + $filterUploaderCategoryId.val());
         } else {
             query.push('uploader_category_id=');
         }
-        if ($('input[name="uploader_type"]:checked').length) {
-            query.push('uploader_type=' + $('input[name="uploader_type"]:checked').val());
+        let $checkedUploaderType = $('input[name="uploader_type"]:checked');
+        if ($checkedUploaderType.length) {
+            query.push('uploader_type=' + $checkedUploaderType.val());
         } else {
             query.push('uploader_type=all');
         }
-        if ($('#FilterName' + listId).val()) {
-            query.push('name=' + encodeURI($('#FilterName' + listId).val()));
+        let $filterName = $('#FilterName' + listId);
+        if ($filterName.val()) {
+            query.push('name=' + encodeURI($filterName.val()));
         } else {
             query.push('name=');
         }
         const num = location.search.match('limit=([0-9]+)');
-        if(num) {
+        if (num) {
             query.push('limit=' + num[1]);
         }
         if (query.length) {
             listUrl += '?' + query.join('&');
         }
         return listUrl;
-    }
+    },
 
     /**
      * コンテキストメニューハンドラ
      */
-    function contextMenuHander(action, el) {
+    contextMenuHandler(action, el) {
+        let listId = uploaderFilesIndex.listId;
         let id = $("#FileList" + listId + " .selected .id").html().trim();
         let delUrl = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/delete/' + id + '.json';
 
@@ -448,17 +491,17 @@ $(function () {
                             },
                             type: 'post',
                             dataType: 'json',
-                            beforeSend: function() {
+                            beforeSend: function () {
                                 $("#Waiting").show();
                             },
                             success: function () {
                                 $("#FileList" + listId).trigger("deletecomplete");
-                                updateFileList();
+                                uploaderFilesIndex.updateFileList();
                             },
                             error: function () {
                                 alert(bcI18n.uploaderAlertMessage4);
                             },
-                            complete: function(){
+                            complete: function () {
                                 $("#Waiting").hide();
                                 $.bcToken.key = null;
                             }
@@ -469,4 +512,22 @@ $(function () {
         }
     }
 
-});
+}
+
+uploaderFilesIndex.mounted();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
