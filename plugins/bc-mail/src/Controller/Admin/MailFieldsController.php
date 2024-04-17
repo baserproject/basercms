@@ -295,6 +295,7 @@ class MailFieldsController extends MailAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function publish(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
