@@ -277,7 +277,7 @@ class MailContentsTable extends MailAppTable
     public function copy(
         ?int $id,
         int $newParentId,
-        string $newTitle,
+        string|null $newTitle,
         int $newAuthorId,
         int $newSiteId = null
     ) {
@@ -303,7 +303,7 @@ class MailContentsTable extends MailAppTable
         $data->content = new Content([
             'name' => $name,
             'parent_id' => $newParentId,
-            'title' => $newTitle ?? $oldData->title . '_copy',
+            'title' => $newTitle ?? $oldData->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'exclude_search' => false,
