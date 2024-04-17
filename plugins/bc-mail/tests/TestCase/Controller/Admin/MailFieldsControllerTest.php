@@ -225,30 +225,35 @@ class MailFieldsControllerTest extends BcTestCase
     }
 
     /**
-     * Test beforeAddEvent
+     * Test beforeEditEvent
      */
-    public function testBeforeEditEvent()
+    public function testAdmin_beforeEditEvent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        //データを生成
-        $this->loadFixtureScenario(MailFieldsScenario::class);
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.beforeEdit', function (Event $event) {
             $data = $event->getData('data');
             $data['name'] = 'beforeEdit';
             $event->setData('data', $data);
         });
-        //メールのコンテンツサービスをコル
-        $mailFieldsService = $this->getService(MailFieldsAdminServiceInterface::class);
-        $data = $mailFieldsService->get(1);
-       //対象URLをコル
-        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data->toArray());
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $data = ['name' => 'editedName', 'type' => 'text'];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
         //イベントに入るかどうか確認
         $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
         $query = $mailFields->find()->where(['name' => 'beforeEdit']);
         $this->assertEquals(1, $query->count());
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
