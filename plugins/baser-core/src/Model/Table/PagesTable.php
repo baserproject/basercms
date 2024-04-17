@@ -257,7 +257,7 @@ class PagesTable extends AppTable
     public function copy(
         int $id,
         int $newParentId,
-        string $newTitle,
+        string|null $newTitle,
         int $newAuthorId,
         int $newSiteId = null)
     {
