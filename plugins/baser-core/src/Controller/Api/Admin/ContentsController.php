@@ -424,7 +424,7 @@ class ContentsController extends BcAdminApiController
     /**
      * add_alias
      *
-     * @param ContentsServiceInterface $service
+     * @param ContentsServiceInterface|ContentsService $service
      * @return void
      * @checked
      * @noTodo
