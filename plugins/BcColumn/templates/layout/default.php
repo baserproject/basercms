@@ -2,6 +2,9 @@
 /**
  * デフォルトレイアウト
  */
+$request = $this->getRequest();
+$attributes = $request->getAttributes();
+$base = $attributes['base'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,6 +31,7 @@
 <?php endif ?>
 		<?php $this->BcBaser->css('responsive') ?>
 
+<?= $this->BcBaser->declarationI18n() ?>
 <?php $this->BcBaser->js(array(
 			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
@@ -35,6 +39,11 @@
 			'baser.min',
 			'startup'
 )) ?>
+<?php $this->BcBaser->js('common.bundle', true, [
+  'id' => 'AdminScript',
+  'data-baseUrl' => h($base),
+  'data-baserCorePrefix' => \Cake\Utility\Inflector::underscore(\BaserCore\Utility\BcUtil::getBaserCorePrefix()),
+]) ?>
 <?php if($this->BcBaser->isHome()): ?>
 <script type="text/javascript">
 $(function(){
@@ -71,7 +80,7 @@ $(function(){
 
 	<div id="PageTitle">
 	    <div class="body-wrap">
-	    <?php if (!empty($this->BcBaser->isBlog())): ?>
+	    <?php if ($this->BcBaser->isBlog()): ?>
 	        <h1><?php echo h($this->Blog->getTitle()) ?></h1>
     	<?php else: ?>
 	        <h1><?php $this->BcBaser->contentsTitle() ?></h1>
