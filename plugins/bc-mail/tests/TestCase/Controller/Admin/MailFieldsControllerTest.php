@@ -217,6 +217,10 @@ class MailFieldsControllerTest extends BcTestCase
         $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
         //check response code
         $this->assertResponseCode(302);
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
         //テストデータベースを削除
         $MailMessagesService->dropTable(1);
     }
