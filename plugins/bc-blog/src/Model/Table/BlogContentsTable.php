@@ -149,7 +149,7 @@ class BlogContentsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex')) {
             return true;
         }
-        if (empty($entity->content) || !empty($entity->content->exclude_search) || !$entity->content->status) {
+        if (empty($entity->content) || !empty($entity->content->exclude_search)) {
             $this->setExcluded();
         }
         return true;
