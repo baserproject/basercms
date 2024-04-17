@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Event\Event;
@@ -283,7 +284,26 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_publish()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        MailFieldsFactory::make([
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => '性',
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'use_field' => 0
+        ])->persist();
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/publish/1/1');
+        //check response code
+        $this->assertResponseCode(302);
+        //check Flash message
+        $this->assertFlashMessage('メールフィールド「性」を有効状態にしました。');
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
     }
 
     /**
