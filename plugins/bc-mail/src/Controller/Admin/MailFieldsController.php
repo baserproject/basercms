@@ -110,6 +110,7 @@ class MailFieldsController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(MailFieldsAdminServiceInterface $service, int $mailContentId)
     {
