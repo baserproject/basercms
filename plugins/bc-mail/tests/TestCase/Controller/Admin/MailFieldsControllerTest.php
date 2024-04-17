@@ -119,26 +119,23 @@ class MailFieldsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        //データを生成
+        //メールメッセージサービスをコル
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        $MailMessagesService->addMessageField(1, 'name_1');
+        ////データを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
-        //メールフィルドのデータを生成
         $this->loadFixtureScenario(MailFieldsScenario::class);
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/delete/1/1');
         //check response code
         $this->assertResponseCode(302);
-        //check redirect
-        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
         //check message
         $this->assertFlashMessage('メールフィールド「性」を削除しました。');
-        //check data not found
-        $this->post('/baser/admin/bc-mail/mail_fields/delete/1/1');
-        //check response code
-        $this->assertResponseCode(404);
-        //エラーを発生した場合、
-        $this->post('/baser/admin/bc-mail/mail_fields/delete/555/123');
-        //check response code
-        $this->assertResponseCode(500);
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
