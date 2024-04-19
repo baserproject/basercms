@@ -422,7 +422,19 @@ class ContentsService implements ContentsServiceInterface
             $postData['parent_id'] = $this->Contents->copyContentFolderPath($postData['url'], $postData['site_id']);
         }
         $data = array_merge($this->get($postData['alias_id'], ['contain' => []])->toArray(), $postData);
-        unset($data['id'], $data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified'], $data['site']);
+        unset(
+            $data['id'],
+            $data['lft'],
+            $data['rght'],
+            $data['level'],
+            $data['pubish_begin'],
+            $data['publish_end'],
+            $data['created_date'],
+            $data['created'],
+            $data['modified'],
+            $data['site'],
+            $data['site_root']
+        );
         $alias = $this->Contents->newEntity($data);
         $alias->name = $postData['name'] ?? $postData['title'];
         $alias->created_date = \Cake\I18n\DateTime::now();

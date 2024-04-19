@@ -257,7 +257,7 @@ class PagesTable extends AppTable
     public function copy(
         int $id,
         int $newParentId,
-        string $newTitle,
+        string|null $newTitle,
         int $newAuthorId,
         int $newSiteId = null)
     {
@@ -278,7 +278,7 @@ class PagesTable extends AppTable
         $page->content = new Content([
 			'name' => $page->content->name,
 			'parent_id' => $newParentId,
-			'title' => $newTitle ?? __d('baser_core', '{0} のコピー', $oldPage->content->title),
+			'title' => $newTitle ?? $oldPage->content->title . '_copy',
 			'author_id' => $newAuthorId,
 			'site_id' => $newSiteId,
 			'description' => $page->content->description,
