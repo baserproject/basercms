@@ -30,7 +30,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_tables/form.bundle', false, [
   'defer' => true
 ]);
 $this->BcBaser->i18nScript([
-  'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title)
+  'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", h($entity->title))
 ]);
 $this->BcAdminForm->unlockField("custom_links");
 $this->BcAdmin->setHelp('custom_tables_form');

@@ -33,12 +33,17 @@ if (!empty($items[$content->type])) {
 } else {
   $type = 'Default';
 }
+if($content->title === '会社案内 のエイリアス') {
+  $a = 1;
+}
 if ($isAlias) {
   $editDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'edit', $content->entity_id);
   $manageDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'manage', $content->entity_id);
+  $copyDisable = true;
 } else {
   $editDisabled = !$this->BcContents->isActionAvailable($content->type, 'edit', $content->entity_id);
   $manageDisabled = !$this->BcContents->isActionAvailable($content->type, 'manage', $content->entity_id);
+  $copyDisable = !$this->BcContents->isActionAvailable($content->type, 'copy', $content->entity_id);
 }
 $typeTitle = @$items[$type]['title'];
 if (!empty($items[$type]['icon'])) {
@@ -57,7 +62,7 @@ $urlParams = ['content_id' => $content->id];
 if ($content->entity_id) {
   $urlParams = array_merge($urlParams, [$content->entity_id]);
 }
-$fullUrl = $this->BcContents->getUrl($content->url, true, @$content['Site']['use_subdomain']);
+$fullUrl = $this->BcContents->getUrl($content->url, true, $content->site->use_subdomain);
 $toStatus = 'publish';
 if ($content->self_status) {
   $toStatus = 'unpublish';
@@ -65,7 +70,7 @@ if ($content->self_status) {
 ?>
 
 
-<tr id="Row<?= $count + 1 ?>"<?php echo $this->BcListTable->rowClass($isPublish, $content) ?>>
+<tr id="Row<?= $count + 1 ?>"<?php $this->BcListTable->rowClass($isPublish, $content) ?>>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
     <?php if ($this->BcBaser->isAdminUser() && empty($content->site_root)): ?>
       <?php echo $this->BcAdminForm->control(
@@ -175,7 +180,7 @@ if ($content->self_status) {
     <?php endif ?>
 
     <!-- コピー -->
-    <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($items[$type]['routes']['copy'])): ?>
+    <?php if (!$editDisabled && !$copyDisable): ?>
       <?php $this->BcBaser->link('',
         array_merge($items[$type]['routes']['copy'], $urlParams, ['_ext' => 'json']), [
           'title' => __d('baser_core', 'コピー'),
