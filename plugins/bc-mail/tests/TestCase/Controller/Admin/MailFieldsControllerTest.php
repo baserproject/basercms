@@ -130,26 +130,30 @@ class MailFieldsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+
         //データを生成
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
         //テストデータベースを生成
         $MailMessagesService->createTable(1);
         $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+
         //データを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
-        //urlをコル
+
+        //正常系実行
         $this->post("/baser/admin/bc-mail/mail_fields/copy/1/1");
-        //レスポンスコードを確認する
         $this->assertResponseCode(302);
         $this->assertFlashMessage('メールフィールド「性」をコピーしました。');
-        //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
-        //check データベース処理中にエラーが発生しました。
-        $this->post("/baser/admin/bc-mail/mail_fields/copy/12/12");
-        //レスポンスコードを確認する
-        $this->assertResponseCode(500);
+
+        //システム実行エラー
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/999");
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `mail_fields`.');
+
         //テストデータベースを削除
         $MailMessagesService->dropTable(1);
     }
