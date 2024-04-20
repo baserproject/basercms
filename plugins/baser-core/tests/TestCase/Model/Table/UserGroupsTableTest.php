@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
 
@@ -88,6 +89,19 @@ class UserGroupsTableTest extends BcTestCase
         $this->assertEquals(['id', 'name', 'title', 'auth_prefix', 'use_move_contents'], $fields);
         $userGroups = $this->UserGroups->get(2);
 
+    }
+
+    /**
+     * test validationDefault with title duplicate
+     */
+    public function test_validationDefaultTitleDuplicate()
+    {
+        UserGroupFactory::make(['title' => '一般ユーザー'])->persist();
+        $validator = $this->UserGroups->getValidator('default');
+        $errors = $validator->validate([
+            'title' => '一般ユーザー'
+        ]);
+        $this->assertEquals('既に登録のある表示名です。', current($errors['title']));
     }
 
     /**
