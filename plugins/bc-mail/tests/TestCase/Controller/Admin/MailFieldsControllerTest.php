@@ -12,11 +12,13 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -187,6 +189,41 @@ class MailFieldsControllerTest extends BcTestCase
     public function testAdmin_ajax_copy()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test copy
+     */
+    public function testAdmin_copy()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        //正常系実行
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/1");
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('メールフィールド「性」をコピーしました。');
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+
+        //システム実行エラー
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/999");
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `mail_fields`.');
+
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
