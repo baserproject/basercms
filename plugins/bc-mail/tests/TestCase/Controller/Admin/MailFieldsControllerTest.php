@@ -93,7 +93,41 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        //テストデータベースを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => 'test',
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //異常系のテスト
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => null,
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
