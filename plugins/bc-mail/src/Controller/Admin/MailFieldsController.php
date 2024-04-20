@@ -224,12 +224,13 @@ class MailFieldsController extends MailAdminAppController
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $entity = $service->get($id);
         try {
+            $entity = $service->get($id);
             if($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を削除しました。', $entity->name));
             } else {
