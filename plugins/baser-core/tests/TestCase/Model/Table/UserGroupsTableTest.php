@@ -89,6 +89,19 @@ class UserGroupsTableTest extends BcTestCase
     }
 
     /**
+     * test validationDefault with title duplicate
+     */
+    public function test_validationDefaultTitleDuplicate()
+    {
+        UserGroupFactory::make(['title' => '一般ユーザー'])->persist();
+        $validator = $this->UserGroups->getValidator('default');
+        $errors = $validator->validate([
+            'title' => '一般ユーザー'
+        ]);
+        $this->assertEquals('既に登録のある表示名です。', current($errors['title']));
+    }
+
+    /**
      * Test copy
      *
      * @return void

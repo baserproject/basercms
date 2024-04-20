@@ -103,7 +103,11 @@ class PreviewController extends BcAdminAppController
         $request = BcUtil::createRequest(
             $url,
             $this->getRequest()->getData(),
-            $this->getRequest()->getMethod()
+            $this->getRequest()->getMethod(),
+            [
+                'base' => $request->getAttribute('base'),
+                'webroot' => $request->getAttribute('webroot'),
+            ]
         );
         //========================================================================
         // 2022/12/02 by ryuring
