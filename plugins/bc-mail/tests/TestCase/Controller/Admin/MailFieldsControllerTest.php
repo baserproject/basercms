@@ -428,4 +428,24 @@ class MailFieldsControllerTest extends BcTestCase
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
     }
+
+    /**
+     * Test unpublish
+     */
+    public function testAdmin_unpublish()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //メールフィルドのデータを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/unpublish/1/1');
+        //check response code
+        $this->assertResponseCode(302);
+        //check Flash message
+        $this->assertFlashMessage('メールフィールド「性」を無効状態にしました。');
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+    }
 }

@@ -277,6 +277,7 @@ class MailFieldsController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function unpublish(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
