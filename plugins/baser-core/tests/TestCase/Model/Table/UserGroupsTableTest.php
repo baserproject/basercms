@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
