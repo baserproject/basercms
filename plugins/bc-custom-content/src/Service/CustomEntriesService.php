@@ -339,7 +339,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         $table = $this->CustomEntries->CustomTables->get($this->CustomEntries->tableId);
         $this->CustomEntries->setDisplayField($table->display_field);
         if ($table->has_child) {
-            return $this->getParentTargetList(null, $options['conditions']);
+            return $this->getParentTargetList(null, $options);
         } else {
             return $this->CustomEntries->find('list')->where($options['conditions'])->toArray();
         }
