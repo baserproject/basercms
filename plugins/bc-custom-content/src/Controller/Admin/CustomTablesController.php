@@ -133,7 +133,18 @@ class CustomTablesController extends CustomContentAdminAppController
                 return $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+                $hasLinkError = false;
+                if($entity->custom_links) {
+                    foreach($entity->custom_links as $key => $link) {
+                        // リンクにエラーが存在する場合、そのままビューに値が渡ると、
+                        // 利用中のフィールド内の対象フィールドの表示が壊れてしまうため除外する
+                        if(!$link->id) unset($entity->custom_links[$key]);
+                        if($link->getErrors()) $hasLinkError = true;
+                    }
+                }
+                $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+                if($hasLinkError) $message .= "\n" . $e->getMessage();
+                $this->BcMessage->setError($message);
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
