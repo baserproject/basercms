@@ -12,11 +12,13 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -93,7 +95,41 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        //テストデータベースを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => 'test',
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //異常系のテスト
+        $data = [
+            'id' => 1,
+            'mail_content_id' => 1,
+            'name' => null,
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'source' => '資料請求|問い合わせ|その他'
+        ];
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
@@ -101,7 +137,34 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //テストデータベースを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //data edit
+        $data = [
+            'name' => 'edit',
+            'type' => 'text'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
+        //check flash message
+        $this->assertFlashMessage('メールフィールド「edit」を更新しました。');
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+        //case error
+        $data = [
+            'name' => null,
+            'type' => 'text'
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
+        //check response code
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
     }
 
     /**
@@ -117,7 +180,32 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdmin_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //メールメッセージサービスをコル
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        $MailMessagesService->addMessageField(1, 'name_1');
+
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/delete/1/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('メールフィールド「性」を削除しました。');
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+
+        //check case error
+        $this->post('/baser/admin/bc-mail/mail_fields/delete/1/999');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `mail_fields`.');
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
@@ -126,6 +214,41 @@ class MailFieldsControllerTest extends BcTestCase
     public function testAdmin_ajax_copy()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test copy
+     */
+    public function testAdmin_copy()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        //正常系実行
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/1");
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('メールフィールド「性」をコピーしました。');
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+
+        //システム実行エラー
+        $this->post("/baser/admin/bc-mail/mail_fields/copy/1/999");
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `mail_fields`.');
+
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(1);
     }
 
     /**
@@ -302,6 +425,26 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         //check Flash message
         $this->assertFlashMessage('メールフィールド「性」を有効状態にしました。');
+        //check redirect
+        $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+    }
+
+    /**
+     * Test unpublish
+     */
+    public function testAdmin_unpublish()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //メールフィルドのデータを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/unpublish/1/1');
+        //check response code
+        $this->assertResponseCode(302);
+        //check Flash message
+        $this->assertFlashMessage('メールフィールド「性」を無効状態にしました。');
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
     }
