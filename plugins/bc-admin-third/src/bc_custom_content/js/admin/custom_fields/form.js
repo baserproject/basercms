@@ -77,11 +77,17 @@ let vm = new Vue({
         /**
          * 配列の初期値を取得
          *
-         * @returns {string[]}
+         * マルチチェックボックスを利用している場合、初期値欄とプレビューの双方向反映のために利用する。
+         * 利用するには、プレビュー用のテンプレートで、v-model="arrayDefaultValue" を指定する。
          */
-        arrayDefaultValue: function() {
-            if(!this.entity.default_value) return;
-            return this.entity.default_value.replace('\r', '').split("\n");
+        arrayDefaultValue: {
+            get: function() {
+                if(!this.entity.default_value) return[];
+                return this.entity.default_value.replace('\r', '').split("\n");
+            },
+            set: function(value) {
+                this.entity.default_value = value.join("\n");
+            }
         },
 
         /**
