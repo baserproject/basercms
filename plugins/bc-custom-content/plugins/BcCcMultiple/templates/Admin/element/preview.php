@@ -19,7 +19,7 @@
             :value="value"
             :id="'text-' + value"
             class="bca-checkbox__input"
-            v-model="arrayDefaultValue">
+            v-model="multipleDefaultValue">
         <label class="bca-checkbox__label" :for="'text-' + value">{{ value }}</label>
     </span>
     <span v-show="arraySource.length < 1">選択リストを入力してください。</span>

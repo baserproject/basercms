@@ -70,7 +70,7 @@ class BcCcCheckboxHelper extends Helper
     public function preview(CustomLink $link)
     {
         $options = [
-            'v-model' => 'entity.default_value',
+            'v-model' => 'checkboxDefaultValue',
             'label' => '{{checkboxLabel}}',
         ];
         return $this->control($link, $options);
