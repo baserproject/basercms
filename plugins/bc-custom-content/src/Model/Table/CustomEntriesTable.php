@@ -22,8 +22,6 @@ use BaserCore\Utility\BcUtil;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Model\Entity\CustomTable;
-use BcCustomContent\Service\CustomTablesService;
-use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;

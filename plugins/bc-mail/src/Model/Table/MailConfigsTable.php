@@ -71,7 +71,14 @@ class MailConfigsTable extends MailAppTable
     {
         $validator
             ->scalar('site_name')
-            ->notEmptyString('site_name', __d('baser_core', 'Webサイト名を入力してください。'));
+            ->notEmptyString('site_name', __d('baser_core', 'Webサイト名を入力してください。'))
+            ->add('site_name', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'Webサイト名を入力してください。')
+                ]
+            ]);
         return $validator;
     }
 

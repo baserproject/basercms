@@ -446,16 +446,22 @@ $(function () {
                     return;
                 }
 
-                let templateId = 'template-field-' + $(ui.item).attr('class').split(' ').filter(value => {
+                // テンプレートのクラスを取得
+                // "template-field-recruit_category" のようなクラス名
+                let templateClass = 'template-field-' + $(ui.item).attr('class').split(' ').filter(value => {
                     return (value.indexOf('available-field-') !== -1);
                 })[0].replace('available-field-', '');
 
                 let baseId = getNewBaseId();
                 let inUseFieldId = 'InUseField' + (baseId);
-                let tmpId = 'Tmp' + (baseId);
-                ui.item.attr('id', tmpId);
 
-                $(`#${tmpId}`).after($(`.${templateId}`).clone().attr('id', inUseFieldId).addClass('in-use-field').removeClass('template')).remove();
+                // テンプレートをクローンし、id を付与してクラスを処理
+                let template = $(`.${templateClass}`).clone()
+                    .attr('id', inUseFieldId)
+                    .addClass('in-use-field')
+                    .removeClass('template ' + templateClass);
+                // ドロップ対象の後に追加しドロップ対象は削除
+                ui.item.after(template).remove();
 
                 $(`#${inUseFieldId} input[name='template[name]']`).attr('name', `custom_links[new-${baseId}][name]`);
                 $(`#${inUseFieldId} input[name='template[custom_field_id]']`).attr('name', `custom_links[new-${baseId}][custom_field_id]`);

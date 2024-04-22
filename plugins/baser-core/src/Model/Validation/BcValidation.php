@@ -255,20 +255,16 @@ class BcValidation extends Validation
      */
     public static function fileExt($file, $exts)
     {
-        if (!is_array($exts)) {
-            $exts = explode(',', $exts);
-        }
+        if (!is_array($exts)) $exts = explode(',', $exts);
+        if (empty($file)) return true;
 
         // FILES形式のチェック
-        if (!is_string($file) && !empty($file->getClientMediaType())) {
-            $ext = BcUtil::decodeContent($file->getClientMediaType(), $file->getClientMediaType());
+        if (is_array($file) && !empty($file['type'])) {
+            $ext = BcUtil::decodeContent($file['type'], $file['name']);
             if (!in_array($ext, $exts)) {
                 return false;
             }
-        }
-
-        // 更新時の文字列チェック
-        if (!empty($file) && is_string($file)) {
+        } else {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             if (!in_array($ext, $exts)) {
                 return false;
