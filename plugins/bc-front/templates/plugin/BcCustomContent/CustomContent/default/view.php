@@ -23,8 +23,7 @@ $customLinks = $this->BcBaser->getCustomLinks($customContent->custom_table_id);
 $this->BcBaser->setTitle($customEntry->title);
 ?>
 
-
-<h2><?php $this->BcBaser->contentsTitle() ?></h2>
+<h2><?php echo $this->BcBaser->getCustomContentTitle() ?></h2>
 
 <h3>
   <?php $this->BcBaser->customEntryTitle($customEntry, ['link' => false]) ?>
