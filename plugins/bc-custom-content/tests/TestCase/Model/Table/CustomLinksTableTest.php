@@ -83,6 +83,13 @@ class CustomLinksTableTest extends BcTestCase
         ]);
         $this->assertEquals('フィールド名を入力してください。', current($errors['name']));
         $this->assertEquals('タイトルを入力してください。', current($errors['title']));
+
+        //スペースだけ登録した場合、
+        $errors = $validator->validate([
+            'title' => '      '
+        ]);
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
+
         //nameは半角英数字以外の記号が含めるケース
         $errors = $validator->validate([
             'name' => 'aこんにちは',
