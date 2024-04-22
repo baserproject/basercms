@@ -279,15 +279,12 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testBeforeAddEvent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         //テストデータベースを生成
         $MailMessagesService->createTable(1);
-        $this->loadFixtureScenario(MailFieldsScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
-
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.beforeAdd', function (Event $event) {
             $data = $event->getData('data');
@@ -296,17 +293,20 @@ class MailFieldsControllerTest extends BcTestCase
         });
         //追加データを準備
         $data = [
+            'mail_content_id' => 1,
             'field_name' => 'name_add_1',
             'type' => 'text',
             'name' => '性',
+            'source' => '資料請求|問い合わせ|その他'
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/add/1', $data);
+        //check response code
+        $this->assertResponseCode(302);
         //イベントに入るかどうか確認
         $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
         $query = $mailFields->find()->where(['name' => 'beforeAdd']);
         $this->assertEquals(1, $query->count());
-
         //テストデータベースを削除
         $MailMessagesService->dropTable(1);
     }
