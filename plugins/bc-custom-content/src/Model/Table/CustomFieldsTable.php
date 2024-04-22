@@ -67,7 +67,13 @@ class CustomFieldsTable extends AppTable
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のあるフィールド名です。')
                 ]
-            ]);
+            ])
+            ->add('name', [
+                'reserved' => [
+                    'rule' => ['reserved'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
+            ]]);
         $validator
             ->scalar('title')
             ->notEmptyString('title', __d('baser_core', '項目見出しを入力してください。'))

@@ -92,7 +92,7 @@ class CustomLinksTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'option',
         ]);
-        $this->assertStringContainsString( 'はシステム予約名称のため利用できません。', current($errors['name']));
+        $this->assertStringContainsString( 'システム予約名称のため利用できません。', current($errors['name']));
         //既に登録のケース
         CustomLinkFactory::make([
             'name' => 'recruit_category',
