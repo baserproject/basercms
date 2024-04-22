@@ -254,7 +254,7 @@ class MailFieldsControllerTest extends BcTestCase
     /**
      * Test afterAddEvent
      */
-    public function testAdmin_afterEditEvent()
+    public function testAfterEditEvent()
     {
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.afterEdit', function (Event $event) {
@@ -265,14 +265,16 @@ class MailFieldsControllerTest extends BcTestCase
         });
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+
         //データを生成
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        //正常系実行
         $data = ['name' => 'afterEdit', 'type' => 'text'];
-        //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data);
-        //check response code
         $this->assertResponseCode(302);
+
         //イベントに入るかどうか確認
         $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
         $query = $mailFields->find()->where(['name' => 'afterEdit']);
