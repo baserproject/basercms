@@ -277,7 +277,7 @@ class MailFieldsControllerTest extends BcTestCase
     /**
      * Test beforeAddEvent
      */
-    public function testAdmin_beforeAddEvent()
+    public function testBeforeAddEvent()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
