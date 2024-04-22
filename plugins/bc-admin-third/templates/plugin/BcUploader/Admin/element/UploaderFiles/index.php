@@ -34,7 +34,9 @@ echo $this->BcBaser->i18nScript([
   'uploaderPublishBegin' => __d('baser_core', '公開開始日'),
   'uploaderPublishEnd' => __d('baser_core', '公開終了日')
 ], ['block' => false]);
-$this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
+$this->BcBaser->js('BcUploader.admin/uploader_files/index_panel.bundle', false, [
+  'defer' => true
+]);
 ?>
 
 
