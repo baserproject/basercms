@@ -330,6 +330,7 @@ class MailFieldsTable extends MailAppTable
      * @return string 整形後選択リストソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function formatSource($source)
     {
