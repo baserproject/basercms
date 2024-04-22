@@ -350,7 +350,7 @@ class MailFieldsControllerTest extends BcTestCase
     /**
      * Test beforeEditEvent
      */
-    public function testAdmin_beforeEditEvent()
+    public function testBeforeEditEvent()
     {
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.beforeEdit', function (Event $event) {
