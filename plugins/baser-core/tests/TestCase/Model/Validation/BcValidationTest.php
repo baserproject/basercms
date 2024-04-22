@@ -16,7 +16,6 @@ use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class BcValidationTest
@@ -261,43 +260,52 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-
     public static function fileExtDataProvider()
     {
         return [
             [
-                new UploadedFile(
-                    'test.jpg',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.jpg',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.jpg',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
                 true
             ],
             [
-                new UploadedFile(
-                    'test.png',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
                 true
             ],
             [
-                new UploadedFile('test.gif',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.gif',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.gif',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'gif'
+                ],
                 true
             ],
             [
-                new UploadedFile('test',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
-                true
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/gif',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
             ]
         ];
     }
