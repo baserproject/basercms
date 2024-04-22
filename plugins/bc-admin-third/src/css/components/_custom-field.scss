@@ -41,7 +41,8 @@
         padding: 8px 15px;
         font-weight: bold;
         font-size: 1.4rem;
-        white-space: break-spaces;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       &-delete {
