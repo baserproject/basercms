@@ -233,6 +233,7 @@ class MailFieldsTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function halfTextMailField(string $value)
     {
