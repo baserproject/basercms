@@ -181,11 +181,25 @@ class MailFieldsTableTest extends BcTestCase
 
     /**
      * 選択リストの入力チェック
+     * @dataProvider sourceMailFieldDataProvider
      */
-    public function testSourceMailField()
+    public function test_sourceMailField($value, $context, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailFieldsTable->sourceMailField($value, $context);
+        $this->assertEquals($expected, $result);
     }
+
+    public static function sourceMailFieldDataProvider()
+    {
+        return [
+            ['radio', ['data' => ['type' => 'radio']], 'radio'],
+            ['select', ['data' => ['type' => 'radio']], 'select'],
+            ['multi_check', ['data' => ['type' => 'radio']], 'multi_check'],
+            ['autozip', ['data' => ['type' => 'radio']], 'autozip'],
+            ['text', ['data' => ['type' => 'text']], true]
+        ];
+    }
+
 
     /**
      * フィールドデータをコピーする

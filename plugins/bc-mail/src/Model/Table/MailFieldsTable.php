@@ -248,6 +248,7 @@ class MailFieldsTable extends MailAppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sourceMailField(string $value, array $context)
     {
