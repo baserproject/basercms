@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase;
 
 use App\Application;
+use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\BaserCorePlugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
@@ -22,6 +23,7 @@ use Cake\Core\Container;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 
@@ -175,9 +177,10 @@ return [];
     {
         $middleware = new MiddlewareQueue();
         $middleware->add(CsrfProtectionMiddleware::class);
+        $middleware->add(RoutingMiddleware::class);
         $middlewareQueue = $this->Plugin->middleware($middleware);
-        $this->assertInstanceOf(BcRequestFilterMiddleware::class, $middlewareQueue->current());
-        $this->assertEquals(6, $middlewareQueue->count());
+        $this->assertInstanceOf(AuthenticationMiddleware::class, $middlewareQueue->current());
+        $this->assertEquals(7, $middlewareQueue->count());
     }
 
     /**
