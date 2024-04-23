@@ -133,10 +133,11 @@ $this->BcAdmin->setHelp('custom_fields_form');
         </div>
 
         <?php
-        $emailConfirmClass = 'bca-textbox__input';
-        if (!empty($this->BcAdminForm->error('meta'))) {
-          $emailConfirmClass = 'bca-textbox__input form-error';
-        }
+          $metaErrors = $entity->getError('meta');
+          $emailConfirmClass = 'bca-textbox__input';
+          if (isset($metaErrors['checkAlphaNumericWithJson'])) {
+            $emailConfirmClass = 'bca-textbox__input form-error';
+          }
         ?>
 
         <span v-show="showControlEmailConfirm" style="display: block">
