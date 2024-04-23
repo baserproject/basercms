@@ -702,7 +702,7 @@ class BlogFrontServiceTest extends BcTestCase
         // データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
         UserFactory::make([
-            'id' => BlogPostFactory::get(1)->user_id,
+            'id' => 1,
             'name' => 'name_test',
             'real_name_1' => 'real_name_1_test',
             'real_name_2' => 'real_name_2_test',
