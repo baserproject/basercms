@@ -75,7 +75,36 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdmin_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // データ生成
+        $data = [
+            'name' => 'test',
+            'widgets' => serialize([
+                [
+                    1 => 'test 1',
+                    2 => 'test 2'
+                ]
+            ])
+        ];
+
+        //正常系実行
+        $this->post('/baser/admin/bc-widget-area/widget_areas/add', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('新しいウィジェットエリアを保存しました。');
+        $this->assertRedirect('/baser/admin/bc-widget-area/widget_areas/edit/1');
+
+        //データが空の場合、
+        $data = [
+            'name' => '',
+            'widgets' => ''
+        ];
+        $this->post('/baser/admin/bc-widget-area/widget_areas/add', $data);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "ウィジェットエリア名を入力してください。"]], $vars['widgetArea']->getErrors());
+        $this->assertResponseCode(200);
     }
 
     /**
