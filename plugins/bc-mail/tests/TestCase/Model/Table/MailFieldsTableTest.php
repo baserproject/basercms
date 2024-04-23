@@ -201,9 +201,9 @@ class MailFieldsTableTest extends BcTestCase
     {
         return [
             ['radio', ['data' => ['type' => 'radio']], 'radio'],
-            ['select', ['data' => ['type' => 'radio']], 'select'],
-            ['multi_check', ['data' => ['type' => 'radio']], 'multi_check'],
-            ['autozip', ['data' => ['type' => 'radio']], 'autozip'],
+            ['select', ['data' => ['type' => 'select']], 'select'],
+            ['multi_check', ['data' => ['type' => 'multi_check']], 'multi_check'],
+            ['autozip', ['data' => ['type' => 'autozip']], 'autozip'],
             ['text', ['data' => ['type' => 'text']], true]
         ];
     }
