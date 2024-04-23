@@ -45,9 +45,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     public function setUp(): void
     {
         if (preg_match('/^testIsInstall/', $this->getName())) {
-            Configure::write('BcRequest.isInstalled', false);
+            Configure::write('BcEnv.isInstalled', false);
         } else {
-            Configure::write('BcRequest.isInstalled', true);
+            Configure::write('BcEnv.isInstalled', true);
         }
         parent::setUp();
         $this->BcRequestFilterMiddleware = new BcRequestFilterMiddleware();

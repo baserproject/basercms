@@ -307,10 +307,10 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertEquals('https://baserproject.github.io/5/operation/update', $bcToolbar->getLogoLink());
         Configure::write('BcRequest.isUpdater', false);
         // インストーラー
-        Configure::write('BcRequest.isInstalled', false);
+        Configure::write('BcEnv.isInstalled', false);
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $this->assertEquals('https://baserproject.github.io/5/introduce/', $bcToolbar->getLogoLink());
-        Configure::write('BcRequest.isInstalled', true);
+        Configure::write('BcEnv.isInstalled', true);
     }
 
     /**

@@ -1093,7 +1093,7 @@ class BcUtil
      */
     public static function isInstalled()
     {
-        return (bool)Configure::read('BcRequest.isInstalled');
+        return (bool)Configure::read('BcEnv.isInstalled');
     }
 
     /**

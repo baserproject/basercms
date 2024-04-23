@@ -89,8 +89,8 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
          * インストールされてない場合のテストをできるようにするため、Configure の設定を優先する
          */
         $hasInstall = file_exists(CONFIG . 'install.php');
-        if (is_null(Configure::read('BcRequest.isInstalled'))) {
-            Configure::write('BcRequest.isInstalled', $hasInstall);
+        if (is_null(Configure::read('BcEnv.isInstalled'))) {
+            Configure::write('BcEnv.isInstalled', $hasInstall);
         }
 
         /**

@@ -76,7 +76,7 @@ class WidgetAreasAdminServiceTest extends BcTestCase
             'paths' => ['/var/www/html/plugins/bc-admin-third/templates/Admin/element/widget']
         ], $result[0]);
         //正常系実行
-        Configure::write('BcRequest.isInstalled', true);
+        Configure::write('BcEnv.isInstalled', true);
         $result = $this->execPrivateMethod($this->WidgetAreasAdminService, 'getWidgetInfos');
         $this->assertCount(1, $result);
         $this->assertEquals('BaserCore', $result[0]['plugin']);
