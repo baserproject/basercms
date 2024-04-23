@@ -113,7 +113,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         $configs['admin'] = [$this, 'isAdmin'];
         $configs['install'] = [$this, 'isInstall'];
         $configs['maintenance'] = [$this, 'isMaintenance'];
-        $configs['update'] = [$this, 'isUpdate'];
         $configs['page'] = [$this, 'isPage'];
         $configs['requestview'] = [$this, 'isRequestView'];
 

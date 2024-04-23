@@ -602,6 +602,17 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     }
 
     /**
+     * 初期データ読み込み時の更新処理
+     * @param array $options
+     * @return void
+     */
+    public function updateDefaultData($options = []) : void
+    {
+        // コンテンツの作成日を更新
+        $this->updateDateNow('BaserCore.Contents', ['created_date'], [], $options);
+    }
+
+    /**
      * services
      * @param ContainerInterface $container
      * @checked
