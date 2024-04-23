@@ -122,6 +122,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'release',
             'title' => 'プレスリリース',
             'status' => 1,
+            'exclude_search' => 0,
             'posted' => '2015-01-27 12:57:59',
         ])->persist();
         BlogPostFactory::make([
@@ -131,6 +132,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'smartphone_release',
             'title' => 'スマホサイトリリース',
             'status' => 1,
+            'exclude_search' => 0,
             'posted' => '2016-02-10 12:57:59',
         ])->persist();
         BlogPostFactory::make([
@@ -140,6 +142,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'english_release',
             'title' => '英語サイトリリース',
             'status' => 1,
+            'exclude_search' => 0,
         ])->persist();
         BlogPostFactory::make([
             'id' => 4,
@@ -148,6 +151,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'another_domain_release',
             'title' => '別サイトリリース',
             'status' => 1,
+            'exclude_search' => 0,
         ])->persist();
         BlogPostFactory::make([
             'id' => 5,
@@ -156,6 +160,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'sub_domain_release',
             'title' => '別サイトリリース',
             'status' => 1,
+            'exclude_search' => 0,
         ])->persist();
         BlogPostFactory::make([
             'id' => 6,
@@ -164,6 +169,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => 'release',
             'title' => 'プレスリリース',
             'status' => 1,
+            'exclude_search' => 0,
         ])->persist();
         return null;
     }

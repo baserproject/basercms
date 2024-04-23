@@ -234,6 +234,7 @@ class BlogPostsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving) {
             return;
         }
+        $this->unsetExcluded();
         // 検索用テーブルに登録
         if ($entity->exclude_search
             || empty($entity->blog_content->content)
