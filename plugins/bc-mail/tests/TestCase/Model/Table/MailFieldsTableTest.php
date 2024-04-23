@@ -269,8 +269,7 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testFormatSource($source, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->MailField->formatSource($source);
+        $result = $this->MailFieldsTable->formatSource($source);
         $this->assertEquals($expected, $result);
     }
 
