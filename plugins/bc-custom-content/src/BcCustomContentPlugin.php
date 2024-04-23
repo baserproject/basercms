@@ -47,10 +47,23 @@ class BcCustomContentPlugin extends BcPlugin
             'connection' => 'default'
         ], $options);
         $result = parent::install($options);
-        $table = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries', ['connectionName' => $options['connection']]);
-        $table->setUp(1);
-        $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
+        if(Configure::read('BcEnv.isInstalled') && empty($options['db_init'])) {
+            $table = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries', ['connectionName' => $options['connection']]);
+            $table->setUp(1);
+            $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
+        }
         return $result;
+    }
+
+    /**
+     * 初期データ読み込み時の更新処理
+     * @param array $options
+     * @return void
+     */
+    public function updateDefaultData($options = []) : void
+    {
+        // エントリーの公開日を更新
+        $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
     }
 
     /**

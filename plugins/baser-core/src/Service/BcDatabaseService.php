@@ -405,14 +405,18 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 					if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto', 'dbConfigKeyName' => $dbConfigKeyName])) {
 						$this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
 						$result = false;
-					} else {
-						break;
 					}
 				} catch(\Throwable $e) {
 					throw $e;
 				}
             }
         }
+        try {
+            $pluginClass = Plugin::getCollection()->get($plugin);
+            if(method_exists($pluginClass, 'updateDefaultData')) {
+                $pluginClass->updateDefaultData();
+            }
+        } catch (\Throwable) {}
         return $result;
     }
 
