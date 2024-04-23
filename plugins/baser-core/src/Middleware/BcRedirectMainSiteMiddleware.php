@@ -42,19 +42,13 @@ class BcRedirectMainSiteMiddleware implements MiddlewareInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      * @checked
+     * @noTodo
      */
     public function process(
         ServerRequestInterface  $request,
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        // TODO 対象サイトでの存在確認ができていない
-        // ルーティング後だと、ルーティングで失敗するので、ルーティング前に実行する必要があるが、
-        // ルーティング前だと対象サイトでの存在確認ができないため、現在は利用していない。
-        // ルーティングに組み込むことを検討する
-        if (Configure::read('BcRequest.isUpdater')) {
-            return $handler->handle($request);
-        }
         if ($request->is('admin') || !BcUtil::isInstalled()) {
             return $handler->handle($request);
         }
