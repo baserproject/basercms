@@ -243,6 +243,8 @@ class CustomContentHelperTest extends BcTestCase
         //サービスをコル
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContentsService = $this->getService(CustomContentsServiceInterface::class);
+
         //テストデータを生成
         $customTable->create([
             'id' => 1,
@@ -285,6 +287,11 @@ class CustomContentHelperTest extends BcTestCase
             'after_linefeed' => true,
             'display_front' => $displayFront
         ])->persist();
+
+        //currentContentをセット
+        $customContent = $customContentsService->get(1);
+        $view = new View($this->getRequest()->withAttribute('currentContent', $customContent->content));
+        $this->CustomContentHelper = new CustomContentHelper($view);
 
         $this->getRequest($requestUrl);
 
