@@ -176,7 +176,15 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testHalfTextMailField()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //case true
+        $string = 'abc123_';
+        $result = $this->MailFieldsTable->halfTextMailField($string);
+        $this->assertTrue($result);
+
+        //case false
+        $string = 'abcABC123_';
+        $result = $this->MailFieldsTable->halfTextMailField($string);
+        $this->assertFalse($result);
     }
 
     /**
@@ -275,8 +283,7 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testFormatSource($source, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->MailField->formatSource($source);
+        $result = $this->MailFieldsTable->formatSource($source);
         $this->assertEquals($expected, $result);
     }
 

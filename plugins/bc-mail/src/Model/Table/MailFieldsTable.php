@@ -233,6 +233,7 @@ class MailFieldsTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function halfTextMailField(string $value)
     {
@@ -331,6 +332,7 @@ class MailFieldsTable extends MailAppTable
      * @return string 整形後選択リストソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function formatSource($source)
     {
