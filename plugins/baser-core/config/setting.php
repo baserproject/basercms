@@ -574,8 +574,6 @@ return [
      * リクエスト情報
      */
     'BcRequest' => [
-        // アップデーターかどうか
-        'isUpdater' => false,
         // メンテナンスかどうか
         'isMaintenance' => false,
     ],
