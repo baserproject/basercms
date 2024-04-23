@@ -186,14 +186,6 @@ class InstallationsServiceTest extends BcTestCase
     }
 
     /**
-     * test _updateContents
-     */
-    public function test_updateContents()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * test installCorePlugin
      */
     public function testInstallCorePlugin()
