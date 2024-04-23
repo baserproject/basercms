@@ -574,8 +574,6 @@ return [
      * リクエスト情報
      */
     'BcRequest' => [
-        // アセットファイルかどうか
-        'asset' => false,
         // アップデーターかどうか
         'isUpdater' => false,
         // メンテナンスかどうか

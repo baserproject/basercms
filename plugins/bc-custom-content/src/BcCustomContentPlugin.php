@@ -80,7 +80,9 @@ class BcCustomContentPlugin extends BcPlugin
     /**
      * カスタムコンテンツコアのプラグインをロードする
      *
+     * @return void
      * @checked
+     * @noTodo
      */
     public function loadPlugin(): void
     {
@@ -94,21 +96,13 @@ class BcCustomContentPlugin extends BcPlugin
         $Folder = new Folder($path);
         $files = $Folder->read(true, true, false);
         if (empty($files[0])) return;
-
-        if (Configure::read('BcRequest.asset')) {
-            // TODO ucmitz 検証要
-            foreach($files[0] as $pluginName) {
-                BcUtil::includePluginClass($pluginName);
-            }
-        } else {
-            foreach($files[0] as $pluginName) {
-                // 設定ファイルを読み込む
-                if (!BcUtil::includePluginClass($pluginName)) continue;
-                $pluginCollection = CakePlugin::getCollection();
-                $plugin = $pluginCollection->create($pluginName);
-                $pluginCollection->add($plugin);
-                BcEvent::registerPluginEvent($pluginName);
-            }
+        foreach($files[0] as $pluginName) {
+            // 設定ファイルを読み込む
+            if (!BcUtil::includePluginClass($pluginName)) continue;
+            $pluginCollection = CakePlugin::getCollection();
+            $plugin = $pluginCollection->create($pluginName);
+            $pluginCollection->add($plugin);
+            BcEvent::registerPluginEvent($pluginName);
         }
     }
 
