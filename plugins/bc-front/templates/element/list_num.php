@@ -27,12 +27,15 @@ if (!is_array($nums)) $nums = [$nums];
 if (!empty($this->getRequest()->getQuery('limit'))) $currentNum = $this->getRequest()->getQuery('limit');
 
 $links = [];
-foreach ($nums as $num) {
-	if ($currentNum != $num) {
-		$links[] = '<span>' . $this->BcBaser->getLink($num, array_merge($this->getRequest()->getQuery(), ['limit' => $num, 'page' => null])) . '</span>';
-	} else {
-		$links[] = '<span class="current">' . $num . '</span>';
-	}
+foreach($nums as $num) {
+  if ($currentNum != $num) {
+    $links[] = '<span>' . $this->BcBaser->getLink(
+        $num, array_merge($this->getRequest()->getParam('pass'),
+        ['?' => array_merge($this->request->getQuery(), ['limit' => $num, 'page' => null])]
+      )) . '</span>';
+  } else {
+    $links[] = '<span class="current">' . $num . '</span>';
+  }
 }
 if ($links) {
 	$link = implode('｜', $links);

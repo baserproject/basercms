@@ -587,6 +587,7 @@ class BcBaserHelper extends Helper
      */
     public function getUserName($user)
     {
+        if(!$user) return '';
         return $user->getDisplayName();
     }
 

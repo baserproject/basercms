@@ -92,7 +92,9 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         if (!empty($options['blog_post_id'])) {
             $query = $query->where(['BlogComments.blog_post_id' => $options['blog_post_id']]);
         }
-
+        if (!empty($options['blog_content_id'])) {
+            $query = $query->where(['BlogComments.blog_content_id' => $options['blog_content_id']]);
+        }
         if ($options['status'] === 'publish') {
             $query->where($this->BlogComments->BlogContents->Contents->getConditionAllowPublish());
         }

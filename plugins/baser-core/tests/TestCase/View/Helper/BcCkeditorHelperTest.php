@@ -136,7 +136,7 @@ class BcCkeditorHelperTest extends BcTestCase
             'editorToolType' => 'simple'
         ]);
         $this->assertIsArray($options['editorToolbar']);
-        (new \BcEditorTemplate\Plugin())->install(['connection' => 'test']);
+        (new \BcEditorTemplate\BcEditorTemplatePlugin())->install(['connection' => 'test']);
         $options = $this->BcCkeditor->setEditorToolbar([
             'editorToolbar' => [],
             'editorUseTemplates' => true,

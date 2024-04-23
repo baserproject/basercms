@@ -45,9 +45,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     public function setUp(): void
     {
         if (preg_match('/^testIsInstall/', $this->getName())) {
-            Configure::write('BcRequest.isInstalled', false);
+            Configure::write('BcEnv.isInstalled', false);
         } else {
-            Configure::write('BcRequest.isInstalled', true);
+            Configure::write('BcEnv.isInstalled', true);
         }
         parent::setUp();
         $this->BcRequestFilterMiddleware = new BcRequestFilterMiddleware();
@@ -71,9 +71,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     {
         $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest(), $this->Application);
         $this->assertResponseOk();
-        $url = '/img/test.png';
-        $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest($url), $this->Application);
-        $this->assertTrue(Configure::read('BcRequest.asset'));
     }
 
     /**
@@ -142,44 +139,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
             [false, '/s/'],
             [false, '/news/index'],
             [false, '/service']
-        ];
-    }
-
-    /**
-     * アセットのURLかどうかを判定
-     *
-     * @param bool $expect 期待値
-     * @param string $url URL文字列
-     * @return void
-     * @dataProvider isAssetDataProvider
-     */
-    public function testIsAsset($expect, $url)
-    {
-        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isAsset($this->getRequest($url)));
-    }
-
-    /**
-     * isAsset用データプロバイダ
-     *
-     * @return array
-     */
-    public function isAssetDataProvider()
-    {
-        return [
-            [false, '/'],
-            [false, '/about'],
-            [false, '/img/test.html'],
-            [false, '/js/test.php'],
-            [false, '/css/file.cgi'],
-            [true, '/img/image.png'],
-            [true, '/js/startup.js'],
-            [true, '/css/main.css'],
-            [false, '/theme/example_theme/img/test.html'],
-            [false, '/theme/example_theme/js/test.php'],
-            [false, '/theme/example_theme/css/file.cgi'],
-            [true, '/theme/example_theme/img/image.png'],
-            [true, '/theme/example_theme/js/startup.js'],
-            [true, '/theme/example_theme/css/main.css']
         ];
     }
 

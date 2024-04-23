@@ -644,4 +644,31 @@ class BcValidationTest extends BcTestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * test hexColorPlus
+     *
+     * @param string $value
+     * @param boolean $expect
+     * @return void
+     * @dataProvider hexColorPlusDataProvider
+     */
+    public function testHexColorPlus($value, $expect)
+    {
+        $result = $this->BcValidation->hexColorPlus($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function hexColorPlusDataProvider()
+    {
+        return [
+            ['000', true],
+            ['0fF', true],
+            ['123f', true],
+            ['123abc', true],
+            ['1234abcd', true],
+            ['black', false],
+            ['#000', false]
+        ];
+    }
+
 }

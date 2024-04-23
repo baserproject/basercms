@@ -297,7 +297,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
             return $this->BcBaser->getLink(
                 $entry->title,
                 ['action' => 'edit', $table->id, $entry->id],
-                ['escape' => false]
+                ['escape' => true]
             );
         } else {
             return h($entry->title);

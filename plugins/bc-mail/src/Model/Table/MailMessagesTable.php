@@ -153,7 +153,7 @@ class MailMessagesTable extends MailAppTable
         if (!is_int($mailContentId)) {
             throw new BcException(__d('baser_core', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
         }
-        return 'mail_message_' . $mailContentId;
+        return $this->addPrefix('mail_message_' . $mailContentId);
     }
 
     /**

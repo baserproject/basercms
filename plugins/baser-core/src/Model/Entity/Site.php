@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Entity;
 
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
@@ -222,6 +223,28 @@ class Site extends EntityAlias
             }
         }
         return $session->read($autoRedirectKey) !== 'off';
+    }
+
+    /**
+     * サイトに適用されているテーマを取得する
+     *
+     * 自身に設定されていない場合は親サイトをたどって取得する
+     * @return string
+     */
+    public function getAppliedTheme()
+    {
+        if($this->theme) return $this->theme;
+        $site = $this->getMain();
+        while(true) {
+            if(!$site) {
+                throw new BcException(__d('baser_core', '適用できるテーマが見つかりません。sites テーブルを確認してください。'));
+            }
+            if($site->theme) return $site->theme;
+            if($site->id === 1) {
+                throw new BcException(__d('baser_core', '適用できるテーマが見つかりません。sites テーブルにて メインサイトの theme を確認してください。'));
+            }
+            $site = $site->getMain();
+        }
     }
 
 }

@@ -601,6 +601,20 @@ class BcValidation extends Validation
     }
 
     /**
+     * 16進数カラーコードチェック
+     *
+     * @param string $value 対象となる値
+     * @return bool
+     * @checked
+     * @notodo
+     * @unitTest
+     */
+    public static function hexColorPlus($value): bool
+    {
+        return preg_match('/\A([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})\z/i', $value);
+    }
+
+    /**
      * Jsonをバリデーション
      * 半角小文字英数字とアンダースコアを許容
      * @param $string

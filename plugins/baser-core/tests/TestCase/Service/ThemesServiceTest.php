@@ -121,12 +121,12 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         );
 
         $rs = $this->ThemesService->add(["file" => $files]);
-        $this->assertEquals('BcPluginSample22', $rs);
+        $this->assertEquals('BcPluginSample3', $rs);
 
         //テスト実行後不要ファイルを削除
         $folder = new Folder();
         $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
-        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcPluginSample22');
+        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcPluginSample3');
         $folder->delete($zipSrcPath);
 
         // 失敗した場合の Exception メッセージ
@@ -167,7 +167,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(is_dir(BASER_THEMES . 'BcFrontCopy'), 'テーマのコピーが確認できませんでした。');
 
         $pluginPath = BcUtil::getPluginPath('BcFrontCopy');
-        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new File($pluginPath . 'src' . DS . 'BcFrontCopyPlugin.php');
         $data = $file->read();
         //namespaceの書き換えを確認
         $this->assertTrue(str_contains($data, 'namespace BcFrontCopy;'), 'namespace の書き換えが確認できませんでした。');

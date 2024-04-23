@@ -16,6 +16,8 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
@@ -217,21 +219,21 @@ class MailContentsTable extends MailAppTable
     }
 
     /**
-     * afterSave
-     *
-     * @return void
+     * beforeSave
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param \ArrayObject $options
+     * @return boolean
      */
-    public function afterSave($created, $options = [])
+    public function beforeSave(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
-        // TODO ucmitz 未実装
-        return;
-
-        // 検索用テーブルへの登録・削除
-        if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
-            $this->saveSearchIndex($this->createSearchIndex($this->data));
-        } else {
-            $this->deleteSearchIndex($this->data['MailContent']['id']);
+        if (!Plugin::isLoaded('BcSearchIndex')) {
+            return true;
         }
+        if (empty($entity->content) || !empty($entity->content->exclude_search)) {
+            $this->setExcluded();
+        }
+        return true;
     }
 
     /**
@@ -239,28 +241,25 @@ class MailContentsTable extends MailAppTable
      *
      * @param array $data
      * @return array|false
+     * @checked
+     * @noTodo
      */
-    public function createSearchIndex($data)
+    public function createSearchIndex($mailContent)
     {
-        if (!isset($data['MailContent']) || !isset($data['Content'])) {
+        if (!$mailContent || !isset($mailContent->content)) {
             return false;
         }
-        $mailContent = $data['MailContent'];
-        $content = $data['Content'];
         return [
-            'SearchIndex' =>
-            [
-                'type'          => __d('baser_core', 'メール'),
-                'model_id'      => (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
-                'content_id'    => $content['id'],
-                'site_id'       => $content['site_id'],
-                'title'         => $content['title'],
-                'detail'        => $mailContent['description'],
-                'url'           => $content['url'],
-                'status'        => $content['status'],
-                'publish_begin' => $content['publish_begin'],
-                'publish_end'   => $content['publish_end']
-            ]
+            'type' => __d('baser_core', 'メール'),
+            'model_id' => $mailContent->id,
+            'content_id' => $mailContent->content->id,
+            'site_id' => $mailContent->content->site_id,
+            'title' => $mailContent->content->title,
+            'detail' => $mailContent->description,
+            'url' => $mailContent->content->url,
+            'status' => $mailContent->content->status,
+            'publish_begin' => $mailContent->content->publish_begin,
+            'publish_end' => $mailContent->content->publish_end
         ];
     }
 
@@ -278,7 +277,7 @@ class MailContentsTable extends MailAppTable
     public function copy(
         ?int $id,
         int $newParentId,
-        string $newTitle,
+        string|null $newTitle,
         int $newAuthorId,
         int $newSiteId = null
     ) {
@@ -304,7 +303,7 @@ class MailContentsTable extends MailAppTable
         $data->content = new Content([
             'name' => $name,
             'parent_id' => $newParentId,
-            'title' => $newTitle ?? $oldData->title . '_copy',
+            'title' => $newTitle ?? $oldData->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'exclude_search' => false,
