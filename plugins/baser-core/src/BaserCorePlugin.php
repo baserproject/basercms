@@ -45,6 +45,7 @@ use Cake\Http\ServerRequestFactory;
 use Cake\I18n\I18n;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -282,7 +283,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-            ->prepend(new BcRequestFilterMiddleware())
+            ->insertBefore(RoutingMiddleware::class, new BcRequestFilterMiddleware())
             ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
@@ -598,6 +599,17 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         );
 
         parent::routes($routes);
+    }
+
+    /**
+     * 初期データ読み込み時の更新処理
+     * @param array $options
+     * @return void
+     */
+    public function updateDefaultData($options = []) : void
+    {
+        // コンテンツの作成日を更新
+        $this->updateDateNow('BaserCore.Contents', ['created_date'], [], $options);
     }
 
     /**

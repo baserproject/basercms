@@ -16,6 +16,7 @@ use BaserCore\BcPlugin;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
+use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -48,10 +49,21 @@ class BcBlogPlugin extends BcPlugin
     {
         $result = parent::install($options);
         // ブログ記事の投稿日を更新
-        if(empty($options['db_init'])) {
+        if(Configure::read('BcEnv.isInstalled') && empty($options['db_init'])) {
             $this->updateDateNow('BcBlog.BlogPosts', ['posted'], [], $options);
         }
         return $result;
+    }
+
+    /**
+     * 初期データ読み込み時の更新処理
+     * @param array $options
+     * @return void
+     */
+    public function updateDefaultData($options = []) : void
+    {
+        // ブログ記事の投稿日を更新
+        $this->updateDateNow('BcBlog.BlogPosts', ['posted'], [], $options);
     }
 
     /**

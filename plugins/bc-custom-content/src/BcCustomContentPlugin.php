@@ -47,10 +47,23 @@ class BcCustomContentPlugin extends BcPlugin
             'connection' => 'default'
         ], $options);
         $result = parent::install($options);
-        $table = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries', ['connectionName' => $options['connection']]);
-        $table->setUp(1);
-        $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
+        if(Configure::read('BcEnv.isInstalled') && empty($options['db_init'])) {
+            $table = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries', ['connectionName' => $options['connection']]);
+            $table->setUp(1);
+            $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
+        }
         return $result;
+    }
+
+    /**
+     * 初期データ読み込み時の更新処理
+     * @param array $options
+     * @return void
+     */
+    public function updateDefaultData($options = []) : void
+    {
+        // エントリーの公開日を更新
+        $this->updateDateNow('BcCustomContent.CustomEntries', ['published'], [], $options);
     }
 
     /**
@@ -80,7 +93,9 @@ class BcCustomContentPlugin extends BcPlugin
     /**
      * カスタムコンテンツコアのプラグインをロードする
      *
+     * @return void
      * @checked
+     * @noTodo
      */
     public function loadPlugin(): void
     {
@@ -94,21 +109,13 @@ class BcCustomContentPlugin extends BcPlugin
         $Folder = new Folder($path);
         $files = $Folder->read(true, true, false);
         if (empty($files[0])) return;
-
-        if (Configure::read('BcRequest.asset')) {
-            // TODO ucmitz 検証要
-            foreach($files[0] as $pluginName) {
-                BcUtil::includePluginClass($pluginName);
-            }
-        } else {
-            foreach($files[0] as $pluginName) {
-                // 設定ファイルを読み込む
-                if (!BcUtil::includePluginClass($pluginName)) continue;
-                $pluginCollection = CakePlugin::getCollection();
-                $plugin = $pluginCollection->create($pluginName);
-                $pluginCollection->add($plugin);
-                BcEvent::registerPluginEvent($pluginName);
-            }
+        foreach($files[0] as $pluginName) {
+            // 設定ファイルを読み込む
+            if (!BcUtil::includePluginClass($pluginName)) continue;
+            $pluginCollection = CakePlugin::getCollection();
+            $plugin = $pluginCollection->create($pluginName);
+            $pluginCollection->add($plugin);
+            BcEvent::registerPluginEvent($pluginName);
         }
     }
 

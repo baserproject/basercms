@@ -48,12 +48,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
             $response = $this->redirectIfIsDeviceFile($request);
             if($response) return $response;
         }
-
-        if ($this->isAsset($request)) {
-            Configure::write('BcRequest.asset', true);
-            return new Response();
-        }
-
         $request = $this->addDetectors($request);
 
         /**
@@ -117,10 +111,8 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     {
         $configs = [];
         $configs['admin'] = [$this, 'isAdmin'];
-        $configs['asset'] = [$this, 'isAsset'];
         $configs['install'] = [$this, 'isInstall'];
         $configs['maintenance'] = [$this, 'isMaintenance'];
-        $configs['update'] = [$this, 'isUpdate'];
         $configs['page'] = [$this, 'isPage'];
         $configs['requestview'] = [$this, 'isRequestView'];
 
@@ -160,30 +152,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     {
         $regex = '/^\/' . preg_quote(Configure::read('BcApp.baserCorePrefix') . '/' . Configure::read('BcApp.adminPrefix'), '/') . '($|\/)/';
         return (bool)preg_match($regex, $request->getPath());
-    }
-
-    /**
-     * アセットのURLかどうかを判定
-     *
-     * @param ServerRequestInterface $request リクエスト
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isAsset(ServerRequestInterface $request)
-    {
-        $dirs = ['css', 'js', 'img'];
-        $exts = ['css', 'js', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'svg', 'swf'];
-
-        $dirRegex = implode('|', $dirs);
-        $extRegex = implode('|', $exts);
-
-        $assetRegex = '/^\/(' . $dirRegex . ')\/.+\.(' . $extRegex . ')$/';
-        $themeAssetRegex = '/^\/theme\/[^\/]+?\/(' . $dirRegex . ')\/.+\.(' . $extRegex . ')$/';
-
-        $uri = $request->getPath();
-        return preg_match($assetRegex, $uri) || preg_match($themeAssetRegex, $uri);
     }
 
     /**
