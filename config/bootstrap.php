@@ -52,7 +52,7 @@ use Cake\Utility\Security;
 if(file_exists(CAKE . 'functions.php')) {
     require CAKE . 'functions.php';
 } else {
-    trigger_error('フレームワーク「CakePHP」がインストールされていないか、古いバージョンを利用しています。処理を終了します。');exit;
+    trigger_error('フレームワーク「CakePHP」がインストールされていないか、古いバージョンを利用しています。処理を終了します。', E_USER_ERROR);
 }
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
