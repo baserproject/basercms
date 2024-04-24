@@ -46,6 +46,15 @@ use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
 
+/**
+ * CakePHPのチェック
+ *
+ * env() 関数が存在しない場合は処理を終了
+ */
+if(!function_exists('env')) {
+    trigger_error('フレームワーク「CakePHP」がインストールされていないか、期待するバージョンではない可能性があります。処理を終了します。', E_USER_ERROR);
+}
+
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
  *
