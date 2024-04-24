@@ -81,7 +81,14 @@ class CustomLinksTable extends AppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
-            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
+            ->add('title', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'タイトルを入力してください。')
+                ]
+            ]);
 
         return $validator;
     }
