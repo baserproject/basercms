@@ -30,4 +30,20 @@ class WidgetAreaTest extends BcTestCase
         $getCount = $this->execPrivateMethod($widgetArea, '_getCount', []);
         $this->assertEquals(1, $getCount);
     }
+
+    /**
+     * test _getWidgetsArray
+     */
+    public function test_getWidgetsArray()
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+    }
+
+    /**
+     * test _setWidgets
+     */
+    public function test_setWidgets()
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+    }
 }
