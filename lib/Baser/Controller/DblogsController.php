@@ -31,7 +31,7 @@ class DblogsController extends AppController
 	public function admin_index()
 	{
 		$this->setViewConditions(
-			'Dblog',
+			'Dblogs',
 			[
 				'default' => [
 					'named' => [
