@@ -200,10 +200,14 @@ class MailFieldsTableTest extends BcTestCase
     public static function sourceMailFieldDataProvider()
     {
         return [
-            ['radio', ['data' => ['type' => 'radio']], 'radio'],
-            ['select', ['data' => ['type' => 'select']], 'select'],
-            ['multi_check', ['data' => ['type' => 'multi_check']], 'multi_check'],
-            ['autozip', ['data' => ['type' => 'autozip']], 'autozip'],
+            ['radio', ['data' => ['type' => 'radio']], true],
+            ['', ['data' => ['type' => 'radio']], false],
+            ['select', ['data' => ['type' => 'select']], true],
+            ['', ['data' => ['type' => 'select']], false],
+            ['multi_check', ['data' => ['type' => 'multi_check']], true],
+            ['', ['data' => ['type' => 'multi_check']], false],
+            ['autozip', ['data' => ['type' => 'autozip']], true],
+            ['', ['data' => ['type' => 'autozip']], false],
             ['text', ['data' => ['type' => 'text']], true]
         ];
     }
