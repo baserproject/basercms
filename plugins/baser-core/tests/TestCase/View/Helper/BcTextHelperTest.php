@@ -60,7 +60,6 @@ class BcTextHelperTest extends BcTestCase
      * */
     public function testBooleanMarkList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanMarkList();
         $expect = [
             0 => "―",
@@ -75,7 +74,6 @@ class BcTextHelperTest extends BcTestCase
      * */
     public function testBooleanExists()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanExists(true);
         $this->assertEquals("有", $result);
 
@@ -88,7 +86,6 @@ class BcTextHelperTest extends BcTestCase
      * */
     public function testBooleanExistsList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanExistsList();
         $expect = [
             0 => "無",
@@ -102,7 +99,6 @@ class BcTextHelperTest extends BcTestCase
      * */
     public function testBooleanAllowList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanAllowList();
         $expect = [
             0 => "不可",
@@ -116,7 +112,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testBooleanDoList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanDoList('baserCMSを');
         $expect = [
             0 => 'baserCMSを しない',
@@ -130,7 +125,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testBooleanDo()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanDo(0, 'baserCMSを');
         $result2 = $this->Helper->booleanDo(1, 'baserCMSを');
         $this->assertEquals('baserCMSを しない', $result);
@@ -142,7 +136,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testPrefList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $expect = [
             '' => '都道府県',
             1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
@@ -176,7 +169,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testSex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals('男', $this->Helper->sex(1));
         $this->assertEquals('女', $this->Helper->sex(2));
         $this->assertEquals('', $this->Helper->sex(0));
@@ -188,7 +180,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testZipFormat()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         //ハイフン無し
         $result = $this->Helper->zipFormat('8190002');
         $expect = '〒 819-0002';
@@ -215,7 +206,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testPref()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals('', $this->Helper->pref(0));
         $this->assertEquals('北海道', $this->Helper->pref(1));
         $this->assertEquals('沖縄県', $this->Helper->pref(47));
@@ -227,7 +217,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testNoValue()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // データあり
         $this->assertEquals('x', $this->Helper->noValue('x', 1));
         // データなし
@@ -239,7 +228,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testBooleanAllow()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // キーが0の場合
         $result = $this->Helper->booleanAllow(0);
         $expect = "不可";
@@ -298,7 +286,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testMoneyFormat()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 適当な数値を入力
         $result = $this->Helper->moneyFormat('1234567');
         $expect = '¥1,234,567';
@@ -361,7 +348,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testFormat()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // $valueが1の場合
         $result = $this->Helper->format('valueは%d', 1);
         $expect = 'valueは1';
@@ -409,7 +395,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testArrayValue()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 適当な配列
         $array = ["a", "i", "u", "e", "o"];
 
@@ -436,7 +421,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testArrayValues()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 適当な連想配列とキーのリスト
         $array = ["key1" => "apple", "key2" => "lemon", "key3" => "banana"];
 
@@ -459,7 +443,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testAge()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 適当な生年月日を入力
         $now = date('Y');
         $year = 1980;
@@ -490,7 +473,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testBooleanStatusList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanStatusList();
         $expect = [0 => "無効", 1 => "有効"];
         $this->assertEquals($expect, $result);
@@ -501,7 +483,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testBooleanStatus()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // キーが0の場合
         $result = $this->Helper->booleanStatus(0);
         $expect = "無効";
