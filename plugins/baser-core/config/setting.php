@@ -173,7 +173,16 @@ return [
         /**
          * 現在のリクエストのホスト
          */
-        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null
+        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null,
+        /**
+         * インストール済かどうか
+         *
+         * BaserCorePlugin::bootstrap() で設定する
+         * bootstrap の方が呼び出し順が早いため、こちらで設定すると再初期化となってしまうため
+         * コメントアウトのままとする
+         * ここで別途判定を入れた場合ユニットテストがやりにくくなるのでそのままにしておく
+         */
+        // 'isInstalled' => null,
     ],
 
     /**
@@ -559,21 +568,6 @@ return [
             '/baser/api/admin/baser-core/users/login.json',
             '/baser/api/admin/baser-core/users/refresh_token.json'
         ]
-    ],
-
-    /**
-     * リクエスト情報
-     */
-    'BcRequest' => [
-        // アセットファイルかどうか
-        'asset' => false,
-        // Router がロード済かどうか
-        // TODO 不要か確認
-        'routerLoaded' => false,
-        // アップデーターかどうか
-        'isUpdater' => false,
-        // メンテナンスかどうか
-        'isMaintenance' => false,
     ],
 
     /**

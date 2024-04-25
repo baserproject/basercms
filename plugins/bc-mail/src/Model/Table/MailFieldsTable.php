@@ -54,6 +54,7 @@ class MailFieldsTable extends MailAppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -108,13 +109,13 @@ class MailFieldsTable extends MailAppTable
             ->maxLength('options', 255, __d('baser_core', 'オプションは255文字以内で入力してください。'));
         $validator
             ->scalar('class')
-            ->maxLength('class', 255, __d('baser_core', 'クラス名255文字以内で入力してください。'));
+            ->maxLength('class', 255, __d('baser_core', 'クラス名は255文字以内で入力してください。'));
         $validator
             ->scalar('default_value')
             ->maxLength('default_value', 255, __d('baser_core', '初期値は255文字以内で入力してください。'));
         $validator
             ->scalar('description')
-            ->maxLength('options', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
+            ->maxLength('description', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
         $validator
             ->scalar('group_field')
             ->maxLength('group_field', 255, __d('baser_core', 'グループ名は255文字以内で入力してください。'))
@@ -122,7 +123,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ名は小文字の半角英数字、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ名は半角英数字、ハイフン、アンダースコアで入力してください。')
                 ]]);
         $validator
             ->scalar('group_valid')
@@ -131,7 +132,7 @@ class MailFieldsTable extends MailAppTable
                 'halfTextMailField' => [
                     'rule' => 'halfTextMailField',
                     'provider' => 'table',
-                    'message' => __d('baser_core', 'グループ入力チェックは小文字の半角英数字、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'グループ入力チェックは半角英数字、ハイフン、アンダースコアで入力してください。')
                 ]]);
         $validator
             ->scalar('size')
@@ -232,6 +233,7 @@ class MailFieldsTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function halfTextMailField(string $value)
     {
@@ -329,6 +331,7 @@ class MailFieldsTable extends MailAppTable
      * @return string 整形後選択リストソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function formatSource($source)
     {

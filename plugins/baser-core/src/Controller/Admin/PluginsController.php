@@ -34,6 +34,7 @@ class PluginsController extends BcAdminAppController
     /**
      * Before Filter
      * @param \Cake\Event\EventInterface $event An Event instance
+     * @return Response|void
      * @checked
      * @unitTest
      * @noTodo
@@ -43,7 +44,6 @@ class PluginsController extends BcAdminAppController
         $response = parent::beforeFilter($event);
         if($response) return $response;
         $this->FormProtection->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
-        if(Configure::read('BcRequest.isUpdater')) $this->Authentication->allowUnauthenticated(['update']);
     }
 
     /**

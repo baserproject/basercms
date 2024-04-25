@@ -56,9 +56,6 @@ class BcRedirectSubSiteMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        if (Configure::read('BcRequest.isUpdater')) {
-            return $handler->handle($request);
-        }
         if ($request->is('admin') || !BcUtil::isInstalled()) {
             return $handler->handle($request);
         }
