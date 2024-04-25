@@ -288,12 +288,12 @@ class CustomContentHelperTest extends BcTestCase
             'display_front' => $displayFront
         ])->persist();
 
+        $this->getRequest($requestUrl);
+
         //currentContentをセット
         $customContent = $customContentsService->get(1);
         $view = new View($this->getRequest()->withAttribute('currentContent', $customContent->content));
         $this->CustomContentHelper = new CustomContentHelper($view);
-
-        $this->getRequest($requestUrl);
 
         $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => $fieldValue], $fieldName, $options);
         //戻り値を確認
