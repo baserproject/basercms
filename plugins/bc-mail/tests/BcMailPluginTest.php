@@ -19,12 +19,12 @@ class BcMailPluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Plugin = new BcMailPlugin(['name' => 'BcMail']);
+        $this->BcMailPlugin = new BcMailPlugin(['name' => 'BcMail']);
     }
 
     public function tearDown(): void
     {
-        unset($this->Plugin);
+        unset($this->BcMailPlugin);
         parent::tearDown();
     }
 
@@ -34,7 +34,7 @@ class BcMailPluginTest extends BcTestCase
     public function testServices(): void
     {
         $container = new Container();
-        $this->Plugin->services($container);
+        $this->BcMailPlugin->services($container);
         $this->assertTrue($container->has(MailConfigsServiceInterface::class));
         $this->assertTrue($container->has(MailContentsServiceInterface::class));
         $this->assertTrue($container->has(MailContentsAdminServiceInterface::class));
@@ -44,5 +44,4 @@ class BcMailPluginTest extends BcTestCase
         $this->assertTrue($container->has(MailMessagesAdminServiceInterface::class));
         $this->assertTrue($container->has(MailFrontServiceInterface::class));
     }
-
 }
