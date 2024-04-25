@@ -108,6 +108,7 @@
     </tr>
 <?php endif ?>
 
+    <?php /* ?>
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?></th>
       <td class="col-input bca-form-table__input">
@@ -115,6 +116,7 @@
         <?php echo $this->BcAdminForm->error('status') ?>
       </td>
     </tr>
+    <?php */ ?>
   </table>
 </div>
 
