@@ -53,6 +53,7 @@ class BcTextHelper extends TextHelper
      * @return string ○ または ―
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function booleanMark($value)
     {

@@ -12,6 +12,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTextHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -26,10 +27,7 @@ class BcTextHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->Helper = new BcTextHelper(new View(null));
-//        $this->Helper->BcForm = new BcFormHelper(new View());
-//        $this->Helper->BcTime = new BcTimeHelper(new View());
-//        $this->Helper->Html = new HtmlHelper(new View());
+        $this->Helper = new BcTextHelper(new View());
     }
 
     /**
@@ -49,7 +47,6 @@ class BcTextHelperTest extends BcTestCase
      * */
     public function testBooleanMark()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->booleanMark(true);
         $this->assertEquals("○", $result);
 
