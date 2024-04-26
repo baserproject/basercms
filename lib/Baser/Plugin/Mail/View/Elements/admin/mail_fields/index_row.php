@@ -24,7 +24,7 @@ if (!$data['MailField']['use_field']) {
 
 <tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
 	<td style="width:25%" class="row-tools">
-		<?php if ($sortmode): ?>
+		<?php if (isset($sortmode) && $sortmode): ?>
 			<span
 				class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => __d('baser', '並び替え')]) ?></span>
 			<?php echo $this->BcForm->hidden('Sort.id' . $data['MailField']['id'], ['class' => 'id', 'value' => $data['MailField']['id']]) ?>
