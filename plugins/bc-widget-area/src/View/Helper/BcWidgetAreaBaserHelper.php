@@ -37,6 +37,7 @@ class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInter
      * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function methods(): array
     {
