@@ -46,7 +46,8 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->customFieldsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->customFieldsTable->hasAssociation('CustomLinks'));
     }
 
     /**
