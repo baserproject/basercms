@@ -105,6 +105,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getCount()
     {
