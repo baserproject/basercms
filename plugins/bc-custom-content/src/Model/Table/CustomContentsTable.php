@@ -97,6 +97,7 @@ class CustomContentsTable extends AppTable
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createSearchIndex($entity)
     {
