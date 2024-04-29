@@ -310,6 +310,7 @@ class BcTextHelper extends TextHelper
      * @return string 日付（例）2015/8/11
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dateTime($arrDate)
     {

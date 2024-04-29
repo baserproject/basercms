@@ -308,7 +308,6 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testDateTime()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 適当な時間を設定
         $arrDate = [
             'year' => 2015,
@@ -321,15 +320,7 @@ class BcTextHelperTest extends BcTestCase
 
         // 異常系 文字列を入力
         $result = $this->Helper->dateTime('baser');
-
-        // PHPのバージョンによって結果が違うので分岐する
-        if (empty($result)) {
-            $this->assertNull($result);
-        } else {
-            $expect = 'b/b/b';
-            $this->assertEquals($expect, $result);
-        }
-
+        $this->assertEmpty($result);
 
         // 不正な日付（現在はそのまま出力してしまう仕様となっている）
         $arrDate = [
@@ -340,7 +331,6 @@ class BcTextHelperTest extends BcTestCase
         $result = $this->Helper->dateTime($arrDate);
         $expect = '2015/20/11';
         $this->assertEquals($expect, $result);
-
     }
 
     /**
