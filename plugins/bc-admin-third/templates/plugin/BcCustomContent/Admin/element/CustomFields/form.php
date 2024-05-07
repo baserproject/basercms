@@ -132,26 +132,18 @@ $this->BcAdmin->setHelp('custom_fields_form');
           </ul>
         </div>
 
-        <?php
-          $metaErrors = $entity->getError('meta');
-          $emailConfirmClass = 'bca-textbox__input';
-          if (isset($metaErrors['checkAlphaNumericWithJson'])) {
-            $emailConfirmClass = 'bca-textbox__input form-error';
-          }
-        ?>
-
         <span v-show="showControlEmailConfirm" style="display: block">
           <?php echo $this->BcAdminForm->label('meta.BcCustomContent.email_confirm', __d('baser_core', 'Eメール比較先フィールド名')) ?>&nbsp;
           <?php echo $this->BcAdminForm->control('meta.BcCustomContent.email_confirm', [
             'type' => 'text',
-            'size' => 20,
-            'class' => $emailConfirmClass
+            'size' => 20
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             Eメール比較チェックの対象となる、フィールド名を入力します。<br>
             利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。
           </div>
+             <?php echo $this->BcAdminForm->error('meta.BcCustomContent.email_confirm') ?>
         </span>
 
         <span style="display: block">
@@ -179,7 +171,6 @@ $this->BcAdmin->setHelp('custom_fields_form');
         </span>
 
         <?php echo $this->BcAdminForm->error('validate') ?>
-        <?php echo $this->BcAdminForm->error('meta') ?>
       </td>
     </tr>
 

@@ -100,4 +100,17 @@ class CustomFieldsTableTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['meta']));
     }
+
+    /**
+     * test afterMarshal
+     */
+    public function test_afterMarshal()
+    {
+        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCustomContent' => ['email_confirm' => '全角文字']]]);
+        $result = $this->CustomFieldsTable->dispatchEvent('Model.afterMarshal', ['entity' => $customFields, 'data' => new \ArrayObject(), 'options' => new \ArrayObject()]);
+        $customFields = $result->getData('entity');
+        //エラー情報を正しい状態に戻すことを確認
+        $errors = $customFields->getErrors();
+        $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta.BcCustomContent.email_confirm']['checkAlphaNumericWithJson']);
+    }
 }

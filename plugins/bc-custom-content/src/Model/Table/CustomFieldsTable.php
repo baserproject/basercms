@@ -117,6 +117,27 @@ class CustomFieldsTable extends AppTable
     }
 
     /**
+     * afterMarshal
+     *
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
+    {
+        $metaErrors = $entity->getError('meta');
+        if (isset($metaErrors['checkAlphaNumericWithJson'])) {
+            $entity->setError('meta.BcCustomContent.email_confirm',  ['checkAlphaNumericWithJson' => $metaErrors['checkAlphaNumericWithJson']]);
+        }
+    }
+
+    /**
      * Find all
      *
      * JSON データをデコードする
