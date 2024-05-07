@@ -131,11 +131,20 @@ class BcCcRelatedHelper extends Helper
      */
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
-        if(!$fieldValue) return '';
+        $options = array_merge([
+            'getRelatedBody' => false
+        ], $options);
+
+        if (!$fieldValue) return '';
+
         /** @var CustomEntriesServiceInterface $entriesService */
         $entriesService = $this->getService(CustomEntriesServiceInterface::class);
         $entriesService->setup($link->custom_field->meta['BcCcRelated']['custom_table_id']);
         $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
+
+        if ($options['getRelatedBody'])
+            return $entry;
+
         return $entry->{$entry->custom_table->display_field};
     }
 
