@@ -36,7 +36,26 @@ class WidgetAreaTest extends BcTestCase
      */
     public function test_getWidgetsArray()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $widgetArea = new WidgetArea([
+            'widgets' => 'a:1:{i:0;a:1:{s:4:"test";a:2:{s:4:"sort";i:1;s:4:"name";s:4:"test";}}}',
+        ]);
+        //正常系実行
+        $getWidgetsArray = $this->execPrivateMethod($widgetArea, '_getWidgetsArray', []);
+        $this->assertEquals([
+            0 => [
+                'test' => [
+                    'sort' => 1,
+                    'name' => 'test',
+                ],
+            ],
+        ], $getWidgetsArray);
+
+        //case empty fields widgets
+        $widgetArea = new WidgetArea([
+            'widgets' => '',
+        ]);
+        $getWidgetsArray = $this->execPrivateMethod($widgetArea, '_getWidgetsArray', []);
+        $this->assertEquals([], $getWidgetsArray);
     }
 
     /**

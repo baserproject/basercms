@@ -55,6 +55,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return array|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getWidgetsArray()
     {
