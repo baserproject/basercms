@@ -86,6 +86,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _setWidgets($value)
     {
