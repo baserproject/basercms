@@ -162,6 +162,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @param EditorTemplatesService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function js(EditorTemplatesServiceInterface $service)
     {
