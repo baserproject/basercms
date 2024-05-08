@@ -256,7 +256,6 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         //$field == 'field_type'
         $rs = $this->CustomFieldsService->getControlSource('field_type');
         $this->assertArrayHasKey('基本', $rs);
