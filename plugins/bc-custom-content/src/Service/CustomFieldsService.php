@@ -188,6 +188,7 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldTypes(): array
     {

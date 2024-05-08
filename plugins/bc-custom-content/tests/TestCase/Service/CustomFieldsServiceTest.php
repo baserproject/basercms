@@ -217,7 +217,6 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getFieldTypes()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         //対象メソッドをコール
         $rs = $this->CustomFieldsService->getFieldTypes();
         //戻る値を確認
