@@ -32,6 +32,7 @@ class CustomFieldsTable extends AppTable
      * @param array $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -52,6 +53,7 @@ class CustomFieldsTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -67,7 +69,13 @@ class CustomFieldsTable extends AppTable
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のあるフィールド名です。')
                 ]
-            ]);
+            ])
+            ->add('name', [
+                'reserved' => [
+                    'rule' => ['reserved'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
+            ]]);
         $validator
             ->scalar('title')
             ->notEmptyString('title', __d('baser_core', '項目見出しを入力してください。'))
@@ -96,6 +104,14 @@ class CustomFieldsTable extends AppTable
                     'message' => __d('baser_core', '選択リストに同じ項目を複数登録できません。')
                 ]
             ]);
+        $validator
+            ->add('meta', [
+                'checkAlphaNumericWithJson' => [
+                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.email_confirm'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
+                ]
+            ]);
         return $validator;
     }
 
@@ -113,6 +129,27 @@ class CustomFieldsTable extends AppTable
     {
         // beforeMarshal のタイミングで変換しないと配列が null になってしまう
         $this->encodeEntity($content);
+    }
+
+    /**
+     * afterMarshal
+     *
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
+    {
+        $metaErrors = $entity->getError('meta');
+        if (isset($metaErrors['checkAlphaNumericWithJson'])) {
+            $entity->setError('meta.BcCustomContent.email_confirm',  ['checkAlphaNumericWithJson' => $metaErrors['checkAlphaNumericWithJson']]);
+        }
     }
 
     /**

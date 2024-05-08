@@ -136,13 +136,14 @@ $this->BcAdmin->setHelp('custom_fields_form');
           <?php echo $this->BcAdminForm->label('meta.BcCustomContent.email_confirm', __d('baser_core', 'Eメール比較先フィールド名')) ?>&nbsp;
           <?php echo $this->BcAdminForm->control('meta.BcCustomContent.email_confirm', [
             'type' => 'text',
-            'size' => 20,
+            'size' => 20
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             Eメール比較チェックの対象となる、フィールド名を入力します。<br>
             利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。
           </div>
+             <?php echo $this->BcAdminForm->error('meta.BcCustomContent.email_confirm') ?>
         </span>
 
         <span style="display: block">
@@ -298,7 +299,10 @@ $this->BcAdmin->setHelp('custom_fields_form');
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', '日付（年月日時間）の場合は、2024/02/14 10:00 のように、日付と時間をスペースで区切ってください。') ?>
+          <ul>
+            <li><?php echo __d('baser_core', '日付（年月日時間）の場合は、2024/02/14 10:00 のように、日付と時間をスペースで区切ってください。') ?></li>
+            <li><?php echo __d('baser_core', '関連データの場合は、対象データの No を指定してください。') ?></li>
+          </ul>
         </div>
         <?php echo $this->BcAdminForm->error('default_value') ?>
       </td>
