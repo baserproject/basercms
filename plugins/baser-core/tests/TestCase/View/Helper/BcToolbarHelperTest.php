@@ -138,10 +138,6 @@ class BcToolbarHelperTest extends BcTestCase
         // インストーラーの場合
         $toolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $this->assertFalse($toolbar->isAvailableLogin());
-        // アップデーターの場合
-        Configure::write('BcRequest.isUpdater', true);
-        $this->assertFalse($this->BcToolbar->isAvailableLogin());
-        Configure::write('BcRequest.isUpdater', false);
         // ログイン画面の場合
         $toolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertFalse($toolbar->isAvailableLogin());
@@ -280,9 +276,8 @@ class BcToolbarHelperTest extends BcTestCase
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertEquals('normal', $bcToolbar->getLogoType());
         // アップデーター
-        Configure::write('BcRequest.isUpdater', true);
+        $bcToolbar->getView()->setRequest($this->getRequest('/baser/admin/baser-core/plugins/update'));
         $this->assertEquals('update', $bcToolbar->getLogoType());
-        Configure::write('BcRequest.isUpdater', false);
         // インストーラー
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $this->assertEquals('install', $bcToolbar->getLogoType());
@@ -302,14 +297,13 @@ class BcToolbarHelperTest extends BcTestCase
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertEquals('https://localhost/', $bcToolbar->getLogoLink());
         // アップデーター
-        Configure::write('BcRequest.isUpdater', true);
+        $bcToolbar->getView()->setRequest($this->getRequest('/baser/admin/baser-core/plugins/update'));
         $this->assertEquals('https://baserproject.github.io/5/operation/update', $bcToolbar->getLogoLink());
-        Configure::write('BcRequest.isUpdater', false);
         // インストーラー
-        Configure::write('BcRequest.isInstalled', false);
+        Configure::write('BcEnv.isInstalled', false);
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $this->assertEquals('https://baserproject.github.io/5/introduce/', $bcToolbar->getLogoLink());
-        Configure::write('BcRequest.isInstalled', true);
+        Configure::write('BcEnv.isInstalled', true);
     }
 
     /**
@@ -326,9 +320,8 @@ class BcToolbarHelperTest extends BcTestCase
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertEquals('サイト表示', $bcToolbar->getLogoText());
         // アップデーター
-        Configure::write('BcRequest.isUpdater', true);
+        $bcToolbar->getView()->setRequest($this->getRequest('/baser/admin/baser-core/plugins/update'));
         $this->assertEquals('アップデートマニュアル', $bcToolbar->getLogoText());
-        Configure::write('BcRequest.isUpdater', false);
         // インストーラー
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $this->assertEquals('インストールマニュアル', $bcToolbar->getLogoText());
@@ -357,11 +350,10 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));
 
         // アップデーター
-        Configure::write('BcRequest.isUpdater', true);
+        $bcToolbar->getView()->setRequest($this->getRequest('/baser/admin/baser-core/plugins/update'));
         $options = $bcToolbar->getLogoLinkOptions();
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));
         $this->assertTrue(in_array('_blank', $options));
-        Configure::write('BcRequest.isUpdater', false);
 
         // インストーラー
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));

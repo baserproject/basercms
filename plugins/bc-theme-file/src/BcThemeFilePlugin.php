@@ -29,6 +29,7 @@ class BcThemeFilePlugin extends BcPlugin
      * @param ContainerInterface $container
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function services(ContainerInterface $container): void
     {

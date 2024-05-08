@@ -16,7 +16,6 @@ use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class BcValidationTest
@@ -261,43 +260,52 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-
     public static function fileExtDataProvider()
     {
         return [
             [
-                new UploadedFile(
-                    'test.jpg',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.jpg',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.jpg',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
                 true
             ],
             [
-                new UploadedFile(
-                    'test.png',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
                 true
             ],
             [
-                new UploadedFile('test.gif',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.gif',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.gif',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'gif'
+                ],
                 true
             ],
             [
-                new UploadedFile('test',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
-                true
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/gif',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
             ]
         ];
     }
@@ -638,6 +646,32 @@ class BcValidationTest extends BcTestCase
         //戻り＝trueケース
         $str = "あa　";
         $result = $this->BcValidation->notBlankOnlyString($str);
+        $this->assertTrue($result);
+    }
+    /**
+     * test checkAlphaNumericWithJson
+     */
+    public function test_checkAlphaNumericWithJson()
+    {
+        //戻り＝falseケース：全角文字
+        $key = 'BcCustomContent.email_confirm';
+        $str = '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝falseケース：半角スペース
+        $str = '{"BcCustomContent":{"email_confirm":" ","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝falseケース：半角・全角
+        $str = '{"BcCustomContent":{"email_confirm":"ああaaa","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝trueケース
+        $str = '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
         $this->assertTrue($result);
     }
 

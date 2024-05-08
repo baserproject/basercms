@@ -76,12 +76,19 @@ class CustomLinksTable extends AppTable
                 'reserved' => [
                     'rule' => ['reserved'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', '{0} はシステム予約名称のため利用できません。', implode(', ', Configure::read('BcApp.reservedWords')))
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
             ]]);
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
-            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
+            ->add('title', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'タイトルを入力してください。')
+                ]
+            ]);
 
         return $validator;
     }

@@ -60,6 +60,17 @@ class EditorTemplatesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function testAdmin_index()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-editor-template/editor_templates/index');
+        $this->assertResponseOk();
+    }
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()

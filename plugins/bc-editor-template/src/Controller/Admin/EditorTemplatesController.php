@@ -37,6 +37,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @param EditorTemplatesService $service
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function index(EditorTemplatesServiceInterface $service)
     {

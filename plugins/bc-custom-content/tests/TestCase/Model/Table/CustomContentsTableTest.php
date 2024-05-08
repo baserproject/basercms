@@ -11,8 +11,16 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use ArrayObject;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomContentsTable;
+use BcCustomContent\Service\CustomContentsService;
+use BcCustomContent\Test\Factory\CustomContentFactory;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BcCustomContent\Service\CustomContentsServiceInterface;
+use Cake\Event\Event;
 
 /**
  * CustomContentsTableTest
@@ -20,6 +28,11 @@ use BcCustomContent\Model\Table\CustomContentsTable;
  */
 class CustomContentsTableTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set up
@@ -69,6 +82,7 @@ class CustomContentsTableTest extends BcTestCase
         $validator = $this->CustomContentsTable->getValidator('withTable');
         $errors = $validator->validate([
             'list_count' => '101'
+
         ]);
         $this->assertEquals([
             'range' => '一覧表示件数は100までの数値で入力してください。',
@@ -82,5 +96,62 @@ class CustomContentsTableTest extends BcTestCase
         $this->assertEquals([
             '_empty' => '一覧表示件数は必須項目です。',
         ], $errors['list_count']);
+    }
+
+    /**
+     * test createSearchIndex
+     */
+    public function test_createSearchIndex()
+    {
+        //content empty
+        $entity = CustomContentFactory::make([
+            'id' => 1,
+        ])->getEntity();
+        $this->assertFalse($this->CustomContentsTable->createSearchIndex($entity));
+
+        //The system operates normally
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $customContentService = new CustomContentsService();
+        $customContent = $customContentService->get(1);
+
+        //set content publish_begin and publish_end
+        $customContent->content->publish_begin = '2021-01-01 00:00:00';
+        $customContent->content->publish_end = '2021-12-31 23:59:59';
+
+        $rs = $this->CustomContentsTable->createSearchIndex($customContent);
+        $this->assertEquals($rs['type'], 'カスタムコンテンツ');
+        $this->assertEquals($rs['model_id'], 1);
+        $this->assertEquals($rs['content_id'], 100);
+        $this->assertEquals($rs['site_id'], 1);
+        $this->assertEquals($rs['title'], 'サービスタイトル');
+        $this->assertEquals($rs['detail'], 'サービステスト');
+        $this->assertEquals($rs['url'], '/test/');
+        $this->assertTrue($rs['status']);
+        $this->assertEquals($rs['publish_begin'], '2021-01-01 00:00:00');
+        $this->assertEquals($rs['publish_end'], '2021-12-31 23:59:59');
+    }
+
+    /**
+     * test beforeSave
+     */
+    public function test_beforeSave()
+    {
+        //サービスクラス
+        $PluginsService = $this->getService(PluginsServiceInterface::class);
+        $customContentService = $this->getService(CustomContentsServiceInterface::class);
+        $PluginsService->attach('BcSearchIndex');
+
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        //isExcluded false
+        $customContent = $customContentService->get(1);
+        $this->CustomContentsTable->beforeSave(new Event("beforeSave"), $customContent, new ArrayObject());
+        $this->assertFalse($this->CustomContentsTable->isExcluded());
+
+        //isExcluded true
+        $customContent = $customContentService->get(1);
+        $customContent->content->exclude_search = 1;
+        $this->CustomContentsTable->beforeSave(new Event("beforeSave"), $customContent, new ArrayObject());
+        $this->assertTrue($this->CustomContentsTable->isExcluded());
     }
 }

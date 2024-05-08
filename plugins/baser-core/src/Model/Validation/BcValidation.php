@@ -255,20 +255,16 @@ class BcValidation extends Validation
      */
     public static function fileExt($file, $exts)
     {
-        if (!is_array($exts)) {
-            $exts = explode(',', $exts);
-        }
+        if (!is_array($exts)) $exts = explode(',', $exts);
+        if (empty($file)) return true;
 
         // FILES形式のチェック
-        if (!is_string($file) && !empty($file->getClientMediaType())) {
-            $ext = BcUtil::decodeContent($file->getClientMediaType(), $file->getClientMediaType());
+        if (is_array($file) && !empty($file['type'])) {
+            $ext = BcUtil::decodeContent($file['type'], $file['name']);
             if (!in_array($ext, $exts)) {
                 return false;
             }
-        }
-
-        // 更新時の文字列チェック
-        if (!empty($file) && is_string($file)) {
+        } else {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             if (!in_array($ext, $exts)) {
                 return false;
@@ -620,4 +616,29 @@ class BcValidation extends Validation
         return preg_match('/\A([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})\z/i', $value);
     }
 
+    /**
+     * Jsonをバリデーション
+     * 半角小文字英数字とアンダースコアを許容
+     * @param $string
+     * @param $key
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkAlphaNumericWithJson($string, $key)
+    {
+        $value = json_decode($string, true);
+        $keys = explode('.', $key);
+
+        foreach ($keys as $k) {
+            $value = $value[$k];
+        }
+
+        if (empty($value) || preg_match("/^[a-z0-9_]+$/", $value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
