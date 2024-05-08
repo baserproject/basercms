@@ -648,6 +648,32 @@ class BcValidationTest extends BcTestCase
         $result = $this->BcValidation->notBlankOnlyString($str);
         $this->assertTrue($result);
     }
+    /**
+     * test checkAlphaNumericWithJson
+     */
+    public function test_checkAlphaNumericWithJson()
+    {
+        //戻り＝falseケース：全角文字
+        $key = 'BcCustomContent.email_confirm';
+        $str = '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝falseケース：半角スペース
+        $str = '{"BcCustomContent":{"email_confirm":" ","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝falseケース：半角・全角
+        $str = '{"BcCustomContent":{"email_confirm":"ああaaa","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertFalse($result);
+
+        //戻り＝trueケース
+        $str = '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"","file_ext":""}}';
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
+        $this->assertTrue($result);
+    }
 
     /**
      * test hexColorPlus

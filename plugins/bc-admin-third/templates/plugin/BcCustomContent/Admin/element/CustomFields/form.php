@@ -136,13 +136,14 @@ $this->BcAdmin->setHelp('custom_fields_form');
           <?php echo $this->BcAdminForm->label('meta.BcCustomContent.email_confirm', __d('baser_core', 'Eメール比較先フィールド名')) ?>&nbsp;
           <?php echo $this->BcAdminForm->control('meta.BcCustomContent.email_confirm', [
             'type' => 'text',
-            'size' => 20,
+            'size' => 20
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             Eメール比較チェックの対象となる、フィールド名を入力します。<br>
             利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。
           </div>
+             <?php echo $this->BcAdminForm->error('meta.BcCustomContent.email_confirm') ?>
         </span>
 
         <span style="display: block">
