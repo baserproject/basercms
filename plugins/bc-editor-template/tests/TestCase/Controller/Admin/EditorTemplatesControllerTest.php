@@ -12,6 +12,7 @@
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -165,25 +166,27 @@ class EditorTemplatesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        //サービスクラス
-        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
-        //のバリューをリセットする
-        $siteConfigsService->resetValue('editor');
+
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+
         //テストデータをセット
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //正常系実行
         $data = [
             'name' => 'japan'
         ];
         $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
-        //check status code
         $this->assertResponseCode(302);
-        //check message
         $this->assertFlashMessage('テンプレート「japan」を更新しました');
-        //check redirect
         $this->assertRedirect(['action' => 'index']);
-        //check error
+
+        //異常系実行
         $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
-        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]],
+            $vars['editorTemplate']->getErrors());
     }
 
     /**
