@@ -73,9 +73,6 @@ class UploaderFilesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        
-        //$pathImg = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
-        //(new BcFile($pathImg . 'social_new.jpg'))->create();
 
         $this->loadFixtureScenario(UploaderFilesScenario::class);
 
@@ -88,8 +85,6 @@ class UploaderFilesControllerTest extends BcTestCase
         //check after delete is not exist
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         UploaderFileFactory::get(1);
-
-
     }
 
     public function test_ajax_get_search_box()
