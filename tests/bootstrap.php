@@ -104,8 +104,6 @@ include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
     ['plugin' => 'BcEditorTemplate'],
-    ['plugin' => 'BcSearchIndex'],
-    ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcEditorTemplate'],
