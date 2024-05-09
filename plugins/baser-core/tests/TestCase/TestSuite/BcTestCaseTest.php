@@ -164,8 +164,10 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testAttachEventAndResetEvent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->attachEvent(['testEvent' => null]);
+        $this->attachEvent(['Helper.Form.afterClickForm' => ['callable' => function (Event $event) {
+            $event->setData('fields', ['title' => '1', 'input' => '2']);
+            return true;
+        }]]);
         $eventManager = EventManager::instance();
         $this->assertNotNull($eventManager->listeners('testEvent'));
         $this->resetEvent();
