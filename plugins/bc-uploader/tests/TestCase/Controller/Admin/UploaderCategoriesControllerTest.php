@@ -143,4 +143,24 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
     }
+
+    /**
+     * Test coppy
+     */
+    public function test_copy(){
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「blog_copy」をコピーしました。');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/10');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。__clone method called on non-object');
+    }
 }

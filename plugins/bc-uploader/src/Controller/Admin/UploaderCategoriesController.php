@@ -150,13 +150,16 @@ class UploaderCategoriesController extends BcAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(UploaderCategoriesServiceInterface $service, $id)
     {
+        $uploaderCategory = null;
         try {
-            if($service->copy($id)) {
-                $entity = $service->get($id);
-                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $entity->name));
+            $uploaderCategory = $service->copy($id);
+            if($uploaderCategory) {
+                //$entity = $service->get($id);
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $uploaderCategory->name));
             } else {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
