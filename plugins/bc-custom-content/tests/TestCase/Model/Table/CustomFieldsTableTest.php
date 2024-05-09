@@ -18,7 +18,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 
 /**
  * CustomFieldsTableTest
- * @property CustomFieldsTable $customFieldsTable
+ * @property CustomFieldsTable $CustomFieldsTable
  */
 class CustomFieldsTableTest extends BcTestCase
 {
@@ -34,7 +34,7 @@ class CustomFieldsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->customFieldsTable = $this->getTableLocator()->get('BcCustomContent.CustomFields');
+        $this->CustomFieldsTable = $this->getTableLocator()->get('BcCustomContent.CustomFields');
     }
 
     /**
@@ -42,7 +42,7 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->customFieldsTable);
+        unset($this->CustomFieldsTable);
         parent::tearDown();
     }
 
@@ -51,8 +51,8 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_initialize()
     {
-        $this->assertTrue($this->customFieldsTable->hasBehavior('Timestamp'));
-        $this->assertTrue($this->customFieldsTable->hasAssociation('CustomLinks'));
+        $this->assertTrue($this->CustomFieldsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->CustomFieldsTable->hasAssociation('CustomLinks'));
     }
 
     /**
@@ -132,7 +132,7 @@ class CustomFieldsTableTest extends BcTestCase
         ];
         $options = new \ArrayObject();
         $content = new \ArrayObject($data);
-        $this->customFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
+        $this->CustomFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
         $this->assertEquals('{"test":"test"}', $content['meta']);
         $this->assertEquals('{"test":"test"}', $content['validate']);
         //case false
@@ -142,7 +142,7 @@ class CustomFieldsTableTest extends BcTestCase
         ];
         $options = new \ArrayObject();
         $content = new \ArrayObject($data);
-        $this->customFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
+        $this->CustomFieldsTable->dispatchEvent('Model.beforeMarshal', ['entity' => $content, 'options' => $options]);
         $this->assertEquals('', $content['meta']);
         $this->assertEquals('', $content['validate']);
     }
