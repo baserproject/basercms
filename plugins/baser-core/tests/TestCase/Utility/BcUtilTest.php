@@ -1412,6 +1412,17 @@ class BcUtilTest extends BcTestCase
     }
 
 
+    /**
+     * test getCurrentDbConfig
+     */
+    public function test_getCurrentDbConfig()
+    {
+        $rs = BcUtil::getCurrentDbConfig();
+
+        $this->assertEquals('bc-db', $rs['host']);
+        $this->assertEquals('3306', $rs['port']);
+        $this->assertEquals('test_basercms', $rs['database']);
+    }
 
     /**
      * test getFrontTemplatePaths

@@ -445,6 +445,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentDbConfig()
     {
