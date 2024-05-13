@@ -241,6 +241,7 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getFieldValue($displayFront, $fieldType, $requestUrl, $fieldName, $fieldValue, $options, $expect)
     {
+        //plugin BcCcRelatedを追加
         Configure::write('BcCustomContent.fieldTypes.BcCcRelated', ['category' => '選択', 'label' => '関連データ', 'columnType' => 'string', 'controlType' => 'select', 'preview' => true, 'loop' => true]);
         //サービスをコル
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
@@ -248,36 +249,12 @@ class CustomContentHelperTest extends BcTestCase
         $customContentsService = $this->getService(CustomContentsServiceInterface::class);
 
         //テストデータを生成
-        $customTable->create([
-            'id' => 1,
-            'type' => 'recruit_category',
-            'name' => 'recruit_categories',
-            'display_field' => 'name'
-        ]);
+        $customTable->create(['id' => 1, 'type' => 'recruit_category', 'name' => 'recruit_categories', 'display_field' => 'name']);
         //データを生成
-        CustomContentFactory::make([
-            'id' => 1,
-            'custom_table_id' => 1,
-            'recruit_category' => 'test'
-        ])->persist();
-        ContentFactory::make([
-            'id' => 100,
-            'plugin' => 'BcCustomContent',
-            'type' => 'CustomContent',
-            'site_id' => 1,
-            'entity_id' => 1
-        ])->persist();
-        CustomFieldFactory::make([
-            'id' => 1,
-            'name' => 'recruit_category',
-            'type' => $fieldType,
-            'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}'
-        ])->persist();
-        CustomEntryFactory::make([
-            'id' => 1,
-            'custom_table_id' => 1,
-            'name' => 'プログラマー'
-        ])->persist();
+        CustomContentFactory::make(['id' => 1, 'custom_table_id' => 1, 'recruit_category' => 'test'])->persist();
+        ContentFactory::make(['id' => 100, 'plugin' => 'BcCustomContent', 'type' => 'CustomContent', 'site_id' => 1, 'entity_id' => 1])->persist();
+        CustomFieldFactory::make(['id' => 1, 'name' => 'recruit_category', 'type' => $fieldType, 'meta' => '{"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""}}'])->persist();
+        CustomEntryFactory::make(['id' => 1, 'custom_table_id' => 1, 'name' => 'プログラマー'])->persist();
         CustomLinkFactory::make([
             'id' => 1,
             'custom_table_id' => 1,
