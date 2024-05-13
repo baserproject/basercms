@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\UtilitiesAdminServiceInterface;
+use BaserCore\Service\UtilitiesService;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
@@ -193,7 +194,7 @@ class UtilitiesController extends BcAdminAppController
 
     /**
      * コンテンツ管理のツリー構造をリセットする
-     * @param UtilitiesServiceInterface $service
+     * @param UtilitiesServiceInterface|UtilitiesService $service
      * @checked
      * @noTodo
      * @unitTest

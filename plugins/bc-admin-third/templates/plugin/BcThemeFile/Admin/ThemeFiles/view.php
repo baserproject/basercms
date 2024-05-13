@@ -66,7 +66,7 @@ $isCopyable = ($isDefaultTheme &&
           "本当に現在のテーマ「{0}」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。",
           Cake\Utility\Inflector::camelize(\BaserCore\Utility\BcUtil::getCurrentTheme())
         ),
-        'class' => 'bca-submit-token bca-btn',
+        'class' => 'bca-btn',
         'data-bca-btn-type' => 'save',
         'data-bca-btn-size' => 'lg',
         'data-bca-btn-width' => 'lg',

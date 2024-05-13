@@ -17,6 +17,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Entity\BlogCategory;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
@@ -301,16 +302,14 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testBeforeDelete()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogCategory->data = ['BlogCategory' => [
-            'id' => '1'
-        ]];
-        $this->BlogCategory->delete();
-
-        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
-        $result = $BlogPost->find('first', [
-            'conditions' => ['blog_category_id' => 1]
+        $data = $this->BlogCategoriesTable->newEntity([
+            'id' > '1'
         ]);
+        $this->BlogCategoriesTable->delete($data);
+
+        //テストメソッドをコール
+        $blogCategories = $this->getTableLocator()->get('BcBlog.BlogCategories');
+        $result = $blogCategories->find()->where(['id' => 1])->first();
         $this->assertEmpty($result);
     }
 
@@ -505,8 +504,11 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testGetByName($blogCategoryId, $name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->BlogCategory->getByName($blogCategoryId, $name);
+        //データ生成
+        BlogCategoryFactory::make(['name' => 'child', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['name' => 'name', 'blog_content_id' => 2])->persist();
+        $result = $this->BlogCategoriesTable->getByName($blogCategoryId, $name);
+        //戻り値を確認
         $this->assertEquals($expects, (bool)$result);
     }
 
@@ -572,5 +574,18 @@ class BlogCategoriesTableTest extends BcTestCase
         $blogCategories = $this->getTableLocator()->get('BcBlog.BlogCategories');
         $query = $blogCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test getParent
+     */
+    public function test_getParent()
+    {
+        //データ生成
+        BlogCategoryFactory::make(['id' => 11])->persist();
+        //テストメソッドをコール
+        $rs = $this->BlogCategoriesTable->getParent(11);
+        //戻り値を確認
+        $this->assertEquals(11, $rs->id);
     }
 }

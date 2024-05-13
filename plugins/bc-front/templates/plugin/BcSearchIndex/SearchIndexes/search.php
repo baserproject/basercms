@@ -32,7 +32,7 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
     <?php if ($contentFolders): ?>
         <?php echo $this->BcBaser->formControl('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
     <?php endif ?>
-    <?php echo $this->BcBaser->formControl('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
+    <?php echo $this->BcBaser->formControl('q', ['placeholder' => __d('baser_core', 'キーワード'), 'div' => false]) ?>
     <?php echo $this->BcBaser->formHidden('s') ?>
     <?php echo $this->BcBaser->formSubmit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
     <?php echo $this->BcBaser->endForm() ?>

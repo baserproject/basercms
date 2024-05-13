@@ -36,7 +36,7 @@ class UploaderCategoriesController extends BcAdminAppController
      */
     public function index(UploaderCategoriesServiceInterface $service)
     {
-        $this->set(['uploaderCategories' => $service->getIndex()->all()]);
+        $this->set(['uploaderCategories' => $this->paginate($service->getIndex())]);
     }
 
     /**

@@ -149,9 +149,11 @@ class BlogTagsTableTest extends BcTestCase
      */
     public function testGetByName($name, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->BlogTag->getByName($name);
-        $this->assertEquals($expects, (bool)$result);
+        BlogTagFactory::make(['name' => 'タグ１'])->persist();
+        BlogTagFactory::make(['name' => 'タグ２'])->persist();
+        $rs = $this->BlogTagsTable->getByName($name);
+        //戻り値を確認
+        $this->assertEquals($expects, (bool)$rs);
     }
 
     public static function getByNameDataProvider()

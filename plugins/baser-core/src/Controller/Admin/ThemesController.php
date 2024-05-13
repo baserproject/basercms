@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\ThemesAdminServiceInterface;
+use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcZip;
@@ -42,7 +43,7 @@ class ThemesController extends BcAdminAppController
 
     /**
      * テーマをアップロードして適用する
-     * @param ThemesServiceInterface $service
+     * @param ThemesServiceInterface|ThemesService $service
      * @checked
      * @noTodo
      * @unitTest
@@ -54,8 +55,8 @@ class ThemesController extends BcAdminAppController
                 $name = $service->add($this->getRequest()->getUploadedFiles());
                 $this->BcMessage->setInfo(__d('baser_core', 'テーマファイル「{0}」を追加しました。', $name));
                 $this->redirect(['action' => 'index']);
-            } catch (BcException $e) {
-                $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . "\n" . $e->getMessage());
             }
         }
     }
@@ -154,7 +155,7 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマを適用する
      *
-     * @param ThemesServiceInterface $service
+     * @param ThemesServiceInterface|ThemesService $service
      * @param string $theme
      * @return void
      * @checked
@@ -165,8 +166,27 @@ class ThemesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if (!$theme) $this->notFound();
+
+        // EVENT Themes.beforeApply
+        $event = $this->dispatchLayerEvent('beforeApply', [
+            'theme' => $theme
+        ]);
+        if ($event !== false) {
+            if($event->getResult() === null || $event->getResult() === true) {
+                $theme = $event->getData('theme');
+            } else {
+                $theme = $event->getResult();
+            }
+        }
+
         try {
             $info = $service->apply($this->getRequest()->getAttribute('currentSite'), $theme);
+
+            // EVENT Themes.afterApply
+            $this->dispatchLayerEvent('afterApply', [
+                'theme' => $theme
+            ]);
+
             $message = [__d('baser_core', 'テーマ「{0}」を適用しました。', $theme)];
             if ($info) $message = array_merge($message, [''], $info);
             $this->BcMessage->setInfo(implode("\n", $message));

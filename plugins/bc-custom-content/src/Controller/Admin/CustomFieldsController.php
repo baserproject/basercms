@@ -34,7 +34,13 @@ class CustomFieldsController extends CustomContentAdminAppController
      */
     public function index(CustomFieldsAdminServiceInterface $service)
     {
-        $this->set(['entities' => $this->paginate($service->getIndex($this->getRequest()->getQueryParams()))]);
+        $this->set([
+            'entities' => $this->paginate(
+                $service->getIndex(
+                    $this->getRequest()->getQueryParams()
+                )
+            )
+        ]);
     }
 
     /**
@@ -66,6 +72,7 @@ class CustomFieldsController extends CustomContentAdminAppController
                 $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
+                $service->CustomFields->decodeEntity($entity);
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
@@ -108,6 +115,7 @@ class CustomFieldsController extends CustomContentAdminAppController
                 return $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
+                $service->CustomFields->decodeEntity($entity);
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));

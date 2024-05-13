@@ -190,7 +190,13 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 101])->persist();
+        ContentFactory::make([
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 101,
+            'lft' => 1,
+            'rght' => 2
+        ])->persist();
         BlogContentFactory::make(['id' => 101, 'description' => 'abc'])->persist();
 
         $this->post('/baser/api/admin/bc-blog/blog_contents/delete/101.json?token=' . $this->accessToken);
@@ -293,9 +299,9 @@ class BlogContentsControllerTest extends BcTestCase
             'title' => 'news',
         ];
         $this->post('/baser/api/admin/bc-blog/blog_contents/copy.json?token=' . $this->accessToken, $data);
-        $this->assertResponseCode(400);
+        $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('コピーに失敗しました。データが不整合となっている可能性があります。', $result->message);
+        $this->assertEquals('ブログのコピー「news」を追加しました。', $result->message);
     }
 
 }

@@ -101,7 +101,7 @@ $this->BcAdmin->setTitle(__d('baser_core',
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
       ['action' => 'delete', $mailContent->id, $mailMessage->id], [
         'confirm' => __d('baser_core', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
-        'class' => 'bca-submit-token button bca-btn bca-actions__item',
+        'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',
         'data-bca-btn-color' => 'danger'

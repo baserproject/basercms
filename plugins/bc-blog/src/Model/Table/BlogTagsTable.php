@@ -115,15 +115,12 @@ class BlogTagsTable extends BlogAppTable
     /**
      * 指定した名称のブログタグ情報を取得する
      *
-     * @param string $name
-     * @return array
+     * @param $name
+     * @return EntityInterface
      */
     public function getByName($name)
     {
-        return $this->find('first',
-        conditions: ['BlogTag.name' => $name],
-        recursive: -1,
-        callbacks: false);
+        return $this->find()->where(['BlogTags.name' => $name])->first();
     }
 
     /**

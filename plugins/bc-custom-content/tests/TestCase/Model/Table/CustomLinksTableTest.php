@@ -11,9 +11,18 @@
 
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
+use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcThemeFile\Model\Entity\ThemeFile;
+use Cake\Event\Event;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * CustomTablesTableTest
@@ -21,6 +30,10 @@ use BcCustomContent\Test\Factory\CustomLinkFactory;
  */
 class CustomLinksTableTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set up
@@ -74,12 +87,12 @@ class CustomLinksTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'aこんにちは',
         ]);
-        $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        $this->assertEquals('フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['name']));
         //システム予約名称のケース
         $errors = $validator->validate([
             'name' => 'option',
         ]);
-        $this->assertEquals('group, rows, option はシステム予約名称のため利用できません。', current($errors['name']));
+        $this->assertStringContainsString( 'システム予約名称のため利用できません。', current($errors['name']));
         //既に登録のケース
         CustomLinkFactory::make([
             'name' => 'recruit_category',
@@ -91,6 +104,11 @@ class CustomLinksTableTest extends BcTestCase
         ]);
         $this->assertEquals('既に登録のあるフィールド名です。', current($errors['name']));
 
+        //スペースだけ登録した場合、
+        $errors = $validator->validate([
+            'title' => '      '
+        ]);
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
     }
 
     /**
@@ -118,7 +136,22 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeSave()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
+        $entity = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->getEntity();
+        $this->CustomLinksTable->dispatchEvent('Model.beforeSave',
+            ['entity' => $entity, 'options' => new \ArrayObject()]);
+        //check unique name
+        $this->assertEquals('recruit_category_2', $entity->get('name'));
+        //check tree scope
+        $treeScope = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
+        $this->assertEquals(['custom_table_id' => 1], $treeScope);
     }
 
     /**
@@ -126,7 +159,13 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeDelete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make(['id' => 1])->persist();
+        //対象メソッドをコール
+        $this->CustomLinksTable->beforeDelete(new Event('beforeDelete'), CustomLinkFactory::get(1), new \ArrayObject());
+        //スコープが設定できるか確認
+        $result = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
+        $this->assertEquals(['custom_table_id' => 1], $result);
     }
 
     /**
@@ -134,7 +173,50 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_updateSort()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customLinks = $this->getService(CustomLinksServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact'
+        ]);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'no' => 2,
+            'sort' => 4
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'no' => 1,
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+
+        //$fieldNameが存在した場合、
+        $this->CustomLinksTable->updateSort($customLinks->getIndex(1)->toArray());
+        //並び順を更新するできるか確認すること
+        $customLink1 = $customLinks->get(1);
+        $this->assertEquals(2, $customLink1->no);
+        //lft: 1->3
+        $this->assertEquals(3, $customLink1->lft);
+        //rght: 2->4
+        $this->assertEquals(4, $customLink1->rght);
+
+        $customLink2 = $customLinks->get(2);
+        $this->assertEquals(1, $customLink2->no);
+        //lft: 3->1
+        $this->assertEquals(1, $customLink2->lft);
+        //rght: 4->2
+        $this->assertEquals(2, $customLink2->rght);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
@@ -142,7 +224,33 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getCurentSort()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make([
+            'id' => 1,
+            'lft' => 1,
+            'rght' => 6,
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'parent_id' => 1,
+            'lft' => 2,
+            'rght' => 3
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 3,
+            'parent_id' => 1,
+            'lft' => 4,
+            'rght' => 5
+        ])->persist();
+
+        $rs = $this->CustomLinksTable->getCurentSort(1, 1, null);
+        $this->assertEquals(1, $rs);
+
+        $rs = $this->CustomLinksTable->getCurentSort(2, 1, 1);
+        $this->assertEquals(1, $rs);
+
+        $rs = $this->CustomLinksTable->getCurentSort(3, 1, 1);
+        $this->assertEquals(2, $rs);
     }
 
     /**
@@ -150,7 +258,50 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_moveOffset()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customLinks = $this->getService(CustomLinksServiceInterface::class);
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact'
+        ]);
+
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make(['id' => 1])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'no' => 2,
+            'sort' => 4
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'no' => 1,
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+
+        //$offset > 0、
+        $rs = $this->CustomLinksTable->moveOffset($customLinks->get(1), 1);
+        //並び順を更新するできるか確認すること
+        $this->assertEquals(2, $rs->no);
+        //lft: 1->3
+        $this->assertEquals(3, $rs->lft);
+        //rght: 2->4
+        $this->assertEquals(4, $rs->rght);
+
+        //$offset < 0、
+        $rs = $this->CustomLinksTable->moveOffset($customLinks->get(2), -1);
+        $this->assertEquals(1, $rs->no);
+        //lft: 3->1
+        $this->assertEquals(1, $rs->lft);
+        //rght: 4->2
+        $this->assertEquals(2, $rs->rght);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
@@ -158,7 +309,19 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_getUniqueName()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //サービスをコル
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
+
+        //nameが登録したことがない場合、
+        $rs = $this->CustomLinksTable->getUniqueName('email', 1);
+        $this->assertEquals('email', $rs);
+
+        //nameが登録した場合、
+        $rs = $this->CustomLinksTable->getUniqueName('recruit_category', 1);
+        $this->assertEquals('recruit_category_2', $rs);
     }
 
 

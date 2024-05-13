@@ -43,7 +43,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
     {
         $this->table = $this->getTableLocator()->get('BaserCore.Pages');
         $this->table->setPrimaryKey(['id']);
-        $this->table->addBehavior('BaserCore.BcSearchIndexManager');
+        $this->table->addBehavior('BcSearchIndex.BcSearchIndexManager');
         $this->BcSearchIndexManager = $this->table->getBehavior('BcSearchIndexManager');
         $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
         parent::setUp();

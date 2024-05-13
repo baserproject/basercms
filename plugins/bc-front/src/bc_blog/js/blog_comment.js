@@ -89,11 +89,11 @@ const bcBlog = {
                 success: function (result) {
                     if(bcBlog.authCaptcha) {
                         bcBlog.loadAuthCaptcha();
-                        $("#BlogCommentAuthCaptcha").val('');
+                        $("#auth-captcha").val('');
                     }
                     if (result) {
                         bcBlog.initView()
-                        $("#BlogCommentAuthCaptcha").val('');
+                        $("#auth-captcha").val('');
                         let resultMessage = '';
                         if (bcBlog.commentApprove) {
                             resultMessage = bcI18n.alertMessageAuthComplete;
@@ -150,6 +150,9 @@ const bcBlog = {
         let msg = '';
         if (!$("#name").val()) {
             msg += bcI18n.alertMessageName + '\n';
+        }
+        if (!$("#email").val()) {
+            msg += bcI18n.alertMessageEmail + '\n';
         }
         if (!$("#message").val()) {
             msg += bcI18n.alertMessageComment + '\n';

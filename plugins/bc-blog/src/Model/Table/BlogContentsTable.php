@@ -51,6 +51,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator
             ->scalar('description')
+            ->allowEmptyString('description')
             ->add('description', [
                 'containsScript' => [
                     'rule' => ['containsScript'],
@@ -61,7 +62,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator->scalar('list_count')
             ->notEmptyString('list_count', __d('baser_core', '一覧表示件数を入力してください。'))
-            ->range('list_count', [0, 101], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
+            ->range('list_count', [0, 100], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
             ->add('list_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',
@@ -69,7 +70,7 @@ class BlogContentsTable extends BlogAppTable
 
         $validator->scalar('feed_count')
             ->notEmptyString('feed_count', __d('baser_core', 'RSSフィード出力件数を入力してください。'))
-            ->range('feed_count', [0, 101], __d('baser_core', 'RSSフィード出力件数は100までの数値で入力してください。'))
+            ->range('feed_count', [0, 100], __d('baser_core', 'RSSフィード出力件数は100までの数値で入力してください。'))
             ->add('feed_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',
@@ -148,7 +149,7 @@ class BlogContentsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex')) {
             return true;
         }
-        if (empty($entity->content) || !empty($entity->content->exclude_search) || !$entity->content->status) {
+        if (empty($entity->content) || !empty($entity->content->exclude_search)) {
             $this->setExcluded();
         }
         return true;
@@ -186,6 +187,7 @@ class BlogContentsTable extends BlogAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createRelatedSearchIndexes(EntityInterface $entity)
     {
@@ -212,11 +214,12 @@ class BlogContentsTable extends BlogAppTable
      * @param int $newSiteId 新しいサイトID
      * @return mixed EntityInterface|false
      * @checked
+     * @unitTest
      */
     public function copy(
         int $id,
         int $newParentId,
-        string $newTitle,
+        string|null $newTitle,
         int $newAuthorId,
         int $newSiteId = null
     )
@@ -243,7 +246,7 @@ class BlogContentsTable extends BlogAppTable
         $data->content = new Content([
             'name' => $name,
             'parent_id' => $newParentId,
-            'title' => $newTitle ?? $oldData->title . '_copy',
+            'title' => $newTitle ?? $oldData->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'exclude_search' => false,

@@ -79,7 +79,7 @@ class PermissionGroupsAdminServiceTest extends BcTestCase
         $request = $this->getRequest('/baser/admin/baser-core/permission_groups/index?list_type=Nghiem&permission_amount=false');
         $vars = $this->PermissionGroupsAdmin->getViewVarsForIndex(1, $request);
         $entities = $vars['entities']->all();
-        $this->assertCount(0, $entities);
+        $this->assertCount(3, $entities);
     }
 
     /**

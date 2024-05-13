@@ -21,13 +21,15 @@
  * @noTodo
  * @unitTest
  */
-if (empty($this->Paginator)) {
-	return;
+try {
+  $pageCount = $this->Paginator->counter('{{pages}}');
+} catch (\Cake\Core\Exception\CakeException) {
+  return;
 }
 if (!isset($modules)) {
 	$modules = 4;
 }
-$pageCount = $this->Paginator->counter('{{pages}}');
+
 $this->Paginator->setTemplates([
   'prevActive' => '<span class="bs-pagination__prev"><a href="{{url}}" rel="prev">{{text}}</a></span>',
   'prevDisabled' => '<span class="bs-pagination__prev disabled">{{text}}</span>',

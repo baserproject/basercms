@@ -39,6 +39,10 @@ $this->BcBaser->js('BcUploader.admin/uploader_categories/index.bundle');
       ]) ?>
     </div>
   <?php endif ?>
+  <div class="bca-data-list__sub">
+    <!-- pagination -->
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
 </div>
 
 <table class="list-table sort-table bca-table-listup" id="ListTable">
@@ -100,3 +104,12 @@ $this->BcBaser->js('BcUploader.admin/uploader_categories/index.bundle');
   <?php endif; ?>
   </tbody>
 </table>
+
+<div class="bca-data-list__bottom">
+  <div class="bca-data-list__sub">
+    <!-- pagination -->
+    <?php $this->BcBaser->element('pagination') ?>
+    <!-- list-num -->
+    <?php $this->BcBaser->element('list_num') ?>
+  </div>
+</div>

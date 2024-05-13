@@ -21,7 +21,9 @@ $this->BcBaser->i18nScript([
   'confirmMessage2' => __d('baser_core', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
   'confirmTitle1' => __d('baser_core', 'エイリアス変更')
 ]);
-$this->BcBaser->js('admin/sites/form.bundle', false);
+$this->BcBaser->js('admin/sites/form.bundle', false, [
+  'defer' => true
+]);
 ?>
 
 

@@ -306,7 +306,7 @@ class ContentFoldersServiceTest extends BcTestCase
             // 親フォルダ（サービス）のfolder_templateを取得できるか確認
             [11, '', ['' => "親フォルダの設定に従う（サービスフォルダー）"]],
             // プラグインが存在する場合
-            [4, 'BcFront', ['' => "親フォルダの設定に従う（baserCMSサンプル）", 'default' => 'default']],
+            [4, 'BcFront', ['' => "親フォルダの設定に従う（baserCMSサンプル）", 'default' => 'default', 'eyecatch' => 'eyecatch']],
         ];
     }
 

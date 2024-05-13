@@ -16,6 +16,7 @@ use BcUploader\Service\Admin\UploaderFilesAdminService;
 use BcUploader\Service\Admin\UploaderFilesAdminServiceInterface;
 use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
+use Cake\Datasource\Paging\NumericPaginator;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -81,7 +82,7 @@ class UploadFilesAdminServiceTest extends BcTestCase
 
         //対象メソッドをコール
         $rs = $this->UploaderFilesAdminService->getViewVarsForAjaxList(
-            $this->UploaderFilesAdminService->getIndex([])->all(),
+            (new NumericPaginator())->paginate($this->UploaderFilesAdminService->getIndex([])),
             1
         );
 

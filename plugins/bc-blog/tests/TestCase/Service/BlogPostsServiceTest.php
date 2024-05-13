@@ -17,7 +17,6 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -346,22 +345,27 @@ class BlogPostsServiceTest extends BcTestCase
         BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 3])->persist();
         BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 4])->persist();
 
-        //文字：存在しているタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], 'tag1');
-        $this->assertEquals(1, $result["BlogPosts.id IN"][0]);
+        $blogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
 
-        //配列：存在しているタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1', 'tag2']);
-        $this->assertEquals(1, $result["BlogPosts.id IN"][0]);
-        $this->assertEquals(2, $result['BlogPosts.id IN'][1]);
+        // 単一：存在しているタグを確認場合
+        $query = $blogPostsTable->find();
+        $result = $this->BlogPostsService->createTagCondition($query, 'tag1');
+        $this->assertEquals(1, $result->count());
 
-        //配列：存在しているタグと存在していないタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1111', 'tag2']);
-        $this->assertEquals(2, $result["BlogPosts.id IN"][0]);
+        // 配列：存在しているタグを確認場合
+        $query = $blogPostsTable->find();
+        $result = $this->BlogPostsService->createTagCondition($query, ['tag1', 'tag2']);
+        $this->assertEquals(2, $result->count());
 
-        //配列：存在していないタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1111', 'tag22222']);
-        $this->assertNull($result["BlogPosts.id IS"]);
+        // 配列：存在しているタグと存在していないタグを確認場合
+        $query = $blogPostsTable->find();
+        $result = $this->BlogPostsService->createTagCondition($query, ['tag1111', 'tag1']);
+        $this->assertEquals(1, $result->count());
+
+        //配列：存在していないタグを確認場合
+        $query = $blogPostsTable->find();
+        $result = $this->BlogPostsService->createTagCondition($query, ['tag1111', 'tag22222']);
+        $this->assertEquals(0, $result->count());
     }
 
     /**
@@ -424,7 +428,15 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testCreateOrder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //昇順
+        $result = $this->BlogPostsService->createOrder('test', 'ASC');
+        $this->assertEquals('BlogPosts.test ASC, BlogPosts.id ASC', $result);
+        //降順
+        $result = $this->BlogPostsService->createOrder('test', 'DESC');
+        $this->assertEquals('BlogPosts.test DESC, BlogPosts.id DESC', $result);
+        //random
+        $result = $this->BlogPostsService->createOrder('test', 'random');
+        $this->assertEquals('RAND()', $result);
     }
 
     /**

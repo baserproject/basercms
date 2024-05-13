@@ -99,7 +99,8 @@ $fullUrl = $this->BcBaser->getContentsUrl(
         'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',
-        'confirm' => sprintf("%s を本当に削除してもいいですか？\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。", $blogCategory->name)
+        'confirm' => sprintf("%s を本当に削除してもいいですか？\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。", $blogCategory->name),
+        'data-bca-btn-color' => "danger"
       ]
     ) ?>
   </div>

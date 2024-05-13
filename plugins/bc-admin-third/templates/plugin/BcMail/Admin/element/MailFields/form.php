@@ -26,7 +26,7 @@
 
 <section class="bca-section" data-bca-section-type='form-group'>
   <table id="FormTable" class="form-table bca-form-table">
-    <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
+    <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
       <tr>
         <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('no', 'No') ?></th>
         <td class="col-input bca-form-table__input">
@@ -43,7 +43,7 @@
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('field_name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <div class="bca-helptext"><?php echo __d('baser_core', '重複しない半角英数字で入力してください。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser_core', '重複しない半角英数字、アンダースコアで入力してください。') ?></div>
         <?php echo $this->BcAdminForm->error('field_name') ?>
       </td>
     </tr>
@@ -219,7 +219,7 @@
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser_core', '各項目を同じグループとするには同じグループ名を入力します。') ?></li>
-              <li><?php echo __d('baser_core', '半角英数字で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', '半角英数字、ハイフン、アンダースコアで入力してください。') ?></li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('group_field') ?>
@@ -235,7 +235,7 @@
             <ul>
               <li><?php echo __d('baser_core', 'グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
               <li><?php echo __d('baser_core', 'グループ内の項目が一つでもエラーとなるとグループ内の全ての項目にエラーを意味する背景色が付きます。') ?></li>
-              <li><?php echo __d('baser_core', '半角英数字で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', '半角英数字、ハイフン、アンダースコアで入力してください。') ?></li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('group_valid') ?>
@@ -268,21 +268,6 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('class', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
           <?php echo $this->BcAdminForm->error('class') ?>
-        </td>
-      </tr>
-      <tr id="RowSeparator">
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('delimiter', __d('baser_core', '区切り文字')) ?></th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('delimiter', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext">
-            <ul>
-              <li><?php echo __d('baser_core', '空白の場合は自動で「＆nbsp;＆nbsp;」が挿入されます') ?></li>
-              <li><?php echo __d('baser_core', '空にしたいときは半角スペースを入力してください。') ?></li>
-            </ul>
-          </div>
-          <?php echo $this->BcAdminForm->error('delimiter') ?>
         </td>
       </tr>
       <tr id="RowDefault">

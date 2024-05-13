@@ -43,7 +43,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
-      'class' => 'button bca-btn bca-actions__item',
+      'class' => 'bca-loading bca-btn bca-actions__item',
       'data-bca-btn-type' =>
       'save', 'data-bca-btn-size' =>
       'lg', 'data-bca-btn-width' => 'lg'
@@ -54,9 +54,10 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集
       ['action' => 'delete', $this->BcAdminForm->getSourceValue('id')], [
         'confirm' => sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('name')),
         'block' => true,
-        'class' => 'bca-submit-token button bca-btn bca-actions__item',
+        'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
-        'data-bca-btn-size' => 'sm'
+        'data-bca-btn-size' => 'sm',
+        'data-bca-btn-color' => "danger"
       ]
     ) ?>
   </div>

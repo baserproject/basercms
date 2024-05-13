@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -66,7 +67,11 @@ class AppService
         $site = Router::getRequest()->getAttribute('currentSite');
         if($site) {
             $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            return $sitesTable->find()->where(['id' => $site->id])->first();
+            try {
+                return $sitesTable->find()->where(['Sites.id' => $site->id])->first();
+            } catch (MissingConnectionException) {
+                return null;
+            }
         } else {
             return null;
         }

@@ -19,6 +19,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
@@ -35,7 +36,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
 
     /**
      * 一覧画面用のデータを取得する
-     * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface $sites
+     * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface|PaginatedInterface $sites
      * @return array
      * @checked
      * @noTodo

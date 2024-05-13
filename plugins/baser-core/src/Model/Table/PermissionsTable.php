@@ -105,7 +105,6 @@ class PermissionsTable extends AppTable
             ->scalar('url')
             ->maxLength('url', 255, __d('baser_core', '設定URLは255文字以内で入力してください。'))
             ->notEmptyString('url', __d('baser_core', '設定URLを入力してください。'))
-            ->requirePresence('url')
             ->regex('url', '/\A\//', __d('baser_core', '設定URLはスラッシュから始まるURLを入力してください。'))
             ->add('url', [
                 'nameAlphaNumericPlus' => [
@@ -128,7 +127,7 @@ class PermissionsTable extends AppTable
     public function validationPlain($validator)
     {
         $collection = ConnectionManager::get('default')->getSchemaCollection();
-        $columns = $collection->describe('permissions')->columns();
+        $columns = $collection->describe($this->getTable())->columns();
         $required = ['user_group_id'];
 
         $validator
@@ -159,8 +158,9 @@ class PermissionsTable extends AppTable
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $data = $event->getData();
-        if (preg_match('/^[^\/]/is', $data["entity"]->get("url"))) {
-            $data["entity"]->set("url", '/' . $data["entity"]->get("url"));
+        $url = $data["entity"]->get("url");
+        if ($url && preg_match('/^[^\/]/is', $url)) {
+            $data["entity"]->set("url", '/' . $url);
         }
         return true;
     }

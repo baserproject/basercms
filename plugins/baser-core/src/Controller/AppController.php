@@ -119,7 +119,7 @@ class AppController extends BaseController
         $this->loadComponent('FormProtection', [
             'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE'],
             'validationFailureCallback' => function (BadRequestException $exception) {
-                $message = __d('baser_core', '不正なリクエストと判断されました。<br>もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。') . "<br>" . $exception->getMessage();
+                $message = __d('baser_core', "不正なリクエストと判断されました\nもしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。") . "\n" . $exception->getMessage();
                 throw new BadRequestException($message);
             }
         ]);
@@ -172,7 +172,9 @@ class AppController extends BaseController
                 }
                 // リファラが存在する場合はリファラにリダイレクトする
                 // $this->referer() で判定した場合、リファラがなくてもトップのURLが返却されるため ServerRequest で判定
-                if ($this->getRequest()->getEnv('HTTP_REFERER')) {
+                if ($this->getRequest()->getEnv('HTTP_REFERER') &&
+                    $this->getRequest()->getAttribute('here') !== $this->referer()
+                ) {
                     $url = $this->referer();
                 } else {
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");

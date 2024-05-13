@@ -50,6 +50,7 @@ function whichPhp()
 
 function command($phpPath)
 {
+    $phpPath = escapeshellarg($phpPath);
     if (!$phpPath) $phpPath = 'php';
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');
@@ -80,7 +81,7 @@ function command($phpPath)
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。(' . $command . ')');
 
-    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar update";
+    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar update --ignore-platform-req=ext-xdebug";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。<br>コマンド実行をお試しください<br>' . $command);
 

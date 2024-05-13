@@ -11,9 +11,11 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Table\DblogsTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
@@ -29,9 +31,9 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * Dblogs Table
-     * @var \Cake\ORM\Table
+     * @var DblogsTable|\Cake\ORM\Table
      */
-    private $Dblogs;
+    private DblogsTable|Table $Dblogs;
 
     /**
      * DblogsService constructor.

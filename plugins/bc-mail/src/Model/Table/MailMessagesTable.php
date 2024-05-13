@@ -154,7 +154,7 @@ class MailMessagesTable extends MailAppTable
         if (!is_int($mailContentId)) {
             throw new BcException(__d('baser_core', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
         }
-        return 'mail_message_' . $mailContentId;
+        return $this->addPrefix('mail_message_' . $mailContentId);
     }
 
     /**
@@ -531,8 +531,8 @@ class MailMessagesTable extends MailAppTable
                 }
             }
             if (!is_array($message->{$fieldName})) {
-                $mailContent->subject_user = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_user);
-                $mailContent->subject_admin = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_admin);
+                $mailContent->subject_user = str_replace('{$' . $fieldName . '}', $message->{$fieldName}?? '', $mailContent->subject_user);
+                $mailContent->subject_admin = str_replace('{$' . $fieldName . '}', $message->{$fieldName}?? '', $mailContent->subject_admin);
             }
             // パスワードは入力値をマスクした値を表示
             if ($value->type === 'password' && $message->{$fieldName} && !empty($options['maskedPasswords'][$fieldName])) {

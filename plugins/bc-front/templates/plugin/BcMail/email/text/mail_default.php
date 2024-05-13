@@ -17,19 +17,20 @@
  * @var \BcMail\View\MailFrontEmailView $this
  * @var array $other その他データ
  * @var array $mailConfig メール設定データ
+ * @var \BaserCore\Model\Entity\Site $site サイト
  */
 ?>
 
                                            <?php echo $other['date'] ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　　　　　　　　　◆◇　<?php echo __d('baser_core', '受信完了メール') ?>　◇◆　
+　◆◇　<?php echo __d('baser_core', '受信完了メール') ?>　◇◆　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <?php if ($other['mode'] === 'user'): ?>
   <?php echo __d('baser_core', 'この度は、ご連絡ありがとうございます。') ?>　
   <?php echo __d('baser_core', '送信内容は下記のようになっております。') ?>　
 <?php elseif ($other['mode'] === 'admin'): ?>
-　<?php echo $mailConfig->site_name ?> <?php echo __d('baser_core', 'へ連絡を受け付けました。') ?>　
+　<?php echo $site->display_name ?> <?php echo __d('baser_core', 'へ連絡を受け付けました。') ?>　
 　<?php echo __d('baser_core', '受信内容は下記のとおりです。') ?>　
 <?php endif; ?>
 　

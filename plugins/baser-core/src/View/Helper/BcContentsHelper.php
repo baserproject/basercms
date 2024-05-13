@@ -14,14 +14,12 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\ContentsService;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
-use Exception;
 use Cake\View\Helper;
-use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
@@ -41,6 +39,8 @@ use BaserCore\Annotation\Doc;
  * @var BcContentsHelper $this
  * @property ContentsTable $_Contents
  * @property PermissionsService $PermissionsService
+ * @property ContentsServiceInterface|ContentsService $ContentsService
+ * @property Helper\UrlHelper $Url
  */
 class BcContentsHelper extends Helper
 {
@@ -57,7 +57,7 @@ class BcContentsHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['BcBaser'];
+    public array $helpers = ['BcBaser', 'Url'];
 
     /**
      * initialize
@@ -361,18 +361,18 @@ class BcContentsHelper extends Helper
     /**
      * サイト連携データかどうか確認する
      *
-     * @param array $data コンテンツデータ
+     * @param EntityInterface $content コンテンツデータ
      * @return bool
      * @unitTest
      */
-    public function isSiteRelated($data)
+    public function isSiteRelated(EntityInterface $content)
     {
-        if ((@$data['Site']['relate_main_site'] && @$data['Content']['main_site_content_id'] && @$data['Content']['alias_id']) ||
-            @$data['Site']['relate_main_site'] && @$data['Content']['main_site_content_id'] && @$data['Content']['type'] == 'ContentFolder') {
-            return true;
-        } else {
-            return false;
+        if(!$content || !$content->site) return false;
+        if($content->site->relate_main_site && $content->main_site_content_id) {
+            if($content->alias_id) return true;
+            if($content->type === 'ContentFolder') return true;
         }
+        return false;
     }
 
     /**
@@ -625,7 +625,11 @@ class BcContentsHelper extends Helper
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
-        return $this->ContentsService->getUrl($url, $full, $useSubDomain, $base);
+        if(BcUtil::isInstalled()) {
+            return $this->ContentsService->getUrl($url, $full, $useSubDomain, $base);
+        } else {
+            return $this->Url->build($url, ['fullBase' => $full]);
+        }
     }
 
     /**
@@ -675,13 +679,14 @@ class BcContentsHelper extends Helper
             }
         }
         if ($content->site->use_subdomain) {
-            $host = $this->getUrl('/' . $urlArray[0] . '/', true, $content->site->use_subdomain);
+            $host = $this->getUrl('/' . $content->site->alias . '/', true, $content->site->use_subdomain);
             array_shift($urlArray);
+            $checkUrl = '/' . $content->site->alias . '/';
         } else {
             $host = $this->getUrl('/', true, $content->site->use_subdomain);
+            $checkUrl = '/';
         }
 
-        $checkUrl = '/';
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';

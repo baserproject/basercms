@@ -17,9 +17,11 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcUploader\Model\Table\UploaderFilesTable;
 use Cake\Datasource\EntityInterface;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
+use Laminas\Diactoros\UploadedFile;
+use Cake\ORM\Table;
 
 /**
  * UploaderFilesService
@@ -31,6 +33,18 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * UploaderFiles Table
+     * @var UploaderFilesTable|Table
+     */
+    public UploaderFilesTable|Table $UploaderFiles;
+
+    /**
+     * UploaderConfigs Service
+     * @var UploaderConfigsServiceInterface|UploaderConfigsService
+     */
+    public UploaderConfigsServiceInterface|UploaderConfigsService $uploaderConfigsService;
 
     /**
      * constructor.
@@ -197,10 +211,12 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if (!isset($postData['file'])){
             throw new BcException(__d('baser_core', 'ファイルが存在しません。'));
         }
-
-        $postData['file']['name'] = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($postData['file']['name']));
-        $postData['name'] = $postData['file'];
-        $postData['alt'] = $postData['name']['name'];
+        /** @var UploadedFile $file */
+        $file = $postData['file'];
+        $name = $file->getClientFilename();
+        $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
+        $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
+        $postData['alt'] = $name;
         $entity = $this->UploaderFiles->patchEntity($this->getNew(), $postData);
         return $this->UploaderFiles->saveOrFail($entity);
     }

@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Table\SitesTable;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Model\Entity\Site;
@@ -44,13 +45,13 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * ContentFolders Table
      * @var ContentFoldersTable
      */
-    public $ContentFolders;
+    public ContentFoldersTable|Table $ContentFolders;
 
     /**
      * ContentFolders Table
      * @var ContentsTable
      */
-    public $Contents;
+    public ContentsTable|Table $Contents;
 
     /**
      * ContentFoldersService constructor.
@@ -245,11 +246,10 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getFolderTemplateList($contentId, $plugins)
+    public function getFolderTemplateList(int $contentId, array|string $theme)
     {
-        $folderTemplates = BcUtil::getTemplateList('ContentFolders', $plugins);
-
-        if ($contentId != 1) {
+        $folderTemplates = BcUtil::getTemplateList('ContentFolders', $theme);
+        if ($contentId !== 1) {
             $parentTemplate = $this->getParentTemplate($contentId, 'folder');
             $searchKey = array_search($parentTemplate, $folderTemplates);
             if ($searchKey !== false) {
@@ -319,7 +319,8 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
                     'layout_template' => 'default',
-                    'created_date' => date('Y-m-d H:i:s')
+                    'description' => $site->description,
+                    'created_date' => date('Y-m-d H:i:s'),
                 ]
             ];
             $contentFolder = $this->create($data);
@@ -333,6 +334,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'parent_id' => $rootContentId,
                     'title' => $site->display_name,
                     'self_status' => $site->status,
+                    'description' => $site->description,
                 ]
             ];
             $contentFolder = $this->update($contentFolder, $data);

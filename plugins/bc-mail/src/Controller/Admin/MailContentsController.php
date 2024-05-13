@@ -12,6 +12,8 @@
 namespace BcMail\Controller\Admin;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -108,8 +110,8 @@ class MailContentsController extends MailAdminAppController
         if (!file_exists($target)) {
             $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
             if (file_exists($source)) {
-                $folder = new Folder();
-                $folder->create(dirname($target), 0777);
+                $folder = new BcFolder(dirname($target));
+                $folder->create();
                 copy($source, $target);
                 chmod($target, 0666);
             }
@@ -141,11 +143,10 @@ class MailContentsController extends MailAdminAppController
         $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcMail' . DS . $path;
         $ext = Configure::read('BcApp.templateExt');
         if (!file_exists($target . DS . 'index' . $ext)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . 'plugin' . DS . 'BcMail' . DS . $path;
             if (is_dir($source)) {
-                $folder = new Folder();
-                $folder->create(dirname($target), 0777);
-                $folder->copy($target, ['from' => $source, 'chmod' => 0777]);
+                $folder = new BcFolder($source);
+                $folder->copy($target);
             }
         }
         $path = str_replace(DS, '/', $path);

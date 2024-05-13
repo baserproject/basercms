@@ -15,8 +15,7 @@
 ._*
 .Spotlight-V100
 .Trashes
-# Icon must end with two \r
-Icon
+Icon?
 ehthumbs.db
 Thumbs.db
 .directory
@@ -63,6 +62,7 @@ yarn-error.log
 /docker/volumes
 /docker/docker-compose.yml
 /docker_inited
+/docker/.env
 # plugins
 /plugins/*
 !/plugins/baser-core

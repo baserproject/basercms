@@ -54,7 +54,7 @@ if (!$blogComment->status) {
   </td>
   <td class="bca-table-listup__tbody-td">
     <strong>
-      <?php $this->BcBaser->link($blogComment->blog_post->name, [
+      <?php $this->BcBaser->link($blogComment->blog_post->title, [
         'controller' => 'blog_posts',
         'action' => 'edit',
         $blogContent->id,

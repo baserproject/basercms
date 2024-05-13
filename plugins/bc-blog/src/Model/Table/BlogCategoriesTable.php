@@ -22,6 +22,7 @@ use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use SoftDelete\ORM\SelectQuery;
 
 /**
  * BlogCategoriesTable
@@ -130,6 +131,9 @@ class BlogCategoriesTable extends BlogAppTable
      *
      * @param boolean $cascade
      * @return void
+     * @notodo
+     * @checked
+     * @unitTest
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
@@ -354,21 +358,23 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId
      * @param string $name
      * @param array $options
-     * @return array|null
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getByName($blogContentId, $name, $options = [])
     {
         $options = array_merge([
             'conditions' => [
-                'BlogCategory.blog_content_id' => $blogContentId,
-                'BlogCategory.name' => urlencode($name),
+                'BlogCategories.blog_content_id' => $blogContentId,
+                'BlogCategories.name' => urlencode($name),
             ],
             'recursive' => -1
         ], $options);
-        $this->unbindModel(['hasMany' => ['BlogPost']]);
-        return $this->find('first', $options);
-    }
+        return $this->find('all', $options)->first();
 
+    }
     /**
      * コピーする
      *
@@ -416,5 +422,19 @@ class BlogCategoriesTable extends BlogAppTable
         } catch (\Throwable $e) {
             throw $e;
         }
+    }
+
+    /**
+     * 親カテゴリを取得する
+     * @param $parent_id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getParent($parent_id)
+    {
+        return $this->find()->where(['id' => $parent_id])->first();
     }
 }
