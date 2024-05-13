@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -256,6 +257,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
+        Configure::write('BcCustomContent.fieldCategories', [
+            __d('baser_core', '基本'),
+            __d('baser_core', '日付'),
+            __d('baser_core', '選択'),
+            __d('baser_core', 'コンテンツ'),
+            __d('baser_core', 'その他')
+        ]);
+
         //$field == 'field_type'
         $rs = $this->CustomFieldsService->getControlSource('field_type');
         $this->assertArrayHasKey('基本', $rs);
