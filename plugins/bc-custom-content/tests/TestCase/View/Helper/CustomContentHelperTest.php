@@ -27,6 +27,7 @@ use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentHelper;
+use Cake\Core\Configure;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -240,6 +241,7 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getFieldValue($displayFront, $fieldType, $requestUrl, $fieldName, $fieldValue, $options, $expect)
     {
+        Configure::write('BcCustomContent.fieldTypes.BcCcRelated', ['category' => '選択', 'label' => '関連データ', 'columnType' => 'string', 'controlType' => 'select', 'preview' => true, 'loop' => true]);
         //サービスをコル
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
