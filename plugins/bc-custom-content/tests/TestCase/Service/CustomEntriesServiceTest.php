@@ -26,6 +26,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -94,11 +95,15 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getFieldControlType()
     {
+        Configure::write('BcCustomContent.fieldTypes.BcCcText.controlType', 'text');
+        Configure::write('BcCustomContent.fieldTypes.BcCcCheckbox.controlType', 'checkbox');
+
         //正常系実行
         $result = $this->CustomEntriesService->getFieldControlType('BcCcText');
         $this->assertEquals('text', $result);
         $result = $this->CustomEntriesService->getFieldControlType('BcCcCheckbox');
         $this->assertEquals('checkbox', $result);
+
         //異常系実行
         $result = $this->CustomEntriesService->getFieldControlType('a');
         $this->assertEquals('', $result);
