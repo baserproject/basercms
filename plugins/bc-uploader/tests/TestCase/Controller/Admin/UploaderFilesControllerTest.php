@@ -61,7 +61,19 @@ class UploaderFilesControllerTest extends BcTestCase
 
     public function test_edit()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $data = UploaderFileFactory::get(1);
+        $data->alt = 'test edit';
+        $this->post("/baser/admin/bc-uploader/uploader_files/edit/1", $data->toArray());
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードファイル「social_new.jpg」を更新しました。');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_files/index');
+
     }
 
     /**
