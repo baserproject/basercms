@@ -148,32 +148,32 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
     /**
      * test edit
-     * @return void
+     *
      */
-    public function testEdit()
+    public function test_edit()
     {
         $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        //get record first
-        $data = $this->uploaderCategoryService->getIndex()->first();
-        $this->post("/baser/admin/bc-uploader/uploader_categories/edit/".$data->id,[
-            'name' => 'test updated'
-        ]);
-        $this->assertResponseSuccess();
+        //正常系実行
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「japan」を更新しました。');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
 
-        //updated data success
-        $item = $this->uploaderCategoryService->get($data->id);
-        $this->assertEquals('test updated', $item->name);
-        //check message
-        $this->assertFlashMessage('アップロードカテゴリ「test updated」を更新しました。');
-
-        //updated data fail
-        $data['name'] = 'edited name';
-        $this->post("/baser/admin/bc-uploader/uploader_categories/edit/".$data->id, $data);
-        //check message
-        $this->assertResponseContains('入力エラーです。内容を修正してください。');
-
+        //異常系実行
+        $data = [
+            'name' => null
+        ];
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
+        $this->assertResponseCode(200);
+        $errors = $this->_controller->viewBuilder()->getVars()['uploaderCategory']->getErrors();
+        $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
     }
+
 }
