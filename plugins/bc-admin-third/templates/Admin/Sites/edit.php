@@ -17,6 +17,10 @@
  */
 $this->BcAdmin->setTitle(__d('baser_core', 'サイト編集'));
 $this->BcAdmin->setHelp('sites_form');
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add'],
+  'title' => __d('baser_core', '新規追加'),
+]);
 ?>
 
 
@@ -48,9 +52,10 @@ $this->BcAdmin->setHelp('sites_form');
         ['action' => 'delete', $site->id],
         ['block' => true,
           'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $site->display_name),
-          'class' => 'bca-submit-token button bca-btn bca-actions__item',
+          'class' => 'bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
-          'data-bca-btn-size' => 'sm'
+          'data-bca-btn-size' => 'sm',
+          'data-bca-btn-color' => "danger"
         ]
       ) ?>
   </div>

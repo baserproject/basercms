@@ -15,9 +15,9 @@ use ArrayObject;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
@@ -36,6 +36,18 @@ class PagesTable extends AppTable
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * Contents Table
+     * @var ContentsTable|Table
+     */
+    public ContentsTable|Table $Contents;
+
+    /**
+     * Sites Table
+     * @var SitesTable|Table
+     */
+    public SitesTable|Table $Sites;
 
     /**
      * 検索テーブルへの保存可否
@@ -232,13 +244,22 @@ class PagesTable extends AppTable
      * 固定ページテンプレートの生成処理を実行する必要がある為、
      * Content::copy() は利用しない
      *
-     * @param array $postData
+     * @param int $id
+     * @param int $newParentId
+     * @param string $newTitle
+     * @param int $newAuthorId
+     * @param int|null $newSiteId
      * @return EntityInterface|false $result
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null)
+    public function copy(
+        int $id,
+        int $newParentId,
+        string|null $newTitle,
+        int $newAuthorId,
+        int $newSiteId = null)
     {
         $page = $this->get($id, contain: ['Contents']);
         $oldPage = clone $page;
@@ -257,7 +278,7 @@ class PagesTable extends AppTable
         $page->content = new Content([
 			'name' => $page->content->name,
 			'parent_id' => $newParentId,
-			'title' => $newTitle ?? __d('baser_core', '{0} のコピー', $oldPage->content->title),
+			'title' => $newTitle ?? $oldPage->content->title . '_copy',
 			'author_id' => $newAuthorId,
 			'site_id' => $newSiteId,
 			'description' => $page->content->description,

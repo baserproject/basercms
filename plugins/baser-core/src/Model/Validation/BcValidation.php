@@ -255,20 +255,16 @@ class BcValidation extends Validation
      */
     public static function fileExt($file, $exts)
     {
-        if (!is_array($exts)) {
-            $exts = explode(',', $exts);
-        }
+        if (!is_array($exts)) $exts = explode(',', $exts);
+        if (empty($file)) return true;
 
         // FILES形式のチェック
-        if (!empty($file['name'])) {
+        if (is_array($file) && !empty($file['type'])) {
             $ext = BcUtil::decodeContent($file['type'], $file['name']);
             if (!in_array($ext, $exts)) {
                 return false;
             }
-        }
-
-        // 更新時の文字列チェック
-        if (!empty($file) && is_string($file)) {
+        } else {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             if (!in_array($ext, $exts)) {
                 return false;
@@ -436,7 +432,7 @@ class BcValidation extends Validation
     /**
      * 指定した日付よりも新しい日付かどうかチェックする
      *
-     * @param \Cake\I18n\DateTime $fieldValue 対象となる日付
+     * @param string $fieldValue 対象となる日付
      * @param array $context
      * @return bool
      * @checked
@@ -445,8 +441,14 @@ class BcValidation extends Validation
      */
     public static function checkDateAfterThan($fieldValue, $target, $context)
     {
-        if ($fieldValue instanceof \Cake\I18n\DateTime && !empty($context['data'][$target])) {
-            return $fieldValue->greaterThan($context['data'][$target]);
+        if (!empty($fieldValue) && !empty($context['data'][$target])) {
+            try {
+                $startDate = new FrozenTime($fieldValue);
+                $endDate = new FrozenTime($context['data'][$target]);
+            } catch (\Exception) {
+                return false;
+            }
+            return $startDate->greaterThan($endDate);
         }
         return true;
     }
@@ -600,4 +602,43 @@ class BcValidation extends Validation
         return (preg_replace("/( |　)/", '', $string) !== '');
     }
 
+    /**
+     * 16進数カラーコードチェック
+     *
+     * @param string $value 対象となる値
+     * @return bool
+     * @checked
+     * @notodo
+     * @unitTest
+     */
+    public static function hexColorPlus($value): bool
+    {
+        return preg_match('/\A([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})\z/i', $value);
+    }
+
+    /**
+     * Jsonをバリデーション
+     * 半角小文字英数字とアンダースコアを許容
+     * @param $string
+     * @param $key
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkAlphaNumericWithJson($string, $key)
+    {
+        $value = json_decode($string, true);
+        $keys = explode('.', $key);
+
+        foreach ($keys as $k) {
+            $value = $value[$k];
+        }
+
+        if (empty($value) || preg_match("/^[a-z0-9_]+$/", $value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

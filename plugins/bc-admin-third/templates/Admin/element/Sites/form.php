@@ -33,14 +33,13 @@ $this->BcBaser->i18nScript([
   'confirmMessage2' => __d('baser_core', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
   'confirmTitle1' => __d('baser_core', 'エイリアス変更')
 ], ['escape' => false]);
-$this->BcBaser->js('admin/sites/form.bundle', false);
 ?>
 
 
 <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 
 <table class="form-table bca-form-table">
-  <?php if ($this->request->getParam('action') === 'admin_edit'): ?>
+  <?php if ($this->request->getParam('action') === 'edit'): ?>
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('id', 'No') ?></th>
       <td class=" bca-form-table__input">
@@ -193,3 +192,46 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
   </tr>
   <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
 </table>
+
+<?php if(!$isMainOnCurrentDisplay): ?>
+<div class="bca-section" data-bca-section-type='form-group'>
+  <div class="bca-collapse__action">
+    <button
+      type="button"
+      class="bca-collapse__btn"
+      data-bca-collapse="collapse"
+      data-bca-target="#formOptionBody"
+      aria-expanded="false"
+      aria-controls="formOptionBody">
+      <?php echo __d('baser_core', '詳細設定') ?>&nbsp;&nbsp;
+      <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+    </button>
+  </div>
+  <div class="bca-collapse" id="formOptionBody" data-bca-state="">
+    <table class="form-table bca-form-table" data-bca-table-type="type2">
+    <tr>
+      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('use_subdomain', __d('baser_core', '外部ドメイン利用')) ?></th>
+      <td class=" bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('use_subdomain', [
+          'type' => 'radio',
+          'options' => [0 => __d('baser_core', '利用しない'), 1 => __d('baser_core', '利用する')],
+          'default' => 0
+        ]) ?>
+        <?php echo $this->BcAdminForm->error('use_subdomain') ?>
+      </td>
+    </tr>
+    <tr id="DomainType">
+      <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('domain_type', __d('baser_core', 'ドメインタイプ')) ?></th>
+      <td class=" bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('domain_type', [
+          'type' => 'radio',
+          'options' => [1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '外部ドメイン')],
+          'default' => 0
+        ]) ?>
+        <?php echo $this->BcAdminForm->error('domain_type') ?>
+      </td>
+    </tr>
+    </table>
+  </div>
+</div>
+<?php endif ?>

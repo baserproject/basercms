@@ -11,9 +11,12 @@
 
 namespace BcFavorite\Service;
 
+use BcFavorite\Model\Table\FavoritesTable;
+use BaserCore\Utility\BcUtil;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -27,9 +30,9 @@ class FavoritesService implements FavoritesServiceInterface
 
     /**
      * Favorites Table
-     * @var \Cake\ORM\Table
+     * @var FavoritesTable|\Cake\ORM\Table
      */
-    public $Favorites;
+    public FavoritesTable|Table $Favorites;
 
     /**
      * FavoritesService constructor.
@@ -68,8 +71,9 @@ class FavoritesService implements FavoritesServiceInterface
         if (!empty($queryParams['num'])) {
             $options = ['limit' => $queryParams['num']];
         }
-        $query = $this->Favorites->find('all', ...$options)->orderBy(['sort']);
-        return $query;
+        return $this->Favorites->find('all', $options)->where(
+            ['Favorites.user_id' => BcUtil::loginUser()->id]
+        )->orderBy(['sort']);
     }
 
     /**

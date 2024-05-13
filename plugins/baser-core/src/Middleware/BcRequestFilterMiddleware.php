@@ -14,7 +14,9 @@ namespace BaserCore\Middleware;
 use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -48,12 +50,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
             $response = $this->redirectIfIsDeviceFile($request);
             if($response) return $response;
         }
-
-        if ($this->isAsset($request)) {
-            Configure::write('BcRequest.asset', true);
-            return new Response();
-        }
-
         $request = $this->addDetectors($request);
 
         /**
@@ -92,8 +88,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      */
     public function redirectIfIsDeviceFile(ServerRequestInterface $request)
     {
-        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findByUrl($request->getPath());
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        try {
+            $site = $sites->findByUrl($request->getPath());
+        } catch (MissingConnectionException) {
+            return;
+        }
         if ($site && $site->device) {
             $param = preg_replace('/^\/' . $site->alias . '\//', '', $request->getPath());
             if (preg_match('/^files/', $param)) {
@@ -116,7 +116,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     {
         $configs = [];
         $configs['admin'] = $this->isAdmin(...);
-        $configs['asset'] = $this->isAsset(...);
         $configs['install'] = $this->isInstall(...);
         $configs['maintenance'] = $this->isMaintenance(...);
         $configs['page'] = $this->isPage(...);
@@ -159,30 +158,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     {
         $regex = '/^\/' . preg_quote(Configure::read('BcApp.baserCorePrefix') . '/' . Configure::read('BcApp.adminPrefix'), '/') . '($|\/)/';
         return (bool)preg_match($regex, $request->getPath());
-    }
-
-    /**
-     * アセットのURLかどうかを判定
-     *
-     * @param ServerRequestInterface $request リクエスト
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isAsset(ServerRequestInterface $request)
-    {
-        $dirs = ['css', 'js', 'img'];
-        $exts = ['css', 'js', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'svg', 'swf'];
-
-        $dirRegex = implode('|', $dirs);
-        $extRegex = implode('|', $exts);
-
-        $assetRegex = '/^\/(' . $dirRegex . ')\/.+\.(' . $extRegex . ')$/';
-        $themeAssetRegex = '/^\/theme\/[^\/]+?\/(' . $dirRegex . ')\/.+\.(' . $extRegex . ')$/';
-
-        $uri = $request->getPath();
-        return preg_match($assetRegex, $uri) || preg_match($themeAssetRegex, $uri);
     }
 
     /**

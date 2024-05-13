@@ -16,6 +16,7 @@ use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
@@ -39,7 +40,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * UserGroups Table
      * @var \Cake\ORM\Table|UserGroupsTable
      */
-    public $UserGroups;
+    public UserGroupsTable|Table $UserGroups;
 
     /**
      * UserGroupsService constructor.

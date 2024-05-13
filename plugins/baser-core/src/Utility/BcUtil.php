@@ -22,6 +22,7 @@ use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Database\Exception\MissingConnectionException;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
@@ -409,15 +410,14 @@ class BcUtil
         }
         if (!$enablePlugins) {
             $enablePlugins = [];
+            $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
+            $prefix = self::getCurrentDbConfig()['prefix'];
             // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
             try {
-                $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
-            } catch (Exception $ex) {
+                $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
+            } catch (MissingConnectionException) {
                 return [];
             }
-
-            $prefix = self::getCurrentDbConfig()['prefix'];
-            $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
             if (!is_array($sources) || in_array($prefix . strtolower('plugins'), array_map('strtolower', $sources))) {
                 $plugins = $pluginsTable->find('all', conditions: ['status' => true], order: 'priority');
                 TableRegistry::getTableLocator()->remove('Plugin');
@@ -487,13 +487,18 @@ class BcUtil
             if (!$pluginPath) {
                 return false;
             }
-            $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
-            if (file_exists($pluginClassPath)) {
-                $loader = require ROOT . DS . 'vendor/autoload.php';
-                $loader->addPsr4($name . '\\', $pluginPath . 'src');
-                $loader->addPsr4($name . '\\Test\\', $pluginPath . 'tests');
-                require_once $pluginClassPath;
+            $name = Inflector::camelize($name, '-');
+            if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
+                $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+            } elseif(file_exists($pluginPath . 'src' . DS . $name . 'Plugin.php')) {
+                $pluginClassPath = $pluginPath . 'src' . DS . $name . 'Plugin.php';
+            } else {
+                return false;
             }
+            $loader = require ROOT . DS . 'vendor/autoload.php';
+            $loader->addPsr4($name . '\\', $pluginPath . 'src');
+            $loader->addPsr4($name . '\\Test\\', $pluginPath . 'tests');
+            require_once $pluginClassPath;
         }
         return true;
     }
@@ -840,9 +845,11 @@ class BcUtil
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->get($siteId);
 
-        $themes = [$site->theme];
+        $themes = $site->theme? [$site->theme] : [];
         $rootTheme = BcUtil::getRootTheme();
-        if ($rootTheme !== $themes[0]) $themes[] = $rootTheme;
+        if (!$themes || $rootTheme !== $themes[0]) {
+            $themes[] = $rootTheme;
+        }
         $defaultTheme = Configure::read('BcApp.coreFrontTheme');
         if (!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
 
@@ -1090,7 +1097,7 @@ class BcUtil
      */
     public static function isInstalled()
     {
-        return (bool)Configure::read('BcRequest.isInstalled');
+        return (bool)Configure::read('BcEnv.isInstalled');
     }
 
     /**
@@ -1219,8 +1226,12 @@ class BcUtil
                 return $site->theme;
             } else {
                 $sitesService = BcContainer::get()->get(SitesServiceInterface::class);
-                $site = $sitesService->get($site->main_site_id);
-                return $site->theme;
+                try {
+                    $site = $sitesService->get($site->main_site_id);
+                    return $site->theme;
+                } catch (MissingConnectionException) {
+                    return $theme;
+                }
             }
         } elseif (self::getRootTheme()) {
             return self::getRootTheme();
@@ -1239,8 +1250,12 @@ class BcUtil
     public static function getRootTheme()
     {
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->getRootMain();
-        return (isset($site->theme))? $site->theme : null;
+        try {
+            $site = $sites->getRootMain();
+            return (isset($site->theme))? $site->theme : null;
+        } catch (MissingConnectionException) {
+            return null;
+        }
     }
 
     /**
@@ -1254,8 +1269,13 @@ class BcUtil
     public static function getCurrentAdminTheme()
     {
         $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.coreAdminTheme')));
-        if (BcUtil::isInstalled() && !empty(BcSiteConfig::get('admin_theme'))) {
-            $adminTheme = BcSiteConfig::get('admin_theme');
+        if (BcUtil::isInstalled()) {
+            try {
+                $siteConfigAdminTheme = BcSiteConfig::get('admin_theme');
+                if($siteConfigAdminTheme) return $siteConfigAdminTheme;
+            } catch (MissingConnectionException) {
+                return $adminTheme;
+            }
         }
         return $adminTheme;
     }
@@ -1443,6 +1463,8 @@ class BcUtil
      *
      * @param mixed $url
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public static function addSessionId($url, $force = false)
     {
@@ -1454,12 +1476,10 @@ class BcUtil
             return $url;
         }
 
-        $site = null;
-        if (!Configure::read('BcRequest.isUpdater')) {
-            $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
-            $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $site = $sites->findByUrl($currentUrl);
-        }
+        $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($currentUrl);
+
         // use_trans_sid が有効になっている場合、２重で付加されてしまう
         if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
             if (is_array($url)) {
@@ -1723,12 +1743,49 @@ class BcUtil
     {
         $pluginPath = BcUtil::getPluginPath($newPlugin);
         if (!$pluginPath) return false;
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
+            $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+        } elseif(file_exists($pluginPath . 'src' . DS . $newPlugin . 'Plugin.php')) {
+            $pluginClassPath = $pluginPath . 'src' . DS . $newPlugin . 'Plugin.php';
+        } else {
+            return false;
+        }
+        $file = new BcFile($pluginClassPath);
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
         return true;
     }
 
+    /**
+     * Plugin クラスのクラス名を変更する
+     *
+     * 古い形式の場合は新しい形式に変更する
+     * `Plugin` -> `{PluginName}Plugin`
+     * @param string $oldPlugin
+     * @param string $newPlugin
+     * @return bool
+     */
+    public static function changePluginClassName(string $oldPlugin, string $newPlugin)
+    {
+        $pluginPath = BcUtil::getPluginPath($newPlugin);
+        if (!$pluginPath) return false;
+        $oldTypePath = $pluginPath . 'src' . DS . 'Plugin.php';
+        $oldPath = $pluginPath . 'src' . DS . $oldPlugin . 'Plugin.php';
+        $newPath = $pluginPath . 'src' . DS . $newPlugin . 'Plugin.php';
+        if(!file_exists($newPath)) {
+            if(file_exists($oldTypePath)) {
+                rename($oldTypePath, $newPath);
+            } elseif(file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+            } else {
+                return false;
+            }
+        }
+        $file = new BcFile($newPath);
+        $data = $file->read();
+        $file->write(preg_replace('/class\s+.*?Plugin/', 'class ' . $newPlugin . 'Plugin', $data));
+        return true;
+    }
 
     /**
      * httpからのフルURLを取得する

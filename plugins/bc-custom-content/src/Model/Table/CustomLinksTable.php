@@ -65,7 +65,7 @@ class CustomLinksTable extends AppTable
             ->scalar('name')
             ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', 'フィールド名を入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角小文字英数字とアンダースコアのみで入力してください。'))
             ->add('name', [
                 'validateUnique' => [
                     'rule' => ['validateUnique', ['scope' => 'custom_table_id']],
@@ -76,12 +76,19 @@ class CustomLinksTable extends AppTable
                 'reserved' => [
                     'rule' => ['reserved'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', '{0} はシステム予約名称のため利用できません。', implode(', ', Configure::read('BcApp.reservedWords')))
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
             ]]);
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
-            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
+            ->add('title', [
+                'notBlankOnlyString' => [
+                    'rule' => ['notBlankOnlyString'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'タイトルを入力してください。')
+                ]
+            ]);
 
         return $validator;
     }
@@ -131,6 +138,7 @@ class CustomLinksTable extends AppTable
      * @return bool|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -148,6 +156,7 @@ class CustomLinksTable extends AppTable
      * @param ArrayObject $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -161,6 +170,7 @@ class CustomLinksTable extends AppTable
      * @param array $customLinks
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSort(array $customLinks)
     {
@@ -184,6 +194,7 @@ class CustomLinksTable extends AppTable
      * @return bool|int|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurentSort(int $id, int $tableId, $parentId)
     {
@@ -214,11 +225,12 @@ class CustomLinksTable extends AppTable
     /**
      * オフセットを元に関連フィールドを移動する
      *
-     * @param $id
+     * @param $field
      * @param $offset
      * @return EntityInterface|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function moveOffset($field, $offset)
     {
@@ -241,6 +253,7 @@ class CustomLinksTable extends AppTable
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUniqueName(string $name, int $tableId)
     {

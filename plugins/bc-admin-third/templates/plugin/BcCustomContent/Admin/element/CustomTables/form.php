@@ -30,7 +30,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_tables/form.bundle', false, [
   'defer' => true
 ]);
 $this->BcBaser->i18nScript([
-  'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title)
+  'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", h($entity->title))
 ]);
 $this->BcAdminForm->unlockField("custom_links");
 $this->BcAdmin->setHelp('custom_tables_form');
@@ -82,6 +82,10 @@ $this->BcAdmin->setHelp('custom_tables_form');
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
+          <?php echo __d('baser_core', '半角英数字とアンダースコアのみ利用できます。') ?>
+        </div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>

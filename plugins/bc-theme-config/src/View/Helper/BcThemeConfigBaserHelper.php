@@ -36,6 +36,7 @@ class BcThemeConfigBaserHelper extends Helper implements BcPluginBaserHelperInte
      * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function methods(): array
     {

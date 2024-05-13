@@ -11,6 +11,7 @@
   padding: 0 !important;;
   background: none !important;
   font-size: 24px !important;
+  overflow-wrap: anywhere;
 }
 
 /* Blog Post Title
@@ -76,6 +77,7 @@
       font-size: 16px;
       line-height: 1.6 !important;
       font-weight:bold;
+      word-break: break-word;
     }
 
     &-category {

@@ -32,6 +32,7 @@ class MailFrontAppView extends BcFrontAppView
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

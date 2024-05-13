@@ -1,4 +1,4 @@
-<?php
+  <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
@@ -70,14 +70,20 @@ $this->BcAdmin->setTitle($pageTitle);
   </div>
   <?php if ($isWritable): ?>
     <div class="bca-actions__sub">
-      <?php $this->BcBaser->link(__d('baser_core', '削除'),
-        array_merge(['action' => 'del', $theme, $plugin, $type], $params), [
-          'class' => 'bca-submit-token button bca-btn bca-actions__item',
+      <?= $this->BcAdminForm->postLink(__d('baser_core', '削除'),
+        array_merge(['action' => 'delete_folder', $theme, $plugin, $type], $params),
+        ['block' => true,
+          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $this->BcAdminForm->getSourceValue('name')),
+          'class' => 'bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
-          'data-bca-btn-size' => 'sm'
-        ], sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('ThemeFolder.name'))) ?>
+          'data-bca-btn-size' => 'sm',
+          'data-bca-btn-color' => "danger"
+        ]
+      ) ?>
     </div>
   <?php endif ?>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>
+
+<?= $this->fetch('postLink') ?>

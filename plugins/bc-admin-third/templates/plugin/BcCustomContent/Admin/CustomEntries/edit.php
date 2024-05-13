@@ -13,6 +13,7 @@
  * @var \BcCustomContent\View\CustomContentAdminAppView $this
  * @var \BcCustomContent\Model\Entity\CustomTable $customTable
  * @var \BcCustomContent\Model\Entity\CustomEntry $entity
+ * @var string $entryUrl
  * @var int $tableId
  * @var bool $availablePreview
  * @checked
@@ -24,10 +25,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $tableId],
   'title' => __d('baser_core', '新規追加'),
 ]);
-$entryUrl = '';
-if($customTable->isContentTable()) {
-  $entryUrl = $this->CustomContentAdmin->getEntryUrl($entity);
-}
 $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
   'defer' => true,
   'id' => 'AdminCustomEntriesFormScript',
@@ -94,7 +91,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
     ['action' => 'delete', $tableId, $entity->id], [
       'block' => true,
       'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $entity->{$entity->custom_table->display_field}),
-      'class' => 'bca-submit-token button bca-btn bca-actions__item',
+      'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',
       'data-bca-btn-color' => 'danger'

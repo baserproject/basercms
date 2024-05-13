@@ -254,6 +254,7 @@
     margin-left: 0;
     padding-left: 0;
     flex-wrap: wrap;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -381,6 +382,7 @@
   background-color: #0087bc;
   font-weight: bold;
   border-radius: 10px;
+  word-break: break-word;
 }
 
 #flashMessage.alert-message {

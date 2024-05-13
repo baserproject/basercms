@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser_core', 'データメンテナンス'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ログメンテナンス'));
 $this->BcAdmin->setHelp('tools_log');
 ?>
 
@@ -46,7 +46,8 @@ $this->BcAdmin->setHelp('tools_log');
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['delete'], [
       'class' => 'bca-btn',
       'data-bca-btn-type' => 'delete',
-      'confirm' => __d('baser_core', 'ログを削除します。いいですか？')
+      'confirm' => __d('baser_core', 'ログを削除します。いいですか？'),
+      'data-bca-btn-color' => "danger"
     ]) ?>
   </p>
 </div>

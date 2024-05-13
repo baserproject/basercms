@@ -85,7 +85,12 @@ class SiteConfigsTable extends AppTable
             ->notEmptyString('email', __d('baser_core', '管理者メールアドレスを入力してください。'));
         $validator
             ->scalar('site_url')
+            ->regex('site_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
             ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
+        $validator
+            ->scalar('ssl_url')
+            ->regex('ssl_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
+            ->notEmptyString('ssl_url', __d('baser_core', 'WebサイトURLを入力してください。'));
         $validator
             ->scalar('admin_ssl')
             ->add('admin_ssl', [

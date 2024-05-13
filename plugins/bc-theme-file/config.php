@@ -15,5 +15,5 @@ return [
     'description' => __d('baser_core', 'テーマ内のファイルを管理する機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
-    'installMessage' => ''
+    'installMessage' => 'インストールすると、テーマ管理の現在利用しているテーマに、テーマファイル管理への移動ボタンが追加されます。'
 ];

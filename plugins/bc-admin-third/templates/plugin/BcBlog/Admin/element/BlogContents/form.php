@@ -111,7 +111,7 @@ use Cake\Routing\Router;
             <ul>
               <li><?php echo __d('baser_core', 'RSSフィードに出力する件数を指定します。') ?></li>
               <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
-              <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
+              <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
                 <li><?php echo __d('baser_core', 'RSSフィードのURL') ?>&nbsp;
                   <?php $this->BcBaser->link(Router::url('/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', true), '/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', ['target' => '_blank']) ?>
                 </li>
@@ -166,6 +166,7 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->error('tag_use') ?>
         </td>
       </tr>
+<?php if(\Cake\Core\Plugin::isLoaded('BcWidgetArea')): ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('widget_area', __d('baser_core', 'ウィジェットエリア')) ?>&nbsp;
@@ -184,12 +185,21 @@ use Cake\Routing\Router;
             <?php echo __d('baser_core', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser_core', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
             <ul>
-              <li><?php //$this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']) ?></li>
+              <li>
+                <?php $this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), [
+                  'prefix' => 'Admin',
+                  'plugin' => 'BcWidgetArea',
+                  'controller' =>
+                  'WidgetAreas',
+                  'action' => 'index'
+                ]) ?>
+              </li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>
       </tr>
+<?php endif ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('template', __d('baser_core', 'コンテンツテンプレート名')) ?>&nbsp;

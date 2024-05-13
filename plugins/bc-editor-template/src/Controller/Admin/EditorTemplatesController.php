@@ -37,6 +37,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @param EditorTemplatesService $service
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function index(EditorTemplatesServiceInterface $service)
     {
@@ -137,6 +138,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(EditorTemplatesServiceInterface $service, $id)
     {

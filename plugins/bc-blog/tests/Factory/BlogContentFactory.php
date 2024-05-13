@@ -42,8 +42,20 @@ class BlogContentFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
+                'description' => $faker->text(10),
+                'template' => 'default',
+                'list_count' => 10,
+                'list_direction' => 'DESC',
+                'feed_count' => 10,
+                'tag_use' => true,
                 'comment_use' => true,
-                'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9'
+                'comment_approve' => false,
+                'auth_captcha' => false,
+                'widget_area' => $faker->randomNumber(),
+                'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+                'use_content' => true,
+                'created' => $faker->date(),
+                'modified' => $faker->date()
             ];
         });
     }
@@ -56,10 +68,7 @@ class BlogContentFactory extends CakephpBaseFactory
     public function forCopyEyeCatch()
     {
         return $this->setField('id', '999')
-            ->setField('description', 'test999')
-            ->setField('template', 'default')
-            ->setField('list_count', '10')
-            ->setField('list_direction', 'DESC');
+            ->setField('description', 'test999');
     }
 
 }

@@ -227,14 +227,19 @@ class BlogPostsTable extends BlogAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving) {
             return;
         }
+        $this->unsetExcluded();
         // 検索用テーブルに登録
-        if (empty($entity->blog_content->content) || !empty($entity->blog_content->content->exclude_search)) {
+        if ($entity->exclude_search
+            || empty($entity->blog_content->content)
+            || !empty($entity->blog_content->content->exclude_search)
+        ) {
             $this->setExcluded();
         }
     }
@@ -282,6 +287,7 @@ class BlogPostsTable extends BlogAppTable
      * @return array 月別リストデータ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPostedDates($blogContentId = null, $options = [])
     {
@@ -507,7 +513,11 @@ class BlogPostsTable extends BlogAppTable
      * 公開状態の記事を取得する
      *
      * @param array $options
-     * @return array
+     * @return Query\SelectQuery
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPublishes($options)
     {
@@ -517,8 +527,7 @@ class BlogPostsTable extends BlogAppTable
             $options['conditions'] = $this->getConditionAllowPublish();
         }
         // 毎秒抽出条件が違うのでキャッシュしない
-        $datas = $this->find('all', ...$options);
-        return $datas;
+        return $this->find('all', ...$options);
     }
 
     /**
@@ -824,7 +833,7 @@ class BlogPostsTable extends BlogAppTable
                 ['BlogPosts.name' => rawurldecode($no)]
             );
         }
-        return $this->find()->where($conditions)
+        $entity = $this->find()->where($conditions)
             ->contain([
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
@@ -833,6 +842,11 @@ class BlogPostsTable extends BlogAppTable
                 'Users'
             ])
             ->first();
+        if($entity) {
+            unset($entity->content_draft);
+            unset($entity->detail_draft);
+        }
+        return $entity;
     }
 
 }

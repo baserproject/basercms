@@ -36,7 +36,11 @@ class CustomContentController extends BcFrontAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
+        if ($this->getRequest()->getParam('action') === 'index') {
+            $this->loadComponent('BaserCore.BcFrontContents');
+        } else {
+            $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
+        }
     }
 
     /**
@@ -58,12 +62,6 @@ class CustomContentController extends BcFrontAppController
             $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
-
-        $this->setRequest($this->getRequest()->withQueryParams(array_merge([
-            'limit' => $customContent->list_count,
-            'sort' => $customContent->list_order,
-            'direction' => $customContent->list_direction
-        ], $this->getRequest()->getQueryParams())));
 
         $this->set($service->getViewVarsForIndex(
             $customContent,

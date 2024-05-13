@@ -50,7 +50,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         $fullPath = '/var/www/html/plugins/bc-front/webroot/img';
         //対象のメソッドをコル
         $rs = $this->ThemeFoldersService->getNew($fullPath);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs->type, 'folder');
         $this->assertEquals($rs->fullpath, $fullPath);
         $this->assertEquals($rs->parent, $fullPath);
@@ -64,7 +64,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         $fullPath = '/var/www/html/plugins/bc-front/webroot/img';
         //対象のメソッドをコル
         $rs = $this->ThemeFoldersService->get($fullPath);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs->type, 'folder');
         $this->assertEquals($rs->fullpath, $fullPath);
         $this->assertEquals($rs->parent, '/var/www/html/plugins/bc-front/webroot/');
@@ -79,18 +79,18 @@ class ThemeFoldersServiceTest extends BcTestCase
         $param['fullpath'] = '/var/www/html/plugins/bc-front/templates';
         $param['type'] = 'folder';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(12, $themeFiles);
+        $this->assertCount(11, $themeFiles);
 
         //typeはetcかつpathは指定しない場合、
         $param['type'] = 'etc';
         $param['path'] = '';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(8, $themeFiles);
+        $this->assertCount(7, $themeFiles);
 
         //typeはetcかつpathは指定した場合、
         $param['path'] = '/var/www/html/plugins/bc-front/templates';
         $themeFiles = $this->ThemeFoldersService->getIndex($param);
-        $this->assertCount(12, $themeFiles);
+        $this->assertCount(11, $themeFiles);
     }
 
     /**
@@ -105,7 +105,7 @@ class ThemeFoldersServiceTest extends BcTestCase
             'name' => 'new_folder',
         ];
         $rs = $this->ThemeFoldersService->create($data);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs->getData('mode'), 'create');
         $this->assertEquals($rs->getData('fullpath'), $data['fullpath'] . DS . $data['name']);
         $this->assertEquals($rs->getData('name'), $data['name']);
@@ -149,7 +149,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout';
         (new BcFolder($fullpath . DS . 'delete_folder'))->create();
         $rs = $this->ThemeFoldersService->delete($fullpath . DS . 'delete_folder');
-        //戻る値を確認
+        //戻り値を確認
         $this->assertTrue($rs);
         //実際にフォルダが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'delete_folder'));
@@ -167,7 +167,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         //対象のメソッドを確認
         $rs = $this->ThemeFoldersService->copy($fullpath . 'new_folder');
 
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs->type, 'folder');
         $this->assertEquals($rs->fullpath, $fullpath . 'new_folder_copy');
         $this->assertEquals($rs->parent, $fullpath);
@@ -211,7 +211,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         ];
         //対象のメソッドをコル
         $rs = $this->ThemeFoldersService->getNamesByFullpath($fullPaths);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs, ['img', 'js']);
     }
 
@@ -235,7 +235,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         ];
 
         $rs = $this->ThemeFoldersService->copyToTheme($data);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertEquals($rs, '/plugins/BcPluginSample/templates/Pages/');
         //実際にフォルダがコピーできるか確認すること
         $this->assertTrue(is_dir($fullpath . '/Pages'));
@@ -247,7 +247,7 @@ class ThemeFoldersServiceTest extends BcTestCase
         $data ['fullpath'] = '/var/www/html/plugins/bc-front/templates/Pages/11111';
 
         $rs = $this->ThemeFoldersService->copyToTheme($data);
-        //戻る値を確認
+        //戻り値を確認
         $this->assertFalse($rs);
     }
 

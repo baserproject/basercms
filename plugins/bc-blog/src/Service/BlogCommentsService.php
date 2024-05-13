@@ -24,6 +24,7 @@ use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Table\BlogCommentsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
@@ -40,6 +41,12 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      */
     use MailerAwareTrait;
     use BcContainerTrait;
+
+    /**
+     * BlogComments Table
+     * @var BlogCommentsTable|Table
+     */
+    public BlogCommentsTable|Table $BlogComments;
 
     /**
      * ブログコメントを初期化する
@@ -85,7 +92,9 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         if (!empty($options['blog_post_id'])) {
             $query = $query->where(['BlogComments.blog_post_id' => $options['blog_post_id']]);
         }
-
+        if (!empty($options['blog_content_id'])) {
+            $query = $query->where(['BlogComments.blog_content_id' => $options['blog_content_id']]);
+        }
         if ($options['status'] === 'publish') {
             $query->where($this->BlogComments->BlogContents->Contents->getConditionAllowPublish());
         }
@@ -127,6 +136,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return EntityInterface 初期値データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -143,6 +153,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @param array $postData
      * @return EntityInterface
      * @checked
+     * @unitTest 
      */
     public function add(int $blogContentId, int $blogPostId, array $postData)
     {
@@ -187,6 +198,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getBlogContent($blogContentId)
     {

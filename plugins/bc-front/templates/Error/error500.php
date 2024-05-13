@@ -21,6 +21,10 @@ use Cake\Error\Debugger;
  * @var string $message エラーメッセージ
  * @var string $url URL
  */
+if($error instanceof \Cake\Database\Exception\MissingConnectionException) {
+  $this->setTheme($currentAdminTheme);
+  $this->setRequest($this->getRequest()->withParam('prefix', 'Admin'));
+}
 if (Configure::read('debug')) :
     $this->layout = 'dev_error';
 
@@ -50,14 +54,25 @@ if (Configure::read('debug')) :
 
     $this->end();
 endif;
+
+$title = explode("\n", trim($message));
+$errorTitle = array_shift($title);
+$errorDescription = implode("\n", $title);
 ?>
 
 
-<h2 class="bs-error-title"><?php echo $message ?></h2>
+<h2 class="bs-error-title"><?= Debugger::formatHtmlMessage($errorTitle) ?></h2>
 <div class="bs-error-body">
-	<strong><?php echo __d('baser_core', 'エラー'); ?>: </strong>
-	<?php printf(
-		__d('baser_core', 'アドレス %s に送信されたリクエストは無効です。'),
-		"<strong>'{$url}'</strong>"
-	); ?>
+  <?php if($errorDescription) : ?>
+  <p class="bs-error-body__description">
+    <?= Debugger::formatHtmlMessage($errorDescription) ?>
+  </p>
+  <?php endif ?>
+  <p class="bs-error-body__message">
+    <strong><?php echo __d('baser_core', 'エラー'); ?>: </strong>
+    <?php printf(
+      __d('baser_core', 'アドレス %s に送信されたリクエストは無効です。'),
+      "<strong>'{$url}'</strong>"
+    ); ?>
+  </p>
 </div>
