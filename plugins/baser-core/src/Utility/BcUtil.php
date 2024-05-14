@@ -2074,6 +2074,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkTime($hour, $min, $sec = null): bool
     {
