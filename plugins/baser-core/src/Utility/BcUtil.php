@@ -2121,6 +2121,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function base64UrlSafeEncode($val): string
     {
