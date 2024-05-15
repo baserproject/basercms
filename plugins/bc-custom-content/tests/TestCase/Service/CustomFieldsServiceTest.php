@@ -257,13 +257,23 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        Configure::write('BcCustomContent.fieldCategories', [
-            __d('baser_core', '基本'),
-            __d('baser_core', '日付'),
-            __d('baser_core', '選択'),
-            __d('baser_core', 'コンテンツ'),
-            __d('baser_core', 'その他')
-        ]);
+        Configure::write(
+            'BcCustomContent.fieldCategories',
+            [
+                __d('baser_core', '基本'),
+                __d('baser_core', '日付'),
+                __d('baser_core', '選択'),
+                __d('baser_core', 'コンテンツ'),
+                __d('baser_core', 'その他')
+            ]
+        );
+        $types = Configure::read('BcCustomContent.fieldTypes');
+        $types['group'] = [
+            'category' => __d('baser_core', 'その他'),
+            'label' => __d('baser_core', 'グループ'),
+            'useDefaultValue' => false
+        ];
+        Configure::write('BcCustomContent.fieldTypes', $types);
 
         //$field == 'field_type'
         $rs = $this->CustomFieldsService->getControlSource('field_type');
