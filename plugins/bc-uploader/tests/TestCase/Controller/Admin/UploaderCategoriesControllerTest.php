@@ -43,7 +43,6 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/uploader_categories/');
         $this->loginAdmin($request);
-        $this->uploaderCategoryService = new UploaderCategoriesService();
     }
 
     /**
@@ -158,19 +157,13 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->enableCsrfToken();
 
         //正常系実行
-        $data = [
-            'name' => 'japan'
-        ];
-        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => 'japan']);
         $this->assertResponseCode(302);
         $this->assertFlashMessage('アップロードカテゴリ「japan」を更新しました。');
         $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
 
         //異常系実行
-        $data = [
-            'name' => null
-        ];
-        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => null]);
         $this->assertResponseCode(200);
         $errors = $this->_controller->viewBuilder()->getVars()['uploaderCategory']->getErrors();
         $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
