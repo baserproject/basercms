@@ -624,7 +624,7 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public static function checkAlphaNumericWithJson($string, $key)
+    public static function checkAlphaNumericWithJson($string, $key, $regex)
     {
         $value = json_decode($string, true);
         $keys = explode('.', $key);
@@ -633,7 +633,12 @@ class BcValidation extends Validation
             $value = $value[$k];
         }
 
-        if (empty($value) || preg_match("/^[a-z0-9_]+$/", $value)) {
+        //入力チェックした項目だけバリデーション
+        $validate = $_POST['validate'];
+        if (!in_array(strtoupper($k), $validate))
+            return true;
+
+        if (empty($value) || preg_match($regex, $value)) {
             return true;
         } else {
             return false;

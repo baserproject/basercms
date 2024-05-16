@@ -87,18 +87,22 @@ class CustomFieldsTableTest extends BcTestCase
 
         //Eメール比較先フィールド名のバリデーション
         //trueを返す
+        $_POST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
         $errors = $validator->validate([
-            'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"","file_ext":""}}'
+            'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"100","file_ext":"png"}}'
         ]);
         //戻り値を確認
         $this->assertArrayNotHasKey('meta', $errors);
 
         //全角文字
         $errors = $validator->validate([
-            'meta' => '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"","file_ext":""}}'
+            'meta' => '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"ああ","file_ext":"ああ"}}'
+
         ]);
         //戻り値を確認
-        $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['meta']));
+        $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta']['checkAlphaNumericWithJson']);
+        $this->assertEquals('ファイルアップロードサイズ上限は整数値のみで入力してください。', $errors['meta']['checkMaxFileSizeWithJson']);
+        $this->assertEquals('拡張子を次の形式のようにカンマ（,）区切りで入力します。', $errors['meta']['checkFileExtWithJson']);
     }
 
     /**

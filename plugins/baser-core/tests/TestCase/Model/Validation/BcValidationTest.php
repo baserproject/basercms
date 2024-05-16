@@ -617,31 +617,44 @@ class BcValidationTest extends BcTestCase
         $result = $this->BcValidation->notBlankOnlyString($str);
         $this->assertTrue($result);
     }
+
     /**
+     * @param $str
+     * @param $key
+     * @param $regex
+     * @param $expect
+     *
      * test checkAlphaNumericWithJson
+     * @dataProvider checkAlphaNumericWithJsonProvider
+     *
      */
-    public function test_checkAlphaNumericWithJson()
+    public function test_checkAlphaNumericWithJson($key, $str, $regex, $expect)
     {
-        //戻り＝falseケース：全角文字
-        $key = 'BcCustomContent.email_confirm';
-        $str = '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"","file_ext":""}}';
-        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
-        $this->assertFalse($result);
+        $_POST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
 
-        //戻り＝falseケース：半角スペース
-        $str = '{"BcCustomContent":{"email_confirm":" ","max_file_size":"","file_ext":""}}';
-        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
-        $this->assertFalse($result);
+        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key, $regex);
+        $this->assertEquals($expect, $result);
+    }
 
-        //戻り＝falseケース：半角・全角
-        $str = '{"BcCustomContent":{"email_confirm":"ああaaa","max_file_size":"","file_ext":""}}';
-        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
-        $this->assertFalse($result);
+    public static function checkAlphaNumericWithJsonProvider()
+    {
+        return [
+            //Eメール比較先フィールド名 テスト
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"ああ"}}', "/^[a-z0-9_]+$/", false],       //戻り＝falseケース：全角文字
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":" "}}', "/^[a-z0-9_]+$/", false],         //戻り＝falseケース：半角スペース
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"ああaaa"}}', "/^[a-z0-9_]+$/", false],    //戻り＝falseケース：半角・全角
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"aaaa_bbb"}}', "/^[a-z0-9_]+$/", true],    //戻り＝trueケース
 
-        //戻り＝trueケース
-        $str = '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"","file_ext":""}}';
-        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key);
-        $this->assertTrue($result);
+            //ファイルアップロードサイズ制限 テスト
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"aaaaa111"}}', "/^[0-9]+$/", false],       //戻り＝falseケース：文字列
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"ああaaa"}}', "/^[0-9]+$/", false],         //戻り＝falseケース：半角・全角
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"123"}}', "/^[0-9]+$/", true],             //戻り＝falseケース：数値
+
+            //ファイル拡張子チェック テスト
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"ああaaa"}}', "/^[a-z,]+$/", false],                  //戻り＝falseケース：半角・全角
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"1111"}}', "/^[a-z,]+$/", false],                    //戻り＝falseケース：数字
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"pdf,png"}}', "/^[a-z,]+$/", true],                  //戻り＝trueケース：文字列
+        ];
     }
 
     /**
