@@ -245,6 +245,7 @@ class MailContentsTable extends MailAppTable
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createSearchIndex($mailContent)
     {
