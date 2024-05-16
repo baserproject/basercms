@@ -3,23 +3,19 @@
 namespace BcUploader\Test\TestCase;
 
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcUtil;
+use BcUploader\BcUploaderPlugin;
 use BcUploader\Service\Admin\UploaderFilesAdminServiceInterface;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use Cake\Core\Container;
-use Cake\Core\Plugin;
 
 class BcUploaderPluginTest extends BcTestCase
 {
     public function setUp(): void
     {
         parent::setUp();
-        BcUtil::includePluginClass('BcUploader');
-        $plugins = Plugin::getCollection();
-        $this->BcUploader = $plugins->create('BcUploader');
-        $plugins->add($this->BcUploader);
+        $this->BcUploader = new BcUploaderPlugin(['name' => 'BcUploader']);
     }
 
     public function tearDown(): void
