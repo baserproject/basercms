@@ -28,9 +28,6 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-//        $this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
-//
-//        $this->Case = $this->getMockForAbstractClass('ControllerTestCase');
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->MailConfigsController = new MailConfigsController($this->loginAdmin($this->getRequest()));
@@ -43,8 +40,6 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->MailConfigs);
-//        unset($this->Case);
         unset($this->MailConfigsController);
         parent::tearDown();
     }
