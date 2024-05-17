@@ -98,6 +98,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(string $prefix)
     {
