@@ -1432,6 +1432,16 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test base64UrlSafeDecode
+     */
+    public function test_base64UrlSafeDecode()
+    {
+        $rs = BcUtil::base64UrlSafeDecode('Api/A_d-m.in');
+        //文字列が交換できるか確認すること
+        $this->assertEquals(base64_decode('Api/A+d/m=in'), $rs);
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
