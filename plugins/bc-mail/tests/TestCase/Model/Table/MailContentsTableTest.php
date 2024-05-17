@@ -12,8 +12,12 @@
 namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcMail\Model\Entity\MailContent;
+use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Core\Configure;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailContentTest
@@ -22,6 +26,8 @@ use Cake\Core\Configure;
  */
 class MailContentsTableTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
     /**
      * Set Up
      *
@@ -405,5 +411,30 @@ class MailContentsTableTest extends BcTestCase
     public function testFindAccepting()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test createSearchIndex
+     */
+
+    public function test_createSearchIndex()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $mailContentServices = $this->getService(MailContentsServiceInterface::class);
+
+        $mailContent = $mailContentServices->get(1);
+        $mailContent->content->publish_begin = '2015-01-27 12:56:53';
+        $mailContent->content->publish_end = '2015-02-27 12:56:53';
+
+        $result = $this->MailContent->createSearchIndex($mailContent);
+        $this->assertEquals($result['type'], 'メール');
+        $this->assertEquals($result['model_id'], 1);
+        $this->assertEquals($result['site_id'], 1);
+        $this->assertEquals($result['title'], 'お問い合わせ');
+        $this->assertEquals($result['detail'], 'description test');
+        $this->assertEquals($result['url'], '/contact/');
+        $this->assertTrue($result['status']);
+        $this->assertEquals($result['publish_begin'], '2015-01-27 12:56:53');
+        $this->assertEquals($result['publish_end'], '2015-02-27 12:56:53');
     }
 }
