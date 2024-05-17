@@ -1369,6 +1369,15 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test base64UrlSafeEncode
+     */
+    public function test_base64UrlSafeEncode()
+    {
+        $rs = BcUtil::base64UrlSafeEncode(base64_decode('a+b/c=d'));
+        $this->assertEquals('a_b-cQ..', $rs);
+    }
+
+    /**
      * test isMigrations
      */
     public function testIsMigrations()
