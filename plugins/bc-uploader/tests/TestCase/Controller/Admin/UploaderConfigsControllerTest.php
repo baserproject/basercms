@@ -5,23 +5,25 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Controller\Admin\UploaderConfigsController;
-use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class UploaderConfigsControllerTest extends BcTestCase
 {
+
     use ScenarioAwareTrait;
-    use IntegrationTestTrait;
+
+    public $UploaderConfigsController;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->UploaderConfigsController = new UploaderConfigsController($this->loginAdmin($this->getRequest()));
+        $this->UploaderConfigsController = new UploaderConfigsController($this->getRequest());
     }
 
     public function tearDown(): void
     {
+        unset($this->UploaderConfigsController);
         parent::tearDown();
     }
 
@@ -30,6 +32,7 @@ class UploaderConfigsControllerTest extends BcTestCase
      */
     public function test_index()
     {
+        $this->loginAdmin($this->getRequest('/'));
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
