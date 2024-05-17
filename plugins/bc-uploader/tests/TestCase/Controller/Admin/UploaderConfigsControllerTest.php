@@ -4,7 +4,6 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcUploader\Controller\Admin\UploaderConfigsController;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class UploaderConfigsControllerTest extends BcTestCase
@@ -18,7 +17,6 @@ class UploaderConfigsControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->UploaderConfigsController = new UploaderConfigsController($this->getRequest());
     }
 
     public function tearDown(): void
