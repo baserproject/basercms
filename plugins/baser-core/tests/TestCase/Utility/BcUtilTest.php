@@ -1192,6 +1192,37 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     *  test checkTime
+     *
+     * @param $hour
+     * @param $min
+     * @param $sec
+     * @param $expect
+     * @dataProvider checkTimeDataProvider
+     */
+    public function test_checkTime($hour, $min, $sec, $expect)
+    {
+        $rs = BcUtil::checkTime($hour, $min, $sec);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function checkTimeDataProvider()
+    {
+        return [
+            [-1, 1, 1, false],      //$hour < 0 return false
+            [24, 1, 1, false],      //$hour > 23 return false
+            [23, -1, 1, false],     //$min < 0 return false
+            [23, 60, 1, false],     //$min > 59 return false
+            [23, 59, -1, false],    //$sec < 0 return false
+            [23, 59, 60, false],    //$sec > 59 return false
+            [23, 59, 59, true],     //return true
+            [0, 0, 0, true],        //return true
+            [0, 0, null, true],     //return true
+            [23, 59, null, true],   //return true
+        ];
+    }
+
+    /**
      * Test getCurrentTheme
      *
      * @return void
