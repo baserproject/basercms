@@ -215,4 +215,22 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->expectException(RecordNotFoundException::class);
         EditorTemplateFactory::get(11);
     }
+
+    public function test_js()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/baser/admin/bc-editor-template/editor_templates/js');
+
+        // 戻り値を確認
+        $this->assertResponseCode(200);
+        $this->assertNull($this->_controller->viewBuilder()->getLayout());
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['templates']);
+
+        $helpers = $this->_controller->viewBuilder()->getHelpers();
+        $this->assertEquals('BaserCore.BcArray', $helpers['BcArray']['className']);
+    }
 }
