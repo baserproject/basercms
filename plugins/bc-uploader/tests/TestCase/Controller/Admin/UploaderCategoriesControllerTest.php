@@ -13,7 +13,6 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -169,4 +168,24 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
     }
 
+
+    /**
+     * Test coppy
+     */
+    public function test_copy(){
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「blog」をコピーしました。');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/10');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。__clone method called on non-object');
+    }
 }

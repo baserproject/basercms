@@ -61,6 +61,16 @@ class MailFieldsControllerTest extends BcTestCase
     }
 
     /**
+     * Test initialize
+     */
+    public function testInitialize()
+    {
+        $controller = new MailFieldsController($this->getRequest());
+        $this->assertNotEmpty($controller->BcAdminContents);
+        $this->assertEquals('mailContent', $controller->BcAdminContents->getConfig('entityVarName'));
+    }
+
+    /**
      * beforeFilter
      */
     public function testBeforeFilter()

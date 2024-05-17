@@ -445,6 +445,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentDbConfig()
     {
@@ -2074,6 +2075,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkTime($hour, $min, $sec = null): bool
     {
@@ -2101,6 +2103,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function base64UrlSafeDecode($val): string
     {
@@ -2121,6 +2124,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function base64UrlSafeEncode($val): string
     {

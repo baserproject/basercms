@@ -151,6 +151,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(UploaderCategoriesServiceInterface $service, $id)
     {

@@ -1192,6 +1192,37 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     *  test checkTime
+     *
+     * @param $hour
+     * @param $min
+     * @param $sec
+     * @param $expect
+     * @dataProvider checkTimeDataProvider
+     */
+    public function test_checkTime($hour, $min, $sec, $expect)
+    {
+        $rs = BcUtil::checkTime($hour, $min, $sec);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function checkTimeDataProvider()
+    {
+        return [
+            [-1, 1, 1, false],      //$hour < 0 return false
+            [24, 1, 1, false],      //$hour > 23 return false
+            [23, -1, 1, false],     //$min < 0 return false
+            [23, 60, 1, false],     //$min > 59 return false
+            [23, 59, -1, false],    //$sec < 0 return false
+            [23, 59, 60, false],    //$sec > 59 return false
+            [23, 59, 59, true],     //return true
+            [0, 0, 0, true],        //return true
+            [0, 0, null, true],     //return true
+            [23, 59, null, true],   //return true
+        ];
+    }
+
+    /**
      * Test getCurrentTheme
      *
      * @return void
@@ -1338,6 +1369,15 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test base64UrlSafeEncode
+     */
+    public function test_base64UrlSafeEncode()
+    {
+        $rs = BcUtil::base64UrlSafeEncode(base64_decode('a+b/c=d'));
+        $this->assertEquals('a_b-cQ..', $rs);
+    }
+
+    /**
      * test isMigrations
      */
     public function testIsMigrations()
@@ -1392,6 +1432,16 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test base64UrlSafeDecode
+     */
+    public function test_base64UrlSafeDecode()
+    {
+        $rs = BcUtil::base64UrlSafeDecode('Api/A_d-m.in');
+        //文字列が交換できるか確認すること
+        $this->assertEquals(base64_decode('Api/A+d/m=in'), $rs);
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
@@ -1412,6 +1462,17 @@ class BcUtilTest extends BcTestCase
     }
 
 
+    /**
+     * test getCurrentDbConfig
+     */
+    public function test_getCurrentDbConfig()
+    {
+        $rs = BcUtil::getCurrentDbConfig();
+
+        $this->assertEquals('bc-db', $rs['host']);
+        $this->assertEquals('3306', $rs['port']);
+        $this->assertEquals('test_basercms', $rs['database']);
+    }
 
     /**
      * test getFrontTemplatePaths
