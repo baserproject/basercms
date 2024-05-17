@@ -59,7 +59,23 @@ class UploaderFilesTableTest extends BcTestCase
      */
     public function testCheckPeriod()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //true
+        $context = [
+            'data' => [
+                'publish_begin' => '2021-01-02 00:00:00',
+                'publish_end' => '2021-01-01 00:00:00',
+            ]
+        ];
+        $this->assertFalse($this->UploaderFilesTable->checkPeriod(null, $context));
+
+        //false
+        $context = [
+            'data' => [
+                'publish_begin' => '2021-01-01 00:00:00',
+                'publish_end' => '2021-01-02 00:00:00',
+            ]
+        ];
+        $this->assertTrue($this->UploaderFilesTable->checkPeriod(null, $context));
     }
 
     /**

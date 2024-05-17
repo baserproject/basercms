@@ -107,6 +107,7 @@ class UploaderFilesTable extends AppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkPeriod($value, $context = null)
     {
