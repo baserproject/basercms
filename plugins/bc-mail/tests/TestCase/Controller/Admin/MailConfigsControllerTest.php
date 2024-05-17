@@ -21,6 +21,7 @@ class MailConfigsControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
+    public $MailConfigsController;
     /**
      * set up
      *
@@ -30,7 +31,7 @@ class MailConfigsControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->MailConfigsController = new MailConfigsController($this->loginAdmin($this->getRequest()));
+        $this->MailConfigsController = new MailConfigsController($this->getRequest());
     }
 
     /**
@@ -85,6 +86,7 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
+        $this->loginAdmin($this->getRequest('/'));
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
