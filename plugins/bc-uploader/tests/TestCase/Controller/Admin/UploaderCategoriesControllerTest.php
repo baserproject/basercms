@@ -147,7 +147,8 @@ class UploaderCategoriesControllerTest extends BcTestCase
     /**
      * test add
      */
-    public function test_add(){
+    public function test_add()
+    {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
@@ -162,5 +163,25 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         $errors = $this->_controller->viewBuilder()->getVars()['uploaderCategory']->getErrors();
         $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
+    }
+
+    /**
+     * Test coppy
+     */
+    public function test_copy(){
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「blog」をコピーしました。');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/10');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。__clone method called on non-object');
     }
 }
