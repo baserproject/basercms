@@ -11,7 +11,6 @@
 namespace BcMail\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcMail\Controller\Admin\MailConfigsController;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailConfigsControllerTest extends BcTestCase
@@ -31,7 +30,6 @@ class MailConfigsControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->MailConfigsController = new MailConfigsController($this->getRequest());
     }
 
     /**
