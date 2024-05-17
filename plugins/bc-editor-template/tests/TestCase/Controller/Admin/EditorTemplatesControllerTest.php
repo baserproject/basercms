@@ -11,6 +11,8 @@
 
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -155,6 +157,36 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test edit
+     */
+    public function testAdmin_edit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+
+        //テストデータをセット
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //正常系実行
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「japan」を更新しました');
+        $this->assertRedirect(['action' => 'index']);
+
+        //異常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]],
+            $vars['editorTemplate']->getErrors());
     }
 
     /**
