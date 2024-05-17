@@ -169,9 +169,10 @@ class BcTestCaseTest extends BcTestCase
             return true;
         }]]);
         $eventManager = EventManager::instance();
-        $this->assertNotNull($eventManager->listeners('testEvent'));
+        $this->assertCount(1, $eventManager->listeners('Helper.Form.afterClickForm'));
+
         $this->resetEvent();
-        $this->assertEmpty($eventManager->listeners('testEvent'));
+        $this->assertCount(0, $eventManager->listeners('Helper.Form.afterClickForm'));
     }
 
     /**
