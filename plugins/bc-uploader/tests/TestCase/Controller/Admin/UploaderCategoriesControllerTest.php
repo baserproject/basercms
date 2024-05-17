@@ -57,6 +57,18 @@ class UploaderCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-uploader/uploader_categories/index');
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()
