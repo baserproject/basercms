@@ -129,6 +129,12 @@ class UsersService implements UsersServiceInterface
         if (!empty($queryParams['name'])) {
             $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
         }
+        if (!empty($queryParams['real_name'])) {
+            $query->where(['OR' => [
+                ['real_name_1 LIKE' => '%' . $queryParams['real_name'] . '%'],
+                ['real_name_2 LIKE' => '%' . $queryParams['real_name'] . '%'],
+            ]]);
+        }
         return $query;
     }
 

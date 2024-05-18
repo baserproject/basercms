@@ -117,6 +117,10 @@ class UsersServiceTest extends BcTestCase
         $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(3, $users->all()->count());
 
+        $request = $this->getRequest('/?real_name=operator');
+        $users = $this->Users->getIndex($request->getQueryParams());
+        $this->assertEquals(1, $users->all()->count());
+
         $request = $this->getRequest('/?limit=1');
         $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
