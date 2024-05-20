@@ -170,6 +170,27 @@ class UploaderCategoriesControllerTest extends BcTestCase
 
 
     /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/delete/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「blog」を削除しました。');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/delete/10');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `uploader_categories`.');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
+    }
+
+    /**
      * Test coppy
      */
     public function test_copy(){

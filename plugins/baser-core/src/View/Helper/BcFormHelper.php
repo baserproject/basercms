@@ -704,6 +704,7 @@ SCRIPT_END;
             'style' => 'width:99%;height:540px'
         ], $options);
 
+        if($options['editor'] === 'none') $options['editor'] = '';
         if ($options['editor']) {
             [$plugin] = pluginSplit($options['editor']);
             if (!Plugin::isLoaded($plugin)) {
