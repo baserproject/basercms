@@ -11,6 +11,8 @@
 
 namespace BaserCore\Model\Validation;
 
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Client\Request;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
@@ -26,6 +28,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcValidation extends Validation
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * 英数チェックプラス
@@ -634,7 +641,7 @@ class BcValidation extends Validation
         }
 
         //入力チェックした項目だけバリデーション
-        $validate = $_POST['validate'];
+        $validate = $_REQUEST['validate'];
         if (!in_array(strtoupper($k), $validate))
             return true;
 

@@ -87,7 +87,7 @@ class CustomFieldsTableTest extends BcTestCase
 
         //Eメール比較先フィールド名のバリデーション
         //trueを返す
-        $_POST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
+        $_REQUEST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
         $errors = $validator->validate([
             'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"100","file_ext":"png"}}'
         ]);
