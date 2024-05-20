@@ -33,6 +33,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(UploaderCategoriesServiceInterface $service)
     {
@@ -87,6 +88,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function edit(UploaderCategoriesServiceInterface $service, $id)
     {
@@ -126,12 +128,13 @@ class UploaderCategoriesController extends BcAdminAppController
      * @return    void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(UploaderCategoriesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $entity = $service->get($id);
         try {
+            $entity = $service->get($id);
             if($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を削除しました。', $entity->name));
             } else {
@@ -150,6 +153,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(UploaderCategoriesServiceInterface $service, $id)
     {

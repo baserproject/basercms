@@ -13,6 +13,7 @@ namespace BcFavorite\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcFavorite\Test\Scenario\FavoritesScenario;
+use Cake\Http\Session;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -222,5 +223,22 @@ class FavoritesControllerTest extends BcTestCase
             'offset' => 1
         ]);
         $this->assertResponseOk();
+    }
+
+    /**
+     * test get_favorite_box_opened
+     */
+    public function test_get_favorite_box_opened()
+    {
+        //セッションを設定
+        $this->session(['Baser.favorite_box_opened' => 1]);
+
+        //APIをコール
+        $this->post('/baser/api/admin/bc-favorite/favorites/get_favorite_box_opened.json?token=' . $this->accessToken);
+
+        //戻り値を確認
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, $result->result);
     }
 }

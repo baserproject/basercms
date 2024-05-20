@@ -221,6 +221,7 @@ class UploaderFilesTable extends AppTable
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSourceFileName($fileName)
     {
