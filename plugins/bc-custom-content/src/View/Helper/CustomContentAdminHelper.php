@@ -339,6 +339,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnabledMoveUpEntry(\ArrayObject $entries, CustomEntry $currentEntry)
     {

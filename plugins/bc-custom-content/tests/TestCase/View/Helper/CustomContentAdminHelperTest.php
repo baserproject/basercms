@@ -4,6 +4,7 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomEntryFactory;
@@ -419,5 +420,25 @@ class CustomContentAdminHelperTest extends BcTestCase
         ];
         $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arrCustomLink);
         $this->assertEquals(7, $rs);
+    }
+
+    /**
+     * test isEnabledMoveUpEntry
+     */
+    public function test_isEnabledMoveUpEntry()
+    {
+        $entries = new \ArrayObject([
+            new CustomEntry(['id' => 1, 'level' => 1]),
+            new CustomEntry(['id' => 2, 'level' => 1]),
+            new CustomEntry(['id' => 3, 'level' => 1])
+        ]);
+        $currentEntry = new CustomEntry(['id' => 2, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertTrue($result);
+
+        //with move not possible
+        $currentEntry = new CustomEntry(['id' => 1, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertFalse($result);
     }
 }
