@@ -74,7 +74,7 @@ class EditorTemplatesController extends BcAdminAppController
                 ]);
 
                 $this->BcMessage->setSuccess(__d('baser_core', 'テンプレート「{0}」を追加しました', $entity->name));
-                $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
@@ -85,7 +85,6 @@ class EditorTemplatesController extends BcAdminAppController
         $this->set([
             'editorTemplate' => $entity?? $service->getNew()
         ]);
-        $this->viewBuilder()->addHelper(BcSiteConfig::get('editor'));
     }
 
     /**
@@ -118,7 +117,7 @@ class EditorTemplatesController extends BcAdminAppController
                 ]);
 
                 $this->BcMessage->setSuccess(__d('baser_core', 'テンプレート「{0}」を更新しました', $entity->name));
-                $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
@@ -129,7 +128,6 @@ class EditorTemplatesController extends BcAdminAppController
         $this->set([
             'editorTemplate' => $entity
         ]);
-        $this->viewBuilder()->addHelper(BcSiteConfig::get('editor'));
     }
 
     /**

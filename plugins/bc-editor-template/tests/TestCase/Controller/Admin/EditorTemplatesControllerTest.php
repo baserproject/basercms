@@ -122,8 +122,6 @@ class EditorTemplatesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
-
         //正常系実行
         $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => 'test', 'description' => 'test description']);
         $this->assertResponseCode(302);
@@ -133,8 +131,6 @@ class EditorTemplatesControllerTest extends BcTestCase
         //異常系実行
         $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => '']);
         $this->assertResponseCode(200);
-
-        //エラーメッセージを確認
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]], $vars['editorTemplate']->getErrors());
     }
