@@ -88,11 +88,24 @@ class UploaderFilesTableTest extends BcTestCase
 
     /**
      * ソースファイルの名称を取得する
+     * @dataProvider getSourceFileNameDataProvider
      */
-    public function testGetSourceFileName()
+    public function testGetSourceFileName($fileName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($expected, $this->UploaderFilesTable->getSourceFileName($fileName));
     }
+
+    public static function getSourceFileNameDataProvider()
+    {
+        return [
+            ['example__large.jpg', 'example.jpg'],
+            ['example__midium.png', 'example.png'],
+            ['example__small.jpg', 'example.jpg'],
+            ['example__mobile_large.jpg', 'example.jpg'],
+            ['example__mobile_small.git', 'example.git'],
+        ];
+    }
+
 
     /**
      * Before Delete

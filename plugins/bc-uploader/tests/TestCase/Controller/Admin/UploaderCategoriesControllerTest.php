@@ -57,6 +57,18 @@ class UploaderCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-uploader/uploader_categories/index');
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()
@@ -142,6 +154,52 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
         $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test edit
+     *
+     */
+    public function test_edit()
+    {
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => 'japan']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「japan」を更新しました。');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => null]);
+        $this->assertResponseCode(200);
+        $errors = $this->_controller->viewBuilder()->getVars()['uploaderCategory']->getErrors();
+        $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
+    }
+
+
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/delete/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「blog」を削除しました。');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/delete/10');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table `uploader_categories`.');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
     }
 
     /**
