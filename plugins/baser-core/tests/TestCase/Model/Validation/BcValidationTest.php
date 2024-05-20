@@ -624,19 +624,19 @@ class BcValidationTest extends BcTestCase
      * @param $regex
      * @param $expect
      *
-     * test checkAlphaNumericWithJson
-     * @dataProvider checkAlphaNumericWithJsonProvider
+     * test checkWithJson
+     * @dataProvider checkWithJsonProvider
      *
      */
-    public function test_checkAlphaNumericWithJson($key, $str, $regex, $expect)
+    public function test_checkWithJson($key, $str, $regex, $expect)
     {
         $_POST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
 
-        $result = $this->BcValidation->checkAlphaNumericWithJson($str, $key, $regex);
+        $result = $this->BcValidation->checkWithJson($str, $key, $regex);
         $this->assertEquals($expect, $result);
     }
 
-    public static function checkAlphaNumericWithJsonProvider()
+    public static function checkWithJsonProvider()
     {
         return [
             //Eメール比較先フィールド名 テスト

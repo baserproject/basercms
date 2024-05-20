@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomFieldsTable;
+use Cake\Routing\Router;
 
 /**
  * CustomFieldsTableTest
@@ -87,7 +88,8 @@ class CustomFieldsTableTest extends BcTestCase
 
         //Eメール比較先フィールド名のバリデーション
         //trueを返す
-        $_REQUEST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
+        $request = $this->getRequest('/test')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
         $errors = $validator->validate([
             'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"100","file_ext":"png"}}'
         ]);

@@ -14,6 +14,7 @@ namespace BaserCore\Model\Validation;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Client\Request;
 use Cake\Log\Log;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
@@ -631,7 +632,7 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public static function checkAlphaNumericWithJson($string, $key, $regex)
+    public static function checkWithJson($string, $key, $regex)
     {
         $value = json_decode($string, true);
         $keys = explode('.', $key);
@@ -641,7 +642,8 @@ class BcValidation extends Validation
         }
 
         //入力チェックした項目だけバリデーション
-        $validate = $_REQUEST['validate'];
+        $request = Router::getRequest();
+        $validate = $request->getData('validate');
         if (!in_array(strtoupper($k), $validate))
             return true;
 

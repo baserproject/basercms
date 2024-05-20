@@ -93,21 +93,21 @@ class CustomFieldsTable extends AppTable
         $validator
             ->add('meta', [
                 'checkAlphaNumericWithJson' => [
-                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.email_confirm', "/^[a-z0-9_]+$/"],
+                    'rule' => ['checkWithJson', 'BcCustomContent.email_confirm', "/^[a-z0-9_]+$/"],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
                 ],
             ])
             ->add('meta', [
                 'checkMaxFileSizeWithJson' => [
-                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.max_file_size', "/^[0-9]+$/"],
+                    'rule' => ['checkWithJson', 'BcCustomContent.max_file_size', "/^[0-9]+$/"],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'ファイルアップロードサイズ上限は整数値のみで入力してください。')
                 ],
             ])
             ->add('meta', [
                 'checkFileExtWithJson' => [
-                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.file_ext', "/^[a-z,]+$/"],
+                    'rule' => ['checkWithJson', 'BcCustomContent.file_ext', "/^[a-z,]+$/"],
                     'provider' => 'bc',
                     'message' => __d('baser_core', '拡張子を次の形式のようにカンマ（,）区切りで入力します。')
                 ],
