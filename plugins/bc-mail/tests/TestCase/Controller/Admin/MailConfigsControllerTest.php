@@ -20,7 +20,6 @@ class MailConfigsControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
 
-    public $MailConfigsController;
     /**
      * set up
      *
@@ -39,7 +38,6 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->MailConfigsController);
         parent::tearDown();
     }
 
