@@ -9,7 +9,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-namespace BcMail\Test\TestCase\Model;
+namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailMessage;
@@ -17,6 +17,8 @@ use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Model\Table\MailMessagesTable;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
+use BcMail\Test\TestCase\Model\Array;
+use BcMail\Test\TestCase\Model\ClassRegistry;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -46,7 +48,19 @@ class MailMessagesTableTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->MailMessage);
+        unset($this->MailField);
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertEquals('mail_messages', $this->MailMessage->getTable());
+        $this->assertEquals('id', $this->MailMessage->getPrimaryKey());
+        $this->assertTrue($this->MailMessage->hasBehavior('Timestamp'));
+        $this->assertTrue($this->MailMessage->hasBehavior('BcUpload'));
     }
 
     /**
@@ -481,5 +495,4 @@ class MailMessagesTableTest extends BcTestCase
         $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
         $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
     }
-
 }

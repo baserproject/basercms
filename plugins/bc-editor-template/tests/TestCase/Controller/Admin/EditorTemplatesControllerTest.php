@@ -185,6 +185,36 @@ class EditorTemplatesControllerTest extends BcTestCase
     }
 
     /**
+     * Test edit
+     */
+    public function testAdmin_edit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+
+        //テストデータをセット
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //正常系実行
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「japan」を更新しました');
+        $this->assertRedirect(['action' => 'index']);
+
+        //異常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]],
+            $vars['editorTemplate']->getErrors());
+    }
+
+    /**
      * Test delete
      */
     public function testAdmin_delete()
@@ -209,5 +239,23 @@ class EditorTemplatesControllerTest extends BcTestCase
          */
         $this->expectException(RecordNotFoundException::class);
         EditorTemplateFactory::get(11);
+    }
+
+    public function test_js()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/baser/admin/bc-editor-template/editor_templates/js');
+
+        // 戻り値を確認
+        $this->assertResponseCode(200);
+        $this->assertNull($this->_controller->viewBuilder()->getLayout());
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['templates']);
+
+        $helpers = $this->_controller->viewBuilder()->getHelpers();
+        $this->assertEquals('BaserCore.BcArray', $helpers['BcArray']['className']);
     }
 }
