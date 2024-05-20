@@ -56,7 +56,7 @@ class UploaderFilesTableTest extends BcTestCase
     }
     /**
      * 公開期間をチェックする
-     * @dataProvider periodProviderData
+     * @dataProvider periodDataProvider
      */
     public function testCheckPeriod($publishBegin, $publishEnd, $expected)
     {
