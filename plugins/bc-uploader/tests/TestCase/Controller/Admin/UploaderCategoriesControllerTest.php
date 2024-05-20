@@ -145,6 +145,31 @@ class UploaderCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test edit
+     *
+     */
+    public function test_edit()
+    {
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => 'japan']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('アップロードカテゴリ「japan」を更新しました。');
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
+
+        //異常系実行
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', ['name' => null]);
+        $this->assertResponseCode(200);
+        $errors = $this->_controller->viewBuilder()->getVars()['uploaderCategory']->getErrors();
+        $this->assertEquals(['_empty' => 'カテゴリ名を入力してください。'], $errors['name']);
+    }
+
+
+    /**
      * test delete
      */
     public function test_delete()
