@@ -88,7 +88,7 @@ class CustomFieldsTableTest extends BcTestCase
 
         //Eメール比較先フィールド名のバリデーション
         //trueを返す
-        $request = $this->getRequest('/test')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
         Router::setRequest($request);
         $errors = $validator->validate([
             'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"100","file_ext":"png"}}'
@@ -112,7 +112,10 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_afterMarshal()
     {
-        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCustomContent' => ['email_confirm' => '全角文字']]]);
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
+
+        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCustomContent' => ['email_confirm' => '全角文字', 'max_file_size' => 'abc', 'file_ext' => 'avc']]]);
         $result = $this->CustomFieldsTable->dispatchEvent('Model.afterMarshal', ['entity' => $customFields, 'data' => new \ArrayObject(), 'options' => new \ArrayObject()]);
         $customFields = $result->getData('entity');
         //エラー情報を正しい状態に戻すことを確認
