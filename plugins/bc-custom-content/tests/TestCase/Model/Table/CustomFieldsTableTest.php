@@ -167,4 +167,29 @@ class CustomFieldsTableTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * test encodeEntity
+     */
+    public function test_encodeEntity()
+    {
+        $entity = new ArrayObject(['meta' => ['key' => 'value'], 'validate' => ['rule' => 'notEmpty']]);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEquals(json_encode(['key' => 'value'], JSON_UNESCAPED_UNICODE), $result['meta']);
+        $this->assertEquals(json_encode(['rule' => 'notEmpty'], JSON_UNESCAPED_UNICODE), $result['validate']);
+
+        //meta empty and validate empty
+        $entity = new ArrayObject(['meta' => [], 'validate' => []]);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEmpty($result['meta']);
+        $this->assertEmpty($result['validate']);
+
+        //without meta and validate
+        $entity = new ArrayObject(['other' => 'value']);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEquals('value', $result['other']);
+        $this->assertArrayNotHasKey('meta', $result);
+        $this->assertArrayNotHasKey('validate', $result);
+    }
+
 }
