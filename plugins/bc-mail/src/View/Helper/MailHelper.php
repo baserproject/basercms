@@ -173,6 +173,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーのためテスト不要
      */
     public function description()
     {
