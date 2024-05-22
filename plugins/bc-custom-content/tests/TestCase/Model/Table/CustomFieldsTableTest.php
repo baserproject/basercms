@@ -13,7 +13,9 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Model\Table\CustomFieldsTable;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 
 /**
@@ -166,5 +168,34 @@ class CustomFieldsTableTest extends BcTestCase
     public function test_findAll()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test decodeEntity
+     */
+    public function test_decodeEntity()
+    {
+
+        $customContent = CustomContentFactory::make([
+            'meta' => '{"key": "value"}',
+            'validate' => '{"rule": "notEmpty"}'
+        ])->getEntity();
+
+        $result = $this->CustomFieldsTable->decodeEntity($customContent);
+        $this->assertEquals(['key' => 'value'], $result->meta);
+        $this->assertEquals(['rule' => 'notEmpty'], $result->validate);
+
+        //with empty meta and validate
+        $customContent = CustomContentFactory::make([
+            'meta' => '',
+            'validate' => ''
+        ])->getEntity();
+        $result = $this->CustomFieldsTable->decodeEntity($customContent);
+        $this->assertEmpty($result->meta);
+        $this->assertEmpty($result->validate);
+
+        //with null entity
+        $result = $this->CustomFieldsTable->decodeEntity(null);
+        $this->assertNull($result);
     }
 }

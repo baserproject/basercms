@@ -175,6 +175,7 @@ class CustomFieldsTable extends AppTable
      *
      * @param EntityInterface $entity
      * @return mixed
+     * @unitTest
      */
     public function decodeEntity(EntityInterface|array|null $entity): EntityInterface|array|null
     {
