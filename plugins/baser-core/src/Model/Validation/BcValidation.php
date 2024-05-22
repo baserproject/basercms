@@ -638,13 +638,14 @@ class BcValidation extends Validation
         $keys = explode('.', $key);
 
         foreach ($keys as $k) {
-            $value = $value[$k];
+            if (isset($value[$k]))
+                $value = $value[$k];
         }
 
         //入力チェックした項目だけバリデーション
         $request = Router::getRequest();
         $validate = $request->getData('validate');
-        if (!in_array(strtoupper($k), $validate))
+        if (is_array($validate) && !in_array(strtoupper($k), $validate))
             return true;
 
         if (empty($value) || preg_match($regex, $value)) {
