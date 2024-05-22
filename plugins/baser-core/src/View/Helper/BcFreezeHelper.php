@@ -56,6 +56,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function text(string $fieldName, array $options = []): string
     {
