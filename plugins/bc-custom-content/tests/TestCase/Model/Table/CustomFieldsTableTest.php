@@ -13,10 +13,8 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
-use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Model\Table\CustomFieldsTable;
 use BcCustomContent\Test\Factory\CustomContentFactory;
-use BcCustomContent\Test\Factory\CustomFieldFactory;
 
 /**
  * CustomFieldsTableTest
@@ -175,7 +173,6 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_decodeEntity()
     {
-
         $customContent = CustomContentFactory::make([
             'meta' => '{"key": "value"}',
             'validate' => '{"rule": "notEmpty"}'
