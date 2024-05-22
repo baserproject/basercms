@@ -630,7 +630,8 @@ class BcValidationTest extends BcTestCase
      */
     public function test_checkWithJson($key, $str, $regex, $expect)
     {
-        $_POST['validate'] = ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE'];
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
 
         $result = $this->BcValidation->checkWithJson($str, $key, $regex);
         $this->assertEquals($expect, $result);

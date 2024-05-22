@@ -638,8 +638,7 @@ class BcValidation extends Validation
         $keys = explode('.', $key);
 
         foreach ($keys as $k) {
-            if (isset($value[$k]))
-                $value = $value[$k];
+            $value = $value[$k] ?? '';
         }
 
         //入力チェックした項目だけバリデーション
