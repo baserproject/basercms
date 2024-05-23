@@ -102,4 +102,19 @@ class UserTest extends BcTestCase
             ['', '', '', 'undefined'],
         ];
     }
+
+    /**
+     * test getAuthPrefixes
+     */
+    public function test_getAuthPrefixes()
+    {
+        //user group is empty
+        $user = new User();
+        $user_groups = $user->getAuthPrefixes();
+        $this->assertEquals([], $user_groups);
+
+        //user group is not empty
+        $user_groups = $this->User->getAuthPrefixes();
+        $this->assertEquals([0 => 'Admin', 1 => ' Api/Admin'], $user_groups);
+    }
 }
