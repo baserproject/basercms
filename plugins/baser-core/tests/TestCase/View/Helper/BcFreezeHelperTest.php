@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
+use Cake\View\View;
 
 /**
  * Class FormHelperTest
@@ -30,15 +31,7 @@ class BcFreezeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        Configure::write('Config.language', 'jp');
-//        Configure::write('App.base', '');
-//        Configure::delete('Asset');
-//        $this->BcFreeze = new BcFreezeHelper(new View);
-//        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
-//        $this->BcFreeze->request->here = '/contacts/add';
-//        $this->BcFreeze->request['action'] = 'add';
-//        $this->BcFreeze->request->webroot = '';
-//        $this->BcFreeze->request->base = '';
+        $this->BcFreeze = new BcFreezeHelper(new View());
     }
 
     /**
@@ -282,24 +275,29 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testRadio($freezed, $fieldName, $options, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->radio($fieldName, $options, $attributes);
-        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
+        $this->assertEquals($expected, $result);
     }
 
     public static function radioDataProvider()
     {
         return [
-            [false, 'baser', [], [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""],
-            [false, 'baser', ['test1' => 'testValue1'], [], 'id="baserTest1".*for="baserTest1">testValue1'],
-            [false, 'baser', ['test1' => 'testValue1'], ['class' => 'bcclass'], 'class="bcclass"'],
-            [true, 'baser.freezed', [], [], 'type="hidden"'],
-            [true, 'baser.freezed', ['test1' => 'testValue1'], ['class' => 'bcclass'], 'class="bcclass"'],
+            [false, 'baser', [], [], '<input type="hidden" name="baser" id="baser" value="">'],
+            [
+                false, 'baser', ['test1' => 'testValue1'], [],
+                '<input type="hidden" name="baser" id="baser" value=""><label for="baser-test1"><input type="radio" name="baser" value="test1" id="baser-test1">testValue1</label>'
+            ],
+            [
+                false, 'baser', ['test1' => 'testValue1'], ['class' => 'bcclass'],
+                '<input type="hidden" name="baser" id="baser" value=""><label for="baser-test1"><input type="radio" name="baser" value="test1" id="baser-test1" class="bcclass">testValue1</label>'
+            ],
+            [true, 'baser.freezed', [], [], '<input type="hidden" name="baser[freezed]" class="">'],
+            [true, 'baser.freezed', ['test1' => 'testValue1'], ['class' => 'bcclass'], '<input type="hidden" name="baser[freezed]" class="bcclass">'],
         ];
     }
 
