@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
+use Cake\View\View;
 
 /**
  * Class FormHelperTest
@@ -30,15 +31,7 @@ class BcFreezeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        Configure::write('Config.language', 'jp');
-//        Configure::write('App.base', '');
-//        Configure::delete('Asset');
-//        $this->BcFreeze = new BcFreezeHelper(new View);
-//        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
-//        $this->BcFreeze->request->here = '/contacts/add';
-//        $this->BcFreeze->request['action'] = 'add';
-//        $this->BcFreeze->request->webroot = '';
-//        $this->BcFreeze->request->base = '';
+        $this->BcFreeze = new BcFreezeHelper(new View());
     }
 
     /**
@@ -428,7 +421,6 @@ class BcFreezeHelperTest extends BcTestCase
 
     public function testFreeze()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertFalse($this->BcFreeze->freezed);
         $this->BcFreeze->freeze();
         $this->assertTrue($this->BcFreeze->freezed);
