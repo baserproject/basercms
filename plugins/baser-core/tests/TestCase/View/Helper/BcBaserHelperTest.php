@@ -787,8 +787,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetKeywords($expected, $keyword = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         if ($keyword !== null) {
             $this->BcBaser->setKeywords($keyword);
         }
@@ -798,8 +796,7 @@ class BcBaserHelperTest extends BcTestCase
     public static function getKeywordsDataProvider()
     {
         return [
-            ['baser,CMS,コンテンツマネジメントシステム,開発支援'],
-            ['baser,CMS,コンテンツマネジメントシステム,開発支援', ''],
+            ['', ''],
             ['baserCMS,国産,オープンソース', 'baserCMS,国産,オープンソース'],
         ];
     }
