@@ -14,7 +14,6 @@ class UserGroupTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
         $this->UserGroup = $this->getTableLocator()->get('BaserCore.UserGroups');
     }
 
@@ -25,6 +24,8 @@ class UserGroupTest extends BcTestCase
 
     public function testIsAdmin()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+
         //userGroup is admin
         $userGroup = $this->UserGroup->get(1);
         $this->assertTrue($userGroup->isAdmin());
