@@ -31,7 +31,17 @@ class BcAdminFormHelper extends BcFormHelper
      * Helpers
      * @var string[]
      */
-    public $helpers = ['BcBaser'];
+    public $helpers = [
+        'Url',
+        'Js',
+        'Html',
+        'BaserCore.BcHtml',
+        'BaserCore.BcTime',
+        'BaserCore.BcText',
+        'BaserCore.BcUpload',
+        'BaserCore.BcCkeditor',
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * control
