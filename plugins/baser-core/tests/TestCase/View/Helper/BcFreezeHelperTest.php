@@ -425,7 +425,6 @@ class BcFreezeHelperTest extends BcTestCase
 
     public function testFreeze()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertFalse($this->BcFreeze->freezed);
         $this->BcFreeze->freeze();
         $this->assertTrue($this->BcFreeze->freezed);

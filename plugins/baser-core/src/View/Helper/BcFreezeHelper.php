@@ -40,6 +40,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function freeze()
     {
