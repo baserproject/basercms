@@ -64,6 +64,7 @@ class UserGroup extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAuthPrefixAvailabled(string $prefix): bool
     {
