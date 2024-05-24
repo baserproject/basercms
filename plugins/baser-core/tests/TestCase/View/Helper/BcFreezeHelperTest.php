@@ -239,26 +239,26 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testTextarea($freezed, $fieldName, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
-            $this->BcFreeze->freeze();
             [$model, $field] = explode('.', $fieldName);
-            $this->BcFreeze->request->data[$model][$field] = 'BaserCMS';
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->textarea($fieldName, $attributes);
-        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
+        $this->assertEquals($expected, $result);
     }
 
     public static function textareaDataProvider()
     {
         return [
-            [false, 'baser', [], "<textarea name=\"data\[baser\]\" id=\"baser\"><\/textarea>"],
-            [false, 'baser', ['class' => 'bcclass'], 'class="bcclass"'],
-            [true, 'baser.freezed', [], 'value="BaserCMS"'],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], 'value="BaserCMS2"'],
-            [true, 'baser.freezed', ['class' => 'bcclass'], 'class="bcclass"'],
+            [false, 'baser', [], '<textarea name="baser" rows="5"></textarea>'],
+            [false, 'baser', ['class' => 'bcclass'], '<textarea name="baser" class="bcclass" rows="5"></textarea>'],
+            [true, 'baser.freezed', [], '<textarea name="baser[freezed]" rows="5">BaserCMS</textarea>BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<textarea name="baser[freezed]" rows="5">BaserCMS2</textarea>BaserCMS2'],
+            [true, 'baser.freezed', ['class' => 'bcclass'], '<textarea name="baser[freezed]" class="bcclass" rows="5">BaserCMS</textarea>BaserCMS'],
         ];
     }
 
