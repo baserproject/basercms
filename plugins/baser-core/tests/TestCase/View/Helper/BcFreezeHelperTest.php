@@ -93,26 +93,25 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testSelect($freezed, $fieldName, $options, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
             $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->select($fieldName, $options, $attributes);
-        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
+        $this->assertEquals($expected, $result);
     }
 
     public static function selectDataProvider()
     {
         return [
-            [false, 'baser', [], [], "<select name=\"data\[baser\]\" id=\"baser\">.<option value=\"\">"],
-            [false, 'baser', ['1' => 'ラーメン'], [], '<option value="1">ラーメン'],
-            [false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], [], '<option value="1">ラーメン.*<option value="2">寿司'],
-            [false, 'baser', [], ['class' => 'bcclass'], "<select name=\"data\[baser\]\" class=\"bcclass\" id=\"baser\">"],
-            [false, 'baser', ['1' => 'ラーメン'], ['class' => 'bcclass'], 'class="bcclass".*<option value="1">ラーメン'],
-            [false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], ['cols' => 10], 'cols="10".*<option value="1">ラーメン　　　　　　.*<option value="2">寿司　　　　　　　　'],
-            [true, 'baser.freezed', ['1' => 'ラーメン'], ['class' => 'bcclass'], "<input type=\"hidden\" name=\"data\[baser\]\[freezed\]\" class=\"bcclass\" id=\"baserFreezed\""],
+            [false, 'baser', [], [], '<select name="baser"></select>'],
+            [false, 'baser', ['1' => 'ラーメン'], [], '<select name="baser"><option value="1">ラーメン</option></select>'],
+            [false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], [], '<select name="baser"><option value="1">ラーメン</option><option value="2">寿司</option></select>'],
+            [false, 'baser', [], ['class' => 'bcclass'], '<select name="baser" class="bcclass"></select>'],
+            [false, 'baser', ['1' => 'ラーメン'], ['class' => 'bcclass'], '<select name="baser" class="bcclass"><option value="1">ラーメン</option></select>'],
+            [false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], ['cols' => 10], '<select name="baser" cols="10"><option value="1">ラーメン　　　　　　</option><option value="2">寿司　　　　　　　　</option></select>'],
+            [true, 'baser.freezed', ['1' => 'ラーメン'], ['class' => 'bcclass'], '<input type="hidden" name="baser[freezed]" class="bcclass">'],
         ];
     }
 

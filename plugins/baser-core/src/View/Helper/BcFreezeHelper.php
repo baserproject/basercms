@@ -92,6 +92,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function select(string $fieldName, iterable $options = [], array $attributes = []): string
     {
