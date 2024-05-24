@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -256,14 +257,14 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getControlSource()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        Configure::write('BcCustomContent.fieldCategories', ['基本', '日付']);
+        Configure::write('BcCustomContent.fieldTypes.BcCcEmail', ['category' => '基本', 'label' => 'Eメール', 'useDefaultValue' => false]);
+        Configure::write('BcCustomContent.fieldTypes.BcCcDate', ['category' => '日付', 'label' => '日付（年月日）', 'useDefaultValue' => false]);
+
         //$field == 'field_type'
         $rs = $this->CustomFieldsService->getControlSource('field_type');
         $this->assertArrayHasKey('基本', $rs);
         $this->assertArrayHasKey('日付', $rs);
-        $this->assertArrayHasKey('選択', $rs);
-        $this->assertArrayHasKey('コンテンツ', $rs);
-        $this->assertArrayHasKey('その他', $rs);
 
         //$field == 'validate'
         $rs = $this->CustomFieldsService->getControlSource('validate');
