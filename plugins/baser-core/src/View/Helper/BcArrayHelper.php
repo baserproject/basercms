@@ -90,6 +90,7 @@ class BcArrayHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addText($array, $prefix = '', $suffix = '')
     {
