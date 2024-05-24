@@ -11,7 +11,10 @@
 
 namespace BaserCore\Model\Validation;
 
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Client\Request;
 use Cake\Log\Log;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
@@ -26,6 +29,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcValidation extends Validation
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * 英数チェックプラス
@@ -624,16 +632,22 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public static function checkAlphaNumericWithJson($string, $key)
+    public static function checkWithJson($string, $key, $regex)
     {
         $value = json_decode($string, true);
         $keys = explode('.', $key);
 
         foreach ($keys as $k) {
-            $value = $value[$k];
+            $value = $value[$k] ?? '';
         }
 
-        if (empty($value) || preg_match("/^[a-z0-9_]+$/", $value)) {
+        //入力チェックした項目だけバリデーション
+        $request = Router::getRequest();
+        $validate = $request->getData('validate');
+        if (is_array($validate) && !in_array(strtoupper($k), $validate))
+            return true;
+
+        if (empty($value) || preg_match($regex, $value)) {
             return true;
         } else {
             return false;
