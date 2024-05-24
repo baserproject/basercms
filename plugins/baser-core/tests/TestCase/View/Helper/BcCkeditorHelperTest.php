@@ -194,7 +194,7 @@ class BcCkeditorHelperTest extends BcTestCase
 
         //the field is not empty
         $rs = $this->BcCkeditor->createDomId('Page.contents');
-        $this->assertEmpty('PageContents', $rs);
+        $this->assertEquals('PageContents', $rs);
     }
 
 }
