@@ -1593,6 +1593,8 @@ class BcUtil
 
     /**
      * オベントをオフにする
+     *
+     * グローバルイベントマネージャーからも削除する
      * @param EventManagerInterface $eventManager
      * @param string $eventKey
      * @return array
@@ -1602,9 +1604,11 @@ class BcUtil
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
         $eventListeners = $eventManager->listeners($eventKey);
+        $globalEventManager = $eventManager->instance();
         if ($eventListeners) {
             foreach($eventListeners as $eventListener) {
                 $eventManager->off($eventKey, $eventListener['callable']);
+                $globalEventManager->off($eventKey, $eventListener['callable']);
             }
         }
         return $eventListeners;
