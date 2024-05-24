@@ -72,7 +72,6 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testAddText()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // prefixとsuffix両方指定
         $result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
         $expect = [
