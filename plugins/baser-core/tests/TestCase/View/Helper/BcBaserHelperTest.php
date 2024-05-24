@@ -813,6 +813,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetDescription($expected, $description = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
         if ($description !== null) {
             $this->BcBaser->setDescription($description);
         }
@@ -822,7 +824,7 @@ class BcBaserHelperTest extends BcTestCase
     public static function getDescriptionDataProvider()
     {
         return [
-            ['', ''],
+            ['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
             ['国産オープンソースのホームページです', '国産オープンソースのホームページです']
         ];
     }
@@ -2058,4 +2060,17 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
+    /**
+     *test getDescription
+     */
+    public function test_getDescription()
+    {
+        //the with description is null
+        $this->BcBaser->setDescription(null);
+        $this->assertEquals('', $this->BcBaser->getDescription());
+
+        //the with description is not null
+        $this->BcBaser->setDescription('test description');
+        $this->assertEquals('test description', $this->BcBaser->getDescription());
+    }
 }
