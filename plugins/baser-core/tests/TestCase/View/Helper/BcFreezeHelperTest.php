@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
+use Cake\View\View;
 
 /**
  * Class FormHelperTest
@@ -30,15 +31,7 @@ class BcFreezeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        Configure::write('Config.language', 'jp');
-//        Configure::write('App.base', '');
-//        Configure::delete('Asset');
-//        $this->BcFreeze = new BcFreezeHelper(new View);
-//        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
-//        $this->BcFreeze->request->here = '/contacts/add';
-//        $this->BcFreeze->request['action'] = 'add';
-//        $this->BcFreeze->request->webroot = '';
-//        $this->BcFreeze->request->base = '';
+        $this->BcFreeze = new BcFreezeHelper(new View());
     }
 
     /**
@@ -62,12 +55,12 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testText($freezed, $fieldName, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
-            $this->BcFreeze->freeze();
             [$model, $field] = explode('.', $fieldName);
-            $this->BcFreeze->request->data[$model][$field] = 'BaserCMS';
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->text($fieldName, $attributes);
@@ -77,13 +70,13 @@ class BcFreezeHelperTest extends BcTestCase
     public static function textDataProvider()
     {
         return [
-            [false, 'baser', [], '<input name="data[baser]" type="text" id="baser"/>'],
-            [false, 'baser', ['class' => 'bcclass'], '<input name="data[baser]" class="bcclass" type="text" id="baser"/>'],
-            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input name="data[baser]" class="bcclass" id="bcid" type="text"/>'],
-            [false, 'baser', ['type' => 'hidden'], '<input name="data[baser]" type="hidden" id="baser"/>'],
-            [true, 'baser.freezed', [], '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input name="data[baser][freezed]" value="BaserCMS2" type="hidden" id="baserFreezed"/>BaserCMS2'],
-            [true, 'baser.freezed', ['type' => 'hidden'], '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'],
+            [false, 'baser', [], '<input type="text" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="text" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="text" name="baser" class="bcclass" id="bcid">'],
+            [false, 'baser', ['type' => 'hidden'], '<input type="hidden" name="baser">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
         ];
     }
 
