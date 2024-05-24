@@ -12,7 +12,9 @@
 namespace BcUploader\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
+use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
@@ -146,6 +148,21 @@ class UploaderFilesController extends BcAdminApiController
             'message' => $message
         ]);
         $this->viewBuilder()->setOption('serialize', ['uploaderFile', 'message']);
+    }
+
+    /**
+     * 画像が存在するかチェックする
+     *
+     * @param UploaderFilesServiceInterface|UploaderFilesService $service
+     * @param string $name
+     * @return void
+     */
+    public function exists_images(UploaderFilesServiceInterface $service, string $name)
+    {
+        $this->set([
+            'result' => $service->filesExistsByName($name)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['result']);
     }
 
 }
