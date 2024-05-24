@@ -343,6 +343,39 @@ class BcFreezeHelperTest extends BcTestCase
     }
 
     /**
+     * test email
+     * @param boolean $freezed フォームを凍結させる
+     * @param string $fieldName フィールド文字列
+     * @param array $attributes html属性
+     * @param string $expexted 期待値(htmlタグ)
+     * @dataProvider emailDataProvider
+     */
+    public function testEmail($freezed, $fieldName, $attributes, $expected)
+    {
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
+
+        $result = $this->BcFreeze->email($fieldName, $attributes);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function emailDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="email" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="email" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="email" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+        ];
+    }
+
+    /**
      * ファイルコントロール（画像）を表示する
      *
      * @param boolean $freezed フォームを凍結させる

@@ -503,6 +503,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return    string    htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function email($fieldName, $options = [])
     {
