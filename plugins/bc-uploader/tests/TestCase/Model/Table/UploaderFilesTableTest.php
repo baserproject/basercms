@@ -56,12 +56,27 @@ class UploaderFilesTableTest extends BcTestCase
     }
     /**
      * 公開期間をチェックする
+     * @dataProvider periodDataProvider
      */
-    public function testCheckPeriod()
+    public function testCheckPeriod($publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $context = [
+            'data' => [
+                'publish_begin' => $publishBegin,
+                'publish_end' => $publishEnd,
+            ]
+        ];
+        $rs = $this->UploaderFilesTable->checkPeriod(null, $context);
+        $this->assertEquals($expected, $rs);
     }
 
+    public static function periodDataProvider()
+    {
+        return [
+            ['2021-01-01 00:00:00', '2021-01-02 00:00:00', true],
+            ['2021-01-02 00:00:00', '2021-01-01 00:00:00', false],
+        ];
+    }
     /**
      * Before Save
      */
