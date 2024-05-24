@@ -192,6 +192,7 @@ class CustomFieldsTable extends AppTable
      * @return ArrayObject
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function encodeEntity(ArrayObject $entity)
     {
