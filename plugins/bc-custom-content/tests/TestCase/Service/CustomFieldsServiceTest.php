@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -217,38 +218,15 @@ class CustomFieldsServiceTest extends BcTestCase
      */
     public function test_getFieldTypes()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        Configure::write('BcCustomContent.fieldCategories', ['基本', '日付']);
+        Configure::write('BcCustomContent.fieldTypes.BcCcEmail', ['category' => '基本', 'label' => 'Eメール', 'useDefaultValue' => false]);
+        Configure::write('BcCustomContent.fieldTypes.BcCcDate', ['category' => '日付', 'label' => '日付（年月日）', 'useDefaultValue' => false]);
+
         //対象メソッドをコール
         $rs = $this->CustomFieldsService->getFieldTypes();
         //戻る値を確認
-        $this->assertEquals($rs['基本'], [
-            'BcCcEmail' => 'Eメール',
-            'BcCcHidden' => '隠しフィールド',
-            'BcCcPassword' => 'パスワード',
-            'BcCcTel' => '電話番号',
-            'BcCcText' => 'テキスト',
-            'BcCcTextarea' => 'テキストエリア',
-        ]);
-        $this->assertEquals($rs['日付'], [
-            'BcCcDate' => '日付（年月日）',
-            'BcCcDateTime' => '日付（年月日時間）',
-        ]);
-        $this->assertEquals($rs['選択'], [
-            'BcCcCheckbox' => 'チェックボックス',
-            'BcCcMultiple' => 'マルチチェックボックス',
-            'BcCcPref' => '都道府県リスト',
-            'BcCcRadio' => 'ラジオボタン',
-            'BcCcRelated' => '関連データ',
-            'BcCcSelect' => 'セレクトボックス',
-        ]);
-        $this->assertEquals($rs['コンテンツ'], [
-            'BcCcFile' => 'ファイル',
-            'BcCcWysiwyg' => 'Wysiwyg エディタ',
-        ]);
-        $this->assertEquals($rs['その他'], [
-            'group' => 'グループ',
-            'BcCcAutoZip' => '自動補完郵便番号',
-        ]);
+        $this->assertEquals($rs['基本']['BcCcEmail'], 'Eメール');
+        $this->assertEquals($rs['日付']['BcCcDate'], '日付（年月日）');
     }
 
     /**
