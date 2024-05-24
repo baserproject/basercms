@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 use BaserCore\Model\Entity\User;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -116,5 +117,17 @@ class UserTest extends BcTestCase
         //user group is not empty
         $user_groups = $this->User->getAuthPrefixes();
         $this->assertEquals([0 => 'Admin', 1 => ' Api/Admin'], $user_groups);
+    }
+    public function test_isSuper()
+    {
+        //user is a superuser
+        Configure::write('BcApp.superUserId', 1);
+        $user = new User();
+        $user->id = 1;
+        $this->assertTrue($user->isSuper());
+
+        //user is not a superuser
+        $user->id = 2;
+        $this->assertFalse($user->isSuper());
     }
 }
