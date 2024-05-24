@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
+use Cake\View\View;
 
 /**
  * Class FormHelperTest
@@ -30,15 +31,7 @@ class BcFreezeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        Configure::write('Config.language', 'jp');
-//        Configure::write('App.base', '');
-//        Configure::delete('Asset');
-//        $this->BcFreeze = new BcFreezeHelper(new View);
-//        $this->BcFreeze->request = new CakeRequest('contacts/add', false);
-//        $this->BcFreeze->request->here = '/contacts/add';
-//        $this->BcFreeze->request['action'] = 'add';
-//        $this->BcFreeze->request->webroot = '';
-//        $this->BcFreeze->request->base = '';
+        $this->BcFreeze = new BcFreezeHelper(new View());
     }
 
     /**
@@ -387,6 +380,39 @@ class BcFreezeHelperTest extends BcTestCase
             [true, null, null, 'test.image', [], ['alt' => 'testalt'], '&nbsp;'],
             [true, null, 'testexist', 'test.image', [], [], 'dir=""'],
             [true, null, 'testexist', 'test.image', [], ['dir' => 'testdir'], 'dir="testdir"'],
+        ];
+    }
+
+    /**
+     * test tel
+     * @param boolean $freezed フォームを凍結させる
+     * @param string $fieldName フィールド文字列
+     * @param array $attributes html属性
+     * @param string $expexted 期待値(htmlタグ)
+     * @dataProvider telDataProvider
+     */
+    public function testTel($freezed, $fieldName, $attributes, $expected)
+    {
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
+
+        $result = $this->BcFreeze->tel($fieldName, $attributes);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function telDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="tel" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="tel" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="tel" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
         ];
     }
 

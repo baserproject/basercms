@@ -474,6 +474,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tel($fieldName, $attributes = [])
     {
