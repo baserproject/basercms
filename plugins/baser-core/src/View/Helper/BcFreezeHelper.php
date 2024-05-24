@@ -40,6 +40,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function freeze()
     {
@@ -56,6 +57,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function text(string $fieldName, array $options = []): string
     {
@@ -91,6 +93,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function select(string $fieldName, iterable $options = [], array $attributes = []): string
     {
@@ -335,6 +338,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function textarea($fieldName, $options = []): string
     {
@@ -351,7 +355,7 @@ class BcFreezeHelper extends BcFormHelper
                 $value = $this->getSourceValue($field);
             }
             if ($value) {
-                return parent::text($fieldName, $options) . nl2br(h($value));
+                return parent::textarea($fieldName, $options) . nl2br(h($value));
             } else {
                 return "&nbsp;";
             }
@@ -369,6 +373,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function radio($fieldName, $options = [], $attributes = []): string
     {
@@ -474,6 +479,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tel($fieldName, $attributes = [])
     {
@@ -497,6 +503,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return    string    htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function email($fieldName, $options = [])
     {

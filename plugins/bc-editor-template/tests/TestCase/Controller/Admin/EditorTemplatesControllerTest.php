@@ -115,6 +115,27 @@ class EditorTemplatesControllerTest extends BcTestCase
     }
 
     /**
+     * Test add
+     */
+    public function testAdmin_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => 'test', 'description' => 'test description']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「test」を追加しました');
+        $this->assertRedirect(['action' => 'index']);
+
+        //異常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]], $vars['editorTemplate']->getErrors());
+    }
+
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeEditEvent()

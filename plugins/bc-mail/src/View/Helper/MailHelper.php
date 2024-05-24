@@ -186,6 +186,7 @@ class MailHelper extends Helper
      * @return boolean 設定されている場合 true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function descriptionExists()
     {
