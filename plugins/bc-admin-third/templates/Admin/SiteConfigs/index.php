@@ -214,7 +214,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('admin_side_banner') ?>
         </td>
       </tr>
-
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_update_notice', __d('baser_core', 'アップデート通知')) ?>
@@ -228,6 +227,20 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <div class="bca-helptext"><?php echo __d('baser_core', '管理システム自体のアップデートに関する通知を有効する場合にはチェックを入れます。
           左サイドメニューに更新ボタンが表示され、利用可能なアップデートが存在する場合にバッジが付きます。') ?></div>
           <?php echo $this->BcAdminForm->error('use_update_notice') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_two_factor_authentication', __d('baser_core', '二段階認証')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('use_two_factor_authentication', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', '利用する')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ログイン時にメールで送信される認証コードの入力が必要になります。') ?></div>
+          <?php echo $this->BcAdminForm->error('use_two_factor_authentication') ?>
         </td>
       </tr>
 

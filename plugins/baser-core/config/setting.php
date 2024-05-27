@@ -332,6 +332,11 @@ return [
         'passwordRequestAllowTime' => 1440,
 
         /**
+         * 二段階認証コードの有効時間(min)
+         */
+        'twoFactorAuthenticationCodeAllowTime' => 10,
+
+        /**
          * 管理画面のSSL
          */
         'adminSsl' => filter_var(env('ADMIN_SSL', true), FILTER_VALIDATE_BOOLEAN),
@@ -554,6 +559,7 @@ return [
         'defaultAllows' => [
             '/baser/admin',
             '/baser/admin/baser-core/users/login',
+            '/baser/admin/baser-core/users/login_code',
             '/baser/admin/baser-core/users/logout',
             '/baser/admin/baser-core/password_requests/*',
             '/baser/admin/baser-core/dashboard/*',
