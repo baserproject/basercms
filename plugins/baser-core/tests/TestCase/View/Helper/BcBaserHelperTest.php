@@ -1340,8 +1340,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCopyYear($expected, $begin)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->expectOutputString($expected);
         $this->BcBaser->copyYear($begin);
     }
@@ -1350,8 +1348,9 @@ class BcBaserHelperTest extends BcTestCase
     {
         $year = date('Y');
         return [
+            ["{$year}", $year],
             ["2000 - {$year}", 2000],
-            [$year, 'はーい']
+            [$year, 'はーい'],
         ];
     }
 
