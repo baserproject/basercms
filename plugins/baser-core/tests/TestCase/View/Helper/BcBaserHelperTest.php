@@ -1818,7 +1818,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         Configure::write('BcEnv.siteUrl', 'https://basercms.net/');
         Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
 

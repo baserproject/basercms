@@ -2319,6 +2319,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function siteUrl($ssl = false)
     {
