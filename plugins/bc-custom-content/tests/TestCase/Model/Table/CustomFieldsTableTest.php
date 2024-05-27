@@ -14,11 +14,7 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomFieldsTable;
-<<<<<<< HEAD
-use BcCustomContent\Test\Factory\CustomFieldFactory;
-=======
 use Cake\Routing\Router;
->>>>>>> dev-5
 
 /**
  * CustomFieldsTableTest
