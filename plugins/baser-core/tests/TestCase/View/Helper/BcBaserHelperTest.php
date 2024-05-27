@@ -1881,9 +1881,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetPluginBaser()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $PluginBaser = $this->BcBaser->getPluginBaser('BcBlog');
-        $this->assertEquals('BlogBaserHelper', get_class($PluginBaser));
+        $this->assertEquals('BcBlog\View\Helper\BcBlogBaserHelper', get_class($PluginBaser));
         $this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
     }
 

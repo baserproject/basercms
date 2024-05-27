@@ -2654,6 +2654,7 @@ class BcBaserHelper extends Helper
      * @return bool|mixed Plugin 内の Baserヘルパ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPluginBaser($name)
     {
