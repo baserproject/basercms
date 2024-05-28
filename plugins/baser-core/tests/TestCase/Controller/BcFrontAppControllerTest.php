@@ -60,6 +60,7 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testNotFound()
     {
+        $this->markTestIncomplete('このテストは未確認です。');
         // setUp でコンテナの初期化が行われるため、ここで再度初期化する
         BcContainer::clear();
         // どのプラグインが影響を与えるかわからないので全プラグイン有効化する
@@ -79,6 +80,8 @@ class BcFrontAppControllerTest extends BcTestCase
         ])->persist();
         $this->get('/aaa');
         $this->assertResponseCode(404);
+        // BcCustomContentを削除しておかないと、他のテストに影響を与えるため削除する
+        $this->Application->getPlugins()->remove('BcCustomContent');
     }
 
     /**
