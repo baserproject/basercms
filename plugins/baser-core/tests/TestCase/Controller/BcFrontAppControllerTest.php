@@ -64,6 +64,7 @@ class BcFrontAppControllerTest extends BcTestCase
         BcContainer::clear();
         // どのプラグインが影響を与えるかわからないので全プラグイン有効化する
         PluginFactory::make([
+            ['name' => 'BaserCore'],
             ['name' => 'BcBlog'],
             ['name' => 'BcContentLink'],
             ['name' => 'BcCustomContent'],
