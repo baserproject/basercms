@@ -214,6 +214,7 @@ class BcContentsHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getJsonItems()
     {

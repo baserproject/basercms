@@ -820,4 +820,20 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertFalse($this->BcContents->getCurrentSite());
     }
 
+    public function test_getJsonItems()
+    {
+        //Define a config
+        $config = [
+          'items' => [
+              'item1',
+              'item2',
+              'item3'
+          ]];
+
+        //Set the config
+        $this->BcContents->setConfig($config);
+        $rs = $this->BcContents->getJsonItems();
+        $this->assertEquals(json_encode($config['items']), $rs);
+    }
+
 }
