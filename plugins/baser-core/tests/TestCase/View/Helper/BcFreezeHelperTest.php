@@ -526,4 +526,23 @@ class BcFreezeHelperTest extends BcTestCase
             ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'],
         ];
     }
+
+    public function test_datepicker()
+    {
+        //with freezed true
+        $this->BcFreeze->freeze();
+        $fieldName = 'test';
+        $options = ['value' => '2015-04-01'];
+        $rs = $this->BcFreeze->datepicker($fieldName, $options);
+        $this->assertEquals('<input type="hidden" name="test" value="' . $options['value'] . '">', $rs);
+
+        //with options empty
+        $rs = $this->BcFreeze->datepicker($fieldName);
+        $this->assertEquals('<input type="hidden" name="test">', $rs);
+
+        //with freezed false
+        $this->BcFreeze->freezed = false;
+        $rs = $this->BcFreeze->datepicker($fieldName, $options);
+        $this->assertStringContainsString('<script>', $rs);
+    }
 }
