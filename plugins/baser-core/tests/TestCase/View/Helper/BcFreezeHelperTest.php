@@ -526,4 +526,28 @@ class BcFreezeHelperTest extends BcTestCase
             ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'],
         ];
     }
+
+    public function test_number()
+    {
+        /**
+         * with freezed is true
+         * Define a mock field name and options
+         */
+        $fieldName = 'age';
+        $options = ['value' => 32];
+        $this->BcFreeze->freeze();
+        $result = $this->BcFreeze->number($fieldName, $options);
+        $this->assertEquals('<input type="hidden" name="' . $fieldName . '" value="' . $options['value'] . '">' . h($options['value']), $result);
+
+        //options empty
+        $options = [];
+        $result = $this->BcFreeze->number($fieldName, $options);
+        $this->assertEquals('<input type="hidden" name="'.$fieldName.'">', $result);
+
+        //with freezed is false
+        $options = ['min' => 0, 'max' => 100];
+        $this->BcFreeze->freezed = false;
+        $result = $this->BcFreeze->number($fieldName, $options);
+        $this->assertEquals('<input type="number" name="'. $fieldName .'" min="' .$options['min']. '" max="'.$options['max'].'">', $result);
+    }
 }
