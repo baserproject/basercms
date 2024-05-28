@@ -526,4 +526,23 @@ class BcFreezeHelperTest extends BcTestCase
             ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'],
         ];
     }
+
+    public function test_password()
+    {
+        //with freezed is true
+        $this->BcFreeze->freezed = true;
+        $fieldName = 'password';
+        $options = ['value' => 'password'];
+        $result = $this->BcFreeze->password($fieldName, $options);
+        $this->assertEquals('<input type="hidden" name="' . $fieldName . '" value="' . $options['value'] . '">' . h(str_repeat('*', strlen($options['value']))), $result);
+
+        //with options empty
+        $result = $this->BcFreeze->password($fieldName);
+        $this->assertEquals('<input type="hidden" name="password">', $result);
+
+        //with freezed is false
+        $this->BcFreeze->freezed = false;
+        $result = $this->BcFreeze->password($fieldName, $options);
+        $this->assertEquals('<input type="password" name="'.$fieldName.'" value="'.$options['value'].'">', $result);
+    }
 }
