@@ -61,20 +61,20 @@ class BcFrontAppControllerTest extends BcTestCase
     public function testNotFound()
     {
         // setUp でコンテナの初期化が行われるため、ここで再度初期化する
-        BcContainer::clear();
+//        BcContainer::clear();
         // どのプラグインが影響を与えるかわからないので全プラグイン有効化する
-        PluginFactory::make([
-            ['name' => 'BcBlog'],
-            ['name' => 'BcContentLink'],
-            ['name' => 'BcEditorTemplate'],
-            ['name' => 'BcFavorite'],
-            ['name' => 'BcMail'],
-            ['name' => 'BcSearchIndex'],
-            ['name' => 'BcThemeConfig'],
-            ['name' => 'BcThemeFile'],
-            ['name' => 'BcUploader'],
-            ['name' => 'BcWidgetArea']
-        ])->persist();
+//        PluginFactory::make([
+//            ['name' => 'BcBlog'],
+//            ['name' => 'BcContentLink'],
+//            ['name' => 'BcEditorTemplate'],
+//            ['name' => 'BcFavorite'],
+//            ['name' => 'BcMail'],
+//            ['name' => 'BcSearchIndex'],
+//            ['name' => 'BcThemeConfig'],
+//            ['name' => 'BcThemeFile'],
+//            ['name' => 'BcUploader'],
+//            ['name' => 'BcWidgetArea']
+//        ])->persist();
         $this->get('/aaa');
         $this->assertResponseCode(404);
         // BcCustomContentを削除しておかないと、他のテストに影響を与えるため削除する
