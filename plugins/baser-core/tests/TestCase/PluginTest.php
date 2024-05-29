@@ -84,7 +84,6 @@ class PluginTest extends BcTestCase
      */
     public function testBootStrap(): void
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $event = EventManager::instance();
 
         $this->assertTrue(is_array($event->listeners('Controller.initialize')));
