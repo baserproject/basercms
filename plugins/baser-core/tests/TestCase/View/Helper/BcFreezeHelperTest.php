@@ -527,27 +527,31 @@ class BcFreezeHelperTest extends BcTestCase
         ];
     }
 
-    public function test_number()
+    /**
+     * @dataProvider numberlDataProvider
+     */
+    public function test_number($freezed, $fieldName, $attributes, $expected)
     {
-        /**
-         * with freezed is true
-         * Define a mock field name and options
-         */
-        $fieldName = 'age';
-        $options = ['value' => 32];
-        $this->BcFreeze->freeze();
-        $result = $this->BcFreeze->number($fieldName, $options);
-        $this->assertEquals('<input type="hidden" name="' . $fieldName . '" value="' . $options['value'] . '">' . h($options['value']), $result);
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
 
-        //options empty
-        $options = [];
-        $result = $this->BcFreeze->number($fieldName, $options);
-        $this->assertEquals('<input type="hidden" name="'.$fieldName.'">', $result);
+        $result = $this->BcFreeze->number($fieldName, $attributes);
+        $this->assertEquals($expected, $result);
+    }
 
-        //with freezed is false
-        $options = ['min' => 0, 'max' => 100];
-        $this->BcFreeze->freezed = false;
-        $result = $this->BcFreeze->number($fieldName, $options);
-        $this->assertEquals('<input type="number" name="'. $fieldName .'" min="' .$options['min']. '" max="'.$options['max'].'">', $result);
+    public static function numberlDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="number" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="number" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="number" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+        ];
     }
 }
