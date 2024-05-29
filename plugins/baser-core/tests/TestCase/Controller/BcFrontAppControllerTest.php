@@ -77,6 +77,8 @@ class BcFrontAppControllerTest extends BcTestCase
         ])->persist();
         $this->get('/aaa');
         $this->assertResponseCode(404);
+        // BcCustomContentを削除しておかないと、他のテストに影響を与えるため削除する
+        $this->Application->getPlugins()->remove('BcCustomContent');
     }
 
     /**
