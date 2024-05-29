@@ -527,22 +527,32 @@ class BcFreezeHelperTest extends BcTestCase
         ];
     }
 
-    public function test_password()
+    /**
+     * @dataProvider passwordDataProvider
+     */
+    public function test_password($freezed, $fieldName, $attributes, $expected)
     {
-        //with freezed is true
-        $this->BcFreeze->freezed = true;
-        $fieldName = 'password';
-        $options = ['value' => 'password'];
-        $result = $this->BcFreeze->password($fieldName, $options);
-        $this->assertEquals('<input type="hidden" name="' . $fieldName . '" value="' . $options['value'] . '">' . h(str_repeat('*', strlen($options['value']))), $result);
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
 
-        //with options empty
-        $result = $this->BcFreeze->password($fieldName);
-        $this->assertEquals('<input type="hidden" name="password">', $result);
+        $result = $this->BcFreeze->password($fieldName, $attributes);
+        //dd($result);
+        $this->assertEquals($expected, $result);
+    }
 
-        //with freezed is false
-        $this->BcFreeze->freezed = false;
-        $result = $this->BcFreeze->password($fieldName, $options);
-        $this->assertEquals('<input type="password" name="'.$fieldName.'" value="'.$options['value'].'">', $result);
+    public static function passwordDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="password" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="password" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="password" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">'. h(str_repeat('*', strlen('BaserCMS')))],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">'. h(str_repeat('*', strlen('BaserCMS2')))],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">'. h(str_repeat('*', strlen('BaserCMS')))],
+        ];
     }
 }
