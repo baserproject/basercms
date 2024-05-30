@@ -1986,6 +1986,7 @@ class BcBaserHelper extends Helper
      * @return string URL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getHere()
     {
