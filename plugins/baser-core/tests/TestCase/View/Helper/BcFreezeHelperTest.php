@@ -540,7 +540,6 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->password($fieldName, $attributes);
-        //dd($result);
         $this->assertEquals($expected, $result);
     }
 
