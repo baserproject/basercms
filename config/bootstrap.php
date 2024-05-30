@@ -51,6 +51,9 @@ use Cake\Utility\Security;
  *
  * env() 関数が存在しない場合は処理を終了
  */
+if(file_exists(CAKE . 'functions.php')) {
+    require CAKE . 'functions.php';
+}
 if(!function_exists('env')) {
     trigger_error('フレームワーク「CakePHP」がインストールされていないか、期待するバージョンではない可能性があります。処理を終了します。', E_USER_ERROR);
 }
@@ -113,7 +116,7 @@ if (Configure::read('debug')) {
 
 /*
  * Set the default server timezone. Using UTC makes time calculations / conversions easier.
- * Check http://php.net/manual/en/timezones.php for list of valid timezone strings.
+ * Check https://php.net/manual/en/timezones.php for list of valid timezone strings.
  */
 date_default_timezone_set(Configure::read('App.defaultTimezone'));
 
@@ -153,7 +156,7 @@ if (!$fullBaseUrl) {
      * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
      * header to determine whether to generate URLs using `https`.
      *
-     * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
+     * See also https://book.cakephp.org/5/en/controllers/request-response.html#trusting-proxy-headers
      */
     $trustProxy = filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN);
 
@@ -185,12 +188,12 @@ Security::setSalt(Configure::consume('Security.salt'));
  * If you don't use these checks you can safely remove this code
  * and the mobiledetect package from composer.json.
  */
-ServerRequest::addDetector('mobile', function($request) {
+ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isMobile();
 });
-ServerRequest::addDetector('tablet', function($request) {
+ServerRequest::addDetector('tablet', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isTablet();
@@ -200,7 +203,7 @@ ServerRequest::addDetector('tablet', function($request) {
  * You can enable default locale format parsing by adding calls
  * to `useLocaleParser()`. This enables the automatic conversion of
  * locale specific date formats. For details see
- * @link https://book.cakephp.org/4/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
+ * @link https://book.cakephp.org/5/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
  */
 // \Cake\Database\TypeFactory::build('time')
 //    ->useLocaleParser();
@@ -219,8 +222,10 @@ ServerRequest::addDetector('tablet', function($request) {
 // \Cake\Database\TypeFactory::build('timestamptimezone')
 //    ->useLocaleParser();
 
-// There is no time-specific type in Cake
-TypeFactory::map('time', StringType::class);
+if(!\BaserCore\Utility\BcUtil::is51()) {
+    // There is no time-specific type in Cake
+    TypeFactory::map('time', StringType::class);
+}
 
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize
@@ -230,3 +235,9 @@ TypeFactory::map('time', StringType::class);
 //Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
+
+// set a custom date and time format
+// see https://book.cakephp.org/5/en/core-libraries/time.html#setting-the-default-locale-and-format-string
+// and https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
+//\Cake\I18n\Date::setToStringFormat('dd.MM.yyyy');
+//\Cake\I18n\Time::setToStringFormat('dd.MM.yyyy HH:mm');

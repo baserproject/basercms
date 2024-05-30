@@ -16,9 +16,9 @@ declare(strict_types=1);
  */
 namespace App;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
-use Cake\Core\Exception\MissingPluginException;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
@@ -34,6 +34,8 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  *
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
+ *
+ * @extends \Cake\Http\BaseApplication<\App\Application>
  */
 class Application extends BaseApplication
 {
@@ -48,7 +50,9 @@ class Application extends BaseApplication
         parent::bootstrap();
 
         if (PHP_SAPI === 'cli') {
-            $this->bootstrapCli();
+            if(!BcUtil::is51()) {
+                $this->bootstrapCli();
+            }
         } else {
             FactoryLocator::add(
                 'Table',
@@ -56,16 +60,18 @@ class Application extends BaseApplication
             );
         }
 
-        /*
-         * Only try to load DebugKit in development mode
-         * Debug Kit should not be installed on a production system
-         */
-        if (Configure::read('debug')) {
-            $this->addPlugin('DebugKit');
-        }
+        if(!BcUtil::is51()) {
+            /*
+             * Only try to load DebugKit in development mode
+             * Debug Kit should not be installed on a production system
+             */
+            if (Configure::read('debug')) {
+                $this->addPlugin('DebugKit');
+            }
 
-        // Load more plugins here
-        $this->addPlugin('BaserCore');
+            // Load more plugins here
+            $this->addPlugin('BaserCore');
+        }
     }
 
     /**
@@ -76,11 +82,19 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
-        $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
+        if(BcUtil::is51()) {
+            $middlewareQueue = $middlewareQueue
+                // Catch any exceptions in the lower layers,
+                // and make an error page/response
+                ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this));
+        } else {
+            $middlewareQueue = $middlewareQueue
+                // Catch any exceptions in the lower layers,
+                // and make an error page/response
+                ->add(new ErrorHandlerMiddleware(Configure::read('Error')));
+        }
 
+        $middlewareQueue
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
@@ -88,19 +102,17 @@ class Application extends BaseApplication
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance. For that when
-            // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
-            // `new RoutingMiddleware($this, '_cake_routes_')`
+            // caching in production could improve performance.
+            // See https://github.com/CakeDC/cakephp-cached-routing
             ->add(new RoutingMiddleware($this))
 
             // Parse various types of encoded request bodies so that they are
             // available as array through $request->getData()
-            // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
+            // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
+            // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
             ]));
@@ -113,7 +125,7 @@ class Application extends BaseApplication
      *
      * @param \Cake\Core\ContainerInterface $container The Container to update.
      * @return void
-     * @link https://book.cakephp.org/4/en/development/dependency-injection.html#dependency-injection
+     * @link https://book.cakephp.org/5/en/development/dependency-injection.html#dependency-injection
      */
     public function services(ContainerInterface $container): void
     {

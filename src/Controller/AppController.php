@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Controller\Controller;
 
 /**
@@ -24,7 +25,7 @@ use Cake\Controller\Controller;
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @link https://book.cakephp.org/4/en/controllers.html#the-app-controller
+ * @link https://book.cakephp.org/5/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
 {
@@ -41,12 +42,14 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        if(!BcUtil::is51()) {
+            $this->loadComponent('RequestHandler');
+        }
         $this->loadComponent('Flash');
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
-         * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
+         * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
     }
