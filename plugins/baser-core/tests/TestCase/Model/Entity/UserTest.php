@@ -13,13 +13,10 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
-use BaserCore\Test\Factory\UserGroupFactory;
-use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use PHPUnit\Metadata\Group;
 
 /**
  * Class UserTest
