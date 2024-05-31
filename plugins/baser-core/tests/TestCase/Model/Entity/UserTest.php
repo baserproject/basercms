@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -70,6 +71,17 @@ class UserTest extends BcTestCase
     public function testIsAdmin()
     {
         $this->assertTrue($this->User->isAdmin());
+    }
+
+    /**
+     * test isDeletableUser
+     */
+    public function testIsDeletableUser()
+    {
+        Configure::write('BcApp.superUserId', 2);
+        $this->assertTrue($this->User->isEnableLoginAgent(UserFactory::make(['id' => 2])->getEntity()));
+
+        $this->assertFalse($this->User->isEnableLoginAgent(new User(['id' => 1])));
     }
 
     /**

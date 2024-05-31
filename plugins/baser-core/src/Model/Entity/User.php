@@ -147,6 +147,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDeletableUser(EntityInterface $targetUser): bool
     {
