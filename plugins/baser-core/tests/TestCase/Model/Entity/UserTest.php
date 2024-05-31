@@ -12,10 +12,14 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use PHPUnit\Metadata\Group;
 
 /**
  * Class UserTest
@@ -103,6 +107,7 @@ class UserTest extends BcTestCase
             ['', '', '', 'undefined'],
         ];
     }
+
     public function test_isSuper()
     {
         //user is a superuser
@@ -114,5 +119,17 @@ class UserTest extends BcTestCase
         //user is not a superuser
         $user->id = 2;
         $this->assertFalse($user->isSuper());
+    }
+
+    public function testIsEnableLoginAgent()
+    {
+        //status = false場合、return true
+        $targetUser = UserFactory::make(['status' => false])->getEntity();
+        $this->assertFalse($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = false場合、return false
+        Configure::write('BcApp.superUserId', 1);
+        $targetUser = UserFactory::make(['id' => 2])->getEntity();
+        $this->assertTrue($this->User->isEnableLoginAgent($targetUser));
     }
 }
