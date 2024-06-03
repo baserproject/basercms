@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\Helper\BcSmartphoneHelper;
+use Cake\View\View;
 
 /**
  * BcSmartphoneHelper Test Case
@@ -36,7 +37,7 @@ class BcSmartphoneHelperTest extends BcTestCase
     {
         parent::setUp();
 //        $this->View = new BcAppView();
-//        $this->BcSmartphone = new BcSmartphoneHelper($this->View);
+        $this->BcSmartphone = new BcSmartphoneHelper(new View());
     }
 
     /**
@@ -59,6 +60,38 @@ class BcSmartphoneHelperTest extends BcTestCase
     public function testAfterLayout()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * @dataProvider removePrefixDataProvider
+     */
+    public function test_removePrefix($matches, $expected){
+        $result = $this->execPrivateMethod($this->BcSmartphone, '_removePrefix', [$matches]);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function removePrefixDataProvider()
+    {
+        return [
+            'with_smartphone_off' => [
+                [
+                    1 => ' class="link"',
+                    2 => 'smartphone=off',
+                    3 => 'http://example.com',
+                    5 => 'page.html',
+                ],
+                '<a class="link"href="http://example.comsmartphone=off"'
+            ],
+            'without_smartphone_off' => [
+                [
+                    1 => ' class="link"',
+                    2 => 'category/news',
+                    3 => 'http://example.com',
+                    5 => 'page.html',
+                ],
+                '<a class="link"href="http://example.compage.html"'
+            ]
+        ];
     }
 
 }

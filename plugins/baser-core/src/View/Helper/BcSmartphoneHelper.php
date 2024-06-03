@@ -93,6 +93,7 @@ class BcSmartphoneHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _removePrefix($matches)
     {
