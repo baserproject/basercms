@@ -80,6 +80,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false 和暦
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wareki($date)
     {

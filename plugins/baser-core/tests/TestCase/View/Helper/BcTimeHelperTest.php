@@ -12,6 +12,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTimeHelper;
+use Cake\View\View;
 
 /**
  * @property BcTimeHelper $Helper
@@ -24,7 +25,7 @@ class BcTimeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->Helper = new BcTimeHelper(new View(null));
+        $this->Helper = new BcTimeHelper(new View());
     }
 
     /**
@@ -68,8 +69,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWareki($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $data = 's-48/5/10';
         $result = $this->Helper->wareki($data);
         $this->assertSame($expects, $result);
     }
@@ -77,7 +76,14 @@ class BcTimeHelperTest extends BcTestCase
     public static function warekiDataProvider()
     {
         return [
+            ['m-48/5/10', 'm'],
+            ['t-48/5/10', 't'],
             ['s-48/5/10', 's'],
+            ['h-48/5/10', 'h'],
+            ['r-48/5/10', 'r'],
+            ['a-48/5/10', false],
+            ['r-5-13-01', false],
+            ['r-5-01-32', false]
         ];
     }
 
