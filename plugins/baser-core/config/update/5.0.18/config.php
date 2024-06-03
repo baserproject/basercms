@@ -1,6 +1,6 @@
 <?php
 /**
- * 5.0.16 アップデーター
+ * 5.0.18 アップデーター
  * 書き込み権限チェック
  */
 $notWritablePath = [];
@@ -31,8 +31,8 @@ if(!is_writable(ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php')) {
 if(!is_writable(ROOT . DS . 'webroot' . DS . 'index.php')) {
     $notWritablePath[] = ROOT . DS . 'webroot' . DS . 'index.php';
 }
-if(!is_writable(ROOT . DS . 'config' . DS . 'plugins.php')) {
-    $notWritablePath[] = ROOT . DS . 'config' . DS . 'plugins.php';
+if(!is_writable(ROOT . DS . 'config')) {
+    $notWritablePath[] = ROOT . DS . 'config';
 }
 if($notWritablePath) {
     return [
