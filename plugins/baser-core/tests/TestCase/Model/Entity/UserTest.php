@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -62,6 +63,22 @@ class UserTest extends BcTestCase
     {
         $this->User->set('password', 'testtest');
         $this->assertNotEquals('testtest', $this->User->password);
+    }
+
+    /**
+     * test isEditableUser
+     */
+    public function testIsEditableUser()
+    {
+        Configure::write('BcApp.superUserId', 2);
+        //$isSuper = true, return true
+        $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 2])->getEntity()));
+
+        //$this->id === $targetUser->id、return true
+        $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 1])->getEntity()));
+
+        //isAdminではない場合、return true
+        $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 3])->getEntity()));
     }
 
     /**

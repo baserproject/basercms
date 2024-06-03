@@ -171,6 +171,7 @@ class User extends EntityAlias
     {
         if ($this->isSuper()) return true;
         if ($this->id === $targetUser->id) return true;
+        $a = $targetUser->isAdmin();
         return !$targetUser->isAdmin();
     }
 
