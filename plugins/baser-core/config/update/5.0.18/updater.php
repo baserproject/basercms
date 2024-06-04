@@ -6,13 +6,7 @@
  */
 use BaserCore\Utility\BcUpdateLog;
 
-if (is_dir(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'config' . DS . 'update' . DS . '5.0.16')) {
-    $updateDir = ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'config' . DS . 'update' . DS . '5.0.16' ;
-} elseif (is_dir(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'config' . DS . 'update' . DS . '5.0.16')) {
-    $updateDir = ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'config' . DS . 'update' . DS . '5.0.16';
-} else {
-    return;
-}
+$updateDir = __DIR__;
 
 if (is_writable(ROOT . DS . 'bin' . DS . 'cake.php')) {
     copy($updateDir . DS . 'bin' . DS . 'cake.php', ROOT . DS . 'bin' . DS . 'cake.php');
