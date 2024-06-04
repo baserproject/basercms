@@ -465,6 +465,8 @@ $config['BcApp'] = [
 	'excludeListAddPrefix' => [],
 	// generator のメタタグを出力するかどうか
 	'outputMetaGenerator' => true,
+	// canonical のメタタグを出力するかどうか
+	'outputMetaCanonical' => true,
 	// 外部リンク
 	'outerLinks' => [
 		// インストールマニュアル

@@ -2829,7 +2829,9 @@ END_FLASH;
 		if (empty($this->request->params['Site'])) {
 			return;
 		}
-		$this->setCanonicalUrl();
+		if (Configure::read('BcApp.outputMetaCanonical')) {
+			$this->setCanonicalUrl();
+		}
 		$this->setAlternateUrl();
 	}
 
