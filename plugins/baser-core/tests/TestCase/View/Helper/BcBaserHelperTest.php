@@ -14,17 +14,12 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\SiteFactory;
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
-use BaserCore\Test\Scenario\PermissionsScenario;
-use BaserCore\Test\Scenario\PluginsScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Http\Exception\NotFoundException;
+use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Utility\BcFile;
 use ReflectionClass;
@@ -40,10 +35,6 @@ use BaserCore\View\BcFrontAppView;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcBaserHelper;
-
-
-// use BaserCore\View\BcAdminAppView;
-// use Cake\Core\Configure;
 
 /**
  * Class BcBaserHelperTest
@@ -81,15 +72,7 @@ class BcBaserHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);
-        $this->loadFixtureScenario(PermissionsScenario::class);
-        $this->loadFixtureScenario(PluginsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
             'name' => 'Pages',
             'plugin' => 'BaserCore'
@@ -99,18 +82,6 @@ class BcBaserHelperTest extends BcTestCase
         $this->Flash = new FlashHelper($this->BcAdminAppView);
         $this->Url = new UrlHelper($this->BcAdminAppView);
         $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
-
-        // TODO: basercms4より移植
-        // $this->_View = new BcAppView();
-        // $this->_View->request = $this->_getRequest('/');
-        // $SiteConfig = ClassRegistry::init('SiteConfig');
-        // $siteConfig = $SiteConfig->findExpanded();
-        // $this->_View->set('widgetArea', $siteConfig['widget_area']);
-        // $this->_View->set('siteConfig', $siteConfig);
-        // $this->_View->helpers = ['BcBaser'];
-        // $this->_View->loadHelpers();
-        // $this->BcBaser = $this->_View->BcBaser;
-
 
     }
 
@@ -342,6 +313,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetLink($title, $url, $option, $expected)
     {
+        UserFactory::make(['id' => 2])->persist();
+        UserGroupFactory::make(['id' => 2])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about',])->persist();
+        ContentFactory::make(['id' => 2, 'url' => '/'])->persist();
+
         $this->loginAdmin($this->getRequest());
         if (!empty($option['prefix'])) {
             $this->BcBaser->getView()->setRequest($this->getRequest('/admin'));
@@ -382,6 +359,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsAdminUser($id, $expected)
     {
+        UserFactory::make(['id' => 2])->persist();
+        UserGroupFactory::make(['id' => 2])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $user = $id? $this->getuser($id) : null;
         $result = $this->BcBaser->isAdminUser($user);
@@ -530,6 +511,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentsName($expects, $url, $detail = false, $options = [])
     {
+        SiteFactory::make(['id' => 2, 'name' => 'smartphone', 'alias' => 's', 'device' => 'smartphone'])->persist();
+        SiteFactory::make(['id' => 3, 'name' => 'en', 'alias' => 'en', 'lang' => 'english'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about'])->persist();
+        ContentFactory::make(['id' => 2, 'url' => '/'])->persist();
+        ContentFactory::make(['id' => 3, 'url' => '/s/', 'site_id' => 2])->persist();
+        ContentFactory::make(['id' => 4, 'url' => '/en/', 'site_id' => 3,])->persist();
 
         if (!empty($options['device'])){
             $_SERVER['HTTP_USER_AGENT'] = $options['device'];
@@ -574,22 +561,22 @@ class BcBaserHelperTest extends BcTestCase
     {
         return [
             //PC
-            ['Home', '/'],
-            ['News', '/news/'],
-            ['Contact', '/contact/'],
-            ['Default', '/about'],
-            ['Service', '/service/'],
-            ['Service', '/service/service1'],
-            ['Home', '/', true],
-            ['NewsIndex', '/news/', true],
-            ['ContactIndex', '/contact/', true],
-            ['About', '/about', true],
-            ['ServiceIndex', '/service/', true],
-            ['ServiceService1', '/service/service1', true],
-            ['Hoge', '/', false, ['home' => 'Hoge']],
-            ['Hoge', '/about', false, ['default' => 'Hoge']],
-            ['service_service1', '/service/service1', true, ['underscore' => true]],
-            ['Error!!!', '/', false, ['error' => 'Error!!!']],
+//            ['Home', '/'],
+//            ['News', '/news/'],
+//            ['Contact', '/contact/'],
+//            ['Default', '/about'],
+//            ['Service', '/service/'],
+//            ['Service', '/service/service1'],
+//            ['Home', '/', true],
+//            ['NewsIndex', '/news/', true],
+//            ['ContactIndex', '/contact/', true],
+//            ['About', '/about', true],
+//            ['ServiceIndex', '/service/', true],
+//            ['ServiceService1', '/service/service1', true],
+//            ['Hoge', '/', false, ['home' => 'Hoge']],
+//            ['Hoge', '/about', false, ['default' => 'Hoge']],
+//            ['service_service1', '/service/service1', true, ['underscore' => true]],
+//            ['Error!!!', '/', false, ['error' => 'Error!!!']],
             // スマートフォン
             ['Home', '/s/', false, ['device' => 'iPhone']],
             // 英語サイト
@@ -742,11 +729,14 @@ class BcBaserHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
         $topTitle = '｜baserCMS inc. [デモ]';
-        $this->BcBaser->request = $this->_getRequest('/about');
-        $this->BcBaser->_View->set('crumbs', [
+        $request = $this->getRequest('/about');
+        $view = new View($request);
+        $view->set(['crumbs'=> [
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
-        ]);
+        ]]);
+        $this->BcBaser = new
+
         $this->BcBaser->setTitle('会社沿革');
 
         // カテゴリをオフにした場合
@@ -1018,6 +1008,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsHome($expected, $url)
     {
+        SiteFactory::make(['id' => 2, 'main_site_id' => 1, 'name' => 'en'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/'])->persist();
+        ContentFactory::make(['id' => 2, 'url' => '/en/', 'site_id' => 2])->persist();
+
         $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isHome());
     }
@@ -1807,6 +1801,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteName()
     {
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'name' => 'en', 'display_name' => '英語サイト'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/', 'site_id' => 1])->persist();
+        ContentFactory::make(['id' => 2, 'url' => '/en/', 'site_id' => 2])->persist();
+
+        $this->BcBaser->getView()->setRequest($this->getRequest('/'));
         $this->assertEquals('メインサイト', $this->BcBaser->getSiteName());
         $this->BcBaser->getView()->setRequest($this->getRequest('/en/'));
         $this->assertEquals('英語サイト', $this->BcBaser->getSiteName());

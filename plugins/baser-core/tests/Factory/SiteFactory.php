@@ -39,7 +39,7 @@ class SiteFactory extends CakephpBaseFactory
                 'name' => $faker->text(50),
                 'title' => $faker->text(50),
                 'main_site_id' => null,
-                'display_name' => $faker->text(5),
+                'display_name' => 'メインサイト',
                 'alias' => null,
                 'theme' => 'BcThemeSample',
                 'status' => true,
