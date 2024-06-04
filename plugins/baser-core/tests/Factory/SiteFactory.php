@@ -39,7 +39,7 @@ class SiteFactory extends CakephpBaseFactory
                 'name' => $faker->text(50),
                 'title' => $faker->text(50),
                 'main_site_id' => null,
-                'display_name' => 'メインサイト',
+                'display_name' => $faker->text(5),
                 'alias' => null,
                 'theme' => 'BcThemeSample',
                 'status' => true,
@@ -65,6 +65,7 @@ class SiteFactory extends CakephpBaseFactory
     {
         return $this->setField('id', 1)
             ->setField('name', '')
+            ->setField('display_name', 'メインサイト')
             ->setField('theme', 'BcFront')
             ->setField('status', true);
     }
