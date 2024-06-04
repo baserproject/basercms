@@ -12,6 +12,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTimeHelper;
+use Cake\View\View;
 
 /**
  * @property BcTimeHelper $Helper
@@ -24,7 +25,7 @@ class BcTimeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->Helper = new BcTimeHelper(new View(null));
+        $this->Helper = new BcTimeHelper(new View());
     }
 
     /**
@@ -45,7 +46,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testNengo($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->nengo($data);
         $this->assertSame($expects, $result);
     }
@@ -58,6 +58,7 @@ class BcTimeHelperTest extends BcTestCase
             ['s', '昭和'],
             ['h', '平成'],
             ['r', '令和'],
+            ['a', false],
         ];
     }
 

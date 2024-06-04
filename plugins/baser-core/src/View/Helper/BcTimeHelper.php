@@ -63,6 +63,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 年号をあらわすアルファベット
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function nengo($w)
     {
