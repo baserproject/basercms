@@ -13,11 +13,22 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\ContentFoldersScenario;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionsScenario;
+use BaserCore\Test\Scenario\PluginsScenario;
+use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
+use BaserCore\Test\Scenario\UserScenario;
+use BaserCore\Test\Scenario\UsersUserGroupsScenario;
+use BcBlog\Controller\BlogController;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -913,6 +924,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentsMenu()
     {
+        ContentFactory::make(['id' => 1, 'site_id' => 1, 'lft' => 1, 'rght' => 2, 'site_root' => true])->persist();
+
+        $request = $this->getRequest()->withAttribute('currentContent', ContentFactory::get(1));
+        $this->BcBaser = new BcBaserHelper(new BcAdminAppView($request));
+
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu());
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1));
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1, 1));
@@ -1355,6 +1371,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentCreatedDate()
     {
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        ContentFactory::make(['type' => 'Page', 'url' => '/', 'created_date' => '2016-07-29 18:13:03'])->persist();
+        $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()));
+
         $this->assertEquals('2016/07/29 18:13', $this->BcBaser->getContentCreatedDate());
     }
 
@@ -1364,6 +1384,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentModifiedDate()
     {
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        ContentFactory::make(['type' => 'Page', 'url' => '/', 'modified_date' => '2020-09-14 20:13:03'])->persist();
+        $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()));
+
         $this->assertEquals('2020/09/14 20:13', $this->BcBaser->getContentModifiedDate());
     }
 
@@ -1602,6 +1626,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testPage()
     {
+        ContentFactory::make(['id' => 1, 'url' => '/service/service1'])->persist();
         PageFactory::make(['id' => 5, 'contents' => 'test'])->persist();
 
         // 正常系
