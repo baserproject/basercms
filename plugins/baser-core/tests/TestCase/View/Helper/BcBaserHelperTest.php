@@ -18,17 +18,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
-use BaserCore\Test\Scenario\PermissionsScenario;
-use BaserCore\Test\Scenario\PluginsScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
-use BcBlog\Controller\BlogController;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -83,7 +73,6 @@ class BcBaserHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
         $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
             'name' => 'Pages',
             'plugin' => 'BaserCore'
@@ -324,10 +313,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetLink($title, $url, $option, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         UserFactory::make(['id' => 2])->persist();
         UserGroupFactory::make(['id' => 2])->persist();
         UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
-        ContentFactory::make(['id' => 1, 'url' => '/about',])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about'])->persist();
         ContentFactory::make(['id' => 2, 'url' => '/'])->persist();
 
         $this->loginAdmin($this->getRequest());
@@ -370,6 +360,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsAdminUser($id, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         UserFactory::make(['id' => 2])->persist();
         UserGroupFactory::make(['id' => 2])->persist();
         UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
@@ -1024,6 +1015,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsHome($expected, $url)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make(['id' => 2, 'main_site_id' => 1, 'name' => 'en'])->persist();
         ContentFactory::make(['id' => 1, 'url' => '/'])->persist();
         ContentFactory::make(['id' => 2, 'url' => '/en/', 'site_id' => 2])->persist();
@@ -1371,6 +1363,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentCreatedDate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         PluginFactory::make(['name' => 'BcBlog'])->persist();
         ContentFactory::make(['type' => 'Page', 'url' => '/', 'created_date' => '2016-07-29 18:13:03'])->persist();
         $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()));
@@ -1384,6 +1377,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentModifiedDate()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         PluginFactory::make(['name' => 'BcBlog'])->persist();
         ContentFactory::make(['type' => 'Page', 'url' => '/', 'modified_date' => '2020-09-14 20:13:03'])->persist();
         $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()));
@@ -1555,6 +1549,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsPage($expected, $requestUrl)
     {
+        SiteFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['url' => '/', 'site_id' => 1])->persist();
+        ContentFactory::make(['url' => '/index', 'site_id' => 1])->persist();
+
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $this->BcBaser->getView()->setRequest($this->getRequest($requestUrl));
         $this->assertEquals($expected, $this->BcBaser->isPage());
@@ -1741,6 +1739,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContentsNavi()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['id' => 1, 'url' => '/about'])->persist();
         $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
         $this->expectOutputRegex('/<div class=\"bs-contents-navi\">/');
         $this->BcBaser->contentsNavi();
@@ -1752,6 +1752,13 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCrumbsList()
     {
+        SiteFactory::make(['id' => 1, 'main_site_id' => null, 'name' => '', 'theme' => 'BcFront'])->persist();
+        ContentFactory::make(['url' => '/', 'site_id' => 1])->persist();
+        ContentFactory::make(['url' => '/index', 'site_id' => 1])->persist();
+
+        $this->BcAdminAppView = new BcAdminAppView($this->getRequest());
+        $this->BcBaser = new BcBaserHelper($this->BcAdminAppView);
+
         $this->expectOutputRegex('/ホーム/');
         $this->BcBaser->crumbsList();
     }
@@ -1826,6 +1833,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteName()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'name' => 'en', 'display_name' => '英語サイト'])->persist();
         ContentFactory::make(['id' => 1, 'url' => '/', 'site_id' => 1])->persist();
         ContentFactory::make(['id' => 2, 'url' => '/en/', 'site_id' => 2])->persist();
@@ -1858,6 +1866,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetParams()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
         $this->BcBaser->getView()->setRequest($this->getRequest('/'));
         $params = $this->BcBaser->getParams();
         $this->assertEquals('BaserCore', $params['plugin']);
