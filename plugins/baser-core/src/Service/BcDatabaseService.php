@@ -77,6 +77,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {

@@ -10,7 +10,9 @@
  */
 namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
+use Cake\View\View;
 
 /**
  * Class MailHelperTest
@@ -25,9 +27,7 @@ class MailHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->View = new BcAppView(null);
-//        $this->View->request = $this->_getRequest('/');
-//        $this->Mail = new MailHelper($this->View);
+        $this->MailHelper = new MailHelper(new View());
     }
 
     /**
@@ -193,5 +193,25 @@ class MailHelperTest extends BcTestCase
     public function testBeforeRender()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test descriptionExists
+     */
+    public function test_descriptionExists()
+    {
+        $mailContent = new MailContent();
+        $mailContent->description = 'test description';
+
+        //with description
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->descriptionExists();
+        $this->assertTrue($rs);
+
+        //with empty description
+        $mailContent->description = '';
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->descriptionExists();
+        $this->assertFalse($rs);
     }
 }

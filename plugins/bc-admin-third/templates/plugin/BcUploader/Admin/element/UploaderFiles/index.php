@@ -34,7 +34,8 @@ echo $this->BcBaser->i18nScript([
   'uploaderPublishBegin' => __d('baser_core', '公開開始日'),
   'uploaderPublishEnd' => __d('baser_core', '公開終了日')
 ], ['block' => false]);
-$this->BcBaser->js('BcUploader.admin/uploader_files/index_panel.bundle', false, [
+// Ajaxで呼び出される前提のため、第２引数：インラインは true にしておく必要あり
+$this->BcBaser->js('BcUploader.admin/uploader_files/index_panel.bundle', true, [
   'defer' => true
 ]);
 ?>

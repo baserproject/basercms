@@ -130,23 +130,6 @@ class UploaderFilesController extends BcAdminAppController
     }
 
     /**
-     * [ADMIN] 各サイズごとの画像の存在チェックを行う
-     *
-     * @param string $name
-     * @return void
-     */
-    public function ajax_exists_images(string $name)
-    {
-
-        Configure::write('debug', 0);
-        $this->RequestHandler->setContent('json');
-        $this->RequestHandler->respondAs('application/json; charset=UTF-8');
-        $files = $this->UploaderFile->filesExists($name);
-        $this->set('result', $files);
-        $this->render('json_result');
-    }
-
-    /**
      * [ADMIN] 編集処理
      *
      * @param UploaderFilesService $service
@@ -154,6 +137,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(UploaderFilesServiceInterface $service, int $id)
     {
