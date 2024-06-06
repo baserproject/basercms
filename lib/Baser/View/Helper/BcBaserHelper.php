@@ -2842,6 +2842,23 @@ END_FLASH;
 	 * 		- PCサイトが存在する場合、canonicalを出力
 	 */
 	public function setCanonicalUrl() {
+		$canonicalUrl = $this->_View->get('canonicalUrl');
+		if ($canonicalUrl === false) {
+			return;
+		}
+		if ($canonicalUrl) {
+			return $this->_View->set('meta',
+				$this->BcHtml->meta('canonical',
+					$this->BcHtml->url($canonicalUrl, true),
+					[
+						'rel' => 'canonical',
+						'type' => null,
+						'title' => null,
+						'inline' => false
+					]
+				)
+			);
+		}
 		$currentSite = BcSite::findCurrent();
 		if (!$currentSite) {
 			return;
