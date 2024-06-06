@@ -34,7 +34,7 @@ class UploaderFilesControllerTest extends BcTestCase
     public function test_beforeFilter(){
         $event = new Event('Controller.beforeFilter', $this->UploaderFilesController);
         $this->UploaderFilesController->beforeFilter($event);
-        $this->assertTrue(true);
+        $this->assertNotEmpty($this->UploaderFilesController->viewBuilder()->getHelpers());
     }
 
     public function test_index()
