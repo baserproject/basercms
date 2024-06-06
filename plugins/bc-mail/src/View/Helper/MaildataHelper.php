@@ -44,7 +44,7 @@ class MaildataHelper extends BcTextHelper
      * @checked
      * @noTodo
      */
-    public function control($type, $value, $escape = true)
+    public function control($type, $value, $escape = false)
     {
         $toDisplayString = $this->toDisplayString($type, $value);
         return $escape? h($toDisplayString) : $toDisplayString;
