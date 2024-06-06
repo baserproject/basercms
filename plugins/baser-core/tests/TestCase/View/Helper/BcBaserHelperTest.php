@@ -32,7 +32,6 @@ use Cake\View\Helper\UrlHelper;
 use Cake\View\Helper\HtmlHelper;
 use Cake\View\Helper\FlashHelper;
 use Cake\ORM\TableRegistry;
-use BaserCore\View\BcFrontAppView;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcBaserHelper;
@@ -81,8 +80,6 @@ class BcBaserHelperTest extends BcTestCase
         $this->Html = new HtmlHelper($this->BcAdminAppView);
         $this->Flash = new FlashHelper($this->BcAdminAppView);
         $this->Url = new UrlHelper($this->BcAdminAppView);
-        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
-
     }
 
     /**
@@ -535,7 +532,7 @@ class BcBaserHelperTest extends BcTestCase
             unset($options['device']);
         }
 
-        $this->BcBaser = new BcBaserHelper(new BcFrontAppView());
+        $this->BcBaser = new BcBaserHelper(new View());
         $this->BcBaser->getView()->setRequest($this->getRequest($url));
 
         if (!empty($options['error'])) {
