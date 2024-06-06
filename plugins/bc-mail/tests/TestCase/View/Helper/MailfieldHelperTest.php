@@ -11,6 +11,9 @@
 namespace BcMail\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Model\Entity\MailField;
+use BcMail\View\Helper\MailfieldHelper;
+use Cake\View\View;
 
 class MailfieldHelperTest extends BcTestCase
 {
@@ -21,6 +24,7 @@ class MailfieldHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->mailfieldHelper = new MailfieldHelper(new View());
     }
 
     /**
@@ -28,6 +32,7 @@ class MailfieldHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->mailfieldHelper);
         parent::tearDown();
     }
 
@@ -41,9 +46,23 @@ class MailfieldHelperTest extends BcTestCase
 
     /**
      * コントロールのソースを取得する
+     * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions()
+    public function testGetOptions($source, $type, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $mailField = new MailField();
+        $mailField->source = $source;
+        $mailField->type = $type;
+
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getOptionsDataProvider()
+    {
+        return [
+            ["option1|option2|option3", "not_check", ['option1' => 'option1', 'option2' => 'option2', 'option3' => 'option3']],
+            ["option1|option2|option3", "check", []],
+        ];
     }
 }
