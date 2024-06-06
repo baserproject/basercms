@@ -1867,7 +1867,17 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetParams()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        ContentFactory::make(
+            [
+                'name' => 'index',
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'entity_id' => 2,
+                'url' => '/index',
+                'site_id' => 1,
+            ]
+        )->persist();
+
         $this->BcBaser->getView()->setRequest($this->getRequest('/'));
         $params = $this->BcBaser->getParams();
         $this->assertEquals('BaserCore', $params['plugin']);
