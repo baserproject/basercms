@@ -725,7 +725,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetCategoryTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id'=>1, 'title'=>'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id'=>1])->persist();
 
         $topTitle = '｜baserCMS inc. [デモ]';
         $request = $this->getRequest('/about');
@@ -734,7 +735,7 @@ class BcBaserHelperTest extends BcTestCase
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
         ]]);
-        $this->BcBaser = new
+        $this->BcBaser = new BcBaserHelper($view);
 
         $this->BcBaser->setTitle('会社沿革');
 
