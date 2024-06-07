@@ -725,13 +725,13 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetCategoryTitle()
     {
-        SiteFactory::make(['id'=>1, 'title'=>'baserCMS inc. [デモ]'])->persist();
-        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id'=>1])->persist();
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
 
         $topTitle = '｜baserCMS inc. [デモ]';
         $request = $this->getRequest('/about');
         $view = new View($request);
-        $view->set(['crumbs'=> [
+        $view->set(['crumbs' => [
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
         ]]);
