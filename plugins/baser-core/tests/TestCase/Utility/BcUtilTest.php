@@ -798,12 +798,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetSubDomain($host, $currentHost, $expects, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         Configure::write('BcEnv.mainDomain', 'localhost');
         if ($currentHost) {
             Configure::write('BcEnv.host', $currentHost);

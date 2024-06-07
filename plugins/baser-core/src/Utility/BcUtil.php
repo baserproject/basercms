@@ -951,6 +951,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getSubDomain($host = null)
     {
