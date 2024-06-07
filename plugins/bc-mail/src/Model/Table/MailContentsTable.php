@@ -197,6 +197,7 @@ class MailContentsTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkSslUrl($value)
     {
