@@ -1750,6 +1750,7 @@ class BcBaserHelper extends Helper
      * @todo TextHelperに移行を検討
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function mark($search, $text, $name = 'strong', $attributes = [], $escape = false)
     {

@@ -1483,7 +1483,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testMark($search, $text, $name, $attributes, $escape, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcBaser->mark($search, $text, $name, $attributes, $escape);
         $this->assertEquals($expected, $result);
     }
