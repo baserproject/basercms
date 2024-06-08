@@ -46,7 +46,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testNengo($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->nengo($data);
         $this->assertSame($expects, $result);
     }
@@ -59,6 +58,7 @@ class BcTimeHelperTest extends BcTestCase
             ['s', '昭和'],
             ['h', '平成'],
             ['r', '令和'],
+            ['a', false],
         ];
     }
 
