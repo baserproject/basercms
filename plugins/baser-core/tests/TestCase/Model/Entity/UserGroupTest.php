@@ -2,7 +2,6 @@
 
 namespace BaserCore\Test\TestCase\Model\Entity;
 
-use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -39,6 +38,24 @@ class UserGroupTest extends BcTestCase
     public function testIsAuthPrefixAvailabled()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getAuthPrefixArray
+     */
+    public function test_getAuthPrefixArray()
+    {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+
+        //the with auth_prefix empty
+        $userGroup = UserGroupFactory::make(['auth_prefix' => ''])->getEntity();
+        $rs = $userGroup->getAuthPrefixArray();
+        $this->assertEquals([], $rs);
+
+        //the with auth_prefix not empty
+        $userGroup = UserGroupFactory::get(1);
+        $rs = $userGroup->getAuthPrefixArray();
+        $this->assertEquals([0 => 'Admin', 1 => 'Api/Admin'], $rs);
     }
 
     public function testGetAuthPrefixSettingsArray()

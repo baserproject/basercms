@@ -76,6 +76,7 @@ class UserGroup extends Entity
      * @return string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixArray(): array
     {
