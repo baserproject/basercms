@@ -181,6 +181,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //Postデータを生成
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
+        $data['validate'] = ['EMAIL_CONFIRM'];
         $data['meta'] = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
@@ -221,6 +222,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //Postデータを生成
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
+        $data['validate'] = ['EMAIL_CONFIRM'];
         $data['meta'] = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());
@@ -249,6 +251,7 @@ class CustomFieldsControllerTest extends BcTestCase
         //Postデータを生成
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
+        $data['validate'] = ['EMAIL_CONFIRM'];
         $data['meta'] = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_fields/edit/1', $data->toArray());

@@ -171,6 +171,8 @@ $this->BcAdmin->setHelp('custom_fields_form');
         </span>
 
         <?php echo $this->BcAdminForm->error('validate') ?>
+        <?php echo $this->BcAdminForm->error('meta.BcCustomContent.max_file_size') ?>
+        <?php echo $this->BcAdminForm->error('meta.BcCustomContent.file_ext') ?>
       </td>
     </tr>
 

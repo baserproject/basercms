@@ -133,7 +133,7 @@ class CreateReleaseCommand extends Command
      */
     public function deletePlugins(string $packagePath)
     {
-        $excludes = ['BcThemeSample', 'BcPluginSample'];
+        $excludes = ['BcThemeSample', 'BcPluginSample', 'BcColumn'];
         $folder = new BcFolder($packagePath . 'plugins');
         $files = $folder->getFolders(['full'=>true]);
         foreach($files as $path) {
