@@ -94,7 +94,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWyear($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->wyear($data);
         $this->assertSame($expects, $result);
     }
@@ -102,7 +101,12 @@ class BcTimeHelperTest extends BcTestCase
     public static function wyearDataProvider()
     {
         return [
-            ['s-48/5/10', '48'],
+            ['r-5-01-01', '5'],
+            ['h-31-12-31', '31'],
+            ['s-15-06-15', '15'],
+            ['x-5-01-01', false],
+            ['r-5-13-01', false],
+            ['r-5-01-32', false],
         ];
     }
 

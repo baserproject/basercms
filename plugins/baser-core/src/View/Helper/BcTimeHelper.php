@@ -97,6 +97,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false int / false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wyear($date)
     {
