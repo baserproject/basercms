@@ -2000,6 +2000,7 @@ class BcBaserHelper extends Helper
      * @return bool カテゴリトップの場合は、 true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCategoryTop()
     {

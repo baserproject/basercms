@@ -1585,8 +1585,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsCategoryTop($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isCategoryTop());
     }
 
