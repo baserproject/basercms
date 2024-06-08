@@ -54,10 +54,14 @@ if (is_writable(ROOT . DS . 'webroot' . DS . 'index.php')) {
     BcUpdateLog::set(__d('baser_core', ROOT . DS . 'webroot' . DS . 'index.php に書き込み権限がありません。' . $updateDir . DS . 'webroot' . DS . 'index.php をコピーして手動で上書きしてください。'));
 }
 if (is_writable(ROOT . DS . 'config')) {
-    if (is_writable(ROOT . DS . 'config' . DS . 'plugins.php')) {
-        copy($updateDir . DS . 'config' . DS . 'plugins.php', ROOT . DS . 'config' . DS . 'plugins.php');
+    if(file_exists(ROOT . DS . 'config' . DS . 'plugins.php')) {
+        if (is_writable(ROOT . DS . 'config' . DS . 'plugins.php')) {
+            copy($updateDir . DS . 'config' . DS . 'plugins.php', ROOT . DS . 'config' . DS . 'plugins.php');
+        } else {
+            BcUpdateLog::set(__d('baser_core', ROOT . DS . 'config' . DS . 'plugins.php に書き込み権限がありません。' . $updateDir . DS . 'config' . DS . 'plugins.php をコピーして手動で上書きしてください。'));
+        }
     } else {
-        BcUpdateLog::set(__d('baser_core', ROOT . DS . 'config' . DS . 'plugins.php に書き込み権限がありません。' . $updateDir . DS . 'config' . DS . 'plugins.php をコピーして手動で上書きしてください。'));
+        copy($updateDir . DS . 'config' . DS . 'plugins.php', ROOT . DS . 'config' . DS . 'plugins.php');
     }
 } else {
     BcUpdateLog::set(__d('baser_core', ROOT . DS . 'config に書き込み権限がありません。' . $updateDir . DS . 'config' . DS . 'plugins.php をコピーして、手動で' . ROOT . DS . 'config 配下に配置してください。'));
