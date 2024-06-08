@@ -37,7 +37,15 @@ class UserGroupTest extends BcTestCase
 
     public function testIsAuthPrefixAvailabled()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+
+        //userGroup is not available
+        $userGroup = UserGroupFactory::get(2);
+        $this->assertTrue($userGroup->isAuthPrefixAvailabled('Admin'));
+
+        //userGroup is available
+        $userGroup = UserGroupFactory::get(1);
+        $this->assertFalse($userGroup->isAuthPrefixAvailabled('Api'));
     }
 
     /**
