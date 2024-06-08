@@ -5,6 +5,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -42,7 +43,17 @@ class UserGroupTest extends BcTestCase
 
     public function testGetAuthPrefixSettingsArray()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        
+        //the with auth_prefix_settings is empty
+        $userGroup = UserGroupFactory::get(1);
+        $rs = $userGroup->getAuthPrefixSettingsArray();
+        $this->assertEquals([], $rs);
+
+        //the with auth_prefix_settings is not empty
+        $userGroup = UserGroupFactory::get(2);
+        $rs = $userGroup->getAuthPrefixSettingsArray();
+        $this->assertEquals(['Admin' => ['type' => '2'], 'Api/Admin' => ['type' => '2']], $rs);
     }
 
     public function testGetAuthPrefixSettings()
