@@ -648,12 +648,11 @@ class PluginsService implements PluginsServiceInterface
         }
         $name = $postData['file']->getClientFileName();
         $postData['file']->moveTo(TMP . $name);
-        $srcDirName = basename($name, '.zip');
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
-
+        $srcDirName = $zip->topArchiveName;
         $dstName = $srcName = Inflector::camelize($srcDirName);
         if (preg_match('/^(.+?)([0-9]+)$/', $srcName, $matches)) {
             $baseName = $matches[1];
