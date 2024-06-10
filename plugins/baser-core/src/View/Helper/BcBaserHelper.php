@@ -882,6 +882,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setCategoryTitle($on = true)
     {
@@ -1500,6 +1501,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copyYear($begin)
     {
@@ -1749,6 +1751,7 @@ class BcBaserHelper extends Helper
      * @todo TextHelperに移行を検討
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function mark($search, $text, $name = 'strong', $attributes = [], $escape = false)
     {
@@ -1986,6 +1989,7 @@ class BcBaserHelper extends Helper
      * @return string URL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getHere()
     {
@@ -1999,6 +2003,7 @@ class BcBaserHelper extends Helper
      * @return bool カテゴリトップの場合は、 true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCategoryTop()
     {
@@ -2319,6 +2324,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function siteUrl($ssl = false)
     {
@@ -2654,6 +2660,7 @@ class BcBaserHelper extends Helper
      * @return bool|mixed Plugin 内の Baserヘルパ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPluginBaser($name)
     {

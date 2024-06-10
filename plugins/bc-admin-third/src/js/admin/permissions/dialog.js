@@ -12,6 +12,7 @@
  * dialog
  * @checked
  * @noTodo
+ * @unitTest
  */
 $(function () {
 
