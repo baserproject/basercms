@@ -2381,8 +2381,11 @@ class BcBaserHelperTest extends BaserTestCase
 	 * testSetAlternateUrl
 	 * @dataProvider setCanonicalUrlDataProvider
 	 */
-	public function testSetCanonicalUrl($url, $expected)
+	public function testSetCanonicalUrl($url, $expected, $canonicalUrl = null)
 	{
+		if (!is_null($canonicalUrl)) {
+			$this->_View->set('canonicalUrl', $canonicalUrl);
+		}
 		Configure::write('BcSite.use_site_device_setting', true);
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->BcBaser->setCanonicalUrl();
@@ -2396,6 +2399,8 @@ class BcBaserHelperTest extends BaserTestCase
 			['/index.html', '<link href="http://localhost/" rel="canonical"/>'],
 			['/about/index.html', '<link href="http://localhost/about/" rel="canonical"/>'],
 			['/s/', '<link href="http://localhost/" rel="canonical"/>'],
+			['/', '<link href="https://example.com" rel="canonical"/>', 'https://example.com'],
+			['/', '', false],
 		];
 	}
 }
