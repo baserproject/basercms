@@ -439,6 +439,7 @@ class BcCkeditorHelper extends Helper
      * フィールド名から Dom ID を生成する
      * @param string $field
      * @return string
+     * @unitTest
      */
     public function createDomId(string $field): string
     {
