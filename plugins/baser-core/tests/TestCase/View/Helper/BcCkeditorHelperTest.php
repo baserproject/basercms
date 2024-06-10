@@ -182,4 +182,19 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * Test createDomId
+     */
+
+    public function test_createDomId()
+    {
+        //the field is empty
+        $rs = $this->BcCkeditor->createDomId('');
+        $this->assertEmpty($rs);
+
+        //the field is not empty
+        $rs = $this->BcCkeditor->createDomId('Page.contents');
+        $this->assertEquals('PageContents', $rs);
+    }
+
 }

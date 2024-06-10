@@ -716,4 +716,23 @@ class BcValidationTest extends BcTestCase
         ];
     }
 
+    /**
+     * @dataProvider reservedDataProvider
+     */
+    public function test_reserved($value, $expect)
+    {
+        $result = $this->BcValidation->reserved($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function reservedDataProvider()
+    {
+        return [
+            ['test', true],
+            ['admin', true],
+            ['accessible', false],
+            ['before', false],
+        ];
+    }
+
 }

@@ -104,6 +104,7 @@ class UploaderFile extends Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function getFileNameBySize(string $size): string
     {
