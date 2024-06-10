@@ -63,6 +63,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 年号をあらわすアルファベット
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function nengo($w)
     {
@@ -80,6 +81,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false 和暦
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wareki($date)
     {
@@ -96,6 +98,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false int / false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wyear($date)
     {
