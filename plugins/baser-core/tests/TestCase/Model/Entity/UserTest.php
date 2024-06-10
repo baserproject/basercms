@@ -139,9 +139,12 @@ class UserTest extends BcTestCase
         $targetUser = UserFactory::make(['status' => false])->getEntity();
         $this->assertFalse($this->User->isEnableLoginAgent($targetUser));
 
-        //status = true && isSuper = false && isAdmin = false場合、return false
+        //status = true && isSuper = false && isAdmin = false場合、return true
         Configure::write('BcApp.superUserId', 1);
         $targetUser = UserFactory::make(['id' => 2])->getEntity();
         $this->assertTrue($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = true場合、return false
+        $this->assertFalse($this->User->isEnableLoginAgent($this->User));
     }
 }
