@@ -166,6 +166,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEditableUser(EntityInterface $targetUser): bool
     {
