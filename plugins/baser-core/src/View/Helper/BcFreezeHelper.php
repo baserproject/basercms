@@ -576,6 +576,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string html
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function datepicker($fieldName, $options = [])
     {
