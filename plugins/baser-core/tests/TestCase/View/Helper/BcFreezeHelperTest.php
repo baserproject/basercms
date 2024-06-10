@@ -553,9 +553,9 @@ class BcFreezeHelperTest extends BcTestCase
             [false, 'baser', [], '<input type="password" name="baser">'],
             [false, 'baser', ['class' => 'bcclass'], '<input type="password" name="baser" class="bcclass">'],
             [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="password" name="baser" class="bcclass" id="bcid">'],
-            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">'. h(str_repeat('*', strlen('BaserCMS')))],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">'. h(str_repeat('*', strlen('BaserCMS2')))],
-            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">'. h(str_repeat('*', strlen('BaserCMS')))],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">*********'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
         ];
     }
 }
