@@ -50,9 +50,10 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testFirst()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertTrue($this->Helper->first($this->data, 'b'));
-        $this->assertFalse($this->Helper->first($this->data, 'c'));
+        $data = [1 => 'カンジ', 2 => 'リュウジ', 3 => 'スナオ', 4 => 'ゴンチャン'];
+
+        $this->assertTrue($this->Helper->first($data, 1));
+        $this->assertFalse($this->Helper->first($data, 2));
     }
 
     /**
