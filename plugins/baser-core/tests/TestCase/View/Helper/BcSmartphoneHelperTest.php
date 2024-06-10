@@ -36,7 +36,6 @@ class BcSmartphoneHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->View = new BcAppView();
         $this->BcSmartphone = new BcSmartphoneHelper(new View());
     }
 
