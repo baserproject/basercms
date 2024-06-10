@@ -423,6 +423,26 @@ class CustomContentAdminHelperTest extends BcTestCase
     }
 
     /**
+     * test isEnabledMoveUpEntry
+     */
+    public function test_isEnabledMoveUpEntry()
+    {
+        $entries = new \ArrayObject([
+            new CustomEntry(['id' => 1, 'level' => 1]),
+            new CustomEntry(['id' => 2, 'level' => 1]),
+            new CustomEntry(['id' => 3, 'level' => 1])
+        ]);
+        $currentEntry = new CustomEntry(['id' => 2, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertTrue($result);
+
+        //with move not possible
+        $currentEntry = new CustomEntry(['id' => 1, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertFalse($result);
+    }
+
+    /**
      * test isEnabledMoveDownEntry
      */
 
