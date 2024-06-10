@@ -78,10 +78,13 @@ class UserTest extends BcTestCase
      */
     public function testIsDeletableUser()
     {
-        Configure::write('BcApp.superUserId', 2);
-        $this->assertTrue($this->User->isEnableLoginAgent(UserFactory::make(['id' => 2])->getEntity()));
+        //status = true && isSuper = false && isAdmin = false場合、return true
+        Configure::write('BcApp.superUserId', 1);
+        $targetUser = UserFactory::make(['id' => 2])->getEntity();
+        $this->assertTrue($this->User->isDeletableUser($targetUser));
 
-        $this->assertFalse($this->User->isEnableLoginAgent(new User(['id' => 1])));
+        //status = true && isSuper = false && isAdmin = true場合、return false
+        $this->assertFalse($this->User->isDeletableUser($this->User));
     }
 
     /**
