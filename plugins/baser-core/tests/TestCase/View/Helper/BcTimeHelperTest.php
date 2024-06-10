@@ -12,6 +12,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTimeHelper;
+use Cake\View\View;
 
 /**
  * @property BcTimeHelper $Helper
@@ -24,7 +25,7 @@ class BcTimeHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->Helper = new BcTimeHelper(new View(null));
+        $this->Helper = new BcTimeHelper(new View());
     }
 
     /**
@@ -45,7 +46,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testNengo($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->nengo($data);
         $this->assertSame($expects, $result);
     }
@@ -58,6 +58,7 @@ class BcTimeHelperTest extends BcTestCase
             ['s', '昭和'],
             ['h', '平成'],
             ['r', '令和'],
+            ['a', false],
         ];
     }
 
@@ -68,8 +69,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWareki($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $data = 's-48/5/10';
         $result = $this->Helper->wareki($data);
         $this->assertSame($expects, $result);
     }
@@ -77,7 +76,14 @@ class BcTimeHelperTest extends BcTestCase
     public static function warekiDataProvider()
     {
         return [
+            ['m-48/5/10', 'm'],
+            ['t-48/5/10', 't'],
             ['s-48/5/10', 's'],
+            ['h-48/5/10', 'h'],
+            ['r-48/5/10', 'r'],
+            ['a-48/5/10', false],
+            ['r-5-13-01', false],
+            ['r-5-01-32', false]
         ];
     }
 
@@ -88,7 +94,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testWyear($data, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->wyear($data);
         $this->assertSame($expects, $result);
     }
@@ -96,7 +101,12 @@ class BcTimeHelperTest extends BcTestCase
     public static function wyearDataProvider()
     {
         return [
-            ['s-48/5/10', '48'],
+            ['r-5-01-01', '5'],
+            ['h-31-12-31', '31'],
+            ['s-15-06-15', '15'],
+            ['x-5-01-01', false],
+            ['r-5-13-01', false],
+            ['r-5-01-32', false],
         ];
     }
 

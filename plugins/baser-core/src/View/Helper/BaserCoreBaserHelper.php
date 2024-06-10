@@ -43,6 +43,7 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
      * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function methods(): array
     {
