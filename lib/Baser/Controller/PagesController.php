@@ -138,6 +138,10 @@ class PagesController extends AppController
 				$this->redirect(['contents', 'action' => 'index']);
 			}
 
+			if(empty($this->request->data['Content']['name'])) {
+				$this->request->data['Content']['name'] = $this->request->data['Content']['title'];
+			}
+
 			// EVENT Pages.beforeAdd
 			$event = $this->dispatchEvent('beforeAdd', [
 				'data' => $this->request->data
@@ -412,10 +416,10 @@ class PagesController extends AppController
 					$this->BcMessage->setError(__d('baser', '本稿欄でスクリプトの入力は許可されていません。'));
 					$this->notFound();
 				}
-				
+
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
-				
+
 				$this->Session->write($sessionKey, $this->request->data);
 				$query = [];
 				if ($this->request->query) {
@@ -441,7 +445,7 @@ class PagesController extends AppController
 					$this->BcMessage->setError(__d('baser', '本稿欄でスクリプトの入力は許可されていません。'));
 					$this->notFound();
 				}
-				
+
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 
