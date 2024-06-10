@@ -1510,5 +1510,18 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser admin', $result['Api/Admin']->name);
     }
 
+    /**
+     * test PairToAssoc
+     */
+    public function testPairToAssoc()
+    {
+        $result = BcUtil::pairToAssoc('key1', 'value1', 'key2', 'value2', 'key3');
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
 
+        $result = BcUtil::pairToAssoc('key1|value1|key2|value2|key3');
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
+
+        $result = BcUtil::pairToAssoc('');
+        $this->assertEquals([], $result);
+    }
 }
