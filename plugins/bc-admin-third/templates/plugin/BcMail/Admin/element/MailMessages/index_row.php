@@ -63,6 +63,7 @@
       ○
     <?php endif ?>
   </td>
+  <?php echo $this->BcListTable->dispatchShowRow($mailMessage) ?>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'view', $mailContent->id, $mailMessage->id], [
       'title' => __d('baser_core', '詳細'),
@@ -78,5 +79,4 @@
       'data-bca-btn-size' => 'lg'
     ]) ?>
   </td>
-  <?php echo $this->BcListTable->dispatchShowRow($mailMessage) ?>
 </tr>
