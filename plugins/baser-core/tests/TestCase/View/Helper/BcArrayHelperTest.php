@@ -61,7 +61,6 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testLast()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertTrue($this->Helper->last($this->data, 'c'));
         $this->assertFalse($this->Helper->last($this->data, 'd'));
     }
