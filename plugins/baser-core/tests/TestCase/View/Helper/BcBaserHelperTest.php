@@ -1921,6 +1921,9 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetPluginBaser()
     {
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()));
+
         $PluginBaser = $this->BcBaser->getPluginBaser('BcBlog');
         $this->assertEquals('BcBlog\View\Helper\BcBlogBaserHelper', get_class($PluginBaser));
         $this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
