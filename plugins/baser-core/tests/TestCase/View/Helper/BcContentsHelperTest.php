@@ -833,7 +833,7 @@ class BcContentsHelperTest extends BcTestCase
         //Set the config
         $this->BcContents->setConfig($config);
         $rs = $this->BcContents->getJsonItems();
-        $this->assertEquals(json_encode($config['items']), $rs);
+        $this->assertEquals('["item1","item2","item3"]', $rs);
     }
 
 }
