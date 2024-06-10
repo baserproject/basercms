@@ -725,16 +725,17 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetCategoryTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
 
         $topTitle = '｜baserCMS inc. [デモ]';
         $request = $this->getRequest('/about');
         $view = new View($request);
-        $view->set(['crumbs'=> [
+        $view->set(['crumbs' => [
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
         ]]);
-        $this->BcBaser = new
+        $this->BcBaser = new BcBaserHelper($view);
 
         $this->BcBaser->setTitle('会社沿革');
 
@@ -1339,8 +1340,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCopyYear($expected, $begin)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->expectOutputString($expected);
         $this->BcBaser->copyYear($begin);
     }
@@ -1349,8 +1348,9 @@ class BcBaserHelperTest extends BcTestCase
     {
         $year = date('Y');
         return [
+            ["{$year}", $year],
             ["2000 - {$year}", 2000],
-            [$year, 'はーい']
+            [$year, 'はーい'],
         ];
     }
 
@@ -1493,7 +1493,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testMark($search, $text, $name, $attributes, $escape, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcBaser->mark($search, $text, $name, $attributes, $escape);
         $this->assertEquals($expected, $result);
     }
@@ -1575,8 +1574,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetHere($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->getHere());
     }
 
@@ -1599,8 +1597,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsCategoryTop($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isCategoryTop());
     }
 
@@ -1847,7 +1844,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         Configure::write('BcEnv.siteUrl', 'https://basercms.net/');
         Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
 
@@ -1922,9 +1918,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetPluginBaser()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $PluginBaser = $this->BcBaser->getPluginBaser('BcBlog');
-        $this->assertEquals('BlogBaserHelper', get_class($PluginBaser));
+        $this->assertEquals('BcBlog\View\Helper\BcBlogBaserHelper', get_class($PluginBaser));
         $this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
     }
 

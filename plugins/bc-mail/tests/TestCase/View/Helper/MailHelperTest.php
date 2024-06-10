@@ -214,4 +214,18 @@ class MailHelperTest extends BcTestCase
         $rs = $this->MailHelper->descriptionExists();
         $this->assertFalse($rs);
     }
+
+    /**
+     * test testGetDescription
+     */
+    public function test_getDescription()
+    {
+        $mailContent = new MailContent();
+        $mailContent->description = 'test description';
+
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $rs = $this->MailHelper->getDescription();
+        $this->assertEquals('test description', $rs);
+    }
 }
