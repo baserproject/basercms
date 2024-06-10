@@ -23,6 +23,7 @@ use BcMail\Model\Entity\MailContent;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailMessagesTable;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 
@@ -144,9 +145,32 @@ class MailMessagesService implements MailMessagesServiceInterface
             $this->MailMessages->convertToDb($mailFields, $entity);
             if ($mailContent->save_info) {
                 return $this->MailMessages->saveOrFail($entity);
+            } else {
+                return $entity;
             }
         }
-        throw new PersistenceFailedException($validateEntity, __d('baser_core', '入力エラーです。内容を見直してください。'));
+        throw new PersistenceFailedException($entity, __d('baser_core', '入力エラーです。内容を見直してください。'));
+    }
+
+    /**
+     * エンティティをフォーム用のデータに変換する
+     *
+     * @param EntityInterface $mailMessage
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function convertToForm(EntityInterface $mailMessage)
+    {
+        foreach($this->MailMessages->mailFields as $mailField) {
+            if (empty($mailMessage->{$mailField->field_name})) continue;
+            $value = $mailMessage->{$mailField->field_name};
+            // マルチチェックのデータを配列に変換
+            if ($mailField->type === 'multi_check' && $mailField->use_field && $value && strpos($value, '|') !== false) {
+                $mailMessage->{$mailField->field_name} = explode("|", $value);
+            }
+        }
+        return $mailMessage;
     }
 
     /**

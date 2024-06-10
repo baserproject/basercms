@@ -348,11 +348,12 @@ if (!CKEDITOR.dialog.exists('Image')) {
 
                                         if (element && imgFlg) {
                                             // 画像のサイズを取得する
-                                            $.get($.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_exists_images/' + getFileName(element.getAttribute('src'), ''), null, function (res) {
-                                                if (res) {
-                                                    rdoSize.find('input[type=radio]').eq(1).prop('disabled', !res.small);
-                                                    rdoSize.find('input[type=radio]').eq(2).prop('disabled', !res.midium);
-                                                    rdoSize.find('input[type=radio]').eq(3).prop('disabled', !res.large);
+                                            const url = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/exists_images/' + getFileName(element.getAttribute('src'), '');
+                                            $.get(url, null, function (res) {
+                                                if (res.result) {
+                                                    rdoSize.find('input[type=radio]').eq(1).prop('disabled', !res.result.small);
+                                                    rdoSize.find('input[type=radio]').eq(2).prop('disabled', !res.result.midium);
+                                                    rdoSize.find('input[type=radio]').eq(3).prop('disabled', !res.result.large);
                                                 } else {
                                                     rdoSize.find('input[type=radio]').prop('disabled', true);
                                                 }

@@ -65,6 +65,7 @@ class SiteFactory extends CakephpBaseFactory
     {
         return $this->setField('id', 1)
             ->setField('name', '')
+            ->setField('display_name', 'メインサイト')
             ->setField('theme', 'BcFront')
             ->setField('status', true);
     }

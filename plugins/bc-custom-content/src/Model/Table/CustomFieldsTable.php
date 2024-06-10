@@ -107,10 +107,24 @@ class CustomFieldsTable extends AppTable
         $validator
             ->add('meta', [
                 'checkAlphaNumericWithJson' => [
-                    'rule' => ['checkAlphaNumericWithJson', 'BcCustomContent.email_confirm'],
+                    'rule' => ['checkWithJson', 'BcCustomContent.email_confirm', "/^[a-z0-9_]+$/"],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
-                ]
+                ],
+            ])
+            ->add('meta', [
+                'checkMaxFileSizeWithJson' => [
+                    'rule' => ['checkWithJson', 'BcCustomContent.max_file_size', "/^[0-9]+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'ファイルアップロードサイズ上限は整数値のみで入力してください。')
+                ],
+            ])
+            ->add('meta', [
+                'checkFileExtWithJson' => [
+                    'rule' => ['checkWithJson', 'BcCustomContent.file_ext', "/^[a-z,]+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '拡張子を次の形式のようにカンマ（,）区切りで入力します。')
+                ],
             ]);
         return $validator;
     }
@@ -148,7 +162,13 @@ class CustomFieldsTable extends AppTable
     {
         $metaErrors = $entity->getError('meta');
         if (isset($metaErrors['checkAlphaNumericWithJson'])) {
-            $entity->setError('meta.BcCustomContent.email_confirm',  ['checkAlphaNumericWithJson' => $metaErrors['checkAlphaNumericWithJson']]);
+            $entity->setError('meta.BcCustomContent.email_confirm', ['checkAlphaNumericWithJson' => $metaErrors['checkAlphaNumericWithJson']]);
+        }
+        if (isset($metaErrors['checkFileExtWithJson'])) {
+            $entity->setError('meta.BcCustomContent.file_ext', ['checkFileExtWithJson' => $metaErrors['checkFileExtWithJson']]);
+        }
+        if (isset($metaErrors['checkMaxFileSizeWithJson'])) {
+            $entity->setError('meta.BcCustomContent.max_file_size', ['checkMaxFileSizeWithJson' => $metaErrors['checkMaxFileSizeWithJson']]);
         }
     }
 
@@ -175,6 +195,7 @@ class CustomFieldsTable extends AppTable
      *
      * @param EntityInterface $entity
      * @return mixed
+     * @unitTest
      */
     public function decodeEntity(EntityInterface|array|null $entity): EntityInterface|array|null
     {
@@ -191,6 +212,7 @@ class CustomFieldsTable extends AppTable
      * @return ArrayObject
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function encodeEntity(ArrayObject $entity)
     {

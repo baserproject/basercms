@@ -97,6 +97,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isSuper(): bool
     {
@@ -206,6 +207,7 @@ class User extends EntityAlias
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixes(): array
     {

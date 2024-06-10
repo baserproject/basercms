@@ -9,10 +9,17 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcMail\Test\TestCase\Controller\Admin;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailConfigsControllerTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
     /**
      * set up
      *
@@ -20,11 +27,8 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-//        $this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
-//
-//        $this->Case = $this->getMockForAbstractClass('ControllerTestCase');
-
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
     }
 
     /**
@@ -34,8 +38,6 @@ class MailConfigsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->MailConfigs);
-//        unset($this->Case);
         parent::tearDown();
     }
 
@@ -73,5 +75,25 @@ class MailConfigsControllerTest extends BcTestCase
                 ]
             ], '\/admin\/mail\/mail_configs\/form']
         ];
+    }
+
+    /**
+     * test index
+     */
+    public function testIndex()
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //request is get
+        $this->get('/baser/admin/bc-mail/mail_configs/index');
+        $this->assertResponseOk();
+
+        //request is post
+        $this->post('/baser/admin/bc-mail/mail_configs/index', ['name_add' => 'test']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('メールプラグイン設定を保存しました。');
+        $this->assertRedirect('/baser/admin/bc-mail/mail_configs/index');
     }
 }

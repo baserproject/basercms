@@ -1593,6 +1593,8 @@ class BcUtil
 
     /**
      * オベントをオフにする
+     *
+     * グローバルイベントマネージャーからも削除する
      * @param EventManagerInterface $eventManager
      * @param string $eventKey
      * @return array
@@ -1602,9 +1604,11 @@ class BcUtil
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
         $eventListeners = $eventManager->listeners($eventKey);
+        $globalEventManager = $eventManager->instance();
         if ($eventListeners) {
             foreach($eventListeners as $eventListener) {
                 $eventManager->off($eventKey, $eventListener['callable']);
+                $globalEventManager->off($eventKey, $eventListener['callable']);
             }
         }
         return $eventListeners;
@@ -2195,6 +2199,37 @@ class BcUtil
         if ($remove) $message .= sprintf(__d('baser_core', 'バージョン %s で削除される予定です。'), $remove);
         if ($note) $message .= $note;
         return $message;
+    }
+
+    /**
+     * baserCMS のバージョンが 5.1 かどうか判定
+     * 5.1系へのバージョンアップ時のみ利用
+     *
+     * @return bool
+     * @deprecated remove 5.1.0 このメソッドは非推奨です。
+     */
+    public static function is51()
+    {
+        if(file_exists(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt')) {
+            $versionFile = new File(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } elseif(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt') {
+            $versionFile = new File(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        $versionData = $versionFile->read();
+        $aryVersionData = explode("\n", $versionData);
+        if (!empty($aryVersionData[0])) {
+            $version = $aryVersionData[0];
+            if(preg_match('/^5\.0/', $version) || $version === '5.1.0-dev') {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        return false;
     }
 
 }

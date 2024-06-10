@@ -14,7 +14,7 @@ namespace BcCustomContent\Test\TestCase\Model\Table;
 use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomFieldsTable;
-use BcCustomContent\Test\Factory\CustomFieldFactory;
+use Cake\Routing\Router;
 
 /**
  * CustomFieldsTableTest
@@ -102,18 +102,23 @@ class CustomFieldsTableTest extends BcTestCase
 
         //Eメール比較先フィールド名のバリデーション
         //trueを返す
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
         $errors = $validator->validate([
-            'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"","file_ext":""}}'
+            'meta' => '{"BcCustomContent":{"email_confirm":"aaaa_bbb","max_file_size":"100","file_ext":"png"}}'
         ]);
         //戻り値を確認
         $this->assertArrayNotHasKey('meta', $errors);
 
         //全角文字
         $errors = $validator->validate([
-            'meta' => '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"","file_ext":""}}'
+            'meta' => '{"BcCustomContent":{"email_confirm":"ああ","max_file_size":"ああ","file_ext":"ああ"}}'
+
         ]);
         //戻り値を確認
-        $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['meta']));
+        $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta']['checkAlphaNumericWithJson']);
+        $this->assertEquals('ファイルアップロードサイズ上限は整数値のみで入力してください。', $errors['meta']['checkMaxFileSizeWithJson']);
+        $this->assertEquals('拡張子を次の形式のようにカンマ（,）区切りで入力します。', $errors['meta']['checkFileExtWithJson']);
     }
 
     /**
@@ -152,7 +157,10 @@ class CustomFieldsTableTest extends BcTestCase
      */
     public function test_afterMarshal()
     {
-        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCustomContent' => ['email_confirm' => '全角文字']]]);
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
+
+        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCustomContent' => ['email_confirm' => '全角文字', 'max_file_size' => 'abc', 'file_ext' => 'avc']]]);
         $result = $this->CustomFieldsTable->dispatchEvent('Model.afterMarshal', ['entity' => $customFields, 'data' => new \ArrayObject(), 'options' => new \ArrayObject()]);
         $customFields = $result->getData('entity');
         //エラー情報を正しい状態に戻すことを確認
@@ -167,4 +175,29 @@ class CustomFieldsTableTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * test encodeEntity
+     */
+    public function test_encodeEntity()
+    {
+        $entity = new ArrayObject(['meta' => ['key' => 'value'], 'validate' => ['rule' => 'notEmpty']]);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEquals(json_encode(['key' => 'value'], JSON_UNESCAPED_UNICODE), $result['meta']);
+        $this->assertEquals(json_encode(['rule' => 'notEmpty'], JSON_UNESCAPED_UNICODE), $result['validate']);
+
+        //meta empty and validate empty
+        $entity = new ArrayObject(['meta' => [], 'validate' => []]);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEmpty($result['meta']);
+        $this->assertEmpty($result['validate']);
+
+        //without meta and validate
+        $entity = new ArrayObject(['other' => 'value']);
+        $result = $this->CustomFieldsTable->encodeEntity($entity);
+        $this->assertEquals('value', $result['other']);
+        $this->assertArrayNotHasKey('meta', $result);
+        $this->assertArrayNotHasKey('validate', $result);
+    }
+
 }

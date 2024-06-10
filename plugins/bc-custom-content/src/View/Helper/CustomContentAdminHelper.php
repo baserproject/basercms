@@ -339,6 +339,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnabledMoveUpEntry(\ArrayObject $entries, CustomEntry $currentEntry)
     {
@@ -362,6 +363,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnabledMoveDownEntry(\ArrayObject $entries, CustomEntry $currentEntry)
     {

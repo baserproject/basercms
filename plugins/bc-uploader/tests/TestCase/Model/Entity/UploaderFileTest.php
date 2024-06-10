@@ -4,6 +4,7 @@ namespace BcUploader\Test\TestCase\Model\Entity;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Entity\UploaderFile;
+use BcUploader\Test\Scenario\UploaderFilesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class UploaderFileTest extends BcTestCase
@@ -49,9 +50,25 @@ class UploaderFileTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test getFileNameBySize
+     */
     public function test_getFileNameBySize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        $uploaderFile = $this->UploaderFile->get(1);
+
+        $result = $this->execPrivateMethod($uploaderFile, 'getFileNameBySize', ['small']);
+        $this->assertEquals('social_new__small.jpg', $result);
+
+        $result = $this->execPrivateMethod($uploaderFile, 'getFileNameBySize', ['midium']);
+        $this->assertEquals('social_new__midium.jpg', $result);
+
+        $result = $this->execPrivateMethod($uploaderFile, 'getFileNameBySize', ['large']);
+        $this->assertEquals('social_new__large.jpg', $result);
+
+        $result = $this->execPrivateMethod($uploaderFile, 'getFileNameBySize', ['mobile_small']);
+        $this->assertEquals('social_new__mobile_small.jpg', $result);
     }
 
     public function test_fileExists()
