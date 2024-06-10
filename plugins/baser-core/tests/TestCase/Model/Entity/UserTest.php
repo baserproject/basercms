@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -79,6 +80,13 @@ class UserTest extends BcTestCase
 
         //isAdminではない場合、return true
         $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 3])->getEntity()));
+
+        //他のAdminアカウトを編集する場合、return false
+        UserFactory::make(['id' => 4])->persist();
+        UsersUserGroupFactory::make(['user_id' => 4, 'user_group_id' => 1])->persist();
+        $user = $this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups');
+
+        $this->assertFalse($this->User->isEditableUser($user));
     }
 
     /**
