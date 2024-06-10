@@ -11,13 +11,15 @@
 namespace BcMail\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
-use BcMail\Model\Entity\MailField;
+use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\View\Helper\MailfieldHelper;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailfieldHelperTest extends BcTestCase
 {
-
+    use ScenarioAwareTrait;
     /**
      * set up
      */
@@ -46,23 +48,18 @@ class MailfieldHelperTest extends BcTestCase
 
     /**
      * コントロールのソースを取得する
-     * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions($source, $type, $expected)
+    public function testGetOptions()
     {
-        $mailField = new MailField();
-        $mailField->source = $source;
-        $mailField->type = $type;
-
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //with source data not empty
+        $mailField = MailFieldsFactory::get(1);
         $result = $this->mailfieldHelper->getOptions($mailField);
-        $this->assertEquals($expected, $result);
-    }
+        $this->assertEquals(['資料請求' => '資料請求', '問い合わせ' => '問い合わせ', 'その他' => 'その他'], $result);
 
-    public static function getOptionsDataProvider()
-    {
-        return [
-            ["option1|option2|option3", "not_check", ['option1' => 'option1', 'option2' => 'option2', 'option3' => 'option3']],
-            ["option1|option2|option3", "check", []],
-        ];
+        //with source data empty
+        $mailField = MailFieldsFactory::make(['source' => '']);
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals([], $result);
     }
 }
