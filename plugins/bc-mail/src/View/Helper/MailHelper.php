@@ -160,6 +160,7 @@ class MailHelper extends Helper
      * @return string メールフォームの説明文
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription()
     {
@@ -172,6 +173,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーのためテスト不要
      */
     public function description()
     {

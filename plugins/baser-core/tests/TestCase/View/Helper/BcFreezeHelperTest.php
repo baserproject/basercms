@@ -466,12 +466,16 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testDatepicker($freezed, $date, $fieldName, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
-            $this->BcFreeze->freeze();
             [$model, $field] = explode('.', $fieldName);
-            $this->BcFreeze->request->data[$model][$field] = $date;
+            if (!empty($date)){
+                $request = $this->getRequest()->withData($model, [$field => $date]);
+            }else{
+                $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            }
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->datepicker($fieldName, $attributes);
@@ -484,7 +488,7 @@ class BcFreezeHelperTest extends BcTestCase
             [false, null, 'baser', [], 'type="text".*id="baser".*("#baser")'],
             [false, null, 'baser', ['test1' => 'testValue1'], 'test1="testValue1"'],
             [true, '2015-4-1', 'baser.freezed', [], 'type="hidden".*2015\/04\/01'],
-            [true, null, 'baser.freezed', [], '>$'],
+            [true, null, 'baser.freezed', [], 'type="hidden".*1970\/01\/01'],
             [true, null, 'baser.freezed', ['test1' => 'testValue1'], 'test1="testValue1"'],
         ];
     }

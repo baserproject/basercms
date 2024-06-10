@@ -207,6 +207,7 @@ class User extends EntityAlias
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixes(): array
     {
