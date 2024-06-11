@@ -929,13 +929,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
 
-        $topTitle = 'baserCMS inc. [デモ]';
-        $title = '会社データ';
-        $this->BcBaser->request = $this->_getRequest('/about');
-        $this->expectOutputString('<title>' . $title . '｜' . $topTitle . '</title>' . PHP_EOL);
-        $this->BcBaser->setTitle($title);
+        $this->expectOutputString('<title>会社データ｜baserCMS inc. [デモ]</title>' . PHP_EOL);
+        $this->BcBaser->setTitle('会社データ');
         $this->BcBaser->title();
     }
 

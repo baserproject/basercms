@@ -1085,6 +1085,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function title($separator = '｜', $categoryTitleOn = null)
     {
