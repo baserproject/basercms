@@ -945,20 +945,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testMetaKeywords()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
         ob_start();
         $this->BcBaser->metaKeywords();
         $result = ob_get_clean();
-        $excepted = [
-            'meta' => [
-                'name' => 'keywords',
-                'content' => 'baserCMS,国産,オープンソース'
-            ]
-        ];
-
-        $this->assertTags($result, $excepted);
+        $this->assertEquals($result, '<meta name="keywords" content="baserCMS,国産,オープンソース">' . PHP_EOL);
     }
 
     /**
