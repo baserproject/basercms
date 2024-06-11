@@ -1109,6 +1109,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function metaDescription()
     {

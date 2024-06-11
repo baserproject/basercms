@@ -967,19 +967,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testMetaDescription()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->BcBaser->setDescription('国産オープンソースのホームページです');
         ob_start();
         $this->BcBaser->metaDescription();
         $result = ob_get_clean();
-        $excepted = [
-            'meta' => [
-                'name' => 'description',
-                'content' => '国産オープンソースのホームページです'
-            ]
-        ];
-        $this->assertTags($result, $excepted);
+
+        $this->assertEquals($result, '<meta name="description" content="国産オープンソースのホームページです">' . PHP_EOL);
     }
 
     /**
