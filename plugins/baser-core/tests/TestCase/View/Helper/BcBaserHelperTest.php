@@ -988,20 +988,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testRss()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         ob_start();
         $this->BcBaser->rss('ブログ', 'http://localhost/blog/');
         $result = ob_get_clean();
-        $excepted = [
-            'link' => [
-                'href' => 'http://localhost/blog/',
-                'type' => 'application/rss+xml',
-                'rel' => 'alternate',
-                'title' => 'ブログ'
-            ]
-        ];
-        $this->assertTags($result, $excepted);
+        $this->assertEquals($result, '<link href="http://localhost/blog/" type="application/rss+xml" rel="alternate" title="ブログ">' . PHP_EOL);
     }
 
     /**
