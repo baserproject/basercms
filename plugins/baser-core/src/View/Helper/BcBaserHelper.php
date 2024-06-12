@@ -2389,6 +2389,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentPrefix()
     {
