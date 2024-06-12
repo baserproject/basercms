@@ -820,4 +820,13 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertFalse($this->BcContents->getCurrentSite());
     }
 
+    public function test_getSiteRoot()
+    {
+        $siteRoot = $this->BcContents->getSiteRoot(1);
+        $this->assertNotEmpty($siteRoot);
+
+        $siteRoot = $this->BcContents->getSiteRoot(99);
+        $this->assertNull($siteRoot);
+    }
+
 }
