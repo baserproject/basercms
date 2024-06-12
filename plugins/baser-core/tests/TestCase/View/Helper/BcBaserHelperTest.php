@@ -1310,24 +1310,23 @@ class BcBaserHelperTest extends BcTestCase
      * @return void
      * @dataProvider charsetDataProvider
      */
-    public function testCharset($expected, $encoding, $url = null)
+    public function testCharset($expected, $charset , $device)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
-        $this->expectOutputString($expected);
-        if ($encoding !== null) {
-            $this->BcBaser->charset($encoding);
-        } else {
-            $this->BcBaser->charset();
-        }
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $site = SiteFactory::get(1);
+        $site->device = $device;
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site->device));
+        ob_start();
+        $this->BcBaser->charset($charset);
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
     }
 
     public static function charsetDataProvider()
     {
         return [
-            ['<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'],
-            ['<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/']
+            ['<meta charset="utf-8">','utf-8', 'desktop'],
+            ['<meta charset="Shift-JIS">','Shift-JIS', 'mobile']
         ];
     }
 
