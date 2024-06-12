@@ -2616,6 +2616,7 @@ class BcBaserHelper extends Helper
      * @param bool $useGloss 光沢有無
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function webClipIcon($fileName = 'apple-touch-icon-precomposed.png', $useGloss = false)
     {
