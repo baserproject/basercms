@@ -2099,4 +2099,11 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
+    public function test_baseUrl()
+    {
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('base', '/BaserCMS'));
+        $this->BcBaser->baseUrl();
+        $this->expectOutputString('/BaserCMS/');
+    }
+
 }
