@@ -1655,6 +1655,7 @@ class BcBaserHelper extends Helper
      * @return string プロトコルから始まるURL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUri($url)
     {
