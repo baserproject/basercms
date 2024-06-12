@@ -1223,10 +1223,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIcon()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon"/><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"/>' . "\n");
+        ob_start();
         $this->BcBaser->icon();
+        $result = ob_get_clean();
+        $expected = '<link href="/favicon.ico" type="image/x-icon" rel="icon"><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">'."\n";
+        $this->assertEquals($expected, $result);
     }
 
     /**
