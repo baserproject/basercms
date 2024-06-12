@@ -1064,9 +1064,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testFooter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputRegex('/<div id="Footer">.*<img src="\/img\/cake.power.gif".*<\/a>.*<\/p>.*<\/div>/s');
+        $this->expectOutputRegex('/<footer class="bs-footer">.*<img src="\/img\/cake.power.gif".*<\/a>.*<\/p>.*<\/footer>/s');
         $this->BcBaser->footer();
     }
 
