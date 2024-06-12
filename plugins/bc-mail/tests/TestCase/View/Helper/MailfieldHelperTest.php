@@ -51,14 +51,13 @@ class MailfieldHelperTest extends BcTestCase
      */
     public function testGetOptions()
     {
-        $this->loadFixtureScenario(MailFieldsScenario::class);
         //with source data not empty
-        $mailField = MailFieldsFactory::get(1);
+        $mailField = MailFieldsFactory::make(['source' => '資料請求|問い合わせ|その他'])->getEntity();
         $result = $this->mailfieldHelper->getOptions($mailField);
         $this->assertEquals(['資料請求' => '資料請求', '問い合わせ' => '問い合わせ', 'その他' => 'その他'], $result);
 
         //with source data empty
-        $mailField = MailFieldsFactory::make(['source' => '']);
+        $mailField = MailFieldsFactory::make(['source' => ''])->getEntity();
         $result = $this->mailfieldHelper->getOptions($mailField);
         $this->assertEquals([], $result);
     }
