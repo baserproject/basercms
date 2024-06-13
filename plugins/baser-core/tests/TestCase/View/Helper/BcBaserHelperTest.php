@@ -2016,7 +2016,19 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSitePrefix()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //isInstalled is false
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertEquals('', $this->BcBaser->getSitePrefix());
+
+        Configure::write('BcEnv.isInstalled', true);
+        //without currentSite
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', []));
+        $this->assertEquals('', $this->BcBaser->getSitePrefix());
+
+        //with currentSite
+        $site = SiteFactory::make(['id' => 1, 'alias' => 'alias'])->persist();
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $this->assertEquals('alias', $this->BcBaser->getSitePrefix());
     }
 
     /**

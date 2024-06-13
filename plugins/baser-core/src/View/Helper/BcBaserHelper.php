@@ -1519,6 +1519,7 @@ class BcBaserHelper extends Helper
      * @return string|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitePrefix(): string|false
     {
