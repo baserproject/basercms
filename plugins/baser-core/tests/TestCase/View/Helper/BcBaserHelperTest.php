@@ -1312,9 +1312,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCharset($expected, $charset , $device)
     {
-        $this->loadFixtureScenario(InitAppScenario::class);
-        $site = SiteFactory::get(1);
-        $site->device = $device;
+        $site = SiteFactory::make(['device' => $device])->getEntity();
         $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site->device));
         ob_start();
         $this->BcBaser->charset($charset);
