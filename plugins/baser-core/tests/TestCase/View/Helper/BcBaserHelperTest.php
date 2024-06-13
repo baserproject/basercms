@@ -2098,12 +2098,4 @@ class BcBaserHelperTest extends BcTestCase
             [2, '/s/', '<link href="https://localhost/" rel="canonical">'],
         ];
     }
-
-    public function test_baseUrl()
-    {
-        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('base', '/BaserCMS'));
-        $this->BcBaser->baseUrl();
-        $this->expectOutputString('/BaserCMS/');
-    }
-
 }
