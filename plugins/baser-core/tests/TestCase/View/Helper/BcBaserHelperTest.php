@@ -1166,9 +1166,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testFunc()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        Configure::write('debug', 0);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        Configure::write('debug', false);
 
         // 未ログイン
         ob_start();
@@ -1177,19 +1176,17 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals('', $result);
 
         // ログイン中
-        $expects = '<div id="ToolBar">';
-        $this->_login();
-        $this->BcBaser->set('currentPrefix', 'admin');
-        $this->BcBaser->set('currentUserAuthPrefixes', ['admin']);
+        $expects = '<div id="ToolBar" class="bca-toolbar">';
+        $this->loginAdmin($this->getRequest('/baser/admin'));
         ob_start();
         $this->BcBaser->func();
         $result = ob_get_clean();
         $this->assertTextContains($expects, $result);
-        $this->_logout();
 
         // デバッグモード２
-        $expects = '<table class="cake-sql-log"';
-        Configure::write('debug', 2);
+        $expects = '<span id="DebugMode" class="bca-debug-mode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">
+              デバッグモード          </span>';
+        Configure::write('debug', true);
         ob_start();
         $this->BcBaser->func();
         $result = ob_get_clean();
