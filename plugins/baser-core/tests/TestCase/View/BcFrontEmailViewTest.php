@@ -21,7 +21,6 @@ class BcFrontEmailViewTest extends BcTestCase
 
     public function testInitialize(): void
     {
-        $this->BcFrontEmailView->initialize();
         $this->assertNotEmpty($this->BcFrontEmailView->BcHtml);
     }
 }
