@@ -295,7 +295,7 @@ class BcContentsHelper extends Helper
             $conditions['Contents.level <'] = $level;
         }
         if (!empty($options['type'])) {
-            $conditions['Contents.type'] = ['ContentFolder', $options['type']];
+            $conditions['Contents.type IN'] = ['ContentFolder', $options['type']];
         }
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
