@@ -150,7 +150,7 @@ class BcComposer
      */
     public static function require(string $package, string $version)
     {
-        return self::execCommand("require baserproject/{$package}:{$version} --with-all-dependencies");
+        return self::execCommand("require baserproject/{$package}:{$version} --with-all-dependencies --ignore-platform-req=ext-xdebug");
     }
 
     /**
