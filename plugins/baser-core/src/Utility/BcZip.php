@@ -77,7 +77,7 @@ class BcZip
             $extractedPath = $target . $this->topArchiveName;
             $Folder = new Folder();
             $Folder->chmod($extractedPath, 0777);
-            $this->Zip->close();
+            if ($this->Zip) $this->Zip->close();
             return true;
         } else {
             return false;
