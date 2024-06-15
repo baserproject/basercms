@@ -44,6 +44,7 @@ class CKEditorStyleParser
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function parse($css)
     {

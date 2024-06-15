@@ -163,6 +163,7 @@ class AppTable extends Table
      * @return string 変換後文字列
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function replaceText($str)
     {
