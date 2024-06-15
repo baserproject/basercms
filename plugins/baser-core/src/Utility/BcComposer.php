@@ -152,7 +152,7 @@ class BcComposer
         if(strpos($package, '/') === false) {
             $package = 'baserproject/' . $package;
         }
-        return self::execCommand("require {$package}:{$version} --with-all-dependencies");
+        return self::execCommand("require {$package}:{$version} --with-all-dependencies --ignore-platform-req=ext-xdebug");
     }
 
     /**

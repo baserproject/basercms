@@ -2211,13 +2211,12 @@ class BcUtil
     public static function is51()
     {
         if(file_exists(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt')) {
-            $versionFile = new File(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt');
+            $versionData = file_get_contents(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt');
         } elseif(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt') {
-            $versionFile = new File(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+            $versionData = file_get_contents(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
         } else {
             trigger_error('baserCMSのバージョンが特定できません。');
         }
-        $versionData = $versionFile->read();
         $aryVersionData = explode("\n", $versionData);
         if (!empty($aryVersionData[0])) {
             $version = $aryVersionData[0];

@@ -168,4 +168,28 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         return $updateLog;
     }
 
+    /**
+     * プラグインアップロード画面用のデータを取得
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForAdd()
+    {
+        return [
+            'isPluginsDirWritable' => $this->isPluginsDirWritable()
+        ];
+    }
+
+    /**
+     * プラグインディレクトリが書き込み可能かどうか
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isPluginsDirWritable()
+    {
+        return is_writable(BASER_PLUGINS);
+    }
+
 }
