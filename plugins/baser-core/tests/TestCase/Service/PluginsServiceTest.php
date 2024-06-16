@@ -567,6 +567,7 @@ EOF;
      */
     public function testGetCoreUpdateAndUpdateCoreFiles()
     {
+        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
@@ -610,6 +611,7 @@ EOF;
      */
     public function testRollbackCore()
     {
+        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         // composer.json を配布用に更新

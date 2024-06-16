@@ -37,7 +37,6 @@ class ComposerCommandTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->useCommandRunner();
     }
 
     /**
@@ -58,6 +57,7 @@ class ComposerCommandTest extends BcTestCase
      */
 	public function testExecute()
     {
+        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         // バージョン指定なし
         $this->exec('composer');
         $this->assertErrorContains('Missing required argument. The `version` argument is required');
@@ -97,6 +97,7 @@ class ComposerCommandTest extends BcTestCase
      */
 	public function testExecuteOnUpdateTmp()
     {
+        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         // 一時ファイル作成
         (new BcFolder(TMP . 'update'))->create();
         (new BcFolder(ROOT . DS . 'vendor'))->copy(TMP . 'update' . DS . 'vendor');

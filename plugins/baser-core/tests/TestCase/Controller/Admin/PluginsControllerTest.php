@@ -360,6 +360,7 @@ class PluginsControllerTest extends BcTestCase
      */
     public function test_get_core_update()
     {
+        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
