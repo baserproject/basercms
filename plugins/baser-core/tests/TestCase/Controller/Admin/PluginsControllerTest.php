@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -349,6 +350,13 @@ class PluginsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
+        // composer.json をバックアップ
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
+        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
+
+        // composer.json を配布用に更新
+        BcComposer::setupComposerForDistribution(ROOT . DS);
+
         $this->post('/baser/admin/baser-core/plugins/get_core_update', [
             'targetVersion' => '5.0.15',
             'php' => 'php',
@@ -361,6 +369,13 @@ class PluginsControllerTest extends BcTestCase
             'controller' => 'plugins',
             'action' => 'update'
         ]);
+
+        // 一時ファイルを削除
+        (new Folder())->delete(TMP . 'update');
+
+        // composer.json を元に戻す
+        rename(ROOT . DS . 'composer.bak.json', ROOT . DS . 'composer.json');
+        rename(ROOT . DS . 'composer.bak.lock', ROOT . DS . 'composer.lock');
     }
 
 }
