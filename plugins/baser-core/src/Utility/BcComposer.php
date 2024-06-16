@@ -58,10 +58,10 @@ class BcComposer
      * @checked
      * @noTodo
      */
-    public static function setup(string $php = '')
+    public static function setup(string $php = '', $dir = '')
     {
         self::checkEnv();
-        self::$cd = "cd " . ROOT . DS . ';';
+        self::$cd = ($dir)? "cd " . $dir . ';': "cd " . ROOT . DS . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
         self::$export = "export HOME=" . self::$composerDir . ";";
         self::$php = ($php)?: 'php';
@@ -175,6 +175,15 @@ class BcComposer
     public static function selfUpdate()
     {
         return self::execCommand('self-update');
+    }
+
+    /**
+     * キャッシュをクリアする
+     * @return array
+     */
+    public static function clearCache()
+    {
+        return self::execCommand('clear-cache');
     }
 
     /**

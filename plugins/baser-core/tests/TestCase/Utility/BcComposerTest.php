@@ -39,6 +39,23 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test setup
+     */
+    public function testSetup()
+    {
+        BcComposer::setup();
+        $this->assertEquals('cd /var/www/html/;', BcComposer::$cd);
+        $this->assertEquals('/var/www/html/composer/', BcComposer::$composerDir);
+        $this->assertEquals('export HOME=/var/www/html/composer/;', BcComposer::$export);
+        $this->assertEquals('php', BcComposer::$php);
+
+        // 環境を変更
+        BcComposer::setup('/usr/local/bin/php', '/var/www/html/tmp/update');
+        $this->assertEquals('cd /var/www/html/tmp/update;', BcComposer::$cd);
+        $this->assertEquals('/usr/local/bin/php', BcComposer::$php);
+    }
+
+    /**
      * installComposer
      */
     public function test_installComposer()
@@ -112,6 +129,19 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new Folder();
         $folder->delete(ROOT . DS . 'vendor' . DS . 'baserproject');
+    }
+
+    /**
+     * test clearCache
+     */
+    public function testClearCache()
+    {
+        // キャッシュを作成
+        BcComposer::setup();
+        BcComposer::selfUpdate();
+        $this->assertFileExists(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+        BcComposer::clearCache();
+        $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
     }
 
 }
