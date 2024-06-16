@@ -11,6 +11,8 @@
 
 namespace BaserCore\Utility;
 
+use Cake\Core\Configure;
+use Cake\Filesystem\File;
 use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -215,6 +217,28 @@ class BcComposer
     public static function createCommand(string $command)
     {
         return self::$cd . ' ' . self::$export . ' echo y | ' . self::$php . ' ' . self::$composerDir . 'composer.phar ' . $command . ' 2>&1';
+    }
+
+    /**
+     * 配布用に composer.json をセットアップする
+     * @param string $packagePath
+     * @return void
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public static function setupComposerForDistribution(string $packagePath)
+    {
+        $composer = $packagePath . 'composer.json';
+        $file = new File($composer);
+        $data = $file->read();
+        $regex = '/^(.+?)    "replace": {.+?},\n(.+?)/s';
+        $data = preg_replace($regex, "$1$2", $data);
+        $regex = '/^(.+?"cakephp\/cakephp": ".+?",)(.+?)$/s';
+        $setupVersion = Configure::read('BcApp.setupVersion');
+        $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
+        $data = preg_replace($regex, $replace, $data);
+        $file->write($data);
     }
 
 }

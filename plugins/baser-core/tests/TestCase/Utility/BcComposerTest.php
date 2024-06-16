@@ -144,4 +144,24 @@ class BcComposerTest extends BcTestCase
         $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
     }
 
+    /**
+     * test setupComposerForDistribution
+     */
+    public function testSetupComposerForDistribution()
+    {
+        // composer.json をバックアップ
+        $composer = ROOT . DS . 'composer.json';
+        copy($composer, ROOT . DS . 'composer.json.bak');
+
+        // 実行
+        BcComposer::setupComposerForDistribution(ROOT . DS);
+        $file = new File($composer);
+        $data = $file->read();
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
+        $this->assertFalse(strpos($data, '"replace": {'));
+
+        // バックアップをリストア
+        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+    }
+
 }
