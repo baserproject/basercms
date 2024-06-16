@@ -14,6 +14,7 @@ namespace BaserCore\Service\Admin;
 use BaserCore\Service\PluginsService;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
@@ -60,15 +61,15 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $dbVersion = BcUtil::getDbVersion($entity->name);
         BcUtil::includePluginClass($entity->name);
         $plugin = CakePlugin::getCollection()->create($entity->name);
-        $scriptNum = count($plugin->getUpdaters());
-        $scriptMessages = $plugin->getUpdateScriptMessages();
+        $scriptNum = count($plugin->getUpdaters('', true));
+        $scriptMessages = $plugin->getUpdateScriptMessages('', true);
 
         if ($entity->name === 'BaserCore') {
             $availableVersion = $this->getAvailableCoreVersion();
             $corePlugins = Configure::read('BcApp.corePlugins');
             foreach($corePlugins as $corePlugin) {
-                $scriptNum += count($plugin->getUpdaters($corePlugin));
-                $scriptMessages += $plugin->getUpdateScriptMessages($corePlugin);
+                $scriptNum += count($plugin->getUpdaters($corePlugin, true));
+                $scriptMessages += $plugin->getUpdateScriptMessages($corePlugin, true);
             }
         } else {
             $availableVersion = null;
@@ -94,9 +95,9 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
             'requireUpdate' => $this->isRequireUpdate(
                 $programVersion,
                 $dbVersion,
-                $availableVersion,
-                $scriptNum
+                $availableVersion
             ),
+            'coreDownloaded' => Cache::read('coreDownloaded', '_bc_update_'),
             'php' => $this->whichPhp(),
             'isWritableVendor' => $isWritableVendor,
             'isWritableComposerJson' => $isWritableComposerJson,
@@ -120,7 +121,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
 
     /**
      * アップデートが必要がどうか
-     *
+     * DBのバージョンと利用可能なバージョンが違う場合に必要とする
      * @param string $programVersion
      * @param string $dbVersion
      * @param string $availableVersion
@@ -129,7 +130,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @checked
      * @noTodo
      */
-    public function isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion, $scriptNum)
+    public function isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion)
     {
         $programVerPoint = BcUtil::verpoint($programVersion);
         $dbVerPoint = BcUtil::verpoint($dbVersion);
@@ -140,14 +141,16 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         if ($programVerPoint === false || $dbVerPoint === false || $availableVerPoint === false) {
             return false;
         }
-        if ($availableVerPoint !== true) {
-            if ($availableVersion !== $programVersion) return true;
-        }
-        if ($programVersion !== $dbVersion || $scriptNum) {
-            return true;
+
+        if(is_null($availableVersion)) {
+            // プラグインの場合 プログラムのバージョンを利用可能なバージョンとする
+            $availableVersion = $programVersion;
         } else {
-            return false;
+            // コアの場合は、プログラムのバージョンとDBのバージョンが違う場合はアップデート不可
+            if ($programVersion !== $dbVersion) return false;
         }
+        if ($availableVersion !== $dbVersion) return true;
+        return false;
     }
 
     /**

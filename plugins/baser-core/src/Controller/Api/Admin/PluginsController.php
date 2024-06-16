@@ -381,4 +381,28 @@ class PluginsController extends BcAdminApiController
         $this->viewBuilder()->setOption('serialize', ['availableCoreVersionInfo']);
     }
 
+    /**
+     * コアファイルの最新版を反映する
+     *
+     * @param PluginsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update_core_files(PluginsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            $service->updateCoreFiles();
+            $message = __d('baser_core', 'コアファイルの最新版への更新が完了しました。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'コアファイルの最新版への更新中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }

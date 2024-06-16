@@ -27,10 +27,12 @@ use BaserCore\View\BcAdminAppView;
  * @var bool $requireUpdate
  * @var string $php
  * @var bool $isWritablePackage
+ * @var bool $coreDownloaded
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜データベースアップデート'), ($plugin->name === 'BaserCore')? __d('baser_core', 'baserCMSコア') : $plugin->title . __d('baser_core', 'プラグイン')));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アップデート'), ($plugin->name === 'BaserCore')? __d('baser_core', 'baserCMSコア') : $plugin->title . __d('baser_core', 'プラグイン')));
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser_core', 'アップデートを実行します。よろしいですか？'),
+  'updateMessage1' => __d('baser_core', '続いてアップデートを実行します。しばらくお待ちください。'),
 ]);
 $this->BcBaser->js('admin/plugins/update.bundle', false, [
   'id' => 'AdminPluginsUpdateScript',
@@ -38,6 +40,15 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
   'data-plugin' => $plugin->name,
   'data-isWritablePackage' => $isWritablePackage
 ]);
+if ($plugin->name !== 'BaserCore' || $coreDownloaded) {
+  $formAction = 'update';
+  $h2 = __d('baser_core', 'アップデート実行');
+  $description = __d('baser_core', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。');
+} else {
+  $formAction = 'get_core_update';
+  $h2 = __d('baser_core', '最新版をダウンロード');
+  $description = __d('baser_core', 'アップデートを実行する前に、最新版をダウンロードしてください。');
+}
 ?>
 
 
@@ -49,11 +60,9 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
     <ul class="version">
       <?php if ($availableVersion): ?>
         <li><?php echo __d('baser_core', '{0} の利用可能なバージョン： <strong>{1}</strong>', $plugin->title, $availableVersion) ?></li>
-        <li><?php echo __d('baser_core', '{0} の現在のバージョン： <strong>{1}</strong>', $plugin->title, $programVersion) ?></li>
-      <?php else: ?>
-        <li><?php echo __d('baser_core', '{0} の現在のプログラムバージョン： <strong>{1}</strong>', $plugin->title, $programVersion) ?></li>
-        <li><?php echo __d('baser_core', '{0} の現在のデータベースのバージョン：<strong>{1}</strong>', $plugin->title, $dbVersion) ?></li>
       <?php endif ?>
+        <li><?php echo __d('baser_core', '{0} の現在のプログラムのバージョン： <strong>{1}</strong>', $plugin->title, $programVersion) ?></li>
+        <li><?php echo __d('baser_core', '{0} の現在のデータベースのバージョン：<strong>{1}</strong>', $plugin->title, $dbVersion) ?></li>
     </ul>
     <?php if ($scriptNum || $scriptMessages): ?>
       <div class="em-box">
@@ -61,7 +70,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
           <h3><?php echo __d('baser_core', 'α版の場合はアップデートサポート外です。') ?></h3>
         <?php elseif ($programVersion !== $dbVersion || $scriptNum): ?>
           <?php if ($scriptNum): ?>
-            <h3><?php echo sprintf(__d('baser_core', 'アップデートプログラムが <strong>%s つ</strong> あります。'), $scriptNum) ?></h3>
+            <h3><?php echo __d('baser_core', 'アップデートプログラムが {0} つあります。', $scriptNum) ?></h3>
           <?php endif ?>
         <?php else: ?>
           <h3><?php echo __d('baser_core', 'データベースのバージョンは最新です。') ?></h3>
@@ -80,7 +89,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
     <?php endif ?>
   </div>
 
-  <?php if ($scriptNum): ?>
+  <?php if ($scriptNum && $coreDownloaded): ?>
     <div class="bca-panel-box">
       <div class="section">
         <h2 class="bca-main__heading" data-bca-heading-size="lg">
@@ -88,10 +97,15 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
         </h2>
         <p>
           <?php if ($plugin->name === 'BaserCore'): ?>
-            <?php echo __d('baser_core', 'バックアップを行われていない場合は、アップデートを実行する前にプログラムファイルを前のバージョンに戻し、システム設定よりデータベースのバックアップを行いましょう。') ?>
+            <?php echo __d(
+              'baser_core',
+              'バックアップを行われていない場合は、アップデートを実行する前にプログラムファイルを前のバージョンに戻し、{0} よりデータベースのバックアップを行いましょう。',
+              $this->BcBaser->getLink(__d('baser_core', 'データベースメンテナンス'), ['controller' => 'Utilities', 'action' => 'maintenance'])
+            ) ?>
             <br>
           <?php else: ?>
-            <?php echo __d('baser_core', 'バックアップを行われていない場合は、アップデートを実行する前にデータベースのバックアップを行いましょう。') ?><br/>
+            <?php echo __d('baser_core', 'バックアップを行われていない場合は、アップデートを実行する前にデータベースのバックアップを行いましょう。') ?>
+            <br/>
           <?php endif ?>
           <small>※ <?php echo __d('baser_core', 'アップデート処理は必ず自己責任で行ってください。') ?></small><br/>
         </p>
@@ -113,11 +127,22 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
 
   <div class="bca-panel-box">
     <h2 class="bca-main__heading" data-bca-heading-size="lg">
-      <?php echo __d('baser_core', 'アップデート実行') ?>
+      <?php echo $h2 ?>
     </h2>
     <?php if ($requireUpdate): ?>
-      <p><?php echo __d('baser_core', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。') ?></p>
-      <?php echo $this->BcAdminForm->create($plugin) ?>
+      <p><?php echo $description ?></p>
+      <?php if ($plugin->name === 'BaserCore'): ?>
+        <p>
+          <?php echo sprintf(
+            __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'),
+            $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank'])
+          ) ?>
+        </p>
+      <?php endif ?>
+      <?php echo $this->BcAdminForm->create($plugin, [
+        'url' => ['action' => $formAction, $this->getRequest()->getParam('pass.0')],
+        'id' => 'PluginUpdateForm'
+      ]) ?>
       <?php echo $this->BcAdminForm->control('update', ['type' => 'hidden', 'value' => true]) ?>
       <?php echo $this->BcAdminForm->control('currentVersion', ['type' => 'hidden', 'value' => $programVersion]) ?>
       <?php echo $this->BcAdminForm->control('targetVersion', ['type' => 'hidden', 'value' => $availableVersion]) ?>
@@ -145,28 +170,34 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
           ]) ?>
         </div>
         <div class="bca-actions__main">
-          <?php echo $this->BcAdminForm->submit(__d('baser_core', 'アップデート実行'), [
-            'class' => 'button bca-btn bca-actions__item',
-            'data-bca-btn-size' => 'lg',
-            'data-bca-btn-width' => 'lg',
-            'data-bca-btn-type' => 'save',
-            'id' => 'BtnUpdate',
-            'div' => false,
-          ]) ?>
+          <?php if ($plugin->name !== 'BaserCore' || $coreDownloaded): ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser_core', 'アップデート実行'), [
+              'class' => 'bca-btn bca-actions__item',
+              'data-bca-btn-size' => 'lg',
+              'data-bca-btn-width' => 'lg',
+              'data-bca-btn-type' => 'save',
+              'id' => 'BtnUpdate',
+              'div' => false,
+            ]) ?>
+          <?php else: ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser_core', '最新版をダウンロード'), [
+              'class' => 'bca-btn bca-actions__item',
+              'data-bca-btn-size' => 'lg',
+              'data-bca-btn-width' => 'lg',
+              'data-bca-btn-type' => 'save',
+              'id' => 'BtnDownload',
+              'div' => false,
+            ]) ?>
+          <?php endif ?>
         </div>
       </div>
       <?php echo $this->BcAdminForm->end() ?>
     <?php else: ?>
       <div>
-        <?php if ($plugin->name === 'BaserCore'): ?>
-          <p>
-            <?php echo sprintf(
-              __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'),
-              $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank'])
-            ) ?>
-          </p>
+        <?php if($plugin->name === 'BaserCore' && $dbVersion !== $programVersion): ?>
+          <p><?php echo __d('baser_core', 'データベースのバージョンの整合性がありません。<br>プログラムのバージョンに合わせて データベースの site_configs テーブルの version フィールドを更新してください。') ?></p>
         <?php else: ?>
-          <p><?php echo __d('baser_core', 'アップデートはありません。') ?></p>
+          <p><?php echo __d('baser_core', '利用可能なアップデートはありません。') ?></p>
         <?php endif ?>
       </div>
       <div class="bca-actions">
@@ -184,18 +215,16 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
     <?php endif ?>
   </div>
 
-  <?php if ($log): ?>
-    <div class="bca-panel-box" id="UpdateLog">
-      <h2 class="bca-main__heading" data-bca-heading-size="lg">
-        <?php echo __d('baser_core', 'アップデートログ') ?>
-      </h2>
-      <?php echo $this->BcAdminForm->control('log', [
-        'type' => 'textarea',
-        'value' => $log,
-        'style' => 'width:99%;height:200px;font-size:12px',
-        'readonly' => 'readonly'
-      ]); ?>
-    </div>
-  <?php endif; ?>
+  <div class="bca-panel-box" id="UpdateLog">
+    <h2 class="bca-main__heading" data-bca-heading-size="lg">
+      <?php echo __d('baser_core', 'ログ') ?>
+    </h2>
+    <?php echo $this->BcAdminForm->control('log', [
+      'type' => 'textarea',
+      'value' => $log,
+      'style' => 'width:99%;height:200px;font-size:12px',
+      'readonly' => 'readonly'
+    ]); ?>
+  </div>
 
 </div>

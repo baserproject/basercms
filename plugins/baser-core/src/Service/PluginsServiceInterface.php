@@ -61,12 +61,14 @@ interface PluginsServiceInterface
     /**
      * プラグインをアップデートする
      *
-     * @return bool
+     * @param string $name
+     * @param string $connection
+     * @return bool|null
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function update($name, $connection = 'default'): ?bool;
+    public function update(string $name, string $connection = 'default'): ?bool;
 
     /**
      * バージョンを取得する

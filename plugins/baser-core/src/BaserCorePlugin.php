@@ -643,7 +643,6 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     {
         $commands->add('setup test', SetupTestCommand::class);
         $commands->add('composer', ComposerCommand::class);
-        $commands->add('update', UpdateCommand::class);
         $commands->add('create release', CreateReleaseCommand::class);
         $commands->add('setup install', SetupInstallCommand::class);
         return $commands;
