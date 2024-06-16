@@ -88,6 +88,7 @@ class PluginsAdminServiceTest extends BcTestCase
             'availableVersion',
             'log',
             'requireUpdate',
+            'coreDownloaded',
             'php',
             'isWritableVendor',
             'isWritableComposerJson',

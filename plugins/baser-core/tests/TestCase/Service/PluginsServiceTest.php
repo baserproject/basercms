@@ -15,7 +15,9 @@ use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -112,6 +114,7 @@ class PluginsServiceTest extends BcTestCase
             $this->assertNotContains('BcTest', $pluginNames);
         }
     }
+
     public function indexDataprovider()
     {
         return [
@@ -158,6 +161,7 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('BcBlog', $this->Plugins->getByName('BcBlog')->name);
         $this->assertNull($this->Plugins->getByName('Test'));
     }
+
     /**
      * test resetDb
      * @throws \Exception
@@ -312,11 +316,12 @@ EOF;
      * test attachAllFromIds
      * @return void
      */
-    public function test_attachAllFromIds(){
+    public function test_attachAllFromIds()
+    {
         $plugins = $this->Plugins->getIndex(false);
         $this->assertTrue($plugins[1]->status);
 
-        $ids = [1,2];
+        $ids = [1, 2];
 
         $this->Plugins->detachAll();
 
@@ -332,7 +337,8 @@ EOF;
      * test attachAllFromIds with 配列：null
      * @return void
      */
-    public function test_attachAllFromIds_false(){
+    public function test_attachAllFromIds_false()
+    {
         $ids = null;
         $rs = $this->Plugins->attachAllFromIds($ids);
 
@@ -343,7 +349,8 @@ EOF;
      * test getMarketPlugins
      * @return void
      */
-    public function testGetMarketPlugins(){
+    public function testGetMarketPlugins()
+    {
         $this->markTestIncomplete('TODO 直接外部ではなく Mockのテストに切り替える');
         $rs = $this->Plugins->getMarketPlugins();
         $this->assertNotEmpty($rs, 'baserマーケットのデータが読み込めませんでした。テストを再実行してください。');
@@ -554,6 +561,75 @@ EOF;
         $file = new File($url);
         $file->write($rss);
         $file->close();
+    }
+
+    /**
+     * test getCoreUpdate
+     * @return void
+     */
+    public function testGetCoreUpdateAndUpdateCoreFiles()
+    {
+        // composer.json をバックアップ
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
+        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
+
+        // composer.json を配布用に更新
+        BcComposer::setupComposerForDistribution(ROOT . DS);
+
+        // getCoreUpdate 実行
+        $this->Plugins->getCoreUpdate('5.0.15', 'php');
+
+        // バージョンを確認
+        $this->assertEquals('5.0.15', BcUtil::getVersion('BaserCore', true));
+
+        // coreDownloaded を確認
+        $this->assertTrue(Cache::read('coreDownloaded', '_bc_update_'));
+
+        // updateCoreFiles 実行
+        $this->Plugins->updateCoreFiles();
+        // バージョンを確認
+        $file = new File(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+        $versionData = $file->read();
+        $aryVersionData = explode("\n", $versionData);
+        $this->assertEquals('5.0.15', $aryVersionData[0]);
+
+        // vendor を元に戻す
+        (new Folder())->delete(ROOT . DS . 'vendor');
+        $zip = new BcZip();
+        $zip->extract(TMP . 'update' . DS . 'vendor.zip', ROOT . DS . 'vendor');
+
+        // 一時ファイルを削除
+        (new Folder())->delete(TMP . 'update');
+
+        // composer.json を元に戻す
+        rename(ROOT . DS . 'composer.bak.json', ROOT . DS . 'composer.json');
+        rename(ROOT . DS . 'composer.bak.lock', ROOT . DS . 'composer.lock');
+    }
+
+    /**
+     * test rollbackCore
+     * @return void
+     */
+    public function testRollbackCore()
+    {
+        // composer.json をバックアップ
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
+        // composer.json を配布用に更新
+        BcComposer::setupComposerForDistribution(ROOT . DS);
+
+        // ロールバック
+        $this->Plugins->rollbackCore('5.0.15', 'php');
+
+        // バージョンを確認
+        $file = new File(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+        $versionData = $file->read();
+        $aryVersionData = explode("\n", $versionData);
+        $this->assertEquals('5.0.15', $aryVersionData[0]);
+
+        // composer.json を元に戻す
+        rename(ROOT . DS . 'composer.bak.json', ROOT . DS . 'composer.json');
+        // vendor 内の baserproject を削除
+        (new Folder())->delete(ROOT . DS . 'vendor' . DS . 'baserproject');
     }
 
 }

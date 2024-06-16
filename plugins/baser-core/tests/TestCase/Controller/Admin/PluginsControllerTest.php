@@ -260,7 +260,7 @@ class PluginsControllerTest extends BcTestCase
             'targetVersion' => '5.0.1'
         ]);
         $this->assertRedirect('/baser/admin/baser-core/plugins/update');
-        $this->assertFlashMessage(sprintf('全てのアップデート処理が完了しました。 %s にログを出力しています。', LOGS . 'update.log'));
+        $this->assertFlashMessage('アップデート処理が完了しました。画面下部のアップデートログを確認してください。');
         rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
         rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
         rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
@@ -340,4 +340,29 @@ class PluginsControllerTest extends BcTestCase
         $folder->delete(BASER_PLUGINS . $plugin);
         $folder->delete($zipSrcPath);
     }
+
+    /**
+     * test get_core_update
+     */
+    public function test_get_core_update()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/plugins/get_core_update');
+        $this->assertFlashMessage('最新版のダウンロードに失敗しました。ログを確認してください。');
+
+        $this->post('/baser/admin/baser-core/plugins/get_core_update', [
+            'targetVersion' => '5.0.15',
+            'php' => 'php',
+        ]);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('最新版のダウンロードが完了しました。アップデートを実行してください。');
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'update'
+        ]);
+    }
+
 }
