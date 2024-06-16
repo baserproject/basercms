@@ -243,17 +243,17 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function getUpdaters($name = '')
+    public function getUpdaters($name = '', $isUpdateTmp = false)
     {
         if (!$name) $name = $this->getName();
-        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
+        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name, $isUpdateTmp));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
             return [];
         }
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
-        $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
+        $path = BcUtil::getPluginPath($name, $isUpdateTmp) . 'config' . DS . 'update';
         $folder = new Folder($path);
         $files = $folder->read(true, true);
         $updaters = [];
@@ -291,17 +291,17 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function getUpdateScriptMessages($name = '')
+    public function getUpdateScriptMessages($name = '', $isUpdateTmp = false)
     {
         if (!$name) $name = $this->getName();
-        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
+        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name, $isUpdateTmp));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
             return [];
         }
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
-        $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
+        $path = BcUtil::getPluginPath($name, $isUpdateTmp) . 'config' . DS . 'update';
         $folder = new Folder($path);
         $files = $folder->read(true, true);
         $messages = [];

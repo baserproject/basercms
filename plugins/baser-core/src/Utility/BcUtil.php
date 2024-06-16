@@ -1048,7 +1048,7 @@ class BcUtil
      */
     public static function getPluginPath(string $pluginName, bool $isUpdateTmp = false): string|false
     {
-        $pluginDir = self::getPluginDir($pluginName);
+        $pluginDir = self::getPluginDir($pluginName, $isUpdateTmp);
         if($isUpdateTmp) {
             return TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . $pluginDir . DS;
         }
