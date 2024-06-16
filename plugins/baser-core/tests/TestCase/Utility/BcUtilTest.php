@@ -889,9 +889,13 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
         $this->assertEquals(ROOT . '/plugins/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample'));
         // アップデート用の一時ディレクトリを確認
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core');
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-blog');
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'BcPluginSample');
         $this->assertEquals(TMP . 'update/vendor/baserproject/baser-core/', BcUtil::getPluginPath('BaserCore', true));
         $this->assertEquals(TMP . 'update/vendor/baserproject/bc-blog/', BcUtil::getPluginPath('BcBlog', true));
         $this->assertEquals(TMP . 'update/vendor/baserproject/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample', true));
+        (new Folder())->delete(TMP . 'update');
     }
 
     /**
