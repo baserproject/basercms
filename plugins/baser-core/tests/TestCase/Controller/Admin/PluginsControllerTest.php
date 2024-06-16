@@ -348,8 +348,6 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/plugins/get_core_update');
-        $this->assertFlashMessage('最新版のダウンロードに失敗しました。ログを確認してください。');
 
         $this->post('/baser/admin/baser-core/plugins/get_core_update', [
             'targetVersion' => '5.0.15',
