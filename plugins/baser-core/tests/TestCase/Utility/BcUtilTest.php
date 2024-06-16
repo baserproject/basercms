@@ -213,10 +213,31 @@ class BcUtilTest extends BcTestCase
         $File = new File($path . 'VERSION.txt', true);
         $File->write('1.2.3');
         $result = BcUtil::getVersion('Hoge');
-
+        $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
         $File->close();
         $Folder->delete();
-        $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
+
+        // アップデート時の一時ディレクトリ内のバージョン（BaserCore）
+        $updateTmpDir = TMP . 'update';
+        $pluginTmpDir = $updateTmpDir . DS . 'vendor' . DS . 'baserproject';
+        $folder = new Folder();
+        $folder->create($pluginTmpDir . DS . 'baser-core');
+        $file = new File($pluginTmpDir . DS . 'baser-core' . DS . 'VERSION.txt');
+        $file->write('1.2.4');
+        $this->assertEquals('1.2.4', BcUtil::getVersion('BaserCore', true));
+
+        // アップデート時の一時ディレクトリ内のバージョン（BcBlog）
+        $this->assertEquals('1.2.4', BcUtil::getVersion('BcBlog', true));
+        $file->delete();
+
+        // アップデート時の一時ディレクトリ内のバージョン（Sample）
+        $folder = new Folder();
+        $folder->create($pluginTmpDir . DS . 'Sample');
+        $file = new File($pluginTmpDir . DS . 'Sample' . DS . 'VERSION.txt');
+        $file->write('1.2.5');
+        $this->assertEquals('1.2.5', BcUtil::getVersion('Sample', true));
+        $file->delete();
+        $folder->delete($updateTmpDir);
     }
 
     /**
@@ -867,6 +888,10 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals(ROOT . '/plugins/baser-core/', BcUtil::getPluginPath('BaserCore'));
         $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
         $this->assertEquals(ROOT . '/plugins/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample'));
+        // アップデート用の一時ディレクトリを確認
+        $this->assertEquals(TMP . 'update/vendor/baserproject/baser-core/', BcUtil::getPluginPath('BaserCore', true));
+        $this->assertEquals(TMP . 'update/vendor/baserproject/bc-blog/', BcUtil::getPluginPath('BcBlog', true));
+        $this->assertEquals(TMP . 'update/vendor/baserproject/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample', true));
     }
 
     /**
@@ -877,6 +902,19 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
         $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample'));
+        // アップデート用の一時ディレクトリを確認
+        // - フォルダが存在しない場合
+        $this->assertFalse(BcUtil::getPluginDir('BaserCore', true));
+        $this->assertFalse(BcUtil::getPluginDir('BcBlog', true));
+        $this->assertFalse(BcUtil::getPluginDir('BcPluginSample', true));
+        // - フォルダが存在する場合
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core');
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-blog');
+        (new Folder())->create(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'BcPluginSample');
+        $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore', true));
+        $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog', true));
+        $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample', true));
+        (new Folder())->delete(TMP . 'update');
     }
 
     /**
