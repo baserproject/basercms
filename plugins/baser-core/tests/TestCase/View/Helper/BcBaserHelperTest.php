@@ -1113,7 +1113,7 @@ class BcBaserHelperTest extends BcTestCase
     public function testScripts()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-
+        $this->BcBaser = new BcBaserHelper((new View())->assign('meta', ''));
         $themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 
         // CSS
