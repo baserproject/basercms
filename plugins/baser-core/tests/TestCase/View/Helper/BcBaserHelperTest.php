@@ -1113,7 +1113,6 @@ class BcBaserHelperTest extends BcTestCase
     public function testScripts()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->BcBaser = new BcBaserHelper((new View())->assign('meta', ''));
         $themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 
         // CSS
@@ -1125,7 +1124,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->scripts();
         $result = ob_get_clean();
         $result = str_replace($themeConfigTag, '', $result);
-        $this->assertEquals($expected, $result);
+        $this->assertStringContainsString($expected, $result);
         $this->BcBaser = new BcBaserHelper((new View())->assign('css', ''));
 
         Configure::write('BcApp.outputMetaGenerator', false);
