@@ -1783,6 +1783,7 @@ class BcBaserHelper extends Helper
      * @doc
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテスト不要
      */
     public function contentsMenu($id = null, $level = null, $currentId = null)
     {
@@ -1877,6 +1878,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテスト不要
      */
     public function globalMenu($level = 1, $options = [])
     {
@@ -1942,6 +1944,7 @@ class BcBaserHelper extends Helper
      * @param int $siteId サイトID
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function sitemap($siteId = 0)
     {
@@ -2269,6 +2272,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function siteSearchForm($data = [], $options = [])
     {
@@ -2486,6 +2490,7 @@ class BcBaserHelper extends Helper
      * @param int $id コンテンツID
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function relatedSiteLinks($id = null, $excludeIds = [])
     {
