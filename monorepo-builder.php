@@ -13,7 +13,7 @@ use Symplify\MonorepoBuilder\Release\ReleaseWorker\UpdateReplaceReleaseWorker;
 
 return static function (MBConfig $mbConfig): void {
     $mbConfig->packageDirectories([__DIR__ . '/plugins']);
-    $version = $_SERVER['argv'][2];
+    $version = (!empty($_SERVER['argv'][2]))?: null;
     if(!$version) return;
     $mbConfig->packageDirectoriesExcludes([
         __DIR__ . '/plugins/BcThemeSample',
@@ -23,7 +23,8 @@ return static function (MBConfig $mbConfig): void {
     $mbConfig->dataToAppend([
         ComposerJsonSection::REQUIRE_DEV => [
             'phpunit/phpunit' => '^9.5',
-        ]
+            'symplify/monorepo-builder' => '^11.2',
+        ],
     ]);
 
     if(preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $version)) {
