@@ -2,8 +2,9 @@ name: 'Packages Split'
 
 on:
   push:
-    branches-ignore:
-      - master
+    branches:
+      - 5.0.x
+      - 5.1.x
     tags:
       - '*'
 jobs:
