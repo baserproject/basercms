@@ -26,7 +26,7 @@
         "cakephp/bake": "^2.6",
         "cakephp/debug_kit": "^4.5",
         "phpunit/phpunit": "^9.5",
-        "symplify/monorepo-builder": "^10.2",
+        "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^2.5",
         "vierge-noire/cakephp-test-suite-light": "^2.0"
     },

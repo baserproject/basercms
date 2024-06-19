@@ -1,95 +1,77 @@
 name: 'Packages Split'
 
 on:
-    push:
-        branches:
-            - master
-        tags:
-            - '*'
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
 jobs:
-    packages_split:
-        runs-on: ubuntu-latest
-        environment: develop
-        strategy:
-            fail-fast: false
-            matrix:
-                package:
-                    -
-                        local_path: 'baser-core'
-                        split_repository: 'baser-core'
-                    -
-                        local_path: 'bc-admin-third'
-                        split_repository: 'bc-admin-third'
-                    -
-                        local_path: 'bc-blog'
-                        split_repository: 'bc-blog'
-                    -
-                        local_path: 'BcColumn'
-                        split_repository: 'bc-column'
-                    -
-                        local_path: 'bc-content-link'
-                        split_repository: 'bc-content-link'
-                    -
-                        local_path: 'bc-custom-content'
-                        split_repository: 'bc-custom-content'
-                    -
-                        local_path: 'bc-editor-template'
-                        split_repository: 'bc-editor-template'
-                    -
-                        local_path: 'bc-favorite'
-                        split_repository: 'bc-favorite'
-                    -
-                        local_path: 'bc-front'
-                        split_repository: 'bc-front'
-                    -
-                        local_path: 'bc-installer'
-                        split_repository: 'bc-installer'
-                    -
-                        local_path: 'bc-mail'
-                        split_repository: 'bc-mail'
-                    -
-                        local_path: 'bc-search-index'
-                        split_repository: 'bc-search-index'
-                    -
-                        local_path: 'bc-theme-config'
-                        split_repository: 'bc-theme-config'
-                    -
-                        local_path: 'bc-theme-file'
-                        split_repository: 'bc-theme-file'
-                    -
-                        local_path: 'bc-uploader'
-                        split_repository: 'bc-uploader'
-                    -
-                        local_path: 'bc-widget-area'
-                        split_repository: 'bc-widget-area'
-        steps:
-            - uses: actions/checkout@v3
-            # no tag
-            -
-                if: "!startsWith(github.ref, 'refs/tags/')"
-                name: Monorepo Split of ${{ matrix.package }}
-                uses: "symplify/monorepo-split-github-action@v2.3.0"
-                env:
-                    GITHUB_TOKEN: ${{ secrets.TOKEN }}
-                with:
-                    package_directory: 'plugins/${{ matrix.package.local_path }}'
-                    repository_organization: 'baserproject'
-                    repository_name: '${{ matrix.package.split_repository }}'
-                    branch: "master"
-                    user_name: "ryuring"
-                    user_email: "ryuring55@gmail.com"
-            # with tag
-            -
-                if: "startsWith(github.ref, 'refs/tags/')"
-                name: Monorepo Tagged Split of ${{ matrix.package }}
-                uses: "symplify/monorepo-split-github-action@v2.3.0"
-                env:
-                    GITHUB_TOKEN: ${{ secrets.TOKEN }}
-                with:
-                    tag: ${GITHUB_REF#refs/tags/}
-                    package_directory: 'plugins/${{ matrix.package.local_path }}'
-                    repository_organization: 'baserproject'
-                    repository_name: '${{ matrix.package.split_repository }}'
-                    branch: "master"
-                    user_name: "ryuring"
-                    user_email: "ryuring55@gmail.com"
+  packages_split:
+    runs-on: ubuntu-latest
+    environment: develop
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - local_path: 'baser-core'
+            split_repository: 'baser-core'
+          - local_path: 'bc-admin-third'
+            split_repository: 'bc-admin-third'
+          - local_path: 'bc-blog'
+            split_repository: 'bc-blog'
+          - local_path: 'BcColumn'
+            split_repository: 'bc-column'
+          - local_path: 'bc-content-link'
+            split_repository: 'bc-content-link'
+          - local_path: 'bc-custom-content'
+            split_repository: 'bc-custom-content'
+          - local_path: 'bc-editor-template'
+            split_repository: 'bc-editor-template'
+          - local_path: 'bc-favorite'
+            split_repository: 'bc-favorite'
+          - local_path: 'bc-front'
+            split_repository: 'bc-front'
+          - local_path: 'bc-installer'
+            split_repository: 'bc-installer'
+          - local_path: 'bc-mail'
+            split_repository: 'bc-mail'
+          - local_path: 'bc-search-index'
+            split_repository: 'bc-search-index'
+          - local_path: 'bc-theme-config'
+            split_repository: 'bc-theme-config'
+          - local_path: 'bc-theme-file'
+            split_repository: 'bc-theme-file'
+          - local_path: 'bc-uploader'
+            split_repository: 'bc-uploader'
+          - local_path: 'bc-widget-area'
+            split_repository: 'bc-widget-area'
+    steps:
+      - uses: actions/checkout@v3
+      # no tag
+      - if: "!startsWith(github.ref, 'refs/tags/')"
+        name: Monorepo Split of ${{ matrix.package }}
+        uses: "symplify/monorepo-split-github-action@v2.3.0"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          package_directory: 'plugins/${{ matrix.package.local_path }}'
+          repository_organization: 'baserproject'
+          repository_name: '${{ matrix.package.split_repository }}'
+          branch: "master"
+          user_name: "ryuring"
+          user_email: "ryuring55@gmail.com"
+      # with tag
+      - if: "startsWith(github.ref, 'refs/tags/')"
+        name: Monorepo Tagged Split of ${{ matrix.package }}
+        uses: "symplify/monorepo-split-github-action@v2.3.0"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag: ${GITHUB_REF#refs/tags/}
+          package_directory: 'plugins/${{ matrix.package.local_path }}'
+          repository_organization: 'baserproject'
+          repository_name: '${{ matrix.package.split_repository }}'
+          branch: "master"
+          user_name: "ryuring"
+          user_email: "ryuring55@gmail.com"
