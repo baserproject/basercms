@@ -2640,6 +2640,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {
