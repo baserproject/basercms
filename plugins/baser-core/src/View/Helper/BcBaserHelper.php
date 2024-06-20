@@ -1852,6 +1852,7 @@ class BcBaserHelper extends Helper
      * @return mixed コンテンツデータ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function _unsetIndexInContentsMenu($contents, $children = false)
     {
