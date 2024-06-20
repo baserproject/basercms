@@ -18,7 +18,6 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
-use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\View\Helper\BcContentsHelper;
 use Cake\Http\Exception\NotFoundException;
