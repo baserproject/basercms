@@ -180,6 +180,22 @@ if (isset($thisSiteConfig['use_site_device_setting'])) {
 		</td>
 	</tr>
 	<tr>
+		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.use_subdomain', __d('baser', 'ドメイン設定')) ?></th>
+		<td class=" bca-form-table__input">
+			<?php echo $this->BcForm->input('Site.use_subdomain', ['type' => 'radio', 'options' => [0 => __d('baser', '主となるドメインと同じドメイン'), 1 => __d('baser', '主となるドメインとは異なるドメイン')], 'default' => 0]) ?>
+			<?php echo $this->BcForm->error('Site.use_subdomain') ?>
+			<div class="domain_type">
+			<small><?php echo $this->BcForm->label('Site.domain_type', __d('baser', 'ドメインタイプ')) ?></small>　
+			<?php echo $this->BcForm->input('Site.domain_type', ['type' => 'radio', 'options' => [1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '別ドメイン')], 'default' => 1]) ?>
+			<i class="bca-icon--question-circle btn help bca-help"></i>
+			<?php echo $this->BcForm->error('Site.domain_type') ?>
+				<div class="helptext">
+					<?php echo __d('baser', 'サブドメインの場合は、主となるドメインを除いたサブドメインの文字列をエイリアスに入力します。別ドメインの場合は、別ドメインをそのままエイリアスに入力します。') ?>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.status', __d('baser', '公開状態')) ?></th>
 		<td class=" bca-form-table__input">
 			<?php echo $this->BcForm->input('Site.status', ['type' => 'radio', 'options' => [0 => __d('baser', '公開しない'), 1 => __d('baser', '公開する')]]) ?>
