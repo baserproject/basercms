@@ -31,22 +31,23 @@ use BaserCore\View\BcAdminAppView;
   </h2>
 
   <?php if ($isUpdatable): ?>
+    <p><?php echo __d('baser_core', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。') ?></p>
+    <p>
+      <?php echo sprintf(
+        __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'),
+        $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank'])
+      ) ?>
+    </p>
+  <?php else: ?>
     <?php if ($dbVersion !== $programVersion): ?>
       <p><?php echo __d('baser_core', 'データベースのバージョンの整合性がありません。<br>アップデートの前にプログラムのバージョンに合わせて データベースの site_configs テーブルの version フィールドを更新してください。') ?></p>
     <?php else: ?>
-      <p><?php echo __d('baser_core', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。') ?></p>
-      <p>
-        <?php echo sprintf(
-          __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'),
-          $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank'])
-        ) ?>
-      </p>
+      <p><?php echo __d('baser_core', '利用可能なアップデートはありません。') ?></p>
     <?php endif ?>
-  <?php else: ?>
-    <p><?php echo __d('baser_core', '利用可能なアップデートはありません。') ?></p>
   <?php endif ?>
 
   <?php echo $this->BcAdminForm->create($plugin, [
+    'url' => ['action' => 'update_core'],
     'id' => 'PluginUpdateForm'
   ]) ?>
   <?php echo $this->BcAdminForm->control('update', ['type' => 'hidden', 'value' => true]) ?>

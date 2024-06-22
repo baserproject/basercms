@@ -55,36 +55,8 @@ const updateForm = {
      */
     update() {
         if (confirm(bcI18n.confirmMessage1)) {
-            if (updateForm.plugin !== 'BaserCore') {
-                $.bcUtil.showLoader();
-                return true;
-            }
-            $.bcToken.check(function () {
-                $.bcUtil.showLoader();
-                $.bcUtil.hideMessage();
-                axios.post($.bcUtil.apiAdminBaseUrl + 'baser-core/plugins/update_core_files.json', {}, {
-                    headers: {
-                        'X-CSRF-Token': $.bcToken.key
-                    }
-                })
-                    .then(response => {
-                        let message = response.data.message + bcI18n.updateMessage1;
-                        $.bcUtil.showNoticeMessage(message);
-                        $(window).scrollTop(0);
-                        $.bcUtil.showLoader();
-                        // フォーム送信
-                        $("#PluginUpdateForm").submit();
-                    })
-                    .catch(error => {
-                        if (error.response.status === 500) {
-                            $.bcUtil.showAlertMessage(error.response.data.message);
-                        } else {
-                            $.bcUtil.showAlertMessage('予期せぬエラーが発生しました。システム管理者に連絡してください。');
-                        }
-                        $.bcUtil.hideLoader();
-                        $(window).scrollTop(0);
-                    });
-            }, {hideLoader: false});
+            $.bcUtil.showLoader();
+            return true;
         }
         return false;
     },
@@ -102,6 +74,8 @@ const updateForm = {
             if ($inputPhp.val() !== ''){
                 if(updateForm.isUpdatable) {
                     $btnUpdate.removeAttr('disabled');
+                } else {
+                    $btnUpdate.attr('disabled', 'disabled');
                 }
                 $btnDownload.removeAttr('disabled');
             } else {
