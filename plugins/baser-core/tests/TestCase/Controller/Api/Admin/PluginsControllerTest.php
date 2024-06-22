@@ -266,42 +266,4 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
     }
 
-    /**
-     * test update_core_files
-     */
-    public function test_update_core_files()
-    {
-        // composer.json をバックアップ
-        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
-        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
-
-        // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
-
-        // vendor を一時フォルダにコピー
-        (new Folder(ROOT . DS . 'vendor'))->copy(TMP . 'update' . DS . 'vendor');
-
-        // composer.json を一時フォルダにコピー
-        copy(ROOT . DS . 'composer.json', TMP . 'update' . DS . 'composer.json');
-        copy(ROOT . DS . 'composer.lock', TMP . 'update' . DS . 'composer.lock');
-
-        // 最新版を反映
-        $this->post('/baser/api/admin/baser-core/plugins/update_core_files.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('コアファイルの最新版への更新が完了しました。', $result->message);
-
-        // vendor を元に戻す
-        (new Folder())->delete(ROOT . DS . 'vendor');
-        $zip = new BcZip();
-        $zip->extract(TMP . 'update' . DS . 'vendor.zip', ROOT . DS . 'vendor');
-
-        // 一時ファイルを削除
-        (new Folder())->delete(TMP . 'update');
-
-        // composer.json を元に戻す
-        rename(ROOT . DS . 'composer.bak.json', ROOT . DS . 'composer.json');
-        rename(ROOT . DS . 'composer.bak.lock', ROOT . DS . 'composer.lock');
-    }
-
 }

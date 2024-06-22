@@ -309,6 +309,29 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * BaserCoreをアップデートする
+     *
+     * @param string $currentVersion
+     * @param string $targetVersion
+     * @param string $connection
+     * @checked
+     * @noTodo
+     */
+    public function updateCore($php, $connection = 'default')
+    {
+        $this->updateCoreFiles();
+
+        // マイグレーション、アップデートスクリプト実行、バージョン番号更新
+        // マイグレーションファイルがプログラムに反映されないと実行できないため、別プロセスとして実行する
+        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php update --connection ' . $connection;
+        $out = $code = null;
+        exec($command, $out, $code);
+        if ($code !== 0) {
+            throw new BcException(__d('baser_core', 'マイグレーション処理が失敗しました。'));
+        }
+    }
+
+    /**
      * コアファイルを更新
      * @return void
      * @checked
