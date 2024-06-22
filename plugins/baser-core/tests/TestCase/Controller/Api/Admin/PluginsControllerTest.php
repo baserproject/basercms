@@ -281,6 +281,10 @@ class PluginsControllerTest extends BcTestCase
         // vendor を一時フォルダにコピー
         (new Folder(ROOT . DS . 'vendor'))->copy(TMP . 'update' . DS . 'vendor');
 
+        // composer.json を一時フォルダにコピー
+        copy(ROOT . DS . 'composer.json', TMP . 'update' . DS . 'composer.json');
+        copy(ROOT . DS . 'composer.lock', TMP . 'update' . DS . 'composer.lock');
+
         // 最新版を反映
         $this->post('/baser/api/admin/baser-core/plugins/update_core_files.json?token=' . $this->accessToken);
         $this->assertResponseOk();
