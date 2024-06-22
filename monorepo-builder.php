@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 use Symplify\MonorepoBuilder\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
 use Symplify\MonorepoBuilder\Config\MBConfig;
-use Symplify\MonorepoBuilder\Release\ReleaseWorker\AddTagToChangelogReleaseWorker;
-use Symplify\MonorepoBuilder\Release\ReleaseWorker\PushNextDevReleaseWorker;
 use Symplify\MonorepoBuilder\Release\ReleaseWorker\SetCurrentMutualDependenciesReleaseWorker;
-use Symplify\MonorepoBuilder\Release\ReleaseWorker\SetNextMutualDependenciesReleaseWorker;
-use Symplify\MonorepoBuilder\Release\ReleaseWorker\UpdateBranchAliasReleaseWorker;
 use Symplify\MonorepoBuilder\Release\ReleaseWorker\UpdateReplaceReleaseWorker;
 
 return static function (MBConfig $mbConfig): void {
     $mbConfig->packageDirectories([__DIR__ . '/plugins']);
-    $version = (!empty($_SERVER['argv'][2]))?: null;
+    $version = (!empty($_SERVER['argv'][2]))?: '';
     if(!$version) return;
     $mbConfig->packageDirectoriesExcludes([
         __DIR__ . '/plugins/BcThemeSample',
@@ -27,7 +23,7 @@ return static function (MBConfig $mbConfig): void {
         ],
     ]);
 
-    if(preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $version)) {
+    if(preg_match('/^([0-9]+\.[0-9]+\.[0-9]+|patch)$/', $version)) {
 		/**
          * 正式リリース
          * タグの送信とマスタの送信
@@ -36,16 +32,12 @@ return static function (MBConfig $mbConfig): void {
 		$mbConfig->workers([
 			UpdateReplaceReleaseWorker::class,
 			SetCurrentMutualDependenciesReleaseWorker::class,
-			AddTagToChangelogReleaseWorker::class,
-			SetNextMutualDependenciesReleaseWorker::class,
-			UpdateBranchAliasReleaseWorker::class,
-			PushNextDevReleaseWorker::class
 		]);
     } elseif(preg_match('/^[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc)/', $version)) {
     	/**
          * alpha / beta / rc
          * タグの送信のみ
          */
-    	$mbConfig->defaultBranch('dev');
+    	$mbConfig->defaultBranch('dev-5');
     }
 };
