@@ -81,7 +81,16 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $isWritableVendor = is_writable(ROOT . DS . 'vendor');
         $isWritableComposerJson = is_writable(ROOT . DS . 'composer.json');
         $isWritableComposerLock = is_writable(ROOT . DS . 'composer.lock');
-
+        $requireUpdate = $this->isRequireUpdate(
+            $programVersion,
+            $dbVersion,
+            $availableVersion
+        );
+        if($entity->name === 'BaserCore') {
+            $isUpdatable = ($requireUpdate && $isWritableVendor && $isWritableComposerJson && $isWritableComposerLock);
+        } else {
+            $isUpdatable = $requireUpdate;
+        }
         return [
             'plugin' => $entity,
             'scriptNum' => $scriptNum,
@@ -92,17 +101,13 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
             'programVerPoint' => $programVerPoint,
             'availableVersion' => $availableVersion,
             'log' => $this->getUpdateLog(),
-            'requireUpdate' => $this->isRequireUpdate(
-                $programVersion,
-                $dbVersion,
-                $availableVersion
-            ),
             'coreDownloaded' => Cache::read('coreDownloaded', '_bc_update_'),
             'php' => $this->whichPhp(),
+            'isCore' => $entity->name === 'BaserCore',
             'isWritableVendor' => $isWritableVendor,
             'isWritableComposerJson' => $isWritableComposerJson,
             'isWritableComposerLock' => $isWritableComposerLock,
-            'isWritablePackage' => ($isWritableVendor && $isWritableComposerJson && $isWritableComposerLock)
+            'isUpdatable' => $isUpdatable
         ];
     }
 

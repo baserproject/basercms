@@ -146,7 +146,7 @@ class PluginsService implements PluginsServiceInterface
     {
         $dbInit = false;
         $config = $this->Plugins->getPluginConfig($name);
-        if($config) {
+        if ($config) {
             $dbInit = $config->db_init;
         }
         $options = [
@@ -188,7 +188,7 @@ class PluginsService implements PluginsServiceInterface
             unlink(LOGS . 'update.log');
         }
 
-		$ids = [];
+        $ids = [];
         if ($name === 'BaserCore') {
             $pluginNames = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
             $ids = $this->detachAll();
@@ -212,16 +212,16 @@ class PluginsService implements PluginsServiceInterface
             $plugin = $pluginCollection->create($pluginName);
             $migrate = false;
             if (method_exists($plugin, 'migrate')) {
-            	try {
-					$plugin->migrate($options);
-				} catch (\Throwable $e) {
-					if($ids) $this->attachAllFromIds($ids);
-					BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
-					BcUpdateLog::set($e->getMessage());
-					BcUtil::clearAllCache();
-					BcUpdateLog::save();
-					return false;
-				}
+                try {
+                    $plugin->migrate($options);
+                } catch (\Throwable $e) {
+                    if ($ids) $this->attachAllFromIds($ids);
+                    BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
+                    BcUpdateLog::set($e->getMessage());
+                    BcUtil::clearAllCache();
+                    BcUpdateLog::save();
+                    return false;
+                }
                 $migrate = true;
             }
             $plugins[$pluginName] = [
@@ -231,7 +231,7 @@ class PluginsService implements PluginsServiceInterface
             ];
         }
 
-        if(!$plugins) {
+        if (!$plugins) {
             BcUpdateLog::set(__d('baser_core', '登録済のプラグインが見つかりませんでした。先にインストールを実行してください。'));
             BcUpdateLog::save();
             return false;
@@ -250,7 +250,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
-            if($ids) $this->attachAllFromIds($ids);
+            if ($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -271,7 +271,7 @@ class PluginsService implements PluginsServiceInterface
                     $plugin['instance']->migrations->rollback($options);
                 }
             }
-            if($ids) $this->attachAllFromIds($ids);
+            if ($ids) $this->attachAllFromIds($ids);
             BcUpdateLog::set(__d('baser_core', 'アップデート処理が途中で失敗しました。'));
             BcUpdateLog::set($e->getMessage());
             BcUtil::clearAllCache();
@@ -283,7 +283,7 @@ class PluginsService implements PluginsServiceInterface
 
         BcUtil::clearAllCache();
         BcUpdateLog::save();
-        if($ids) $this->attachAllFromIds($ids);
+        if ($ids) $this->attachAllFromIds($ids);
 
         return true;
     }
@@ -317,7 +317,7 @@ class PluginsService implements PluginsServiceInterface
      */
     public function updateCoreFiles()
     {
-        if(!is_dir(TMP . 'update' . DS . 'vendor')) {
+        if (!is_dir(TMP . 'update' . DS . 'vendor')) {
             throw new BcException(__d('baser_core', 'ダウンロードした最新版が見つかりませんでした。'));
         }
 
@@ -329,7 +329,7 @@ class PluginsService implements PluginsServiceInterface
         (new Folder())->delete(ROOT . DS . 'vendor');
 
         // 最新版に更新
-        if(!(new Folder(TMP . 'update' . DS . 'vendor'))->copy(ROOT . DS . 'vendor')) {
+        if (!(new Folder(TMP . 'update' . DS . 'vendor'))->copy(ROOT . DS . 'vendor')) {
             $zip->extract(TMP . 'update' . DS . 'vendor.zip', ROOT . DS . 'vendor');
             throw new BcException(__d('baser_core', '最新版のファイルをコピーできませんでした。'));
         }
@@ -718,7 +718,7 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getAvailableCoreVersionInfo()
     {
-        if(!BcSiteConfig::get('use_update_notice')) return [];
+        if (!BcSiteConfig::get('use_update_notice')) return [];
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
         if (!$coreReleaseInfo) {
@@ -753,11 +753,11 @@ class PluginsService implements PluginsServiceInterface
                         $currentVerPoint = BcUtil::verpoint($currentVersion);
                         $latestVerPoint = BcUtil::verpoint($latest);
                         // 現在のパッケージが開発版の場合は無視
-                        if($currentVerPoint === false) break;
+                        if ($currentVerPoint === false) break;
                         // アップデートバージョンが開発版の場合は無視
-                        if($latestVerPoint === false) continue;
+                        if ($latestVerPoint === false) continue;
                         // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
-                        if($currentVerPoint > $latestVerPoint) break;
+                        if ($currentVerPoint > $latestVerPoint) break;
 
                         if ($currentVersion === $version) break;
                         $versions[] = $version;
@@ -786,7 +786,7 @@ class PluginsService implements PluginsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getCoreUpdate(string $targetVersion, string $php)
+    public function getCoreUpdate(string $targetVersion, string $php, bool $force = false)
     {
         if (function_exists('ini_set')) {
             ini_set('max_execution_time', 0);
@@ -796,10 +796,10 @@ class PluginsService implements PluginsServiceInterface
             unlink(LOGS . 'update.log');
         }
 
-        if(!is_dir(TMP . 'update')) {
+        if (!is_dir(TMP . 'update')) {
             mkdir(TMP . 'update', 0777);
         }
-        if(!is_dir(TMP . 'update' . DS . 'vendor')) {
+        if (!is_dir(TMP . 'update' . DS . 'vendor')) {
             $folder = new Folder(ROOT . DS . 'vendor');
             $folder->copy(TMP . 'update' . DS . 'vendor');
         }
@@ -808,6 +808,10 @@ class PluginsService implements PluginsServiceInterface
 
         // Composer 実行
         $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php composer ' . $targetVersion . ' --php ' . $php . ' --dir ' . TMP . 'update';
+        if ($force) {
+            $command .= ' --force true';
+        }
+
         exec($command, $out, $code);
         if ($code !== 0) throw new BcException(__d('baser_core', '最新版のダウンロードに失敗しました。ログを確認してください。'));
 

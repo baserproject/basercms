@@ -149,7 +149,7 @@ class PluginsController extends BcAdminAppController
                 try {
                     $service->rollbackCore(
                         $request->getData('currentVersion'),
-                        $request->getData('php'),
+                        $request->getData('php')
                     );
                     $this->BcMessage->setError(__d('baser_core', 'コアファイルを元に戻しました。'));
                 } catch (\Throwable $e) {
@@ -183,6 +183,7 @@ class PluginsController extends BcAdminAppController
             $service->getCoreUpdate(
                 $request->getData('targetVersion')?? '',
                 $request->getData('php')?? 'php',
+                $request->getData('force'),
             );
         } catch (\Throwable $e) {
             $this->BcMessage->setError($e->getMessage());
