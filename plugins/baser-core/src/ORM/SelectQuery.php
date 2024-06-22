@@ -1,5 +1,5 @@
 <?php
-namespace SoftDelete\ORM;
+namespace BaserCore\ORM;
 
 use Cake\ORM\Query\SelectQuery as CakeQuery;
 
