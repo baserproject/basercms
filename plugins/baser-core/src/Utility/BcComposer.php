@@ -159,15 +159,6 @@ class BcComposer
     /**
      * composer update 実行
      * @return array
-     */
-    public static function update()
-    {
-        return self::execCommand('update');
-    }
-
-    /**
-     * composer update 実行
-     * @return array
      * @checked
      * @noTodo
      */
