@@ -49,6 +49,10 @@ class ComposerCommand extends Command
             'help' => __d('baser_core', '実行対象ディレクトリ'),
             'default' => ''
         ]);
+        $parser->addOption('force', [
+            'help' => __d('baser_core', '指定したバージョンを設定せず composer.json の内容で update する'),
+            'default' => ''
+        ]);
         return $parser;
     }
 
@@ -72,8 +76,15 @@ class ComposerCommand extends Command
             $io->error($message);
             $this->abort();
         }
+
         BcComposer::clearCache();
-        $result = BcComposer::require('baser-core', $args->getArgument('version'));
+
+        if($args->getOption('force')) {
+            $result = BcComposer::update();
+        } else {
+            $result = BcComposer::require('baser-core', $args->getArgument('version'));
+        }
+
         if($result['code'] === 0) {
             $io->out(__d('baser_core', 'Composer によるアップデートが完了しました。'));
         } else {

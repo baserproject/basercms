@@ -156,6 +156,17 @@ class BcComposer
     }
 
     /**
+     * composer update 実行
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public static function update()
+    {
+        return self::execCommand('update --with-all-dependencies --ignore-platform-req=ext-xdebug');
+    }
+
+    /**
      * composer install 実行
      *
      * @return array
@@ -164,7 +175,7 @@ class BcComposer
      */
     public static function install()
     {
-        return self::execCommand('install');
+        return self::execCommand('install --with-all-dependencies --ignore-platform-req=ext-xdebug');
     }
 
     /**
