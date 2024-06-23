@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\View\Helper\BcContentsHelper;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -1965,7 +1966,21 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function test_unsetIndexInContentsMenu()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $BcContents = new BcContentsHelper(new  View());
+
+        ContentFactory::make(['id' => 1, 'site_id' => 1, 'parent_id' => null, 'lft' => 1, 'rght' => 106])->persist();
+        ContentFactory::make(['site_id' => 1, 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        ContentFactory::make(['type' => 'Page', 'name' => 'index', 'site_id' => 1, 'parent_id' => 1, 'lft' => 4, 'rght' => 5])->persist();
+
+        $contents = $BcContents->getTree(1, 2);
+
+        //$children = false、_unsetIndexInContentsMenuを実行しない
+        $rs = $this->BcBaser->_unsetIndexInContentsMenu($contents->toArray());
+        $this->assertCount(2, $rs);
+
+        //$children = true、_unsetIndexInContentsMenuを実行する
+        $rs = $this->BcBaser->_unsetIndexInContentsMenu($contents->toArray(), true);
+        $this->assertCount(1, $rs);
     }
 
     /**
