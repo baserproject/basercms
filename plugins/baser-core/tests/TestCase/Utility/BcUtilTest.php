@@ -1544,5 +1544,15 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser admin', $result['Api/Admin']->name);
     }
 
+    public function test_isInstalled()
+    {
+        // Set the 'BcEnv.isInstalled' configuration to true
+        Configure::write('BcEnv.isInstalled', true);
+        $this->assertTrue(BcUtil::isInstalled());
+
+        // Set the 'BcEnv.isInstalled' configuration to false
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertFalse(BcUtil::isInstalled());
+    }
 
 }

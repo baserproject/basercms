@@ -1124,6 +1124,7 @@ class BcUtil
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isInstalled()
     {
