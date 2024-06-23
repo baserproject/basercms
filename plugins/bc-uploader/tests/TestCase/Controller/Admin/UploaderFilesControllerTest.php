@@ -7,6 +7,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Controller\Admin\UploaderFilesController;
 use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -31,7 +32,9 @@ class UploaderFilesControllerTest extends BcTestCase
      * test beforeFilter
      */
     public function test_beforeFilter(){
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $event = new Event('Controller.beforeFilter', $this->UploaderFilesController);
+        $this->UploaderFilesController->beforeFilter($event);
+        $this->assertNotEmpty($this->UploaderFilesController->viewBuilder()->getHelpers());
     }
 
     public function test_index()
