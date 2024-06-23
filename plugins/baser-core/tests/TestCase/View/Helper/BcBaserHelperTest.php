@@ -1437,7 +1437,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetUri($url, $sessionId, $host, $https, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $_SERVER['HTTPS'] = $https;
         Configure::write('BcEnv.host', $host);
 
