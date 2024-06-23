@@ -2094,6 +2094,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isDebug(): bool
     {

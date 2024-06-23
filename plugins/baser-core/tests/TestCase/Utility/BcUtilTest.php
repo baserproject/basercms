@@ -1555,4 +1555,14 @@ class BcUtilTest extends BcTestCase
         $this->assertFalse(BcUtil::isInstalled());
     }
 
+    public function test_isDebug()
+    {
+        // Set the debug configuration to true
+        Configure::write('debug', true);
+        $this->assertTrue(BcUtil::isDebug());
+
+        // Set the debug configuration to false
+        Configure::write('debug', false);
+        $this->assertFalse(BcUtil::isDebug());
+    }
 }
