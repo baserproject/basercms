@@ -85,6 +85,7 @@ class CKEditorStyleParser
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private static function parseCode($code)
     {
