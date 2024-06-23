@@ -2072,4 +2072,17 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
+
+    public function test_getCurrentPrefix(){
+        //with site not empty
+        $site = SiteFactory::make(['id' => 1,'alias' => 'secret name'])->persist();
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        $rs = $this->BcBaser->getCurrentPrefix();
+        $this->assertEquals('secret name', $rs);
+
+        //with site empty
+        $this->BcBaser->getView()->setRequest($this->getRequest());
+        $rs = $this->BcBaser->getCurrentPrefix();
+        $this->assertEquals('', $rs);
+    }
 }
