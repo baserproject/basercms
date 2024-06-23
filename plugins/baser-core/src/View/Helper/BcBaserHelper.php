@@ -895,6 +895,7 @@ class BcBaserHelper extends Helper
      * @return string meta タグ用のキーワード
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getKeywords()
     {

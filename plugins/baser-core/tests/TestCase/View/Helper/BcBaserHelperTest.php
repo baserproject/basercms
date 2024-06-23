@@ -777,7 +777,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetKeywords($expected, $keyword = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'keyword' => 'baser,CMS,コンテンツマネジメントシステム,開発支援'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/about')));
 
         if ($keyword !== null) {
             $this->BcBaser->setKeywords($keyword);
