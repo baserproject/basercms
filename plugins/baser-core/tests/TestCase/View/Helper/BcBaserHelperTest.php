@@ -1772,13 +1772,15 @@ class BcBaserHelperTest extends BcTestCase
      * BcContentsRoute::match() に途中までの処理を記述している
      *
      * @return void
-     * @TODO 現在の仕様として、Contents テーブルで管理しているURLの場合、URLが解決できない
      */
     public function testListNum()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/search_indices/search');
-        $this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/search_indices\/search\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'Page', 'url' => '/'])->persist();
+
+        $this->BcBaser = new BcBaserHelper(new BcAdminAppView($this->getRequest()->withParam('pass', [1])));
+
+        $this->expectOutputRegex('/<div class="bs-list-num">.*/s');
         $this->BcBaser->listNum();
     }
 
