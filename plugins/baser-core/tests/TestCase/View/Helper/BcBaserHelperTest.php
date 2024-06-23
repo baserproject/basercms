@@ -1031,9 +1031,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testHeader()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputRegex('/<div id="Header">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>.*<\/div>.*<\/div>/s');
+        $this->expectOutputRegex('/<header class="bs-header">.*<div class="bs-header__menu-button" id="BsMenuBtn">.*<\/div>.*<nav class="bs-header__nav" id="BsMenuContent">.*<\/nav>.*<\/header>/s');
         $this->BcBaser->header();
     }
 
