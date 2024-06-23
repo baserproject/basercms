@@ -1074,10 +1074,9 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcBaser = new BcBaserHelper((new View())->assign('content', 'コンテンツ本体'));
 
         $this->expectOutputString('コンテンツ本体');
-        $this->_View->assign('content', 'コンテンツ本体');
         $this->BcBaser->content();
     }
 
