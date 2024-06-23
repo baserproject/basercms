@@ -209,12 +209,24 @@ class MailContentsTableTest extends BcTestCase
 
     /**
      * 英数チェック
+     * @dataProvider alphaNumericDataProvider
      */
-    public function testAlphaNumeric()
+    public function testAlphaNumeric($expected, $check)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailContent->alphaNumeric($check);
+        $this->assertEquals($expected, $result);
     }
 
+    public static function alphaNumericDataProvider()
+    {
+        return [
+            [true, ['abc123']],
+            [false, ['abc123!']],
+            [false, ['ABC123']],
+            [true, ['123']],
+            [false, ['']],
+        ];
+    }
     /**
      * afterSave
      *

@@ -211,6 +211,7 @@ class MailContentsTable extends MailAppTable
      *
      * @param array $check チェック対象文字列
      * @return boolean
+     * @unitTest
      */
     public static function alphaNumeric($check)
     {
