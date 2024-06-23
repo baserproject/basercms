@@ -913,6 +913,7 @@ class BcBaserHelper extends Helper
      * @return string meta タグ用の説明文
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription()
     {

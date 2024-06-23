@@ -806,7 +806,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetDescription($expected, $description = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'alias' => 'test', 'description' => 'baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/test/', 'site_id' => 1])->persist();
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/test/')));
 
         if ($description !== null) {
             $this->BcBaser->setDescription($description);
