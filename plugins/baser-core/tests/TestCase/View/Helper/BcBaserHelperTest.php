@@ -1998,7 +1998,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testWebClipIcon()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         ob_start();
         $this->BcBaser->webClipIcon('', false);
         $result = ob_get_clean();
