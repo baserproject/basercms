@@ -255,7 +255,8 @@ export default {
                             }
                         }).then(function (response) {
                             if (response.status === 200) {
-                                t.formSubmitted();
+                                t.refresh();
+                                t.currentFavorite = null;
                             } else {
                                 alert(bcI18n.alertServerError);
                             }
@@ -265,7 +266,7 @@ export default {
                                 alert(bcI18n.alertServerError);
                                 $("#Waiting").hide();
                             });
-                    }, {useUpdate: false, hideLoader: false});
+                    }, {hideLoader: false});
 
                     break;
             }
