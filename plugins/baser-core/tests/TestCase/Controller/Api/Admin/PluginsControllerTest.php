@@ -273,4 +273,5 @@ class PluginsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertIsArray($result->availableCoreVersionInfo);
     }
+
 }
