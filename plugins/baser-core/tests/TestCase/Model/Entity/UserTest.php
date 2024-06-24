@@ -71,7 +71,6 @@ class UserTest extends BcTestCase
      */
     public function testIsEditableUser()
     {
-        Configure::write('BcApp.superUserId', 2);
         //$isSuper = true, return true
         $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 2])->getEntity()));
 
@@ -82,6 +81,7 @@ class UserTest extends BcTestCase
         $this->assertTrue($this->User->isEditableUser(UserFactory::make(['id' => 3])->getEntity()));
 
         //他のAdminアカウトを編集する場合、return false
+        Configure::write('BcApp.superUserId', 2);
         UserFactory::make(['id' => 4])->persist();
         UsersUserGroupFactory::make(['user_id' => 4, 'user_group_id' => 1])->persist();
         $user = $this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups');
