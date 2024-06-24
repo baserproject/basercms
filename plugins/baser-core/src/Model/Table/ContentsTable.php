@@ -26,7 +26,6 @@ use BaserCore\Annotation\Note;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
-use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
  * Class ContentsTable
