@@ -29,6 +29,29 @@ class PluginTest extends BcTestCase
         $this->assertFalse($this->Plugin->isPlugin());
     }
 
+    /**
+     * @dataProvider hasTypeDataProvider
+     */
+    public function test_hasType($type, $types, $expected)
+    {
+        $this->Plugin->type = $type;
+        $result = $this->Plugin->hasType($types);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function hasTypeDataProvider()
+    {
+        return [
+            [null, ['exampleType'], false],
+            ['exampleType', ['exampleType'], true],
+            ['exampleType', ['otherType'], false],
+            [['exampleType', 'anotherType'], ['exampleType'], true],
+            [['exampleType', 'anotherType'], ['anotherType'], true],
+            [['exampleType', 'anotherType'], ['differentType'], false]
+        ];
+    }
+
+
     public function testIsTheme()
     {
         //with type = 'Theme'

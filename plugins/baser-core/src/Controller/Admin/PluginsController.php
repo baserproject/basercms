@@ -93,7 +93,7 @@ class PluginsController extends BcAdminAppController
     }
 
 	/**
-	 * アップデート実行
+	 * プラグインアップデート実行
      * @param PluginsAdminServiceInterface|PluginsAdminService $service
      * @param string $name
      * @return void|Response
@@ -131,24 +131,41 @@ class PluginsController extends BcAdminAppController
             }
         } catch (\Throwable $e) {
             $this->BcMessage->setError(__d('baser_core', 'アップデート処理に失敗しました。画面下部のアップデートログを確認してください。') . $e->getMessage());
-            if($plugin->name === 'BaserCore') {
-                $request = $this->getRequest();
-                try {
-                    $service->rollbackCore(
-                        $request->getData('currentVersion'),
-                        $request->getData('php'),
-                    );
-                    $this->BcMessage->setError(__d('baser_core', 'コアファイルを元に戻しました。'));
-                } catch (\Throwable $e) {
-                    $this->BcMessage->setError($e->getMessage());
-                }
+        }
+        return $this->redirect(['action' => 'update', $name]);
+	}
+
+	/**
+	 * コアアップデート実行
+     * @param PluginsAdminServiceInterface|PluginsAdminService $service
+     * @param string $name
+     * @return void|Response
+     * @checked
+     * @noTodo
+	 */
+	public function update_core(PluginsAdminServiceInterface $service)
+	{
+        if (!$this->request->is(['put', 'post'])) return;
+        try {
+            $request = $this->getRequest();
+            $service->updateCore(
+                $request->getData('php')?? 'php',
+                $request->getData('connection') ?? 'default'
+            );
+            $this->BcMessage->setInfo(__d('baser_core', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError(__d('baser_core', 'アップデート処理に失敗しました。画面下部のアップデートログを確認してください。') . $e->getMessage());
+            try {
+                $service->rollbackCore(
+                    $request->getData('currentVersion'),
+                    $request->getData('php')
+                );
+                $this->BcMessage->setError(__d('baser_core', 'コアファイルを元に戻しました。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError($e->getMessage());
             }
         }
-        if($plugin->name === 'BaserCore') {
-            return $this->redirect(['action' => 'update']);
-        } else {
-            return $this->redirect(['action' => 'update', $name]);
-        }
+        return $this->redirect(['action' => 'update']);
 	}
 
     /**
@@ -170,6 +187,7 @@ class PluginsController extends BcAdminAppController
             $service->getCoreUpdate(
                 $request->getData('targetVersion')?? '',
                 $request->getData('php')?? 'php',
+                $request->getData('force'),
             );
         } catch (\Throwable $e) {
             $this->BcMessage->setError($e->getMessage());

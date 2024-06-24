@@ -22,12 +22,18 @@ const updateForm = {
     isWritablePackage: false,
 
     /**
+     * アップデートできるかどうか
+     */
+    isUpdatable: false,
+
+    /**
      * 起動処理
      */
     mounted() {
         const script = $("#AdminPluginsUpdateScript");
         this.plugin = script.attr('data-plugin');
-        this.isWritablePackage = script.attr('data-isWritablePackage');
+        this.isUpdatable = script.attr('data-isUpdatable');
+        if(this.isUpdatable === undefined) this.isUpdatable = false;
         this.registerEvents();
         this.toggleUpdate();
     },
@@ -49,36 +55,8 @@ const updateForm = {
      */
     update() {
         if (confirm(bcI18n.confirmMessage1)) {
-            if(updateForm.plugin !== 'BaserCore') {
-                $.bcUtil.showLoader();
-                return true;
-            }
-            $.bcToken.check(function() {
-                $.bcUtil.showLoader();
-                $.bcUtil.hideMessage();
-                axios.post($.bcUtil.apiAdminBaseUrl + 'baser-core/plugins/update_core_files.json', {}, {
-                    headers: {
-                        'X-CSRF-Token': $.bcToken.key
-                    }
-                })
-                .then(response => {
-                    let message = response.data.message + bcI18n.updateMessage1;
-                    $.bcUtil.showNoticeMessage(message);
-                    $(window).scrollTop(0);
-                    $.bcUtil.showLoader();
-                    // フォーム送信
-                    $("#PluginUpdateForm").submit();
-                })
-                .catch(error => {
-                    if (error.response.status === 500) {
-                        $.bcUtil.showAlertMessage(error.response.data.message);
-                    } else {
-                        $.bcUtil.showAlertMessage('予期せぬエラーが発生しました。システム管理者に連絡してください。');
-                    }
-                    $.bcUtil.hideLoader();
-                    $(window).scrollTop(0);
-                });
-            }, {hideLoader: false});
+            $.bcUtil.showLoader();
+            return true;
         }
         return false;
     },
@@ -90,19 +68,33 @@ const updateForm = {
         const $btnUpdate = $("#BtnUpdate");
         const $btnDownload = $("#BtnDownload");
         const $phpNotice = $(".php-notice");
-        if(updateForm.plugin !== 'BaserCore') return;
-        if($("#php").val()) {
-            if($btnUpdate.length) $btnUpdate.removeAttr('disabled');
-            if($btnDownload.length) $btnDownload.removeAttr('disabled');
-            $phpNotice.hide();
+        const $inputPhp = $("#php");
+
+        if (updateForm.plugin === 'BaserCore') {
+            if ($inputPhp.val() !== ''){
+                if(updateForm.isUpdatable) {
+                    $btnUpdate.removeAttr('disabled');
+                } else {
+                    $btnUpdate.attr('disabled', 'disabled');
+                }
+                $btnDownload.removeAttr('disabled');
+            } else {
+                $btnUpdate.attr('disabled', 'disabled');
+                $btnDownload.attr('disabled', 'disabled');
+            }
+            if ($inputPhp.val()) {
+                $phpNotice.hide();
+            } else {
+                $phpNotice.show();
+            }
         } else {
-            if($btnUpdate.length) $btnUpdate.attr('disabled', 'disabled');
-            if($btnDownload.length) $btnDownload.attr('disabled', 'disabled');
-            $phpNotice.show();
-        }
-        if(!updateForm.isWritablePackage) {
-            if($btnUpdate.length) $btnUpdate.attr('disabled', 'disabled');
-            if($btnDownload.length) $btnDownload.attr('disabled', 'disabled');
+            if (updateForm.isUpdatable) {
+                $btnUpdate.removeAttr('disabled');
+                $btnDownload.removeAttr('disabled');
+            } else {
+                $btnUpdate.attr('disabled', 'disabled');
+                $btnDownload.attr('disabled', 'disabled');
+            }
         }
     }
 

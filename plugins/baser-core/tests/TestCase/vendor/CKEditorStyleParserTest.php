@@ -39,7 +39,17 @@ class CKEditorStyleParserTest extends BcTestCase
 
     public function test_parseCode()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $code = 'color: #333; font-size: 20px;';
+
+        $expected = [
+            'color' => '#333',
+            'font-size' => '20px'
+        ];
+
+        $params = [&$code];
+        $result = $this->execPrivateMethod(new CKEditorStyleParser(), 'parseCode', $params);
+
+        $this->assertEquals($expected, $result);
     }
 
     public function test_readString()

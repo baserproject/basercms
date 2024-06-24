@@ -96,7 +96,7 @@ class BcZip
     {
         if ($this->Zip->open($source) === true && $this->Zip->extractTo($target)) {
             $archivePath = $this->Zip->getNameIndex(0);
-            $archivePathAry = explode(DS, $archivePath);
+            $archivePathAry = explode('/', $archivePath);
             $this->topArchiveName = $archivePathAry[0];
             return true;
         } else {
