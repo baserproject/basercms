@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
@@ -106,6 +107,31 @@ class AppTable extends Table
             $options['joinTable'] = $this->addPrefix($options['joinTable']);
         }
         return parent::belongsToMany($associated, $options);
+    }
+
+    /**
+     * findの前後にイベントを追加する
+     *
+     * @param string $type the type of query to perform
+     * @param array<string, mixed> $options An array that will be passed to Query::applyOptions()
+     * @return \Cake\ORM\Query The query builder
+     * @checked
+     * @noTodo
+     */
+    public function find(string $type = 'all', array $options = []): Query
+    {
+        $event = $this->dispatchEvent('AppTable.beforeFind', compact('type', 'options'));
+        if ($event !== false) {
+            if (!empty($event->getData('options'))) {
+                $options = $event->getData('options');
+            }
+        }
+
+        $result = parent::find($type, $options);
+
+        $this->dispatchEvent('AppTable.afterFind', compact('type', 'options', 'result'));
+
+        return $result;
     }
 
     /**
