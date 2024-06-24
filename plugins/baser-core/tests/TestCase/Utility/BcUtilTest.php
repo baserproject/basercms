@@ -817,12 +817,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetSubDomain($host, $currentHost, $expects, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         Configure::write('BcEnv.mainDomain', 'localhost');
         if ($currentHost) {
             Configure::write('BcEnv.host', $currentHost);
@@ -1550,5 +1544,25 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser admin', $result['Api/Admin']->name);
     }
 
+    public function test_isInstalled()
+    {
+        // Set the 'BcEnv.isInstalled' configuration to true
+        Configure::write('BcEnv.isInstalled', true);
+        $this->assertTrue(BcUtil::isInstalled());
 
+        // Set the 'BcEnv.isInstalled' configuration to false
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertFalse(BcUtil::isInstalled());
+    }
+
+    public function test_isDebug()
+    {
+        // Set the debug configuration to true
+        Configure::write('debug', true);
+        $this->assertTrue(BcUtil::isDebug());
+
+        // Set the debug configuration to false
+        Configure::write('debug', false);
+        $this->assertFalse(BcUtil::isDebug());
+    }
 }

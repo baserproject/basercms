@@ -1,18 +1,31 @@
 <?php
-namespace SoftDelete\Model\Table;
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+namespace BaserCore\Model\Table;
 
 use Cake\ORM\RulesChecker;
 use Cake\Datasource\EntityInterface;
-use SoftDelete\Error\MissingColumnException;
-use SoftDelete\ORM\SelectQuery;
+use BaserCore\Error\MissingColumnException;
+use BaserCore\ORM\SelectQuery;
 
+/**
+ * SoftDeleteTrait
+ */
 trait SoftDeleteTrait
 {
     /**
      * Get the configured deletion field
      *
      * @return string
-     * @throws \SoftDelete\Error\MissingColumnException
+     * @throws \BaserCore\Error\MissingColumnException
      */
     public function getSoftDeleteField()
     {
@@ -41,7 +54,7 @@ trait SoftDeleteTrait
      * Fatal error: Declaration of SoftDelete\Model\Table\SoftDeleteTrait::query(): SoftDelete\ORM\Query must be compatible with Cake\ORM\Table::query(): Cake\ORM\Query
      * 上記エラー回避のため戻り値の型宣言では実体と異なるがCakePHP本体のquery()で定義されている上書き元の型（\Cake\ORM\Query）を明示する
      *
-     * @return \SoftDelete\ORM\SelectQuery
+     * @return \BaserCore\ORM\SelectQuery
      */
     public function SelectQuery(): SelectQuery
     {

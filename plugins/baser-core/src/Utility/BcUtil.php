@@ -970,6 +970,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getSubDomain($host = null)
     {
@@ -1123,6 +1124,7 @@ class BcUtil
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isInstalled()
     {
@@ -2092,6 +2094,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isDebug(): bool
     {
