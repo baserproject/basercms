@@ -1554,13 +1554,6 @@ class BcUtilTest extends BcTestCase
         Configure::write('BcEnv.isInstalled', false);
         $this->assertFalse(BcUtil::isInstalled());
     }
-    /**
-     * test PairToAssoc
-     */
-    public function testPairToAssoc()
-    {
-        $result = BcUtil::pairToAssoc('key1', 'value1', 'key2', 'value2', 'key3');
-        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
 
     public function test_isDebug()
     {
@@ -1572,6 +1565,15 @@ class BcUtilTest extends BcTestCase
         Configure::write('debug', false);
         $this->assertFalse(BcUtil::isDebug());
     }
+
+    /**
+     * test PairToAssoc
+     */
+    public function testPairToAssoc()
+    {
+        $result = BcUtil::pairToAssoc('key1', 'value1', 'key2', 'value2', 'key3');
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
+
         $result = BcUtil::pairToAssoc('key1|value1|key2|value2|key3');
         $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
 
