@@ -1932,7 +1932,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentsUrl()
     {
-        SiteFactory::make(['id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'domain_type' => 2, 'alias' => 'another.com'])->persist();
         ContentFactory::make(['url' => '/news/', 'site_id' => 1])->persist();
         // URLが設定されていない場合
         $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/news/')));
@@ -1948,10 +1948,10 @@ class BcBaserHelperTest extends BcTestCase
         // サブドメインの指定がある場合
         Configure::write('BcEnv.host', 'localhost');
         $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
-        $this->assertEquals('/another.com/news/', $this->BcBaser->getContentsUrl('/another.com/news/', true, true));
+        $this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl('another.com/news/', true, true));
         // サブドメインの指定がないのに指定ありとした場合
         Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->assertEquals('/news/', $this->BcBaser->getContentsUrl('/news/', true, true));
+        $this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, false));
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
