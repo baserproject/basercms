@@ -197,6 +197,7 @@ class MailContentsTable extends MailAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkSslUrl($value)
     {
@@ -211,6 +212,7 @@ class MailContentsTable extends MailAppTable
      *
      * @param array $check チェック対象文字列
      * @return boolean
+     * @unitTest
      */
     public static function alphaNumeric($check)
     {
