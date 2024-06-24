@@ -109,6 +109,7 @@ class BcArrayHelper extends Helper
      * @param string $add
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function __addText(&$value, $key, $add)
     {
