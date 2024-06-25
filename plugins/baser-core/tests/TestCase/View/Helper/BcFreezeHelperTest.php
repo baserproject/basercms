@@ -466,12 +466,16 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testDatepicker($freezed, $date, $fieldName, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 凍結させる
         if ($freezed) {
-            $this->BcFreeze->freeze();
             [$model, $field] = explode('.', $fieldName);
-            $this->BcFreeze->request->data[$model][$field] = $date;
+            if (!empty($date)){
+                $request = $this->getRequest()->withData($model, [$field => $date]);
+            }else{
+                $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            }
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
         }
 
         $result = $this->BcFreeze->datepicker($fieldName, $attributes);
@@ -484,7 +488,7 @@ class BcFreezeHelperTest extends BcTestCase
             [false, null, 'baser', [], 'type="text".*id="baser".*("#baser")'],
             [false, null, 'baser', ['test1' => 'testValue1'], 'test1="testValue1"'],
             [true, '2015-4-1', 'baser.freezed', [], 'type="hidden".*2015\/04\/01'],
-            [true, null, 'baser.freezed', [], '>$'],
+            [true, null, 'baser.freezed', [], 'type="hidden".*1970\/01\/01'],
             [true, null, 'baser.freezed', ['test1' => 'testValue1'], 'test1="testValue1"'],
         ];
     }
@@ -524,6 +528,34 @@ class BcFreezeHelperTest extends BcTestCase
             ['baser.freezed', ['1' => 'BaserCMS1', '2' => 'BaserCMS2', '3' => 'BaserCMS3',], ['value' => [1, 2, 3], 'multiple' => 'checkbox'], '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'],
             ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]" class="" value="1" id="baserFreezed"\/>BaserCMS1'],
             ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'],
+        ];
+    }
+
+    /**
+     * @dataProvider passwordDataProvider
+     */
+    public function test_password($freezed, $fieldName, $attributes, $expected)
+    {
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
+
+        $result = $this->BcFreeze->password($fieldName, $attributes);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function passwordDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="password" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="password" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="password" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">*********'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
         ];
     }
 }

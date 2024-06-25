@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -103,6 +104,22 @@ class UserTest extends BcTestCase
             ['', '', '', 'undefined'],
         ];
     }
+
+    /**
+     * test getAuthPrefixes
+     */
+    public function test_getAuthPrefixes()
+    {
+        //user group is empty
+        $user = new User();
+        $user_groups = $user->getAuthPrefixes();
+        $this->assertEquals([], $user_groups);
+
+        //user group is not empty
+        $user_groups = $this->User->getAuthPrefixes();
+        $this->assertEquals([0 => 'Admin', 1 => ' Api/Admin'], $user_groups);
+    }
+
     public function test_isSuper()
     {
         //user is a superuser
@@ -114,5 +131,20 @@ class UserTest extends BcTestCase
         //user is not a superuser
         $user->id = 2;
         $this->assertFalse($user->isSuper());
+    }
+
+    public function testIsEnableLoginAgent()
+    {
+        //status = false場合、return true
+        $targetUser = UserFactory::make(['status' => false])->getEntity();
+        $this->assertFalse($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = false場合、return true
+        Configure::write('BcApp.superUserId', 1);
+        $targetUser = UserFactory::make(['id' => 2])->getEntity();
+        $this->assertTrue($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = true場合、return false
+        $this->assertFalse($this->User->isEnableLoginAgent($this->User));
     }
 }

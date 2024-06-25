@@ -264,22 +264,41 @@ class BcUtil
     /**
      * バージョンを取得する
      *
-     * @return bool|string
+     * @param string $plugin プラグイン名
+     * @param bool $isUpdateTmp アップデート時の一時ファイルが対象かどうか
+     * @return false|string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function getVersion($plugin = '')
+    public static function getVersion(string $plugin = '', bool $isUpdateTmp = false): string|false
     {
         if (!$plugin) $plugin = 'BaserCore';
         $corePlugins = Configure::read('BcApp.corePlugins');
+        $updateTmpDir = TMP . 'update';
+        $pluginTmpDir = $updateTmpDir . DS . 'vendor' . DS . 'baserproject';
+
         if (in_array($plugin, $corePlugins)) {
             $path = BASER . 'VERSION.txt';
+            if($isUpdateTmp) {
+                if (preg_match('/^' . preg_quote(ROOT . DS . 'plugins' . DS, '/') . '/', $path)) {
+                    $path = str_replace(ROOT . DS . 'plugins', $pluginTmpDir, $path);
+                } else {
+                    $path = str_replace(ROOT, $updateTmpDir, $path);
+                }
+            }
+            if (!file_exists($path)) {
+                return false;
+            }
         } else {
-            $paths = App::path('plugins');
+            if($isUpdateTmp) {
+                $paths = [$pluginTmpDir . DS];
+            } else {
+                $paths = App::path('plugins');
+            }
             $exists = false;
             foreach($paths as $path) {
-                $path .= self::getPluginDir($plugin) . DS . 'VERSION.txt';
+                $path .= self::getPluginDir($plugin, $isUpdateTmp) . DS . 'VERSION.txt';
                 if (file_exists($path)) {
                     $exists = true;
                     break;
@@ -951,6 +970,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getSubDomain($host = null)
     {
@@ -1032,9 +1052,12 @@ class BcUtil
      * @checked
      * @noTodo
      */
-    public static function getPluginPath($pluginName): string
+    public static function getPluginPath(string $pluginName, bool $isUpdateTmp = false): string|false
     {
-        $pluginDir = self::getPluginDir($pluginName);
+        $pluginDir = self::getPluginDir($pluginName, $isUpdateTmp);
+        if($isUpdateTmp) {
+            return TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . $pluginDir . DS;
+        }
         if ($pluginDir) {
             $paths = App::path('plugins');
             foreach($paths as $path) {
@@ -1048,16 +1071,22 @@ class BcUtil
 
     /**
      * プラグインのディレクトリ名を取得する
-     * @param $pluginName
-     * @return false|mixed
+     * @param string $pluginName
+     * @param bool $isUpdateTmp
+     * @return false|string
      * @checked
      * @noTodo
      */
-    public static function getPluginDir($pluginName)
+    public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
         if (!$pluginName) $pluginName = 'BaserCore';
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
-        foreach(App::path('plugins') as $path) {
+        if($isUpdateTmp) {
+            $paths = [TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS];
+        } else {
+            $paths = App::path('plugins');
+        }
+        foreach($paths as $path) {
             foreach($pluginNames as $name) {
                 if (is_dir($path . $name)) {
                     return $name;
@@ -1095,6 +1124,7 @@ class BcUtil
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isInstalled()
     {
@@ -2064,6 +2094,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isDebug(): bool
     {
@@ -2199,6 +2230,36 @@ class BcUtil
         if ($remove) $message .= sprintf(__d('baser_core', 'バージョン %s で削除される予定です。'), $remove);
         if ($note) $message .= $note;
         return $message;
+    }
+
+    /**
+     * baserCMS のバージョンが 5.1 かどうか判定
+     * 5.1系へのバージョンアップ時のみ利用
+     *
+     * @return bool
+     * @deprecated remove 5.1.0 このメソッドは非推奨です。
+     */
+    public static function is51()
+    {
+        if(file_exists(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt')) {
+            $versionData = file_get_contents(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } elseif(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt') {
+            $versionData = file_get_contents(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        $aryVersionData = explode("\n", $versionData);
+        if (!empty($aryVersionData[0])) {
+            $version = $aryVersionData[0];
+            if(preg_match('/^5\.0/', $version) || $version === '5.1.0-dev') {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        return false;
     }
 
 }

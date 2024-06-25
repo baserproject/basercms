@@ -67,6 +67,7 @@ class Plugin extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isPlugin(): bool
     {
@@ -115,6 +116,7 @@ class Plugin extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasType(array|string $types): bool
     {

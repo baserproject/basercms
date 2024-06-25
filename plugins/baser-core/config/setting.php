@@ -296,7 +296,7 @@ return [
 
         /**
          * インストール時に composer.json にセットするバージョン
-         * @see \BaserCore\Command\CreateReleaseCommand::setupComposer()
+         * @see \BaserCore\Utility\BcComposer::setupComposerForDistribution()
          */
         'setupVersion' => '5.1.*',
 
