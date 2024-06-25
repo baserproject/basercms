@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcArrayHelper;
+use Cake\Datasource\ResultSetInterface;
+use Cake\ORM\Query;
 use Cake\View\View;
 
 /**
@@ -59,10 +61,26 @@ class BcArrayHelperTest extends BcTestCase
      * 配列の最後のキーを判定する
      *
      * */
-    public function testLast()
+    public function testLastWithArray()
     {
         $this->assertTrue($this->Helper->last($this->data, 'c'));
         $this->assertFalse($this->Helper->last($this->data, 'd'));
+
+        $this->data = [];
+        $this->assertFalse($this->Helper->last($this->data, 'c'));
+    }
+
+    public function testLastWithQuery()
+    {
+        $mockResultSet = $this->createMock(ResultSetInterface::class);
+        $mockResultSet->method('count')->willReturn(3);
+
+        $mockQuery = $this->createMock(Query::class);
+        $mockQuery->method('count')->willReturn(3);
+        $mockQuery->method('getIterator')->willReturn($mockResultSet);
+
+        $this->assertTrue($this->Helper->last($mockQuery, 2));
+        $this->assertFalse($this->Helper->last($mockQuery, 1));
     }
 
     /**
