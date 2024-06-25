@@ -37,8 +37,8 @@ class MaildataHelperTest extends BcTestCase
     public static function controlDataProvider()
     {
         return [
-          ['text' , 'test', true, ' test'],
-          ['number' , 123, true, ' 123'],
+          ['text' , '<b>bold</b>', true, ' &lt;b&gt;bold&lt;/b&gt;'],
+          ['text' , '<b>bold</b>', false, ' <b>bold</b>'],
         ];
     }
 
