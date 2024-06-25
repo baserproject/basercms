@@ -42,8 +42,13 @@ class BcAuthenticationEventListener implements EventListenerInterface
         ];
     }
 
-    // 二段階認証
+    /**
+     * 認証後処理
+     *
+     * @param Event $event
+     */
     public function afterIdentify(Event $event) {
+        // 二段階認証有効時はログインに認証コードが必要
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         if (!$siteConfigsService->getValue('use_two_factor_authentication')) {
             return;
@@ -54,6 +59,10 @@ class BcAuthenticationEventListener implements EventListenerInterface
         $session = $request->getSession();
         $loginUser = BcUtil::loginUser();
         $twoFactorAuthenticationsService = $this->getService(TwoFactorAuthenticationsServiceInterface::class);
+
+        if (!in_array($prefix, ['Api/Admin', 'Admin'])) {
+            return;
+        }
 
         if ($request->getData('code')) {
             if ($twoFactorAuthenticationsService->verify($loginUser->id, $request->getData('code'))) {
