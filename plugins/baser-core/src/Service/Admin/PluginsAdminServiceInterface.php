@@ -31,6 +31,6 @@ interface PluginsAdminServiceInterface
      * @param EntityInterface $plugin
      * @return array
      */
-    public function getViewVarsForUpdate(EntityInterface $plugin): array;
+    public function getViewVarsForUpdate(EntityInterface $entity): array;
 
 }

@@ -129,6 +129,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnableLoginAgent(EntityInterface $targetUser): bool
     {

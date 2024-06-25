@@ -201,20 +201,43 @@ class MailContentsTableTest extends BcTestCase
 
     /**
      * SSL用のURLが設定されているかチェックする
+     * @dataProvider checkSslUrlProvider
      */
-    public function testCheckSslUrl()
+    public function testCheckSslUrl($expected, $sslUrl, $value)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write('BcEnv.sslUrl', $sslUrl);
+        $this->assertEquals($expected, $this->MailContent->checkSslUrl($value));
+    }
+
+    public static function checkSslUrlProvider()
+    {
+        return [
+            [true, true, 'https://example.com/'],
+            [false, false, 'https://example.com/'],
+            [true, false, null],
+        ];
     }
 
     /**
      * 英数チェック
+     * @dataProvider alphaNumericDataProvider
      */
-    public function testAlphaNumeric()
+    public function testAlphaNumeric($expected, $check)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->MailContent->alphaNumeric($check);
+        $this->assertEquals($expected, $result);
     }
 
+    public static function alphaNumericDataProvider()
+    {
+        return [
+            [true, ['abc123']],
+            [false, ['abc123!']],
+            [false, ['ABC123']],
+            [true, ['123']],
+            [false, ['']],
+        ];
+    }
     /**
      * afterSave
      *
@@ -437,4 +460,5 @@ class MailContentsTableTest extends BcTestCase
         $this->assertEquals($result['publish_begin'], '2015-01-27 12:56:53');
         $this->assertEquals($result['publish_end'], '2015-02-27 12:56:53');
     }
+
 }

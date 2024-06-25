@@ -159,6 +159,7 @@ class UserTest extends BcTestCase
         $user_groups = $this->User->getAuthPrefixes();
         $this->assertEquals([0 => 'Admin', 1 => ' Api/Admin'], $user_groups);
     }
+
     public function test_isSuper()
     {
         //user is a superuser
@@ -170,5 +171,20 @@ class UserTest extends BcTestCase
         //user is not a superuser
         $user->id = 2;
         $this->assertFalse($user->isSuper());
+    }
+
+    public function testIsEnableLoginAgent()
+    {
+        //status = false場合、return true
+        $targetUser = UserFactory::make(['status' => false])->getEntity();
+        $this->assertFalse($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = false場合、return true
+        Configure::write('BcApp.superUserId', 1);
+        $targetUser = UserFactory::make(['id' => 2])->getEntity();
+        $this->assertTrue($this->User->isEnableLoginAgent($targetUser));
+
+        //status = true && isSuper = false && isAdmin = true場合、return false
+        $this->assertFalse($this->User->isEnableLoginAgent($this->User));
     }
 }
