@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -78,13 +79,37 @@ class UserTest extends BcTestCase
      */
     public function testIsDeletableUser()
     {
-        //status = true && isSuper = false && isAdmin = false場合、return true
-        Configure::write('BcApp.superUserId', 1);
-        $targetUser = UserFactory::make(['id' => 2])->getEntity();
-        $this->assertTrue($this->User->isDeletableUser($targetUser));
+        //データ生成
+        //スーパーユーザー
+        UserFactory::make(['id' => 2])->persist();
+        Configure::write('BcApp.superUserId', 2);
+        //Adminーザー
+        UserFactory::make(['id' => 3])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 1])->persist();
+        //スーパーでもAdminでもないーザー
+        UserFactory::make(['id' => 4])->persist();
 
-        //status = true && isSuper = false && isAdmin = true場合、return false
-        $this->assertFalse($this->User->isDeletableUser($this->User));
+        //自身がAdminを設定
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
+
+        //ターゲットがAdmin：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
+        //ターゲットがAdminじゃない
+        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
+
+        //自身がスーパーを設定
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups');
+        //ターゲットがスーパー：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+        //ターゲットがスーパーじゃない：true
+        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
+
+        //自身がスーパーでもAdminでもないを設定 ：false
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups');
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
     }
 
     /**
