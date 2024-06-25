@@ -45,6 +45,14 @@ class ComposerCommand extends Command
             'help' => __d('baser_core', 'データベース接続名'),
             'default' => 'php'
         ]);
+        $parser->addOption('dir', [
+            'help' => __d('baser_core', '実行対象ディレクトリ'),
+            'default' => ''
+        ]);
+        $parser->addOption('force', [
+            'help' => __d('baser_core', '指定したバージョンを設定せず composer.json の内容で update する'),
+            'default' => ''
+        ]);
         return $parser;
     }
 
@@ -60,23 +68,31 @@ class ComposerCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io)
     {
         try {
-            BcComposer::setup($args->getOption('php'));
+            BcComposer::setup($args->getOption('php'), $args->getOption('dir'));
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'Composer によるアップデートが失敗しました。');
             $this->log($message, LogLevel::ERROR, 'update');
             $this->log($e->getMessage(), LogLevel::ERROR, 'update');
-            $io->out($message);
-            exit(1);
+            $io->error($message);
+            $this->abort();
         }
-        $result = BcComposer::require('baser-core', $args->getArgument('version'));
+
+        BcComposer::clearCache();
+
+        if($args->getOption('force')) {
+            $result = BcComposer::update();
+        } else {
+            $result = BcComposer::require('baser-core', $args->getArgument('version'));
+        }
+
         if($result['code'] === 0) {
             $io->out(__d('baser_core', 'Composer によるアップデートが完了しました。'));
         } else {
             $message = __d('baser_core', 'Composer によるアップデートが失敗しました。update ログを確認してください。');
             $this->log($message, LogLevel::ERROR, 'update');
             $this->log(implode("\n", $result['out']), LogLevel::ERROR, 'update');
-            $io->out($message);
-            exit(1);
+            $io->error($message);
+            $this->abort();
         }
     }
 

@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use SoftDelete\ORM\SelectQuery;
 
 /**
  * BlogCategoriesTable

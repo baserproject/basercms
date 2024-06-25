@@ -112,4 +112,24 @@ class BcArrayHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
+    public function test_addTextWithPrefixAndSuffix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, "prefix-,-suffix"]);
+        $this->assertEquals("prefix-test-suffix", $value);
+    }
+
+    public function test_addTextWithOnlyPrefix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, "prefix-,"]);
+        $this->assertEquals("prefix-test", $value);
+    }
+
+    public function test_AddTextWithOnlySuffix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, ",-suffix"]);
+        $this->assertEquals("test-suffix", $value);
+    }
 }
