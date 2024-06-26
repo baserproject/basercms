@@ -74,7 +74,7 @@ use BaserCore\View\BcAdminAppView;
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>",
 	"deleteDisabled":"<?php echo !$isContentDeletable ?>"
-}'<?php if ($open): ?> class="jstree-open"<?php endif ?>
+}'class="<?php if ($open): ?>jstree-open<?php endif ?> display-none"
     ><?php
       echo h($content->title);
       if (!empty($content->children)) {
