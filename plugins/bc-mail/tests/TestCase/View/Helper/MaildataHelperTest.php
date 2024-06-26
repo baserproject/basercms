@@ -1,6 +1,8 @@
 <?php
 namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\View\Helper\MaildataHelper;
+use Cake\View\View;
 
 class MaildataHelperTest extends BcTestCase
 {
@@ -11,9 +13,7 @@ class MaildataHelperTest extends BcTestCase
     public function setUp():void
     {
         parent::setUp();
-//        $this->View = new BcAppView(null);
-//        $this->View->request = $this->_getRequest('/');
-//        $this->Maildata = new MaildataHelper($this->View);
+        $this->MaildataHelper = new MaildataHelper(new View());
     }
 
     /**
@@ -21,16 +21,26 @@ class MaildataHelperTest extends BcTestCase
      */
     public function tearDown():void
     {
-//        unset($this->Maildata);
+        unset($this->MaildataHelper);
         parent::tearDown();
     }
     /**
      * メール表示用のデータを出力する
-     *
-     * public function testControl() {
-     * $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドのためスキップします。');
-     * }
+     * @dataProvider controlDataProvider
      */
+    public function testControl($type, $value, $escape, $expected)
+    {
+        $result = $this->MaildataHelper->control($type, $value, $escape);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function controlDataProvider()
+    {
+        return [
+          ['text' , '<b>bold</b>', true, ' &lt;b&gt;bold&lt;/b&gt;'],
+          ['text' , '<b>bold</b>', false, ' <b>bold</b>'],
+        ];
+    }
 
     /**
      * メール表示用のデータを出力する
