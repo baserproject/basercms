@@ -1313,7 +1313,7 @@ class BcBaserHelperTest extends BcTestCase
     public function testCharset($expected, $charset , $device)
     {
         $site = SiteFactory::make(['device' => $device])->getEntity();
-        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site->device));
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
         ob_start();
         $this->BcBaser->charset($charset);
         $result = ob_get_clean();
@@ -1324,7 +1324,7 @@ class BcBaserHelperTest extends BcTestCase
     {
         return [
             ['<meta charset="utf-8">','utf-8', 'desktop'],
-            ['<meta charset="Shift-JIS">','Shift-JIS', 'mobile']
+            ['<meta charset="Shift-JIS">', null, 'mobile'],
         ];
     }
 
