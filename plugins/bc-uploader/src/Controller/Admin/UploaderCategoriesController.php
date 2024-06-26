@@ -15,6 +15,7 @@ use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcSiteConfig;
 use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -37,6 +38,11 @@ class UploaderCategoriesController extends BcAdminAppController
      */
     public function index(UploaderCategoriesServiceInterface $service)
     {
+        $this->setViewConditions('UploadCategory', [
+            'default' => [
+                'query' => [
+                    'limit' => BcSiteConfig::get('admin_list_num'),
+                ]]]);
         $this->set(['uploaderCategories' => $this->paginate($service->getIndex())]);
     }
 
@@ -89,7 +95,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function edit(UploaderCategoriesServiceInterface $service, $id)
     {
