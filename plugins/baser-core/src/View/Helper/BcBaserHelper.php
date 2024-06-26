@@ -1490,6 +1490,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function charset($charset = null)
     {
@@ -2170,6 +2171,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @UnitTest ラッパーメソッドに付きテスト不要
      */
     public function baseUrl()
     {
@@ -2662,6 +2664,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {

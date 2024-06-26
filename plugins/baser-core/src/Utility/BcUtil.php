@@ -1979,6 +1979,7 @@ class BcUtil
      * @return array Associative array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function pairToAssoc()
     {
