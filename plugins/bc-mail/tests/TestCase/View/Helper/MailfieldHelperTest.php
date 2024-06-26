@@ -11,6 +11,7 @@
 namespace BcMail\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\View\Helper\MailfieldHelper;
 use Cake\View\View;
 
@@ -59,6 +60,14 @@ class MailfieldHelperTest extends BcTestCase
      */
     public function testGetOptions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //with source data not empty
+        $mailField = MailFieldsFactory::make(['source' => '資料請求|問い合わせ|その他'])->getEntity();
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals(['資料請求' => '資料請求', '問い合わせ' => '問い合わせ', 'その他' => 'その他'], $result);
+
+        //with source data empty
+        $mailField = MailFieldsFactory::make(['source' => ''])->getEntity();
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals([], $result);
     }
 }

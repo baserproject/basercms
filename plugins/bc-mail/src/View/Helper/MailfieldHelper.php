@@ -68,6 +68,7 @@ class MailfieldHelper extends Helper
      * @return array コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getOptions($data)
     {
