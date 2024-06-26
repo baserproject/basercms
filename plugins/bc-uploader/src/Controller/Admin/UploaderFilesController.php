@@ -58,7 +58,7 @@ class UploaderFilesController extends BcAdminAppController
         $this->setViewConditions('UploadFile', [
             'default' => [
                 'query' => [
-                    'num' => BcSiteConfig::get('admin_list_num'),
+                    'limit' => BcSiteConfig::get('admin_list_num'),
                     'uploader_type' => 'all'
                 ]]]);
         $this->setRequest($this->getRequest()->withParsedBody($this->getRequest()->getQueryParams()));
@@ -98,7 +98,7 @@ class UploaderFilesController extends BcAdminAppController
         $this->setViewConditions('UploadFile', [
             'default' => [
                 'query' => [
-                    'num' => BcSiteConfig::get('admin_list_num')
+                    'limit' => BcSiteConfig::get('admin_list_num'),
                 ]],
             'type' => 'get'
         ]);
