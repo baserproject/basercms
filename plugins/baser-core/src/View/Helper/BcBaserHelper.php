@@ -2171,6 +2171,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @UnitTest ラッパーメソッドに付きテスト不要
      */
     public function baseUrl()
     {
