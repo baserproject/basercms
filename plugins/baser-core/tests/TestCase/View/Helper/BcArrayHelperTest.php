@@ -50,11 +50,28 @@ class BcArrayHelperTest extends BcTestCase
      * 配列の最初のキーを判定する
      *
      * */
-    public function testFirst()
+    public function testFirstWithArray()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertTrue($this->Helper->first($this->data, 'b'));
-        $this->assertFalse($this->Helper->first($this->data, 'c'));
+        $data = [1 => 'カンジ', 2 => 'リュウジ', 3 => 'スナオ', 4 => 'ゴンチャン'];
+
+        $this->assertTrue($this->Helper->first($data, 1));
+        $this->assertFalse($this->Helper->first($data, 2));
+
+        $data = [];
+        $this->assertFalse($this->Helper->first($data, 1));
+    }
+
+    public function testFirstWithQuery()
+    {
+        $mockResultSet = $this->createMock(ResultSetInterface::class);
+        $mockResultSet->method('first')->willReturn([1 => 'a', 2 => 'b', 3 => 'c']);
+        $mockResultSet->method('key')->willReturn(1);
+
+        $mockQuery = $this->createMock(Query::class);
+        $mockQuery->method('getIterator')->willReturn($mockResultSet);
+
+        $this->assertTrue($this->Helper->first($mockQuery, 1));
+        $this->assertFalse($this->Helper->first($mockQuery, 2));
     }
 
     /**
