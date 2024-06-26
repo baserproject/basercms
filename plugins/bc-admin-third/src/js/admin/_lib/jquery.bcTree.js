@@ -233,9 +233,6 @@
                     "force_text": true,
                     "check_callback": function (operation, node, node_parent, node_position, more) {
                         if (operation == 'move_node') {
-                            if (!$.bcTree.config.isUseMoveContents) {
-                                return false;
-                            }
                             if (node_parent.type == 'folder' && !node_parent.data.jstree.alias && !node.data.jstree.contentSiteRoot) {
                                 $.bcTree.dropTarget = node_parent;
                                 $.bcTree.dragTarget = node;
@@ -257,7 +254,17 @@
                     "types"
                 ],
                 "dnd": {
-                    "large_drop_target": true
+                    "large_drop_target": true,
+                    "is_draggable" : function (nodes) {
+                        if (!$.bcTree.config.isUseMoveContents) {
+                            return false;
+                        }
+                        // 最上位のコンテンツは移動不可
+                        if (nodes[0].parents.length <= 1) {
+                            return false;
+                        }
+                        return true;
+                    },
                 },
                 "types": {
                     "default": {},
