@@ -254,8 +254,8 @@ SCRIPT_END;
             $timeOptions['value'] = $timeValue;
         }
 
-		$step = $timeOptions['step'];
-		unset($timeOptions['step']);
+        $step = $timeOptions['step'];
+        unset($timeOptions['step']);
 
         $dateDivOptions = $timeDivOptions = $dateLabelOptions = $timeLabelOptions = null;
         if (!empty($dateOptions['div'])) {
@@ -1634,7 +1634,19 @@ DOC_END;
             }
             unset($options['counter']);
         }
-         $output = parent::control($fieldName, $options);
+
+        // EVENT Form.beforeControl
+        $event = $this->dispatchLayerEvent('beforeControl', [
+            'formId' => $this->__id,
+            'data' => $this->getView()->getRequest()->getData(),
+            'fieldName' => $fieldName,
+            'options' => $options
+        ], ['class' => 'Form', 'plugin' => '']);
+        if ($event !== false) {
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+        }
+
+        $output = parent::control($fieldName, $options);
 
         // EVENT Form.afterControl
         $event = $this->dispatchLayerEvent('afterControl', [
@@ -1643,7 +1655,6 @@ DOC_END;
             'fieldName' => $fieldName,
             'out' => $output
         ], ['class' => 'Form', 'plugin' => '']);
-
         if ($event !== false) {
             $output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
