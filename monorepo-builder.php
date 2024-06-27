@@ -9,11 +9,12 @@ use Symplify\MonorepoBuilder\Release\ReleaseWorker\UpdateReplaceReleaseWorker;
 
 return static function (MBConfig $mbConfig): void {
     $mbConfig->packageDirectories([__DIR__ . '/plugins']);
-    $version = ($_SERVER['argv'][2])?: '';
+    $version = (!empty($_SERVER['argv'][2]))? $_SERVER['argv'][2] : '';
     if(!$version) return;
     $mbConfig->packageDirectoriesExcludes([
         __DIR__ . '/plugins/BcThemeSample',
         __DIR__ . '/plugins/BcPluginSample',
+        __DIR__ . '/plugins/BcColumn',
     ]);
     // for "merge" command
     $mbConfig->dataToAppend([

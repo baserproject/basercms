@@ -51,13 +51,11 @@
             "BcInstaller\\": "plugins/bc-installer/src/",
             "BcMail\\": "plugins/bc-mail/src/",
             "BcSearchIndex\\": "plugins/bc-search-index/src/",
-            "BcSpaSample\\": "plugins/BcSpaSample/src/",
             "BcThemeConfig\\": "plugins/bc-theme-config/src/",
             "BcThemeFile\\": "plugins/bc-theme-file/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "BcWidgetArea\\": "plugins/bc-widget-area/src/",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing",
-            "SoftDelete\\": "plugins/cakephp-soft-delete/src"
+            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
         }
     },
     "autoload-dev": {
@@ -74,15 +72,13 @@
             "BcThemeConfig\\Test\\": "plugins/bc-theme-config/tests/",
             "BcThemeFile\\Test\\": "plugins/bc-theme-file/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/",
-            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/",
-            "SoftDelete\\Test\\": "plugins/cakephp-soft-delete/tests"
+            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
         }
     },
     "replace": {
         "baserproject/baser-core": "5.0.19",
         "baserproject/bc-admin-third": "5.0.19",
         "baserproject/bc-blog": "5.0.19",
-        "baserproject/bc-column": "5.0.19",
         "baserproject/bc-content-link": "5.0.19",
         "baserproject/bc-custom-content": "5.0.19",
         "baserproject/bc-editor-template": "5.0.19",
