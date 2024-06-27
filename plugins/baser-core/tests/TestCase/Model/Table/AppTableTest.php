@@ -12,8 +12,11 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class AppTableTest
@@ -27,7 +30,7 @@ class AppTableTest extends BcTestCase
      * @var AppTable
      */
     public $App;
-        /**
+    /**
      * Fixtures
      *
      * @var array
@@ -36,6 +39,7 @@ class AppTableTest extends BcTestCase
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.Plugins',
     ];
+
     /**
      * Set Up
      *
@@ -68,7 +72,7 @@ class AppTableTest extends BcTestCase
         $Permission = new TablePermissionsTable();
 
         $this->assertMatchesRegularExpression(
-            // yyyy-MM-dd HH:mm:ssのパターン
+        // yyyy-MM-dd HH:mm:ssのパターン
             '{^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$}',
             $Permission->find()->first()->created->__toString()
         );
@@ -153,6 +157,34 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(null, $conditions[0]['or'][1]['App.publish_begin IS']);
         $this->assertArrayHasKey('App.publish_end >=', $conditions[1]['or'][0]);
         $this->assertEquals(null, $conditions[1]['or'][1]['App.publish_end IS']);
+    }
+
+    /**
+     * test beforeFind
+     * @return void
+     */
+    public function testBeforeFind()
+    {
+        ContentFolderFactory::make(2)->persist();
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.beforeFind', function(Event $event) {
+            $event->setData('options', ['limit' => 1]);
+        });
+        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $this->assertEquals(1, $contentFolders->find()->all()->count());
+    }
+
+    /**
+     * test afterFind
+     * @return void
+     */
+    public function testAfterFind()
+    {
+        ContentFolderFactory::make(2)->persist();
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.afterFind', function(Event $event) {
+            $event->setData('result', $event->getData('result')->limit(1));
+        });
+        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $this->assertEquals(1, $contentFolders->find()->all()->count());
     }
 
 }
