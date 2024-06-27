@@ -121,6 +121,7 @@ class UploaderHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download(UploaderFile $uploaderFile, $linkText = '≫ ダウンロード')
     {
