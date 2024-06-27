@@ -9,7 +9,7 @@ use Symplify\MonorepoBuilder\Release\ReleaseWorker\UpdateReplaceReleaseWorker;
 
 return static function (MBConfig $mbConfig): void {
     $mbConfig->packageDirectories([__DIR__ . '/plugins']);
-    $version = (!empty($_SERVER['argv'][2]))?: '';
+    $version = ($_SERVER['argv'][2])?: '';
     if(!$version) return;
     $mbConfig->packageDirectoriesExcludes([
         __DIR__ . '/plugins/BcThemeSample',

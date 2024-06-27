@@ -809,7 +809,7 @@ class PluginsService implements PluginsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getCoreUpdate(string $targetVersion, string $php, bool $force = false)
+    public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
         if (function_exists('ini_set')) {
             ini_set('max_execution_time', 0);
