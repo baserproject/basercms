@@ -590,6 +590,7 @@ class BcValidation extends Validation
      * @param int $min 値の最短値
      * @param int $max 値の最長値
      * @param boolean
+     * @unitTest
      */
     public static function between($value, $min, $max)
     {
