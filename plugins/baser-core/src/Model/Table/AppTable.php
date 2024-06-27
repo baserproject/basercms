@@ -118,18 +118,25 @@ class AppTable extends Table
      * @checked
      * @noTodo
      */
-    public function find(string $type = 'all', array $options = []): Query
+    public function find(string $type = 'all', mixed ...$args): Query
     {
         // EVENT beforeFind
-        $event = $this->dispatchLayerEvent('beforeFind', compact('type', 'options'));
+        $event = $this->dispatchLayerEvent('beforeFind', [
+            'type' => $type, 'options' =>
+            $args['options'] ?? []
+        ]);
         if ($event !== false) {
-            $options = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+            $args['options'] = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
         }
 
-        $result = parent::find($type, $options);
+        $result = $this->callFinder($type, $this->selectQuery(), ...$args);
 
         // EVENT afterFind
-        $event = $this->dispatchLayerEvent('afterFind', compact('type', 'options', 'result'));
+        $event = $this->dispatchLayerEvent('afterFind', [
+            'type' => $type,
+            'options' => $args['options'] ?? [],
+            'result' => $result
+        ]);
         if ($event !== false) {
             $result = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('result') : $event->getResult();
         }
