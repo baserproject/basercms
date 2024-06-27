@@ -1,8 +1,9 @@
 <?php
 namespace BcUploader\Test\TestCase\View\Helper;
+use App\View\AppView;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\View\View;
+use Cake\Event\Event;
 
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -27,7 +28,8 @@ class UploaderHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->UploaderHelper = new UploaderHelper(new View());
+        $this->UploaderHelper = new UploaderHelper(new AppView($this->getRequest('/')));
+        $this->UploaderHelper->beforeRender(new Event('beforeRender'), '');
     }
 
     /**
@@ -68,7 +70,7 @@ class UploaderHelperTest extends BcTestCase
     {
         return [
             ['', ''],
-            ['test.jpg', 'test.jpg']
+            ['test.jpg', '/files/uploads/test.jpg']
         ];
     }
 
