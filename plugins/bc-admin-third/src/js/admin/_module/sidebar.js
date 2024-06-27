@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 if(!this.useUpdateNotice) return;
                 $.get($.bcUtil.apiAdminBaseUrl + 'baser-core/plugins/get_available_core_version_info.json', function (response){
                     if(response.availableCoreVersionInfo !== undefined) {
-                        app.availableVersions = response.availableCoreVersionInfo.versions.length;
+                        app.availableVersions = Object.keys(response.availableCoreVersionInfo.versions).length;
                     }
                 });
             },

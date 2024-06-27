@@ -11,6 +11,9 @@
 namespace BcMail\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\View\Helper\MailfieldHelper;
+use Cake\View\View;
 
 class MailfieldHelperTest extends BcTestCase
 {
@@ -21,6 +24,7 @@ class MailfieldHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->mailfieldHelper = new MailfieldHelper(new View());
     }
 
     /**
@@ -28,15 +32,27 @@ class MailfieldHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->mailfieldHelper);
         parent::tearDown();
     }
 
     /**
      * htmlの属性を取得する
+     * @dataProvider getAttributesProvider
      */
-    public function testGetAttributes()
+    public function testGetAttributes($expected, $data)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($expected, $this->mailfieldHelper->getAttributes($data));
+    }
+
+    public static function getAttributesProvider()
+    {
+        return [
+            [['size' => 10, 'rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'tel'], ['MailField' => ['size' => 10, 'text_rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'tel', 'options' => '']]],
+            [['size' => 10, 'rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'multiple' => true], ['MailField' => ['size' => 10, 'text_rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'multi_check', 'options' => '']]],
+            [['size' => 10, 'rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'number'], ['MailField' => ['size' => 10, 'text_rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'number', 'options' => '']]],
+            [['size' => 10, 'rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'number', 'key1' => 'value1', 'key2' => 'value2', 'key3' => null], ['MailField' => ['size' => 10, 'text_rows' => 5, 'maxlength' => 100, 'class' => 'test', 'autocomplete' => 'on', 'type' => 'number', 'options' => 'key1|value1|key2|value2|key3']]],
+        ];
     }
 
     /**
@@ -44,6 +60,14 @@ class MailfieldHelperTest extends BcTestCase
      */
     public function testGetOptions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //with source data not empty
+        $mailField = MailFieldsFactory::make(['source' => '資料請求|問い合わせ|その他'])->getEntity();
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals(['資料請求' => '資料請求', '問い合わせ' => '問い合わせ', 'その他' => 'その他'], $result);
+
+        //with source data empty
+        $mailField = MailFieldsFactory::make(['source' => ''])->getEntity();
+        $result = $this->mailfieldHelper->getOptions($mailField);
+        $this->assertEquals([], $result);
     }
 }
