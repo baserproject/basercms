@@ -43,6 +43,7 @@ class MaildataHelper extends BcTextHelper
      * @return string メール用データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function control($type, $value, $escape = true)
     {

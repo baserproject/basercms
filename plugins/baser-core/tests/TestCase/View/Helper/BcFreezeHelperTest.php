@@ -532,13 +532,41 @@ class BcFreezeHelperTest extends BcTestCase
     }
 
     /**
+     * @dataProvider passwordDataProvider
+     */
+    public function test_password($freezed, $fieldName, $attributes, $expected)
+    {
+        if ($freezed) {
+            [$model, $field] = explode('.', $fieldName);
+            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $this->BcFreeze = new BcFreezeHelper(new View($request));
+            $this->BcFreeze->freeze();
+        }
+
+        $result = $this->BcFreeze->password($fieldName, $attributes);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function passwordDataProvider()
+    {
+        return [
+            [false, 'baser', [], '<input type="password" name="baser">'],
+            [false, 'baser', ['class' => 'bcclass'], '<input type="password" name="baser" class="bcclass">'],
+            [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="password" name="baser" class="bcclass" id="bcid">'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">*********'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">********'],
+        ];
+    }
+
+    /**
      * @dataProvider numberlDataProvider
      */
     public function test_number($freezed, $fieldName, $attributes, $expected)
     {
         if ($freezed) {
             [$model, $field] = explode('.', $fieldName);
-            $request = $this->getRequest()->withData($model, [$field => 'BaserCMS'])->withData('freezed', 'BaserCMS');
+            $request = $this->getRequest()->withData($model, [$field => '123'])->withData('freezed', '123');
             $this->BcFreeze = new BcFreezeHelper(new View($request));
             $this->BcFreeze->freeze();
         }
@@ -553,9 +581,9 @@ class BcFreezeHelperTest extends BcTestCase
             [false, 'baser', [], '<input type="number" name="baser">'],
             [false, 'baser', ['class' => 'bcclass'], '<input type="number" name="baser" class="bcclass">'],
             [false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input type="number" name="baser" class="bcclass" id="bcid">'],
-            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
-            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="123">123'],
+            [true, 'baser.freezed', ['value' => '1234'], '<input type="hidden" name="baser[freezed]" value="1234">1234'],
+            [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="123">123'],
         ];
     }
 }

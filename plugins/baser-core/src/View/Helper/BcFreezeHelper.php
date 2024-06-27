@@ -552,6 +552,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return    string    htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function password($fieldName, $options = [])
     {
@@ -561,7 +562,7 @@ class BcFreezeHelper extends BcFormHelper
             } else {
                 $value = $this->getSourceValue($fieldName);
             }
-            $value = preg_replace('/./', '*', $value);
+            $value = $value !== null ? preg_replace('/./', '*', $value) : '';
             return parent::hidden($fieldName, $options) . h($value);
         } else {
             return parent::password($fieldName, $options);

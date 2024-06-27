@@ -610,8 +610,7 @@ class BcValidationTest extends BcTestCase
      */
     public function testBetween($check, $min, $max, $expect)
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        $result = $this->BcApp->between($check, $min, $max);
+        $result = $this->BcValidation->between($check, $min, $max);
         $this->assertEquals($expect, $result);
     }
 
@@ -621,7 +620,7 @@ class BcValidationTest extends BcTestCase
             ["あいう", 2, 4, true],
             ["あいう", 3, 3, true],
             ["あいう", 4, 3, false],
-            [["あいう", "あいうえお"], 2, 4, true],
+            ["あいうえお", 2, 4, false],
         ];
     }
 

@@ -250,6 +250,38 @@ class BcPluginTest extends BcTestCase
     }
 
     /**
+     * test getUpdateScriptMessages And getUpdaters On Update Tmp
+     */
+    public function test_getUpdateScriptMessagesAndGetUpdatersOnUpdateTmp()
+    {
+        $name = 'Sample';
+        $pluginPath = TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . $name . DS;
+        $updatePath = $pluginPath . 'config' . DS . 'update' . DS;
+        PluginFactory::make(['name' => $name, 'title' => 'サンプル', 'version' => '1.0.0'])->persist();
+
+        // 新バージョン
+        (new BcFolder($pluginPath))->create();
+        $file = new BcFile($pluginPath . 'VERSION.txt');
+        $file->write('1.0.3');
+        // アップデートスクリプト 1.0.1
+        (new BcFolder($updatePath . '1.0.1'))->create();
+        $file = new BcFile($updatePath . '1.0.1' . DS . 'config.php');
+        $file->write('<?php return [\'updateMessage\' => \'test1\'];');
+        $file = new BcFile($updatePath . '1.0.1' . DS . 'updater.php');
+        $file->create();
+
+        $this->assertEquals(
+            ['Sample-1.0.1' => 'test1'],
+            $this->BcPlugin->getUpdateScriptMessages($name, true)
+        );
+        $this->assertEquals(
+            ['Sample-1.0.1' => 1000001000],
+            $this->BcPlugin->getUpdaters($name, true)
+        );
+        (new BcFolder(TMP . 'update'))->delete();
+    }
+
+    /**
      * test execScript
      */
     public function test_execScript()
