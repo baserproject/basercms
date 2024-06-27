@@ -843,7 +843,8 @@ class BcContentsHelperTest extends BcTestCase
 
         //sub site
         $siteRoot = $this->BcContents->getSiteRoot(3);
-        $this->assertNotEmpty($siteRoot);
+        $this->assertEquals(24, $siteRoot->id);
+        $this->assertEquals('サイトID3のフォルダ', $siteRoot->name);
 
         $siteRoot = $this->BcContents->getSiteRoot(99);
         $this->assertNull($siteRoot);
