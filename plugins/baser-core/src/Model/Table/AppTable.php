@@ -120,16 +120,19 @@ class AppTable extends Table
      */
     public function find(string $type = 'all', array $options = []): Query
     {
-        $event = $this->dispatchEvent('AppTable.beforeFind', compact('type', 'options'));
+        // EVENT beforeFind
+        $event = $this->dispatchLayerEvent('beforeFind', compact('type', 'options'));
         if ($event !== false) {
-            if (!empty($event->getData('options'))) {
-                $options = $event->getData('options');
-            }
+            $options = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
         }
 
         $result = parent::find($type, $options);
 
-        $this->dispatchEvent('AppTable.afterFind', compact('type', 'options', 'result'));
+        // EVENT afterFind
+        $event = $this->dispatchLayerEvent('afterFind', compact('type', 'options', 'result'));
+        if ($event !== false) {
+            $result = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('result') : $event->getResult();
+        }
 
         return $result;
     }
