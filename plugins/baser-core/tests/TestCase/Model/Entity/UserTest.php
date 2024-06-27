@@ -98,6 +98,46 @@ class UserTest extends BcTestCase
     }
 
     /**
+     * test isDeletableUser
+     */
+    public function testIsDeletableUser()
+    {
+        //データ生成
+        //スーパーユーザー
+        UserFactory::make(['id' => 2])->persist();
+        Configure::write('BcApp.superUserId', 2);
+        //Adminーザー
+        UserFactory::make(['id' => 3])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 1])->persist();
+        //スーパーでもAdminでもないーザー
+        UserFactory::make(['id' => 4])->persist();
+
+        //自身がAdminを設定
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
+
+        //ターゲットがAdmin：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
+        //ターゲットがスーパーじゃない：true
+        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
+        //ターゲットがスーパー：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+
+        //自身がスーパーを設定
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups');
+        //ターゲットがスーパー：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+        //ターゲットがスーパーじゃない：true
+        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
+
+        //自身がスーパーでもAdminでもないを設定 ：false
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups');
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
+    }
+
+    /**
      * ユーザー名を整形して表示する
      * @param string $nickname
      * @param string $realName1

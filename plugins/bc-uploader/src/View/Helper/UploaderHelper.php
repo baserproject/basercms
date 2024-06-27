@@ -101,6 +101,7 @@ class UploaderHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFileUrl($fileName)
     {

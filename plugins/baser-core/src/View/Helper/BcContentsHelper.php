@@ -584,6 +584,7 @@ class BcContentsHelper extends Helper
      * @return Content
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteRoot($siteId)
     {
