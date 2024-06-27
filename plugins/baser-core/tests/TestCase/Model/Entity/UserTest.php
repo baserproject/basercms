@@ -117,9 +117,10 @@ class UserTest extends BcTestCase
 
         //ターゲットがAdmin：false
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
-        //ターゲットがAdminじゃない
+        //ターゲットがスーパーじゃない：true
         $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
-        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
+        //ターゲットがスーパー：false
+        $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
 
         //自身がスーパーを設定
         $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups');
