@@ -148,11 +148,12 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDeletableUser(EntityInterface $targetUser): bool
     {
         return (($this->isSuper() && !$targetUser->isSuper()) ||
-            ($this->isAdmin() && !$targetUser->isAdmin()));
+            ($this->isAdmin() && !$targetUser->isAdmin()) && !$targetUser->isSuper());
     }
 
     /**
