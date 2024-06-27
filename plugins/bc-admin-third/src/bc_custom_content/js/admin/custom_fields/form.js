@@ -159,7 +159,7 @@ let vm = new Vue({
             $preview.appendTo('body');
             $(window).on('scroll', function () {
                 var bottom = $(document).innerHeight() - $(window).innerHeight();
-                if (bottom <= $(window).scrollTop()) {
+                if (bottom <= $(window).scrollTop() + 10) {
                     $preview.fadeOut(500);
                 } else {
                     if (vm.displayPreview && $preview.css('display') === 'none') {
