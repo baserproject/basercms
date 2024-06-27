@@ -839,7 +839,7 @@ class BcContentsHelperTest extends BcTestCase
     public function test_getSiteRoot()
     {
         $siteRoot = $this->BcContents->getSiteRoot(1);
-        $this->assertNotEmpty($siteRoot);
+        $this->assertEquals(1, $siteRoot->id);
 
         //sub site
         $siteRoot = $this->BcContents->getSiteRoot(3);
