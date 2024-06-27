@@ -51,8 +51,6 @@ class PluginTest extends BcTestCase
         ];
     }
 
-
-
     public function testIsAdminTheme()
     {
         //with type = 'AdminTheme'
@@ -62,6 +60,17 @@ class PluginTest extends BcTestCase
         //with type = 'Plugin'
         $this->Plugin->type = 'Plugin';
         $this->assertFalse($this->Plugin->isAdminTheme());
+    }
+
+    public function testIsTheme()
+    {
+        //with type = 'Theme'
+        $this->Plugin->type = 'Theme';
+        $this->assertTrue($this->Plugin->isTheme());
+
+        //with type = 'Plugin'
+        $this->Plugin->type = 'Plugin';
+        $this->assertFalse($this->Plugin->isTheme());
     }
 
 }

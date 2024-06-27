@@ -1,7 +1,9 @@
 <?php
 namespace BcUploader\Test\TestCase\View\Helper;
+use App\View\AppView;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
 
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -26,6 +28,8 @@ class UploaderHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->UploaderHelper = new UploaderHelper(new AppView($this->getRequest('/')));
+        $this->UploaderHelper->beforeRender(new Event('beforeRender'), '');
     }
 
     /**
@@ -54,10 +58,20 @@ class UploaderHelperTest extends BcTestCase
 
     /**
      * ファイルが保存されているURLを取得する
+     * @dataProvider getFileUrlProviderData
      */
-    public function testGetFileUrl()
+    public function testGetFileUrl($fileName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->UploaderHelper->getFileUrl($fileName);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function getFileUrlProviderData()
+    {
+        return [
+            ['', ''],
+            ['test.jpg', '/files/uploads/test.jpg']
+        ];
     }
 
     /**

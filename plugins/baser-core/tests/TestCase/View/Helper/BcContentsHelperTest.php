@@ -836,4 +836,18 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals('["item1","item2","item3"]', $rs);
     }
 
+    public function test_getSiteRoot()
+    {
+        $siteRoot = $this->BcContents->getSiteRoot(1);
+        $this->assertEquals(1, $siteRoot->id);
+
+        //sub site
+        $siteRoot = $this->BcContents->getSiteRoot(3);
+        $this->assertEquals(24, $siteRoot->id);
+        $this->assertEquals('サイトID3のフォルダ', $siteRoot->name);
+
+        $siteRoot = $this->BcContents->getSiteRoot(99);
+        $this->assertNull($siteRoot);
+    }
+
 }
