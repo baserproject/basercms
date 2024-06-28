@@ -135,6 +135,7 @@ class UploaderHelper extends Helper
      * @param array $data
      * @return bool
      * @checked
+     * @unitTest
      */
     public function isLimitSetting($data)
     {

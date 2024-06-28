@@ -84,10 +84,25 @@ class UploaderHelperTest extends BcTestCase
 
     /**
      * ファイルの公開制限期間が設定されているか判定する
+     * @dataProvider isLimitSettingDataProvider
      */
-    public function testIsLimitSetting()
+    public function testIsLimitSetting($data, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->UploaderHelper->isLimitSetting($data);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isLimitSettingDataProvider()
+    {
+        return [
+            [['UploaderFile' => []], false],
+            [['UploaderFile' => ['publish_begin' => '2023-01-01']], true],
+            [['UploaderFile' => ['publish_end' => '2023-12-31']], true],
+            [['UploaderFile' => ['publish_begin' => '2023-01-01', 'publish_end' => '2023-12-31']], true],
+            [['publish_begin' => '2023-01-01'], true],
+            [['publish_end' => '2023-12-31'], true],
+            [[], false],
+        ];
     }
 
     /**
