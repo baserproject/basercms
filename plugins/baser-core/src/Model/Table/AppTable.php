@@ -122,19 +122,19 @@ class AppTable extends Table
     {
         // EVENT beforeFind
         $event = $this->dispatchLayerEvent('beforeFind', [
-            'type' => $type, 'options' =>
-            $args['options'] ?? []
+            'type' => $type,
+            'options' => $args // 後方互換のため options として渡す
         ]);
         if ($event !== false) {
-            $args['options'] = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+            $args = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
         }
 
-        $result = $this->callFinder($type, $this->selectQuery(), ...$args);
+        $result = parent::find($type, ...$args);
 
         // EVENT afterFind
         $event = $this->dispatchLayerEvent('afterFind', [
             'type' => $type,
-            'options' => $args['options'] ?? [],
+            'options' => $args,
             'result' => $result
         ]);
         if ($event !== false) {
