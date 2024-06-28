@@ -11,9 +11,9 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\Admin\ContentFoldersAdminService;
 use BaserCore\Service\Admin\ContentFoldersAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
-use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -44,8 +44,9 @@ class ContentFoldersController extends BcAdminAppController
     /**
      * コンテンツを更新する
      *
-     * @param ContentFoldersAdminServiceInterface $service
+     * @param ContentFoldersAdminServiceInterface|ContentFoldersAdminService $service
      * @param int $id
+     * @return \Cake\Http\Response|void
      * @checked
      * @unitTest
      * @noTodo

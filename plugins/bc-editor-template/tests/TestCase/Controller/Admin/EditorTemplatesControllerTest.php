@@ -11,11 +11,15 @@
 
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcEditorTemplate\Test\Factory\EditorTemplateFactory;
 use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -57,6 +61,17 @@ class EditorTemplatesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function testAdmin_index()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/bc-editor-template/editor_templates/index');
+        $this->assertResponseOk();
+    }
+    /**
      * Test beforeAddEvent
      */
     public function testBeforeAddEvent()
@@ -97,6 +112,27 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test add
+     */
+    public function testAdmin_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => 'test', 'description' => 'test description']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「test」を追加しました');
+        $this->assertRedirect(['action' => 'index']);
+
+        //異常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', ['name' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]], $vars['editorTemplate']->getErrors());
     }
 
     /**
@@ -142,5 +178,80 @@ class EditorTemplatesControllerTest extends BcTestCase
         $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
         $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test edit
+     */
+    public function testAdmin_edit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+
+        //テストデータをセット
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+
+        //正常系実行
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', $data);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「japan」を更新しました');
+        $this->assertRedirect(['action' => 'index']);
+
+        //異常系実行
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/11', ['name' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals(['name' => ['_empty' => "テンプレート名を入力してください。"]],
+            $vars['editorTemplate']->getErrors());
+    }
+
+    /**
+     * Test delete
+     */
+    public function testAdmin_delete()
+    {
+        //delete
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        //check before delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(1, $query->count());
+        $this->post('/baser/admin/bc-editor-template/editor_templates/delete/11');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('テンプレート「画像（左）とテキスト」を削除しました。');
+        //check after delete
+        $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
+        $this->assertEquals(0, $query->count());
+        /**
+         * check RecordNotFoundException
+         */
+        $this->expectException(RecordNotFoundException::class);
+        EditorTemplateFactory::get(11);
+    }
+
+    public function test_js()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/baser/admin/bc-editor-template/editor_templates/js');
+
+        // 戻り値を確認
+        $this->assertResponseCode(200);
+        $this->assertNull($this->_controller->viewBuilder()->getLayout());
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['templates']);
+
+        $helpers = $this->_controller->viewBuilder()->getHelpers();
+        $this->assertEquals('BaserCore.BcArray', $helpers['BcArray']['className']);
     }
 }

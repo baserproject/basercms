@@ -107,6 +107,7 @@ class UploaderFilesTable extends AppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkPeriod($value, $context = null)
     {
@@ -220,6 +221,7 @@ class UploaderFilesTable extends AppTable
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSourceFileName($fileName)
     {

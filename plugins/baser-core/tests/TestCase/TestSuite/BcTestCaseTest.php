@@ -69,7 +69,7 @@ class BcTestCaseTest extends BcTestCase
         $this->assertEquals('App\Application', get_class($this->Application));
         $plugins = $this->Application->getPlugins();
         $this->assertTrue($plugins->has('BaserCore'));
-        $this->assertEquals('BaserCore\Plugin', get_class($this->BaserCore));
+        $this->assertEquals('BaserCore\BaserCorePlugin', get_class($this->BaserCore));
     }
 
     /**
@@ -164,12 +164,15 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testAttachEventAndResetEvent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->attachEvent(['testEvent' => null]);
+        $this->attachEvent(['Helper.Form.afterClickForm' => ['callable' => function (Event $event) {
+            $event->setData('fields', ['title' => '1', 'input' => '2']);
+            return true;
+        }]]);
         $eventManager = EventManager::instance();
-        $this->assertNotNull($eventManager->listeners('testEvent'));
+        $this->assertCount(1, $eventManager->listeners('Helper.Form.afterClickForm'));
+
         $this->resetEvent();
-        $this->assertEmpty($eventManager->listeners('testEvent'));
+        $this->assertCount(0, $eventManager->listeners('Helper.Form.afterClickForm'));
     }
 
     /**

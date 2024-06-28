@@ -55,6 +55,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return array|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getWidgetsArray()
     {
@@ -86,6 +87,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _setWidgets($value)
     {
@@ -105,6 +107,7 @@ class WidgetArea extends \Cake\ORM\Entity
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getCount()
     {

@@ -34,6 +34,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Psr\Http\Message\ResponseInterface;
@@ -169,15 +170,10 @@ class AppController extends BaseController
                     } else {
                         $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。'));
                     }
-                }
-                // リファラが存在する場合はリファラにリダイレクトする
-                // $this->referer() で判定した場合、リファラがなくてもトップのURLが返却されるため ServerRequest で判定
-                if ($this->getRequest()->getEnv('HTTP_REFERER') &&
-                    $this->getRequest()->getAttribute('here') !== $this->referer()
-                ) {
-                    $url = $this->referer();
-                } else {
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
+                } else {
+                    $url = Router::url(Configure::read("BcPrefixAuth.{$prefix}.loginAction"))
+                        . '?redirect=' . urlencode(Router::url());
                 }
                 return $this->redirect($url);
             }

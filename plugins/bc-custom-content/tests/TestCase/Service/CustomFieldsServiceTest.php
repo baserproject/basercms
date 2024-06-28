@@ -19,6 +19,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -150,6 +151,12 @@ class CustomFieldsServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
         $customField = $this->CustomFieldsService->get(1);
         $customField->title = 'test edit title';
+        $customField->validate = ['EMAIL_CONFIRM'];
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'aa']];
+
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
+
         //正常系をテスト
         $rs = $this->CustomFieldsService->update($customField, $customField->toArray());
         //戻る値を確認
@@ -157,6 +164,8 @@ class CustomFieldsServiceTest extends BcTestCase
 
         //異常系をテスト
         $customField->title = null;
+        $customField->meta = ['BcCustomContent' => ['email_confirm' => 'aa']];
+        $customField->validate = ['EMAIL_CONFIRM'];
         $this->expectException(PersistenceFailedException::class);
         $this->expectExceptionMessage('Entity save failure. Found the following errors (title._empty: "項目見出しを入力してください。")');
         $this->CustomFieldsService->update($customField, $customField->toArray());

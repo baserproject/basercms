@@ -11,6 +11,7 @@
 
 namespace BaserCore\Command;
 
+use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use Cake\Command\Command;
@@ -69,7 +70,7 @@ class CreateReleaseCommand extends Command
         $this->clonePackage($packagePath, $args->getArgument('branch'));
 
         $io->out(__d('baser_core', '- composer.json をセットアップします。'));
-        $this->setupComposer($packagePath);
+        BcComposer::setupComposerForDistribution($packagePath);
 
         $io->out(__d('baser_core', '- プラグインを初期化します。'));
         $this->deletePlugins($packagePath);
@@ -85,27 +86,6 @@ class CreateReleaseCommand extends Command
 
         $io->out();
         $io->out(__d('baser_core', 'リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。'));
-    }
-
-    /**
-     * composer.json を配布用にセットアップする
-     *
-     * @param string $packagePath
-     * @checked
-     * @noTodo
-     */
-    public function setupComposer(string $packagePath)
-    {
-        $composer = $packagePath . 'composer.json';
-        $file = new BcFile($composer);
-        $data = $file->read();
-        $regex = '/^(.+?)    "replace": {.+?},\n(.+?)/s';
-        $data = preg_replace($regex, "$1$2", $data);
-        $regex = '/^(.+?"cakephp\/cakephp": ".+?",)(.+?)$/s';
-        $setupVersion = Configure::read('BcApp.setupVersion');
-        $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
-        $data = preg_replace($regex, $replace, $data);
-        $file->write($data);
     }
 
     /**
@@ -133,7 +113,7 @@ class CreateReleaseCommand extends Command
      */
     public function deletePlugins(string $packagePath)
     {
-        $excludes = ['BcThemeSample', 'BcPluginSample'];
+        $excludes = ['BcThemeSample', 'BcPluginSample', 'BcColumn'];
         $folder = new BcFolder($packagePath . 'plugins');
         $files = $folder->getFolders(['full'=>true]);
         foreach($files as $path) {

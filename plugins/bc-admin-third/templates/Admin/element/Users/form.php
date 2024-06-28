@@ -155,8 +155,16 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
-        <?php echo $this->BcAdminForm->error('status') ?>
+        <?php if ($isUserGroupEditable): ?>
+          <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
+          <?php echo $this->BcAdminForm->error('status') ?>
+        <?php else: ?>
+          <?php if ($user->status): ?>
+            <span><?php echo __d('baser_core', '有効') ?></span>
+          <?php else: ?>
+            <span><?php echo __d('baser_core', '無効') ?></span>
+          <?php endif ?>
+        <?php endif ?>
       </td>
     </tr>
 

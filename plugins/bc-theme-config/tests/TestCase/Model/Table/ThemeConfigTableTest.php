@@ -87,6 +87,10 @@ class ThemeConfigTableTest extends BcTestCase
     {
         $validator = $this->ThemeConfigsTable->getValidator('keyValue');
         $errors = $validator->validate([
+            'color_main' => 'color',
+            'color_sub' => 'color',
+            'color_link' => 'color',
+            'color_hover' => 'color',
             'logo' => 'logo.ppp',
             'main_image_1' => 'logo.ppp',
             'main_image_2' => 'logo.ppp',
@@ -94,6 +98,14 @@ class ThemeConfigTableTest extends BcTestCase
             'main_image_4' => 'logo.ppp',
             'main_image_5' => 'logo.ppp',
         ]);
+        $this->assertArrayHasKey('color_main', $errors);
+        $this->assertEquals('メインのカラーコードの形式が間違っています。', current($errors['color_main']));
+        $this->assertArrayHasKey('color_sub', $errors);
+        $this->assertEquals('サブのカラーコードの形式が間違っています。', current($errors['color_sub']));
+        $this->assertArrayHasKey('color_link', $errors);
+        $this->assertEquals('テキストリンクのカラーコードの形式が間違っています。', current($errors['color_link']));
+        $this->assertArrayHasKey('color_hover', $errors);
+        $this->assertEquals('テキストホバーのカラーコードの形式が間違っています。', current($errors['color_hover']));
         $this->assertArrayHasKey('logo', $errors);
         $this->assertEquals('許可されていないファイルです。', current($errors['logo']));
         $this->assertArrayHasKey('main_image_1', $errors);
@@ -106,34 +118,6 @@ class ThemeConfigTableTest extends BcTestCase
         $this->assertEquals('許可されていないファイルです。', current($errors['main_image_4']));
         $this->assertArrayHasKey('main_image_5', $errors);
         $this->assertEquals('許可されていないファイルです。', current($errors['main_image_5']));
-    }
-
-    /**
-     * test validationKeyValue color
-     */
-    public function test_validationKeyValue_color()
-    {
-        $validator = $this->ThemeConfigsTable->getValidator('keyValue');
-        //値は3桁と6桁ではない場合
-        $errors = $validator->validate([
-            'color_main' => '1',
-            'color_sub' => '12',
-            'color_link' => '1234',
-            'color_hover' => '1234567',
-        ]);
-        $this->assertEquals('[メイン]はカラーコード形式で入力してください。', current($errors['color_main']));
-        $this->assertEquals('[サブ]はカラーコード形式で入力してください。', current($errors['color_sub']));
-        $this->assertEquals('[テキストリンク]はカラーコード形式で入力してください。', current($errors['color_link']));
-        $this->assertEquals('[テキストホバー]はカラーコード形式で入力してください。', current($errors['color_hover']));
-
-        //値は3桁と6桁場合
-        $errors = $validator->validate([
-            'color_main' => '123',
-            'color_sub' => 'abc',
-            'color_link' => 'ABCFFF',
-            'color_hover' => '123456',
-        ]);
-        $this->assertCount(0, $errors);
     }
 
 }

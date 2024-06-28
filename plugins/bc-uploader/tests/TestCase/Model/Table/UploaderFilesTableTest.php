@@ -56,12 +56,27 @@ class UploaderFilesTableTest extends BcTestCase
     }
     /**
      * 公開期間をチェックする
+     * @dataProvider periodDataProvider
      */
-    public function testCheckPeriod()
+    public function testCheckPeriod($publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $context = [
+            'data' => [
+                'publish_begin' => $publishBegin,
+                'publish_end' => $publishEnd,
+            ]
+        ];
+        $rs = $this->UploaderFilesTable->checkPeriod(null, $context);
+        $this->assertEquals($expected, $rs);
     }
 
+    public static function periodDataProvider()
+    {
+        return [
+            ['2021-01-01 00:00:00', '2021-01-02 00:00:00', true],
+            ['2021-01-02 00:00:00', '2021-01-01 00:00:00', false],
+        ];
+    }
     /**
      * Before Save
      */
@@ -88,11 +103,24 @@ class UploaderFilesTableTest extends BcTestCase
 
     /**
      * ソースファイルの名称を取得する
+     * @dataProvider getSourceFileNameDataProvider
      */
-    public function testGetSourceFileName()
+    public function testGetSourceFileName($fileName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($expected, $this->UploaderFilesTable->getSourceFileName($fileName));
     }
+
+    public static function getSourceFileNameDataProvider()
+    {
+        return [
+            ['example__large.jpg', 'example.jpg'],
+            ['example__midium.png', 'example.png'],
+            ['example__small.jpg', 'example.jpg'],
+            ['example__mobile_large.jpg', 'example.jpg'],
+            ['example__mobile_small.git', 'example.git'],
+        ];
+    }
+
 
     /**
      * Before Delete

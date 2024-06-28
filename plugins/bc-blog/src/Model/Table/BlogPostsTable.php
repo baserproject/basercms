@@ -234,8 +234,12 @@ class BlogPostsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving) {
             return;
         }
+        $this->unsetExcluded();
         // 検索用テーブルに登録
-        if (empty($entity->blog_content->content) || !empty($entity->blog_content->content->exclude_search)) {
+        if ($entity->exclude_search
+            || empty($entity->blog_content->content)
+            || !empty($entity->blog_content->content->exclude_search)
+        ) {
             $this->setExcluded();
         }
     }
@@ -829,7 +833,7 @@ class BlogPostsTable extends BlogAppTable
                 ['BlogPosts.name' => rawurldecode($no)]
             );
         }
-        return $this->find()->where($conditions)
+        $entity = $this->find()->where($conditions)
             ->contain([
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
@@ -838,6 +842,11 @@ class BlogPostsTable extends BlogAppTable
                 'Users'
             ])
             ->first();
+        if($entity) {
+            unset($entity->content_draft);
+            unset($entity->detail_draft);
+        }
+        return $entity;
     }
 
 }

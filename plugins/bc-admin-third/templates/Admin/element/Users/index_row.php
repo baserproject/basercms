@@ -57,7 +57,7 @@
       '',
       ['action' => 'delete', $user->id],
       [
-        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $user->name),
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", empty($user->name) ? $user->email : $user->name),
         'title' => __d('baser_core', '削除'),
         'class' => 'btn-delete bca-btn-icon',
         'data-bca-btn-type' => 'delete',

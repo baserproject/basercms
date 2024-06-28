@@ -105,7 +105,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         $errors = [];
 
         for($i = $min; $i <= $edge; $i++) {
-            $count = $table->find()->where([
+            $count = $table->find()->applyOptions(['withDeleted'])->where([
                 $scope,
                 'OR' => [$left => $i, $right => $i]
             ])->count();
@@ -417,6 +417,9 @@ class UtilitiesService implements UtilitiesServiceInterface
         }
 
         $tmpPath = TMP . 'schema' . DS;
+        if(!is_dir($tmpPath)) {
+            (new Folder())->create($tmpPath, 0777);
+        }
         $name = $uploaded['backup']->getClientFileName();
         $uploaded['backup']->moveTo($tmpPath . $name);
         $bcZip = new BcZip();

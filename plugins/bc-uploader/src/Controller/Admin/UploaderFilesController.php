@@ -38,6 +38,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return \Cake\Http\Response|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -58,7 +59,7 @@ class UploaderFilesController extends BcAdminAppController
         $this->setViewConditions('UploadFile', [
             'default' => [
                 'query' => [
-                    'num' => BcSiteConfig::get('admin_list_num'),
+                    'limit' => BcSiteConfig::get('admin_list_num'),
                     'uploader_type' => 'all'
                 ]]]);
         $this->setRequest($this->getRequest()->withParsedBody($this->getRequest()->getQueryParams()));
@@ -98,7 +99,7 @@ class UploaderFilesController extends BcAdminAppController
         $this->setViewConditions('UploadFile', [
             'default' => [
                 'query' => [
-                    'num' => BcSiteConfig::get('admin_list_num')
+                    'limit' => BcSiteConfig::get('admin_list_num'),
                 ]],
             'type' => 'get'
         ]);
@@ -129,23 +130,6 @@ class UploaderFilesController extends BcAdminAppController
     }
 
     /**
-     * [ADMIN] 各サイズごとの画像の存在チェックを行う
-     *
-     * @param string $name
-     * @return void
-     */
-    public function ajax_exists_images(string $name)
-    {
-
-        Configure::write('debug', 0);
-        $this->RequestHandler->setContent('json');
-        $this->RequestHandler->respondAs('application/json; charset=UTF-8');
-        $files = $this->UploaderFile->filesExists($name);
-        $this->set('result', $files);
-        $this->render('json_result');
-    }
-
-    /**
      * [ADMIN] 編集処理
      *
      * @param UploaderFilesService $service
@@ -153,6 +137,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(UploaderFilesServiceInterface $service, int $id)
     {
@@ -186,6 +171,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return    void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(UploaderFilesServiceInterface $service, int $id)
     {

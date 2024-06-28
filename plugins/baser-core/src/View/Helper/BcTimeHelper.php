@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\Chronos\ChronosDate;
+use Cake\Core\Configure;
 use Cake\View\Helper\TimeHelper;
 use DateTimeInterface;
 use DateTimeZone;
@@ -62,6 +63,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 年号をあらわすアルファベット
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function nengo($w)
     {
@@ -79,6 +81,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false 和暦
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wareki($date)
     {
@@ -95,6 +98,7 @@ class BcTimeHelper extends TimeHelper
      * @return string|false int / false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function wyear($date)
     {
@@ -309,7 +313,17 @@ class BcTimeHelper extends TimeHelper
         if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
             return "";
         }
-        return parent::format($date, $format, $invalid, $timezone);
+        try {
+            return parent::format($date, $format, $invalid, $timezone);
+        } catch (\Throwable $e) {
+            $message = $e->getMessage();
+            $this->getView()->log($message);
+            if(Configure::read('debug')) {
+                return $message;
+            } else {
+                return '';
+            }
+        }
     }
 
     /**

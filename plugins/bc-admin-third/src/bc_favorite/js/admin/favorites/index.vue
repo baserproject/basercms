@@ -227,6 +227,7 @@ export default {
          */
         formSubmitted: function () {
             this.refresh();
+            this.currentFavorite = null;
             this.$refs.modalFavoriteForm.closeModal();
         },
 
@@ -245,6 +246,7 @@ export default {
                 case 'FavoriteDelete':
                     if (!confirm(bcI18n.commonConfirmDeleteMessage)) return false;
                     var id = this.currentFavorite.id;
+                    let t = this;
                     $.bcToken.check(function () {
                         $("#Waiting").show();
                         axios.post($.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/delete/" + id + ".json", {}, {
@@ -253,9 +255,8 @@ export default {
                             }
                         }).then(function (response) {
                             if (response.status === 200) {
-                                $('#FavoriteRow' + id).fadeOut(300, function () {
-                                    $(this).remove();
-                                });
+                                t.refresh();
+                                t.currentFavorite = null;
                             } else {
                                 alert(bcI18n.alertServerError);
                             }

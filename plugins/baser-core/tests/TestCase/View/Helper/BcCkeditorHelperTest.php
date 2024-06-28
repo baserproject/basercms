@@ -124,7 +124,7 @@ class BcCkeditorHelperTest extends BcTestCase
             'editorToolType' => 'simple'
         ]);
         $this->assertIsArray($options['editorToolbar']);
-        (new \BcEditorTemplate\Plugin())->install(['connection' => 'test']);
+        (new \BcEditorTemplate\BcEditorTemplatePlugin())->install(['connection' => 'test']);
         $options = $this->BcCkeditor->setEditorToolbar([
             'editorToolbar' => [],
             'editorUseTemplates' => true,
@@ -180,6 +180,21 @@ class BcCkeditorHelperTest extends BcTestCase
     public function testGetThemeEditorCsses()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test createDomId
+     */
+
+    public function test_createDomId()
+    {
+        //the field is empty
+        $rs = $this->BcCkeditor->createDomId('');
+        $this->assertEmpty($rs);
+
+        //the field is not empty
+        $rs = $this->BcCkeditor->createDomId('Page.contents');
+        $this->assertEquals('PageContents', $rs);
     }
 
 }

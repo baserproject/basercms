@@ -1,6 +1,0 @@
-.idea
-.vagrant
-composer.lock
-Vagrantfile
-vendor
-.phpunit.result.cache

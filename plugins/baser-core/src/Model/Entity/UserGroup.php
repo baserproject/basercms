@@ -50,6 +50,7 @@ class UserGroup extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAdmin(): bool
     {
@@ -63,6 +64,7 @@ class UserGroup extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAuthPrefixAvailabled(string $prefix): bool
     {
@@ -75,6 +77,7 @@ class UserGroup extends Entity
      * @return string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixArray(): array
     {
@@ -91,6 +94,7 @@ class UserGroup extends Entity
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixSettingsArray(): array
     {
