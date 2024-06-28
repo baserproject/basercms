@@ -272,7 +272,7 @@ class UsersTable extends AppTable
                     'pattern' => '[a-z]',
                 ],
                 'symbol' => [
-                    'name' => __d('baser_core', '大文字英字'),
+                    'name' => __d('baser_core', '記号'),
                     'pattern' => '[' . $quotedSymbol . ']',
                 ],
             ];

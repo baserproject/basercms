@@ -554,7 +554,7 @@ return [
             'minLength' => 12,
             // 入力必須な文字種
             'requiredCharacterTypes' => [
-                // 数値
+                // 数字
                 'numeric',
                 // 大文字英字
                 'uppercase',
