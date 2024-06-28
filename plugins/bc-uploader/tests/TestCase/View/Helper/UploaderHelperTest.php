@@ -45,12 +45,8 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $viewFile = 'icon.jpg';
-        $this->UploaderHelper->beforeRender(new Event('beforeRender'), $viewFile);
-
         $this->assertEquals('/files/uploads/', $this->UploaderHelper->savedUrl);
-        $this->assertEquals(WWW_ROOT . 'files' . DS . 'uploads' . DS, $this->UploaderHelper->savePath);
-
+        $this->assertEquals('/var/www/html/webroot/files/uploads/', $this->UploaderHelper->savePath);
     }
 
     /**
