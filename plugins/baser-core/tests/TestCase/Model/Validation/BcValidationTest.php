@@ -13,11 +13,9 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Routing\Router;
-use Cake\I18n\FrozenTime;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class BcValidationTest
@@ -262,43 +260,52 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
-
     public static function fileExtDataProvider()
     {
         return [
             [
-                new UploadedFile(
-                    'test.jpg',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.jpg',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.jpg',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
                 true
             ],
             [
-                new UploadedFile(
-                    'test.png',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
                 true
             ],
             [
-                new UploadedFile('test.gif',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.gif',
-                    'image/jpeg'),
+                [
+                    'name' => 'test.gif',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'gif'
+                ],
                 true
             ],
             [
-                new UploadedFile('test',
-                    1,
-                    UPLOAD_ERR_OK,
-                    'test.png',
-                    'image/jpeg'),
-                true
+                [
+                    'name' => 'test.png',
+                    'size' => 1,
+                    'type' => 'image/gif',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
             ]
         ];
     }
@@ -603,8 +610,7 @@ class BcValidationTest extends BcTestCase
      */
     public function testBetween($check, $min, $max, $expect)
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        $result = $this->BcApp->between($check, $min, $max);
+        $result = $this->BcValidation->between($check, $min, $max);
         $this->assertEquals($expect, $result);
     }
 
@@ -614,7 +620,7 @@ class BcValidationTest extends BcTestCase
             ["あいう", 2, 4, true],
             ["あいう", 3, 3, true],
             ["あいう", 4, 3, false],
-            [["あいう", "あいうえお"], 2, 4, true],
+            ["あいうえお", 2, 4, false],
         ];
     }
 
@@ -640,6 +646,92 @@ class BcValidationTest extends BcTestCase
         $str = "あa　";
         $result = $this->BcValidation->notBlankOnlyString($str);
         $this->assertTrue($result);
+    }
+
+    /**
+     * @param $str
+     * @param $key
+     * @param $regex
+     * @param $expect
+     *
+     * test checkWithJson
+     * @dataProvider checkWithJsonProvider
+     *
+     */
+    public function test_checkWithJson($key, $str, $regex, $expect)
+    {
+        $request = $this->getRequest('/')->withData('validate', ['EMAIL_CONFIRM', 'FILE_EXT', 'MAX_FILE_SIZE']);
+        Router::setRequest($request);
+
+        $result = $this->BcValidation->checkWithJson($str, $key, $regex);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function checkWithJsonProvider()
+    {
+        return [
+            //Eメール比較先フィールド名 テスト
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"ああ"}}', "/^[a-z0-9_]+$/", false],       //戻り＝falseケース：全角文字
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":" "}}', "/^[a-z0-9_]+$/", false],         //戻り＝falseケース：半角スペース
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"ああaaa"}}', "/^[a-z0-9_]+$/", false],    //戻り＝falseケース：半角・全角
+            ['BcCustomContent.email_confirm', '{"BcCustomContent":{"email_confirm":"aaaa_bbb"}}', "/^[a-z0-9_]+$/", true],    //戻り＝trueケース
+
+            //ファイルアップロードサイズ制限 テスト
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"aaaaa111"}}', "/^[0-9]+$/", false],       //戻り＝falseケース：文字列
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"ああaaa"}}', "/^[0-9]+$/", false],         //戻り＝falseケース：半角・全角
+            ['BcCustomContent.max_file_size', '{"BcCustomContent":{"max_file_size":"123"}}', "/^[0-9]+$/", true],             //戻り＝falseケース：数値
+
+            //ファイル拡張子チェック テスト
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"ああaaa"}}', "/^[a-z,]+$/", false],                  //戻り＝falseケース：半角・全角
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"1111"}}', "/^[a-z,]+$/", false],                    //戻り＝falseケース：数字
+            ['BcCustomContent.file_ext', '{"BcCustomContent":{"file_ext":"pdf,png"}}', "/^[a-z,]+$/", true],                  //戻り＝trueケース：文字列
+        ];
+    }
+
+    /**
+     * test hexColorPlus
+     *
+     * @param string $value
+     * @param boolean $expect
+     * @return void
+     * @dataProvider hexColorPlusDataProvider
+     */
+    public function testHexColorPlus($value, $expect)
+    {
+        $result = $this->BcValidation->hexColorPlus($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function hexColorPlusDataProvider()
+    {
+        return [
+            ['000', true],
+            ['0fF', true],
+            ['123f', true],
+            ['123abc', true],
+            ['1234abcd', true],
+            ['black', false],
+            ['#000', false]
+        ];
+    }
+
+    /**
+     * @dataProvider reservedDataProvider
+     */
+    public function test_reserved($value, $expect)
+    {
+        $result = $this->BcValidation->reserved($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public static function reservedDataProvider()
+    {
+        return [
+            ['test', true],
+            ['admin', true],
+            ['accessible', false],
+            ['before', false],
+        ];
     }
 
 }

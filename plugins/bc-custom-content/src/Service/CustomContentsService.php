@@ -237,7 +237,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      */
     public function getListOrders(int $tableId): array
     {
-        $list = ['id' => 'No', 'created' => __d('baser_core', '登録日'), 'modified' => __d('baser_core', '編集日')];
+        $list = ['id' => 'No', 'published' => __d('baser_core', '公開日付'), 'created' => __d('baser_core', '登録日'), 'modified' => __d('baser_core', '編集日')];
         if(!$tableId) return $list;
         $table = $this->CustomContents->CustomTables->get($tableId, contain: [
             'CustomLinks' => ['CustomFields']
@@ -267,7 +267,7 @@ class CustomContentsService implements CustomContentsServiceInterface
         $site = $sites->get($siteId);
 
         $templatesPaths = array_merge(
-            [Plugin::templatePath($site->theme) . 'plugin' . DS . 'BcCustomContent' . DS],
+            [Plugin::templatePath($site->getAppliedTheme()) . 'plugin' . DS . 'BcCustomContent' . DS],
             App::path('templates'),
             [Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . 'plugin' . DS . 'BcCustomContent' . DS],
             [Plugin::templatePath('BcCustomContent')]

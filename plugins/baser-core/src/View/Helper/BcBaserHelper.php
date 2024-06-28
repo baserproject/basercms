@@ -587,6 +587,7 @@ class BcBaserHelper extends Helper
      */
     public function getUserName($user)
     {
+        if(!$user) return '';
         return $user->getDisplayName();
     }
 
@@ -881,6 +882,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setCategoryTitle($on = true)
     {
@@ -893,6 +895,7 @@ class BcBaserHelper extends Helper
      * @return string meta タグ用のキーワード
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getKeywords()
     {
@@ -910,6 +913,7 @@ class BcBaserHelper extends Helper
      * @return string meta タグ用の説明文
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription()
     {
@@ -1083,6 +1087,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function title($separator = '｜', $categoryTitleOn = null)
     {
@@ -1095,6 +1100,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function metaKeywords()
     {
@@ -1107,6 +1113,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function metaDescription()
     {
@@ -1121,6 +1128,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rss($title, $link)
     {
@@ -1166,6 +1174,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function header($data = [], $options = [])
     {
@@ -1203,6 +1212,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function footer($data = [], $options = [])
     {
@@ -1259,6 +1269,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function content()
     {
@@ -1366,6 +1377,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function func()
     {
@@ -1418,6 +1430,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function icon()
     {
@@ -1477,6 +1490,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function charset($charset = null)
     {
@@ -1499,6 +1513,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copyYear($begin)
     {
@@ -1516,6 +1531,7 @@ class BcBaserHelper extends Helper
      * @return string|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitePrefix(): string|false
     {
@@ -1652,6 +1668,7 @@ class BcBaserHelper extends Helper
      * @return string プロトコルから始まるURL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUri($url)
     {
@@ -1748,6 +1765,7 @@ class BcBaserHelper extends Helper
      * @todo TextHelperに移行を検討
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function mark($search, $text, $name = 'strong', $attributes = [], $escape = false)
     {
@@ -1779,6 +1797,7 @@ class BcBaserHelper extends Helper
      * @doc
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテスト不要
      */
     public function contentsMenu($id = null, $level = null, $currentId = null)
     {
@@ -1848,6 +1867,7 @@ class BcBaserHelper extends Helper
      * @return mixed コンテンツデータ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function _unsetIndexInContentsMenu($contents, $children = false)
     {
@@ -1873,6 +1893,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテスト不要
      */
     public function globalMenu($level = 1, $options = [])
     {
@@ -1938,6 +1959,7 @@ class BcBaserHelper extends Helper
      * @param int $siteId サイトID
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function sitemap($siteId = 0)
     {
@@ -1985,6 +2007,7 @@ class BcBaserHelper extends Helper
      * @return string URL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getHere()
     {
@@ -1998,6 +2021,7 @@ class BcBaserHelper extends Helper
      * @return bool カテゴリトップの場合は、 true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCategoryTop()
     {
@@ -2107,7 +2131,7 @@ class BcBaserHelper extends Helper
      */
     public function getThemeUrl()
     {
-        return '/' . $this->_View->getRequest()->getAttribute('base') . Inflector::underscore($this->getView()->getTheme()) . '/';
+        return $this->_View->getRequest()->getAttribute('base') . '/' . Inflector::underscore($this->getView()->getTheme()) . '/';
     }
 
     /**
@@ -2147,6 +2171,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @UnitTest ラッパーメソッドに付きテスト不要
      */
     public function baseUrl()
     {
@@ -2248,6 +2273,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function listNum($data = [], $options = [])
     {
@@ -2263,6 +2289,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function siteSearchForm($data = [], $options = [])
     {
@@ -2318,6 +2345,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function siteUrl($ssl = false)
     {
@@ -2382,6 +2410,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentPrefix()
     {
@@ -2479,6 +2508,7 @@ class BcBaserHelper extends Helper
      * @param int $id コンテンツID
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップする
      */
     public function relatedSiteLinks($id = null, $excludeIds = [])
     {
@@ -2609,6 +2639,7 @@ class BcBaserHelper extends Helper
      * @param bool $useGloss 光沢有無
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function webClipIcon($fileName = 'apple-touch-icon-precomposed.png', $useGloss = false)
     {
@@ -2633,6 +2664,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {
@@ -2653,6 +2685,7 @@ class BcBaserHelper extends Helper
      * @return bool|mixed Plugin 内の Baserヘルパ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPluginBaser($name)
     {

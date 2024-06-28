@@ -219,9 +219,28 @@ class BcUtilTest extends BcTestCase
         $File->create();
         $File->write('1.2.3');
         $result = BcUtil::getVersion('Hoge');
-
-        $Folder->delete();
         $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
+        $Folder->delete();
+
+        // アップデート時の一時ディレクトリ内のバージョン（BaserCore）
+        $updateTmpDir = TMP . 'update';
+        $pluginTmpDir = $updateTmpDir . DS . 'vendor' . DS . 'baserproject';
+        (new BcFolder($pluginTmpDir . DS . 'baser-core'))->create();
+        $file = new BcFile($pluginTmpDir . DS . 'baser-core' . DS . 'VERSION.txt');
+        $file->write('1.2.4');
+        $this->assertEquals('1.2.4', BcUtil::getVersion('BaserCore', true));
+
+        // アップデート時の一時ディレクトリ内のバージョン（BcBlog）
+        $this->assertEquals('1.2.4', BcUtil::getVersion('BcBlog', true));
+        $file->delete();
+
+        // アップデート時の一時ディレクトリ内のバージョン（Sample）
+        (new BcFolder($pluginTmpDir . DS . 'Sample'))->create();
+        $file = new BcFile($pluginTmpDir . DS . 'Sample' . DS . 'VERSION.txt');
+        $file->write('1.2.5');
+        $this->assertEquals('1.2.5', BcUtil::getVersion('Sample', true));
+        $file->delete();
+        (new BcFolder($updateTmpDir))->delete();
     }
 
     /**
@@ -798,12 +817,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetSubDomain($host, $currentHost, $expects, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         Configure::write('BcEnv.mainDomain', 'localhost');
         if ($currentHost) {
             Configure::write('BcEnv.host', $currentHost);
@@ -867,6 +880,14 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals(ROOT . '/plugins/baser-core/', BcUtil::getPluginPath('BaserCore'));
         $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
         $this->assertEquals(ROOT . '/plugins/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample'));
+        // アップデート用の一時ディレクトリを確認
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core'))->create();
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-blog'))->create();
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'BcPluginSample'))->create();
+        $this->assertEquals(TMP . 'update/vendor/baserproject/baser-core/', BcUtil::getPluginPath('BaserCore', true));
+        $this->assertEquals(TMP . 'update/vendor/baserproject/bc-blog/', BcUtil::getPluginPath('BcBlog', true));
+        $this->assertEquals(TMP . 'update/vendor/baserproject/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample', true));
+        (new BcFolder(TMP . 'update'))->delete();
     }
 
     /**
@@ -877,6 +898,19 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
         $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample'));
+        // アップデート用の一時ディレクトリを確認
+        // - フォルダが存在しない場合
+        $this->assertFalse(BcUtil::getPluginDir('BaserCore', true));
+        $this->assertFalse(BcUtil::getPluginDir('BcBlog', true));
+        $this->assertFalse(BcUtil::getPluginDir('BcPluginSample', true));
+        // - フォルダが存在する場合
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core'))->create();
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-blog'))->create();
+        (new BcFolder(TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . 'BcPluginSample'))->create();
+        $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore', true));
+        $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog', true));
+        $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample', true));
+        (new BcFolder(TMP . 'update'))->delete();
     }
 
     /**
@@ -1141,9 +1175,12 @@ class BcUtilTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $eventManager = EventManager::instance();
         $eventKey = 'testOnEvent';
-        $bcEvenListener = new BcEventListener();
-        $bcEvenListener->events = ['event 1', 'event 2'];
-
+        $bcEvenListener = new class extends BcEventListener {
+            public $events = ['event1'];
+            public function event1() {
+                return 'event1';
+            }
+        };
         // onEvent() でイベントを設定
         BcUtil::onEvent($eventManager, $eventKey, $bcEvenListener->implementedEvents());
         // listeners() イベントの登録を確認
@@ -1186,6 +1223,37 @@ class BcUtilTest extends BcTestCase
         $session->write('test', 'testGetRequest');
         $request = BcUtil::createRequest('/', [], 'GET', ['session' => $session]);
         $this->assertEquals('testGetRequest', $request->getSession()->read('test'));
+    }
+
+    /**
+     *  test checkTime
+     *
+     * @param $hour
+     * @param $min
+     * @param $sec
+     * @param $expect
+     * @dataProvider checkTimeDataProvider
+     */
+    public function test_checkTime($hour, $min, $sec, $expect)
+    {
+        $rs = BcUtil::checkTime($hour, $min, $sec);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function checkTimeDataProvider()
+    {
+        return [
+            [-1, 1, 1, false],      //$hour < 0 return false
+            [24, 1, 1, false],      //$hour > 23 return false
+            [23, -1, 1, false],     //$min < 0 return false
+            [23, 60, 1, false],     //$min > 59 return false
+            [23, 59, -1, false],    //$sec < 0 return false
+            [23, 59, 60, false],    //$sec > 59 return false
+            [23, 59, 59, true],     //return true
+            [0, 0, 0, true],        //return true
+            [0, 0, null, true],     //return true
+            [23, 59, null, true],   //return true
+        ];
     }
 
     /**
@@ -1307,7 +1375,7 @@ class BcUtilTest extends BcTestCase
         // 対象ファイルをopen
         $theme = 'BcFront';
         $pluginPath = BcUtil::getPluginPath($theme);
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        $file = new BcFile($pluginPath . 'src' . DS . 'BcFrontPlugin.php');
         // テーマ名とネームスペースが違う状態を作る
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));
@@ -1332,6 +1400,15 @@ class BcUtilTest extends BcTestCase
         $this->assertMatchesRegularExpression('/\//', BcUtil::fullUrl('/'));
         $this->assertMatchesRegularExpression('/\/.*blog/', BcUtil::fullUrl('/blog'));
         $this->assertMatchesRegularExpression('/\//', BcUtil::fullUrl(null));
+    }
+
+    /**
+     * test base64UrlSafeEncode
+     */
+    public function test_base64UrlSafeEncode()
+    {
+        $rs = BcUtil::base64UrlSafeEncode(base64_decode('a+b/c=d'));
+        $this->assertEquals('a_b-cQ..', $rs);
     }
 
     /**
@@ -1389,6 +1466,16 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test base64UrlSafeDecode
+     */
+    public function test_base64UrlSafeDecode()
+    {
+        $rs = BcUtil::base64UrlSafeDecode('Api/A_d-m.in');
+        //文字列が交換できるか確認すること
+        $this->assertEquals(base64_decode('Api/A+d/m=in'), $rs);
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
@@ -1409,6 +1496,17 @@ class BcUtilTest extends BcTestCase
     }
 
 
+    /**
+     * test getCurrentDbConfig
+     */
+    public function test_getCurrentDbConfig()
+    {
+        $rs = BcUtil::getCurrentDbConfig();
+
+        $this->assertEquals('bc-db', $rs['host']);
+        $this->assertEquals('3306', $rs['port']);
+        $this->assertEquals('test_basercms', $rs['database']);
+    }
 
     /**
      * test getFrontTemplatePaths
@@ -1446,5 +1544,40 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('baser admin', $result['Api/Admin']->name);
     }
 
+    public function test_isInstalled()
+    {
+        // Set the 'BcEnv.isInstalled' configuration to true
+        Configure::write('BcEnv.isInstalled', true);
+        $this->assertTrue(BcUtil::isInstalled());
 
+        // Set the 'BcEnv.isInstalled' configuration to false
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertFalse(BcUtil::isInstalled());
+    }
+
+    public function test_isDebug()
+    {
+        // Set the debug configuration to true
+        Configure::write('debug', true);
+        $this->assertTrue(BcUtil::isDebug());
+
+        // Set the debug configuration to false
+        Configure::write('debug', false);
+        $this->assertFalse(BcUtil::isDebug());
+    }
+
+    /**
+     * test PairToAssoc
+     */
+    public function testPairToAssoc()
+    {
+        $result = BcUtil::pairToAssoc('key1', 'value1', 'key2', 'value2', 'key3');
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
+
+        $result = BcUtil::pairToAssoc('key1|value1|key2|value2|key3');
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2', 'key3' => null], $result);
+
+        $result = BcUtil::pairToAssoc('');
+        $this->assertEquals([], $result);
+    }
 }

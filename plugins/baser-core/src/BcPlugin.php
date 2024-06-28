@@ -243,17 +243,17 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function getUpdaters($name = '')
+    public function getUpdaters($name = '', $isUpdateTmp = false)
     {
         if (!$name) $name = $this->getName();
-        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
+        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name, $isUpdateTmp));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
             return [];
         }
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
-        $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
+        $path = BcUtil::getPluginPath($name, $isUpdateTmp) . 'config' . DS . 'update';
         $folder = new BcFolder($path);
         $files = $folder->getFolders();
         $updaters = [];
@@ -291,17 +291,17 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function getUpdateScriptMessages($name = '')
+    public function getUpdateScriptMessages($name = '', $isUpdateTmp = false)
     {
         if (!$name) $name = $this->getName();
-        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
+        $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name, $isUpdateTmp));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
             return [];
         }
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
-        $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
+        $path = BcUtil::getPluginPath($name, $isUpdateTmp) . 'config' . DS . 'update';
         $folder = new BcFolder($path);
         $files = $folder->getFolders();
         $messages = [];
@@ -621,7 +621,11 @@ class BcPlugin extends BasePlugin
         $options = array_merge([
             'connection' => 'default'
         ], $options);
-        $table = TableRegistry::getTableLocator()->get($table, ['connectionName' => $options['connection']]);
+        $tableOptions = [];
+        if($options['connection'] && $options['connection'] !== 'default') {
+            $tableOptions = ['connectionName' => $options['connection']];
+        }
+        $table = TableRegistry::getTableLocator()->get($table, $tableOptions);
         $beforeSaveEvents = BcUtil::offEvent($table->getEventManager(), 'Model.beforeSave');
         $afterSaveEvents = BcUtil::offEvent($table->getEventManager(), 'Model.afterSave');
 

@@ -76,6 +76,25 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $option = [
+            'adapter' => 'mysql',
+            'host' => 'bc-db',
+            'user' => 'root',
+            'pass' => 'root',
+            'port' => '3306',
+            'name' => 'test_basercms',
+            'charset' => 'utf8mb4',
+            'unix_socket' => null,
+        ];
+        $adapter = $this->BcDatabaseService->_adapter->getAdapter();
+        $this->assertEquals($option, $adapter->getOptions());
+    }
+
+    /**
      * Test initAdapter
      */
     public function test_initAdapter()

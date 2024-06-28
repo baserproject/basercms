@@ -84,7 +84,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function descriptionExists(CustomContent $content)
     {
@@ -207,6 +207,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string|array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFieldValue(mixed $entry, string $fieldName, array $options = [])
     {
@@ -286,6 +287,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isLoop(CustomEntry $customEntry, string $fieldName): bool
     {
@@ -326,6 +328,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return \Cake\Datasource\ResultSetInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLinkChildren(CustomEntry $customEntry, string $fieldName)
     {
@@ -342,6 +345,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * 関連リンクのエンティティキャッシュを削除する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCacheLinks()
     {

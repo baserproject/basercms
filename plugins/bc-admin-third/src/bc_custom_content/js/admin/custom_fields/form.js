@@ -75,13 +75,35 @@ let vm = new Vue({
         },
 
         /**
-         * 配列の初期値を取得
+         * マルチチェックボックスの初期値を取得
          *
-         * @returns {string[]}
+         * マルチチェックボックスを利用している場合、初期値欄とプレビューの双方向反映のために利用する。
+         * 利用するには、プレビュー用のテンプレートで、v-model="multipleDefaultValue" を指定する。
          */
-        arrayDefaultValue: function() {
-            if(!this.entity.default_value) return;
-            return this.entity.default_value.replace('\r', '').split("\n");
+        multipleDefaultValue: {
+            get: function() {
+                if(!this.entity.default_value) return[];
+                return this.entity.default_value.replace('\r', '').split("\n");
+            },
+            set: function(value) {
+                this.entity.default_value = value.join("\n");
+            }
+        },
+
+        /**
+         * チェックボックスの初期値を取得
+         *
+         * チェックボックスを利用している場合、初期値欄とプレビューの双方向反映のために利用する。
+         * 利用するには、プレビュー用のテンプレートで、v-model="checkboxDefaultValue" を指定する。
+         */
+        checkboxDefaultValue: {
+            get: function() {
+                if(!this.entity.default_value) return false;
+                return this.entity.default_value === '1';
+            },
+            set: function(value) {
+                this.entity.default_value = value ? '1' : '';
+            }
         },
 
         /**
@@ -137,7 +159,7 @@ let vm = new Vue({
             $preview.appendTo('body');
             $(window).on('scroll', function () {
                 var bottom = $(document).innerHeight() - $(window).innerHeight();
-                if (bottom <= $(window).scrollTop()) {
+                if (bottom <= $(window).scrollTop() + 10) {
                     $preview.fadeOut(500);
                 } else {
                     if (vm.displayPreview && $preview.css('display') === 'none') {

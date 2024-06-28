@@ -20,7 +20,6 @@ use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
-use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -1612,6 +1611,7 @@ class BlogHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _mergePostCountToTagsData(ResultSetInterface $tags, $options)
     {
@@ -1648,7 +1648,7 @@ class BlogHelper extends Helper
         $query = $blogPostsService->BlogPosts->find()
             ->where($conditions)
             ->leftJoinWith('BlogTags')
-            ->group(['BlogTags.id'])
+            ->groupBy(['BlogTags.id'])
             ->select(['BlogTags.id']);
         $query = $query->select([
             'post_count' => $query->func()->count('BlogPosts.id')

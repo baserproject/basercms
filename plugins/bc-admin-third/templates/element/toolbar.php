@@ -127,7 +127,7 @@ $this->BcBaser->js([
           ?>
           <li>
             <?php $this->BcBaser->link(
-              h($this->BcBaser->getUserName($loginUser)) . ' ' .
+              h($this->BcBaser->getUserName($loginUser ?? '')) . ' ' .
               $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',

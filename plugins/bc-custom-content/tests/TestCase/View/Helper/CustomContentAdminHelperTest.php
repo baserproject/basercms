@@ -4,8 +4,10 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
@@ -26,7 +28,7 @@ class CustomContentAdminHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $view = new View($this->getRequest());
+        $view = new View($this->getRequest('/baser/admin'));
         $this->CustomContentAdminHelper = new CustomContentAdminHelper($view);
     }
     /**
@@ -172,7 +174,40 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_required()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        /**
+         * case children is not exists
+         * and required is false
+         */
+        $customLink = CustomLinkFactory::make([
+            'required' => 0
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+        /**
+         * case children is not exists
+         * and required is true
+         */
+        $customLink->required = 1;
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals("<span class=\"bca-label\" data-bca-label-type=\"required\">必須</span>\n", $rs);
+        /**
+         * case children is exists
+         * and required of children is false
+         */
+        $customLink->children = [CustomLinkFactory::make([
+            'required' => 0
+        ])->getEntity()];
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals('', $rs);
+        /**
+         * case children is exists
+         * and required of children is true
+         */
+        $customLink->children = [CustomLinkFactory::make([
+            'required' => 1
+        ])->getEntity()];
+        $rs = $this->CustomContentAdminHelper->required($customLink);
+        $this->assertEquals("<span class=\"bca-label\" data-bca-label-type=\"required\">必須</span>\n", $rs);
     }
     /**
      * test attention
@@ -204,7 +239,53 @@ class CustomContentAdminHelperTest extends BcTestCase
      */
     public function test_getEntryIndexTitle()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        /**
+         * case has_child is true
+         * and customTable with display_field is title
+         */
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'display_field' => 'title',
+            'has_child' => 1
+        ]);
+        $customTableService->create([
+            'id' => 2,
+            'name' => 'recruit_categories_2',
+            'display_field' => 'text',
+            'has_child' => 0
+        ]);
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->setup(1);
+        $customTable = $customTableService->get(1);
+        $customEntry = $customEntriesService->get(1);
+        //case customEntry exists
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        //check result return
+        $this->assertEquals('<a href="/baser/admin/baser-core/dashboard/edit/1/1">Webエンジニア・Webプログラマー</a>', $rs);
+        /**
+         * case has_child is false
+         * and customTable with display_field is not title
+         */
+        CustomEntryFactory::make([
+            'id' => 4,
+            'custom_table_id' => 2,
+            'title' => 'プログラマー 4',
+        ])->persist();
+        $customTable = $customTableService->get(2);
+        $customEntry = $customEntriesService->get(4);
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        //check result return
+        $this->assertEquals('プログラマー 4', $rs);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+        $dataBaseService->dropTable('custom_entry_2_recruit_categories_2');
     }
 
     /*
@@ -312,4 +393,73 @@ class CustomContentAdminHelperTest extends BcTestCase
         $this->assertEquals(2, $rs->count());
     }
 
+    /*
+     * test getEntryColumnsNum
+     */
+    public function test_getEntryColumnsNum()
+    {
+        //case isDisplayEntryList is false
+        $arrCustomLink = [
+            CustomLinkFactory::make([
+                'display_admin_list' => 1
+            ])->getEntity()
+        ];
+        $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arrCustomLink);
+        $this->assertEquals(6, $rs);
+        //case isDisplayEntryList is true
+        $arrCustomLink = [
+            CustomLinkFactory::make([
+                'display_admin_list' => 1,
+                'custom_field' => [
+                    'type' => 'group'
+                ],
+                'children' => [
+                    'name' => 'test children'
+                ]
+            ])->getEntity()
+        ];
+        $rs = $this->CustomContentAdminHelper->getEntryColumnsNum($arrCustomLink);
+        $this->assertEquals(7, $rs);
+    }
+
+    /**
+     * test isEnabledMoveUpEntry
+     */
+    public function test_isEnabledMoveUpEntry()
+    {
+        $entries = new \ArrayObject([
+            new CustomEntry(['id' => 1, 'level' => 1]),
+            new CustomEntry(['id' => 2, 'level' => 1]),
+            new CustomEntry(['id' => 3, 'level' => 1])
+        ]);
+        $currentEntry = new CustomEntry(['id' => 2, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertTrue($result);
+
+        //with move not possible
+        $currentEntry = new CustomEntry(['id' => 1, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveUpEntry($entries, $currentEntry);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * test isEnabledMoveDownEntry
+     */
+
+    public function test_isEnabledMoveDownEntry()
+    {
+        $entries = new \ArrayObject([
+            new CustomEntry(['id' => 1, 'level' => 1]),
+            new CustomEntry(['id' => 2, 'level' => 1]),
+            new CustomEntry(['id' => 3, 'level' => 1])
+        ]);
+        $currentEntry = new CustomEntry(['id' => 2, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveDownEntry($entries, $currentEntry);
+        $this->assertTrue($result);
+
+        //with move not possible
+        $currentEntry = new CustomEntry(['id' => 3, 'level' => 1]);
+        $result = $this->CustomContentAdminHelper->isEnabledMoveDownEntry($entries, $currentEntry);
+        $this->assertFalse($result);
+    }
 }

@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
@@ -109,6 +110,41 @@ class AppTable extends Table
     }
 
     /**
+     * findの前後にイベントを追加する
+     *
+     * @param string $type the type of query to perform
+     * @param array<string, mixed> $options An array that will be passed to Query::applyOptions()
+     * @return \Cake\ORM\Query The query builder
+     * @checked
+     * @noTodo
+     */
+    public function find(string $type = 'all', mixed ...$args): Query
+    {
+        // EVENT beforeFind
+        $event = $this->dispatchLayerEvent('beforeFind', [
+            'type' => $type,
+            'options' => $args // 後方互換のため options として渡す
+        ]);
+        if ($event !== false) {
+            $args = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+        }
+
+        $result = parent::find($type, ...$args);
+
+        // EVENT afterFind
+        $event = $this->dispatchLayerEvent('afterFind', [
+            'type' => $type,
+            'options' => $args,
+            'result' => $result
+        ]);
+        if ($event !== false) {
+            $result = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('result') : $event->getResult();
+        }
+
+        return $result;
+    }
+
+    /**
      * テーブル名にプレフィックスを追加する
      *
      * $this->getConnection()->config() を利用するとユニットテストで問題が発生するため、BcUtil::getCurrentDbConfig()を利用する
@@ -163,6 +199,7 @@ class AppTable extends Table
      * @return string 変換後文字列
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function replaceText($str)
     {

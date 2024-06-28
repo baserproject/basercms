@@ -18,6 +18,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class BcAdminFormHelper
+ * @property BcBaserHelper $BcBaser
  */
 class BcAdminFormHelper extends BcFormHelper
 {
@@ -25,6 +26,22 @@ class BcAdminFormHelper extends BcFormHelper
      * Trait
      */
     use BcEventDispatcherTrait;
+
+    /**
+     * Helpers
+     * @var string[]
+     */
+    public array $helpers = [
+        'Url',
+        'Js',
+        'Html',
+        'BaserCore.BcHtml',
+        'BaserCore.BcTime',
+        'BaserCore.BcText',
+        'BaserCore.BcUpload',
+        'BaserCore.BcCkeditor',
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * control
@@ -152,15 +169,30 @@ class BcAdminFormHelper extends BcFormHelper
      */
     public function postLink(string $title, $url = null, array $options = []): string
     {
-        $class = 'bca-submit-token';
+        $submitTokenClass = 'bca-submit-token';
+        $options = array_merge([
+            'forceTitle' => false,
+            'enabled' => true,
+            'class' => $submitTokenClass
+        ], $options);
+
+        $checkUrl = $this->BcBaser->getUrl($url, false, ['escape' => false]);
+        $checkUrl = preg_replace('/^' . preg_quote($this->getView()->getRequest()->getAttribute('base'), '/') . '\//', '/', $checkUrl);
+        if (!$options['enabled'] || !$this->BcBaser->isLinkEnabled($checkUrl)) {
+            if ($options['forceTitle']) {
+                return "<span>$title</span>";
+            } else {
+                return '';
+            }
+        }
         if(!empty($options['class'])) {
             $classes = explode(' ', $options['class']);
-            if(!in_array($class, $classes)) {
-                $classes[] = $class;
+            if(!in_array($submitTokenClass, $classes)) {
+                $classes[] = $submitTokenClass;
             }
             $options['class'] = implode(' ', $classes);
         } else {
-                $options['class'] = $class;
+            $options['class'] = $submitTokenClass;
         }
         return parent::postLink($title, $url, $options);
     }

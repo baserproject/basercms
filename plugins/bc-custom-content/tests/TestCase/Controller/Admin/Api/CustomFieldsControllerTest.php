@@ -147,6 +147,8 @@ class CustomFieldsControllerTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
         $data = CustomFieldFactory::get(1);
         $data['title'] = 'test edit title';
+        $data['validate'] = ['EMAIL_CONFIRM'];
+        $data['meta'] = ['BcCustomContent' => ['email_confirm' => 'aa']];
         //APIを呼ぶ
         $this->post('/baser/api/admin/bc-custom-content/custom_fields/edit/1.json?token=' . $this->accessToken, $data->toArray());
         //ステータスを確認

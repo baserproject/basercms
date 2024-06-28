@@ -704,6 +704,7 @@ SCRIPT_END;
             'style' => 'width:99%;height:540px'
         ], $options);
 
+        if($options['editor'] === 'none') $options['editor'] = '';
         if ($options['editor']) {
             [$plugin] = pluginSplit($options['editor']);
             if (!Plugin::isLoaded($plugin)) {
@@ -982,7 +983,32 @@ SCRIPT_END;
             }
             unset($options['counter']);
         }
-        return parent::control($fieldName, $options);
+
+        // EVENT Form.beforeControl
+        $event = $this->dispatchLayerEvent('beforeControl', [
+            'formId' => $this->__id,
+            'data' => $this->getView()->getRequest()->getData(),
+            'fieldName' => $fieldName,
+            'options' => $options
+        ], ['class' => 'Form', 'plugin' => '']);
+        if ($event !== false) {
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+        }
+
+        $output = parent::control($fieldName, $options);
+
+        // EVENT Form.afterControl
+        $event = $this->dispatchLayerEvent('afterControl', [
+            'formId' => $this->__id,
+            'data' => $this->getView()->getRequest()->getData(),
+            'fieldName' => $fieldName,
+            'out' => $output
+        ], ['class' => 'Form', 'plugin' => '']);
+        if ($event !== false) {
+            $output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
+        }
+
+        return $output;
     }
 // <<<
 

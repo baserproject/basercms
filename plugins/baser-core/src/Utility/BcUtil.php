@@ -264,22 +264,41 @@ class BcUtil
     /**
      * バージョンを取得する
      *
-     * @return bool|string
+     * @param string $plugin プラグイン名
+     * @param bool $isUpdateTmp アップデート時の一時ファイルが対象かどうか
+     * @return false|string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function getVersion($plugin = '')
+    public static function getVersion(string $plugin = '', bool $isUpdateTmp = false): string|false
     {
         if (!$plugin) $plugin = 'BaserCore';
         $corePlugins = Configure::read('BcApp.corePlugins');
+        $updateTmpDir = TMP . 'update';
+        $pluginTmpDir = $updateTmpDir . DS . 'vendor' . DS . 'baserproject';
+
         if (in_array($plugin, $corePlugins)) {
             $path = BASER . 'VERSION.txt';
+            if($isUpdateTmp) {
+                if (preg_match('/^' . preg_quote(ROOT . DS . 'plugins' . DS, '/') . '/', $path)) {
+                    $path = str_replace(ROOT . DS . 'plugins', $pluginTmpDir, $path);
+                } else {
+                    $path = str_replace(ROOT, $updateTmpDir, $path);
+                }
+            }
+            if (!file_exists($path)) {
+                return false;
+            }
         } else {
-            $paths = App::path('plugins');
+            if($isUpdateTmp) {
+                $paths = [$pluginTmpDir . DS];
+            } else {
+                $paths = App::path('plugins');
+            }
             $exists = false;
             foreach($paths as $path) {
-                $path .= self::getPluginDir($plugin) . DS . 'VERSION.txt';
+                $path .= self::getPluginDir($plugin, $isUpdateTmp) . DS . 'VERSION.txt';
                 if (file_exists($path)) {
                     $exists = true;
                     break;
@@ -445,6 +464,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentDbConfig()
     {
@@ -487,13 +507,18 @@ class BcUtil
             if (!$pluginPath) {
                 return false;
             }
-            $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
-            if (file_exists($pluginClassPath)) {
-                $loader = require ROOT . DS . 'vendor/autoload.php';
-                $loader->addPsr4($name . '\\', $pluginPath . 'src');
-                $loader->addPsr4($name . '\\Test\\', $pluginPath . 'tests');
-                require_once $pluginClassPath;
+            $name = Inflector::camelize($name, '-');
+            if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
+                $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+            } elseif(file_exists($pluginPath . 'src' . DS . $name . 'Plugin.php')) {
+                $pluginClassPath = $pluginPath . 'src' . DS . $name . 'Plugin.php';
+            } else {
+                return false;
             }
+            $loader = require ROOT . DS . 'vendor/autoload.php';
+            $loader->addPsr4($name . '\\', $pluginPath . 'src');
+            $loader->addPsr4($name . '\\Test\\', $pluginPath . 'tests');
+            require_once $pluginClassPath;
         }
         return true;
     }
@@ -840,9 +865,11 @@ class BcUtil
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->get($siteId);
 
-        $themes = [$site->theme];
+        $themes = $site->theme? [$site->theme] : [];
         $rootTheme = BcUtil::getRootTheme();
-        if ($rootTheme !== $themes[0]) $themes[] = $rootTheme;
+        if (!$themes || $rootTheme !== $themes[0]) {
+            $themes[] = $rootTheme;
+        }
         $defaultTheme = Configure::read('BcApp.coreFrontTheme');
         if (!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
 
@@ -943,6 +970,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getSubDomain($host = null)
     {
@@ -1024,9 +1052,12 @@ class BcUtil
      * @checked
      * @noTodo
      */
-    public static function getPluginPath($pluginName): string
+    public static function getPluginPath(string $pluginName, bool $isUpdateTmp = false): string|false
     {
-        $pluginDir = self::getPluginDir($pluginName);
+        $pluginDir = self::getPluginDir($pluginName, $isUpdateTmp);
+        if($isUpdateTmp) {
+            return TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS . $pluginDir . DS;
+        }
         if ($pluginDir) {
             $paths = App::path('plugins');
             foreach($paths as $path) {
@@ -1040,16 +1071,22 @@ class BcUtil
 
     /**
      * プラグインのディレクトリ名を取得する
-     * @param $pluginName
-     * @return false|mixed
+     * @param string $pluginName
+     * @param bool $isUpdateTmp
+     * @return false|string
      * @checked
      * @noTodo
      */
-    public static function getPluginDir($pluginName)
+    public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
         if (!$pluginName) $pluginName = 'BaserCore';
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
-        foreach(App::path('plugins') as $path) {
+        if($isUpdateTmp) {
+            $paths = [TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS];
+        } else {
+            $paths = App::path('plugins');
+        }
+        foreach($paths as $path) {
             foreach($pluginNames as $name) {
                 if (is_dir($path . $name)) {
                     return $name;
@@ -1087,10 +1124,11 @@ class BcUtil
      * @return    boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isInstalled()
     {
-        return (bool)Configure::read('BcRequest.isInstalled');
+        return (bool)Configure::read('BcEnv.isInstalled');
     }
 
     /**
@@ -1456,6 +1494,8 @@ class BcUtil
      *
      * @param mixed $url
      * @return mixed
+     * @checked
+     * @noTodo
      */
     public static function addSessionId($url, $force = false)
     {
@@ -1467,12 +1507,10 @@ class BcUtil
             return $url;
         }
 
-        $site = null;
-        if (!Configure::read('BcRequest.isUpdater')) {
-            $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
-            $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $site = $sites->findByUrl($currentUrl);
-        }
+        $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($currentUrl);
+
         // use_trans_sid が有効になっている場合、２重で付加されてしまう
         if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
             if (is_array($url)) {
@@ -1585,6 +1623,8 @@ class BcUtil
 
     /**
      * オベントをオフにする
+     *
+     * グローバルイベントマネージャーからも削除する
      * @param EventManagerInterface $eventManager
      * @param string $eventKey
      * @return array
@@ -1594,9 +1634,11 @@ class BcUtil
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
         $eventListeners = $eventManager->listeners($eventKey);
+        $globalEventManager = $eventManager->instance();
         if ($eventListeners) {
             foreach($eventListeners as $eventListener) {
                 $eventManager->off($eventKey, $eventListener['callable']);
+                $globalEventManager->off($eventKey, $eventListener['callable']);
             }
         }
         return $eventListeners;
@@ -1736,9 +1778,47 @@ class BcUtil
     {
         $pluginPath = BcUtil::getPluginPath($newPlugin);
         if (!$pluginPath) return false;
-        $file = new BcFile($pluginPath . 'src' . DS . 'Plugin.php');
+        if(file_exists($pluginPath . 'src' . DS . 'Plugin.php')) {
+            $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+        } elseif(file_exists($pluginPath . 'src' . DS . $newPlugin . 'Plugin.php')) {
+            $pluginClassPath = $pluginPath . 'src' . DS . $newPlugin . 'Plugin.php';
+        } else {
+            return false;
+        }
+        $file = new BcFile($pluginClassPath);
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
+        return true;
+    }
+
+    /**
+     * Plugin クラスのクラス名を変更する
+     *
+     * 古い形式の場合は新しい形式に変更する
+     * `Plugin` -> `{PluginName}Plugin`
+     * @param string $oldPlugin
+     * @param string $newPlugin
+     * @return bool
+     */
+    public static function changePluginClassName(string $oldPlugin, string $newPlugin)
+    {
+        $pluginPath = BcUtil::getPluginPath($newPlugin);
+        if (!$pluginPath) return false;
+        $oldTypePath = $pluginPath . 'src' . DS . 'Plugin.php';
+        $oldPath = $pluginPath . 'src' . DS . $oldPlugin . 'Plugin.php';
+        $newPath = $pluginPath . 'src' . DS . $newPlugin . 'Plugin.php';
+        if(!file_exists($newPath)) {
+            if(file_exists($oldTypePath)) {
+                rename($oldTypePath, $newPath);
+            } elseif(file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+            } else {
+                return false;
+            }
+        }
+        $file = new BcFile($newPath);
+        $data = $file->read();
+        $file->write(preg_replace('/class\s+.*?Plugin/', 'class ' . $newPlugin . 'Plugin', $data));
         return true;
     }
 
@@ -1899,6 +1979,7 @@ class BcUtil
      * @return array Associative array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function pairToAssoc()
     {
@@ -2014,6 +2095,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isDebug(): bool
     {
@@ -2029,6 +2111,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkTime($hour, $min, $sec = null): bool
     {
@@ -2056,6 +2139,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function base64UrlSafeDecode($val): string
     {
@@ -2076,6 +2160,7 @@ class BcUtil
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function base64UrlSafeEncode($val): string
     {
@@ -2146,6 +2231,36 @@ class BcUtil
         if ($remove) $message .= sprintf(__d('baser_core', 'バージョン %s で削除される予定です。'), $remove);
         if ($note) $message .= $note;
         return $message;
+    }
+
+    /**
+     * baserCMS のバージョンが 5.1 かどうか判定
+     * 5.1系へのバージョンアップ時のみ利用
+     *
+     * @return bool
+     * @deprecated remove 5.1.0 このメソッドは非推奨です。
+     */
+    public static function is51()
+    {
+        if(file_exists(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt')) {
+            $versionData = file_get_contents(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } elseif(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt') {
+            $versionData = file_get_contents(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        $aryVersionData = explode("\n", $versionData);
+        if (!empty($aryVersionData[0])) {
+            $version = $aryVersionData[0];
+            if(preg_match('/^5\.0/', $version) || $version === '5.1.0-dev') {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            trigger_error('baserCMSのバージョンが特定できません。');
+        }
+        return false;
     }
 
 }

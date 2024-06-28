@@ -99,6 +99,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isSuper(): bool
     {
@@ -130,6 +131,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEnableLoginAgent(EntityInterface $targetUser): bool
     {
@@ -148,11 +150,12 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isDeletableUser(EntityInterface $targetUser): bool
     {
         return (($this->isSuper() && !$targetUser->isSuper()) ||
-            ($this->isAdmin() && !$targetUser->isAdmin()));
+            ($this->isAdmin() && !$targetUser->isAdmin()) && !$targetUser->isSuper());
     }
 
     /**
@@ -167,6 +170,7 @@ class User extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isEditableUser(EntityInterface $targetUser): bool
     {
@@ -208,6 +212,7 @@ class User extends EntityAlias
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixes(): array
     {

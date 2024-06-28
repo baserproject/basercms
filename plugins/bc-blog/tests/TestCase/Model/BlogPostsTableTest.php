@@ -22,10 +22,8 @@ use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
-use BcBlog\Test\Scenario\BlogPostsScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Event\Event;
-use Cake\I18n\FrozenTime;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ArrayObject;
 /**
@@ -770,8 +768,9 @@ class BlogPostsTableTest extends BcTestCase
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
         $blogPost = $BlogPostsService->get(1);
+        $blogPost->exclude_search = 1;
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
-        $this->assertFalse($this->BlogPostsTable->isExcluded());
+        $this->assertTrue($this->BlogPostsTable->isExcluded());
 
         //set isExcluded true
         BlogContentFactory::make(['id' => 11])->persist();

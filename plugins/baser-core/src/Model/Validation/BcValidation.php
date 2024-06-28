@@ -11,7 +11,10 @@
 
 namespace BaserCore\Model\Validation;
 
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Client\Request;
 use Cake\Log\Log;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
@@ -26,6 +29,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcValidation extends Validation
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * 英数チェックプラス
@@ -255,20 +263,16 @@ class BcValidation extends Validation
      */
     public static function fileExt($file, $exts)
     {
-        if (!is_array($exts)) {
-            $exts = explode(',', $exts);
-        }
+        if (!is_array($exts)) $exts = explode(',', $exts);
+        if (empty($file)) return true;
 
         // FILES形式のチェック
-        if (!is_string($file) && !empty($file->getClientMediaType())) {
-            $ext = BcUtil::decodeContent($file->getClientMediaType(), $file->getClientMediaType());
+        if (is_array($file) && !empty($file['type'])) {
+            $ext = BcUtil::decodeContent($file['type'], $file['name']);
             if (!in_array($ext, $exts)) {
                 return false;
             }
-        }
-
-        // 更新時の文字列チェック
-        if (!empty($file) && is_string($file)) {
+        } else {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             if (!in_array($ext, $exts)) {
                 return false;
@@ -553,6 +557,7 @@ class BcValidation extends Validation
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function reserved($value): bool
     {
@@ -585,6 +590,7 @@ class BcValidation extends Validation
      * @param int $min 値の最短値
      * @param int $max 値の最長値
      * @param boolean
+     * @unitTest
      */
     public static function between($value, $min, $max)
     {
@@ -606,4 +612,49 @@ class BcValidation extends Validation
         return (preg_replace("/( |　)/", '', $string) !== '');
     }
 
+    /**
+     * 16進数カラーコードチェック
+     *
+     * @param string $value 対象となる値
+     * @return bool
+     * @checked
+     * @notodo
+     * @unitTest
+     */
+    public static function hexColorPlus($value): bool
+    {
+        return preg_match('/\A([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})\z/i', $value);
+    }
+
+    /**
+     * Jsonをバリデーション
+     * 半角小文字英数字とアンダースコアを許容
+     * @param $string
+     * @param $key
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkWithJson($string, $key, $regex)
+    {
+        $value = json_decode($string, true);
+        $keys = explode('.', $key);
+
+        foreach ($keys as $k) {
+            $value = $value[$k] ?? '';
+        }
+
+        //入力チェックした項目だけバリデーション
+        $request = Router::getRequest();
+        $validate = $request->getData('validate');
+        if (is_array($validate) && !in_array(strtoupper($k), $validate))
+            return true;
+
+        if (empty($value) || preg_match($regex, $value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

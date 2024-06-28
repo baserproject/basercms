@@ -12,12 +12,14 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomLinksTable;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcThemeFile\Model\Entity\ThemeFile;
 use Cake\Event\Event;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -85,12 +87,12 @@ class CustomLinksTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'aこんにちは',
         ]);
-        $this->assertEquals('フィールド名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        $this->assertEquals('フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', current($errors['name']));
         //システム予約名称のケース
         $errors = $validator->validate([
             'name' => 'option',
         ]);
-        $this->assertStringContainsString( 'はシステム予約名称のため利用できません。', current($errors['name']));
+        $this->assertStringContainsString( 'システム予約名称のため利用できません。', current($errors['name']));
         //既に登録のケース
         CustomLinkFactory::make([
             'name' => 'recruit_category',
@@ -102,6 +104,11 @@ class CustomLinksTableTest extends BcTestCase
         ]);
         $this->assertEquals('既に登録のあるフィールド名です。', current($errors['name']));
 
+        //スペースだけ登録した場合、
+        $errors = $validator->validate([
+            'title' => '      '
+        ]);
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
     }
 
     /**
@@ -129,7 +136,22 @@ class CustomLinksTableTest extends BcTestCase
      */
     public function test_beforeSave()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //データを生成
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->persist();
+        $entity = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'name' => 'recruit_category'
+        ])->getEntity();
+        $this->CustomLinksTable->dispatchEvent('Model.beforeSave',
+            ['entity' => $entity, 'options' => new \ArrayObject()]);
+        //check unique name
+        $this->assertEquals('recruit_category_2', $entity->get('name'));
+        //check tree scope
+        $treeScope = $this->CustomLinksTable->getBehavior('Tree')->getConfig('scope');
+        $this->assertEquals(['custom_table_id' => 1], $treeScope);
     }
 
     /**

@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcArrayHelper;
+use Cake\Datasource\ResultSetInterface;
+use Cake\ORM\Query;
 use Cake\View\View;
 
 /**
@@ -48,22 +50,54 @@ class BcArrayHelperTest extends BcTestCase
      * 配列の最初のキーを判定する
      *
      * */
-    public function testFirst()
+    public function testFirstWithArray()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertTrue($this->Helper->first($this->data, 'b'));
-        $this->assertFalse($this->Helper->first($this->data, 'c'));
+        $data = [1 => 'カンジ', 2 => 'リュウジ', 3 => 'スナオ', 4 => 'ゴンチャン'];
+
+        $this->assertTrue($this->Helper->first($data, 1));
+        $this->assertFalse($this->Helper->first($data, 2));
+
+        $data = [];
+        $this->assertFalse($this->Helper->first($data, 1));
+    }
+
+    public function testFirstWithQuery()
+    {
+        $mockResultSet = $this->createMock(ResultSetInterface::class);
+        $mockResultSet->method('first')->willReturn([1 => 'a', 2 => 'b', 3 => 'c']);
+        $mockResultSet->method('key')->willReturn(1);
+
+        $mockQuery = $this->createMock(Query::class);
+        $mockQuery->method('getIterator')->willReturn($mockResultSet);
+
+        $this->assertTrue($this->Helper->first($mockQuery, 1));
+        $this->assertFalse($this->Helper->first($mockQuery, 2));
     }
 
     /**
      * 配列の最後のキーを判定する
      *
      * */
-    public function testLast()
+    public function testLastWithArray()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertTrue($this->Helper->last($this->data, 'c'));
         $this->assertFalse($this->Helper->last($this->data, 'd'));
+
+        $this->data = [];
+        $this->assertFalse($this->Helper->last($this->data, 'c'));
+    }
+
+    public function testLastWithQuery()
+    {
+        $mockResultSet = $this->createMock(ResultSetInterface::class);
+        $mockResultSet->method('count')->willReturn(3);
+
+        $mockQuery = $this->createMock(Query::class);
+        $mockQuery->method('count')->willReturn(3);
+        $mockQuery->method('getIterator')->willReturn($mockResultSet);
+
+        $this->assertTrue($this->Helper->last($mockQuery, 2));
+        $this->assertFalse($this->Helper->last($mockQuery, 1));
     }
 
     /**
@@ -72,7 +106,6 @@ class BcArrayHelperTest extends BcTestCase
      * */
     public function testAddText()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // prefixとsuffix両方指定
         $result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
         $expect = [
@@ -114,4 +147,24 @@ class BcArrayHelperTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
+    public function test_addTextWithPrefixAndSuffix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, "prefix-,-suffix"]);
+        $this->assertEquals("prefix-test-suffix", $value);
+    }
+
+    public function test_addTextWithOnlyPrefix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, "prefix-,"]);
+        $this->assertEquals("prefix-test", $value);
+    }
+
+    public function test_AddTextWithOnlySuffix()
+    {
+        $value = 'test';
+        $this->execPrivateMethod($this->Helper, '__addText', [&$value, null, ",-suffix"]);
+        $this->assertEquals("test-suffix", $value);
+    }
 }
