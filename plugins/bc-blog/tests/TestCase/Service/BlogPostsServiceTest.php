@@ -412,18 +412,6 @@ class BlogPostsServiceTest extends BcTestCase
     }
 
     /**
-     * 作成者の条件を作成する
-     */
-    public function testCreateAuthorCondition()
-    {
-        //データ　生成
-        UserFactory::make(['id' => 1, 'name' => 'test name', 'email' => 'test_name@gmail.com'])->persist();
-        //戻り値を確認
-        $result = $this->BlogPostsService->createAuthorCondition([], "test name");
-        $this->assertEquals($result["BlogPosts.user_id"], 1);
-    }
-
-    /**
      * 並び替え設定を生成する
      */
     public function testCreateOrder()
@@ -965,7 +953,7 @@ class BlogPostsServiceTest extends BcTestCase
 
         // サービスメソッドを呼ぶ
         // test author1 の記事を取得、id昇順
-        $result = $this->BlogPostsService->getIndexByAuthor('test author1', [
+        $result = $this->BlogPostsService->getIndexByAuthor(2, [
             'direction' => 'ASC',
             'order' => 'id',
         ]);
@@ -984,7 +972,7 @@ class BlogPostsServiceTest extends BcTestCase
 
         // サービスメソッドを呼ぶ
         // 記事が存在しない
-        $result = $this->BlogPostsService->getIndexByAuthor('test author3', []);
+        $result = $this->BlogPostsService->getIndexByAuthor(4, []);
 
         // 戻り値を確認
         // 指定した author の記事が存在しない
