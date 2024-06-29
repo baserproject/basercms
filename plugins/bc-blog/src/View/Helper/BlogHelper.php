@@ -154,7 +154,7 @@ class BlogHelper extends Helper
             // 現在のサイトにエイリアスが存在するのであればそちらを優先する
             $site = $this->_View->getRequest()->getAttribute('currentSite');
             $content = null;
-            if (!empty($site->id)) {
+            if (!empty($site->id) && $site->id > 1) {
                 $content = $contentTable->find()->where([
                     'Contents.entity_id' => $this->currentBlogContent->id,
                     'Contents.type' => 'BlogContent',
