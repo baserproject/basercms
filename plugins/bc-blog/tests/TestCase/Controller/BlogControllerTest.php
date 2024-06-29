@@ -195,7 +195,7 @@ class BlogControllerTest extends BcTestCase
         $this->assertEquals('release', $vars['blogCategory']->name);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
         //type = 'author'
-        $this->get('/news/archives/author/name');
+        $this->get('/news/archives/author/1');
         $this->assertResponseOk();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('author', $vars['blogArchiveType']);

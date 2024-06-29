@@ -249,17 +249,17 @@ class BlogFrontService implements BlogFrontServiceInterface
     /**
      * 著者別アーカイブ一覧の view 用変数を取得する
      * @param ResultSet|PaginatedResultSet $posts
-     * @param string $author
+     * @param int $userId
      * @param BlogContent $blogContent
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByAuthor(ResultSet|PaginatedResultSet $posts, string $author, BlogContent $blogContent): array
+    public function getViewVarsForArchivesByAuthor(ResultSet|PaginatedResultSet $posts, int $userId, BlogContent $blogContent): array
     {
         $usersTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
-        $author = $usersTable->find('available')->where(['Users.name' => $author])->first();
+        $author = $usersTable->find('available')->where(['Users.id' => $userId])->first();
         if (!$author) {
             throw new NotFoundException();
         }
