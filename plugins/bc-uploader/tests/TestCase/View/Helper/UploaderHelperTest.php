@@ -55,7 +55,18 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testFile()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['name' => 'test.jpg', 'alt' => 'Example Image Alt Text'])->getEntity();
+        $rs = $this->UploaderHelper->file($uploaderFile, ['size' => 'small']);
+        $this->assertEquals('<img src="/files/uploads/test.jpg" alt="Example Image Alt Text" size="small">', $rs);
+
+        //options empty
+        $rs = $this->UploaderHelper->file($uploaderFile);
+        $this->assertEquals('<img src="/files/uploads/test.jpg" alt="Example Image Alt Text">', $rs);
+
+        //extension don't have ['gif', 'jpg', 'png']
+        $uploaderFile = UploaderFileFactory::make(['name' => 'example.pdf'])->getEntity();
+        $rs = $this->UploaderHelper->file($uploaderFile);
+        $this->assertEquals('<img src="/bc_uploader/img/icon_upload_file.png" alt="">', $rs);
     }
 
     /**

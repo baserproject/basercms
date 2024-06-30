@@ -67,6 +67,7 @@ class UploaderHelper extends Helper
      * @return string imgタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function file(UploaderFile $uploaderFile, array $options = [])
     {
