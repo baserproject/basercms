@@ -1,6 +1,7 @@
 <?php
 namespace BcUploader\Test\TestCase\View\Helper;
 use App\View\AppView;
+use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
@@ -80,7 +81,13 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testDownload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['name' => 'test.jpg'])->getEntity();
+        $linkText = 'click here to download';
+        $rs = $this->UploaderHelper->download($uploaderFile, $linkText);
+        $this->assertEquals('<a href="/files/uploads/test.jpg" target="_blank">click here to download</a>', $rs);
+
+        $rs = $this->UploaderHelper->download($uploaderFile);
+        $this->assertEquals('<a href="/files/uploads/test.jpg" target="_blank">≫ ダウンロード</a>', $rs);
     }
 
     /**
