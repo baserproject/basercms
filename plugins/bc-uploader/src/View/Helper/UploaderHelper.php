@@ -51,6 +51,7 @@ class UploaderHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(Event $event, $viewFile)
     {

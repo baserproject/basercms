@@ -45,7 +45,8 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals('/files/uploads/', $this->UploaderHelper->savedUrl);
+        $this->assertEquals('/var/www/html/webroot/files/uploads/', $this->UploaderHelper->savePath);
     }
 
     /**
