@@ -657,4 +657,26 @@ class BcValidation extends Validation
             return false;
         }
     }
+
+    /**
+     * サイトエリアスをバリデーション
+     * ドメインタイプが外部ドメインの場合、
+     * 英数、ハイフン、アンダースコア以外スラッシュ（/）・ドット（.）も許容
+     *
+     * @param $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkSiteAlias($value)
+    {
+        $request = Router::getRequest();
+        $domainType = $request->getData('domain_type');
+        if ($domainType == 2) {
+            return self::alphaNumericPlus($value, './');
+        } else {
+            return self::alphaNumericPlus($value);
+        }
+    }
 }
