@@ -43,6 +43,10 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSコア｜アップデート'
   <?php echo $this->BcAdminForm->control('targetVersion', ['type' => 'hidden', 'value' => $availableVersion]) ?>
 
   <p>
+    <?php echo __d('baser_core', 'ダウンロード対象バージョン') ?>
+    <?php echo $this->BcAdminForm->control('targetVersion', ['type' => 'text', 'value' => $availableVersion]) ?>
+  </p>
+  <p>
     <?php echo __d('baser_core', 'PHP CLI の実行パス') ?>
     <?php echo $this->BcAdminForm->control('php', [
       'type' => 'text',
