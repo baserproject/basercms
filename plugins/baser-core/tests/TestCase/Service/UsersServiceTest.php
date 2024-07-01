@@ -138,8 +138,8 @@ class UsersServiceTest extends BcTestCase
             ],
             'email' => 'example@example.com',
             'real_name_1' => 'test',
-            'password_1' => 'aaaaaaaaaaaaaa',
-            'password_2' => 'aaaaaaaaaaaaaa'
+            'password_1' => 'Testtest1234',
+            'password_2' => 'Testtest1234'
         ]);
         $request = $request->withData('password', $request->getData('password_1'));
         $this->Users->create($request->getData());

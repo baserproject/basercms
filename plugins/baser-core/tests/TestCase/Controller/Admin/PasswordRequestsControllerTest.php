@@ -97,8 +97,8 @@ class PasswordRequestsControllerTest extends BcTestCase
 
         // パスワード変更
         $this->post($passwordEditUrl, [
-            'password_1' => 'new-password',
-            'password_2' => 'new-password',
+            'password_1' => 'New-password1',
+            'password_2' => 'New-password1',
         ]);
         $this->assertRedirect('/baser/admin/baser-core/password_requests/done');
     }
