@@ -79,6 +79,23 @@ class BcAdminAppController extends AppController
         if (!$usersService->reload($this->request)) {
             return $this->redirect($this->Authentication->logout());
         }
+
+        // パスワード更新日時のチェック
+        $session = $this->request->getSession();
+        // - reload実行後の場合、BcUtil::loginUser()よりも新しい情報を取得可能
+        $user = $session->read(Configure::read('BcPrefixAuth.Admin.sessionKey')) ?? BcUtil::loginUser();
+        if ($user && !BcUtil::isAgentUser() &&
+            !$usersService->checkPasswordModified($this->request, $user) && (
+                $this->getRequest()->getParam('plugin') !== 'BaserCore' ||
+                $this->getRequest()->getParam('controller') !== 'Users' ||
+                $this->getRequest()->getParam('action') !== 'edit_password'
+        )) {
+            $this->BcMessage->setError(__d('baser_core',
+                '管理画面を利用するには定期的なパスワードの再設定が必要です。'));
+            return $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'edit_password',
+                '?'=> ['redirect' => $this->getRequest()->getRequestTarget()]]);
+        }
+
         $response = parent::beforeFilter($event);
         if ($response) return $response;
         $response = $this->redirectIfIsNotSameSite();

@@ -12,12 +12,14 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\LoginStoresScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\Test\Scenario\UsersUserGroupsScenario;
-use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -141,15 +143,27 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test validationPasswordUpdate
+     * Test validationPassword
      * @param $isValid 妥当でない場合、$validator->validateからエラーが返る
      * @param $data パスワード文字列
+     * @param $allowSimplePassword 簡易なパスワードを許可
+     * @param $passwordRule パスワードの設定ルール
      * @return void
-     * @dataProvider validationPasswordUpdateDataProvider
+     * @dataProvider validationPasswordDataProvider
      */
-    public function testValidationPasswordUpdate($isValid, $data)
+    public function testValidationPassword($isValid, $data, $allowSimplePassword, $passwordRule = [])
     {
-        $validator = $this->Users->validationPasswordUpdate(new Validator());
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        if ($allowSimplePassword) {
+            $siteConfigsService->setValue('allow_simple_password', 1);
+        } else {
+            $siteConfigsService->setValue('allow_simple_password', 0);
+        }
+        if ($passwordRule) {
+            Configure::write('BcApp.passwordRule', $passwordRule);
+        }
+
+        $validator = $this->Users->validationPassword(new Validator());
         $validator->setProvider('table', $this->Users);
         if ($isValid) {
             $this->assertEmpty($validator->validate($data));
@@ -158,23 +172,74 @@ class UsersTableTest extends BcTestCase
         }
     }
 
-    public static function validationPasswordUpdateDataProvider()
+    public static function validationPasswordDataProvider()
     {
-        $exceedMax = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
+        $exceedMax = str_repeat('a', 256);
+
         return [
-            // 妥当な例
-            [true, ['password' => 'testtest', 'password_1' => 'testtest', 'password_2' => 'testtest']],
-            // 文字数が少ない場合
-            [false, ['password' => 'test', 'password_1' => 'test', 'password_2' => 'test']],
-            // 文字数が少ない場合
-            [false, ['password' => $exceedMax, 'password_1' => $exceedMax, 'password_2' => $exceedMax]],
-            // 不適切な文字が入ってる場合
-            [false, ['password' => '^^^^^^^^', 'password_1' => '^^^^^^^^', 'password_2' => '^^^^^^^^']],
-            // パスワードが異なる例
-            [false, ['password' => 'testtest', 'password_1' => 'test', 'password_2' => 'testtest']],
+            // 簡易なパスワードを許可
+
+            // - OK
+            [true, ['password' => 'testtest', 'password_1' => 'testtest', 'password_2' => 'testtest'], true],
+            // - 文字数が少ない
+            [false, ['password' => 'test', 'password_1' => 'test', 'password_2' => 'test'], true],
+            // - 文字数が多い
+            [false, ['password' => $exceedMax, 'password_1' => $exceedMax, 'password_2' => $exceedMax], true],
+            // - 不適切な文字が入っている
+            [false, ['password' => '^^^^^^^^', 'password_1' => '^^^^^^^^', 'password_2' => '^^^^^^^^'], true],
+            // - パスワードが異なる
+            [false, ['password' => 'testtest', 'password_1' => 'test', 'password_2' => 'testtest'], true],
+
+            // 簡易なパスワードを許可しない
+
+            // - OK
+            [true, ['password' => 'TestPassword1!', 'password_1' => 'TestPassword1!', 'password_2' => 'TestPassword1!'], false, [
+                'minLength' => 12,
+                'requiredCharacterTypes' => [ 'numeric', 'uppercase', 'lowercase', 'symbol' ],
+            ]],
+            [true, ['password' => '1234', 'password_1' => '1234', 'password_2' => '1234'], false, [
+                'minLength' => 4,
+                'requiredCharacterTypes' => [ 'numeric' ],
+            ]],
+            [true, ['password' => 'AAAA', 'password_1' => 'AAAA', 'password_2' => 'AAAA'], false, [
+                'minLength' => 4,
+                'requiredCharacterTypes' => [ 'uppercase' ],
+            ]],
+            [true, ['password' => 'aaaa', 'password_1' => 'aaaa', 'password_2' => 'aaaa'], false, [
+                'minLength' => 4,
+                'requiredCharacterTypes' => [ 'lowercase' ],
+            ]],
+            [true, ['password' => '!!!!', 'password_1' => '!!!!', 'password_2' => '!!!!'], false, [
+                'minLength' => 4,
+                'requiredCharacterTypes' => [ 'symbol' ],
+            ]],
+            // - 文字数が少ない
+            [false, ['password' => 'TestPassword1!', 'password_1' => 'TestPassword1!', 'password_2' => 'TestPassword1!'], false, [
+                'minLength' => 24,
+                'requiredCharacterTypes' => [ 'numeric', 'uppercase', 'lowercase', 'symbol' ],
+            ]],
+            // - 文字種が少ない
+            [false, ['password' => '1234', 'password_1' => '1234', 'password_2' => '1234'], false, [
+                'minLength' => 4,
+                'requiredCharacterTypes' => [ 'numeric', 'uppercase', 'lowercase', 'symbol' ],
+            ]],
         ];
     }
 
+    /**
+     * Test validationPasswordUpdate
+     * @return void
+     */
+    public function testValidationPasswordUpdate()
+    {
+        $validator = $this->Users->validationPasswordUpdate(new Validator());
+
+        $this->assertEmpty($validator->validate([
+            'password' => 'TestPassword1!', 'password_1' => 'TestPassword1!', 'password_2' => 'TestPassword1!',
+        ]));
+
+        $this->assertNotEmpty($validator->validate([]));
+    }
 
     /**
      * Test validationNew

@@ -17,6 +17,8 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
@@ -40,6 +42,11 @@ use Cake\Http\Response;
  */
 class UsersService implements UsersServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Users Table
@@ -195,6 +202,24 @@ class UsersService implements UsersServiceInterface
             throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
         }
         $user = $this->Users->patchEntity($target, $postData);
+        return $this->Users->saveOrFail($user);
+    }
+
+    /**
+     * パスワードを更新する
+     *
+     * @param EntityInterface $user
+     * @param array $postData
+     * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
+     */
+    public function updatePassword(EntityInterface $user, array $postData): ?EntityInterface
+    {
+        $user = $this->Users->patchEntity(
+            $user,
+            ['password_1' => $postData['password_1'], 'password_2' => $postData['password_2']],
+            ['validate' => 'passwordUpdate']
+        );
         return $this->Users->saveOrFail($user);
     }
 
@@ -399,6 +424,30 @@ class UsersService implements UsersServiceInterface
 
         $authentication->persistIdentity($request, $response, $user);
         return $user;
+    }
+
+    /**
+     * ユーザーのパスワード更新日時チェック
+     *
+     * @param ServerRequest $request
+     * @param EntityInterface $user
+     * @return boolean
+     */
+    public function checkPasswordModified(ServerRequest $request, EntityInterface $user)
+    {
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $passwordResetDays = $siteConfigsService->getValue('password_reset_days');
+        if (!$passwordResetDays) {
+            return true;
+        }
+        if (!$user['password_modified']) {
+            return false;
+        }
+        // システム基本設定「ログインパスワードの再設定日数」で設定した日数以上パスワードが更新されていない場合
+        if ($user['password_modified']->modify('+' . $passwordResetDays . ' days') <= new DateTime()) {
+            return false;
+        }
+        return true;
     }
 
     /**

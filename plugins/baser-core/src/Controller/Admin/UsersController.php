@@ -298,6 +298,41 @@ class UsersController extends BcAdminAppController
         $this->set($service->getViewVarsForEdit($user));
     }
 
+    public function edit_password(UsersAdminServiceInterface $service)
+    {
+        $user = $service->get(BcUtil::loginUser()['id']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $event = $this->dispatchLayerEvent('beforeEditPassword', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
+            try {
+                $user = $service->updatePassword($user, $this->request->getData());
+                $this->dispatchLayerEvent('afterEditPassword', [
+                    'user' => $user
+                ]);
+                $service->reLogin($this->request, $this->response);
+                $this->BcMessage->setSuccess(__d('baser_core', 'パスワードを更新しました。'));
+                if ($this->request->getQuery('redirect')) {
+                    $parsed = parse_url($this->request->getQuery('redirect'));
+                    if (empty($parsed['host']) && empty($parsed['scheme'])) {
+                        return $this->redirect(trim(BcUtil::siteUrl(), '/') . $this->request->getQuery('redirect'));
+                    }
+                }
+                return $this->redirect(['action' => 'edit_password']);
+            } catch (PersistenceFailedException $e) {
+                $user = $e->getEntity();
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            }
+        }
+        $this->set($service->getViewVarsForEdit($user));
+    }
+
     /**
      * ログインユーザー削除
      *
