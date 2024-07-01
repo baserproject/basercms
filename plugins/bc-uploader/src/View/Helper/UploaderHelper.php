@@ -51,6 +51,7 @@ class UploaderHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(Event $event, $viewFile)
     {
@@ -66,6 +67,7 @@ class UploaderHelper extends Helper
      * @return string imgタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function file(UploaderFile $uploaderFile, array $options = [])
     {
@@ -121,6 +123,7 @@ class UploaderHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download(UploaderFile $uploaderFile, $linkText = '≫ ダウンロード')
     {
@@ -135,6 +138,7 @@ class UploaderHelper extends Helper
      * @param array $data
      * @return bool
      * @checked
+     * @unitTest
      */
     public function isLimitSetting($data)
     {
