@@ -202,10 +202,10 @@ class PluginsController extends BcAdminAppController
                 $request->getData('php')?? 'php',
                 $request->getData('force'),
             );
+            $this->BcMessage->setSuccess(__d('baser_core', '最新版のダウンロードが完了しました。アップデートを実行してください。'));
         } catch (\Throwable $e) {
             $this->BcMessage->setError($e->getMessage());
         }
-        $this->BcMessage->setSuccess(__d('baser_core', '最新版のダウンロードが完了しました。アップデートを実行してください。'));
         return $this->redirect(['action' => 'update']);
     }
 
