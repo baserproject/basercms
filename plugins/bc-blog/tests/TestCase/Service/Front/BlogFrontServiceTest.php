@@ -511,7 +511,7 @@ class BlogFrontServiceTest extends BcTestCase
         // サービスメソッドを呼ぶ
         $result = $this->BlogFrontService->getViewVarsForArchivesByAuthor(
             $blogPostsService->getIndex([])->all(),
-            'name',
+            1,
             $blogContentsService->get(1)
         );
 
@@ -533,7 +533,7 @@ class BlogFrontServiceTest extends BcTestCase
         $this->expectException("Cake\Http\Exception\NotFoundException");
         $this->BlogFrontService->getViewVarsForArchivesByAuthor(
             $blogPostsService->getIndex([])->all(),
-            'author name test',
+            999,
             $blogContentsService->get(1)
         );
     }
