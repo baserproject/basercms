@@ -734,4 +734,21 @@ class BcValidationTest extends BcTestCase
         ];
     }
 
+    /**
+     * test checkSiteAlias
+     */
+    public function test_checkSiteAlias()
+    {
+        //ドメインタイプはサブドメインの場合、スラッシュ（/）・ドット（.）を入力できない
+        $request = $this->getRequest('/')->withData('domain_type', 1);
+        Router::setRequest($request);
+        $result = $this->BcValidation->checkSiteAlias('example.com');
+        $this->assertFalse($result);
+
+        //ドメインタイプは外部ドメインの場合、スラッシュ（/）・ドット（.）を入力可能
+        $request = $this->getRequest('/')->withData('domain_type', 2);
+        Router::setRequest($request);
+        $result = $this->BcValidation->checkSiteAlias('example.com/abc');
+        $this->assertTrue($result);
+    }
 }

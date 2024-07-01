@@ -133,8 +133,8 @@ class SitesTable extends AppTable
             ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
             ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
             ->add('alias', [
-                'nameAlphaNumericPlus' => [
-                    'rule' => ['alphaNumericPlus'],
+                'checkSiteAlias' => [
+                    'rule' => ['checkSiteAlias'],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
                 ]]);

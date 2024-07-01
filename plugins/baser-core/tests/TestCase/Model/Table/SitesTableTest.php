@@ -22,6 +22,7 @@ use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 
@@ -65,6 +66,9 @@ class SitesTableTest extends BcTestCase
      */
     public function testValidationDefault_alias()
     {
+        $request = $this->getRequest('/')->withData('domain_type', 1);
+        Router::setRequest($request);
+
         //バリデーションを発生した場合
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
@@ -82,6 +86,22 @@ class SitesTableTest extends BcTestCase
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
             'alias' => 'aaaaaaa'
+        ]);
+        $this->assertArrayNotHasKey('alias', $errors);
+
+        //ドメインタイプはサブドメインの場合、スラッシュ（/）・ドット（.）を入力できない
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => 'example.com/abc'
+        ]);
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+
+        //ドメインタイプは外部ドメインの場合、スラッシュ（/）・ドット（.）を入力可能
+        $request = $this->getRequest('/')->withData('domain_type', 2);
+        Router::setRequest($request);
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => 'example.com/abc'
         ]);
         $this->assertArrayNotHasKey('alias', $errors);
     }
