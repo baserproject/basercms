@@ -178,7 +178,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWarekiArray($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWarekiArray($data);
         $this->assertSame($expects, $result, $message);
     }
