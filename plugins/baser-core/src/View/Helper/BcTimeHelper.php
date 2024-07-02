@@ -391,6 +391,7 @@ class BcTimeHelper extends TimeHelper
      * @param string $suffix getJpWeek参照
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function jpWeek($dateStr = null, $suffix = '')
     {
