@@ -296,6 +296,7 @@ class BcTimeHelper extends TimeHelper
      * @return string Formatted date string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function format(
         ChronosDate|DateTimeInterface|string|int|null $date,
