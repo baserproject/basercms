@@ -274,6 +274,7 @@ class BcTimeHelper extends TimeHelper
      * @return mixed 分/null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function minutes($strDate)
     {
