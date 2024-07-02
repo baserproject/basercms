@@ -204,9 +204,6 @@ class InstallationsController extends BcAdminAppController
             /** @var SiteConfigsServiceInterface $siteConfigsService */
             $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
             $siteConfigsService->putEnv('INSTALL_MODE', 'false');
-            if(!$this->getRequest()->is('https')) {
-                $siteConfigsService->putEnv('ADMIN_SSL', 'false');
-            }
 
             BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) opcache_reset();
