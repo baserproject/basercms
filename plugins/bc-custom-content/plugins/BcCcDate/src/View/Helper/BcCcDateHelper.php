@@ -49,7 +49,7 @@ class BcCcDateHelper extends Helper
     {
         $field = $link->custom_field;
         $options = array_merge([
-            'type' => 'date',
+            'type' => 'datePicker',
             'size' => $field->size
         ], $options);
         return $this->BcAdminForm->control($link->name, $options);
