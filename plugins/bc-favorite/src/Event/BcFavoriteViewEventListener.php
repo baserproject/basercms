@@ -80,9 +80,10 @@ class BcFavoriteViewEventListener extends \BaserCore\Event\BcViewEventListener
     public function afterRender(EventInterface $event)
     {
         if(!BcUtil::isAdminSystem()) return;
-        $request = Router::getRequest();
-        if($request->getParam('controller') === 'PasswordRequests') return;
         $view = $event->getSubject();
+        if (!$view->helpers()->has('BcAdmin')) {
+            return;
+        }
         $view->set('currentPageName', h($view->BcAdmin->getTitle()));
         $view->set('currentPageUrl', h($view->getRequest()->getRequestTarget()));
     }

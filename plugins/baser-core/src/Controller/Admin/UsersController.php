@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Service\Admin\UsersAdminServiceInterface;
+use BaserCore\Service\TwoFactorAuthenticationsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
@@ -48,7 +49,7 @@ class UsersController extends BcAdminAppController
     {
         parent::initialize();
         if($this->components()->has('Authentication')) {
-            $this->Authentication->allowUnauthenticated(['login']);
+            $this->Authentication->allowUnauthenticated(['login', 'login_code']);
         }
     }
 
@@ -97,6 +98,73 @@ class UsersController extends BcAdminAppController
             if ($result->isValid()) {
                 return $this->redirect($target);
             }
+        }
+    }
+
+    /**
+     * 二段階認証コード入力
+     *
+     * @param UsersServiceInterface $usersService
+     * @param TwoFactorAuthenticationsServiceInterface $twoFactorAuthenticationsServiceInterface
+     */
+    public function login_code(UsersServiceInterface $usersService, TwoFactorAuthenticationsServiceInterface $twoFactorAuthenticationsService)
+    {
+        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+
+        $session = $this->request->getSession();
+
+        // セッションの有効期限チェック
+        $sessionDate = $session->read('TwoFactorAuth.Admin.date');
+        if (!$sessionDate) {
+            return $this->redirect(['action' => 'login']);
+        }
+        $expire = strtotime($sessionDate) + (Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime') * 60);
+        if ($expire < time()) {
+            $this->BcMessage->setError(__d('baser_core', 'セッションの有効期限が切れました。'));
+            return $this->redirect(['action' => 'login', '?' => $this->request->getQueryParams()]);
+        }
+
+        $userId = $session->read('TwoFactorAuth.Admin.user_id');
+        $userEmail = $session->read('TwoFactorAuth.Admin.email');
+        if (!$userId || !$userEmail) {
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is('post')) {
+            // 認証コード再送信
+            if ($this->request->getData('resend')) {
+                $twoFactorAuthenticationsService->send($userId, $userEmail);
+                $this->BcMessage->setInfo(__d('baser_core', '認証コードを送信しました。'));
+                return $this->render();
+            }
+
+            // 認証コードチェック
+            if (!$twoFactorAuthenticationsService->verify($userId, $this->request->getData('code'))
+            ) {
+                $this->BcMessage->setError(__d('baser_core', '認証コードが間違っているか有効期限切れです。'));
+                return $this->render();
+            }
+
+            // ログイン
+            $usersService->login($this->request, $this->response, $userId);
+            $user = $usersService->get($userId);
+
+            // EVENT Users.afterLogin
+            $this->dispatchLayerEvent('afterLogin', [
+                'user' => $user,
+                'loginRedirect' => $target
+            ]);
+
+            // 自動ログイン保存
+            $usersService->removeLoginKey($user->id);
+            if ($this->request->is('https') && $session->read('TwoFactorAuth.Admin.saved')) {
+                $this->response = $usersService->setCookieAutoLoginKey($this->response, $user->id);
+            }
+
+            $session->delete('TwoFactorAuth.Admin');
+
+            $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
+            return $this->redirect($target);
         }
     }
 
