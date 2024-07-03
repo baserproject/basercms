@@ -134,7 +134,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
             'name' => 'chinese',
             'display_name' => '中国サイト',
             'title' => 'baserの中国サイト',
-            'alias' => 'zh'
+            'alias' => 'zh',
+            'domain_type' => 2
         ]);
         $this->Sites->create($request->getData());
         $request = $this->getRequest('/?name=chinese');
@@ -240,7 +241,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
             'display_name' => 'test',
             'alias' => 'test',
             'title' => 'test',
-            'status' => true
+            'status' => true,
+            'domain_type' => 2
         ]);
         $this->assertEquals(6, count($this->Sites->getList()));
     }

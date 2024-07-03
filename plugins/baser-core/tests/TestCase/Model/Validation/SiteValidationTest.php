@@ -117,7 +117,7 @@ class SiteValidationTest extends BcTestCase
         $this->assertFalse($result);
 
         //ドメインタイプは外部ドメインの場合、スラッシュ（/）・ドット（.）を入力可能
-        $result = $this->SiteValidation->checkSiteAlias('example.com/abc', ['data' => ['domain_type' => 1]]);
+        $result = $this->SiteValidation->checkSiteAlias('example.com/abc', ['data' => ['domain_type' => 2]]);
         $this->assertTrue($result);
     }
 }
