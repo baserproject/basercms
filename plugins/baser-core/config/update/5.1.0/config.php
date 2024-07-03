@@ -11,17 +11,20 @@
 
 /**
  * 5.1.0 アップデーター
- *
- * 書き込み権限チェック
  */
 $notWritablePath = [];
 if(!is_writable(ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php')) {
     $notWritablePath[] = ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php';
 }
-if($notWritablePath) {
-    return [
-        'updateMessage' => "アップデートを実行する前に次のファイルみ書き込み権限を与えてください<br>" . implode('<br>', $notWritablePath)
-    ];
-} else {
-    return [];
+$message = '';
+if(\Cake\Core\Plugin::isLoaded('BcUpdateSupporter')) {
+    $message = "アップデート前に、BcUpdateSupporterプラグインを無効化してください。\n";
 }
+$message .= "baserCMS 5.1.0 へのアップデートの際、プラグインに問題がある場合、アップデート完了後に画面が表示できなくなる可能性があります。\n" .
+    "アップデート前に、コアプラグイン以外を一度無効化しておいてください。";
+if($notWritablePath) {
+    $message .= "\nアップデートを実行する前に次のファイルみ書き込み権限を与えてください<br>" . implode('<br>', $notWritablePath)
+}
+return [
+    'updateMessage' => $message
+];
