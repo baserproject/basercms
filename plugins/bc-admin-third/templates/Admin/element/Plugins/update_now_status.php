@@ -62,7 +62,14 @@ if ($isNotSupported) {
         <?php foreach($scriptMessages as $key => $scriptMessage): ?>
           <tr>
             <td class="bca-table-listup__tbody-td"><?php echo $key ?></td>
-            <td class="bca-table-listup__tbody-td"><?php echo $scriptMessage ?></td>
+            <td class="bca-table-listup__tbody-td">
+              <?php
+              if(is_array($scriptMessage)) {
+                $scriptMessage = implode("\n", $scriptMessage);
+              }
+              ?>
+              <p class="error-message"><?php echo nl2br(h($scriptMessage)) ?></p>
+            </td>
           </tr>
         <?php endforeach ?>
       </table>
