@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Model\Validation\BcValidation;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentsService;
 use BaserCore\Utility\BcPluginUtil;
@@ -135,7 +136,7 @@ class SitesTable extends AppTable
             ->add('alias', [
                 'checkSiteAlias' => [
                     'rule' => ['checkSiteAlias'],
-                    'provider' => 'bc',
+                    'provider' => 'site',
                     'message' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
                 ]]);
         $validator
@@ -802,4 +803,11 @@ class SitesTable extends AppTable
         return $success;
     }
 
+    public static function checkSiteTableAlias($value, $domainType){
+        if ($domainType == 2) {
+            return BcValidation::alphaNumericPlus($value, './');
+        } else {
+            return BcValidation::alphaNumericPlus($value);
+        }
+    }
 }

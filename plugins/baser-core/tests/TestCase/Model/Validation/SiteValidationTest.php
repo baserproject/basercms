@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 use BaserCore\Model\Validation\SiteValidation;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -71,6 +72,7 @@ class SiteValidationTest extends BcTestCase
         $result = $this->SiteValidation->aliasSlashChecks($alias);
         $this->assertEquals($expected, $result);
     }
+
     public static function checkUrlDataProvider()
     {
         return [
@@ -105,4 +107,17 @@ class SiteValidationTest extends BcTestCase
         $contents->delete($content);
     }
 
+    /**
+     * test checkSiteAlias
+     */
+    public function test_checkSiteAlias()
+    {
+        //ドメインタイプはサブドメインの場合、スラッシュ（/）・ドット（.）を入力できない
+        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['domain_type' => 1]]);
+        $this->assertFalse($result);
+
+        //ドメインタイプは外部ドメインの場合、スラッシュ（/）・ドット（.）を入力可能
+        $result = $this->SiteValidation->checkSiteAlias('example.com/abc', ['data' => ['domain_type' => 1]]);
+        $this->assertTrue($result);
+    }
 }

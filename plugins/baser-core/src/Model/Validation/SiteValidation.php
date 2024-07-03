@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Validation;
 
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -63,4 +64,23 @@ class SiteValidation extends Validation
         return !((bool) $query->count());
     }
 
+    /**
+     * サイトエリアスをバリデーション
+     * ドメインタイプが外部ドメインの場合、
+     * 英数、ハイフン、アンダースコア以外スラッシュ（/）・ドット（.）も許容
+     *
+     * @param $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkSiteAlias($value, $context)
+    {
+        if ($context['data']['domain_type'] == 2) {
+            return BcValidation::alphaNumericPlus($value, './');
+        } else {
+            return BcValidation::alphaNumericPlus($value);
+        }
+    }
 }

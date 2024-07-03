@@ -535,8 +535,6 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $request = $this->getRequest('/')->withData('domain_type', 1);
-        Router::setRequest($request);
         $name = "testUpdate";
         $newContent = $this->ContentsService->getIndex(['name' => 'testEdit'])->first();
         $newContent->name = $name;

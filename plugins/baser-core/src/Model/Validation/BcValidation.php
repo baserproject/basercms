@@ -12,9 +12,7 @@
 namespace BaserCore\Model\Validation;
 
 use BaserCore\Utility\BcContainerTrait;
-use Cake\Http\Client\Request;
 use Cake\Log\Log;
-use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
@@ -658,25 +656,4 @@ class BcValidation extends Validation
         }
     }
 
-    /**
-     * サイトエリアスをバリデーション
-     * ドメインタイプが外部ドメインの場合、
-     * 英数、ハイフン、アンダースコア以外スラッシュ（/）・ドット（.）も許容
-     *
-     * @param $value
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public static function checkSiteAlias($value)
-    {
-        $request = Router::getRequest();
-        $domainType = $request->getData('domain_type');
-        if ($domainType == 2) {
-            return self::alphaNumericPlus($value, './');
-        } else {
-            return self::alphaNumericPlus($value);
-        }
-    }
 }
