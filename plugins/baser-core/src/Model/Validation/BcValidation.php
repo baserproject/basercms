@@ -12,7 +12,9 @@
 namespace BaserCore\Model\Validation;
 
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Client\Request;
 use Cake\Log\Log;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
@@ -655,5 +657,4 @@ class BcValidation extends Validation
             return false;
         }
     }
-
 }

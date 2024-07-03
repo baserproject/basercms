@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -732,4 +733,5 @@ class BcValidationTest extends BcTestCase
             ['before', false],
         ];
     }
+
 }
