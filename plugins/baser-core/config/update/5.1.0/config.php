@@ -23,7 +23,7 @@ if(\Cake\Core\Plugin::isLoaded('BcUpdateSupporter')) {
 $message .= "baserCMS 5.1.0 へのアップデートの際、プラグインに問題がある場合、アップデート完了後に画面が表示できなくなる可能性があります。\n" .
     "アップデート前に、コアプラグイン以外を一度無効化しておいてください。";
 if($notWritablePath) {
-    $message .= "\nアップデートを実行する前に次のファイルみ書き込み権限を与えてください<br>" . implode('<br>', $notWritablePath)
+    $message .= "\nアップデートを実行する前に次のファイルみ書き込み権限を与えてください<br>" . implode('<br>', $notWritablePath);
 }
 return [
     'updateMessage' => $message
