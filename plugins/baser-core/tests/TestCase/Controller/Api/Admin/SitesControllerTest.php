@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 use ArrayObject;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -108,7 +109,8 @@ class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
             'name' => 'chinese',
             'display_name' => '中国語サイト',
             'title' => '中国語',
-            'alias' => 'zh'
+            'alias' => 'zh',
+            'domain_type' => 1
         ];
         $this->post('/baser/api/admin/baser-core/sites/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
