@@ -270,20 +270,25 @@ class PagesTable extends AppTable
             'id' => $page->id
         ]);
         if ($event !== false) {
-            $page = $event->getResult() === true? $event->getData('data') : $event->getResult();
+            $page = $event->getResult() === true ? $event->getData('data') : $event->getResult();
             unset($event);
+        }
+
+        $saveDir = $this->Contents->getSaveDir();
+        if (file_exists($saveDir . $page->content->eyecatch)) {
+            copy($saveDir . $page->content->eyecatch, $saveDir . 'copy_' . $page->content->eyecatch);
         }
 
         unset($page->created, $page->modified);
         $page->content = new Content([
-			'name' => $page->content->name,
-			'parent_id' => $newParentId,
-			'title' => $newTitle ?? $oldPage->content->title . '_copy',
-			'author_id' => $newAuthorId,
-			'site_id' => $newSiteId,
-			'description' => $page->content->description,
-			'eyecatch' => $page->content->eyecatch,
-			'layout_template' => $page->content->layout_tmplate?? ''
+            'name' => $page->content->name,
+            'parent_id' => $newParentId,
+            'title' => $newTitle ?? $oldPage->content->title . '_copy',
+            'author_id' => $newAuthorId,
+            'site_id' => $newSiteId,
+            'description' => $page->content->description,
+            'eyecatch' => 'copy_' . $page->content->eyecatch,
+            'layout_template' => $page->content->layout_tmplate ?? ''
         ]);
 
         if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {
