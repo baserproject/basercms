@@ -332,11 +332,6 @@ return [
         'passwordRequestAllowTime' => 1440,
 
         /**
-         * 管理画面のSSL
-         */
-        'adminSsl' => filter_var(env('ADMIN_SSL', true), FILTER_VALIDATE_BOOLEAN),
-
-        /**
          * エディタ
          */
         'editors' => [
