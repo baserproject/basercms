@@ -180,6 +180,7 @@ class BcTimeHelper extends TimeHelper
      * @return array|string 配列形式の和暦データ、または日付フォーマットが正しくない場合は空文字
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToWarekiArray($date)
     {
@@ -274,6 +275,7 @@ class BcTimeHelper extends TimeHelper
      * @return mixed 分/null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function minutes($strDate)
     {
@@ -336,6 +338,7 @@ class BcTimeHelper extends TimeHelper
      * @return boolean 経過有無
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pastDays($date, $days, $now = null)
     {
@@ -365,6 +368,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 曜日 | 空白
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getJpWeek($dateStr = null, $suffix = '')
     {
@@ -391,6 +395,7 @@ class BcTimeHelper extends TimeHelper
      * @param string $suffix getJpWeek参照
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function jpWeek($dateStr = null, $suffix = '')
     {
