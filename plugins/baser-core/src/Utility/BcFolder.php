@@ -208,7 +208,7 @@ class BcFolder
      */
     public function copy($dest, $mode = 0777): bool
     {
-        if(is_array($mode) && empty($mode['from'])) {
+        if(is_array($mode) && !empty($mode['from'])) {
             // @deprecated 6.0.0 since 5.1.0 後方互換用
             $this->log(__d('baser_core', 'BcFile::delete() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
             $this->path = $mode['from'];
@@ -250,7 +250,7 @@ class BcFolder
      */
     public function move($dest, $options = []): bool
     {
-        if(empty($options['from'])) {
+        if(!empty($options['from'])) {
             // @deprecated 6.0.0 since 5.1.0 後方互換用
             $this->log(__d('baser_core', 'BcFile::delete() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
             $this->path = $options['from'];
