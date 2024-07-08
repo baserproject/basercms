@@ -99,7 +99,6 @@ class SiteConfigsService implements SiteConfigsServiceInterface
                 'mode' => Configure::read('debug'),
                 'site_url' => Configure::read('BcEnv.siteUrl'),
                 'ssl_url' => Configure::read('BcEnv.sslUrl'),
-                'admin_ssl' => (int)Configure::read('BcApp.adminSsl'),
             ]), ['validate' => 'keyValue']);
         }
         return $this->entity;
@@ -141,14 +140,12 @@ class SiteConfigsService implements SiteConfigsServiceInterface
             if (isset($siteConfig->mode)) $this->putEnv('DEBUG', ($siteConfig->mode)? 'true' : 'false');
             if (isset($siteConfig->site_url)) $this->putEnv('SITE_URL', $siteConfig->site_url);
             if (isset($siteConfig->ssl_url)) $this->putEnv('SSL_URL', $siteConfig->ssl_url);
-            if (isset($siteConfig->admin_ssl)) $this->putEnv('ADMIN_SSL', ($siteConfig->admin_ssl)? 'true' : 'false');
         }
 
         $siteConfigArray = $siteConfig->toArray();
         unset($siteConfigArray['mode'],
             $siteConfigArray['site_url'],
             $siteConfigArray['ssl_url'],
-            $siteConfigArray['admin_ssl'],
             $siteConfigArray['dummy-site_url'],
             $siteConfigArray['dummy-ssl_url']
         );
