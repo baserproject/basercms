@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 use BaserCore\Model\Validation\SiteValidation;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**

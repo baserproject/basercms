@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Validation;
 
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
