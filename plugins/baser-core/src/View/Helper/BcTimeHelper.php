@@ -180,6 +180,7 @@ class BcTimeHelper extends TimeHelper
      * @return array|string 配列形式の和暦データ、または日付フォーマットが正しくない場合は空文字
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToWarekiArray($date)
     {
