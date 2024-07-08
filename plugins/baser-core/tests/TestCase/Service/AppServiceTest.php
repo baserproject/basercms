@@ -75,7 +75,7 @@ class AppServiceTest extends BcTestCase
             'alias' => 'test',
             'name'  => 'test',
             'title' => 'test',
-            'domain_type' => 1
+            'use_subdomain' => 0
         ]);
         $request = $request->withAttribute('currentSite', $service->get($site->id));
         Router::setRequest($request);
