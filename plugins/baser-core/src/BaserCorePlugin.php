@@ -290,14 +290,6 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             ->add(new BcFrontMiddleware())
             ->add(new BcRedirectSubSiteMiddleware());
 
-        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole() && BcUtil::isAdminSystem() && BcUtil::isInstalled()) {
-            $config = ['redirect' => false];
-            if(filter_var(env('TRUST_PROXY', false))) {
-                $config['trustedProxies'] = !empty($_SERVER['HTTP_X_FORWARDED_FOR'])? [$_SERVER['HTTP_X_FORWARDED_FOR']] : [];
-            }
-            $middlewareQueue->add(new HttpsEnforcerMiddleware($config));
-        }
-
         // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
         $ref = new ReflectionClass($middlewareQueue);
         $queue = $ref->getProperty('queue');

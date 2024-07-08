@@ -83,14 +83,14 @@ interface BlogFrontServiceInterface
 
     /**
      * 著者別アーカイブ一覧の view 用変数を取得する
-     * @param ResultSet $posts
-     * @param string $author
+     * @param ResultSet|PaginatedResultSet $posts
+     * @param int $userId
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByAuthor(ResultSet $posts, string $author, BlogContent $blogContent): array;
+    public function getViewVarsForArchivesByAuthor(ResultSet|PaginatedResultSet $posts, int $userId, BlogContent $blogContent): array;
 
     /**
      * タグ別アーカイブ一覧の view 用変数を取得する

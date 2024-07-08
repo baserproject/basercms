@@ -315,6 +315,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkbox(string $fieldName, array $options = []): array|string
     {
@@ -527,6 +528,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return    string    htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function number($fieldName, $options = [])
     {

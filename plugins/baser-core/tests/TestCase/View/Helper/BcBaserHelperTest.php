@@ -1283,24 +1283,21 @@ class BcBaserHelperTest extends BcTestCase
      * @return void
      * @dataProvider charsetDataProvider
      */
-    public function testCharset($expected, $encoding, $url = null)
+    public function testCharset($expected, $charset , $device)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
-        $this->expectOutputString($expected);
-        if ($encoding !== null) {
-            $this->BcBaser->charset($encoding);
-        } else {
-            $this->BcBaser->charset();
-        }
+        $site = SiteFactory::make(['device' => $device])->getEntity();
+        $this->BcBaser->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
+        ob_start();
+        $this->BcBaser->charset($charset);
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
     }
 
     public static function charsetDataProvider()
     {
         return [
-            ['<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'],
-            ['<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/']
+            ['<meta charset="utf-8">','utf-8', 'desktop'],
+            ['<meta charset="Shift-JIS">', null, 'mobile'],
         ];
     }
 
@@ -1906,25 +1903,26 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentsUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'domain_type' => 2, 'alias' => 'another.com'])->persist();
+        ContentFactory::make(['url' => '/news/', 'site_id' => 1])->persist();
         // URLが設定されていない場合
-        $this->BcBaser->request = $this->_getRequest('/news/');
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/news/')));
         $this->assertEquals('/news/', $this->BcBaser->getContentsUrl());
         // URLの指定がある場合
-        $this->BcBaser->request = $this->_getRequest('/');
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
         $this->assertEquals('/news/', $this->BcBaser->getContentsUrl('/news/'));
         // サブドメインの指定がない場合
-        Configure::write('BcEnv.host', 'another.com');
-        $this->BcBaser->request = $this->_getRequest('/news/');
+        $siteUrl = Configure::read('BcEnv.siteUrl');
+        Configure::write('BcEnv.siteUrl', 'http://another.com/');
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/news/')));
         $this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl(null, true));
         // サブドメインの指定がある場合
         Configure::write('BcEnv.host', 'localhost');
-        $this->BcBaser->request = $this->_getRequest('/');
-        $this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl('/another.com/news/', true, true));
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
+        $this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl('another.com/news/', true, true));
         // サブドメインの指定がないのに指定ありとした場合
-        $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, true));
+        $this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, false));
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 

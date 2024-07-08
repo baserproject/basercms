@@ -10,13 +10,7 @@
 
 $(function () {
 
-    var script = $("#AdminSiteConfigsFormScript");
-    var isAdminSsl = script.attr('data-isAdminSsl');
-
     $("#BtnSave").click(function () {
-        if (!isAdminSslCheck(isAdminSsl)) {
-            return false;
-        }
         $.bcUtil.showLoader();
     });
 
@@ -25,7 +19,7 @@ $(function () {
 
     // SMTP送信テスト
     $("#BtnCheckSendmail").click(function () {
-        if (!confirm(bcI18n.confirmMessage2)) {
+        if (!confirm(bcI18n.confirmMessage1)) {
             return false;
         }
         $.bcToken.check(function () {
@@ -47,7 +41,7 @@ $(function () {
                     } else {
                         errorMessage = errorThrown;
                     }
-                    $("#ResultCheckSendmail").html(bcI18n.alertMessage2 + errorMessage);
+                    $("#ResultCheckSendmail").html(bcI18n.alertMessage1 + errorMessage);
                 },
                 complete: function () {
                     $("#ResultCheckSendmail").show();
@@ -57,32 +51,6 @@ $(function () {
         }, {loaderType: 'none'});
         return false;
     });
-
-    /**
-     * 管理画面SSLチェック
-     * @param isAdminSsl
-     * @returns {boolean}
-     */
-    function isAdminSslCheck(isAdminSsl) {
-        if (isAdminSsl === "0" && $("input[name='admin_ssl']:checked").val() === "1") {
-            if (!$("#SiteConfigSslUrl").val()) {
-                alert(bcI18n.alertMessage1);
-                window.location.hash = 'ssl-url';
-                return false;
-            }
-            $.bcConfirm.show({
-                title: bcI18n.confirmTitle1,
-                message: bcI18n.confirmMessage1,
-                defaultCancel: true,
-                ok: function () {
-                    $.bcUtil.showLoader();
-                    $("#SiteConfigFormForm").submit();
-                }
-            });
-            return false;
-        }
-        return true;
-    }
 
     /**
      * エディタ切替時イベント

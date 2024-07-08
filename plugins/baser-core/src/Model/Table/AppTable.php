@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
@@ -106,6 +107,41 @@ class AppTable extends Table
             $options['joinTable'] = $this->addPrefix($options['joinTable']);
         }
         return parent::belongsToMany($associated, $options);
+    }
+
+    /**
+     * findの前後にイベントを追加する
+     *
+     * @param string $type the type of query to perform
+     * @param array<string, mixed> $options An array that will be passed to Query::applyOptions()
+     * @return \Cake\ORM\Query The query builder
+     * @checked
+     * @noTodo
+     */
+    public function find(string $type = 'all', mixed ...$args): Query
+    {
+        // EVENT beforeFind
+        $event = $this->dispatchLayerEvent('beforeFind', [
+            'type' => $type,
+            'options' => $args // 後方互換のため options として渡す
+        ]);
+        if ($event !== false) {
+            $args = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+        }
+
+        $result = parent::find($type, ...$args);
+
+        // EVENT afterFind
+        $event = $this->dispatchLayerEvent('afterFind', [
+            'type' => $type,
+            'options' => $args,
+            'result' => $result
+        ]);
+        if ($event !== false) {
+            $result = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('result') : $event->getResult();
+        }
+
+        return $result;
     }
 
     /**

@@ -12,6 +12,8 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTextHelper;
+use BaserCore\View\Helper\BcXmlHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -26,8 +28,7 @@ class BcXmlHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $View = new View();
-//        $this->BcXml = new BcXmlHelper($View);
+        $this->BcXml = new BcXmlHelper(new View());
     }
 
     /**
@@ -52,7 +53,6 @@ class BcXmlHelperTest extends BcTestCase
      */
     public function testHeader($attrib, $agent, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $_SERVER['HTTP_USER_AGENT'] = $agent;
 
         $result = $this->BcXml->header($attrib);
@@ -82,6 +82,21 @@ class BcXmlHelperTest extends BcTestCase
                 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1',
                 '<?xml version="1.0" encoding="SJIS" ?>'
             ],
+            [
+                'xml-stylesheet',
+                'Mozilla/5.0',
+                '<?xml-stylesheet ?>'
+            ],
+            [
+                'stylesheet',
+                'Mozilla/5.0',
+                '<?xml stylesheet ?>'
+            ],
+            [
+                [],
+                'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
+                ''
+            ]
         ];
     }
 

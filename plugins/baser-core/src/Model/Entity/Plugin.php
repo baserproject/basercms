@@ -93,6 +93,7 @@ class Plugin extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isTheme()
     {
@@ -104,6 +105,7 @@ class Plugin extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAdminTheme(): bool
     {
