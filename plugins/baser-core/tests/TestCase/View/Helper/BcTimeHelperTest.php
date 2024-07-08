@@ -309,7 +309,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testGetJpWeek($dateStr, $suffix, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->getJpWeek($dateStr, $suffix);
         $this->assertSame($expects, $result, $message);
     }

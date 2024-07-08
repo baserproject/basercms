@@ -367,6 +367,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 曜日 | 空白
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getJpWeek($dateStr = null, $suffix = '')
     {
