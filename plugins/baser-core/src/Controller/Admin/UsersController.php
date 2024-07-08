@@ -139,8 +139,7 @@ class UsersController extends BcAdminAppController
             }
 
             // 認証コードチェック
-            if (!$twoFactorAuthenticationsService->verify($userId, $this->request->getData('code'))
-            ) {
+            if (!$twoFactorAuthenticationsService->verify($userId, $this->request->getData('code'))) {
                 $this->BcMessage->setError(__d('baser_core', '認証コードが間違っているか有効期限切れです。'));
                 return $this->render();
             }

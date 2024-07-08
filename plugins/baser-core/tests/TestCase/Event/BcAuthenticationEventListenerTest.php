@@ -16,6 +16,7 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Event\Event;
+use Cake\Http\Exception\HttpException;
 use Cake\Http\Exception\RedirectException;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\TestSuite\EmailTrait;
@@ -75,7 +76,7 @@ class BcAuthenticationEventListenerTest extends BcTestCase
     }
 
     /**
-     * test afterIdentify
+     * test afterIdentify 管理画面
      */
     public function testAfterIdentify()
     {
@@ -83,15 +84,14 @@ class BcAuthenticationEventListenerTest extends BcTestCase
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $event = new Event('Authentication.afterIdentify', null, []);
 
-        // 管理画面
         $request = $this->getRequest('/baser/admin/baser-core/users/login');
         $this->loginAdmin($request);
 
-        // - 二段階認証無効時
+        // 二段階認証無効時
         $siteConfigsService->setValue('use_two_factor_authentication', 0);
         $this->assertNull($this->BcAuthenticationEventListener->afterIdentify($event));
 
-        // - 二段階認証有効時
+        // 二段階認証有効時
         $siteConfigsService->setValue('use_two_factor_authentication', 1);
         $siteConfigsService->setValue('email', 'from@example.com');
 
@@ -103,21 +103,45 @@ class BcAuthenticationEventListenerTest extends BcTestCase
             $this->assertMailSentTo('admin@example.com');
             $this->assertMailContainsText('認証コード');
         }
+    }
 
-        // API
+    /**
+     * test afterIdentify API
+     */
+    public function testAfterIdentifyApi()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $event = new Event('Authentication.afterIdentify', null, []);
+
         $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json');
         $this->loginAdmin($request);
 
-        // - 二段階認証無効時
+        // 二段階認証無効時
         $siteConfigsService->setValue('use_two_factor_authentication', 0);
         $this->assertNull($this->BcAuthenticationEventListener->afterIdentify($event));
 
-        // - 二段階認証有効時
+        // 二段階認証有効時
         $siteConfigsService->setValue('use_two_factor_authentication', 1);
+        $siteConfigsService->setValue('email', 'from@example.com');
+
         try {
             $this->BcAuthenticationEventListener->afterIdentify($event);
             throw new \Exception();
         } catch (UnauthorizedException $e) {
+            $this->assertEquals('send_codeキーを付与すると認証コードをメールで送信します。', $e->getMessage());
+            $this->assertNoMailSent();
+        }
+
+        // 認証コード送信要求
+        $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json',
+            ['send_code' => '1']);
+        $this->loginAdmin($request);
+
+        try {
+            $this->BcAuthenticationEventListener->afterIdentify($event);
+            throw new \Exception();
+        } catch (HttpException $e) {
             $this->assertEquals('メールで受信した認証コードをcodeキーの値として送信してください。', $e->getMessage());
             $this->assertMailSentTo('admin@example.com');
             $this->assertMailContainsText('認証コード');

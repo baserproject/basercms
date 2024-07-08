@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Http\Exception\HttpException;
 use Cake\Http\Exception\RedirectException;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Routing\Router;
@@ -65,19 +66,23 @@ class BcAuthenticationEventListener implements EventListenerInterface
             return;
         }
 
-        if ($request->getData('code')) {
-            if ($twoFactorAuthenticationsService->verify($loginUser->id, $request->getData('code'))) {
-                return;
+        // API対応
+        if ($prefix === 'Api/Admin') {
+            if ($request->getData('code')) {
+                if ($twoFactorAuthenticationsService->verify($loginUser->id, $request->getData('code'))) {
+                    return;
+                }
+                throw new UnauthorizedException(__d('baser', '認証コードが間違っているか有効期限切れです。'));
+            } else if ($request->getData('send_code')) {
+                $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
+                throw new HttpException(__d('baser', 'メールで受信した認証コードをcodeキーの値として送信してください。'), 200);
+            } else {
+                throw new UnauthorizedException(__d('baser', 'send_codeキーを付与すると認証コードをメールで送信します。'));
             }
-            throw new UnauthorizedException(__d('baser', '認証コードが間違っているか有効期限切れです。'));
         }
 
         // 認証コード送信
         $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
-
-        if ($prefix === 'Api/Admin') {
-            throw new UnauthorizedException(__d('baser', 'メールで受信した認証コードをcodeキーの値として送信してください。'));
-        }
 
         // 認証コード入力画面にリダイレクト
         $session->write('TwoFactorAuth.' . $prefix, [
