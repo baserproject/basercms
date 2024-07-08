@@ -325,12 +325,8 @@ class BcBaserHelperTest extends BcTestCase
         if (!empty($option['forceTitle'])) {
             $this->loginAdmin($this->getRequest('/baser/admin'), 2);
         }
-        if (!empty($option['ssl'])) {
-            Configure::write('BcEnv.sslUrl', 'https://localhost/');
-        }
         $result = $this->BcBaser->getLink($title, $url, $option);
         $this->assertEquals($expected, $result);
-        Configure::write('BcEnv.sslUrl', '');
     }
 
     public static function getLinkDataProvider()
@@ -344,9 +340,6 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
-            ['会社案内', '/about', ['ssl' => true], '<a href="https://localhost/about">会社案内</a>'], // SSL
-            ['テーマファイル管理', ['controller' => 'themes', 'action' => 'manage', 'jsa'], ['ssl' => true], '<a href="https://localhost/baser-core/themes/manage/jsa">テーマファイル管理</a>'], // SSL
-            ['画像', '/img/test.jpg', ['ssl' => true], '<a href="https://localhost/img/test.jpg">画像</a>'], // SSL
         ];
     }
 
@@ -1816,12 +1809,7 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetSiteUrl()
     {
         Configure::write('BcEnv.siteUrl', 'https://basercms.net/');
-        Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
-
-        // http
         $this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl());
-        //https
-        $this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
     }
 
     /**

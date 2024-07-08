@@ -98,7 +98,6 @@ class SiteConfigsService implements SiteConfigsServiceInterface
             $this->entity = $this->SiteConfigs->newEntity(array_merge($this->SiteConfigs->getKeyValue(), [
                 'mode' => Configure::read('debug'),
                 'site_url' => Configure::read('BcEnv.siteUrl'),
-                'ssl_url' => Configure::read('BcEnv.sslUrl'),
             ]), ['validate' => 'keyValue']);
         }
         return $this->entity;
@@ -132,22 +131,16 @@ class SiteConfigsService implements SiteConfigsServiceInterface
         if ($siteConfig->site_url && !preg_match('/\/$/', $siteConfig->site_url)) {
             $siteConfig->site_url .= '/';
         }
-        if ($siteConfig->ssl_url && !preg_match('/\/$/', $siteConfig->ssl_url)) {
-            $siteConfig->ssl_url .= '/';
-        }
 
         if ($this->isWritableEnv()) {
             if (isset($siteConfig->mode)) $this->putEnv('DEBUG', ($siteConfig->mode)? 'true' : 'false');
             if (isset($siteConfig->site_url)) $this->putEnv('SITE_URL', $siteConfig->site_url);
-            if (isset($siteConfig->ssl_url)) $this->putEnv('SSL_URL', $siteConfig->ssl_url);
         }
 
         $siteConfigArray = $siteConfig->toArray();
         unset($siteConfigArray['mode'],
             $siteConfigArray['site_url'],
-            $siteConfigArray['ssl_url'],
             $siteConfigArray['dummy-site_url'],
-            $siteConfigArray['dummy-ssl_url']
         );
 
         if ($this->SiteConfigs->saveKeyValue($siteConfigArray)) {

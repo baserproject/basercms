@@ -104,7 +104,6 @@ class SiteConfigsTableTest extends BcTestCase
                 'name' => 'hoge',
                 'email' => 'hoge@basercms.net',
                 'site_url' => 'https://localhost/',
-                'ssl_url' => 'https://localhost/',
         ]);
         $this->assertEmpty($errors);
     }
@@ -116,18 +115,14 @@ class SiteConfigsTableTest extends BcTestCase
     {
         $validator = $this->SiteConfigs->getValidator('keyValue');
         $errors = $validator->validate([
-            'ssl_url' => 'hoge',
             'site_url' => 'hoge',
         ]);
-        $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['ssl_url']));
         $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['site_url']));
 
         $validator = $this->SiteConfigs->getValidator('keyValue');
         $errors = $validator->validate([
-            'ssl_url' => '/hoge',
             'site_url' => '/hoge',
         ]);
-        $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['ssl_url']));
         $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['site_url']));
     }
 

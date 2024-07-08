@@ -158,10 +158,6 @@ return [
          */
         'siteUrl' => env('SITE_URL', 'https://localhost/'),
         /**
-         * SSL URL
-         */
-        'sslUrl' => env('SSL_URL', 'https://localhost/'),
-        /**
          * CMS URL
          * CMSのURLが別ドメインの場合に設定する
          */

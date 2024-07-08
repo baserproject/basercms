@@ -60,21 +60,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         <input type="password" name="dummy-site_url" style="display: none">
         <?php $this->BcAdminForm->unlockFields('dummy-site_url') ?>
         <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom', 'disabled' => !$isWritableEnv]) ?>
-        <br>
-        <input type="password" name="dummy-ssl_url" style="display: none">
-        <?php $this->BcAdminForm->unlockFields('dummy-ssl_url') ?>
-        <?php echo $this->BcAdminForm->control('ssl_url', [
-            'type' => 'text',
-            'size' => 35,
-            'maxlength' => 255,
-            'disabled' => !$isWritableEnv]
-        ) ?> <small>[SSL]</small>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。') ?>
+          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('site_url') ?>
-        <?php echo $this->BcAdminForm->error('ssl_url') ?>
       </td>
     </tr>
 
