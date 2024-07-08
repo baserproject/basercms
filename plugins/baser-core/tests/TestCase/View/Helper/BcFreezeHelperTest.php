@@ -586,4 +586,27 @@ class BcFreezeHelperTest extends BcTestCase
             [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="123">123'],
         ];
     }
+
+    /**
+     * @dataProvider checkboxProvider
+     */
+    public function test_checkbox($freezed, $fieldName, $option, $expected)
+    {
+        if ($freezed) {
+            $this->BcFreeze->freeze();
+        }
+        $result = $this->BcFreeze->checkbox($fieldName, $option);
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function checkboxProvider()
+    {
+        return [
+            [false, 'baser', ['label' => 'text'], '<input type="hidden" name="baser" value="0"><input type="checkbox" name="baser" value="1" label="text">'],
+            [true, 'baser', ['label' => 'text'], '<input type="hidden" name="baser" class="" ="" text="text">'],
+            [false, 'baser', [], '<input type="hidden" name="baser" value="0"><input type="checkbox" name="baser" value="1">'],
+            [true, 'baser', [], '<input type="hidden" name="baser" class="" ="" ="">'],
+        ];
+    }
 }
