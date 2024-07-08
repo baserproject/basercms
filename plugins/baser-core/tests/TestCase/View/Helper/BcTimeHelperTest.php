@@ -284,7 +284,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testPastDays($date, $days, $nowDate, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $now = strtotime($nowDate);
         $result = $this->Helper->pastDays($date, $days, $now);
         $this->assertSame($expects, $result, $message);

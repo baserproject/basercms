@@ -338,6 +338,7 @@ class BcTimeHelper extends TimeHelper
      * @return boolean 経過有無
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pastDays($date, $days, $now = null)
     {
