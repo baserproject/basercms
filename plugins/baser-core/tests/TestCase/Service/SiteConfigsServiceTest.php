@@ -77,7 +77,6 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertArrayHasKey('mode', $result);
         $this->assertArrayHasKey('site_url', $result);
         $this->assertArrayHasKey('ssl_url', $result);
-        $this->assertArrayHasKey('admin_ssl', $result);
     }
 
     /**

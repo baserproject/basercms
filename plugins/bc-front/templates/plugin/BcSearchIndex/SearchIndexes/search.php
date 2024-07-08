@@ -44,7 +44,7 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 </section>
 
 <section class="bs-search-result">
-<?php if ($searchIndexes->count()): ?>
+<?php if ($searchIndexes->count() > 0): ?>
 	<?php foreach ($searchIndexes as $searchIndex): ?>
 	<div class="bs-search-result__item">
 		<h3 class="bs-search-result__item-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $searchIndex->title), $searchIndex->url, ['escape' => false]) ?></h3>
@@ -52,7 +52,7 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link($this->BcBaser->getFullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
 	</div>
 	<?php endforeach ?>
-<?php elseif (!isset($query['q'][0])): ?>
+<?php elseif (!isset($query[0])): ?>
 	<p class="bs-search-result__no-data"><?php echo __d('baser_core', '検索キーワードを入力してください。')?></p>
 <?php else: ?>
 	<p class="bs-search-result__no-data"><?php echo __d('baser_core', '該当する結果が存在しませんでした。')?></p>

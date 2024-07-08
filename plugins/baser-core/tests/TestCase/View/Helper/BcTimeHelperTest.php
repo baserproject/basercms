@@ -178,7 +178,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWarekiArray($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWarekiArray($data);
         $this->assertSame($expects, $result, $message);
     }
@@ -234,7 +233,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testMinutes($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->minutes($data);
         $this->assertSame($expects, $result, $message);
     }
@@ -245,6 +243,12 @@ class BcTimeHelperTest extends BcTestCase
             ['invalid time', null, '不正な日付形式'],
             ['1 days', '1440分', '1日'],
             ['2 week', '20160分', '2週間'],
+            ['3 month', '129600分', '3ヶ月'],
+            ['4 year', '2103840分', '4年'],
+            ['5 hour', '300分', '5時間'],
+            ['6 minute', '6分', '6分'],
+            ['7 second', '0.11666666666667分', '7秒'],
+            ['2023-07-01 12:34:56', '28136374.933333分', '日時'],
         ];
     }
 
@@ -280,7 +284,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testPastDays($date, $days, $nowDate, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $now = strtotime($nowDate);
         $result = $this->Helper->pastDays($date, $days, $now);
         $this->assertSame($expects, $result, $message);
@@ -305,7 +308,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testGetJpWeek($dateStr, $suffix, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->getJpWeek($dateStr, $suffix);
         $this->assertSame($expects, $result, $message);
     }
@@ -328,7 +330,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testJpWeek($dateStr, $suffix, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->expectOutputString($expects);
         $this->Helper->jpWeek($dateStr, $suffix);
     }
