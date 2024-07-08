@@ -55,10 +55,9 @@ class CKEditorStyleParserTest extends BcTestCase
     /**
      * @dataProvider readStringDataProvider
      */
-    public function test_readString($target, $body, $expected)
+    public function test_readString($target, $body, $i, $expected)
     {
         $size = strlen($body);
-        $i = 0;
         $params = [$target, $body, $size, &$i];
         $result = $this->execPrivateMethod(new CKEditorStyleParser(), 'readString', $params);
         $this->assertEquals($expected, $result);
@@ -67,10 +66,11 @@ class CKEditorStyleParserTest extends BcTestCase
     public static function readStringDataProvider()
     {
         return [
-            ['!', 'Hello World!', 'Hello World'],
-            ['!', 'Hello\\! World!', 'Hello\\'],
-            ['!', 'Hello World', 'Hello World'],
-            ['!', '', '']
+            ['"', 'This is a "test" string', 11, 'test'],
+            ["'", "This is a 'test' string", 11, 'test'],
+            ['"', 'This is a \\"test\\" string', 12, 'test\\'],
+            ['"', '', 0, ''],
+            ['"', 'No target character here', 0, 'No target character here']
         ];
     }
 }
