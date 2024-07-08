@@ -181,6 +181,31 @@ class SitesTable extends AppTable
     }
 
     /**
+     * afterMarshal
+     *
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
+    {
+        $metaErrors = $entity->getError('alias');
+        if (isset($metaErrors['checkSiteAlias'])) {
+            if ($data['use_subdomain'] == 0) {
+                $entity->setError('alias', ['checkSiteAlias' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）・スラッシュ（/）で入力してください。')]);
+            } else {
+                $entity->setError('alias', ['checkSiteAlias' => __d('baser_core', 'サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。')]);
+            }
+        }
+    }
+
+    /**
      * プラグインが存在するかどうか
      *
      * プラグイン名はダッシュライズに変換する前提とする

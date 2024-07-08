@@ -77,10 +77,10 @@ class SiteValidation extends Validation
      */
     public static function checkSiteAlias($value, $context)
     {
-        if ($context['data']['domain_type'] == 2) {
-            return BcValidation::alphaNumericPlus($value, './');
+        if ($context['data']['use_subdomain'] == 0) {
+            return BcValidation::alphaNumericPlus($value, '/');
         } else {
-            return BcValidation::alphaNumericPlus($value);
+            return BcValidation::alphaNumericPlus($value, '.');
         }
     }
 }

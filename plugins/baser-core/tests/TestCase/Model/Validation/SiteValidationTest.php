@@ -112,12 +112,16 @@ class SiteValidationTest extends BcTestCase
      */
     public function test_checkSiteAlias()
     {
-        //ドメインタイプはサブドメインの場合、スラッシュ（/）・ドット（.）を入力できない
-        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['domain_type' => 1]]);
+        //use_subdomain = 0 の場合、ドット（.） が利用不可、スラッシュは利用可能
+        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 0]]);
         $this->assertFalse($result);
-
-        //ドメインタイプは外部ドメインの場合、スラッシュ（/）・ドット（.）を入力可能
-        $result = $this->SiteValidation->checkSiteAlias('example.com/abc', ['data' => ['domain_type' => 2]]);
+        $result = $this->SiteValidation->checkSiteAlias('/news/new-1', ['data' => ['use_subdomain' => 0]]);
         $this->assertTrue($result);
+
+        //use_subdomain = 1、かつ、domain_type = 1 と 2 の場合、ドット（.） が利用可能、スラッシュは利用不可
+        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 1]]);
+        $this->assertTrue($result);
+        $result = $this->SiteValidation->checkSiteAlias('example.com/news', ['data' => ['use_subdomain' => 1]]);
+        $this->assertFalse($result);
     }
 }

@@ -110,7 +110,7 @@ class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
             'display_name' => '中国語サイト',
             'title' => '中国語',
             'alias' => 'zh',
-            'domain_type' => 1
+            'use_subdomain' => 0
         ];
         $this->post('/baser/api/admin/baser-core/sites/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();

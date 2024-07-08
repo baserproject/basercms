@@ -100,7 +100,7 @@ class SitesControllerTest extends BcTestCase
             'alias' => 'test',
             'title' => 'test',
             'status' => true,
-            'domain_type' => 2
+            'use_subdomain' => 0
         ];
         $this->post('/baser/admin/baser-core/sites/add', $data);
         $this->assertResponseSuccess();
@@ -126,7 +126,7 @@ class SitesControllerTest extends BcTestCase
             'alias' => 'test',
             'title' => 'test',
             'status' => true,
-            'domain_type' => 2
+            'use_subdomain' => 0
         ];
         $this->post('/baser/admin/baser-core/sites/add', $data);
         $sites = $this->getTableLocator()->get('BaserCore.Sites');
@@ -153,7 +153,7 @@ class SitesControllerTest extends BcTestCase
             'alias' => 'test',
             'title' => 'test',
             'status' => true,
-            'domain_type' => 2
+            'use_subdomain' => 0
         ];
         $this->post('/baser/admin/baser-core/sites/add', $data);
         $sites = $this->getTableLocator()->get('BaserCore.Sites');
@@ -190,7 +190,7 @@ class SitesControllerTest extends BcTestCase
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test2@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
-            'domain_type' => 2
+            'use_subdomain' => 0
         ];
         $this->post('/baser/admin/baser-core/sites/edit/1', $data);
         $sites = $this->getTableLocator()->get('BaserCore.Sites');
