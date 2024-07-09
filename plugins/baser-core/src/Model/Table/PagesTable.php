@@ -274,11 +274,6 @@ class PagesTable extends AppTable
             unset($event);
         }
 
-        $saveDir = $this->Contents->getSaveDir();
-        if (file_exists($saveDir . $page->content->eyecatch)) {
-            copy($saveDir . $page->content->eyecatch, $saveDir . 'copy_' . $page->content->eyecatch);
-        }
-
         unset($page->created, $page->modified);
         $page->content = new Content([
             'name' => $page->content->name,
@@ -287,7 +282,6 @@ class PagesTable extends AppTable
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'description' => $page->content->description,
-            'eyecatch' => 'copy_' . $page->content->eyecatch,
             'layout_template' => $page->content->layout_tmplate ?? ''
         ]);
 
