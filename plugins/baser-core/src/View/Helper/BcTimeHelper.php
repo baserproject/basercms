@@ -116,6 +116,7 @@ class BcTimeHelper extends TimeHelper
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToWarekiYear($year)
     {
