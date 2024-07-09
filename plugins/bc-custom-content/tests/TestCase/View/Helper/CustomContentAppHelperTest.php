@@ -146,8 +146,81 @@ class CustomContentAppHelperTest extends BcTestCase
     /**
      * test isDisplayEntrySearch
      */
-    public function test_isDisplayEntrySearch()
+    public function test_isDisplayEntrySearchFront()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => true,
+            'search_target_admin' => false,
+            'children' => ['child1'],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field'] = new CustomLink(['type' => 'text']);
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink, 'front');
+        $this->assertTrue($rs);
+    }
+
+    public function test_isDisplayEntrySearchAdmin()
+    {
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => false,
+            'search_target_admin' => true,
+            'children' => ['child1'],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field'] = new CustomLink(['type' => 'text']);
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink, 'admin');
+        $this->assertTrue($rs);
+    }
+
+    public function test_isDisplayEntrySearchInvalidType()
+    {
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => false,
+            'search_target_admin' => false,
+            'children' => ['child1'],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field'] = new CustomLink(['type' => 'text']);
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink, 'invalid');
+        $this->assertFalse($rs);
+    }
+
+    public function test_isDisplayEntrySearchNoCustomField()
+    {
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => false,
+            'search_target_admin' => false,
+            'children' => ['child1'],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field'] = null;
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink);
+        $this->assertFalse($rs);
+    }
+
+    public function test_isDisplayEntrySearchGroupTypeNoChildren()
+    {
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => false,
+            'search_target_admin' => false,
+            'children' => [],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field'] = new CustomLink(['type' => 'group']);
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink);
+        $this->assertFalse($rs);
+    }
+
+    public function test_isDisplayEntrySearchFileType()
+    {
+        $customLink = CustomLinkFactory::make([
+            'search_target_front' => true,
+            'search_target_admin' => false,
+            'children' => ['child1'],
+            'status' => true
+        ])->getEntity();
+        $customLink['custom_field']['type'] = 'file';
+        $rs = $this->CustomContentAppHelper->isDisplayEntrySearch($customLink);
+        $this->assertFalse($rs);
     }
 }
