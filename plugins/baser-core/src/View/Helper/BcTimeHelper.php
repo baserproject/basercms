@@ -150,6 +150,7 @@ class BcTimeHelper extends TimeHelper
      * @return int|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToSeirekiYear($year)
     {
