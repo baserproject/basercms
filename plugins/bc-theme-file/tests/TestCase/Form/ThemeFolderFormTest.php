@@ -11,6 +11,7 @@ class ThemeFolderFormTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->ThemeFolderForm = new ThemeFolderForm();
     }
 
     public function tearDown(): void
@@ -20,7 +21,7 @@ class ThemeFolderFormTest extends BcTestCase
 
     public function test_buildSchema()
     {
-        $schema = $this->execPrivateMethod(new ThemeFolderForm(), '_buildSchema', [new Schema()]);
+        $schema = $this->execPrivateMethod($this->ThemeFolderForm, '_buildSchema', [new Schema()]);
         $this->assertEquals('string', $schema->fieldType('fullpath'));
         $this->assertEquals('string', $schema->fieldType('name'));
         $this->assertEquals('string', $schema->fieldType('parent'));
