@@ -259,8 +259,7 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testFormat($format, $date, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Helper->format($format, $date);
+        $result = $this->Helper->format($date, $format);
         $this->assertSame($expects, $result, $message);
     }
 
@@ -268,10 +267,13 @@ class BcTimeHelperTest extends BcTestCase
     {
         return [
             ['Y-m-d', '2012-03-04 05:06:07', '2012-03-04', '日付'],
-            ['Y/m/d H:i:s', '2012-03-04 05:06:07', '2012/03/04 05:06:07', '日時'],
+            ['Y/m/d', '2012-03-04 05:06:07', '2012/03/04', '日時'],
+            ['Y/m/d H:i:s', '2012-03-04 05:06:07', '2012/6/4 5:', '日時'],
+            ['Y.m.d', '2012-03-04', '2012.03.04', '日付'],
             ['Y-m-d', '0000-00-00 00:00:00', '', 'nll datetime'],
             ['Y-m-d', false, '', 'date is false'],
             ['Y-m-d', 0, '', 'date is zero'],
+            ['Y-m-d', 'invalid date', 'Failed to parse time string (invalid date) at position 0 (i): The timezone could not be found in the database', 'invalid date'],
         ];
     }
 
