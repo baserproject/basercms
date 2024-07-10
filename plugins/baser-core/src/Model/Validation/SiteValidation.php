@@ -76,10 +76,11 @@ class SiteValidation extends Validation
      */
     public static function checkSiteAlias($value, $context)
     {
-        if ($context['data']['use_subdomain'] == 0) {
-            return BcValidation::alphaNumericPlus($value, '/');
-        } else {
-            return BcValidation::alphaNumericPlus($value, '.');
+        if ($context['data']['use_subdomain'] == 0 && !BcValidation::alphaNumericPlus($value, '/')) {
+            return 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。';
+        } elseif ($context['data']['use_subdomain'] == 1 && !BcValidation::alphaNumericPlus($value, '.')) {
+            return 'サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。';
         }
+        return true;
     }
 }

@@ -70,7 +70,7 @@ class SitesTableTest extends BcTestCase
             'alias' => '漢字',
             'use_subdomain' => 0
         ]);
-        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', current($errors['alias']));
 
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
@@ -93,7 +93,7 @@ class SitesTableTest extends BcTestCase
             'alias' => 'example.com/abc',
             'use_subdomain' => 0
         ]);
-        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', current($errors['alias']));
 
         $errors = $validator->validate([
             'alias' => 'news/new-1',
@@ -107,7 +107,7 @@ class SitesTableTest extends BcTestCase
             'alias' => 'example.com/abc',
             'use_subdomain' => 1
         ]);
-        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+        $this->assertEquals('サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。', current($errors['alias']));
 
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
@@ -115,30 +115,6 @@ class SitesTableTest extends BcTestCase
             'use_subdomain' => 1
         ]);
         $this->assertArrayNotHasKey('alias', $errors);
-    }
-
-    /**
-     * test afterMarshal
-     */
-    public function test_afterMarshal()
-    {
-        //use_subdomain = 0 の場合、ドット（.） が利用不可、スラッシュは利用可能
-        $data = ['alias' => 'example.com/abc', 'use_subdomain' => 0];
-        $site = $this->Sites->newEntity($data);
-        $result = $this->Sites->dispatchEvent('Model.afterMarshal', ['entity' => $site, 'data' => new ArrayObject($data), 'options' => new \ArrayObject()]);
-        $site = $result->getData('entity');
-        //エラー情報を正しい状態に戻すことを確認
-        $errors = $site->getErrors();
-        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）・スラッシュ（/）で入力してください。', $errors['alias']['checkSiteAlias']);
-
-        //use_subdomain = 1、かつ、domain_type = 1 と 2 の場合、ドット（.） が利用可能、スラッシュは利用不可
-        $data['use_subdomain'] = 1;
-        $site = $this->Sites->newEntity($data);
-        $result = $this->Sites->dispatchEvent('Model.afterMarshal', ['entity' => $site, 'data' => new ArrayObject($data), 'options' => new \ArrayObject()]);
-        $site = $result->getData('entity');
-        //エラー情報を正しい状態に戻すことを確認
-        $errors = $site->getErrors();
-        $this->assertEquals('サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。', $errors['alias']['checkSiteAlias']);
     }
 
     /**

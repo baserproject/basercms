@@ -113,7 +113,7 @@ class SiteValidationTest extends BcTestCase
     {
         //use_subdomain = 0 の場合、ドット（.） が利用不可、スラッシュは利用可能
         $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 0]]);
-        $this->assertFalse($result);
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', $result);
         $result = $this->SiteValidation->checkSiteAlias('/news/new-1', ['data' => ['use_subdomain' => 0]]);
         $this->assertTrue($result);
 
@@ -121,6 +121,6 @@ class SiteValidationTest extends BcTestCase
         $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 1]]);
         $this->assertTrue($result);
         $result = $this->SiteValidation->checkSiteAlias('example.com/news', ['data' => ['use_subdomain' => 1]]);
-        $this->assertFalse($result);
+        $this->assertEquals('サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。', $result);
     }
 }
