@@ -11,6 +11,7 @@ class SearchIndexesSearchFormTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->SearchIndexesSearchForm = new SearchIndexesSearchForm();
     }
 
     public function tearDown(): void
@@ -20,7 +21,7 @@ class SearchIndexesSearchFormTest extends BcTestCase
 
     public function test_buildSchema(): void
     {
-        $schema = $this->execPrivateMethod(new SearchIndexesSearchForm(), '_buildSchema', [new Schema()]);
+        $schema = $this->execPrivateMethod($this->SearchIndexesSearchForm, '_buildSchema', [new Schema()]);
         $this->assertEquals('string', $schema->fieldType('type'));
         $this->assertEquals('string', $schema->fieldType('site_id'));
         $this->assertEquals('string', $schema->fieldType('folder_id'));
