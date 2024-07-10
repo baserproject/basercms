@@ -424,4 +424,15 @@ class BcFolder
         return $files;
     }
 
+    /**
+     * パスを取得する
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function pwd(): string
+    {
+        return $this->path;
+    }
+
 }
