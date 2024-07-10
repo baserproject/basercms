@@ -28,6 +28,7 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -82,7 +83,12 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_beforeFilter()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $this->BlogController = new BlogController($this->getRequest());
+        $event = new Event('Controller.beforeFilter', $this->BlogController);
+        $this->BlogController->beforeFilter($event);
+        $config = $this->BlogController->FormProtection->getConfig('validate');
+        $this->assertFalse($config);
+
     }
 
     /**
