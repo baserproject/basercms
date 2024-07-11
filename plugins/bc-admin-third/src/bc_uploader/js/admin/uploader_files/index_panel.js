@@ -471,7 +471,7 @@ uploaderFilesIndex = {
         let listId = uploaderFilesIndex.listId;
         let id = $("#FileList" + listId + " .selected .id").html().trim();
         let delUrl = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/delete/' + id + '.json';
-        let fileName = $("#selectedFile" + id +' .name').text();
+        let fileName = $("#selectedFile" + id +' .name').text().trim();
         // IEの場合、action値が正常に取得できないので整形する
         let pos = action.indexOf("#");
         if (pos !== -1) action = action.substring(pos + 1, action.length);
