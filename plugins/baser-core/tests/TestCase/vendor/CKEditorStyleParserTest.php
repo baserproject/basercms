@@ -52,8 +52,26 @@ class CKEditorStyleParserTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test_readString()
+    /**
+     * @dataProvider readStringDataProvider
+     */
+    public function test_readString($target, $body, $i, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $size = strlen($body);
+        $params = [$target, $body, $size, &$i];
+        $result = $this->execPrivateMethod(new CKEditorStyleParser(), 'readString', $params);
+        $this->assertEquals($expected, $result);
     }
+
+    public static function readStringDataProvider()
+    {
+        return [
+            ['"', 'This is a "test" string', 11, 'test'],
+            ["'", "This is a 'test' string", 11, 'test'],
+            ['"', 'This is a \\"test\\" string', 12, 'test\\'],
+            ['"', '', 0, ''],
+            ['"', 'No target character here', 0, 'No target character here']
+        ];
+    }
+
 }
