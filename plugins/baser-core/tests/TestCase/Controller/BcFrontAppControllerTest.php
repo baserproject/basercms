@@ -17,6 +17,8 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\I18n\I18n;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -85,9 +87,31 @@ class BcFrontAppControllerTest extends BcTestCase
     /**
      * test beforeFilter
      */
-    public function testBeforeFilter()
+    public function testBeforeFilterSetsLocale()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        Configure::write('BcLang.en', ['langs' => ['en_US']]);
+        Configure::write('BcApp.systemMessageLangFromSiteSetting', true);
+
+        $request = $this->getRequest()->withAttribute('currentSite', (object)['lang' => 'en']);
+        $this->BcFrontAppController->setRequest($request);
+
+        $event = new Event('Controller.beforeFilter', $this->BcFrontAppController);
+        $this->BcFrontAppController->beforeFilter($event);
+        $this->assertEquals('en_US', I18n::getLocale());
+    }
+
+    public function testBeforeFilterWithoutCurrentSite()
+    {
+        Configure::write('BcLang.en', ['langs' => ['en_US']]);
+        Configure::write('BcApp.systemMessageLangFromSiteSetting', true);
+
+        $request = $this->getRequest();
+        $this->BcFrontAppController->setRequest($request);
+
+        $event = new Event('Controller.beforeFilter', $this->BcFrontAppController);
+        $this->BcFrontAppController->beforeFilter($event);
+
+        $this->assertNotEquals('en_US', I18n::getLocale());
     }
 
     /**
