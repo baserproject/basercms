@@ -29,7 +29,7 @@ echo $this->BcBaser->i18nScript([
   'uploaderAlertMessage2' => __d('baser_core', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
   'uploaderAlertMessage3' => __d('baser_core', 'このファイルの編集・削除はできません。'),
   'uploaderAlertMessage4' => __d('baser_core', 'サーバーでの処理に失敗しました。'),
-  'uploaderConfirmMessage1' => __d('baser_core', '本当に削除してもよろしいですか？'),
+  'uploaderConfirmMessage1' => __d('baser_core', 'を本当に削除してもよろしいですか？'),
   'uploaderFile' => __d('baser_core', 'ファイル'),
   'uploaderPublishBegin' => __d('baser_core', '公開開始日'),
   'uploaderPublishEnd' => __d('baser_core', '公開終了日')
