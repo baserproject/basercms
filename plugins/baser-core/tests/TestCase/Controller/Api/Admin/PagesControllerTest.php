@@ -60,6 +60,20 @@ class PagesControllerTest extends BcTestCase
         $this->PagesService = new PagesService();
     }
 
+    public function testView()
+    {
+        $this->get('/baser/api/admin/baser-core/pages/view/2.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode($this->_response->getBody());
+        $this->assertEquals('default', $result->page->page_template);
+
+        $this->get('/baser/api/admin/baser-core/pages/view/999999.json?token=' . $this->accessToken);
+        $result = json_decode($this->_response->getBody());
+        $this->assertEquals("データが見つかりません", $result->message);
+        $this->assertResponseCode(404);
+    }
+
     /**
      * Test add method
      *
