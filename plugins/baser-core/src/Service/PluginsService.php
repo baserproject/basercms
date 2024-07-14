@@ -811,6 +811,10 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
+        if(!preg_match('/[0-9]+\.[0-9x*]+\.[0-9x*]+/', $targetVersion)) {
+            throw new BcException(__d('baser_core', 'バージョン番号が不正です。'));
+        }
+
         if (function_exists('ini_set')) {
             ini_set('max_execution_time', 0);
             ini_set('memory_limit', '512M');
