@@ -40,6 +40,6 @@ $siteConfigsService->setValue('allow_simple_password', true);
  */
 $siteUrl = env('SITE_URL');
 $sslUrl = env('SSL_URL');
-if($siteUrl !== $sslUrl) {
+if(!$sslUrl && $siteUrl !== $sslUrl) {
     $siteConfigsService->putEnv('SITE_URL', $sslUrl);
 }
