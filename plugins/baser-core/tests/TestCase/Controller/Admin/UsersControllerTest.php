@@ -134,8 +134,8 @@ class UsersControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $data = [
             'name' => 'Test_test_Man',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet1',
+            'password_2' => 'Lorem ipsum dolor sit amet1',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test@example.com',
@@ -159,8 +159,8 @@ class UsersControllerTest extends BcTestCase
         });
         $data = [
             'name' => 'Test_test_Man2',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet1',
+            'password_2' => 'Lorem ipsum dolor sit amet1',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test2@example.com',
@@ -188,8 +188,8 @@ class UsersControllerTest extends BcTestCase
         });
         $data = [
             'name' => 'Test_test_Man2',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet1',
+            'password_2' => 'Lorem ipsum dolor sit amet1',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test2@example.com',
@@ -252,8 +252,8 @@ class UsersControllerTest extends BcTestCase
         $data = [
             'id' => 1,
             'name' => 'Test_test_Man2',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet1',
+            'password_2' => 'Lorem ipsum dolor sit amet1',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test2@example.com',

@@ -125,8 +125,8 @@ class UsersControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $data = [
             'name' => 'Test_test_Man',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet1',
+            'password_2' => 'Lorem ipsum dolor sit amet1',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test@example.com',
