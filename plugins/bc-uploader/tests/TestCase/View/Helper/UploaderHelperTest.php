@@ -1,6 +1,7 @@
 <?php
 namespace BcUploader\Test\TestCase\View\Helper;
 use App\View\AppView;
+use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
@@ -45,7 +46,8 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals('/files/uploads/', $this->UploaderHelper->savedUrl);
+        $this->assertEquals('/var/www/html/webroot/files/uploads/', $this->UploaderHelper->savePath);
     }
 
     /**
@@ -53,7 +55,18 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testFile()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['name' => 'test.jpg', 'alt' => 'Example Image Alt Text'])->getEntity();
+        $rs = $this->UploaderHelper->file($uploaderFile, ['size' => 'small']);
+        $this->assertEquals('<img src="/files/uploads/test.jpg" alt="Example Image Alt Text" size="small">', $rs);
+
+        //options empty
+        $rs = $this->UploaderHelper->file($uploaderFile);
+        $this->assertEquals('<img src="/files/uploads/test.jpg" alt="Example Image Alt Text">', $rs);
+
+        //extension don't have ['gif', 'jpg', 'png']
+        $uploaderFile = UploaderFileFactory::make(['name' => 'example.pdf'])->getEntity();
+        $rs = $this->UploaderHelper->file($uploaderFile);
+        $this->assertEquals('<img src="/bc_uploader/img/icon_upload_file.png" alt="">', $rs);
     }
 
     /**
@@ -79,15 +92,36 @@ class UploaderHelperTest extends BcTestCase
      */
     public function testDownload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['name' => 'test.jpg'])->getEntity();
+        $linkText = 'click here to download';
+        $rs = $this->UploaderHelper->download($uploaderFile, $linkText);
+        $this->assertEquals('<a href="/files/uploads/test.jpg" target="_blank">click here to download</a>', $rs);
+
+        $rs = $this->UploaderHelper->download($uploaderFile);
+        $this->assertEquals('<a href="/files/uploads/test.jpg" target="_blank">≫ ダウンロード</a>', $rs);
     }
 
     /**
      * ファイルの公開制限期間が設定されているか判定する
+     * @dataProvider isLimitSettingDataProvider
      */
-    public function testIsLimitSetting()
+    public function testIsLimitSetting($data, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->UploaderHelper->isLimitSetting($data);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isLimitSettingDataProvider()
+    {
+        return [
+            [['UploaderFile' => []], false],
+            [['UploaderFile' => ['publish_begin' => '2023-01-01']], true],
+            [['UploaderFile' => ['publish_end' => '2023-12-31']], true],
+            [['UploaderFile' => ['publish_begin' => '2023-01-01', 'publish_end' => '2023-12-31']], true],
+            [['publish_begin' => '2023-01-01'], true],
+            [['publish_end' => '2023-12-31'], true],
+            [[], false],
+        ];
     }
 
     /**

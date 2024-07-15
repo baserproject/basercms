@@ -14,6 +14,7 @@ namespace BaserCore\Utility;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Log\LogTrait;
 use Exception;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -26,12 +27,22 @@ class BcFolder
 {
 
     /**
+     * Trait
+     */
+    use LogTrait;
+
+    /**
      * パス
      * @var string
      */
     private string $path;
 
+    /**
+     * 権限
+     * @var int
+     */
     public int $mode = 0755;
+
     /**
      * Holds messages from last method.
      *
@@ -53,8 +64,12 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function __construct(string $path)
+    public function __construct(string $path = '')
     {
+        if(!$path) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            $this->log(__d('baser_core', 'BcFile では、コンストラクタでパスの指定をしないのは非推奨です。パスの指定行うようにしてください。この要件はバージョン 6.0.0 で必須となります。'));
+        }
         $this->path = $path;
     }
 
@@ -78,8 +93,14 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function create(int $mask = 0777)
+    public function create(int|string $mask = 0777)
     {
+        if(is_string($mask)) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            $this->log(__d('baser_core', 'BcFile::create() では、第一引数にパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
+            $this->path = $mask;
+            $mask = 0777;
+        }
         $path = $this->path;
         $parent = dirname($path);
         if (!is_dir($parent)) {
@@ -156,8 +177,13 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function delete()
+    public function delete($path = '')
     {
+        if($path) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            $this->log(__d('baser_core', 'BcFile::delete() では、第一引数にパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
+            $this->path = $path;
+        }
         if (!is_dir($this->path)) return false;
         $files = $this->getFiles(['full' => true]);
         foreach($files as $file) {
@@ -182,6 +208,12 @@ class BcFolder
      */
     public function copy($dest, $mode = 0777): bool
     {
+        if(is_array($mode) && !empty($mode['from'])) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            $this->log(__d('baser_core', 'BcFile::delete() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
+            $this->path = $mode['from'];
+            $mode = 0777;
+        }
         $source = $this->path;
         if (!is_dir($source)) return false;
         if (is_dir($source)) {
@@ -211,12 +243,18 @@ class BcFolder
 
     /**
      * ディレクトリを移動する
+     * @param string $dest
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function move($dest): bool
+    public function move($dest, $options = []): bool
     {
+        if(!empty($options['from'])) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            $this->log(__d('baser_core', 'BcFile::delete() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
+            $this->path = $options['from'];
+        }
         $source = $this->path;
         if (!is_dir($source)) return false;
         return $this->copy($dest) && $this->delete();
@@ -368,6 +406,33 @@ class BcFolder
         $files = $this->getFiles();
 
         return array_values(preg_grep('/^' . $regexpPattern . '$/i', $files));
+    }
+
+    /**
+     * フォルダ内のファイルとフォルダを読み込む
+     *
+     * @param mixed $sort 利用不可
+     * @param bool $exceptions 利用不可
+     * @param bool $fullPath
+     * @return array
+     * @deprecated 6.0.0 since 5.1.0 後方互換用
+     */
+    public function read($sort = true, $exceptions = false, $fullPath = false)
+    {
+        $files[0] = $this->getFolders(['full' => $fullPath]);
+        $files[1] = $this->getFiles(['full' => $fullPath]);
+        return $files;
+    }
+
+    /**
+     * パスを取得する
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function pwd(): string
+    {
+        return $this->path;
     }
 
 }

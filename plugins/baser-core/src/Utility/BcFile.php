@@ -124,4 +124,13 @@ class BcFile
         }
         return false;
     }
+
+    /**
+     * close
+     * @return void
+     * @deprecated 6.0.0 since 5.1.0 後方互換用に配置
+     */
+    public function close()
+    {}
+
 }

@@ -200,7 +200,7 @@ class BcAdminAppController extends AppController
     }
 
     /**
-     * siteUrlや、sslUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
+     * siteUrlや、cmsUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
      * setting.php にて、cmsUrlとして、cmsUrlを定義した場合にはそちらを優先する
      * @return Response|void|null
      * @checked
@@ -211,8 +211,6 @@ class BcAdminAppController extends AppController
     {
         if (Configure::read('BcEnv.cmsUrl')) {
             $siteUrl = Configure::read('BcEnv.cmsUrl');
-        } elseif ($this->getRequest()->is('https')) {
-            $siteUrl = Configure::read('BcEnv.sslUrl');
         } else {
             $siteUrl = Configure::read('BcEnv.siteUrl');
         }

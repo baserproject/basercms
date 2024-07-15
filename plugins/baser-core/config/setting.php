@@ -158,10 +158,6 @@ return [
          */
         'siteUrl' => env('SITE_URL', 'https://localhost/'),
         /**
-         * SSL URL
-         */
-        'sslUrl' => env('SSL_URL', 'https://localhost/'),
-        /**
          * CMS URL
          * CMSのURLが別ドメインの場合に設定する
          */
@@ -330,11 +326,6 @@ return [
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */
         'passwordRequestAllowTime' => 1440,
-
-        /**
-         * 管理画面のSSL
-         */
-        'adminSsl' => filter_var(env('ADMIN_SSL', true), FILTER_VALIDATE_BOOLEAN),
 
         /**
          * エディタ

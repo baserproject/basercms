@@ -315,6 +315,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkbox(string $fieldName, array $options = []): array|string
     {
@@ -355,7 +356,7 @@ class BcFreezeHelper extends BcFormHelper
                 $value = $this->getSourceValue($field);
             }
             if ($value) {
-                return parent::textarea($fieldName, $options) . nl2br(h($value));
+                return parent::text($fieldName, $options) . nl2br(h($value));
             } else {
                 return "&nbsp;";
             }

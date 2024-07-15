@@ -26,16 +26,12 @@
 $this->BcAdmin->setTitle(__d('baser_core', 'システム基本設定'));
 $this->BcAdmin->setHelp('site_configs_form');
 $this->BcBaser->i18nScript([
-  'alertMessage1' => __d('baser_core', '管理システムをSSLに切り替える場合には、SSL用のURLを登録してください。'),
-  'alertMessage2' => __d('baser_core', 'テストメールを送信に失敗しました。'),
-  'confirmMessage1' => __d('baser_core', '管理システムをSSLに切り替えようとしています。よろしいですか？<br><br>サーバがSSLに対応していない場合、管理システムを表示する事ができなくなってしまいますのでご注意ください。<br><br>もし、表示する事ができなくなってしまった場合は、 /app/Config/install.php の、 BcEnv.sslUrl の値を調整するか、BcApp.adminSsl の値を false に書き換えて復旧してください。'),
-  'confirmMessage2' => __d('baser_core', 'テストメールを送信します。いいですか？'),
+  'alertMessage1' => __d('baser_core', 'テストメールの送信に失敗しました。'),
+  'confirmMessage1' => __d('baser_core', 'テストメールを送信します。よろしいですか？'),
   'infoMessage1' => __d('baser_core', 'テストメールを送信しました。'),
   'confirmTitle1' => __d('baser_core', '管理システムSSL設定確認')
 ], ['escape' => false]);
-$this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSiteConfigsFormScript',
-  'data-isAdminSsl' => (string)$siteConfig->admin_ssl
-]);
+$this->BcBaser->js('admin/site_configs/index.bundle', false);
 ?>
 
 
@@ -64,21 +60,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         <input type="password" name="dummy-site_url" style="display: none">
         <?php $this->BcAdminForm->unlockFields('dummy-site_url') ?>
         <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom', 'disabled' => !$isWritableEnv]) ?>
-        <br>
-        <input type="password" name="dummy-ssl_url" style="display: none">
-        <?php $this->BcAdminForm->unlockFields('dummy-ssl_url') ?>
-        <?php echo $this->BcAdminForm->control('ssl_url', [
-            'type' => 'text',
-            'size' => 35,
-            'maxlength' => 255,
-            'disabled' => !$isWritableEnv]
-        ) ?> <small>[SSL]</small>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。') ?>
+          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('site_url') ?>
-        <?php echo $this->BcAdminForm->error('ssl_url') ?>
       </td>
     </tr>
 
@@ -139,25 +125,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
   </div>
   <div class="bca-collapse" id="formAdminSettingBody" data-bca-state="">
     <table class="form-table bca-form-table section" data-bca-table-type="type2">
-      <tr>
-        <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('admin_ssl', __d('baser_core', '管理画面SSL設定')) ?>
-        </th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('admin_ssl', [
-            'type' => 'radio',
-            'options' => $this->BcText->booleanDoList(__d('baser_core', 'SSL通信を利用')),
-            'separator' => '　',
-            'legend' => false,
-            'disabled' => !$isWritableEnv
-          ]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext">
-            <?php echo __d('baser_core', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br>また、SSL用のWebサイトURLの指定が必要です。') ?>
-          </div>
-          <?php echo $this->BcAdminForm->error('admin_ssl') ?>
-        </td>
-      </tr>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('admin_list_num', __d('baser_core', '管理画面テーマ')) ?>

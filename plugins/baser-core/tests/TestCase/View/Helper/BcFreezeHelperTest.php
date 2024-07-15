@@ -256,9 +256,9 @@ class BcFreezeHelperTest extends BcTestCase
         return [
             [false, 'baser', [], '<textarea name="baser" rows="5"></textarea>'],
             [false, 'baser', ['class' => 'bcclass'], '<textarea name="baser" class="bcclass" rows="5"></textarea>'],
-            [true, 'baser.freezed', [], '<textarea name="baser[freezed]" rows="5">BaserCMS</textarea>BaserCMS'],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<textarea name="baser[freezed]" rows="5">BaserCMS2</textarea>BaserCMS2'],
-            [true, 'baser.freezed', ['class' => 'bcclass'], '<textarea name="baser[freezed]" class="bcclass" rows="5">BaserCMS</textarea>BaserCMS'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['class' => 'bcclass'], '<input type="hidden" name="baser[freezed]" class="bcclass" value="BaserCMS">BaserCMS'],
         ];
     }
 
@@ -584,6 +584,29 @@ class BcFreezeHelperTest extends BcTestCase
             [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="123">123'],
             [true, 'baser.freezed', ['value' => '1234'], '<input type="hidden" name="baser[freezed]" value="1234">1234'],
             [true, 'baser.freezed', ['type' => 'hidden'], '<input type="hidden" name="baser[freezed]" value="123">123'],
+        ];
+    }
+
+    /**
+     * @dataProvider checkboxProvider
+     */
+    public function test_checkbox($freezed, $fieldName, $option, $expected)
+    {
+        if ($freezed) {
+            $this->BcFreeze->freeze();
+        }
+        $result = $this->BcFreeze->checkbox($fieldName, $option);
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function checkboxProvider()
+    {
+        return [
+            [false, 'baser', ['label' => 'text'], '<input type="hidden" name="baser" value="0"><input type="checkbox" name="baser" value="1" label="text">'],
+            [true, 'baser', ['label' => 'text'], '<input type="hidden" name="baser" class="" ="" text="text">'],
+            [false, 'baser', [], '<input type="hidden" name="baser" value="0"><input type="checkbox" name="baser" value="1">'],
+            [true, 'baser', [], '<input type="hidden" name="baser" class="" ="" ="">'],
         ];
     }
 }
