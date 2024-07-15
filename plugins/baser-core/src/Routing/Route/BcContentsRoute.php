@@ -71,11 +71,7 @@ class BcContentsRoute extends Route
             $site = $sites->findByUrl($url);
             if ($site && !is_null($site->name)) {
                 if ($site->use_subdomain) {
-                    if (str_starts_with($url, '/' . $site->alias)) {
-                        $checkUrl = $url;
-                    } else {
-                        $checkUrl = '/' . $site->alias . (($url)? $url : '/');
-                    }
+                    $checkUrl = '/' . $site->alias . (($url) ? $url : '/');
                 } else {
                     $checkUrl = ($url)? $url : '/';
                 }
