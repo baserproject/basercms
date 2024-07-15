@@ -356,7 +356,6 @@ class BcFreezeHelper extends BcFormHelper
                 $value = $this->getSourceValue($field);
             }
             if ($value) {
-                // textarea のままだと<input type="hidden">にならないため、text扱いに変更
                 return parent::text($fieldName, $options) . nl2br(h($value));
             } else {
                 return "&nbsp;";
