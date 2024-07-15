@@ -212,7 +212,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('password_reset_days', __d('baser_core', 'ログインパスワードの再設定日数')) ?>
+          <?php echo $this->BcAdminForm->label('password_reset_days', __d('baser_core', 'ログインパスワード強制変更<br>までの日数'), ['escape' => false]) ?>
         </th>
         <td class="col-input bca-form-table__input">
 
@@ -222,7 +222,13 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
             'maxlength' => 255
           ]) ?>日
           <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext"><?php echo __d('baser_core', 'ユーザーのパスワードが設定した日数以上更新されていない場合に再設定画面を表示します。再設定を行うまで管理画面の利用は不可となります。') ?></div>
+          <div class="bca-helptext">
+            <?php echo __d(
+              'baser_core',
+              'ユーザーのパスワードが設定した日数以上更新されていない場合に強制的にパスワード再設定画面を表示します。' .
+              '再設定を行うまで管理画面の利用は不可となります。空欄の場合には強制変更は行われません。'
+            ) ?>
+          </div>
           <?php echo $this->BcAdminForm->error('password_reset_days') ?>
         </td>
       </tr>
