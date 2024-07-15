@@ -407,4 +407,17 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue($content->status);
     }
 
+
+    public function test_view()
+    {
+        $this->get('/baser/api/admin/baser-core/contents/view/4.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('トップページ', $result->content->title);
+
+        $this->get('/baser/api/admin/baser-core/contents/view/100.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+    }
+
 }

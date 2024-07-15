@@ -31,6 +31,7 @@ class ContentsController extends BcAdminApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ContentsServiceInterface $service, int $id)
     {
