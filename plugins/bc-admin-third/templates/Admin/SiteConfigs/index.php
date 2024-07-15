@@ -232,6 +232,20 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
           <?php echo $this->BcAdminForm->error('password_reset_days') ?>
         </td>
       </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_two_factor_authentication', __d('baser_core', '二段階認証')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('use_two_factor_authentication', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', '利用する')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ログイン時にメールで送信される認証コードの入力が必要になります。') ?></div>
+          <?php echo $this->BcAdminForm->error('use_two_factor_authentication') ?>
+        </td>
+      </tr>
 
       <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
 

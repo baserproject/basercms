@@ -75,6 +75,8 @@ use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Service\TwoFactorAuthenticationsService;
+use BaserCore\Service\TwoFactorAuthenticationsServiceInterface;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\UsersService;
@@ -137,7 +139,8 @@ class BcServiceProvider extends ServiceProvider
         PermissionGroupsAdminServiceInterface::class,
         BcCaptchaServiceInterface::class,
         BcOfficialApiServiceInterface::class,
-        PermissionsAdminServiceInterface::class
+        PermissionsAdminServiceInterface::class,
+        TwoFactorAuthenticationsServiceInterface::class,
     ];
 
     /**
@@ -212,6 +215,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(BcOfficialApiServiceInterface::class, BcOfficialApiService::class);
         // PermissionAdmin サービス
         $container->add(PermissionsAdminServiceInterface::class, PermissionsAdminService::class);
+        // TwoFactorAuthentications サービス
+        $container->add(TwoFactorAuthenticationsServiceInterface::class, TwoFactorAuthenticationsService::class);
     }
 
 }

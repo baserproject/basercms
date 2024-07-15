@@ -328,6 +328,11 @@ return [
         'passwordRequestAllowTime' => 1440,
 
         /**
+         * 二段階認証コードの有効時間(min)
+         */
+        'twoFactorAuthenticationCodeAllowTime' => 10,
+
+        /**
          * エディタ
          */
         'editors' => [
@@ -564,6 +569,7 @@ return [
         'defaultAllows' => [
             '/baser/admin',
             '/baser/admin/baser-core/users/login',
+            '/baser/admin/baser-core/users/login_code',
             '/baser/admin/baser-core/users/logout',
             '/baser/admin/baser-core/password_requests/*',
             '/baser/admin/baser-core/dashboard/*',

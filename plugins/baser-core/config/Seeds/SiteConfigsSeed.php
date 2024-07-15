@@ -260,6 +260,13 @@ q {}',
                 'created' => '',
                 'modified' => ''
             ],
+            [
+                'id' => '32',
+                'name' => 'use_two_factor_authentication',
+                'value' => '0',
+                'created' => '',
+                'modified' => ''
+            ],
         ];
         $table = $this->table('site_configs');
         $table->insert($data)->save();
