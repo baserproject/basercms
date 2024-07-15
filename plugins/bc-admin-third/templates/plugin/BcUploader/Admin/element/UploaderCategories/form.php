@@ -37,7 +37,7 @@
     <td class="bca-form-table__input">
       <?php echo $this->BcAdminForm->control('name', [
         'type' => 'text',
-        'size' => 40,
+        'size' => 100,
         'maxlength' => 50,
         'autofocus' => true
       ]) ?>
