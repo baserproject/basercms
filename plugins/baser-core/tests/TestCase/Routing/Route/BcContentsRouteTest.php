@@ -109,9 +109,7 @@ class BcContentsRouteTest extends BcTestCase
     {
         $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
         $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
-        $siteUrl = env('SITE_URL');
-        $siteConfig = $this->getService(SiteConfigsServiceInterface::class);
-        $siteConfig->putEnv('SITE_URL', 'http://main.com');
+        Configure::write('BcEnv.siteUrl', 'http://main.com/');
         Configure::write('BcSite.use_site_device_setting', $useSiteDeviceSetting);
         if ($ua) {
             $_SERVER['HTTP_USER_AGENT'] = $ua;
@@ -124,7 +122,6 @@ class BcContentsRouteTest extends BcTestCase
         unset($result['Site']);
         unset($result['_route']);
         $this->assertEquals($expects, $result);
-        $siteConfig->putEnv('SITE_URL', $siteUrl);
     }
 
     public static function routerParseDataProvider()
