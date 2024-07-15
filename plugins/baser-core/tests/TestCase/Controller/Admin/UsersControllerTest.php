@@ -266,6 +266,26 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Test edit_password
+     */
+    public function testEdit_password()
+    {
+        $users = $this->getTableLocator()->get('BaserCore.Users');
+        $user = $users->get(1);
+        $beforePassword = $user->password;
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'password_1' => 'Testtest1234',
+            'password_2' => 'Testtest1234',
+        ];
+        $this->post('/baser/admin/baser-core/users/edit_password', $data);
+        $this->assertResponseSuccess();
+        $user = $users->get(1);
+        $this->assertNotEquals($beforePassword, $user->password);
+    }
+
+    /**
      * Test delete method
      *
      * @return void
