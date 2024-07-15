@@ -62,16 +62,12 @@ class BcSmartphoneHelper extends Helper
             // 内部リンクの自動変換
             if ($site->auto_link) {
                 $siteUrl = Configure::read('BcEnv.siteUrl');
-                $sslUrl = Configure::read('BcEnv.sslUrl');
                 $currentAlias = $request->getAttribute('currentSite')->alias;
                 $base = '/' . $request->getAttribute('base');
                 $regBaseUrls = [
                     preg_quote($base, '/'),
                     preg_quote(preg_replace('/\/$/', '', $siteUrl) . $base, '/'),
                 ];
-                if ($sslUrl) {
-                    $regBaseUrls[] = preg_quote(preg_replace('/\/$/', '', $sslUrl) . $base, '/');
-                }
                 $regBaseUrl = implode('|', $regBaseUrls);
 
                 // 一旦プレフィックスを除外

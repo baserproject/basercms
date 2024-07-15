@@ -2348,32 +2348,26 @@ class BcBaserHelper extends Helper
     /**
      * WebサイトURLを出力する
      *
-     * @param bool ssl （初期値 : false）
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function siteUrl($ssl = false)
+    public function siteUrl()
     {
-        echo $this->getSiteUrl($ssl);
+        echo $this->getSiteUrl();
     }
 
     /**
      * WebサイトURLを取得する
      *
-     * @param bool ssl （初期値 : false）
      * @return string サイト基本設定のWebサイト名
      * @checked
      * @noTodo
      */
-    public function getSiteUrl($ssl = false)
+    public function getSiteUrl()
     {
-        if ($ssl) {
-            return Configure::read('BcEnv.sslUrl');
-        } else {
-            return Configure::read('BcEnv.siteUrl');
-        }
+        return Configure::read('BcEnv.siteUrl');
     }
 
     /**

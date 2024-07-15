@@ -178,33 +178,7 @@ class MailContentsTable extends MailAppTable
                     'message' => __d('baser_core', 'BCC用送信先メールアドレスのEメールの形式が不正です。')
                 ]]);
 
-        // ssl_on
-        $validator
-            ->add('ssl_on', [
-                'checkSslUrl' => [
-                    'rule' => 'checkSslUrl',
-                    'provider' => 'table',
-                    'message' => __d('baser_core', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
-                ]]);
-
         return $validator;
-    }
-
-    /**
-     * SSL用のURLが設定されているかチェックする
-     *
-     * @param array $check チェック対象文字列
-     * @return boolean
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function checkSslUrl($value)
-    {
-        if ($value && !Configure::read('BcEnv.sslUrl')) {
-            return false;
-        }
-        return true;
     }
 
     /**

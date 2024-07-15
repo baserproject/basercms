@@ -441,8 +441,8 @@ class PermissionsService implements PermissionsServiceInterface
     {
         // ドメイン部分を除外
         if(preg_match('/^(http(s|):\/\/[^\/]+?\/)(.*?)$/', $url, $matches)) {
-            if(in_array($matches[1], [Configure::read('BcEnv.siteUrl'), Configure::read('BcEnv.sslUrl')])) {
-                $url = str_replace([Configure::read('BcEnv.siteUrl'), Configure::read('BcEnv.sslUrl')], '', $url);
+            if(in_array($matches[1], [Configure::read('BcEnv.siteUrl')])) {
+                $url = str_replace([Configure::read('BcEnv.siteUrl')], '', $url);
                 if(!$url) $url = '/';
             } else {
                 return true;
