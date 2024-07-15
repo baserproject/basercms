@@ -61,17 +61,27 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $dbVersion = BcUtil::getDbVersion($entity->name);
         BcUtil::includePluginClass($entity->name);
         $plugin = CakePlugin::getCollection()->create($entity->name);
-        $scriptNum = count($plugin->getUpdaters('', true));
-        $scriptMessages = $plugin->getUpdateScriptMessages('', true);
+        $coreDownloaded = Cache::read('coreDownloaded', '_bc_update_');
 
         if ($entity->name === 'BaserCore') {
-            $availableVersion = $this->getAvailableCoreVersion();
-            $corePlugins = Configure::read('BcApp.corePlugins');
-            foreach($corePlugins as $corePlugin) {
-                $scriptNum += count($plugin->getUpdaters($corePlugin, true));
-                $scriptMessages += $plugin->getUpdateScriptMessages($corePlugin, true);
+            $availableVersion = null;
+            $scriptNum = $scriptMessages = [];
+            if($coreDownloaded) {
+                $availableVersion = BcUtil::getVersion('BaserCore', true);
+                $scriptNum = count($plugin->getUpdaters('', true));
+                $scriptMessages = $plugin->getUpdateScriptMessages('', true);
+                $corePlugins = Configure::read('BcApp.corePlugins');
+                foreach($corePlugins as $corePlugin) {
+                    $scriptNum += count($plugin->getUpdaters($corePlugin, true));
+                    $scriptMessages += $plugin->getUpdateScriptMessages($corePlugin, true);
+                }
+            }
+            if(!$availableVersion) {
+                $availableVersion = $this->getAvailableCoreVersion();
             }
         } else {
+            $scriptNum = count($plugin->getUpdaters());
+            $scriptMessages = $plugin->getUpdateScriptMessages();
             $availableVersion = null;
         }
 
@@ -101,7 +111,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
             'programVerPoint' => $programVerPoint,
             'availableVersion' => $availableVersion,
             'log' => $this->getUpdateLog(),
-            'coreDownloaded' => Cache::read('coreDownloaded', '_bc_update_'),
+            'coreDownloaded' => $coreDownloaded,
             'php' => $this->whichPhp(),
             'isCore' => $entity->name === 'BaserCore',
             'isWritableVendor' => $isWritableVendor,
@@ -149,12 +159,12 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
 
         if(is_null($availableVersion)) {
             // プラグインの場合 プログラムのバージョンを利用可能なバージョンとする
-            $availableVersion = $programVersion;
+            $availableVerPoint = $programVerPoint;
         } else {
             // コアの場合は、プログラムのバージョンとDBのバージョンが違う場合はアップデート不可
-            if ($programVersion !== $dbVersion) return false;
+            if ($programVerPoint !== $dbVerPoint) return false;
         }
-        if ($availableVersion !== $dbVersion) return true;
+        if ($availableVerPoint > $dbVerPoint) return true;
         return false;
     }
 

@@ -1444,7 +1444,7 @@ class BcBaserHelper extends Helper
      * $this->BcBaser->css('admin/import')
      *
      * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
-     * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
+     * @param bool $inline コンテンツ内に css を出力するかどうか（初期値 : true）
      * @param mixed $options オプション
      * ※💣inline=false→block=trueに変更になったため注意
      * @return string|void
@@ -1462,6 +1462,13 @@ class BcBaserHelper extends Helper
     public function css($path, $inline = true, $options = [])
     {
         if (!isset($options['block'])) {
+            // @deprecated 6.0.0 since 5.1.0 後方互換用
+            // >>>
+            if(!$options && is_array($inline) && isset($inline['inline'])) {
+                echo __d('baser_core', 'BcBaserHelper::css() にて、第２引数に配列でオプションを指定することは非推奨です。引数の仕様を見直してください。');
+                $inline = $inline['inline'];
+            }
+            // <<<
             $options['block'] = $inline ? null : true;
         }
         echo $this->BcHtml->css($path, $options);
@@ -2341,32 +2348,26 @@ class BcBaserHelper extends Helper
     /**
      * WebサイトURLを出力する
      *
-     * @param bool ssl （初期値 : false）
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function siteUrl($ssl = false)
+    public function siteUrl()
     {
-        echo $this->getSiteUrl($ssl);
+        echo $this->getSiteUrl();
     }
 
     /**
      * WebサイトURLを取得する
      *
-     * @param bool ssl （初期値 : false）
      * @return string サイト基本設定のWebサイト名
      * @checked
      * @noTodo
      */
-    public function getSiteUrl($ssl = false)
+    public function getSiteUrl()
     {
-        if ($ssl) {
-            return Configure::read('BcEnv.sslUrl');
-        } else {
-            return Configure::read('BcEnv.siteUrl');
-        }
+        return Configure::read('BcEnv.siteUrl');
     }
 
     /**

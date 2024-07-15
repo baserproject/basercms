@@ -144,27 +144,6 @@ class MailContentsTableTest extends BcTestCase
         $this->assertEquals('リダイレクトURLはURLの形式を入力してください。', current($errors['redirect_url']));
     }
 
-    public function testSSLTrue()
-    {
-        Configure::write('BcEnv.sslUrl', 'on');
-        $validator = $this->MailContent->getValidator('default');
-        $errors = $validator->validate([
-            'ssl_on' => ['on'],
-        ]);
-        $this->assertCount(0, $errors);
-    }
-
-    public function testSSLFalse()
-    {
-        Configure::write('BcEnv.sslUrl', '');
-        $validator = $this->MailContent->getValidator('default');
-        $errors = $validator->validate([
-            'ssl_on' => ['on'],
-        ]);
-
-        $this->assertEquals('SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。', current($errors['ssl_on']));
-    }
-
     public function testURLErrors()
     {
         //エラーテスト
@@ -197,25 +176,6 @@ class MailContentsTableTest extends BcTestCase
         ]);
 
         $this->assertCount(0, $errors);
-    }
-
-    /**
-     * SSL用のURLが設定されているかチェックする
-     * @dataProvider checkSslUrlProvider
-     */
-    public function testCheckSslUrl($expected, $sslUrl, $value)
-    {
-        Configure::write('BcEnv.sslUrl', $sslUrl);
-        $this->assertEquals($expected, $this->MailContent->checkSslUrl($value));
-    }
-
-    public static function checkSslUrlProvider()
-    {
-        return [
-            [true, true, 'https://example.com/'],
-            [false, false, 'https://example.com/'],
-            [true, false, null],
-        ];
     }
 
     /**

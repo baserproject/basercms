@@ -75,7 +75,7 @@ class CustomFieldsTable extends AppTable
                     'rule' => ['reserved'],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'システム予約名称のため利用できません。')
-            ]]);
+                ]]);
         $validator
             ->scalar('title')
             ->notEmptyString('title', __d('baser_core', '項目見出しを入力してください。'))
@@ -110,6 +110,20 @@ class CustomFieldsTable extends AppTable
                     'rule' => ['checkWithJson', 'BcCustomContent.email_confirm', "/^[a-z0-9_]+$/"],
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
+                ],
+            ])
+            ->add('meta', [
+                'checkBcCcWysiwygWith' => [
+                    'rule' => ['checkWithJson', 'BcCcWysiwyg.width', "/^[0-9]+[px%]{1,2}+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '横幅はピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。')
+                ],
+            ])
+            ->add('meta', [
+                'checkBcCcWysiwygHeight' => [
+                    'rule' => ['checkWithJson', 'BcCcWysiwyg.height', "/^[0-9]+[px%]{1,2}+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '高さはピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。')
                 ],
             ])
             ->add('meta', [
@@ -169,6 +183,12 @@ class CustomFieldsTable extends AppTable
         }
         if (isset($metaErrors['checkMaxFileSizeWithJson'])) {
             $entity->setError('meta.BcCustomContent.max_file_size', ['checkMaxFileSizeWithJson' => $metaErrors['checkMaxFileSizeWithJson']]);
+        }
+        if (isset($metaErrors['checkBcCcWysiwygWith'])) {
+            $entity->setError('meta.BcCcWysiwyg.width', ['checkBcCcWysiwygWith' => $metaErrors['checkBcCcWysiwygWith']]);
+        }
+        if (isset($metaErrors['checkBcCcWysiwygHeight'])) {
+            $entity->setError('meta.BcCcWysiwyg.height', ['checkBcCcWysiwygHeight' => $metaErrors['checkBcCcWysiwygHeight']]);
         }
     }
 

@@ -242,7 +242,6 @@ class BlogPostsService implements BlogPostsServiceInterface
             'site_id' => null,
             'category' => null,
             'keyword' => null,
-            'author' => null,
             'tag' => null,
             'year' => null,
             'month' => null,
@@ -341,10 +340,6 @@ class BlogPostsService implements BlogPostsServiceInterface
         // キーワード
         if ($params['keyword']) {
             $conditions = $this->createKeywordCondition($conditions, $params['keyword']);
-        }
-        // 作成者
-        if ($params['author']) {
-            $conditions = $this->createAuthorCondition($conditions, $params['author']);
         }
         return $query->where($conditions);
     }
@@ -535,23 +530,6 @@ class BlogPostsService implements BlogPostsServiceInterface
                 if ($day) $conditions["strftime('%d',BlogPosts.posted)"] = sprintf('%02d', $day);
                 break;
         }
-        return $conditions;
-    }
-
-    /**
-     * 作成者の条件を作成する
-     *
-     * @param array $conditions
-     * @param string $author
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function createAuthorCondition($conditions, $author)
-    {
-        $user = $this->BlogPosts->Users->find()->where(['Users.name' => $author])->first();
-        $conditions['BlogPosts.user_id'] = $user->id;
         return $conditions;
     }
 
@@ -809,16 +787,16 @@ class BlogPostsService implements BlogPostsServiceInterface
     /**
      * 著者別記事一覧を取得
      *
-     * @param string $author
+     * @param int $userId
      * @param array $options
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndexByAuthor(string $author, array $options = [])
+    public function getIndexByAuthor(int $userId, array $options = [])
     {
-        $options['author'] = $author;
+        $options['user_id'] = $userId;
         return $this->getIndex($options);
     }
 

@@ -77,8 +77,6 @@ class SiteConfigsTable extends AppTable
      */
     public function validationKeyValue(Validator $validator): Validator
     {
-        $validator->setProvider('siteConfig', 'BaserCore\Model\Validation\SiteConfigValidation');
-
         $validator
             ->scalar('email')
             ->email('email', 255, __d('baser_core', '管理者メールアドレスの形式が不正です。'))
@@ -87,18 +85,6 @@ class SiteConfigsTable extends AppTable
             ->scalar('site_url')
             ->regex('site_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
             ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
-        $validator
-            ->scalar('ssl_url')
-            ->regex('ssl_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
-            ->notEmptyString('ssl_url', __d('baser_core', 'WebサイトURLを入力してください。'));
-        $validator
-            ->scalar('admin_ssl')
-            ->add('admin_ssl', [
-                'adminSSlSslUrlExists' => [
-                    'rule' => 'sslUrlExists',
-                    'provider' => 'siteConfig',
-                    'message' => __d('baser_core', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')
-                ]]);
         return $validator;
     }
 

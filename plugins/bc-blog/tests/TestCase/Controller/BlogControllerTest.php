@@ -28,6 +28,7 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -82,7 +83,12 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_beforeFilter()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $this->BlogController = new BlogController($this->getRequest());
+        $event = new Event('Controller.beforeFilter', $this->BlogController);
+        $this->BlogController->beforeFilter($event);
+        $config = $this->BlogController->FormProtection->getConfig('validate');
+        $this->assertFalse($config);
+
     }
 
     /**
@@ -195,7 +201,7 @@ class BlogControllerTest extends BcTestCase
         $this->assertEquals('release', $vars['blogCategory']->name);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
         //type = 'author'
-        $this->get('/news/archives/author/name');
+        $this->get('/news/archives/author/1');
         $this->assertResponseOk();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('author', $vars['blogArchiveType']);

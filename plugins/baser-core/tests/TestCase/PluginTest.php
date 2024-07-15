@@ -129,8 +129,6 @@ export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
 
 export INSTALL_MODE="false"
 export SITE_URL="https://localhost/"
-export SSL_URL="https://localhost/"
-export ADMIN_SSL="true"
 export ADMIN_PREFIX="admin"
 export BASER_CORE_PREFIX="baser"
 export SQL_LOG="false"

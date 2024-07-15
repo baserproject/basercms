@@ -71,6 +71,7 @@ class SiteValidationTest extends BcTestCase
         $result = $this->SiteValidation->aliasSlashChecks($alias);
         $this->assertEquals($expected, $result);
     }
+
     public static function checkUrlDataProvider()
     {
         return [
@@ -105,4 +106,21 @@ class SiteValidationTest extends BcTestCase
         $contents->delete($content);
     }
 
+    /**
+     * test checkSiteAlias
+     */
+    public function test_checkSiteAlias()
+    {
+        //use_subdomain = 0 の場合、ドット（.） が利用不可、スラッシュは利用可能
+        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 0]]);
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', $result);
+        $result = $this->SiteValidation->checkSiteAlias('/news/new-1', ['data' => ['use_subdomain' => 0]]);
+        $this->assertTrue($result);
+
+        //use_subdomain = 1、かつ、domain_type = 1 と 2 の場合、ドット（.） が利用可能、スラッシュは利用不可
+        $result = $this->SiteValidation->checkSiteAlias('example.com', ['data' => ['use_subdomain' => 1]]);
+        $this->assertTrue($result);
+        $result = $this->SiteValidation->checkSiteAlias('example.com/news', ['data' => ['use_subdomain' => 1]]);
+        $this->assertEquals('サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。', $result);
+    }
 }

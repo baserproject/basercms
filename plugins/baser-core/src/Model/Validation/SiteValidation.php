@@ -63,4 +63,24 @@ class SiteValidation extends Validation
         return !((bool) $query->count());
     }
 
+    /**
+     * サイトエリアスをバリデーション
+     * ドメインタイプが外部ドメインの場合、
+     * 英数、ハイフン、アンダースコア以外スラッシュ（/）・ドット（.）も許容
+     *
+     * @param $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function checkSiteAlias($value, $context)
+    {
+        if ($context['data']['use_subdomain'] == 0 && !BcValidation::alphaNumericPlus($value, '/')) {
+            return 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。';
+        } elseif ($context['data']['use_subdomain'] == 1 && !BcValidation::alphaNumericPlus($value, '.')) {
+            return 'サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。';
+        }
+        return true;
+    }
 }
