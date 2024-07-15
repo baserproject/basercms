@@ -823,10 +823,11 @@ class PluginsService implements PluginsServiceInterface
             unlink(LOGS . 'update.log');
         }
 
-        if (!is_dir(TMP . 'update')) {
-            mkdir(TMP . 'update', 0777);
+        if (is_dir(TMP . 'update')) {
+            (new BcFolder(TMP . 'update'))->delete();
         }
-        if(!is_dir(TMP . 'update' . DS . 'vendor')) {
+        mkdir(TMP . 'update', 0777);
+        if (!is_dir(TMP . 'update' . DS . 'vendor')) {
             $folder = new BcFolder(ROOT . DS . 'vendor');
             $folder->copy(TMP . 'update' . DS . 'vendor');
         }
