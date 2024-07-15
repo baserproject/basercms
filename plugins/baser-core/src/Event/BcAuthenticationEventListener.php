@@ -11,6 +11,7 @@
 
 namespace BaserCore\Event;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\TwoFactorAuthenticationsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -82,7 +83,11 @@ class BcAuthenticationEventListener implements EventListenerInterface
         }
 
         // 認証コード送信
-        $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
+        try {
+            $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
+        } catch (\Exception $e) {
+            throw new HttpException(__d('baser_core', '認証コードの送信に失敗しました。'. $e->getMessage()));
+        }
 
         // 認証コード入力画面にリダイレクト
         $session->write('TwoFactorAuth.' . $prefix, [
