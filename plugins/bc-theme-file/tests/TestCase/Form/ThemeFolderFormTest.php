@@ -26,4 +26,32 @@ class ThemeFolderFormTest extends BcTestCase
         $this->assertEquals('string', $schema->fieldType('name'));
         $this->assertEquals('string', $schema->fieldType('parent'));
     }
+
+    public function test_duplicateThemeFolderEmptyValue(){
+        $rs = $this->ThemeFolderForm->duplicateThemeFolder('');
+        $this->assertTrue($rs);
+    }
+
+    public function test_duplicateThemeFolderWithoutModeCreate(){
+        //mode != create
+        $context['data']['mode'] = 'update';
+        $rs = $this->ThemeFolderForm->duplicateThemeFolder('test', $context);
+        $this->assertTrue($rs);
+    }
+
+    public function test_duplicateThemeFolderAlreadyExists()
+    {
+        $fullPath = BASER_PLUGINS . 'BcThemeSample' . '/templates/';
+        $context = ['data' => ['mode' => 'create', 'parent' => $fullPath]];
+        $result = $this->ThemeFolderForm->duplicateThemeFolder('layout', $context);
+        $this->assertFalse($result);
+    }
+
+    public function test_duplicateThemeFolderDoesNotExist()
+    {
+        $fullPath = BASER_PLUGINS . 'BcThemeSample' . '/templates/';
+        $context = ['data' => ['mode' => 'create', 'parent' => $fullPath]];
+        $result = $this->ThemeFolderForm->duplicateThemeFolder('test', $context);
+        $this->assertTrue($result);
+    }
 }
