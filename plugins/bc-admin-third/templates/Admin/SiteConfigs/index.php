@@ -196,6 +196,24 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
           <?php echo $this->BcAdminForm->error('use_update_notice') ?>
         </td>
       </tr>
+
+      <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
+
+    </table>
+  </div>
+</section>
+
+<section class="bca-section" data-bca-section-type='form-group'>
+  <div class="bca-collapse__action">
+    <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
+            data-bca-target="#formSecuritySettingBody" aria-expanded="false"
+            aria-controls="formAdminSettingBody">
+      <?php echo __d('baser_core', 'セキュリティ') ?>&nbsp;&nbsp;
+      <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+    </button>
+  </div>
+  <div class="bca-collapse" id="formSecuritySettingBody" data-bca-state="">
+    <table class="form-table bca-form-table section" data-bca-table-type="type2">
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('allow_simple_password', __d('baser_core', '簡易なログインパスワード')) ?>
@@ -203,7 +221,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('allow_simple_password', [
             'type' => 'checkbox',
-            'label' => __d('baser_core', 'ログインパスワードの複雑性のチェックを行わない')
+            'label' => __d('baser_core', 'ログインパスワードの複雑度のチェックを行わない')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ユーザーがパスワードを設定する際の文字数と文字種の制限が緩和されます。') ?></div>
@@ -247,7 +265,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         </td>
       </tr>
 
-      <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
+      <?php echo $this->BcAdminForm->dispatchAfterForm('Security') ?>
 
     </table>
   </div>
