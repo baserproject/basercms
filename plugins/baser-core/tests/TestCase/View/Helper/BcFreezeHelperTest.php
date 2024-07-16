@@ -256,9 +256,9 @@ class BcFreezeHelperTest extends BcTestCase
         return [
             [false, 'baser', [], '<textarea name="baser" rows="5"></textarea>'],
             [false, 'baser', ['class' => 'bcclass'], '<textarea name="baser" class="bcclass" rows="5"></textarea>'],
-            [true, 'baser.freezed', [], '<textarea name="baser[freezed]" rows="5">BaserCMS</textarea>BaserCMS'],
-            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<textarea name="baser[freezed]" rows="5">BaserCMS2</textarea>BaserCMS2'],
-            [true, 'baser.freezed', ['class' => 'bcclass'], '<textarea name="baser[freezed]" class="bcclass" rows="5">BaserCMS</textarea>BaserCMS'],
+            [true, 'baser.freezed', [], '<input type="hidden" name="baser[freezed]" value="BaserCMS">BaserCMS'],
+            [true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input type="hidden" name="baser[freezed]" value="BaserCMS2">BaserCMS2'],
+            [true, 'baser.freezed', ['class' => 'bcclass'], '<input type="hidden" name="baser[freezed]" class="bcclass" value="BaserCMS">BaserCMS'],
         ];
     }
 

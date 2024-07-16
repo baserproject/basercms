@@ -21,6 +21,7 @@ use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\Command\SetupInstallCommand;
 use BaserCore\Command\SetupTestCommand;
 use BaserCore\Command\UpdateCommand;
+use BaserCore\Event\BcAuthenticationEventListener;
 use BaserCore\Event\BcContainerEventListener;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
@@ -184,6 +185,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $event->on(new BcModelEventDispatcher());
         $event->on(new BcViewEventDispatcher());
         $event->on(new BcContainerEventListener());
+        $event->on(new BcAuthenticationEventListener());
     }
 
     /**

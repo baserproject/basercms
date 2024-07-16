@@ -20,6 +20,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Utility\Hash;
+use DateTime;
 
 /**
  * Class User
@@ -68,6 +69,7 @@ class User extends EntityAlias
     protected function _setPassword($value)
     {
         if ($value) {
+            $this->password_modified = new DateTime();
             $hasher = new DefaultPasswordHasher();
             return $hasher->hash($value);
         } else {

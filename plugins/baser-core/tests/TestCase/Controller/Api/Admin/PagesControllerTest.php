@@ -148,4 +148,13 @@ class PagesControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $this->assertFalse($this->PagesService->getIndex(['title' => $data['title']])->all()->isEmpty());
     }
+
+    public function test_index()
+    {
+        $this->get('/baser/api/admin/baser-core/pages/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(8, $result->pages);
+    }
 }

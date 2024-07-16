@@ -86,9 +86,8 @@ class SiteConfigsTable extends AppTable
             ->regex('site_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
             ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
         $validator
-            ->scalar('ssl_url')
-            ->regex('ssl_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
-            ->notEmptyString('ssl_url', __d('baser_core', 'WebサイトURLを入力してください。'));
+            ->allowEmptyString('password_reset_days')
+            ->nonNegativeInteger('password_reset_days', __d('baser_core', 'パスワードの再設定日数は0以上の整数を入力してください。'));
         return $validator;
     }
 

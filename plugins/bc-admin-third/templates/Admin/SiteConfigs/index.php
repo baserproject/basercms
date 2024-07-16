@@ -60,21 +60,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         <input type="password" name="dummy-site_url" style="display: none">
         <?php $this->BcAdminForm->unlockFields('dummy-site_url') ?>
         <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom', 'disabled' => !$isWritableEnv]) ?>
-        <br>
-        <input type="password" name="dummy-ssl_url" style="display: none">
-        <?php $this->BcAdminForm->unlockFields('dummy-ssl_url') ?>
-        <?php echo $this->BcAdminForm->control('ssl_url', [
-            'type' => 'text',
-            'size' => 35,
-            'maxlength' => 255,
-            'disabled' => !$isWritableEnv]
-        ) ?> <small>[SSL]</small>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。') ?>
+          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('site_url') ?>
-        <?php echo $this->BcAdminForm->error('ssl_url') ?>
       </td>
     </tr>
 
@@ -191,7 +181,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
           <?php echo $this->BcAdminForm->error('admin_side_banner') ?>
         </td>
       </tr>
-
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_update_notice', __d('baser_core', 'アップデート通知')) ?>
@@ -205,6 +194,56 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
           <div class="bca-helptext"><?php echo __d('baser_core', '管理システム自体のアップデートに関する通知を有効する場合にはチェックを入れます。
           左サイドメニューに更新ボタンが表示され、利用可能なアップデートが存在する場合にバッジが付きます。') ?></div>
           <?php echo $this->BcAdminForm->error('use_update_notice') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('allow_simple_password', __d('baser_core', '簡易なログインパスワード')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('allow_simple_password', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', 'ログインパスワードの複雑性のチェックを行わない')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ユーザーがパスワードを設定する際の文字数と文字種の制限が緩和されます。') ?></div>
+          <?php echo $this->BcAdminForm->error('allow_simple_password') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('password_reset_days', __d('baser_core', 'ログインパスワード強制変更<br>までの日数'), ['escape' => false]) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+
+          <?php echo $this->BcAdminForm->control('password_reset_days', [
+            'type' => 'text',
+            'size' => 10,
+            'maxlength' => 255
+          ]) ?>日
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <?php echo __d(
+              'baser_core',
+              'ユーザーのパスワードが設定した日数以上更新されていない場合に強制的にパスワード再設定画面を表示します。' .
+              '再設定を行うまで管理画面の利用は不可となります。空欄の場合には強制変更は行われません。'
+            ) ?>
+          </div>
+          <?php echo $this->BcAdminForm->error('password_reset_days') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_two_factor_authentication', __d('baser_core', '二段階認証')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('use_two_factor_authentication', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', '利用する')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ログイン時にメールで送信される認証コードの入力が必要になります。') ?></div>
+          <?php echo $this->BcAdminForm->error('use_two_factor_authentication') ?>
         </td>
       </tr>
 

@@ -144,7 +144,6 @@ $this->BcBaser->js('admin/users/form.bundle', false);
               <?php endif; ?>
               <?php echo __d('baser_core', '確認のため２回入力してください。') ?></li>
             <li><?php echo __d('baser_core', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください') ?></li>
-            <li><?php echo __d('baser_core', '最低６文字以上で入力してください') ?></li>
           </ul>
         </div>
         <?php echo $this->BcAdminForm->error('password') ?>

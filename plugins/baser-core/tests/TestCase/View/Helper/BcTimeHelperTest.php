@@ -118,7 +118,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWarekiYear($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWarekiYear($data);
         $this->assertSame($expects, $result, $message);
     }
@@ -147,7 +146,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToSeirekiYear($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToSeirekiYear($data);
         $this->assertSame($expects, $result, $message);
     }

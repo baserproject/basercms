@@ -119,6 +119,37 @@ class CustomFieldsTableTest extends BcTestCase
         $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta']['checkAlphaNumericWithJson']);
         $this->assertEquals('ファイルアップロードサイズ上限は整数値のみで入力してください。', $errors['meta']['checkMaxFileSizeWithJson']);
         $this->assertEquals('拡張子を次の形式のようにカンマ（,）区切りで入力します。', $errors['meta']['checkFileExtWithJson']);
+
+        //Wysiwyg エディタ設定の横幅と高さのバリデーション
+        $request = $this->getRequest('/')->withData('validate', '');
+        Router::setRequest($request);
+
+        //横幅と高さは英文字で入力、return false
+        $errors = $validator->validate([
+            'meta' => '{"BcCcWysiwyg":{"width":"abc","height":"abc"}}'
+        ]);
+        $this->assertEquals('横幅はピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygWith']);
+        $this->assertEquals('高さはピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygHeight']);
+
+        //横幅と高さはひらがなや漢字で入力、return false
+        $errors = $validator->validate([
+            'meta' => '{"BcCcWysiwyg":{"width":"ひらがな","height":"漢字"}}'
+        ]);
+        $this->assertEquals('横幅はピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygWith']);
+        $this->assertEquals('高さはピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygHeight']);
+
+        //横幅と高さはpxと%を入力しない、return false
+        $errors = $validator->validate([
+            'meta' => '{"BcCcWysiwyg":{"width":"100","height":"200"}}'
+        ]);
+        $this->assertEquals('横幅はピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygWith']);
+        $this->assertEquals('高さはピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta']['checkBcCcWysiwygHeight']);
+
+        //return true
+        $errors = $validator->validate([
+            'meta' => '{"BcCcWysiwyg":{"width":"100%","height":"200px"}}'
+        ]);
+        $this->assertArrayNotHasKey('meta', $errors);
     }
 
     /**
@@ -166,6 +197,18 @@ class CustomFieldsTableTest extends BcTestCase
         //エラー情報を正しい状態に戻すことを確認
         $errors = $customFields->getErrors();
         $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta.BcCustomContent.email_confirm']['checkAlphaNumericWithJson']);
+
+        //Wysiwyg エディタ設定テスト    'meta' => '{"BcCcWysiwyg":{"width":"100%","height":"200px"}}'
+        $request = $this->getRequest('/')->withData('validate', '');
+        Router::setRequest($request);
+
+        $customFields = $this->CustomFieldsTable->newEntity(['meta' => ['BcCcWysiwyg' => ['width' => '全角文字', 'height' => 'abc']]]);
+        $result = $this->CustomFieldsTable->dispatchEvent('Model.afterMarshal', ['entity' => $customFields, 'data' => new \ArrayObject(), 'options' => new \ArrayObject()]);
+        $customFields = $result->getData('entity');
+        //エラー情報を正しい状態に戻すことを確認
+        $errors = $customFields->getErrors();
+        $this->assertEquals('横幅はピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta.BcCcWysiwyg.width']['checkBcCcWysiwygWith']);
+        $this->assertEquals('高さはピクセル（px）、または、パーセンテージ（%）で単位も含めて入力してください。', $errors['meta.BcCcWysiwyg.height']['checkBcCcWysiwygHeight']);
     }
 
     /**

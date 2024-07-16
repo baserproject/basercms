@@ -16,7 +16,6 @@ use BaserCore\Model\Table\SitesTable;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -68,20 +67,52 @@ class SitesTableTest extends BcTestCase
         //バリデーションを発生した場合
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
-            'alias' => '漢字'
+            'alias' => '漢字',
+            'use_subdomain' => 0
         ]);
-        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。', current($errors['alias']));
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', current($errors['alias']));
 
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
-            'alias' => str_repeat('a', 51)
+            'alias' => str_repeat('a', 51),
+            'use_subdomain' => 0
         ]);
         $this->assertEquals('エイリアスは50文字以内で入力してください。', current($errors['alias']));
 
         //バリデーションを発生しない場合
         $validator = $this->Sites->getValidator('default');
         $errors = $validator->validate([
-            'alias' => 'aaaaaaa'
+            'alias' => 'aaaaaaa',
+            'use_subdomain' => 0
+        ]);
+        $this->assertArrayNotHasKey('alias', $errors);
+
+        //use_subdomain = 0 の場合、ドット（.） が利用不可、スラッシュは利用可能
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => 'example.com/abc',
+            'use_subdomain' => 0
+        ]);
+        $this->assertEquals('エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）で入力してください。', current($errors['alias']));
+
+        $errors = $validator->validate([
+            'alias' => 'news/new-1',
+            'use_subdomain' => 0
+        ]);
+        $this->assertArrayNotHasKey('alias', $errors);
+
+        //use_subdomain = 1、かつ、domain_type = 1 と 2 の場合、ドット（.） が利用可能、スラッシュは利用不可
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => 'example.com/abc',
+            'use_subdomain' => 1
+        ]);
+        $this->assertEquals('サブドメインや外部ドメインを利用する場合、エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・ドット（.）で入力してください。', current($errors['alias']));
+
+        $validator = $this->Sites->getValidator('default');
+        $errors = $validator->validate([
+            'alias' => 'example.com',
+            'use_subdomain' => 1
         ]);
         $this->assertArrayNotHasKey('alias', $errors);
     }

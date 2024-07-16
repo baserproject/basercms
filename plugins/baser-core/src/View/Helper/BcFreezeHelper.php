@@ -356,7 +356,7 @@ class BcFreezeHelper extends BcFormHelper
                 $value = $this->getSourceValue($field);
             }
             if ($value) {
-                return parent::textarea($fieldName, $options) . nl2br(h($value));
+                return parent::text($fieldName, $options) . nl2br(h($value));
             } else {
                 return "&nbsp;";
             }

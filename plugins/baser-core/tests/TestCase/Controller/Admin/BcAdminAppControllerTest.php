@@ -12,12 +12,14 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Model\Entity\Permission;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -223,4 +225,27 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->assertNull($this->_response);
     }
 
+    /**
+     * test checkPasswordModified
+     */
+    public function testCheckPasswordModified()
+    {
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+
+        $siteConfigsService->setValue('password_reset_days', 1);
+        $this->get('/baser/admin');
+        $this->assertResponseCode(200);
+
+        // パスワード再設定画面にリダイレクト
+        $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        $user = $users->get(1);
+        $user->password_modified = new \DateTime('-2 days');
+        $users->save($user);
+        $this->get('/baser/admin');
+        $this->assertResponseCode(302);
+
+        $siteConfigsService->setValue('password_reset_days', 0);
+        $this->get('/baser/admin');
+        $this->assertResponseCode(200);
+    }
 }
