@@ -210,7 +210,7 @@ class BcFolder
     {
         if(is_array($mode) && !empty($mode['from'])) {
             // @deprecated 6.0.0 since 5.1.0 後方互換用
-            $this->log(__d('baser_core', 'BcFile::delete() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
+            $this->log(__d('baser_core', 'BcFile::copy() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
             $this->path = $mode['from'];
             $mode = 0777;
         }
