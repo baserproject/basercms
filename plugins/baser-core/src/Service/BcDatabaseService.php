@@ -724,7 +724,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             }
             $values = [];
             foreach($record as $key => $value) {
-                if(!$value) {
+                if($value === '') {
                     $values[$head[$key]] = null;
                 } else {
                     $values[$head[$key]] = $value;
