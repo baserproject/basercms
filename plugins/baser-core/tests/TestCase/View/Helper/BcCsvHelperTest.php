@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCsvHelper;
 use BaserCore\View\Helper\BcTextHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -29,8 +30,7 @@ class BcCsvHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $View = new View();
-//        $this->BcCsv = new BcCsvHelper($View);
+        $this->BcCsv = new BcCsvHelper(new View());
     }
 
     /**
@@ -245,6 +245,43 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertStringEqualsFile($fileName, $expected);
 
         unlink($fileName);
+    }
+
+    public function test_perseValueWithNonArrayData()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [''],);
+        $this->assertFalse($rs);
+    }
+
+    public function test_perseValueWithStringValues()
+    {
+        $data = [
+            'key1' => 'value1,value2',
+            'key2' => 'value3"with"quotes'
+        ];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = "\"value1、value2\",\"value3\"\"with\"\"quotes\"\n";
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function test_perseValueWithArrayValues()
+    {
+        $data = [
+            'key1' => ['value1', 'value2'],
+            'key2' => 'value3'
+        ];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = "\"value1|value2\",\"value3\"\n";
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function test_perseValueWithDifferentEncoding()
+    {
+        $data = ['a', 'b', 'c'];
+        $this->BcCsv->encoding = 'UTF-8';
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = '"a","b","c"' . "\n";
+        $this->assertEquals($expected, $rs);
     }
 
 }
