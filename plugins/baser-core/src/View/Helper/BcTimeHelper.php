@@ -244,6 +244,7 @@ class BcTimeHelper extends TimeHelper
      * @return string 和暦データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertToWareki($date)
     {
