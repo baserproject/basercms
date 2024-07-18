@@ -243,6 +243,7 @@ class BcCsvHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function save($fileName)
     {
