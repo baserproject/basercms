@@ -439,7 +439,7 @@ class BcPlugin extends BasePlugin
 
         // CSRFトークンの場合は高速化のためここで処理を終了
         $request = Router::getRequest();
-        if(!$request->is('requestview')) {
+        if($request && !$request->is('requestview')) {
             parent::routes($routes);
             return;
         }
