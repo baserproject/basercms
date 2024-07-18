@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCsvHelper;
 use BaserCore\View\Helper\BcTextHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -29,8 +30,7 @@ class BcCsvHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $View = new View();
-//        $this->BcCsv = new BcCsvHelper($View);
+        $this->BcCsv = new BcCsvHelper(new View());
     }
 
     /**
@@ -245,6 +245,35 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertStringEqualsFile($fileName, $expected);
 
         unlink($fileName);
+    }
+
+
+    public function test_perseKeyWithNonArray()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', ['']);
+        $this->assertFalse($rs);
+    }
+
+    public function test_perseKeyWithEmptyArray()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [[]]);
+        $this->assertEquals( "\n", $rs);
+    }
+
+    public function test_perseKeyWithSimpleArray()
+    {
+        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
+        $this->assertEquals('"a","b","c"' . "\n", $rs);
+    }
+
+    public function test_perseKeyWithDifferentEncoding()
+    {
+        $this->BcCsv->encoding = 'ISO-8859-1';
+        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
+        $expectedResult = mb_convert_encoding('"a","b","c"' . "\n", 'ISO-8859-1', 'UTF-8');
+        $this->assertEquals($expectedResult, $rs);
     }
 
 }
