@@ -161,7 +161,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         // CSRFトークンの場合は高速化のためここで処理を終了
-        if(preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
+        if(!empty($_SERVER['REQUEST_URI']) && preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
             return;
         }
 
