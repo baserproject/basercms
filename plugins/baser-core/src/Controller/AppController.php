@@ -74,6 +74,9 @@ class AppController extends BaseController
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
 
+        // CSRFトークンの場合は高速化のためここで処理を終了
+        if(!$request->is('requestview')) return;
+
         $request->getSession()->start();
 
         // インストールされていない場合、トップページにリダイレクトする

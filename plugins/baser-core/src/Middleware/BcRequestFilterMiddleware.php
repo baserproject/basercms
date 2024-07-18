@@ -46,11 +46,12 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        if(BcUtil::isInstalled()) {
+        $request = $this->addDetectors($request);
+
+        if(BcUtil::isInstalled() && $request->is('requestview')) {
             $response = $this->redirectIfIsDeviceFile($request);
             if($response) return $response;
         }
-        $request = $this->addDetectors($request);
 
         /**
          * CGIモード等PHPでJWT認証で必要なAuthorizationヘッダーが取得出来ないできない場合、REDIRECT_HTTP_AUTHORIZATION環境変数より取得する
