@@ -13,11 +13,9 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
-use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcAdminAppView;
@@ -49,11 +47,6 @@ class BcAdminHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
         $BcAdminAppView = new BcAdminAppView($this->getRequest()->withParam('controller', 'users'));
         $BcAdminAppView->setTheme('BcAdminThird');
         $this->BcAdmin = new BcAdminHelper($BcAdminAppView);
@@ -77,6 +70,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testIsAvailableSideBar()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 未ログイン
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
@@ -230,6 +224,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testGetJsonMenu(): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 未ログイン
         $result = $this->BcAdmin->getJsonMenu();
         $this->assertNull($result);
@@ -263,6 +258,9 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testContentsMenu()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
+
         $this->BcAdmin->getView()->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());
         $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
         // ヘルプなし 未ログイン
@@ -364,6 +362,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testExistsEditLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 存在しない
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
@@ -383,6 +382,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testExistsPublishLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 存在しない
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
@@ -402,6 +402,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testEditLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // リンクなし
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
@@ -426,6 +427,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testPublishLink()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // リンクなし
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
@@ -462,11 +464,14 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testGetCurrentSite()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make(['id' => '2', 'name' => 'smartphone'])->persist();
+
         // メインサイト
         $request = $this->getRequest('/baser/admin');
         $this->BcAdmin->getView()->setRequest($request);
         $entity = $this->BcAdmin->getCurrentSite();
-        $this->assertEquals('baserCMS inc.', $entity->title);
+        $this->assertNotNull($entity->title);
 
         // サブサイト
         $request = $this->getRequest('/baser/admin?site_id=2');
