@@ -188,7 +188,6 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function testDownload($fileName, $debug, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // csvのデータを作成
         $modelName = 'sample';
         $data = [
