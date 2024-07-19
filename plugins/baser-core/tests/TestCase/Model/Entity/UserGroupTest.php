@@ -2,6 +2,7 @@
 
 namespace BaserCore\Test\TestCase\Model\Entity;
 
+use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -83,7 +84,15 @@ class UserGroupTest extends BcTestCase
 
     public function testGetAuthPrefixSettings()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+
+        $userGroup = UserGroupFactory::get(1);
+        $rs = $userGroup->getAuthPrefixSettings('Admin');
+        $this->assertEquals([], $rs);
+
+        $userGroup = UserGroupFactory::get(2);
+        $rs = $userGroup->getAuthPrefixSettings('Admin');
+        $this->assertEquals(['type' => 2], $rs);
     }
 
     public function test_getAuthPrefixSetting()
