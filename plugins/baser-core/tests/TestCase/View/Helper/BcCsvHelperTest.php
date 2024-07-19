@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCsvHelper;
 use BaserCore\View\Helper\BcTextHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -29,8 +30,7 @@ class BcCsvHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $View = new View();
-//        $this->BcCsv = new BcCsvHelper($View);
+        $this->BcCsv = new BcCsvHelper(new View());
     }
 
     /**
@@ -55,7 +55,6 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function testAddModelData($modelName, $data, $expectedHead, $expectedBody)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcCsv->addModelData($modelName, $data);
         $this->assertEquals($expectedHead, $this->BcCsv->csvHead);
         $body = '';
