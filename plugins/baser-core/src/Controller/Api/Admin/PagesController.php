@@ -59,6 +59,7 @@ class PagesController extends BcAdminApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(PagesServiceInterface $service, $id)
     {
