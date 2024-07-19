@@ -11,10 +11,8 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAuthHelper;
@@ -38,10 +36,6 @@ class BcAuthHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
         // adminの場合
         $BcAdminAppView = new BcAdminAppView();
         $BcAdminAppView->setRequest($this->getRequest()->withParam('prefix', 'Admin'));
@@ -67,6 +61,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentPrefix()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // adminの場合
         $result = $this->BcAuth->getCurrentPrefix();
         $this->assertEquals('Admin', $result);
@@ -81,6 +76,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetPrefixSetting()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 管理画面の場合
         $result = $this->BcAuth->getPrefixSetting('Admin');
         $this->assertEquals($result['name'], "管理システム");
@@ -94,6 +90,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentPrefixSetting()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 管理画面の場合
         $result = $this->BcAuth->getCurrentPrefixSetting();
         $this->assertEquals($result['name'], "管理システム");
@@ -111,6 +108,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetLoginUrl()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // 管理画面の場合
         $this->assertEquals('/baser/admin/baser-core/users/login', $this->BcAuth->getLoginUrl('Admin'));
         // 設定がない場合
@@ -123,6 +121,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentLoginUrl()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // Adminの場合
         $expected = "/baser/admin/baser-core/users/login";
         $result = $this->BcAuth->getCurrentLoginUrl();
@@ -142,6 +141,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentUserPrefixes()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // TODO getCurrentUserPrefixSettings() の実装が完了したら別パターンのテストを追加する
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $result = $this->BcAuth->getCurrentUserPrefixes();
@@ -154,6 +154,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testIsCurrentUserAdminAvailable()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $result = $this->BcAuth->isCurrentUserAdminAvailable();
         $this->assertTrue($result);
@@ -165,6 +166,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentName()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // prefix(admin)の場合
         $expected = Configure::read('BcPrefixAuth.Admin')['name'];
         $result = $this->BcAuth->getCurrentName();
@@ -177,6 +179,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testIsAdminLogin()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // ログインしない場合;
         $result = $this->BcAuth->isAdminLogin();
         $this->assertFalse($result);
@@ -191,6 +194,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetLogoutUrl()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // Adminの場合
         $this->assertEquals([
             'prefix' => 'Admin',
@@ -208,6 +212,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentLogoutUrl()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // Adminの場合
         $expected = "/baser/admin/baser-core/users/logout";
         $result = $this->BcAuth->getCurrentLogoutUrl();
@@ -230,6 +235,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentLoginRedirectUrl()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // Adminの場合
         $expected = "/baser/admin";
         $result = $this->BcAuth->getCurrentLoginRedirectUrl();
@@ -247,6 +253,8 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testGetCurrentLoginUser()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
         $ids = [1, 2];
         foreach($ids as $id) {
             $expected = $this->getUser($id);
@@ -264,6 +272,8 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testIsAdminUser($id, $expected)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
         if ($id) {
             $this->loginAdmin($this->getRequest('/baser/admin'), $id);
         }
@@ -289,6 +299,7 @@ class BcAuthHelperTest extends BcTestCase
      */
     public function testIsAgentUser()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         // AuthAgent.Userが書き込まれてない場合
         $result = $this->BcAuth->isAgentUser();
         $this->assertFalse($result);
