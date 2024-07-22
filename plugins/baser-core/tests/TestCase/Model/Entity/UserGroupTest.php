@@ -88,6 +88,16 @@ class UserGroupTest extends BcTestCase
 
     public function test_getAuthPrefixSetting()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+
+        //the with auth_prefix_settings is empty
+        $userGroup = UserGroupFactory::get(1);
+        $rs = $userGroup->getAuthPrefixSetting('Admin', 'setting');
+        $this->assertEmpty($rs);
+        
+        //the with auth_prefix_settings is not empty
+        $userGroup = UserGroupFactory::get(2);
+        $rs = $userGroup->getAuthPrefixSetting('Admin', 'type');
+        $this->assertEquals('2', $rs);
     }
 }
