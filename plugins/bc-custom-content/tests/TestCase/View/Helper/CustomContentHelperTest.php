@@ -126,7 +126,15 @@ class CustomContentHelperTest extends BcTestCase
      */
     public function test_getDescription()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //with description is null
+        $customContent = CustomContentFactory::make(['description' => null])->getEntity();
+        $rs = $this->CustomContentHelper->getDescription($customContent);
+        $this->assertEquals('', $rs);
+
+        //with description is not null
+        $customContent = CustomContentFactory::make(['description' => 'test'])->getEntity();
+        $rs = $this->CustomContentHelper->getDescription($customContent);
+        $this->assertEquals('test', $rs);
     }
 
     /**
