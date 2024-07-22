@@ -199,6 +199,7 @@ class BcCsvHelper extends Helper
      * @return void|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download($fileName, $debug = false)
     {
@@ -243,6 +244,7 @@ class BcCsvHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function save($fileName)
     {

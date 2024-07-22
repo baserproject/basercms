@@ -137,8 +137,8 @@ class PluginsServiceTest extends BcTestCase
         }
         // フォルダはあるがインストールできない場合
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
+        $folder = new BcFolder($pluginPath);
+        $folder->create();
         try {
             $this->assertNull($this->Plugins->install('BcTest', true, 'test'));
         } catch (\Exception $e) {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class TwoFactorAuthentications extends AbstractMigration
+class TwoFactorAuthentications extends BcMigration
 {
     public function up(): void
     {

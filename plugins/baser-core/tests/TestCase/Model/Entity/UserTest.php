@@ -183,7 +183,7 @@ class UserTest extends BcTestCase
 
         //user group is not empty
         $user_groups = $this->User->getAuthPrefixes();
-        $this->assertEquals([0 => 'Admin', 1 => ' Api/Admin'], $user_groups);
+        $this->assertEquals([0 => 'Admin', 1 => 'Api/Admin'], $user_groups);
     }
 
     public function test_isSuper()

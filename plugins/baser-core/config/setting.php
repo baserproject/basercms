@@ -283,6 +283,7 @@ return [
             'BcMail',
             'BcThemeConfig',
             'BcWidgetArea',
+            'BcUploader',
         ],
 
         /**

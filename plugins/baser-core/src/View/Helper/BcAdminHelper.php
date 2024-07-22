@@ -327,6 +327,7 @@ class BcAdminHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitle(): string
     {
@@ -526,6 +527,7 @@ class BcAdminHelper extends Helper
      * @return false|Site
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCurrentSite()
     {

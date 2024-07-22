@@ -11,6 +11,7 @@
 namespace BcThemeFile\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 
 /**
  * Class ThemeFileTest
@@ -69,7 +70,6 @@ class ThemeFileTest extends BcTestCase
     public function testDuplicateThemeFile()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $themeFile = new File(TMP . 'test/theme-file.php', true);
         $this->ThemeFile->create([
             'ThemeFile' => [
                 'name' => 'another-theme-file',
@@ -90,8 +90,7 @@ class ThemeFileTest extends BcTestCase
         ]);
         $this->assertFalse($this->ThemeFile->validates(), 'テーマファイルが重複しているにも関わらずバリデーションに成功しています。');
 
-        $themeFile->delete();
-        $themeFile->close();
+        (new BcFile(TMP . 'test/theme-file.php'))->delete();
     }
 
 }

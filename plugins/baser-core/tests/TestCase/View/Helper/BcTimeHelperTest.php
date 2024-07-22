@@ -203,7 +203,6 @@ class BcTimeHelperTest extends BcTestCase
      */
     public function testConvertToWareki($data, $expects, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Helper->convertToWareki($data);
         $this->assertSame($expects, $result, $message);
     }
