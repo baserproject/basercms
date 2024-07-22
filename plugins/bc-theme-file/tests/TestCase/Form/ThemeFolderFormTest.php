@@ -55,10 +55,14 @@ class ThemeFolderFormTest extends BcTestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * test validationDefault
+     */
     public function test_validationDefault()
     {
         $validator = $this->ThemeFolderForm->getValidator('default');
 
+        //nameNotEmpty
         $errors = $validator->validate(['name' => '']);
         $this->assertEquals('フォルダ名を入力してください。', current($errors['name']));
 
