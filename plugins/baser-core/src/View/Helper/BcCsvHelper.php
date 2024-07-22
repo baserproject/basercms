@@ -119,6 +119,7 @@ class BcCsvHelper extends Helper
      * @return $csv
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addModelDatas($modelName, $datas)
     {
