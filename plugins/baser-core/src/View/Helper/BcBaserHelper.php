@@ -525,6 +525,7 @@ class BcBaserHelper extends Helper
      * @return true
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function isLinkEnabled(string $link): bool
     {
