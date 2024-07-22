@@ -437,6 +437,13 @@ class BcPlugin extends BasePlugin
             $routes = $this->frontPageRouting($routes, $plugin);
         }
 
+        // CSRFトークンの場合は高速化のためここで処理を終了
+        $request = Router::getRequest();
+        if($request && !$request->is('requestview')) {
+            parent::routes($routes);
+            return;
+        }
+
         // プレフィックスルーティング
         $routes = $this->prefixRouting($routes, $plugin);
 

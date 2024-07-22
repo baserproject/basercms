@@ -98,6 +98,7 @@ class ThemeFolderForm extends Form
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function duplicateThemeFolder($value, $context = null)
     {

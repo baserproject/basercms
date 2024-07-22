@@ -258,6 +258,7 @@ class BcAuthHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAdminUser(): bool
     {
