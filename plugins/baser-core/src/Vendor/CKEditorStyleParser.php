@@ -123,6 +123,7 @@ class CKEditorStyleParser
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     private static function readString($target, $body, $size, &$i)
     {

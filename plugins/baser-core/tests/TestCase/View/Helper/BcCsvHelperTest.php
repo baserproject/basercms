@@ -225,8 +225,6 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function testSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         // csvのデータを作成
         $modelName = 'sample';
         $data = [
@@ -242,6 +240,9 @@ class BcCsvHelperTest extends BcTestCase
         $expected = '"head1","head2","head3"' . "\n" .
             '"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n";
         $this->BcCsv->save($fileName);
+
+        $this->assertFileExists($fileName);
+
         $this->assertStringEqualsFile($fileName, $expected);
 
         unlink($fileName);

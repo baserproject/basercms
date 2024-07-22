@@ -150,19 +150,27 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             Log::setConfig(Configure::consume('Log'));
         }
 
+
+
         /**
          * プラグインロード
          */
+        if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
+            // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
+            \Cake\Core\Plugin::getCollection()->remove('DebugKit');
+        }
+
+        // CSRFトークンの場合は高速化のためここで処理を終了
+        if(!empty($_SERVER['REQUEST_URI']) && preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
         if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
         $app->addPlugin('Authentication');
         $app->addPlugin('Migrations');
 
         $this->addTheme($app);
 
-        if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
-            // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
-            \Cake\Core\Plugin::getCollection()->remove('DebugKit');
-        }
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
             foreach($plugins as $plugin) {
