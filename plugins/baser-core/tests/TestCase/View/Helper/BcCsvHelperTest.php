@@ -246,4 +246,61 @@ class BcCsvHelperTest extends BcTestCase
 
         unlink($fileName);
     }
+
+    /**
+     * test _perseValue
+     * with non array data
+     */
+    public function test_perseValueWithNonArrayData()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [''],);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * @param array $data
+     * test _perseValue
+     * with string values
+     */
+    public function test_perseValueWithStringValues()
+    {
+        $data = [
+            'key1' => 'value1,value2',
+            'key2' => 'value3"with"quotes'
+        ];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = "\"value1、value2\",\"value3\"\"with\"\"quotes\"\n";
+        $this->assertEquals($expected, $rs);
+    }
+
+    /**
+     * @param array $data
+     * test _perseValue
+     * with array values
+     */
+    public function test_perseValueWithArrayValues()
+    {
+        $data = [
+            'key1' => ['value1', 'value2'],
+            'key2' => 'value3'
+        ];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = "\"value1|value2\",\"value3\"\n";
+        $this->assertEquals($expected, $rs);
+    }
+
+    /**
+     * @param array $data
+     * test _perseValue
+     * with different encoding
+     */
+    public function test_perseValueWithDifferentEncoding()
+    {
+        $data = ['a', 'b', 'c'];
+        $this->BcCsv->encoding = 'UTF-8';
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
+        $expected = '"a","b","c"' . "\n";
+        $this->assertEquals($expected, $rs);
+    }
+
 }
