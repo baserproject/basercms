@@ -248,19 +248,31 @@ class BcCsvHelperTest extends BcTestCase
         unlink($fileName);
     }
 
-
+    /**
+     * test _perseKey
+     * with non-array
+     */
     public function test_perseKeyWithNonArray()
     {
         $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', ['']);
         $this->assertFalse($rs);
     }
 
+    /**
+     * test _perseKey
+     * with empty array
+     */
     public function test_perseKeyWithEmptyArray()
     {
         $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [[]]);
         $this->assertEquals( "\n", $rs);
     }
 
+    /**
+     * @param array $data
+     * test _perseKey
+     * with array
+     */
     public function test_perseKeyWithSimpleArray()
     {
         $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
@@ -268,6 +280,11 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertEquals('"a","b","c"' . "\n", $rs);
     }
 
+    /**
+     * @param array $data
+     * test _perseKey
+     * with array with different encoding
+     */
     public function test_perseKeyWithDifferentEncoding()
     {
         $this->BcCsv->encoding = 'ISO-8859-1';
@@ -277,4 +294,5 @@ class BcCsvHelperTest extends BcTestCase
         $this->assertEquals($expectedResult, $rs);
     }
 
+    
 }
