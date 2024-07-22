@@ -647,26 +647,29 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
 
-        $topTitle = '｜baserCMS inc. [デモ]';
-        $this->BcBaser->request = $this->_getRequest('/about');
         // カテゴリがない場合
         $this->BcBaser->setTitle('会社案内');
-        $this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社案内｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
 
         // カテゴリがある場合
-        $this->BcBaser->request = $this->_getRequest('/service/service2');
-        $this->BcBaser->_View->set('crumbs', [
-            ['name' => '会社案内', 'url' => '/service/index'],
-            ['name' => '会社データ', 'url' => '/service/data']
-        ]);
+        $request = $this->getRequest('/about');
+        $view = new View($request);
+        $view->set(['crumbs' => [
+            ['name' => '会社案内', 'url' => '/company/index'],
+            ['name' => '会社データ', 'url' => '/company/data']
+        ]]);
+
+        $this->BcBaser = new BcBaserHelper($view);
         $this->BcBaser->setTitle('会社沿革');
-        $this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社沿革｜会社データ｜会社案内｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
 
         // カテゴリは存在するが、カテゴリの表示をオフにした場合
         $this->BcBaser->setTitle('会社沿革', false);
-        $this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社沿革｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
     }
 
     /**
