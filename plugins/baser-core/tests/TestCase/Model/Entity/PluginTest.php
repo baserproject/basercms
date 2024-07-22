@@ -4,6 +4,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 
 class PluginTest extends BcTestCase
 {
@@ -71,6 +72,23 @@ class PluginTest extends BcTestCase
         //with type = 'Plugin'
         $this->Plugin->type = 'Plugin';
         $this->assertFalse($this->Plugin->isTheme());
+    }
+
+    public function testIsCorePlugin()
+    {
+        //with type = 'CorePlugin' and name in Configure::read('BcApp.corePlugins')
+        $this->Plugin->type = 'CorePlugin';
+        $this->Plugin->name = 'BcContentLink';
+        $this->assertTrue($this->Plugin->isCorePlugin());
+
+        //with type = 'CorePlugin' and name not in Configure::read('BcApp.corePlugins')
+        $this->Plugin->type = 'CorePlugin';
+        $this->Plugin->name = 'notCorePlugin';
+        $this->assertFalse($this->Plugin->isCorePlugin());
+
+        //with type = 'Plugin'
+        $this->Plugin->type = 'Plugin';
+        $this->assertFalse($this->Plugin->isCorePlugin());
     }
 
 }
