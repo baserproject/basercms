@@ -12,7 +12,6 @@
 namespace BcSearchIndex\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
-use BaserCore\Test\Scenario\SearchIndexesSearchScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
 use BcSearchIndex\Service\SearchIndexesService;
