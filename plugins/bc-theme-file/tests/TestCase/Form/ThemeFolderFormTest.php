@@ -54,4 +54,38 @@ class ThemeFolderFormTest extends BcTestCase
         $result = $this->ThemeFolderForm->duplicateThemeFolder('test', $context);
         $this->assertTrue($result);
     }
+
+    /**
+     * test validationDefault
+     */
+    public function test_validationDefault()
+    {
+        $validator = $this->ThemeFolderForm->getValidator('default');
+
+        //nameNotEmpty
+        $errors = $validator->validate(['name' => '']);
+        $this->assertEquals('フォルダ名を入力してください。', current($errors['name']));
+
+        $errors = $validator->validate([]);
+        $this->assertEquals('フォルダ名を入力してください。', current($errors['name']));
+
+        //duplicateThemeFolder
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/';
+        $postData = [
+            'mode' => 'create',
+            'parent' => $fullpath,
+            'name' => 'layout',
+        ];
+        $errors = $validator->validate($postData);
+        $this->assertEquals('入力されたフォルダ名は、同一階層に既に存在します。', current($errors['name']));
+
+        //nameAlphaNumericPlus
+        $postData = [
+            'mode' => 'create',
+            'parent' => 'layout',
+            'name' => 't e s t',
+        ];
+        $errors = $validator->validate($postData);
+        $this->assertEquals('フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。', current($errors['name']));
+    }
 }
