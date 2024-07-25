@@ -162,6 +162,7 @@ class SearchIndexesController extends BcAdminApiController
      * @param SearchIndexesServiceInterface $searchIndexesService
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(SearchIndexesServiceInterface $searchIndexesService)
     {

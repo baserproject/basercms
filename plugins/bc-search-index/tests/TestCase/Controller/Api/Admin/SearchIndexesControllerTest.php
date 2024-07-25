@@ -12,6 +12,7 @@
 namespace BcSearchIndex\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SearchIndexesSearchScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
 use BcSearchIndex\Service\SearchIndexesService;
@@ -118,6 +119,23 @@ class SearchIndexesControllerTest extends BcTestCase
 
         $this->get('/baser/api/admin/bc-search-index/search_indexes/reconstruct.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
+    }
+
+    /**
+     * test index
+     */
+    public function testIndex()
+    {
+        //データ生成
+        SearchIndexFactory::make(['site_id' => 4, 'title' => '会社案内', 'detail' => 'baserCMS inc.',])->persist();
+
+        //APIを呼ぶ
+        $this->get('/baser/api/admin/bc-search-index/search_indexes.json?keyword=inc&s=4&token=' . $this->accessToken);
+
+        //戻り値を確認
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
     }
 
     /**
