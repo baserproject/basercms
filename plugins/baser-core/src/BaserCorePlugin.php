@@ -401,6 +401,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isRequiredAuthentication(array $authSetting)
     {
