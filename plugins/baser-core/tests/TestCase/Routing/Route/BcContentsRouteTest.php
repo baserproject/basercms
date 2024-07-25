@@ -211,4 +211,70 @@ class BcContentsRouteTest extends BcTestCase
         ];
     }
 
+    /**
+     * test _getContentTypeByParams
+     */
+    public function test_getContentTypeByParams()
+    {
+        // Khởi tạo hoặc cấu hình đối tượng nếu cần thiết
+        Configure::write('BcContents.items', [
+            'YourPlugin' => [
+                'item1' => [
+                    'routes' => [
+                        'view' => [
+                            'controller' => 'YourController',
+                            'action' => 'view'
+                        ]
+                    ]
+                ],
+                'item2' => [
+                    'routes' => [
+                        'view' => [
+                            'controller' => 'YourController',
+                            'action' => 'otherAction'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        //testGetContentTypeByParamsWithNoMatch
+        $params = [
+            'plugin' => 'your_plugin',
+            'controller' => 'NonExistentController',
+            'action' => 'nonExistentAction'
+        ];
+
+        $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
+        $this->assertFalse($result);
+
+        //testGetContentTypeByParamsWithNoPlugin
+        $params = [
+            'plugin' => 'non_existent_plugin',
+            'controller' => 'YourController',
+            'action' => 'view'
+        ];
+
+        $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
+        $this->assertFalse($result);
+
+        //testGetContentTypeByParamsWithAction
+        $params = [
+            'plugin' => 'your_plugin',
+            'controller' => 'YourController',
+            'action' => 'view'
+        ];
+
+        $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
+        $this->assertEquals('item1', $result);
+
+        //testGetContentTypeByParamsWithoutAction
+        $params = [
+            'plugin' => 'your_plugin',
+            'controller' => 'YourController'
+        ];
+
+        $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, false]);
+        $this->assertEquals('item1', $result);
+    }
 }

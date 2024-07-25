@@ -358,6 +358,7 @@ class BcContentsRoute extends Route
      * @return bool|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getContentTypeByParams($params, $useAction = true)
     {
