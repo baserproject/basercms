@@ -86,6 +86,9 @@ class UserGroupTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test getAuthPrefixSetting
+     */
     public function test_getAuthPrefixSetting()
     {
         $this->loadFixtureScenario(UserGroupsScenario::class);
