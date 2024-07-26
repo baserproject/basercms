@@ -166,6 +166,7 @@ class ThemesController extends BcAdminApiController
      * @param ThemesServiceInterface $service
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function load_default_data(ThemesServiceInterface $service)
     {
