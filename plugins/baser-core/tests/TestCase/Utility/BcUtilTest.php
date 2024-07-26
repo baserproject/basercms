@@ -644,11 +644,12 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsTest()
     {
+        $_SERVER['argv'][0] = "vendor/bin/php";
+        $this->assertFalse(BcUtil::isTest());
+
         $_SERVER['argv'][0] = "vendor/bin/phpunit";
         $this->assertTrue(BcUtil::isTest());
 
-        $_SERVER['argv'][0] = "vendor/bin/php";
-        $this->assertFalse(BcUtil::isTest());
     }
 
     /**
