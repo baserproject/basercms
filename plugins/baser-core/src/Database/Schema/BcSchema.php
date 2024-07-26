@@ -66,6 +66,7 @@ class BcSchema extends TableSchema
      * @param string $table
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setTable(string $table)
     {
