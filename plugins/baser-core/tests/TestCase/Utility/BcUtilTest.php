@@ -640,6 +640,18 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test isTest
+     */
+    public function testIsTest()
+    {
+        $_SERVER['argv'][0] = "vendor/bin/phpunit";
+        $this->assertTrue(BcUtil::isTest());
+
+        $_SERVER['argv'][0] = "vendor/bin/php";
+        $this->assertFalse(BcUtil::isTest());
+    }
+
+    /**
      * レイアウトテンプレートのリストを取得する
      */
     public function testGetTemplateList()
