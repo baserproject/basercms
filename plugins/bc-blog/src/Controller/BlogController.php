@@ -109,7 +109,7 @@ class BlogController extends BlogFrontAppController
                 'sort' => 'BlogPosts.posted',
                 'direction' => $blogContent->list_direction
             ], $this->getRequest()->getQueryParams())));
-            $entities = $this->paginate($blogPostsService->getIndex([
+            $queryParams = [
                 'blog_content_id' => $blogContentId,
                 'limit' => $listCount,
                 'status' => 'publish',
@@ -120,7 +120,14 @@ class BlogController extends BlogFrontAppController
                     'BlogContents' => ['Contents'],
                     'BlogComments',
                     'BlogTags',
-            ]]));
+            ]];
+
+            // EVENT Blog.beforeQueryParams
+            $event = $this->dispatchLayerEvent('beforeQueryParams', [
+                'data' => $queryParams
+            ]);
+
+            $entities = $this->paginate($blogPostsService->getIndex($queryParams));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index']);
         }
