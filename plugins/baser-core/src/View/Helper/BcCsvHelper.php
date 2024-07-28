@@ -141,6 +141,7 @@ class BcCsvHelper extends Helper
      * @return string|false $head
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _perseKey($data)
     {

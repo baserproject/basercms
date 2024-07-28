@@ -246,4 +246,50 @@ class BcCsvHelperTest extends BcTestCase
 
         unlink($fileName);
     }
+
+    /**
+     * test _perseKey
+     * with non-array
+     */
+    public function test_perseKeyWithNonArray()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', ['']);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test _perseKey
+     * with empty array
+     */
+    public function test_perseKeyWithEmptyArray()
+    {
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [[]]);
+        $this->assertEquals( "\n", $rs);
+    }
+
+    /**
+     * @param array $data
+     * test _perseKey
+     * with array
+     */
+    public function test_perseKeyWithSimpleArray()
+    {
+        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
+        $this->assertEquals('"a","b","c"' . "\n", $rs);
+    }
+
+    /**
+     * @param array $data
+     * test _perseKey
+     * with array with different encoding
+     */
+    public function test_perseKeyWithDifferentEncoding()
+    {
+        $this->BcCsv->encoding = 'ISO-8859-1';
+        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
+        $expectedResult = mb_convert_encoding('"a","b","c"' . "\n", 'ISO-8859-1', 'UTF-8');
+        $this->assertEquals($expectedResult, $rs);
+    }
 }
