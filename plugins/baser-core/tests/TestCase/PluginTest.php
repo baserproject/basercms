@@ -270,4 +270,56 @@ return [];
         ], Configure::read('App.paths.templates'));
     }
 
+    /**
+     * test isRequiredAuthentication
+     * with empty auth  setting
+     */
+    public function test_isRequiredAuthenticationWithEmptyAuthSetting()
+    {
+        $rs = $this->Plugin->isRequiredAuthentication([]);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test isRequiredAuthentication
+     * with empty auth setting type
+     */
+    public function test_isRequiredAuthenticationWithEmptyAuthSettingType()
+    {
+        $rs = $this->Plugin->isRequiredAuthentication(['type' => '']);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test isRequiredAuthentication
+     * with disabled
+     */
+    public function test_isRequiredAuthenticationWithDisabled()
+    {
+        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType', 'disabled' => true]);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test isRequiredAuthentication
+     * with not installed
+     */
+    public function test_isRequiredAuthenticationWhenNotInstalled()
+    {
+        Configure::write('BcEnv.isInstalled', false);
+        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType']);
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test isRequiredAuthentication
+     * with pass all
+     */
+    public function test_isRequiredAuthentication()
+    {
+        Configure::write('BcEnv.isInstalled', true);
+        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType']);
+        $this->assertTrue($rs);
+    }
+
 }
