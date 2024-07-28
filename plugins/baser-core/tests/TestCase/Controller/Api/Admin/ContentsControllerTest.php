@@ -420,4 +420,15 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseCode(404);
     }
 
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        $this->get('/baser/api/admin/baser-core/contents/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(20, $result->contents);
+    }
 }
