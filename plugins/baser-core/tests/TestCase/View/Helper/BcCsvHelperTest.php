@@ -218,60 +218,49 @@ class BcCsvHelperTest extends BcTestCase
 
     /**
      * test _perseValue
-     * with non array data
+     * @param $input
+     * @param $expected
+     * @param null $encoding
+     * @dataProvider perseValueDataProvider
      */
-    public function test_perseValueWithNonArrayData()
+    public function test_perseValue($input, $expected, $encoding = null)
     {
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [''],);
-        $this->assertFalse($rs);
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$input],);
+        $this->assertEquals($expected, $rs);
     }
 
-    /**
-     * @param array $data
-     * test _perseValue
-     * with string values
-     */
-    public function test_perseValueWithStringValues()
+    public static function perseValueDataProvider()
     {
-        $data = [
-            'key1' => 'value1,value2',
-            'key2' => 'value3"with"quotes'
+        return [
+            // Test with non-array data
+            ['', false],
+
+            // Test with string values
+            [
+                [
+                    'key1' => 'value1,value2',
+                    'key2' => 'value3"with"quotes'
+                ],
+                "\"value1、value2\",\"value3\"\"with\"\"quotes\"\n"
+            ],
+
+            // Test with array values
+            [
+                [
+                    'key1' => ['value1', 'value2'],
+                    'key2' => 'value3'
+                ],
+                "\"value1|value2\",\"value3\"\n"
+            ],
+
+            // Test with different encoding
+            [
+                ['a', 'b', 'c'],
+                '"a","b","c"' . "\n",
+                'UTF-8'
+            ]
         ];
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
-        $expected = "\"value1、value2\",\"value3\"\"with\"\"quotes\"\n";
-        $this->assertEquals($expected, $rs);
     }
-
-    /**
-     * @param array $data
-     * test _perseValue
-     * with array values
-     */
-    public function test_perseValueWithArrayValues()
-    {
-        $data = [
-            'key1' => ['value1', 'value2'],
-            'key2' => 'value3'
-        ];
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
-        $expected = "\"value1|value2\",\"value3\"\n";
-        $this->assertEquals($expected, $rs);
-    }
-
-    /**
-     * @param array $data
-     * test _perseValue
-     * with different encoding
-     */
-    public function test_perseValueWithDifferentEncoding()
-    {
-        $data = ['a', 'b', 'c'];
-        $this->BcCsv->encoding = 'UTF-8';
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$data]);
-        $expected = '"a","b","c"' . "\n";
-        $this->assertEquals($expected, $rs);
-    }
-
 
     /**
      * ファイルを保存する
