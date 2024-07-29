@@ -248,48 +248,32 @@ class BcCsvHelperTest extends BcTestCase
     }
 
     /**
-     * test _perseKey
-     * with non-array
+     *
+     * @param $input
+     * @param $expected
+     * @param null $encoding
+     * @dataProvider perseKeyDataProvider
      */
-    public function test_perseKeyWithNonArray()
+    public function test_perseKey($input, $expected, $encoding = null)
     {
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', ['']);
-        $this->assertFalse($rs);
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$input]);
+        $this->assertEquals($expected, $rs);
     }
 
-    /**
-     * test _perseKey
-     * with empty array
-     */
-    public function test_perseKeyWithEmptyArray()
+    public static function perseKeyDataProvider()
     {
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [[]]);
-        $this->assertEquals( "\n", $rs);
-    }
+        return [
+            // Test with non-array
+            ['', false],
 
-    /**
-     * @param array $data
-     * test _perseKey
-     * with array
-     */
-    public function test_perseKeyWithSimpleArray()
-    {
-        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
-        $this->assertEquals('"a","b","c"' . "\n", $rs);
-    }
+            // Test with empty array
+            [[], "\n"],
 
-    /**
-     * @param array $data
-     * test _perseKey
-     * with array with different encoding
-     */
-    public function test_perseKeyWithDifferentEncoding()
-    {
-        $this->BcCsv->encoding = 'ISO-8859-1';
-        $data = ['a' => 'value1', 'b' => 'value2', 'c' => 'value3'];
-        $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$data]);
-        $expectedResult = mb_convert_encoding('"a","b","c"' . "\n", 'ISO-8859-1', 'UTF-8');
-        $this->assertEquals($expectedResult, $rs);
+            // Test with simple array
+            [['a' => 'value1', 'b' => 'value2', 'c' => 'value3'], '"a","b","c"' . "\n"],
+
+            // Test with array with different encoding
+            [['a' => 'value1', 'b' => 'value2', 'c' => 'value3'], mb_convert_encoding('"a","b","c"' . "\n", 'ISO-8859-1', 'UTF-8'), 'ISO-8859-1']
+        ];
     }
 }
