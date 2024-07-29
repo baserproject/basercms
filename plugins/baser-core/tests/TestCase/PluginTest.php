@@ -272,54 +272,56 @@ return [];
 
     /**
      * test isRequiredAuthentication
-     * with empty auth  setting
+     * @param array $config
+     * @param bool $isInstall
+     * @param bool $expected
+     * @dataProvider isRequiredAuthenticationDataProvider
      */
-    public function test_isRequiredAuthenticationWithEmptyAuthSetting()
+    public function test_isRequiredAuthentication(array $config, bool $isInstall, bool $expected)
     {
-        $rs = $this->Plugin->isRequiredAuthentication([]);
-        $this->assertFalse($rs);
+        Configure::write('BcEnv.isInstalled', $isInstall);
+        $rs = $this->Plugin->isRequiredAuthentication($config);
+        $this->assertEquals($expected, $rs);
     }
 
-    /**
-     * test isRequiredAuthentication
-     * with empty auth setting type
-     */
-    public function test_isRequiredAuthenticationWithEmptyAuthSettingType()
+    public static function isRequiredAuthenticationDataProvider()
     {
-        $rs = $this->Plugin->isRequiredAuthentication(['type' => '']);
-        $this->assertFalse($rs);
-    }
+        return [
+            // Test with empty auth setting
+            [
+                [],
+                true,
+                false
+            ],
 
-    /**
-     * test isRequiredAuthentication
-     * with disabled
-     */
-    public function test_isRequiredAuthenticationWithDisabled()
-    {
-        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType', 'disabled' => true]);
-        $this->assertFalse($rs);
-    }
+            // Test with empty auth setting type
+            [
+                ['type' => ''],
+                true,
+                false
+            ],
 
-    /**
-     * test isRequiredAuthentication
-     * with not installed
-     */
-    public function test_isRequiredAuthenticationWhenNotInstalled()
-    {
-        Configure::write('BcEnv.isInstalled', false);
-        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType']);
-        $this->assertFalse($rs);
-    }
+            // Test with disabled
+            [
+                ['type' => 'someType', 'disabled' => true],
+                true,
+                false
+            ],
 
-    /**
-     * test isRequiredAuthentication
-     * with pass all
-     */
-    public function test_isRequiredAuthentication()
-    {
-        Configure::write('BcEnv.isInstalled', true);
-        $rs = $this->Plugin->isRequiredAuthentication(['type' => 'someType']);
-        $this->assertTrue($rs);
+            // Test when not installed
+            [
+                ['type' => 'someType'],
+                false,
+                false
+            ],
+
+            // Test with pass all
+            [
+                ['type' => 'someType'],
+                true,
+                true
+            ]
+        ];
     }
 
 }
