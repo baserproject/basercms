@@ -337,6 +337,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     protected function getSkipCsrfUrl(): array
     {

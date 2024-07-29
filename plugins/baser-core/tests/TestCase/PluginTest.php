@@ -270,4 +270,45 @@ return [];
         ], Configure::read('App.paths.templates'));
     }
 
+    /**
+     * test getSkipCsrfUrl
+     * @param array $skipCsrfUrlConfig
+     * @param array $expected
+     * @dataProvider getSkipCsrfUrlDataProvider
+     */
+    public function test_getSkipCsrfUrl(array $skipCsrfUrlConfig, array $expected)
+    {
+        Configure::write('BcApp.skipCsrfUrl', $skipCsrfUrlConfig);
+        $rs = $this->execPrivateMethod($this->Plugin, 'getSkipCsrfUrl', []);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function getSkipCsrfUrlDataProvider()
+    {
+        return [
+            // Test with empty skip CSRF URL config
+            [
+                [],
+                []
+            ],
+
+            // Test with single URL in skip CSRF URL config
+            [
+                ['/test-url'],
+                ['/test-url']
+            ],
+
+            // Test with multiple URLs in skip CSRF URL config
+            [
+                ['/test-url', '/another-url'],
+                ['/test-url', '/another-url']
+            ],
+
+            // Test with nested URLs in skip CSRF URL config
+            [
+                ['/nested/url/1', '/nested/url/2'],
+                ['/nested/url/1', '/nested/url/2']
+            ]
+        ];
+    }
 }
