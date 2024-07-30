@@ -42,6 +42,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(ServerRequest $request, int $userGroupId)
     {
