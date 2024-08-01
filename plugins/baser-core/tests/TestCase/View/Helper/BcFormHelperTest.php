@@ -333,12 +333,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testEditor($fieldName, $options, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $this->BcForm->BcCkeditor->BcAdminForm->create();
         $result = $this->BcForm->editor($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
@@ -346,8 +341,8 @@ class BcFormHelperTest extends BcTestCase
     public static function editorDataProvider()
     {
         return [
-            ['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
-            ['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
+            ['test', [], '<span class="bca-textarea"><textarea name="test" style="width:99%;height:540px" .*', 'CKEditorを出力できません'],
+            ['test', ['editorLanguage' => 'en'], '<span class="bca-textarea"><textarea name="test" style="width:99%;height:540px" id="Test" class="bca-textarea__textarea" rows="5">.*', 'オプションを設定できません'],
         ];
     }
 
