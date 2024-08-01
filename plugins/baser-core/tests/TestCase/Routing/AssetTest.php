@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Routing;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFolder;
+use Cake\Core\Configure;
 use Cake\Routing\Asset;
 
 /**
@@ -39,6 +40,45 @@ class AssetTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test assetUrl
+     * @param string $path
+     * @param array $options
+     * @param string $expected
+     * @dataProvider imageUrlDataProvider
+     */
+    public function testImageUrl(string $path, array $options, string $expected)
+    {
+        Configure::write('App.imageBaseUrl', '/img/');
+
+        $result = Asset::imageUrl($path, $options);
+        $this->assertSame($expected, $result);
+    }
+
+    public static function imageUrlDataProvider()
+    {
+        return [
+            //basic path
+            [
+                'path' => 'example.jpg',
+                'options' => [],
+                'expected' => '/img/example.jpg'
+            ],
+            //full path
+            [
+                'path' => 'http://example.com/example.jpg',
+                'options' => [],
+                'expected' => 'http://example.com/example.jpg'
+            ],
+            //custom pathPrefix
+            [
+                'path' => 'example.jpg',
+                'options' => ['pathPrefix' => '/custom/'],
+                'expected' => '/custom/example.jpg'
+            ],
+        ];
     }
 
     /**
