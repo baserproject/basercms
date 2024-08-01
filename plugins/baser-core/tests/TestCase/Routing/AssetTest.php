@@ -41,6 +41,44 @@ class AssetTest extends BcTestCase
         parent::tearDown();
     }
 
+
+    /**
+     * test testCssUrl
+     * @param string $path
+     * @param array $options
+     * @param string $expected
+     * @dataProvider cssUrlDataProvider
+     */
+    public function testCssUrl(string $path, array $options, string $expected)
+    {
+        $result = Asset::cssUrl($path, $options);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function cssUrlDataProvider(): array
+    {
+        return [
+            //basic path
+            [
+                'path' => 'styles.css',
+                'options' => [],
+                'expected' => '/css/styles.css'
+            ],
+            //full base URL
+            [
+                'path' => 'http://localhost/css/styles.css',
+                'options' => [],
+                'expected' => 'http://localhost/css/styles.css'
+            ],
+            //custom pathPrefix
+            [
+                'path' => 'styles.css',
+                'options' => ['pathPrefix' => '/custom/'],
+                'expected' => '/custom/styles.css'
+            ],
+        ];
+    }
+
     /**
      * test webroot
      *

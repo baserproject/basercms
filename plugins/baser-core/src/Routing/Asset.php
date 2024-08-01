@@ -85,6 +85,7 @@ class Asset
      *        Set to true to apply timestamps when debug is true. Set to 'force' to always
      *        enable timestamping regardless of debug value.
      * @return string Generated URL
+     * @unitTest
      */
     public static function cssUrl(string $path, array $options = []): string
     {
