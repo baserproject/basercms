@@ -19,6 +19,33 @@ class ThemeFolderFormTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test validationDefault
+     */
+    public function test_validationDefault()
+    {
+        $validator = $this->ThemeFolderForm->getValidator('default');
+        //フォルダ名を入力しない
+        $errors = $validator->validate(['name' => '', 'mode' => 'create']);
+        //戻り値を確認
+        $this->assertEquals('フォルダ名を入力してください。', current($errors['name']));
+
+        //同一階層に既に存在
+        $errors = $validator->validate(['name' => 'plugins', 'mode' => 'create', 'parent' => '']);
+        //戻り値を確認
+        $this->assertEquals('入力されたフォルダ名は、同一階層に既に存在します。', current($errors['name']));
+
+        //同一階層に既に存在
+        $errors = $validator->validate(['name' => 'あいうえお', 'mode' => 'create', 'parent' => '']);
+        //戻り値を確認
+        $this->assertEquals('フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。', current($errors['name']));
+
+        //エラーがない
+        $errors = $validator->validate(['name' => 'test', 'mode' => 'create', 'parent' => '']);
+        //戻り値を確認
+        $this->assertCount(0, $errors);
+    }
+
     public function test_buildSchema()
     {
         $schema = $this->execPrivateMethod($this->ThemeFolderForm, '_buildSchema', [new Schema()]);
