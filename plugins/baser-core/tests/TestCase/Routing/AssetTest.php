@@ -29,6 +29,7 @@ class AssetTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->Asset = new Asset();
     }
 
     /**
@@ -58,6 +59,28 @@ class AssetTest extends BcTestCase
         $result = Asset::webroot('css/style.css', ['theme' => 'BcPluginSample']);
         $this->assertEquals('/bc_plugin_sample/css/style.css', $result);
         $folder->delete();
+    }
+
+
+    /**
+     * test encodeUrl
+     * @param string $url
+     * @param string $expected
+     * @dataProvider encodeUrlDataProvider
+     */
+    public function testEncodeUrl(string $url, string $expected)
+    {
+        $result = $this->execPrivateMethod($this->Asset, 'encodeUrl', [$url]);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function encodeUrlDataProvider()
+    {
+        return [
+            ['/path/to/some file.jpg', '/path/to/some%20file.jpg'],
+            ['/path/to/special!@#$.jpg', '/path/to/special%21%40#$.jpg'],
+            ['/path/with/mixed characters%20and spaces.jpg', '/path/with/mixed%20characters%20and%20spaces.jpg']
+        ];
     }
 
 }

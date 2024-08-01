@@ -210,6 +210,7 @@ class Asset
      *
      * @param string $url The URL to encode.
      * @return string
+     * @unitTest
      */
     protected static function encodeUrl(string $url): string
     {
