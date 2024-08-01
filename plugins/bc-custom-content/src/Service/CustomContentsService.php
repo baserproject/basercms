@@ -179,7 +179,10 @@ class CustomContentsService implements CustomContentsServiceInterface
             $options['validate'] = 'withTable';
         }
 
-        if (Configure::read('BcContents.autoUpdateContentCreatedDate') && $entity->content->modified_date == $postData['content']['modified_date']) {
+        if (Configure::read('BcContents.autoUpdateContentCreatedDate')
+            && isset($postData['content']['modified_date'])
+            && $entity->content->modified_date == $postData['content']['modified_date']
+        ) {
             $postData['content']['modified_date'] = date('Y-m-d H:i:s');
         }
 
