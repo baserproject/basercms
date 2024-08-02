@@ -111,6 +111,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getName()
     {

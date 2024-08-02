@@ -63,10 +63,28 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getName
+     * @dataProvider getNameDataProvider
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getName()
+    public function test_getName($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getName', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getNameDataProvider()
+    {
+        return [
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.ctp', 'default.ctp'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.php', 'default.php'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/css/default.css', 'default.css'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/js/default.js', 'default.js'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.png', 'default.png'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.gif', 'default.gif'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/other/default.html', 'default.html'],
+        ];
     }
 
     /**
