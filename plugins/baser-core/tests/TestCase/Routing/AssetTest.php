@@ -29,6 +29,7 @@ class AssetTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->Asset = new Asset();
     }
 
     /**
@@ -60,4 +61,51 @@ class AssetTest extends BcTestCase
         $folder->delete();
     }
 
+
+    /**
+     * test inflectString
+     * @param string $input
+     * @param string $inflectionType
+     * @param string $expected
+     * @dataProvider inflectStringDataProvider
+     */
+    public function testInflectString(string $input, string $inflectionType, string $expected)
+    {
+        Asset::setInflectionType($inflectionType);
+        $result = $this->execPrivateMethod($this->Asset, 'inflectString', [$input]);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * inflectStringDataProvider
+     */
+    public static function inflectStringDataProvider()
+    {
+        return [
+            //underscore
+            [
+                'input' => 'TestString',
+                'inflectionType' => 'underscore',
+                'expected' => 'test_string'
+            ],
+            //dasherize
+            [
+                'input' => 'TestString',
+                'inflectionType' => 'dasherize',
+                'expected' => 'test-string'
+            ],
+            //camelize
+            [
+                'input' => 'test_string',
+                'inflectionType' => 'camelize',
+                'expected' => 'TestString'
+            ],
+            //humanize
+            [
+                'input' => 'test string',
+                'inflectionType' => 'humanize',
+                'expected' => 'Test String'
+            ],
+        ];
+    }
 }

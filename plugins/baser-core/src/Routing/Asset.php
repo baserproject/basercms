@@ -361,6 +361,7 @@ class Asset
      *
      * @param string $string String inflected.
      * @return string Inflected name of the theme
+     * @unitTest
      */
     protected static function inflectString(string $string): string
     {
