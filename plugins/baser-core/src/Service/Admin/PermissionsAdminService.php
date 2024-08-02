@@ -71,6 +71,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      */
     public function getViewVarsForAdd(int $userGroupId, EntityInterface $entity)
     {
+        $currentUserGroup = null;
         if($userGroupId) {
             $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
             $currentUserGroup = $userGroupsService->get($userGroupId);
