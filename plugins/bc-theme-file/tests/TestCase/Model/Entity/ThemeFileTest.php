@@ -55,10 +55,30 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getType
+     * @dataProvider getTypeDataProvider
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getType()
+    public function test_getType($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getType', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getTypeDataProvider()
+    {
+        return [
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.ctp', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.php', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/css/default.css', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/js/default.js', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.png', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.gif', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.jpg', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.jpeg', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/other/default.html', 'file'],
+        ];
     }
 
     /**
