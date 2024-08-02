@@ -72,6 +72,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @param array $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(array $properties = [], array $options = [])
     {
