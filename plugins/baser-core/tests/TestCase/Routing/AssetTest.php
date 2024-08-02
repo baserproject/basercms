@@ -60,4 +60,41 @@ class AssetTest extends BcTestCase
         $folder->delete();
     }
 
+
+    /**
+     * test webroot
+     * @param string $path
+     * @param array $options
+     * @param string $expected
+     * @dataProvider scriptUrlDataProvider
+     */
+    public function testScriptUrl(string $path, array $options, string $expected)
+    {
+        $result = Asset::scriptUrl($path, $options);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * scriptUrlDataProvider
+     */
+    public static function scriptUrlDataProvider(): array
+    {
+        return [
+            [
+                'path' => 'script.js',
+                'options' => [],
+                'expected' => '/js/script.js'
+            ],
+            [
+                'path' => 'https://localhost//bc_plugin_sample/js/script.js',
+                'options' => [],
+                'expected' => 'https://localhost//bc_plugin_sample/js/script.js'
+            ],
+            [
+                'path' => 'js/script.js',
+                'options' => ['pathPrefix' => 'admin'],
+                'expected' => '/adminjs/script.js'
+            ],
+        ];
+    }
 }
