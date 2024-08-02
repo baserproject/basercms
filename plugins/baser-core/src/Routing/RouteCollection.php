@@ -430,6 +430,7 @@ class RouteCollection
      *
      * @param string $name The name of the middleware group to check.
      * @return bool
+     * @unitTest
      */
     public function hasMiddlewareGroup(string $name): bool
     {

@@ -14,8 +14,10 @@ namespace BaserCore\Test\TestCase\Routing;
 use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
 use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Routing\RouteCollection;
 use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
  * Class RouteCollectionTest
@@ -34,6 +36,7 @@ class RouteCollectionTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->RouteCollection = new RouteCollection();
     }
 
     /**
@@ -66,6 +69,24 @@ class RouteCollectionTest extends BcTestCase
             'action' => 'view',
             'entityId' => 4
         ]));
+    }
+
+    /**
+     * test hasMiddlewareGroup
+     */
+    public function testHasMiddlewareGroup()
+    {
+        $middleware = $this->createMock(MiddlewareInterface::class);
+        $this->RouteCollection->registerMiddleware('middleware1', $middleware);
+        $this->RouteCollection->registerMiddleware('middleware2', $middleware);
+
+        //add middleware group
+        $this->RouteCollection->middlewareGroup('group1', ['middleware1', 'middleware2']);
+
+        // check if middleware group exists
+        $this->assertTrue($this->RouteCollection->hasMiddlewareGroup('group1'));
+        // check if middleware group does not exist
+        $this->assertFalse($this->RouteCollection->hasMiddlewareGroup('nonexistent_group'));
     }
 
 }
