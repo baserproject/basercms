@@ -27,6 +27,36 @@ class ThemeFolderFormTest extends BcTestCase
         $this->assertEquals('string', $schema->fieldType('parent'));
     }
 
+    /**
+     * test _execute
+     */
+    public function test_execute()
+    {
+        $data['fullpath'] = TMP;
+        //フォルダの作成　テスト
+        $data['name'] = 'test_create';
+        $data['mode'] = 'create';
+        $rs = $this->execPrivateMethod($this->ThemeFolderForm, '_execute', [$data]);
+        //フォルダが作成できるか確認すること
+        $this->assertTrue($rs);
+        $this->assertTrue(is_dir(TMP . DS . 'test_create'));
+
+        //フォルダのリネーム　テスト
+        $data['fullpath'] = TMP . DS . 'test_create';
+        $data['name'] = 'test_update';
+        $data['mode'] = 'update';
+        $rs = $this->execPrivateMethod($this->ThemeFolderForm, '_execute', [$data]);
+        //戻り値確認
+        $this->assertTrue($rs);
+        //フォルダがリネームできるか確認すること
+        $this->assertTrue(is_dir(TMP . DS . 'test_update'));
+        $this->assertFalse(is_dir(TMP . DS . 'test_create'));
+
+        //作成したフォルダを削除
+        rmdir(TMP . DS . 'test_update');
+        $this->assertFalse(is_dir(TMP . DS . 'test_update'));
+    }
+
     public function test_duplicateThemeFolderEmptyValue(){
         $rs = $this->ThemeFolderForm->duplicateThemeFolder('');
         $this->assertTrue($rs);

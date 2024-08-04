@@ -48,6 +48,7 @@ class ThemeFolderForm extends Form
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execute(array $data): bool
     {
