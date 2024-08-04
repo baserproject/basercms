@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\View;
@@ -341,6 +342,41 @@ class BcBaserHelperTest extends BcTestCase
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
         ];
+    }
+
+    /**
+     * test isLinkEnabled
+     */
+    public function testIsLinkEnabled()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
+        UserFactory::make(['id' => 3])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 3])->persist();
+        UserGroupFactory::make(['id' => 3])->persist();
+
+
+        //baserCMSのインストールが完了していない、return true
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //baserCMSのインストールが完了している設定
+        Configure::write('BcEnv.isInstalled', true);
+
+        //ログインしていない場合、return true
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //ユーザーグループがユーザーに関連付けられていない場合、return true
+        $this->loginAdmin($this->getRequest('/'), 2);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //Adminでログインした場合、return true
+        $this->loginAdmin($this->getRequest('/'), 1);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //AdminではないログインしたかつadminURLにアクセス場合、return false
+        $this->loginAdmin($this->getRequest('/'), 3);
+        $this->assertFalse($this->BcBaser->isLinkEnabled('/baser/admin/bc-blog/blog_posts/edit/100'));
     }
 
     /**
