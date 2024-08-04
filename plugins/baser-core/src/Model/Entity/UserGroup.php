@@ -112,6 +112,7 @@ class UserGroup extends Entity
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAuthPrefixSettings(string $prefix): array
     {
