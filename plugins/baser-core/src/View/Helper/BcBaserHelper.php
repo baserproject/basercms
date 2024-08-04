@@ -945,6 +945,7 @@ class BcBaserHelper extends Helper
      * @return string メタタグ用のタイトルを返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitle($separator = '｜', $options = [])
     {
