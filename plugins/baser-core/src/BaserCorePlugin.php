@@ -79,17 +79,6 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     public function bootstrap(PluginApplicationInterface $app): void
     {
         /**
-         * Dotenv が読み込まれていない場合は読み込む
-         */
-        if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-            $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-            $dotenv->parse()
-                ->putenv()
-                ->toEnv()
-                ->toServer();
-        }
-
-        /**
          * composer インストール対応
          * composer でインストールした場合、プラグインは vendor 保存されるためパスを追加
          * bootstrap() で、setting.php の読み込みがあるので、その前に呼び出す必要あり
@@ -160,8 +149,6 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         if (!Log::getConfig('update')) {
             Log::setConfig(Configure::consume('Log'));
         }
-
-
 
         /**
          * プラグインロード
