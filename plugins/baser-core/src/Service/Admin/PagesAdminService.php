@@ -40,6 +40,7 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
      * @return array
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function getViewVarsForAdd(EntityInterface $page): array
     {
