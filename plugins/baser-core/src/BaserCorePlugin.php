@@ -538,7 +538,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      * @noTodo
      * @unitTest
      */
-    public function routes($routes): void
+    public function routes(RouteBuilder $routes): void
     {
 
         // migrations コマンドの場合は実行しない
@@ -557,17 +557,16 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         if (!$request) {
             $request = ServerRequestFactory::fromGlobals();
         }
-        if (!BcUtil::isConsole() && !preg_match('/^\/debug-kit\//', $request->getPath())) {
-            // ユニットテストでは実行しない
-            $property = new ReflectionProperty(get_class($routes), '_collection');
-            $property->setAccessible(true);
-            $collection = $property->getValue($routes);
-            $property = new ReflectionProperty(get_class($collection), '_routeTable');
-            $property->setAccessible(true);
-            $property->setValue($collection, []);
-            $property = new ReflectionProperty(get_class($collection), '_paths');
-            $property->setAccessible(true);
-            $property->setValue($collection, []);
+
+        /**
+         * /config/routes.php を無効化する
+         * ユニットテストや DebugKit では実行しない
+         */
+        if (!Configure::read('BcApp.enableRootRoutes')
+            && !BcUtil::isConsole()
+            && !preg_match('/^\/debug-kit\//', $request->getPath())
+        ) {
+            $this->disableRootRoutes($routes);
         }
 
         /**
@@ -620,6 +619,28 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         );
 
         parent::routes($routes);
+    }
+
+    /**
+     * /config/routes.php を無効化する
+     * @param RouteBuilder $routes
+     * @throws \ReflectionException
+     */
+    public function disableRootRoutes(RouteBuilder $routes): void
+    {
+        // ユニットテストでは実行しない
+        $property = new ReflectionProperty(get_class($routes), '_collection');
+        $property->setAccessible(true);
+        $collection = $property->getValue($routes);
+        $property = new ReflectionProperty(get_class($collection), '_routeTable');
+        $property->setAccessible(true);
+        $property->setValue($collection, []);
+        $property = new ReflectionProperty(get_class($collection), '_paths');
+        $property->setAccessible(true);
+        $property->setValue($collection, []);
+        $property = new ReflectionProperty(get_class($collection), 'staticPaths');
+        $property->setAccessible(true);
+        $property->setValue($collection, []);
     }
 
     /**
