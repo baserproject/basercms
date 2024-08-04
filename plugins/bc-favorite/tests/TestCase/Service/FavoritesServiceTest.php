@@ -69,6 +69,14 @@ class FavoritesServiceTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct(): void
+    {
+        $this->assertEquals('favorites', $this->FavoritesService->Favorites->getTable());
+    }
+
+    /**
      * testGet
      *
      * @return void
