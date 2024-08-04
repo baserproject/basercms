@@ -70,6 +70,7 @@ class ThemeFolderForm extends Form
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
