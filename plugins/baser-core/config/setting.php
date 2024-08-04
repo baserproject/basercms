@@ -416,7 +416,7 @@ return [
         /**
          * /config/routes.php を有効化するかどうか
          */
-        'enableRootRoutes' => true,
+        'enableRootRoutes' => false,
 
         /**
          * システムナビ
