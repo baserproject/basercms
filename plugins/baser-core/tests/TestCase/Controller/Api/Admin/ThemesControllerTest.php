@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Service\ThemesService;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -47,7 +49,8 @@ class ThemesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make(['id' => 1, 'theme' => 'BcThemeSample'])->persist();
+        UserFactory::make()->admin()->persist();
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -159,6 +162,30 @@ class ThemesControllerTest extends BcTestCase
         $this->assertEquals('テーマ「BcPluginSample」をコピーしました。', $result->message);
         $themeService = new ThemesService();
         $themeService->delete('BcPluginSampleCopy');
+    }
+
+    /**
+     * test loadDefaultDataPattern
+     */
+    public function testLoadDefaultData()
+    {
+        $this->get('/baser/api/admin/baser-core/themes/load_default_data.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->post('/baser/api/admin/baser-core/themes/load_default_data.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('不正な操作です。', $result->message);
+
+        $this->post('/baser/api/admin/baser-core/themes/load_default_data.json?token=' . $this->accessToken, ['default_data_pattern' => 'BcThemeSample.default']);
+        $this->assertResponseCode(200);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('初期データの読み込みが完了しました。', $result->message);
+
+        $this->post('/baser/api/admin/baser-core/themes/load_default_data.json?token=' . $this->accessToken, ['default_data_pattern' => 'BcThemeSample.default2']);
+        $this->assertResponseCode(500);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データベース処理中にエラーが発生しました。初期データのバージョンが違うか、初期データの構造が壊れています。', $result->message);
     }
 
     /**
