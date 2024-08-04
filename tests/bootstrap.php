@@ -39,6 +39,15 @@ if (empty($_SERVER['HTTP_HOST'])) {
     Configure::write('App.fullBaseUrl', 'http://localhost');
 }
 
+// Dotenv 読み込み 2024/08/04 ryuring
+if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    $dotenv->parse()
+        ->putenv()
+        ->toEnv()
+        ->toServer();
+}
+
 // エラー設定 2023/01/12 ryuring
 // CakePHP4.4 で PaginatorComponent が非推奨となり、deprecated エラーが発生するため
 // 強制的に errorLevel を書き換えて再設定を実行
