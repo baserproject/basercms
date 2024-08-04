@@ -2327,6 +2327,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテスト不要
      */
     public function siteName()
     {
@@ -2339,6 +2340,7 @@ class BcBaserHelper extends Helper
      * @return string サイト基本設定のWebサイト名
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteName()
     {
@@ -2367,6 +2369,7 @@ class BcBaserHelper extends Helper
      * @return string サイト基本設定のWebサイト名
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteUrl()
     {
