@@ -21,8 +21,6 @@ jobs:
             split_repository: 'bc-admin-third'
           - local_path: 'bc-blog'
             split_repository: 'bc-blog'
-          - local_path: 'BcColumn'
-            split_repository: 'bc-column'
           - local_path: 'bc-content-link'
             split_repository: 'bc-content-link'
           - local_path: 'bc-custom-content'
@@ -47,6 +45,12 @@ jobs:
             split_repository: 'bc-uploader'
           - local_path: 'bc-widget-area'
             split_repository: 'bc-widget-area'
+          - local_path: 'BcColumn'
+            split_repository: 'BcColumn'
+          - local_path: 'BcThemeSample'
+            split_repository: 'BcThemeSample'
+          - local_path: 'BcPluginSample'
+            split_repository: 'BcPluginSample'
     steps:
       - uses: actions/checkout@v3
 

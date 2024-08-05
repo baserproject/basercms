@@ -1,0 +1,13 @@
+{
+    "name": "baserproject/bc-theme-sample",
+    "description": "theme for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "autoload": {
+        "psr-4": {
+            "BcThemeSample\\": "src/"
+        }
+    }
+}

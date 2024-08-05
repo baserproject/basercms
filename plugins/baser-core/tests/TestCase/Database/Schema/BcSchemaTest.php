@@ -94,6 +94,15 @@ class UserActionsSchema extends BcSchema
     }
 
     /**
+     * test setTable
+     */
+    public function testSetTable()
+    {
+        $this->schema->setTable('table_test');
+        $this->assertEquals('table_test', $this->schema->name());
+    }
+
+    /**
      * Test connection
      */
     public function test_connection()
