@@ -66,9 +66,10 @@ class BcListTableHelperTest extends BcTestCase
             $this->assertTrue(isset($data['data']));
             $this->assertTrue(isset($data['fields']));
             $event->setData('class', ['test1', 'test2']);
+            $event->setData('fields', ['name']);
         });
         $rs = $this->BcListTable->dispatchShowRow(SiteFactory::make(['title' => 'メイン'])->getEntity());
-        $this->assertEquals("", $rs);
+        $this->assertStringContainsString('<td class="bca-table-listup__tbody-td">name</td>', $rs);
     }
 
     /**
