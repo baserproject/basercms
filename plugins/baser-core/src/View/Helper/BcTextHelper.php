@@ -356,7 +356,9 @@ class BcTextHelper extends TextHelper
         if (!$list) {
             return false;
         }
-        $list = $list->toArray();
+        if (!is_array($list)) {
+            $list = $list->toArray();
+        }
         return $list[$value] ?? false;
     }
 
