@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcUploadHelper;
@@ -198,6 +199,22 @@ class BcUploadHelperTest extends BcTestCase
         $this->BcUpload->setTable('contents');
         // テーブルがセットされたかどうか確認する
         $this->assertEquals('contents', $this->getPrivateProperty($this->BcUpload, 'table')->getTable());
+    }
+
+    /**
+     * test getBasePath
+     */
+    public function testGetBasePath()
+    {
+        $settings = ['saveDir' => 'uploads/files'];
+
+        // Trường hợp $isTheme = false
+        $result = $this->BcUpload->getBasePath($settings, false);
+        $this->assertEquals('/files/uploads/files/', $result);
+
+        // Trường hợp $isTheme = true và có theme hiện tại
+        $result = $this->BcUpload->getBasePath($settings, true);
+        $this->assertEquals('/bc_front/files/uploads/files/', $result);
     }
 
 }
