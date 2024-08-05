@@ -38,6 +38,7 @@ class FavoritesService implements FavoritesServiceInterface
      * FavoritesService constructor.
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
