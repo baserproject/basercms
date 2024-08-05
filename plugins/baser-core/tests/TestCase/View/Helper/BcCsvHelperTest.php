@@ -246,4 +246,23 @@ class BcCsvHelperTest extends BcTestCase
 
         unlink($fileName);
     }
+
+    /**
+     * Test getCsvTmpDataFp
+     */
+    public function testGetCsvTmpDataFp()
+    {
+        // Call the method to ensure _csvTmpDataFp is created
+        $fp = $this->BcCsv->getCsvTmpDataFp();
+
+        // Check that _csvTmpDataFp is a resource
+        $this->assertIsResource($fp, 'Expected _csvTmpDataFp to be a resource.');
+
+        // Optionally, check that it is a valid file pointer (this can vary by system)
+        $meta = stream_get_meta_data($fp);
+        $this->assertArrayHasKey('uri', $meta, 'Expected _csvTmpDataFp to have URI.');
+
+        // Cleanup: Close the temporary file
+        fclose($fp);
+    }
 }
