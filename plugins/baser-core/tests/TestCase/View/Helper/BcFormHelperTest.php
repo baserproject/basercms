@@ -342,7 +342,7 @@ class BcFormHelperTest extends BcTestCase
     {
         return [
             ['test', [], '<span class="bca-textarea"><textarea name="test" style="width:99%;height:540px" .*', 'CKEditorを出力できません'],
-            ['test', ['editorLanguage' => 'en'], '<span class="bca-textarea"><textarea name="test" style="width:99%;height:540px" id="Test" class="bca-textarea__textarea" rows="5">.*', 'オプションを設定できません'],
+            ['test', ['editorUseDraft' => true, 'editorPreviewModeId' => "name"], '<span class="bca-textarea"><textarea name="test" .*<input type="hidden" name="name" id="name" value="publish"', 'オプションを設定できません'],
         ];
     }
 
