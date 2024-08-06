@@ -140,6 +140,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return mixed|string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getExt()
     {
