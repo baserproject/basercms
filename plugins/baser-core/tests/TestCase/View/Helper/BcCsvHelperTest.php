@@ -225,12 +225,18 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function test_perseValue($input, $expected, $encoding = null)
     {
+        if ($encoding) {
+            $this->BcCsv->encoding = $encoding;
+        }
         $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$input],);
         $this->assertEquals($expected, $rs);
     }
 
     public static function perseValueDataProvider()
     {
+
+        $expected = mb_convert_encoding("\"値1、値2\",\"値3\"\"引用符\"\"\"\n", 'SJIS', 'UTF-8');
+
         return [
             // Test with non-array data
             ['', false],
@@ -238,26 +244,35 @@ class BcCsvHelperTest extends BcTestCase
             // Test with string values
             [
                 [
-                    'key1' => 'value1,value2',
-                    'key2' => 'value3"with"quotes'
+                    'キー1' => '値1、値2',
+                    'キー2' => '値3"引用符"'
                 ],
-                "\"value1、value2\",\"value3\"\"with\"\"quotes\"\n"
-            ],
+                "\"値1、値2\",\"値3\"\"引用符\"\"\"\n"
+        ],
 
             // Test with array values
             [
                 [
-                    'key1' => ['value1', 'value2'],
-                    'key2' => 'value3'
+                    'キー1' => ['値1', '値2'],
+                    'キー2' => '値3'
                 ],
-                "\"value1|value2\",\"value3\"\n"
+                "\"値1|値2\",\"値3\"\n"
             ],
 
-            // Test with different encoding
+            // Test with encoding UTF-8
             [
-                ['a', 'b', 'c'],
-                '"a","b","c"' . "\n",
+                ['あ', 'い', 'う'],
+                '"あ","い","う"' . "\n",
                 'UTF-8'
+            ],
+            // Test with encoding SJIS
+            [
+                [
+                    'キー1' => '値1、値2',
+                    'キー2' => '値3"引用符"'
+                ],
+                $expected,
+                'SJIS'
             ]
         ];
     }
