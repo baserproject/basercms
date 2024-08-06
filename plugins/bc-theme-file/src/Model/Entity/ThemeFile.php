@@ -177,6 +177,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isNew(): bool
     {
