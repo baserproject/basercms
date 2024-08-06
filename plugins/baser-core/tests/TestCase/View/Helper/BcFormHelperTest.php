@@ -313,7 +313,7 @@ class BcFormHelperTest extends BcTestCase
     {
         return [
             ['test', [], '<textarea name="test".*bca-textarea__textarea', 'CKEditorを出力できません'],
-            ['test', ['editorLanguage' => 'en'], '<textarea name="test".*bca-textarea__textarea', 'オプションを設定できません'],
+            ['test', ['editorUseDraft' => true, 'editorPreviewModeId' => "name"], '<textarea name="test".*<input type="hidden" name="name" id="name" value="publish"', 'オプションを設定できません'],
         ];
     }
 
