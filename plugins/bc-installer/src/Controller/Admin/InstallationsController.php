@@ -84,6 +84,10 @@ class InstallationsController extends BcAdminAppController
             return $this->redirect(['action' => 'step3']);
         }
         $this->set($service->getViewVarsForStep2());
+        // .envファイルが無ければ生成する
+        if(!file_exists(CONFIG . '.env')) {
+            copy(CONFIG . '.env.example', CONFIG . '.env');
+        }
     }
 
     /**
@@ -210,6 +214,7 @@ class InstallationsController extends BcAdminAppController
             /** @var SiteConfigsServiceInterface $siteConfigsService */
             $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
             $siteConfigsService->putEnv('INSTALL_MODE', 'false');
+            $siteConfigsService->putEnv('DEBUG', 'false');
 
             BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) opcache_reset();

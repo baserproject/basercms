@@ -45,6 +45,7 @@ class BcCaptchaService implements BcCaptchaServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function check(ServerRequest $request, string $token, string $value): bool
     {

@@ -73,4 +73,24 @@ class PluginTest extends BcTestCase
         $this->assertFalse($this->Plugin->isTheme());
     }
 
+    /**
+     * test isCorePlugin
+     */
+    public function testIsCorePlugin()
+    {
+        //with type = 'CorePlugin' and name in Configure::read('BcApp.corePlugins')
+        $this->Plugin->type = 'CorePlugin';
+        $this->Plugin->name = 'BcContentLink';
+        $this->assertTrue($this->Plugin->isCorePlugin());
+
+        //with type = 'CorePlugin' and name not in Configure::read('BcApp.corePlugins')
+        $this->Plugin->type = 'CorePlugin';
+        $this->Plugin->name = 'notCorePlugin';
+        $this->assertFalse($this->Plugin->isCorePlugin());
+
+        //with type = 'Plugin'
+        $this->Plugin->type = 'Plugin';
+        $this->assertFalse($this->Plugin->isCorePlugin());
+    }
+
 }

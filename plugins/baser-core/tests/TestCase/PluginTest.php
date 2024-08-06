@@ -275,6 +275,60 @@ return [];
     }
 
     /**
+     * test isRequiredAuthentication
+     * @param array $config
+     * @param bool $isInstall
+     * @param bool $expected
+     * @dataProvider isRequiredAuthenticationDataProvider
+     */
+    public function test_isRequiredAuthentication(array $config, bool $isInstall, bool $expected)
+    {
+        Configure::write('BcEnv.isInstalled', $isInstall);
+        $rs = $this->Plugin->isRequiredAuthentication($config);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isRequiredAuthenticationDataProvider()
+    {
+        return [
+            // Test with empty auth setting
+            [
+                [],
+                true,
+                false
+            ],
+
+            // Test with empty auth setting type
+            [
+                ['type' => ''],
+                true,
+                false
+            ],
+
+            // Test with disabled
+            [
+                ['type' => 'someType', 'disabled' => true],
+                true,
+                false
+            ],
+
+            // Test when not installed
+            [
+                ['type' => 'someType'],
+                false,
+                false
+            ],
+
+            // Test with pass all
+            [
+                ['type' => 'someType'],
+                true,
+                true
+            ]
+        ];
+    }
+
+    /**
      * test console
      */
     public function testConsole()

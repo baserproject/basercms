@@ -364,12 +364,6 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testPrefTag($fieldName, $selected, $attributes, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
@@ -377,7 +371,7 @@ class BcFormHelperTest extends BcTestCase
     public static function prefTagDataProvider()
     {
         return [
-            ['test', null, [], '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
+            ['test', null, [], '<select name="test">.*<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
             ['test', '40', [], '<option value="40" selected="selected">', '要素を選択状態にできません'],
             ['test', null, ['class' => 'testclass'], ' class="testclass"', '要素に属性を付与できません'],
         ];

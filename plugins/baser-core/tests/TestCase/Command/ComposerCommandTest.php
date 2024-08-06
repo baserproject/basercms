@@ -46,7 +46,7 @@ class ComposerCommandTest extends BcTestCase
 	public function testBuildOptionParser()
 	{
         $this->exec('composer --help');
-        $this->assertOutputContains('データベース接続名');
+        $this->assertOutputContains('PHPのパス');
         $this->assertOutputContains('実行対象ディレクトリ');
         $this->assertOutputContains('アップデート対象のバージョン番号');
 	}
