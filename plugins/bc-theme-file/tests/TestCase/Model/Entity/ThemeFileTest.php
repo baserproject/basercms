@@ -87,10 +87,26 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getContents
+     *
+     * @dataProvider getContentsDataProvider
+     * @param $fileType
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getContents()
+    public function test_getContents($fileType, $fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->type = $fullpath;
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getContents', []);
+        $this->assertStringContainsString($expect, $rs);
+    }
+
+    public static function getContentsDataProvider()
+    {
+        return [
+            ['text', '/var/www/html/plugins/bc-front/webroot/css/config.css', '.bs-main-contents a:hover,'], //type = text
+            ['image', '/var/www/html/tmp/default.image', ''] //type != text
+        ];
     }
 
     /**
