@@ -208,11 +208,11 @@ class BcUploadHelperTest extends BcTestCase
     {
         $settings = ['saveDir' => 'uploads/files'];
 
-        // Trường hợp $isTheme = false
+        // with $isTheme = false
         $result = $this->BcUpload->getBasePath($settings, false);
         $this->assertEquals('/files/uploads/files/', $result);
 
-        // Trường hợp $isTheme = true và có theme hiện tại
+        // with $isTheme = true and is theme exists
         $result = $this->BcUpload->getBasePath($settings, true);
         $this->assertEquals('/bc_front/files/uploads/files/', $result);
     }
