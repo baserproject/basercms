@@ -256,12 +256,17 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function test_perseKey($input, $expected, $encoding = null)
     {
+        if ($encoding) {
+            $this->BcCsv->encoding = $encoding;
+        }
         $rs = $this->execPrivateMethod($this->BcCsv, '_perseKey', [$input]);
         $this->assertEquals($expected, $rs);
     }
 
     public static function perseKeyDataProvider()
     {
+        $utf8String = '"あ","い","う"' . "\n";
+        $expected = mb_convert_encoding($utf8String, 'SJIS', 'UTF-8');
         return [
             // Test with non-array
             ['', false],
@@ -269,11 +274,11 @@ class BcCsvHelperTest extends BcTestCase
             // Test with empty array
             [[], "\n"],
 
-            // Test with simple array
-            [['a' => 'value1', 'b' => 'value2', 'c' => 'value3'], '"a","b","c"' . "\n"],
+            // Test with simple array in Japanese
+            [['あ' => '値1', 'い' => '値2', 'う' => '値3'], '"あ","い","う"' . "\n"],
 
-            // Test with array with different encoding
-            [['a' => 'value1', 'b' => 'value2', 'c' => 'value3'], mb_convert_encoding('"a","b","c"' . "\n", 'ISO-8859-1', 'UTF-8'), 'ISO-8859-1']
+            // Test with array with sjis encoding
+            [['あ' => '値1', 'い' => '値2', 'う' => '値3'], $expected, 'SJIS'],
         ];
     }
 }
