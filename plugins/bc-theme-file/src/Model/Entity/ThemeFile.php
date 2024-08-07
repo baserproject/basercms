@@ -162,6 +162,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getContents()
     {
