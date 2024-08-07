@@ -104,7 +104,7 @@ class ThemeFileTest extends BcTestCase
     public static function getContentsDataProvider()
     {
         return [
-            ['text', '/var/www/html/plugins/bc-front/webroot/css/config.css', '.bs-main-contents a:hover,'], //type = text
+            ['text', '/var/www/html/plugins/bc-front/webroot/css/config.css', '.bs-header__nav,'], //type = text
             ['image', '/var/www/html/tmp/default.image', ''] //type != text
         ];
     }
