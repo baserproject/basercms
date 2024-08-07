@@ -168,6 +168,7 @@ class BcCsvHelper extends Helper
      * @return string $body
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _perseValue($data)
     {

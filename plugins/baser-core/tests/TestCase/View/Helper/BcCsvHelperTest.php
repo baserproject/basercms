@@ -216,6 +216,66 @@ class BcCsvHelperTest extends BcTestCase
         ];
     }
 
+    /**
+     * test _perseValue
+     * @param $input
+     * @param $expected
+     * @param null $encoding
+     * @dataProvider perseValueDataProvider
+     */
+    public function test_perseValue($input, $expected, $encoding = null)
+    {
+        if ($encoding) {
+            $this->BcCsv->encoding = $encoding;
+        }
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$input],);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function perseValueDataProvider()
+    {
+
+        $expected = mb_convert_encoding("\"値1、値2\",\"値3\"\"引用符\"\"\"\n", 'SJIS', 'UTF-8');
+
+        return [
+            // Test with non-array data
+            ['', false],
+
+            // Test with string values
+            [
+                [
+                    'キー1' => '値1、値2',
+                    'キー2' => '値3"引用符"'
+                ],
+                "\"値1、値2\",\"値3\"\"引用符\"\"\"\n"
+        ],
+
+            // Test with array values
+            [
+                [
+                    'キー1' => ['値1', '値2'],
+                    'キー2' => '値3'
+                ],
+                "\"値1|値2\",\"値3\"\n"
+            ],
+
+            // Test with encoding UTF-8
+            [
+                ['あ', 'い', 'う'],
+                '"あ","い","う"' . "\n",
+                'UTF-8'
+            ],
+            // Test with encoding SJIS
+            [
+                [
+                    'キー1' => '値1、値2',
+                    'キー2' => '値3"引用符"'
+                ],
+                $expected,
+                'SJIS'
+            ]
+        ];
+    }
 
     /**
      * ファイルを保存する
