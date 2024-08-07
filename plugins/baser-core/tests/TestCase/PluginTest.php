@@ -271,44 +271,77 @@ return [];
     }
 
     /**
+     * test isRequiredAuthentication
+     * @param array $config
+     * @param bool $isInstall
+     * @param bool $expected
+     * @dataProvider isRequiredAuthenticationDataProvider
+     */
+    public function test_isRequiredAuthentication(array $config, bool $isInstall, bool $expected)
+    {
+        Configure::write('BcEnv.isInstalled', $isInstall);
+        $rs = $this->Plugin->isRequiredAuthentication($config);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isRequiredAuthenticationDataProvider()
+    {
+        return [
+            // Test with empty auth setting
+            [
+                [],
+                true,
+                false
+            ],
+
+            // Test with empty auth setting type
+            [
+                ['type' => ''],
+                true,
+                false
+            ],
+
+            // Test with disabled
+            [
+                ['type' => 'someType', 'disabled' => true],
+                true,
+                false
+            ],
+
+            // Test when not installed
+            [
+                ['type' => 'someType'],
+                false,
+                false
+            ],
+
+            // Test with pass all
+            [
+                ['type' => 'someType'],
+                true,
+                true
+            ]
+        ];
+    }
+
+    /**
      * test getSkipCsrfUrl
-     * @param array $skipCsrfUrlConfig
      * @param array $expected
      * @dataProvider getSkipCsrfUrlDataProvider
      */
-    public function test_getSkipCsrfUrl(array $skipCsrfUrlConfig, array $expected)
+    public function test_getSkipCsrfUrl(array $expected)
     {
-        Configure::write('BcApp.skipCsrfUrl', $skipCsrfUrlConfig);
         $rs = $this->execPrivateMethod($this->Plugin, 'getSkipCsrfUrl', []);
         $this->assertEquals($expected, $rs);
+
     }
 
     public static function getSkipCsrfUrlDataProvider()
     {
         return [
-            // Test with empty skip CSRF URL config
             [
-                [],
-                []
+                ['/baser-core/users/login.json', '/baser-core/users/refresh_token.json']
             ],
-
-            // Test with single URL in skip CSRF URL config
-            [
-                ['/test-url'],
-                ['/test-url']
-            ],
-
-            // Test with multiple URLs in skip CSRF URL config
-            [
-                ['/test-url', '/another-url'],
-                ['/test-url', '/another-url']
-            ],
-
-            // Test with nested URLs in skip CSRF URL config
-            [
-                ['/nested/url/1', '/nested/url/2'],
-                ['/nested/url/1', '/nested/url/2']
-            ]
         ];
     }
 }

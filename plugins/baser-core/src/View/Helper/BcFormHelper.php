@@ -748,6 +748,7 @@ SCRIPT_END;
      * @return string 都道府県用のSELECTタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function prefTag($fieldName, $selected = null, $attributes = [], $convertKey = false)
     {

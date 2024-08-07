@@ -39,7 +39,7 @@ $user = BcUtil::loginUser();
 <nav id="FavoriteMenu" class="bca-nav-favorite">
     <favorite-index
         user-id="<?php echo $user->id ?>"
-        current-page-name="<?php echo $currentPageName ?>"
-        current-page-url="<?php echo $currentPageUrl ?>"
+        current-page-name="<?php echo $currentPageName ?? '' ?>"
+        current-page-url="<?php echo $currentPageUrl ?? '' ?>"
     ></favorite-index>
 </nav>

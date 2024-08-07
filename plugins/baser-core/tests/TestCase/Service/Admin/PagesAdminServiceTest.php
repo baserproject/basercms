@@ -74,4 +74,29 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertArrayHasKey('editorEnterBr', $rs);
     }
 
+    /**
+     * test getViewVarsForAdd
+     */
+    public function test_getViewVarsForAdd()
+    {
+        PageFactory::make(['id' => 100, 'content' => 'test', 'page_template' => 'template 1'])->persist();
+        ContentFactory::make([
+            'id' => 100,
+            'plugin' => 'BaserCore',
+            'type' => 'Page',
+            'site_id' => 1,
+            'parent_id' => 3,
+            'lft' => 100,
+            'rght' => 101,
+            'entity_id' => 100,
+            'status' => true
+        ])->persist();
+        $rs = $this->PagesAdminService->getViewVarsForAdd($this->PagesAdminService->get(100));
+        $this->assertArrayHasKey('page', $rs);
+        $this->assertArrayHasKey('pageTemplateList', $rs);
+        $this->assertArrayHasKey('editor', $rs);
+        $this->assertArrayHasKey('editorOptions', $rs);
+        $this->assertArrayHasKey('editorEnterBr', $rs);
+    }
+
 }
