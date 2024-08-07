@@ -113,10 +113,23 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getExt
+     * @dataProvider getExtDataProvider
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getExt()
+    public function test_getExt($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getExt', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getExtDataProvider()
+    {
+        return [
+            ['/var/www/html/tmp/', ''], //isNew = true
+            ['/var/www/html/tmp/default.php', 'php'] //isNew = false
+        ];
     }
 
     /**
