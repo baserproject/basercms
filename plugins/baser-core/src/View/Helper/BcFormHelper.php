@@ -697,6 +697,7 @@ SCRIPT_END;
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function editor($fieldName, $options = [])
     {
