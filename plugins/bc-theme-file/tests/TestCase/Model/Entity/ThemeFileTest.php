@@ -91,10 +91,24 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getBaseName
+     * @dataProvider getBaseNameDataProvider
+     * @param $fullpath
+     * @param $expect
+     *
      */
-    public function test_getBaseName()
+    public function test_getBaseName($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getBaseName', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getBaseNameDataProvider()
+    {
+        return [
+            ['/var/www/html/tmp/', ''], //isNew = true
+            ['/var/www/html/tmp/default.php', 'default'] //isNew = false
+        ];
     }
 
     /**
