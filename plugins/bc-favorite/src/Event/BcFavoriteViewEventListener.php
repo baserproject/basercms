@@ -36,6 +36,7 @@ class BcFavoriteViewEventListener extends \BaserCore\Event\BcViewEventListener
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeAdminMenu(EventInterface $event)
     {
@@ -54,6 +55,7 @@ class BcFavoriteViewEventListener extends \BaserCore\Event\BcViewEventListener
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeContentsMenu(EventInterface $event)
     {

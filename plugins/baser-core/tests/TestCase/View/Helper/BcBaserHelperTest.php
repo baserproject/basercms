@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\View;
@@ -344,6 +345,41 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test isLinkEnabled
+     */
+    public function testIsLinkEnabled()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
+        UserFactory::make(['id' => 3])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 3])->persist();
+        UserGroupFactory::make(['id' => 3])->persist();
+
+
+        //baserCMSのインストールが完了していない、return true
+        Configure::write('BcEnv.isInstalled', false);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //baserCMSのインストールが完了している設定
+        Configure::write('BcEnv.isInstalled', true);
+
+        //ログインしていない場合、return true
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //ユーザーグループがユーザーに関連付けられていない場合、return true
+        $this->loginAdmin($this->getRequest('/'), 2);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //Adminでログインした場合、return true
+        $this->loginAdmin($this->getRequest('/'), 1);
+        $this->assertTrue($this->BcBaser->isLinkEnabled('/'));
+
+        //AdminではないログインしたかつadminURLにアクセス場合、return false
+        $this->loginAdmin($this->getRequest('/'), 3);
+        $this->assertFalse($this->BcBaser->isLinkEnabled('/baser/admin/bc-blog/blog_posts/edit/100'));
+    }
+
+    /**
      * 現在のログインユーザーが管理者グループかどうかチェックする
      * @param int|null $id ユーザーグループID
      * @param boolean $expected 期待値
@@ -647,26 +683,29 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
 
-        $topTitle = '｜baserCMS inc. [デモ]';
-        $this->BcBaser->request = $this->_getRequest('/about');
         // カテゴリがない場合
         $this->BcBaser->setTitle('会社案内');
-        $this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社案内｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
 
         // カテゴリがある場合
-        $this->BcBaser->request = $this->_getRequest('/service/service2');
-        $this->BcBaser->_View->set('crumbs', [
-            ['name' => '会社案内', 'url' => '/service/index'],
-            ['name' => '会社データ', 'url' => '/service/data']
-        ]);
+        $request = $this->getRequest('/about');
+        $view = new View($request);
+        $view->set(['crumbs' => [
+            ['name' => '会社案内', 'url' => '/company/index'],
+            ['name' => '会社データ', 'url' => '/company/data']
+        ]]);
+
+        $this->BcBaser = new BcBaserHelper($view);
         $this->BcBaser->setTitle('会社沿革');
-        $this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社沿革｜会社データ｜会社案内｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
 
         // カテゴリは存在するが、カテゴリの表示をオフにした場合
         $this->BcBaser->setTitle('会社沿革', false);
-        $this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
+        $this->assertEquals("会社沿革｜baserCMS inc. [デモ]", $this->BcBaser->getTitle());
     }
 
     /**
@@ -825,15 +864,18 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $topTitle = 'baserCMS inc. [デモ]';
-        $this->BcBaser->request = $this->_getRequest('/about');
+        SiteFactory::make(['id' => 1, 'title' => 'baserCMS inc. [デモ]'])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
+
         // 通常
-        $this->BcBaser->_View->set('crumbs', [
+        $request = $this->getRequest('/about');
+        $view = new View($request);
+        $view->set(['crumbs' => [
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
-        ]);
+        ]]);
+        $this->BcBaser = new BcBaserHelper($view);
         $this->BcBaser->setTitle('会社沿革');
         $this->assertEquals("会社沿革｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle());
 
