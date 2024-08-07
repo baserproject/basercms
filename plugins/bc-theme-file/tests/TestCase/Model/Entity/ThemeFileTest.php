@@ -55,10 +55,30 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getType
+     * @dataProvider getTypeDataProvider
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getType()
+    public function test_getType($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getType', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getTypeDataProvider()
+    {
+        return [
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.ctp', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.php', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/css/default.css', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/js/default.js', 'text'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.png', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.gif', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.jpg', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.jpeg', 'image'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/other/default.html', 'file'],
+        ];
     }
 
     /**
@@ -71,26 +91,69 @@ class ThemeFileTest extends BcTestCase
 
     /**
      * test _getBaseName
+     * @dataProvider getBaseNameDataProvider
+     * @param $fullpath
+     * @param $expect
+     *
      */
-    public function test_getBaseName()
+    public function test_getBaseName($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getBaseName', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getBaseNameDataProvider()
+    {
+        return [
+            ['/var/www/html/tmp/', ''], //isNew = true
+            ['/var/www/html/tmp/default.php', 'default'] //isNew = false
+        ];
     }
 
     /**
      * test _getExt
+     * @dataProvider getExtDataProvider
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getExt()
+    public function test_getExt($fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getExt', []);
+        $this->assertEquals($expect, $rs);
+    }
+
+    public static function getExtDataProvider()
+    {
+        return [
+            ['/var/www/html/tmp/', ''], //isNew = true
+            ['/var/www/html/tmp/default.php', 'php'] //isNew = false
+        ];
     }
 
     /**
      * test _getContents
+     *
+     * @dataProvider getContentsDataProvider
+     * @param $fileType
+     * @param $fullpath
+     * @param $expect
      */
-    public function test_getContents()
+    public function test_getContents($fileType, $fullpath, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->type = $fullpath;
+        $this->ThemeFile->fullpath = $fullpath;
+        $rs = $this->execPrivateMethod($this->ThemeFile, '_getContents', []);
+        $this->assertStringContainsString($expect, $rs);
+    }
+
+    public static function getContentsDataProvider()
+    {
+        return [
+            ['text', '/var/www/html/plugins/bc-front/webroot/css/colorbox/colorbox-1.6.1.css', '#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}'], //type = text
+            ['image', '/var/www/html/tmp/default.image', ''] //type != text
+        ];
     }
 
     /**
@@ -98,6 +161,10 @@ class ThemeFileTest extends BcTestCase
      */
     public function test_isNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->parent = '/var/www/html/tmp/tests/';
+        $this->assertTrue($this->ThemeFile->isNew());
+
+        $this->ThemeFile->parent = '/var/www/html/tmp/tests/test.php';
+        $this->assertFalse($this->ThemeFile->isNew());
     }
 }

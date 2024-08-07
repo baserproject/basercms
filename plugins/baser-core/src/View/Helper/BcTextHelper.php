@@ -348,15 +348,18 @@ class BcTextHelper extends TextHelper
      * @return string 表示用データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function listValue($field, $value)
     {
         $list = $this->BcAdminForm->getControlSource($field);
-        if ($list && isset($list[$value])) {
-            return $list[$value];
-        } else {
+        if (!$list) {
             return false;
         }
+        if (!is_array($list)) {
+            $list = $list->toArray();
+        }
+        return $list[$value] ?? false;
     }
 
     /**

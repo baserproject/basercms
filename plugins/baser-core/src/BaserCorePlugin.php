@@ -660,6 +660,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      * @return CommandCollection
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function console(CommandCollection $commands): CommandCollection
     {

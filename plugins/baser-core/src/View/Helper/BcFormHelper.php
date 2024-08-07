@@ -681,6 +681,7 @@ SCRIPT_END;
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ckeditor($fieldName, $options = [])
     {
@@ -696,6 +697,7 @@ SCRIPT_END;
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function editor($fieldName, $options = [])
     {
