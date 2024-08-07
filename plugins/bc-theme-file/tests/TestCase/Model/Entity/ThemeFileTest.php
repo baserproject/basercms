@@ -145,6 +145,10 @@ class ThemeFileTest extends BcTestCase
      */
     public function test_isNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->ThemeFile->parent = '/var/www/html/tmp/tests/';
+        $this->assertTrue($this->ThemeFile->isNew());
+
+        $this->ThemeFile->parent = '/var/www/html/tmp/tests/test.php';
+        $this->assertFalse($this->ThemeFile->isNew());
     }
 }
