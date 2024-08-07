@@ -94,6 +94,7 @@ class BcListTableHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dispatchShowRow($data)
     {
