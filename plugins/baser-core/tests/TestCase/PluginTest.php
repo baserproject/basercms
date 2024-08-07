@@ -24,7 +24,7 @@ use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Middleware\BcRequestFilterMiddleware;
+use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\Container;
 use Cake\Event\EventManager;
@@ -33,6 +33,10 @@ use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BaserCore\Command\ComposerCommand;
+use BaserCore\Command\CreateReleaseCommand;
+use BaserCore\Command\SetupInstallCommand;
+use BaserCore\Command\UpdateCommand;
 
 /**
  * Class PluginTest
@@ -322,6 +326,22 @@ return [];
                 true
             ]
         ];
+    }
+
+    /**
+     * test console
+     */
+    public function testConsole()
+    {
+        $commands = new CommandCollection();
+        $result = $this->Plugin->console($commands);
+
+        // check the class of the command
+        $this->assertEquals('BaserCore\Command\SetupTestCommand', $result->get('setup test'));
+        $this->assertEquals(ComposerCommand::class, $result->get('composer'));
+        $this->assertEquals(UpdateCommand::class, $result->get('update'));
+        $this->assertEquals(CreateReleaseCommand::class, $result->get('create release'));
+        $this->assertEquals(SetupInstallCommand::class, $result->get('setup install'));
     }
 
 }
