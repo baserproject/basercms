@@ -39,6 +39,7 @@ class BcWidgetAreaControllerEventListener extends BcControllerEventListener
      * @param Event $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function startup(Event $event)
     {
