@@ -3,13 +3,14 @@
 namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\PermissionsAdminServiceInterface;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
-class PermissionsAdminServiceClass extends BcTestCase
+class PermissionsAdminServiceTest extends BcTestCase
 {
     /**
      * Trait
@@ -60,7 +61,24 @@ class PermissionsAdminServiceClass extends BcTestCase
      */
     public function testGetViewVarsForAdd(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+
+        $entity = PermissionFactory::make([
+            'name' => 'test',
+            'user_group_id' => 2,
+            'permission_group_id' => 1,
+        ])->getEntity();
+        $result = $this->PermissionAdmin->getViewVarsForAdd(1, $entity);
+
+        $this->assertArrayHasKey('permissionGroups', $result);
+        $this->assertCount(3, $result['permissionGroups']);
+
+        $this->assertArrayHasKey('permission', $result);
+        $this->assertEquals('test', $result['permission']->name);
+
+        $this->assertEquals(1, $result['userGroupId']);
+        $this->assertEquals('システム管理', $result['userGroupTitle']);
     }
 
     /**
@@ -68,6 +86,23 @@ class PermissionsAdminServiceClass extends BcTestCase
      */
     public function testGetViewVarsForEdit(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+
+        $entity = PermissionFactory::make([
+            'name' => 'test edit',
+            'user_group_id' => 2,
+            'permission_group_id' => 1,
+        ])->getEntity();
+        $result = $this->PermissionAdmin->getViewVarsForEdit(1, $entity);
+
+        $this->assertArrayHasKey('permissionGroups', $result);
+        $this->assertCount(3, $result['permissionGroups']);
+
+        $this->assertArrayHasKey('permission', $result);
+        $this->assertEquals('test edit', $result['permission']->name);
+
+        $this->assertEquals(1, $result['userGroupId']);
+        $this->assertEquals('システム管理', $result['userGroupTitle']);
     }
 }
