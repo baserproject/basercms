@@ -271,4 +271,18 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(1, $contentFolders->find()->all()->count());
     }
 
+    /**
+     * testSortdown
+     * @return void
+     */
+    public function testSortdown()
+    {
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $Plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $Plugins->sortdown(1, ['sortFieldName' => 'priority']);
+        $this->assertEquals(2, $Plugins->get(1)->priority);
+        $Plugins->sortdown(2, ['sortFieldName' => 'priority']);
+        $this->assertEquals(2, $Plugins->get(2)->priority);
+    }
+
 }
