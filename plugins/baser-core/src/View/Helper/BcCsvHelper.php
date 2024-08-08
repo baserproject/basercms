@@ -78,6 +78,7 @@ class BcCsvHelper extends Helper
      * 一時ファイルのポインタを取得
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCsvTmpDataFp()
     {
