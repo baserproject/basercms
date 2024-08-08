@@ -10,9 +10,11 @@
  */
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcTextHelper;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * text helper library.
@@ -21,6 +23,7 @@ use Cake\View\View;
  */
 class BcTextHelperTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
     /**
      * set up
      */
@@ -365,19 +368,14 @@ class BcTextHelperTest extends BcTestCase
      */
     public function testListValue()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
         // ユーザーモデル
-        $this->Helper->BcForm->setEntity('User', true);
-        $expect = 'システム管理';
-        $result = $this->Helper->listValue('user_group_id', 1);
-        $this->assertEquals($expect, $result);
+        $result = $this->Helper->listValue('BaserCore.Users.user_group_id', 1);
+        $this->assertEquals("システム管理", $result);
 
         // 存在しないモデル
-        $this->Helper->BcForm->setEntity('Baser', true);
-        $expect = false;
         $result = $this->Helper->listValue('user_group_id', 1);
-        $this->assertEquals($expect, $result);
-
+        $this->assertFalse($result);
     }
 
     /**
