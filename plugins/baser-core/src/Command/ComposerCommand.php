@@ -42,7 +42,7 @@ class ComposerCommand extends Command
             'required' => true
         ]);
         $parser->addOption('php', [
-            'help' => __d('baser_core', 'データベース接続名'),
+            'help' => __d('baser_core', 'PHPのパス'),
             'default' => 'php'
         ]);
         $parser->addOption('dir', [

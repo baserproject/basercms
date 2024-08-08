@@ -142,6 +142,7 @@ class BcCsvHelper extends Helper
      * @return string|false $head
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _perseKey($data)
     {
@@ -168,6 +169,7 @@ class BcCsvHelper extends Helper
      * @return string $body
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _perseValue($data)
     {

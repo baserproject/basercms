@@ -11,11 +11,10 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\PagesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventList;
@@ -45,14 +44,10 @@ class BcFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(PagesScenario::class);
         $View = new BcAdminAppView($this->getRequest('/contacts/add'));
         $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
             'unlockedFields' => [],
+            'dummy'
         ]));
         $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener('page'))->setEventList(new EventList()));
         $this->BcForm = new BcFormHelper($eventedView);
@@ -78,6 +73,10 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected)
     {
+        UserGroupFactory::make(['id' => 1, 'title' => 'システム管理'])->persist();
+        UserGroupFactory::make(['id' => 2, 'title' => 'サイト運営者'])->persist();
+        UserGroupFactory::make(['id' => 3, 'title' => 'その他のグループ'])->persist();
+
         $result = $this->BcForm->getControlSource($field);
         if ($result) {
             $result = $result->toArray();
@@ -216,6 +215,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testCreate()
     {
+        UserFactory::make(['id'=>1])->persist();
         // 引数がない場合
         $result = $this->BcForm->create();
         $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
@@ -304,12 +304,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testCkeditor($fieldName, $options, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $this->BcForm->BcCkeditor->BcAdminForm->create();
         $result = $this->BcForm->ckeditor($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
@@ -317,8 +312,8 @@ class BcFormHelperTest extends BcTestCase
     public static function ckeditorDataProvider()
     {
         return [
-            ['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
-            ['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
+            ['test', [], '<textarea name="test".*bca-textarea__textarea', 'CKEditorを出力できません'],
+            ['test', ['editorUseDraft' => true, 'editorPreviewModeId' => "name"], '<textarea name="test".*<input type="hidden" name="name" id="name" value="publish"', 'オプションを設定できません'],
         ];
     }
 
@@ -333,12 +328,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testEditor($fieldName, $options, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $this->BcForm->BcCkeditor->BcAdminForm->create();
         $result = $this->BcForm->editor($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
@@ -346,8 +336,8 @@ class BcFormHelperTest extends BcTestCase
     public static function editorDataProvider()
     {
         return [
-            ['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
-            ['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
+            ['test', [], '<span class="bca-textarea"><textarea name="test" style="width:99%;height:540px" .*', 'CKEditorを出力できません'],
+            ['test', ['editorUseDraft' => true, 'editorPreviewModeId' => "name"], '<span class="bca-textarea"><textarea name="test" .*<input type="hidden" name="name" id="name" value="publish"', 'オプションを設定できません'],
         ];
     }
 
@@ -364,12 +354,6 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testPrefTag($fieldName, $selected, $attributes, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
@@ -377,7 +361,7 @@ class BcFormHelperTest extends BcTestCase
     public static function prefTagDataProvider()
     {
         return [
-            ['test', null, [], '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
+            ['test', null, [], '<select name="test">.*<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
             ['test', '40', [], '<option value="40" selected="selected">', '要素を選択状態にできません'],
             ['test', null, ['class' => 'testclass'], ' class="testclass"', '要素に属性を付与できません'],
         ];
@@ -791,8 +775,10 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testGetTable()
     {
+        PageFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 1])->persist();
         $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
-        $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
+        $page = $pagesTable->find()->where(['Pages.id' => 1])->contain(['Contents'])->first();
         $this->BcForm->create($page);
 
         // テーブル名なし
