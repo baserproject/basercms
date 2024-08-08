@@ -96,6 +96,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(int $userGroupId, EntityInterface $entity)
     {
