@@ -1438,7 +1438,7 @@ class BlogHelper extends Helper
      */
     public function hasChildCategory($id)
     {
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
+        $BlogCategory = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
         return $BlogCategory->hasChild($id);
     }
 
@@ -1850,26 +1850,24 @@ class BlogHelper extends Helper
     public function getContents($name = '', $options = [])
     {
         $options = array_merge([
-            'sort' => 'BlogContent.id',
+            'sort' => 'BlogContents.id',
             'siteId' => null,
             'postCount' => false,
         ], $options);
-        $conditions['Content.status'] = true;
+        $conditions['Contents.status'] = true;
         if (!empty($name)) {
             if (is_int($name)) {
-                $conditions['BlogContent.id'] = $name;
+                $conditions['BlogContents.id'] = $name;
             } else {
-                $conditions['Content.name'] = $name;
+                $conditions['Contents.name'] = $name;
             }
         }
         if ($options['siteId'] !== '' && !is_null($options['siteId']) && $options['siteId'] !== false) {
-            $conditions['Content.site_id'] = $options['siteId'];
+            $conditions['Contents.site_id'] = $options['siteId'];
         }
         /** @var BlogContent $BlogContent */
-        $BlogContent = ClassRegistry::init('Blog.BlogContent');
-        $BlogContent->unbindModel(
-            ['hasMany' => ['BlogPost', 'BlogCategory']]
-        );
+        $BlogContent = TableRegistry::getTableLocator()->get('BcBlog.BlogContents');
+
         $datas = $BlogContent->find(
             'all',
             [
@@ -1877,7 +1875,10 @@ class BlogHelper extends Helper
                 'order' => $options['sort'],
                 'recursive' => 0
             ]
-        );
+        )
+        ->contain(['Contents'])
+        ->toArray();
+
         if (!$datas) {
             return false;
         }
@@ -1890,12 +1891,12 @@ class BlogHelper extends Helper
         $contents = [];
         if (count($datas) === 1) {
             $datas = $BlogContent->constructEyeCatchSize($datas[0]);
-            unset($datas['BlogContent']['eye_catch_size']);
+            unset($datas['eye_catch_size']);
             $contents[] = $datas;
         } else {
             foreach($datas as $val) {
                 $val = $BlogContent->constructEyeCatchSize($val);
-                unset($val['BlogContent']['eye_catch_size']);
+                unset($val['eye_catch_size']);
                 $contents[] = $val;
             }
         }
@@ -1913,46 +1914,51 @@ class BlogHelper extends Helper
      */
     private function _mergePostCountToBlogsData(array $blogsData)
     {
+        /** @var BlogPostTable $BlogPost */
+        $BlogPost = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
 
-        /** @var BlogPost $BlogPost */
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $blogContentIds = Hash::extract($blogsData, "{n}.id");
 
-        $blogContentIds = Hash::extract($blogsData, "{n}.BlogContent.id");
+        if(empty($blogContentIds)){
+            return $blogsData;
+        }
+
         $conditions = array_merge(
-            ['BlogPost.blog_content_id' => $blogContentIds],
+            ['BlogPosts.blog_content_id IN' => $blogContentIds],
             $BlogPost->getConditionAllowPublish()
         );
 
         $postCountsData = $BlogPost->find('all', ...[
             'fields' => [
-                'BlogPost.blog_content_id',
-                'COUNT(BlogPost.id) as post_count',
+                'BlogPosts.blog_content_id',
+                'post_count' => 'COUNT(BlogPosts.id)'
             ],
             'conditions' => $conditions,
-            'group' => ['BlogPost.blog_content_id'],
+            'group' => ['BlogPosts.blog_content_id'],
             'recursive' => -1,
-        ]);
+        ])
+        ->toArray();
 
         if (empty($postCountsData)) {
             foreach($blogsData as $blogData) {
-                $blogData['BlogContent']['post_count'] = 0;
+                $blogData['post_count'] = 0;
             }
             return $blogsData;
         }
 
         foreach($blogsData as $index => $blogData) {
 
-            $blogContentId = $blogData['BlogContent']['id'];
-            $countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
-                return $data['BlogPost']['blog_content_id'] == $blogContentId;
+            $blogContentId = $blogData['id'];
+            $countData = array_values(array_filter($postCountsData, function(BlogPost $data) use ($blogContentId) {
+                return $data->blog_content_id == $blogContentId;
             }));
 
             if (empty($countData)) {
-                $blogsData[$index]['BlogContent']['post_count'] = 0;
+                $blogsData[$index]['post_count'] = 0;
                 continue;
             }
 
-            $blogsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
+            $blogsData[$index]['post_count'] = intval($countData[0]['post_count']);
         }
 
         return $blogsData;
