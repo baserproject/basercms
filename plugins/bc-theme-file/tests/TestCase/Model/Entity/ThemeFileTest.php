@@ -97,9 +97,9 @@ class ThemeFileTest extends BcTestCase
     public static function getNameDataProvider()
     {
         return [
-            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.ctp', 'default.ctp'],
-            ['/var/www/html/plugins/BcThemeSample/templates/layout/default.php', 'default.php'],
-            ['/var/www/html/plugins/BcThemeSample/templates/layout/css/default.css', 'default.css'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/ひらがな.ctp', 'ひらがな.ctp'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/カタカナ.php', 'カタカナ.php'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/css/漢字.css', '漢字.css'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/js/default.js', 'default.js'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.png', 'default.png'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/image/default.gif', 'default.gif'],
