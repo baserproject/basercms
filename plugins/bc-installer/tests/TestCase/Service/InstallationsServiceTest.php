@@ -309,19 +309,26 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testCreateDefaultFiles()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
         // 各フォルダを削除
         $path = WWW_ROOT . 'files' . DS;
+        //dd($path);
         $dirs = ['blog', 'editor', 'theme_configs'];
 
+        //delete folders if exists
         foreach($dirs as $dir) {
             (new BcFolder($path . $dir))->delete($path . $dir);
         }
 
-        $this->BcManager->createDefaultFiles();
+        //create folders
+        $this->Installations->createDefaultFiles();
 
         foreach($dirs as $dir) {
-            $this->assertFileExists($path . $dir, 'アップロード用初期フォルダを正しく作成できません');
+            $this->assertFileExists($path . $dir);
+        }
+
+        //delete folders after test
+        foreach($dirs as $dir) {
+            (new BcFolder($path . $dir))->delete($path . $dir);
         }
     }
 

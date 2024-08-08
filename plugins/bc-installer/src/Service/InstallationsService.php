@@ -487,6 +487,7 @@ class InstallationsService implements InstallationsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createDefaultFiles(): bool
     {
