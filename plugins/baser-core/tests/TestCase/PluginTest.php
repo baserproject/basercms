@@ -347,22 +347,10 @@ return [];
 
     /**
      * test getSkipCsrfUrl
-     * @param array $expected
-     * @dataProvider getSkipCsrfUrlDataProvider
      */
-    public function test_getSkipCsrfUrl(array $expected)
+    public function test_getSkipCsrfUrl()
     {
         $rs = $this->execPrivateMethod($this->Plugin, 'getSkipCsrfUrl', []);
-        $this->assertEquals($expected, $rs);
-
-    }
-
-    public static function getSkipCsrfUrlDataProvider()
-    {
-        return [
-            [
-                ['/baser-core/users/login.json', '/baser-core/users/refresh_token.json']
-            ],
-        ];
+        $this->assertEquals(['/baser-core/users/login.json', '/baser-core/users/refresh_token.json'], $rs);
     }
 }
