@@ -125,30 +125,6 @@ class BcPageHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * 公開状態を取得する
-     *
-     * @param boolean $status 公開状態
-     * @param mixed $begin 公開開始日時
-     * @param mixed $end 公開終了日時
-     * @param string $expected 期待値
-     * @param string $message テスト失敗時、表示するメッセージ
-     * @dataProvider allowPublishDataProvider
-     */
-    public function testAllowPublish($status, $begin, $end, $expected, $message)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $data = [
-            'Page' => [
-                'status' => $status,
-                'publish_begin' => $begin,
-                'publish_end' => $end,
-            ]
-        ];
-        $result = $this->BcPage->allowPublish($data);
-        $this->assertEquals($expected, $result, $message);
-    }
-
     public static function allowPublishDataProvider()
     {
         return [
