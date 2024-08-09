@@ -97,7 +97,7 @@ class ThemeFileTest extends BcTestCase
     public static function getNameDataProvider()
     {
         return [
-            ['/var/www/html/plugins/BcThemeSample/templates/layout/ひらがな.ctp', 'ひらがな.ctp'],
+            ['/var/www/html/plugins/BcThemeSample/templates/layout/%E3%81%B2%E3%82%89%E3%81%8C%E3%81%AA.ctp', 'ひらがな.ctp'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/カタカナ.php', 'カタカナ.php'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/css/漢字.css', '漢字.css'],
             ['/var/www/html/plugins/BcThemeSample/templates/layout/js/default.js', 'default.js'],
