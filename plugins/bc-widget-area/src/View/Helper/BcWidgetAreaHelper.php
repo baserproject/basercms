@@ -48,6 +48,7 @@ class BcWidgetAreaHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest ラッパーメソッドのためテスト不要
      */
     public function widgetArea(int $no = null, array $options = [])
     {
@@ -62,6 +63,7 @@ class BcWidgetAreaHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getWidgetArea(int $no = null, array $options = [])
     {
