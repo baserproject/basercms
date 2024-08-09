@@ -12,7 +12,6 @@
 namespace BcWidgetArea\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\View\BcAdminAppView;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcTextHelper;
 use BcWidgetArea\View\Helper\BcWidgetAreaHelper;
