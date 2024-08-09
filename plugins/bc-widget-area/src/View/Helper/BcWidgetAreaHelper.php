@@ -81,6 +81,7 @@ class BcWidgetAreaHelper extends Helper
      *  ※ その他のパラメータについては、View::element() を参照
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function show(int $no, array $options = [])
     {
