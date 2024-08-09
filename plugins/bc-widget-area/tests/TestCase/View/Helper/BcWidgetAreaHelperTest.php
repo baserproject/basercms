@@ -12,8 +12,11 @@
 namespace BcWidgetArea\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcTextHelper;
 use BcWidgetArea\View\Helper\BcWidgetAreaHelper;
+use Cake\View\View;
 
 /**
  * text helper library.
@@ -27,8 +30,8 @@ class BcWidgetAreaHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $View = new View();
-//        $this->BcWidgetArea = new BcWidgetAreaHelper($View);
+        $View = new View();
+        $this->BcWidgetArea = new BcWidgetAreaHelper($View);
     }
 
     public function tearDown(): void
@@ -90,18 +93,18 @@ class BcWidgetAreaHelperTest extends BcTestCase
      */
     public function testGetWidgetArea($url, $no, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        App::uses('BlogHelper', 'BcBlog.View/Helper');
-        $this->BcBaser->request = $this->_getRequest($url);
-        $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
+        $view = new BcFrontAppView($this->getRequest($url));
+        $view->set('currentWidgetAreaId', 1);
+        $this->BcWidgetArea = new BcWidgetAreaHelper($view);
+        $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcWidgetArea->getWidgetArea($no));
     }
 
     public static function getWidgetAreaDataProvider()
     {
         return [
-            ['/company', 1, '<div class="widget-area widget-area-1">'],
-            ['/company', 2, '<div class="widget-area widget-area-2">'],
-            ['/company', null, '<div class="widget-area widget-area-1">'],
+            ['/company', 1, '<div class="bs-widget-area bs-widget-area-1">'],
+            ['/company', 2, '<div class="bs-widget-area bs-widget-area-2">'],
+            ['/company', null, '<div class="bs-widget-area bs-widget-area-1">'],
         ];
     }
 

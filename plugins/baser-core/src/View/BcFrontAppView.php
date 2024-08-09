@@ -46,6 +46,7 @@ class BcFrontAppView extends AppView
             if ($agentHelper) $this->addHelper($agentHelper);
         }
         $this->addHelper('BaserCore.BcText');
+        $this->addHelper('BcWidgetArea.BcWidgetArea');
         if (BcUtil::isInstalled()) {
             $this->setThemeHelpers();
         }
