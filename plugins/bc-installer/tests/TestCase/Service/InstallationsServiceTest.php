@@ -311,7 +311,6 @@ class InstallationsServiceTest extends BcTestCase
     {
         // 各フォルダを削除
         $path = WWW_ROOT . 'files' . DS;
-        //dd($path);
         $dirs = ['blog', 'editor', 'theme_configs'];
 
         //delete folders if exists
