@@ -26,6 +26,7 @@ use BaserCore\Annotation\Note;
  * BcPageHelper
  * @property BcContentsHelper $BcContents
  */
+#[\AllowDynamicProperties]
 class BcPageHelper extends Helper
 {
 
@@ -40,7 +41,9 @@ class BcPageHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['BaserCore.BcContents'];
+    public array $helpers = [
+        'BaserCore.BcContents'
+    ];
 
     /**
      * initialize

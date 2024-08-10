@@ -27,6 +27,7 @@ use BaserCore\Annotation\Checked;
  *
  * @property BcBaserHelper $BcBaser
  */
+#[\AllowDynamicProperties]
 class BcWidgetAreaHelper extends Helper
 {
     /**

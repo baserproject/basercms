@@ -21,8 +21,8 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * スマホヘルパー
- *
  */
+#[\AllowDynamicProperties]
 class BcSmartphoneHelper extends Helper
 {
 
@@ -36,7 +36,9 @@ class BcSmartphoneHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['BcHtml'];
+    public array $helpers = [
+        'BaserCore.BcHtml'
+    ];
 
     /**
      * afterLayout

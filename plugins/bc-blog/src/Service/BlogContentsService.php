@@ -239,7 +239,7 @@ class BlogContentsService implements BlogContentsServiceInterface
     public function getList(): array
     {
         return $this->BlogContents
-            ->find('list', ['keyField' => 'id', 'valueField' => 'content.title'])
+            ->find('list', keyField:'id', valueField: 'content.title')
             ->contain('Contents')->toArray();
     }
 
@@ -257,10 +257,10 @@ class BlogContentsService implements BlogContentsServiceInterface
     {
         switch($field) {
             case 'id':
-                $controlSources['id'] = $this->BlogContents->find('list', [
-                    'keyField' => 'id',
-                    'valueField' => 'content.title'
-                ])
+                $controlSources['id'] = $this->BlogContents->find('list',
+                    keyField: 'id',
+                    valueField: 'content.title'
+                )
                     ->contain(['Contents'])
                     ->where([
                         'plugin' => 'BcBlog',

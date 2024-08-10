@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
 /**
  * BcThemeConfigHelper
  */
+#[\AllowDynamicProperties]
 class BcThemeConfigHelper extends Helper
 {
 
@@ -30,7 +31,9 @@ class BcThemeConfigHelper extends Helper
      *
      * @var string[]
      */
-    public array $helpers = ['BcBaser'];
+    public array $helpers = [
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * メインイメージを出力する

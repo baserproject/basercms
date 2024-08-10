@@ -13,13 +13,11 @@ namespace BcMail\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
-use BaserCore\Utility\BcText;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailContentsServiceInterface;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\Helper;
@@ -30,9 +28,8 @@ use BaserCore\Annotation\Checked;
 
 /**
  * メールヘルパー
- *
- *
  */
+#[\AllowDynamicProperties]
 class MailHelper extends Helper
 {
 
@@ -45,7 +42,10 @@ class MailHelper extends Helper
      * ヘルパー
      * @var array
      */
-    public array $helpers = ['BcBaser', 'BcContents'];
+    public array $helpers = [
+        'BaserCore.BcBaser',
+        'BaserCore.BcContents'
+    ];
 
     /**
      * 現在のメールコンテンツ

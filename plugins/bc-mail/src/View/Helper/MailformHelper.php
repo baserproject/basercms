@@ -25,6 +25,7 @@ use BaserCore\Annotation\Checked;
  *
  * @property BcBaserHelper $BcBaser
  */
+#[\AllowDynamicProperties]
 class MailformHelper extends BcFreezeHelper
 {
 
@@ -33,7 +34,18 @@ class MailformHelper extends BcFreezeHelper
      *
      * @var array
      */
-    public array $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray', 'Url'];
+    public array $helpers = [
+        'Html',
+        'BaserCore.BcTime',
+        'BaserCore.BcText',
+        'Js',
+        'BaserCore.BcUpload',
+        'BaserCore.BcCkeditor',
+        'BaserCore.BcBaser',
+        'BaserCore.BcContents',
+        'BaserCore.BcArray',
+        'Url'
+    ];
 
     /**
      * メールフィールドのデータよりコントロールを生成する
