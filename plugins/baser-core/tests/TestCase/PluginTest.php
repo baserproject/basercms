@@ -344,4 +344,13 @@ return [];
         $this->assertEquals(SetupInstallCommand::class, $result->get('setup install'));
     }
 
+
+    /**
+     * test getSkipCsrfUrl
+     */
+    public function test_getSkipCsrfUrl()
+    {
+        $rs = $this->execPrivateMethod($this->Plugin, 'getSkipCsrfUrl', []);
+        $this->assertEquals(['/baser-core/users/login.json', '/baser-core/users/refresh_token.json'], $rs);
+    }
 }
