@@ -434,6 +434,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         // treeテスト
         $this->get('/baser/api/admin/baser-core/contents/index.json?site_id=1&list_type=tree&token=' . $this->accessToken);
         $this->assertResponseOk();
+        $resultTree = json_decode((string)$this->_response->getBody());
+        $this->assertCount(1, $resultTree->contents);
 
         // tableテスト
         $this->get('/baser/api/admin/baser-core/contents/index.json?site_id=1&folder_id=6&name=サービス&type=Page&token=' . $this->accessToken);
