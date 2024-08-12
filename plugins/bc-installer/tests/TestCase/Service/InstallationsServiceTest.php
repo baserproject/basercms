@@ -342,8 +342,6 @@ class InstallationsServiceTest extends BcTestCase
 
         $this->assertFileExists($keyPath);
         $this->assertFileExists($pemPath);
-        //delete the keys after the test
-        $this->cleanupKeys();
     }
 
     private function cleanupKeys()
