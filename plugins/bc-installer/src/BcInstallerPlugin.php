@@ -15,6 +15,7 @@ use BaserCore\BcPlugin;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Command\InstallCheckCommand;
 use BcInstaller\Command\InstallCommand;
+use BcInstaller\Command\CreateJwtCommand;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use Cake\Console\CommandCollection;
 use Cake\Core\ContainerInterface;
@@ -72,6 +73,7 @@ class BcInstallerPlugin extends BcPlugin
     {
         $commands->add('install', InstallCommand::class);
         $commands->add('install check', InstallCheckCommand::class);
+        $commands->add('create jwt', CreateJwtCommand::class);
         return $commands;
     }
 
