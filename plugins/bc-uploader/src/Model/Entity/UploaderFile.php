@@ -51,6 +51,7 @@ class UploaderFile extends Entity
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function filesExists()
     {
