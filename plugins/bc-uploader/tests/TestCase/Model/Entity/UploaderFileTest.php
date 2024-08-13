@@ -3,7 +3,9 @@
 namespace BcUploader\Test\TestCase\Model\Entity;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcUploader\Model\Entity\UploaderFile;
+use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -71,9 +73,27 @@ class UploaderFileTest extends BcTestCase
         $this->assertEquals('social_new__mobile_small.jpg', $result);
     }
 
+    /**
+     * test fileExists
+     */
     public function test_fileExists()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを準備
+        UploaderFileFactory::make(['name' => 'social_new.jpg', 'publish_begin' => '2017-07-09 03:38:07'])->persist();
+        $file = new BcFile('/var/www/html/webroot/files/uploads/limited/social_new__small.jpg');
+        $file->create();
+
+        //テスト対象メソッドを呼ぶ
+        $entity = $this->UploaderFile->find()->where(['UploaderFiles.name' => "social_new.jpg"])->first();
+
+        //ファイルが存在している場合、
+        $this->assertTrue($entity->fileExists('social_new__small.jpg'));
+
+        //ファイルが存在しない場合、
+        $this->assertFalse($entity->fileExists('social_new__large.jpg'));
+
+        //テストファイルを削除
+        unlink('/var/www/html/webroot/files/uploads/limited/social_new__small.jpg');
     }
 
     /**

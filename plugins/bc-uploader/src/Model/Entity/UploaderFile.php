@@ -121,6 +121,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function fileExists($fileName)
     {
