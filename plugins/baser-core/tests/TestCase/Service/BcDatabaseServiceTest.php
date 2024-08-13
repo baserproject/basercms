@@ -960,4 +960,33 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         $result = $this->BcDatabaseService->tableExists($table);
         $this->assertFalse($result, 'テーブルが存在しないこと');
     }
+
+    /**
+     * Test renameTable
+     */
+    public function test_renameTable()
+    {
+        // テーブル生成
+        $table = 'table_test_create';
+        $columns = [
+            'no' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+
+        // テスト対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->createTable($table, $columns);
+        $this->assertTrue($result);
+
+        // rename table
+        $newTable = 'table_test_rename';
+        $result = $this->BcDatabaseService->renameTable($table, $newTable);
+        $this->assertTrue($result);
+
+        // check exist
+        $result = $this->BcDatabaseService->tableExists($newTable);
+        $this->assertTrue($result);
+
+        // drop table
+        $this->BcDatabaseService->dropTable($newTable);
+    }
 }

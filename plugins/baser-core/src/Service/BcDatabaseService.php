@@ -261,6 +261,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function renameTable(string $oldTableName, string $newTableName)
     {
