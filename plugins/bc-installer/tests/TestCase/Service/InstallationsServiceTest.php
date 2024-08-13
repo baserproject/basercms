@@ -79,10 +79,27 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * test getRealDbName
+     * @param string $type
+     * @param string $dbName
+     * @param string $expected
+     * @dataProvider getRealDbNameDataProvider
      */
-    public function testGetRealDbName()
+    public function testGetRealDbName($type, $dbName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Installations->getRealDbName($type, $dbName);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getRealDbNameDataProvider()
+    {
+        $path = ROOT . DS . 'db' . DS . 'sqlite' . DS;
+        return [
+            ['mysql', '/var/db/mydatabase', '/var/db/mydatabase'],
+            ['sqlite', 'mydatabase', $path . 'mydatabase.db'],
+            ['mysql', 'mydatabase', 'mydatabase'],
+            ['sqlite', '', ''],
+            ['', 'mydatabase', 'mydatabase'],
+        ];
     }
 
     /**
