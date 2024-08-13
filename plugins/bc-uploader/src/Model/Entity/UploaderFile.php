@@ -79,6 +79,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getMidium()
     {
