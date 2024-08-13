@@ -77,9 +77,24 @@ class UploaderFileTest extends BcTestCase
         $file->delete();
     }
 
+    /**
+     * test _getLarge
+     */
     public function test_getLarge()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        UploaderFileFactory::make(['name' => 'social_new.jpg', 'publish_begin' => '2017-07-09 03:38:07'])->persist();
+
+        //テストファイルを生成
+        $file = new BcFile('/var/www/html/webroot/files/uploads/limited/social_new__large.jpg');
+        $file->create();
+
+        //テスト対象メソッドを呼ぶ
+        $entity = $this->UploaderFile->find()->where(['UploaderFiles.name' => "social_new.jpg"])->first();
+        $this->assertTrue($this->execPrivateMethod($entity, '_getLarge', []));
+
+        //テストファイルを削除
+        $file->delete();
     }
 
     /**
