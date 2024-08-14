@@ -72,7 +72,7 @@ class UploaderFile extends Entity
      */
     protected function _getSmall()
     {
-        return $this->fileExists($this->getFileNameBySize('small'));
+        return $this->filesExistsOnLimited($this->getFileNameBySize('small'));
     }
 
     /**
@@ -85,7 +85,7 @@ class UploaderFile extends Entity
      */
     protected function _getMidium()
     {
-        return $this->fileExists($this->getFileNameBySize('midium'));
+        return $this->filesExistsOnLimited($this->getFileNameBySize('midium'));
     }
 
     /**
@@ -98,7 +98,7 @@ class UploaderFile extends Entity
      */
     protected function _getLarge()
     {
-        return $this->fileExists($this->getFileNameBySize('large'));
+        return $this->filesExistsOnLimited($this->getFileNameBySize('large'));
     }
 
     /**
@@ -127,7 +127,7 @@ class UploaderFile extends Entity
      * @noTodo
      * @unitTest
      */
-    public function fileExists($fileName)
+    public function filesExistsOnLimited($fileName)
     {
         $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
         $settings = $uploaderFilesTable->getSettings();
