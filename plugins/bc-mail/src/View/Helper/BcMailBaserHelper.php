@@ -22,6 +22,7 @@ use BaserCore\Annotation\UnitTest;
  *
  * BcBaserHelper より透過的に呼び出されるヘルパー
  */
+#[\AllowDynamicProperties]
 class BcMailBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
 

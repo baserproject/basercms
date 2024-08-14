@@ -23,6 +23,7 @@ use BaserCore\Annotation\UnitTest;
  *
  * @property BcContentsHelper $BcContents
  */
+#[\AllowDynamicProperties]
 class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
     /**

@@ -305,7 +305,6 @@ return [
             '.git',
             '.github',
             '__assets',
-            'docker',
             'tests',
             '.editorconfig',
             '.gitattributes',
@@ -313,7 +312,8 @@ return [
             'monorepo-builder.php',
             'phpdoc.dist.xml'.
             'phpstan.neon',
-            'phpunit.xml.dist'
+            'phpunit.xml.dist',
+            'phpdoc.dist.xml'
         ],
 
         /**

@@ -33,6 +33,7 @@ use BaserCore\Annotation\Note;
  * @property BcBaserHelper $BcBaser
  * @property BcContentsHelper $BcContents
  */
+#[\AllowDynamicProperties]
 class BcAdminHelper extends Helper
 {
     /**
@@ -45,7 +46,11 @@ class BcAdminHelper extends Helper
      * Helper
      * @var string[]
      */
-    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
+    public array $helpers = [
+        'BaserCore.BcBaser',
+        'BaserCore.BcAuth',
+        'BaserCore.BcContents'
+    ];
 
     /**
      * ログインユーザーがシステム管理者かチェックする

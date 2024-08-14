@@ -21,6 +21,7 @@ use BaserCore\Annotation\UnitTest;
 /**
  * アップローダーヘルパー
  */
+#[\AllowDynamicProperties]
 class UploaderHelper extends Helper
 {
 

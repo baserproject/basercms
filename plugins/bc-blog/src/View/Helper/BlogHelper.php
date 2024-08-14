@@ -59,6 +59,7 @@ use BaserCore\Annotation\UnitTest;
  * @property Helper\HtmlHelper $Html
  * @property Helper\UrlHelper $Url
  */
+#[\AllowDynamicProperties]
 class BlogHelper extends Helper
 {
 
@@ -81,13 +82,6 @@ class BlogHelper extends Helper
         'BaserCore.BcUpload',
         'BaserCore.BcContents'
     ];
-
-    /**
-     * ブログカテゴリモデル
-     *
-     * @var BlogCategory
-     */
-    public $BlogCategory = null;
 
     /**
      * ブログコンテンツサービス

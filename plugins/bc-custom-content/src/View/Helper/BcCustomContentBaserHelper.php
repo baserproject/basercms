@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
  *
  * BcBaserHelper より透過的に呼び出されるヘルパー
  */
+#[\AllowDynamicProperties]
 class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
 

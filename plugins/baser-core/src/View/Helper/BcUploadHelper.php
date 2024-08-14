@@ -34,6 +34,7 @@ use Throwable;
  * @property HtmlHelper $Html
  * @property SiteConfigsServiceInterface $siteConfigService
  */
+#[\AllowDynamicProperties]
 class BcUploadHelper  extends Helper
 {
     /**

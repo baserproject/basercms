@@ -23,6 +23,7 @@ use BaserCore\Annotation\Checked;
  *
  * @property BcBaserHelper $BcBaser
  */
+#[\AllowDynamicProperties]
 class MaildataHelper extends BcTextHelper
 {
 
@@ -30,7 +31,10 @@ class MaildataHelper extends BcTextHelper
      * ヘルパー
      * @var string[]
      */
-    public array $helpers = ['BcTime', 'BcBaser'];
+    public array $helpers = [
+        'BaserCore.BcTime',
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * メール表示用のデータを出力する

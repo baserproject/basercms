@@ -27,6 +27,7 @@ use BaserCore\Annotation\UnitTest;
  * @property \Cake\View\Helper\TimeHelper $Time
  * @link https://book.cakephp.org/3/en/views/helpers/rss.html
  */
+#[\AllowDynamicProperties]
 class RssHelper extends Helper
 {
     /**
@@ -34,7 +35,10 @@ class RssHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['Url', 'Time'];
+    public array $helpers = [
+        'Url',
+        'Time'
+    ];
 
     /**
      * Base URL
