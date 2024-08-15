@@ -979,4 +979,32 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         $result = $this->BcDatabaseService->getSequence('products', 'product_code');
         $this->assertEquals('products_product_code_seq', $result);
     }
+
+    /**
+     * Test renameTable
+     */
+    public function test_renameTable()
+    {
+        // create table
+        $table = 'table_test_create';
+        $columns = [
+            'no' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+
+        $result = $this->BcDatabaseService->createTable($table, $columns);
+        $this->assertTrue($result);
+
+        // rename table
+        $newTable = 'table_test_rename';
+        $result = $this->BcDatabaseService->renameTable($table, $newTable);
+        $this->assertTrue($result);
+
+        // check exist
+        $result = $this->BcDatabaseService->tableExists($newTable);
+        $this->assertTrue($result);
+
+        // drop table
+        $this->BcDatabaseService->dropTable($newTable);
+    }
 }
