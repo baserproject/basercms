@@ -361,20 +361,6 @@ class InstallationsServiceTest extends BcTestCase
     public function testCreateJwt()
     {
         //check if the keys exists then delete them
-        $this->cleanupKeys();
-        $result = $this->Installations->createJwt();
-        $this->assertTrue($result);
-
-        //check if the keys are created
-        $keyPath = CONFIG . 'jwt.key';
-        $pemPath = CONFIG . 'jwt.pem';
-
-        $this->assertFileExists($keyPath);
-        $this->assertFileExists($pemPath);
-    }
-
-    private function cleanupKeys()
-    {
         $keyPath = CONFIG . 'jwt.key';
         $pemPath = CONFIG . 'jwt.pem';
 
@@ -385,5 +371,13 @@ class InstallationsServiceTest extends BcTestCase
         if (file_exists($pemPath)) {
             unlink($pemPath);
         }
+
+        //create the keys
+        $result = $this->Installations->createJwt();
+        $this->assertTrue($result);
+
+        //check if the keys exists
+        $this->assertFileExists($keyPath);
+        $this->assertFileExists($pemPath);
     }
 }
