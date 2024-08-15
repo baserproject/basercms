@@ -20,6 +20,7 @@ use BaserCore\Annotation\UnitTest;
 /**
  * Class BcTextHelper
  */
+#[\AllowDynamicProperties]
 class BcTextHelper extends TextHelper
 {
 // CUSTOMIZE ADD 2021/04/24 ryuring
@@ -41,7 +42,12 @@ class BcTextHelper extends TextHelper
 // >>>
 //protected $helpers = ['Html'];
 // ---
-    protected array $helpers = ['BaserCore.BcTime', 'BaserCore.BcForm', 'Html', 'BaserCore.BcAdminForm'];
+    protected array $helpers = [
+        'BaserCore.BcTime',
+        'BaserCore.BcForm',
+        'Html',
+        'BaserCore.BcAdminForm'
+    ];
 // <<<
 
 // CUSTOMIZE ADD 2014/07/03 ryuring

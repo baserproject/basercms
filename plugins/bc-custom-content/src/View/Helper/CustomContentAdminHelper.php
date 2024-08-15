@@ -32,6 +32,7 @@ use Cake\Datasource\EntityInterface;
  *
  * @property BcAdminFormHelper $BcAdminForm
  */
+#[\AllowDynamicProperties]
 class CustomContentAdminHelper extends CustomContentAppHelper
 {
 
