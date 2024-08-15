@@ -626,6 +626,8 @@ class BlogPostsServiceTest extends BcTestCase
     {
         // パラメータを生成
         $postData = [
+            'title' => 'new blog',
+            'user_id' => 1,
             'blog_content_id' => 1,
             'posted' => '2022-12-01 00:00:00',
             'publish_begin' => '2022-12-01 00:00:00',
@@ -652,12 +654,36 @@ class BlogPostsServiceTest extends BcTestCase
     /**
      * 新規登録
      * BlogPostsService::create
+     */
+    public function testCreateExceptionTitle()
+    {
+        // パラメータを生成
+        $postData = [
+            'user_id' => 1,
+            'blog_content_id' => 1,
+            'posted' => '2022-12-01 00:00:00',
+            'publish_begin' => '2022-12-01 00:00:00',
+            'publish_end' => '2022-12-31 23:59:59',
+        ];
+
+        // title を指定しなかった場合はエラーとなること
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._required: "タイトルを入力してください。"');
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->create($postData);
+    }
+
+    /**
+     * 新規登録
+     * BlogPostsService::create
      * 投稿日エラーのテスト
      */
     public function testCreateExceptionPosted()
     {
         // パラメータを生成
         $postData = [
+            'title' => 'new blog',
+            'user_id' => 1,
             'blog_content_id' => 1,
             'posted' => '',
             'publish_begin' => '',
