@@ -301,21 +301,23 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * エディタテンプレート用のアイコン画像をデプロイ
-     *
-     * @return boolean
+     * test deployEditorTemplateImage
      */
     public function testDeployEditorTemplateImage()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
         // editor フォルダを削除
         $targetPath = WWW_ROOT . 'files' . DS . 'editor' . DS;
         $Folder = new \BaserCore\Utility\BcFolder($targetPath);
         $Folder->delete();
 
-        $this->BcManager->deployEditorTemplateImage();
+        $this->Installations->deployEditorTemplateImage();
 
         $this->assertFileExists($targetPath, 'エディタテンプレート用のアイコン画像をデプロイできません');
 
+        //check file exists in editor folder
+        $this->assertFileExists($targetPath . 'template1.gif');
+        $this->assertFileExists($targetPath . 'template2.gif');
+        $this->assertFileExists($targetPath . 'template3.gif');
     }
 
     /**

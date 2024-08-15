@@ -533,6 +533,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deployEditorTemplateImage(): bool
     {
