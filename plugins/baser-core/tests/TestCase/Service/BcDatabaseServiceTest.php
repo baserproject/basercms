@@ -961,19 +961,37 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         $this->assertFalse($result, 'テーブルが存在しないこと');
     }
 
+
+    /**
+     * Test getSequence
+     */
+    public function test_getSequence()
+    {
+        //default value field
+        $result = $this->BcDatabaseService->getSequence('test');
+        $this->assertEquals('test_id_seq', $result);
+
+        //specific value field
+        $result = $this->BcDatabaseService->getSequence('orders', 'order_number');
+        $this->assertEquals('orders_order_number_seq', $result);
+
+        //table and field different
+        $result = $this->BcDatabaseService->getSequence('products', 'product_code');
+        $this->assertEquals('products_product_code_seq', $result);
+    }
+
     /**
      * Test renameTable
      */
     public function test_renameTable()
     {
-        // テーブル生成
+        // create table
         $table = 'table_test_create';
         $columns = [
             'no' => ['type' => 'integer'],
             'contents' => ['type' => 'text'],
         ];
 
-        // テスト対象メソッドを呼ぶ
         $result = $this->BcDatabaseService->createTable($table, $columns);
         $this->assertTrue($result);
 
