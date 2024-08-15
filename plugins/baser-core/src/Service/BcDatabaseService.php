@@ -681,6 +681,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * シーケンスを取得する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSequence($table, $field = 'id')
     {

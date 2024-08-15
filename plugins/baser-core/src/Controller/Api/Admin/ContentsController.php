@@ -90,6 +90,7 @@ class ContentsController extends BcAdminApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(ContentsServiceInterface $service)
     {

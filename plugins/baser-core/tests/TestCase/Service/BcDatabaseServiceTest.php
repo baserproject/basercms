@@ -963,6 +963,25 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
 
 
     /**
+     * Test getSequence
+     */
+    public function test_getSequence()
+    {
+        //default value field
+        $result = $this->BcDatabaseService->getSequence('test');
+        $this->assertEquals('test_id_seq', $result);
+
+        //specific value field
+        $result = $this->BcDatabaseService->getSequence('orders', 'order_number');
+        $this->assertEquals('orders_order_number_seq', $result);
+
+        //table and field different
+        $result = $this->BcDatabaseService->getSequence('products', 'product_code');
+        $this->assertEquals('products_product_code_seq', $result);
+    }
+
+
+    /**
      * Test columnExists
      */
     public function test_columnExists()
@@ -981,6 +1000,10 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         //check column exist
         $result = $this->BcDatabaseService->columnExists($table, 'contents');
         $this->assertTrue($result);
+
+        //check column not exist
+        $result = $this->BcDatabaseService->columnExists($table, 'new_column');
+        $this->assertFalse($result);
 
         // drop table
         $this->BcDatabaseService->dropTable($table);

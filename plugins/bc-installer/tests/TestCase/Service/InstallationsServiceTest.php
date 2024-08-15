@@ -17,6 +17,7 @@ use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
+use Cake\Core\Configure;
 
 /**
  * InstallationsServiceTest
@@ -78,10 +79,27 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * test getRealDbName
+     * @param string $type
+     * @param string $dbName
+     * @param string $expected
+     * @dataProvider getRealDbNameDataProvider
      */
-    public function testGetRealDbName()
+    public function testGetRealDbName($type, $dbName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Installations->getRealDbName($type, $dbName);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getRealDbNameDataProvider()
+    {
+        $path = ROOT . DS . 'db' . DS . 'sqlite' . DS;
+        return [
+            ['mysql', '/var/db/mydatabase', '/var/db/mydatabase'],
+            ['sqlite', 'mydatabase', $path . 'mydatabase.db'],
+            ['mysql', 'mydatabase', 'mydatabase'],
+            ['sqlite', '', ''],
+            ['', 'mydatabase', 'mydatabase'],
+        ];
     }
 
     /**
@@ -105,7 +123,18 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testSetSecuritySalt()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // Test default length (40 characters)
+        $salt = $this->Installations->setSecuritySalt();
+        $this->assertEquals(40, strlen($salt));
+
+        // Test custom length (e.g., 50 characters)
+        $customLength = 50;
+        $customSalt = $this->Installations->setSecuritySalt($customLength);
+        $this->assertEquals($customLength, strlen($customSalt));
+
+        // Verify that the salt is correctly written to the configuration
+        $config = Configure::read('Security.salt');
+        $this->assertEquals($customSalt, $config);
     }
 
     /**
