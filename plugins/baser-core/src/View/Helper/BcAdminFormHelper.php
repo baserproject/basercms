@@ -20,6 +20,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * Class BcAdminFormHelper
  * @property BcBaserHelper $BcBaser
  */
+#[\AllowDynamicProperties]
 class BcAdminFormHelper extends BcFormHelper
 {
     /**

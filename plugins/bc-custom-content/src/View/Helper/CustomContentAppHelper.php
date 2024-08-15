@@ -32,6 +32,7 @@ use Cake\View\View;
  *
  * @property BcBaserHelper $BcBaser
  */
+#[\AllowDynamicProperties]
 class CustomContentAppHelper extends Helper
 {
 
@@ -44,7 +45,9 @@ class CustomContentAppHelper extends Helper
      * Helper
      * @var string[]
      */
-    public array $helpers = ['BaserCore.BcBaser'];
+    public array $helpers = [
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * Constructor

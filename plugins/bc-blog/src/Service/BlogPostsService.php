@@ -299,7 +299,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         // ページカテゴリ（子カテゴリも検索条件に入れる）
         if (!is_null($params['blog_category_id'])) {
             $blogCategoryIds = [$params['blog_category_id']];
-            $children = $this->BlogPosts->BlogCategories->find('children', ['for' => $params['blog_category_id']]);
+            $children = $this->BlogPosts->BlogCategories->find('children', for: $params['blog_category_id']);
             if ($children) {
                 foreach($children as $child) {
                     $blogCategoryIds[] = $child->id;
@@ -438,7 +438,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         } else {
             // 指定したカテゴリ名にぶら下がる子カテゴリを取得
             foreach($categoryIds as $categoryId) {
-                $catChildren = $this->BlogPosts->BlogCategories->find('children', ['for' => $categoryId])->all()->toArray();
+                $catChildren = $this->BlogPosts->BlogCategories->find('children', for: $categoryId)->all()->toArray();
                 if ($catChildren) {
                     $categoryIds = array_merge($categoryIds, Hash::extract($catChildren, '{n}.id'));
                 }

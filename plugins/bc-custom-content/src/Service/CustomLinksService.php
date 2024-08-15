@@ -143,7 +143,7 @@ class CustomLinksService implements CustomLinksServiceInterface
     {
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
         return $this->CustomLinks
-            ->find('list', ['keyField' => 'id', 'valueField' => 'title'])
+            ->find('list', keyField: 'id', valueField: 'title')
             ->where($conditions)->toArray();
     }
 

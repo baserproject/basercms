@@ -938,7 +938,7 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateChildrenUrl()
     {
         $this->assertTrue($this->Contents->updateChildrenUrl(19));
-        $child = $this->Contents->find('children', ['for' => 19])->select(['url', 'id'])->order('lft')->first();
+        $child = $this->Contents->find('children', for: 19)->select(['url', 'id'])->order('lft')->first();
         $this->assertEquals('/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/', $child->url);
     }
 
