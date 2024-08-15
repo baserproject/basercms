@@ -512,6 +512,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function createJwt()
     {
