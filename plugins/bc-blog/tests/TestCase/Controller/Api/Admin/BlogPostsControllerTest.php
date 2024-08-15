@@ -101,6 +101,8 @@ class BlogPostsControllerTest extends BcTestCase
     {
         // postデータを生成
         $postData = [
+            'user_id' => 1,
+            'posted' => '2022-12-01 00:00:00',
             'blog_content_id' => 1,
             'title' => 'baserCMS inc. [デモ] の新しい記事',
             'content' => '記事の概要',
