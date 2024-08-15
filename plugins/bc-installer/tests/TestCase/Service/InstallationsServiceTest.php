@@ -313,6 +313,11 @@ class InstallationsServiceTest extends BcTestCase
         $this->Installations->deployEditorTemplateImage();
 
         $this->assertFileExists($targetPath, 'エディタテンプレート用のアイコン画像をデプロイできません');
+
+        //check file exists in editor folder
+        $this->assertFileExists($targetPath . 'template1.gif');
+        $this->assertFileExists($targetPath . 'template2.gif');
+        $this->assertFileExists($targetPath . 'template3.gif');
     }
 
     /**
