@@ -54,14 +54,14 @@ class UploaderFilesControllerTest extends BcTestCase
      */
     public function test_ajax_list()
     {
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1])->persist();
-        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => '100'])->persist();
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => 5])->persist();
         UploaderConfigFactory::make(['name' => 'layout_type', 'value' => 'panel'])->persist();
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        //正常系実行
+        //正常系実行 $id != null
         $this->get("/baser/admin/bc-uploader/uploader_files/ajax_list/1");
         $this->assertResponseCode(200);
 
@@ -69,6 +69,17 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
         $this->assertEquals(1, $vars['listId']);
         $this->assertEquals("panel", $vars['layoutType']);
+        $this->assertEquals(5, count($vars['uploaderFiles']));
+
+        //正常系実行 $id == null
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_list");
+        $this->assertResponseCode(200);
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals(null, $vars['listId']);
+        $this->assertEquals("panel", $vars['layoutType']);
+        $this->assertEquals(5, count($vars['uploaderFiles']));
     }
 
     public function test_ajax_image()
