@@ -2,9 +2,11 @@
 
 namespace BcUploader\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Controller\Admin\UploaderFilesController;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
 use Cake\Event\Event;
@@ -47,9 +49,26 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
     }
 
+    /**
+     * test ajax_list
+     */
     public function test_ajax_list()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1])->persist();
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => '100'])->persist();
+        UploaderConfigFactory::make(['name' => 'layout_type', 'value' => 'panel'])->persist();
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_list/1");
+        $this->assertResponseCode(200);
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals(1, $vars['listId']);
+        $this->assertEquals("panel", $vars['layoutType']);
     }
 
     public function test_ajax_image()
