@@ -141,7 +141,7 @@ class UploaderFileTest extends BcTestCase
     }
 
     /**
-     * test filesExistsOnLimited
+     * test fileExists
      */
     public function test_filesExistsOnLimited()
     {
@@ -154,10 +154,10 @@ class UploaderFileTest extends BcTestCase
         $entity = $this->UploaderFile->find()->where(['UploaderFiles.name' => "social_new.jpg"])->first();
 
         //ファイルが存在している場合、
-        $this->assertTrue($entity->filesExistsOnLimited('social_new__small.jpg'));
+        $this->assertTrue($entity->fileExists('social_new__small.jpg'));
 
         //ファイルが存在しない場合、
-        $this->assertFalse($entity->filesExistsOnLimited('social_new__large.jpg'));
+        $this->assertFalse($entity->fileExists('social_new__large.jpg'));
 
         //テストファイルを削除
         unlink('/var/www/html/webroot/files/uploads/limited/social_new__small.jpg');
