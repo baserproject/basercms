@@ -512,6 +512,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function createJwt()
     {
@@ -532,6 +533,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deployEditorTemplateImage(): bool
     {
