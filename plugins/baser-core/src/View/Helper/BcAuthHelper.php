@@ -27,6 +27,7 @@ use BaserCore\Annotation\Note;
  * @property BcBaserHelper $BcBaser
  * @uses BcAuthHelper
  */
+#[\AllowDynamicProperties]
 class BcAuthHelper extends Helper
 {
     /**
@@ -38,7 +39,9 @@ class BcAuthHelper extends Helper
      * Helper
      * @var array
      */
-    public array $helpers = ['BaserCore.BcBaser'];
+    public array $helpers = [
+        'BaserCore.BcBaser'
+    ];
 
     /**
      * 現在認証プレフィックスを取得する

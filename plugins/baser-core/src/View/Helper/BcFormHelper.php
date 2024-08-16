@@ -31,6 +31,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcUploadHelper $BcUpload
  * @property BcCkeditorHelper $BcCkeditor
  */
+#[\AllowDynamicProperties]
 class BcFormHelper extends FormHelper
 {
     /**

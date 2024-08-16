@@ -17,6 +17,7 @@ use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
+use Cake\Core\Configure;
 
 /**
  * InstallationsServiceTest
@@ -78,10 +79,27 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * test getRealDbName
+     * @param string $type
+     * @param string $dbName
+     * @param string $expected
+     * @dataProvider getRealDbNameDataProvider
      */
-    public function testGetRealDbName()
+    public function testGetRealDbName($type, $dbName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Installations->getRealDbName($type, $dbName);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getRealDbNameDataProvider()
+    {
+        $path = ROOT . DS . 'db' . DS . 'sqlite' . DS;
+        return [
+            ['mysql', '/var/db/mydatabase', '/var/db/mydatabase'],
+            ['sqlite', 'mydatabase', $path . 'mydatabase.db'],
+            ['mysql', 'mydatabase', 'mydatabase'],
+            ['sqlite', '', ''],
+            ['', 'mydatabase', 'mydatabase'],
+        ];
     }
 
     /**
@@ -105,7 +123,18 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testSetSecuritySalt()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // Test default length (40 characters)
+        $salt = $this->Installations->setSecuritySalt();
+        $this->assertEquals(40, strlen($salt));
+
+        // Test custom length (e.g., 50 characters)
+        $customLength = 50;
+        $customSalt = $this->Installations->setSecuritySalt($customLength);
+        $this->assertEquals($customLength, strlen($customSalt));
+
+        // Verify that the salt is correctly written to the configuration
+        $config = Configure::read('Security.salt');
+        $this->assertEquals($customSalt, $config);
     }
 
     /**
@@ -272,21 +301,23 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * エディタテンプレート用のアイコン画像をデプロイ
-     *
-     * @return boolean
+     * test deployEditorTemplateImage
      */
     public function testDeployEditorTemplateImage()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
         // editor フォルダを削除
         $targetPath = WWW_ROOT . 'files' . DS . 'editor' . DS;
         $Folder = new \BaserCore\Utility\BcFolder($targetPath);
         $Folder->delete();
 
-        $this->BcManager->deployEditorTemplateImage();
+        $this->Installations->deployEditorTemplateImage();
 
         $this->assertFileExists($targetPath, 'エディタテンプレート用のアイコン画像をデプロイできません');
 
+        //check file exists in editor folder
+        $this->assertFileExists($targetPath . 'template1.gif');
+        $this->assertFileExists($targetPath . 'template2.gif');
+        $this->assertFileExists($targetPath . 'template3.gif');
     }
 
     /**
@@ -331,4 +362,30 @@ class InstallationsServiceTest extends BcTestCase
         }
     }
 
+
+    /**
+     * test createJwt
+     */
+    public function testCreateJwt()
+    {
+        //check if the keys exists then delete them
+        $keyPath = CONFIG . 'jwt.key';
+        $pemPath = CONFIG . 'jwt.pem';
+
+        if (file_exists($keyPath)) {
+            unlink($keyPath);
+        }
+
+        if (file_exists($pemPath)) {
+            unlink($pemPath);
+        }
+
+        //create the keys
+        $result = $this->Installations->createJwt();
+        $this->assertTrue($result);
+
+        //check if the keys exists
+        $this->assertFileExists($keyPath);
+        $this->assertFileExists($pemPath);
+    }
 }

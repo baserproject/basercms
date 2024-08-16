@@ -142,7 +142,7 @@ class MailFieldsService implements MailFieldsServiceInterface
     {
         $conditions = [];
         if ($mailContentId) $conditions = ['MailFields.mail_content_id' => $mailContentId];
-        return $this->MailFields->find('list', ['keyField' => 'id', 'valueField' => 'name'])->where($conditions)->toArray();
+        return $this->MailFields->find('list', keyField: 'id', valueField: 'name')->where($conditions)->toArray();
     }
 
     /**

@@ -158,6 +158,7 @@ use BaserCore\Annotation\Doc;
  * ### TextHelper
  * @method string truncateText(string $text, int $length = 100, array $options = [])
  */
+#[\AllowDynamicProperties]
 class BcBaserHelper extends Helper
 {
 

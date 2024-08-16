@@ -327,9 +327,9 @@ class CustomContentsService implements CustomContentsServiceInterface
      */
     public function getList(): array
     {
-        return $this->CustomContents->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'content.title'
-        ])->contain(['Contents'])->toArray();
+        return $this->CustomContents->find('list',
+            keyField: 'id',
+            valueField: 'content.title'
+        )->contain(['Contents'])->toArray();
     }
 }
