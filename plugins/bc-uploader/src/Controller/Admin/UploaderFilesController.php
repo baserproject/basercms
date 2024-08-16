@@ -73,6 +73,7 @@ class UploaderFilesController extends BcAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajax_index(UploaderFilesAdminServiceInterface $service, int $id)
     {
