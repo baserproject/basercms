@@ -2,6 +2,7 @@
 
 namespace BcUploader\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Controller\Admin\UploaderFilesController;
@@ -37,9 +38,24 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertNotEmpty($this->UploaderFilesController->viewBuilder()->getHelpers());
     }
 
+    /**
+     * test index
+     * @return void
+     */
     public function test_index()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => '100'])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post("/baser/admin/bc-uploader/uploader_files");
+        $this->assertResponseCode(200);
+        //Request Paramを確認
+        $data = $this->_controller->getRequest()->getData();
+        $this->assertEquals(100, $data['limit']);
+        $this->assertEquals("all", $data['uploader_type']);
     }
 
     public function test_ajax_index()

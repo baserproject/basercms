@@ -53,6 +53,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(UploaderFilesAdminServiceInterface $service)
     {
