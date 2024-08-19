@@ -176,6 +176,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function columnExists(string $tableName, string $columnName)
     {
