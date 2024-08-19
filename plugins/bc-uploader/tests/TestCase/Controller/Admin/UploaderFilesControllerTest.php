@@ -39,9 +39,24 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertNotEmpty($this->UploaderFilesController->viewBuilder()->getHelpers());
     }
 
+    /**
+     * test index
+     * @return void
+     */
     public function test_index()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => '100'])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post("/baser/admin/bc-uploader/uploader_files");
+        $this->assertResponseCode(200);
+        //Request Paramを確認
+        $data = $this->_controller->getRequest()->getData();
+        $this->assertEquals(100, $data['limit']);
+        $this->assertEquals("all", $data['uploader_type']);
     }
 
     public function test_ajax_index()
@@ -82,9 +97,26 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertEquals(5, count($vars['uploaderFiles']));
     }
 
+    /**
+     * test ajax_image
+     */
     public function test_ajax_image()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        UploaderFileFactory::make(['name' => '2_1.jpg', 'atl' => '2_1.jpg', 'user_id' => 1])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行 パラメータは$sizeを指定しない
+        $this->post("/baser/admin/bc-uploader/uploader_files/ajax_image/2_1.jpg");
+        $this->assertResponseOk();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals("small", $this->_controller->viewBuilder()->getVar('size'));
+
+        //正常系実行 パラメータは$sizeを指定する
+        $this->post("/baser/admin/bc-uploader/uploader_files/ajax_image/2_1.jpg/large");
+        $this->assertResponseOk();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals("large", $this->_controller->viewBuilder()->getVar('size'));
     }
 
     public function test_ajax_exists_images()
