@@ -64,9 +64,18 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testCheckEnv()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
-        $result = $this->BcManager->checkEnv();
-        $this->assertNotEmpty($result, '環境情報を取得できません');
+        Configure::write([
+                'BcRequire' => [
+                    'phpVersion' => "8.0.0",
+                    'phpMemory' => "128",
+                    'MySQLVersion' => "5.0.0",
+                    'winSQLiteVersion' => "3.7.16",
+                    'PostgreSQLVersion' => "8.4.0"
+                ]
+            ]
+        );
+        $result = $this->Installations->checkEnv();
+        $this->assertNotEmpty($result);
     }
 
     /**
