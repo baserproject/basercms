@@ -164,6 +164,7 @@ class InstallationsService implements InstallationsServiceInterface
 	 * @return int
      * @checked
      * @noTodo
+     * @unitTest
 	 */
 	protected function _getMemoryLimit ()
 	{

@@ -356,6 +356,26 @@ class InstallationsServiceTest extends BcTestCase
         }
     }
 
+    /**
+     * @dataProvider memoryLimitDataProvider
+     */
+    public function test_getMemoryLimit($iniMemoryLimit, $expected)
+    {
+        ini_set('memory_limit', $iniMemoryLimit);
+        $result = $this->execPrivateMethod($this->Installations, '_getMemoryLimit');
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function memoryLimitDataProvider()
+    {
+        return [
+            ['128M', 128],
+            ['2G', 2048],
+            ['1g', 1024],
+            ['512m', 512],
+            //['128', 128],
+        ];
+    }
 
     /**
      * test createJwt
