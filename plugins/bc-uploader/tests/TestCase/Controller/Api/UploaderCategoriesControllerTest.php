@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcUploader\Test\TestCase\Controller;
+namespace BcUploader\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
