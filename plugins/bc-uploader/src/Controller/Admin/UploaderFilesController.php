@@ -121,6 +121,7 @@ class UploaderFilesController extends BcAdminAppController
      * @param string $size
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajax_image(
         UploaderFilesAdminServiceInterface $service,
