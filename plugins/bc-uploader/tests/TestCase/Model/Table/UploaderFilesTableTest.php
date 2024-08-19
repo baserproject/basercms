@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BcUploader\Model\Table\UploaderFilesTable;
 use BcUploader\Test\Factory\UploaderFileFactory;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class UploaderFileTest
@@ -56,6 +57,31 @@ class UploaderFilesTableTest extends BcTestCase
         $this->assertTrue($this->UploaderFilesTable->hasBehavior('BcUpload'));
         $this->assertTrue($this->UploaderFilesTable->hasAssociation('UploaderCategories'));
     }
+
+    /**
+     * test validationDefault
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $blogCategory = $this->UploaderFilesTable->newEntity(["name" => 'test', "publish_begin" => "2021-01-27 12:00:00", "publish_end" => "2021-01-01 00:00:00"]);
+
+        $errors = $blogCategory->getErrors();
+        $this->assertEquals('公開期間が不正です。', current($errors['publish_begin']));
+        $this->assertEquals('公開期間が不正です。', current($errors['publish_end']));
+        $this->assertEquals('許可されていないファイルです。', current($errors['name']));
+
+        $blogCategory = $this->UploaderFilesTable->newEntity(["name" => new UploadedFile(
+            "test.png",
+            10,
+            UPLOAD_ERR_INI_SIZE,
+            'test.png',
+            "image/png")
+        ]);
+        $errors = $blogCategory->getErrors();
+        $this->assertEquals('ファイルのアップロード制限を超えています。', current($errors['name']));
+    }
+
     /**
      * 公開期間をチェックする
      * @dataProvider periodDataProvider
