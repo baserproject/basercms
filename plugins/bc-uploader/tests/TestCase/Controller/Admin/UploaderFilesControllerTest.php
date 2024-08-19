@@ -63,9 +63,20 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
     }
 
+    /**
+     * test ajax_index
+     */
     public function test_ajax_list()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post("/baser/admin/bc-uploader/uploader_files/ajax_index/1");
+        $this->assertResponseOk();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals(1, $this->_controller->viewBuilder()->getVar('listId'));
     }
 
     public function test_ajax_image()
