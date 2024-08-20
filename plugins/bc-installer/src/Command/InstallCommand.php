@@ -13,6 +13,7 @@ namespace BcInstaller\Command;
 
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Service\InstallationsService;
@@ -177,7 +178,7 @@ class InstallCommand extends Command
 
         // Init files
         $service->createInstallFile($dbConfig, $salt);
-        $service->createJwt();
+        BcApiUtil::createJwt();
 
         // Init db
         $service->createDefaultFiles();

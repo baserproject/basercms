@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Service\InstallationsService;
@@ -286,7 +287,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
         $securitySalt = $request->getSession()->read('Installation.salt');
         $this->createInstallFile($this->readDbSetting($request), $securitySalt);
         // JWTキーを作成する
-        $this->createJwt();
+        BcApiUtil::createJwt();
         // アップロード用初期フォルダを作成する
         $this->createDefaultFiles();
         // エディタテンプレート用の画像を配置
