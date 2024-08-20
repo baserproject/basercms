@@ -94,6 +94,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajax_list(UploaderFilesAdminServiceInterface $service, int $id = null)
     {

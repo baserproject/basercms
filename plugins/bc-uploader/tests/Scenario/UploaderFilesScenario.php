@@ -52,12 +52,12 @@ class UploaderFilesScenario implements FixtureScenarioInterface
         UploaderCategoryFactory::make(['id' => 2, 'name' => 'contact'])->persist();
 
         //アップロードファイルデータを生成
-        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'atl' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1, 'publish_begin' => '2017-07-09 03:38:07', 'publish_end' => '2017-07-09 03:38:07'])->persist();
-        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'atl' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 3, 'name' => 'logo-48x48_c.png', 'atl' => 'logo-48x48_c.jpg', 'uploader_category_id' => 2, 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 4, 'name' => '2_1.jpg', 'atl' => '2_1.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 5, 'name' => '2_2.jpg', 'atl' => '2_2.jpg', 'user_id' => 1])->persist();
-        UploaderFileFactory::make(['id' => 6, 'name' => '2_3.jpg', 'atl' => '2_3.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'alt' => 'social_new.jpg', 'uploader_category_id' => 1, 'user_id' => 1, 'publish_begin' => '2017-07-09 03:38:07', 'publish_end' => '2017-07-09 03:38:07'])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => 'widget-hero.jpg', 'alt' => 'widget-hero.jpg', 'uploader_category_id' => 1, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 3, 'name' => 'logo-48x48_c.png', 'alt' => 'logo-48x48_c.jpg', 'uploader_category_id' => 2, 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 4, 'name' => '2_1.jpg', 'alt' => '2_1.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 5, 'name' => '2_2.jpg', 'alt' => '2_2.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 6, 'name' => '2_3.jpg', 'alt' => '2_3.jpg', 'user_id' => 1])->persist();
         return null;
     }
 
