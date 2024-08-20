@@ -67,6 +67,7 @@ class BcInstallerPlugin extends BcPlugin
      * @return CommandCollection
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function console(CommandCollection $commands): CommandCollection
     {
