@@ -168,8 +168,22 @@ class UploaderFilesControllerTest extends BcTestCase
         UploaderFileFactory::get(1);
     }
 
+    /**
+     * test ajax_get_search_box
+     */
     public function test_ajax_get_search_box()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_get_search_box/1");
+        $this->assertResponseCode(200);
+        //disableAutoLayoutを確認
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        //listIdを確認
+        $this->assertEquals(1, $this->_controller->viewBuilder()->getVar("listId"));
+        //使用中テンプレートを確認
+        $this->assertEquals("../element/search/uploader_files_index", $this->_controller->viewBuilder()->getTemplate());
     }
 }
