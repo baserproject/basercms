@@ -337,29 +337,55 @@ class InstallationsServiceTest extends BcTestCase
     }
     /**
      * アップロード用初期フォルダを作成する
+     * test createDefaultFiles
      */
     public function testCreateDefaultFiles()
     {
-        // 各フォルダを削除
         $path = WWW_ROOT . 'files' . DS;
         $dirs = ['blog', 'editor', 'theme_configs'];
+        $backupPath = WWW_ROOT . 'backup_files' . DS;
 
-        //delete folders if exists
-        foreach($dirs as $dir) {
-            (new BcFolder($path . $dir))->delete($path . $dir);
+        //delete backup folder
+        (new BcFolder($backupPath))->delete($backupPath);
+
+        //create backup folder
+        (new BcFolder($backupPath))->create($backupPath);
+
+        // move files folder to backup folder and check folder exists in backup folder
+        foreach ($dirs as $dir) {
+            $folderPath = $path . $dir;
+            if (is_dir($folderPath)) {
+                $Folder = new BcFolder($folderPath);
+                $Folder->move($backupPath . $dir);
+                $this->assertFileExists($backupPath . $dir);
+            }
         }
 
-        //create folders
+        //create the files
         $this->Installations->createDefaultFiles();
 
-        foreach($dirs as $dir) {
+        //check if the files exists
+        foreach ($dirs as $dir) {
             $this->assertFileExists($path . $dir);
         }
 
-        //delete folders after test
-        foreach($dirs as $dir) {
-            (new BcFolder($path . $dir))->delete($path . $dir);
+        // delete files folder
+        foreach ($dirs as $dir) {
+            $Folder = new BcFolder($path . $dir);
+            $Folder->delete();
         }
+
+        // move backup folder to files folder
+        foreach ($dirs as $dir) {
+            $backupDir = $backupPath . $dir;
+            if (is_dir($backupDir)) {
+                $Folder = new BcFolder($backupDir);
+                $Folder->move($path . $dir);
+            }
+        }
+
+        // delete backup folder
+        (new BcFolder($backupPath))->delete($backupPath);
     }
 
 
