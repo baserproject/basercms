@@ -94,6 +94,7 @@ class UploaderFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajax_list(UploaderFilesAdminServiceInterface $service, int $id = null)
     {
@@ -198,6 +199,7 @@ class UploaderFilesController extends BcAdminAppController
      * @param int|null $listId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajax_get_search_box(int $listId = null)
     {
