@@ -5,6 +5,7 @@ use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
+use Cake\I18n\FrozenTime;
 
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -126,9 +127,28 @@ class UploaderHelperTest extends BcTestCase
 
     /**
      * ファイルの公開状態を取得する
+     * test isPublish
+     * @param $publishBegin
+     * @param $publishEnd
+     * @param $expected
+     * @dataProvider isPublishDataProvider
      */
-    public function testIsPublish()
+    public function testIsPublish($publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['publish_begin' => $publishBegin, 'publish_end' => $publishEnd])->getEntity();
+        $rs = $this->UploaderHelper->isPublish($uploaderFile);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isPublishDataProvider()
+    {
+        return [
+            [null, null, true],
+            [new FrozenTime('+1 day'), null, false],
+            [null, new FrozenTime('-1 day'), false],
+            [new FrozenTime('-1 day'), new FrozenTime('+1 day'), true],
+            [new FrozenTime('+1 day'), new FrozenTime('+2 day'), false],
+            [new FrozenTime('now'), new FrozenTime('now'), false]
+        ];
     }
 }
