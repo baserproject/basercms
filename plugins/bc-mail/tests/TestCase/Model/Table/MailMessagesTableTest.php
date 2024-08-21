@@ -245,7 +245,6 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testConvertDatasToMail($no_send, $type)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $this->MailMessage->mailFields = [
             [
@@ -494,5 +493,105 @@ class MailMessagesTableTest extends BcTestCase
         );
         $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
         $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
+    }
+
+    /**
+     * test convertDatasToMail
+     */
+    public function test_convertDatasToMail()
+    {
+        //mailFields
+        $mailFields = [
+            (object)[
+                'field_name' => 'name',
+                'before_attachment' => '<b>Before</b> Attachment',
+                'after_attachment' => 'After<br />Attachment',
+                'head' => '<br />Head',
+                'no_send' => false,
+                'type' => 'text'
+            ],
+            (object)[
+                'field_name' => 'password',
+                'before_attachment' => '',
+                'after_attachment' => '',
+                'head' => '',
+                'no_send' => false,
+                'type' => 'password'
+            ],
+            (object)[
+                'field_name' => 'hobbies',
+                'before_attachment' => '',
+                'after_attachment' => '',
+                'head' => '',
+                'no_send' => false,
+                'type' => 'multi_check'
+            ]
+        ];
+
+        // message
+        $message = new \stdClass();
+        $message->name = 'John Doe';
+        $message->password = 'secret123';
+        $message->hobbies = 'Reading|Writing';
+
+        // mailContent
+        $mailContent = new \stdClass();
+        $mailContent->subject_user = 'Hello, {$name}';
+        $mailContent->subject_admin = 'New User: {$name}';
+
+        $options = [
+            'maskedPasswords' => [
+                'password' => '********'
+            ]
+        ];
+
+        $data = [
+            'mailFields' => $mailFields,
+            'message' => $message,
+            'mailContent' => $mailContent,
+        ];
+
+        $result = $this->MailMessage->convertDatasToMail($data, $options);
+
+        // Expected
+        $expectedData = [
+            'mailFields' => [
+                (object)[
+                    'field_name' => 'name',
+                    'before_attachment' => 'Before Attachment',
+                    'after_attachment' => "After\nAttachment",
+                    'head' => 'Head',
+                    'no_send' => false,
+                    'type' => 'text'
+                ],
+                (object)[
+                    'field_name' => 'password',
+                    'before_attachment' => '',
+                    'after_attachment' => '',
+                    'head' => '',
+                    'no_send' => false,
+                    'type' => 'password'
+                ],
+                (object)[
+                    'field_name' => 'hobbies',
+                    'before_attachment' => '',
+                    'after_attachment' => '',
+                    'head' => '',
+                    'no_send' => false,
+                    'type' => 'multi_check'
+                ]
+            ],
+            'message' => (object)[
+                'name' => 'John Doe',
+                'password' => '********',
+                'hobbies' => ['Reading', 'Writing']
+            ],
+            'mailContent' => (object)[
+                'subject_user' => 'Hello, John Doe',
+                'subject_admin' => 'New User: John Doe'
+            ]
+        ];
+
+        $this->assertEquals($expectedData, $result);
     }
 }
