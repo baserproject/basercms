@@ -10,19 +10,11 @@
  */
 
 namespace BcUploader\Test\TestCase\Event;
-use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\View\BcAdminAppView;
-use BaserCore\View\Helper\BcBaserHelper;
-use BcBlog\Controller\Admin\BlogPostsController;
-use BcBlog\Service\Admin\BlogPostsAdminService;
-use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\View\BlogAdminAppView;
-use BcUploader\Controller\Admin\UploaderFilesController;
 use BcUploader\Event\BcUploaderViewEventListener;
 use Cake\Event\Event;
-use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
