@@ -134,7 +134,7 @@ class BlogPostsTable extends BlogAppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', 'タイトルは255文字以内で入力してください。'))
-            ->requirePresence('title', true, __d('baser_core', 'タイトルを入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
             ->scalar('content')
