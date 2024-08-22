@@ -17,6 +17,7 @@ use BcUploader\Service\UploaderFilesServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Laminas\Diactoros\Stream;
 
 /**
  * ファイルアップローダーコントローラー
@@ -93,9 +94,12 @@ class UploaderFilesController extends BcFrontAppController
                 "asf" => "video/x-ms-asf",
                 "wmv" => "video/x-ms-wmv"
             ];
-            header("Content-type: " . $contentsMaping[$ext]);
-            readfile(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename);
-            exit();
+            $this->setResponse(
+                $this->getResponse()
+                    ->withHeader('Content-type', $contentsMaping[$ext])
+                    ->withBody(new Stream(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename))
+            );
+            $this->disableAutoRender();
         } else {
             $this->notFound();
         }

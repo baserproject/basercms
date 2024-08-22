@@ -1313,10 +1313,12 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url,
             'News 1' // title
         );
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'release', 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child', 'lft' => 2, 'rght' => 3, 'parent_id' => 1])->persist();
         BlogPostFactory::make(['id'=> 1, 'blog_content_id' => 1, 'title' => 'title test'])->persist();
-        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog1', 'posted' => '2016-01-27 12:57:59'])->persist();
-        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog2', 'posted' => '2017-01-27 12:57:59'])->persist();
-        BlogPostFactory::make(['blog_content_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog1', 'blog_category_id' => 1, 'posted' => '2016-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog2', 'blog_category_id' => 2, 'posted' => '2017-01-27 12:57:59'])->persist();
+        BlogPostFactory::make(['blog_content_id' => 1, 'blog_category_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
         BlogTagFactory::make(['id' => 1, 'name' => '新製品'])->persist();
         BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
 
@@ -1337,7 +1339,7 @@ class BlogHelperTest extends BcTestCase
             ['', 'news2', 5, [], '/(?=no-data)/', '存在しないコンテンツが存在しています'],    // 存在しないコンテンツ
             ['', '/news/', 2, [], '/^(?!.*post-3).*(?=post-1).*(?=post-2).*/s', '記事の件数を正しく指定できません'], // 件数指定
             ['', '/news/', 5, ['category' => 'release'], '/post-1.*post-2.*post-3/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定（子カテゴリあり）
-            ['', '/news/', 5, ['category' => 'child'], '/post-1.*post-2.*post-3/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定(子カテゴリなし)
+            ['', '/news/', 5, ['category' => 'child'], '/post-1/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定（子カテゴリなし）
             ['', '/news/', 5, ['tag' => '新製品'], '/^(?!.*post-3).*(?=post-1).*(?!.post-2).*/s', '記事のタグを正しく指定できません'], // tag指定
             ['', '/news/', 5, ['tag' => 'テスト'], '/記事がありません/', '記事のタグを正しく指定できません'], // 存在しないtag指定
             ['', '/news/', 5, ['year' => '2016'], '/^(?!.*post-3).*(?=post-1).*(?!.post-2).*/s', '記事の年を正しく指定できません'], // 年指定
