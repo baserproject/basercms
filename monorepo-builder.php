@@ -31,8 +31,7 @@ return static function (MBConfig $mbConfig): void {
          */
 		$mbConfig->defaultBranch('master');
 		$mbConfig->workers([
-			UpdateReplaceReleaseWorker::class,
-			SetCurrentMutualDependenciesReleaseWorker::class,
+			UpdateReplaceReleaseWorker::class
 		]);
     } elseif(preg_match('/^[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc)/', $version)) {
     	/**
