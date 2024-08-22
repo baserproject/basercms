@@ -148,14 +148,14 @@ class MailMessagesTable extends MailAppTable
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createTableName($mailContentId)
     {
-        $mailContentId = (int)$mailContentId;
-        if (!is_int($mailContentId)) {
+        if (!is_int($mailContentId) || !is_numeric($mailContentId)) {
             throw new BcException(__d('baser_core', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
         }
-        return $this->addPrefix('mail_message_' . $mailContentId);
+        return $this->addPrefix('mail_message_' . (int)$mailContentId);
     }
 
     /**

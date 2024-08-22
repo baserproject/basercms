@@ -11,6 +11,7 @@
 
 namespace BcMail\Test\TestCase\Model\Table;
 
+use BaserCore\Error\BcException;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailFieldsTable;
@@ -494,5 +495,20 @@ class MailMessagesTableTest extends BcTestCase
         );
         $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
         $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
+    }
+
+    /**
+     * test createTableName
+     */
+    public function test_createTableName()
+    {
+        $mailContentId = 1;
+        $result = $this->MailMessage->createTableName($mailContentId);
+        $this->assertEquals('mail_message_1', $result);
+
+        $mailContentId = 'abc';
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。');
+        $this->MailMessage->createTableName($mailContentId);
     }
 }
