@@ -10,8 +10,11 @@
  */
 
 namespace BcUploader\Test\TestCase\Event;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogAdminAppView;
 use BcUploader\Event\BcUploaderViewEventListener;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UploaderViewEventListenerTest
@@ -20,6 +23,7 @@ use BcUploader\Event\BcUploaderViewEventListener;
  */
 class UploaderViewEventListenerTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -27,6 +31,7 @@ class UploaderViewEventListenerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->UploaderViewEventListener = new BcUploaderViewEventListener();
     }
 
     /**
@@ -55,7 +60,14 @@ class UploaderViewEventListenerTest extends BcTestCase
      */
     public function test__getCkeditorUploaderScript()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->loginAdmin($this->getRequest("/baser/admin/bc-blog/blog_posts/add/1"));
+        $BcAdminAppView = new BlogAdminAppView($request);
+        //対象メソッドをコール
+        $rs = $this->execPrivateMethod($this->UploaderViewEventListener, '__getCkeditorUploaderScript', [$BcAdminAppView->helpers()->get('BcHtml'), 1]);
+        //戻り値を確認
+        $this->assertMatchesRegularExpression('/.*CKEDITOR.config.contentsCss instanceof Array.*editor_1.+?/s', $rs);
     }
 
     /**
