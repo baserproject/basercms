@@ -323,64 +323,70 @@ class MailMessagesTableTest extends BcTestCase
     /**
      * 受信メッセージの内容を表示状態に変換する
      *
-     * @param int $id
-     * @param array $messages
-     * @return array
      */
     public function testConvertMessageToCsv()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $mailFields = [
+            MailFieldsFactory::make([
+                'mail_content_id' => 1,
+                'field_name' => 'name',
+                'name' => 'Name',
+                'type' => 'text'
+            ])->getEntity(),
 
-        $messages = [
-            ['MailMessage' => [
-                'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]],
-            ['MailMessage' => [
-                'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]]
+            MailFieldsFactory::make([
+                'mail_content_id' => 1,
+                'field_name' => 'file_upload',
+                'name' => 'File Upload',
+                'type' => 'file'
+            ])->getEntity(),
         ];
 
-        $expected = [
-            0 => [
+        //messages
+        $messages = [
+            (object)[
+                'id' => 1,
+                'name' => 'John Doe',
+                'file_upload' => 'file1.jpg',
+                'created' => '2024-08-21 12:00:00',
+                'modified' => '2024-08-21 13:00:00',
+            ],
+            (object)[
+                'id' => 2,
+                'name' => 'Jane Smith',
+                'file_upload' => 'file2.png',
+                'created' => '2024-08-21 14:00:00',
+                'modified' => '2024-08-21 15:00:00',
+            ]
+        ];
+
+        $this->MailMessage->mailFields = $mailFields;
+
+        $result = $this->MailMessage->convertMessageToCsv($messages);
+
+        //Expected
+        $expectedCsv = [
+            [
                 'MailMessage' => [
-                    'NO' => 1, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
+                    'NO' => 1,
+                    'name (Name)' => ' John Doe',
+                    'file_upload (File Upload)' => 'file1.jpg',
+                    '作成日' => '2024-08-21 12:00:00',
+                    '更新日' => '2024-08-21 13:00:00',
                 ]
             ],
-            1 => [
+            [
                 'MailMessage' => [
-                    'NO' => 2, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
+                    'NO' => 2,
+                    'name (Name)' => ' Jane Smith',
+                    'file_upload (File Upload)' => 'file2.png',
+                    '作成日' => '2024-08-21 14:00:00',
+                    '更新日' => '2024-08-21 15:00:00',
                 ]
             ]
         ];
 
-        $result = $this->MailMessage->convertMessageToCsv(1, $messages);
-        $this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
+        $this->assertEquals($expectedCsv, $result);
     }
 
     /**
