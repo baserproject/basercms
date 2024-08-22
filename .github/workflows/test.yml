@@ -40,7 +40,7 @@ jobs:
         run: |
           cd docker
           cp docker-compose.yml.default docker-compose.yml
-          docker-compose up -d
+          docker compose up -d
 
       - name: Sleep for 20 seconds
         run: sleep 20
@@ -48,7 +48,7 @@ jobs:
       - name: Compose log
         run: |
           cd docker
-          docker-compose logs
+          docker compose logs
 
       - name: Run test suite
         run: |
