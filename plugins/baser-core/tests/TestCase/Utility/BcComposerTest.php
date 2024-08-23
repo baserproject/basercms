@@ -76,6 +76,31 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test checkComposer
+     */
+    public function testCheckComposer()
+    {
+        BcComposer::$composerDir = '';
+
+        BcComposer::setup();
+        BcComposer::checkComposer();
+        //実行問題なし場合、composer.pharが生成された
+        $this->assertFileExists(BcComposer::$composerDir . 'composer.phar');
+    }
+
+    /**
+     * test checkComposer エラーを発生した場合
+     */
+    public function testCheckComposerError()
+    {
+        BcComposer::$composerDir = '';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('composer がインストールできません。All settings correct for using Composer');
+        BcComposer::checkComposer();
+    }
+
+    /**
      * test setVersion
      */
     public function test_require()
