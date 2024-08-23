@@ -510,5 +510,10 @@ class MailMessagesTableTest extends BcTestCase
         $this->expectException(BcException::class);
         $this->expectExceptionMessage('MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。');
         $this->MailMessage->createTableName($mailContentId);
+
+        $mailContentId = 1.6;
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。');
+        $this->MailMessage->createTableName($mailContentId);
     }
 }
