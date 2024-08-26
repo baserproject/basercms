@@ -322,7 +322,7 @@ class MailMessagesTableTest extends BcTestCase
 
     /**
      * 受信メッセージの内容を表示状態に変換する
-     *
+     * test convertMessageToCsv
      */
     public function testConvertMessageToCsv()
     {
@@ -342,51 +342,54 @@ class MailMessagesTableTest extends BcTestCase
             ])->getEntity(),
         ];
 
-        //messages
         $messages = [
             (object)[
-                'id' => 1,
-                'name' => 'John Doe',
-                'file_upload' => 'file1.jpg',
-                'created' => '2024-08-21 12:00:00',
-                'modified' => '2024-08-21 13:00:00',
+                'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
+                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
+                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
+                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
+                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
+                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
+                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
+                'modified' => 'v21','name' => 'John Doe', 'file_upload' => 'file1.jpg'
             ],
             (object)[
-                'id' => 2,
-                'name' => 'Jane Smith',
-                'file_upload' => 'file2.png',
-                'created' => '2024-08-21 14:00:00',
-                'modified' => '2024-08-21 15:00:00',
+                'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
+                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
+                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
+                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
+                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
+                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
+                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
+                'modified' => 'v21','name' => 'Jane Smith', 'file_upload' => 'file2.jpg'
             ]
         ];
-
         $this->MailMessage->mailFields = $mailFields;
 
         $result = $this->MailMessage->convertMessageToCsv($messages);
 
-        //Expected
-        $expectedCsv = [
+        $expected = [
             [
                 'MailMessage' => [
-                    'NO' => 1,
+                    'NO' =>  1,
                     'name (Name)' => ' John Doe',
                     'file_upload (File Upload)' => 'file1.jpg',
-                    '作成日' => '2024-08-21 12:00:00',
-                    '更新日' => '2024-08-21 13:00:00',
+                    '作成日' => 'v19',
+                    '更新日' => 'v21'
+
                 ]
             ],
             [
                 'MailMessage' => [
                     'NO' => 2,
                     'name (Name)' => ' Jane Smith',
-                    'file_upload (File Upload)' => 'file2.png',
-                    '作成日' => '2024-08-21 14:00:00',
-                    '更新日' => '2024-08-21 15:00:00',
+                    'file_upload (File Upload)' => 'file2.jpg',
+                    '作成日' => 'v19',
+                    '更新日' => 'v21'
                 ]
             ]
         ];
-
-        $this->assertEquals($expectedCsv, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
