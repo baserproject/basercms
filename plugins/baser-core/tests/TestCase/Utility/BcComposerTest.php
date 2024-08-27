@@ -170,4 +170,39 @@ class BcComposerTest extends BcTestCase
         rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
     }
 
+    /**
+     * test createCommand
+     * @param $inputCommand
+     * @param $expectedCommand
+     * @dataProvider createCommandDataProvider
+     */
+    public function testCreateCommand($inputCommand, $expectedCommand)
+    {
+        BcComposer::$cd = 'cd /var/www/html/;';
+        BcComposer::$export = 'export HOME=/var/www/html/composer/;';
+        BcComposer::$php = 'php';
+        BcComposer::$composerDir = '/var/www/html/composer/';
+
+        $result = BcComposer::createCommand($inputCommand);
+        $this->assertEquals($expectedCommand, $result);
+    }
+
+    public static function createCommandDataProvider()
+    {
+        return [
+            [
+                'self-update',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar self-update 2>&1"
+            ],
+            [
+                'install',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar install 2>&1"
+            ],
+            [
+                'require vendor/package',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar require vendor/package 2>&1"
+            ],
+        ];
+    }
+
 }
