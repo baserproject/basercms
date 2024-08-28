@@ -152,11 +152,11 @@ class BcComposerTest extends BcTestCase
         copy($orgLockPath, $backupLockPath);
 
         // replace を削除
-        // baserCMS5.0.0が、CakePHP4.4.* に依存するため、一旦、CakePHP4.4.* に戻す
+        // baserCMS5.0.0が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "4.5.*"', '"cakephp/cakephp": "4.4.*"', $data);
+        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
