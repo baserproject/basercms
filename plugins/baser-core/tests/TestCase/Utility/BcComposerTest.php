@@ -151,6 +151,19 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test selfUpdate
+     */
+    public function testSelfUpdate()
+    {
+        BcComposer::setup();
+        $rs = BcComposer::selfUpdate();
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+        $this->assertEquals("You are already using the latest available Composer version 2.7.8 (stable channel).", $rs['out'][1]);
+    }
+
+    /**
      * test setupComposerForDistribution
      */
     public function testSetupComposerForDistribution()
