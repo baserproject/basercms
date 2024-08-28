@@ -632,4 +632,60 @@ EOF;
         (new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject'))->delete();
     }
 
+
+    /**
+     * test isAvailableCoreUpdates
+     * @param bool $useUpdateNotice
+     * @param string $currentVersion
+     * @param array $rssVersions
+     * @param array $expectedResult
+     * @dataProvider availableCoreUpdatesDataProvider
+     */
+
+    public function test_isAvailableCoreUpdates($useUpdateNotice, $currentVersion, $rssVersions, $expectedResult)
+    {
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        $versionBakPath = Plugin::path('BaserCore') . 'VERSION.bak.txt';
+        $rssPath = WWW_ROOT . 'baser-core.rss';
+
+        if ($useUpdateNotice) {
+            // Backup version
+            copy($versionPath, $versionBakPath);
+
+            // Enable auto-update
+            SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => $useUpdateNotice])->persist();
+
+            // Update coreReleaseUrl
+            Configure::write('BcApp.coreReleaseUrl', $rssPath);
+
+            // Change version
+            $file = new BcFile($versionPath);
+            $file->write($currentVersion);
+
+            // Generate RSS
+            $this->createReleaseRss($rssVersions);
+
+            // Clear cache
+            Cache::delete('coreReleaseInfo', '_bc_update_');
+        } else {
+            SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => $useUpdateNotice])->persist();
+        }
+
+        // Execute
+        $versionInfo = $this->Plugins->isAvailableCoreUpdates();
+        $this->assertEquals($expectedResult, $versionInfo);
+
+        if ($useUpdateNotice) {
+            rename($versionBakPath, $versionPath);
+            unlink($rssPath);
+        }
+    }
+
+    public static function availableCoreUpdatesDataProvider()
+    {
+        return [
+            [true, '5.0.0', ['5.0.2', '5.0.1', '5.0.0'], ['5.0.2', '5.0.1']],
+            [false, '5.1.0', [], []],
+        ];
+    }
 }
