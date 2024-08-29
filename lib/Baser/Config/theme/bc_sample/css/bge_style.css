@@ -924,7 +924,8 @@ span,
     margin: 0 5px;
     width: 60px;
     height: 60px; }
-
+  [data-bgt='gallery'] [data-gallery-marker='thumbs'] + .bgt-gallery-marker li::before {
+    display: none;}
 [data-bgt='gallery'] [data-gallery-marker='dot'] + .bgt-gallery-marker {
   margin-top: 10px; }
   [data-bgt='gallery'] [data-gallery-marker='dot'] + .bgt-gallery-marker li {

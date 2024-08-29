@@ -298,6 +298,9 @@
         margin: 0 5px;
         width: $thumb-size;
         height: $thumb-size;
+				&::before {
+					display: none;
+				}
       }
     }
   }
