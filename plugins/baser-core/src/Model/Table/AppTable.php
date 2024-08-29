@@ -316,6 +316,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sortdown($id, $conditions)
     {
@@ -333,6 +334,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changeSort($id, $offset, $options = [])
     {
