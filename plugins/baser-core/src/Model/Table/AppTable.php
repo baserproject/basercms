@@ -83,6 +83,7 @@ class AppTable extends Table
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTable(): string
     {

@@ -78,6 +78,19 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * test getTable
+     */
+    public function testGetTable()
+    {
+        //デフォルトテーブル
+        $this->assertEquals('app', $this->App->getTable());
+
+        //Pluginsテーブル
+        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
+        $this->assertEquals('plugins', $this->App->getTable());
+    }
+
+    /**
      * Test getUrlPattern
      *
      * @param string $url
