@@ -100,6 +100,7 @@ class AppTable extends Table
      * @return BelongsToMany
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function belongsToMany(string $associated, array $options = []): BelongsToMany
     {

@@ -102,6 +102,22 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * test belongsToMany
+     */
+    public function testBelongsToMany()
+    {
+        $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        //Usersに連携
+        $rs = $this->App->belongsToMany('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'user_id',
+        ]);
+        //戻り値を確認
+        $this->assertEquals('user_id', $rs->getForeignKey());
+        $this->assertEquals('BaserCore.Users', $rs->getClassName());
+    }
+
+    /**
      * Test getMax
      *
      * @return void
