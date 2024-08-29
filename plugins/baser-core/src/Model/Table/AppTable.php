@@ -117,6 +117,7 @@ class AppTable extends Table
      * @return \Cake\ORM\Query The query builder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function find(string $type = 'all', mixed ...$args): Query
     {
