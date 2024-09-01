@@ -228,6 +228,7 @@ class BcComposer
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function createCommand(string $command)
     {
