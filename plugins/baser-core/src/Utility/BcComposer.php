@@ -69,11 +69,12 @@ class BcComposer
     public static function setup(string $php = '', $dir = '')
     {
         self::checkEnv();
+        $dir = ($dir)? : ROOT . DS;
         if(!preg_match('/\/$/', $dir)) {
             $dir .= '/';
         }
         self::$currentDir = $dir;
-        self::$cd = ($dir)? "cd " . $dir . ';': "cd " . ROOT . DS . ';';
+        self::$cd = "cd " . $dir . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
         self::$export = "export HOME=" . self::$composerDir . ";";
         self::$php = ($php)?: 'php';

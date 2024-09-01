@@ -27,13 +27,13 @@ class CreateReleaseCommandTest extends BcTestCase
     public function test_createZip()
     {
         $this->packagePath = '/var/www/html/plugins/bc-widget-area/';
-        $this->zipFile = TMP . 'basercms.zip';
+        $this->zipFile = TMP . 'basercms-5.1.0.zip';
 
         //create TMP folder if not exist
         if (!is_dir(TMP)) {
             mkdir(TMP, 0777, true);
         }
-        $this->CreateReleaseCommand->createZip($this->packagePath);
+        $this->CreateReleaseCommand->createZip($this->packagePath, '5.1.0');
 
         $this->assertFileExists($this->zipFile);
 

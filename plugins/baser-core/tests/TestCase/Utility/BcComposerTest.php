@@ -51,7 +51,7 @@ class BcComposerTest extends BcTestCase
 
         // 環境を変更
         BcComposer::setup('/usr/local/bin/php', '/var/www/html/tmp/update');
-        $this->assertEquals('cd /var/www/html/tmp/update;', BcComposer::$cd);
+        $this->assertEquals('cd /var/www/html/tmp/update/;', BcComposer::$cd);
         $this->assertEquals('/usr/local/bin/php', BcComposer::$php);
     }
 
