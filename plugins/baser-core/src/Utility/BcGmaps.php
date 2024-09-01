@@ -76,6 +76,7 @@ class BcGmaps
      * @return array|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLocation($address)
     {
