@@ -137,6 +137,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function __getCkeditorUploaderScript(BcHtmlHelper $bcHtmlHelper, string $id)
     {
