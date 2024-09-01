@@ -10,8 +10,12 @@
  */
 
 namespace BcUploader\Test\TestCase\Event;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogAdminAppView;
 use BcUploader\Event\BcUploaderViewEventListener;
+use Cake\Event\Event;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UploaderViewEventListenerTest
@@ -21,12 +25,15 @@ use BcUploader\Event\BcUploaderViewEventListener;
 class UploaderViewEventListenerTest extends BcTestCase
 {
 
+    use ScenarioAwareTrait;
+
     /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->UploaderViewEventListener = new BcUploaderViewEventListener();
     }
 
     /**
@@ -47,7 +54,31 @@ class UploaderViewEventListenerTest extends BcTestCase
      */
     public function testAfterLayout()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        //BcUploaderViewがある場合、
+        $request = $this->loginAdmin($this->getRequest("/baser/admin/bc-blog/blog_posts/add/1"));
+        $BcAdminAppView = new BlogAdminAppView($request);
+        $BcAdminAppView->loadHelper('BaserCore.BcCkeditor');
+        $BcAdminAppView->assign('content', '</head>{"ckeditorField":"editor_content"');
+        $event = new Event('View.afterLayout', $BcAdminAppView);
+
+        $this->UploaderViewEventListener->afterLayout($event);
+
+        $content = $BcAdminAppView->fetch('content');
+        //JSを読み込むできるか確認すること
+        $this->assertTextContains('画像を選択するか、URLを直接入力して下さい。', $content);
+
+        //BcUploaderViewがない場合、
+        $BcAdminAppView = new BlogAdminAppView($this->getRequest("/"));
+        $BcAdminAppView->assign('content', '</head>{"ckeditorField":"editor_content"');
+        $event = new Event('View.afterLayout', $BcAdminAppView);
+
+        $this->UploaderViewEventListener->afterLayout($event);
+
+        $content = $BcAdminAppView->fetch('content');
+        //JSを読み込むできないか確認すること
+        $this->assertEquals('</head>{"ckeditorField":"editor_content"', $content);
     }
 
     /**

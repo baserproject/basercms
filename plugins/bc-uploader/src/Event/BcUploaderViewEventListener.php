@@ -43,6 +43,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
      * @param Event $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterLayout(Event $event)
     {
