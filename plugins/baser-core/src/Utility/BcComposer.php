@@ -98,6 +98,7 @@ class BcComposer
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkEnv()
     {

@@ -56,6 +56,14 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test checkEnv
+     */
+    public function testCheckEnv()
+    {
+        $this->assertNull(BcComposer::checkEnv());
+    }
+
+    /**
      * installComposer
      */
     public function test_installComposer()
