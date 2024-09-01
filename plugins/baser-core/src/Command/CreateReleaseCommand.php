@@ -43,10 +43,9 @@ class CreateReleaseCommand extends Command
             'help' => __d('baser_core', 'リリースバージョン'),
             'required' => true
         ]);
-        $parser->addArgument('branch', [
+        $parser->addOption('branch', [
             'help' => __d('baser_core', 'クローン対象ブランチ'),
-            'default' => 'master',
-            'required' => false
+            'default' => 'master'
         ]);
         return $parser;
     }
@@ -72,11 +71,11 @@ class CreateReleaseCommand extends Command
         $io->out();
 
         $io->out(__d('baser_core', '- {0} にパッケージをクローンします。', TMP));
-        $this->clonePackage($packagePath, $args->getArgument('branch'));
+        $this->clonePackage($packagePath, $args->getOption('branch'));
 
         $io->out(__d('baser_core', '- composer.json / composer.lock をセットアップします。'));
         BcComposer::setup('', $packagePath);
-        $result = BcComposer::setupComposerForDistribution($version, true);
+        $result = BcComposer::setupComposerForDistribution($version);
         if($result['code'] === 0) {
             $io->out(__d('baser_core', 'Composer による lock ファイルの更新に失敗アップデートが完了しました。'));
         } else {
