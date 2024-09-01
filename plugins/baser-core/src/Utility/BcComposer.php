@@ -38,6 +38,13 @@ class BcComposer
     public static $composerDir;
 
     /**
+     * 現在のディレクトリ
+     *
+     * @var string
+     */
+    public static $currentDir;
+
+    /**
      * export コマンド
      *
      * @var string
@@ -62,6 +69,7 @@ class BcComposer
     public static function setup(string $php = '', $dir = '')
     {
         self::checkEnv();
+        self::$currentDir = $dir;
         self::$cd = ($dir)? "cd " . $dir . ';': "cd " . ROOT . DS . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
         self::$export = "export HOME=" . self::$composerDir . ";";
@@ -256,6 +264,45 @@ class BcComposer
         $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
         $data = preg_replace($regex, $replace, $data);
         $file->write($data);
+    }
+
+
+    /**
+     * changeMinimumStabilityToDev
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public static function changeMinimumStabilityToDev()
+    {
+        $file = new BcFile(self::$currentDir . DS . 'composer.json');
+        $json = $file->read();
+
+        if(strpos($json, '"minimum-stability"') !== false) {
+            $json = preg_replace('/"minimum-stability"\s*:\s*".+?"/', '"minimum-stability": "dev"', $json);
+        } else {
+            $json = preg_replace('/"require"\s*:\s*{/', '"minimum-stability": "dev",' . "\n" . '    "require": {', $json);
+        }
+        if(strpos($json, '"prefer-stable"') !== false) {
+            $json = preg_replace('/"prefer-stable"\s*:\s*[a-zA-Z]+/', '"prefer-stable": true', $json);
+        } else {
+            $json = preg_replace('/"require"\s*:\s*{/', '"prefer-stable": true,' . "\n" . '    "require": {', $json);
+        }
+
+        $file->write($json);
+    }
+
+    /**
+     * replace を削除する
+     * @return void
+     */
+    public static function deleteReplace()
+    {
+        $file = new BcFile(self::$currentDir . DS . 'composer.json');
+        $json = $file->read();
+        $json = preg_replace('/"replace"\s*:\s*?{[^}]+?},/', '', $json);
+        $file->write($json);
     }
 
 }
