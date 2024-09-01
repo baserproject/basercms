@@ -171,6 +171,43 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+        $orgLockPath = ROOT . DS . 'composer.lock';
+        $backupLockPath = ROOT . DS . 'composer.lock.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        copy($orgLockPath, $backupLockPath);
+
+        // replace を削除
+        // baserCMS5.0.0が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $regex = '/("replace": {.+?},)/s';
+        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = preg_replace($regex, '', $data);
+        $file->write($data);
+        BcComposer::setup('php');
+
+        $rs = BcComposer::update();
+        //戻り値を確認
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+        rename($backupLockPath, $orgLockPath);
+        $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
+        $folder->delete();
+        BcComposer::update();
+    }
+
+    /**
      * test clearCache
      */
     public function testClearCache()
