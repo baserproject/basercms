@@ -9,6 +9,8 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BaserCore\Test\TestCase\Utility;
+use A\B;
+use BaserCore\Error\BcException;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcGmaps;
 use Cake\Cache\Cache;
@@ -40,7 +42,20 @@ class BcGmapsTest extends BcTestCase
     }
 
     /**
-     * getLocation
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $_gmapsApiUrl = $this->getPrivateProperty($this->BcGmaps, '_gmapsApiUrl');
+        $this->assertEquals('https://maps.googleapis.com/maps/api/geocode/xml?key=api-key', $_gmapsApiUrl);
+
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('システム基本設定にて、Google Maps API キーを入力してください。');
+        new BcGmaps(false);
+    }
+
+    /**
+     * test getLocation
      */
     public function testGetLocation()
     {

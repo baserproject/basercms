@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -269,6 +270,22 @@ class AppTableTest extends BcTestCase
         });
         $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $this->assertEquals(1, $contentFolders->find()->all()->count());
+    }
+
+    /**
+     * test find()
+     */
+    public function testFind()
+    {
+        PluginFactory::make(['name' => 'plugin1'])->persist();
+        PluginFactory::make(['name' => 'plugin2'])->persist();
+
+        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
+        //fill all
+        $this->assertEquals(2, $this->App->find()->all()->count());
+
+        //limit = 1
+        $this->assertEquals(1, $this->App->find('all', ['limit' => 1])->all()->count());
     }
 
     /**

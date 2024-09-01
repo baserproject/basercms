@@ -9,6 +9,7 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcMail\Test\TestCase\View\Helper;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
@@ -227,5 +228,21 @@ class MailHelperTest extends BcTestCase
 
         $rs = $this->MailHelper->getDescription();
         $this->assertEquals('test description', $rs);
+    }
+
+    /**
+     * test isMail
+     */
+    public function test_isMail()
+    {
+        //no content
+        $result = $this->MailHelper->isMail();
+        $this->assertFalse($result);
+
+        //with content
+        $content = ContentFactory::make(['plugin' => 'BcMail'])->getEntity();
+        $this->MailHelper->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
+        $result = $this->MailHelper->isMail();
+        $this->assertTrue($result);
     }
 }
