@@ -59,6 +59,7 @@ class BcGmaps
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($apiKey)
     {
