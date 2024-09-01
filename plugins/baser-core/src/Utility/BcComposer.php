@@ -176,10 +176,11 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function install()
     {
-        return self::execCommand('install --with-all-dependencies --ignore-platform-req=ext-xdebug');
+        return self::execCommand('install --ignore-platform-req=ext-xdebug');
     }
 
     /**
