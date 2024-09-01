@@ -239,18 +239,32 @@ class BcComposerTest extends BcTestCase
     public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $composer = ROOT . DS . 'composer.json';
-        copy($composer, ROOT . DS . 'composer.json.bak');
+        $composer = TMP_TESTS . 'composer.json';
+        copy(ROOT . DS . 'composer.json', $composer);
 
         // 実行
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', TMP_TESTS);
+
+        // 5.1.0 のテストの場合、5.1.1 との依存関係の問題があるためライブラリを調整
+        // このままでは、今後のリリースのタイミングでまた依存関係が変わる可能性があるため
+        // 特定のバージョンの composer.json を別途用意しておいた方が良さそう
+        // >>>
+        BcComposer::require('josegonzalez/dotenv', '^3.2');
+        sleep(1);
+        BcComposer::require('mobiledetect/mobiledetectlib', '^4.8.03');
+        // <<<
+
+        BcComposer::setupComposerForDistribution('5.1.0');
         $file = new BcFile($composer);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
+        $this->assertFileExists(TMP_TESTS . 'composer.lock');
 
         // バックアップをリストア
-        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        unlink($composer);
+        unlink(TMP_TESTS . 'composer.lock');
+        (new BcFolder(TMP_TESTS . 'vendor'))->delete();
     }
 
     /**

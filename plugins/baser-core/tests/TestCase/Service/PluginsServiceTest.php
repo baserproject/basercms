@@ -573,7 +573,8 @@ EOF;
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
 
         // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.0.15');
 
         // getCoreUpdate 実行
         $this->Plugins->getCoreUpdate('5.0.15', 'php');
@@ -615,7 +616,8 @@ EOF;
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.1.1');
 
         // ロールバック
         $this->Plugins->rollbackCore('5.0.15', 'php');

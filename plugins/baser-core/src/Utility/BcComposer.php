@@ -69,6 +69,9 @@ class BcComposer
     public static function setup(string $php = '', $dir = '')
     {
         self::checkEnv();
+        if(!preg_match('/\/$/', $dir)) {
+            $dir .= '/';
+        }
         self::$currentDir = $dir;
         self::$cd = ($dir)? "cd " . $dir . ';': "cd " . ROOT . DS . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
@@ -246,26 +249,21 @@ class BcComposer
 
     /**
      * 配布用に composer.json をセットアップする
-     * @param string $packagePath
-     * @return void
+     * @param string $version
+     * @return array
      * @noTodo
      * @checked
      * @unitTest
      */
-    public static function setupComposerForDistribution(string $packagePath)
+    public static function setupComposerForDistribution(string $version)
     {
-        $composer = $packagePath . 'composer.json';
-        $file = new BcFile($composer);
-        $data = $file->read();
-        $regex = '/^(.+?)    "replace": {.+?},\n(.+?)/s';
-        $data = preg_replace($regex, "$1$2", $data);
-        $regex = '/^(.+?"cakephp\/cakephp": ".+?",)(.+?)$/s';
-        $setupVersion = Configure::read('BcApp.setupVersion');
-        $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
-        $data = preg_replace($regex, $replace, $data);
-        $file->write($data);
+        self::deleteReplace();
+        $result = self::require('baser-core', $version);
+        (new BcFolder(self::$currentDir . 'vendor'))->delete();
+        mkdir(self::$currentDir . 'vendor');
+        (new BcFile(self::$currentDir . 'vendor' . DS . '.gitkeep'))->create();
+        return $result;
     }
-
 
     /**
      * changeMinimumStabilityToDev
@@ -276,7 +274,7 @@ class BcComposer
      */
     public static function changeMinimumStabilityToDev()
     {
-        $file = new BcFile(self::$currentDir . DS . 'composer.json');
+        $file = new BcFile(self::$currentDir . 'composer.json');
         $json = $file->read();
 
         if(strpos($json, '"minimum-stability"') !== false) {
@@ -299,7 +297,7 @@ class BcComposer
      */
     public static function deleteReplace()
     {
-        $file = new BcFile(self::$currentDir . DS . 'composer.json');
+        $file = new BcFile(self::$currentDir . 'composer.json');
         $json = $file->read();
         $json = preg_replace('/"replace"\s*:\s*?{[^}]+?},/', '', $json);
         $file->write($json);
