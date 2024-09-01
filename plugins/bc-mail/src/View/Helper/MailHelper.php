@@ -303,6 +303,7 @@ class MailHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMail(): bool
     {

@@ -6,7 +6,10 @@ use BaserCore\TestSuite\BcTestCase;
 use BcInstaller\BcInstallerPlugin;
 use BcInstaller\Command\InstallCheckCommand;
 use BcInstaller\Command\InstallCommand;
+use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
+use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Console\CommandCollection;
+use Cake\Core\Container;
 
 class BcInstallerPluginTest extends BcTestCase
 {
@@ -26,7 +29,10 @@ class BcInstallerPluginTest extends BcTestCase
      */
     public function test_services()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $container = new Container();
+        $this->BcInstallerPlugin->services($container);
+        $this->assertTrue($container->has(InstallationsServiceInterface::class));
+        $this->assertTrue($container->has(InstallationsAdminServiceInterface::class));
     }
 
     /**

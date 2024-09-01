@@ -79,6 +79,7 @@ class BcComposer
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkComposer()
     {
@@ -97,6 +98,7 @@ class BcComposer
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkEnv()
     {
@@ -161,6 +163,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function update()
     {
@@ -173,10 +176,11 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function install()
     {
-        return self::execCommand('install --with-all-dependencies --ignore-platform-req=ext-xdebug');
+        return self::execCommand('install --ignore-platform-req=ext-xdebug');
     }
 
     /**
@@ -225,6 +229,7 @@ class BcComposer
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function createCommand(string $command)
     {

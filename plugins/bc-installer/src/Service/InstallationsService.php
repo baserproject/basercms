@@ -81,6 +81,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkEnv(): array
     {

@@ -117,6 +117,7 @@ class AppTable extends Table
      * @return \Cake\ORM\Query The query builder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function find(string $type = 'all', mixed ...$args): Query
     {
@@ -315,6 +316,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sortdown($id, $conditions)
     {
@@ -332,6 +334,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changeSort($id, $offset, $options = [])
     {
