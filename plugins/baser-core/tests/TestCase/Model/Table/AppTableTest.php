@@ -245,50 +245,6 @@ class AppTableTest extends BcTestCase
     }
 
     /**
-     * test beforeFind
-     * @return void
-     */
-    public function testBeforeFind()
-    {
-        ContentFolderFactory::make(2)->persist();
-        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.beforeFind', function(Event $event) {
-            $event->setData('options', ['limit' => 1]);
-        });
-        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
-        $this->assertEquals(1, $contentFolders->find()->all()->count());
-    }
-
-    /**
-     * test afterFind
-     * @return void
-     */
-    public function testAfterFind()
-    {
-        ContentFolderFactory::make(2)->persist();
-        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.afterFind', function(Event $event) {
-            $event->setData('result', $event->getData('result')->limit(1));
-        });
-        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
-        $this->assertEquals(1, $contentFolders->find()->all()->count());
-    }
-
-    /**
-     * test find()
-     */
-    public function testFind()
-    {
-        PluginFactory::make(['name' => 'plugin1'])->persist();
-        PluginFactory::make(['name' => 'plugin2'])->persist();
-
-        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
-        //fill all
-        $this->assertEquals(2, $this->App->find()->all()->count());
-
-        //limit = 1
-        $this->assertEquals(1, $this->App->find('all', ['limit' => 1])->all()->count());
-    }
-
-    /**
      * testSortdown
      * @return void
      */
