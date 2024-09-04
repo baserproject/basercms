@@ -61,7 +61,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSコア｜アップデート'
   <p>
     <?php echo $this->BcAdminForm->control('force', [
       'type' => 'checkbox',
-      'label' => __d('baser_core', '利用可能なバージョンに関わらず、composer.json の内容でダウンロードする')
+      'label' => __d('baser_core', '最新の開発版をダウンロードする')
     ]) ?>
   </p>
   <?php endif ?>
@@ -78,7 +78,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSコア｜アップデート'
       ]) ?>
     </div>
     <div class="bca-actions__main">
-      <?php echo $this->BcAdminForm->submit(__d('baser_core', '最新版をダウンロード'), [
+      <?php echo $this->BcAdminForm->submit(__d('baser_core', 'ダウンロード'), [
         'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-size' => 'lg',
         'data-bca-btn-width' => 'lg',

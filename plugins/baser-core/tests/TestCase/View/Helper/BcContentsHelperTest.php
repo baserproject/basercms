@@ -850,4 +850,26 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertNull($siteRoot);
     }
 
+    /**
+     * test isFolder
+     */
+    public function test_isFolder()
+    {
+        //isAdminSystem true
+        $this->getRequest('baser/admin');
+        $rs = $this->BcContents->isFolder();
+        $this->assertFalse($rs);
+
+        //contentFolder not exist
+        $content = ContentFactory::make(['type' => '',])->getEntity();
+        $this->BcContents->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
+        $rs = $this->BcContents->isFolder();
+        $this->assertFalse($rs);
+
+        //contentFolder exist
+        $content['type'] = 'ContentFolder';
+        $this->BcContents->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
+        $rs = $this->BcContents->isFolder();
+        $this->assertTrue($rs);
+    }
 }

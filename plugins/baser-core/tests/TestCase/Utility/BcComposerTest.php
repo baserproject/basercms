@@ -51,8 +51,16 @@ class BcComposerTest extends BcTestCase
 
         // 環境を変更
         BcComposer::setup('/usr/local/bin/php', '/var/www/html/tmp/update');
-        $this->assertEquals('cd /var/www/html/tmp/update;', BcComposer::$cd);
+        $this->assertEquals('cd /var/www/html/tmp/update/;', BcComposer::$cd);
         $this->assertEquals('/usr/local/bin/php', BcComposer::$php);
+    }
+
+    /**
+     * test checkEnv
+     */
+    public function testCheckEnv()
+    {
+        $this->assertNull(BcComposer::checkEnv());
     }
 
     /**
@@ -73,6 +81,31 @@ class BcComposerTest extends BcTestCase
         $result = BcComposer::installComposer();
         $this->assertEquals(0, $result['code']);
         $this->assertFileExists(BcComposer::$composerDir . 'composer.phar');
+    }
+
+    /**
+     * test checkComposer
+     */
+    public function testCheckComposer()
+    {
+        BcComposer::$composerDir = '';
+
+        BcComposer::setup();
+        BcComposer::checkComposer();
+        //実行問題なし場合、composer.pharが生成された
+        $this->assertFileExists(BcComposer::$composerDir . 'composer.phar');
+    }
+
+    /**
+     * test checkComposer エラーを発生した場合
+     */
+    public function testCheckComposerError()
+    {
+        BcComposer::$composerDir = '';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('composer がインストールできません。All settings correct for using Composer');
+        BcComposer::checkComposer();
     }
 
     /**
@@ -138,6 +171,43 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+        $orgLockPath = ROOT . DS . 'composer.lock';
+        $backupLockPath = ROOT . DS . 'composer.lock.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        copy($orgLockPath, $backupLockPath);
+
+        // replace を削除
+        // baserCMS5.0.0が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $regex = '/("replace": {.+?},)/s';
+        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = preg_replace($regex, '', $data);
+        $file->write($data);
+        BcComposer::setup('php');
+
+        $rs = BcComposer::update();
+        //戻り値を確認
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+        rename($backupLockPath, $orgLockPath);
+        $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
+        $folder->delete();
+        BcComposer::update();
+    }
+
+    /**
      * test clearCache
      */
     public function testClearCache()
@@ -148,6 +218,19 @@ class BcComposerTest extends BcTestCase
         $this->assertFileExists(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
         BcComposer::clearCache();
         $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+    }
+
+    /**
+     * test install
+     */
+    public function testInstall()
+    {
+        BcComposer::setup('php');
+
+        $rs = BcComposer::install();
+        //戻り値を確認
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
     }
 
     /**
@@ -169,18 +252,67 @@ class BcComposerTest extends BcTestCase
     public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $composer = ROOT . DS . 'composer.json';
-        copy($composer, ROOT . DS . 'composer.json.bak');
+        $composer = TMP_TESTS . 'composer.json';
+        copy(ROOT . DS . 'composer.json', $composer);
 
         // 実行
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', TMP_TESTS);
+
+        // 5.1.0 のテストの場合、5.1.1 との依存関係の問題があるためライブラリを調整
+        // このままでは、今後のリリースのタイミングでまた依存関係が変わる可能性があるため
+        // 特定のバージョンの composer.json を別途用意しておいた方が良さそう
+        // >>>
+        BcComposer::require('josegonzalez/dotenv', '^3.2');
+        sleep(1);
+        BcComposer::require('mobiledetect/mobiledetectlib', '^4.8.03');
+        // <<<
+
+        BcComposer::setupComposerForDistribution('5.1.0');
         $file = new BcFile($composer);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
+        $this->assertFileExists(TMP_TESTS . 'composer.lock');
 
         // バックアップをリストア
-        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        unlink($composer);
+        unlink(TMP_TESTS . 'composer.lock');
+        (new BcFolder(TMP_TESTS . 'vendor'))->delete();
+    }
+
+    /**
+     * test createCommand
+     * @param $inputCommand
+     * @param $expectedCommand
+     * @dataProvider createCommandDataProvider
+     */
+    public function testCreateCommand($inputCommand, $expectedCommand)
+    {
+        BcComposer::$cd = 'cd /var/www/html/;';
+        BcComposer::$export = 'export HOME=/var/www/html/composer/;';
+        BcComposer::$php = 'php';
+        BcComposer::$composerDir = '/var/www/html/composer/';
+
+        $result = BcComposer::createCommand($inputCommand);
+        $this->assertEquals($expectedCommand, $result);
+    }
+
+    public static function createCommandDataProvider()
+    {
+        return [
+            [
+                'self-update',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar self-update 2>&1"
+            ],
+            [
+                'install',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar install 2>&1"
+            ],
+            [
+                'require vendor/package',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar require vendor/package 2>&1"
+            ],
+        ];
     }
 
 }
