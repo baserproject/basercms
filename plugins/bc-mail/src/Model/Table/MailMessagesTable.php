@@ -551,6 +551,9 @@ class MailMessagesTable extends MailAppTable
      *
      * @param $mailContentId
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createFullTableName($mailContentId)
     {

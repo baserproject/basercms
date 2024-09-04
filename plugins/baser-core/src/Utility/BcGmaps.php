@@ -59,6 +59,7 @@ class BcGmaps
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($apiKey)
     {
@@ -75,6 +76,7 @@ class BcGmaps
      * @return array|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getLocation($address)
     {

@@ -113,6 +113,34 @@ class PluginsAdminServiceTest extends BcTestCase
     }
 
     /**
+     * test isRequireUpdate
+     * @param string $programVersion
+     * @param string|null $dbVersion
+     * @param string|null $availableVersion
+     * @param bool $expected
+     * @dataProvider isRequireUpdateDataProvider
+     */
+    public function test_isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion, bool $expected)
+    {
+        $result = $this->PluginsAdmin->isRequireUpdate($programVersion, $dbVersion, $availableVersion);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function isRequireUpdateDataProvider()
+    {
+        return [
+            ['1.0.0', '1.0.0', '1.1.0', true],
+            ['1.0.0', '1.0.0', '0.9.0', false],
+            ['1.0.0', '1.0.0', '1.0.0', false],
+            ['1.1.0', '1.0.0', '1.1.0', false],
+            ['1.0.0', '1.0.0', null, false],
+            ['invalid_version', '1.0.0', '1.1.0', false],
+            ['1.0.0', 'invalid_version', '1.1.0', false],
+            ['1.0.0', '1.0.0', 'invalid_version', false],
+        ];
+    }
+
+    /**
      * test getViewVarsForAdd
      */
     public function test_getViewVarsForAdd()
