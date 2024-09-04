@@ -91,6 +91,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _extractByPhpLib($source, $target)
     {
@@ -143,6 +144,7 @@ class BcZip
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _escapePath($path)
     {
@@ -161,6 +163,7 @@ class BcZip
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create($sorce, $dist)
     {
