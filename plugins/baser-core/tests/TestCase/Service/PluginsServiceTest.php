@@ -573,7 +573,8 @@ EOF;
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
 
         // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.0.15');
 
         // getCoreUpdate 実行
         $this->Plugins->getCoreUpdate('5.0.15', 'php');
@@ -615,7 +616,8 @@ EOF;
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.1.1');
 
         // ロールバック
         $this->Plugins->rollbackCore('5.0.15', 'php');
@@ -632,6 +634,37 @@ EOF;
         (new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject'))->delete();
     }
 
+    /**
+     * test isAvailableCoreUpdates
+     */
+    public function testIsAvailableCoreUpdates()
+    {
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        $versionBakPath = Plugin::path('BaserCore') . 'VERSION.bak.txt';
+        $rssPath = WWW_ROOT . 'baser-core.rss';
+
+        // バックアップを取得する
+        copy($versionPath, $versionBakPath);
+        // オートアップデートを有効化
+        SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => true])->persist();
+        // BcApp.coreReleaseUrl を書き換える
+        Configure::write('BcApp.coreReleaseUrl', $rssPath);
+        // バージョンを書き換える
+        $file = new BcFile($versionPath);
+        $file->write('5.0.0');
+        // RSSを生成
+        $this->createReleaseRss(['5.0.2', '5.0.1', '5.0.0']);
+        // キャッシュを削除
+        Cache::delete('coreReleaseInfo', '_bc_update_');
+
+        // 実行
+        $rs = $this->Plugins->isAvailableCoreUpdates();
+        $this->assertEquals(['5.0.2', '5.0.1'], $rs);
+
+        // 初期化
+        rename($versionBakPath, $versionPath);
+        unlink($rssPath);
+    }
 
     /**
      * test isAvailableCoreUpdates
@@ -684,8 +717,9 @@ EOF;
     public static function availableCoreUpdatesDataProvider()
     {
         return [
-            [true, '5.0.0', ['5.0.2', '5.0.1', '5.0.0'], ['5.0.2', '5.0.1']],
-            [false, '5.1.0', [], []],
+            [true, '100.0.0', ['100.0.2', '100.0.1', '100.0.0'], ['100.0.2', '100.0.1']],
+            [true, '100.0.2', ['100.0.2', '100.0.1', '100.0.0'], []],
+            [false, '100.0.0', [], []]
         ];
     }
 }
