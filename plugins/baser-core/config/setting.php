@@ -292,12 +292,6 @@ return [
         'coreReleaseUrl' => 'https://packagist.org/feeds/package.baserproject/baser-core.rss',
 
         /**
-         * インストール時に composer.json にセットするバージョン
-         * @see \BaserCore\Utility\BcComposer::setupComposerForDistribution()
-         */
-        'setupVersion' => '5.1.*',
-
-        /**
          * リリースパッケージに不要なファイル
          * @see \BaserCore\Command\CreateReleaseCommand::deleteExcludeFiles()
          */

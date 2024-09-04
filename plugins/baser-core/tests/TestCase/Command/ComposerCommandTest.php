@@ -73,7 +73,8 @@ class ComposerCommandTest extends BcTestCase
         $this->assertErrorContains('Composer によるアップデートが失敗しました。update ログを確認してください。');
 
         // composer実行（composer.json を配布用にセットアップ）
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.0.15');
         $this->exec('composer 5.0.15');
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Composer によるアップデートが完了しました。');
@@ -104,7 +105,8 @@ class ComposerCommandTest extends BcTestCase
         copy(ROOT . DS . 'composer.json', TMP . 'update' . DS . 'composer.json');
         copy(ROOT . DS . 'composer.lock', TMP . 'update' . DS . 'composer.lock');
         // composer.json を配布用にセットアップ
-        BcComposer::setupComposerForDistribution(TMP . 'update' . DS);
+        BcComposer::setup('', TMP . 'update' . DS);
+        BcComposer::setupComposerForDistribution('5.0.15');
         // composer 実行
         $this->exec('composer 5.0.15 --dir ' . TMP . 'update');
         // バージョンを確認
