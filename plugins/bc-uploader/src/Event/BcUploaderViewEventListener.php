@@ -43,6 +43,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
      * @param Event $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterLayout(Event $event)
     {
@@ -136,6 +137,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function __getCkeditorUploaderScript(BcHtmlHelper $bcHtmlHelper, string $id)
     {
