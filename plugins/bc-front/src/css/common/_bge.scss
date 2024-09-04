@@ -1,5 +1,8 @@
 /**
  * BurgerEditor StyleSheet Style
+ *
+ * bc-front テーマ側でコンパイルした際は、bge_style.css を
+ * BcThemeSample テーマ側にコピーする必要がある
  */
 
 .bgt-box__caption {
@@ -240,7 +243,6 @@
 
     &-ctrl {
       top: 50%;
-      opacity: 0;
       transition: opacity 200ms ease-in;
 
       &__prev,
@@ -298,6 +300,9 @@
         margin: 0 5px;
         width: $thumb-size;
         height: $thumb-size;
+				&::before {
+					display: none;
+				}
       }
     }
   }

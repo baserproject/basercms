@@ -237,6 +237,82 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
+     * メール用に変換する
+     *
+     * @param int $no_send no_sendの値
+     * @param string $type 指定するタイプ
+     * @dataProvider convertDatasToMailDataProvider
+     */
+    public function testConvertDatasToMail($no_send, $type)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 初期化
+        $this->MailMessage->mailFields = [
+            [
+                'MailField' => [
+                    'field_name' => 'value',
+                    'use_field' => true,
+                    'no_send' => $no_send,
+                    'type' => $type,
+                ]
+            ]
+        ];
+        $dbData = [
+            'mailFields' => [
+                'key1' => [
+                    'MailField' => [
+                        'before_attachment' => '<before>before_attachment',
+                        'after_attachment' => '<after><br>after_attachment',
+                        'head' => '<head><br>head',
+                    ]
+                ]
+            ],
+            'message' => [
+                'value' => '<br><br />hoge',
+            ]
+        ];
+        if ($type == 'file') {
+            $dbData['message']['value_tmp'] = 'hoge_tmp';
+        }
+
+
+        // 実行
+        $result = $this->MailMessage->convertDatasToMail($dbData);
+
+        if (is_null($type)) {
+            if (!$no_send) {
+                $expectedMailField = [
+                    'before_attachment' => 'before_attachment',
+                    'after_attachment' => "\nafter_attachment",
+                    'head' => 'head',
+                ];
+                $this->assertEquals($expectedMailField, $result['mailFields']['key1']['MailField'], 'mailFieldsに正しい値を格納できていません');
+
+                $expectedMessage = "<br><br />hoge";
+                $this->assertEquals($expectedMessage, $result['message']['value']);
+            } else {
+                $this->assertEmpty($result['message']);
+            }
+        } else if ($type == 'multi_check') {
+            $expectedMessage = "<br><br />hoge";
+            $this->assertEquals($expectedMessage, $result['message']['value'][0]);
+        } else if ($type == 'file') {
+            $expectedMessage = 'hoge_tmp';
+            $this->assertEquals($expectedMessage, $result['message']['value']);
+        }
+    }
+
+    public static function convertDatasToMailDataProvider()
+    {
+        return [
+            [0, null],
+            [1, null],
+            [0, 'multi_check'],
+            [0, 'file'],
+        ];
+    }
+
+    /**
      * フルテーブル名を生成する
      */
     public function testCreateFullTableName()
@@ -418,6 +494,20 @@ class MailMessagesTableTest extends BcTestCase
         );
         $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
         $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
+    }
+
+
+    /**
+     * test createFullTableName
+     */
+    public function test_createFullTableName()
+    {
+        $this->MailMessage->tablePrefix = 'prefix_';
+        $mailContentId = 5;
+
+        $result = $this->MailMessage->createFullTableName($mailContentId);
+        $expected = 'prefix_mail_message_5';
+        $this->assertEquals($expected, $result);
     }
 
     /**
