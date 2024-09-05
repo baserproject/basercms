@@ -192,6 +192,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd()
     {
