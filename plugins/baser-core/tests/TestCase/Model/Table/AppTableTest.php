@@ -12,13 +12,13 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
-use BaserCore\Test\Factory\ContentFolderFactory;
-use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
-use Cake\Event\Event;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
+use Cake\Datasource\ConnectionManager;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -89,6 +89,15 @@ class AppTableTest extends BcTestCase
         //Pluginsテーブル
         $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
         $this->assertEquals('plugins', $this->App->getTable());
+
+        //プレフィックスを追加場合、
+        $config = ConnectionManager::getConfig('test');
+        $config['prefix'] = 'unittest_';
+        ConnectionManager::drop('test');
+        ConnectionManager::setConfig('test', $config);
+
+        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
+        $this->assertEquals('unittest_plugins', $this->App->getTable());
     }
 
     /**
