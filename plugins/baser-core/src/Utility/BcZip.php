@@ -182,6 +182,7 @@ class BcZip
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function zipSub($za, $path, $parentPath = '')
     {
