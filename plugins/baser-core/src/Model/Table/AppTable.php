@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
@@ -130,7 +131,7 @@ class AppTable extends Table
     public function addPrefix($table)
     {
         if(BcUtil::isTest()) {
-            $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+            $prefix = ConnectionManager::getConfig('test')['prefix'];
         } else {
             $prefix = $this->getConnection()->config()['prefix'];
         }
