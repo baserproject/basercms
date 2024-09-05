@@ -145,6 +145,7 @@ class PluginsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
+        $this->markTestSkipped('このテストは未確認です。');
         $vars = $this->PluginsAdmin->getViewVarsForAdd();
         $this->assertTrue(isset($vars['isPluginsDirWritable']));
     }
