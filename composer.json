@@ -26,7 +26,7 @@
         "cakephp/cakephp-codesniffer": "^5.0",
         "cakephp/debug_kit": "^5.0.0",
         "josegonzalez/dotenv": "^4.0",
-        "phpunit/phpunit": "10.1.0",
+        "phpunit/phpunit": "10.5.31",
         "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^3.0",
         "vierge-noire/cakephp-test-suite-light": "^3.0"
