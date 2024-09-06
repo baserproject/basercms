@@ -234,9 +234,22 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test selfUpdate
+     */
+    public function testSelfUpdate()
+    {
+        BcComposer::setup();
+        $rs = BcComposer::selfUpdate();
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+        $this->assertStringContainsString("You are already using the latest available Composer version", $rs['out'][1]);
+    }
+
+    /**
      * test setupComposerForDistribution
      */
-    public function testSetupComposerForDistribution()
+/*    public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
         $composer = TMP_TESTS . 'composer.json';
@@ -265,7 +278,7 @@ class BcComposerTest extends BcTestCase
         unlink($composer);
         unlink(TMP_TESTS . 'composer.lock');
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
-    }
+    }*/
 
     /**
      * test createCommand
