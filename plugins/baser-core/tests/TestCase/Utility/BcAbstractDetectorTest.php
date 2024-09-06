@@ -61,7 +61,18 @@ class BcAbstractDetectorTest extends BcTestCase
      */
     public function testFindAll()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write("BcEnv.isInstalled", false);
+        Configure::write("BcApp.smartphone", true);
+        Configure::write("BcApp.BcAgent", true);
+
+        //isInstalled=false
+        $agents = BcAgent::findAll();
+        $this->assertCount(0, $agents);
+
+        //isInstalled=true
+        Configure::write("BcEnv.isInstalled", true);
+        $agents = BcAgent::findAll();
+        $this->assertCount(2, $agents);
     }
 
     /**
