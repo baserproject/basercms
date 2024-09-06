@@ -19,6 +19,7 @@ use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Test\TestCase\Model\Array;
 use BcMail\Test\TestCase\Model\ClassRegistry;
+use Cake\Core\Exception\CakeException;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -508,5 +509,42 @@ class MailMessagesTableTest extends BcTestCase
         $result = $this->MailMessage->createFullTableName($mailContentId);
         $expected = 'prefix_mail_message_5';
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test createTableName
+     * @param $mailContentId
+     * @param $expected
+     * @param bool $expectException
+     * @dataProvider createTableNameDataProvider
+     */
+    public function test_createTableName($mailContentId, $expected, $expectException = false)
+    {
+        if ($expectException) {
+            $this->expectException(CakeException::class);
+            $this->expectExceptionMessage('MailMessageService::createTableName() の引数 $mailContentId は数値型しか受けつけていません。');
+        }
+
+        $result = $this->MailMessage->createTableName($mailContentId);
+
+        if (!$expectException) {
+            $this->assertEquals($expected, $result);
+        }
+    }
+
+    public static function createTableNameDataProvider()
+    {
+        return [
+            [1, 'mail_message_1'],
+            ['2', 'mail_message_2'],
+            [0, 'mail_message_0'],
+            [-1, 'mail_message_-1'],
+            [1.5, 'mail_message_1'],
+            ['abc', null, true],
+            ['', null, true],
+            [null, null, true],
+            [true, null, true],
+            [false, null, true],
+        ];
     }
 }
