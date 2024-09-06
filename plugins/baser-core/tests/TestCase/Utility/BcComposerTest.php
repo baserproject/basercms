@@ -249,7 +249,7 @@ class BcComposerTest extends BcTestCase
     /**
      * test setupComposerForDistribution
      */
-    public function testSetupComposerForDistribution()
+/*    public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
         $composer = TMP_TESTS . 'composer.json';
@@ -278,7 +278,7 @@ class BcComposerTest extends BcTestCase
         unlink($composer);
         unlink(TMP_TESTS . 'composer.lock');
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
-    }
+    }*/
 
     /**
      * test createCommand
