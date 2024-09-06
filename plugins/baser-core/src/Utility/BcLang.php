@@ -99,6 +99,7 @@ class BcLang extends BcAbstractDetector
      * @return array|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     static public function parseLang($acceptLanguage)
     {
@@ -121,5 +122,5 @@ class BcLang extends BcAbstractDetector
         }
         return $langs[0];
     }
-    
+
 }
