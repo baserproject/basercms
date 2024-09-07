@@ -15,8 +15,8 @@
  */
 ?>
 <div id="Footer" class="bca-footer"
-	 data-loggedin="<?php if (BcUtil::isAdminUser()): ?>true<?php else: ?>false<?php endif; ?>">
-	<?php if (BcUtil::isAdminUser()): //ログイン後 ?>
+	 data-loggedin="<?php $user = BcUtil::loginUser(); ?><?php if ($user): ?>true<?php else: ?>false<?php endif; ?>">
+	<?php $user = BcUtil::loginUser(); ?><?php if ($user): //ログイン後 ?>
 		<div class="bca-footer__inner--full">
 			<div class="bca-footer__main">
 				<div class="bca-footer__baser-version">baserCMS <strong><?php echo h($baserVersion) ?></strong></div>
