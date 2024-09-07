@@ -204,7 +204,7 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
         $folder->delete();
-        BcComposer::update();
+        BcComposer::install();
     }
 
     /**
@@ -322,7 +322,7 @@ class BcComposerTest extends BcTestCase
 
         // バックアップ作成
         copy($orgPath, $backupPath);
-
+        BcComposer::setup();
         BcComposer::deleteReplace();
         $file = new BcFile($orgPath);
         $data = $file->read();
