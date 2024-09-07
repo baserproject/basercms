@@ -707,33 +707,31 @@ SCRIPT_END;
             'style' => 'width:99%;height:540px'
         ], $options);
 
-        if($options['editor'] === 'none') $options['editor'] = '';
-        if ($options['editor']) {
+        if ($options['editor'] !== 'none') {
             [$plugin] = pluginSplit($options['editor']);
             if (!Plugin::isLoaded($plugin)) {
-                $options['editor'] = '';
+                $options['editor'] = 'none';
+            } else {
+                $className = $options['editor'];
+                [, $editor] = pluginSplit($options['editor']);
+                $this->getView()->loadHelper($editor, ['className' => $className]);
             }
-        }
-
-        if (!$options['editor']) {
+        } elseif(!$options['editor']) {
             /** @var BcCkeditorHelper $bcCkeditor */
             $bcCkeditor = $this->getView()->BcCkeditor;
             return $bcCkeditor->editor($fieldName, $options);
         }
 
-        $className = $options['editor'];
-        [, $editor] = pluginSplit($options['editor']);
-        $this->getView()->loadHelper($editor, ['className' => $className]);
-        if (isset($this->getView()->helpers()->{$editor})) {
-            return $this->getView()->{$editor}->editor($fieldName, $options);
-        } elseif ($editor === 'none') {
+        if ($options['editor'] === 'none') {
             $_options = [];
             foreach($options as $key => $value) {
                 if (!preg_match('/^editor/', $key)) {
                     $_options[$key] = $value;
                 }
             }
-            return $this->input($fieldName, array_merge(['type' => 'textarea'], $_options));
+            return $this->control($fieldName, array_merge(['type' => 'textarea'], $_options));
+        } elseif (isset($this->getView()->helpers()->{$editor})) {
+            return $this->getView()->{$editor}->editor($fieldName, $options);
         } else {
             /** @var BcCkeditorHelper $bcCkeditor */
             $bcCkeditor = $this->getView()->BcCkeditor;

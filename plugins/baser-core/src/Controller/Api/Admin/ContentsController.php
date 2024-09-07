@@ -513,6 +513,7 @@ class ContentsController extends BcAdminApiController
             }
         } else {
             $message = __d('baser_core', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。');
+            $this->setResponse($this->response->withStatus(400));
         }
 
         $this->set([

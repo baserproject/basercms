@@ -468,7 +468,7 @@ class ContentsTable extends AppTable
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->id)) {
-            $this->beforeSaveParentId = $entity->parent_id;
+            $this->beforeSaveParentId = $this->get($entity->id)->parent_id;
         }
         if (!empty($entity->name)) {
             $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
