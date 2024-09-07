@@ -472,7 +472,9 @@ class ContentsTable extends AppTable
             try {
                 $this->beforeSaveParentId = $this->get($entity->id)->parent_id;
             } catch (RecordNotFoundException) {
-                $this->beforeSaveParentId = $this->getTrash($entity->id)->parent_id;
+                try {
+                    $this->beforeSaveParentId = $this->getTrash($entity->id)->parent_id;
+                } catch (\Throwable) {}
             }
         }
         if (!empty($entity->name)) {

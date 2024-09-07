@@ -707,7 +707,11 @@ SCRIPT_END;
             'style' => 'width:99%;height:540px'
         ], $options);
 
-        if ($options['editor'] !== 'none') {
+        if(!$options['editor']) {
+            /** @var BcCkeditorHelper $bcCkeditor */
+            $bcCkeditor = $this->getView()->BcCkeditor;
+            return $bcCkeditor->editor($fieldName, $options);
+        } elseif ($options['editor'] !== 'none') {
             [$plugin] = pluginSplit($options['editor']);
             if (!Plugin::isLoaded($plugin)) {
                 $options['editor'] = 'none';
@@ -716,10 +720,6 @@ SCRIPT_END;
                 [, $editor] = pluginSplit($options['editor']);
                 $this->getView()->loadHelper($editor, ['className' => $className]);
             }
-        } elseif(!$options['editor']) {
-            /** @var BcCkeditorHelper $bcCkeditor */
-            $bcCkeditor = $this->getView()->BcCkeditor;
-            return $bcCkeditor->editor($fieldName, $options);
         }
 
         if ($options['editor'] === 'none') {
