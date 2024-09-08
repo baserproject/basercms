@@ -271,6 +271,9 @@ class BcValidation extends Validation
         } elseif(is_array($file)) {
             $fileName = $file['name'];
             $type = $file['type'];
+        } else {
+            $fileName = $file;
+            $type = null;
         }
         if (empty($fileName)) return true;
 

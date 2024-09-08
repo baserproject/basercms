@@ -13,14 +13,13 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
-use Cake\ORM\Entity;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
-use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Content;
@@ -289,11 +288,12 @@ class ContentsTableTest extends BcTestCase
     public function testBeforeSave()
     {
         $value = "テスト";
-        $data = new Entity([
+        ContentFactory::make([
             'id' => 100,
             'parent_id' => 6,
-            'name' => $value
-        ]);
+            'name' => $value,
+        ])->persist();
+        $data = ContentFactory::get(100);
         $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
         $this->assertEquals(6, $this->Contents->beforeSaveParentId);
         // nameフィールドがエンコードされてるかをテスト
