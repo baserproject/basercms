@@ -56,9 +56,30 @@ class BcZipTest extends BcTestCase
     }
 
 
-    public function test_escapePath()
+    /**
+     * test _escapePath
+     * @param $path
+     * @param $expected
+     * @dataProvider escapePathDataProvider
+     */
+    public function test_escapePath($path, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->execPrivateMethod($this->BcZip, '_escapePath', [$path]);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function escapePathDataProvider()
+    {
+        return [
+            ['/var/www/html', "''/'var'/'www'/'html'"],
+            ['/path/to/some file.txt', "''/'path'/'to'/'some file.txt'"],
+            ['/', "''/''"],
+            ['', "''"],
+            [
+                '/path/with/$pecial&chars',
+                "''/'path'/'with'/'\$pecial&chars'",
+            ],
+        ];
     }
 
     /**
