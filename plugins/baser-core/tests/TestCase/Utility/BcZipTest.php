@@ -52,9 +52,68 @@ class BcZipTest extends BcTestCase
      */
     public function testExtractByPhpLib()
     {
-       $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // create zip file
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'test.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('testfolder' . DS . 'testfile.txt', 'This is a test file.');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+
+        $this->assertTrue($result);
+        $this->assertEquals('testfolder', $this->BcZip->topArchiveName);
+
+        // check extracted file
+        $extractedFile = $targetPath . 'testfolder' . DS . 'testfile.txt';
+        $this->assertFileExists($extractedFile);
+        $this->assertEquals('This is a test file.', file_get_contents($extractedFile));
+
+        // clean up
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
     }
 
+    /**
+     * test testExtractByPhpLibReturnsFalse
+     */
+    public function testExtractByPhpLibReturnsFalse()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'invalid.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        //check target path is empty
+        $this->assertEmpty(glob($targetPath . '*'));
+
+        // clean up
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
+    }
 
     /**
      * test _escapePath
