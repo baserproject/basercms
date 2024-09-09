@@ -43,6 +43,7 @@ class BcLang extends BcAbstractDetector
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _setConfig(array $config)
     {
