@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\Chronos\Chronos;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -468,7 +469,13 @@ class ContentsTable extends AppTable
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->id)) {
-            $this->beforeSaveParentId = $entity->parent_id;
+            try {
+                $this->beforeSaveParentId = $this->get($entity->id)->parent_id;
+            } catch (RecordNotFoundException) {
+                try {
+                    $this->beforeSaveParentId = $this->getTrash($entity->id)->parent_id;
+                } catch (\Throwable) {}
+            }
         }
         if (!empty($entity->name)) {
             $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
