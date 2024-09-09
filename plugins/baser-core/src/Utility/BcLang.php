@@ -82,6 +82,7 @@ class BcLang extends BcAbstractDetector
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMatchDecisionKey()
     {
