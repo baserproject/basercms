@@ -2,7 +2,6 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
-use A\B;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcLang;
 
