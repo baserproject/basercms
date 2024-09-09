@@ -49,8 +49,8 @@ class BcAbstractDetectorTest extends BcTestCase
 
         //Configureにnameがある場合、
         $rs = BcAgent::find('smartphone');
-        $this->assertEquals('smartphone',$rs->name);
-        $this->assertEquals('device',$rs->type);
+        $this->assertEquals('smartphone', $rs->name);
+        $this->assertEquals('device', $rs->type);
 
         //Configureにnameがない場合、
         $this->assertNull(BcAgent::find('test'));

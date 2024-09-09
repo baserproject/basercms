@@ -85,7 +85,7 @@ class PermissionGroupsControllerTest extends BcTestCase
             'status' => 1
         ];
         //APIをコール
-        $this->post('/baser/admin/baser-core/permission_groups/add/1/Admin.json', $data);
+        $this->post('/baser/admin/baser-core/permission_groups/add/1?prefix=Admin', $data);
         //フラッシュメッセージを確認
         $this->assertFlashMessage('ルールグループ「システム基本設定　テスト」を登録しました。');
         //ステータスを確認

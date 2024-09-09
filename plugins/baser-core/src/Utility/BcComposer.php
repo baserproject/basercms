@@ -301,7 +301,11 @@ class BcComposer
     {
         $file = new BcFile(self::$currentDir . 'composer.json');
         $json = $file->read();
-        $json = preg_replace('/"replace"\s*:\s*?{[^}]+?},/', '', $json);
+        $data = json_decode($json, true);
+        if(isset($data['replace'])) {
+            unset($data['replace']);
+        }
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $file->write($json);
     }
 
