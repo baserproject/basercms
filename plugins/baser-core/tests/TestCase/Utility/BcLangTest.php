@@ -17,14 +17,26 @@ class BcLangTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test _setConfig
+     */
     public function testSetConfig()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $bcLang = new BcLang('BcLang', ['langs' => 'ja-JP']);
+        //対象メソッドをコール
+        $this->execPrivateMethod($bcLang, '_setConfig', [['langs' => 'ja-JP']]);
+        //decisionKeysがlangsを設定できるか確認すること
+        $this->assertEquals('ja-JP', $bcLang->decisionKeys);
     }
 
+    /**
+     * test _getDefaultConfig
+     */
     public function testGetDefaultConfig()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $bcLang = new BcLang('BcLang', ['langs' => 'ja-JP']);
+        $rs = $this->execPrivateMethod($bcLang, '_getDefaultConfig', []);
+        $this->assertEquals($rs['langs'], []);
     }
 
     public function testGetPattern()

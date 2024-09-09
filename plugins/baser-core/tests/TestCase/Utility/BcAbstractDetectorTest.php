@@ -66,9 +66,29 @@ class BcAbstractDetectorTest extends BcTestCase
 
     /**
      * test findCurrent
+     * @param string $agent ユーザーエージェント名
+     * @param string $expect 期待値
+     *
+     * @dataProvider findCurrentDataProvider
      */
-    public function testFindCurrent()
+    public function testFindCurrent($agent, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $_SERVER["HTTP_USER_AGENT"] = $agent;
+        $result = BcAgent::findCurrent();
+        if (is_null($expect)) {
+            $this->assertNull($result);
+        } else {
+            $this->assertEquals($expect, $result->name);
+        }
+    }
+
+    public static function findCurrentDataProvider(): array
+    {
+        return [
+            ['Googlebot-Mobile', 'mobile'],
+            ['DoCoMo', 'mobile'],
+            ['iPhone', 'smartphone'],
+            ['hoge', null],
+        ];
     }
 }

@@ -425,6 +425,7 @@ class BcAdminHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsAddLink()
     {
