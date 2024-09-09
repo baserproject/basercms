@@ -91,20 +91,19 @@ class AppTableTest extends BcTestCase
         $this->assertEquals('plugins', $this->App->getTable());
 
         //プレフィックスを追加場合、
-//        $config = ConnectionManager::getConfig('test');
-//        $prefixBak = $config['prefix'];
-//        $config['prefix'] = 'unittest_';
-//        ConnectionManager::drop('test');
-//        ConnectionManager::setConfig('test', $config);
-//
-//        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
-//        $this->assertEquals('unittest_plugins', $this->App->getTable());
-//
-//        //prefixは元に戻る
-//        $config = ConnectionManager::getConfig('test');
-//        $config['prefix'] = $prefixBak;
-//        ConnectionManager::drop('test');
-//        ConnectionManager::setConfig('test', $config);
+        $config = ConnectionManager::getConfig('test');
+        $config['prefix'] = 'unittest_';
+        ConnectionManager::drop('test');
+        ConnectionManager::setConfig('test', $config);
+
+        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
+        $this->assertEquals('unittest_plugins', $this->App->getTable());
+
+        //prefixは元に戻る
+        $config = ConnectionManager::getConfig('test');
+        $config['prefix'] = '';
+        ConnectionManager::drop('test');
+        ConnectionManager::setConfig('test', $config);
     }
 
     /**
