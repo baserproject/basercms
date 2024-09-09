@@ -55,4 +55,27 @@ class BcLangTest extends BcTestCase
             ['123,456', '123'],
         ];
     }
+
+    /**
+     * Test getDetectorRegex
+     * @param array $decisionKeys
+     * @param string $expected
+     * @dataProvider getDetectorRegexDataProvider
+     */
+    public function testGetDetectorRegex($decisionKeys, $expected)
+    {
+        $lang = new BcLang('lang', ['langs' => $decisionKeys]);
+        $result = $lang->getDetectorRegex();
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getDetectorRegexDataProvider()
+    {
+        return [
+            [['en'], '/en/i'],
+            [['en', 'ja', 'fr'], '/en|ja|fr/i'],
+            [['en-US', 'zh-CN', 'pt-BR'], '/en\-US|zh\-CN|pt\-BR/i'],
+            [[], '//i'],
+        ];
+    }
 }

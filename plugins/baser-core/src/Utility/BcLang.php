@@ -69,6 +69,7 @@ class BcLang extends BcAbstractDetector
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDetectorRegex()
     {
