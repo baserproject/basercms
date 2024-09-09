@@ -56,6 +56,7 @@ class BcLang extends BcAbstractDetector
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getDefaultConfig()
     {

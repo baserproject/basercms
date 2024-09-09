@@ -29,9 +29,14 @@ class BcLangTest extends BcTestCase
         $this->assertEquals('ja-JP', $bcLang->decisionKeys);
     }
 
+    /**
+     * test _getDefaultConfig
+     */
     public function testGetDefaultConfig()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $bcLang = new BcLang('BcLang', ['langs' => 'ja-JP']);
+        $rs = $this->execPrivateMethod($bcLang, '_getDefaultConfig', []);
+        $this->assertEquals($rs['langs'], []);
     }
 
     public function testGetPattern()
