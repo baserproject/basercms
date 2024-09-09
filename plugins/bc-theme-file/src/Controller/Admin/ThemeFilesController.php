@@ -76,7 +76,7 @@ class ThemeFilesController extends BcAdminAppController
         ];
 
         // テーマ編集機能が制限されている場合はアクセス禁止
-        if (Configure::read('BcThemeEdit.allowedThemeEdit') === false) {
+        if (Configure::read('BcThemeFile.allowedThemeEdit') === false) {
             $denyList = [
                 'index',
                 'add',
