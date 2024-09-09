@@ -98,12 +98,6 @@ class AppTableTest extends BcTestCase
 
         $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
         $this->assertEquals('unittest_plugins', $this->App->getTable());
-
-        //prefixは元に戻る
-        $config = ConnectionManager::getConfig('test');
-        $config['prefix'] = '';
-        ConnectionManager::drop('test');
-        ConnectionManager::setConfig('test', $config);
     }
 
     /**
