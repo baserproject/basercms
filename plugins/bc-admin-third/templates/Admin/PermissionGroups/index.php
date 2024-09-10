@@ -20,7 +20,7 @@
 $this->BcAdmin->addAdminMainBodyHeaderLinks(['url' => [
   'action' => 'add',
   $userGroupId,
-  $this->getRequest()->getData('list_type')
+  '?' => ['prefix' => $this->getRequest()->getData('list_type')]
 ], 'title' => __d('baser_core', '新規追加')]);
 $this->BcAdmin->setTitle(sprintf(__d('baser_core', 'アクセスルールグループ一覧')));
 $this->BcBaser->js('admin/permission_groups/index.bundle', false, [
