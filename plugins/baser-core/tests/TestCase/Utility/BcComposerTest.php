@@ -204,7 +204,7 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
         $folder->delete();
-        BcComposer::update();
+        BcComposer::install();
     }
 
     /**
@@ -249,36 +249,32 @@ class BcComposerTest extends BcTestCase
     /**
      * test setupComposerForDistribution
      */
-/*    public function testSetupComposerForDistribution()
+    public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $composer = TMP_TESTS . 'composer.json';
-        copy(ROOT . DS . 'composer.json', $composer);
+        $srcComposerJsonPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.json';
+        $srcComposerLockPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.lock';
+        $composerJson = TMP_TESTS . 'composer.json';
+        $composerLock = TMP_TESTS . 'composer.lock';
+        copy($srcComposerJsonPath, $composerJson);
+        copy($srcComposerLockPath, $composerLock);
 
         // 実行
         BcComposer::setup('', TMP_TESTS);
-
-        // 5.1.0 のテストの場合、5.1.1 との依存関係の問題があるためライブラリを調整
-        // このままでは、今後のリリースのタイミングでまた依存関係が変わる可能性があるため
-        // 特定のバージョンの composer.json を別途用意しておいた方が良さそう
-        // >>>
-        BcComposer::require('josegonzalez/dotenv', '^3.2');
-        sleep(1);
-        BcComposer::require('mobiledetect/mobiledetectlib', '^4.8.03');
-        // <<<
-
-        BcComposer::setupComposerForDistribution('5.1.0');
-        $file = new BcFile($composer);
+        BcComposer::setupComposerForDistribution('5.1.1');
+        $file = new BcFile($composerJson);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
-        $this->assertFileExists(TMP_TESTS . 'composer.lock');
+        $file = new BcFile($composerLock);
+        $data = $file->read();
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core"'));
 
         // バックアップをリストア
-        unlink($composer);
-        unlink(TMP_TESTS . 'composer.lock');
+        unlink($composerJson);
+        unlink($composerLock);
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
-    }*/
+    }
 
     /**
      * test createCommand
@@ -313,6 +309,27 @@ class BcComposerTest extends BcTestCase
                 "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar require vendor/package 2>&1"
             ],
         ];
+    }
+
+    /**
+     * test deleteReplace
+     * @return void
+     */
+    public function testDeleteReplace()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        BcComposer::setup();
+        BcComposer::deleteReplace();
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $this->assertFalse(strpos($data, '"replace": {'));
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
     }
 
 }

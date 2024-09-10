@@ -150,6 +150,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
       </td>
     </tr>
 
+<?php if(!$user->isSuper()): ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?>
@@ -167,6 +168,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php endif ?>
       </td>
     </tr>
+<?php endif ?>
 
     <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
 
