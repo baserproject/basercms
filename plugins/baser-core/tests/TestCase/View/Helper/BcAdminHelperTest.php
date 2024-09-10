@@ -429,6 +429,37 @@ class BcAdminHelperTest extends BcTestCase
     }
 
     /**
+     * test addLink
+     */
+    public function testAddLink()
+    {
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'ContentFolder', 'url' => '/service'])->persist();
+
+        //isAdminSystem = true, return ''
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2')));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content == null, return ''
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service-1'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content != null, 固定ページ新規追加画面へのリンクを出力する
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertTextContains('新規ページ追加', $actualEmpty);
+    }
+
+    /**
      * 編集画面へのリンクを出力する
      *
      * @return void
