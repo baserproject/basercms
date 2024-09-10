@@ -526,7 +526,7 @@ class BcAdminHelper extends Helper
     public function firstAccess()
     {
         if ($this->getView()->getRequest()->getParam('controller') === 'installations') return;
-        $this->BcBaser->element('first_access', ['firstAccess' => true]);
+        $this->BcBaser->element('first_access');
     }
 
     /**

@@ -493,7 +493,7 @@ class BcAdminHelperTest extends BcTestCase
         $this->assertEmpty($actualEmpty);
 
         //controller != installations, 初回アクセス時のメッセージ表示
-        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin/baser-core/pages/edit/2'))->set('firstAccess', true);
         ob_start();
         $this->BcAdmin->firstAccess();
         $actualEmpty = ob_get_clean();
