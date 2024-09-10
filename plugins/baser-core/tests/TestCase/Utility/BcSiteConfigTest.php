@@ -22,5 +22,8 @@ class BcSiteConfigTest extends BcTestCase
     {
         SiteConfigFactory::make(['name' => 'version', 'value' => '2.0.0'])->persist();
         $this->assertEquals('2.0.0', BcSiteConfig::get('version'));
+
+        //field not exist
+        $this->assertEquals(null, BcSiteConfig::get('not_exist'));
     }
 }
