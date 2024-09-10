@@ -23,6 +23,7 @@ use Cake\Core\Exception\CakeException;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use TypeError;
 
 /**
  * Class MailMessageTest
@@ -521,8 +522,7 @@ class MailMessagesTableTest extends BcTestCase
     public function test_createTableName($mailContentId, $expected, $expectException = false)
     {
         if ($expectException) {
-            $this->expectException(CakeException::class);
-            $this->expectExceptionMessage('MailMessageService::createTableName() の引数 $mailContentId は数値型しか受けつけていません。');
+            $this->expectException(TypeError::class);
         }
 
         $result = $this->MailMessage->createTableName($mailContentId);
@@ -536,15 +536,14 @@ class MailMessagesTableTest extends BcTestCase
     {
         return [
             [1, 'mail_message_1'],
-            ['2', 'mail_message_2'],
             [0, 'mail_message_0'],
             [-1, 'mail_message_-1'],
-            [1.5, 'mail_message_1'],
+            ['2', 'mail_message_2'],
             ['abc', null, true],
             ['', null, true],
             [null, null, true],
-            [true, null, true],
-            [false, null, true],
+            [true, 'mail_message_1'],
+            [false, 'mail_message_0'],
         ];
     }
 }

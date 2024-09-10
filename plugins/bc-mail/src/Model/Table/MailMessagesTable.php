@@ -144,19 +144,14 @@ class MailMessagesTable extends MailAppTable
     /**
      * テーブル名を生成する
      * int型でなかったら強制終了
-     * @param int|string $mailContentId The ID of the mail content
+     * @param int $mailContentId
      * @return string The table name
-     * @throws BcException If the input is not a valid integer
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function createTableName($mailContentId)
+    public function createTableName(int $mailContentId): string
     {
-        if (!is_numeric($mailContentId)) {
-            throw new BcException(__d('baser_core', 'MailMessageService::createTableName() の引数 $mailContentId は数値型しか受けつけていません。'));
-        }
-
-        $mailContentId = (int) $mailContentId;
         return $this->addPrefix("mail_message_{$mailContentId}");
     }
 
