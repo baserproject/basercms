@@ -555,17 +555,12 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testMoveFileSessionToTmp()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $tmpId = 1;
         $fieldName = 'fieldName';
         $tmp_name = 'basercms_tmp';
         $basename = 'basename';
         $ext = 'png';
         $namefield = 'hoge';
-
-        //—————————————————————————
-        // セッションを設定
-        //—————————————————————————
 
         // パス情報
         $tmpPath = $this->savePath . $tmp_name;
@@ -577,24 +572,26 @@ class BcFileUploaderTest extends BcTestCase
         ];
         $this->BcFileUploader->tmpId = $tmpId;
 
-        $this->uploadedData['eyecatch']['name'] = $basename . '.' . $ext;
-        $this->uploadedData['eyecatch']['tmp_name'] = $tmpPath;
-        $this->uploadedData['eyecatch']['type'] = 'basercms';
-        $this->uploadedData['eyecatch']['ext'] = $ext;
-
         // ダミーファイルの作成
         $file = new BcFile($tmpPath);
         $file->create();
         $file->write('dummy');
 
+        // UploadedFileオブジェクトの作成
+        $uploadedFile = new UploadedFile(
+            $tmpPath,
+            filesize($tmpPath),
+            UPLOAD_ERR_OK,
+            $basename . '.' . $ext,
+            'image/png'
+        );
+
+        $this->uploadedData['eyecatch'] = $uploadedFile;
+
         // セッションを設定
         $entity = $this->BcFileUploader->saveTmpFiles($this->uploadedData, $tmpId);
 
-        //—————————————————————————
         // 本題
-        //—————————————————————————
-
-        // パス情報
         $targetName = $entity->eyecatch_tmp;
         $targetPath = $this->savePath . str_replace(['.', '/'], ['_', '_'], $targetName);
 
@@ -610,11 +607,11 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertFileExists($targetPath, 'セッションに保存されたファイルデータをファイルとして保存できません');
         $result = $this->BcFileUploader->getUploadingFiles($bcUploadId)[$fieldName];
         $expected = [
-            'error' => 0,
+            'error' => UPLOAD_ERR_OK,
             'name' => $targetName,
             'tmp_name' => $targetPath,
             'size' => 5,
-            'type' => 'basercms',
+            'type' => 'image/png',
             'uploadable' => true,
             'ext' => 'png'
         ];

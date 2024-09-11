@@ -471,6 +471,7 @@ class BcFileUploader
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function moveFileSessionToTmp($data, $fieldName)
     {
