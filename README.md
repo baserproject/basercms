@@ -8,7 +8,7 @@
     <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
 </a>
     <a href="https://github.com/baserproject/basercms/actions/workflows/test.yml" target="_blank">
-        <img alt="Build Status" src="https://github.com/baserproject/basercms/actions/workflows/test.yml/badge.svg?branch=dev-5">
+        <img alt="Build Status" src="https://github.com/baserproject/basercms/actions/workflows/test.yml/badge.svg?branch=5.1.x">
     </a>
 </p>
 
@@ -30,7 +30,7 @@ Some Handy Links
 - See [baserCMS Users Community](https://basercms.net/community/)
 - See [CakePHP - the rapid development PHP framework](https://cakephp.org)
 
-Get Support!
+Get Support
 -------------
 
 - See [baserCMS Users Forum](https://forum.basercms.net/)

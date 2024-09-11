@@ -40,7 +40,7 @@ Some Handy Links
 - See [baserCMS Users Community](https://basercms.net/community/)
 - See [CakePHP - the rapid development PHP framework](https://cakephp.org)
 
-Get Support!
+Get Support
 -------------
 
 - See [baserCMS Users Forum](https://forum.basercms.net/)

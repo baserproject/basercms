@@ -53,9 +53,8 @@ class BcCsvHelperTest extends BcTestCase
      * @param string $expectedBody csvBodyの期待値
      * @dataProvider addModelDataDataProvider
      */
-    public function testAddModelData($modelName, $data, $expectedHead, $expectedBody)
+    public function test_addModelData($modelName, $data, $expectedHead, $expectedBody)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcCsv->addModelData($modelName, $data);
         $this->assertEquals($expectedHead, $this->BcCsv->csvHead);
         $body = '';
@@ -128,7 +127,6 @@ class BcCsvHelperTest extends BcTestCase
      */
     public function testAddModelDatas($modelName, $datas, $expectedHead, $expectedBody)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $datas = [$datas];
         $this->BcCsv->addModelDatas($modelName, $datas);
         $this->assertEquals($expectedHead, $this->BcCsv->csvHead);

@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -393,6 +394,69 @@ class BcAdminHelperTest extends BcTestCase
         $this->BcAdmin->getView()->setRequest($request);
         $this->BcAdmin->getView()->set('publishLink', 'test');
         $this->assertEquals(true, $this->BcAdmin->existsPublishLink());
+    }
+
+    /**
+     * test existsAddLink
+     */
+    public function testExistsAddLink()
+    {
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'ContentFolder', 'url' => '/service'])->persist();
+        ContentFactory::make(['type' => 'ContentLink', 'url' => '/service-1'])->persist();
+
+        //isAdminSystem = true, return false
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = false, return false
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/'));
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = true && type !== ContentFolder, return false
+        $request = $this->loginAdmin($this->getRequest('/service-1'));
+        $request->getSession()->write('AuthAdmin', UserFactory::get(1));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = true && type == ContentFolder, return true
+        $request = $this->loginAdmin($this->getRequest('/service'));
+        $request->getSession()->write('AuthAdmin', UserFactory::get(1));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertTrue($this->BcAdmin->existsAddLink());
+    }
+
+    /**
+     * test addLink
+     */
+    public function testAddLink()
+    {
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'ContentFolder', 'url' => '/service'])->persist();
+
+        //isAdminSystem = true, return ''
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2')));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content == null, return ''
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service-1'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content != null, 固定ページ新規追加画面へのリンクを出力する
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertTextContains('新規ページ追加', $actualEmpty);
     }
 
     /**

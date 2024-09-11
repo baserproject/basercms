@@ -59,14 +59,49 @@ class InstallationsServiceTest extends BcTestCase
 
     /**
      * 環境チェック
+     * test checkEnv
      *
-     * @return array
      */
     public function testCheckEnv()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
-        $result = $this->BcManager->checkEnv();
-        $this->assertNotEmpty($result, '環境情報を取得できません');
+        Configure::write([
+                'BcRequire' => [
+                    'phpVersion' => "8.0.0",
+                    'phpMemory' => "128",
+                ]
+            ]
+        );
+        $result = $this->Installations->checkEnv();
+        $this->assertEquals('/var/www/html/config',$result['configDir']);
+        $this->assertEquals('/var/www/html/webroot/files',$result['filesDir']);
+        $this->assertEquals('/var/www/html/plugins',$result['pluginDir']);
+        $this->assertEquals('/var/www/html/tmp/',$result['tmpDir']);
+        $this->assertEquals('/var/www/html/db',$result['dbDir']);
+        $this->assertEquals('8.0.0',$result['requirePhpVersion']);
+        $this->assertEquals('128',$result['requirePhpMemory']);
+        $this->assertEquals('UTF-8',$result['encoding']);
+        $this->assertEquals('8.1.5',$result['phpVersion']);
+        $this->assertEquals('-1',$result['phpMemory']);
+        $this->assertTrue($result['safeModeOff']);
+        $this->assertTrue($result['configDirWritable']);
+        $this->assertTrue($result['pluginDirWritable']);
+        $this->assertTrue($result['filesDirWritable']);
+        $this->assertTrue($result['tmpDirWritable']);
+        $this->assertTrue($result['dbDirWritable']);
+        $this->assertEquals('8.1.5',$result['phpActualVersion']);
+        $this->assertTrue($result['phpGd']);
+        $this->assertTrue($result['phpPdo']);
+        $this->assertTrue($result['phpXml']);
+        $this->assertTrue($result['phpZip']);
+        $this->assertEquals('-1',$result['apacheRewrite']);
+        $this->assertTrue($result['encodingOk']);
+        $this->assertTrue($result['gdOk']);
+        $this->assertTrue($result['pdoOk']);
+        $this->assertTrue($result['xmlOk']);
+        $this->assertTrue($result['zipOk']);
+        $this->assertTrue($result['phpVersionOk']);
+        $this->assertTrue($result['phpMemoryOk']);
+        $this->assertTrue($result['blRequirementsMet']);
     }
 
     /**
