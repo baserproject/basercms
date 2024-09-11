@@ -249,6 +249,7 @@ class BcAuthHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isSuperUser(): bool
     {
