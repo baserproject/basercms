@@ -62,8 +62,6 @@ class BcAbstractDetectorTest extends BcTestCase
     public function testFindAll()
     {
         Configure::write("BcEnv.isInstalled", false);
-        Configure::write("BcApp.smartphone", true);
-        Configure::write("BcApp.BcAgent", true);
 
         //isInstalled=false
         $agents = BcAgent::findAll();
