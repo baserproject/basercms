@@ -117,6 +117,7 @@ abstract class BcAbstractDetector
      * @return BcAbstractDetector|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function findCurrent()
     {

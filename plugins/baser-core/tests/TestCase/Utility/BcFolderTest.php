@@ -165,10 +165,29 @@ class BcFolderTest extends TestCase
         $this->assertFileDoesNotExist($path. DS. 'test.txt');
         $this->assertFileExists($des. DS. 'test.txt');
         $folder2->delete();
-
     }
 
+    /**
+     * test pwd
+     * @param string $path
+     * @param string $expected
+     * @dataProvider pwdDataProvider
+     */
+    public function test_pwd($path, $expected)
+    {
+        $bcFolder = new BcFolder($path);
+        $result = $bcFolder->pwd();
+        $this->assertEquals($expected, $result);
+    }
 
-
-
+    public static function pwdDataProvider()
+    {
+        return [
+            ['/', '/'],
+            ['/var/www/html', '/var/www/html'],
+            ['plugins/baser-core', 'plugins/baser-core'],
+            ['/path/with spaces/folder', '/path/with spaces/folder'],
+            ['', ''],
+        ];
+    }
 }
