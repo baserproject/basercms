@@ -1255,6 +1255,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pagination($name = 'default', $data = [], $options = [])
     {
