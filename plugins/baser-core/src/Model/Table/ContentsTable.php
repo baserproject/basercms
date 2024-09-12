@@ -388,11 +388,6 @@ class ContentsTable extends AppTable
         return (array)$content;
     }
 
-    public function afterMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
-    {
-        $a = 1;
-    }
-
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
