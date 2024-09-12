@@ -1158,7 +1158,6 @@ class BcBaserHelperTest extends BcTestCase
         $expected = '<meta name="description" content="説明文">
 
 ';
-//        App::uses('BcHtmlHelper', 'View/Helper');
         $BcHtml = new BcHtmlHelper($view);
         $BcHtml->meta('description', '説明文', ['inline' => false]);
         $view->assign('meta',
