@@ -11,12 +11,8 @@
 
 namespace BaserCore\Model\Table;
 
-use BaserCore\Utility\BcUtil;
-use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
-use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -130,11 +126,7 @@ class AppTable extends Table
      */
     public function addPrefix($table)
     {
-        if(BcUtil::isTest()) {
-            $prefix = ConnectionManager::getConfig('test')['prefix'];
-        } else {
-            $prefix = $this->getConnection()->config()['prefix'];
-        }
+        $prefix = $this->getConnection()->config()['prefix'];
         if (!preg_match('/^' . $prefix . '/', $table)) {
             return $prefix . $table;
         }

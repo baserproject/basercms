@@ -19,6 +19,7 @@ use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Database\Connection;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -91,18 +92,11 @@ class AppTableTest extends BcTestCase
         $this->assertEquals('plugins', $this->App->getTable());
 
         //プレフィックスを追加場合、
-        $config = ConnectionManager::getConfig('test');
-        $config['prefix'] = 'unittest_';
-        ConnectionManager::drop('test');
-        ConnectionManager::setConfig('test', $config);
-
-        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.Plugins')->setConnection($connection);
         $this->assertEquals('unittest_plugins', $this->App->getTable());
-
-        //prefixは元に戻る
-        $config['prefix'] = '';
-        ConnectionManager::drop('test');
-        ConnectionManager::setConfig('test', $config);
     }
 
     /**
