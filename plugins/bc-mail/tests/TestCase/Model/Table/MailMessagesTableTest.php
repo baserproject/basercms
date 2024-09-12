@@ -22,6 +22,7 @@ use BcMail\Test\TestCase\Model\ClassRegistry;
 use Cake\Core\Exception\CakeException;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\Validation\Validator;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use TypeError;
 
@@ -545,5 +546,37 @@ class MailMessagesTableTest extends BcTestCase
             [true, 'mail_message_1'],
             [false, 'mail_message_0'],
         ];
+    }
+
+    /**
+     * test validationDefault
+     * with existing validator
+     */
+    public function testValidationDefaultWithExistingValidator()
+    {
+        $validator = new Validator();
+        $validator->requirePresence('test_field');
+
+        $this->MailMessage->setValidator('MailMessages', $validator);
+
+        $result = $this->MailMessage->validationDefault(new Validator());
+
+        $this->assertSame($validator, $result);
+        $this->assertTrue($result->hasField('test_field'));
+    }
+
+    /**
+     * test validationDefault
+     * without existing validator
+     */
+    public function testValidationDefaultWithoutExistingValidator()
+    {
+        $inputValidator = new Validator();
+        $inputValidator->requirePresence('input_field');
+
+        $result = $this->MailMessage->validationDefault($inputValidator);
+
+        $this->assertSame($inputValidator, $result);
+        $this->assertTrue($result->hasField('input_field'));
     }
 }
