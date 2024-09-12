@@ -90,9 +90,8 @@ class AppTableTest extends BcTestCase
         $dbConfig['prefix'] = 'unittest_';
         $connection = new Connection($dbConfig);
         $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
-        //Pluginsテーブル
-        $this->App = $this->getTableLocator()->get('BaserCore.Plugins');
-        $this->assertEquals('unittest_plugins', $this->App->getTable());
+
+        $this->assertEquals('unittest_app', $this->App->getTable());
     }
 
     /**
