@@ -18,6 +18,8 @@ use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -107,6 +109,12 @@ class AppTableTest extends BcTestCase
      */
     public function testBelongsToMany()
     {
+        //プレフィックスを設定
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
         $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
         //Usersに連携
         $rs = $this->App->belongsToMany('Users', [
@@ -116,6 +124,7 @@ class AppTableTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals('user_id', $rs->getForeignKey());
         $this->assertEquals('BaserCore.Users', $rs->getClassName());
+        $this->assertEquals('unittest_blog_posts', $rs->getSource()->getTable());
     }
 
     /**
