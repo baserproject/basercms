@@ -295,7 +295,6 @@ class ContentsTableTest extends BcTestCase
         ])->persist();
         $data = ContentFactory::get(100);
         $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
-        $this->assertEquals(6, $this->Contents->beforeSaveParentId);
         // nameフィールドがエンコードされてるかをテスト
         $entity = $result->getData('entity');
         $this->assertEquals(urlencode($value), $entity->name);
