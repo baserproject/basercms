@@ -94,6 +94,7 @@ abstract class BcAbstractDetector
      * @return BcAbstractDetector[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function findAll()
     {
