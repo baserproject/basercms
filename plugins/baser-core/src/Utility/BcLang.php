@@ -71,6 +71,7 @@ class BcLang extends BcAbstractDetector
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDetectorRegex()
     {
@@ -84,6 +85,7 @@ class BcLang extends BcAbstractDetector
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMatchDecisionKey()
     {
