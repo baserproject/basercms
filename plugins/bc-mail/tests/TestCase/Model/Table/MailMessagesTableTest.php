@@ -495,4 +495,18 @@ class MailMessagesTableTest extends BcTestCase
         $this->execPrivateMethod($this->MailMessage, '_validGroupComplete', [$mailMessage]);
         $this->assertCount(1, $mailMessage->getErrors()['_not_complate']);
     }
+
+
+    /**
+     * test createFullTableName
+     */
+    public function test_createFullTableName()
+    {
+        $this->MailMessage->tablePrefix = 'prefix_';
+        $mailContentId = 5;
+
+        $result = $this->MailMessage->createFullTableName($mailContentId);
+        $expected = 'prefix_mail_message_5';
+        $this->assertEquals($expected, $result);
+    }
 }
