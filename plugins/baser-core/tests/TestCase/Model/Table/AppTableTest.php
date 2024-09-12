@@ -18,8 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Database\Connection;
-use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
