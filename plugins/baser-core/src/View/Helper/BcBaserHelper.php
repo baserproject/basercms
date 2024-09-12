@@ -2124,6 +2124,7 @@ class BcBaserHelper extends Helper
      * @return bool 同じ場合には true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCurrentUrl($url)
     {
