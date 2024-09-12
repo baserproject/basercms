@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Table;
 
+use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Table;
 use BaserCore\Annotation\NoTodo;
@@ -126,7 +127,11 @@ class AppTable extends Table
      */
     public function addPrefix($table)
     {
-        $prefix = $this->getConnection()->config()['prefix'];
+        if(BcUtil::isTest()) {
+            $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        } else {
+            $prefix = $this->getConnection()->config()['prefix'];
+        }
         if (!preg_match('/^' . $prefix . '/', $table)) {
             return $prefix . $table;
         }
