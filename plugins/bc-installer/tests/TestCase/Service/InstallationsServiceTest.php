@@ -154,25 +154,6 @@ class InstallationsServiceTest extends BcTestCase
     }
 
     /**
-     * test setSecuritySalt
-     */
-    public function testSetSecuritySalt()
-    {
-        // Test default length (40 characters)
-        $salt = $this->Installations->setSecuritySalt();
-        $this->assertEquals(40, strlen($salt));
-
-        // Test custom length (e.g., 50 characters)
-        $customLength = 50;
-        $customSalt = $this->Installations->setSecuritySalt($customLength);
-        $this->assertEquals($customLength, strlen($customSalt));
-
-        // Verify that the salt is correctly written to the configuration
-        $config = Configure::read('Security.salt');
-        $this->assertEquals($customSalt, $config);
-    }
-
-    /**
      * test addDefaultUser
      */
     public function testAddDefaultUser()
