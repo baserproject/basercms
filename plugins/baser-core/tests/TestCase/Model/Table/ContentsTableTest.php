@@ -540,6 +540,7 @@ class ContentsTableTest extends BcTestCase
         $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $this->assertFalse($result);
         // self_*を元にstatusなど補完する
+        ContentFactory::make(['id' => 100, 'name' => ''])->persist();
         $data = [
             'id' => 100,
             'site_id' => 1,

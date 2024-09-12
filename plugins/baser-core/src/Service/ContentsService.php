@@ -972,19 +972,6 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     *
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isTreeModifiedByAnotherUser($listDisplayed)
-    {
-        $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-        return $siteConfig->isChangedContentsSortLastModified($listDisplayed);
-    }
-
-    /**
      * コンテンツを移動する
      *
      * 基本的に targetId の上に移動する前提となる
@@ -1035,11 +1022,6 @@ class ContentsService implements ContentsServiceInterface
         }
         // オフセットを元に移動
         $result = $this->Contents->moveOffset($origin['id'], $offset);
-        if ($result && $origin['parentId'] === $target['parentId']) {
-            // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
-            $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-            $siteConfig->updateContentsSortLastModified();
-        }
         if ($result) $this->saveSearchIndex($origin['id']);
         return $result;
     }

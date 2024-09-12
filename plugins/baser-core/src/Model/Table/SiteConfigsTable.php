@@ -114,67 +114,6 @@ class SiteConfigsTable extends AppTable
     }
 
     /**
-     * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
-     * 60秒をブラウザのロード時間を加味したバッファとする
-     * @param $listDisplayed
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isChangedContentsSortLastModified($listDisplayed)
-    {
-        $lastModified = $this->getValue('contents_sort_last_modified');
-        $changed = false;
-        if ($lastModified) {
-            $user = BcUtil::loginUser();
-            if (!$user) {
-                return false;
-            }
-            [$lastModified, $userId] = explode('|', $lastModified);
-            $lastModified = strtotime($lastModified);
-            if ($user->id !== (int)$userId) {
-                $listDisplayed = strtotime($listDisplayed);
-                if ($lastModified >= ($listDisplayed - 60)) {
-                    $changed = true;
-                }
-            }
-        }
-        return $changed;
-    }
-
-    /**
-     * コンテンツ並び順変更時間を更新する
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function updateContentsSortLastModified()
-    {
-        $user = BcUtil::loginUser();
-        if (!$user) {
-            return false;
-        }
-        return $this->saveValue(
-            'contents_sort_last_modified',
-            date('Y-m-d H:i:s') . '|' . $user->id
-        );
-    }
-
-    /**
-     * コンテンツ並び替え順変更時間をリセットする
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function resetContentsSortLastModified()
-    {
-        return $this->saveValue('contents_sort_last_modified', '');
-    }
-
-    /**
      * 指定したフィールドの値がDBのデータと比較して変更状態か確認
      *
      * @param string $field フィールド名
