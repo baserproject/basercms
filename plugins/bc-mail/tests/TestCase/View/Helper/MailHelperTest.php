@@ -13,6 +13,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
+use Cake\ORM\Entity;
 use Cake\View\View;
 
 /**
@@ -50,17 +51,32 @@ class MailHelperTest extends BcTestCase
 
     /**
      * 説明文を取得する
+     * @param $description
+     * @param $expected
+     * @dataProvider getDescriptionProvider
      */
-    public function testGetDescription()
+    public function testGetDescription($description, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        ClassRegistry::flush();
-        $this->Mail->setMailContent(1);
-        $expected = '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>';
-        $result = $this->Mail->getDescription();
-        $this->assertEquals($result, $expected, "説明文の取得結果が違います。");
+        //set up
+        $mailContent = new Entity([
+            'description' => $description
+        ]);
+
+        $this->MailHelper->currentMailContent = $mailContent;
+        $result = $this->MailHelper->getDescription();
+
+        $this->assertEquals($expected, $result);
     }
 
+    public static function getDescriptionProvider()
+    {
+        return [
+            ['This is a test description', 'This is a test description'],
+            ['', ''],
+            [null, null],
+            ['<p>This is a <strong>HTML</strong> description</p>', '<p>This is a <strong>HTML</strong> description</p>']
+        ];
+    }
     /**
      * 説明文の存在確認
      */
