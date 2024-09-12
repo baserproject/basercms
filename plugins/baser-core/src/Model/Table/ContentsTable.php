@@ -366,12 +366,10 @@ class ContentsTable extends AppTable
             }
         } else {
             if (isset($content['name'])) {
-                try {
-                    $oldName = $this->get($content['id'])->name;
-                } catch (\Exception $e) {
-                    $oldName = null;
-                }
-                if($content['name'] !== $oldName) {
+                $old = $this->get($content['id']);
+                $content['lft'] = $old->lft;
+                $content['rght'] = $old->rght;
+                if($content['name'] !== $old->name) {
                     $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
                 }
             }
@@ -388,6 +386,11 @@ class ContentsTable extends AppTable
             $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
         return (array)$content;
+    }
+
+    public function afterMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        $a = 1;
     }
 
     /**
