@@ -169,7 +169,6 @@ class InstallCommand extends Command
         // Init admin
         $service->setAdminEmailAndVersion($args->getArgument('adminemail'));
         $service->setSiteName($args->getOption('sitename'));
-        $salt = $service->setSecuritySalt();
         $service->addDefaultUser([
             'password_1' => $args->getArgument('adminpassword'),
             'password_2' => $args->getArgument('adminpassword'),
@@ -177,8 +176,8 @@ class InstallCommand extends Command
         ]);
 
         // Init files
-        $service->createInstallFile($dbConfig, $salt);
-        BcApiUtil::createJwt();
+        $service->createInstallFile($dbConfig);
+        $service->createJwt();
 
         // Init db
         $service->createDefaultFiles();
