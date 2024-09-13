@@ -21,7 +21,9 @@ use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\ResultSet;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Utility\BcFile;
@@ -1087,21 +1089,17 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testPagination()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputRegex('/<div class="pagination">/');
-        $this->BcBaser->getRequest()->withParam('paging.Model', [
-            'count' => 100,
-            'pageCount' => 3,
-            'page' => 2,
-            'limit' => 10,
-            'current' => null,
-            'prevPage' => 1,
-            'nextPage' => 3,
-            'options' => [],
-            'paramType' => 'named'
+        $this->expectOutputRegex('/<div class="bs-pagination">/');
+        $posts = new PaginatedResultSet(new ResultSet([]), [
+            'pageCount' => 1,
+            'totalCount' => 1,
+            'currentPage' => 1,
+            'count' => 1,
+            'start' => 1,
+            'end' => 1
         ]);
-        $this->BcBaser->pagination();
+        $this->BcBaser->getView()->setRequest($this->getRequest('/'))->set('posts', $posts);
+        $this->BcBaser->pagination('simple');
     }
 
     /**

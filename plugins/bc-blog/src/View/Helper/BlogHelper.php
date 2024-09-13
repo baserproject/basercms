@@ -454,9 +454,9 @@ class BlogHelper extends Helper
     public function postContent(
         BlogPost $post,
         bool $moreText = true,
-        bool $moreLink = false,
+        mixed $moreLink = false,
         mixed $cut = false,
-        bool $lastText = false
+        mixed $lastText = false
     )
     {
         echo $this->getPostContent($post, $moreText, $moreLink, $cut, $lastText);
@@ -482,7 +482,7 @@ class BlogHelper extends Helper
         bool $moreText = true,
         mixed $moreLink = false,
         mixed $cut = false,
-        bool $lastText = false
+        mixed $lastText = false
     )
     {
         if ($cut) {

@@ -294,6 +294,44 @@ class BcAuthHelperTest extends BcTestCase
     }
 
     /**
+     * Test isSuperUser
+     * @dataProvider isSupperUserDataProvider
+     * @param $id
+     * @param $expected
+     * @return void
+     */
+    public function testIsSuperUser($id, $expected)
+    {
+        //データー生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserFactory::make(['id' => 2])->persist();
+        UserFactory::make(['id' => 3])->persist();
+        //特権ユーザを設定
+        Configure::write('BcApp.superUserId', 2);
+
+        if ($id) {
+            $this->loginAdmin($this->getRequest('/baser/admin'), $id);
+        }
+
+        $result = $this->BcAuth->isSuperUser();
+        $this->assertEquals($result, $expected);
+    }
+
+    public static function isSupperUserDataProvider()
+    {
+        return [
+            // ログインしない場合
+            [null, false],
+            // システム管理者の場合
+            [1, false],
+            // 特権ユーザでのログインの場合
+            [2, true],
+            // サイト運営者などそれ以外の場合
+            [3, false],
+        ];
+    }
+
+    /**
      * Test isAgentUser
      * @return void
      */

@@ -369,7 +369,8 @@ class PluginsControllerTest extends BcTestCase
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
 
         // composer.json を配布用に更新
-        BcComposer::setupComposerForDistribution(ROOT . DS);
+        BcComposer::setup('', ROOT . DS);
+        BcComposer::setupComposerForDistribution('5.0.15');
 
         $this->post('/baser/admin/baser-core/plugins/get_core_update', [
             'targetVersion' => '5.0.15',
