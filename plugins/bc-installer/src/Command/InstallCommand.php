@@ -177,7 +177,7 @@ class InstallCommand extends Command
 
         // Init files
         $service->createInstallFile($dbConfig);
-        $service->createJwt();
+        BcApiUtil::createJwt();
 
         // Init db
         $service->createDefaultFiles();
