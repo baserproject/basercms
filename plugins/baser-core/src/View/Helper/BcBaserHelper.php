@@ -2473,6 +2473,7 @@ class BcBaserHelper extends Helper
      * 更新情報を出力する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateInfo(): void
     {
