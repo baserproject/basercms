@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
@@ -1775,8 +1776,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGoogleAnalytics()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->expectOutputRegex('/<script>.*gtag\(\'config\', \'hoge\'\)\;/s', $this->BcBaser->googleAnalytics());
+        SiteConfigFactory::make(['name' => 'google_analytics_id', 'value' => 'hoge'])->persist();
+        ob_start();
+        $this->BcBaser->googleAnalytics();
+        $result = ob_get_clean();
+        $this->assertStringContainsString('<script async src="https://www.googletagmanager.com/gtag/js?id=hoge"></script>', $result);
     }
 
     /**
