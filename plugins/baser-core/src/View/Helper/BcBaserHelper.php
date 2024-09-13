@@ -2066,6 +2066,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function page($url, $params = [], $options = [])
     {
