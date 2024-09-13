@@ -1987,6 +1987,7 @@ class BcBaserHelper extends Helper
      * @return string サイトマップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitemap($siteId = 0)
     {

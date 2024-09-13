@@ -1519,22 +1519,32 @@ class BcBaserHelperTest extends BcTestCase
      * @param string $recursive 取得する階層
      * @param boolean $expected 期待値
      * @dataProvider getSitemapDataProvider
-     * @TODO : 階層($recursive)を指定した場合のテスト
      */
 
     public function testGetSitemap($siteId, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $message = 'サイトマップを正しく出力できません';
+        ContentFactory::make(['id' => 1, 'url' => '/', 'site_id' => 1, 'parent_id' => 0, 'lft' => 1, 'rght' => 10])->persist();
+        ContentFactory::make(['id' => 2, 'url' => '/index', 'site_id' => 1, 'parent_id' => 1, 'lft' => 2, 'rght' => 9, 'level' => 1, 'title' => 'トップページ'])->persist();
+        ContentFactory::make(['id' => 3, 'url' => '/service/', 'site_id' => 1, 'parent_id' => 1, 'lft' => 3, 'rght' => 8, 'level' => 1])->persist();
+        ContentFactory::make(['id' => 4, 'url' => '/service/service1', 'site_id' => 1, 'parent_id' => 3, 'lft' => 4, 'rght' => 7, 'level' => 2])->persist();
+        ContentFactory::make(['id' => 5, 'url' => '/service/service1/service2', 'site_id' => 1, 'parent_id' => 4, 'lft' => 5, 'rght' => 6, 'level' => 3])->persist();
+
+        ContentFactory::make(['id' => 6, 'url' => '/', 'site_id' => 2, 'lft' => 10, 'rght' => 13, 'site_root' => true])->persist();
+        ContentFactory::make(['id' => 7, 'url' => '/m/', 'site_id' => 2, 'lft' => 11, 'rght' => 12, 'parent_id' => 6, 'title' => 'トップページ'])->persist();
+
+        ContentFactory::make(['id' => 8, 'url' => '/', 'site_id' => 3, 'lft' => 14, 'rght' => 17, 'site_root' => true])->persist();
+        ContentFactory::make(['id' => 9, 'url' => '/s/', 'site_id' => 3, 'lft' => 15, 'rght' => 16, 'parent_id' => 8, 'title' => 'トップページ'])->persist();
+
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $this->BcBaser->getSitemap($siteId));
     }
 
     public static function getSitemapDataProvider()
     {
         return [
-            [0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
-            [1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
-            [2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
+            [0, '<ul class="menu ul-level-1">.*<a href="\/index">トップページ<\/a>.*<ul class="menu ul-level-2">.*<ul class="menu ul-level-3">'],
+            [1, '<ul class="menu ul-level-1">.*<a href="\/index">トップページ<\/a>.*<ul class="menu ul-level-2">.*<ul class="menu ul-level-3">'],
+            [2, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
+            [3, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
         ];
     }
 
