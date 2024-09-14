@@ -192,7 +192,13 @@ class ContentsController extends BcAdminApiController
         try {
             $trash = $service->getTrashIndex($this->request->getQueryParams())->orderBy(['plugin', 'type']);
             foreach ($trash as $entity) {
-                if (!$service->hardDeleteWithAssoc($entity->id)) $result = false;
+                try {
+                    $service->hardDeleteWithAssoc($entity->id);
+                } catch (RecordNotFoundException) {
+                    // 親子関係の際、親が削除された場合、同時に子が削除されている場合があるので、例外を無視
+                    // ただ、baserCMSの仕様上、ゴミ箱に入れた場合は親子関係がなくなるので、この処理は実質的には不要
+                    // テスト用に置いておく
+                }
             }
             $message = __d('baser_core', 'ゴミ箱を空にしました。');
             $this->BcMessage->setSuccess($message, true, false);
