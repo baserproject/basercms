@@ -49,4 +49,30 @@ class BcApiUtilTest extends BcTestCase
         $this->assertEquals(3, count(explode('.', $result['access_token'])));
     }
 
+    /**
+     * test createJwt
+     */
+    public function testCreateJwt()
+    {
+        //check if the keys exists then delete them
+        $keyPath = CONFIG . 'jwt.key';
+        $pemPath = CONFIG . 'jwt.pem';
+
+        if (file_exists($keyPath)) {
+            unlink($keyPath);
+        }
+
+        if (file_exists($pemPath)) {
+            unlink($pemPath);
+        }
+
+        //create the keys
+        $result = BcApiUtil::createJwt();
+        $this->assertTrue($result);
+
+        //check if the keys exists
+        $this->assertFileExists($keyPath);
+        $this->assertFileExists($pemPath);
+    }
+
 }
