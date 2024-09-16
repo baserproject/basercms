@@ -140,4 +140,13 @@ class PluginsAdminServiceTest extends BcTestCase
         ];
     }
 
+    /**
+     * test getViewVarsForAdd
+     */
+    public function test_getViewVarsForAdd()
+    {
+        $vars = $this->PluginsAdmin->getViewVarsForAdd();
+        $this->assertTrue(isset($vars['isPluginsDirWritable']));
+    }
+
 }

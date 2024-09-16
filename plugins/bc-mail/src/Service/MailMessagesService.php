@@ -479,11 +479,11 @@ class MailMessagesService implements MailMessagesServiceInterface
                     $value = mb_convert_kana($value, 'AK');
                 }
                 // サニタイズ
-                if (!is_array($value)) {
+                if (!is_array($value) && !is_object($value)) {
                     $value = str_replace('<!--', '&lt;!--', $value);
                 }
                 // TRIM
-                if (!is_array($value)) {
+                if (!is_array($value) && !is_object($value)) {
                     $value = trim($value);
                 }
             }
