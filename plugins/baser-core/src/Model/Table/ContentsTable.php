@@ -1475,6 +1475,7 @@ class ContentsTable extends AppTable
     {
         $offset = (int)$offset;
         $content = $this->get($id);
+        $this->disableSoftDelete();
         if ($offset > 0) {
             $result = $this->moveDown($content, abs($offset));
         } elseif ($offset < 0) {
@@ -1482,6 +1483,7 @@ class ContentsTable extends AppTable
         } else {
             $result = true;
         }
+        $this->enableSoftDelete();
         return $result? $content : false;
     }
 
