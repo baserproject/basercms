@@ -361,33 +361,34 @@ class InstallationsServiceTest extends BcTestCase
         $dirs = ['blog', 'editor', 'theme_configs'];
         $backupPath = WWW_ROOT . 'backup_files' . DS;
 
-        // delete backup folder if exists
+        // Delete backup folder if exists
         if (is_dir($backupPath)) {
             (new BcFolder($backupPath))->delete();
         }
 
-        // create backup folder
+        // Create backup folder
         (new BcFolder($backupPath))->create();
 
-        // move folders to backup
+        // Move folders to backup
         foreach ($dirs as $dir) {
             $folderPath = $path . $dir;
             if (is_dir($folderPath)) {
                 $Folder = new BcFolder($folderPath);
                 $Folder->move($backupPath . $dir);
-                $this->assertFileExists($backupPath . $dir);
-                $this->assertFileDoesNotExist($folderPath);
+                $this->assertFileExists($backupPath . $dir, "Failed to move $dir to backup.");
+                $this->assertFileDoesNotExist($folderPath, "$folderPath still exists after moving.");
             }
         }
 
+        // Act: Create default files
         $this->Installations->createDefaultFiles();
 
-        // check if the folders are created
+        // Assert: Check if the folders are created
         foreach ($dirs as $dir) {
-            $this->assertFileExists($path . $dir);
+            $this->assertFileExists($path . $dir, "$dir was not created.");
         }
 
-        //delete the folders newly created
+        // Clean up: Delete the folders newly created
         foreach ($dirs as $dir) {
             $folderPath = $path . $dir;
             if (is_dir($folderPath)) {
@@ -395,7 +396,7 @@ class InstallationsServiceTest extends BcTestCase
             }
         }
 
-        // move folders back to original location
+        // Move folders back to original location
         foreach ($dirs as $dir) {
             $backupDir = $backupPath . $dir;
             if (is_dir($backupDir)) {
@@ -404,7 +405,7 @@ class InstallationsServiceTest extends BcTestCase
             }
         }
 
-        // delete backup folder
+        // Delete backup folder
         (new BcFolder($backupPath))->delete();
     }
 
