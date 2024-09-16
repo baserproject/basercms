@@ -19,6 +19,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Entity\BlogPost;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -642,13 +643,13 @@ class BlogPostsTable extends BlogAppTable
      * コピーする
      *
      * @param int $id
-     * @param array $data
+     * @param BlogPost $data
      * @return mixed page Or false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy($id = null, $data = [])
+    public function copy($id = null, BlogPost $data = null)
     {
         if ($id) $data = $this->find()->where(['BlogPosts.id' => $id])->contain('BlogTags')->first();
         $oldData = clone $data;
@@ -671,6 +672,8 @@ class BlogPostsTable extends BlogAppTable
         $data->id = null;
         $data->created = null;
         $data->modified = null;
+        $data->publish_begin = null;
+        $data->publish_end = null;
         // 一旦退避(afterSaveでリネームされてしまうのを避ける為）
         $eyeCatch = $data->eye_catch;
         $data->eye_catch = null;
