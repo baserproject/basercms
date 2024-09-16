@@ -248,14 +248,6 @@ q {}',
             ]
         )->persist();
         SiteConfigFactory::make([
-                'id' => '30',
-                'name' => 'contents_sort_last_modified',
-                'value' => '',
-                'created' => '2021-01-27 12:58:10',
-                'modified' => '2021-01-27 12:58:25'
-            ]
-        )->persist();
-        SiteConfigFactory::make([
                 'id' => '31',
                 'name' => 'editor',
                 'value' => 'BcCkeditor',

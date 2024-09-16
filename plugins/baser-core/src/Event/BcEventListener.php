@@ -122,6 +122,7 @@ class BcEventListener implements EventListenerInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAction($action, $isContainController = true)
     {

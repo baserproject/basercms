@@ -12,13 +12,12 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
-use BaserCore\Test\Factory\ContentFolderFactory;
-use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
-use Cake\Event\Event;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -76,6 +75,23 @@ class AppTableTest extends BcTestCase
             '{^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$}',
             $Permission->find()->first()->created->__toString()
         );
+    }
+
+    /**
+     * test getTable
+     */
+    public function testGetTable()
+    {
+        //デフォルトテーブル
+        $this->assertEquals('app', $this->App->getTable());
+
+        //プレフィックスを追加場合、
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->assertEquals('unittest_app', $this->App->getTable());
     }
 
     /**

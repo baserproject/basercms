@@ -429,6 +429,7 @@ class BcFolder
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pwd(): string
     {
