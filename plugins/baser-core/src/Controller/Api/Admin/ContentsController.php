@@ -192,7 +192,13 @@ class ContentsController extends BcAdminApiController
         try {
             $trash = $service->getTrashIndex($this->request->getQueryParams())->orderBy(['plugin', 'type']);
             foreach ($trash as $entity) {
-                if (!$service->hardDeleteWithAssoc($entity->id)) $result = false;
+                try {
+                    $service->hardDeleteWithAssoc($entity->id);
+                } catch (RecordNotFoundException) {
+                    // 親子関係の際、親が削除された場合、同時に子が削除されている場合があるので、例外を無視
+                    // ただ、baserCMSの仕様上、ゴミ箱に入れた場合は親子関係がなくなるので、この処理は実質的には不要
+                    // テスト用に置いておく
+                }
             }
             $message = __d('baser_core', 'ゴミ箱を空にしました。');
             $this->BcMessage->setSuccess($message, true, false);
@@ -490,30 +496,26 @@ class ContentsController extends BcAdminApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         $url = $content = $errors = null;
-        if (!$service->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
-            try {
-                $beforeContent = $service->get($this->request->getData('origin.id'));
-                $beforeUrl = $beforeContent->url;
-                $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
-                $message = sprintf(
-                    __d('baser_core', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
-                    $content->title,
-                    rawurldecode($beforeUrl),
-                    rawurldecode($content->url)
-                );
-                $url = $service->getUrlById($content->id, true);
-                $this->BcMessage->setSuccess($message, true, false);
-            } catch (PersistenceFailedException $e) {
-                $errors = $e->getEntity()->getErrors();
-                $message = __d('baser_core', "入力エラーです。内容を修正してください。");
-                $this->setResponse($this->response->withStatus(400));
-            } catch (\Throwable $e) {
-                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-                $this->setResponse($this->response->withStatus(500));
-            }
-        } else {
-            $message = __d('baser_core', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。');
+
+        try {
+            $beforeContent = $service->get($this->request->getData('origin.id'));
+            $beforeUrl = $beforeContent->url;
+            $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
+            $message = sprintf(
+                __d('baser_core', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+                $content->title,
+                rawurldecode($beforeUrl),
+                rawurldecode($content->url)
+            );
+            $url = $service->getUrlById($content->id, true);
+            $this->BcMessage->setSuccess($message, true, false);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
 
         $this->set([

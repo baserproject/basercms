@@ -152,65 +152,6 @@ class SiteConfigsTableTest extends BcTestCase
     }
 
     /**
-     * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
-     * @param bool $isLogin ログインしているかどうか
-     * @param string $saveValue 保存値
-     * @param string $listDisplayed 表示した時間
-     * @param bool $expected 期待値
-     * @dataProvider isChangedContentsSortLastModifiedDataProvider
-     */
-    public function testIsChangedContentsSortLastModified($isLogin, $saveValue, $listDisplayed, $expected)
-    {
-        $this->loadFixtureScenario(InitAppScenario::class);
-        if($isLogin) Router::setRequest($this->loginAdmin($this->getRequest()));
-        $this->SiteConfigs->saveValue('contents_sort_last_modified', $saveValue);
-        $result = $this->SiteConfigs->isChangedContentsSortLastModified($listDisplayed);
-        $this->assertEquals($expected, $result);
-    }
-
-    public static function isChangedContentsSortLastModifiedDataProvider()
-    {
-        return [
-            [false, '', '2021/08/01', false], // 保存値なし
-            [false, '2021/08/01|1', '2021/08/01', false], // 未ログイン
-            [true, '2021/08/01|1', '2021/08/01', false], // 同じユーザーの変更
-            [true, '2021/08/01 10:00:00|2', '2021/08/01 10:00:30', true], // バッファ内
-            [true, '2021/08/01 10:00:00|2', '2021/08/01 10:01:01', false],  // バッファ外
-        ];
-    }
-
-    /**
-     * コンテンツ並び順変更時間を更新する
-     */
-    public function testUpdateContentsSortLastModified()
-    {
-        $this->loadFixtureScenario(InitAppScenario::class);
-        // 未ログイン
-        $this->SiteConfigs->saveValue('contents_sort_last_modified', '');
-        $this->SiteConfigs->updateContentsSortLastModified();
-        $this->assertEquals('', $this->SiteConfigs->getValue('contents_sort_last_modified'));
-        // ログイン
-        Router::setRequest($this->loginAdmin($this->getRequest()));
-        $this->SiteConfigs->updateContentsSortLastModified();
-        $lastModified = $this->SiteConfigs->getValue('contents_sort_last_modified');
-        [$lastModified, $userId] = explode('|', $lastModified);
-        $this->assertEquals(1, $userId);
-        $this->assertNotEmpty($lastModified);
-    }
-
-    /**
-     * コンテンツ並び替え順変更時間をリセットする
-     */
-    public function testResetContentsSortLastModified()
-    {
-        $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loginAdmin($this->getRequest());
-        $this->SiteConfigs->updateContentsSortLastModified();
-        $this->SiteConfigs->resetContentsSortLastModified();
-        $this->assertEmpty($this->SiteConfigs->getValue('contents_sort_last_modified'));
-    }
-
-    /**
      * testIsChanged
      *
      * @param string $field フィールド名
