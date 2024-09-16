@@ -561,8 +561,11 @@ class MailMessagesTableTest extends BcTestCase
 
         $result = $this->MailMessage->validationDefault(new Validator());
 
-        $this->assertSame($validator, $result);
         $this->assertTrue($result->hasField('test_field'));
+        $fieldData = $result->field('test_field');
+
+        $this->assertTrue($fieldData->isPresenceRequired());
+        $this->assertFalse($fieldData->isEmptyAllowed());
     }
 
     /**
@@ -576,7 +579,10 @@ class MailMessagesTableTest extends BcTestCase
 
         $result = $this->MailMessage->validationDefault($inputValidator);
 
-        $this->assertSame($inputValidator, $result);
         $this->assertTrue($result->hasField('input_field'));
+
+        $fieldData = $result->field('input_field');
+        $this->assertTrue($fieldData->isPresenceRequired());
+        $this->assertFalse($fieldData->isEmptyAllowed());
     }
 }
