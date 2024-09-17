@@ -144,6 +144,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion)
     {
@@ -191,6 +192,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd()
     {

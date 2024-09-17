@@ -960,4 +960,80 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         $result = $this->BcDatabaseService->tableExists($table);
         $this->assertFalse($result, 'テーブルが存在しないこと');
     }
+
+
+    /**
+     * Test getSequence
+     */
+    public function test_getSequence()
+    {
+        //default value field
+        $result = $this->BcDatabaseService->getSequence('test');
+        $this->assertEquals('test_id_seq', $result);
+
+        //specific value field
+        $result = $this->BcDatabaseService->getSequence('orders', 'order_number');
+        $this->assertEquals('orders_order_number_seq', $result);
+
+        //table and field different
+        $result = $this->BcDatabaseService->getSequence('products', 'product_code');
+        $this->assertEquals('products_product_code_seq', $result);
+    }
+
+    /**
+     * Test renameTable
+     */
+    public function test_renameTable()
+    {
+        // create table
+        $table = 'table_test_create';
+        $columns = [
+            'no' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+
+        $result = $this->BcDatabaseService->createTable($table, $columns);
+        $this->assertTrue($result);
+
+        // rename table
+        $newTable = 'table_test_rename';
+        $result = $this->BcDatabaseService->renameTable($table, $newTable);
+        $this->assertTrue($result);
+
+        // check exist
+        $result = $this->BcDatabaseService->tableExists($newTable);
+        $this->assertTrue($result);
+
+        // drop table
+        $this->BcDatabaseService->dropTable($newTable);
+    }
+
+
+    /**
+     * Test columnExists
+     */
+    public function test_columnExists()
+    {
+        // create table
+        $table = 'table_test_column_exist';
+        $columns = [
+            'contents' => ['type' => 'text'],
+        ];
+        $this->BcDatabaseService->createTable($table, $columns);
+
+        //check table exist
+        $result = $this->BcDatabaseService->tableExists($table);
+        $this->assertTrue($result);
+
+        //check column exist
+        $result = $this->BcDatabaseService->columnExists($table, 'contents');
+        $this->assertTrue($result);
+
+        //check column not exist
+        $result = $this->BcDatabaseService->columnExists($table, 'new_column');
+        $this->assertFalse($result);
+
+        // drop table
+        $this->BcDatabaseService->dropTable($table);
+    }
 }

@@ -176,6 +176,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function columnExists(string $tableName, string $columnName)
     {
@@ -261,6 +262,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function renameTable(string $oldTableName, string $newTableName)
     {
@@ -680,6 +682,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * シーケンスを取得する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSequence($table, $field = 'id')
     {

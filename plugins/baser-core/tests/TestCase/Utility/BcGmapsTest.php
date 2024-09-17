@@ -9,8 +9,11 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BaserCore\Test\TestCase\Utility;
+use A\B;
+use BaserCore\Error\BcException;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcGmaps;
+use Cake\Cache\Cache;
 
 /**
  * Class BcGmapsTest
@@ -25,6 +28,7 @@ class BcGmapsTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->BcGmaps = new BcGmaps('api-key');
     }
 
     /**
@@ -38,23 +42,31 @@ class BcGmapsTest extends BcTestCase
     }
 
     /**
-     * getInfoLocation
-     * 2018/07/09 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
+     * test __construct
      */
-    public function testGetInfoLocation()
+    public function test__construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-//		$result = $this->BcGmaps->getInfoLocation('日本');
-//		$this->assertNotEmpty($result, 'getInfoLocationで情報を取得できません');
-//
-//		$lat = round($result['latitude'], 1);
-//		$lng = round($result['longitude'], 1);
-//
-//		$this->assertEquals(36.2, $lat, '位置情報を正しく取得できません');
-//		$this->assertEquals(138.3, $lng, '位置情報を正しく取得できません');
-//
-//		$result = $this->BcGmaps->getInfoLocation('');
-//		$this->assertNull($result, 'getInfoLocationに空のアドレスに値が返ってきます');
+        $_gmapsApiUrl = $this->getPrivateProperty($this->BcGmaps, '_gmapsApiUrl');
+        $this->assertEquals('https://maps.googleapis.com/maps/api/geocode/xml?key=api-key', $_gmapsApiUrl);
+
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('システム基本設定にて、Google Maps API キーを入力してください。');
+        new BcGmaps(false);
+    }
+
+    /**
+     * test getLocation
+     */
+    public function testGetLocation()
+    {
+        Cache::write('5pel5pys', '33.0661504,126.551622,5z', '_bc_gmaps_');
+        $result = $this->BcGmaps->getLocation('日本');
+        $this->assertEquals('33.0661504,126.551622,5z', $result);
+
+        $result = $this->BcGmaps->getLocation('');
+        $this->assertNull($result, 'getLocationに空のアドレスに値が返ってきます');
+
+        Cache::delete('5pel5pys', '_bc_gmaps_');
     }
 
 }

@@ -126,6 +126,7 @@ class UploaderFilesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -181,6 +182,7 @@ class UploaderFilesTable extends AppTable
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

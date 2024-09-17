@@ -2,9 +2,11 @@
 
 namespace BcUploader\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Controller\Admin\UploaderFilesController;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
 use Cake\Event\Event;
@@ -37,9 +39,24 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertNotEmpty($this->UploaderFilesController->viewBuilder()->getHelpers());
     }
 
+    /**
+     * test index
+     * @return void
+     */
     public function test_index()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => '100'])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->post("/baser/admin/bc-uploader/uploader_files");
+        $this->assertResponseCode(200);
+        //Request Paramを確認
+        $data = $this->_controller->getRequest()->getData();
+        $this->assertEquals(100, $data['limit']);
+        $this->assertEquals("all", $data['uploader_type']);
     }
 
     public function test_ajax_index()
@@ -47,14 +64,59 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
     }
 
+    /**
+     * test ajax_list
+     */
     public function test_ajax_list()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        SiteConfigFactory::make(['name' => 'admin_list_num', 'value' => 5])->persist();
+        UploaderConfigFactory::make(['name' => 'layout_type', 'value' => 'panel'])->persist();
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行 $id != null
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_list/1");
+        $this->assertResponseCode(200);
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals(1, $vars['listId']);
+        $this->assertEquals("panel", $vars['layoutType']);
+        $this->assertEquals(5, count($vars['uploaderFiles']));
+
+        //正常系実行 $id == null
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_list");
+        $this->assertResponseCode(200);
+
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals(null, $vars['listId']);
+        $this->assertEquals("panel", $vars['layoutType']);
+        $this->assertEquals(5, count($vars['uploaderFiles']));
     }
 
+    /**
+     * test ajax_image
+     */
     public function test_ajax_image()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        UploaderFileFactory::make(['name' => '2_1.jpg', 'atl' => '2_1.jpg', 'user_id' => 1])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行 パラメータは$sizeを指定しない
+        $this->post("/baser/admin/bc-uploader/uploader_files/ajax_image/2_1.jpg");
+        $this->assertResponseOk();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals("small", $this->_controller->viewBuilder()->getVar('size'));
+
+        //正常系実行 パラメータは$sizeを指定する
+        $this->post("/baser/admin/bc-uploader/uploader_files/ajax_image/2_1.jpg/large");
+        $this->assertResponseOk();
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals("large", $this->_controller->viewBuilder()->getVar('size'));
     }
 
     public function test_ajax_exists_images()
@@ -106,8 +168,22 @@ class UploaderFilesControllerTest extends BcTestCase
         UploaderFileFactory::get(1);
     }
 
+    /**
+     * test ajax_get_search_box
+     */
     public function test_ajax_get_search_box()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //正常系実行
+        $this->get("/baser/admin/bc-uploader/uploader_files/ajax_get_search_box/1");
+        $this->assertResponseCode(200);
+        //disableAutoLayoutを確認
+        $this->assertFalse($this->_controller->viewBuilder()->isAutoLayoutEnabled());
+        //listIdを確認
+        $this->assertEquals(1, $this->_controller->viewBuilder()->getVar("listId"));
+        //使用中テンプレートを確認
+        $this->assertEquals("../element/search/uploader_files_index", $this->_controller->viewBuilder()->getTemplate());
     }
 }
