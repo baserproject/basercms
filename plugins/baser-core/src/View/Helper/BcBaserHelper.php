@@ -1716,6 +1716,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _initPluginBasers()
     {
