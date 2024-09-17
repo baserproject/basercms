@@ -274,4 +274,22 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(2, $Plugins->get(2)->priority);
     }
 
+    /**
+     * test addPrefix
+     * @return void
+     */
+    public function testAddPrefix()
+    {
+        //デフォルトテーブル
+        $this->assertEquals('plugin', $this->App->addPrefix('plugin'));
+
+        //プレフィックスを追加場合、
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->assertEquals('unittest_plugin', $this->App->addPrefix('plugin'));
+    }
+
 }
