@@ -37,6 +37,7 @@ use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * MailFrontService
@@ -425,7 +426,7 @@ class MailFrontService implements MailFrontServiceInterface
         }
         foreach($mailFields as $mailField) {
             if ($mailField->type !== 'file') continue;
-            $tmp_name = Hash::get($postData, $mailField->field_name . '.tmp_name');
+            $tmp_name = Hash::get($_FILES, $mailField->field_name . '.tmp_name');
             if ($tmp_name && !is_uploaded_file($tmp_name)) {
                 return false;
             }

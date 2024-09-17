@@ -51,8 +51,16 @@ class BcComposerTest extends BcTestCase
 
         // 環境を変更
         BcComposer::setup('/usr/local/bin/php', '/var/www/html/tmp/update');
-        $this->assertEquals('cd /var/www/html/tmp/update;', BcComposer::$cd);
+        $this->assertEquals('cd /var/www/html/tmp/update/;', BcComposer::$cd);
         $this->assertEquals('/usr/local/bin/php', BcComposer::$php);
+    }
+
+    /**
+     * test checkEnv
+     */
+    public function testCheckEnv()
+    {
+        $this->assertNull(BcComposer::checkEnv());
     }
 
     /**
@@ -73,6 +81,31 @@ class BcComposerTest extends BcTestCase
         $result = BcComposer::installComposer();
         $this->assertEquals(0, $result['code']);
         $this->assertFileExists(BcComposer::$composerDir . 'composer.phar');
+    }
+
+    /**
+     * test checkComposer
+     */
+    public function testCheckComposer()
+    {
+        BcComposer::$composerDir = '';
+
+        BcComposer::setup();
+        BcComposer::checkComposer();
+        //実行問題なし場合、composer.pharが生成された
+        $this->assertFileExists(BcComposer::$composerDir . 'composer.phar');
+    }
+
+    /**
+     * test checkComposer エラーを発生した場合
+     */
+    public function testCheckComposerError()
+    {
+        BcComposer::$composerDir = '';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('composer がインストールできません。All settings correct for using Composer');
+        BcComposer::checkComposer();
     }
 
     /**
@@ -138,6 +171,43 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+        $orgLockPath = ROOT . DS . 'composer.lock';
+        $backupLockPath = ROOT . DS . 'composer.lock.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        copy($orgLockPath, $backupLockPath);
+
+        // replace を削除
+        // baserCMS5.0.0が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $regex = '/("replace": {.+?},)/s';
+        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = preg_replace($regex, '', $data);
+        $file->write($data);
+        BcComposer::setup('php');
+
+        $rs = BcComposer::update();
+        //戻り値を確認
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+        rename($backupLockPath, $orgLockPath);
+        $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
+        $folder->delete();
+        BcComposer::install();
+    }
+
+    /**
      * test clearCache
      */
     public function testClearCache()
@@ -151,23 +221,115 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test install
+     */
+    public function testInstall()
+    {
+        BcComposer::setup('php');
+
+        $rs = BcComposer::install();
+        //戻り値を確認
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
+    }
+
+    /**
+     * test selfUpdate
+     */
+    public function testSelfUpdate()
+    {
+        BcComposer::setup();
+        $rs = BcComposer::selfUpdate();
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+        $this->assertStringContainsString("You are already using the latest available Composer version", $rs['out'][1]);
+    }
+
+    /**
      * test setupComposerForDistribution
      */
     public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $composer = ROOT . DS . 'composer.json';
-        copy($composer, ROOT . DS . 'composer.json.bak');
+        $srcComposerJsonPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.json';
+        $srcComposerLockPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.lock';
+        $composerJson = TMP_TESTS . 'composer.json';
+        $composerLock = TMP_TESTS . 'composer.lock';
+        copy($srcComposerJsonPath, $composerJson);
+        copy($srcComposerLockPath, $composerLock);
 
         // 実行
-        BcComposer::setupComposerForDistribution(ROOT . DS);
-        $file = new BcFile($composer);
+        BcComposer::setup('', TMP_TESTS);
+        BcComposer::setupComposerForDistribution('5.1.1');
+        $file = new BcFile($composerJson);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
+        $file = new BcFile($composerLock);
+        $data = $file->read();
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core"'));
 
         // バックアップをリストア
-        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        unlink($composerJson);
+        unlink($composerLock);
+        (new BcFolder(TMP_TESTS . 'vendor'))->delete();
+    }
+
+    /**
+     * test createCommand
+     * @param $inputCommand
+     * @param $expectedCommand
+     * @dataProvider createCommandDataProvider
+     */
+    public function testCreateCommand($inputCommand, $expectedCommand)
+    {
+        BcComposer::$cd = 'cd /var/www/html/;';
+        BcComposer::$export = 'export HOME=/var/www/html/composer/;';
+        BcComposer::$php = 'php';
+        BcComposer::$composerDir = '/var/www/html/composer/';
+
+        $result = BcComposer::createCommand($inputCommand);
+        $this->assertEquals($expectedCommand, $result);
+    }
+
+    public static function createCommandDataProvider()
+    {
+        return [
+            [
+                'self-update',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar self-update 2>&1"
+            ],
+            [
+                'install',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar install 2>&1"
+            ],
+            [
+                'require vendor/package',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar require vendor/package 2>&1"
+            ],
+        ];
+    }
+
+    /**
+     * test deleteReplace
+     * @return void
+     */
+    public function testDeleteReplace()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        BcComposer::setup();
+        BcComposer::deleteReplace();
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $this->assertFalse(strpos($data, '"replace": {'));
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
     }
 
 }

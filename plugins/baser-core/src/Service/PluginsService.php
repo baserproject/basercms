@@ -865,6 +865,7 @@ class PluginsService implements PluginsServiceInterface
      * @return array|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAvailableCoreUpdates()
     {
