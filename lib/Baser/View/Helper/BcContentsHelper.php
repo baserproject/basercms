@@ -115,7 +115,8 @@ class BcContentsHelper extends AppHelper
 			}
 			// disabled
 			if(!empty($setting['url']['add'])) {
-				$setting['addDisabled'] = !($this->_Permission->check($setting['url']['add'], $user['user_group_id']));
+				$permissionCheckUrl = preg_replace("@\A{$this->request->base}@", '', $setting['url']['add']);
+				$setting['addDisabled'] = !($this->_Permission->check($permissionCheckUrl, $user['user_group_id']));
 			} else {
 				$setting['addDisabled'] = true;
 			}
@@ -138,7 +139,8 @@ class BcContentsHelper extends AppHelper
 			return false;
 		}
 		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
-		return $this->_Permission->check($url, $user['user_group_id']);
+		$permissionCheckUrl = preg_replace("@\A{$this->request->base}@", '', $url);
+		return $this->_Permission->check($permissionCheckUrl, $user['user_group_id']);
 	}
 
 	/**
