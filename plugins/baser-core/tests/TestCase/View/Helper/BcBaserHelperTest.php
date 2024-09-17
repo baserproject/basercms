@@ -1984,6 +1984,17 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test updateInfo
+     */
+    public function testUpdateInfo()
+    {
+        ob_start();
+        $this->BcBaser->updateInfo();
+        $result = ob_get_clean();
+        $this->assertStringContainsString('<div class="bc-update-info clearfix">', $result);
+    }
+
+    /**
      * @return void
      */
     public function testGetUpdateInfo()
