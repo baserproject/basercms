@@ -208,8 +208,8 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertEquals('blog post edit', $blogPost['title']);
         $this->assertEquals('ホームページをオープンしました', $blogPost['name']);
 
-        //dataは空にする場合を確認
-        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', []);
+        //エラーを発生した場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', ['name' => str_repeat('a', 256)]);
         // ステータスを確認
         $this->assertResponseCode(200);
         // メッセージを確認

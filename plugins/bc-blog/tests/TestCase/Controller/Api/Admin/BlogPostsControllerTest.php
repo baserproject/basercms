@@ -163,15 +163,15 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertEquals('blog post edit', $result->blogPost->title);
         $this->assertEquals('記事「blog post edit」を更新しました。', $result->message);
 
-        //dataは空にする場合を確認
+        //エラーを発生した場合を確認
         //APIをコル
-        $this->post('/baser/api/admin/bc-blog/blog_posts/edit/1.json?token=' . $this->accessToken, []);
+        $this->post('/baser/api/admin/bc-blog/blog_posts/edit/1.json?token=' . $this->accessToken, ['name' => str_repeat('a', 256)]);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('タイトルを入力してください。', $result->errors->title->_required);
+        $this->assertEquals('スラッグは255文字以内で入力してください。', $result->errors->name->maxLength);
     }
 
     /**
