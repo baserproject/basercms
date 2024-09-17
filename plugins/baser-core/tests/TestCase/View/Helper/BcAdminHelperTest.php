@@ -214,9 +214,20 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testConvertAdminMenuGroups(): void
     {
-        // $adminMenuGroups = $this->BcAdmin->getAdminMenuGroups();
-        // $covertedAdminMenuGroups = $this->BcAdmin->convertAdminMenuGroups($adminMenuGroups);
-        $this->markTestIncomplete('Not implemented yet.');
+        //データー生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->BcAdmin->getView()->setRequest($request);
+
+        //対象メソッドを実行
+        $adminMenuGroups = $this->execPrivateMethod($this->BcAdmin, 'getAdminMenuGroups');
+        $covertedAdminMenuGroups = $this->execPrivateMethod($this->BcAdmin, 'convertAdminMenuGroups', [$adminMenuGroups]);
+
+        //戻り値を確認
+        $this->assertEquals('ダッシュボード', $covertedAdminMenuGroups[0]['title']);
+        $this->assertEquals('/baser/admin', $covertedAdminMenuGroups[0]['url']);
+        $this->assertEquals('dashboard', $covertedAdminMenuGroups[0]['type']);
+        $this->assertEquals('bca-icon--file', $covertedAdminMenuGroups[0]['icon']);
     }
 
     /**
