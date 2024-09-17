@@ -95,6 +95,7 @@ class BcWidgetAreaHelperTest extends BcTestCase
     {
         $view = new BcFrontAppView($this->getRequest($url));
         $view->set('currentWidgetAreaId', 1);
+        $view->loadHelper('BcWidgetArea.BcWidgetArea');
         $this->BcWidgetArea = new BcWidgetAreaHelper($view);
         $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcWidgetArea->getWidgetArea($no));
     }
