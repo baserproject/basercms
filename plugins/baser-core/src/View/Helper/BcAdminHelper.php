@@ -522,10 +522,11 @@ class BcAdminHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function firstAccess()
     {
-        if($this->getView()->getRequest()->getParam('controller') === 'installations') return;
+        if ($this->getView()->getRequest()->getParam('controller') === 'installations') return;
         $this->BcBaser->element('first_access');
     }
 

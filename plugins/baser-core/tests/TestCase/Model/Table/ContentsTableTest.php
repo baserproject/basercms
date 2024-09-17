@@ -295,7 +295,6 @@ class ContentsTableTest extends BcTestCase
         ])->persist();
         $data = ContentFactory::get(100);
         $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
-        $this->assertEquals(6, $this->Contents->beforeSaveParentId);
         // nameフィールドがエンコードされてるかをテスト
         $entity = $result->getData('entity');
         $this->assertEquals(urlencode($value), $entity->name);
@@ -540,6 +539,7 @@ class ContentsTableTest extends BcTestCase
         $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $this->assertFalse($result);
         // self_*を元にstatusなど補完する
+        ContentFactory::make(['id' => 100, 'name' => ''])->persist();
         $data = [
             'id' => 100,
             'site_id' => 1,

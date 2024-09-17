@@ -96,8 +96,6 @@ class ContentsController extends BcAdminAppController
 
         switch($this->getRequest()->getQuery('list_type')) {
             case 1:
-                // 並び替え最終更新時刻をリセット
-                $siteConfigService->resetValue('contents_sort_last_modified');
                 $contents = $service->getTreeIndex($this->getRequest()->getQueryParams());
                 break;
             case 2:

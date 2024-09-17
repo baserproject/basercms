@@ -1255,6 +1255,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pagination($name = 'default', $data = [], $options = [])
     {
@@ -1306,6 +1307,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function scripts()
     {
@@ -2064,6 +2066,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function page($url, $params = [], $options = [])
     {
@@ -2122,6 +2125,7 @@ class BcBaserHelper extends Helper
      * @return bool 同じ場合には true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCurrentUrl($url)
     {

@@ -511,6 +511,27 @@ class BcAdminHelperTest extends BcTestCase
     }
 
     /**
+     * test firstAccess
+     */
+    public function testFirstAccess()
+    {
+        //controller == installations, return ''
+        $request = $this->getRequest('/')->withParam('controller', 'installations');
+        $this->BcAdmin->getView()->setRequest($request);
+        ob_start();
+        $this->BcAdmin->firstAccess();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //controller != installations, 初回アクセス時のメッセージ表示
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin/baser-core/pages/edit/2'))->set('firstAccess', true);
+        ob_start();
+        $this->BcAdmin->firstAccess();
+        $actualEmpty = ob_get_clean();
+        $this->assertTextContains('baserCMSへようこそ', $actualEmpty);
+    }
+
+    /**
      * test getTitle
      * @return void
      */

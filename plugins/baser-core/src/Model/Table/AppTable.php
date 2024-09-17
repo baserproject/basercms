@@ -13,9 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
-use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -83,6 +81,7 @@ class AppTable extends Table
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTable(): string
     {

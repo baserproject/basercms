@@ -21,7 +21,10 @@ use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
+use BaserCore\View\Helper\BcHtmlHelper;
+use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\ResultSet;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Utility\BcFile;
@@ -1087,21 +1090,17 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testPagination()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputRegex('/<div class="pagination">/');
-        $this->BcBaser->getRequest()->withParam('paging.Model', [
-            'count' => 100,
-            'pageCount' => 3,
-            'page' => 2,
-            'limit' => 10,
-            'current' => null,
-            'prevPage' => 1,
-            'nextPage' => 3,
-            'options' => [],
-            'paramType' => 'named'
+        $this->expectOutputRegex('/<div class="bs-pagination">/');
+        $posts = new PaginatedResultSet(new ResultSet([]), [
+            'pageCount' => 1,
+            'totalCount' => 1,
+            'currentPage' => 1,
+            'count' => 1,
+            'start' => 1,
+            'end' => 1
         ]);
-        $this->BcBaser->pagination();
+        $this->BcBaser->getView()->setRequest($this->getRequest('/'))->set('posts', $posts);
+        $this->BcBaser->pagination('simple');
     }
 
     /**
@@ -1122,51 +1121,65 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testScripts()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 
         // CSS
-        $expected = "\n" . '<meta name="generator" content="basercms"/><link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
-        $this->BcBaser->css('admin/layout', ['inline' => false]);
+        $expected = '
+<meta name="generator" content="basercms"/>
+<link rel="stylesheet" href="/css/admin/layout.css">
+';
         ob_start();
+        $this->BcBaser->css('admin/layout', false);
         $this->BcBaser->scripts();
         $result = ob_get_clean();
-        $result = str_replace($themeConfigTag, '', $result);
         $this->assertEquals($expected, $result);
-        $this->_View->assign('css', '');
+
+        $view = $this->BcBaser->getView();
+        $view->assign('css', '');
+        $this->BcBaser = new BcBaserHelper($view);
 
         Configure::write('BcApp.outputMetaGenerator', false);
 
         // Javascript
-        $expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+        $expected = '
+
+<script src="/js/admin/startup.js"></script>';
         $this->BcBaser->js('admin/startup', false);
         ob_start();
         $this->BcBaser->scripts();
         $result = ob_get_clean();
         $result = str_replace($themeConfigTag, '', $result);
         $this->assertEquals($expected, $result);
-        $this->_View->assign('script', '');
+
+        $view->assign('script', '');
+        $this->BcBaser = new BcBaserHelper($view);
 
         // meta
-        $expected = '<meta name="description" content="説明文"/>';
-        App::uses('BcHtmlHelper', 'View/Helper');
-        $BcHtml = new BcHtmlHelper($this->_View);
-        $BcHtml->meta('description', '説明文', ['inline' => false]);
-        ob_start();
-        $this->BcBaser->scripts();
-        $result = ob_get_clean();
-        $result = str_replace($themeConfigTag, '', $result);
-        $this->assertEquals($expected, $result);
-        $this->_View->assign('meta', '');
+        $expected = '<meta name="description" content="説明文">
 
-        // ツールバー
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
-        $this->BcBaser->set('user', ['User']);
+';
+        $BcHtml = new BcHtmlHelper($view);
+        $BcHtml->meta('description', '説明文', ['inline' => false]);
+        $view->assign('meta',
+            $BcHtml->meta('description', '説明文', ['inline' => false])
+        );
         ob_start();
         $this->BcBaser->scripts();
         $result = ob_get_clean();
-        $result = str_replace($themeConfigTag, '', $result);
+        $this->assertEquals($expected, $result);
+        $view->assign('meta', '');
+        $this->BcBaser = new BcBaserHelper($view);
+
+        $this->loadFixtureScenario(InitAppScenario::class);
+        // ツールバー
+        $expected = '<link rel="stylesheet" href="/css/admin/toolbar.css"><link rel="stylesheet" href="/bc_blog/css/admin/bc_blog_admin.css"><link rel="stylesheet" href="/bc_custom_content/css/admin/bc_custom_content_admin.css"><link rel="stylesheet" href="/bc_mail/css/admin/bc_mail_admin.css"><link rel="stylesheet" href="/bc_uploader/css/admin/bc_uploader_admin.css">
+
+';
+        $this->BcBaser->set('user', ['User']);
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        ob_start();
+        $this->BcBaser->scripts();
+        $result = ob_get_clean();
         $this->assertEquals($expected, $result);
     }
 
