@@ -2020,11 +2020,27 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test __construct
      * @return void
      */
     public function test__construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //プラグインのBaserヘルパを初期化を呼ぶ
+        Configure::write('BcEnv.isInstalled', true);
+        PluginFactory::make(['name' => 'BcMail'])->persist();
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
+        //プラグインのBaserヘルパを初期化を呼ぶか確認すること
+        $_pluginBasers = $this->getPrivateProperty($this->BcBaser, '_pluginBasers');
+        $this->assertArrayHasKey('BcMail', $_pluginBasers);
+
+        //プラグインのBaserヘルパを初期化を呼ばない
+        Configure::write('BcEnv.isInstalled', false);
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
+        //プラグインのBaserヘルパを初期化を呼ぶか確認すること
+        $_pluginBasers = $this->getPrivateProperty($this->BcBaser, '_pluginBasers');
+        $this->assertArrayNotHasKey('BcMail', $_pluginBasers);
     }
 
     /**
