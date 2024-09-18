@@ -1744,6 +1744,7 @@ class BcBaserHelper extends Helper
      * @return mixed|void PluginBaserHelper の戻り値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __call($method, $params)
     {
