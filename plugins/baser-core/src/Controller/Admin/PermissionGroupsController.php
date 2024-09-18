@@ -80,7 +80,7 @@ class PermissionGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function add(PermissionGroupsAdminServiceInterface $service, int $userGroupId, string $prefix)
+    public function add(PermissionGroupsAdminServiceInterface $service, int $userGroupId)
     {
         if($this->getRequest()->is(['post', 'put'])) {
             try {
@@ -96,7 +96,7 @@ class PermissionGroupsController extends BcAdminAppController
         }
         $this->set($service->getViewVarsForForm(
             $userGroupId,
-            $entity?? $service->getNew($prefix)
+            $entity?? $service->getNew($this->getRequest()->getQuery('prefix'))
         ));
     }
 

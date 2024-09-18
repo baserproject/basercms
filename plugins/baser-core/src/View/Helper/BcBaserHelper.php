@@ -1255,6 +1255,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pagination($name = 'default', $data = [], $options = [])
     {
@@ -1306,6 +1307,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function scripts()
     {
@@ -1714,6 +1716,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _initPluginBasers()
     {
@@ -1986,6 +1989,7 @@ class BcBaserHelper extends Helper
      * @return string サイトマップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitemap($siteId = 0)
     {
@@ -2064,6 +2068,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function page($url, $params = [], $options = [])
     {
@@ -2122,6 +2127,7 @@ class BcBaserHelper extends Helper
      * @return bool 同じ場合には true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCurrentUrl($url)
     {
@@ -2234,6 +2240,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function googleAnalytics($data = [], $options = [])
     {
@@ -2472,6 +2479,7 @@ class BcBaserHelper extends Helper
      * 更新情報を出力する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateInfo(): void
     {

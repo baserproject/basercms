@@ -344,6 +344,7 @@ class MailformHelper extends BcFreezeHelper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isGroupLastField(ResultSet $mailFields, MailField $currentMailField)
     {

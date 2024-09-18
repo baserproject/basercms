@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
@@ -366,7 +367,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
         foreach($tables as $table) {
             $baredTable = preg_replace('/^' . $prefix . '/', '', $table);
-            if (!isset($tableList[$plugin]) || !in_array($baredTable, $tableList[$plugin])) continue;
+            if (!isset($tableList[$plugin]) || !in_array($table, $tableList[$plugin])) continue;
             if (!$dbService->writeSchema($baredTable, [
                 'path' => $path,
                 'prefix' => $prefix

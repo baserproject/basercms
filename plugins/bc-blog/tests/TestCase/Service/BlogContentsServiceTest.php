@@ -217,10 +217,6 @@ class BlogContentsServiceTest extends BcTestCase
             'level' => 1,
 
         ])->persist();
-        SiteConfigFactory::make([
-            'name' => 'contents_sort_last_modified',
-            'value' => ''
-        ])->persist();
         $data = [
             'entity_id' => 2,
             'parent_id' => 2,

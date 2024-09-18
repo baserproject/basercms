@@ -9,9 +9,11 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcMail\Test\TestCase\View\Helper;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
+use Cake\ORM\Entity;
 use Cake\View\View;
 
 /**
@@ -62,13 +64,33 @@ class MailHelperTest extends BcTestCase
 
     /**
      * 説明文の存在確認
+     * @param $description
+     * @param $expected
+     * @dataProvider descriptionExistsProvider
      */
-    public function testDescriptionExists()
+    public function testDescriptionExists($description, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Mail->setMailContent(1);
-        $result = $this->Mail->descriptionExists();
-        $this->assertTrue($result, "メールの説明文が指定されていません。");
+        //setUp
+        $mailContent = new Entity([
+            'description' => $description
+        ]);
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $result = $this->MailHelper->descriptionExists();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function descriptionExistsProvider()
+    {
+        return [
+            ['This is a test description', true],
+            ['', false],
+            [null, false],
+            ['0', false],
+            ['   ', true],
+            ['<p>This is a <strong>HTML</strong> description</p>', true],
+        ];
     }
 
     /**
@@ -227,5 +249,21 @@ class MailHelperTest extends BcTestCase
 
         $rs = $this->MailHelper->getDescription();
         $this->assertEquals('test description', $rs);
+    }
+
+    /**
+     * test isMail
+     */
+    public function test_isMail()
+    {
+        //no content
+        $result = $this->MailHelper->isMail();
+        $this->assertFalse($result);
+
+        //with content
+        $content = ContentFactory::make(['plugin' => 'BcMail'])->getEntity();
+        $this->MailHelper->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
+        $result = $this->MailHelper->isMail();
+        $this->assertTrue($result);
     }
 }
