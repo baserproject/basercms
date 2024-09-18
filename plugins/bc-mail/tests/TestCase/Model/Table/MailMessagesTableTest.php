@@ -546,4 +546,16 @@ class MailMessagesTableTest extends BcTestCase
             [false, 'mail_message_0'],
         ];
     }
+
+    /**
+     * test setUseTable
+     */
+    public function test_setUseTable()
+    {
+        $mailContentId = 1;
+        $this->MailMessage->setUseTable($mailContentId);
+
+        $actualTableName = $this->MailMessage->getTable();
+        $this->assertEquals('mail_message_1', $actualTableName);
+    }
 }
