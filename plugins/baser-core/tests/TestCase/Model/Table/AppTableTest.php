@@ -119,6 +119,29 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * test belongsToMany
+     */
+    public function testBelongsToMany()
+    {
+        //プレフィックスを設定
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        //Usersに連携
+        $rs = $this->App->belongsToMany('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'user_id',
+        ]);
+        //戻り値を確認
+        $this->assertEquals('user_id', $rs->getForeignKey());
+        $this->assertEquals('BaserCore.Users', $rs->getClassName());
+        $this->assertEquals('unittest_blog_posts', $rs->getSource()->getTable());
+    }
+
+    /**
      * Test getMax
      *
      * @return void
