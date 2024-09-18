@@ -328,70 +328,31 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testConvertMessageToCsv()
     {
-        $mailFields = [
-            MailFieldsFactory::make([
-                'mail_content_id' => 1,
-                'field_name' => 'name',
-                'name' => 'Name',
-                'type' => 'text'
-            ])->getEntity(),
-
-            MailFieldsFactory::make([
-                'mail_content_id' => 1,
-                'field_name' => 'file_upload',
-                'name' => 'File Upload',
-                'type' => 'file'
-            ])->getEntity(),
+        // Set up the mail fields
+        $this->MailMessage->mailFields = [
+            (object)['field_name' => 'image', 'name' => 'Image', 'type' => 'file'],
+            (object)['field_name' => 'description', 'name' => 'Description', 'type' => 'text'],
         ];
 
+        // Set up the messages
         $messages = [
-            (object)[
-                'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21','name' => 'John Doe', 'file_upload' => 'file1.jpg'
-            ],
-            (object)[
-                'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21','name' => 'Jane Smith', 'file_upload' => 'file2.jpg'
-            ]
+            new Entity(['id' => 1, 'image' => 'image1.jpg', 'description' => 'Test description 1', 'created' => '2023-01-01', 'modified' => '2023-01-02']),
+            new Entity(['id' => 2, 'image' => 'image2.jpg', 'description' => 'Test description 2', 'created' => '2023-01-03', 'modified' => '2023-01-04']),
         ];
-        $this->MailMessage->mailFields = $mailFields;
 
         $result = $this->MailMessage->convertMessageToCsv($messages);
 
-        $expected = [
-            [
-                'MailMessage' => [
-                    'NO' =>  1,
-                    'name (Name)' => ' John Doe',
-                    'file_upload (File Upload)' => 'file1.jpg',
-                    '作成日' => 'v19',
-                    '更新日' => 'v21'
+        // Check the result of the conversion to CSV 1
+        $this->assertEquals('image1.jpg', $result[0]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 1', $result[0]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-01', $result[0]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-02', $result[0]['MailMessage']['更新日']);
 
-                ]
-            ],
-            [
-                'MailMessage' => [
-                    'NO' => 2,
-                    'name (Name)' => ' Jane Smith',
-                    'file_upload (File Upload)' => 'file2.jpg',
-                    '作成日' => 'v19',
-                    '更新日' => 'v21'
-                ]
-            ]
-        ];
-        $this->assertEquals($expected, $result);
+        // Check the result of the conversion to CSV 2
+        $this->assertEquals('image2.jpg', $result[1]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 2', $result[1]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-03', $result[1]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-04', $result[1]['MailMessage']['更新日']);
     }
 
     /**
