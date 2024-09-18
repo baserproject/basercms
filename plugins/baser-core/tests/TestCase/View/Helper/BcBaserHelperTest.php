@@ -1500,6 +1500,23 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test _initPluginBasers
+     * @return void
+     */
+    public function test_initPluginBasers()
+    {
+        //データ生成
+        PluginFactory::make(['name' => 'BcMail'])->persist();
+
+        //対象メソッドを実行
+        $this->execPrivateMethod($this->BcBaser, '_initPluginBasers', []);
+        $_pluginBasers = $this->getPrivateProperty($this->BcBaser, '_pluginBasers');
+
+        //戻り値を確認
+        $this->assertArrayHasKey('BcMail', $_pluginBasers);
+    }
+
+    /**
      * 文字列を検索しマークとしてタグをつける
      * @param string $search 検索文字列
      * @param string $text 検索対象文字列
