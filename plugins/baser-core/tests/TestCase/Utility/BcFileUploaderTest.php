@@ -1269,4 +1269,108 @@ class BcFileUploaderTest extends BcTestCase
         $this->BcFileUploader->resetUploaded();
         $this->assertFalse($this->BcFileUploader->isUploaded());
     }
+
+    /**
+     * test rollbackFile with errors
+     * @param array $initialData
+     * @param array $originalData
+     * @param array $errors
+     * @param array $expected
+     * @dataProvider rollbackFileDataProvider
+     */
+    public function testRollbackFileWithErrors($initialData, $originalData, $errors, $expected)
+    {
+        //create BcFileUploader
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'image'],
+            ['name' => 'document']
+        ];
+
+        //create Entity
+        $entity = new Entity($originalData);
+        $entity->clean();
+        //Set new data
+        $entity->set($initialData);
+
+        //set errors
+        if (isset($errors['image'])) {
+            $entity->setError('image', $errors['image']);
+        }
+        if (isset($errors['document'])) {
+            $entity->setError('document', $errors['document']);
+        }
+
+        //check has error
+        $this->assertTrue($entity->hasErrors());
+
+        $BcFileUploader->rollbackFile($entity);
+
+        //Check data after rollback
+        $this->assertEquals($expected['image'], $entity->get('image'));
+        $this->assertEquals($expected['document'], $entity->get('document'));
+
+        //check errors after rollback
+        if (isset($errors['image'])) {
+            $this->assertEquals($errors['image'], $entity->getError('image'));
+        }
+        if (isset($errors['document'])) {
+            $this->assertEquals($errors['document'], $entity->getError('document'));
+        }
+    }
+
+    public static  function rollbackFileDataProvider()
+    {
+        return [
+            [
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf'],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf'],
+                ['image' => ['Error message for image'], 'document' => ['Error message for document']],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf']
+            ]
+        ];
+    }
+
+    /**
+     * test rollbackFile without errors
+     * @param array $initialData
+     * @param array $originalData
+     * @param array $expected
+     * @dataProvider rollbackFileNoErrorsDataProvider
+     */
+    public function testRollbackFileWithoutErrors($initialData, $originalData, $expected)
+    {
+        //create BcFileUploader
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'image'],
+            ['name' => 'document']
+        ];
+
+        //create Entity
+        $entity = new Entity($originalData);
+        $entity->clean();
+        //set new data
+        $entity->set($initialData);
+
+        //check has error
+        $this->assertFalse($entity->hasErrors());
+
+        $BcFileUploader->rollbackFile($entity);
+
+        //Check data after rollback
+        $this->assertEquals($expected['image'], $entity->get('image'));
+        $this->assertEquals($expected['document'], $entity->get('document'));
+    }
+
+    public static function rollbackFileNoErrorsDataProvider()
+    {
+        return [
+            [
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf'],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf'],
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf']
+            ],
+        ];
+    }
 }

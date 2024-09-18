@@ -1197,6 +1197,7 @@ class BcFileUploader
      * @param EntityInterface $entity
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rollbackFile(EntityInterface $entity)
     {
