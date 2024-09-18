@@ -99,6 +99,7 @@ class AppTable extends Table
      * @return BelongsToMany
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function belongsToMany(string $associated, array $options = []): BelongsToMany
     {
@@ -124,6 +125,7 @@ class AppTable extends Table
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addPrefix($table)
     {

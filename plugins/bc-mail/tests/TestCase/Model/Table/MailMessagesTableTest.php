@@ -549,40 +549,51 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
-     * test validationDefault
-     * with existing validator
+     * test setUseTable
      */
-    public function testValidationDefaultWithExistingValidator()
+    public function test_setUseTable()
     {
-        $validator = new Validator();
-        $validator->requirePresence('test_field');
+        $mailContentId = 1;
+        $this->MailMessage->setUseTable($mailContentId);
 
-        $this->MailMessage->setValidator('MailMessages', $validator);
-
-        $result = $this->MailMessage->validationDefault(new Validator());
-
-        $this->assertTrue($result->hasField('test_field'));
-        $fieldData = $result->field('test_field');
-
-        $this->assertTrue($fieldData->isPresenceRequired());
-        $this->assertFalse($fieldData->isEmptyAllowed());
+        $actualTableName = $this->MailMessage->getTable();
+        $this->assertEquals('mail_message_1', $actualTableName);
     }
 
     /**
      * test validationDefault
-     * without existing validator
+     * @param $existingValidator
+     * @param $expectedField
+     * @dataProvider validationDefaultDataProvider
      */
-    public function testValidationDefaultWithoutExistingValidator()
+    public function testValidationDefault($existingValidator, $expectedField)
     {
+        if ($existingValidator) {
+            $validator = new Validator();
+            $validator->requirePresence($expectedField);
+            $this->MailMessage->setValidator('MailMessages', $validator);
+        }
+
         $inputValidator = new Validator();
-        $inputValidator->requirePresence('input_field');
+        $inputValidator->requirePresence($expectedField);
 
         $result = $this->MailMessage->validationDefault($inputValidator);
 
-        $this->assertTrue($result->hasField('input_field'));
+        $this->assertTrue($result->hasField($expectedField));
 
-        $fieldData = $result->field('input_field');
+        $fieldData = $result->field($expectedField);
         $this->assertTrue($fieldData->isPresenceRequired());
         $this->assertFalse($fieldData->isEmptyAllowed());
     }
+
+    public static function validationDefaultDataProvider()
+    {
+        return [
+            //case existing validator
+            [true, 'test_field'],
+            //case not existing validator
+            [false, 'input_field']
+        ];
+    }
+
 }

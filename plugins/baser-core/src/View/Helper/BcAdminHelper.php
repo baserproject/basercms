@@ -99,6 +99,7 @@ class BcAdminHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function convertAdminMenuGroups($adminMenuGroups)
     {

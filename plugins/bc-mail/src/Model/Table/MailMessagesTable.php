@@ -136,6 +136,7 @@ class MailMessagesTable extends MailAppTable
      * @param $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setUseTable($mailContentId)
     {
