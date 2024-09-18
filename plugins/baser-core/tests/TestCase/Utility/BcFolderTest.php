@@ -236,7 +236,7 @@ class BcFolderTest extends TestCase
         file_put_contents($testPath . '/test_file.txt', 'Test file 3');
 
         $BcFolder = new BcFolder($testPath);
-        $result = $BcFolder->find('^test_file\.txt$');
+        $result = $BcFolder->find('test_file.txt');
 
         //check
         $this->assertCount(1, $result);
@@ -261,7 +261,7 @@ class BcFolderTest extends TestCase
         file_put_contents($testPath . '/file2.txt', 'Test file 2');
 
         $BcFolder = new BcFolder($testPath);
-        $result = $BcFolder->find('^non_existent_file\.txt$');
+        $result = $BcFolder->find('non_existent_file.txt');
 
         //check
         $this->assertCount(0, $result);
