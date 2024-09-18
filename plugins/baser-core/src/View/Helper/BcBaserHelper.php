@@ -2323,6 +2323,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteSearchForm($data = [], $options = [])
     {
@@ -2507,6 +2508,7 @@ class BcBaserHelper extends Helper
      * @param int $id コンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getRelatedSiteLinks($id = null, $excludeIds = [])
     {
