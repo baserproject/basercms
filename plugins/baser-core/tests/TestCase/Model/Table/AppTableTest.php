@@ -119,6 +119,29 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * test belongsToMany
+     */
+    public function testBelongsToMany()
+    {
+        //プレフィックスを設定
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        //Usersに連携
+        $rs = $this->App->belongsToMany('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'user_id',
+        ]);
+        //戻り値を確認
+        $this->assertEquals('user_id', $rs->getForeignKey());
+        $this->assertEquals('BaserCore.Users', $rs->getClassName());
+        $this->assertEquals('unittest_blog_posts', $rs->getSource()->getTable());
+    }
+
+    /**
      * Test getMax
      *
      * @return void
@@ -272,6 +295,24 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(2, $Plugins->get(1)->priority);
         $Plugins->sortdown(2, ['sortFieldName' => 'priority']);
         $this->assertEquals(2, $Plugins->get(2)->priority);
+    }
+
+    /**
+     * test addPrefix
+     * @return void
+     */
+    public function testAddPrefix()
+    {
+        //デフォルトテーブル
+        $this->assertEquals('plugin', $this->App->addPrefix('plugin'));
+
+        //プレフィックスを追加場合、
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->assertEquals('unittest_plugin', $this->App->addPrefix('plugin'));
     }
 
 }
