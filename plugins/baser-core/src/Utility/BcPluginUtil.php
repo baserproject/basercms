@@ -21,6 +21,9 @@ class BcPluginUtil
      * プラグインのconfig内容を取得する
      * @param string $name
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getPluginConfig(string $name): array
     {
