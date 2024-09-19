@@ -1520,6 +1520,17 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('3306', $rs['port']);
         $this->assertEquals('test_basercms', $rs['database']);
     }
+    /**
+     * test getCurrentDb
+     */
+    public function testGetCurrentDb()
+    {
+        $config = $this->getPrivateProperty(BcUtil::getCurrentDb(), '_config');
+        //戻り値を確認
+        $this->assertEquals('bc-db', $config['host']);
+        $this->assertEquals('3306', $config['port']);
+        $this->assertEquals('test_basercms', $config['database']);
+    }
 
     /**
      * test getFrontTemplatePaths

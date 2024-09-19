@@ -477,6 +477,7 @@ class BcUtil
      * @return \Cake\Database\Connection
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentDb()
     {
