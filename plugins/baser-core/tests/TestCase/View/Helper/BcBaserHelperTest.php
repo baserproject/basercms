@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -1804,12 +1805,26 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * グローバルメニューを取得する
+     * @dataProvider getGlobalMenuDataProvider
+     * @param string $level 取得する階層
+     * @param boolean $expected 期待値
      * @return void
      */
-    public function testGetGlobalMenu()
+    public function testGetGlobalMenu($level, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertMatchesRegularExpression('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s', $this->BcBaser->getGlobalMenu());
+        $this->loadFixtureScenario(ContentsScenario::class);
+
+        $rs = $this->BcBaser->getGlobalMenu($level);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $rs);
+    }
+
+    public static function getGlobalMenuDataProvider()
+    {
+        return [
+            [0, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*ul-level-3.*<\/ul>'],
+            [1, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*<\/ul>'],
+            [3, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*ul-level-3.*<\/ul>']
+        ];
     }
 
     /**
