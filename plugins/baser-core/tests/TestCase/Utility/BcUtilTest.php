@@ -325,6 +325,39 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test clearModelCache
+     */
+    public function testClearModelCache()
+    {
+        // cacheファイルのバックアップ作成
+        $origin = CACHE;
+        $folder = new BcFolder($origin);
+        $backup = str_replace('cache', 'cache_backup', CACHE);
+        (new BcFolder($backup))->create();
+        $folder->move($backup);
+
+        // _cake_model_準備
+        Cache::drop('_cake_model_');
+        Cache::setConfig('_cake_model_', [
+            'className' => "File",
+            'prefix' => 'myapp' . '_cake_model_',
+            'path' => CACHE . 'models' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+        ]);
+        Cache::write('_cake_model_' . 'test', 'testtest', '_cake_model_');
+
+        // 削除実行
+        BcUtil::clearModelCache();
+        $this->assertNull(Cache::read('_cake_model_' . 'test', '_cake_model_'));
+
+        // cacheファイル復元
+        $folder = new BcFolder($backup);
+        $folder->move($origin);
+        $folder->chmod(0777);
+    }
+
+    /**
      * 管理システムかチェック
      *
      * @param string $url 対象URL
