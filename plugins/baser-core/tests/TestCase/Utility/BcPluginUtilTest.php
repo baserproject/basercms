@@ -46,7 +46,6 @@ class BcPluginUtilTest extends BcTestCase
     public static function getPluginConfigDataProvider()
     {
         return [
-            // Trường hợp file không tồn tại
             [
                 'non_existent_plugin',
                 null,
@@ -61,7 +60,6 @@ class BcPluginUtilTest extends BcTestCase
                 ]
             ],
 
-            // Trường hợp file tồn tại với type là 'Plugin'
             [
                 'test_plugin',
                 '<?php return [\'type\' => \'Plugin\', \'title\' => \'Test Plugin\'];',
@@ -76,7 +74,6 @@ class BcPluginUtilTest extends BcTestCase
                 ]
             ],
 
-            // Trường hợp file tồn tại với type là chuỗi 'Plugin,CorePlugin'
             [
                 'test_plugin',
                 '<?php return [\'type\' => \'Plugin,CorePlugin\', \'title\' => \'Test Plugin\'];',
