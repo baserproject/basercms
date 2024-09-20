@@ -679,17 +679,15 @@ class ContentsServiceTest extends BcTestCase
             'id' => $originEntity->id,
             'parentId' => $originEntity->parent_id
         ];
-        // target idが指定されてない場合 親要素内の最後に移動
         $target1 = [
-            'id' => "",
+            'id' => "9",
             'parentId' => "1",
             'siteId' => "1",
         ];
-        $result = $this->ContentsService->move($origin, $target1);
-        $lastEntity = $this->ContentsService->getIndex(['parent_id' => 1])->order('lft')->all()->last();
-        $this->assertEquals($result->title, $originEntity->title);
-        $this->assertEquals($result->title, $lastEntity->title);
-        // targetIdが指定されてる場合
+        $this->ContentsService->move($origin, $target1);
+        $movedEntity = $this->ContentsService->get(4);
+        $this->assertEquals(14, $movedEntity->lft);
+        $this->assertEquals(15, $movedEntity->rght);
         // 対象が同じ要素の2番目のエンティティなので、直前つまり最初に移動
         $target2 = [
             'id' => "10",
