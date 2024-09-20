@@ -1185,27 +1185,21 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $eventManager = EventManager::instance();
-        $eventKey = 'testOnEvent';
-        $bcEvenListener = new class extends BcEventListener {
-            public $events = ['event1'];
-            public function event1() {
-                return 'event1';
-            }
-        };
-        // onEvent() でイベントを設定
-        BcUtil::onEvent($eventManager, $eventKey, $bcEvenListener->implementedEvents());
-        // listeners() イベントの登録を確認
-        $listeners = $eventManager->listeners($eventKey);
-        foreach ($bcEvenListener->events as $index => $event) {
-            $this->assertEquals($listeners[$index]['callable'], $event);
-        }
-        // offEvent() でイベントを解除
-        BcUtil::offEvent($eventManager, $eventKey);
-        // listeners() イベントの解除を確認
-        $listeners = $eventManager->listeners($eventKey);
-        $this->assertEmpty($listeners);
+        //offEventをテスト
+        $eventManager = $this->getTableLocator()->get('BcBlog.BlogPosts')->getEventManager();
+        $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeMarshal');
+        //戻り値を確認
+        $this->assertCount(1, $beforeSaveListeners);
+        //eventがOFFしたかどうか確認
+        $listeners = $eventManager->listeners('Model.beforeMarshal');
+        $this->assertCount(0, $listeners);
+
+        //onEventをテスト
+        BcUtil::onEvent($eventManager, 'Model.beforeMarshal', $beforeSaveListeners);
+        //eventがONしたかどうか確認
+        $listeners = $eventManager->listeners('Model.beforeMarshal');
+        $this->assertCount(1, $listeners);
+        $this->assertEquals($beforeSaveListeners, $listeners);
     }
 
     /**

@@ -1631,6 +1631,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
@@ -1652,6 +1653,7 @@ class BcUtil
      * @param EventListenerInterface[] $eventListeners
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
