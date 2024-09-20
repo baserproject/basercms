@@ -670,6 +670,20 @@ class ContentsController extends AppController
 			$this->ajaxError(500, __d('baser', '名称変更中にエラーが発生しました。'));
 			return false;
 		}
+		// ページの場合、固定ページテンプレート書き出しも併せて行う
+		if ($data['Content']['type'] == 'Page') {
+			// リクエストデータに entity_idが入ってこないので、再取得
+			$contentData = $this->Content->findById($data['Content']['id']);
+			// ページモデル呼び出し
+			$Page = ClassRegistry::init('Page');
+			// 書き出し用にページデータを呼び出す。
+			$pageData = $Page->find('first', [
+				'conditions' => ['Page.id' => $contentData['Content']['entity_id']],
+				'recursive' => 2
+			]);
+			// 該当ページテンプレート書き出し
+			$Page->createPageTemplate($pageData);
+		}
 
 		$this->BcMessage->setSuccess(
 			sprintf(
