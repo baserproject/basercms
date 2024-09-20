@@ -1052,6 +1052,7 @@ class BcUtil
      * @return string|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getPluginPath(string $pluginName, bool $isUpdateTmp = false): string|false
     {
@@ -1077,6 +1078,7 @@ class BcUtil
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
@@ -2036,6 +2038,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isSameReferrerAsCurrent()
     {

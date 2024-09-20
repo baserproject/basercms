@@ -1489,6 +1489,39 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test isSameReferrerAsCurrent
+     * @dataProvider isSameReferrerAsCurrentDataProvider
+     * @param $referer
+     * @param $expected
+     */
+    public function testIsSameReferrerAsCurrent($referer, $expected)
+    {
+        //準備
+        $tmpHost = Configure::read('BcEnv.host');
+        Configure::write('BcEnv.host', parse_url("http://www.example.com/baser/admin")['host']);
+        $_SERVER['HTTP_REFERER'] = $referer;
+
+        //実行
+        $this->assertEquals(BcUtil::isSameReferrerAsCurrent(), $expected);
+
+        //元に戻る
+        Configure::write('BcEnv.host', $tmpHost);
+        unset($_SERVER['HTTP_REFERER']);
+    }
+
+    public static function isSameReferrerAsCurrentDataProvider()
+    {
+        return [
+            // refererがnullの場合　
+            [null, false],
+            // referer!=$siteDomainの場合
+            ["/baser/admin", false],
+            // refererが同サイトドメインの場合
+            ["http://www.example.com/baser/admin", true],
+        ];
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
