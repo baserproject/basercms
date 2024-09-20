@@ -1209,6 +1209,21 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test retry
+     */
+    public function testRetry()
+    {
+        //正常実行
+        $rs = BcUtil::retry(1, function () {return 2;}, 3);
+        $this->assertEquals(2, $rs);
+
+        //異常実行
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('リトライ回数は正の整数値で指定してください。');
+        BcUtil::retry(-1, function () {return 0;}, 1);
+    }
+
+    /**
      * Test createRequest
      *
      * @return void
