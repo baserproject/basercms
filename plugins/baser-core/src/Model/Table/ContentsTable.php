@@ -26,7 +26,7 @@ use BaserCore\Annotation\Note;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
-use SoftDelete\Model\Table\SoftDeleteTrait;
+use BaserCore\Model\Table\SoftDeleteTrait;
 
 /**
  * Class ContentsTable
@@ -1493,6 +1493,7 @@ class ContentsTable extends AppTable
     {
         $offset = (int)$offset;
         $content = $this->get($id);
+        $this->disableSoftDelete();
         if ($offset > 0) {
             $result = $this->moveDown($content, abs($offset));
         } elseif ($offset < 0) {
@@ -1500,6 +1501,7 @@ class ContentsTable extends AppTable
         } else {
             $result = true;
         }
+        $this->enableSoftDelete();
         return $result? $content : false;
     }
 

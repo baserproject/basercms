@@ -29,7 +29,6 @@
         "baserproject/bc-theme-file": "5.0.x",
         "baserproject/bc-uploader": "5.0.x",
         "baserproject/bc-widget-area": "5.0.x",
-        "imo-tikuwa/cakephp-soft-delete": "^2.0",
         "ext-mbstring": "*",
         "ext-zip": "*",
         "ext-gd": "*"
