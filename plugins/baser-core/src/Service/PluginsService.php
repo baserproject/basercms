@@ -774,13 +774,13 @@ class PluginsService implements PluginsServiceInterface
                         if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
 
                         $currentVerPoint = BcUtil::verpoint($currentVersion);
-                        $latestVerPoint = BcUtil::verpoint($latest);
+                        $updateVerPoint = BcUtil::verpoint($version);
                         // 現在のパッケージが開発版の場合は無視
                         if ($currentVerPoint === false) break;
                         // アップデートバージョンが開発版の場合は無視
-                        if ($latestVerPoint === false) continue;
+                        if ($updateVerPoint === false) continue;
                         // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
-                        if ($currentVerPoint > $latestVerPoint) break;
+                        if ($currentVerPoint > $updateVerPoint) break;
 
                         if ($currentVersion === $version) break;
                         $versions[] = $version;
