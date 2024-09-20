@@ -113,9 +113,11 @@ class BcFolder
             }
         }
         if (!is_dir($this->path)) {
-            return mkdir($this->path, $mask, true);
+            mkdir($this->path, $mask, true);
+            chmod($this->path, $mask);
         }
-        return true;
+        clearstatcache();
+        return is_dir($this->path);
     }
 
     /**
