@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
@@ -1592,5 +1593,41 @@ class BcUtilTest extends BcTestCase
 
         $result = BcUtil::pairToAssoc('');
         $this->assertEquals([], $result);
+    }
+
+    /**
+     * test addSessionId
+     */
+    public function testAddSessionId()
+    {
+        // 初期化
+        $this->truncateTable('sites');
+        SiteFactory::make(['id' => 1, 'device' => 'mobile'])->persist();
+        $_SERVER['REQUEST_URI'] = '/m/';
+
+        $this->assertEquals('/?BASERCMS=cli', BcUtil::addSessionId('/', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1&BASERCMS=1', true));
+
+        // urlが配列の場合
+        $url = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 1
+            ]
+        ];
+        $expect = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 'cli'
+            ]
+        ];
+        $this->assertEquals($expect, BcUtil::addSessionId($url, true));
+
+        //adminでログインしいる場合、
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->assertEquals('/', BcUtil::addSessionId('/'));
     }
 }

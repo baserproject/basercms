@@ -1497,6 +1497,7 @@ class BcUtil
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function addSessionId($url, $force = false)
     {
