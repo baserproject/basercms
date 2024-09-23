@@ -509,6 +509,7 @@ class MailMessagesTable extends MailAppTable
      * @checked
      * @noTodo
      * @TODO ヘルパー化すべきかも
+     * @unitTest
      */
     public function convertDatasToMail($data, $options)
     {
