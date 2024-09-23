@@ -1925,6 +1925,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGlobalMenu($level = 5, $options = [])
     {
