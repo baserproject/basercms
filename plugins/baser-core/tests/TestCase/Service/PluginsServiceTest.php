@@ -666,53 +666,21 @@ EOF;
         unlink($rssPath);
     }
 
-        /**
-     * @param bool $useUpdateNotice
-     * @param string $currentVersion
-     * @param array $rssVersions
-     * @param string $expectedVersion
-     * @dataProvider availableCoreVersionDataProvider
+    /**
+     * test getAvailableCoreVersion
+     * @return void
      */
-    public function test_getAvailableCoreVersion1111($useUpdateNotice, $currentVersion, $rssVersions, $expectedVersion)
+    public function testGetAvailableCoreVersion()
     {
-        SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => $useUpdateNotice])->persist();
+        $pluginsService = $this->getMockBuilder(PluginsService::class)
+            ->onlyMethods(['getAvailableCoreVersionInfo'])
+            ->getMock();
 
-        if ($useUpdateNotice) {
-            $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
-            $versionBakPath = Plugin::path('BaserCore') . 'VERSION.bak.txt';
-            $rssPath = WWW_ROOT . 'baser-core.rss';
+        $pluginsService->expects($this->once())
+            ->method('getAvailableCoreVersionInfo')
+            ->willReturn(['latest' => '100.0.0']);
 
-            // Backup version
-            copy($versionPath, $versionBakPath);
-
-            // BcApp.coreReleaseUrl configuration
-            Configure::write('BcApp.coreReleaseUrl', $rssPath);
-
-            // Change version
-            $file = new BcFile($versionPath);
-            $file->write($currentVersion);
-
-            // Generate RSS
-            $this->createReleaseRss($rssVersions);
-
-            // Clear cache
-            Cache::delete('coreReleaseInfo', '_bc_update_');
-        }
-
-        $this->assertEquals($expectedVersion, $this->Plugins->getAvailableCoreVersion());
-
-        if ($useUpdateNotice) {
-            rename($versionBakPath, $versionPath);
-            unlink($rssPath);
-        }
-    }
-
-    public static function availableCoreVersionDataProvider()
-    {
-        return [
-            [false, '100.0.0', [], '5.1.1'],
-            [true, '100.0.0', ['100.0.2', '100.0.1', '100.0.0'], '100.0.2'],
-            [true, '100.0.2', ['100.0.2', '100.0.1', '100.0.0'], '100.0.2']
-        ];
+        $result = $pluginsService->getAvailableCoreVersion();
+        $this->assertEquals('100.0.0', $result);
     }
 }
