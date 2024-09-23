@@ -220,6 +220,7 @@ class BcBaserHelper extends Helper
      * @param array $settings ヘルパ設定値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $View, $settings = [])
     {
