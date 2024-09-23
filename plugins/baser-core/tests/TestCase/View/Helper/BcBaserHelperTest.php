@@ -2029,11 +2029,22 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test __call
      * @return void
      */
     public function test__call()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest()));
+        $this->BcBaser->getView()->setRequest($this->getRequest())->set('blogArchiveType', 'tag');
+
+        //BlogHelperのisTagメソッドをコール
+        $this->assertTrue($this->BcBaser->__call('isBlogTag', []));
+
+
+        //存在しないメソッドをコール
+        $this->assertNull($this->BcBaser->__call('isBlogTag3', []));
     }
 
     /**
