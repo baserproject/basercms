@@ -113,6 +113,13 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals('タイトルを入力してください。', current($errors['title']));
         $this->assertEquals('投稿日を入力してください。', current($errors['posted']));
         $this->assertEquals('投稿者を選択してください。', current($errors['user_id']));
+
+        $errors = $validator->validate([]);
+
+        //戻り値を確認
+        $this->assertEquals('タイトルを入力してください。', current($errors['title']));
+        $this->assertEquals('投稿日を入力してください。', current($errors['posted']));
+        $this->assertEquals('投稿者を選択してください。', current($errors['user_id']));
     }
 
     /*
