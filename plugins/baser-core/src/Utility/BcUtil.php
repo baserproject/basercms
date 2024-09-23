@@ -545,6 +545,7 @@ class BcUtil
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function clearModelCache(): void
     {
