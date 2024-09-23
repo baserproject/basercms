@@ -2015,6 +2015,7 @@ class BcUtil
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function retry($times, callable $callback, $interval = 0)
     {
