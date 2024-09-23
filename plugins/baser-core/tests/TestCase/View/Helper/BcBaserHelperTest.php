@@ -21,6 +21,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcHtmlHelper;
 use Cake\Datasource\Paging\PaginatedResultSet;
@@ -1867,8 +1868,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteSearchForm()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertMatchesRegularExpression('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s', $this->BcBaser->getSiteSearchForm());
+        //準備
+        $site = SiteFactory::make(['theme' => 'BcColumn'])->getEntity();
+        $view = new BcFrontAppView($this->getRequest()->withAttribute('currentSite', $site));
+        $this->BcBaser = new BcBaserHelper($view->setTheme('BcColumn'));
+        //正常系実行
+        $this->assertMatchesRegularExpression('/<input type="submit" class="submit_button bs-button" value="検索"/s', $this->BcBaser->getSiteSearchForm());
     }
 
     /**
