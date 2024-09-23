@@ -566,6 +566,7 @@ class MailMessagesTable extends MailAppTable
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertMessageToCsv(array $messages)
     {

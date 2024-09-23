@@ -324,65 +324,35 @@ class MailMessagesTableTest extends BcTestCase
 
     /**
      * 受信メッセージの内容を表示状態に変換する
-     *
-     * @param int $id
-     * @param array $messages
-     * @return array
+     * test convertMessageToCsv
      */
     public function testConvertMessageToCsv()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // Set up the mail fields
+        $this->MailMessage->mailFields = [
+            (object)['field_name' => 'image', 'name' => 'Image', 'type' => 'file'],
+            (object)['field_name' => 'description', 'name' => 'Description', 'type' => 'text'],
+        ];
 
+        // Set up the messages
         $messages = [
-            ['MailMessage' => [
-                'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]],
-            ['MailMessage' => [
-                'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]]
+            new Entity(['id' => 1, 'image' => 'image1.jpg', 'description' => 'Test description 1', 'created' => '2023-01-01', 'modified' => '2023-01-02']),
+            new Entity(['id' => 2, 'image' => 'image2.jpg', 'description' => 'Test description 2', 'created' => '2023-01-03', 'modified' => '2023-01-04']),
         ];
 
-        $expected = [
-            0 => [
-                'MailMessage' => [
-                    'NO' => 1, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-                ]
-            ],
-            1 => [
-                'MailMessage' => [
-                    'NO' => 2, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-                ]
-            ]
-        ];
+        $result = $this->MailMessage->convertMessageToCsv($messages);
 
-        $result = $this->MailMessage->convertMessageToCsv(1, $messages);
-        $this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
+        // Check the result of the conversion to CSV 1
+        $this->assertEquals('image1.jpg', $result[0]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 1', $result[0]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-01', $result[0]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-02', $result[0]['MailMessage']['更新日']);
+
+        // Check the result of the conversion to CSV 2
+        $this->assertEquals('image2.jpg', $result[1]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 2', $result[1]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-03', $result[1]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-04', $result[1]['MailMessage']['更新日']);
     }
 
     /**
