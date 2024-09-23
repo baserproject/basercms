@@ -89,4 +89,39 @@ class BcPluginUtilTest extends BcTestCase
             ]
         ];
     }
+
+    /**
+     * test isPlugin
+     * @param string $pluginName
+     * @param string|null $configContent
+     * @param bool $expectedResult
+     * @dataProvider isPluginDataProvider
+     */
+    public function testIsPlugin($pluginName, $configContent, $expectedResult)
+    {
+        //create config file
+        $configPath = BcUtil::getPluginPath($pluginName) . 'config.php';
+        if ($configContent !== null) {
+            file_put_contents($configPath, $configContent);
+        }
+
+        $result = BcPluginUtil::isPlugin($pluginName);
+
+        $this->assertEquals($expectedResult, $result);
+
+        // Clean up
+        if ($configContent !== null) {
+            unlink($configPath);
+        }
+    }
+
+    public static function isPluginDataProvider()
+    {
+        return [
+            ['BaserCore', null, true],
+            ['test_plugin', '<?php return [\'type\' => \'Plugin\'];', true],
+            ['core_plugin', '<?php return [\'type\' => \'CorePlugin\'];', true],
+            ['non_plugin', '<?php return [\'type\' => \'SomeOtherType\'];', false],
+        ];
+    }
 }
