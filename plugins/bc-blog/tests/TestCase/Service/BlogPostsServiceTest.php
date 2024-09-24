@@ -626,6 +626,8 @@ class BlogPostsServiceTest extends BcTestCase
     {
         // パラメータを生成
         $postData = [
+            'title' => 'new blog',
+            'user_id' => 1,
             'blog_content_id' => 1,
             'posted' => '2022-12-01 00:00:00',
             'publish_begin' => '2022-12-01 00:00:00',
@@ -652,12 +654,36 @@ class BlogPostsServiceTest extends BcTestCase
     /**
      * 新規登録
      * BlogPostsService::create
+     */
+    public function testCreateExceptionTitle()
+    {
+        // パラメータを生成
+        $postData = [
+            'user_id' => 1,
+            'blog_content_id' => 1,
+            'posted' => '2022-12-01 00:00:00',
+            'publish_begin' => '2022-12-01 00:00:00',
+            'publish_end' => '2022-12-31 23:59:59',
+        ];
+
+        // title を指定しなかった場合はエラーとなること
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (title._required: "タイトルを入力してください。"');
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->create($postData);
+    }
+
+    /**
+     * 新規登録
+     * BlogPostsService::create
      * 投稿日エラーのテスト
      */
     public function testCreateExceptionPosted()
     {
         // パラメータを生成
         $postData = [
+            'title' => 'new blog',
+            'user_id' => 1,
             'blog_content_id' => 1,
             'posted' => '',
             'publish_begin' => '',
@@ -697,41 +723,18 @@ class BlogPostsServiceTest extends BcTestCase
     public function testUpdate()
     {
         //データ生成
-        BlogPostFactory::make([
-            'id' => 1,
-            'title' => 'post title 1',
-            'posted' => '2022-12-01 00:00:00',
-            'publish_begin' => '2022-12-01 00:00:00',
-            'publish_end' => '9999-12-31 23:59:59'
-        ])->persist();
+        BlogPostFactory::make(['id' => 1, 'title' => 'post title 1'])->persist();
 
-        //データ生成
-        $postData = [
-            'title' => 'title of post 3',
-            'posted' => '2021-11-01 00:00:00',
-            'publish_begin' => '2021-10-01 00:00:00',
-            'publish_end' => '2100-11-30 23:59:59'
-        ];
         // サービスメソッドを呼ぶ
-        $result = $this->BlogPostsService->update(BlogPostFactory::get(1), $postData);
+        $result = $this->BlogPostsService->update(BlogPostFactory::get(1), ['title' => 'title of post 3']);
         // 戻り値を確認
         $this->assertEquals("title of post 3", $result["title"]);
-        $this->assertEquals("2021-11-01 00:00:00", $result["posted"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
-        $this->assertEquals("2021-10-01 00:00:00", $result["publish_begin"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
-        $this->assertEquals("2100-11-30 23:59:59", $result["publish_end"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
 
-        // titleがない時を確認すること
-        $postData = [
-            'posted' => '2021-11-01 00:00:00',
-            'publish_begin' => '2021-11-01 00:00:00',
-            'publish_end' => '9999-11-31 23:59:59'
-        ];
-
-        // title を指定しなかった場合はエラーとなること
+        // titleの長さは256文字を指定しなかった場合はエラーとなること
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
-        $this->expectExceptionMessage("タイトルを入力してください。");
+        $this->expectExceptionMessage("タイトルは255文字以内で入力してください。");
         // サービスメソッドを呼ぶ
-        $this->BlogPostsService->update(BlogPostFactory::get(1), $postData);
+        $this->BlogPostsService->update(BlogPostFactory::get(1), ['title' => str_repeat('a', 256)]);
     }
 
     /**

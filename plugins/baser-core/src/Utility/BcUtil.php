@@ -477,6 +477,7 @@ class BcUtil
      * @return \Cake\Database\Connection
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentDb()
     {
@@ -544,6 +545,7 @@ class BcUtil
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function clearModelCache(): void
     {
@@ -1052,6 +1054,7 @@ class BcUtil
      * @return string|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getPluginPath(string $pluginName, bool $isUpdateTmp = false): string|false
     {
@@ -1077,6 +1080,7 @@ class BcUtil
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
@@ -1497,6 +1501,7 @@ class BcUtil
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function addSessionId($url, $force = false)
     {
@@ -1631,6 +1636,7 @@ class BcUtil
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
@@ -1652,6 +1658,7 @@ class BcUtil
      * @param EventListenerInterface[] $eventListeners
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
@@ -2011,6 +2018,7 @@ class BcUtil
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function retry($times, callable $callback, $interval = 0)
     {
@@ -2036,6 +2044,7 @@ class BcUtil
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function isSameReferrerAsCurrent()
     {

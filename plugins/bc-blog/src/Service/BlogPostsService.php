@@ -547,10 +547,13 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function getNew(int $blogContentId, int $userId)
     {
         return $this->BlogPosts->newEntity([
+            'title' => '',
             'user_id' => $userId,
             'posted' => \Cake\I18n\DateTime::now(),
             'status' => false,
             'blog_content_id' => $blogContentId
+        ], [
+            'validate' => false,
         ]);
     }
 
