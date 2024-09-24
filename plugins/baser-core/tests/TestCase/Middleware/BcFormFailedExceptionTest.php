@@ -4,6 +4,7 @@ namespace BaserCore\Test\TestCase\Middleware;
 
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\ORM\Table;
 use Cake\Validation\ValidatorAwareInterface;
 use PHPUnit\Framework\MockObject\Exception;
 
@@ -22,14 +23,12 @@ class BcFormFailedExceptionTest extends BcTestCase
 
     /**
      * Test getForm
-     * @throws Exception
      */
     public function testGetForm(): void
     {
-        $mockForm = $this->createMock(ValidatorAwareInterface::class);
-        $exception = new BcFormFailedException($mockForm, 'Test message');
-
-        $this->assertSame($mockForm, $exception->getForm());
+       $table = new Table();
+       $exception = new BcFormFailedException($table, 'message');
+       $this->assertEquals($table, $exception->getForm());
     }
 
 }
