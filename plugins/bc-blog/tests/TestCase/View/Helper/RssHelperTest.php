@@ -208,7 +208,6 @@ class RssHelperTest extends BcTestCase
     public function testImplementedEvents()
     {
         $result = $this->RssHelper->implementedEvents();
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertEquals([], $result);
     }
 }
