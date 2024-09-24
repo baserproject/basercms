@@ -45,4 +45,16 @@ class BcUpdateLogTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals([], BcUpdateLog::get());
     }
 
+    /**
+     * test clear
+     */
+    public function testClear()
+    {
+        //メッセージを設定
+        BcUpdateLog::set('this is test');
+        $this->assertEquals(['this is test'], BcUpdateLog::get());
+        //メッセージを削除する
+        BcUpdateLog::clear();
+        $this->assertEquals([], BcUpdateLog::get());
+    }
 }

@@ -403,6 +403,13 @@ class BcFolder
         return $files;
     }
 
+    /**
+     * @param string $regexpPattern
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function find(string $regexpPattern = '.*'): array
     {
         $files = $this->getFiles();
