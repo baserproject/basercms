@@ -40,21 +40,14 @@ class UpdateCommandTest extends BcTestCase
      */
     public function testBuildOptionParser()
     {
-        $parser = $this->getMockBuilder(ConsoleOptionParser::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parser = new ConsoleOptionParser('update_command');
+        $resultParser = $this->execPrivateMethod($this->UpdateCommand, 'buildOptionParser', [$parser]);
 
-        $parser->expects($this->once())
-            ->method('addOption')
-            ->with('connection', [
-                'help' => 'データベース接続名',
-                'default' => 'default'
-            ]);
+        $options = $resultParser->options();
+        $this->assertArrayHasKey('connection', $options);
 
-        $rs = $this->execPrivateMethod($this->UpdateCommand, 'buildOptionParser', [$parser]);
-
-        $this->assertInstanceOf(ConsoleOptionParser::class, $rs);
-
+        $this->assertStringContainsString('データベース接続名', $options['connection']->help());
+        $this->assertEquals('default', $options['connection']->defaultValue());
     }
 
     /**
