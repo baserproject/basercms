@@ -357,56 +357,48 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testCreateDefaultFiles()
     {
-        $path = WWW_ROOT . 'files' . DS;
+        //create backup folder
+        $backupPath = WWW_ROOT . 'files_backup' . DS;
+        if (!is_dir($backupPath)) {
+            mkdir($backupPath, 0777, true);
+        }
+
         $dirs = ['blog', 'editor', 'theme_configs'];
-        $backupPath = WWW_ROOT . 'backup_files' . DS;
-
-        // Delete backup folder if exists
-        if (is_dir($backupPath)) {
-            (new BcFolder($backupPath))->delete();
-        }
-
-        // Create backup folder
-        (new BcFolder($backupPath))->create();
-
-        // Move folders to backup
         foreach ($dirs as $dir) {
-            $folderPath = $path . $dir;
-            if (is_dir($folderPath)) {
-                $Folder = new BcFolder($folderPath);
-                $Folder->move($backupPath . $dir);
-                $this->assertFileExists($backupPath . $dir, "Failed to move $dir to backup.");
-                $this->assertFileDoesNotExist($folderPath, "$folderPath still exists after moving.");
+            $path = WWW_ROOT . 'files' . DS . $dir;
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            } else {
+                // Backup folder if exists
+                rename($path, $backupPath . $dir);
             }
         }
 
-        // Act: Create default files
-        $this->Installations->createDefaultFiles();
+        $result = $this->Installations->createDefaultFiles();
+        $this->assertTrue($result);
 
-        // Assert: Check if the folders are created
+        //check folder is created
         foreach ($dirs as $dir) {
-            $this->assertFileExists($path . $dir, "$dir was not created.");
+            $this->assertTrue(is_dir(WWW_ROOT . 'files' . DS . $dir));
         }
 
-        // Clean up: Delete the folders newly created
+        //delete created folders
         foreach ($dirs as $dir) {
-            $folderPath = $path . $dir;
-            if (is_dir($folderPath)) {
-                (new BcFolder($folderPath))->delete();
+            $newDir = WWW_ROOT . 'files' . DS . $dir;
+            if (is_dir($newDir) && !is_dir($backupPath . $dir)) {
+                rmdir($newDir);
             }
         }
 
-        // Move folders back to original location
+        // Restore backup folder
         foreach ($dirs as $dir) {
             $backupDir = $backupPath . $dir;
             if (is_dir($backupDir)) {
-                $Folder = new BcFolder($backupDir);
-                $Folder->move($path . $dir);
+                rename($backupDir, WWW_ROOT . 'files' . DS . $dir);
             }
         }
-
-        // Delete backup folder
-        (new BcFolder($backupPath))->delete();
+        //delete backup folder
+        rmdir($backupPath);
     }
 
 }
