@@ -13,7 +13,6 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\ORM\Query;
-use Cake\ORM\ResultSet;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;

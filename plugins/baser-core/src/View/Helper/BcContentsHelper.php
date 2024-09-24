@@ -42,6 +42,7 @@ use BaserCore\Annotation\Doc;
  * @property ContentsServiceInterface|ContentsService $ContentsService
  * @property Helper\UrlHelper $Url
  */
+#[\AllowDynamicProperties]
 class BcContentsHelper extends Helper
 {
 
@@ -57,7 +58,10 @@ class BcContentsHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['BcBaser', 'Url'];
+    public array $helpers = [
+        'BaserCore.BcBaser',
+        'Url'
+    ];
 
     /**
      * initialize
@@ -568,6 +572,7 @@ class BcContentsHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isFolder()
     {

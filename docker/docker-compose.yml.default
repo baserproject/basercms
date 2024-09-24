@@ -1,6 +1,3 @@
-version: '3'
-
-# volumes:
 #  db-volume: # windowsの場合はコメントを外す
 
 services:

@@ -128,7 +128,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         }
         // 管理ユーザ以外が利用時、ユーザ制限がOnになっていれば一覧に表示しない
         $uploaderConfig = $this->uploaderConfigsService->get();
-        if ($uploaderConfig->use_permission && !BcUtil::isAdminUser()) {
+        if ($uploaderConfig != null && $uploaderConfig->use_permission && !BcUtil::isAdminUser()) {
             $user = BcUtil::loginUser();
             if ($user) $conditions['UploaderFiles.user_id'] = $user->id;
         }

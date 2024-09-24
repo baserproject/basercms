@@ -33,6 +33,7 @@ use BaserCore\Annotation\Note;
  * @property BcBaserHelper $BcBaser
  * @property BcContentsHelper $BcContents
  */
+#[\AllowDynamicProperties]
 class BcAdminHelper extends Helper
 {
     /**
@@ -45,7 +46,11 @@ class BcAdminHelper extends Helper
      * Helper
      * @var string[]
      */
-    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
+    public array $helpers = [
+        'BaserCore.BcBaser',
+        'BaserCore.BcAuth',
+        'BaserCore.BcContents'
+    ];
 
     /**
      * ログインユーザーがシステム管理者かチェックする
@@ -94,6 +99,7 @@ class BcAdminHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function convertAdminMenuGroups($adminMenuGroups)
     {
@@ -420,6 +426,7 @@ class BcAdminHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsAddLink()
     {
@@ -472,6 +479,7 @@ class BcAdminHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addLink(): void
     {
@@ -515,10 +523,11 @@ class BcAdminHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function firstAccess()
     {
-        if($this->getView()->getRequest()->getParam('controller') === 'installations') return;
+        if ($this->getView()->getRequest()->getParam('controller') === 'installations') return;
         $this->BcBaser->element('first_access');
     }
 

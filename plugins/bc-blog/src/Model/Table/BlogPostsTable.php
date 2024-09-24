@@ -19,6 +19,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Entity\BlogPost;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -134,7 +135,7 @@ class BlogPostsTable extends BlogAppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', 'タイトルは255文字以内で入力してください。'))
-            ->requirePresence('title', 'update', __d('baser_core', 'タイトルを入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
             ->scalar('content')
@@ -195,9 +196,11 @@ class BlogPostsTable extends BlogAppTable
                     'message' => __d('baser_core', '投稿日の形式が不正です。')
                 ]
             ])
+            ->requirePresence('posted', 'create', __d('baser_core', '投稿日を入力してください。'))
             ->notEmptyDateTime('posted', __d('baser_core', '投稿日を入力してください。'));;
         $validator
             ->integer('user_id')
+            ->requirePresence('user_id', 'create', __d('baser_core', '投稿者を選択してください。'))
             ->notEmptyString('user_id', __d('baser_core', '投稿者を選択してください。'));
         $validator
             ->allowEmptyString('eye_catch')
@@ -642,13 +645,13 @@ class BlogPostsTable extends BlogAppTable
      * コピーする
      *
      * @param int $id
-     * @param array $data
+     * @param BlogPost $data
      * @return mixed page Or false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy($id = null, $data = [])
+    public function copy($id = null, BlogPost $data = null)
     {
         if ($id) $data = $this->find()->where(['BlogPosts.id' => $id])->contain('BlogTags')->first();
         $oldData = clone $data;
@@ -671,6 +674,8 @@ class BlogPostsTable extends BlogAppTable
         $data->id = null;
         $data->created = null;
         $data->modified = null;
+        $data->publish_begin = null;
+        $data->publish_end = null;
         // 一旦退避(afterSaveでリネームされてしまうのを避ける為）
         $eyeCatch = $data->eye_catch;
         $data->eye_catch = null;

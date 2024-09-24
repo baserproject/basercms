@@ -40,10 +40,13 @@ class CreateReleaseCommand extends Command
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
-        $parser->addArgument('branch', [
+        $parser->addArgument('version', [
+            'help' => __d('baser_core', 'リリースバージョン'),
+            'required' => true
+        ]);
+        $parser->addOption('branch', [
             'help' => __d('baser_core', 'クローン対象ブランチ'),
-            'default' => 'master',
-            'required' => false
+            'default' => 'master'
         ]);
         return $parser;
     }
@@ -63,15 +66,26 @@ class CreateReleaseCommand extends Command
         if(is_dir($packagePath)) {
             (new BcFolder($packagePath))->delete();
         }
+        $version = $args->getArgument('version');
 
         $io->out(__d('baser_core', 'リリースパッケージを作成します。', TMP));
         $io->out();
 
         $io->out(__d('baser_core', '- {0} にパッケージをクローンします。', TMP));
-        $this->clonePackage($packagePath, $args->getArgument('branch'));
+        $this->clonePackage($packagePath, $args->getOption('branch'));
 
-        $io->out(__d('baser_core', '- composer.json をセットアップします。'));
-        BcComposer::setupComposerForDistribution($packagePath);
+        $io->out(__d('baser_core', '- composer.json / composer.lock をセットアップします。'));
+        BcComposer::setup('', $packagePath);
+        $result = BcComposer::setupComposerForDistribution($version);
+        if($result['code'] === 0) {
+            $io->out(__d('baser_core', 'Composer による lock ファイルの更新に失敗アップデートが完了しました。'));
+        } else {
+            $message = __d('baser_core', 'Composer による lock ファイルの更新に失敗しました。ログを確認してください。');
+            $this->log($message);
+            $this->log(implode("\n", $result['out']));
+            $io->error($message);
+            $this->abort();
+        }
 
         $io->out(__d('baser_core', '- プラグインを初期化します。'));
         $this->deletePlugins($packagePath);
@@ -80,7 +94,7 @@ class CreateReleaseCommand extends Command
         $this->deleteExcludeFiles($packagePath);
 
         $io->out(__d('baser_core', '- Zip ファイルを作成します。'));
-        $this->createZip($packagePath);
+        $this->createZip($packagePath, $version);
 
         $io->out(__d('baser_core', '- クリーニング処理を実行します。'));
         (new BcFolder($packagePath))->delete();
@@ -129,11 +143,12 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function createZip(string $packagePath)
+    public function createZip(string $packagePath, string $version)
     {
         $zip = new ZipArchiver();
-        $zipFile = TMP . 'basercms.zip';
+        $zipFile = TMP . 'basercms-' . $version . '.zip';
         if(file_exists($zipFile)) {
             unlink($zipFile);
         }

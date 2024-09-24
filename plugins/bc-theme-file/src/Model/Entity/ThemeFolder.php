@@ -55,6 +55,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      * @param array $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(array $properties = [], array $options = [])
     {
@@ -73,6 +74,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      * @return array|mixed|string|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getName()
     {

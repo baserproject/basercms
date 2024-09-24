@@ -23,6 +23,7 @@ use BaserCore\View\AppView;
 
 $this->BcAdmin->setTitle(__d('baser_core', 'ログイン'));
 $this->BcBaser->js('admin/users/login.bundle', false, [
+  'defer' => true,
   'id' => 'AdminUsersLoginScript',
   'data-isEnableLoginCredit' => $isEnableLoginCredit
 ]);

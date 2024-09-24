@@ -12,6 +12,7 @@
 namespace BaserCore\Command;
 
 use BaserCore\Utility\BcComposer;
+use BaserCore\Utility\BcFile;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -42,7 +43,7 @@ class ComposerCommand extends Command
             'required' => true
         ]);
         $parser->addOption('php', [
-            'help' => __d('baser_core', 'データベース接続名'),
+            'help' => __d('baser_core', 'PHPのパス'),
             'default' => 'php'
         ]);
         $parser->addOption('dir', [
@@ -79,11 +80,16 @@ class ComposerCommand extends Command
 
         BcComposer::clearCache();
 
+        $version = $args->getArgument('version');
         if($args->getOption('force')) {
-            $result = BcComposer::update();
-        } else {
-            $result = BcComposer::require('baser-core', $args->getArgument('version'));
+            if (!preg_match('/-dev$/', $version)) {
+                $version = preg_replace('/^(\d+\.\d+\.)(\d+)$/', '$1x-dev', $version);
+            }
+            BcComposer::changeMinimumStabilityToDev();
+            BcComposer::deleteReplace();
         }
+
+        $result = BcComposer::require('baser-core', $version);
 
         if($result['code'] === 0) {
             $io->out(__d('baser_core', 'Composer によるアップデートが完了しました。'));

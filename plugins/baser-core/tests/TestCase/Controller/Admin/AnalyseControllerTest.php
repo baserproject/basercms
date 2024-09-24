@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\SitesScenario;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\View\JsonView;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 use BaserCore\Controller\AnalyseController;
@@ -154,5 +155,17 @@ class AnalyseControllerTest extends BcTestCase
             // 全体
             [ROOT . DS . "plugins/baser-core/src/tests/TestSample/test.php", "\BaserCore\Test\TestSample\\test"],
         ];
+    }
+
+    /**
+     * Test viewClasses
+     *
+     */
+    public function testViewClasses()
+    {
+        $result = $this->Controller->viewClasses();
+        $this->assertIsArray($result);
+
+        $this->assertEquals([JsonView::class], $result);
     }
 }

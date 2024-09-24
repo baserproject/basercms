@@ -51,6 +51,7 @@ class UploaderFile extends Entity
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function filesExists()
     {
@@ -67,6 +68,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getSmall()
     {
@@ -79,6 +81,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getMidium()
     {
@@ -91,6 +94,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getLarge()
     {
@@ -121,6 +125,7 @@ class UploaderFile extends Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function fileExists($fileName)
     {

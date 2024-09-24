@@ -42,6 +42,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(ServerRequest $request, int $userGroupId)
     {
@@ -68,9 +69,11 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(int $userGroupId, EntityInterface $entity)
     {
+        $currentUserGroup = null;
         if($userGroupId) {
             $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
             $currentUserGroup = $userGroupsService->get($userGroupId);
@@ -93,6 +96,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(int $userGroupId, EntityInterface $entity)
     {

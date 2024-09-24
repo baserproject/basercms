@@ -21,6 +21,7 @@ use BaserCore\Annotation\UnitTest;
 /**
  * アップローダーヘルパー
  */
+#[\AllowDynamicProperties]
 class UploaderHelper extends Helper
 {
 
@@ -160,6 +161,7 @@ class UploaderHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isPublish($data)
     {

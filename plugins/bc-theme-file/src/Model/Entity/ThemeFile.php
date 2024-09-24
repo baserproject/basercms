@@ -72,6 +72,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @param array $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(array $properties = [], array $options = [])
     {
@@ -96,6 +97,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getType()
     {
@@ -110,6 +112,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getName()
     {
@@ -122,6 +125,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getBaseName()
     {
@@ -139,6 +143,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return mixed|string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getExt()
     {
@@ -158,6 +163,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getContents()
     {
@@ -176,6 +182,7 @@ class ThemeFile extends \Cake\ORM\Entity
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isNew(): bool
     {

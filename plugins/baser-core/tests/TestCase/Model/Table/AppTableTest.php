@@ -12,12 +12,12 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
-use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
-use Cake\Event\Event;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -78,6 +78,23 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * test getTable
+     */
+    public function testGetTable()
+    {
+        //デフォルトテーブル
+        $this->assertEquals('app', $this->App->getTable());
+
+        //プレフィックスを追加場合、
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->assertEquals('unittest_app', $this->App->getTable());
+    }
+
+    /**
      * Test getUrlPattern
      *
      * @param string $url
@@ -99,6 +116,29 @@ class AppTableTest extends BcTestCase
             ['/news/archives/1', ['/news/archives/1']],
             ['/news/archives/index', ['/news/archives/index', '/news/archives/']]
         ];
+    }
+
+    /**
+     * test belongsToMany
+     */
+    public function testBelongsToMany()
+    {
+        //プレフィックスを設定
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        //Usersに連携
+        $rs = $this->App->belongsToMany('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'user_id',
+        ]);
+        //戻り値を確認
+        $this->assertEquals('user_id', $rs->getForeignKey());
+        $this->assertEquals('BaserCore.Users', $rs->getClassName());
+        $this->assertEquals('unittest_blog_posts', $rs->getSource()->getTable());
     }
 
     /**
@@ -244,31 +284,35 @@ class AppTableTest extends BcTestCase
     }
 
     /**
-     * test beforeFind
+     * testSortdown
      * @return void
      */
-    public function testBeforeFind()
+    public function testSortdown()
     {
-        ContentFolderFactory::make(2)->persist();
-        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.beforeFind', function(Event $event) {
-            $event->setData('options', ['limit' => 1]);
-        });
-        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
-        $this->assertEquals(1, $contentFolders->find()->all()->count());
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $Plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $Plugins->sortdown(1, ['sortFieldName' => 'priority']);
+        $this->assertEquals(2, $Plugins->get(1)->priority);
+        $Plugins->sortdown(2, ['sortFieldName' => 'priority']);
+        $this->assertEquals(2, $Plugins->get(2)->priority);
     }
 
     /**
-     * test afterFind
+     * test addPrefix
      * @return void
      */
-    public function testAfterFind()
+    public function testAddPrefix()
     {
-        ContentFolderFactory::make(2)->persist();
-        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.afterFind', function(Event $event) {
-            $event->setData('result', $event->getData('result')->limit(1));
-        });
-        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
-        $this->assertEquals(1, $contentFolders->find()->all()->count());
+        //デフォルトテーブル
+        $this->assertEquals('plugin', $this->App->addPrefix('plugin'));
+
+        //プレフィックスを追加場合、
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->assertEquals('unittest_plugin', $this->App->addPrefix('plugin'));
     }
 
 }

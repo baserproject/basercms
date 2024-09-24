@@ -11,11 +11,7 @@ return static function (MBConfig $mbConfig): void {
     $mbConfig->packageDirectories([__DIR__ . '/plugins']);
     $version = (!empty($_SERVER['argv'][2]))? $_SERVER['argv'][2] : '';
     if(!$version) return;
-    $mbConfig->packageDirectoriesExcludes([
-        __DIR__ . '/plugins/BcThemeSample',
-        __DIR__ . '/plugins/BcPluginSample',
-        __DIR__ . '/plugins/BcColumn',
-    ]);
+
     // for "merge" command
     $mbConfig->dataToAppend([
         ComposerJsonSection::REQUIRE_DEV => [
@@ -31,8 +27,7 @@ return static function (MBConfig $mbConfig): void {
          */
 		$mbConfig->defaultBranch('master');
 		$mbConfig->workers([
-			UpdateReplaceReleaseWorker::class,
-			SetCurrentMutualDependenciesReleaseWorker::class,
+			UpdateReplaceReleaseWorker::class
 		]);
     } elseif(preg_match('/^[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc)/', $version)) {
     	/**

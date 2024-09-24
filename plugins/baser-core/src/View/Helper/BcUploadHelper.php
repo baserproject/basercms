@@ -34,6 +34,7 @@ use Throwable;
  * @property HtmlHelper $Html
  * @property SiteConfigsServiceInterface $siteConfigService
  */
+#[\AllowDynamicProperties]
 class BcUploadHelper  extends Helper
 {
     /**
@@ -480,6 +481,7 @@ class BcUploadHelper  extends Helper
 	 * @return string パス
      * @checked
      * @noTodo
+     * @unitTest
 	 */
 	public function getBasePath($settings, $isTheme = false)
 	{

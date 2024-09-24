@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
  *
  * @property BcWidgetAreaHelper $BcWidgetArea
  */
+#[\AllowDynamicProperties]
 class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
 

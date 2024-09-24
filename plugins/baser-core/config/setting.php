@@ -292,12 +292,6 @@ return [
         'coreReleaseUrl' => 'https://packagist.org/feeds/package.baserproject/baser-core.rss',
 
         /**
-         * インストール時に composer.json にセットするバージョン
-         * @see \BaserCore\Utility\BcComposer::setupComposerForDistribution()
-         */
-        'setupVersion' => '5.1.*',
-
-        /**
          * リリースパッケージに不要なファイル
          * @see \BaserCore\Command\CreateReleaseCommand::deleteExcludeFiles()
          */
@@ -305,7 +299,6 @@ return [
             '.git',
             '.github',
             '__assets',
-            'docker',
             'tests',
             '.editorconfig',
             '.gitattributes',
@@ -313,7 +306,8 @@ return [
             'monorepo-builder.php',
             'phpdoc.dist.xml'.
             'phpstan.neon',
-            'phpunit.xml.dist'
+            'phpunit.xml.dist',
+            'phpdoc.dist.xml'
         ],
 
         /**
@@ -412,6 +406,11 @@ return [
          * 例: 'test/' と記載 → https://basercms.net/s/test/ は s が付かなくなる
          */
         'excludeListAddPrefix' => [],
+
+        /**
+         * /config/routes.php を有効化するかどうか
+         */
+        'enableRootRoutes' => false,
 
         /**
          * システムナビ

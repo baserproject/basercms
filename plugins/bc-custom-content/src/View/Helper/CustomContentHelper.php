@@ -29,6 +29,7 @@ use Cake\Utility\Hash;
  *
  * @property BcTimeHelper $BcTime
  */
+#[\AllowDynamicProperties]
 class CustomContentHelper extends CustomContentAppHelper
 {
 
@@ -41,7 +42,10 @@ class CustomContentHelper extends CustomContentAppHelper
      * ヘルパ
      * @var string[]
      */
-    public array $helpers = ['BaserCore.BcBaser', 'BaserCore.BcTime'];
+    public array $helpers = [
+        'BaserCore.BcBaser',
+        'BaserCore.BcTime'
+    ];
 
     /**
      * カスタムリンクのキャッシュ
@@ -98,6 +102,7 @@ class CustomContentHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDescription(CustomContent $content)
     {
