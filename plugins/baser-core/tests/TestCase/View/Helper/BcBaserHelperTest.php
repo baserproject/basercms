@@ -19,8 +19,10 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcHtmlHelper;
 use Cake\Datasource\Paging\PaginatedResultSet;
@@ -1804,12 +1806,26 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * グローバルメニューを取得する
+     * @dataProvider getGlobalMenuDataProvider
+     * @param string $level 取得する階層
+     * @param boolean $expected 期待値
      * @return void
      */
-    public function testGetGlobalMenu()
+    public function testGetGlobalMenu($level, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertMatchesRegularExpression('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s', $this->BcBaser->getGlobalMenu());
+        $this->loadFixtureScenario(ContentsScenario::class);
+
+        $rs = $this->BcBaser->getGlobalMenu($level);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $rs);
+    }
+
+    public static function getGlobalMenuDataProvider()
+    {
+        return [
+            [0, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*ul-level-3.*<\/ul>'],
+            [1, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*<\/ul>'],
+            [3, '<ul class="ul-level-1 bs-global-menu".*?">.*<a href="\/" class="bs-global-menu-item--link">トップページ<\/a>.*<\/li>.*ul-level-2.*ul-level-3.*<\/ul>']
+        ];
     }
 
     /**
@@ -1867,8 +1883,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetSiteSearchForm()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertMatchesRegularExpression('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s', $this->BcBaser->getSiteSearchForm());
+        //準備
+        $site = SiteFactory::make(['theme' => 'BcColumn'])->getEntity();
+        $view = new BcFrontAppView($this->getRequest()->withAttribute('currentSite', $site));
+        $this->BcBaser = new BcBaserHelper($view->setTheme('BcColumn'));
+        //正常系実行
+        $this->assertMatchesRegularExpression('/<input type="submit" class="submit_button bs-button" value="検索"/s', $this->BcBaser->getSiteSearchForm());
     }
 
     /**
@@ -2029,19 +2049,46 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * test __call
      * @return void
      */
     public function test__call()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest()));
+        $this->BcBaser->getView()->setRequest($this->getRequest())->set('blogArchiveType', 'tag');
+
+        //BlogHelperのisTagメソッドをコール
+        $this->assertTrue($this->BcBaser->__call('isBlogTag', []));
+
+
+        //存在しないメソッドをコール
+        $this->assertNull($this->BcBaser->__call('isBlogTag3', []));
     }
 
     /**
+     * test __construct
      * @return void
      */
     public function test__construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //プラグインのBaserヘルパを初期化を呼ぶ
+        Configure::write('BcEnv.isInstalled', true);
+        PluginFactory::make(['name' => 'BcMail'])->persist();
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
+        //プラグインのBaserヘルパを初期化を呼ぶか確認すること
+        $_pluginBasers = $this->getPrivateProperty($this->BcBaser, '_pluginBasers');
+        $this->assertArrayHasKey('BcMail', $_pluginBasers);
+
+        //プラグインのBaserヘルパを初期化を呼ばない
+        Configure::write('BcEnv.isInstalled', false);
+
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
+        //プラグインのBaserヘルパを初期化を呼ぶか確認すること
+        $_pluginBasers = $this->getPrivateProperty($this->BcBaser, '_pluginBasers');
+        $this->assertArrayNotHasKey('BcMail', $_pluginBasers);
     }
 
     /**

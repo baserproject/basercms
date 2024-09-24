@@ -59,7 +59,7 @@ $this->BcBaser->js([
           <li>
             <?php $this->BcBaser->link(
               h($currentSite->display_name) . ' ' .
-              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              $this->BcBaser->getImg('admin/btn_dropdown.png', ['class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',
               'escapeTitle' => false
@@ -128,7 +128,7 @@ $this->BcBaser->js([
           <li>
             <?php $this->BcBaser->link(
               h($this->BcBaser->getUserName($loginUser ?? '')) . ' ' .
-              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              $this->BcBaser->getImg('admin/btn_dropdown.png', ['class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',
               'escapeTitle' => false
@@ -161,7 +161,7 @@ $this->BcBaser->js([
             <li>
               <?php $this->BcBaser->link(
                 __d('baser_core', 'ログインしていません ') .
-                $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+                $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['class' => 'bc-btn']),
                 'javascript:void(0)',
                 ['class' => 'title', 'escapeTitle' => false]
               ) ?>
