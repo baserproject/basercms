@@ -220,6 +220,7 @@ class BcBaserHelper extends Helper
      * @param array $settings ヘルパ設定値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $View, $settings = [])
     {
@@ -1744,6 +1745,7 @@ class BcBaserHelper extends Helper
      * @return mixed|void PluginBaserHelper の戻り値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __call($method, $params)
     {
@@ -1923,6 +1925,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGlobalMenu($level = 5, $options = [])
     {
@@ -2323,6 +2326,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteSearchForm($data = [], $options = [])
     {

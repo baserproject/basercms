@@ -59,6 +59,9 @@ class BcPluginUtil
      * プラグインかどうかを判定する
      * @param string $name
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isPlugin(string $name): bool
     {
