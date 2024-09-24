@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcSiteConfig;
@@ -535,12 +536,15 @@ class ThemesService implements ThemesServiceInterface
         $tables = $db->getSchemaCollection()->listTables();
         $tableList = $dbService->getAppTableList();
         if (!isset($tableList[$plugin])) return true;
+
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
         $result = true;
         foreach($tables as $table) {
+            $baredTable = preg_replace('/^' . $prefix . '/', '', $table);
             if (in_array($table, $tableList[$plugin])) {
                 if (in_array($table, $exclude)) continue;
                 if (!$dbService->writeCsv($table, [
-                    'path' => $path . $table . '.csv',
+                    'path' => $path . $baredTable . '.csv',
                     'encoding' => 'UTF-8',
                     'init' => false,
                     'plugin' => $plugin
