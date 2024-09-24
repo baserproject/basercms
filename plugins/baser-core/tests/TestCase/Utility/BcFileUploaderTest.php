@@ -555,17 +555,12 @@ class BcFileUploaderTest extends BcTestCase
      */
     public function testMoveFileSessionToTmp()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $tmpId = 1;
         $fieldName = 'fieldName';
         $tmp_name = 'basercms_tmp';
         $basename = 'basename';
         $ext = 'png';
         $namefield = 'hoge';
-
-        //—————————————————————————
-        // セッションを設定
-        //—————————————————————————
 
         // パス情報
         $tmpPath = $this->savePath . $tmp_name;
@@ -577,24 +572,26 @@ class BcFileUploaderTest extends BcTestCase
         ];
         $this->BcFileUploader->tmpId = $tmpId;
 
-        $this->uploadedData['eyecatch']['name'] = $basename . '.' . $ext;
-        $this->uploadedData['eyecatch']['tmp_name'] = $tmpPath;
-        $this->uploadedData['eyecatch']['type'] = 'basercms';
-        $this->uploadedData['eyecatch']['ext'] = $ext;
-
         // ダミーファイルの作成
         $file = new BcFile($tmpPath);
         $file->create();
         $file->write('dummy');
 
+        // UploadedFileオブジェクトの作成
+        $uploadedFile = new UploadedFile(
+            $tmpPath,
+            filesize($tmpPath),
+            UPLOAD_ERR_OK,
+            $basename . '.' . $ext,
+            'image/png'
+        );
+
+        $this->uploadedData['eyecatch'] = $uploadedFile;
+
         // セッションを設定
         $entity = $this->BcFileUploader->saveTmpFiles($this->uploadedData, $tmpId);
 
-        //—————————————————————————
         // 本題
-        //—————————————————————————
-
-        // パス情報
         $targetName = $entity->eyecatch_tmp;
         $targetPath = $this->savePath . str_replace(['.', '/'], ['_', '_'], $targetName);
 
@@ -610,11 +607,11 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertFileExists($targetPath, 'セッションに保存されたファイルデータをファイルとして保存できません');
         $result = $this->BcFileUploader->getUploadingFiles($bcUploadId)[$fieldName];
         $expected = [
-            'error' => 0,
+            'error' => UPLOAD_ERR_OK,
             'name' => $targetName,
             'tmp_name' => $targetPath,
             'size' => 5,
-            'type' => 'basercms',
+            'type' => 'image/png',
             'uploadable' => true,
             'ext' => 'png'
         ];
@@ -1271,5 +1268,109 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertTrue($this->BcFileUploader->isUploaded());
         $this->BcFileUploader->resetUploaded();
         $this->assertFalse($this->BcFileUploader->isUploaded());
+    }
+
+    /**
+     * test rollbackFile with errors
+     * @param array $initialData
+     * @param array $originalData
+     * @param array $errors
+     * @param array $expected
+     * @dataProvider rollbackFileDataProvider
+     */
+    public function testRollbackFileWithErrors($initialData, $originalData, $errors, $expected)
+    {
+        //create BcFileUploader
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'image'],
+            ['name' => 'document']
+        ];
+
+        //create Entity
+        $entity = new Entity($originalData);
+        $entity->clean();
+        //Set new data
+        $entity->set($initialData);
+
+        //set errors
+        if (isset($errors['image'])) {
+            $entity->setError('image', $errors['image']);
+        }
+        if (isset($errors['document'])) {
+            $entity->setError('document', $errors['document']);
+        }
+
+        //check has error
+        $this->assertTrue($entity->hasErrors());
+
+        $BcFileUploader->rollbackFile($entity);
+
+        //Check data after rollback
+        $this->assertEquals($expected['image'], $entity->get('image'));
+        $this->assertEquals($expected['document'], $entity->get('document'));
+
+        //check errors after rollback
+        if (isset($errors['image'])) {
+            $this->assertEquals($errors['image'], $entity->getError('image'));
+        }
+        if (isset($errors['document'])) {
+            $this->assertEquals($errors['document'], $entity->getError('document'));
+        }
+    }
+
+    public static  function rollbackFileDataProvider()
+    {
+        return [
+            [
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf'],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf'],
+                ['image' => ['Error message for image'], 'document' => ['Error message for document']],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf']
+            ]
+        ];
+    }
+
+    /**
+     * test rollbackFile without errors
+     * @param array $initialData
+     * @param array $originalData
+     * @param array $expected
+     * @dataProvider rollbackFileNoErrorsDataProvider
+     */
+    public function testRollbackFileWithoutErrors($initialData, $originalData, $expected)
+    {
+        //create BcFileUploader
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'image'],
+            ['name' => 'document']
+        ];
+
+        //create Entity
+        $entity = new Entity($originalData);
+        $entity->clean();
+        //set new data
+        $entity->set($initialData);
+
+        //check has error
+        $this->assertFalse($entity->hasErrors());
+
+        $BcFileUploader->rollbackFile($entity);
+
+        //Check data after rollback
+        $this->assertEquals($expected['image'], $entity->get('image'));
+        $this->assertEquals($expected['document'], $entity->get('document'));
+    }
+
+    public static function rollbackFileNoErrorsDataProvider()
+    {
+        return [
+            [
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf'],
+                ['image' => 'original_image.jpg', 'document' => 'original_document.pdf'],
+                ['image' => 'new_image.jpg', 'document' => 'new_document.pdf']
+            ],
+        ];
     }
 }

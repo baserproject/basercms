@@ -481,6 +481,7 @@ class BcUploadHelper  extends Helper
 	 * @return string パス
      * @checked
      * @noTodo
+     * @unitTest
 	 */
 	public function getBasePath($settings, $isTheme = false)
 	{

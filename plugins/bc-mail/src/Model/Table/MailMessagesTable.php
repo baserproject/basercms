@@ -135,6 +135,7 @@ class MailMessagesTable extends MailAppTable
      * @param $mailContentId
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setUseTable($mailContentId)
     {
@@ -508,6 +509,7 @@ class MailMessagesTable extends MailAppTable
      * @checked
      * @noTodo
      * @TODO ヘルパー化すべきかも
+     * @unitTest
      */
     public function convertDatasToMail($data, $options)
     {
@@ -564,6 +566,7 @@ class MailMessagesTable extends MailAppTable
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function convertMessageToCsv(array $messages)
     {

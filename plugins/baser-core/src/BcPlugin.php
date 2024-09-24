@@ -145,11 +145,11 @@ class BcPlugin extends BasePlugin
                 $permissionGroupsService->buildByPlugin($pluginName);
             }
 
-            $this->createAssetsSymlink();
-
             BcUtil::clearAllCache();
+            $result = $plugins->install($pluginName);
             TableRegistry::getTableLocator()->clear();
-            return $plugins->install($pluginName);
+            $this->createAssetsSymlink();
+            return $result;
         } catch (BcException $e) {
             $this->log($e->getMessage());
             $this->migrations->rollback($options);
@@ -608,10 +608,10 @@ class BcPlugin extends BasePlugin
      */
     public function applyAsTheme(Site $site, string $theme)
     {
-        $this->createAssetsSymlink();
         $site->theme = $theme;
         $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $siteConfigsTable->save($site);
+        $this->createAssetsSymlink();
     }
 
     /**
