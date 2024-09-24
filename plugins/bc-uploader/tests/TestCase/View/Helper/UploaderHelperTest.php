@@ -1,10 +1,13 @@
 <?php
 namespace BcUploader\Test\TestCase\View\Helper;
 use App\View\AppView;
+use BaserCore\View\Helper\BcUploadHelper;
 use BcUploader\Test\Factory\UploaderFileFactory;
 use BcUploader\View\Helper\UploaderHelper;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
+use Cake\I18n\FrozenTime;
+use Cake\View\View;
 
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -126,9 +129,53 @@ class UploaderHelperTest extends BcTestCase
 
     /**
      * ファイルの公開状態を取得する
+     * test isPublish
+     * @param $publishBegin
+     * @param $publishEnd
+     * @param $expected
+     * @dataProvider isPublishDataProvider
      */
-    public function testIsPublish()
+    public function testIsPublish($publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $uploaderFile = UploaderFileFactory::make(['publish_begin' => $publishBegin, 'publish_end' => $publishEnd])->getEntity();
+        $rs = $this->UploaderHelper->isPublish($uploaderFile);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function isPublishDataProvider()
+    {
+        return [
+            [null, null, true],
+            [new FrozenTime('+1 day'), null, false],
+            [null, new FrozenTime('-1 day'), false],
+            [new FrozenTime('-1 day'), new FrozenTime('+1 day'), true],
+            [new FrozenTime('+1 day'), new FrozenTime('+2 day'), false],
+            [new FrozenTime('now'), new FrozenTime('now'), false]
+        ];
+    }
+
+    /**
+     * test getBasePath
+     * @param $settings
+     * @param $isTheme
+     * @param $expected
+     * @dataProvider getBasePathDataProvider
+     */
+    public function testGetBasePath($settings, $isTheme, $expected)
+    {
+        $helper = new BcUploadHelper(new View());
+
+        $result = $helper->getBasePath($settings, $isTheme);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function getBasePathDataProvider()
+    {
+        return [
+            [['saveDir' => 'uploads/images'], false, '/files/uploads/images/'],
+            [['saveDir' => 'uploads/images'], true, '/bc_front/files/uploads/images/'],
+            [['saveDir' => 'documents/files'], false, '/files/documents/files/'],
+            [['saveDir' => 'documents/files'], true, '/bc_front/files/documents/files/'],
+        ];
     }
 }

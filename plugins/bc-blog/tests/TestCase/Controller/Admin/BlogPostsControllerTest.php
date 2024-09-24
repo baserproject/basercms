@@ -152,7 +152,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
-        $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => 'test']);
+        $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => 'test', 'user_id' => 1, 'posted' => '2022-12-01 00:00:00']);
         $this->assertResponseCode(302);
         $this->assertFlashMessage('記事「test」を追加しました。');
         $this->assertRedirect(['action' => 'edit/1/1']);
@@ -208,8 +208,8 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertEquals('blog post edit', $blogPost['title']);
         $this->assertEquals('ホームページをオープンしました', $blogPost['name']);
 
-        //dataは空にする場合を確認
-        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', []);
+        //エラーを発生した場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', ['name' => str_repeat('a', 256)]);
         // ステータスを確認
         $this->assertResponseCode(200);
         // メッセージを確認

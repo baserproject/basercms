@@ -165,10 +165,108 @@ class BcFolderTest extends TestCase
         $this->assertFileDoesNotExist($path. DS. 'test.txt');
         $this->assertFileExists($des. DS. 'test.txt');
         $folder2->delete();
+    }
 
+    /**
+     * test pwd
+     * @param string $path
+     * @param string $expected
+     * @dataProvider pwdDataProvider
+     */
+    public function test_pwd($path, $expected)
+    {
+        $bcFolder = new BcFolder($path);
+        $result = $bcFolder->pwd();
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function pwdDataProvider()
+    {
+        return [
+            ['/', '/'],
+            ['/var/www/html', '/var/www/html'],
+            ['plugins/baser-core', 'plugins/baser-core'],
+            ['/path/with spaces/folder', '/path/with spaces/folder'],
+            ['', ''],
+        ];
     }
 
 
+    /**
+     * test find
+     * no pattern all files
+     */
+    public function testFindReturnsAllFilesWithDefaultPattern()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
 
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+        file_put_contents($testPath . '/file3.txt', 'Test file 3');
 
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find();
+
+        //check
+        $this->assertCount(3, $result);
+        $this->assertContains('file1.txt', $result);
+        $this->assertContains('file2.txt', $result);
+        $this->assertContains('file3.txt', $result);
+
+        // Clean up
+        (new BcFolder($testPath))->delete();
+    }
+
+    /**
+     * test find
+     * matching files
+     */
+    public function testFindReturnsMatchingFiles()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
+
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+        file_put_contents($testPath . '/test_file.txt', 'Test file 3');
+
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find('test_file.txt');
+
+        //check
+        $this->assertCount(1, $result);
+        $this->assertContains('test_file.txt', $result);
+
+        //cleanup
+        (new BcFolder($testPath))->delete();
+    }
+
+    /**
+     * test find
+     * no matching files
+     */
+    public function testFindReturnsNoFilesForNonMatchingPattern()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
+
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find('non_existent_file.txt');
+
+        //check
+        $this->assertCount(0, $result);
+
+        // Clean up
+        (new BcFolder($testPath))->delete();
+    }
 }

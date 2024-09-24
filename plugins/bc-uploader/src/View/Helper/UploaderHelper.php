@@ -161,6 +161,7 @@ class UploaderHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isPublish($data)
     {

@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -213,9 +214,20 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testConvertAdminMenuGroups(): void
     {
-        // $adminMenuGroups = $this->BcAdmin->getAdminMenuGroups();
-        // $covertedAdminMenuGroups = $this->BcAdmin->convertAdminMenuGroups($adminMenuGroups);
-        $this->markTestIncomplete('Not implemented yet.');
+        //データー生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->BcAdmin->getView()->setRequest($request);
+
+        //対象メソッドを実行
+        $adminMenuGroups = $this->execPrivateMethod($this->BcAdmin, 'getAdminMenuGroups');
+        $covertedAdminMenuGroups = $this->execPrivateMethod($this->BcAdmin, 'convertAdminMenuGroups', [$adminMenuGroups]);
+
+        //戻り値を確認
+        $this->assertEquals('ダッシュボード', $covertedAdminMenuGroups[0]['title']);
+        $this->assertEquals('/baser/admin', $covertedAdminMenuGroups[0]['url']);
+        $this->assertEquals('dashboard', $covertedAdminMenuGroups[0]['type']);
+        $this->assertEquals('bca-icon--file', $covertedAdminMenuGroups[0]['icon']);
     }
 
     /**
@@ -396,6 +408,69 @@ class BcAdminHelperTest extends BcTestCase
     }
 
     /**
+     * test existsAddLink
+     */
+    public function testExistsAddLink()
+    {
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'ContentFolder', 'url' => '/service'])->persist();
+        ContentFactory::make(['type' => 'ContentLink', 'url' => '/service-1'])->persist();
+
+        //isAdminSystem = true, return false
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = false, return false
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/'));
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = true && type !== ContentFolder, return false
+        $request = $this->loginAdmin($this->getRequest('/service-1'));
+        $request->getSession()->write('AuthAdmin', UserFactory::get(1));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertFalse($this->BcAdmin->existsAddLink());
+
+        //isAdminSystem = true && type == ContentFolder, return true
+        $request = $this->loginAdmin($this->getRequest('/service'));
+        $request->getSession()->write('AuthAdmin', UserFactory::get(1));
+        $this->BcAdmin->getView()->setRequest($request);
+        $this->assertTrue($this->BcAdmin->existsAddLink());
+    }
+
+    /**
+     * test addLink
+     */
+    public function testAddLink()
+    {
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['type' => 'ContentFolder', 'url' => '/service'])->persist();
+
+        //isAdminSystem = true, return ''
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2')));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content == null, return ''
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service-1'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //$content != null, 固定ページ新規追加画面へのリンクを出力する
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/service'));
+        ob_start();
+        $this->BcAdmin->addLink();
+        $actualEmpty = ob_get_clean();
+        $this->assertTextContains('新規ページ追加', $actualEmpty);
+    }
+
+    /**
      * 編集画面へのリンクを出力する
      *
      * @return void
@@ -444,6 +519,27 @@ class BcAdminHelperTest extends BcTestCase
         $this->BcAdmin->publishLink();
         $result = ob_get_clean();
         $this->assertEquals('<a href="https://localhost/" class="tool-menu">サイト確認</a>', $result);
+    }
+
+    /**
+     * test firstAccess
+     */
+    public function testFirstAccess()
+    {
+        //controller == installations, return ''
+        $request = $this->getRequest('/')->withParam('controller', 'installations');
+        $this->BcAdmin->getView()->setRequest($request);
+        ob_start();
+        $this->BcAdmin->firstAccess();
+        $actualEmpty = ob_get_clean();
+        $this->assertEmpty($actualEmpty);
+
+        //controller != installations, 初回アクセス時のメッセージ表示
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin/baser-core/pages/edit/2'))->set('firstAccess', true);
+        ob_start();
+        $this->BcAdmin->firstAccess();
+        $actualEmpty = ob_get_clean();
+        $this->assertTextContains('baserCMSへようこそ', $actualEmpty);
     }
 
     /**

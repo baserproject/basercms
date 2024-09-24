@@ -47,7 +47,9 @@ $priorities = [
       \BaserCore\Utility\BcUtil::siteUrl() . preg_replace('/^\//', '', $searchIndex->url), ['target' => '_blank', 'escape' => true]
     ) ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($this->Text->truncate($searchIndex->detail, 50)) ?></td>
+  <td class="bca-table-listup__tbody-td">
+    <?php echo h($this->Text->truncate($searchIndex->detail?? '', 50)) ?>
+  </td>
   <td class="bca-table-listup__tbody-td" style="width:10%;text-align:center">
     <?php echo $this->BcText->booleanMark($searchIndex->status); ?><br>
   </td>

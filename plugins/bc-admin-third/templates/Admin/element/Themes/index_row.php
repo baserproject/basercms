@@ -96,7 +96,9 @@ use Cake\Utility\Inflector;
           <?php echo h($theme->author) ?>
         <?php endif ?>
       </div>
-      <div class="theme-description"><?php echo nl2br($this->BcText->autoLinkUrls($theme->description)) ?></div>
+      <?php if (!empty($theme->description)): ?>
+        <div class="theme-description"><?php echo nl2br($this->BcText->autoLinkUrls($theme->description)) ?></div>
+      <?php endif ?>
     </div>
   </div>
 </li>

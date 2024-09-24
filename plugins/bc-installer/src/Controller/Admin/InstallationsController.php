@@ -11,6 +11,7 @@
 
 namespace BcInstaller\Controller\Admin;
 
+use BaserCore\BcPlugin;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -217,6 +218,7 @@ class InstallationsController extends BcAdminAppController
             $siteConfigsService->putEnv('DEBUG', 'false');
 
             BcUtil::clearAllCache();
+            (new BcPlugin())->createAssetsSymlink();
             if (function_exists('opcache_reset')) opcache_reset();
         }
     }

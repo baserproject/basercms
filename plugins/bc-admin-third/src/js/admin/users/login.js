@@ -8,64 +8,82 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-$(function () {
-
-    let alertMessage = $("#AlertMessage");
-    let isEnableLoginCredit = $("#AdminUsersLoginScript").attr('data-isEnableLoginCredit');
-
-    if (isEnableLoginCredit) {
-        $("body").hide();
-    }
-
-    if (isEnableLoginCredit) {
-        let $body = $("body");
-        let $logo = $("#Logo");
-        $body.append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
-        $("#HeaderInner").css('height', '50px');
-        $logo.css('position', 'absolute');
-        $logo.css('z-index', '10000');
-        changeView(isEnableLoginCredit);
-        // 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
-        $body.fadeIn(50);
-    }
+/**
+ * users login form
+ */
+const usersLoginForm = {
 
     /**
-     * ログインエリア周辺クリック時
-     * エンドロールを非表示にする
+     * 初期化
      */
-    $("#Login").click(function () {
-        changeView(false);
-    });
+    mounted() {
+        this.initView();
+    },
 
     /**
-     * ログインエリア内側クリック時
-     * エンドロールの非表示を無効にする
+     * 表示初期化
      */
-    $("#LoginInner").click(function (e) {
-        if (e && e.stopPropagation) {
-            e.stopPropagation();
-        } else {
-            window.event.cancelBubble = true;
+    initView() {
+        let isEnableLoginCredit = $("#AdminUsersLoginScript").attr('data-isEnableLoginCredit');
+        if (isEnableLoginCredit) {
+            let $body = $("body").hide();
+            let $logo = $("#Logo");
+            $body.append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
+            $("#HeaderInner").css('height', '50px');
+            $logo.css('position', 'absolute');
+            $logo.css('z-index', '10000');
+            this.changeView(isEnableLoginCredit);
+            // 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
+            $body.fadeIn(50);
         }
-    });
+        this.registerEvents();
+    },
+
+    /**
+     * イベント登録
+     */
+    registerEvents() {
+        /**
+         * ログインエリア周辺クリック時
+         * エンドロールを非表示にする
+         */
+        $("#Login").click(function () {
+            changeView(false);
+        });
+        /**
+         * ログインエリア内側クリック時
+         * エンドロールの非表示を無効にする
+         */
+        $("#LoginInner").click(function (e) {
+            if (e && e.stopPropagation) {
+                e.stopPropagation();
+            } else {
+                window.event.cancelBubble = true;
+            }
+        });
+
+        $("#BtnLogin").click(function(){
+            $.bcUtil.showLoader();
+        });
+    },
 
     /**
      * エンドロールの表示を切り替える
      * @param creditOn
      */
-    function changeView(creditOn) {
+    changeView(creditOn) {
         if (creditOn) {
             $.bcCredit.show();
         } else {
-            openCredit();
+            this.openCredit();
         }
-    }
+    },
 
     /**
      * エンドロールを表示する
      * @param completeHandler
      */
-    function openCredit(completeHandler) {
+    openCredit(completeHandler) {
         let $credit = $("#Credit");
         let $logo = $("#Logo");
         if (!$credit.length) {
@@ -86,5 +104,6 @@ $(function () {
             }
         }
     }
+};
 
-});
+usersLoginForm.mounted();

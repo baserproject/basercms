@@ -81,6 +81,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkEnv(): array
     {
@@ -284,26 +285,6 @@ class InstallationsService implements InstallationsServiceInterface
     }
 
     /**
-     * セキュリティ用のキーを生成する
-     *
-     * @param int $length
-     * @return string キー
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function setSecuritySalt($length = 40): string
-    {
-        $keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        $randkey = "";
-        for($i = 0; $i < $length; $i++) {
-            $randkey .= substr($keyset, rand(0, strlen($keyset) - 1), 1);
-        }
-        Configure::write('Security.salt', $randkey);
-        return $randkey;
-    }
-
-    /**
      * 初期ユーザーを登録する
      *
      * @param array $user
@@ -312,11 +293,8 @@ class InstallationsService implements InstallationsServiceInterface
      * @checked
      * @noTodo
      */
-    public function addDefaultUser(array $user, $securitySalt = '')
+    public function addDefaultUser(array $user)
     {
-        if ($securitySalt) {
-            Configure::write('Security.salt', $securitySalt);
-        }
         $user = array_merge([
             'name' => '',
             'real_name_1' => preg_replace('/@.+$/', '', $user['email']),
@@ -415,12 +393,11 @@ class InstallationsService implements InstallationsServiceInterface
      * インストール設定ファイルを生成する
      *
      * @param array $dbConfig
-     * @param string $securitySalt
      * @return boolean
      * @checked
      * @noTodo
      */
-    public function createInstallFile(array $dbConfig, string $securitySalt): bool
+    public function createInstallFile(array $dbConfig): bool
     {
 		if (!is_writable(ROOT . DS . 'config' . DS)) {
 			return false;
@@ -443,18 +420,11 @@ class InstallationsService implements InstallationsServiceInterface
             $dbConfig[$key] = addcslashes($value, '\'\\');
         }
 
-        $basicSettings = [
-            'Security.salt' => $securitySalt
-        ];
-
         $installCoreData = [
             '<?php',
             '// created by BcInstaller',
             'return ['
         ];
-        foreach($basicSettings as $key => $value) {
-            $installCoreData[] = '    \'' . $key . '\' => \'' . $value . '\',';
-        }
         $installCoreData[] = '    \'Datasources.default\' => [';
         foreach($dbConfig as $key => $value) {
             if($key === 'datasource' || $key === 'dataPattern') continue;
@@ -505,27 +475,6 @@ class InstallationsService implements InstallationsServiceInterface
             }
         }
         return $result;
-    }
-
-    /**
-     * JWTキーを作成する
-     *
-     * @return bool
-     * @noTodo
-     * @checked
-     * @unitTest
-     */
-    public function createJwt()
-    {
-        $command = "openssl genrsa -out " . CONFIG . "jwt.key 1024";
-        exec($command, $out, $code);
-        if($code === 0) {
-            $command = "openssl rsa -in " . CONFIG . "jwt.key -outform PEM -pubout -out " . CONFIG . "jwt.pem";
-            exec($command, $out, $code);
-            return ($code === 0);
-        } else {
-            return false;
-        }
     }
 
     /**
