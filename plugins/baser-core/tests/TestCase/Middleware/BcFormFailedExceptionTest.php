@@ -4,15 +4,15 @@ namespace BaserCore\Test\TestCase\Middleware;
 
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\ORM\Table;
-use Cake\Validation\ValidatorAwareInterface;
-use PHPUnit\Framework\MockObject\Exception;
+use BcThemeFile\Form\ThemeFileForm;
 
 class BcFormFailedExceptionTest extends BcTestCase
 {
+    protected $form;
     public function setUp(): void
     {
         parent::setUp();
+        $this->form = new ThemeFileForm();
     }
 
     public function tearDown(): void
@@ -26,9 +26,7 @@ class BcFormFailedExceptionTest extends BcTestCase
      */
     public function testGetForm(): void
     {
-       $table = new Table();
-       $exception = new BcFormFailedException($table, 'message');
-       $this->assertEquals($table, $exception->getForm());
+       $exception = new BcFormFailedException($this->form, 'message');
+       $this->assertEquals($this->form, $exception->getForm());
     }
-
 }
