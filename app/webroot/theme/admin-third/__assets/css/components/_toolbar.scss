@@ -126,6 +126,8 @@ body {
   &__users {
     .bc-btn {
       margin-left:5px;
+      width: 8px;
+      height: 11px;
     }
     > ul {
       display: flex!important;
