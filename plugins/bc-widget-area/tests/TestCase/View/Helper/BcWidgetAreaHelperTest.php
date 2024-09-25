@@ -94,10 +94,8 @@ class BcWidgetAreaHelperTest extends BcTestCase
     public function testGetWidgetArea($url, $no, $expected)
     {
         $view = new BcFrontAppView($this->getRequest($url));
-        $view->set('currentWidgetAreaId', 1);
-        $view->loadHelper('BcWidgetArea.BcWidgetArea');
-        $this->BcWidgetArea = new BcWidgetAreaHelper($view);
-        $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcWidgetArea->getWidgetArea($no));
+        $view->set('currentWidgetAreaId', 1)->loadHelper('BcWidgetArea.BcWidgetArea');
+        $this->assertMatchesRegularExpression('/' . $expected . '/', $view->BcWidgetArea->getWidgetArea($no));
     }
 
     public static function getWidgetAreaDataProvider()
