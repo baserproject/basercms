@@ -4,6 +4,8 @@ namespace BaserCore\Test\TestCase\Command;
 
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFolder;
+use Cake\Core\Configure;
 
 class CreateReleaseCommandTest extends BcTestCase
 {
@@ -41,5 +43,46 @@ class CreateReleaseCommandTest extends BcTestCase
         if (file_exists($this->zipFile)) {
             unlink($this->zipFile);
         }
+    }
+
+
+    /**
+     * Test deleteExcludeFiles
+     *
+     */
+    public function test_deleteExcludeFiles()
+    {
+        //create folder tmp
+        $packagePath = TMP . 'exclude_files_test' . DS;
+
+        Configure::write('BcApp.excludeReleasePackage', [
+            'folder1',
+            'file1.txt',
+            'folder2',
+            'file2.txt'
+        ]);
+
+        $folder = new BcFolder($packagePath);
+        $folder->create($packagePath . 'folder1');
+        $folder->create($packagePath . 'folder2');
+        touch($packagePath . 'file1.txt');
+        touch($packagePath . 'file2.txt');
+
+        //check folder and file created
+        $this->assertDirectoryExists($packagePath . 'folder1');
+        $this->assertDirectoryExists($packagePath . 'folder2');
+        $this->assertFileExists($packagePath . 'file1.txt');
+        $this->assertFileExists($packagePath . 'file2.txt');
+
+        $this->CreateReleaseCommand->deleteExcludeFiles($packagePath);
+
+        //check folder and file delete
+        $this->assertDirectoryDoesNotExist($packagePath . 'folder1');
+        $this->assertDirectoryDoesNotExist($packagePath . 'folder2');
+        $this->assertFileDoesNotExist($packagePath . 'file1.txt');
+        $this->assertFileDoesNotExist($packagePath . 'file2.txt');
+
+        //clear up
+        $folder->delete();
     }
 }
