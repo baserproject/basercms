@@ -8,11 +8,11 @@ use BcThemeFile\Form\ThemeFileForm;
 
 class BcFormFailedExceptionTest extends BcTestCase
 {
-    protected $form;
     public function setUp(): void
     {
         parent::setUp();
         $this->form = new ThemeFileForm();
+        $this->BcFormFailedException = new BcFormFailedException($this->form, 'message');
     }
 
     public function tearDown(): void
@@ -26,7 +26,7 @@ class BcFormFailedExceptionTest extends BcTestCase
      */
     public function testGetForm(): void
     {
-       $exception = new BcFormFailedException($this->form, 'message');
-       $this->assertEquals($this->form, $exception->getForm());
+        $exception = $this->BcFormFailedException->getForm();
+        $this->assertEquals($this->form, $exception);
     }
 }
