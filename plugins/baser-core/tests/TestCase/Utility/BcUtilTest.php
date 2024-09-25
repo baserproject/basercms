@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
@@ -317,6 +318,39 @@ class BcUtilTest extends BcTestCase
         foreach ($cacheList as $cacheName) {
             $this->assertNull(Cache::read($cacheName . 'test', $cacheName));
         }
+
+        // cacheファイル復元
+        $folder = new BcFolder($backup);
+        $folder->move($origin);
+        $folder->chmod(0777);
+    }
+
+    /**
+     * test clearModelCache
+     */
+    public function testClearModelCache()
+    {
+        // cacheファイルのバックアップ作成
+        $origin = CACHE;
+        $folder = new BcFolder($origin);
+        $backup = str_replace('cache', 'cache_backup', CACHE);
+        (new BcFolder($backup))->create();
+        $folder->move($backup);
+
+        // _cake_model_準備
+        Cache::drop('_cake_model_');
+        Cache::setConfig('_cake_model_', [
+            'className' => "File",
+            'prefix' => 'myapp' . '_cake_model_',
+            'path' => CACHE . 'models' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+        ]);
+        Cache::write('_cake_model_' . 'test', 'testtest', '_cake_model_');
+
+        // 削除実行
+        BcUtil::clearModelCache();
+        $this->assertNull(Cache::read('_cake_model_' . 'test', '_cake_model_'));
 
         // cacheファイル復元
         $folder = new BcFolder($backup);
@@ -1185,27 +1219,36 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $eventManager = EventManager::instance();
-        $eventKey = 'testOnEvent';
-        $bcEvenListener = new class extends BcEventListener {
-            public $events = ['event1'];
-            public function event1() {
-                return 'event1';
-            }
-        };
-        // onEvent() でイベントを設定
-        BcUtil::onEvent($eventManager, $eventKey, $bcEvenListener->implementedEvents());
-        // listeners() イベントの登録を確認
-        $listeners = $eventManager->listeners($eventKey);
-        foreach ($bcEvenListener->events as $index => $event) {
-            $this->assertEquals($listeners[$index]['callable'], $event);
-        }
-        // offEvent() でイベントを解除
-        BcUtil::offEvent($eventManager, $eventKey);
-        // listeners() イベントの解除を確認
-        $listeners = $eventManager->listeners($eventKey);
-        $this->assertEmpty($listeners);
+        //offEventをテスト
+        $eventManager = $this->getTableLocator()->get('BcBlog.BlogPosts')->getEventManager();
+        $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeMarshal');
+        //戻り値を確認
+        $this->assertCount(1, $beforeSaveListeners);
+        //eventがOFFしたかどうか確認
+        $listeners = $eventManager->listeners('Model.beforeMarshal');
+        $this->assertCount(0, $listeners);
+
+        //onEventをテスト
+        BcUtil::onEvent($eventManager, 'Model.beforeMarshal', $beforeSaveListeners);
+        //eventがONしたかどうか確認
+        $listeners = $eventManager->listeners('Model.beforeMarshal');
+        $this->assertCount(1, $listeners);
+        $this->assertEquals($beforeSaveListeners, $listeners);
+    }
+
+    /**
+     * test retry
+     */
+    public function testRetry()
+    {
+        //正常実行
+        $rs = BcUtil::retry(1, function () {return 2;}, 3);
+        $this->assertEquals(2, $rs);
+
+        //異常実行
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('リトライ回数は正の整数値で指定してください。');
+        BcUtil::retry(-1, function () {return 0;}, 1);
     }
 
     /**
@@ -1489,6 +1532,39 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test isSameReferrerAsCurrent
+     * @dataProvider isSameReferrerAsCurrentDataProvider
+     * @param $referer
+     * @param $expected
+     */
+    public function testIsSameReferrerAsCurrent($referer, $expected)
+    {
+        //準備
+        $tmpHost = Configure::read('BcEnv.host');
+        Configure::write('BcEnv.host', parse_url("http://www.example.com/baser/admin")['host']);
+        $_SERVER['HTTP_REFERER'] = $referer;
+
+        //実行
+        $this->assertEquals(BcUtil::isSameReferrerAsCurrent(), $expected);
+
+        //元に戻る
+        Configure::write('BcEnv.host', $tmpHost);
+        unset($_SERVER['HTTP_REFERER']);
+    }
+
+    public static function isSameReferrerAsCurrentDataProvider()
+    {
+        return [
+            // refererがnullの場合　
+            [null, false],
+            // referer!=$siteDomainの場合
+            ["/baser/admin", false],
+            // refererが同サイトドメインの場合
+            ["http://www.example.com/baser/admin", true],
+        ];
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
@@ -1519,6 +1595,17 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('bc-db', $rs['host']);
         $this->assertEquals('3306', $rs['port']);
         $this->assertEquals('test_basercms', $rs['database']);
+    }
+    /**
+     * test getCurrentDb
+     */
+    public function testGetCurrentDb()
+    {
+        $config = $this->getPrivateProperty(BcUtil::getCurrentDb(), '_config');
+        //戻り値を確認
+        $this->assertEquals('bc-db', $config['host']);
+        $this->assertEquals('3306', $config['port']);
+        $this->assertEquals('test_basercms', $config['database']);
     }
 
     /**
@@ -1592,5 +1679,41 @@ class BcUtilTest extends BcTestCase
 
         $result = BcUtil::pairToAssoc('');
         $this->assertEquals([], $result);
+    }
+
+    /**
+     * test addSessionId
+     */
+    public function testAddSessionId()
+    {
+        // 初期化
+        $this->truncateTable('sites');
+        SiteFactory::make(['id' => 1, 'device' => 'mobile'])->persist();
+        $_SERVER['REQUEST_URI'] = '/m/';
+
+        $this->assertEquals('/?BASERCMS=cli', BcUtil::addSessionId('/', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1&BASERCMS=1', true));
+
+        // urlが配列の場合
+        $url = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 1
+            ]
+        ];
+        $expect = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 'cli'
+            ]
+        ];
+        $this->assertEquals($expect, BcUtil::addSessionId($url, true));
+
+        //adminでログインしいる場合、
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->assertEquals('/', BcUtil::addSessionId('/'));
     }
 }

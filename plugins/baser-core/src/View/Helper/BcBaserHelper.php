@@ -220,6 +220,7 @@ class BcBaserHelper extends Helper
      * @param array $settings ヘルパ設定値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $View, $settings = [])
     {
@@ -1307,6 +1308,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function scripts()
     {
@@ -1715,6 +1717,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _initPluginBasers()
     {
@@ -1742,6 +1745,7 @@ class BcBaserHelper extends Helper
      * @return mixed|void PluginBaserHelper の戻り値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __call($method, $params)
     {
@@ -1921,6 +1925,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGlobalMenu($level = 5, $options = [])
     {
@@ -1987,6 +1992,7 @@ class BcBaserHelper extends Helper
      * @return string サイトマップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitemap($siteId = 0)
     {
@@ -2065,6 +2071,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function page($url, $params = [], $options = [])
     {
@@ -2123,6 +2130,7 @@ class BcBaserHelper extends Helper
      * @return bool 同じ場合には true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCurrentUrl($url)
     {
@@ -2235,6 +2243,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function googleAnalytics($data = [], $options = [])
     {
@@ -2317,6 +2326,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteSearchForm($data = [], $options = [])
     {
@@ -2473,6 +2483,7 @@ class BcBaserHelper extends Helper
      * 更新情報を出力する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateInfo(): void
     {

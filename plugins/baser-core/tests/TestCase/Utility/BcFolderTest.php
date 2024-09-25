@@ -190,4 +190,83 @@ class BcFolderTest extends TestCase
             ['', ''],
         ];
     }
+
+
+    /**
+     * test find
+     * no pattern all files
+     */
+    public function testFindReturnsAllFilesWithDefaultPattern()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
+
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+        file_put_contents($testPath . '/file3.txt', 'Test file 3');
+
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find();
+
+        //check
+        $this->assertCount(3, $result);
+        $this->assertContains('file1.txt', $result);
+        $this->assertContains('file2.txt', $result);
+        $this->assertContains('file3.txt', $result);
+
+        // Clean up
+        (new BcFolder($testPath))->delete();
+    }
+
+    /**
+     * test find
+     * matching files
+     */
+    public function testFindReturnsMatchingFiles()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
+
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+        file_put_contents($testPath . '/test_file.txt', 'Test file 3');
+
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find('test_file.txt');
+
+        //check
+        $this->assertCount(1, $result);
+        $this->assertContains('test_file.txt', $result);
+
+        //cleanup
+        (new BcFolder($testPath))->delete();
+    }
+
+    /**
+     * test find
+     * no matching files
+     */
+    public function testFindReturnsNoFilesForNonMatchingPattern()
+    {
+        //create a test folder
+        $testPath = TMP_TESTS . 'test';
+        (new BcFolder($testPath))->create();
+
+        //create some test files
+        file_put_contents($testPath . '/file1.txt', 'Test file 1');
+        file_put_contents($testPath . '/file2.txt', 'Test file 2');
+
+        $BcFolder = new BcFolder($testPath);
+        $result = $BcFolder->find('non_existent_file.txt');
+
+        //check
+        $this->assertCount(0, $result);
+
+        // Clean up
+        (new BcFolder($testPath))->delete();
+    }
 }

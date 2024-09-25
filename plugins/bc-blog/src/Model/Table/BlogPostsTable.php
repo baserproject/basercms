@@ -135,7 +135,7 @@ class BlogPostsTable extends BlogAppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', 'タイトルは255文字以内で入力してください。'))
-            ->requirePresence('title', 'update', __d('baser_core', 'タイトルを入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
             ->scalar('content')
@@ -196,9 +196,11 @@ class BlogPostsTable extends BlogAppTable
                     'message' => __d('baser_core', '投稿日の形式が不正です。')
                 ]
             ])
+            ->requirePresence('posted', 'create', __d('baser_core', '投稿日を入力してください。'))
             ->notEmptyDateTime('posted', __d('baser_core', '投稿日を入力してください。'));;
         $validator
             ->integer('user_id')
+            ->requirePresence('user_id', 'create', __d('baser_core', '投稿者を選択してください。'))
             ->notEmptyString('user_id', __d('baser_core', '投稿者を選択してください。'));
         $validator
             ->allowEmptyString('eye_catch')
