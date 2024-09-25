@@ -19,6 +19,7 @@ use BaserCore\Service\Front\BcFrontContentsService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
+use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
@@ -238,10 +239,17 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         $customContent = $this->ContentsService->get($request->getParam('entityId'));
         $controller->set($this->getViewVarsForView($customContent, $entryId, true));
         $customEntry = $controller->viewBuilder()->getVar('customEntry');
+
+        if (!$this->EntriesService->CustomEntries->hasBehavior('BaserCore.BcUpload')) {
+            BcCcFileUtil::setupUploader($customContent->custom_table_id);
+        }
+//        $events = BcUtil::offEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal');
         $entity = $this->EntriesService->CustomEntries->patchEntity(
-            $customEntry?? $this->EntriesService->CustomEntries->newEmptyEntity(),
-            $request->getData()
+            $customEntry ?? $this->EntriesService->CustomEntries->newEmptyEntity(),
+            $this->EntriesService->CustomEntries->saveTmpFiles($request->getData(), mt_rand(0, 99999999))->toArray()
         );
+//        BcUtil::onEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal', $events);
+
         $entity = $this->EntriesService->CustomEntries->decodeRow($entity);
         $controller->set(['customEntry' => $entity]);
 
