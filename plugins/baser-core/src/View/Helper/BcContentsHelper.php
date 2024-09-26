@@ -186,6 +186,7 @@ class BcContentsHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getExistsTitles()
     {

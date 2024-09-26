@@ -102,6 +102,17 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
+     * test _getExistsTitles
+     */
+    public function test_getExistsTitles()
+    {
+        $rs = $this->execPrivateMethod($this->BcContents, '_getExistsTitles', []);
+
+        $this->assertEquals('サイトID3のフォルダ', $rs["BaserCore.ContentFolder"]);
+        $this->assertEquals('サイトID3の固定ページ3', $rs["BaserCore.Page"]);
+    }
+
+    /**
      * ページリストを取得する
      *
      * @param int $pageCategoryId カテゴリID
