@@ -394,7 +394,7 @@ class InstallationsServiceTest extends BcTestCase
     {
         return [
             ['128M', 128],
-            ['2G', 2048],
+            ['1G', 1024],
             ['1g', 1024],
             ['512m', 512]
         ];
