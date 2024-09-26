@@ -453,4 +453,19 @@ class PermissionGroupsServiceTest extends BcTestCase
         Configure::delete('permission');
         $this->assertCount(count($settings), $data);
     }
+
+    /**
+     * Test create
+     */
+    public function testCreate(): void
+    {
+        $data = $this->PermissionGroups->create([
+            'name' => 'name test',
+            'type' => 'super',
+            'plugin' => 'BcSample'
+        ]);
+        $this->assertEquals('name test', $data->name);
+        $this->assertEquals('super', $data->type);
+        $this->assertEquals('BcSample', $data->plugin);
+    }
 }
