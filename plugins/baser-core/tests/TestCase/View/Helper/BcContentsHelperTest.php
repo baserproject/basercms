@@ -91,14 +91,16 @@ class BcContentsHelperTest extends BcTestCase
         $this->BcContents->setUp();
         $result = $this->BcContents->getConfig('items');
         $this->assertNull($result);
+
         // $itemsがある場合
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new BcAdminAppView($this->getRequest('/'));
+        $View = new BcAdminAppView($this->loginAdmin($this->getRequest('/')));
         $View->set('contentsItems', BcUtil::getContentsItem());
         $this->BcContents = new BcContentsHelper($View);
         $this->BcContents->setUp();
 
-
+        $result = $this->BcContents->getConfig('items');
+        $this->assertNotNull($result);
+        $this->assertEquals('無所属コンテンツ', $result["Default"]["title"]);
     }
 
     /**

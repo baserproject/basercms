@@ -89,6 +89,7 @@ class BcContentsHelper extends Helper
      * セットアップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup()
     {
