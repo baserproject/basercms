@@ -43,6 +43,7 @@ class BcLang extends BcAbstractDetector
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _setConfig(array $config)
     {
@@ -55,6 +56,7 @@ class BcLang extends BcAbstractDetector
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getDefaultConfig()
     {
@@ -69,6 +71,7 @@ class BcLang extends BcAbstractDetector
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDetectorRegex()
     {
@@ -82,6 +85,7 @@ class BcLang extends BcAbstractDetector
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isMatchDecisionKey()
     {

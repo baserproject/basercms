@@ -501,18 +501,10 @@ class ContentsService implements ContentsServiceInterface
     public function hardDelete($id, $enableTree = false): bool
     {
         $content = $this->Contents->find()->where(['id' => $id])->first();
-        if ($content && empty($content->deleted_date)) {
-            $this->delete($content->id);
+        if (!$content) {
+            $content = $this->getTrash($id);
         }
-        $content = $this->getTrash($id);
-        // 2022/10/20 ryuring
-        // 原因不明の下記のエラーが出てしまったが、sleep() を実行する事で回避できた。根本的な解決に至らず
-        // デバッガで１行ずつステップ実行すると成功したため sleep() で回避できることに気づいた
-        // Cannot commit transaction - rollback() has been already called in the nested transaction
-        sleep(1);
-        $this->Contents->Behaviors()->unload('Tree');
         $result = $this->Contents->hardDelete($content);
-        $this->Contents->Behaviors()->load('Tree');
         return $result;
     }
 
@@ -972,19 +964,6 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     *
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isTreeModifiedByAnotherUser($listDisplayed)
-    {
-        $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-        return $siteConfig->isChangedContentsSortLastModified($listDisplayed);
-    }
-
-    /**
      * コンテンツを移動する
      *
      * 基本的に targetId の上に移動する前提となる
@@ -1035,11 +1014,6 @@ class ContentsService implements ContentsServiceInterface
         }
         // オフセットを元に移動
         $result = $this->Contents->moveOffset($origin['id'], $offset);
-        if ($result && $origin['parentId'] === $target['parentId']) {
-            // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
-            $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-            $siteConfig->updateContentsSortLastModified();
-        }
         if ($result) $this->saveSearchIndex($origin['id']);
         return $result;
     }

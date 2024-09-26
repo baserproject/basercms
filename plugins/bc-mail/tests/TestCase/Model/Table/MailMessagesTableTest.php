@@ -19,9 +19,11 @@ use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Test\TestCase\Model\Array;
 use BcMail\Test\TestCase\Model\ClassRegistry;
+use Cake\Core\Exception\CakeException;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use TypeError;
 
 /**
  * Class MailMessageTest
@@ -322,65 +324,35 @@ class MailMessagesTableTest extends BcTestCase
 
     /**
      * 受信メッセージの内容を表示状態に変換する
-     *
-     * @param int $id
-     * @param array $messages
-     * @return array
+     * test convertMessageToCsv
      */
     public function testConvertMessageToCsv()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // Set up the mail fields
+        $this->MailMessage->mailFields = [
+            (object)['field_name' => 'image', 'name' => 'Image', 'type' => 'file'],
+            (object)['field_name' => 'description', 'name' => 'Description', 'type' => 'text'],
+        ];
 
+        // Set up the messages
         $messages = [
-            ['MailMessage' => [
-                'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]],
-            ['MailMessage' => [
-                'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
-                'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
-                'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
-                'tel_2' => 'v9', 'tel_3' => 'v10', 'zip' => 'v11',
-                'address_1' => 'v12', 'address_2' => 'v13', 'address_3' => 'v14',
-                'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
-                'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
-                'modified' => 'v21',
-            ]]
+            new Entity(['id' => 1, 'image' => 'image1.jpg', 'description' => 'Test description 1', 'created' => '2023-01-01', 'modified' => '2023-01-02']),
+            new Entity(['id' => 2, 'image' => 'image2.jpg', 'description' => 'Test description 2', 'created' => '2023-01-03', 'modified' => '2023-01-04']),
         ];
 
-        $expected = [
-            0 => [
-                'MailMessage' => [
-                    'NO' => 1, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-                ]
-            ],
-            1 => [
-                'MailMessage' => [
-                    'NO' => 2, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
-                    'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
-                    'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
-                    'tel_1 (電話番号１)' => 'v8', 'tel_2 (電話番号２)' => 'v9', 'tel_3 (電話番号３)' => 'v10',
-                    'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
-                    'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
-                    'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-                ]
-            ]
-        ];
+        $result = $this->MailMessage->convertMessageToCsv($messages);
 
-        $result = $this->MailMessage->convertMessageToCsv(1, $messages);
-        $this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
+        // Check the result of the conversion to CSV 1
+        $this->assertEquals('image1.jpg', $result[0]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 1', $result[0]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-01', $result[0]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-02', $result[0]['MailMessage']['更新日']);
+
+        // Check the result of the conversion to CSV 2
+        $this->assertEquals('image2.jpg', $result[1]['MailMessage']['image (Image)']);
+        $this->assertEquals(' Test description 2', $result[1]['MailMessage']['description (Description)']);
+        $this->assertEquals('2023-01-03', $result[1]['MailMessage']['作成日']);
+        $this->assertEquals('2023-01-04', $result[1]['MailMessage']['更新日']);
     }
 
     /**
@@ -508,5 +480,152 @@ class MailMessagesTableTest extends BcTestCase
         $result = $this->MailMessage->createFullTableName($mailContentId);
         $expected = 'prefix_mail_message_5';
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test createTableName
+     * @param $mailContentId
+     * @param $expected
+     * @param bool $expectException
+     * @dataProvider createTableNameDataProvider
+     */
+    public function test_createTableName($mailContentId, $expected, $expectException = false)
+    {
+        if ($expectException) {
+            $this->expectException(TypeError::class);
+        }
+
+        $result = $this->MailMessage->createTableName($mailContentId);
+
+        if (!$expectException) {
+            $this->assertEquals($expected, $result);
+        }
+    }
+
+    public static function createTableNameDataProvider()
+    {
+        return [
+            [1, 'mail_message_1'],
+            [0, 'mail_message_0'],
+            [-1, 'mail_message_-1'],
+            ['2', 'mail_message_2'],
+            ['abc', null, true],
+            ['', null, true],
+            [null, null, true],
+            [true, 'mail_message_1'],
+            [false, 'mail_message_0'],
+        ];
+    }
+
+    /**
+     * test setUseTable
+     */
+    public function test_setUseTable()
+    {
+        $mailContentId = 1;
+        $this->MailMessage->setUseTable($mailContentId);
+
+        $actualTableName = $this->MailMessage->getTable();
+        $this->assertEquals('mail_message_1', $actualTableName);
+    }
+
+    /**
+     * test convertDatasToMail
+     */
+    public function test_convertDatasToMail()
+    {
+        //mailFields
+        $mailFields = [
+            (object)[
+                'field_name' => 'name',
+                'before_attachment' => '<b>Before</b> Attachment',
+                'after_attachment' => 'After<br />Attachment',
+                'head' => '<br />Head',
+                'no_send' => false,
+                'type' => 'text'
+            ],
+            (object)[
+                'field_name' => 'password',
+                'before_attachment' => '',
+                'after_attachment' => '',
+                'head' => '',
+                'no_send' => false,
+                'type' => 'password'
+            ],
+            (object)[
+                'field_name' => 'hobbies',
+                'before_attachment' => '',
+                'after_attachment' => '',
+                'head' => '',
+                'no_send' => false,
+                'type' => 'multi_check'
+            ]
+        ];
+
+        // message
+        $message = new \stdClass();
+        $message->name = 'John Doe';
+        $message->password = 'secret123';
+        $message->hobbies = 'Reading|Writing';
+
+        // mailContent
+        $mailContent = new \stdClass();
+        $mailContent->subject_user = 'Hello, {$name}';
+        $mailContent->subject_admin = 'New User: {$name}';
+
+        $options = [
+            'maskedPasswords' => [
+                'password' => '********'
+            ]
+        ];
+
+        $data = [
+            'mailFields' => $mailFields,
+            'message' => $message,
+            'mailContent' => $mailContent,
+        ];
+
+        $result = $this->MailMessage->convertDatasToMail($data, $options);
+
+        // Expected
+        $expectedData = [
+            'mailFields' => [
+                (object)[
+                    'field_name' => 'name',
+                    'before_attachment' => 'Before Attachment',
+                    'after_attachment' => "After\nAttachment",
+                    'head' => 'Head',
+                    'no_send' => false,
+                    'type' => 'text'
+                ],
+                (object)[
+                    'field_name' => 'password',
+                    'before_attachment' => '',
+                    'after_attachment' => '',
+                    'head' => '',
+                    'no_send' => false,
+                    'type' => 'password'
+                ],
+                (object)[
+                    'field_name' => 'hobbies',
+                    'before_attachment' => '',
+                    'after_attachment' => '',
+                    'head' => '',
+                    'no_send' => false,
+                    'type' => 'multi_check'
+                ]
+            ],
+            'message' => (object)[
+                'name' => 'John Doe',
+                'password' => '********',
+                'hobbies' => ['Reading', 'Writing']
+            ],
+            'mailContent' => (object)[
+                'subject_user' => 'Hello, John Doe',
+                'subject_admin' => 'New User: John Doe'
+            ]
+        ];
+
+        $this->assertEquals($expectedData, $result);
     }
 }
