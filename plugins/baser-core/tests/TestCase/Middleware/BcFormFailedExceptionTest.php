@@ -26,7 +26,7 @@ class BcFormFailedExceptionTest extends BcTestCase
      */
     public function testGetForm(): void
     {
-        $exception = $this->BcFormFailedException->getForm();
-        $this->assertEquals($this->form, $exception);
+        $result = $this->BcFormFailedException->getForm();
+        $this->assertEquals($this->form, $result);
     }
 }
