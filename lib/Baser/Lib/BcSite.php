@@ -173,7 +173,7 @@ class BcSite
 			$request = new CakeRequest();
 		}
 		$url = $request->url;
-		$sites = self::findAll();
+		$sites = self::findAll(true);
 		if (!$sites) {
 			return null;
 		}
@@ -292,7 +292,7 @@ class BcSite
 	 *
 	 * @return BcSite[]
 	 */
-	public static function findAll()
+	public static function findAll($reversed = false)
 	{
 		if (!BC_INSTALLED) {
 			return [];
@@ -306,7 +306,17 @@ class BcSite
 		} catch (Exception $e) {
 			return [];
 		}
-		$sites = $Site->find('all', ['recursive' => -1]);
+		if($reversed){
+			$order = [
+				'Site.domain_type' => 'desc'
+			];
+		} else {
+			$order = [];
+		}
+		$sites = $Site->find('all', [
+			'recursive' => -1,
+			'order' => $order
+		]);
 		array_unshift($sites, $Site->getRootMain());
 		self::$_sites = [];
 		foreach($sites as $site) {
