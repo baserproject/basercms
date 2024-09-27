@@ -459,7 +459,13 @@ class PermissionGroupsServiceTest extends BcTestCase
      */
     public function test_delete(): void
     {
-        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        PermissionGroupFactory::make([
+            'id' => 1,
+            'name' => 'コンテンツフォルダ管理',
+            'type' => 'Admin',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ])->persist();
 
         $data = $this->PermissionGroups->get(1);
         $result = $this->PermissionGroups->delete($data->id);
