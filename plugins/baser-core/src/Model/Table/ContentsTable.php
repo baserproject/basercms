@@ -1212,28 +1212,28 @@ class ContentsTable extends AppTable
         ], $options);
         $conditions = [
             ['OR' => [
-                ['Content.id' => $id],
-                ['Content.main_site_content_id' => $id]
+                ['Contents.id' => $id],
+                ['Contents.main_site_content_id' => $id]
             ]],
             ['OR' => [
-                ['Site.status' => true],
-                ['Site.status' => null]    // ルートメインサイト
+                ['Sites.status' => true],
+                ['Sites.status IS' => null]    // ルートメインサイト
             ]]
         ];
         if ($options['excludeIds']) {
             if (count($options['excludeIds']) == 1) {
                 $options['excludeIds'] = $options['excludeIds'][0];
             }
-            $conditions['Content.site_id <>'] = $options['excludeIds'];
+            $conditions['Contents.site_id <>'] = $options['excludeIds'];
         }
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
         $contents = $this->find('all',
         conditions: $conditions,
-        order: ['Content.id'],
-        recursive: 0);
+        order: ['Contents.id'],
+        recursive: 0)->contain('Sites')->toArray();
         $mainSite = $this->Sites->getRootMain();
         foreach($contents as $key => $content) {
-            if ($content['Content']['site_id'] == 0) {
+            if ($content->site_id == 0) {
                 $contents[$key]['Site'] = $mainSite;
             }
         }

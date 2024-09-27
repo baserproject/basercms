@@ -2511,6 +2511,7 @@ class BcBaserHelper extends Helper
      * @param int $id コンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getRelatedSiteLinks($id = null, $excludeIds = [])
     {

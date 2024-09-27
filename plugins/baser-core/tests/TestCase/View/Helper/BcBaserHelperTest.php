@@ -2040,12 +2040,17 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * @return void
+     * test getRelatedSiteLinks
      */
     public function testGetRelatedSiteLinks()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertMatchesRegularExpression('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks());
+        SiteFactory::make(['id' => 1])->persist();
+        SiteFactory::make(['id' => 2])->persist();
+        ContentFactory::make(['site_id' => 1])->persist();
+        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1])->persist();
+        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1])->persist();
+
+        $this->assertMatchesRegularExpression('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks(1));
     }
 
     /**

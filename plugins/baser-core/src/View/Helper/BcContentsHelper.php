@@ -391,7 +391,7 @@ class BcContentsHelper extends Helper
         $options = array_merge([
             'excludeIds' => []
         ], $options);
-        $this->_Contents->unbindModel(['belongsTo' => ['User']]);
+
         if (!$id) {
             if (!empty($this->request->getAttribute('currentContent'))) {
                 $content = $this->request->getAttribute('currentContent');
@@ -423,9 +423,9 @@ class BcContentsHelper extends Helper
         if ($contents) {
             foreach($contents as $content) {
                 $urls[] = [
-                    'prefix' => $content['Site']['name'],
-                    'name' => $content['Site']['display_name'],
-                    'url' => $content['Content']['url']
+                    'prefix' => $content->site->name,
+                    'name' => $content->site->display_name,
+                    'url' => $content->url
                 ];
             }
         }
