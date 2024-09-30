@@ -324,6 +324,7 @@ class BcContentsHelper extends Helper
      * @return EntityInterface|array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getParent($id = null, $direct = true)
     {
