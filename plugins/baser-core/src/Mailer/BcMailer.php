@@ -105,6 +105,7 @@ class BcMailer extends Mailer
      * @return string
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function getPlugin(): ?string
     {
