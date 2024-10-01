@@ -76,6 +76,9 @@ class BcPluginUtil
      * テーマかどうかを判定する
      * @param string $name
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isTheme(string $name): bool
     {
