@@ -315,4 +315,22 @@ class AppTableTest extends BcTestCase
         $this->assertEquals('unittest_plugin', $this->App->addPrefix('plugin'));
     }
 
+    /**
+     * test setTable
+     */
+    public function testSetTable()
+    {
+        $this->App->setTable('plugin');
+        $this->assertEquals('plugin', $this->App->getTable());
+
+        //add prefix
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->App->setTable('plugin');
+        $this->assertEquals('unittest_plugin', $this->App->getTable());
+    }
+
 }
