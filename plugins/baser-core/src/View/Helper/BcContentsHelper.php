@@ -440,6 +440,7 @@ class BcContentsHelper extends Helper
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
