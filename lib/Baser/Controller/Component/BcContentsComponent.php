@@ -242,7 +242,13 @@ class BcContentsComponent extends Component
 			if (empty($controller->request->query['preview'])) {
 				// @deprecated 5.0.0 since 4.0.0
 				//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
-				if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
+				if ($this->useViewCache &&
+					!BcUtil::loginUser('admin') &&
+					!isConsole() &&
+					!empty($controller->request->params['Content']) &&
+					$controller->request->is('get') &&
+					!$controller->request->is('ajax')
+				) {
 					$controller->helpers[] = 'BcCache';
 					// php 8系では'+5 min'など、string型で指定されていた場合、5分後と判定されない問題を解消
 					$cacheTime = $controller->Content->getCacheTime($controller->request->params['Content']);
