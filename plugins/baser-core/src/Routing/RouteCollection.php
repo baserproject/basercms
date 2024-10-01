@@ -366,6 +366,7 @@ class RouteCollection
      * @param bool $merge Whether to merge with or override existing extensions.
      *   Defaults to `true`.
      * @return $this
+     * @unitTest
      */
     public function setExtensions(array $extensions, bool $merge = true)
     {

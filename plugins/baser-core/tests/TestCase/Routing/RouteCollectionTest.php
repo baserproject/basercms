@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Routing;
 use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
 use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Routing\RouteCollection;
 use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -34,6 +35,7 @@ class RouteCollectionTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->RouteCollection = new RouteCollection();
     }
 
     /**
@@ -66,6 +68,32 @@ class RouteCollectionTest extends BcTestCase
             'action' => 'view',
             'entityId' => 4
         ]));
+    }
+
+    /**
+     * @dataProvider extensionsProvider
+     */
+    public function testSetExtensions(array $initial, array $new, bool $merge, array $expected)
+    {
+        // Set initial extensions
+        $this->RouteCollection->setExtensions($initial);
+
+        // SetExtensions with new data
+        $this->RouteCollection->setExtensions($new, $merge);
+        $expected = array_unique($expected);
+        $actual = array_values( $this->RouteCollection->getExtensions());
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public static function extensionsProvider()
+    {
+        return [
+            ['initial' => ['jpg', 'png'], 'new' => ['png', 'gif'], 'merge' => true, 'expected' => ['jpg', 'png', 'gif']],
+            ['initial' => ['jpg', 'png'], 'new' => ['gif'],'merge' => false, 'expected' => ['gif']],
+            ['initial' => [], 'new' => ['gif', 'jpg'], 'merge' => true, 'expected' => ['gif', 'jpg']],
+            ['initial' => ['jpg'], 'new' => [], 'merge' => true, 'expected' => ['jpg']],
+        ];
     }
 
 }
