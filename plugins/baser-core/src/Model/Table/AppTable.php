@@ -267,6 +267,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sortup($id, $conditions)
     {
