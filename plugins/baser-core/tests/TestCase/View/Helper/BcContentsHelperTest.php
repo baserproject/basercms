@@ -272,6 +272,33 @@ class BcContentsHelperTest extends BcTestCase
      */
 
     /**
+     * test getContentFolderList
+     */
+    public function testGetContentFolderList()
+    {
+        $result = $this->BcContents->getContentFolderList(1);
+        $this->assertEquals(
+            [
+                1 => "baserCMSサンプル",
+                6 => "　　　└サービス",
+                18 => '　　　└ツリー階層削除用フォルダー(親)',
+                19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
+                20 => '　　　　　　　　　└ツリー階層削除用フォルダー(孫)',
+                21 => '　　　└testEdit',
+            ],
+            $result);
+
+        $result = $this->BcContents->getContentFolderList(1, ['conditions' => ['site_root' => false]]);
+        $this->assertEquals([
+            6 => 'サービス',
+            18 => 'ツリー階層削除用フォルダー(親)',
+            19 => '　　　└ツリー階層削除用フォルダー(子)',
+            20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
+            21 => 'testEdit',
+        ], $result);
+    }
+
+    /**
      * 現在のURLを元に指定したサブサイトのURLを取得する
      * getCurrentRelatedSiteUrl
      * フロントエンド専用メソッド
