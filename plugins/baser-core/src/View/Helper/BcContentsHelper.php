@@ -497,6 +497,7 @@ class BcContentsHelper extends Helper
      * @return array|string|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentByEntityId($id, $contentType, $field = null)
     {

@@ -520,7 +520,6 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testgetContentByEntityId($expect, $id, $contentType, $field)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getContentByEntityId($id, $contentType, $field);
         $this->assertEquals($expect, $result);
     }
@@ -529,12 +528,12 @@ class BcContentsHelperTest extends BcTestCase
     {
         return [
             // 存在するID（0~2）を指定した場合
-            ['/news/', '1', 'BlogContent', 'url'],
-            ['/contact/', '1', 'MailContent', 'url'],
-            ['/index', '1', 'Page', 'url'],
+            ['/news/', '31', 'BlogContent', 'url'],
+            ['/contact/', '30', 'MailContent', 'url'],
+            ['/index', '2', 'Page', 'url'],
             ['/service/', '4', 'ContentFolder', 'url'],
-            ['/service/sub_service/sub_service_1', '14', 'Page', 'url'],
-            ['サービス２', '12', 'Page', 'title'],
+            ['/service/service1', '5', 'Page', 'url'],
+            ['サービス２', '6', 'Page', 'title'],
             // 存在しないIDを指定した場合
             [false, '5', 'BlogContent', 'name'],
             //指定がおかしい場合
