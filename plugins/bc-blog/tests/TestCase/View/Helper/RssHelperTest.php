@@ -201,4 +201,13 @@ class RssHelperTest extends BcTestCase
         $this->assertStringContainsString('<description>Channel Description', $result);
         $this->assertStringContainsString('<customElement>Custom Value', $result);
     }
+
+    /**
+     * test implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $result = $this->RssHelper->implementedEvents();
+        $this->assertEquals([], $result);
+    }
 }
