@@ -68,6 +68,7 @@ class BcFormFailedException extends CakeException {
      * @return ValidatorAwareInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getForm(): ValidatorAwareInterface
     {

@@ -160,4 +160,24 @@ class UserGroupsServiceTest extends BcTestCase
 
         $this->assertEquals($expected, end($rs));
     }
+
+    /**
+     * test getControlSource
+     * @param $field
+     * @param $expected
+     * @dataProvider controlSourceDataProvider
+     */
+    public function test_getControlSource($field, $expected)
+    {
+        $result = $this->UserGroups->getControlSource($field);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function controlSourceDataProvider()
+    {
+        return [
+            ['auth_prefix', ['Admin' => '管理システム', 'Api/Admin' => 'Admin Web API']],
+            ['other_field', []]
+        ];
+    }
 }

@@ -169,6 +169,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isInstall(ServerRequestInterface $request)
     {

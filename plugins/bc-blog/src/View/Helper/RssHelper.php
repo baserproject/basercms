@@ -378,8 +378,10 @@ class RssHelper extends Helper
 
     /**
      * Event listeners.
-     *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {
