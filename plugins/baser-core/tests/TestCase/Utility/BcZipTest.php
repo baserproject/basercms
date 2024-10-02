@@ -21,6 +21,14 @@ class BcZipTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->assertNotFalse($this->BcZip->Zip);
+    }
+
+    /**
      * test create
      */
     public function testCreate()

@@ -46,6 +46,7 @@ class BcZip
      * BcZip constructor.
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
