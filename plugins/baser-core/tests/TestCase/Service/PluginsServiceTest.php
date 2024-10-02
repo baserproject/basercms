@@ -665,4 +665,48 @@ EOF;
         rename($versionBakPath, $versionPath);
         unlink($rssPath);
     }
+
+    /**
+     * test getAvailableCoreVersion
+     * @param bool $useUpdateNotice
+     * @param string $expectedVersion
+     * @dataProvider availableCoreVersionDataProvider
+     */
+    public function testGetAvailableCoreVersion($useUpdateNotice, $expectedVersion)
+    {
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        $versionBakPath = Plugin::path('BaserCore') . 'VERSION.bak.txt';
+        $rssPath = WWW_ROOT . 'baser-core.rss';
+
+        // Backup the current version file
+        copy($versionPath, $versionBakPath);
+        // Set the update notice configuration
+        SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => $useUpdateNotice])->persist();
+        // Update the core release URL
+        Configure::write('BcApp.coreReleaseUrl', $rssPath);
+        // Write the version to the version file
+        $file = new BcFile($versionPath);
+        $file->write('100.0.0');
+        // Generate the RSS feed
+        $this->createReleaseRss(['5.0.0', '5.0.1', '5.0.0']);
+        // Clear the cache
+        Cache::delete('coreReleaseInfo', '_bc_update_');
+
+        $rs = $this->Plugins->getAvailableCoreVersion();
+        $this->assertEquals($expectedVersion, $rs);
+
+        // Restore the files and clean up
+        rename($versionBakPath, $versionPath);
+        unlink($rssPath);
+    }
+
+    public static function availableCoreVersionDataProvider()
+    {
+        return [
+            //use_update_notice enabled
+            [true, '5.0.0'],
+            //use_update_notice disabled
+            [false, '100.0.0'],
+        ];
+    }
 }

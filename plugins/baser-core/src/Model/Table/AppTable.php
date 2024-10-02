@@ -67,6 +67,7 @@ class AppTable extends Table
      * @return AppTable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setTable(string $table)
     {

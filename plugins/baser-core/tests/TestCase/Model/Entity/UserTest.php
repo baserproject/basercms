@@ -213,4 +213,20 @@ class UserTest extends BcTestCase
         //status = true && isSuper = false && isAdmin = true場合、return false
         $this->assertFalse($this->User->isEnableLoginAgent($this->User));
     }
+
+    /**
+     * test isAddableToAdminGroup
+     */
+    public function test_isAddableToAdminGroup()
+    {
+        //user is a superuser
+        Configure::write('BcApp.superUserId', 1);
+        $user = new User();
+        $user->id = 1;
+        $this->assertTrue($user->isAddableToAdminGroup());
+
+        //user is not a superuser
+        $user->id = 2;
+        $this->assertFalse($user->isAddableToAdminGroup());
+    }
 }
