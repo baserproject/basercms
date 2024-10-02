@@ -366,9 +366,7 @@ class InstallationsServiceTest extends BcTestCase
         $dirs = ['blog', 'editor', 'theme_configs'];
         foreach ($dirs as $dir) {
             $path = WWW_ROOT . 'files' . DS . $dir;
-            if (!is_dir($path)) {
-                mkdir($path, 0777, true);
-            } else {
+            if (is_dir($path)) {
                 // Backup folder if exists
                 rename($path, $backupPath . $dir);
             }
