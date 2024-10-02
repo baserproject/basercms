@@ -4,6 +4,7 @@ namespace BaserCore\Test\TestCase\Command;
 
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Console\ConsoleOptionParser;
 use BaserCore\Utility\BcFolder;
 use Cake\Core\Configure;
 
@@ -43,6 +44,28 @@ class CreateReleaseCommandTest extends BcTestCase
         if (file_exists($this->zipFile)) {
             unlink($this->zipFile);
         }
+    }
+
+    /**
+     * test buildOptionParser
+     * @return void
+     */
+    public function testBuildOptionParser()
+    {
+        $parser = new ConsoleOptionParser('create_release');
+        $result = $this->execPrivateMethod($this->CreateReleaseCommand, 'buildOptionParser', [$parser]);
+
+        $this->assertInstanceOf(ConsoleOptionParser::class, $result);
+
+        $arguments = $parser->arguments();
+        $this->assertEquals('version', $arguments[0]->name());
+        $this->assertStringContainsString('リリースバージョン', $arguments[0]->help());
+        $this->assertTrue($arguments[0]->isRequired());
+
+        $options = $parser->options();
+        $this->assertArrayHasKey('branch', $options);
+        $this->assertStringContainsString('クローン対象ブランチ', $options['branch']->help());
+        $this->assertEquals('master', $options['branch']->defaultValue());
     }
 
 
