@@ -45,6 +45,7 @@ class BcFormFailedException extends CakeException {
      * @param \Throwable|null $previous
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(ValidatorAwareInterface $form, $message, ?int $code = null, ?Throwable $previous = null)
     {
