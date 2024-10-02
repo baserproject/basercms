@@ -22,6 +22,7 @@ use BcMail\Test\TestCase\Model\ClassRegistry;
 use Cake\Core\Exception\CakeException;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\Validation\Validator;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use TypeError;
 
@@ -628,4 +629,41 @@ class MailMessagesTableTest extends BcTestCase
 
         $this->assertEquals($expectedData, $result);
     }
+
+    /**
+     * test validationDefault
+     * @param $existingValidator
+     * @param $expectedField
+     * @dataProvider validationDefaultDataProvider
+     */
+    public function testValidationDefault($existingValidator, $expectedField)
+    {
+        if ($existingValidator) {
+            $validator = new Validator();
+            $validator->requirePresence($expectedField);
+            $this->MailMessage->setValidator('MailMessages', $validator);
+        }
+
+        $inputValidator = new Validator();
+        $inputValidator->requirePresence($expectedField);
+
+        $result = $this->MailMessage->validationDefault($inputValidator);
+
+        $this->assertTrue($result->hasField($expectedField));
+
+        $fieldData = $result->field($expectedField);
+        $this->assertTrue($fieldData->isPresenceRequired());
+        $this->assertFalse($fieldData->isEmptyAllowed());
+    }
+
+    public static function validationDefaultDataProvider()
+    {
+        return [
+            //case existing validator
+            [true, 'test_field'],
+            //case not existing validator
+            [false, 'input_field']
+        ];
+    }
+
 }
