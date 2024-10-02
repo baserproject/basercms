@@ -453,4 +453,19 @@ class PermissionGroupsServiceTest extends BcTestCase
         Configure::delete('permission');
         $this->assertCount(count($settings), $data);
     }
+
+    /**
+     * Test delete
+     */
+    public function test_delete(): void
+    {
+        PermissionGroupFactory::make(['id' => 1])->persist();
+
+        $data = $this->PermissionGroups->get(1);
+        $result = $this->PermissionGroups->delete($data->id);
+        $this->assertTrue($result);
+
+        $this->expectException(RecordNotFoundException::class);
+        $this->PermissionGroups->get(1);
+    }
 }

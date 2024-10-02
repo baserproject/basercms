@@ -852,6 +852,7 @@ class PluginsService implements PluginsServiceInterface
      * @return bool|mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAvailableCoreVersion()
     {

@@ -114,6 +114,7 @@ class User extends EntityAlias
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAddableToAdminGroup(): bool
     {
