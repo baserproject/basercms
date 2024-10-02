@@ -19,6 +19,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 
@@ -261,4 +262,27 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $this->assertFalse($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
     }
 
+    /**
+     * test isInstall
+     * @param string $controller
+     * @param bool $expected
+     * @dataProvider isInstallProvider
+     */
+    public function test_isInstall($controller, $expected)
+    {
+        $request = new ServerRequest([
+            'params' => ['controller' => $controller]
+        ]);
+
+        $result = $this->BcRequestFilterMiddleware->isInstall($request);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function isInstallProvider()
+    {
+        return [
+            ['Installations', true],
+            ['Users', false],
+        ];
+    }
 }
