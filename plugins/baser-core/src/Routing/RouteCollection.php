@@ -23,7 +23,9 @@ use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
-
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 /**
  * Contains a collection of routes.
  *
@@ -364,8 +366,10 @@ class RouteCollection
      *
      * @param array<string> $extensions The list of extensions to set.
      * @param bool $merge Whether to merge with or override existing extensions.
-     *   Defaults to `true`.
+     * Defaults to `true`.
      * @return $this
+     * @checked
+     * @noTodo
      * @unitTest
      */
     public function setExtensions(array $extensions, bool $merge = true)
