@@ -553,10 +553,11 @@ class BcContentsHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isParentId($id, $parentId)
     {
-        $parentIds = $this->_Contents->find('treeList', valuePath: 'id')->where(['id' => $id])->all()->toArray();
+        $parentIds = $this->_Contents->find('treeList', valuePath: 'parent_id')->where(['id' => $id])->all()->toArray();
         if (!$parentIds) {
             return false;
         }
