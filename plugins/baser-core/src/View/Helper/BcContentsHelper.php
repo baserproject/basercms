@@ -89,6 +89,7 @@ class BcContentsHelper extends Helper
      * セットアップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup()
     {
@@ -186,6 +187,7 @@ class BcContentsHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getExistsTitles()
     {
@@ -440,6 +442,7 @@ class BcContentsHelper extends Helper
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
@@ -494,6 +497,7 @@ class BcContentsHelper extends Helper
      * @return array|string|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentByEntityId($id, $contentType, $field = null)
     {

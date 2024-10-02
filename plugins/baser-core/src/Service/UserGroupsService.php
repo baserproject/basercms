@@ -197,6 +197,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getControlSource(string $field): array
     {

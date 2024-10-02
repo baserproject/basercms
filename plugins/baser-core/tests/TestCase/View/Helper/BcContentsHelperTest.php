@@ -91,14 +91,27 @@ class BcContentsHelperTest extends BcTestCase
         $this->BcContents->setUp();
         $result = $this->BcContents->getConfig('items');
         $this->assertNull($result);
+
         // $itemsがある場合
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new BcAdminAppView($this->getRequest('/'));
+        $View = new BcAdminAppView($this->loginAdmin($this->getRequest('/')));
         $View->set('contentsItems', BcUtil::getContentsItem());
         $this->BcContents = new BcContentsHelper($View);
         $this->BcContents->setUp();
 
+        $result = $this->BcContents->getConfig('items');
+        $this->assertNotNull($result);
+        $this->assertEquals('無所属コンテンツ', $result["Default"]["title"]);
+    }
 
+    /**
+     * test _getExistsTitles
+     */
+    public function test_getExistsTitles()
+    {
+        $rs = $this->execPrivateMethod($this->BcContents, '_getExistsTitles', []);
+
+        $this->assertEquals('サイトID3のフォルダ', $rs["BaserCore.ContentFolder"]);
+        $this->assertEquals('サイトID3の固定ページ3', $rs["BaserCore.Page"]);
     }
 
     /**
@@ -257,6 +270,33 @@ class BcContentsHelperTest extends BcTestCase
      * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
      * }
      */
+
+    /**
+     * test getContentFolderList
+     */
+    public function testGetContentFolderList()
+    {
+        $result = $this->BcContents->getContentFolderList(1);
+        $this->assertEquals(
+            [
+                1 => "baserCMSサンプル",
+                6 => "　　　└サービス",
+                18 => '　　　└ツリー階層削除用フォルダー(親)',
+                19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
+                20 => '　　　　　　　　　└ツリー階層削除用フォルダー(孫)',
+                21 => '　　　└testEdit',
+            ],
+            $result);
+
+        $result = $this->BcContents->getContentFolderList(1, ['conditions' => ['site_root' => false]]);
+        $this->assertEquals([
+            6 => 'サービス',
+            18 => 'ツリー階層削除用フォルダー(親)',
+            19 => '　　　└ツリー階層削除用フォルダー(子)',
+            20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
+            21 => 'testEdit',
+        ], $result);
+    }
 
     /**
      * 現在のURLを元に指定したサブサイトのURLを取得する
@@ -480,7 +520,6 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testgetContentByEntityId($expect, $id, $contentType, $field)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getContentByEntityId($id, $contentType, $field);
         $this->assertEquals($expect, $result);
     }
@@ -489,12 +528,12 @@ class BcContentsHelperTest extends BcTestCase
     {
         return [
             // 存在するID（0~2）を指定した場合
-            ['/news/', '1', 'BlogContent', 'url'],
-            ['/contact/', '1', 'MailContent', 'url'],
-            ['/index', '1', 'Page', 'url'],
+            ['/news/', '31', 'BlogContent', 'url'],
+            ['/contact/', '30', 'MailContent', 'url'],
+            ['/index', '2', 'Page', 'url'],
             ['/service/', '4', 'ContentFolder', 'url'],
-            ['/service/sub_service/sub_service_1', '14', 'Page', 'url'],
-            ['サービス２', '12', 'Page', 'title'],
+            ['/service/service1', '5', 'Page', 'url'],
+            ['サービス２', '6', 'Page', 'title'],
             // 存在しないIDを指定した場合
             [false, '5', 'BlogContent', 'name'],
             //指定がおかしい場合
