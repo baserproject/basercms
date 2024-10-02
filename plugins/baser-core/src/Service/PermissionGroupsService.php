@@ -180,6 +180,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
