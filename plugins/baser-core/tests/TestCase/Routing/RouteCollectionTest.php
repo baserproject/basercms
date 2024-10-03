@@ -81,7 +81,7 @@ class RouteCollectionTest extends BcTestCase
         // SetExtensions with new data
         $this->RouteCollection->setExtensions($new, $merge);
         $expected = array_unique($expected);
-        $actual = array_values( $this->RouteCollection->getExtensions());
+        $actual = array_values($this->RouteCollection->getExtensions());
 
         $this->assertEquals($expected, $actual);
     }
