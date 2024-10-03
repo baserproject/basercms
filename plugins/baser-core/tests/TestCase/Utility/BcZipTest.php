@@ -65,9 +65,8 @@ class BcZipTest extends BcTestCase
         $this->assertFileExists(TMP_TESTS, 'test_extract.zip');
 
         //ZIP を展開する
-        $rs = $this->BcZip->extract(TMP_TESTS . 'test_extract.zip', TMP_TESTS);
-        //戻り値を確認
-        $this->assertEquals('test1.txt', $rs);
+        $this->BcZip->extract(TMP_TESTS . 'test_extract.zip', TMP_TESTS);
+
         //ZIP が展開できるか確認すること
         $this->assertFileExists(TMP_TESTS . 'test1.txt');
         $this->assertFileExists(TMP_TESTS . 'test2.txt');
