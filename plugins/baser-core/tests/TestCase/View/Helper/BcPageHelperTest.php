@@ -70,12 +70,12 @@ class BcPageHelperTest extends BcTestCase
     public function testGetUrl($pageId, $expected)
     {
         //データ生成
-        ContentFactory::make(['url' => '/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 1])->persist();
-        ContentFactory::make(['url' => '/service/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 2])->persist();
-        ContentFactory::make(['url' => '/service/about', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 3])->persist();
-        ContentFactory::make(['url' => '/icons', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 4])->persist();
-        ContentFactory::make(['url' => '/sitemap', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 5])->persist();
-        ContentFactory::make(['url' => '/m/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 6])->persist();
+        ContentFactory::make(['url' => '/index', 'type' => 'Page', 'entity_id' => 1])->persist();
+        ContentFactory::make(['url' => '/service/index', 'type' => 'Page', 'entity_id' => 2])->persist();
+        ContentFactory::make(['url' => '/service/about', 'type' => 'Page', 'entity_id' => 3])->persist();
+        ContentFactory::make(['url' => '/icons', 'type' => 'Page', 'entity_id' => 4])->persist();
+        ContentFactory::make(['url' => '/sitemap', 'type' => 'Page', 'entity_id' => 5])->persist();
+        ContentFactory::make(['url' => '/m/index', 'type' => 'Page', 'entity_id' => 6])->persist();
 
         PageFactory::make(['id' => 1])->persist();
         PageFactory::make(['id' => 2])->persist();
@@ -83,7 +83,6 @@ class BcPageHelperTest extends BcTestCase
         PageFactory::make(['id' => 4])->persist();
         PageFactory::make(['id' => 5])->persist();
         PageFactory::make(['id' => 6])->persist();
-        PageFactory::make(['id' => 7])->persist();
 
         $pageService = $this->getService(PagesServiceInterface::class);
 
