@@ -8,13 +8,9 @@ use BaserCore\TestSuite\BcTestCase;
 
 class PermissionTest extends BcTestCase
 {
-    protected $permissionGroup;
-    protected $permission;
     public function setUp(): void
     {
         parent::setUp();
-        $this->permissionGroup = PermissionGroupFactory::make()->persist();
-        $this->permission = PermissionFactory::make(['permission_group_id' => $this->permissionGroup->id])->persist();
     }
 
     public function tearDown(): void
@@ -30,10 +26,10 @@ class PermissionTest extends BcTestCase
      */
     public function testGetPermissionGroupType($type, $expected)
     {
-        $this->permissionGroup = PermissionGroupFactory::make(['type' => $type])->persist();
-        $this->permission = PermissionFactory::make(['permission_group_id' => $this->permissionGroup->id])->persist();
+        PermissionGroupFactory::make(['id' => 1,'type' => $type])->persist();
+        $permission = PermissionFactory::make(['permission_group_id' => 1])->persist();
 
-        $result = $this->execPrivateMethod($this->permission, '_getPermissionGroupType');
+        $result = $this->execPrivateMethod($permission, '_getPermissionGroupType');
         $this->assertEquals($expected, $result);
     }
 
