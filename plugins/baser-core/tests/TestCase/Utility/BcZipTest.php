@@ -3,6 +3,7 @@
 namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcZip;
 use ZipArchive;
@@ -184,5 +185,40 @@ class BcZipTest extends BcTestCase
         unlink($zipFile);
         $folder = new BcFolder($tempDir);
         $folder->delete();
+    }
+
+    /**
+     * test _extractByCommand
+     */
+    public function test_extractByCommand()
+    {
+        //準備
+        (new BcFolder(TMP_TESTS . 'test'))->create();
+        $path1 = TMP_TESTS . 'test' . DS . 'test1.txt';
+        $path2 = TMP_TESTS . 'test' . DS . 'test2.txt';
+        (new BcFile($path1))->create();
+        (new BcFile($path2))->create();
+        //テストzipファイルを生成
+        $this->BcZip->create(TMP_TESTS . 'test', TMP_TESTS . 'test_extract.zip');
+        //テストzipファイルが生成できるか確認
+        $this->assertFileExists(TMP_TESTS, 'test_extract.zip');
+
+        //ZIP を展開する
+        $rs = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [TMP_TESTS . 'test_extract.zip', TMP_TESTS]);
+        $this->assertTrue($rs);
+        //ZIP が展開できるか確認すること
+        $this->assertFileExists(TMP_TESTS . 'test1.txt');
+        $this->assertFileExists(TMP_TESTS . 'test2.txt');
+
+        //不要なファイルを削除
+        unlink(TMP_TESTS . 'test1.txt');
+        unlink(TMP_TESTS . 'test2.txt');
+        unlink(TMP_TESTS . 'test_extract.zip');
+        (new BcFolder(TMP_TESTS . 'test'))->delete();
+
+        //存在しないファイルを展開する場合、
+        $rs = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [TMP_TESTS . 'test_extract.zip', TMP_TESTS]);
+        //戻り値を確認
+        $this->assertFalse($rs);
     }
 }
