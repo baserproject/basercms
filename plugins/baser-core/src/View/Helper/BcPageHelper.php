@@ -66,6 +66,7 @@ class BcPageHelper extends Helper
      * @return string URL
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUrl($page)
     {
