@@ -27,6 +27,7 @@ use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -467,5 +468,26 @@ class PermissionGroupsServiceTest extends BcTestCase
 
         $this->expectException(RecordNotFoundException::class);
         $this->PermissionGroups->get(1);
+    }
+
+    /**
+     * Test create
+     */
+    public function testCreate(): void
+    {
+        // Test create
+        $postData = ['name' => 'name test', 'type' => 'super', 'plugin' => 'BcSample'];
+
+        $data = $this->PermissionGroups->create($postData);
+
+        $this->assertEquals('name test', $data->name);
+        $this->assertEquals('super', $data->type);
+        $this->assertEquals('BcSample', $data->plugin);
+
+        // Test create with exception
+        $invalidPostData = ['id' => 'test'];
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (id.integer: "The provided value must be an integer")');
+        $this->PermissionGroups->create($invalidPostData);
     }
 }

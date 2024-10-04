@@ -333,4 +333,19 @@ class AppTableTest extends BcTestCase
         $this->assertEquals('unittest_plugin', $this->App->getTable());
     }
 
+    /**
+     * test sortup
+     * @return void
+     */
+    public function testSortup()
+    {
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+
+        $plugins->sortup(2, ['sortFieldName' => 'priority']);
+        $this->assertEquals(1, $plugins->get(2)->priority);
+
+        $this->assertEquals(2, $plugins->get(1)->priority);
+    }
+
 }

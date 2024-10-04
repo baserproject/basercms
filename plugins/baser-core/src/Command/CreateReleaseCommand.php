@@ -161,6 +161,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteExcludeFiles(string $packagePath)
     {
