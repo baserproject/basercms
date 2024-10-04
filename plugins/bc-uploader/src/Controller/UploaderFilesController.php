@@ -34,7 +34,7 @@ class UploaderFilesController extends BcFrontAppController
     public function view_limited_file(UploaderFilesServiceInterface $service, string $filename)
     {
         $display = false;
-        if (BcUtil::loginUser()) {
+        if (BcUtil::isAdminUser()) {
             $display = true;
         } else {
             $conditions = [
