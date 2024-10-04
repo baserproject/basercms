@@ -318,6 +318,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return \Cake\Datasource\EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setSiteName(string $name)
     {
