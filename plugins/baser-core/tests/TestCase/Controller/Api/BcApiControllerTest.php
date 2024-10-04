@@ -21,6 +21,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\View\JsonView;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -45,6 +46,18 @@ class BcApiControllerTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(SiteConfigsScenario::class);
         $this->loadFixtureScenario(LoginStoresScenario::class);
+        $this->Controller = new BcApiController($this->getRequest());
+    }
+
+    /**
+     * Test viewClasses
+     */
+    public function testViewClasses()
+    {
+        $result = $this->Controller->viewClasses();
+        $this->assertIsArray($result);
+
+        $this->assertEquals([JsonView::class], $result);
     }
 
     /**
