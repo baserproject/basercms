@@ -129,7 +129,7 @@ class UtilitiesControllerTest extends BcTestCase
 
         $zipSrcPath = TMP;
 
-        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema', 'BaserCore', 'utf8']);
+        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema', 'BcWidgetArea', 'utf8']);
 
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . 'test.zip';
