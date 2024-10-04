@@ -359,7 +359,8 @@ class AppControllerTest extends BcTestCase
         $output = ob_get_clean();
 
         $response = $this->AppController->getResponse();
-        $this->assertEquals($errorNo, $response);
+
+        $this->assertEquals($errorNo, $response->getStatusCode());
         $this->assertEquals($expectedOutput, $output);
     }
 
