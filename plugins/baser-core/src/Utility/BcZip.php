@@ -63,6 +63,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function extract($source, $target)
     {
