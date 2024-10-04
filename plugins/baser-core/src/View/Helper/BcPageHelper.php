@@ -85,6 +85,7 @@ class BcPageHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPageList($id, $level = null, $options = [])
     {
