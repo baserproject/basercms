@@ -22,12 +22,21 @@ class PermissionTest extends BcTestCase
      * test _getPermissionGroupType
      * @param $type
      * @param $expected
+     * @param null $permissionGroupType
      * @dataProvider permissionGroupDataProvider
      */
-    public function testGetPermissionGroupType($type, $expected)
+    public function testGetPermissionGroupType($type, $expected, $permissionGroupType = null)
     {
-        PermissionGroupFactory::make(['id' => 1,'type' => $type])->persist();
-        $permission = PermissionFactory::make(['permission_group_id' => 1])->persist();
+        if ($type !== null) {
+            PermissionGroupFactory::make(['id' => 1, 'type' => $type])->persist();
+            $permission = PermissionFactory::make(['permission_group_id' => 1])->persist();
+        } else {
+            $permission = PermissionFactory::make(['permission_group_id' => null])->persist();
+        }
+
+        if ($permissionGroupType !== null) {
+           $permission['permission_group_type'] = $permissionGroupType;
+        }
 
         $result = $this->execPrivateMethod($permission, '_getPermissionGroupType');
         $this->assertEquals($expected, $result);
@@ -38,6 +47,7 @@ class PermissionTest extends BcTestCase
         return [
             ['Admin', 'Admin'],
             [null, null],
+            [null, 'GroupType', 'GroupType']
         ];
     }
 
