@@ -115,6 +115,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _extractByCommand($source, $target)
     {
