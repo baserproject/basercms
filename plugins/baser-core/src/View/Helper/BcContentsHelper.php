@@ -326,41 +326,29 @@ class BcContentsHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getParent($id = null, $direct = true)
+    public function getParent(?int $id = null, bool $direct = true): EntityInterface|array|false
     {
         if (!$id && !empty($this->request->getAttribute('currentContent')->id)) {
             $id = $this->request->getAttribute('currentContent')->id;
         }
-        if (!$id) {
-            return false;
-        }
-        $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
+        if (!$id) return false;
+
         if ($direct) {
-            $parents = $this->_Contents->find('path', for: $id)->all()->toArray();
-            if (!isset($parents[count($parents) - 2])) return false;
-            $parent = $parents[count($parents) - 2];
-            if ($parent->site_id === $siteId) {
-                return $parent;
-            } else {
-                return false;
-            }
+            $content = $this->_Contents->find()->where(['Contents.id' => $id])->first();
+            if(!$content) return false;
+            $parent = $this->_Contents->find()->where(['Contents.id' => $content->parent_id])->first();
+            return $parent?: false;
         } else {
-            $parents = $this->_Contents->find('path', for: $id)->all()->toArray();
-            if ($parents) {
-                $result = [];
-                foreach($parents as $parent) {
-                    if ($parent->id !== $id && $parent->site_id === $siteId) {
-                        $result[] = $parent;
-                    }
+            $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
+            $parents = $this->_Contents->find('path', for: $id)->where(['Contents.site_id' => $siteId])->all()->toArray();
+            if(!$parents) return false;
+            $result = [];
+            foreach($parents as $parent) {
+                if ($parent->id !== $id && $parent->site_id === $siteId) {
+                    $result[] = $parent;
                 }
-                if ($result) {
-                    return $result;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
             }
+            return $result?: false;
         }
     }
 
