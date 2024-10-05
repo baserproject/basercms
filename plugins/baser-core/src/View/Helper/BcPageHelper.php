@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Page;
 use BaserCore\Utility\BcUtil;
+use Cake\Datasource\ResultSetDecorator;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -77,17 +78,21 @@ class BcPageHelper extends Helper
     }
 
     /**
-     * ページリストを取得する
+     * 固定ページリストを取得する
      * 戻り値は、固定ページ、または、コンテンツフォルダが対象
      *
-     * @param int $pageCategoryId カテゴリID
-     * @param int $recursive 関連データの階層
+     * @param int $id コンテンツID
+     * @param int $level 階層を指定する場合に階層数を指定
+     * @param array $options オプション
+     *  - `type` : コンテンツタイプ
+     *  - `order` : ソート順（初期値：['Contents.site_id', 'Contents.lft']）
+     *  - `siteId` : サイトID
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getPageList($id, $level = null, $options = [])
+    public function getPageList(int $id, ?int $level = null, array $options = []): ResultSetDecorator
     {
         $options['type'] = 'Page';
         return $this->BcContents->getTree($id, $level, $options);
