@@ -31,6 +31,7 @@ use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * CustomContentFrontService
@@ -240,16 +241,21 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         $customEntry = $controller->viewBuilder()->getVar('customEntry');
 
         BcCcFileUtil::setupUploader($customContent->custom_table_id);
-        $events = BcUtil::offEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal');
 
-        $entity = $this->EntriesService->CustomEntries->patchEntity(
-            $customEntry ?? $this->EntriesService->CustomEntries->newEmptyEntity(),
-            $this->EntriesService->CustomEntries->saveTmpFiles($request->getData(), mt_rand(0, 99999999))->toArray()
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
+
+        $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
+        $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
+
+        $entity = $customEntriesTable->patchEntity(
+            $customEntry ?? $customEntriesTable->newEmptyEntity(),
+            $postEntity
         );
 
-        BcUtil::onEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal', $events);
+        BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
 
-        $entity = $this->EntriesService->CustomEntries->decodeRow($entity);
+        $entity = $customEntriesTable->decodeRow($entity);
         $controller->set(['customEntry' => $entity]);
 
         // テンプレートの変更
