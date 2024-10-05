@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
-use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -64,6 +63,7 @@ class Permission extends Entity
      * @return string|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getPermissionGroupType()
     {
