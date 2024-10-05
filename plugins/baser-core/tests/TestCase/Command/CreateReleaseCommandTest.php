@@ -108,4 +108,42 @@ class CreateReleaseCommandTest extends BcTestCase
         //clear up
         $folder->delete();
     }
+
+    /**
+     * Test deletePlugins
+     *
+     */
+    public function test_deletePlugins()
+    {
+        //create TMP folder if not exist
+        $pluginsPath = TMP . 'plugins_test' . DS;
+
+        $folder = new BcFolder($pluginsPath . 'plugins');
+        $folder->create($pluginsPath . 'plugins' . DS . 'BcThemeSample');
+        $folder->create($pluginsPath . 'plugins' . DS . 'BcPluginSample');
+        $folder->create($pluginsPath . 'plugins' . DS . 'BcColumn');
+        $folder->create($pluginsPath . 'plugins' . DS . 'BcNewPlugin1');
+        $folder->create($pluginsPath . 'plugins' . DS . 'BcNewPlugin2');
+
+        //check the directories that has been created
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcThemeSample');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcPluginSample');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcColumn');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcNewPlugin1');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcNewPlugin2');
+
+        $this->CreateReleaseCommand->deletePlugins($pluginsPath);
+
+        //Plugins be deleted
+        $this->assertDirectoryDoesNotExist($pluginsPath . 'plugins' . DS . 'BcNewPlugin1');
+        $this->assertDirectoryDoesNotExist($pluginsPath . 'plugins' . DS . 'BcNewPlugin2');
+
+        //Plugins be not deleted
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcThemeSample');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcPluginSample');
+        $this->assertDirectoryExists($pluginsPath . 'plugins' . DS . 'BcColumn');
+
+        //clean up
+        $folder->delete($pluginsPath);
+    }
 }
