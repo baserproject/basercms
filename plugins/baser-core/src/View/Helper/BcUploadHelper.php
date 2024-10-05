@@ -116,6 +116,7 @@ class BcUploadHelper  extends Helper
         ], $options);
 
         $this->initField($options);
+        unset($options['table']);
 
         $tmp = false;
 
@@ -263,6 +264,7 @@ class BcUploadHelper  extends Helper
         ], $options);
 
         $this->initField($options);
+        unset($options['table']);
 
         try {
             $settings = $this->getBcUploadSetting();
