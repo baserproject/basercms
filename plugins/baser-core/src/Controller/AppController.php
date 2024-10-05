@@ -510,6 +510,7 @@ class AppController extends BaseController
      * @deprecated since 5.0.5 このメソッドは非推奨です。
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajaxError(int $errorNo = 500, $message = '')
     {
