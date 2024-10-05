@@ -376,24 +376,22 @@ class BcContentsHelper extends Helper
      * 関連サイトのコンテンツを取得
      *
      * @param int $id コンテンツID
-     * @return array | false
+     * @param array $options
+     * @return array|false
      */
-    public function getRelatedSiteContents($id = null, $options = [])
+    public function getRelatedSiteContents(?int $id = null, array $options = []): array|false
     {
         $options = array_merge([
             'excludeIds' => []
         ], $options);
-        $this->_Contents->unbindModel(['belongsTo' => ['User']]);
+
         if (!$id) {
-            if (!empty($this->request->getAttribute('currentContent'))) {
-                $content = $this->request->getAttribute('currentContent');
-                if ($content['main_site_content_id']) {
-                    $id = $content['main_site_content_id'];
-                } else {
-                    $id = $content['id'];
-                }
+            if (empty($this->request->getAttribute('currentContent'))) return false;
+            $content = $this->request->getAttribute('currentContent');
+            if ($content->main_site_content_id) {
+                $id = $content->main_site_content_id;
             } else {
-                return false;
+                $id = $content->id;
             }
         }
         return $this->_Contents->getRelatedSiteContents($id, $options);
@@ -415,9 +413,9 @@ class BcContentsHelper extends Helper
         if ($contents) {
             foreach($contents as $content) {
                 $urls[] = [
-                    'prefix' => $content['Site']['name'],
-                    'name' => $content['Site']['display_name'],
-                    'url' => $content['Content']['url']
+                    'prefix' => $content->site->name,
+                    'name' => $content->site->display_name,
+                    'url' => $content->url
                 ];
             }
         }

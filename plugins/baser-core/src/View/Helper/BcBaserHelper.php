@@ -2509,15 +2509,15 @@ class BcBaserHelper extends Helper
      * 関連サイトのリンク一覧を取得
      *
      * @param int $id コンテンツID
+     * @param array $excludeIds 除外するサイトID
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getRelatedSiteLinks($id = null, $excludeIds = [])
+    public function getRelatedSiteLinks(int $id = null, array $excludeIds = []): string
     {
         $options = [];
-        if ($excludeIds) {
-            $options['excludeIds'] = $excludeIds;
-        }
+        if ($excludeIds) $options['excludeIds'] = $excludeIds;
         $links = $this->BcContents->getRelatedSiteLinks($id, $options);
         return $this->getElement('related_site_links', ['links' => $links]);
     }
