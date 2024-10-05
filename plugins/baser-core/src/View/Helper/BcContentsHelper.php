@@ -384,24 +384,22 @@ class BcContentsHelper extends Helper
      * 関連サイトのコンテンツを取得
      *
      * @param int $id コンテンツID
-     * @return array | false
+     * @param array $options
+     * @return array|false
      */
-    public function getRelatedSiteContents($id = null, $options = [])
+    public function getRelatedSiteContents(?int $id = null, array $options = []): array|false
     {
         $options = array_merge([
             'excludeIds' => []
         ], $options);
 
         if (!$id) {
-            if (!empty($this->request->getAttribute('currentContent'))) {
-                $content = $this->request->getAttribute('currentContent');
-                if ($content['main_site_content_id']) {
-                    $id = $content['main_site_content_id'];
-                } else {
-                    $id = $content['id'];
-                }
+            if (empty($this->request->getAttribute('currentContent'))) return false;
+            $content = $this->request->getAttribute('currentContent');
+            if ($content->main_site_content_id) {
+                $id = $content->main_site_content_id;
             } else {
-                return false;
+                $id = $content->id;
             }
         }
         return $this->_Contents->getRelatedSiteContents($id, $options);

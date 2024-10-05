@@ -2044,13 +2044,19 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks()
     {
-        SiteFactory::make(['id' => 1])->persist();
-        SiteFactory::make(['id' => 2])->persist();
-        ContentFactory::make(['site_id' => 1])->persist();
-        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1])->persist();
-        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'name' => '', 'display_name' => 'メインサイト'])->persist();
+        SiteFactory::make(['id' => 2, 'name' => 'en', 'display_name' => '英語サイト'])->persist();
+        ContentFactory::make(['id' => 1, 'site_id' => 1, 'url' => '/'])->persist();
+        ContentFactory::make(['id' => 2, 'site_id' => 2, 'main_site_content_id' => 1, 'url' => '/en/'])->persist();
+        ContentFactory::make(['id' => 3, 'site_id' => 2, 'main_site_content_id' => 2, 'url' => '/en/about'])->persist();
 
-        $this->assertMatchesRegularExpression('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks(1));
+        $request = $this->BcBaser->getView()->getRequest();
+        $request = $request->withAttribute('currentSite', SiteFactory::get(1));
+        $request = $request->withAttribute('currentContent', ContentFactory::get(2));
+        $this->BcBaser->getView()->setRequest($request);
+        $result = $this->BcBaser->getRelatedSiteLinks(1);
+        $this->assertStringContainsString('<ul class="related-site-links">', $result);
+        $this->assertStringContainsString('<li class="current"><a href="/en/?en_auto_redirect=off" title="英語サイト">英語サイト</a></li>', $result);
     }
 
     /**

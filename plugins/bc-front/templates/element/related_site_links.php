@@ -21,6 +21,8 @@
 if (empty($links) || count($links) <= 1) {
 	return;
 }
+$currentContent = $this->getRequest()->getAttribute('currentContent');
+$currentSite = $this->getRequest()->getAttribute('currentSite');
 ?>
 
 
@@ -29,11 +31,11 @@ if (empty($links) || count($links) <= 1) {
 		<?php
 		$class = $query = '';
 		$queryArray = [];
-		if (isset($params['Content']) && $params['Content']['url'] == $link['url']) {
+		if ($currentContent && $currentContent->url == $link['url']) {
 			$class = ' class="current"';
 		}
-		if (isset($params['Site']) && $params['Site']['name']) {
-			$queryArray[] = $params['Site']['name'] . '=off';
+		if ($currentSite && $currentSite->name) {
+			$queryArray[] = $currentSite->name . '=off';
 		}
 		if ($link['prefix']) {
 			$queryArray[] = $link['prefix'] . '_auto_redirect=off';

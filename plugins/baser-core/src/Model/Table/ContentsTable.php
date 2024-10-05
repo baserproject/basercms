@@ -1203,41 +1203,32 @@ class ContentsTable extends AppTable
      * 関連サイトの関連コンテンツを取得する
      *
      * @param int $id
+     * @param array $options オプション
+     *  - `excludeIds` : 除外するサイトID
      * @return array|false
      */
-    public function getRelatedSiteContents($id, $options = [])
+    public function getRelatedSiteContents(int $id, array $options = []): array
     {
         $options = array_merge([
             'excludeIds' => []
         ], $options);
+
         $conditions = [
             ['OR' => [
                 ['Contents.id' => $id],
                 ['Contents.main_site_content_id' => $id]
             ]],
-            ['OR' => [
-                ['Sites.status' => true],
-                ['Sites.status IS' => null]    // ルートメインサイト
-            ]]
+            ['Sites.status' => true]
         ];
         if ($options['excludeIds']) {
-            if (count($options['excludeIds']) == 1) {
-                $options['excludeIds'] = $options['excludeIds'][0];
-            }
             $conditions['Contents.site_id <>'] = $options['excludeIds'];
         }
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
-        $contents = $this->find('all',
-        conditions: $conditions,
-        order: ['Contents.id'],
-        recursive: 0)->contain('Sites')->toArray();
-        $mainSite = $this->Sites->getRootMain();
-        foreach($contents as $key => $content) {
-            if ($content->site_id == 0) {
-                $contents[$key]['Site'] = $mainSite;
-            }
-        }
-        return $contents;
+
+        return $this->find('all',
+            conditions: $conditions,
+            order: ['Contents.id']
+        )->contain('Sites')->toArray();
     }
 
     /**
