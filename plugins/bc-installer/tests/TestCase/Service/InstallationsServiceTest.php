@@ -11,6 +11,9 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
@@ -18,6 +21,7 @@ use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * InstallationsServiceTest
@@ -166,7 +170,28 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testSetSiteName()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        SiteFactory::make(['id' => '1'])->persist();
+        ContentFactory::make([
+                'id' => 1,
+                'type' => 'ContentFolder',
+                'entity_id' => 1,
+                'parent_id' => 0,
+                'rght' => 48,
+                'site_root' => true
+            ])->persist();
+        ContentFolderFactory::make(['id' => '1'])->persist();
+
+        $siteName = 'testSiteName';
+        $result = $this->Installations->setSiteName($siteName);
+
+        $this->assertEquals($siteName, $result['title']);
+        $this->assertEquals('testSiteName', $result['display_name']);
+
+        // case error
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (display_name._empty: "サイト名を入力してください。", title._empty: "サイトタイトルを入力してください。")');
+        $this->Installations->setSiteName('');
+
     }
 
     public function test_deployAdminAssets()

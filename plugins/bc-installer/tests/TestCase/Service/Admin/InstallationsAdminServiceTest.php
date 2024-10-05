@@ -16,6 +16,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
+use Cake\Http\ServerRequest;
+use Cake\Http\Session;
 
 /**
  * InstallationsAdminServiceTest
@@ -76,10 +78,73 @@ class InstallationsAdminServiceTest extends BcTestCase
 
     /**
      * test getDefaultValuesStep4
+     * @param array $sessionData
+     * @param array $expected
+     * @dataProvider getDefaultValuesStep4DataProvider
      */
-    public function test_getDefaultValuesStep4()
+    public function test_getDefaultValuesStep4($sessionData, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $session = new Session();
+        if (!empty($sessionData)) {
+            foreach ($sessionData as $key => $value) {
+                $session->write($key, $value);
+            }
+        }
+        $request = new ServerRequest(['session' => $session]);
+
+        $result = $this->Installations->getDefaultValuesStep4($request);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for getDefaultValuesStep4
+     *
+     */
+    public static function getDefaultValuesStep4DataProvider()
+    {
+        return [
+             [
+                [],
+                [
+                    'site_name' => 'My Site',
+                    'admin_username' => '',
+                    'admin_password' => '',
+                    'admin_confirm_password' => '',
+                    'admin_email' => ''
+                ]
+            ],
+            [
+                [
+                    'Installation' => [
+                        'site_name' => 'Custom Site',
+                        'admin_username' => 'admin'
+                    ]
+                ],
+                [
+                    'site_name' => 'Custom Site',
+                    'admin_username' => 'admin',
+                    'admin_password' => '',
+                    'admin_confirm_password' => '',
+                    'admin_email' => ''
+                ]
+            ], [
+                [
+                    'Installation' => [
+                        'site_name' => 'Custom Site',
+                        'admin_username' => 'admin',
+                        'admin_password' => '123456',
+                        'admin_email' => 'admin@example.com'
+                    ]
+                ],
+                [
+                    'site_name' => 'Custom Site',
+                    'admin_username' => 'admin',
+                    'admin_password' => '123456',
+                    'admin_confirm_password' => '123456',
+                    'admin_email' => 'admin@example.com'
+                ]
+            ]
+        ];
     }
 
     /**

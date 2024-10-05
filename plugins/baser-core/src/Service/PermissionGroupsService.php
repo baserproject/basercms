@@ -115,6 +115,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -179,6 +180,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {

@@ -46,6 +46,7 @@ class BcZip
      * BcZip constructor.
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -62,6 +63,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function extract($source, $target)
     {
@@ -113,6 +115,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _extractByCommand($source, $target)
     {

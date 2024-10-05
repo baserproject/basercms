@@ -898,7 +898,10 @@ class BcUtil
     public static function getAllThemeList()
     {
         $themeTypes = ['Theme', 'AdminTheme'];
-        $paths = [ROOT . DS . 'plugins'];
+        $paths = [
+        	ROOT . DS . 'vendor' . DS . 'baserproject' ,
+        	ROOT . DS . 'plugins'
+		];
         $themes = [];
         foreach($paths as $path) {
             $Folder = new BcFolder($path);

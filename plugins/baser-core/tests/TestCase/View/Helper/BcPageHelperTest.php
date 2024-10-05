@@ -10,16 +10,14 @@
  */
 
 namespace BaserCore\Test\TestCase\View\Helper;
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
-use BaserCore\View\AppView;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcPageHelper;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -38,20 +36,11 @@ class BcPageHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);
-        $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
-        $this->BcPage = new BcPageHelper(new AppView());
-        // $this->AppView = new AppView();
-        // $this->BcContents = $this->AppView->BcContents;
-        // $this->BcBaser = $this->AppView->BcBaser;
-        // $this->BcPage = $this->AppView->BcPage;
-        // $this->BcPage->BcBaser = $this->AppView->BcBaser;
+        $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
+            'name' => 'Pages',
+            'plugin' => 'BaserCore'
+        ]);
+        $this->BcPage = new BcPageHelper($this->BcAdminAppView);
     }
 
     /**
@@ -61,7 +50,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->Pages, $this->BcPage);
+        unset($this->BcPage);
         parent::tearDown();
     }
 
@@ -74,54 +63,46 @@ class BcPageHelperTest extends BcTestCase
     }
 
     /**
-     * テスト用に固定ページのデータを取得する
-     *
-     * @return array 固定ページのデータ
-     */
-    public function getPageData($conditions = [], $fields = [])
-    {
-        $options = [
-            'conditions' => $conditions,
-            'fields' => $fields,
-            'recursive' => 0
-        ];
-        $pages = $this->Page->find('all', ...$options);
-        if (empty($pages)) {
-            return false;
-        } else {
-            return $pages[0];
-        }
-    }
-
-    /**
      * ページ機能用URLを取得する
      *
      * @param array $pageId 固定ページID
      * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider getUrlDataProvider
      */
-    public function testGetUrl($pageId, $expected, $message = null)
+    public function testGetUrl($pageId, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // 固定ページのデータ取得
-        $conditions = ['Page.id' => $pageId];
-        $fields = ['Content.url'];
-        $page = $this->getPageData($conditions, $fields);
+        //データ生成
+        ContentFactory::make(['url' => '/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 1])->persist();
+        ContentFactory::make(['url' => '/service/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 2])->persist();
+        ContentFactory::make(['url' => '/service/about', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 3])->persist();
+        ContentFactory::make(['url' => '/icons', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 4])->persist();
+        ContentFactory::make(['url' => '/sitemap', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 5])->persist();
+        ContentFactory::make(['url' => '/m/index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 6])->persist();
 
-        $result = $this->BcPage->getUrl($page);
-        $this->assertEquals($expected, $result, $message);
+        PageFactory::make(['id' => 1])->persist();
+        PageFactory::make(['id' => 2])->persist();
+        PageFactory::make(['id' => 3])->persist();
+        PageFactory::make(['id' => 4])->persist();
+        PageFactory::make(['id' => 5])->persist();
+        PageFactory::make(['id' => 6])->persist();
+        PageFactory::make(['id' => 7])->persist();
+
+        $pageService = $this->getService(PagesServiceInterface::class);
+
+        //実行
+        $result = $this->BcPage->getUrl($pageService->get($pageId));
+        $this->assertEquals($expected, $result);
     }
 
     public static function getUrlDataProvider()
     {
         return [
             [1, '/index'],
-            [2, '/about'],
-            [3, '/service/index'],
+            [2, '/service/index'],
+            [3, '/service/about'],
             [4, '/icons'],
             [5, '/sitemap'],
-            [6, '/m/index'],
+            [6, '/m/index']
         ];
     }
 
@@ -144,18 +125,18 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPageList($id, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $result = $this->BcPage->GetPageList($id);
-        $result = Hash::extract($result, '{n}.Content.type');
+        $result = Hash::extract($result->toArray(), '{n}.type');
         $this->assertEquals($expects, $result);
     }
 
     public static function getPageListDataProvider()
     {
         return [
-            [1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],    // トップフォルダ
-            [21, ['Page', 'Page', 'Page', 'ContentFolder']],    // 下層フォルダ
-            [4, []]    // ターゲットがフォルダでない
+            [1, ['Page', 'ContentFolder']],    // トップフォルダ
+            [3, ['Page', 'Page']],    // 下層フォルダ
+            [2, []]    // ターゲットがフォルダでない
         ];
     }
 

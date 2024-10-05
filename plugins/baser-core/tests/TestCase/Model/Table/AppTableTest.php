@@ -315,4 +315,37 @@ class AppTableTest extends BcTestCase
         $this->assertEquals('unittest_plugin', $this->App->addPrefix('plugin'));
     }
 
+    /**
+     * test setTable
+     */
+    public function testSetTable()
+    {
+        $this->App->setTable('plugin');
+        $this->assertEquals('plugin', $this->App->getTable());
+
+        //add prefix
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
+
+        $this->App->setTable('plugin');
+        $this->assertEquals('unittest_plugin', $this->App->getTable());
+    }
+
+    /**
+     * test sortup
+     * @return void
+     */
+    public function testSortup()
+    {
+        $this->loadFixtureScenario(PluginsScenario::class);
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+
+        $plugins->sortup(2, ['sortFieldName' => 'priority']);
+        $this->assertEquals(1, $plugins->get(2)->priority);
+
+        $this->assertEquals(2, $plugins->get(1)->priority);
+    }
+
 }

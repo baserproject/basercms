@@ -67,6 +67,7 @@ class AppTable extends Table
      * @return AppTable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setTable(string $table)
     {
@@ -267,6 +268,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sortup($id, $conditions)
     {

@@ -124,4 +124,37 @@ class BcPluginUtilTest extends BcTestCase
             ['non_plugin', '<?php return [\'type\' => \'SomeOtherType\'];', false],
         ];
     }
+
+    /**
+     * Test isTheme
+     * @param string $pluginName
+     * @param string|null $configContent
+     * @param bool $expected
+     * @dataProvider isThemeDataProvider
+     */
+    public function testIsTheme($pluginName, $configContent, $expected)
+    {
+        //Create config file
+        $configPath = BcUtil::getPluginPath($pluginName) . 'config.php';
+        if ($configContent !== null) {
+            file_put_contents($configPath, $configContent);
+        }
+
+        $result = BcPluginUtil::isTheme($pluginName);
+        $this->assertEquals($expected, $result);
+
+        //clean up
+        if (file_exists($configPath)) {
+            unlink($configPath);
+        }
+    }
+    public static function isThemeDataProvider()
+    {
+        return [
+            ['test_theme', '<?php return [\'type\' => \'Theme\'];', true],
+            ['admin_theme', '<?php return [\'type\' => \'AdminTheme\'];', true],
+            ['non_theme', '<?php return [\'type\' => \'SomeOtherType\'];', false],
+            ['non_existent_theme', null, false],
+        ];
+    }
 }

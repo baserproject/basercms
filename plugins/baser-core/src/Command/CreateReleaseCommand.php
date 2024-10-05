@@ -36,6 +36,7 @@ class CreateReleaseCommand extends Command
      * @return \Cake\Console\ConsoleOptionParser
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
@@ -124,6 +125,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deletePlugins(string $packagePath)
     {
@@ -160,6 +162,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteExcludeFiles(string $packagePath)
     {

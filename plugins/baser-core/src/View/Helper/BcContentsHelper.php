@@ -17,6 +17,7 @@ use BaserCore\Model\Table\SitesTable;
 use BaserCore\Service\ContentsService;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Datasource\ResultSetDecorator;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\Routing\Router;
@@ -90,6 +91,7 @@ class BcContentsHelper extends Helper
      * セットアップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setup()
     {
@@ -187,6 +189,7 @@ class BcContentsHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getExistsTitles()
     {
@@ -268,16 +271,16 @@ class BcContentsHelper extends Helper
     /**
      * コンテンツリストをツリー構造で取得する
      *
-     * @param int $id カテゴリID
-     * @param int $level 関連データの階層
-     * @param array $options
+     * @param int $id コンテンツID
+     * @param int $level 階層を指定する場合に階層数を指定
+     * @param array $options オプション
      *  - `type` : コンテンツタイプ
      *  - `order` : ソート順（初期値：['Contents.site_id', 'Contents.lft']）
      *  - `siteId` : サイトID
      * @checked
      * @noTodo
      */
-    public function getTree($id = 1, $level = null, $options = [])
+    public function getTree(int $id = 1, ?int $level = null, array $options = []): ResultSetDecorator
     {
         $options = array_merge([
             'type' => '',
@@ -287,7 +290,7 @@ class BcContentsHelper extends Helper
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Contents.id' => $id]);
         $content = $this->_Contents->find()->where($conditions)->first();
         if (!$content) {
-            return [];
+            return new ResultSetDecorator([]);
         }
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), [
             'Contents.site_root' => false,
@@ -307,7 +310,6 @@ class BcContentsHelper extends Helper
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        // CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
         return $this->_Contents->find('threaded')
             ->orderBy($options['order'])
             ->where($conditions)->all();
@@ -325,42 +327,31 @@ class BcContentsHelper extends Helper
      * @return EntityInterface|array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getParent($id = null, $direct = true)
+    public function getParent(?int $id = null, bool $direct = true): EntityInterface|array|false
     {
         if (!$id && !empty($this->request->getAttribute('currentContent')->id)) {
             $id = $this->request->getAttribute('currentContent')->id;
         }
-        if (!$id) {
-            return false;
-        }
-        $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
+        if (!$id) return false;
+
         if ($direct) {
-            $parents = $this->_Contents->find('path', for: $id)->all()->toArray();
-            if (!isset($parents[count($parents) - 2])) return false;
-            $parent = $parents[count($parents) - 2];
-            if ($parent->site_id === $siteId) {
-                return $parent;
-            } else {
-                return false;
-            }
+            $content = $this->_Contents->find()->where(['Contents.id' => $id])->first();
+            if(!$content) return false;
+            $parent = $this->_Contents->find()->where(['Contents.id' => $content->parent_id])->first();
+            return $parent?: false;
         } else {
-            $parents = $this->_Contents->find('path', for: $id)->all()->toArray();
-            if ($parents) {
-                $result = [];
-                foreach($parents as $parent) {
-                    if ($parent->id !== $id && $parent->site_id === $siteId) {
-                        $result[] = $parent;
-                    }
+            $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
+            $parents = $this->_Contents->find('path', for: $id)->where(['Contents.site_id' => $siteId])->all()->toArray();
+            if(!$parents) return false;
+            $result = [];
+            foreach($parents as $parent) {
+                if ($parent->id !== $id && $parent->site_id === $siteId) {
+                    $result[] = $parent;
                 }
-                if ($result) {
-                    return $result;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
             }
+            return $result?: false;
         }
     }
 
@@ -441,6 +432,7 @@ class BcContentsHelper extends Helper
      * @return array|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
@@ -495,6 +487,7 @@ class BcContentsHelper extends Helper
      * @return array|string|bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentByEntityId($id, $contentType, $field = null)
     {
