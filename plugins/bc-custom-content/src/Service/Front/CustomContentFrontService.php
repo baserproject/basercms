@@ -29,8 +29,7 @@ use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\Paging\PaginatedResultSet;
-use Cake\Datasource\ResultSetInterface;
+use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Exception\NotFoundException;
 
 /**
@@ -115,13 +114,13 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * 一覧用の View 変数を取得する
      *
      * @param EntityInterface $customContent
-     * @param PaginatedResultSet $customEntries
+     * @param PaginatedInterface $customEntries
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(EntityInterface $customContent, PaginatedResultSet $customEntries): array
+    public function getViewVarsForIndex(EntityInterface $customContent, PaginatedInterface $customEntries): array
     {
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
@@ -240,15 +239,15 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         $controller->set($this->getViewVarsForView($customContent, $entryId, true));
         $customEntry = $controller->viewBuilder()->getVar('customEntry');
 
-        if (!$this->EntriesService->CustomEntries->hasBehavior('BaserCore.BcUpload')) {
-            BcCcFileUtil::setupUploader($customContent->custom_table_id);
-        }
-//        $events = BcUtil::offEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal');
+        BcCcFileUtil::setupUploader($customContent->custom_table_id);
+        $events = BcUtil::offEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal');
+
         $entity = $this->EntriesService->CustomEntries->patchEntity(
             $customEntry ?? $this->EntriesService->CustomEntries->newEmptyEntity(),
             $this->EntriesService->CustomEntries->saveTmpFiles($request->getData(), mt_rand(0, 99999999))->toArray()
         );
-//        BcUtil::onEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal', $events);
+
+        BcUtil::onEvent($this->EntriesService->CustomEntries->getEventManager(), 'Model.beforeMarshal', $events);
 
         $entity = $this->EntriesService->CustomEntries->decodeRow($entity);
         $controller->set(['customEntry' => $entity]);
