@@ -13,9 +13,11 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcPageHelper;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -123,18 +125,18 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPageList($id, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $result = $this->BcPage->GetPageList($id);
-        $result = Hash::extract($result, '{n}.Content.type');
+        $result = Hash::extract($result->toArray(), '{n}.type');
         $this->assertEquals($expects, $result);
     }
 
     public static function getPageListDataProvider()
     {
         return [
-            [1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],    // トップフォルダ
-            [21, ['Page', 'Page', 'Page', 'ContentFolder']],    // 下層フォルダ
-            [4, []]    // ターゲットがフォルダでない
+            [1, ['Page', 'ContentFolder']],    // トップフォルダ
+            [3, ['Page', 'Page']],    // 下層フォルダ
+            [2, []]    // ターゲットがフォルダでない
         ];
     }
 

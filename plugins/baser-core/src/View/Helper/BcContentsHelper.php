@@ -16,6 +16,7 @@ use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Service\ContentsService;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetDecorator;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\Routing\Router;
@@ -269,16 +270,16 @@ class BcContentsHelper extends Helper
     /**
      * コンテンツリストをツリー構造で取得する
      *
-     * @param int $id カテゴリID
-     * @param int $level 関連データの階層
-     * @param array $options
+     * @param int $id コンテンツID
+     * @param int $level 階層を指定する場合に階層数を指定
+     * @param array $options オプション
      *  - `type` : コンテンツタイプ
      *  - `order` : ソート順（初期値：['Contents.site_id', 'Contents.lft']）
      *  - `siteId` : サイトID
      * @checked
      * @noTodo
      */
-    public function getTree($id = 1, $level = null, $options = [])
+    public function getTree(int $id = 1, ?int $level = null, array $options = []): ResultSetDecorator
     {
         $options = array_merge([
             'type' => '',
@@ -288,7 +289,7 @@ class BcContentsHelper extends Helper
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Contents.id' => $id]);
         $content = $this->_Contents->find()->where($conditions)->first();
         if (!$content) {
-            return [];
+            return new ResultSetDecorator([]);
         }
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), [
             'Contents.site_root' => false,
@@ -308,7 +309,6 @@ class BcContentsHelper extends Helper
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        // CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
         return $this->_Contents->find('threaded')
             ->orderBy($options['order'])
             ->where($conditions)->all();
