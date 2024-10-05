@@ -36,6 +36,7 @@ class BcApiController extends AppController
      * @return string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function viewClasses(): array
     {
