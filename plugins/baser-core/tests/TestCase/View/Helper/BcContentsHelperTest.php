@@ -564,17 +564,16 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testIsParentId($id, $parentId, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
     public static function isParentIdDataProvider()
     {
         return [
-            [2, 1, true],
+            [2, 1, false],
             [5, 1, true],
             [5, 2, false],
-            [6, 21, true]
+            [26, 24, true]
         ];
     }
 
