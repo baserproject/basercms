@@ -16,6 +16,7 @@ use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Service\ContentsService;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\Routing\Router;
@@ -555,17 +556,19 @@ class BcContentsHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function isParentId($id, $parentId)
+    public function isParentId(int $id, int $parentId): bool
     {
-        $parentIds = $this->_Contents->find('treeList', valuePath: 'parent_id')->where(['id' => $id])->all()->toArray();
-        if (!$parentIds) {
+        try {
+            $parentIds = $this->_Contents->find('path', for: $id)
+                ->all()
+                ->toArray();
+        } catch (RecordNotFoundException) {
             return false;
         }
-        if ($parentIds && in_array($parentId, $parentIds)) {
-            return true;
-        } else {
-            return false;
-        }
+        if (!$parentIds) return false;
+        $parentIds = Hash::extract($parentIds, '{n}.id');
+        unset($parentIds[count($parentIds) - 1]);
+        return ($parentIds && in_array($parentId, $parentIds)) ? true : false;
     }
 
     /**
