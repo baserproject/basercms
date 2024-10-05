@@ -78,7 +78,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 			<ul class="clearfix">
 				<li>
 					<?php if (!empty($user)): ?>
-						<?php $this->BcBaser->link(h($this->BcBaser->getUserName($user)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
+						<?php $this->BcBaser->link(h($this->BcBaser->getUserName($user)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<ul>
 							<?php if ($this->Session->check('AuthAgent')): ?>
 								<li><?php $this->BcBaser->link(__d('baser', '元のユーザーに戻る'), '/users/back_agent') ?></li>
@@ -93,7 +93,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 							<li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $logoutAction) ?></li>
 						</ul>
 					<?php elseif ($this->name != 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
-						<?php $this->BcBaser->link(__d('baser', 'ログインしていません ') . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
+						<?php $this->BcBaser->link(__d('baser', 'ログインしていません ') . $this->BcBaser->getImg('admin/btn_dropdown.png', ['class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<ul>
 							<?php if ($currentPrefix == 'front'): ?>
 								<li><?php $this->BcBaser->link(__d('baser', 'ログイン'), ['plugin' => null, 'controller' => 'users', 'action' => 'login']) ?></li>
@@ -105,7 +105,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				</li>
 				<?php if (!empty($user) && in_array('admin', $currentUserAuthPrefixes) && Configure::read('BcApp.adminNavi')): ?>
 					<li>
-						<?php $this->BcBaser->link(__d('baser', 'システムナビ') . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
+						<?php $this->BcBaser->link(__d('baser', 'システムナビ') . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<div id="SystemMenu">
 							<div>
 								<?php

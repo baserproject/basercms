@@ -81,6 +81,8 @@ span#DebugMode{
 
 #UserMenu li img {
 	vertical-align: baseline;
+	width: 8px;
+	height: 11px;
 }
 #UserMenu{
 	margin-right:10px;
