@@ -21,7 +21,6 @@ use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
 use Cake\Controller\ComponentRegistry;
-use BaserCore\Controller\AppController;
 use BaserCore\Controller\PagesController;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;

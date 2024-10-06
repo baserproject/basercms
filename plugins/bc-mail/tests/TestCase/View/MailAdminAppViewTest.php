@@ -2,10 +2,10 @@
 
 namespace BcMail\Test\TestCase\View;
 
-use BaserCore\Test\TestCase\BcPluginTest;
+use BaserCore\TestSuite\BcTestCase;
 use BcMail\View\MailAdminAppView;
 
-class MailAdminAppViewTest extends BcPluginTest
+class MailAdminAppViewTest extends BcTestCase
 {
     /**
      * @return void

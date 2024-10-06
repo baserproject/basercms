@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;

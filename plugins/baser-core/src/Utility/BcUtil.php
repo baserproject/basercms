@@ -1200,7 +1200,7 @@ class BcUtil
      */
     public static function topLevelUrl($lastSlash = true)
     {
-        if (self::isConsole() && !Configure::check('BcEnv.host')) {
+        if (self::isConsole()) {
             return Configure::read('App.fullBaseUrl');
         }
         $request = Router::getRequest();

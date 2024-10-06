@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Routing\Route;
 
 use BaserCore\Routing\Route\BcContentsRoute;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
 use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;

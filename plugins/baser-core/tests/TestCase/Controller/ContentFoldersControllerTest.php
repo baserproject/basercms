@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Controller;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
