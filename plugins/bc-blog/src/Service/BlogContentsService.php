@@ -98,25 +98,39 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @param int $id
      * @param array $options
      *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
-     * @return \Cake\Datasource\EntityInterface|array|null
+     *  - `contentId`: コンテンツID。指定した場合、エイリアスも指定可能。
+     * @return \Cake\Datasource\EntityInterface|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get(int $id, $options = [])
+    public function get(int $id, array $options = []): EntityInterface|null
     {
         $options = array_merge([
             'status' => '',
+            'contentId' => null,
             'contain' => ['Contents' => ['Sites']]
         ], $options);
+
         $conditions = ['BlogContents.id' => $id];
         if ($options['status'] === 'publish') {
             $conditions = array_merge($conditions, $this->BlogContents->Contents->getConditionAllowPublish());
         }
-        return $this->BlogContents->get($id,
+        if ($options['contentId']) {
+            $this->BlogContents->onAlias();
+            $conditions = array_merge($conditions, ['Contents.id' => $options['contentId']]);
+        }
+
+        $result = $this->BlogContents->get($id,
             conditions: $conditions,
             contain: $options['contain']
         );
+
+        if ($options['contentId']) {
+            $this->BlogContents->offAlias();
+        }
+
+        return $result;
     }
 
     /**
@@ -311,16 +325,29 @@ class BlogContentsService implements BlogContentsServiceInterface
     }
 
     /**
-     * コンテンツ名よりブログコンテンツを取得する
+     * URL よりブログコンテンツを取得する
      *
      * Contents を含む
      *
-     * @param string $name
-     * @return array|EntityInterface|null
+     * @param string $url
+     * @return EntityInterface|null
      */
-    public function findByName(string $name)
+    public function findByUrl(string $url): ?EntityInterface
     {
-        return $this->BlogContents->find()->where(['Contents.name' => $name])->contain('Contents')->first();
+        return $this->BlogContents->find()->where(['Contents.url' => $url])->contain('Contents')->first();
+    }
+
+    /**
+     * コンテンツ ID よりブログコンテンツを取得する
+     *
+     * Contents を含む
+     *
+     * @param int $contentId
+     * @return EntityInterface|null
+     */
+    public function findByContentId(int $contentId): ?EntityInterface
+    {
+        return $this->BlogContents->find()->where(['Contents.id' => $contentId])->contain('Contents')->first();
     }
 
     /**

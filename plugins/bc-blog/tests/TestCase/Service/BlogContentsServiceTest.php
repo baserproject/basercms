@@ -324,16 +324,4 @@ class BlogContentsServiceTest extends BcTestCase
 
     }
 
-    /**
-     * test findByName
-     * @return void
-     */
-    public function testFindByName()
-    {
-        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
-        $blogContent = $this->BlogContentsService->findByName('test');
-        $this->assertEquals($blogContent->id, 1);
-        $this->assertEquals($blogContent->content->url, '/test');
-        $this->assertNull($this->BlogContentsService->findByName('non'));
-    }
 }
