@@ -179,21 +179,26 @@ class BcSite
 		}
 		$url = preg_replace('/^\//', '', $url);
 		$currentSite = null;
+		$currentDomain = BcUtil::getCurrentDomain();
+		$mainDomain = BcUtil::getMainDomain();
+		$subDomain = BcUtil::getSubDomain();
+		$isAnotherDomain = ($currentDomain !== $mainDomain);
 		foreach($sites as $site) {
-			if ($site->alias) {
-				$domainKey = '';
-				if ($site->useSubDomain) {
-					if ($site->domainType == 1) {
-						$domainKey = BcUtil::getSubDomain() . '/';
-					} elseif ($site->domainType == 2) {
-						$domainKey = BcUtil::getCurrentDomain() . '/';
-					}
+			if(!$site->alias) continue;
+			$domainKey = '';
+			if ($site->useSubDomain) {
+				if ($site->domainType == 1) {
+					$domainKey = $subDomain . '/';
+				} elseif ($site->domainType == 2) {
+					$domainKey = $currentDomain . '/';
 				}
-				$regex = '/^' . preg_quote($site->alias, '/') . '\//';
-				if (preg_match($regex, $domainKey . $url)) {
-					$currentSite = $site;
-					break;
-				}
+			} elseif($isAnotherDomain) {
+				continue;
+			}
+			$regex = '/^' . preg_quote($site->alias, '/') . '\//';
+			if (preg_match($regex, $domainKey . $url)) {
+				$currentSite = $site;
+				break;
 			}
 		}
 		if (!$currentSite) {
@@ -292,7 +297,7 @@ class BcSite
 	 *
 	 * @return BcSite[]
 	 */
-	public static function findAll($reversed = false)
+	public static function findAll()
 	{
 		if (!BC_INSTALLED) {
 			return [];
@@ -306,16 +311,8 @@ class BcSite
 		} catch (Exception $e) {
 			return [];
 		}
-		if($reversed){
-			$order = [
-				'Site.domain_type' => 'desc'
-			];
-		} else {
-			$order = [];
-		}
 		$sites = $Site->find('all', [
-			'recursive' => -1,
-			'order' => $order
+			'recursive' => -1
 		]);
 		array_unshift($sites, $Site->getRootMain());
 		self::$_sites = [];
