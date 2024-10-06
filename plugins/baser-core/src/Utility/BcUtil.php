@@ -789,10 +789,10 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isTest()
+    public static function isTest(): bool
     {
         return (!empty($_SERVER['argv'][0]) &&
-            preg_match('/vendor\/bin\/phpunit$/', $_SERVER['argv'][0]));
+            preg_match('/\/phpunit$/', $_SERVER['argv'][0]));
     }
 
     /**
@@ -1198,11 +1198,12 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function topLevelUrl($lastSlash = true)
+    public static function topLevelUrl(bool $lastSlash = true): string
     {
         $request = Router::getRequest();
         $protocol = 'http://';
-        if (!empty($request) && $request->is('https')) {
+        // コンソールから
+        if ((!empty($request) && $request->is('https')) || BcUtil::isTest()) {
             $protocol = 'https://';
         }
         $host = Configure::read('BcEnv.host');
