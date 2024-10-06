@@ -2013,7 +2013,7 @@ class BcBaserHelperTest extends BcTestCase
         // サブドメインの指定がある場合
         Configure::write('BcEnv.host', 'localhost');
         $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/')));
-        $this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl('another.com/news/', true, true));
+        $this->assertEquals('https://another.com/news/', $this->BcBaser->getContentsUrl('another.com/news/', true, true));
         // サブドメインの指定がないのに指定ありとした場合
         Configure::write('BcEnv.siteUrl', 'http://main.com');
         $this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, false));

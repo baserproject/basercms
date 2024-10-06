@@ -498,6 +498,7 @@ class BlogHelperTest extends BcTestCase
 
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'https://main.com');
+        Configure::write('BcEnv.host', 'main.com');
         $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $base? ['base' => $base] : []));
         $options = [
             'base' => $useBase
