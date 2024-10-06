@@ -222,6 +222,11 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->BcAdminApp->setRequest($this->getRequest('https://localhost/baser/admin'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertNull($this->_response);
+        // ユニットテストにおいては、現在のサイトのURLの取得を https固定にしているため
+        // http://localhost/ と https://localhost/ は同一サイトとして扱われリダイレクトしない
+        $this->BcAdminApp->setRequest($this->getRequest('http://localhost/'));
+        $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
     }
 
     /**
