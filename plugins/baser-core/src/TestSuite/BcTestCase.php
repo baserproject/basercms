@@ -133,7 +133,6 @@ class BcTestCase extends TestCase
         // BcUtil::baseUrl() / BcUtil::docRoot() BcUtil::siteUrl() に影響あり
         $_SERVER['SCRIPT_NAME'] = DS . 'webroot' . DS . 'index.php';
         $_SERVER['SCRIPT_FILENAME'] = ROOT . DS . 'webroot' . DS . 'index.php';
-        $_SERVER['HTTP_HOST'] = 'localhost';
         $this->Application = new Application(CONFIG);
         $this->Application->bootstrap();
         $this->Application->getContainer();

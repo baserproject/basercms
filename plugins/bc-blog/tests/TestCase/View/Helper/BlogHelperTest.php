@@ -505,7 +505,7 @@ class BlogHelperTest extends BcTestCase
         ];
 
         $result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
-        $this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
+        $this->assertEquals($expected, $result, 'カテゴリ一覧へのURLを正しく取得できません');
 
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }
@@ -520,8 +520,8 @@ class BlogHelperTest extends BcTestCase
             [3, '', false, '/news/archives/category/child-no-parent'],
             [4, '', false, 'https://main.com/s/news2/archives/category/smartphone_release'],
             [5, '', false, 'https://main.com/en/news3/archives/category/english_release'],
-            [6, '', false, 'https://example.com/news4/archives/category/another_domain_release'],
-            [7, '', false, 'https://sub.main.com/news5/archives/category/sub_domain_release'],
+            [6, '', false, 'http://example.com/news4/archives/category/another_domain_release'],
+            [7, '', false, 'http://sub.main.com/news5/archives/category/sub_domain_release'],
         ];
     }
 

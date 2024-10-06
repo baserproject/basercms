@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Model\Entity\Permission;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
