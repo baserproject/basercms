@@ -469,10 +469,10 @@ class SitesTable extends AppTable
         $domain = BcUtil::getCurrentDomain();
         $mainDomain = BcUtil::getMainDomain();
         $subDomain = BcUtil::getSubDomain();
-        $isAnotherDomain = ($domain === $mainDomain);
+        $isAnotherDomain = ($domain !== $mainDomain);
         $where = [];
         for($i = count($urlAry); $i > 0; $i--) {
-            if($isAnotherDomain) {
+            if(!$isAnotherDomain) {
                 $where['or'][] = ['alias' => implode('/', $urlAry)];
             }
             if ($subDomain) {
