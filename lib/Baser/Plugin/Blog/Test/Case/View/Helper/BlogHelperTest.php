@@ -823,6 +823,7 @@ class BlogHelperTest extends BaserTestCase
 	{
 		$siteUrl = Configure::read('BcEnv.siteUrl');
 		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		Configure::write('BcEnv.host', 'main.com');
 		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
 		BcSite::flash();
 		$this->Blog->request = $this->_getRequest($currentUrl);

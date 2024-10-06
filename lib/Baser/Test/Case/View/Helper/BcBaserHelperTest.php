@@ -522,6 +522,7 @@ class BcBaserHelperTest extends BaserTestCase
 	 */
 	public function testIsHome($expected, $url)
 	{
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isHome());
 	}
@@ -2363,6 +2364,7 @@ class BcBaserHelperTest extends BaserTestCase
 	 */
 	public function testSetAlternateUrl($url, $expected)
 	{
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		Configure::write('BcSite.use_site_device_setting', true);
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->BcBaser->setAlternateUrl();
@@ -2383,6 +2385,7 @@ class BcBaserHelperTest extends BaserTestCase
 	 */
 	public function testSetCanonicalUrl($url, $expected, $canonicalUrl = null)
 	{
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		if (!is_null($canonicalUrl)) {
 			$this->_View->set('canonicalUrl', $canonicalUrl);
 		}

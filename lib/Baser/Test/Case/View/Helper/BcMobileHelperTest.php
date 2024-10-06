@@ -66,8 +66,9 @@ class BcMobileHelperTest extends BaserTestCase
 	 */
 	public function testAfterLayout()
 	{
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		$_SERVER['HTTP_USER_AGENT'] = 'SoftBank';
-		$site = BcSite::findCurrent(true);
+		BcSite::findCurrent();
 		$this->View->output = '＞＜＆＆1２＠＠';
 		$expected = '&gt;&lt;&amp;&amp;12@@';
 

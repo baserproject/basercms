@@ -580,6 +580,7 @@ class BcBasicsTest extends BaserTestCase
 	public function testAddSessionId()
 	{
 		// 初期化
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		$sessionId = session_id();
 		$sessionName = session_name();
 		$_SERVER['REQUEST_URI'] = '/m/';
