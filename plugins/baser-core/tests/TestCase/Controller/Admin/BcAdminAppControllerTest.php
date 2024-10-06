@@ -216,7 +216,7 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->BcAdminApp->setRequest($this->getRequest('https://localhost/index'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertNull($this->_response);
-        $this->BcAdminApp->setRequest($this->getRequest('http://localhost/index'));
+        $this->BcAdminApp->setRequest($this->getRequest('http://main.com/index'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertRedirect('https://localhost/index');
         $this->BcAdminApp->setRequest($this->getRequest('https://localhost/baser/admin'));
