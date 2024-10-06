@@ -94,7 +94,7 @@ class BlogController extends BlogFrontAppController
         /* @var BlogContent $blogContent */
         $blogContent = $blogContentsService->get($blogContentId, [
             'status' => 'publish',
-            'contentId' => $currentContent->id
+            'contentId' => $currentContent?->id
         ]);
 
         if ($this->getRequest()->is('rss')) {

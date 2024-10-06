@@ -1023,16 +1023,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testTopLevelUrl()
     {
-        if (BcUtil::isConsole()) {
-            $this->assertEquals('https://localhost', BcUtil::topLevelUrl());
-        } else {
-            $this->assertMatchesRegularExpression('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
-            $this->assertMatchesRegularExpression('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
-
-            // httpsの場合
-            $_SERVER['HTTPS'] = 'on';
-            $this->assertMatchesRegularExpression('/^https:\/\//', BcUtil::topLevelUrl());
-        }
+        $this->assertEquals('https://localhost/', BcUtil::topLevelUrl());
+        $this->assertEquals('https://localhost', BcUtil::topLevelUrl(false));
     }
 
     /**
