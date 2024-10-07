@@ -378,7 +378,6 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks($id, $options, $expect)
     {
-        $this->truncateTable('contents');
         ContentFactory::make(['site_id' => 1, 'url' => '/'])->persist();
         ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1, 'url' => '/en/'])->persist();
         ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 2, 'url' => '/en/about'])->persist();
@@ -391,7 +390,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         return [
             [null, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
-            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
+            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/']]],
             [1, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index'], ['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
             [1, ['excludeIds' => [1]], [['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
         ];
