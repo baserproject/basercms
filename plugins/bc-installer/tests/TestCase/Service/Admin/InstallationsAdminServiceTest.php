@@ -76,7 +76,6 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_getDefaultValuesStep3($sessionData, $expected)
     {
-        // Khởi tạo request và session
         $session = new Session();
         $request = new ServerRequest(['session' => $session]);
 
