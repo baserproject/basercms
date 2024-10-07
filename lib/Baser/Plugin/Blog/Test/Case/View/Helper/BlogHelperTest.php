@@ -857,6 +857,7 @@ class BlogHelperTest extends BaserTestCase
 	 */
 	public function testGetTagLink($expected, $currentUrl, $blogContentId, $name)
 	{
+		Configure::write('BcEnv.host', BcUtil::getMainDomain());
 		$this->Blog->request = $this->_getRequest($currentUrl);
 		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
 		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
