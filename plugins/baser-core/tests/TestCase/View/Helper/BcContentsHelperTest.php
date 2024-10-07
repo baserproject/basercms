@@ -378,6 +378,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks($id, $options, $expect)
     {
+        $this->truncateTable('contents');
         ContentFactory::make(['site_id' => 1, 'url' => '/'])->persist();
         ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1, 'url' => '/en/'])->persist();
         ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 2, 'url' => '/en/about'])->persist();
