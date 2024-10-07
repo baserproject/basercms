@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
@@ -377,9 +378,10 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks($id, $options, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcContents->request = $this->_getRequest('/');
-        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
+        ContentFactory::make(['site_id' => 1, 'url' => '/'])->persist();
+        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1, 'url' => '/en/'])->persist();
+        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 2, 'url' => '/en/about'])->persist();
+
         $result = $this->BcContents->getRelatedSiteLinks($id, $options);
         $this->assertEquals($expect, $result);
     }
@@ -387,18 +389,10 @@ class BcContentsHelperTest extends BcTestCase
     public static function getRelatedSiteLinksDataProvider()
     {
         return [
-            // IDが空 オプションも空
-            [null, [], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            // IDが空  オプション excludeIds 0~2
-            ['', ['excludeIds' => [0]], [0 => ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], 1 => ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [false, ['excludeIds' => [1]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [0, ['excludeIds' => [2]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index']]],
-            // IDが空  オプション excludeIds 3~
-            [0, ['excludeIds' => [3]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [0, ['excludeIds' => [99]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            // IDに値が入っていれば、false
-            [1, ['excludeIds' => [0]], [['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/']]],
-            [99, [], []],
+            [null, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
+            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
+            [1, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index'], ['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
+            [1, ['excludeIds' => [1]], [['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
         ];
     }
 
