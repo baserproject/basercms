@@ -77,6 +77,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep3(ServerRequest $request): array
     {
