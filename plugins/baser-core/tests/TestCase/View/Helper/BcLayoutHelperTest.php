@@ -46,6 +46,9 @@ class BcLayoutHelperTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test testDispatchContentsHeader
+     */
     public function testDispatchContentsHeader()
     {
         //イベントをセット
