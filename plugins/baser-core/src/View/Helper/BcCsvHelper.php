@@ -66,6 +66,7 @@ class BcCsvHelper extends Helper
      * テンポラリファイルを生成する
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _createTmpFp()
     {
