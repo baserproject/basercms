@@ -609,6 +609,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function freezeControll(string $fieldName, array $options, array $attributes = [])
     {
