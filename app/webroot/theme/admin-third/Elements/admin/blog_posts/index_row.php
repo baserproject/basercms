@@ -13,6 +13,8 @@
 /**
  * [ADMIN] ブログ記事 一覧　行
  */
+$url = $this->request->params['Content']['url'] . 'archives/' . $data['BlogPost']['no'];
+$fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->params['Site']['use_subdomain']);
 ?>
 
 
@@ -72,7 +74,7 @@
 		<?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
 		<?php $this->BcBaser->link('', ['action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
 		<?php if ($this->Blog->allowPublish($data)): //公開状態であれば 公開ページヘのリンク ?>
-			<?php $this->BcBaser->link('', $this->request->params['Content']['url'] . '/archives/' . $data['BlogPost']['no'], ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']); ?>
+			<?php $this->BcBaser->link('', $fullUrl, ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']); ?>
 		<?php else: // 非公開であればボタンを押せなくする ?>
 			<a title="確認" class="btn bca-btn-icon" data-bca-btn-type="preview" data-bca-btn-size="lg"
 			   data-bca-btn-status="gray"></a>
