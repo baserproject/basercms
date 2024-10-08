@@ -2303,10 +2303,20 @@ class DboSource extends DataSource {
 			if ($noJoin === true) {
 				return $this->conditions($conditions);
 			}
-			$idList = $Model->find('all', array(
+
+			// CUSTOMIZE MODIFY 2024/09/28 ryuring
+			// >>>
+			/* $idList = $Model->find('all', array(
 				'fields' => "{$Model->alias}.{$Model->primaryKey}",
 				'conditions' => $conditions
+			)); */
+			// ---
+			$idList = $Model->find('all', array(
+				'fields' => "{$Model->alias}.{$Model->primaryKey}",
+				'conditions' => $conditions,
+				'callbacks' => false
 			));
+			// <<<
 
 			if (empty($idList)) {
 				return false;
