@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
 
@@ -74,8 +75,12 @@ class InstallationsAdminServiceTest extends BcTestCase
      * @param array $expected
      * @dataProvider defaultValuesStep3DataProvider
      */
-    public function test_getDefaultValuesStep3($sessionData, $expected)
+    public function test_getDefaultValuesStep3($sessionData, $expected, $defaultFrontTheme = null)
     {
+        if ($defaultFrontTheme) {
+            Configure::write('BcApp.defaultFrontTheme', $defaultFrontTheme);
+        }
+
         $session = new Session();
         $request = new ServerRequest(['session' => $session]);
 
@@ -98,7 +103,8 @@ class InstallationsAdminServiceTest extends BcTestCase
                     'dbPort' => '3306',
                     'dbName' => 'basercms',
                     'dbDataPattern' => 'BcThemeSample.default',
-                ]
+                ],
+                'bc-theme-sample'
             ],
             [
                 [
@@ -122,7 +128,7 @@ class InstallationsAdminServiceTest extends BcTestCase
                     'dbDataPattern' => 'BcSample.default',
                     'dbUsername' => 'root',
                     'dbPassword' => 'password'
-                ]
+                ],
             ]
         ];
     }
