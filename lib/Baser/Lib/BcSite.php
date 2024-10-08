@@ -297,7 +297,7 @@ class BcSite
 	 *
 	 * @return BcSite[]
 	 */
-	public static function findAll($reversed = false)
+	public static function findAll()
 	{
 		if (!BC_INSTALLED) {
 			return [];
