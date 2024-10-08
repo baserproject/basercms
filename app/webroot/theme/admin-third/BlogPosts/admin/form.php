@@ -84,9 +84,9 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 
 		<span class="bca-post__url">
     <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
-    <a href="<?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>"
+    <a href="<?php echo $fullUrl ?>"
 	   class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i
-			class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></a>
+			class="bca-icon--globe"></i><?php echo $fullUrl ?></a>
     <?php echo $this->BcForm->button('', [
 		'id' => 'BtnCopyUrl',
 		'class' => 'bca-btn',
