@@ -36,10 +36,11 @@ class BcLayoutHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dispatchContentsHeader()
     {
-        $request = $this->_View->request;
+        $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         // EVENT BcLayout.contentsHeader
         $event = $this->dispatchLayerEvent('contentsHeader', [
@@ -59,10 +60,11 @@ class BcLayoutHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dispatchContentsFooter()
     {
-        $request = $this->_View->request;
+        $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         // EVENT BcLayout.contentsFooter
         $event = $this->dispatchLayerEvent('contentsFooter', [
