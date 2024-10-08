@@ -183,6 +183,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function readDbSetting(ServerRequest $request, array $installationData = []): array
     {
