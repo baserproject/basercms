@@ -291,6 +291,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @throws PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addDefaultUser(array $user)
     {
