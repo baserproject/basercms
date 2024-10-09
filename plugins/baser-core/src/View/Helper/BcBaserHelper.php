@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
@@ -2073,7 +2074,7 @@ class BcBaserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function page($url, $params = [], $options = [])
+    public function page(string $url, array $params = [], array $options = []): void
     {
         if(
             in_array('pageRecursive', $this->getView()->getVars())
@@ -2100,6 +2101,7 @@ class BcBaserHelper extends Helper
             }
         }
 
+        /** @var PagesService $pagesService */
         $pagesService = $this->getService(PagesServiceInterface::class);
         try {
             $page = $pagesService->get($content->entity_id);
@@ -2107,12 +2109,13 @@ class BcBaserHelper extends Helper
             return;
         }
 
-        // urlを取得
-        if (empty($this->getView()->subDir)) {
-            $url = '/../Pages/' . $page->page_template;
+        $pageTemplate = $pagesService->getPageTemplate($page);
+        if (!$this->getView()->getSubDir()) {
+            $url = '/../Pages/' . $pageTemplate;
         } else {
-            $url = '../Pages/' . $page->page_template;
+            $url = '../Pages/' . $pageTemplate;
         }
+
         $page->content = $content;
         $params['page'] = $page;
         $this->element($url, $params, ['subDir' => $options['subDir']]);
