@@ -332,4 +332,16 @@ class BcComposerTest extends BcTestCase
         rename($backupPath, $orgPath);
     }
 
+    /**
+     * test execCommand
+     */
+    public function testExecCommand()
+    {
+        BcComposer::setup();
+        $rs = BcComposer::execCommand('update --with-all-dependencies --ignore-platform-req=ext-xdebug');
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+        $this->assertStringContainsString("Loading composer repositories with package information", $rs['out'][1]);
+    }
 }

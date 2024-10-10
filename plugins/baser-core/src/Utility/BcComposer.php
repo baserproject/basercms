@@ -224,6 +224,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function execCommand(string $command)
     {
