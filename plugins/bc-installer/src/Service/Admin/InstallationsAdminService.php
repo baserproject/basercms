@@ -138,6 +138,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function writeDbSettingToSession(ServerRequest $request, array $data): void
     {

@@ -206,10 +206,103 @@ class InstallationsAdminServiceTest extends BcTestCase
 
     /**
      * test writeDbSettingToSession
+     * @param array $data
+     * @param array $expected
+     * @dataProvider writeDbSettingToSessionDataProvider
      */
-    public function test_writeDbSettingToSession()
+    public function test_writeDbSettingToSession($data, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $session = new Session();
+        $request = new ServerRequest(['session' => $session]);
+
+        $this->Installations->writeDbSettingToSession($request, $data);
+
+        $result = $session->read();
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function writeDbSettingToSessionDataProvider()
+    {
+        return [
+            [
+                [
+                    'dbType' => 'mysql',
+                    'dbHost' => 'localhost',
+                    'dbPort' => '3306',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password',
+                    'dbPrefix' => 'bc_',
+                    'dbName' => 'test_database_mysql',
+                    'dbDataPattern' => 'BcSample.default',
+                ],
+                [
+                    'Installation' => [
+                        'dbType' => 'mysql',
+                        'dbHost' => 'localhost',
+                        'dbPort' => '3306',
+                        'dbUsername' => 'root',
+                        'dbPassword' => 'password',
+                        'dbPrefix' => 'bc_',
+                        'dbName' => 'test_database_mysql',
+                        'dbSchema' => '',
+                        'dbEncoding' => 'utf8mb4',
+                        'dbDataPattern' => 'BcSample.default',
+                    ]
+                ]
+            ],
+           [
+                [
+                    'dbType' => 'postgres',
+                    'dbHost' => 'localhost',
+                    'dbPort' => '5432',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password',
+                    'dbPrefix' => 'bc_',
+                    'dbName' => 'test_database',
+                    'dbDataPattern' => 'BcSample.default',
+                ],
+                [
+                    'Installation' => [
+                        'dbType' => 'postgres',
+                        'dbHost' => 'localhost',
+                        'dbPort' => '5432',
+                        'dbUsername' => 'root',
+                        'dbPassword' => 'password',
+                        'dbPrefix' => 'bc_',
+                        'dbName' => 'test_database',
+                        'dbSchema' => 'public',
+                        'dbEncoding' => 'utf8',
+                        'dbDataPattern' => 'BcSample.default'
+                    ]
+                ]
+            ],
+            [
+                [
+                    'dbType' => 'sqlite',
+                    'dbHost' => '',
+                    'dbPort' => '',
+                    'dbUsername' => '',
+                    'dbPassword' => '',
+                    'dbPrefix' => '',
+                    'dbName' => 'test_database_sqlite',
+                    'dbDataPattern' => 'BcSample.default',
+                ],
+                [
+                    'Installation' => [
+                        'dbType' => 'sqlite',
+                        'dbHost' => '',
+                        'dbPort' => '',
+                        'dbUsername' => '',
+                        'dbPassword' => '',
+                        'dbPrefix' => '',
+                        'dbName' => 'test_database_sqlite',
+                        'dbSchema' => '',
+                        'dbEncoding' => 'utf8',
+                        'dbDataPattern' => 'BcSample.default',
+                    ]
+                ]
+            ],
+        ];
     }
 
     /**
