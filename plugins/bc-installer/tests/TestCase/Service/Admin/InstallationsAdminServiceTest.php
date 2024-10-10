@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
 
@@ -70,10 +71,66 @@ class InstallationsAdminServiceTest extends BcTestCase
 
     /**
      * test getDefaultValuesStep3
+     * @param array $sessionData
+     * @param array $expected
+     * @dataProvider defaultValuesStep3DataProvider
      */
-    public function test_getDefaultValuesStep3()
+    public function test_getDefaultValuesStep3($sessionData, $expected, $defaultFrontTheme = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        if ($defaultFrontTheme) {
+            Configure::write('BcApp.defaultFrontTheme', $defaultFrontTheme);
+        }
+
+        $session = new Session();
+        $request = new ServerRequest(['session' => $session]);
+
+        $session->write('Installation', $sessionData);
+
+        $result = $this->Installations->getDefaultValuesStep3($request);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function defaultValuesStep3DataProvider()
+    {
+        return [
+            [
+                [],
+                [
+                    'dbType' => 'mysql',
+                    'dbHost' => 'localhost',
+                    'dbPrefix' => '',
+                    'dbPort' => '3306',
+                    'dbName' => 'basercms',
+                    'dbDataPattern' => 'BcThemeSample.default',
+                ],
+                'bc-theme-sample'
+            ],
+            [
+                [
+                    'dbType' => 'postgres',
+                    'dbHost' => 'localhost',
+                    'dbPrefix' => 'bc_',
+                    'dbPort' => '5432',
+                    'dbName' => 'test_database',
+                    'dbSchema' => '',
+                    'dbEncoding' => 'utf8mb4',
+                    'dbDataPattern' => 'BcSample.default',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password'
+                ],
+                [
+                    'dbType' => 'postgres',
+                    'dbHost' => 'localhost',
+                    'dbPrefix' => 'bc_',
+                    'dbPort' => '5432',
+                    'dbName' => 'test_database',
+                    'dbDataPattern' => 'BcSample.default',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password'
+                ],
+            ]
+        ];
     }
 
     /**
