@@ -123,7 +123,7 @@ class BcComposerTest extends BcTestCase
         copy($orgLockPath, $backupLockPath);
 
         // replace を削除
-        // baserCMS5.0.0が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
+        // baserCMS5.1系が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
@@ -131,31 +131,32 @@ class BcComposerTest extends BcTestCase
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
+        BcComposer::deleteReplace();
         BcComposer::update();
 
         // インストール
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '^5.0.11');
+        $result = BcComposer::require('baser-core', '5.1.1');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "^5.0.11"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.1"'));
 
         // アップデート
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '^5.0.1');
+        $result = BcComposer::require('baser-core', '5.1.2');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "^5.0.1"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.2"'));
 
         // ダウングレード
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '^5.0.0');
+        $result = BcComposer::require('baser-core', '5.1.1');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "^5.0.0"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.1"'));
 
         // エラー
         $result = BcComposer::require('bc-content-link', '100.0.0');
