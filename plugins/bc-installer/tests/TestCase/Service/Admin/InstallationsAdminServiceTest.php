@@ -307,11 +307,109 @@ class InstallationsAdminServiceTest extends BcTestCase
 
     /**
      * test readDbSetting
+     * @param array $sessionData
+     * @param array $installationData
+     * @param array $expected
+     * @dataProvider readDbSettingDataProvider
      */
-    public function test_readDbSetting()
+    public function test_readDbSetting($sessionData, $installationData, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $session = new Session();
+        $request = new ServerRequest(['session' => $session]);
+
+        if (!empty($sessionData)) {
+            $session->write('Installation', $sessionData);
+        }
+
+        $result = $this->Installations->readDbSetting($request, $installationData);
+        $this->assertEquals($expected, $result);
     }
+
+    public static function readDbSettingDataProvider()
+    {
+        return [
+            [
+                [],
+                [],
+                [
+                    'className' => 'Cake\Database\Connection',
+                    'datasource' => '',
+                    'driver' => null,
+                    'host' => '',
+                    'port' => '',
+                    'username' => '',
+                    'password' => '',
+                    'prefix' => '',
+                    'database' => '',
+                    'schema' => '',
+                    'encoding' => '',
+                    'dataPattern' => '',
+                    'persistent' => false,
+                ]
+            ],
+            [
+                [
+                    'dbType' => 'mysql',
+                    'dbHost' => 'localhost',
+                    'dbPort' => '3306',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password',
+                    'dbPrefix' => 'bc_',
+                    'dbName' => 'test_db',
+                    'dbSchema' => '',
+                    'dbEncoding' => 'utf8mb4',
+                    'dbDataPattern' => 'BcSample.default'
+                ],
+                [],
+                [
+                    'className' => 'Cake\Database\Connection',
+                    'datasource' => 'mysql',
+                    'driver' => 'Cake\Database\Driver\Mysql',
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'username' => 'root',
+                    'password' => 'password',
+                    'prefix' => 'bc_',
+                    'database' => 'test_db',
+                    'schema' => '',
+                    'encoding' => 'utf8mb4',
+                    'dataPattern' => 'BcSample.default',
+                    'persistent' => false,
+                ]
+            ],
+            [
+                [],
+                [
+                    'dbType' => 'postgres',
+                    'dbHost' => 'localhost',
+                    'dbPort' => '5432',
+                    'dbUsername' => 'postgres_user',
+                    'dbPassword' => 'password123',
+                    'dbPrefix' => 'pg_',
+                    'dbName' => 'pg_database',
+                    'dbSchema' => 'public',
+                    'dbEncoding' => 'UTF8',
+                    'dbDataPattern' => 'PgSample.default'
+                ],
+                [
+                    'className' => 'Cake\Database\Connection',
+                    'datasource' => 'postgres',
+                    'driver' => 'Cake\Database\Driver\Postgres',
+                    'host' => 'localhost',
+                    'port' => '5432',
+                    'username' => 'postgres_user',
+                    'password' => 'password123',
+                    'prefix' => 'pg_',
+                    'database' => 'pg_database',
+                    'schema' => 'public',
+                    'encoding' => 'UTF8',
+                    'dataPattern' => 'PgSample.default',
+                    'persistent' => false,
+                ]
+            ]
+        ];
+    }
+
 
     /**
      * test deleteAllTables
