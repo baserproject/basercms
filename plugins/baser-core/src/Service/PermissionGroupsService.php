@@ -471,6 +471,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return false|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAvailableMinUserGroupId()
     {
