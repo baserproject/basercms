@@ -252,6 +252,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @throws PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initAdmin(ServerRequest $request): void
     {
