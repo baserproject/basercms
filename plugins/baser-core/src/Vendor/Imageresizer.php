@@ -170,6 +170,7 @@ class Imageresizer
      * @return \GdImage|resource 新しいイメージオブジェクト
      * @checked
      * @noTodo
+     * @unitTest
      */
     function _copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming = false)
     {
