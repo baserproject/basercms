@@ -511,7 +511,6 @@ class BcFreezeHelperTest extends BcTestCase
      */
     public function testFreezeControll($fieldName, $options, $attributes, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcFreeze->freezeControll($fieldName, $options, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
@@ -519,15 +518,15 @@ class BcFreezeHelperTest extends BcTestCase
     public static function freezeControllDataProvider()
     {
         return [
-            ['baser.freezed', [], [], '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'],
+            ['baser.freezed', [], [], 'input type="hidden" name="baser\[freezed\]" class=""'],
             ['baser.freezed', [], ['value' => 'BaserCMS'], 'value="BaserCMS"'],
-            ['baser.freezed', [], ['value' => 'BaserCMS', 'multiple' => 'select'], 'value="BaserCMS"\/>BaserCMS'],
-            ['baser.freezed', [], ['value' => 'BaserCMS', 'multiple' => 'checkbox'], 'value="BaserCMS"\/>BaserCMS'],
+            ['baser.freezed', [], ['value' => 'BaserCMS', 'multiple' => 'select'], 'value="BaserCMS">BaserCMS'],
+            ['baser.freezed', [], ['value' => 'BaserCMS', 'multiple' => 'checkbox'], 'value="BaserCMS">BaserCMS'],
             ['baser.freezed', ['1' => 'BaserCMS1', '2' => 'BaserCMS2', '3' => 'BaserCMS3',], ['value' => [1, 2, 3], 'multiple' => 'checkbox'], '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'],
-            ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => [1], 'multiple' => 'hoge'], '<input type="hidden" name="data\[baser\]\[freezed\]\[\]"  class="" value="1" \/><ul class="" value="1"  ><\/ul>'],
+            ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => [1], 'multiple' => 'hoge'], '<input type="hidden" name="baser\[freezed\]\[\]" class="" value="1"><ul class="" value="1"><li>BaserCMS1<\/li><\/ul>'],
             ['baser.freezed', ['1' => 'BaserCMS1', '2' => 'BaserCMS2', '3' => 'BaserCMS3',], ['value' => [1, 2, 3], 'multiple' => 'checkbox'], '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'],
-            ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]" class="" value="1" id="baserFreezed"\/>BaserCMS1'],
-            ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'],
+            ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="baser\[freezed\]" class="" value="1">BaserCMS1'],
+            ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="baser\[freezed\]\[hoge\]" class="" value="1">BaserCMS1'],
         ];
     }
 
