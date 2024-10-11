@@ -11,9 +11,11 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
@@ -22,6 +24,7 @@ use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * InstallationsServiceTest
@@ -34,6 +37,7 @@ class InstallationsServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * setup
@@ -395,6 +399,19 @@ class InstallationsServiceTest extends BcTestCase
         foreach($dirs as $dir) {
             $this->assertFileExists($path . $dir, 'アップロード用初期フォルダを正しく作成できません');
         }
+    }
+
+    /**
+     * test buildPermissions
+     */
+    public function test_buildPermissions()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->Installations->buildPermissions();
+
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroups = $permissionGroupsService->getlist();
+        $this->assertCount(28, $permissionGroups);
     }
 
 }
