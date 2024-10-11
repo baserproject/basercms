@@ -22,6 +22,7 @@ use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
+use SQLite3;
 
 /**
  * InstallationsServiceTest
@@ -366,7 +367,32 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function test_getDbSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //winSQLiteVersion write
+        Configure::write('BcRequire.winSQLiteVersion', '3.7.16');
+
+        $pdoDrivers = \PDO::getAvailableDrivers();
+
+        if (in_array('mysql', $pdoDrivers)) {
+            $expectedDbSources['mysql'] = 'MySQL';
+        }
+
+        if (in_array('pgsql', $pdoDrivers)) {
+            $expectedDbSources['postgres'] = 'PostgreSQL';
+        }
+
+        if (in_array('sqlite', $pdoDrivers) && extension_loaded('sqlite3') && class_exists('SQLite3')) {
+            $dbFolderPath = ROOT . DS . 'db' . DS . 'sqlite';
+
+            if (is_writable(dirname($dbFolderPath))) {
+                $info = SQLite3::version();
+                if (version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {
+                    $expectedDbSources['sqlite'] = 'SQLite';
+                }
+            }
+        }
+
+        $result = $this->execPrivateMethod($this->Installations, '_getDbSource');
+        $this->assertEquals($expectedDbSources, $result);
     }
 
     /**
