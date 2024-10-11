@@ -12,8 +12,8 @@
 
 namespace BcInstaller\Test\TestCase\Service\Admin;
 
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -432,8 +432,16 @@ class InstallationsAdminServiceTest extends BcTestCase
     public function test_initAdmin()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);;
+        ContentFactory::make([
+            'id' => 1,
+            'type' => 'ContentFolder',
+            'entity_id' => 1,
+            'parent_id' => 0,
+            'rght' => 48,
+            'site_root' => true
+        ])->persist();
+        ContentFolderFactory::make(['id' => '1'])->persist();;
+
         $this->loginAdmin($this->getRequest('/'));
 
         //create admin user
@@ -474,8 +482,15 @@ class InstallationsAdminServiceTest extends BcTestCase
     public function test_initAdminException()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);;
+        ContentFactory::make([
+            'id' => 1,
+            'type' => 'ContentFolder',
+            'entity_id' => 1,
+            'parent_id' => 0,
+            'rght' => 48,
+            'site_root' => true
+        ])->persist();
+        ContentFolderFactory::make(['id' => '1'])->persist();;
         $this->loginAdmin($this->getRequest('/'));
 
         //create admin user
