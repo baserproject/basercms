@@ -684,9 +684,9 @@ EOF;
         Configure::write('BcApp.coreReleaseUrl', $rssPath);
         // Write the version to the version file
         $file = new BcFile($versionPath);
-        $file->write('100.0.0');
+        $file->write('5.0.0');
         // Generate the RSS feed
-        $this->createReleaseRss(['5.0.0', '5.0.1', '5.0.0']);
+        $this->createReleaseRss(['5.0.0', '5.0.1', '5.0.2']);
         // Clear the cache
         Cache::delete('coreReleaseInfo', '_bc_update_');
 
@@ -702,9 +702,9 @@ EOF;
     {
         return [
             //use_update_notice enabled
-            [true, '5.0.0'],
+            [true, '5.0.2'],
             //use_update_notice disabled
-            [false, '100.0.0'],
+            [false, '5.0.0'],
         ];
     }
 }
