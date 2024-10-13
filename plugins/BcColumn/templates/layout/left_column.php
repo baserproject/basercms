@@ -32,8 +32,8 @@ $base = $attributes['base'];
 
 <?= $this->BcBaser->declarationI18n() ?>
 <?php $this->BcBaser->js(array(
-			'jquery-1.7.2.min',
-			'jquery.bxSlider.min',
+			'jquery-3.7.1.min',
+			'jquery.bxslider-4.2.17.min',
 			'jquery.colorbox-1.6.1.min',
 			'baser.min',
 			'startup'

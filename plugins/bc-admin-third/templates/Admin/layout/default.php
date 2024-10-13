@@ -71,7 +71,7 @@ $base = $attributes['base'];
   <?php $this->BcBaser->js([
     'admin/vendor.bundle',
     'vendor/vue.min',
-    'vendor/jquery-3.5.1.min',
+    'vendor/jquery-3.7.1.min',
     'vendor/jquery.bt.min',
     'vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
     'vendor/jquery-ui-1.13.0.min',

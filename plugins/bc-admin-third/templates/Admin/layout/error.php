@@ -15,7 +15,7 @@
   <?php $this->BcBaser->js([
     'admin/vendor.bundle',
     'vendor/vue.min',
-    'vendor/jquery-3.5.1.min',
+    'vendor/jquery-3.7.1.min',
     'vendor/jquery.bt.min',
     'vendor/jquery-ui-1.11.4.min.js',
     'vendor/i18n/ui.datepicker-ja',

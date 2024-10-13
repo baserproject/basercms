@@ -37,9 +37,9 @@ $base = $attributes['base'];
 	]) ?>
   <?= $this->BcBaser->declarationI18n() ?>
 	<?php $this->BcBaser->js([
-		'vendor/jquery-1.11.3.min',
+		'vendor/jquery-3.7.1.min',
 		'vendor/jquery-ui-1.11.4.min',
-		'vendor/jquery.bxslider-4.12.min',
+		'vendor/jquery.bxslider-4.2.17.min',
 		'vendor/jquery.colorbox-1.6.1.min',
 		'vendor/i18n/ui.datepicker-ja',
 		'vendor/jquery-accessibleMegaMenu',
