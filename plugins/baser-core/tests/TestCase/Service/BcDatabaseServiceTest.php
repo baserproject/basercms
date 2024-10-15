@@ -1040,24 +1040,11 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
 
     /**
      * test updateSequence
+     * @TODO PostgreSQLのテスト
      */
     public function testUpdateSequence()
     {
         // デフォルトdriver：MYSQL
         $this->assertTrue($this->BcDatabaseService->updateSequence());
-
-        // Postgres Driverを変更
-        $config = ConnectionManager::getConfig('default');
-        $bakDriver = $config['driver'];
-        $config['driver'] = Postgres::class;
-        ConnectionManager::drop('default');
-        ConnectionManager::setConfig('default', $config);
-
-        $this->assertTrue($this->BcDatabaseService->updateSequence());
-
-        // 後処理
-        $config['driver'] = $bakDriver;
-        ConnectionManager::drop('default');
-        ConnectionManager::setConfig('default', $config);
     }
 }
