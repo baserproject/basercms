@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\MailContentsScenario;
+use BaserCore\Test\Scenario\SitesScenario;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -107,6 +108,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTreeIndex(): void
     {
+        ContentFactory::make(['title' => 'baserCMSサンプル'])->persist();
         $request = $this->getRequest('/?site_id=1');
         $result = $this->ContentsService->getTreeIndex($request->getQueryParams());
         $this->assertEquals("baserCMSサンプル", $result->first()->title);
@@ -161,6 +163,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $request = $this->getRequest('/');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals('', $contents->first()->name);
@@ -198,6 +201,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTrashIndex(): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         // type: all
         $result = $this->ContentsService->getTrashIndex();
         $this->assertNotNull($result->first()->deleted_date);
@@ -449,43 +453,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetUrlById($id, $full, $expects)
     {
-        ContentFactory::make(
-            [
-                'id' => 1,
-                'name' => '',
-                'plugin' => 'BaserCore',
-                'type' => 'ContentFolder',
-                'entity_id' => 1,
-                'url' => '/',
-                'site_id' => 1,
-                'alias_id' => null,
-                'main_site_content_id' => null,
-                'parent_id' => 0,
-                'lft' => 1,
-                'rght' => 48,
-                'level' => 0,
-                'title' => 'baserCMSサンプル',
-                'description' => '',
-                'eyecatch' => '',
-                'author_id' => 1,
-                'layout_template' => 'default',
-                'status' => true,
-                'publish_begin' => null,
-                'publish_end' => null,
-                'self_status' => true,
-                'self_publish_begin' => '2019-06-11 12:27:01',
-                'self_publish_end' => null,
-                'exclude_search' => false,
-                'created_date' => null,
-                'modified_date' => '2019-06-11 12:27:01',
-                'site_root' => true,
-                'deleted_date' => null,
-                'exclude_menu' => false,
-                'blank_link' => false,
-                'created' => '2016-07-29 18:02:53',
-                'modified' => '2020-09-14 21:10:41',
-            ]
-        )->persist();
+        $this->loadFixtureScenario(ContentsScenario::class);
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
         $result = $this->ContentsService->getUrlById($id, $full);
@@ -517,6 +485,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetUrl($host, $userAgent, $url, $full, $useSubDomain, $expects)
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(ContentsScenario::class);
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
