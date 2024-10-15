@@ -390,7 +390,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         return [
             [null, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
-            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/']]],
+            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
             [1, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/'], ['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
             [1, ['excludeIds' => [1]], [['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
         ];
