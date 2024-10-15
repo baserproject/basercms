@@ -120,6 +120,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTableIndex($conditions, $expected): void
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $result = $this->ContentsService->getTableIndex($conditions);
         $this->assertEquals($expected, $result->count());
     }
@@ -212,6 +213,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetContentFolderList()
     {
+        $this->loadFixtureScenario(ContentsScenario::class);
         $siteId = 1;
         $result = $this->ContentsService->getContentFolderList($siteId);
         $this->assertEquals(
