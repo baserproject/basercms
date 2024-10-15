@@ -179,6 +179,7 @@ class InstallationsServiceTest extends BcTestCase
         $result = $this->Installations->addDefaultUser($userData);
         $this->assertEquals('testuser', $result['name']);
         $this->assertEquals('testuser@example.com', $result['email']);
+        $this->assertEquals('testuser', $result['real_name_1']);
         $this->assertCount(1, $result['user_groups']);
     }
 
