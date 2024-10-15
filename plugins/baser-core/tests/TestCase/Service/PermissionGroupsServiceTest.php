@@ -20,6 +20,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
+use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Test\Factory\PermissionGroupFactory;
@@ -490,4 +491,27 @@ class PermissionGroupsServiceTest extends BcTestCase
         $this->expectExceptionMessage('Entity save failure. Found the following errors (id.integer: "The provided value must be an integer")');
         $this->PermissionGroups->create($invalidPostData);
     }
+
+    /**
+     * Test getAvailableMinUserGroupId
+     * with valid user group
+     */
+    public function test_getAvailableMinUserGroupId_with_valid_user_group()
+    {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $result = $this->PermissionGroups->getAvailableMinUserGroupId();
+
+        $this->assertEquals(2, $result);
+    }
+
+    /**
+     * Test getAvailableMinUserGroupId
+     * without user group
+     */
+    public function test_getAvailableMinUserGroupId_without_user_group()
+    {
+        $result = $this->PermissionGroups->getAvailableMinUserGroupId();
+        $this->assertFalse($result);
+    }
+
 }

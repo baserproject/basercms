@@ -64,7 +64,7 @@ class UsersController extends BcAdminAppController
     public function login(UsersAdminServiceInterface $service)
     {
         $this->set($service->getViewVarsForLogin($this->getRequest()));
-        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+        $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
 
         // EVENT Users.beforeLogin
         $event = $this->dispatchLayerEvent('beforeLogin', [
