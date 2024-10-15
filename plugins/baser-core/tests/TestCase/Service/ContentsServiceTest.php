@@ -1252,4 +1252,38 @@ class ContentsServiceTest extends BcTestCase
 
     }
 
+    /**
+     * test getCrumbs
+     */
+    public function testGetCrumbs()
+    {
+        //データ生成
+        ContentFactory::make(['id' => 1, 'lft' => 1, 'rght' => 10])->persist();
+        ContentFactory::make(['id' => 2, 'lft' => 2, 'rght' => 5, 'exclude_menu' => true])->persist();
+        ContentFactory::make(['id' => 3, 'lft' => 3, 'rght' => 4])->persist();
+
+        ContentFactory::make(['id' => 4, 'lft' => 6, 'rght' => 9])->persist();
+        ContentFactory::make(['id' => 5, 'lft' => 7, 'rght' => 8])->persist();
+
+        //親IDを指定
+        $rs = $this->ContentsService->getCrumbs(1);
+        $this->assertCount(1, $rs);
+
+        //第一子かつexclude_menu＝trueを指定
+        $rs = $this->ContentsService->getCrumbs(2);
+        $this->assertCount(1, $rs);
+
+        //第二子かつexclude_menu＝trueを指定
+        $rs = $this->ContentsService->getCrumbs(3);
+        $this->assertCount(2, $rs);
+
+
+        //第一子かつexclude_menu＝falseを指定
+        $rs = $this->ContentsService->getCrumbs(4);
+        $this->assertCount(2, $rs);
+
+        //第二子かつexclude_menu＝falseを指定
+        $rs = $this->ContentsService->getCrumbs(5);
+        $this->assertCount(3, $rs);
+    }
 }
