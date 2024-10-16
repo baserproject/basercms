@@ -674,7 +674,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         foreach ($tables as $table) {
             if (preg_match('/(^|_)phinxlog$/', $table)) continue;
             $sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
-            if (!$this->columnExists($table, 'id')) continue;
             if (!$db->execute($sql)) $result = false;
         }
         return $result;
