@@ -118,7 +118,7 @@ class User extends EntityAlias
      */
     public function isAddableToAdminGroup(): bool
     {
-        return $this->isSuper();
+        return $this->isAdmin();
     }
 
     /**
