@@ -459,8 +459,8 @@ class InstallationsAdminServiceTest extends BcTestCase
 
         //check user is created
         $users = $this->getTableLocator()->get('Users');
-        $result = $users->find()->where(['email' => 'test@example.com'])->first();
-        $this->assertEquals(2, $result->id);
+        $query = $users->find()->where(['email' => $data['admin_email']]);
+        $this->assertEquals(1, $query->count());
 
         $this->assertEquals(2, $session->read('Installation.id'));
 
