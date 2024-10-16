@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\LoginStoresScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
@@ -123,5 +124,18 @@ class BcAdminApiControllerTest extends BcTestCase
         $_SERVER['USE_CORE_ADMIN_API'] = 'true';
     }
 
+    /**
+     * test isAvailableUser
+     */
+    public function testIsAvailableUser()
+    {
+        UserFactory::make(['id' => 2])->persist();
+        $request = $this->getRequest('/baser/admin/baser-core/themes/');
 
+        $controller = new BcAdminApiController($this->loginAdmin($request));
+        $this->assertTrue($controller->isAvailableUser());
+
+        $controller = new BcAdminApiController($this->loginAdmin($request, 2));
+        $this->assertFalse($controller->isAvailableUser());
+    }
 }
