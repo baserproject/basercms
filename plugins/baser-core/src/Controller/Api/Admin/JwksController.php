@@ -27,6 +27,7 @@ class JwksController extends BcAdminApiController
      * Initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -41,6 +42,7 @@ class JwksController extends BcAdminApiController
      * JWT::decode($jwt, JWK::parseKeySet($keys), [Configure::read('Jwt.algorithm')])
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index()
     {
