@@ -48,13 +48,22 @@ class UserValidation extends Validation
         $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
         /* @var User $loginUser */
         $loginUser = $users->find()->contain('UserGroups')->where(['Users.id' => $loginUserId])->first();
-        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
-        if(in_array(Configure::read('BcApp.adminGroupId'), $loginGroupId)) {
-            return true;
-        }
+
+        // 自身の変更ではない
         if($context['data']['id'] !== $loginUserId) {
             return true;
         }
+
+        // スーパーユーザーはシステム管理グループが含まれていれば自身のユーザーグループも変更可能
+        if($loginUser->isSuper()) {
+            if(in_array(Configure::read('BcApp.adminGroupId'), $userGroup['_ids'])) {
+                return true;
+            }
+            return false;
+        }
+
+        // 自身のユーザーグループを変更しているかどうか
+        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
         $postGroupId = array_map('intval', $userGroup['_ids']);
         return ($loginGroupId === $postGroupId);
     }
