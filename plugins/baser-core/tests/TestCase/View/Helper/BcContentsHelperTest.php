@@ -44,12 +44,12 @@ class BcContentsHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-//        $this->loadFixtureScenario(UserScenario::class);
-//        $this->loadFixtureScenario(UserGroupsScenario::class);
-//        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-//        $this->loadFixtureScenario(SitesScenario::class);
-//        $this->loadFixtureScenario(ContentsScenario::class);
-//        $this->loadFixtureScenario(PermissionsScenario::class);
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PermissionsScenario::class);
         $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
