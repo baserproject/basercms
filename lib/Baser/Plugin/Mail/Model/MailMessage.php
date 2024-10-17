@@ -250,6 +250,15 @@ class MailMessage extends MailAppModel
 					}
 				}
 			}
+
+			// ファイル拡張子チェックデフォルト設定
+			if ($mailField['type'] === 'file') {
+				$this->validate[$mailField['field_name']]['fileExt'] = [
+					'rule' => ['fileExt', 'gif,jpg,jpeg,png,pdf'],
+					'message' => __('ファイル形式が無効です。')
+				];
+			}
+
 			// ### 拡張バリデーション
 			if ($mailField['valid_ex'] && !empty($mailField['use_field'])) {
 				$valids = explode(',', $mailField['valid_ex']);
