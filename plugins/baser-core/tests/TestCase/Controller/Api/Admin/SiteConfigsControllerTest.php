@@ -88,11 +88,16 @@ class SiteConfigsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = [
-            'email' => 'hoge@basercms.net'
-        ];
+        $data = ['email' => 'hoge@basercms.net'];
         $this->post('/baser/api/admin/baser-core/site_configs/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
+
+        //エラーを発生した場合、
+        $this->post('/baser/api/admin/baser-core/site_configs/edit/1.json?token=' . $this->accessToken, ['email' => '']);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('管理者メールアドレスを入力してください。', $result->errors->email->_empty);
     }
 
     /**
