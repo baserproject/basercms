@@ -881,6 +881,9 @@ class BlogHelper extends AppHelper
 	 */
 	public function getPostImg($post, $options = [])
 	{
+		if (!isset($post)) {
+			return '';
+		}
 		$this->setContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge($_options = [
 			'num' => 1,
@@ -1160,7 +1163,9 @@ class BlogHelper extends AppHelper
 	 */
 	public function getEyeCatch($post, $options = [])
 	{
-		$this->setContent($post['BlogPost']['blog_content_id']);
+		if (isset($post)) {
+			$this->setContent($post['BlogPost']['blog_content_id']);
+		}
 		$options = array_merge([
 			'imgsize' => 'thumb',
 			'link' => true, // 大きいサイズの画像へのリンク有無
