@@ -12,6 +12,9 @@
 
 namespace BcInstaller\Test\TestCase\Service\Admin;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
@@ -19,6 +22,8 @@ use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
+use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * InstallationsAdminServiceTest
@@ -31,6 +36,7 @@ class InstallationsAdminServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -421,10 +427,83 @@ class InstallationsAdminServiceTest extends BcTestCase
 
     /**
      * test initAdmin
+     * no exception
      */
     public function test_initAdmin()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make([
+            'id' => 1,
+            'type' => 'ContentFolder',
+            'entity_id' => 1,
+            'parent_id' => 0,
+            'rght' => 48,
+            'site_root' => true
+        ])->persist();
+        ContentFolderFactory::make(['id' => '1'])->persist();;
+
+        $this->loginAdmin($this->getRequest('/'));
+
+        //create admin user
+        $data = [
+            'admin_email' => 'test@example.com',
+            'site_name' => 'Test Site',
+            'admin_password' => 'Password1234',
+            'admin_confirm_password' => 'Password1234'
+        ];
+        $request = new ServerRequest(['post' => $data]);
+
+        $session = $request->getSession();
+
+        $this->Installations->initAdmin($request);
+
+        //check user is created
+        $users = $this->getTableLocator()->get('Users');
+        $query = $users->find()->where(['email' => $data['admin_email']]);
+        $this->assertEquals(1, $query->count());
+
+        $this->assertEquals(2, $session->read('Installation.id'));
+
+        //check set site name
+        $site = $this->getTableLocator()->get('sites');
+        $result = $site->find()->where(['title' => 'Test Site'])->first();
+        $this->assertEquals('Test Site', $result->title);
+
+        //check set admin email
+        $siteConfig = $this->getTableLocator()->get('SiteConfigs');
+        $result = $siteConfig->find()->where(['name' => 'email'])->first();
+        $this->assertEquals('test@example.com', $result->value);
+    }
+
+    /**
+     * test initAdmin
+     * with exception
+     */
+    public function test_initAdminException()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make([
+            'id' => 1,
+            'type' => 'ContentFolder',
+            'entity_id' => 1,
+            'parent_id' => 0,
+            'rght' => 48,
+            'site_root' => true
+        ])->persist();
+        ContentFolderFactory::make(['id' => '1'])->persist();;
+        $this->loginAdmin($this->getRequest('/'));
+
+        //create admin user
+        $data = [
+            'admin_email' => 'admin@example.com',
+            'site_name' => 'Test Site',
+            'admin_password' => 'Password1234',
+            'admin_confirm_password' => 'Password1234'
+        ];
+        $request = new ServerRequest(['post' => $data]);
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (email.nameUnique: "既に登録のあるEメールです。").');
+        $this->Installations->initAdmin($request);
     }
 
     /**
