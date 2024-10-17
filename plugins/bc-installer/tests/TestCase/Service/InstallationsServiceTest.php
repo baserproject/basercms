@@ -24,6 +24,7 @@ use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use PDO;
 
 /**
  * InstallationsServiceTest
@@ -400,7 +401,13 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function test_getDbSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $pdoDrivers = PDO::getAvailableDrivers();
+        $expected = [];
+        if (in_array('mysql', $pdoDrivers)) {
+            $expected['mysql'] = 'MySQL';
+        }
+        $result = $this->execPrivateMethod($this->Installations, '_getDbSource');
+        $this->assertEquals($expected, $result);
     }
 
     /**
