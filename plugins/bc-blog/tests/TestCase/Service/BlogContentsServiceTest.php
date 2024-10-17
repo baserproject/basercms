@@ -333,10 +333,10 @@ class BlogContentsServiceTest extends BcTestCase
     public function test_findByUrl($url, $expected)
     {
         //generate data
-        BlogContentFactory::make(['id' => 60])->persist();
-        ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'entity_id' => 60, 'title' => 'url test', 'url' => '/test', 'site_id' => 60])->persist();
-        ContentFactory::make(['id' => 61, 'type' => 'BlogContent', 'entity_id' => 60,'title' => 'url demo', 'url' => '/demo', 'site_id' => 60])->persist();
-        SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'title' => 'url test', 'url' => '/test', 'site_id' => 1])->persist();
+        ContentFactory::make(['id' => 2, 'type' => 'BlogContent', 'entity_id' => 1,'title' => 'url demo', 'url' => '/demo', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
 
         $rs = $this->BlogContentsService->findByUrl($url);
 
