@@ -114,6 +114,7 @@ class BcAdminApiController extends BcApiController
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function isAvailableUser(): bool
     {
