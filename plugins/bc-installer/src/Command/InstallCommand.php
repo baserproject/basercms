@@ -49,6 +49,7 @@ class InstallCommand extends Command
      * @return \Cake\Console\ConsoleOptionParser
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {

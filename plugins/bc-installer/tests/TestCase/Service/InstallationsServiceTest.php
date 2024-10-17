@@ -166,7 +166,38 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testAddDefaultUser()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        //data
+        $userData = [
+            'name' => 'testuser',
+            'email' => 'testuser@example.com',
+            'password_1' => 'Password1234',
+            'password_2' => 'Password1234'
+        ];
+
+        $result = $this->Installations->addDefaultUser($userData);
+        $this->assertEquals('testuser', $result['name']);
+        $this->assertEquals('testuser@example.com', $result['email']);
+        $this->assertEquals('testuser', $result['real_name_1']);
+        $this->assertCount(1, $result['user_groups']);
+    }
+
+    public function testAddDefaultUserThrowsException()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        $userData = [
+            'email' => 'testuser@example.com',
+            'password_1' => 'password123',
+            'password_2' => 'differentpassword'
+        ];
+
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (password.minLength: "パスワードは12文字以上で入力してください。", password.passwordConfirm: "パスワードが同じものではありません。", password.passwordRequiredCharacterType: "パスワード');
+        $this->Installations->addDefaultUser($userData);
     }
 
     /**
@@ -382,23 +413,50 @@ class InstallationsServiceTest extends BcTestCase
     }
     /**
      * アップロード用初期フォルダを作成する
+     * test createDefaultFiles
      */
     public function testCreateDefaultFiles()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
-        // 各フォルダを削除
-        $path = WWW_ROOT . 'files' . DS;
+        //create backup folder
+        $backupPath = WWW_ROOT . 'files_backup' . DS;
+        if (!is_dir($backupPath)) {
+            mkdir($backupPath, 0777, true);
+        }
+
         $dirs = ['blog', 'editor', 'theme_configs'];
-
-        foreach($dirs as $dir) {
-            (new BcFolder($path . $dir))->delete($path . $dir);
+        foreach ($dirs as $dir) {
+            $path = WWW_ROOT . 'files' . DS . $dir;
+            if (is_dir($path)) {
+                // Backup folder if exists
+                rename($path, $backupPath . $dir);
+            }
         }
 
-        $this->BcManager->createDefaultFiles();
+        $result = $this->Installations->createDefaultFiles();
+        $this->assertTrue($result);
 
-        foreach($dirs as $dir) {
-            $this->assertFileExists($path . $dir, 'アップロード用初期フォルダを正しく作成できません');
+        //check folder is created
+        foreach ($dirs as $dir) {
+            $this->assertTrue(is_dir(WWW_ROOT . 'files' . DS . $dir));
         }
+
+        //delete created folders
+        foreach ($dirs as $dir) {
+            $newDir = WWW_ROOT . 'files' . DS . $dir;
+            if (is_dir($newDir) && !is_dir($backupPath . $dir)) {
+                rmdir($newDir);
+            }
+        }
+
+        // Restore backup folder
+        foreach ($dirs as $dir) {
+            $backupDir = $backupPath . $dir;
+            if (is_dir($backupDir)) {
+                rename($backupDir, WWW_ROOT . 'files' . DS . $dir);
+            }
+        }
+        //delete backup folder
+        rmdir($backupPath);
     }
 
     /**
