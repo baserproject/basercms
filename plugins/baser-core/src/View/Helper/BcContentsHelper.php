@@ -279,6 +279,7 @@ class BcContentsHelper extends Helper
      *  - `siteId` : サイトID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTree(int $id = 1, ?int $level = null, array $options = []): ResultSetDecorator
     {
