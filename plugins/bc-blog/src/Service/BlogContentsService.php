@@ -344,6 +344,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      *
      * @param int $contentId
      * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findByContentId(int $contentId): ?EntityInterface
     {
