@@ -34,6 +34,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {

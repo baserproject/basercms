@@ -754,37 +754,39 @@ class PluginsService implements PluginsServiceInterface
                 // ユニットテストの場合にhttpでアクセスできないので、ファイルから直接読み込む
                 $file = new BcFile($releaseUrl);
                 $body = $file->read();
-            } catch (NetworkException $e) {
+            } catch (NetworkException) {
                 return [];
             }
             $xml = Xml::build($body);
             $latest = null;
             $versions = [];
             $currentVersion = BcUtil::getVersion();
-            if (isset($xml->channel->item)) {
+            $currentVerPoint = BcUtil::verpoint($currentVersion);
+            if (isset($xml->channel->item) && $currentVerPoint !== false) {
+            	$items = [];
                 $major = preg_replace('/^([0-9]+\.).+?$/', "$1", $currentVersion);
                 foreach($xml->channel->item as $item) {
-                    if (!isset($item->guid)) continue;
-                    if (preg_match('/baserproject\/baser-core ([0-9.]+)$/', $item->guid, $matches)) {
-                        $version = $matches[1];
-                        if (!$latest) {
-                            $latest = $version;
-                        }
-                        // 同じメジャーバージョンでない場合は無視
-                        if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
+					if (!isset($item->guid)) continue;
+					if (preg_match('/baserproject\/baser-core ([0-9.]+)$/', $item->guid, $matches)) {
+						$version = $matches[1];
+						// 同じメジャーバージョンでない場合は無視
+						if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
+						$verpoint = BcUtil::verpoint($version);
+						// アップデートバージョンが開発版の場合は無視
+						if($verpoint === false) continue;
+						$items[$verpoint] = $version;
+					}
+				}
+                krsort($items);
 
-                        $currentVerPoint = BcUtil::verpoint($currentVersion);
-                        $updateVerPoint = BcUtil::verpoint($version);
-                        // 現在のパッケージが開発版の場合は無視
-                        if ($currentVerPoint === false) break;
-                        // アップデートバージョンが開発版の場合は無視
-                        if ($updateVerPoint === false) continue;
-                        // アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
-                        if ($currentVerPoint > $updateVerPoint) break;
-
-                        if ($currentVersion === $version) break;
-                        $versions[] = $version;
-                    }
+                foreach($items as $verpoint => $version) {
+					if (!$latest) {
+						$latest = $version;
+					}
+					// アップデートバージョンが現在のパッケージのバージョンより小さい場合は無視
+					if ($currentVerPoint > $verpoint) break;
+					if ($currentVersion === $version) break;
+					$versions[] = $version;
                 }
             }
             arsort($versions);
