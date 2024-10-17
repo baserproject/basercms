@@ -11,6 +11,7 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\SiteFactory;
@@ -456,6 +457,25 @@ class InstallationsServiceTest extends BcTestCase
         }
         //delete backup folder
         rmdir($backupPath);
+    }
+
+    /**
+     * test buildPermissions
+     */
+    public function test_buildPermissions()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        //check before buildPermissions
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroups = $permissionGroupsService->getlist();
+        $this->assertCount(0, $permissionGroups);
+
+        //buildPermissions
+        $this->Installations->buildPermissions();
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroups = $permissionGroupsService->getlist();
+        $this->assertCount(28, $permissionGroups);
     }
 
 }
