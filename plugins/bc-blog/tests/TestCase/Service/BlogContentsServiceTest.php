@@ -324,4 +324,36 @@ class BlogContentsServiceTest extends BcTestCase
 
     }
 
+    /**
+     * test findByUrl
+     * @param $url
+     * @param $expected
+     * @dataProvider findByUrlDataProvider
+     */
+    public function test_findByUrl($url, $expected)
+    {
+        //generate data
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'title' => 'url test', 'url' => '/test', 'site_id' => 1])->persist();
+        ContentFactory::make(['id' => 2, 'type' => 'BlogContent', 'entity_id' => 1,'title' => 'url demo', 'url' => '/demo', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
+
+        $rs = $this->BlogContentsService->findByUrl($url);
+
+        if (empty($url)) {
+            $this->assertEmpty($expected);
+        }else{
+            $this->assertEquals($expected, $rs->content->title);
+        }
+    }
+
+    public static function findByUrlDataProvider()
+    {
+        return [
+            ['', ''],
+            ['/test', 'url test'],
+            ['/demo', 'url demo'],
+        ];
+    }
+
 }

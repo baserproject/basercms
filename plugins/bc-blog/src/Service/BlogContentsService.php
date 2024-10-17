@@ -331,6 +331,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      *
      * @param string $url
      * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findByUrl(string $url): ?EntityInterface
     {
