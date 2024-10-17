@@ -327,27 +327,19 @@ class BlogContentsServiceTest extends BcTestCase
     /**
      * test findByContentId
      */
-
     public function test_findByContentId()
     {
         //generate data
-        BlogContentFactory::make(['id' => 60])->persist();
-        ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'title' => 'test', 'description' => 'BaserCMS', 'entity_id' => 60, 'site_id' => 60])->persist();
-        SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'title' => 'test', 'description' => 'BaserCMS', 'entity_id' => 1, 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
 
-        $rs = $this->BlogContentsService->findByContentId(60);
+        $rs = $this->BlogContentsService->findByContentId(1);
         $this->assertEquals('test', $rs->content->title);
         $this->assertEquals('BaserCMS', $rs->content->description);
-    }
 
-    /**
-     * test findByContentId
-     * with invalid content id
-     */
-    public function test_findByContentIdWithInvalidContentId()
-    {
+        //with invalid content id
         $rs = $this->BlogContentsService->findByContentId(999);
         $this->assertNull($rs);
     }
-
 }
