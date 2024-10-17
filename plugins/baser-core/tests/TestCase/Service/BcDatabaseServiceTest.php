@@ -34,6 +34,7 @@ use Cake\Core\Configure;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Utility\Inflector;
@@ -1035,5 +1036,15 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
 
         // drop table
         $this->BcDatabaseService->dropTable($table);
+    }
+
+    /**
+     * test updateSequence
+     * @TODO PostgreSQLのテスト
+     */
+    public function testUpdateSequence()
+    {
+        // デフォルトdriver：MYSQL
+        $this->assertTrue($this->BcDatabaseService->updateSequence());
     }
 }

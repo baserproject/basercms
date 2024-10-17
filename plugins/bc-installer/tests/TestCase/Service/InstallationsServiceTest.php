@@ -14,6 +14,7 @@ namespace BcInstaller\Test\TestCase\Service;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
@@ -22,6 +23,7 @@ use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * InstallationsServiceTest
@@ -34,6 +36,7 @@ class InstallationsServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * setup
@@ -162,7 +165,38 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testAddDefaultUser()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        //data
+        $userData = [
+            'name' => 'testuser',
+            'email' => 'testuser@example.com',
+            'password_1' => 'Password1234',
+            'password_2' => 'Password1234'
+        ];
+
+        $result = $this->Installations->addDefaultUser($userData);
+        $this->assertEquals('testuser', $result['name']);
+        $this->assertEquals('testuser@example.com', $result['email']);
+        $this->assertEquals('testuser', $result['real_name_1']);
+        $this->assertCount(1, $result['user_groups']);
+    }
+
+    public function testAddDefaultUserThrowsException()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        $userData = [
+            'email' => 'testuser@example.com',
+            'password_1' => 'password123',
+            'password_2' => 'differentpassword'
+        ];
+
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (password.minLength: "パスワードは12文字以上で入力してください。", password.passwordConfirm: "パスワードが同じものではありません。", password.passwordRequiredCharacterType: "パスワード');
+        $this->Installations->addDefaultUser($userData);
     }
 
     /**

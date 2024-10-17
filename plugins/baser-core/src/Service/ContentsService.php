@@ -1596,6 +1596,7 @@ class ContentsService implements ContentsServiceInterface
      * @return \Cake\Datasource\ResultSetInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCrumbs(int $id)
     {
