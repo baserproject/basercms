@@ -12,11 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\JwksController;
-use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
-use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * JwksControllerTest Test Case
@@ -29,7 +27,6 @@ class JwksControllerTest extends BcTestCase
      */
     use IntegrationTestTrait;
     use BcContainerTrait;
-    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -37,8 +34,6 @@ class JwksControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
-
     }
 
     /**
