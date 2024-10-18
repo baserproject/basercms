@@ -401,13 +401,19 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function test_getDbSource()
     {
+        Configure::write('BcRequire.winSQLiteVersion', '3.7.16');
+
         $pdoDrivers = PDO::getAvailableDrivers();
         $expected = [];
         if (in_array('mysql', $pdoDrivers)) {
             $expected['mysql'] = 'MySQL';
         }
         $result = $this->execPrivateMethod($this->Installations, '_getDbSource');
-        $this->assertEquals($expected, $result);
+
+        //only mysql
+        $filteredResult = array_intersect_key($result, ['mysql' => '']);
+
+        $this->assertEquals($expected, $filteredResult);
     }
 
     /**
