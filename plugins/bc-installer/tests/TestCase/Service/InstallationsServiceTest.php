@@ -120,8 +120,8 @@ class InstallationsServiceTest extends BcTestCase
         ini_set('memory_limit', '1024M');
         $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
 
-//        ini_set('memory_limit', '2m');
-//        $this->assertEquals(2, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
+        ini_set('memory_limit', '1024m');
+        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
 
 //        ini_set('memory_limit', '1g');
 //        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
