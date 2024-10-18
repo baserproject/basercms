@@ -328,6 +328,11 @@ return [
         'twoFactorAuthenticationCodeAllowTime' => 10,
 
         /**
+         * 4系のパスワードでログインする際に、新しいハッシュアルゴリズムでハッシュ化するかどうか
+         */
+        'needsPasswordRehash' => true,
+
+        /**
          * エディタ
          */
         'editors' => [

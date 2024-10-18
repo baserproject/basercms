@@ -91,10 +91,11 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
 
                 // baserCMS4系のパスワードでログインした場合、新しいハッシュアルゴリズムでパスワードをハッシュし直す
-                if ($this->request->getAttribute('authentication')
-                    ->identifiers()
-                    ->get('Password')
-                    ->needsPasswordRehash()
+                if (Configure::read('BcApp.needsPasswordRehash') &&
+                    $this->request->getAttribute('authentication')
+                        ->identifiers()
+                        ->get('Password')
+                        ->needsPasswordRehash()
                 ) {
                     try {
                         $password = $this->getRequest()->getData('password');
