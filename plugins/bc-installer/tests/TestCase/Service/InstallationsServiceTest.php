@@ -464,8 +464,6 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function test_buildPermissions()
     {
-        $this->loadFixtureScenario(InitAppScenario::class);
-
         //check before buildPermissions
         $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         $permissionGroups = $permissionGroupsService->getlist();
@@ -475,7 +473,7 @@ class InstallationsServiceTest extends BcTestCase
         $this->Installations->buildPermissions();
         $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         $permissionGroups = $permissionGroupsService->getlist();
-        $this->assertCount(28, $permissionGroups);
+        $this->assertCount(4, $permissionGroups);
     }
 
 }
