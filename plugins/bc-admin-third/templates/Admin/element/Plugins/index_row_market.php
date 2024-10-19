@@ -44,7 +44,7 @@ use BaserCore\View\AppView;
       if (!empty($data['authorLink'])) {
         $this->BcBaser->link(strip_tags($data['author']), $data['authorLink'], ['target' => '_blank', 'escape' => true]);
       } else {
-        echo strip_tags($data['author']);
+        echo h(strip_tags($data['author']));
       }
     ?>
   </td>
