@@ -39,8 +39,15 @@ use BaserCore\View\AppView;
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($data['version']) ?></td>
   <td class="bca-table-listup__tbody-td"><?php echo nl2br(h($data['description'])) ?></td>
-  <td
-    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
+  <td class="bca-table-listup__tbody-td">
+    <?php
+      if (!empty($data['authorLink'])) {
+        $this->BcBaser->link(strip_tags($data['author']), $data['authorLink'], ['target' => '_blank', 'escape' => true]);
+      } else {
+        echo strip_tags($data['author']);
+      }
+    ?>
+  </td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
     <?php echo $this->BcTime->format($data['created'], 'yyyy-MM-dd') ?><br/>
     <?php echo $this->BcTime->format($data['modified'], 'yyyy-MM-dd') ?>
