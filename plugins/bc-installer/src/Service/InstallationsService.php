@@ -397,6 +397,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createInstallFile(array $dbConfig): bool
     {
