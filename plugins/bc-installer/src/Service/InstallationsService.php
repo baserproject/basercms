@@ -337,6 +337,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function executeDefaultUpdates(): bool
     {
