@@ -408,7 +408,11 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testGetAllDefaultDataPatterns()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->Installations->getAllDefaultDataPatterns();
+        //戻り値を確認
+        $this->assertEquals('BcColumn ( default )', $rs['BcColumn.default']);
+        $this->assertEquals('サンプルテーマ ( default )', $rs['BcThemeSample.default']);
+        $this->assertEquals('サンプルテーマ ( empty )', $rs['BcThemeSample.empty']);
     }
     /**
      * アップロード用初期フォルダを作成する
