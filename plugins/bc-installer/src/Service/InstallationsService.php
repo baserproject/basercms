@@ -516,6 +516,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getDbSource(): array
     {
