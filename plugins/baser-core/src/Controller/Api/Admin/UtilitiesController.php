@@ -46,6 +46,7 @@ class UtilitiesController extends BcAdminApiController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function reset_contents_tree(UtilitiesServiceInterface $service)
     {
@@ -137,6 +138,7 @@ class UtilitiesController extends BcAdminApiController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function restore_db(UtilitiesServiceInterface $service)
     {
@@ -195,6 +197,7 @@ class UtilitiesController extends BcAdminApiController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_log(UtilitiesServiceInterface $service)
     {

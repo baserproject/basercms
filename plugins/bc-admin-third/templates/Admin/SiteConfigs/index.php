@@ -234,11 +234,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         </th>
         <td class="col-input bca-form-table__input">
 
-          <?php echo $this->BcAdminForm->control('password_reset_days', [
+          <?php echo __d('baser_core', '{0} 日間', $this->BcAdminForm->control('password_reset_days', [
             'type' => 'text',
             'size' => 10,
             'maxlength' => 255
-          ]) ?>日
+          ])) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             <?php echo __d(

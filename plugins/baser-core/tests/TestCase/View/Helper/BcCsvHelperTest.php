@@ -358,4 +358,13 @@ class BcCsvHelperTest extends BcTestCase
         // Cleanup: Close the temporary file
         fclose($fp);
     }
+
+    /**
+     * test _createTmpFp
+     */
+    public function test_createTmpFp()
+    {
+        $this->execPrivateMethod($this->BcCsv, '_createTmpFp');
+        $this->assertIsResource($this->getPrivateProperty($this->BcCsv, '_csvTmpDataFp'));
+    }
 }

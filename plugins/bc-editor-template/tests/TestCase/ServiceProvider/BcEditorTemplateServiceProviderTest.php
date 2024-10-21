@@ -2,12 +2,12 @@
 
 namespace BcEditorTemplate\Test\TestCase\ServiceProvider;
 
-use BaserCore\Test\TestCase\BcPluginTest;
+use BaserCore\TestSuite\BcTestCase;
 use BcEditorTemplate\Service\EditorTemplatesServiceInterface;
 use BcEditorTemplate\ServiceProvider\BcEditorTemplateServiceProvider;
 use Cake\Core\Container;
 
-class BcEditorTemplateServiceProviderTest extends BcPluginTest
+class BcEditorTemplateServiceProviderTest extends BcTestCase
 {
     public function setUp(): void
     {

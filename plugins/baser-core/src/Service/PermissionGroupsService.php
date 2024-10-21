@@ -115,6 +115,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
@@ -470,6 +471,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return false|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAvailableMinUserGroupId()
     {

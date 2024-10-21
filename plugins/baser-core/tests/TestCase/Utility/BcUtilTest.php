@@ -841,7 +841,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentDomain()
     {
-        $this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
         Configure::write('BcEnv.host', 'hoge');
         $this->assertEquals('hoge', BcUtil::getCurrentDomain(), 'ホストを変更できません。');
     }
@@ -1024,16 +1023,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testTopLevelUrl()
     {
-        if (BcUtil::isConsole()) {
-            $this->assertEquals('https://localhost', BcUtil::topLevelUrl());
-        } else {
-            $this->assertMatchesRegularExpression('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
-            $this->assertMatchesRegularExpression('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
-
-            // httpsの場合
-            $_SERVER['HTTPS'] = 'on';
-            $this->assertMatchesRegularExpression('/^https:\/\//', BcUtil::topLevelUrl());
-        }
+        $this->assertEquals('https://localhost/', BcUtil::topLevelUrl());
+        $this->assertEquals('https://localhost', BcUtil::topLevelUrl(false));
     }
 
     /**

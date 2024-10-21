@@ -167,7 +167,7 @@ class UsersAdminServiceTest extends BcTestCase
         $this->assertTrue($this->Users->isUserGroupEditable(2));
         // サイト運営ユーザーで他ユーザー更新
         $this->loginAdmin($this->getRequest('/baser/admin'), 2);
-        $this->assertTrue($this->Users->isUserGroupEditable(1));
+        $this->assertFalse($this->Users->isUserGroupEditable(1));
         // サイト運営ユーザーで自身を更新
         $this->assertFalse($this->Users->isUserGroupEditable(2));
     }

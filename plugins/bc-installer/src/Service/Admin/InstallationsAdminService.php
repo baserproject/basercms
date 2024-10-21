@@ -77,6 +77,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep3(ServerRequest $request): array
     {
@@ -109,6 +110,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep4(ServerRequest $request): array
     {
@@ -136,6 +138,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function writeDbSettingToSession(ServerRequest $request, array $data): void
     {
@@ -182,6 +185,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function readDbSetting(ServerRequest $request, array $installationData = []): array
     {

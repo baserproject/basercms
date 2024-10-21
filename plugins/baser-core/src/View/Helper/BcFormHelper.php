@@ -729,7 +729,7 @@ SCRIPT_END;
                     $_options[$key] = $value;
                 }
             }
-            return $this->control($fieldName, array_merge(['type' => 'textarea'], $_options));
+            return $this->control($fieldName, array_merge($_options, ['type' => 'textarea']));
         } elseif (isset($this->getView()->helpers()->{$editor})) {
             return $this->getView()->{$editor}->editor($fieldName, $options);
         } else {

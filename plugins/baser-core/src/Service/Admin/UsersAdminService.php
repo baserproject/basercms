@@ -99,7 +99,8 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      */
     public function isUserGroupEditable(?int $id): bool
     {
-        return ($id === null || BcUtil::isAdminUser() || !$this->isSelf($id));
+        $user = BcUtil::loginUser();
+        return ($id === null || $user->isSuper());
     }
 
     /**

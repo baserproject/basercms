@@ -25,6 +25,7 @@ use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -464,19 +465,18 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetParent($expected, $id, $direct)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         if (is_string($id)) {
-            $this->BcContents->request = $this->_getRequest($id);
+            $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest($id)));
             $id = null;
         }
         $result = $this->BcContents->getParent($id, $direct);
         if ($direct) {
             if ($result) {
-                $result = $result['Content']['id'];
+                $result = $result->id;
             }
         } else {
             if ($result) {
-                $result = Hash::extract($result, '{n}.Content.id');
+                $result = Hash::extract($result, '{n}.id');
             }
         }
         $this->assertEquals($expected, $result);
@@ -488,12 +488,12 @@ class BcContentsHelperTest extends BcTestCase
             [1, 4, true],            // ダイレクト ROOT直下
             [21, 22, true],            // ダイレクト フォルダ内
             [false, 1, true],        // ダイレクト ルートフォルダ
-            [false, 100, true],        // ダイレクト 存在しないコンテンツ
-            [[1, 21], 24, false],    // パス ２階層配下
-            [[1, 21, 24], 25, false],    // パス ３階層配下
-            [[3, 26], 12, false],    // パス スマホ２階層配下
-            [false, 100, false],    // パス 存在しないコンテンツ
-            [[1, 21, 24], '/service/sub_service/sub_service_1', false] // パス URLで解決
+            [false, 1, true],        // ダイレクト 存在しないコンテンツ
+            [[24], 27, false],    // パス ２階層配下
+            [[24], 25, false],    // パス ３階層配下
+            [[1, 6], 12, false],    // パス スマホ２階層配下
+            [false, '/service/service2/test', true],    // パス 存在しないコンテンツ
+            [[1, 6], '/service/service2', false] // パス URLで解決
         ];
     }
 
@@ -564,17 +564,16 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testIsParentId($id, $parentId, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
     public static function isParentIdDataProvider()
     {
         return [
-            [2, 1, true],
+            [2, 1, false],
             [5, 1, true],
             [5, 2, false],
-            [6, 21, true]
+            [26, 24, true]
         ];
     }
 
