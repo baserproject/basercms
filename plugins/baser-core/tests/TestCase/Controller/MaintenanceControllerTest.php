@@ -23,11 +23,10 @@ class MaintenanceControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->MaintenanceController->index();
-        $status = $this->MaintenanceController->getResponse()->withStatus(503);
-        $this->assertEquals(503, $status->getStatusCode());
+        $this->get('/maintenance');
+        $this->assertResponseOk();
 
-        $var = $this->MaintenanceController->viewBuilder()->getVars();
-        $this->assertEquals('メンテナンス中', $var['title']);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('メンテナンス中', $vars['title']);
     }
 }
