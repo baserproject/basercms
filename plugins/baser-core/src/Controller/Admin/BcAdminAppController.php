@@ -128,6 +128,7 @@ class BcAdminAppController extends AppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function __updateFirstAccess()
     {
@@ -135,7 +136,7 @@ class BcAdminAppController extends AppController
         if (!empty(BcSiteConfig::get('first_access'))) {
             /** @var SiteConfigsService $siteConfigsService */
             $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
-            $siteConfigsService->setValue('first_access', false);
+            $siteConfigsService->setValue('first_access', 'false');
         }
     }
 
