@@ -433,7 +433,8 @@ class InstallationsAdminServiceTest extends BcTestCase
             'dbDataPattern' => 'BcThemeSample.default'
         ];
         $session = new Session();
-        $request = new ServerRequest(['session' => $session->write('Installation', $config)]);
+        $session->write('Installation', $config);
+        $request = new ServerRequest(['session' => $session]);
 
         //テストを実行
         $this->Installations->deleteAllTables($request);
