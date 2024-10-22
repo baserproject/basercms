@@ -581,6 +581,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @param array $email
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendCompleteMail(array $postData)
     {

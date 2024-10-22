@@ -13,6 +13,7 @@ namespace BcInstaller\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -150,6 +151,23 @@ class InstallationsServiceTest extends BcTestCase
     public function testTestConnectDb()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test sendCompleteMail
+     */
+    public function testSendCompleteMail()
+    {
+        //データを生成
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
+
+        //正常テスト
+        $this->Installations->sendCompleteMail(['admin_email' => 'abc@example.example']);
+
+        //エラーを発生
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The email set for `to` is empty.');
+        $this->Installations->sendCompleteMail(['admin_email' => '']);
     }
 
     /**
