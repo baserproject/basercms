@@ -157,7 +157,7 @@ if (!$fullBaseUrl) {
     $trustProxy = filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN);
 
     $s = null;
-    if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
+    if (env('HTTPS') || ($trustProxy && (env('HTTP_X_FORWARDED_PROTO') === 'https' || env('HTTP_HTTPS') === 'on'))) {
         $s = 's';
     }
 
