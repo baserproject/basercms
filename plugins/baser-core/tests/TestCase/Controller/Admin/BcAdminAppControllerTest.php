@@ -260,11 +260,11 @@ class BcAdminAppControllerTest extends BcTestCase
     {
         //before test
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
-        $siteConfigsService->setValue('first_access', 'true');
-        $this->assertEquals('true' ,$siteConfigsService->getValue('first_access'));
+        $siteConfigsService->setValue('first_access', true);
+        $this->assertEquals(1 ,$siteConfigsService->getValue('first_access'));
 
         //after test
         $this->execPrivateMethod($this->BcAdminApp, '__updateFirstAccess');
-        $this->assertEquals('false',$siteConfigsService->getValue('first_access'));
+        $this->assertEquals('', $siteConfigsService->getValue('first_access'));
     }
 }
