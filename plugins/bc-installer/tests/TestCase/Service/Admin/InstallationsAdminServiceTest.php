@@ -12,6 +12,7 @@
 
 namespace BcInstaller\Test\TestCase\Service\Admin;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
@@ -19,6 +20,7 @@ use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
+use Migrations\Migrations;
 
 /**
  * InstallationsAdminServiceTest
@@ -416,7 +418,54 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_deleteAllTables()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $bcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $config = [
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => '',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+        $session = new Session();
+        $request = new ServerRequest(['session' => $session->write('Installation', $config)]);
+
+        //テストを実行
+        $this->Installations->deleteAllTables($request);
+
+        //全てテーブルを削除できるか確認
+        $db = $bcDatabaseService->getDataSource();
+        $tables = $db->getSchemaCollection()->listTables();
+        $this->assertCount(0, $tables);
+
+        //テーブルを復活
+        $migrations = new Migrations();
+        $plugins = [
+            'BaserCore',
+            'BcBlog',
+            'BcContentLink',
+            'BcCustomContent',
+            'BcEditorTemplate',
+            'BcFavorite',
+            'BcMail',
+            'BcSearchIndex',
+            'BcThemeConfig',
+            'BcThemeFile',
+            'BcUploader',
+            'BcWidgetArea',
+        ];
+        foreach ($plugins as $plugin) {
+            $migrate = $migrations->migrate([
+                'connection' => 'test',
+                'plugin' => $plugin,
+            ]);
+            $this->assertTrue($migrate);
+        }
     }
 
     /**

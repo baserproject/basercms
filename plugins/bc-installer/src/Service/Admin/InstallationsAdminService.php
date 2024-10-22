@@ -232,13 +232,11 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteAllTables(ServerRequest $request): bool
     {
         $dbConfig = $this->readDbSetting($request);
-        if (!$dbConfig) {
-            $dbConfig = ConnectionManager::getConfig('default');
-        }
         return $this->BcDatabase->deleteTables('default', $dbConfig);
     }
 
