@@ -12,6 +12,10 @@
 
 namespace BcInstaller\Test\TestCase\Service\Admin;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
@@ -19,6 +23,8 @@ use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
+use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * InstallationsAdminServiceTest
@@ -31,6 +37,7 @@ class InstallationsAdminServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -424,7 +431,49 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_initAdmin()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFolderFactory::make(['id' => 1])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BaserCore',
+            'type' => 'ContentFolder',
+            'site_id' => 1,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 10,
+            'entity_id' => 1,
+            'site_root' => true,
+            'status' => true
+        ])->persist();
+
+        //準備
+        $request = $this->loginAdmin($this->getRequest());
+        $request = $request->withParsedBody([
+            'admin_email' => 'basertest@example.com',
+            'site_name' => 'basertest',
+            'admin_password' => '123456Abcdef@',
+            'admin_confirm_password' => '123456Abcdef@',
+        ]);
+        //正常テスト
+        $this->Installations->initAdmin($request);
+
+        //SESSIONにデータが設定できるか確認
+        $this->assertEquals(2, $_SESSION["Installation"]["id"]);
+        //新しいユーザーが保存できるか確認
+        $user = UserFactory::get(2);
+        $this->assertEquals('basertest@example.com', $user->email);
+
+        //異常テスト
+        $request = $request->withParsedBody([
+            'admin_email' => 'basertest@example.com',
+            'site_name' => 'basertest',
+            'admin_password' => '123456Abcdef@',
+            'admin_confirm_password' => '123456Abcdef@',
+        ]);
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (email.nameUnique: "既に登録のあるEメールです。');
+        $this->Installations->initAdmin($request);
     }
 
     /**
