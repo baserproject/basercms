@@ -215,4 +215,26 @@ class MailContentsControllerTest extends BcTestCase
         $this->assertEquals($result->message, 'メールフォームのコピー「メールコンテンツコピー」を追加しました。');
         $this->assertNotNull($result->mailContent);
     }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //create data
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        $this->get("/baser/api/admin/bc-mail/mail_contents/index.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        //List of mail contents
+        $this->assertCount(2, $result->mailContents);
+
+        //Query is set to limit = 1, only one result is returned
+        $this->get("/baser/api/admin/bc-mail/mail_contents/index.json?limit=1&token=" . $this->accessToken);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(1, $result->mailContents);
+    }
 }
