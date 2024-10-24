@@ -75,6 +75,7 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearCache()
     {
