@@ -89,6 +89,25 @@ class UsersController extends BcAdminAppController
                     $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
                 }
                 $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
+
+                // baserCMS4系のパスワードでログインした場合、新しいハッシュアルゴリズムでパスワードをハッシュし直す
+                if (Configure::read('BcApp.needsPasswordRehash') &&
+                    $this->request->getAttribute('authentication')
+                        ->identifiers()
+                        ->get('Password')
+                        ->needsPasswordRehash()
+                ) {
+                    try {
+                        $password = $this->getRequest()->getData('password');
+                        $service->update($user, [
+                            'password_1' => $password,
+                            'password_2' => $password
+                        ]);
+                    } catch (PersistenceFailedException) {
+                        // バリデーションでパスワードの更新に失敗した場合はスルーする
+                    }
+                }
+
                 return $this->redirect($target);
             } else {
                 $this->BcMessage->setError(__d('baser_core', 'Eメール、または、パスワードが間違っています。'));
