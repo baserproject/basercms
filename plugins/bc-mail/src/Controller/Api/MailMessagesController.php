@@ -36,6 +36,7 @@ class MailMessagesController extends BcApiController
      * @return \Cake\Http\Response|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
