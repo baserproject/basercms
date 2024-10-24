@@ -1,9 +1,9 @@
 {
     "name": "baserproject/basercms",
     "description": "baserCMS plugin for CakePHP",
-    "homepage": "https://basercms.net",
-    "type": "project",
     "license": "MIT",
+    "type": "project",
+    "homepage": "https://basercms.net",
     "require": {
         "php": ">=8.0",
         "ext-gd": "*",
@@ -28,6 +28,23 @@
         "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^2.5",
         "vierge-noire/cakephp-test-suite-light": "^2.0"
+    },
+    "replace": {
+        "baserproject/baser-core": "5.0.20",
+        "baserproject/bc-admin-third": "5.0.20",
+        "baserproject/bc-blog": "5.0.20",
+        "baserproject/bc-content-link": "5.0.20",
+        "baserproject/bc-custom-content": "5.0.20",
+        "baserproject/bc-editor-template": "5.0.20",
+        "baserproject/bc-favorite": "5.0.20",
+        "baserproject/bc-front": "5.0.20",
+        "baserproject/bc-installer": "5.0.20",
+        "baserproject/bc-mail": "5.0.20",
+        "baserproject/bc-search-index": "5.0.20",
+        "baserproject/bc-theme-config": "5.0.20",
+        "baserproject/bc-theme-file": "5.0.20",
+        "baserproject/bc-uploader": "5.0.20",
+        "baserproject/bc-widget-area": "5.0.20"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
@@ -74,22 +91,12 @@
             "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
         }
     },
-    "replace": {
-        "baserproject/baser-core": "5.0.20",
-        "baserproject/bc-admin-third": "5.0.20",
-        "baserproject/bc-blog": "5.0.20",
-        "baserproject/bc-content-link": "5.0.20",
-        "baserproject/bc-custom-content": "5.0.20",
-        "baserproject/bc-editor-template": "5.0.20",
-        "baserproject/bc-favorite": "5.0.20",
-        "baserproject/bc-front": "5.0.20",
-        "baserproject/bc-installer": "5.0.20",
-        "baserproject/bc-mail": "5.0.20",
-        "baserproject/bc-search-index": "5.0.20",
-        "baserproject/bc-theme-config": "5.0.20",
-        "baserproject/bc-theme-file": "5.0.20",
-        "baserproject/bc-uploader": "5.0.20",
-        "baserproject/bc-widget-area": "5.0.20"
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
@@ -112,12 +119,5 @@
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpunit --colors=always"
         ]
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "cakephp/plugin-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
     }
 }
