@@ -84,7 +84,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合は記事NOを利用します。<br>/news/archives/slag') ?>
+          <?php echo __d('baser_core', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合は記事NOを利用します。<br>/news/archives/slag<br>半角英数字、ハイフン、アンダースコアで入力してください。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
