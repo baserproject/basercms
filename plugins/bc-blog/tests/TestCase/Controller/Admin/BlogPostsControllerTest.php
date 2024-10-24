@@ -189,7 +189,7 @@ class BlogPostsControllerTest extends BcTestCase
             'blog_content_id' => '1'
         ])->persist();
 
-        $data = ['title' => 'blog post edit', 'name' => 'ホームページをオープンしました'];
+        $data = ['title' => 'blog post edit'];
         //正常の場合を確認
         $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', $data);
         // ステータスを確認
@@ -206,7 +206,6 @@ class BlogPostsControllerTest extends BcTestCase
         // データの変更を確認
         $blogPost = BlogPostFactory::get(1);
         $this->assertEquals('blog post edit', $blogPost['title']);
-        $this->assertEquals('ホームページをオープンしました', $blogPost['name']);
 
         //エラーを発生した場合を確認
         $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', ['name' => str_repeat('a', 256)]);
