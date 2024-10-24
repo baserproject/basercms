@@ -122,6 +122,10 @@ class UploaderFile extends AppModel
 	{
 		parent::beforeSave($options);
 
+		if (!empty($this->data['UploaderFile']['name'])) {
+			$this->data['UploaderFile']['name'] = basename($this->data['UploaderFile']['name']);
+		}
+
 		if (!empty($this->data['UploaderFile']['id'])) {
 
 			$savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS;
