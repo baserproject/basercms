@@ -11,6 +11,7 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\SiteFactory;
@@ -466,6 +467,23 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
         $this->assertEquals('サンプルテーマ ( default )', $rs['BcThemeSample.default']);
         $this->assertEquals('サンプルテーマ ( empty )', $rs['BcThemeSample.empty']);
     }
+
+    /**
+     * test buildPermissions
+     */
+    public function testBuildPermissions()
+    {
+        //準備
+        $PermissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+
+        //テスト前にアクセスルールをチェック
+        $this->assertCount(0, $PermissionGroupsService->getList());
+        //テストを実行
+        $this->Installations->buildPermissions();
+        //テスト後にアクセスルールをチェック
+        $this->assertCount(4, $PermissionGroupsService->getList());
+    }
+
     /**
      * アップロード用初期フォルダを作成する
      * test createDefaultFiles

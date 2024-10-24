@@ -599,6 +599,7 @@ class InstallationsService implements InstallationsServiceInterface
      * アクセスルールを構築する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function buildPermissions()
     {
