@@ -926,20 +926,4 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertTrue($rs);
     }
 
-    /**
-//     * test getTree
-//     */
-//    public function test_getTree()
-//    {
-//        //データ生成
-//        ContentFactory::make(['id' => 1, 'lft' => 1, 'rght' => 10])->persist();
-//        ContentFactory::make(['id' => 2, 'lft' => 2, 'rght' => 5, 'exclude_menu' => true])->persist();
-//        ContentFactory::make(['id' => 3, 'lft' => 3, 'rght' => 4])->persist();
-//
-//        ContentFactory::make(['id' => 4, 'lft' => 6, 'rght' => 9])->persist();
-//        ContentFactory::make(['id' => 5, 'lft' => 7, 'rght' => 8])->persist();
-//
-//        $rs = $this->BcContents->getTree(1);
-//        $this->assertEquals(1,1);
-//    }
 }
