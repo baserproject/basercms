@@ -255,6 +255,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @throws BcException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function testConnectDb(array $config)
     {

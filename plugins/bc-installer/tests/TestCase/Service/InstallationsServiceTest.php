@@ -171,7 +171,30 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testTestConnectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadPlugins(['BcInstaller']);
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "",
+            "encoding" => "utf8"
+        ];
+        //接続できる場合、エラを返さない
+        $this->Installations->testConnectDb($config);
+
+        // 接続できない場合、エラーを返す
+        $config['host'] = 'test';
+        $this->expectException("PDOException");
+        $this->expectExceptionMessage('データベースへの接続でエラーが発生しました。データベース設定を見直してください。
+サーバー上に指定されたデータベースが存在しない可能性が高いです。
+SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ');
+
+        $this->Installations->testConnectDb($config);
     }
 
     /**
