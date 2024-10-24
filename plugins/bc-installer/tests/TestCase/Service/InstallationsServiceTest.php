@@ -445,7 +445,14 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function test_getDbSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        Configure::write('BcRequire.winSQLiteVersion', '0.0.1');
+        //テストを実行
+        $rs = $this->execPrivateMethod($this->Installations, '_getDbSource');
+        //戻り値を確認
+        $this->assertEquals('MySQL', $rs["mysql"]);
+        $this->assertEquals('PostgreSQL', $rs["postgres"]);
+        $this->assertEquals('SQLite', $rs["sqlite"]);
     }
 
     /**
