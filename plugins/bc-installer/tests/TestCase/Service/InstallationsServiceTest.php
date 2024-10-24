@@ -394,30 +394,25 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function testCreateInstallFile()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
         // install.phpをバックアップ
-        $configPath = APP . 'Config' . DS;
-        $copy = copy($configPath . 'install.php', $configPath . 'install.php.copy');
+        $configPath = ROOT . DS . 'config' . DS;
+        copy($configPath . 'install.php', $configPath . 'install.php.copy');
 
-        if ($copy) {
+        $dbConfig = [
+            'username' => 'hogeName',
+            'password' => 'hogePassword',
+            'database' => 'hogeDB'
+        ];
 
-            $this->BcManager->createInstallFile('hogeSalt', 'hogeSeed', 'hogeUrl');
+        $this->Installations->createInstallFile($dbConfig);
 
-            $File = new BcFile($configPath . 'install.php');
-            $result = $File->read();
+        $file = new BcFile($configPath . 'install.php');
+        $result = $file->read();
+        $this->assertMatchesRegularExpression("/'username' => 'hogeName'.*'password' => 'hogePassword'.*'database' => 'hogeDB'/s", $result);
 
-            // 生成されたファイルを削除し、バックアップしたファイルに置き換える
-            $File->delete();
-            $File->close();
-            rename($configPath . 'install.php.copy', $configPath . 'install.php');
-
-            $this->assertMatchesRegularExpression("/'Security.salt', 'hogeSalt'.*'Security.cipherSeed', 'hogeSeed'.*'BcEnv.siteUrl', 'hogeUrl'/s", $result, 'インストール設定ファイルを正しく生成できません');
-
-        } else {
-            $this->markTestIncomplete('install.phpのバックアップに失敗したため、このテストをスキップします。');
-
-        }
-
+        // 生成されたファイルを削除し、バックアップしたファイルに置き換える
+        $file->delete();
+        rename($configPath . 'install.php.copy', $configPath . 'install.php');
     }
 
     /**
