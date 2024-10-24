@@ -1037,11 +1037,7 @@
                         data.name = result.content.name;
                         data.contentEntityId = result.content.entity_id;
                         data.contentTitle = result.content.title;
-                        data.contentTitle = data.contentTitle.replace(/&/g, '&amp;')
-                            .replace(/"/g, '&quot;')
-                            .replace(/'/g, '&#039;')
-                            .replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;');
+
                         $.ajax($.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_full_url/' + data.contentId + '.json', {
                             type: 'GET',
                             dataType: 'json'
@@ -1103,9 +1099,7 @@
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
-                            if (!result) {
-                                $.bcUtil.showNoticeMessage(result.message);
-                            }
+                            $.bcUtil.showNoticeMessage(result.message);
                             $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
                             editNode.data.jstree.contentFullUrl = result.url;
                             editNode.data.jstree.name = result.name;

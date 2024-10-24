@@ -475,7 +475,7 @@ class BcValidation extends Validation
         if (!$value) return true;
         $events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
             'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
-            'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
+            'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange', 'onerror'];
         if (BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
             return true;
         }
