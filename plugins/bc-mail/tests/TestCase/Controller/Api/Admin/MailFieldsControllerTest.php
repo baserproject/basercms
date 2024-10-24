@@ -273,6 +273,25 @@ class MailFieldsControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function testView()
+    {
+        //Create data
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        $this->get("/baser/api/admin/bc-mail/mail_fields/view/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+
+        //Check the return value
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('性', $result->mailField->name);
+        $this->assertEquals('お名前', $result->mailField->head);
+        $this->assertEquals('text', $result->mailField->type);
+    }
+
+    /**
      * test index
      */
     public function testIndex()
