@@ -290,4 +290,33 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertEquals('お名前', $result->mailField->head);
         $this->assertEquals('text', $result->mailField->type);
     }
+
+    /**
+     * test index
+     */
+    public function testIndex()
+    {
+        //Create data
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        //mail_content_id is not set
+        $this->get("/baser/api/admin/bc-mail/mail_fields/index.json?token=" . $this->accessToken);
+        $this->assertResponseCode(400);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('パラメーターに mail_content_id を指定してください。', $vars['message']);
+
+        //mail_content_id is set
+        $this->get("/baser/api/admin/bc-mail/mail_fields/index.json?mail_content_id=1&token=" . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailFields);
+
+        //mail_content_id fails
+        $this->get("/baser/api/admin/bc-mail/mail_fields/index.json?mail_content_id=tt&token=" . $this->accessToken);
+        $this->assertResponseCode(500);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertTextContains('データベース処理中にエラーが発生しました。', $vars['message']);
+    }
 }
