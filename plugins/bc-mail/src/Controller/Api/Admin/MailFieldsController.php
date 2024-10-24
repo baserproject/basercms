@@ -159,6 +159,7 @@ class MailFieldsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(MailFieldsServiceInterface $service, int $id)
     {
