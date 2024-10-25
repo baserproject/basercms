@@ -21,6 +21,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -497,7 +498,15 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_login()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/baser-core/users/index');
+        $request->getSession()->write('Installation.id', 1);
+        $response = new Response();
+        //テストを実行
+        $this->Installations->login($request, $response);
+        //ログインできるか確認
+        $this->assertEquals(1, $request->getSession()->read('AuthAdmin')->id);
     }
 
     /**
