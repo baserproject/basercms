@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
@@ -481,7 +482,47 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_initFiles()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // install.phpをバックアップ
+        $configPath = ROOT . DS . 'config' . DS;
+        copy($configPath . 'install.php', $configPath . 'install.php.copy');
+        //準備
+        $config = [
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => '',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+        $session = new Session();
+        $session->write('Installation', $config);
+        $request = new ServerRequest(['session' => $session]);
+
+        //テストを実行
+        $this->Installations->initFiles($request);
+
+        // インストールファイルが生成できるか確認する
+        $file = new BcFile($configPath . 'install.php');
+        $result = $file->read();
+        $this->assertMatchesRegularExpression("/'username' => 'dbUsername'.*'password' => 'dbPassword'.*'database' => 'basercms'/s", $result);
+
+        // JWTキーを作成できるか確認する
+        $this->assertFileExists(CONFIG . 'jwt.key');
+        $this->assertFileExists(CONFIG . 'jwt.pem');
+
+        // アップロード用初期フォルダが生成できるか確認する
+        $this->assertTrue(is_dir(WWW_ROOT . 'files' . DS . 'blog'));
+
+        // エディタテンプレート用の画像を配置
+        $this->assertFileExists(WWW_ROOT . 'files' . DS . 'editor' . DS);
+        $this->assertFileExists(WWW_ROOT . 'files' . DS . 'editor' . DS . 'template1.gif');
+
+        // 生成されたファイルを削除し、バックアップしたファイルに置き換える
+        rename($configPath . 'install.php.copy', $configPath . 'install.php');
     }
 
     /**
