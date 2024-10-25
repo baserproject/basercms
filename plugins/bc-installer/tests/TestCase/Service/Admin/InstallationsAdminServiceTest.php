@@ -12,6 +12,7 @@
 
 namespace BcInstaller\Test\TestCase\Service\Admin;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\UserFactory;
@@ -20,6 +21,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
+use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
@@ -505,7 +507,22 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_initDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $PermissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
+        //テスト前、アクセスルールを確認
+        $this->assertCount(0, $PermissionGroupsService->getList());
+
+        //テストを実行
+        $this->Installations->initDb(new ServerRequest());
+
+        // データベースのデータを初期設定に更新できるか確認
+        $searchIndexesTable = $this->getTableLocator()->get('SearchIndexes');
+        $this->assertEquals(3, $searchIndexesTable->find()->count());
+        //テスト後、アクセスルールを確認
+        $this->assertCount(28, $PermissionGroupsService->getList());
+        // SITE_URL更新
+        $this->assertEquals('https://localhost/', env('SITE_URL'));
     }
 
 }
