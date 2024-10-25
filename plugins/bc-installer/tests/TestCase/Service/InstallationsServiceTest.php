@@ -24,6 +24,7 @@ use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -368,7 +369,16 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function testInstallPlugin()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //プラグインがすでにインストールした場合、
+        $this->assertTrue($this->Installations->installPlugin('BcBlog'));
+
+        //プラグインがインストールしない場合、
+        $this->assertTrue($this->Installations->installPlugin('BcPluginSample'));
+
+        //存在しないプラグイン
+        $this->expectException(MissingPluginException::class);
+        $this->expectExceptionMessage('Plugin `BcPluginSampleTest` could not be found.');
+        $this->Installations->installPlugin('BcPluginSampleTest');
     }
 
     /**
