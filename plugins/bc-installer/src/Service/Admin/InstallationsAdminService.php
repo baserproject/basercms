@@ -281,6 +281,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param ServerRequest $request
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initFiles(ServerRequest $request): void
     {
