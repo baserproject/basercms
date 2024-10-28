@@ -317,6 +317,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function login(ServerRequest $request, Response $response): void
     {
