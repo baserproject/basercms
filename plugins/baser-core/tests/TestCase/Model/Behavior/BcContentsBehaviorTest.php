@@ -49,6 +49,8 @@ class BcContentsBehaviorTest extends BcTestCase
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcContents');
         $this->contentService = new ContentsService();
+
+       $this->BcContentsBehavior = new BcContentsBehavior($this->table);
     }
 
     /**
@@ -198,6 +200,17 @@ class BcContentsBehaviorTest extends BcTestCase
         ]);
         $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->all()->isEmpty());
 
+    }
+
+    /**
+     * test getType
+     */
+    public function testGetType()
+    {
+        $this->table->setTable('baser_contents');
+        $rs = $this->BcContentsBehavior->getType();
+
+        $this->assertEquals('BaserContent', $rs);
     }
 
 }

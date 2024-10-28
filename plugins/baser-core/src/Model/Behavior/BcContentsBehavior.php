@@ -75,6 +75,7 @@ class BcContentsBehavior extends Behavior
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getType(): string
     {
