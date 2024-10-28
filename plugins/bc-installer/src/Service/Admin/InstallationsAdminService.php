@@ -302,6 +302,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return \Cake\Datasource\ConnectionInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function connectDb(ServerRequest $request): \Cake\Datasource\ConnectionInterface
     {

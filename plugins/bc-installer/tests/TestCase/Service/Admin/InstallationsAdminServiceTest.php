@@ -533,7 +533,28 @@ class InstallationsAdminServiceTest extends BcTestCase
      */
     public function test_connectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $session = new Session();
+        $request = new ServerRequest(['session' => $session]);
+        $session->write('Installation', [
+            "datasource" => "MySQL",
+            "dbSchema" => "test_basercms",
+            'dbType' => 'mysql',
+            'dbName' => 'test_db',
+            'dbHost' => 'bc-db',
+            'dbPrefix' => '',
+            'dbPort' => '3306',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default',
+            "dbUsername" => "root",
+            "dbPassword" => "root",
+        ]);
+        //準備
+        $rs = $this->Installations->connectDb($request);
+
+        // 接続できていること
+        $this->assertNotEmpty($rs);
+        $this->assertTrue($rs->getDriver()->isConnected());
     }
 
     /**
