@@ -15,9 +15,11 @@ use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Controller\Api\MailMessagesController;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -54,6 +56,19 @@ class MailMessagesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+
+    /**
+     * test beforeFilter
+     */
+    public function testBeforeFilter()
+    {
+        $this->MailMessagesController = new MailMessagesController($this->getRequest());
+        $event = new Event('Controller.beforeFilter', $this->MailMessagesController);
+        $this->MailMessagesController->beforeFilter($event);
+        $config = $this->MailMessagesController->FormProtection->getConfig('validate');
+        $this->assertFalse($config);
     }
 
     /**

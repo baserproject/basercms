@@ -1221,7 +1221,7 @@ class ContentsTable extends AppTable
             ['Sites.status' => true]
         ];
         if ($options['excludeIds']) {
-            $conditions['Contents.site_id <>'] = $options['excludeIds'];
+            $conditions['Contents.site_id NOT IN'] = $options['excludeIds'];
         }
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
 
