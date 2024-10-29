@@ -403,6 +403,9 @@ class BcContentsHelper extends Helper
      *
      * @param int $id
      * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getRelatedSiteLinks($id = null, $options = [])
     {
