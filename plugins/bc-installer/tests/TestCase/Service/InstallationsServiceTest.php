@@ -20,6 +20,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
+use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -237,7 +238,15 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testExecuteDefaultUpdates()
     {
+        //準備
+        $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
+        $searchIndexesTable = $this->getTableLocator()->get('SearchIndexes');
+        //テスト前、search_indexes テーブルにデータを確認
+        $this->assertEquals(1, $searchIndexesTable->find()->count());
+        //テストを実行
         $this->assertTrue($this->Installations->executeDefaultUpdates());
+        //テスト後、search_indexes テーブルにデータを確認
+        $this->assertEquals(3, $searchIndexesTable->find()->count());
     }
 
     /**
