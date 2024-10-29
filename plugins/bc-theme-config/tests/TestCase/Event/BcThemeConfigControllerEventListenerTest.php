@@ -36,13 +36,5 @@ class BcThemeConfigControllerEventListenerTest extends BcTestCase
         $this->BcThemeConfigControllerEventListener->baserCoreThemesAfterApply($event);
 
         $this->assertFileDoesNotExist($path);
-
-        // cleanup
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        if (is_dir(dirname($path))) {
-            rmdir(dirname($path));
-        }
     }
 }
