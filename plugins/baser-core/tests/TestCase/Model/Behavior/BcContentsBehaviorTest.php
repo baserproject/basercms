@@ -202,6 +202,19 @@ class BcContentsBehaviorTest extends BcTestCase
     }
 
     /**
+     * test onAlias
+     */
+    public function testOnAlias()
+    {
+        $this->BcContentsBehavior->onAlias();
+
+        $conditions = $this->BcContentsBehavior->Contents->getConditions();
+
+        $this->assertArrayHasKey('Contents.type', $conditions);
+        $this->assertEquals('ContentFolder', $conditions['Contents.type']);
+    }
+
+    /**
      * test offAlias
      *
      */
