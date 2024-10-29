@@ -20,9 +20,9 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
-use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
+use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -302,57 +302,15 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function testExecuteDefaultUpdates()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
-        $dbConfig = [
-            'datasource' => 'Database/BcMysql',
-            'persistent' => false,
-            'host' => 'localhost',
-            'port' => '8889',
-            'login' => 'root',
-            'password' => 'root',
-            'database' => 'basercms',
-            'schema' => '',
-            'prefix' => 'mysite_',
-            'encoding' => 'utf8',
-        ];
-
-        // プラグイン有効化チェック用準備(ダミーのプラグインディレクトリを作成)
-        $testPluginPath = BASER_PLUGINS . 'Test' . DS;
-        $testPluginConfigPath = $testPluginPath . 'config.php';
-        $Folder = new BcFolder($testPluginPath);
-        $Folder->create();
-        $File = new BcFile($testPluginConfigPath);
-        $File->write('<?php $title = "テスト";');
-
-        Configure::write('BcApp.corePlugins', ['BcBlog', 'BcFeed', 'BcMail', 'Test']);
-
-
-        // 初期更新を実行
-        $result = $this->BcManager->executeDefaultUpdates($dbConfig);
-
-
-        // =====================
-        // プラグイン有効化チェック
-        // =====================
-        $File->delete();
-        $Folder->delete($testPluginPath);
-
-        $this->Plugin = ClassRegistry::init('Plugin');
-        $plugin = $this->Plugin->find('first', [
-                'conditions' => ['id' => 4],
-                'fields' => ['title', 'status'],
-            ]
-        );
-        $expected = [
-            'Plugin' => [
-                'title' => 'テスト',
-                'status' => 1,
-            ]
-        ];
-        $this->Plugin->delete(4);
-        unset($this->Plugin);
-        $this->assertEquals($expected, $plugin, 'プラグインのステータスを正しく更新できません');
-        $this->assertTrue($result, 'データベースのデータに初期更新に失敗しました');
+        //準備
+        $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
+        $searchIndexesTable = $this->getTableLocator()->get('SearchIndexes');
+        //テスト前、search_indexes テーブルにデータを確認
+        $this->assertEquals(1, $searchIndexesTable->find()->count());
+        //テストを実行
+        $this->assertTrue($this->Installations->executeDefaultUpdates());
+        //テスト後、search_indexes テーブルにデータを確認
+        $this->assertEquals(3, $searchIndexesTable->find()->count());
     }
 
     /**

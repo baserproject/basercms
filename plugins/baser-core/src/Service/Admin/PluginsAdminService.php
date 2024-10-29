@@ -206,6 +206,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isPluginsDirWritable()
     {

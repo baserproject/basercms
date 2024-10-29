@@ -99,6 +99,7 @@ class BcContentsBehavior extends Behavior
      * アソシエーション時に alias を含める
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function onAlias(): void
     {

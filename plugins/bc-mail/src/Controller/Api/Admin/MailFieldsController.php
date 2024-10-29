@@ -118,6 +118,7 @@ class MailFieldsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(MailFieldsServiceInterface $service)
     {
