@@ -11,9 +11,12 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
@@ -22,6 +25,7 @@ use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\Exception\PersistenceFailedException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * InstallationsServiceTest
@@ -34,6 +38,7 @@ class InstallationsServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * setup
@@ -109,6 +114,28 @@ class InstallationsServiceTest extends BcTestCase
     }
 
     /**
+     * test _getMemoryLimit
+     */
+    public function test_getMemoryLimit()
+    {
+        $size = ini_get('memory_limit');
+        ini_set('memory_limit', '1024M');
+        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
+
+        ini_set('memory_limit', '1024m');
+        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
+
+        ini_set('memory_limit', '1g');
+        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
+
+        ini_set('memory_limit', '1G');
+        $this->assertEquals(1024, $this->execPrivateMethod($this->Installations, '_getMemoryLimit'));
+
+        //元に戻る
+        ini_set('memory_limit', $size);
+    }
+
+    /**
      * test constructionDb
      */
     public function testConstructionDb()
@@ -146,7 +173,47 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testTestConnectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadPlugins(['BcInstaller']);
+        // 接続情報を設定 MYSQL
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "",
+            "encoding" => "utf8"
+        ];
+        //接続できる場合、エラを返さない
+        $this->Installations->testConnectDb($config);
+
+        // 接続できない場合、エラーを返す
+        $config['host'] = 'test';
+        $this->expectException("PDOException");
+        $this->expectExceptionMessage('データベースへの接続でエラーが発生しました。データベース設定を見直してください。
+サーバー上に指定されたデータベースが存在しない可能性が高いです。
+SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ');
+
+        $this->Installations->testConnectDb($config);
+    }
+
+    /**
+     * test sendCompleteMail
+     */
+    public function testSendCompleteMail()
+    {
+        //データを生成
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
+
+        //正常テスト
+        $this->Installations->sendCompleteMail(['admin_email' => 'abc@example.example']);
+
+        //エラーを発生
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The email set for `to` is empty.');
+        $this->Installations->sendCompleteMail(['admin_email' => '']);
     }
 
     /**
@@ -162,7 +229,38 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testAddDefaultUser()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        //data
+        $userData = [
+            'name' => 'testuser',
+            'email' => 'testuser@example.com',
+            'password_1' => 'Password1234',
+            'password_2' => 'Password1234'
+        ];
+
+        $result = $this->Installations->addDefaultUser($userData);
+        $this->assertEquals('testuser', $result['name']);
+        $this->assertEquals('testuser@example.com', $result['email']);
+        $this->assertEquals('testuser', $result['real_name_1']);
+        $this->assertCount(1, $result['user_groups']);
+    }
+
+    public function testAddDefaultUserThrowsException()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        $userData = [
+            'email' => 'testuser@example.com',
+            'password_1' => 'password123',
+            'password_2' => 'differentpassword'
+        ];
+
+        $this->expectException(PersistenceFailedException::class);
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (password.minLength: "パスワードは12文字以上で入力してください。", password.passwordConfirm: "パスワードが同じものではありません。", password.passwordRequiredCharacterType: "パスワード');
+        $this->Installations->addDefaultUser($userData);
     }
 
     /**
@@ -314,30 +412,25 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testCreateInstallFile()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
         // install.phpをバックアップ
-        $configPath = APP . 'Config' . DS;
-        $copy = copy($configPath . 'install.php', $configPath . 'install.php.copy');
+        $configPath = ROOT . DS . 'config' . DS;
+        copy($configPath . 'install.php', $configPath . 'install.php.copy');
 
-        if ($copy) {
+        $dbConfig = [
+            'username' => 'hogeName',
+            'password' => 'hogePassword',
+            'database' => 'hogeDB'
+        ];
 
-            $this->BcManager->createInstallFile('hogeSalt', 'hogeSeed', 'hogeUrl');
+        $this->Installations->createInstallFile($dbConfig);
 
-            $File = new BcFile($configPath . 'install.php');
-            $result = $File->read();
+        $file = new BcFile($configPath . 'install.php');
+        $result = $file->read();
+        $this->assertMatchesRegularExpression("/'username' => 'hogeName'.*'password' => 'hogePassword'.*'database' => 'hogeDB'/s", $result);
 
-            // 生成されたファイルを削除し、バックアップしたファイルに置き換える
-            $File->delete();
-            $File->close();
-            rename($configPath . 'install.php.copy', $configPath . 'install.php');
-
-            $this->assertMatchesRegularExpression("/'Security.salt', 'hogeSalt'.*'Security.cipherSeed', 'hogeSeed'.*'BcEnv.siteUrl', 'hogeUrl'/s", $result, 'インストール設定ファイルを正しく生成できません');
-
-        } else {
-            $this->markTestIncomplete('install.phpのバックアップに失敗したため、このテストをスキップします。');
-
-        }
-
+        // 生成されたファイルを削除し、バックアップしたファイルに置き換える
+        $file->delete();
+        rename($configPath . 'install.php.copy', $configPath . 'install.php');
     }
 
     /**
@@ -366,7 +459,14 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function test_getDbSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        Configure::write('BcRequire.winSQLiteVersion', '0.0.1');
+        //テストを実行
+        $rs = $this->execPrivateMethod($this->Installations, '_getDbSource');
+        //戻り値を確認
+        $this->assertEquals('MySQL', $rs["mysql"]);
+        $this->assertEquals('PostgreSQL', $rs["postgres"]);
+        $this->assertEquals('SQLite', $rs["sqlite"]);
     }
 
     /**
@@ -374,27 +474,75 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testGetAllDefaultDataPatterns()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->Installations->getAllDefaultDataPatterns();
+        //戻り値を確認
+        $this->assertEquals('BcColumn ( default )', $rs['BcColumn.default']);
+        $this->assertEquals('サンプルテーマ ( default )', $rs['BcThemeSample.default']);
+        $this->assertEquals('サンプルテーマ ( empty )', $rs['BcThemeSample.empty']);
     }
+
+    /**
+     * test buildPermissions
+     */
+    public function testBuildPermissions()
+    {
+        //準備
+        $PermissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+
+        //テスト前にアクセスルールをチェック
+        $this->assertCount(0, $PermissionGroupsService->getList());
+        //テストを実行
+        $this->Installations->buildPermissions();
+        //テスト後にアクセスルールをチェック
+        $this->assertCount(4, $PermissionGroupsService->getList());
+    }
+
     /**
      * アップロード用初期フォルダを作成する
+     * test createDefaultFiles
      */
     public function testCreateDefaultFiles()
     {
-        $this->markTestIncomplete('このテストは未実装です。BcManagerComponentから移植中です。');
-        // 各フォルダを削除
-        $path = WWW_ROOT . 'files' . DS;
+        //create backup folder
+        $backupPath = WWW_ROOT . 'files_backup' . DS;
+        if (!is_dir($backupPath)) {
+            mkdir($backupPath, 0777, true);
+        }
+
         $dirs = ['blog', 'editor', 'theme_configs'];
-
-        foreach($dirs as $dir) {
-            (new BcFolder($path . $dir))->delete($path . $dir);
+        foreach ($dirs as $dir) {
+            $path = WWW_ROOT . 'files' . DS . $dir;
+            if (is_dir($path)) {
+                // Backup folder if exists
+                rename($path, $backupPath . $dir);
+            }
         }
 
-        $this->BcManager->createDefaultFiles();
+        $result = $this->Installations->createDefaultFiles();
+        $this->assertTrue($result);
 
-        foreach($dirs as $dir) {
-            $this->assertFileExists($path . $dir, 'アップロード用初期フォルダを正しく作成できません');
+        //check folder is created
+        foreach ($dirs as $dir) {
+            $this->assertTrue(is_dir(WWW_ROOT . 'files' . DS . $dir));
         }
+
+        //delete created folders
+        foreach ($dirs as $dir) {
+            $newDir = WWW_ROOT . 'files' . DS . $dir;
+            if (is_dir($newDir) && !is_dir($backupPath . $dir)) {
+                rmdir($newDir);
+            }
+        }
+
+        // Restore backup folder
+        foreach ($dirs as $dir) {
+            $backupDir = $backupPath . $dir;
+            if (is_dir($backupDir)) {
+                rename($backupDir, WWW_ROOT . 'files' . DS . $dir);
+            }
+        }
+        //delete backup folder
+        rmdir($backupPath);
     }
 
 }

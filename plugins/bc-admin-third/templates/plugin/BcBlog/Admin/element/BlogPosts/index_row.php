@@ -21,6 +21,11 @@
 
 use Cake\Utility\Hash;
 
+$fullUrl = $this->BcBaser->getContentsUrl(
+  $this->getRequest()->getAttribute('currentContent')->url . 'archives/' . $post->no,
+  true,
+  $this->getRequest()->getAttribute('currentSite')->use_subdomain
+);
 ?>
 
 
@@ -120,7 +125,7 @@ use Cake\Utility\Hash;
     <?php endif ?>
     <?php if ($this->Blog->allowPublish($post)): ?>
       <?php $this->BcBaser->link('',
-        $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no, [
+        $fullUrl, [
           'title' => __d('baser_core', '確認'),
           'target' => '_blank',
           'class' => 'bca-btn-icon',

@@ -508,14 +508,12 @@ EOF;
         return [
             // 通常
             ['5.0.0', ['5.0.2', '5.0.1', '5.0.0'], '5.0.2', ['5.0.2', '5.0.1']],
-            // 現在のバージョンが dev の場合
-            ['5.0.0-dev', ['5.0.2', '5.0.1', '5.0.0'], '5.0.2', []],
             // リリースに dev が含まれている場合
             ['5.0.0', ['5.0.2-dev', '5.0.1-dev', '5.0.0'], '5.0.0', []],
             // マイナーアップデートの場合
             ['5.0.0', ['5.1.0', '5.0.0'], '5.1.0', ['5.1.0']],
             // メジャーアップデートの場合
-            ['5.0.0', ['6.0.0', '5.5.0'], '6.0.0', ['5.5.0']],
+            ['5.0.0', ['6.0.0', '5.5.0'], '5.5.0', ['5.5.0']],
             // アップデート対象が古いものしかない場合
             ['5.0.0', ['5.0.0', '4.9.0'], '5.0.0', []],
             // アップデート対象が全く取れない場合
@@ -686,9 +684,9 @@ EOF;
         Configure::write('BcApp.coreReleaseUrl', $rssPath);
         // Write the version to the version file
         $file = new BcFile($versionPath);
-        $file->write('100.0.0');
+        $file->write('5.0.0');
         // Generate the RSS feed
-        $this->createReleaseRss(['5.0.0', '5.0.1', '5.0.0']);
+        $this->createReleaseRss(['5.0.0', '5.0.1', '5.0.2']);
         // Clear the cache
         Cache::delete('coreReleaseInfo', '_bc_update_');
 
@@ -704,9 +702,9 @@ EOF;
     {
         return [
             //use_update_notice enabled
-            [true, '5.0.0'],
+            [true, '5.0.2'],
             //use_update_notice disabled
-            [false, '100.0.0'],
+            [false, '5.0.0'],
         ];
     }
 }

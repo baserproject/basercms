@@ -65,6 +65,7 @@ class BcComposer
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function setup(string $php = '', $dir = '')
     {
@@ -161,6 +162,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function require(string $package, string $version)
     {
@@ -224,6 +226,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function execCommand(string $command)
     {

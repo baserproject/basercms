@@ -118,7 +118,7 @@ class CustomFieldsTableTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals('Eメール比較先フィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta']['checkAlphaNumericWithJson']);
         $this->assertEquals('ファイルアップロードサイズ上限は整数値のみで入力してください。', $errors['meta']['checkMaxFileSizeWithJson']);
-        $this->assertEquals('拡張子を次の形式のようにカンマ（,）区切りで入力します。', $errors['meta']['checkFileExtWithJson']);
+        $this->assertEquals('拡張子を次の形式のようにカンマ（,）区切りで入力します。「jpg,pdf」', $errors['meta']['checkFileExtWithJson']);
 
         //Wysiwyg エディタ設定の横幅と高さのバリデーション
         $request = $this->getRequest('/')->withData('validate', '');

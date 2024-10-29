@@ -64,7 +64,7 @@ class UsersController extends BcAdminAppController
     public function login(UsersAdminServiceInterface $service)
     {
         $this->set($service->getViewVarsForLogin($this->getRequest()));
-        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+        $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
 
         // EVENT Users.beforeLogin
         $event = $this->dispatchLayerEvent('beforeLogin', [
@@ -89,6 +89,25 @@ class UsersController extends BcAdminAppController
                     $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
                 }
                 $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
+
+                // baserCMS4系のパスワードでログインした場合、新しいハッシュアルゴリズムでパスワードをハッシュし直す
+                if (Configure::read('BcApp.needsPasswordRehash') &&
+                    $this->request->getAttribute('authentication')
+                        ->identifiers()
+                        ->get('Password')
+                        ->needsPasswordRehash()
+                ) {
+                    try {
+                        $password = $this->getRequest()->getData('password');
+                        $service->update($user, [
+                            'password_1' => $password,
+                            'password_2' => $password
+                        ]);
+                    } catch (PersistenceFailedException) {
+                        // バリデーションでパスワードの更新に失敗した場合はスルーする
+                    }
+                }
+
                 return $this->redirect($target);
             } else {
                 $this->BcMessage->setError(__d('baser_core', 'Eメール、または、パスワードが間違っています。'));

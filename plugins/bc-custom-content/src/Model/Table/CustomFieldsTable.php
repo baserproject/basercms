@@ -137,7 +137,7 @@ class CustomFieldsTable extends AppTable
                 'checkFileExtWithJson' => [
                     'rule' => ['checkWithJson', 'BcCustomContent.file_ext', "/^[a-z,]+$/"],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', '拡張子を次の形式のようにカンマ（,）区切りで入力します。')
+                    'message' => __d('baser_core', '拡張子を次の形式のようにカンマ（,）区切りで入力します。「jpg,pdf」')
                 ],
             ]);
         return $validator;

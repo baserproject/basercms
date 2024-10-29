@@ -77,6 +77,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep3(ServerRequest $request): array
     {
@@ -137,6 +138,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function writeDbSettingToSession(ServerRequest $request, array $data): void
     {
@@ -183,6 +185,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function readDbSetting(ServerRequest $request, array $installationData = []): array
     {
@@ -249,6 +252,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @throws PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initAdmin(ServerRequest $request): void
     {
@@ -277,6 +281,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param ServerRequest $request
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initFiles(ServerRequest $request): void
     {
@@ -297,6 +302,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return \Cake\Datasource\ConnectionInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function connectDb(ServerRequest $request): \Cake\Datasource\ConnectionInterface
     {
@@ -312,6 +318,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function login(ServerRequest $request, Response $response): void
     {
@@ -328,6 +335,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param ServerRequest $request
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initDb(ServerRequest $request): void
     {

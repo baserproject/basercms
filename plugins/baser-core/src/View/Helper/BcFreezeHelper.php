@@ -68,7 +68,7 @@ class BcFreezeHelper extends BcFormHelper
                 $field = $fieldName;
             }
             if (isset($options)) {
-                $options = $options + ['type' => 'hidden'];
+                $options = array_merge($options, ['type' => 'hidden']);
             } else {
                 $options = ['type' => 'hidden'];
             }
@@ -349,7 +349,11 @@ class BcFreezeHelper extends BcFormHelper
             } else {
                 $field = $fieldName;
             }
-            $options = $options + ['type' => 'hidden'];
+            if (isset($options)) {
+                $options = array_merge($options, ['type' => 'hidden']);
+            } else {
+                $options = ['type' => 'hidden'];
+            }
             if (isset($options["value"])) {
                 $value = $options["value"];
             } else {
@@ -609,6 +613,7 @@ class BcFreezeHelper extends BcFormHelper
      * @return string htmlタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function freezeControll(string $fieldName, array $options, array $attributes = [])
     {

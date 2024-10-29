@@ -974,7 +974,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         /** @var ContentsServiceInterface $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $contentUrl = $contentsService->getUrl(rawurldecode($content->url), $full, !empty($site->use_subdomain), false);
-        $no = ($post->name)?: $post->no;
+        $no = ($post->name)? rawurlencode($post->name) : $post->no;
         return $contentUrl . 'archives/' . $no;
     }
 
