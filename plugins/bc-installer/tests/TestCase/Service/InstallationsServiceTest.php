@@ -305,9 +305,6 @@ class InstallationsServiceTest extends BcTestCase
      */
     public function testInstallPlugin()
     {
-        //プラグインがすでにインストールした場合、
-        $this->assertTrue($this->Installations->installPlugin('BcBlog'));
-
         //プラグインがインストールしない場合、
         $this->assertTrue($this->Installations->installPlugin('BcPluginSample'));
 

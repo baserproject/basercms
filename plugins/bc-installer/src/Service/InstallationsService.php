@@ -387,9 +387,7 @@ class InstallationsService implements InstallationsServiceInterface
         BcUtil::clearAllCache();
         /* @var BcPlugin $plugin */
         $plugin = Plugin::isLoaded($name);
-        if ($plugin)
-            return true;
-        $plugin = Plugin::getCollection()->create($name);
+        if (!$plugin) $plugin = Plugin::getCollection()->create($name);
         return $plugin->install();
     }
 
