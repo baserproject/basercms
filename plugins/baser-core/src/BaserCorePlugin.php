@@ -43,7 +43,6 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Database\Exception\MissingConnectionException;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
-use Cake\Http\Middleware\HttpsEnforcerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
 use Cake\I18n\I18n;
@@ -436,6 +435,25 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             ],
             'loginUrl' => Router::url($authSetting['loginAction']),
         ]);
+
+        $passwordHasher = null;
+        if(!empty($authSetting['passwordHasher'])) {
+            $passwordHasher = $authSetting['passwordHasher'];
+        } elseif(env('HASH_TYPE') === 'sha1') {
+            // .env に HASH_TYPE で sha1が設定されている場合 4系のハッシュアルゴリズムを使用
+            $passwordHasher = [
+                'className' => 'Authentication.Fallback',
+                'hashers' => [
+                    'Authentication.Default',
+                    [
+                        'className' => 'Authentication.Legacy',
+                        'hashType' => 'sha1',
+                        'salt' => true
+                    ]
+                ]
+            ];
+        }
+
         $service->loadIdentifier('Authentication.Password', [
             'fields' => [
                 'username' => $authSetting['username'],
@@ -446,6 +464,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 'userModel' => $authSetting['userModel'],
                 'finder' => $authSetting['finder']?? 'available'
             ],
+            'passwordHasher' => $passwordHasher
         ]);
         return $service;
     }

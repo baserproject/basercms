@@ -25,6 +25,7 @@ class MaintenanceController extends BcFrontAppController
      * メンテナンス中ページを表示する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index()
     {
