@@ -45,11 +45,28 @@ class CustomContentAppHelperTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        //プラグインのヘルパーが読み込めるか確認すること
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcAutoZip);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcCheckbox);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcDate);
+    }
+
+    /**
      * test loadPluginHelper
      */
     public function test_loadPluginHelper()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //プラグインのヘルパーが読み込めるか確認すること
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcAutoZip);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcCheckbox);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcDate);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcCheckbox);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcEmail);
+        $this->assertNotNull($this->CustomContentAppHelper->BcCcFile);
     }
     /**
      * test isEnableField
