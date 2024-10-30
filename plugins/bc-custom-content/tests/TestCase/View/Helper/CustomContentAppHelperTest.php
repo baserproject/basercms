@@ -5,6 +5,7 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
@@ -35,6 +36,7 @@ class CustomContentAppHelperTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomContentAppHelper = new CustomContentAppHelper(new View());
+        BcUtil::includePluginClass('BcCustomContent');
     }
     /**
      * tearDown
