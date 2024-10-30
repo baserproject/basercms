@@ -18,6 +18,10 @@ use Cake\Core\Configure;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
+/**
+ * class CustomContentAppHelperTest
+ * @property CustomContentAppHelper $CustomContentAppHelper
+ */
 class CustomContentAppHelperTest extends BcTestCase
 {
     /**
