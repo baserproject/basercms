@@ -271,8 +271,14 @@ class BlogPostsService implements BlogPostsServiceInterface
         } else {
             $conditions = [];
         }
-        // ID
-        if ($params['id']) $conditions["BlogPosts.id"] = $params['id'];
+        // ID【blog】一覧表示でブログIDを指定する時、IDが複数の場合エラーになる問題を解決
+        if ($params['id']) {
+            if (is_array($params['id'])) {
+                $conditions["BlogPosts.id IN"] = $params['id'];
+            } else {
+                $conditions["BlogPosts.id"] = $params['id'];
+            }
+        }
         // タイトル
         if (!is_null($params['title'])) $conditions['BlogPosts.title LIKE'] = '%' . $params['title'] . '%';
         // ユーザーID
