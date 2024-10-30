@@ -20,6 +20,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
@@ -327,8 +328,13 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function testInstallPlugin()
     {
+        $folder = new BcFolder(BASER_PLUGINS . 'BcPluginSample');
+        $folder->copy(BASER_PLUGINS . 'BcPluginSample2');
         //プラグインがインストールしない場合、
-        $this->assertTrue($this->Installations->installPlugin('BcPluginSample'));
+        $this->assertTrue($this->Installations->installPlugin('BcPluginSample2'));
+
+        $folder = new BcFolder(BASER_PLUGINS . 'BcPluginSample2');
+        $folder->delete();
 
         //存在しないプラグイン
         $this->expectException(MissingPluginException::class);
