@@ -129,6 +129,7 @@ class CustomContentAppHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function searchControl(CustomLink $customLink, array $options = []): string
     {
