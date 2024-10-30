@@ -44,6 +44,7 @@ class SiteConfigsController extends BcAdminApiController
      * @param SiteConfigsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(SiteConfigsServiceInterface $service)
     {
@@ -55,6 +56,7 @@ class SiteConfigsController extends BcAdminApiController
                 $message = __d('baser_core', 'システム基本設定を更新しました。');
                 $this->BcMessage->setSuccess($message, true, false);
             } else {
+                $errors = $siteConfig->getErrors();
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             }

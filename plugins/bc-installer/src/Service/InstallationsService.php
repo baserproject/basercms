@@ -165,6 +165,7 @@ class InstallationsService implements InstallationsServiceInterface
 	 * @return int
      * @checked
      * @noTodo
+     * @unitTest
 	 */
 	protected function _getMemoryLimit ()
 	{
@@ -254,6 +255,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @throws BcException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function testConnectDb(array $config)
     {
@@ -337,6 +339,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function executeDefaultUpdates(): bool
     {
@@ -398,6 +401,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createInstallFile(array $dbConfig): bool
     {
@@ -517,6 +521,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getDbSource(): array
     {
@@ -550,6 +555,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAllDefaultDataPatterns(): array
     {
@@ -582,6 +588,7 @@ class InstallationsService implements InstallationsServiceInterface
      * @param array $email
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendCompleteMail(array $postData)
     {
@@ -596,6 +603,7 @@ class InstallationsService implements InstallationsServiceInterface
      * アクセスルールを構築する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function buildPermissions()
     {

@@ -324,4 +324,41 @@ class BlogContentsServiceTest extends BcTestCase
 
     }
 
+    /**
+     * test findByContentId
+     */
+    public function test_findByContentId()
+    {
+        //generate data
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'title' => 'test', 'description' => 'BaserCMS', 'entity_id' => 1, 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
+
+        $rs = $this->BlogContentsService->findByContentId(1);
+        $this->assertEquals('test', $rs->content->title);
+        $this->assertEquals('BaserCMS', $rs->content->description);
+
+        //with invalid content id
+        $rs = $this->BlogContentsService->findByContentId(999);
+        $this->assertNull($rs);
+    }
+    /**
+     * test findByUrl
+     */
+    public function test_findByUrl()
+    {
+        //generate data
+        BlogContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'title' => 'url test', 'url' => '/test', 'site_id' => 1])->persist();
+        ContentFactory::make(['id' => 2, 'type' => 'BlogContent', 'entity_id' => 1,'title' => 'url demo', 'url' => '/demo', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
+
+        $rs = $this->BlogContentsService->findByUrl('/test');
+        $this->assertEquals('url test', $rs->content->title);
+
+        //with empty url
+        $rs = $this->BlogContentsService->findByUrl('');
+        $this->assertNull($rs);
+    }
+
 }

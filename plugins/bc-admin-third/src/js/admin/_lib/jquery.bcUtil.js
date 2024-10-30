@@ -112,6 +112,11 @@ import Cookies from 'js-cookie'
          * @param message
          */
         showNoticeMessage: function (message) {
+            message = message.replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
             $.bcUtil.hideMessage();
             $("#BcSystemMessage")
                 .removeClass('notice-messge alert-message')
