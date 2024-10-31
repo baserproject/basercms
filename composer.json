@@ -85,6 +85,7 @@
         "stan": "phpstan analyse",
         "install": [
             "composer install --no-plugins",
+            "composer self-update",
             "bin/cake setup install",
             "bin/cake install https://localhost foo@example.com baserCMS1234 basercms --host bc-db --username root --password root"
         ],
