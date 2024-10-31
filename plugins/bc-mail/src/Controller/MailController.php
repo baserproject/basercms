@@ -166,6 +166,7 @@ class MailController extends MailFrontAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function confirm(
         MailFrontServiceInterface $service,
