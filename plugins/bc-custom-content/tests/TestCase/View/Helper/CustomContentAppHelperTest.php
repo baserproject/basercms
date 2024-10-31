@@ -18,6 +18,7 @@ use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAppHelper;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -37,6 +38,9 @@ class CustomContentAppHelperTest extends BcTestCase
         parent::setUp();
         $this->CustomContentAppHelper = new CustomContentAppHelper(new View());
         BcUtil::includePluginClass('BcCustomContent');
+        $plugins = Plugin::getCollection();
+        $this->Plugin = $plugins->create('BcCustomContent');
+        $plugins->add($this->Plugin);
     }
     /**
      * tearDown
