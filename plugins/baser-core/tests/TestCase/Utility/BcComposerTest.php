@@ -243,7 +243,7 @@ class BcComposerTest extends BcTestCase
 
         $this->assertEquals(0, $rs['code']);
         $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
-        $this->assertStringContainsString("You are already using the latest available Composer version", $rs['out'][1]);
+        $this->assertEquals("You are already using the latest available Composer version", $rs['out'][1]);
     }
 
     /**
@@ -342,6 +342,6 @@ class BcComposerTest extends BcTestCase
 
         $this->assertEquals(0, $rs['code']);
         $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
-        $this->assertStringContainsString("Loading composer repositories with package information", $rs['out'][1]);
+        $this->assertEquals("Loading composer repositories with package information", $rs['out'][1]);
     }
 }
