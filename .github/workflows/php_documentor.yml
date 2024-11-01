@@ -43,6 +43,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
+          git config --global --add safe.directory /var/www/html
           git config --global user.name 'ryuring'
           git config --global user.email 'ryuring55@github.com'
           git clone https://ryuring:${TOKEN}@github.com/baserproject/baserproject.github.io.git
