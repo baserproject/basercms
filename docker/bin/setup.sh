@@ -22,3 +22,5 @@ chmod 777 /var/www/html/plugins
 
 # Sqlite を利用する場合に必要
 chmod 777 /var/www/html/db
+
+sudo chown -R root.www-data .git
