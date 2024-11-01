@@ -41,7 +41,7 @@ class SetupInstallCommandTest extends BcTestCase
         //backup file
         copy(ROOT . DS . 'config' . DS . 'install.php', ROOT . DS . 'config' . DS . 'install.php.bak');
         //test
-        $this->exec('setup install test');
+        $this->exec('setup install');
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('インストールの準備ができました。');
 
