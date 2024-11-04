@@ -167,8 +167,6 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $app->addPlugin('Authentication');
         $app->addPlugin('Migrations');
 
-        $this->addTheme($app);
-
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
             foreach($plugins as $plugin) {
@@ -177,6 +175,8 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 }
             }
         }
+
+        $this->addTheme($app);
 
         /**
          * デフォルトテンプレートを設定する
