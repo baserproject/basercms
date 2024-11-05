@@ -12,11 +12,15 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\I18n\I18n;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -87,7 +91,14 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //準備
+        ContentFactory::make(['url' => '/', 'site_id' => 2])->persist();
+        SiteFactory::make(['id' => 2, 'lang' => 'english'])->persist();
+        $this->BcFrontAppController->setRequest($this->loginAdmin($this->getRequest('/')));
+        //テスト
+        $this->BcFrontAppController->beforeFilter(new Event('Controller.beforeFilter', $this->BcFrontAppController));
+        //language check
+        $this->assertEquals('en', I18n::getLocale());
     }
 
     /**
