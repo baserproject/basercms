@@ -18,7 +18,6 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
-use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\I18n;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
