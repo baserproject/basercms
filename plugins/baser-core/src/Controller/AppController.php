@@ -195,6 +195,7 @@ class AppController extends BaseController
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     private function checkPermission()
     {
