@@ -231,6 +231,7 @@ class MailController extends MailFrontAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function submit(
         MailFrontServiceInterface $service,

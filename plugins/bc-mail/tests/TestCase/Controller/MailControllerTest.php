@@ -11,7 +11,11 @@
 
 namespace BcMail\Test\TestCase\Controller;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailFieldsFactory;
 
 class MailControllerTest extends BcTestCase
 {
@@ -83,7 +87,18 @@ class MailControllerTest extends BcTestCase
      */
     public function testSubmit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        SiteFactory::make(['id' => 1])->persist();
+        MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'sex'])->persist();
+        ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default', 'sender_1' => 't@gm.com'])->persist();
+
+        $this->session(['BcMail' => ['valid' => true]]);
+        $this->post('/contact/submit/', ['sex' => 1]);
+        $this->assertResponseCode(302);
     }
 
     /**
