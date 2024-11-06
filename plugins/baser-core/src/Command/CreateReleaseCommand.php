@@ -109,6 +109,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clonePackage(string $packagePath, string $branch)
     {

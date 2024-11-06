@@ -146,4 +146,20 @@ class CreateReleaseCommandTest extends BcTestCase
         //clean up
         $folder->delete($pluginsPath);
     }
+
+    /**
+     * test clonePackage
+     */
+    public function testClonePackage()
+    {
+        //テストを実行
+        $this->CreateReleaseCommand->clonePackage('/var/www/html/tmp/basercms/', 'master');
+
+        //パッケージを GitHub よりクローンできるか確認
+        $this->assertTrue(is_dir(TMP . 'basercms'));
+        $this->assertTrue(file_exists(TMP . 'basercms'));
+
+        //不要フォルダを削除
+        (new BcFolder(TMP . 'basercms'))->delete();
+    }
 }
