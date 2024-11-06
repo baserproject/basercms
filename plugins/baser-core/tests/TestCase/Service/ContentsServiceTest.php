@@ -453,6 +453,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetUrlById($id, $full, $expects)
     {
+        $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(ContentsScenario::class);
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
