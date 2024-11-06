@@ -314,6 +314,7 @@ class MailMessagesController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {
