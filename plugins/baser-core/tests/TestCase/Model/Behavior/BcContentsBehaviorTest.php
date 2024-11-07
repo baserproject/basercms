@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 use ArrayObject;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
@@ -219,9 +221,21 @@ class BcContentsBehaviorTest extends BcTestCase
      */
     public function testGetType()
     {
-        $this->table->setTable('baser_contents');
+        //prefix = ""
+        $this->table->setTable('unittest_baser_contents');
         $rs = $this->BcContentsBehavior->getType();
+        //戻り確認
+        $this->assertEquals('UnittestBaserContent', $rs);
 
+        //prefix = "unittest_"
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->table->setConnection($connection);
+        $this->table->setTable('unittest_baser_contents');
+
+        $rs = $this->BcContentsBehavior->getType();
+        //戻り確認
         $this->assertEquals('BaserContent', $rs);
     }
 
