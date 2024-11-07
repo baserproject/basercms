@@ -134,6 +134,7 @@ class MailController extends MailFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(
         MailFrontServiceInterface $service,

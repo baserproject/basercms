@@ -59,6 +59,7 @@ class CreateReleaseCommand extends Command
      * @return int|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
@@ -109,6 +110,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clonePackage(string $packagePath, string $branch)
     {

@@ -48,8 +48,22 @@ class UploadsControllerTest extends BcTestCase
      */
     public function testTmp()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->get('/baser/baser-core/uploads/tmp/medium/00000001_eyecatch_png');
+        mkdir(TMP . 'uploads');
+        touch(TMP . 'uploads/test.gif');
+        copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', TMP . 'uploads/test.gif');
+
+        $this->session([
+            'Upload.test_gif.data' => base64_encode(file_get_contents(TMP . 'uploads/test.gif')),
+            'Upload.test_gif.type' => 'image/gif',
+            'Upload.test_gif.imagecopy.medium' => ['width' => 100, 'height' => 100],
+        ]);
+
+        $this->get('/baser-core/uploads/tmp/thumb/test.gif');
+        $this->assertResponseSuccess();
+        $this->assertNotEmpty($this->_controller->getResponse()->getBody());
+
+        @unlink(TMP . 'uploads/test.gif');
+        rmdir(TMP . 'uploads');
     }
     /**
      * セッションに保存した一時ファイルを出力する
