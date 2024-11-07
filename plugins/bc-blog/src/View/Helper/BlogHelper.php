@@ -49,6 +49,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BcMail\View\Helper\MailHelper;
 
 /**
  * ブログヘルパー
@@ -1296,7 +1297,6 @@ class BlogHelper extends Helper
      */
     public function mailFormLink($title, $contentsName, $datas = [], $options = [])
     {
-        App::uses('MailHelper', 'BcMail.View/Helper');
         $MailHelper = new MailHelper($this->_View);
         $MailHelper->link($title, $contentsName, $datas, $options);
     }
