@@ -248,6 +248,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     {
         if (!BcUtil::isInstalled()) return;
         if(!$themes) return;
+        $path = [];
         foreach($themes as $theme) {
             $pluginsPath = CorePlugin::path($theme) . 'plugins' . DS;
             if (!is_dir($pluginsPath)) continue;
