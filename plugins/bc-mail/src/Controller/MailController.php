@@ -289,7 +289,7 @@ class MailController extends MailFrontAppController
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
-        // EVENT Mail.beforeSendEmail
+        // EVENT BcMail.Mail.beforeSendEmail
         $event = $this->dispatchLayerEvent('beforeSendEmail', [
             'data' => $entity
         ]);
@@ -308,9 +308,9 @@ class MailController extends MailFrontAppController
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
-        // EVENT Mail.afterSendEmail
+        // EVENT BcMail.Mail.afterSendEmail
         $this->dispatchLayerEvent('afterSendEmail', [
-            'data' => $this->request->getData()
+            'data' => $entity
         ]);
 
         $this->getRequest()->getSession()->write('BcMail.MailContent', $mailContent);
