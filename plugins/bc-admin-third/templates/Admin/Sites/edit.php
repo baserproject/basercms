@@ -17,6 +17,9 @@
  */
 $this->BcAdmin->setTitle(__d('baser_core', 'サイト編集'));
 $this->BcAdmin->setHelp('sites_form');
+$this->BcBaser->js('admin/sites/form.bundle', false, [
+  'defer' => true
+]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser_core', '新規追加'),
