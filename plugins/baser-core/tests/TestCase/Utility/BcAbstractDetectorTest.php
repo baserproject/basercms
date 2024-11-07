@@ -100,4 +100,24 @@ class BcAbstractDetectorTest extends BcTestCase
             ['hoge', null],
         ];
     }
+
+    /**
+     * test __construct
+     */
+    public function testConstruct()
+    {
+        $name = 'TestName';
+        $config = [
+            'agents' => [
+                'iPhone',            // Apple iPhone
+                'iPod',                // Apple iPod touch
+                'Android',            // 1.5+ Android
+                'dream',            // Pre 1.5 Android
+            ]
+        ];
+        $instance = new BcAgent($name, $config);
+        $this->assertEquals('TestName', $instance->name);
+        $this->assertEquals($config['agents'][0], $instance->decisionKeys[0]);
+        $this->assertFalse($instance->sessionId);
+    }
 }

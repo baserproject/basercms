@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -95,14 +96,11 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        // TODO ucmitz 本体側の実装要
-        /* >>>
-        $this->BcFrontAppController->setRequest($this->getRequest('/en/サイトID3の固定ページ'));
+        $this->BcFrontAppController->setRequest($this->getRequest());
         $this->BcFrontAppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getLayoutPath());
-        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getTemplatePath());
-        <<< */
+        $viewBuilder = $this->BcFrontAppController->viewBuilder();
+        $this->assertEquals('BaserCore.BcFrontApp', $viewBuilder->getClassName());
+        $this->assertEquals('BcFront', $viewBuilder->getTheme());
     }
 
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -145,6 +146,28 @@ class AppControllerTest extends BcTestCase
     {
         $this->AppController->beforeRender(new Event('beforeRender'));
         $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getVars()['currentAdminTheme']);
+    }
+
+    /**
+     * test checkPermission
+     */
+    public function testCheckPermission()
+    {
+        //準備
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
+        $permissionsService->addCheck("/fuga", false);
+        $permissionsService->addCheck("/piyo", true);
+
+        Configure::write('BcApp.adminGroupId', 2);
+        $this->loginAdmin($this->getRequest('/'));
+
+        //result = false test
+        $this->AppController->setRequest($this->getRequest('/fuga'));
+        $this->assertFalse($this->execPrivateMethod($this->AppController, 'checkPermission', []));
+
+        //result = true test
+        $this->AppController->setRequest($this->getRequest('/piyo'));
+        $this->assertTrue($this->execPrivateMethod($this->AppController, 'checkPermission', []));
     }
 
     /**
