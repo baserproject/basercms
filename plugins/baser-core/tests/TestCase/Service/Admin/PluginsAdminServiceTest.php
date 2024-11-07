@@ -149,4 +149,13 @@ class PluginsAdminServiceTest extends BcTestCase
         $this->assertTrue(isset($vars['isPluginsDirWritable']));
     }
 
+    /**
+     * test isPluginsDirWritable
+     */
+    public function test_isPluginsDirWritable()
+    {
+        $result = $this->PluginsAdmin->isPluginsDirWritable();
+        $this->assertTrue($result);
+    }
+
 }

@@ -151,7 +151,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         /**
-         * プラグインロード
+         * テーマ・プラグインロード
          */
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
@@ -164,19 +164,19 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
-        $app->addPlugin('Authentication');
-        $app->addPlugin('Migrations');
 
-        $this->addTheme($app);
-
-        $plugins = BcUtil::getEnablePlugins();
-        if ($plugins) {
-            foreach($plugins as $plugin) {
-                if (BcUtil::includePluginClass($plugin->name)) {
-                    $this->loadPlugin($app, $plugin->name, $plugin->priority);
-                }
-            }
-        }
+        // 利用可能なテーマを取得
+        $themes = $this->getAvailableThemes();
+        // プラグインを追加する前にテーマが保有するプラグインのパスをセット
+        $this->setupThemePlugin($themes);
+        // テーマが保有するプラグインも含めてプラグインを読み込む
+        $this->addPlugin($app);
+        // ======================================================
+        // テーマはプラグインの後に読み込む
+        // テーマもプラグインとして扱う場合があるため、
+        // その場合に、テーマでプラグインの設定等を上書きできるようにする
+        // ======================================================
+        $this->addTheme($app, $themes);
 
         /**
          * デフォルトテンプレートを設定する
@@ -195,47 +195,97 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     }
 
     /**
+     * プラグインを追加する
+     * @param PluginApplicationInterface $app
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function addPlugin(PluginApplicationInterface $app): void
+    {
+        $app->addPlugin('Authentication');
+        $app->addPlugin('Migrations');
+
+        $plugins = BcUtil::getEnablePlugins();
+        if(!$plugins) return;
+        foreach($plugins as $plugin) {
+            if (!BcUtil::includePluginClass($plugin->name)) continue;
+            $this->loadPlugin($app, $plugin->name, $plugin->priority);
+        }
+    }
+
+    /**
      * テーマを追加する
-     *
-     * テーマ内のプラグインも追加する
      *
      * @param PluginApplicationInterface $application
      * @noTodo
      * @checked
      */
-    public function addTheme(PluginApplicationInterface $application)
+    public function addTheme(PluginApplicationInterface $application, array $themes): void
     {
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-'));
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-'));
         if (!BcUtil::isInstalled()) return;
-        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        try {
-            $sites = $sitesTable->find()->where(['Sites.status' => true]);
-        } catch (MissingConnectionException) {
-            return;
-        }
 
-        $path = [];
-        foreach($sites as $site) {
-            if ($site->theme) {
-                if(!BcUtil::includePluginClass($site->theme)) continue;
-                try {
-                    $application->addPlugin($site->theme);
-                    $pluginPath = CorePlugin::path($site->theme) . 'plugins' . DS;
-                    if (!is_dir($pluginPath)) continue;
-                    $path[] = $pluginPath;
-                } catch (MissingPluginException $e) {
-                    $this->log($e->getMessage());
-                }
+        foreach($themes as $theme) {
+            if(!BcUtil::includePluginClass($theme)) continue;
+            try {
+                $application->addPlugin($theme);
+            } catch (MissingPluginException $e) {
+                $this->log($e->getMessage());
             }
         }
-        // テーマプラグインを追加
+    }
+
+    /**
+     * テーマが保有するプラグインのパスを追加する
+     * @param array $themes
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function setupThemePlugin(array $themes): void
+    {
+        if (!BcUtil::isInstalled()) return;
+        if(!$themes) return;
+        $path = [];
+        foreach($themes as $theme) {
+            $pluginsPath = CorePlugin::path($theme) . 'plugins' . DS;
+            if (!is_dir($pluginsPath)) continue;
+            $path[] = $pluginsPath;
+        }
         if($path) {
             Configure::write('App.paths.plugins', array_merge(
                 Configure::read('App.paths.plugins'),
                 $path
             ));
         }
+    }
+
+    /**
+     * 利用可能なテーマを取得する
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getAvailableThemes(): array
+    {
+        if (!BcUtil::isInstalled()) return [];
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        try {
+            $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        } catch (MissingConnectionException) {
+            return [];
+        }
+        $themes = [];
+        foreach($sites as $site) {
+            if ($site->theme) {
+                if (!is_dir(CorePlugin::path($site->theme))) continue;
+                if(in_array($site->theme, $themes)) continue;
+                $themes[] = $site->theme;
+            }
+        }
+        return $themes;
     }
 
     /**

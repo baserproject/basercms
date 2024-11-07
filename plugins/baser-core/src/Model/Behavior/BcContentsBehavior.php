@@ -86,6 +86,7 @@ class BcContentsBehavior extends Behavior
      * アソシエーション時に alias を除外する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function offAlias(): void
     {
@@ -99,6 +100,7 @@ class BcContentsBehavior extends Behavior
      * アソシエーション時に alias を含める
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function onAlias(): void
     {

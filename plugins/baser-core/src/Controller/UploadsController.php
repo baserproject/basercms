@@ -31,6 +31,7 @@ class UploadsController extends AppController
      * @return \Cake\Http\Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tmp()
     {
