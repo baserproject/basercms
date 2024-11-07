@@ -253,7 +253,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             if (!is_dir($pluginsPath)) continue;
             $path[] = $pluginsPath;
         }
-        if($path) {
+        if(isset($path) && $path) {
             Configure::write('App.paths.plugins', array_merge(
                 Configure::read('App.paths.plugins'),
                 $path
