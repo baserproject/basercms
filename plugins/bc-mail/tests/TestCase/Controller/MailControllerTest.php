@@ -65,11 +65,28 @@ class MailControllerTest extends BcTestCase
 
     /**
      * [test_index description]
-     * @return [type] [description]
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //準備
+        SiteFactory::make(['id' => 1])->persist();
+        MailFieldsFactory::make(['mail_content_id' => 1, 'no' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
+        //正常テスト
+        $this->get('/contact/');
+
+        $this->assertResponseOk();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['mailContent']);
+        $this->assertNotNull($vars['mailFields']);
+        $this->assertNotNull($vars['mailMessage']);
+        $this->assertNotNull($vars['description']);
+        $this->assertTrue($_SESSION["BcMail"]["valid"]);
+
+        //異常テスト
+        $this->get('/contact-test/');
+        $this->assertResponseCode(404);
     }
 
     /**

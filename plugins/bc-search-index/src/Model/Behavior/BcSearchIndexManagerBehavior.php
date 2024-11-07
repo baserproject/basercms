@@ -191,7 +191,7 @@ class BcSearchIndexManagerBehavior extends Behavior
         }
 
         if (!empty($searchIndex['content_id'])) {
-            $content = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $searchIndex['content_id']])->first();
+            $content = $this->Contents->find()->select(['lft', 'rght'])->where(['Contents.id' => $searchIndex['content_id']])->first();
             $searchIndex['lft'] = $content->lft;
             $searchIndex['rght'] = $content->rght;
         } else {

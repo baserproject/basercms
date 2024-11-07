@@ -14,12 +14,17 @@ namespace BcMail\Test\TestCase\Model\Table;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * @property MailFieldsTable $MailFieldsTable
  */
 class MailFieldsTableTest extends BcTestCase
 {
+
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -167,7 +172,22 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testDuplicateMailField()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        $context = [
+            'field' => 'field_name',
+            'data' => ['mail_content_id' => 1, 'id' => 2],
+            'newRecord' => true
+        ];
+        //case false
+        $result = $this->MailFieldsTable->duplicateMailField('name_1', $context);
+        $this->assertFalse($result);
+
+        //case true
+        $result = $this->MailFieldsTable->duplicateMailField('name_test', $context);
+        $this->assertTrue($result);
+
     }
 
     /**

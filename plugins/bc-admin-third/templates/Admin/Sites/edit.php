@@ -26,7 +26,11 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 <?php echo $this->BcAdminForm->create($site) ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php $this->BcBaser->element('Sites/form') ?>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
   <div class="bca-actions__before">
