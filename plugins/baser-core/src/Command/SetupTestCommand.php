@@ -39,6 +39,7 @@ class SetupTestCommand extends Command
      * @return int|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
