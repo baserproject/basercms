@@ -69,6 +69,7 @@ class BcMailer extends Mailer
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setEmailTransport()
     {
@@ -106,6 +107,7 @@ class BcMailer extends Mailer
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPlugin(): ?string
     {
@@ -120,6 +122,7 @@ class BcMailer extends Mailer
      * @psalm-return array{headers: string, message: string}
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deliver(string $content = ''): array
     {
