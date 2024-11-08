@@ -418,6 +418,16 @@ return [
         'enableRootRoutes' => false,
 
         /**
+         * bc_formのテンプレートを指定
+         * config/bc_form.phpを差し替える         
+         *  プラグイン記法 (プラグイン名.テンプレート名)
+         */
+        //basercms/plugins/baser-core/src/View/AppView.php
+        'AppFormTemplate' => 'BaserCore.bc_form',
+        //basercms/plugins/baser-core/src/View/BcAdminAppView.php
+        'AdminFormTemplate' => 'BaserCore.bc_form',
+
+        /**
          * システムナビ
          *
          * 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する

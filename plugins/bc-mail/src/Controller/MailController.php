@@ -134,6 +134,7 @@ class MailController extends MailFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(
         MailFrontServiceInterface $service,
@@ -166,6 +167,7 @@ class MailController extends MailFrontAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function confirm(
         MailFrontServiceInterface $service,
@@ -324,6 +326,7 @@ class MailController extends MailFrontAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function thanks(MailFrontServiceInterface $service, MailContentsServiceInterface $mailContentsService)
     {

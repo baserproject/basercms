@@ -409,7 +409,7 @@ class ContentsTable extends AppTable
         $query = $this->find()->where(['name LIKE' => $name . '%', 'site_root' => false]);
         if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
-            $query = $query->andWhere(['id <>' => $contentId]);
+            $query = $query->andWhere(['Contents.id <>' => $contentId]);
         }
         $datas = $query->select('name')->orderBy('name')->all()->toArray();
         $datas = Hash::extract($datas, '{n}.name');

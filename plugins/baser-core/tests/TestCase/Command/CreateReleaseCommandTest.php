@@ -4,12 +4,19 @@ namespace BaserCore\Test\TestCase\Command;
 
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Command\Command;
 use Cake\Console\ConsoleOptionParser;
 use BaserCore\Utility\BcFolder;
 use Cake\Core\Configure;
+use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 
 class CreateReleaseCommandTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ConsoleIntegrationTestTrait;
+
     private $packagePath;
     private $zipFile;
     public function setUp(): void
@@ -68,6 +75,22 @@ class CreateReleaseCommandTest extends BcTestCase
         $this->assertEquals('master', $options['branch']->defaultValue());
     }
 
+    /**
+     * test execute
+     */
+    public function testExecute()
+    {
+        //異常テスト
+        $this->exec('create release');
+        $this->assertExitCode(Command::CODE_ERROR);
+
+        //正常テスト
+        $this->exec('create release 5.1.1');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertOutputContains('リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。');
+        $this->assertTrue(file_exists(TMP . 'basercms-5.1.1.zip'));
+        unlink(TMP . 'basercms-5.1.1.zip');
+    }
 
     /**
      * Test deleteExcludeFiles
@@ -145,5 +168,21 @@ class CreateReleaseCommandTest extends BcTestCase
 
         //clean up
         $folder->delete($pluginsPath);
+    }
+
+    /**
+     * test clonePackage
+     */
+    public function testClonePackage()
+    {
+        //テストを実行
+        $this->CreateReleaseCommand->clonePackage('/var/www/html/tmp/basercms/', 'master');
+
+        //パッケージを GitHub よりクローンできるか確認
+        $this->assertTrue(is_dir(TMP . 'basercms'));
+        $this->assertTrue(file_exists(TMP . 'basercms'));
+
+        //不要フォルダを削除
+        (new BcFolder(TMP . 'basercms'))->delete();
     }
 }

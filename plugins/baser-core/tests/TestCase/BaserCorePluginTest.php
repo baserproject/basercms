@@ -42,7 +42,7 @@ use BaserCore\Command\UpdateCommand;
  * Class PluginTest
  * @property BaserCorePlugin $Plugin
  */
-class PluginTest extends BcTestCase
+class BaserCorePluginTest extends BcTestCase
 {
     use ScenarioAwareTrait;
 
