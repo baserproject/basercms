@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Mailer;
 
 use BaserCore\Mailer\BcMailer;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
@@ -89,7 +90,9 @@ class BcMailerTest extends BcTestCase
      */
     public function testDeliver()
     {
-        $this->markTestIncomplete('まだ実装されません');
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->sendTestMail(['email' => 'aa@ff.ccc'], 'test@test.com', 'メール送信テスト', 'メール送信テスト');
+        $this->assertNotNull($this->BcMailer->getMessage());
     }
 
 }

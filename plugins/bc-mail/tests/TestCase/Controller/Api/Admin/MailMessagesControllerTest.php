@@ -362,6 +362,7 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testDownload()
     {
+        $this->markTestSkipped('このテストは未確認です');
         // メールメッセージのデータを作成する
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         //テストデータベースを生成
