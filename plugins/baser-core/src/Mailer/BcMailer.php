@@ -48,6 +48,7 @@ class BcMailer extends Mailer
      * @param null $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($config = null)
     {
