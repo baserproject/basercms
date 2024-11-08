@@ -326,6 +326,7 @@ class MailController extends MailFrontAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function thanks(MailFrontServiceInterface $service, MailContentsServiceInterface $mailContentsService)
     {

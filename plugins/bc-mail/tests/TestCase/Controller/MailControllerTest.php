@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Controller;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Test\Factory\MailContentFactory;
@@ -187,5 +188,23 @@ class MailControllerTest extends BcTestCase
     public function testCaptcha()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * [PUBIC] メール送信完了
+     */
+    public function test_thanks()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
+
+        $this->session(['BcMail.MailContent' => MailContentFactory::get(1)]);
+        //正常テスト
+        $this->get('/contact/thanks');
+
+        $this->assertResponseOk();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['mailContent']);
     }
 }
