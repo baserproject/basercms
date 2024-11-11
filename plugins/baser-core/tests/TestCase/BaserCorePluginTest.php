@@ -108,6 +108,7 @@ class BaserCorePluginTest extends BcTestCase
         $pathsPluginsExpected = [
             '/var/www/html/plugins/',
             '/var/www/html/vendor/baserproject/',
+            '/var/www/html/plugins/bc-custom-content/plugins/',
         ];
 
         $this->assertEquals($pathsPluginsExpected, Configure::read('App.paths.plugins'));
