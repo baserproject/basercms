@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\Routing\Route;
 
 use BaserCore\Routing\Route\BcContentsRoute;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
 use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -76,8 +78,10 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testMatch($current, $params, $expects)
     {
-        $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
-        $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
+        SiteFactory::make(['id' => '1', 'main_site_id' => null, 'status' => 1])->persist();
+        ContentFactory::make(['name' => 'index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '1', 'url' => '/index', 'site_id' => '1',])->persist();
+        ContentFactory::make(['name' => 'service1', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '3', 'url' => '/service/service1', 'site_id' => '1'])->persist();
+        ContentFactory::make(['name' => 'news', 'plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => '1', 'url' => '/news/', 'site_id' => '1'])->persist();
         Router::setRequest($this->getRequest($current));
         $this->assertEquals($expects, Router::url($params));
     }
