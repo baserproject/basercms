@@ -373,14 +373,38 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_captcha()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        //準備
-
-        //正常系実行
-
-        //異常系実行
-
-
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/news/',
+            'site_id' => 1,
+            'status' => true,
+            'tag_use' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '1',
+            'rght' => '2',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'layout_template' => 'default',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'blog_category_id' => 1,
+            'no' => 1,
+            'user_id' => 1,
+            'name' => 'post1',
+            'posted' => '2023-01-11 12:57:59',
+            'status' => true])->persist();
+        BlogContentFactory::make(['id' => 1,
+            'tag_use' => true,
+            'list_direction' => 'DESC',
+            'template' => 'default'
+        ])->persist();
+        $this->get('/news/captcha/abc');
+        $this->assertResponseOk();
     }
 
 }

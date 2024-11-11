@@ -371,6 +371,7 @@ class BlogController extends BlogFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
