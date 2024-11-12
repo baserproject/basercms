@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Mailer;
 
 use BaserCore\Mailer\BcMailer;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
@@ -39,6 +40,9 @@ class BcMailerTest extends BcTestCase
         parent::setUp();
         SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
         SiteConfigFactory::make(['name' => 'admin-theme', 'value' => 'test theme'])->persist();
+        SiteConfigFactory::make(['name' => 'smtp_host', 'value' => '3306'])->persist();
+        SiteConfigFactory::make(['name' => 'smtp_user', 'value' => 'gmail.com'])->persist();
+        SiteConfigFactory::make(['name' => 'smtp_password', 'value' => '123456'])->persist();
         SiteFactory::make(['id' => '1', 'theme' => 'BcFront', 'status' => true])->persist();
         ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         Router::setRequest($this->getRequest('/contact/'));
@@ -69,15 +73,16 @@ class BcMailerTest extends BcTestCase
      */
     public function testSetEmailTransport()
     {
-        $this->markTestIncomplete('まだ実装されません');
+        $this->BcMailer->setEmailTransport();
+        $this->assertEquals('Smtp', $this->BcMailer->getTransport()->getConfig('className'));
     }
 
     /**
      * test getPlugin
      */
-    public function testGetPlugint()
+    public function testGetPlugin()
     {
-        $this->markTestIncomplete('まだ実装されません');
+        $this->assertEquals('BaserCore', $this->BcMailer->getPlugin());
     }
 
     /**
@@ -85,7 +90,9 @@ class BcMailerTest extends BcTestCase
      */
     public function testDeliver()
     {
-        $this->markTestIncomplete('まだ実装されません');
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->sendTestMail(['email' => 'aa@ff.ccc'], 'test@test.com', 'メール送信テスト', 'メール送信テスト');
+        $this->assertNotNull($this->BcMailer->getMessage());
     }
 
 }
