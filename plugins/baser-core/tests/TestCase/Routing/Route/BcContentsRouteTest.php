@@ -79,19 +79,6 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testMatch($current, $params, $expects)
     {
-        //configure
-        Configure::write('BcContents.items.BcBlog', [
-            'title' => 'ブログ',
-            'routes' => [
-                'manage' => [
-                    'prefix' => 'Admin',
-                    'plugin' => 'BcBlog',
-                    'controller' => 'BlogPosts',
-                    'action' => 'index',
-                ]
-            ],
-        ]);
-
         SiteFactory::make(['id' => '1', 'main_site_id' => null, 'status' => 1])->persist();
         ContentFactory::make(['name' => 'index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '1', 'url' => '/index', 'site_id' => '1',])->persist();
         ContentFactory::make(['name' => 'service1', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '3', 'url' => '/service/service1', 'site_id' => '1'])->persist();
@@ -233,66 +220,29 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function test_getContentTypeByParams()
     {
-        //configure
-        Configure::write('BcContents.items', [
-            'YourPlugin' => [
-                'item1' => [
-                    'routes' => [
-                        'view' => [
-                            'controller' => 'YourController',
-                            'action' => 'view'
-                        ]
-                    ]
-                ],
-                'item2' => [
-                    'routes' => [
-                        'view' => [
-                            'controller' => 'YourController',
-                            'action' => 'otherAction'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
         //testGetContentTypeByParamsWithNoMatch
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'NonExistentController',
-            'action' => 'nonExistentAction'
-        ];
+        $params = ['plugin' => 'BcBlogs', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
         $this->assertFalse($result);
 
         //testGetContentTypeByParamsWithNoPlugin
-        $params = [
-            'plugin' => 'non_existent_plugin',
-            'controller' => 'YourController',
-            'action' => 'view'
-        ];
+        $params = ['plugin' => '', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
         $this->assertFalse($result);
 
         //testGetContentTypeByParamsWithAction
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'YourController',
-            'action' => 'view'
-        ];
+        $params = ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
-        $this->assertEquals('item1', $result);
+        $this->assertEquals('BlogContent', $result);
 
         //testGetContentTypeByParamsWithoutAction
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'YourController'
-        ];
+        $params = ['plugin' => 'BcBlog', 'controller' => 'Blog'];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, false]);
-        $this->assertEquals('item1', $result);
+        $this->assertEquals('BlogContent', $result);
     }
 
 }
