@@ -250,7 +250,7 @@ class CustomContentHelperTest extends BcTestCase
     public function test_getFieldValue($displayFront, $fieldType, $requestUrl, $fieldName, $fieldValue, $options, $expect)
     {
         //plugin BcCcRelatedを追加
-        Configure::write('BcCustomContent.fieldTypes.BcCcRelated', ['category' => '選択', 'label' => '関連データ', 'columnType' => 'string', 'controlType' => 'select', 'preview' => true, 'loop' => true]);
+//        Configure::write('BcCustomContent.fieldTypes.BcCcRelated', ['category' => '選択', 'label' => '関連データ', 'columnType' => 'string', 'controlType' => 'select', 'preview' => true, 'loop' => true]);
         //サービスをコル
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);

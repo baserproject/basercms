@@ -114,8 +114,8 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getFieldControlType()
     {
-        Configure::write('BcCustomContent.fieldTypes.BcCcText.controlType', 'text');
-        Configure::write('BcCustomContent.fieldTypes.BcCcCheckbox.controlType', 'checkbox');
+//        Configure::write('BcCustomContent.fieldTypes.BcCcText.controlType', 'text');
+//        Configure::write('BcCustomContent.fieldTypes.BcCcCheckbox.controlType', 'checkbox');
 
         //正常系実行
         $result = $this->CustomEntriesService->getFieldControlType('BcCcText');

@@ -70,7 +70,6 @@ class CustomContentAppHelperTest extends BcTestCase
         $this->assertNotNull($this->CustomContentAppHelper->BcCcAutoZip);
         $this->assertNotNull($this->CustomContentAppHelper->BcCcCheckbox);
         $this->assertNotNull($this->CustomContentAppHelper->BcCcDate);
-        $this->assertNotNull($this->CustomContentAppHelper->BcCcCheckbox);
         $this->assertNotNull($this->CustomContentAppHelper->BcCcEmail);
         $this->assertNotNull($this->CustomContentAppHelper->BcCcFile);
     }

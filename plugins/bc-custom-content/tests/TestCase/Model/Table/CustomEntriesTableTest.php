@@ -818,7 +818,7 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_autoConvert()
     {
-        Configure::write('BcCustomContent.fieldTypes.BcCcFile.controlType', 'file');
+//        Configure::write('BcCustomContent.fieldTypes.BcCcFile.controlType', 'file');
         //データ生成
         CustomFieldFactory::make([
             'id' => 1,
