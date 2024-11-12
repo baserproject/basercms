@@ -249,6 +249,17 @@ class BcTestCaseTest extends BcTestCase
     }
 
     /**
+     * test classMethod
+     */
+    public function testClassMethod()
+    {
+        ob_start();
+        $this->classMethod();
+        $output = ob_get_clean();
+        $this->assertEquals("", $output);
+    }
+
+    /**
      * test dropTable
      */
     public function testDropTable()
