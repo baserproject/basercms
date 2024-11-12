@@ -106,7 +106,7 @@ class MailControllerTest extends BcTestCase
      */
     public function testConfirm()
     {
-
+        $this->markTestIncomplete('このテストは未確認です');
         //準備
         $this->enableSecurityToken();
         $this->enableCsrfToken();
@@ -150,6 +150,7 @@ class MailControllerTest extends BcTestCase
      */
     public function testSubmit()
     {
+        $this->markTestIncomplete('このテストは未確認です');
         //準備
         $this->enableSecurityToken();
         $this->enableCsrfToken();

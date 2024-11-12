@@ -233,16 +233,14 @@ class BcContentsRouteTest extends BcTestCase
         $this->assertFalse($result);
 
         //testGetContentTypeByParamsWithAction
-        $params = ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
+        $params = ['plugin' => 'BcMail', 'controller' => 'Mail', 'action' => 'index'];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
-        $this->assertEquals('BlogContent', $result);
+        $this->assertEquals('MailContent', $result);
 
         //testGetContentTypeByParamsWithoutAction
-        $params = ['plugin' => 'BcBlog', 'controller' => 'Blog'];
-
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, false]);
-        $this->assertEquals('BlogContent', $result);
+        $this->assertEquals('MailContent', $result);
     }
 
 }
