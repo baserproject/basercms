@@ -56,7 +56,7 @@ class BcAdminAppView extends AppView
     public function initialize(): void
     {
         parent::initialize();
-        $this->addHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BaserCore.BcAdminForm', ['templates' => Configure::read('BcApp.AdminFormTemplate')]);
         $this->addHelper('BaserCore.BcAuth');
         $this->addHelper('BaserCore.BcText');
         $this->addHelper('BaserCore.BcContents');

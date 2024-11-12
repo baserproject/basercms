@@ -11,6 +11,7 @@
 
 namespace BcMail\View;
 
+use Cake\Core\Configure;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -39,7 +40,7 @@ class MailFrontAppView extends BcFrontAppView
         parent::initialize();
         $this->addHelper('BcMail.Mail');
         $this->addHelper('BcMail.Mailfield');
-        $this->addHelper('BcMail.Mailform', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BcMail.Mailform', ['templates' => Configure::read('BcMail.formTemplate')]);
     }
 
 }

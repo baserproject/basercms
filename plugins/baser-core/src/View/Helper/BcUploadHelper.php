@@ -26,6 +26,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use Cake\View\Helper\HtmlHelper;
+use Laminas\Diactoros\UploadedFile;
 use Throwable;
 
 /**
@@ -159,7 +160,7 @@ class BcUploadHelper  extends Helper
             $basePath = '/baser-core/uploads/tmp/';
         }
 
-        if (is_array($value)) {
+        if (is_array($value) || $value instanceof UploadedFile) {
             return false;
         }
 

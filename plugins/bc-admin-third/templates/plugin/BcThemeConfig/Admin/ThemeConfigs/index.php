@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->css('vendor/colpick', ['inline' => false]);
+$this->BcBaser->css('vendor/colpick', false);
 $this->BcBaser->js(['vendor/colpick'], false);
 $this->BcAdmin->setTitle(__d('baser_core', 'テーマ設定'));
 $this->BcAdmin->setHelp('theme_configs_form');

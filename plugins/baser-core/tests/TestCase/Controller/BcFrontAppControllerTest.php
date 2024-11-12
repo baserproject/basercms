@@ -12,11 +12,14 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
-use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\I18n\I18n;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -87,7 +90,14 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //準備
+        ContentFactory::make(['url' => '/', 'site_id' => 2])->persist();
+        SiteFactory::make(['id' => 2, 'lang' => 'english'])->persist();
+        $this->BcFrontAppController->setRequest($this->loginAdmin($this->getRequest('/')));
+        //テスト
+        $this->BcFrontAppController->beforeFilter(new Event('Controller.beforeFilter', $this->BcFrontAppController));
+        //language check
+        $this->assertEquals('en', I18n::getLocale());
     }
 
     /**
@@ -95,14 +105,11 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        // TODO ucmitz 本体側の実装要
-        /* >>>
-        $this->BcFrontAppController->setRequest($this->getRequest('/en/サイトID3の固定ページ'));
+        $this->BcFrontAppController->setRequest($this->getRequest());
         $this->BcFrontAppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getLayoutPath());
-        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getTemplatePath());
-        <<< */
+        $viewBuilder = $this->BcFrontAppController->viewBuilder();
+        $this->assertEquals('BaserCore.BcFrontApp', $viewBuilder->getClassName());
+        $this->assertEquals('BcFront', $viewBuilder->getTheme());
     }
 
 }

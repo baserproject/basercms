@@ -126,6 +126,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function whichPhp()
     {

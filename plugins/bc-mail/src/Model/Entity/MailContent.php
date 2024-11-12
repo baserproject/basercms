@@ -60,6 +60,7 @@ class MailContent extends Entity
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNumberOfMessages()
     {

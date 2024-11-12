@@ -131,7 +131,13 @@ class BlogPostsTable extends BlogAppTable
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のあるスラッグです。')
                 ]])
-            ->regex('name', '/\D/', __d('baser_core', '数値だけのスラッグを登録することはできません。'));
+            ->regex('name', '/\D/', __d('baser_core', '数値だけのスラッグを登録することはできません。'))
+            ->add('name', 'slash', [
+                'rule' => function ($value) {
+                    return !str_contains($value, '/');
+                },
+                'message' => __d('baser_core', 'スラッグにスラッシュを入力することはできません。')
+            ]);
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', 'タイトルは255文字以内で入力してください。'))
