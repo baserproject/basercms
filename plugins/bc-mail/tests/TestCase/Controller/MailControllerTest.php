@@ -19,7 +19,9 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\View\Helper\MailformHelper;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailControllerTest extends BcTestCase
@@ -188,7 +190,14 @@ class MailControllerTest extends BcTestCase
      */
     public function testCaptcha()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
+
+        //正常テスト
+        ob_start();
+        $this->get('/contact/captcha/38763366');
+        $this->assertNotNull(ob_get_clean());
     }
 
     /**
