@@ -231,7 +231,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if ($link->description) {
             return '<i class="bca-icon--question-circle bca-help"></i>' .
                 '<div class="bca-helptext">' .
-                $link->description .
+                preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $link->description) .
                 '</div>';
         }
         return '';

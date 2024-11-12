@@ -32,6 +32,7 @@ class PasswordRequestMailer extends BcAdminMailer
      * @param PasswordRequest|EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function resetPassword(EntityInterface $user, EntityInterface $passwordRequest)
     {

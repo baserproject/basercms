@@ -198,6 +198,7 @@ class MailHelper extends Helper
 
     /**
      * メールフォームへのリンクを生成する
+     * $contentsNameはコンテンツ管理上の１階層のみ対応
      *
      * @param string $title リンクのタイトル
      * @param string $contentsName メールフォームのコンテンツ名
@@ -212,10 +213,26 @@ class MailHelper extends Helper
     {
         if ($datas && is_array($datas)) {
             foreach ($datas as $key => $data) {
-                $datas[$key] = base64UrlsafeEncode($data);
+                $datas[$key] = BcUtil::base64UrlsafeEncode($data);
             }
         }
-        $link = array_merge(['plugin' => '', 'controller' => $contentsName, 'action' => 'index'], $datas);
+
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find('all')
+            ->where([
+                'Contents.name' => $contentsName,
+                'Contents.plugin' => 'BcMail',
+                'Contents.type' => 'MailContent',
+                ])
+            ->first();
+
+        $link = [
+            'plugin' => 'BcMail',
+            'controller' => 'Mail',
+            'action' => 'index',
+            'entityId' => $content->entity_id,
+            '?' => $datas,
+        ];
         $this->BcBaser->link($title, $link, $options);
     }
 

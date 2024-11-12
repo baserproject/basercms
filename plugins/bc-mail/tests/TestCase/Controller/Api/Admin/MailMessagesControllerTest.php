@@ -362,6 +362,19 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testDownload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->markTestSkipped('このテストは未確認です');
+        // メールメッセージのデータを作成する
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailContentId = 1;
+        $mailMessageTable->setup($mailContentId);
+        $mailMessageTable->save(new Entity(['id' => 2]));
+
+        ob_start();
+        $this->get("/baser/api/admin/bc-mail/mail_messages/download/1.json?token=$this->accessToken");
+        $actual = ob_get_clean();
+        $this->assertNotEmpty($actual);
     }
 }

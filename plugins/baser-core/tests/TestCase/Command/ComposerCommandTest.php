@@ -57,7 +57,6 @@ class ComposerCommandTest extends BcTestCase
      */
 	public function testExecute()
     {
-        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
         // バージョン指定なし
         $this->exec('composer');
         $this->assertErrorContains('Missing required argument. The `version` argument is required');
@@ -68,22 +67,15 @@ class ComposerCommandTest extends BcTestCase
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
 
         // composer実行（composer.json を配布用にセットアップなし）
-        $this->exec('composer 5.0.15');
+        $this->exec('composer 9999.9999.9999');
         $this->assertExitError();
         $this->assertErrorContains('Composer によるアップデートが失敗しました。update ログを確認してください。');
 
         // composer実行（composer.json を配布用にセットアップ）
         BcComposer::setup('', ROOT . DS);
-        BcComposer::setupComposerForDistribution('5.0.15');
-        $this->exec('composer 5.0.15');
+        $this->exec('composer 5.1.3.0');
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Composer によるアップデートが完了しました。');
-
-        // バージョンを確認
-        $file = new BcFile(ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'VERSION.txt');
-        $versionData = $file->read();
-        $aryVersionData = explode("\n", $versionData);
-        $this->assertEquals('5.0.15', $aryVersionData[0]);
 
         // バックアップをリストア
         rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');

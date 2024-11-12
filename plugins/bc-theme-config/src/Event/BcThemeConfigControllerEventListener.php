@@ -32,6 +32,9 @@ class BcThemeConfigControllerEventListener extends BcControllerEventListener
      * テーマ適用後イベント
      * @param Event $event
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreThemesAfterApply(Event $event)
     {

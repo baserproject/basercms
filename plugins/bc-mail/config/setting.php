@@ -154,6 +154,13 @@ return [
             ['name' => 'email', 'title' => 'Eメールアドレス'],
             ['name' => 'impp', 'title' => 'インスタントメッセージングプロトコルの端点'],
             ['name' => 'on', 'title' => '自動設定'],
-        ]
+        ],
+        /**
+         * bc_formのテンプレートを指定
+         * config/bc_form.phpを差し替える         
+         *  プラグイン記法 (プラグイン名.テンプレート名)
+         * basercms/plugins/bc-mail/src/View/MailFrontAppView.php
+         */
+        'formTemplate' => 'BaserCore.bc_form'
     ]
 ];
