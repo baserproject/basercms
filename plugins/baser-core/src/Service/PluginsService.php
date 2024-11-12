@@ -738,6 +738,7 @@ class PluginsService implements PluginsServiceInterface
      *  - `versions`: 取得可能なコアのバージョンリスト
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getAvailableCoreVersionInfo()
     {
