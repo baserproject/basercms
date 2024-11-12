@@ -85,7 +85,7 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
             'ContentFolder' => 'フォルダー',
             'Page' => '固定ページ',
             'ContentAlias' => 'エイリアス',
-            'BlogContent' => 'ブログ',
+//            'BlogContent' => 'ブログ',
             'ContentLink' => 'リンク',
             'MailContent' => 'メールフォーム'
         ];

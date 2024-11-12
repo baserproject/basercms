@@ -212,7 +212,7 @@ class SitesTable extends AppTable
      */
     public function getPublishedAll(): ResultSetInterface
     {
-        return $this->find()->where(['status' => true])->all();
+        return $this->find()->where(['Sites.status' => true])->all();
     }
 
     /**
@@ -236,7 +236,7 @@ class SitesTable extends AppTable
 
         $conditions = [];
         if (!is_null($options['status'])) {
-            $conditions = ['status' => $options['status']];
+            $conditions = ['Sites.status' => $options['status']];
         }
 
         if (!is_null($mainSiteId)) {
