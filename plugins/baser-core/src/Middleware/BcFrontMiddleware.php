@@ -36,6 +36,7 @@ class BcFrontMiddleware implements MiddlewareInterface
      * @return ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function process(
         ServerRequestInterface  $request,
