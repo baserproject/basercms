@@ -154,7 +154,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
         ob_start();
         $this->Listener->leftOfToolbar(new Event('leftOfToolbar', $View));
         $result = ob_get_clean();
-        $this->assertNotNull( $result);
+        $this->assertNotNull($result);
     }
 
 }
