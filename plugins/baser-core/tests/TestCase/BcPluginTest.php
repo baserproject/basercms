@@ -312,7 +312,7 @@ $users->save($user);');
         $this->BcPlugin->execScript($version);
         $users = $this->getTableLocator()->get('BaserCore.Users');
         $user = $users->find()->where(['id' => 1])->first();
-        $this->assertEquals('test', $user->name);
+        $this->assertEquals('hoge', $user->name);
         // 無効スクリプトあり
         $file = new BcFile($versionPath . DS . 'updater.php');
         $file->create();
