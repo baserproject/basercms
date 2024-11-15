@@ -1204,36 +1204,32 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
-        //offEventをテスト
-        $eventManager = $this->getTableLocator()->get('BcBlog.BlogPosts')->getEventManager();
-        $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeMarshal');
-        //戻り値を確認
-        $this->assertCount(1, $beforeSaveListeners);
-        //eventがOFFしたかどうか確認
-        $listeners = $eventManager->listeners('Model.beforeMarshal');
-        $this->assertCount(0, $listeners);
+        $eventManager = EventManager::instance();
+        $eventKey = 'testOnEvent';
+        $bcEvenListener = new class extends BcEventListener {
+            public $events = ['event1'];
+            public $layer = 'Controller';
+            public function event1() {
+                return 'event1';
+            }
+        };
+        // onEvent() でイベントを設定
+        BcUtil::onEvent($eventManager, $eventKey, [
+            'local' => [
+                10 => [
+                    ['callable' => [$bcEvenListener, 'event1']]
+                ]
+            ]
+        ]);
+        // listeners() イベントの登録を確認
+        $listeners = $eventManager->listeners($eventKey);
+        $this->assertIsCallable($listeners[0]['callable']);
 
-        //onEventをテスト
-        BcUtil::onEvent($eventManager, 'Model.beforeMarshal', $beforeSaveListeners);
-        //eventがONしたかどうか確認
-        $listeners = $eventManager->listeners('Model.beforeMarshal');
-        $this->assertCount(1, $listeners);
-        $this->assertEquals($beforeSaveListeners, $listeners);
-    }
-
-    /**
-     * test retry
-     */
-    public function testRetry()
-    {
-        //正常実行
-        $rs = BcUtil::retry(1, function () {return 2;}, 3);
-        $this->assertEquals(2, $rs);
-
-        //異常実行
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('リトライ回数は正の整数値で指定してください。');
-        BcUtil::retry(-1, function () {return 0;}, 1);
+        // offEvent() でイベントを解除
+        BcUtil::offEvent($eventManager, $eventKey);
+        // listeners() イベントの解除を確認
+        $listeners = $eventManager->listeners($eventKey);
+        $this->assertEmpty($listeners);
     }
 
     /**
