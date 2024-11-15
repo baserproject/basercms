@@ -48,6 +48,7 @@ class BcContentsRouteTest extends BcTestCase
     {
         parent::setUp();
         $this->BcContentsRoute = new BcContentsRoute('/', [], []);
+        $this->loadPlugins(['BcBlog']);
     }
 
     /**
@@ -94,10 +95,10 @@ class BcContentsRouteTest extends BcTestCase
             ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'index'], '/index'],
             ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'service', 'service1'], '/service/service1'],
             // Blog
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1], '/news/'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 2], '/news/archives/2'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, '?' => ['page' => 2], 2], '/news/archives/2?page=2'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'category', 'release'], '/news/archives/category/release'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1], '/news/'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 2], '/news/archives/2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, '?' => ['page' => 2], 2], '/news/archives/2?page=2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'category', 'release'], '/news/archives/category/release'],
         ];
     }
 
