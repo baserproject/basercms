@@ -25,7 +25,7 @@ class CustomContentUtilTest extends BcTestCase
     public function test_getPluginSetting()
     {
         //plugin and name is not empty
-        //Configure::write('BcCustomContent.fieldTypes.testPlugin.testSetting', 'testValue');
+        Configure::write('BcCustomContent.fieldTypes.testPlugin.testSetting', 'testValue');
         $rs = CustomContentUtil::getPluginSetting('testPlugin', 'testSetting');
         $this->assertEquals('testValue', $rs);
 
