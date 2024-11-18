@@ -29,4 +29,14 @@ class BlogCommentMailerTest extends BcTestCase
         $this->assertEquals('BcBlog.blog_comment_admin', $this->BlogCommentMailer->viewBuilder()->getTemplate());
         $this->assertEquals(['test' => 'test'], $this->BlogCommentMailer->viewBuilder()->getVars());
     }
+
+    /**
+     * test sendCommentToUser
+     */
+    public function testSendCommentToUser()
+    {
+        $this->BlogCommentMailer->sendCommentToUser('admin baser','user@example.com', ['test' => 'test']);
+        $this->assertEquals('BcBlog.blog_comment_contributor', $this->BlogCommentMailer->viewBuilder()->getTemplate());
+        $this->assertEquals(['test' => 'test'], $this->BlogCommentMailer->viewBuilder()->getVars());
+    }
 }

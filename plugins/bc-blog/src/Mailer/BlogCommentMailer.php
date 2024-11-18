@@ -56,6 +56,7 @@ class BlogCommentMailer extends BcMailer
      * @param array $data
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendCommentToUser(string $senderName, string $userMail, array $data)
     {
