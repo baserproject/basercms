@@ -17,7 +17,7 @@
  * @unitTest
  * @noTodo
  */
-$this->BcListTable->setColumnNumber(6);
+$this->BcListTable->setColumnNumber(5);
 $i = 1;
 ?>
 
@@ -28,7 +28,11 @@ $i = 1;
     <th class="bca-table-listup__thead-th">No</th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'ルールグループ名') ?></th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '設定数') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '有効') ?></th>
+<?php
+// TODO こちらのIssueに関連するため一旦コメントアウト、仕様をどうするか検討が必要
+// https://github.com/baserproject/basercms/pull/3384
+?>
+<!--    <th class="bca-table-listup__thead-th">--><?php //echo __d('baser_core', '有効') ?><!--</th>-->
     <?php echo $this->BcListTable->dispatchShowHead() ?>
     <th class="bca-table-listup__thead-th">
       <?php echo __d('baser_core', '登録日') ?><br><?php echo __d('baser_core', '更新日') ?>

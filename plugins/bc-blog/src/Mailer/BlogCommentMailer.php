@@ -29,6 +29,7 @@ class BlogCommentMailer extends BcMailer
      * @param array $data
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function sendCommentToAdmin(string $senderName, array $data)
     {

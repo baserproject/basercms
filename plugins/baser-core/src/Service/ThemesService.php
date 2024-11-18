@@ -23,6 +23,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcZip;
 use BcMail\Service\MailMessagesServiceInterface;
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
@@ -286,6 +287,12 @@ class ThemesService implements ThemesServiceInterface
      */
     public function installThemesPlugins(string $theme)
     {
+        $paths = App::path('plugins');
+        $path = BcUtil::getPluginPath($theme) . 'plugins' . DS;
+        if(!is_dir($path)) return;
+        if(!in_array($path, $paths)) {
+            Configure::write('App.paths.plugins', array_merge($paths, [$path]));
+        }
         /* @var PluginsService $pluginsService */
         $pluginsService = $this->getService(PluginsServiceInterface::class);
         $plugins = BcUtil::getThemesPlugins($theme);

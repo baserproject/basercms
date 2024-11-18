@@ -1114,9 +1114,9 @@ class BcUtil
      */
     public static function getContentsItem(): array
     {
-        $items = Configure::read('BcContents.items');
+        $plugins = Configure::read('BcContents.items');
         $createdItems = [];
-        foreach($items as $name => $items) {
+        foreach($plugins as $name => $items) {
             foreach($items as $type => $item) {
                 $item['plugin'] = $name;
                 $item['type'] = $type;
@@ -1641,12 +1641,23 @@ class BcUtil
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
-        $eventListeners = $eventManager->listeners($eventKey);
         $globalEventManager = $eventManager->instance();
-        if ($eventListeners) {
-            foreach($eventListeners as $eventListener) {
-                $eventManager->off($eventKey, $eventListener['callable']);
-                $globalEventManager->off($eventKey, $eventListener['callable']);
+        $eventListeners = [
+            'local' => $eventManager->prioritisedListeners($eventKey),
+            'global' => $globalEventManager->prioritisedListeners($eventKey)
+        ];
+        if ($eventListeners['local']) {
+            foreach($eventListeners['local'] as $listeners) {
+                foreach($listeners as $listener) {
+                    $eventManager->off($eventKey, $listener['callable']);
+                }
+            }
+        }
+        if ($eventListeners['global']) {
+            foreach($eventListeners['global'] as $listeners) {
+                foreach($listeners as $listener) {
+                    $globalEventManager->off($eventKey, $listener['callable']);
+                }
             }
         }
         return $eventListeners;
@@ -1656,16 +1667,26 @@ class BcUtil
      * イベントをオンにする
      * @param EventManagerInterface $eventManager
      * @param string $eventKey
-     * @param EventListenerInterface[] $eventListeners
+     * @param array $eventListeners
      * @checked
      * @noTodo
      * @unitTest
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
-        if ($eventListeners) {
-            foreach($eventListeners as $eventListener) {
-                $eventManager->on($eventKey, $eventListener['callable']);
+        $globalEventManager = $eventManager->instance();
+        if (!empty($eventListeners['local'])) {
+            foreach($eventListeners['local'] as $priority => $listeners) {
+                foreach($listeners as $listener) {
+                    $eventManager->on($eventKey, ['priority' => $priority], $listener['callable']);
+                }
+            }
+        }
+        if (!empty($eventListeners['global'])) {
+            foreach($eventListeners['global'] as $priority => $listeners) {
+                foreach($listeners as $listener) {
+                    $globalEventManager->on($eventKey, ['priority' => $priority], $listener['callable']);
+                }
             }
         }
     }

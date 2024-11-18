@@ -55,6 +55,10 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function setUp(): void
     {
+        $this->loadPlugins([
+            'BcBlog',
+            'BcCustomContent'
+        ]);
         parent::setUp();
         $this->loadFixtureScenario(UserScenario::class);
         $this->loadFixtureScenario(UserGroupsScenario::class);
@@ -85,9 +89,10 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
             'ContentFolder' => 'フォルダー',
             'Page' => '固定ページ',
             'ContentAlias' => 'エイリアス',
-//            'BlogContent' => 'ブログ',
+            'BlogContent' => 'ブログ',
             'ContentLink' => 'リンク',
-            'MailContent' => 'メールフォーム'
+            'MailContent' => 'メールフォーム',
+            'CustomContent' => 'カスタムコンテンツ'
         ];
         $this->assertEquals($expected, $this->ContentsAdmin->getTypes());
     }

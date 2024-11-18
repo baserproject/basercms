@@ -39,6 +39,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
      * @param Event $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function leftOfToolbar(Event $event)
     {
