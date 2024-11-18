@@ -5,16 +5,20 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomEntryFactory;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAppHelper;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -33,6 +37,10 @@ class CustomContentAppHelperTest extends BcTestCase
     {
         parent::setUp();
         $this->CustomContentAppHelper = new CustomContentAppHelper(new View());
+        BcUtil::includePluginClass('BcCustomContent');
+        $plugins = Plugin::getCollection();
+        $this->Plugin = $plugins->create('BcCustomContent');
+        $plugins->add($this->Plugin);
     }
     /**
      * tearDown
@@ -140,7 +148,28 @@ class CustomContentAppHelperTest extends BcTestCase
      */
     public function test_searchControl()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customLinksService = $this->getService(CustomLinksServiceInterface::class);
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        CustomFieldFactory::make(['id' => 1, 'title' => 'テキスト60', 'type' => 'BcCcText', 'status' => 1])->persist();
+        CustomLinkFactory::make(['id' => 1, 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
+        CustomLinkFactory::make(['id' => 2, 'custom_table_id' => 1, 'custom_field_id' => 2])->persist();
+        $customTable->create(['type' => 'contact', 'name' => 'contact']);
+
+        //テストを実行
+
+        $rs = $this->CustomContentAppHelper->searchControl($customLinksService->get(1));
+        $this->assertTextContains('<span class="bca-textbox"><input type="text"', $rs);
+
+        //異常テスト
+        $rs = $this->CustomContentAppHelper->searchControl($customLinksService->get(2));
+        $this->assertEquals('', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
