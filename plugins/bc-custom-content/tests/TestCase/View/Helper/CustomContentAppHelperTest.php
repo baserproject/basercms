@@ -37,8 +37,6 @@ class CustomContentAppHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        BcUtil::includePluginClass('BcCustomContent');
-        Configure::load('BaserCore.setting', 'baser');
         $this->CustomContentAppHelper = new CustomContentAppHelper(new View());
     }
     /**
