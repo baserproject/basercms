@@ -219,6 +219,7 @@ class CustomEntriesTable extends AppTable
      * @var array $postData
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupValidate(array $postData = [])
     {
