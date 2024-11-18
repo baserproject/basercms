@@ -35,7 +35,7 @@ class BlogCommentMailerTest extends BcTestCase
      */
     public function testSendCommentToUser()
     {
-        $this->BlogCommentMailer->sendCommentToUser('admin baser','user@example.com', ['test' => 'test']);
+        $this->BlogCommentMailer->sendCommentToUser('admin baser', 'user@example.com', ['test' => 'test']);
         $this->assertEquals('BcBlog.blog_comment_contributor', $this->BlogCommentMailer->viewBuilder()->getTemplate());
         $this->assertEquals(['test' => 'test'], $this->BlogCommentMailer->viewBuilder()->getVars());
     }
