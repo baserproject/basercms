@@ -268,6 +268,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendTestMail(array $postData, string $email, string $subject, string $body)
     {

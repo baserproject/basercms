@@ -353,12 +353,12 @@ class MailController extends MailFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
         $this->viewBuilder()->disableAutoLayout();
         $service->render($this->getRequest(), $token);
-        exit();
     }
 
 }

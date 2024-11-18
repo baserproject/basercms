@@ -109,6 +109,10 @@
     </tr>
 <?php endif ?>
 
+<?php
+// TODO こちらのIssueに関連するため一旦コメントアウト、仕様をどうするか検討が必要
+// https://github.com/baserproject/basercms/pull/3384
+?>
     <?php /* ?>
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?></th>

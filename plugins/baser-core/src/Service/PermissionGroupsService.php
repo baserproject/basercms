@@ -246,6 +246,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rebuildByUserGroup(int $userGroupId)
     {

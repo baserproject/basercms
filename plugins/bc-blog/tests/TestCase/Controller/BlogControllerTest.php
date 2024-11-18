@@ -373,14 +373,12 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_captcha()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        //準備
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(['url' => '/news/', 'site_id' => 1, 'entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent',])->persist();
 
-        //正常系実行
-
-        //異常系実行
-
-
+        ob_start();
+        $this->get('/news/captcha/abc');
+        $this->assertNotNull(ob_get_clean());
     }
 
 }
