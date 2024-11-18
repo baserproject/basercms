@@ -83,6 +83,7 @@ class BcPlugin extends BasePlugin
      * @param PluginApplicationInterface $app
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
