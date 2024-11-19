@@ -319,6 +319,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * プラグインのメタフィールドを表示する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function displayPluginMeta()
     {

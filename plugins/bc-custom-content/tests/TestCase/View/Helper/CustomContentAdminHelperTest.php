@@ -4,6 +4,7 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogAdminAppView;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
@@ -461,5 +462,24 @@ class CustomContentAdminHelperTest extends BcTestCase
         $currentEntry = new CustomEntry(['id' => 3, 'level' => 1]);
         $result = $this->CustomContentAdminHelper->isEnabledMoveDownEntry($entries, $currentEntry);
         $this->assertFalse($result);
+    }
+
+    /**
+     * test displayPluginMeta
+     */
+    public function testDisplayPluginMeta()
+    {
+        //準備
+        $view = new BlogAdminAppView($this->getRequest('/baser/admin'));
+        $view->loadHelper('BcAdminForm');
+        $this->CustomContentAdminHelper = new CustomContentAdminHelper($view);
+
+        //テスト
+        ob_start();
+        $this->CustomContentAdminHelper->displayPluginMeta();
+        $output = ob_get_clean();
+
+        //戻り値を確認
+        $this->assertTextContains('<label for="">自動補完郵便番号設定</label> ', $output);
     }
 }
