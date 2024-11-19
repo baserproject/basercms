@@ -668,4 +668,9 @@ class BcValidation extends Validation
             return false;
         }
     }
+
+    public static function urlCheck($value): bool
+    {
+        return preg_match('/^[\/0-9a-zA-Z]*$/', $value);
+    }
 }

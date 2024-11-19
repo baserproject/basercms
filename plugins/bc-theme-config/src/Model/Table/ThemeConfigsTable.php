@@ -128,6 +128,14 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
+        $validator->add('logo_link', [
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+            ]
+        ]);
+
         // main_image_1
         $validator->add('main_image_1', [
             'fileExt' => [
@@ -135,6 +143,14 @@ class ThemeConfigsTable extends AppTable
                 'provider' => 'bc',
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
+        ]);
+
+        $validator->add('main_image_link_1',[
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+           ]
         ]);
 
         // main_image_2
@@ -146,6 +162,14 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
+        $validator->add('main_image_link_2',[
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+           ]
+        ]);
+
         // main_image_3
         $validator->add('main_image_3', [
             'fileExt' => [
@@ -153,6 +177,14 @@ class ThemeConfigsTable extends AppTable
                 'provider' => 'bc',
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
+        ]);
+
+        $validator->add('main_image_link_3',[
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+           ]
         ]);
 
         // main_image_4
@@ -164,6 +196,14 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
+        $validator->add('main_image_link_4',[
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+           ]
+        ]);
+
         // main_image_5
         $validator->add('main_image_5', [
             'fileExt' => [
@@ -171,6 +211,14 @@ class ThemeConfigsTable extends AppTable
                 'provider' => 'bc',
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
+        ]);
+
+        $validator->add('main_image_link_5',[
+            'urlCheck' => [
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '無効なURLです')
+           ]
         ]);
         return $validator;
     }
