@@ -147,7 +147,6 @@ class ThemeConfigsTable extends AppTable
         $validator->add('main_image_link_1',[
             'urlCheck' => [
                 'rule' => ['url', true],
-                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
            ]
         ]);
@@ -164,7 +163,6 @@ class ThemeConfigsTable extends AppTable
         $validator->add('main_image_link_2',[
             'urlCheck' => [
                 'rule' => ['url', true],
-                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
            ]
         ]);
@@ -181,7 +179,6 @@ class ThemeConfigsTable extends AppTable
         $validator->add('main_image_link_3',[
             'urlCheck' => [
                 'rule' => ['url', true],
-                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
            ]
         ]);
@@ -198,7 +195,6 @@ class ThemeConfigsTable extends AppTable
         $validator->add('main_image_link_4',[
             'urlCheck' => [
                 'rule' => ['url', true],
-                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
            ]
         ]);
@@ -215,7 +211,6 @@ class ThemeConfigsTable extends AppTable
         $validator->add('main_image_link_5',[
             'urlCheck' => [
                 'rule' => ['url', true],
-                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
            ]
         ]);
