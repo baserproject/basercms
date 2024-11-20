@@ -147,6 +147,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function control(CustomLink $customLink, array $options = []): string
     {
@@ -179,6 +180,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function preview(string $fieldName, string $type, CustomField $field): string
     {
