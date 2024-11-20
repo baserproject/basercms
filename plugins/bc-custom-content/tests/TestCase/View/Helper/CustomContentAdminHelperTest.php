@@ -14,6 +14,7 @@ use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
+use Cake\View\Form\EntityContext;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -489,5 +490,25 @@ class CustomContentAdminHelperTest extends BcTestCase
         $currentEntry = new CustomEntry(['id' => 3, 'level' => 1]);
         $result = $this->CustomContentAdminHelper->isEnabledMoveDownEntry($entries, $currentEntry);
         $this->assertFalse($result);
+    }
+
+    /**
+     * test error
+     */
+    public function testError()
+    {
+        //準備
+        $customLink = CustomLinkFactory::make(['name' => ''])->getEntity();
+        $customLinkParent = CustomLinkFactory::make(['group_valid' => true])->getEntity();
+        $customLink->setError('name', ['_empty' => 'フィールド名を入力してください。']);
+        $this->CustomContentAdminHelper->BcAdminForm->context(new EntityContext(['entity' => $customLink, 'table' => 'custom_links']));
+
+        //テスト
+        $rs = $this->CustomContentAdminHelper->error($customLink, ['fieldName' => 'name']);
+        $this->assertEquals('<div class="error-message" id="name-error">フィールド名を入力してください。</div>', $rs);
+
+        //異常系 $options['parent']->group_valid = true: return ''
+        $rs = $this->CustomContentAdminHelper->error($customLink, ['parent' => $customLinkParent]);
+        $this->assertEquals('', $rs);
     }
 }
