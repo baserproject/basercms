@@ -11,7 +11,7 @@ class BlogCommentMailerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com,basertest02@example.com'])->persist();
         $this->BlogCommentMailer = new BlogCommentMailer();
     }
 
