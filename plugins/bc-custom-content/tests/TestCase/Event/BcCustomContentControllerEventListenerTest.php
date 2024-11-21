@@ -13,12 +13,12 @@ namespace BcCustomContent\Test\TestCase\Event;
 
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Event\BcCustomContentControllerEventListener;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -57,8 +57,8 @@ class BcCustomContentControllerEventListenerTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->eventManager = EventManager::instance();
 
-        $this->BcAuthenticationEventListener = new BcCustomContentControllerEventListener();
-        foreach ($this->BcAuthenticationEventListener->implementedEvents() as $key => $event) {
+        $this->BcCustomContentControllerEventListener = new BcCustomContentControllerEventListener();
+        foreach ($this->BcCustomContentControllerEventListener->implementedEvents() as $key => $event) {
             $this->eventManager->off($key);
         }
         $this->UsersController = new UsersController($this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/')));
@@ -71,7 +71,7 @@ class BcCustomContentControllerEventListenerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        $this->BcAuthenticationEventListener = null;
+        $this->BcCustomContentControllerEventListener = null;
         parent::tearDown();
     }
 
@@ -84,17 +84,15 @@ class BcCustomContentControllerEventListenerTest extends BcTestCase
         $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
         $customTable = $this->getService(CustomTablesServiceInterface::class);
         //カスタムテーブルとカスタムエントリテーブルを生成
-        $customTable->create([
-            'id' => 1,
-            'name' => 'recruit_categories',
-            'title' => '求人情報',
-            'type' => '1',
-            'display_field' => 'title',
-            'has_child' => 0
-        ]);
-        //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customTable->create(['id' => 1, 'name' => 'recruit_categories']);
+        CustomContentFactory::make(['id' => 1, 'custom_table_id' => 1])->persist();
+        ContentFactory::make([
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'site_id' => 1,
+            'title' => 'サービスタイトル',
+            'entity_id' => 1,
+        ])->persist();
 
         $listener = $this->getMockBuilder(BcCustomContentControllerEventListener::class)
             ->onlyMethods(['implementedEvents'])
@@ -106,7 +104,7 @@ class BcCustomContentControllerEventListenerTest extends BcTestCase
 
         $this->eventManager
             ->on($listener)
-            ->on($this->BcAuthenticationEventListener)
+            ->on($this->BcCustomContentControllerEventListener)
             ->dispatch(new Event('Controller.startup', $this->UsersController, []));
 
         //メーニューにカスタムタイトルがあるか確認
