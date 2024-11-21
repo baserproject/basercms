@@ -79,7 +79,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('logo', ['type' => 'file']) ?><?php if ($themeConfig->logo): ?><?php echo $this->BcAdminForm->control('logo_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('logo') ?></p>
       <?php echo $this->BcAdminForm->control('logo_alt', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('logo_link', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('logo_link', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('logo_link') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
@@ -90,7 +90,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('main_image_1', ['type' => 'file']) ?><?php if ($themeConfig->main_image_1): ?><?php echo $this->BcAdminForm->control('main_image_1_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('main_image_1') ?></p>
       <?php echo $this->BcAdminForm->control('main_image_alt_1', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('main_image_link_1', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('main_image_link_1', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('main_image_link_1') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
@@ -101,7 +101,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('main_image_2', ['type' => 'file']) ?><?php if ($themeConfig->main_image_2): ?><?php echo $this->BcAdminForm->control('main_image_2_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('main_image_2') ?></p>
       <?php echo $this->BcAdminForm->control('main_image_alt_2', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('main_image_link_2', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('main_image_link_2', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('main_image_link_2') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
@@ -112,7 +112,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('main_image_3', ['type' => 'file']) ?><?php if ($themeConfig->main_image_3): ?><?php echo $this->BcAdminForm->control('main_image_3_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('main_image_3') ?></p>
       <?php echo $this->BcAdminForm->control('main_image_alt_3', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('main_image_link_3', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('main_image_link_3', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('main_image_link_3') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
@@ -123,7 +123,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('main_image_4', ['type' => 'file']) ?><?php if ($themeConfig->main_image_4): ?><?php echo $this->BcAdminForm->control('main_image_4_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('main_image_4') ?></p>
       <?php echo $this->BcAdminForm->control('main_image_alt_4', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('main_image_link_4', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('main_image_link_4', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('main_image_link_4') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
@@ -134,7 +134,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <p><?php echo $this->BcAdminForm->control('main_image_5', ['type' => 'file']) ?><?php if ($themeConfig->main_image_5): ?><?php echo $this->BcAdminForm->control('main_image_5_delete', ['type' => 'checkbox', 'label' => __d('baser_core', '削除する')]) ?><?php endif ?><?php echo $this->BcAdminForm->error('main_image_5') ?></p>
       <?php echo $this->BcAdminForm->control('main_image_alt_5', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
-      <?php echo $this->BcAdminForm->control('main_image_link_5', ['type' => 'text', 'size' => 50]) ?>
+      <?php echo $this->BcAdminForm->control('main_image_link_5', ['type' => 'text', 'size' => 50]) ?><?php echo $this->BcAdminForm->error('main_image_link_5') ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
     </td>
   </tr>
