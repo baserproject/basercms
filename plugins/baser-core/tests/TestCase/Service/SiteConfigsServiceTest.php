@@ -30,7 +30,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
      * Trait
      */
     use BcContainerTrait;
-
+    use EmailTrait;
     /**
      * ScenarioAwareTrait
      */
@@ -188,8 +188,10 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
         //正常テスト　エラーにならない
         $this->SiteConfigs->sendTestMail(['email' => 'aa@ff.ccc'], 'test@test.com', 'メール送信テスト', 'メール送信テスト');
         $this->assertMailSentTo('test@test.com');
+        $this->assertMailSentFrom('aa@ff.ccc');
         $this->assertMailSubjectContains('メール送信テスト');
         $this->assertMailContains('メール送信テスト');
+
         //異常常テスト　エラーになる
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid email set for `from`. You passed `aaa`');

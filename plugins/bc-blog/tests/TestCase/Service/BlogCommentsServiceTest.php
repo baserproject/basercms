@@ -20,6 +20,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -33,6 +34,7 @@ class BlogCommentsServiceTest extends BcTestCase
      * Trait
      */
     use ScenarioAwareTrait;
+    use EmailTrait;
 
     /**
      * Set Up
@@ -322,6 +324,10 @@ class BlogCommentsServiceTest extends BcTestCase
 
         //正常テスト
         $this->BlogCommentsService->sendCommentToAdmin($blogComment);
+        $this->assertMailSentTo('basertest@example.com');
+        $this->assertMailSentFrom('basertest@example.com');
+        $this->assertMailSubjectContains('コメントを受け付けました');
+        $this->assertMailContains('受信内容は下記のとおりです');
 
         //異常テスト
         $this->expectException(\TypeError::class);
