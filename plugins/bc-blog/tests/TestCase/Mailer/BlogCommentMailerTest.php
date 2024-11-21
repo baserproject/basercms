@@ -26,6 +26,7 @@ class BlogCommentMailerTest extends BcTestCase
     public function testSendCommentToAdmin()
     {
         $this->BlogCommentMailer->sendCommentToAdmin('test', ['test' => 'test']);
+        $this->assertEquals(['basertest02@example.com' => 'basertest02@example.com'], $this->BlogCommentMailer->getTo());
         $this->assertEquals('BcBlog.blog_comment_admin', $this->BlogCommentMailer->viewBuilder()->getTemplate());
         $this->assertEquals(['test' => 'test'], $this->BlogCommentMailer->viewBuilder()->getVars());
     }

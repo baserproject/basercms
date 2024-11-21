@@ -15,6 +15,7 @@ use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use InvalidArgumentException;
 
@@ -24,6 +25,7 @@ use InvalidArgumentException;
 class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
 
+    use EmailTrait;
     /**
      * Trait
      */
@@ -185,10 +187,12 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         //正常テスト　エラーにならない
         $this->SiteConfigs->sendTestMail(['email' => 'aa@ff.ccc'], 'test@test.com', 'メール送信テスト', 'メール送信テスト');
-
+        $this->assertMailSentTo('test@test.com');
+        $this->assertMailSubjectContains('メール送信テスト');
+        $this->assertMailContains('メール送信テスト');
         //異常常テスト　エラーになる
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The email set for `from` is empty.');
-        $this->SiteConfigs->sendTestMail([], '', 'メール送信テスト', 'メール送信テスト');
+        $this->expectExceptionMessage('Invalid email set for `from`. You passed `aaa`');
+        $this->SiteConfigs->sendTestMail(['email' => 'aaa'], '', 'メール送信テスト', 'メール送信テスト');
     }
 }
