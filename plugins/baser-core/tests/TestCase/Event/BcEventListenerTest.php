@@ -21,6 +21,19 @@ class BcEventListenerTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->BcEventListener = $this->getMockBuilder(BcEventListener::class)
+            ->onlyMethods(['getAction'])
+            ->setMockClassName('TestAction')
+            ->getMock();
+
+        $this->assertEquals('TestAction', $this->BcEventListener->plugin);
+    }
+
+    /**
      * Test getAction
      *
      */
