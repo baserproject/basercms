@@ -13,15 +13,15 @@ namespace BaserCore\Test\TestCase\Database\Migration;
 
 use BaserCore\Database\Migration\BcMigration;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Phinx\Db\Adapter\AdapterFactory;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class BcMigrationTest
@@ -60,7 +60,6 @@ class BcMigrationTest extends BcTestCase
         parent::tearDown();
     }
 
-
     /**
      * Test create
      */
@@ -76,10 +75,7 @@ class BcMigrationTest extends BcTestCase
             'user' => 'root',
             'pass' => 'root',
             'port' => '3306',
-            'name' => 'test_basercms',
-            'prefix' => 'my_prefix_',
-            'charset' => 'utf8mb4',
-            'unix_socket' => null,
+            'name' => 'test_basercms'
         ];
         $factory = AdapterFactory::instance();
         $adapter = $factory->getAdapter('mysql', $options);
