@@ -80,4 +80,15 @@ class BcEventListenerTest extends BcTestCase
             ['Users.Index', 'Users.Index', true, true],
         ];
     }
+
+
+    /**
+     * test implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $this->BcEventListener->events = ['isAction' => ['priority' => 100]];
+        $rs = $this->BcEventListener->implementedEvents();
+        $this->assertNotEmpty($rs);
+    }
 }
