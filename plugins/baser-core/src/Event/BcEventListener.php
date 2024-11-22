@@ -64,6 +64,7 @@ class BcEventListener implements EventListenerInterface
      * コンストラクタ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -78,6 +79,7 @@ class BcEventListener implements EventListenerInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {

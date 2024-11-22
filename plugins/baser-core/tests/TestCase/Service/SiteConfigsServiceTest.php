@@ -25,6 +25,7 @@ use InvalidArgumentException;
 class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
 
+    use EmailTrait;
     /**
      * Trait
      */
@@ -193,7 +194,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         //異常常テスト　エラーになる
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The email set for `from` is empty.');
-        $this->SiteConfigs->sendTestMail([], '', 'メール送信テスト', 'メール送信テスト');
+        $this->expectExceptionMessage('Invalid email set for `from`. You passed `aaa`');
+        $this->SiteConfigs->sendTestMail(['email' => 'aaa'], '', 'メール送信テスト', 'メール送信テスト');
     }
 }

@@ -59,9 +59,13 @@ class BcMailer extends Mailer
         if ($site) $this->viewBuilder()
             ->setTheme($site->theme)
             ->setClassName('BaserCore.BcFrontEmail');
-        $this->setFrom([
-            BcSiteConfig::get('email') => BcSiteConfig::get('formal_name')
-        ]);
+        $adminMail = BcSiteConfig::get('email');
+        if (strpos($adminMail, ',') !== false) {
+            [$fromAdmin] = explode(',', $adminMail);
+        } else {
+            $fromAdmin = $adminMail;
+        }
+        $this->setFrom($fromAdmin, BcSiteConfig::get('formal_name'));
     }
 
     /**
