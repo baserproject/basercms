@@ -466,6 +466,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function contentsRoutingForReverse(RouteBuilder $routes, string $plugin)
     {
