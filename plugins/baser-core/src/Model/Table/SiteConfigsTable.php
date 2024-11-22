@@ -79,8 +79,12 @@ class SiteConfigsTable extends AppTable
     {
         $validator
             ->scalar('email')
-            ->email('email', 255, __d('baser_core', '管理者メールアドレスの形式が不正です。'))
-            ->notEmptyString('email', __d('baser_core', '管理者メールアドレスを入力してください。'));
+            ->notEmptyString('email', __d('baser_core', '管理者メールアドレスを入力してください。'))
+            ->add('email', ['emails' => [
+                'rule' => 'emails',
+                'provider' => 'bc',
+                'message' => __d('baser_core', '管理者メールアドレスの形式が不正です。')
+            ]]);
         $validator
             ->scalar('site_url')
             ->regex('site_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
