@@ -577,6 +577,24 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
     }
 
     /**
+     * test frontPageRouting
+     */
+    public function testFrontPageRouting()
+    {
+        // 管理画面のプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+
+        // フロントエンドのプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+    }
+
+    /**
      * test Rest API
      */
     public function testRestApi()
