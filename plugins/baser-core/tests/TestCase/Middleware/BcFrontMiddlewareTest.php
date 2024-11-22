@@ -104,8 +104,6 @@ class BcFrontMiddlewareTest extends BcTestCase
         $rs = $this->execPrivateMethod($this->BcFrontMiddleware, 'setCurrent', [$request]);
         $this->assertNotEmpty($rs->getAttribute('currentContent'));
         $this->assertNotEmpty($rs->getAttribute('currentSite'));
-        dd($rs);
-
     }
 
 }
