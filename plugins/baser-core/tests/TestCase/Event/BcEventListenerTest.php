@@ -21,6 +21,19 @@ class BcEventListenerTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->BcEventListener = $this->getMockBuilder(BcEventListener::class)
+            ->onlyMethods(['getAction'])
+            ->setMockClassName('TestAction')
+            ->getMock();
+
+        $this->assertEquals('TestAction', $this->BcEventListener->plugin);
+    }
+
+    /**
      * Test getAction
      *
      */
@@ -79,5 +92,16 @@ class BcEventListenerTest extends BcTestCase
             ['Index', 'View', false, false],
             ['Users.Index', 'Users.Index', true, true],
         ];
+    }
+
+
+    /**
+     * test implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $this->BcEventListener->events = ['isAction' => ['priority' => 100]];
+        $rs = $this->BcEventListener->implementedEvents();
+        $this->assertNotEmpty($rs);
     }
 }

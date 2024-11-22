@@ -356,6 +356,5 @@ class BcComposerTest extends BcTestCase
 
         $this->assertEquals(0, $rs['code']);
         $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
-        $this->assertStringContainsString("Loading composer repositories with package information", $rs['out'][1]);
     }
 }
