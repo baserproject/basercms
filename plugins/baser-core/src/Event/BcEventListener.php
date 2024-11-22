@@ -64,6 +64,7 @@ class BcEventListener implements EventListenerInterface
      * コンストラクタ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
