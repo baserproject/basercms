@@ -13,8 +13,6 @@ namespace BaserCore\Test\TestCase\Database\Migration;
 
 use BaserCore\Database\Migration\BcMigration;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcUtil;
-use Cake\Database\Connection;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -36,7 +34,7 @@ class BcMigrationTest extends BcTestCase
      * スキーム
      *
      * @var BcMigration
-    */
+     */
     protected $BcMigration;
 
     /**
@@ -82,14 +80,14 @@ class BcMigrationTest extends BcTestCase
         $this->BcMigration->setAdapter($adapter);
 
         // prefixをセットアップ
-        $config = ConnectionManager::getConfig('default');
-        ConnectionManager::drop('default');
+        $config = ConnectionManager::getConfig('test');
+        ConnectionManager::drop('test');
         $config['prefix'] = 'my_prefix_';
-        ConnectionManager::setConfig('default', $config);
+        ConnectionManager::setConfig('test', $config);
 
         // 実行
         $rs = $this->BcMigration->table('test');
-        $this->assertEquals('my_prefix_test',$rs->getName());
+        $this->assertEquals('my_prefix_test', $rs->getName());
 
         // 後処理
         $config['prefix'] = '';
