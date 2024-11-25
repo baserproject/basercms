@@ -116,6 +116,7 @@ class BlogContentsController extends BlogAdminAppController
      * @return ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function redirectEditBlog(string $template): ResponseInterface
     {
