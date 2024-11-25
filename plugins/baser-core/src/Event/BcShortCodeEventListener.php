@@ -50,6 +50,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterRender(Event $event)
     {
@@ -65,6 +66,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execShortCode(View $view)
     {
