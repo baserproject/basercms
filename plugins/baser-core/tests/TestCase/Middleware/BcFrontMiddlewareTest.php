@@ -78,4 +78,32 @@ class BcFrontMiddlewareTest extends BcTestCase
         $this->assertNotEmpty($request->getAttribute('currentSite'));
     }
 
+    /**
+     * Test process
+     */
+    public function test_process(): void
+    {
+        ContentFactory::make([
+            'id' => 1,
+            'entity_id' => 1,
+            'url' => '/',
+            'site_id' => 1,
+            'status' => true,
+        ])->persist();
+        SiteFactory::make([
+            'id' => 1,
+            'name' => '',
+            'title' => 'baserCMS inc.',
+            'status' => true,
+        ])->persist();
+        $request = $this->getRequest()->withAttribute('isRequestView', true)->withQueryParams([
+            'Site' => SiteFactory::get(1),
+            'Content' => ContentFactory::get(1)
+        ]);
+
+        $rs = $this->execPrivateMethod($this->BcFrontMiddleware, 'setCurrent', [$request]);
+        $this->assertNotEmpty($rs->getAttribute('currentContent'));
+        $this->assertNotEmpty($rs->getAttribute('currentSite'));
+    }
+
 }
