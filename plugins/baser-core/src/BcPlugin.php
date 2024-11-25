@@ -495,6 +495,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function frontPageRouting(RouteBuilder $routes, string $plugin)
     {
