@@ -646,4 +646,24 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $this->assertEquals(0, count($result->pages));
     }
 
+    /**
+     * test contentsRoutingForReverse
+     */
+    public function testContentsRoutingForReverse()
+    {
+        SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+        $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
+        $routes = Router::createRouteBuilder('/');
+        $this->BcPlugin->routes($routes);
+        $this->getRequest('/');
+        $this->assertEquals('/news/', Router::url([
+            'plugin' => 'BcBlog',
+            'controller' => 'Blog',
+            'action' => 'index',
+            'entityId' => 31
+        ]));
+    }
+
 }
