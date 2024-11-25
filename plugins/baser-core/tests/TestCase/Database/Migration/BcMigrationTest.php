@@ -91,7 +91,7 @@ class BcMigrationTest extends BcTestCase
 
         // 後処理
         $config['prefix'] = '';
-        ConnectionManager::drop('default');
-        ConnectionManager::setConfig('default', $config);
+        ConnectionManager::drop('test');
+        ConnectionManager::setConfig('test', $config);
     }
 }
