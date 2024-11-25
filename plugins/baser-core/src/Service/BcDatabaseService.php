@@ -1049,7 +1049,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'schema' => $schema
         ]);
 
-        $eventManager = EventManager::instance();
+        $eventManager = new EventManager();
         $beforeRenderListeners = BcUtil::offEvent($eventManager, 'View.beforeRender');
         $afterRenderListeners = BcUtil::offEvent($eventManager, 'View.afterRender');
 
