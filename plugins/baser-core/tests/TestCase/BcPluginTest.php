@@ -577,6 +577,24 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
     }
 
     /**
+     * test frontPageRouting
+     */
+    public function testFrontPageRouting()
+    {
+        // 管理画面のプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+
+        // フロントエンドのプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+    }
+
+    /**
      * test Rest API
      */
     public function testRestApi()
@@ -644,6 +662,26 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $this->get('/baser/api/admin/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(0, count($result->pages));
+    }
+
+    /**
+     * test contentsRoutingForReverse
+     */
+    public function testContentsRoutingForReverse()
+    {
+        SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+        $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
+        $routes = Router::createRouteBuilder('/');
+        $this->BcPlugin->routes($routes);
+        $this->getRequest('/');
+        $this->assertEquals('/news/', Router::url([
+            'plugin' => 'BcBlog',
+            'controller' => 'Blog',
+            'action' => 'index',
+            'entityId' => 31
+        ]));
     }
 
 }

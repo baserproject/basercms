@@ -4,6 +4,7 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogAdminAppView;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
@@ -510,5 +511,24 @@ class CustomContentAdminHelperTest extends BcTestCase
         //異常系 $options['parent']->group_valid = true: return ''
         $rs = $this->CustomContentAdminHelper->error($customLink, ['parent' => $customLinkParent]);
         $this->assertEquals('', $rs);
+    }
+
+    /**
+     * test displayPluginMeta
+     */
+    public function testDisplayPluginMeta()
+    {
+        //準備
+        $view = new BlogAdminAppView($this->getRequest('/baser/admin'));
+        $view->loadHelper('BcAdminForm');
+        $this->CustomContentAdminHelper = new CustomContentAdminHelper($view);
+
+        //テスト
+        ob_start();
+        $this->CustomContentAdminHelper->displayPluginMeta();
+        $output = ob_get_clean();
+
+        //戻り値を確認
+        $this->assertTextContains('<label for="">自動補完郵便番号設定</label> ', $output);
     }
 }
