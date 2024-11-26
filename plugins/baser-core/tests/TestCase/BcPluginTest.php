@@ -691,12 +691,12 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
     {
         SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
         SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
-        ContentFactory::make( ['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
 
-        $this->getRequest('/');
         Router::reload();
         $routes = Router::createRouteBuilder('');
         $_SERVER['REQUEST_URI'] = '/s/';
+        $this->BcPlugin->clearCurrentSite();
         $this->BcPlugin->routes($routes);
         $result = Router::parseRequest($this->getRequest('/s/bc-blog/blog_contents/index'));
         $this->assertEquals('BlogContents', $result['controller']);
