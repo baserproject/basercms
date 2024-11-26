@@ -1206,7 +1206,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
-        $eventManager = EventManager::instance();
+        $eventManager = new EventManager();
         $eventKey = 'testOnEvent';
         $bcEvenListener = new class extends BcEventListener {
             public $events = ['event1'];
