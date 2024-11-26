@@ -145,10 +145,9 @@ class BlogTagsServiceTest extends BcTestCase
         // 戻り値を確認
         $this->assertTrue($result);
 
-        // 存在しない id を指定された場合は例外が発生すること
-        // サービスメソッドを呼ぶ
-        $this->expectException(\TypeError::class);
-        $this->BlogTagsService->batch('update', [1, 2, 3]);
+        // 例外が発生
+        $this->expectExceptionMessage('Call to undefined method BcBlog\Service\BlogPostsService::test()');
+        $this->BlogTagsService->batch('test', [1, 2, 3]);
     }
 
     /**
