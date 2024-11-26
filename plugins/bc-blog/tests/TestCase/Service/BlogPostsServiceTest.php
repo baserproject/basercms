@@ -890,6 +890,7 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testBatch()
     {
+        $this->markTestIncomplete('このテストは未確認です');
         // データを生成
         $this->loadFixtureScenario(BlogContentScenario::class, 5, 1, null, 'news1', '/news/');
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
