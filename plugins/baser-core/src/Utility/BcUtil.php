@@ -11,6 +11,7 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Error\BcException;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
@@ -1641,6 +1642,13 @@ class BcUtil
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオフにすることはできません。'));
+        }
+
         $globalEventManager = $eventManager->instance();
         $eventListeners = [
             'local' => $eventManager->prioritisedListeners($eventKey),
@@ -1674,6 +1682,13 @@ class BcUtil
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオンにすることはできません。'));
+        }
+
         $globalEventManager = $eventManager->instance();
         if (!empty($eventListeners['local'])) {
             foreach($eventListeners['local'] as $priority => $listeners) {

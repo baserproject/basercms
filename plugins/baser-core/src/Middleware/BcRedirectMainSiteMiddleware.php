@@ -42,6 +42,7 @@ class BcRedirectMainSiteMiddleware implements MiddlewareInterface
      * @return ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function process(
         ServerRequestInterface  $request,
