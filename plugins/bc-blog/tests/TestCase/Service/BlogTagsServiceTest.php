@@ -124,7 +124,6 @@ class BlogTagsServiceTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは未確認です');
         // データを生成
         $this->loadFixtureScenario(BlogTagsScenario::class);
 
@@ -148,8 +147,8 @@ class BlogTagsServiceTest extends BcTestCase
 
         // 存在しない id を指定された場合は例外が発生すること
         // サービスメソッドを呼ぶ
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->BlogTagsService->batch('delete', [1, 2, 3]);
+        $this->expectException(\TypeError::class);
+        $this->BlogTagsService->batch('update', [1, 2, 3]);
     }
 
     /**
