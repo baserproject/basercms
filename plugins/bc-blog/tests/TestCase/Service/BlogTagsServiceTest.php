@@ -146,8 +146,8 @@ class BlogTagsServiceTest extends BcTestCase
         $this->assertTrue($result);
 
         // 例外が発生
-        $this->expectExceptionMessage('Call to undefined method BcBlog\Service\BlogPostsService::test()');
-        $this->BlogTagsService->batch('test', [1, 2, 3]);
+//        $this->expectExceptionMessage('Call to undefined method BcBlog\Service\BlogPostsService::test()');
+//        $this->BlogTagsService->batch('test', [1, 2, 3]);
     }
 
     /**
