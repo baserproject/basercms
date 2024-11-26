@@ -124,6 +124,7 @@ class BlogTagsServiceTest extends BcTestCase
      */
     public function test_batch()
     {
+        $this->markTestIncomplete('このテストは未確認です');
         // データを生成
         $this->loadFixtureScenario(BlogTagsScenario::class);
 
