@@ -917,9 +917,13 @@ class BlogPostsServiceTest extends BcTestCase
         // 戻り値を確認
         $this->assertTrue($result);
 
-        // 例外が発生
-//        $this->expectExceptionMessage('Call to undefined method BcBlog\Service\BlogPostsService::test()');
-//        $this->BlogPostsService->batch('update', [1, 2, 3]);
+        // 存在しない処理を指定した場合は false を返すこと
+        $this->assertFalse($this->BlogPostsService->batch('test', [1, 2, 3]));
+
+        // 存在しない id を指定された場合は例外が発生すること
+        // サービスメソッドを呼ぶ
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->BlogPostsService->batch('delete', [1, 2, 3]);
     }
 
     /**
