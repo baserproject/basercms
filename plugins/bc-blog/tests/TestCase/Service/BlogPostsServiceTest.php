@@ -891,7 +891,10 @@ class BlogPostsServiceTest extends BcTestCase
     public function testBatch()
     {
         // データを生成
-        $this->loadFixtureScenario(BlogContentScenario::class, 5, 1, null, 'news1', '/news/');
+        BlogContentFactory::make([
+            'id' => 5,
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+        ])->persist();
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '2', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '3', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
@@ -914,10 +917,13 @@ class BlogPostsServiceTest extends BcTestCase
         // 戻り値を確認
         $this->assertTrue($result);
 
+        // 存在しない処理を指定した場合は false を返すこと
+        $this->assertFalse($this->BlogPostsService->batch('test', [1, 2, 3]));
+
         // 存在しない id を指定された場合は例外が発生すること
         // サービスメソッドを呼ぶ
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $result = $this->BlogPostsService->batch('delete', [1, 2, 3]);
+        $this->BlogPostsService->batch('delete', [1, 2, 3]);
     }
 
     /**

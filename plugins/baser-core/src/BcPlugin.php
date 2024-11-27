@@ -572,6 +572,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function siteRouting(RouteBuilder $routes, string $plugin)
     {
