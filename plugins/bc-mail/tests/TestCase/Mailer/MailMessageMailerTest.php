@@ -87,7 +87,33 @@ class MailMessageMailerTest extends BcTestCase
      */
     public function testSendFormToUser()
     {
-        $this->markTestIncomplete('このテストは未実装');
+        //準備
+        $data['message'] = 'message test';
+        $data['mailContent'] = 'content test';
+        $data['mailFields'] = 'fields test';
+        $mailContent = MailContentFactory::make([
+            'description' => 'description test',
+            'sender_1' => 'sender_1',
+            'sender_name' => 'name 111',
+            'subject_user' => 'subject_user 111',
+            'subject_admin' => 'subject_admin 111',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'redirect_url' => '/',
+        ])->getEntity();
+
+        //テスト
+        $this->MailMessageMailer->sendFormToUser($mailContent, 'abc@example.com', 'abcUser@example.com', $data, [], []);
+
+        //戻り値を確認
+        $this->assertEquals(['abc@example.com' => 'abc@example.com'], $this->MailMessageMailer->getReplyTo());
+        $this->assertEquals(['abcUser@example.com' => 'abcUser@example.com'], $this->MailMessageMailer->getTo());
+
+        $vars = $this->MailMessageMailer->viewBuilder()->getVars();
+        $this->assertEquals('message test', $vars['message']);
+        $this->assertEquals('content test', $vars['mailContent']);
+        $this->assertEquals('fields test', $vars['mailFields']);
+        $this->assertEquals('user', $vars['other']['mode']);
     }
 
     /**
