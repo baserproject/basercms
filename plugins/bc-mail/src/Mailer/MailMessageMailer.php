@@ -131,6 +131,7 @@ class MailMessageMailer extends BcMailer
      * @return array|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFrom(EntityInterface $mailContent) {
         if($mailContent->sender_name) return $mailContent->sender_name;
