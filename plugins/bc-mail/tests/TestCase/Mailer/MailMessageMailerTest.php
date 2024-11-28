@@ -11,9 +11,12 @@
 
 namespace BcMail\Test\TestCase\Mailer;
 
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Mailer\MailMessageMailer;
+use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -121,6 +124,17 @@ class MailMessageMailerTest extends BcTestCase
      */
     public function testGetFrom()
     {
-        $this->markTestIncomplete('このテストは未実装');
+        $mailContentService = $this->getService(MailContentsServiceInterface::class);
+        MailContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent', 'site_id' => 1, 'entity_id' => 1])->persist();
+        SiteFactory::make(['id' => 1, 'display_name' => 'main site'])->persist();
+
+        //sender_name が存在場合
+        $mailContent = MailContentFactory::make(['sender_name' => 'sender name'])->getEntity();
+        $this->assertEquals('sender name', $this->MailMessageMailer->getFrom($mailContent));
+
+        //sender_name が存在しない場合
+        $mailContent = $mailContentService->get(1);
+        $this->assertEquals('main site', $this->MailMessageMailer->getFrom($mailContent));
     }
 }
