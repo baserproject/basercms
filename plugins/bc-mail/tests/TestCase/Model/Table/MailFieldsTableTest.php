@@ -163,7 +163,16 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$field = null
+        $rs = $this->MailFieldsTable->getControlSource();
+        $this->assertEquals('テキスト', $rs['type']['text']);
+        $this->assertEquals('Eメール形式チェック', $rs['valid_ex']['VALID_EMAIL']);
+        $this->assertEquals('半角変換', $rs['auto_convert']['CONVERT_HANKAKU']);
+
+        //$field != null
+        $rs = $this->MailFieldsTable->getControlSource('type');
+        $this->assertEquals('テキストエリア', $rs['textarea']);
+        $this->assertEquals('隠しフィールド', $rs['hidden']);
     }
 
     /**
