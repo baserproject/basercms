@@ -88,6 +88,7 @@ class MailMessageMailer extends BcMailer
      * @param array $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendFormToUser(
         EntityInterface $mailContent,
