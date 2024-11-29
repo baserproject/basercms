@@ -159,6 +159,7 @@ class MailFieldsTable extends MailAppTable
      * @return array source
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null)
     {
