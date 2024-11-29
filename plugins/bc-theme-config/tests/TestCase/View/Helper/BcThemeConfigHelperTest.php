@@ -54,9 +54,10 @@ class BcThemeConfigHelperTest extends BcTestCase
      */
     public function testLogo()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS"\/>/');
-        $this->BcBaser->logo();
+        ob_start();
+        $this->BcThemeConfigHelper->logo();
+        $result = ob_get_clean();
+        $this->assertEquals('<img src="/bc_front/img/logo.png" alt="">', $result);
     }
 
     /**

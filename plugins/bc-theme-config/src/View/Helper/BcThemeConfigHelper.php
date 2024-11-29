@@ -95,6 +95,7 @@ class BcThemeConfigHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function logo($options = [])
     {
@@ -121,6 +122,7 @@ class BcThemeConfigHelper extends Helper
      * @return string $tag テーマ画像のHTMLタグ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getThemeImage($name, $options = [])
     {
