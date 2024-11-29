@@ -49,6 +49,7 @@ class BcThemeConfigHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function mainImage($options = [])
     {
