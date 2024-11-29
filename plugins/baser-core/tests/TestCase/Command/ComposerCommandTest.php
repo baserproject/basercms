@@ -73,7 +73,7 @@ class ComposerCommandTest extends BcTestCase
 
         // composer実行（composer.json を配布用にセットアップ）
         BcComposer::setup('', ROOT . DS);
-        $this->exec('composer 5.1.3.0');
+        $this->exec('composer 5.1.4.0');
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Composer によるアップデートが完了しました。');
 
