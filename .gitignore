@@ -134,5 +134,8 @@ node_modules
 # profiler
 /profiler/*
 # etc
-LOCAL_TODO.md
-LOCAL_Q&A.md
+/LOCAL_TODO.md
+/LOCAL_Q&A.md
+/.cache
+/docker/nginx/*
+/docker/proxy/*

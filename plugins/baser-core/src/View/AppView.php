@@ -16,6 +16,7 @@ use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcToolbarHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use Cake\View\View;
+use Cake\Core\Configure;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -53,7 +54,7 @@ class AppView extends View
     {
         parent::initialize();
         $this->addHelper('BaserCore.BcTime');
-        $this->addHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
+        $this->addHelper('BaserCore.BcForm', ['templates' => Configure::read('BcApp.AppFormTemplate')]);
         $this->addHelper('BaserCore.BcAdmin');
         $this->addHelper('BaserCore.BcContents');
         $this->addHelper('BaserCore.BcPage');

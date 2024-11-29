@@ -87,7 +87,26 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $rs = $this->CustomEntriesService->getNew(1);
+
+        $this->assertEquals(1, $rs->custom_table_id);
+        $this->assertEquals(1, $rs->creator_id);
+        $this->assertEquals(0, $rs->status);
+
+        $this->CustomEntriesService->dropTable(1);
     }
 
     /**

@@ -29,23 +29,21 @@ class BlogCommentMailer extends BcMailer
      * @param array $data
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function sendCommentToAdmin(string $senderName, array $data)
     {
-        $adminMail = BcSiteConfig::get('email');
-        if (strpos($adminMail, ',') !== false) {
-            [$fromAdmin] = explode(',', $adminMail);
-        } else {
-            $fromAdmin = $adminMail;
+        $adminMail = explode(',', BcSiteConfig::get('email'));
+        $fromAdmin = $adminMail[0];
+        foreach ($adminMail as $mailTo) {
+            $this->setTo($mailTo)
+                ->setFrom($fromAdmin, $senderName)
+                ->setReplyTo($fromAdmin)
+                ->setSubject(__d('baser_core', '【{0}】コメントを受け付けました', $senderName))
+                ->viewBuilder()
+                ->setTemplate('BcBlog.blog_comment_admin')
+                ->setVars($data);
         }
-
-        $this->setTo($adminMail)
-            ->setFrom($fromAdmin, $senderName)
-            ->setReplyTo($fromAdmin)
-            ->setSubject(__d('baser_core', '【{0}】コメントを受け付けました', $senderName))
-            ->viewBuilder()
-            ->setTemplate('BcBlog.blog_comment_admin')
-            ->setVars($data);
     }
 
     /**
@@ -55,6 +53,7 @@ class BlogCommentMailer extends BcMailer
      * @param array $data
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendCommentToUser(string $senderName, string $userMail, array $data)
     {

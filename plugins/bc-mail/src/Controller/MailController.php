@@ -134,6 +134,7 @@ class MailController extends MailFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(
         MailFrontServiceInterface $service,
@@ -166,6 +167,7 @@ class MailController extends MailFrontAppController
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function confirm(
         MailFrontServiceInterface $service,
@@ -288,7 +290,7 @@ class MailController extends MailFrontAppController
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
-        // EVENT Mail.beforeSendEmail
+        // EVENT BcMail.Mail.beforeSendEmail
         $event = $this->dispatchLayerEvent('beforeSendEmail', [
             'data' => $entity
         ]);
@@ -307,9 +309,9 @@ class MailController extends MailFrontAppController
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
-        // EVENT Mail.afterSendEmail
+        // EVENT BcMail.Mail.afterSendEmail
         $this->dispatchLayerEvent('afterSendEmail', [
-            'data' => $this->request->getData()
+            'data' => $entity
         ]);
 
         $this->getRequest()->getSession()->write('BcMail.MailContent', $mailContent);
@@ -324,6 +326,7 @@ class MailController extends MailFrontAppController
      * @return void|ResponseInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function thanks(MailFrontServiceInterface $service, MailContentsServiceInterface $mailContentsService)
     {
@@ -350,12 +353,12 @@ class MailController extends MailFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
         $this->viewBuilder()->disableAutoLayout();
         $service->render($this->getRequest(), $token);
-        exit();
     }
 
 }

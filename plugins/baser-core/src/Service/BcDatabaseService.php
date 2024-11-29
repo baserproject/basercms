@@ -324,11 +324,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadDefaultDataPattern(string $theme, string $pattern, string $dbConfigKeyName = 'default'): bool
     {
-        $plugins = array_merge(
-            ['BaserCore'],
-            Configure::read('BcApp.corePlugins'),
-            BcUtil::getCurrentThemesPlugins()
-        );
+        $folderUtility = new BcFolder(Plugin::path($theme) . 'config' . DS . 'data' . DS . $pattern);
+        $plugins = $folderUtility->getFolders();
 
 		$db = $this->getDataSource($dbConfigKeyName);
 		$db->begin();
@@ -1052,7 +1049,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'schema' => $schema
         ]);
 
-        $eventManager = EventManager::instance();
+        $eventManager = new EventManager();
         $beforeRenderListeners = BcUtil::offEvent($eventManager, 'View.beforeRender');
         $afterRenderListeners = BcUtil::offEvent($eventManager, 'View.afterRender');
 

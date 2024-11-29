@@ -26,6 +26,7 @@ use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -40,6 +41,7 @@ class InstallationsServiceTest extends BcTestCase
      */
     use BcContainerTrait;
     use ScenarioAwareTrait;
+    use EmailTrait;
 
     /**
      * setup
@@ -210,6 +212,9 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
 
         //正常テスト
         $this->Installations->sendCompleteMail(['admin_email' => 'abc@example.example']);
+        $this->assertMailSentTo('abc@example.example');
+        $this->assertMailSentFrom('basertest@example.com');
+        $this->assertMailContains('baserCMSのインストールが完了しました');
 
         //エラーを発生
         $this->expectException(\InvalidArgumentException::class);

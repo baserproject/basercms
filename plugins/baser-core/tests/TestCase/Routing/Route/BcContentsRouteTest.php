@@ -12,10 +12,13 @@
 namespace BaserCore\Test\TestCase\Routing\Route;
 
 use BaserCore\Routing\Route\BcContentsRoute;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentBcContentsRouteScenario;
 use BaserCore\Test\Scenario\SiteBcContentsRouteScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -45,6 +48,7 @@ class BcContentsRouteTest extends BcTestCase
     {
         parent::setUp();
         $this->BcContentsRoute = new BcContentsRoute('/', [], []);
+        $this->loadPlugins(['BcBlog']);
     }
 
     /**
@@ -76,8 +80,10 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testMatch($current, $params, $expects)
     {
-        $this->loadFixtureScenario(ContentBcContentsRouteScenario::class);
-        $this->loadFixtureScenario(SiteBcContentsRouteScenario::class);
+        SiteFactory::make(['id' => '1', 'main_site_id' => null, 'status' => 1])->persist();
+        ContentFactory::make(['name' => 'index', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '1', 'url' => '/index', 'site_id' => '1',])->persist();
+        ContentFactory::make(['name' => 'service1', 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => '3', 'url' => '/service/service1', 'site_id' => '1'])->persist();
+        ContentFactory::make(['name' => 'news', 'plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => '1', 'url' => '/news/', 'site_id' => '1'])->persist();
         Router::setRequest($this->getRequest($current));
         $this->assertEquals($expects, Router::url($params));
     }
@@ -215,66 +221,27 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function test_getContentTypeByParams()
     {
-        //configure
-        Configure::write('BcContents.items', [
-            'YourPlugin' => [
-                'item1' => [
-                    'routes' => [
-                        'view' => [
-                            'controller' => 'YourController',
-                            'action' => 'view'
-                        ]
-                    ]
-                ],
-                'item2' => [
-                    'routes' => [
-                        'view' => [
-                            'controller' => 'YourController',
-                            'action' => 'otherAction'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
         //testGetContentTypeByParamsWithNoMatch
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'NonExistentController',
-            'action' => 'nonExistentAction'
-        ];
+        $params = ['plugin' => 'BcBlogs', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
         $this->assertFalse($result);
 
         //testGetContentTypeByParamsWithNoPlugin
-        $params = [
-            'plugin' => 'non_existent_plugin',
-            'controller' => 'YourController',
-            'action' => 'view'
-        ];
+        $params = ['plugin' => '', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
         $this->assertFalse($result);
 
         //testGetContentTypeByParamsWithAction
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'YourController',
-            'action' => 'view'
-        ];
+        $params = ['plugin' => 'BcMail', 'controller' => 'Mail', 'action' => 'index'];
 
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, true]);
-        $this->assertEquals('item1', $result);
+        $this->assertEquals('MailContent', $result);
 
         //testGetContentTypeByParamsWithoutAction
-        $params = [
-            'plugin' => 'your_plugin',
-            'controller' => 'YourController'
-        ];
-
         $result = $this->execPrivateMethod($this->BcContentsRoute, '_getContentTypeByParams', [$params, false]);
-        $this->assertEquals('item1', $result);
+        $this->assertEquals('MailContent', $result);
     }
 
 }

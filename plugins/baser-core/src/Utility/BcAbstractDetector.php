@@ -62,6 +62,7 @@ abstract class BcAbstractDetector
      * @param array $config 設定の配列
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($name, array $config)
     {

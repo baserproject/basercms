@@ -119,7 +119,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         $categories = [];
         foreach ($srcCategories->toArray() as $key => $value) {
             /* @var BlogCategory $category */
-            $category = $this->BlogCategories->find()->where(['id' => $key])->first();
+            $category = $this->BlogCategories->find()->where(['BlogCategories.id' => $key])->first();
             if (!preg_match("/^([_]+)/i", $value, $matches)) {
                 $category->depth = 0;
                 $category->layered_title = $category->title;

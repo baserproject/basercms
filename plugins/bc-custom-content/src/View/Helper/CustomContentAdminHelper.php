@@ -147,6 +147,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function control(CustomLink $customLink, array $options = []): string
     {
@@ -179,6 +180,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function preview(string $fieldName, string $type, CustomField $field): string
     {
@@ -199,6 +201,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function error(CustomLink $link, $options = []): string
     {
@@ -231,7 +234,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if ($link->description) {
             return '<i class="bca-icon--question-circle bca-help"></i>' .
                 '<div class="bca-helptext">' .
-                $link->description .
+                preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $link->description) .
                 '</div>';
         }
         return '';
@@ -319,6 +322,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * プラグインのメタフィールドを表示する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function displayPluginMeta()
     {

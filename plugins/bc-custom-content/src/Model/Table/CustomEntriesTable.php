@@ -219,6 +219,7 @@ class CustomEntriesTable extends AppTable
      * @var array $postData
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupValidate(array $postData = [])
     {
@@ -442,6 +443,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setValidateZenkakuKatakana(Validator $validator, CustomLink $link): Validator
     {
