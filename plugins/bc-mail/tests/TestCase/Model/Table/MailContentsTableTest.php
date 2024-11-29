@@ -397,6 +397,51 @@ class MailContentsTableTest extends BcTestCase
     }
 
     /**
+     * test validationDefault
+     */
+    public function testValidationDefault()
+    {
+        $validator = $this->MailContent->getValidator('default');
+
+        //notEmptyString
+        $errors = $validator->validate(['subject_user' => '', 'subject_admin' => '']);
+        $this->assertEquals('自動返信メール件名[ユーザー宛]を入力してください。', current($errors['subject_user']));
+        $this->assertEquals('自動返信メール件名[管理者宛]を入力してください。', current($errors['subject_admin']));
+
+        //maxLength
+        $errors = $validator->validate([
+            'subject_user' => str_repeat('a', 256),
+            'subject_admin' => str_repeat('a', 256),
+            'form_template' => str_repeat('a', 21),
+            'mail_template' => str_repeat('a', 21),
+            'redirect_url' => 'https://github.com/' . str_repeat('a', 256),
+        ]);
+        $this->assertEquals('自動返信メール件名[ユーザー宛]は255文字以内で入力してください。', current($errors['subject_user']));
+        $this->assertEquals('自動返信メール件名[管理者宛]は255文字以内で入力してください。', current($errors['subject_admin']));
+        $this->assertEquals('フォームテンプレート名は20文字以内で入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレート名は20文字以内で入力してください。', current($errors['mail_template']));
+        $this->assertEquals('リダイレクトURLは255文字以内で入力してください。', current($errors['redirect_url']));
+
+        //halfText
+        $errors = $validator->validate(['form_template' => 'カタカナ', 'mail_template' => 'カタカナ']);
+        $this->assertEquals('メールフォームテンプレート名は半角のみで入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレートは半角のみで入力してください。', current($errors['mail_template']));
+
+        //redirect_urlのURL形式ではない
+        $errors = $validator->validate(['redirect_url' => 'abc']);
+        $this->assertEquals('リダイレクトURLはURLの形式を入力してください。', current($errors['redirect_url']));
+
+        //containsScript
+        $errors = $validator->validate(['description' => '<script></script>']);
+        $this->assertEquals('説明文でスクリプトの入力は許可されていません。', current($errors['description']));
+
+        //emails
+        $errors = $validator->validate(['sender_1' => 'カタカナ', 'sender_2' => 'カタカナ']);
+        $this->assertEquals('送信先メールアドレスのEメールの形式が不正です。', current($errors['sender_1']));
+        $this->assertEquals('BCC用送信先メールアドレスのEメールの形式が不正です。', current($errors['sender_2']));
+    }
+
+    /**
      * test createSearchIndex
      */
 
