@@ -24,6 +24,7 @@ use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -331,7 +332,13 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
      */
     public function testInstallPlugin()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //プラグインがインストールしない場合、
+        $this->assertTrue($this->Installations->installPlugin('BcPluginSample'));
+
+        //存在しないプラグイン
+        $this->expectException(MissingPluginException::class);
+        $this->expectExceptionMessage('Plugin `BcPluginSampleTest` could not be found.');
+        $this->Installations->installPlugin('BcPluginSampleTest');
     }
 
     /**
