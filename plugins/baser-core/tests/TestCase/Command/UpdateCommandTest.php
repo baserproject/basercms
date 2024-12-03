@@ -4,6 +4,7 @@ namespace BaserCore\Test\TestCase\Command;
 
 use BaserCore\Command\UpdateCommand;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Command\Command;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 
@@ -55,6 +56,8 @@ class UpdateCommandTest extends BcTestCase
      */
     public function testExecute()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->exec('update');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertOutputContains('Migration と アップデーターによるアップデートが完了しました。');
     }
 }
