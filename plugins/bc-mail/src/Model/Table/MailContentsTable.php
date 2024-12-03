@@ -157,6 +157,23 @@ class MailContentsTable extends MailAppTable
                 ]
             ]);
 
+        // publish_end
+        $validator
+        ->add('publish_end', [
+            'dateTime' => [
+                'rule' => ['dateTime'],
+                'message' => __d('baser_core', '公開終了日に不正な文字列が入っています。')
+            ]
+        ])
+        ->allowEmptyDateTime('publish_end')
+        ->add('publish_end', [
+            'checkDateAfterThan' => [
+                'rule' => ['checkDateAfterThan', 'publish_begin'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '公開終了日は、公開開始日より新しい日付で入力してください。')
+            ]
+        ]);
+
         // sender_1
         $validator
             ->scalar('sender_1')
