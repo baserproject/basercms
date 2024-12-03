@@ -158,23 +158,23 @@ class MailHelperTest extends BcTestCase
      */
     public function testLink($title, $contentsName, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent', 'name' => $contentsName, 'entity_id' => 1])->persist();
         $this->expectOutputString($expected);
-        $this->Mail->link($title, $contentsName, $datas = [], $options = []);
+        $this->MailHelper->link($title, $contentsName);
     }
 
     public static function linkProvider()
     {
         return [
-            ['タイトル', 'Members', '<a href="/Members">タイトル</a>'],
-            [' ', 'a', '<a href="/a"> </a>'],
-            [' ', ' ', '<a href="/ "> </a>'],
-            [' ', '///', '<a href="/"> </a>'],
-            [' ', '////a', '<a href="/a"> </a>'],
-            [' ', '////a//a/aa', '<a href="/a/a/aa"> </a>'],
-            [' ', '/../../../../a', '<a href="/../../../../a"> </a>'],
-            ['', 'javascript:void(0);', '<a href="/javascript:void(0);"></a>'],
-            ['<script>alert(1)</script>', '////a', '<a href="/a"><script>alert(1)</script></a>']
+            ['タイトル', 'Members', '<a href="/bc-mail/mail">タイトル</a>'],
+            [' ', 'a', '<a href="/bc-mail/mail"> </a>'],
+            [' ', ' ', '<a href="/bc-mail/mail"> </a>'],
+            [' ', '///', '<a href="/bc-mail/mail"> </a>'],
+            [' ', '////a', '<a href="/bc-mail/mail"> </a>'],
+            [' ', '////a//a/aa', '<a href="/bc-mail/mail"> </a>'],
+            [' ', '/../../../../a', '<a href="/bc-mail/mail"> </a>'],
+            ['', 'javascript:void(0);', '<a href="/bc-mail/mail"></a>'],
+            ['<script>alert(1)</script>', '////a', '<a href="/bc-mail/mail">&lt;script&gt;alert(1)&lt;/script&gt;</a>']
         ];
     }
 

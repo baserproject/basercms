@@ -209,6 +209,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function link($title, $contentsName, $datas = [], $options = [])
     {
