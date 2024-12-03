@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
+use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\View\View;
 
@@ -126,19 +127,11 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetMailTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new View(null);
-        $View->set('siteConfig', Configure::read('BcSite'));
-        $this->Mail->BcBaser = new BcBaserHelper($View);
-        $result = $this->Mail->getMailTemplates();
-        $expected = [
-            'mail_default' => 'mail_default',
-            'default' => 'default',
-            'reset_password' => 'reset_password',
-            'send_activate_url' => 'send_activate_url',
-            'send_activate_urls' => 'send_activate_urls',
-        ];
-        $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
+        SiteFactory::make(['id' => '1'])->persist();
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MailHelper = new MailHelper($view);
+        $result = $this->MailHelper->getMailTemplates(1);
+        $this->assertEquals(['mail_default' => 'mail_default'], $result);
     }
 
     /**
