@@ -96,6 +96,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパーに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFormTemplates($siteId = 1)
     {

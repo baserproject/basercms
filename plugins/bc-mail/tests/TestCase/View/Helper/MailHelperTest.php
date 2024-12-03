@@ -10,7 +10,9 @@
  */
 namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
 use Cake\ORM\Entity;
@@ -112,16 +114,11 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetFormTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new View(null);
-        $View->set('siteConfig', Configure::read('BcSite'));
-        $this->Mail->BcBaser = new BcBaserHelper($View);
-        $result = $this->Mail->getFormTemplates();
-        $expected = [
-            'default' => 'default',
-            'smartphone' => 'smartphone'
-        ];
-        $this->assertEquals($result, $expected, 'フォームテンプレートの取得結果が違います。');
+        SiteFactory::make(['id' => '1'])->persist();
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MailHelper = new MailHelper($view);
+        $result = $this->MailHelper->getFormTemplates(1);
+        $this->assertEquals(['default' => 'default'], $result);
     }
 
     /**
