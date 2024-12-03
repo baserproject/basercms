@@ -181,6 +181,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData): ?EntityInterface
     {

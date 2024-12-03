@@ -127,6 +127,24 @@ class MailMessagesServiceTest extends BcTestCase
     }
 
     /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        //準備
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailMessageTable->setup(1);
+        $mailMessageTable->save(new Entity(['id' => 1, 'name_1' => 'name 1']));
+        $mailMessage = $mailMessagesService->get(1);
+        $mailMessage->name_1 = 'name update';
+
+        //正常実行
+        $rs = $mailMessagesService->update($mailMessage, $mailMessage->toArray());
+        $this->assertEquals('name update', $rs->name_1);
+    }
+
+    /**
      * test getIndex
      */
     public function testGetIndex()
