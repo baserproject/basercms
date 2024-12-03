@@ -15,7 +15,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
 use BcMail\View\Helper\MailHelper;
-use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\View\View;
 
