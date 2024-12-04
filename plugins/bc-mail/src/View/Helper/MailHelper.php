@@ -244,6 +244,7 @@ class MailHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getToken()
     {

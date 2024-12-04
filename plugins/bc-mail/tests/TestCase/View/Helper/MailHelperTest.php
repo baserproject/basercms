@@ -21,7 +21,7 @@ use Cake\View\View;
 /**
  * Class MailHelperTest
  *
- * @property MailHelper $Mail
+ * @property MailHelper $MailHelper
  */
 class MailHelperTest extends BcTestCase
 {
@@ -31,7 +31,9 @@ class MailHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->MailHelper = new MailHelper(new View());
+        SiteFactory::make(['id' => '1'])->persist();
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MailHelper = new MailHelper($view);
     }
 
     /**
@@ -114,9 +116,6 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetFormTemplates()
     {
-        SiteFactory::make(['id' => '1'])->persist();
-        $view = new BcFrontAppView($this->getRequest('/'));
-        $this->MailHelper = new MailHelper($view);
         $result = $this->MailHelper->getFormTemplates(1);
         $this->assertEquals(['default' => 'default'], $result);
     }
@@ -126,9 +125,6 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetMailTemplates()
     {
-        SiteFactory::make(['id' => '1'])->persist();
-        $view = new BcFrontAppView($this->getRequest('/'));
-        $this->MailHelper = new MailHelper($view);
         $result = $this->MailHelper->getMailTemplates(1);
         $this->assertEquals(['mail_default' => 'mail_default'], $result);
     }
@@ -138,10 +134,9 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetToken()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Mail->getToken();
+        $result = $this->MailHelper->getToken();
         $expected = '/<script.*<\/script>.*/s';
-        $this->assertMatchesRegularExpression($expected, $result, 'スクリプトが取得できません。');
+        $this->assertMatchesRegularExpression($expected, $result);
     }
 
     /**
