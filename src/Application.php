@@ -64,6 +64,12 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrfProtectionMiddlewareOptions = ['httponly' => true];
+        //リクエストがhttpsならcsrfTokenにもsecureヘッダを付与
+        $sessionConfig = (array)Configure::read('Session');
+        if (!empty($sessionConfig['ini']['session.cookie_secure']) || ini_get('session.cookie_secure') == 1) {
+            $csrfProtectionMiddlewareOptions['secure'] =  true;
+        }
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -87,9 +93,7 @@ class Application extends BaseApplication
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            ->add(new CsrfProtectionMiddleware($csrfProtectionMiddlewareOptions));
 
         return $middlewareQueue;
     }
