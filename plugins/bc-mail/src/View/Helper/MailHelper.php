@@ -340,6 +340,7 @@ class MailHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishedMailContents(int $siteId)
     {

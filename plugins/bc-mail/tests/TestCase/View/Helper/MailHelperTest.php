@@ -14,9 +14,10 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\View\Helper\MailHelper;
 use Cake\ORM\Entity;
-use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailHelperTest
@@ -25,6 +26,11 @@ use Cake\View\View;
  */
 class MailHelperTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
     /**
      * set up
      */
@@ -41,7 +47,7 @@ class MailHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->Mail);
+        unset($this->MailHelper);
         parent::tearDown();
     }
 
@@ -249,5 +255,15 @@ class MailHelperTest extends BcTestCase
         $this->MailHelper->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
         $result = $this->MailHelper->isMail();
         $this->assertTrue($result);
+    }
+
+    /**
+     * test getPublishedMailContents
+     */
+    public function testGetPublishedMailContents()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $rs = $this->MailHelper->getPublishedMailContents(1);
+        $this->assertEquals(1, $rs->count());
     }
 }
