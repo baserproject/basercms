@@ -127,6 +127,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getMailTemplates($siteId = 1)
     {
@@ -244,6 +245,7 @@ class MailHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getToken()
     {
@@ -256,6 +258,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function token()
     {
@@ -338,6 +341,7 @@ class MailHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishedMailContents(int $siteId)
     {

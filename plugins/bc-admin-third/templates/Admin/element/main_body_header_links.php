@@ -35,7 +35,7 @@ if (!isset($mainBodyHeaderLinks)) {
   if (empty($link['class'])) {
     $link['class'] = 'bca-btn';
   }
-  if (empty($link['data-bca-btn-type'])) {
+  if (empty($link['data-bca-btn-type']) && !empty($url['action'])) {
     $link['data-bca-btn-type'] = $url['action'];
   }
   if (empty($link['data-bca-btn-size'])) {

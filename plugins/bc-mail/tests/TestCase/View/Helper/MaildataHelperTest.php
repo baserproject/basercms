@@ -1,29 +1,34 @@
 <?php
 namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcFrontAppView;
 use BcMail\View\Helper\MaildataHelper;
-use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MaildataHelperTest extends BcTestCase
 {
 
+    use ScenarioAwareTrait;
+
     /**
      * set up
      */
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
-        $this->MaildataHelper = new MaildataHelper(new View());
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MaildataHelper = new MaildataHelper($view);
     }
 
     /**
      * tear down
      */
-    public function tearDown():void
+    public function tearDown(): void
     {
         unset($this->MaildataHelper);
         parent::tearDown();
     }
+
     /**
      * メール表示用のデータを出力する
      * @dataProvider controlDataProvider
@@ -37,8 +42,8 @@ class MaildataHelperTest extends BcTestCase
     public static function controlDataProvider()
     {
         return [
-          ['text' , '<b>bold</b>', true, ' &lt;b&gt;bold&lt;/b&gt;'],
-          ['text' , '<b>bold</b>', false, ' <b>bold</b>'],
+            ['text', '<b>bold</b>', true, ' &lt;b&gt;bold&lt;/b&gt;'],
+            ['text', '<b>bold</b>', false, ' <b>bold</b>'],
         ];
     }
 
@@ -48,12 +53,7 @@ class MaildataHelperTest extends BcTestCase
      */
     public function testToDisplayString($type, $value, $options, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        if ($type == 'file') {
-            $this->View->set('mailContent', ['MailContent' => ['id' => 1]]);
-        }
-
-        $result = $this->Maildata->toDisplayString($type, $value, $options);
+        $result = $this->MaildataHelper->toDisplayString($type, $value, $options);
         $this->assertEquals($result, $expected);
     }
 
@@ -75,33 +75,57 @@ class MaildataHelperTest extends BcTestCase
             ['email', 'hoge', '', 'hoge'],
             ['hidden', 'hoge', '', 'hoge'],
             ['radio', '', '', ''],
-            ['radio', '', $options, ''],
-            ['radio', 'hoge', $options, 'hoge'],
-            ['radio', 'h', $options, 'h'],
+            ['radio', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
+            ['radio', $options, true, ' ・資料請求
+ ・お問い合わせ
+ ・その他
+'],
+            ['radio', $options, false, '・資料請求
+・お問い合わせ
+・その他
+'],
             ['select', '', '', ''],
-            ['select', '', $options, ''],
-            ['select', 'hoge', $options, 'hoge'],
-            ['select', 'h', $options, 'h'],
+            ['select', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
+            ['select', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
             ['pref', '', '', ''],
             ['pref', '東京都', '', '東京都'],
             ['pref', '福岡県', '', '福岡県'],
             ['check', '', '', ''],
-            ['check', '', $options, ''],
+            ['check', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
             ['check', 'hoge', '', 'hoge'],
-            ['check', 'hoge', $options, 'hoge'],
+            ['check', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
             ['multi_check', '', '', ''],
-            ['multi_check', '', $options, ''],
-            ['multi_check', $get, $options, "・hoge\n ・hello\n ・world\n"],
-            ['file', 'hoge', $options, '<a href="/admin/mail_messages/attachment/1/hoge">hoge</a>'],
-            ['file', 'test/hoge.jpg', $options, '<a href="/admin/mail_messages/attachment/1/test/hoge.jpg" target="_blank"><img src="/admin/mail_messages/attachment/1/test/hoge.jpg" width="400" alt=""/></a>'],
-            //TODO 西暦のオーバーフロー処理ができてない
-            ['date_time_calender', 'hoge', $options, '1970年 01月 01日'],
-            ['date_time_calender', '21000828', $options, '2100年 08月 28日'],
-            ['date_time_calender', '2100/08/32', $options, '1970年 01月 01日'],
-            ['date_time_calender', '', $options, ''],
-            ['autozip', '888-0000', $options, '888-0000'],
-            ['autozip', '8880000', $options, '888-0000'],
-            ['', 'hoge', $options, 'hoge']
+            ['multi_check', $options, '', '・資料請求
+・お問い合わせ
+・その他
+'],
+            ['multi_check', $get, '', "・hoge
+・hello
+・world
+"],
+//            ['file', 'hoge', '', '<a href="/admin/mail_messages/attachment/1/hoge">hoge</a>'],
+            ['date_time_calender', 'hoge', '', '1970年 01月 01日'],
+            ['date_time_calender', '21000828', '', '2100年 08月 28日'],
+            ['date_time_calender', '2100/08/32', '', '1970年 01月 01日'],
+            ['date_time_calender', '', '', ''],
+            ['autozip', '888-0000', '', '888-0000'],
+            ['autozip', '8880000', '', '888-0000'],
+            ['', 'hoge', '', 'hoge']
         ];
     }
 }

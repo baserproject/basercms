@@ -14,24 +14,32 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\View\Helper\MailHelper;
 use Cake\ORM\Entity;
-use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailHelperTest
  *
- * @property MailHelper $Mail
+ * @property MailHelper $MailHelper
  */
 class MailHelperTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
     /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->MailHelper = new MailHelper(new View());
+        SiteFactory::make(['id' => '1'])->persist();
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MailHelper = new MailHelper($view);
     }
 
     /**
@@ -39,7 +47,7 @@ class MailHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->Mail);
+        unset($this->MailHelper);
         parent::tearDown();
     }
 
@@ -114,9 +122,6 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetFormTemplates()
     {
-        SiteFactory::make(['id' => '1'])->persist();
-        $view = new BcFrontAppView($this->getRequest('/'));
-        $this->MailHelper = new MailHelper($view);
         $result = $this->MailHelper->getFormTemplates(1);
         $this->assertEquals(['default' => 'default'], $result);
     }
@@ -126,19 +131,8 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetMailTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new View(null);
-        $View->set('siteConfig', Configure::read('BcSite'));
-        $this->Mail->BcBaser = new BcBaserHelper($View);
-        $result = $this->Mail->getMailTemplates();
-        $expected = [
-            'mail_default' => 'mail_default',
-            'default' => 'default',
-            'reset_password' => 'reset_password',
-            'send_activate_url' => 'send_activate_url',
-            'send_activate_urls' => 'send_activate_urls',
-        ];
-        $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
+        $result = $this->MailHelper->getMailTemplates(1);
+        $this->assertEquals(['mail_default' => 'mail_default'], $result);
     }
 
     /**
@@ -146,10 +140,9 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetToken()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Mail->getToken();
+        $result = $this->MailHelper->getToken();
         $expected = '/<script.*<\/script>.*/s';
-        $this->assertMatchesRegularExpression($expected, $result, 'スクリプトが取得できません。');
+        $this->assertMatchesRegularExpression($expected, $result);
     }
 
     /**
@@ -262,5 +255,15 @@ class MailHelperTest extends BcTestCase
         $this->MailHelper->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
         $result = $this->MailHelper->isMail();
         $this->assertTrue($result);
+    }
+
+    /**
+     * test getPublishedMailContents
+     */
+    public function testGetPublishedMailContents()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $rs = $this->MailHelper->getPublishedMailContents(1);
+        $this->assertEquals(1, $rs->count());
     }
 }
