@@ -66,8 +66,8 @@ class Application extends BaseApplication
     {
         $csrfProtectionMiddlewareOptions = ['httponly' => true];
         //リクエストがhttpsならcsrfTokenにもsecureヘッダを付与
-        $sessionConfig = (array)Configure::read('Session');
-        if (!empty($sessionConfig['ini']['session.cookie_secure']) || ini_get('session.cookie_secure') == 1) {
+        $sessionConfig = (array) Configure::read('Session');
+        if (!empty($sessionConfig['ini']['session.cookie_secure']) || (int) ini_get('session.cookie_secure') === 1) {
             $csrfProtectionMiddlewareOptions['secure'] =  true;
         }
         $middlewareQueue
