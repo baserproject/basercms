@@ -11,12 +11,23 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Controller\Admin\MailMessagesController;
+use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Factory\MailContentFactory;
+use Cake\Event\Event;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailMessagesControllerTest extends BcTestCase
 {
-
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
     /**
      * set up
      *
@@ -25,7 +36,8 @@ class MailMessagesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->MailMessagesController = new MailMessagesController($this->getRequest());
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->MailMessagesController = new MailMessagesController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -53,7 +65,31 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1
+        ])->persist();
+
+        //正常テスト・エラーにならない
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/view/1/1');
+        $request = $this->loginAdmin($request);
+        $this->MailMessagesController = new MailMessagesController($request);
+        $event = new Event('filter');
+        $this->MailMessagesController->beforeFilter($event);
+
+        //異常テスト
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/view/2222/1');
+        $request = $this->loginAdmin($request);
+        $this->MailMessagesController = new MailMessagesController($request);
+        $event = new Event('filter');
+        $this->expectExceptionMessage('コンテンツデータが見つかりません。');
+        $this->expectException('BaserCore\Error\BcException');
+        $this->MailMessagesController->beforeFilter($event);
     }
 
     /**
@@ -69,7 +105,26 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // メールメッセージのデータを作成する
+        ContentFactory::make([
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1,
+        ])->persist();
+        MailContentFactory::make(['id' => 1])->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+
+        //正常テスト
+        $this->get('/baser/admin/bc-mail/mail_messages/index/1');
+        $this->assertResponseOk();
+        $MailMessagesService->dropTable(1);
     }
 
     /**
