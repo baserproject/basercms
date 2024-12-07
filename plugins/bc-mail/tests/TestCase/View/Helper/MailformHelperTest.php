@@ -12,6 +12,7 @@ namespace BcMail\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailField;
+use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\View\Helper\MailformHelper;
 use Cake\ORM\ResultSet;
 use Cake\View\View;
@@ -50,7 +51,11 @@ class MailformHelperTest extends BcTestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->MailformHelper->create();
+        $this->assertTextContains('form enctype="multipart/form-data"', $rs);
+
+        $rs = $this->MailformHelper->create(MailMessagesFactory::make()->getEntity(), ['url' => '/test']);
+        $this->assertTextContains('action="/test"', $rs);
     }
 
     /**
