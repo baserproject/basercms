@@ -20,6 +20,7 @@ use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Test\TestCase\Model\Array;
 use BcMail\Test\TestCase\Model\ClassRegistry;
 use Cake\Core\Exception\CakeException;
+use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Validation\Validator;
@@ -666,6 +667,40 @@ class MailMessagesTableTest extends BcTestCase
             //case not existing validator
             [false, 'input_field']
         ];
+    }
+
+    /**
+     * test afterMarshal
+     */
+    public function testAfterMarshal()
+    {
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'field_name' => 'ok99',
+            'valid_ex' => 'VALID_GROUP_COMPLATE, keke',
+            'use_field' => 1,
+        ])->persist();
+        MailFieldsFactory::make([
+            'id' => 98,
+            'mail_content_id' => 1,
+            'field_name' => 'ok98',
+            'type' => 'number',
+            'valid_ex' => 'VALID_GROUP_COMPLATE, 98',
+            'use_field' => 1,
+        ])->persist();
+        $this->MailMessage->setMailFields(1);
+        $mailMessage = new MailMessage([
+            'id' => 1,
+            'name_1' => "hehe",
+            'ok98' => "hic98",
+            'ok99' => "",
+        ]);
+        $event = new Event('event');
+        $event->setData('entity', $mailMessage);
+        $this->MailMessage->afterMarshal($event);
+        $entity = $event->getData('entity');
+        $this->assertCount(1, $entity->getErrors()['_not_complate']);
     }
 
 }
