@@ -130,6 +130,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(
         MailMessagesServiceInterface $service,
