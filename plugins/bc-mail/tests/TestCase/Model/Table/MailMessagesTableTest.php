@@ -89,7 +89,9 @@ class MailMessagesTableTest extends BcTestCase
      */
     public function testSetupUpload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->MailMessage->setupUpload(1);
+        $bcUpload = $this->MailMessage->getBehavior('BcUpload');
+        $this->assertEquals('/var/www/html/webroot/files/mail/limited/1/messages/', $bcUpload->BcFileUploader["MailMessages"]->savePath);
     }
 
     /**
