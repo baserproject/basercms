@@ -252,6 +252,7 @@ class MailformHelper extends BcFreezeHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create($context = null, $options = []): string
     {
