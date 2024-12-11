@@ -20,6 +20,7 @@ use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogPost;
+use Cake\Collection\CollectionInterface;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -857,6 +858,36 @@ class BlogPostsTable extends BlogAppTable
             unset($entity->content_draft);
             unset($entity->detail_draft);
         }
+        return $entity;
+    }
+
+    /**
+     * find all
+     * @param Query $query
+     * @param array $options
+     * @return Query
+     * @checked
+     * @noTodo
+     */
+    public function findAll(Query $query, array $options = []): Query
+    {
+        if($options['draft'] !== false) return $query;
+        return $query->formatResults(function(CollectionInterface $results) {
+            return $results->map([$this, 'excludeDraftFields']);
+        });
+    }
+
+    /**
+     * 草稿データを除外する
+     * @param EntityInterface $entity
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function excludeDraftFields(EntityInterface $entity)
+    {
+        unset($entity->content_draft);
+        unset($entity->detail_draft);
         return $entity;
     }
 
