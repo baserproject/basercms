@@ -168,7 +168,38 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // メールメッセージのデータを作成する
+        ContentFactory::make([
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1,
+        ])->persist();
+        MailContentFactory::make(['id' => 1])->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailContentId = 1;
+        $mailMessageTable->setup($mailContentId);
+        $mailMessageTable->setup($mailContentId);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+
+        //正常テスト
+        $this->post('/baser/admin/bc-mail/mail_messages/delete/1/1');
+        $this->assertResponseCode(302);
+        $this->assertRedirect(['action' => 'index', 1]);
+        $this->assertFlashMessage('お問い合わせ への受信データ NO「1」 を削除しました。');
+
+        //異常テスト
+        $this->get('/baser/admin/bc-mail/mail_messages/delete/1/1');
+        $this->assertResponseCode(405);
+
+        $MailMessagesService->dropTable(1);
     }
 
     /**
