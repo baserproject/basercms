@@ -24,7 +24,7 @@
 ?>
 
 
-<?php if (!$freezed): ?>
+<?php if (!isset($freezed) || !$freezed): ?>
   <div class="bs-mail-form-auth-captcha">
     <div>
       <?php $this->BcBaser->img($captchaUrl, ['alt' => __d('baser_core', '認証画像'), 'class' => $options['class']]) ?>
