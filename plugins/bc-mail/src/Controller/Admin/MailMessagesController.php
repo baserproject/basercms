@@ -109,6 +109,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(
         MailMessagesAdminServiceInterface $service,
@@ -130,6 +131,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(
         MailMessagesServiceInterface $service,

@@ -306,6 +306,7 @@ class MailformHelper extends BcFreezeHelper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGroupValidErrors(ResultSetInterface $mailFields, string $groupValid, array $options = [], bool $distinct = true)
     {
