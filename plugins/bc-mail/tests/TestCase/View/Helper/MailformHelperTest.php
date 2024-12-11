@@ -13,12 +13,20 @@ namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailField;
 use BcMail\Test\Factory\MailMessagesFactory;
+use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\View\Helper\MailformHelper;
+use BcMail\Test\Scenario\MailContentsScenario;
+use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\ORM\ResultSet;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class MailformHelperTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -96,5 +104,20 @@ class MailformHelperTest extends BcTestCase
         [[['group_field' => ''], ['group_field' => 'group1']], 0, false],
         [[['group_field' => 'group1'], ['group_field' => 'group2']], 0, true],
     ];
+    }
+
+    /**
+     * test getGroupValidErrors
+     */
+    public function testGetGroupValidErrors()
+    {
+        // prepare
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // get mail field list
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        $rs = $this->MailformHelper->getGroupValidErrors($mailFields, 'field_name');
+        $this->assertEquals([], $rs);
     }
 }
