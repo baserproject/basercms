@@ -18,6 +18,8 @@ use BcMail\Controller\Admin\MailMessagesController;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use Cake\Event\Event;
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -132,7 +134,33 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // メールメッセージのデータを作成する
+        ContentFactory::make([
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1,
+        ])->persist();
+        MailContentFactory::make(['id' => 1])->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(1);
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailContentId = 1;
+        $mailMessageTable->setup($mailContentId);
+        $mailMessageTable->save(new Entity(['id' => 1]));
+
+        //正常テスト
+        $this->get('/baser/admin/bc-mail/mail_messages/view/1/1');
+        $this->assertResponseCode(200);
+
+        //異常テスト
+        $this->get('/baser/admin/bc-mail/mail_messages/view/1/2');
+        $this->assertResponseCode(404);
+
+        $MailMessagesService->dropTable(1);
     }
 
     /**
