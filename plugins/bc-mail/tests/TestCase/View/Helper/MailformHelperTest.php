@@ -10,23 +10,17 @@
  */
 namespace BcMail\Test\TestCase\View\Helper;
 
-use BaserCore\Service\ContentsService;
-use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcBaserHelper;
 use BcMail\Model\Entity\MailField;
 use BcMail\Test\Factory\MailContentFactory;
-use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Service\MailFieldsServiceInterface;
-use BcMail\View\Helper\BcMailBaserHelper;
 use BcMail\View\Helper\MailformHelper;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
-use BcMail\View\Helper\MailHelper;
 use BcMail\View\MailFrontAppView;
 use Cake\ORM\ResultSet;
 use Cake\View\View;
