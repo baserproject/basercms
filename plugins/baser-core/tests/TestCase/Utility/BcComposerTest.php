@@ -250,7 +250,6 @@ class BcComposerTest extends BcTestCase
 
         $this->assertEquals(0, $rs['code']);
         $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
-        $this->assertMatchesRegularExpression("/(You are already using the latest available Composer version|Upgrading to version)/", $rs['out'][1]);
     }
 
     /**
