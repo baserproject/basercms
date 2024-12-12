@@ -199,6 +199,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download_csv(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {
