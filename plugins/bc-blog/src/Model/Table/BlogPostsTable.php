@@ -871,7 +871,7 @@ class BlogPostsTable extends BlogAppTable
      */
     public function findAll(Query $query, array $options = []): Query
     {
-        if($options['draft'] !== false) return $query;
+        if(!isset($options['draft']) || $options['draft'] !== false) return $query;
         return $query->formatResults(function(CollectionInterface $results) {
             return $results->map([$this, 'excludeDraftFields']);
         });
