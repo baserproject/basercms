@@ -16,6 +16,8 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
 use BcMail\Service\MailFieldsServiceInterface;
@@ -468,5 +470,20 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertFlashMessage('メールフィールド「性」を無効状態にしました。');
         //check redirect
         $this->assertRedirect('/baser/admin/bc-mail/mail_fields/index/1');
+    }
+
+    /**
+     * _checkEnv
+     */
+    public function test_checkEnv()
+    {
+        $folderPath = '/var/www/html/webroot/files/mail/limited';
+        $folder = new BcFolder($folderPath);
+        $folder->delete();
+
+        $this->execPrivateMethod($this->MailFieldsController, '_checkEnv');
+        $this->assertTrue(is_dir($folderPath));
+        $file = new BcFile($folderPath . DS . '.htaccess');
+        $this->assertTextContains('Order allow', $file->read());
     }
 }
