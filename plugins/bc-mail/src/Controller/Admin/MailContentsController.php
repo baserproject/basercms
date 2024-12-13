@@ -55,6 +55,7 @@ class MailContentsController extends MailAdminAppController
      * @param int ブログコンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(MailContentsAdminServiceInterface $service, int $id)
     {
