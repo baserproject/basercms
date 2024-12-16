@@ -99,6 +99,7 @@ class MailContentsController extends MailAdminAppController
      * @return Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function redirectEditMail($template)
     {
