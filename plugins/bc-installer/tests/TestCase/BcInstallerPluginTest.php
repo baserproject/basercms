@@ -47,6 +47,11 @@ class BcInstallerPluginTest extends BcTestCase
         $this->BcInstallerPlugin->routes($routes);
         $result = Router::parseRequest($this->getRequest('/install'));
         $this->assertEquals('Installations', $result['controller']);
+
+        $routes = Router::createRouteBuilder('/');
+        $this->BcInstallerPlugin->routes($routes);
+        $result = Router::parseRequest($this->getRequest('/'));
+        $this->assertEquals('Installations', $result['controller']);
         Configure::write('BcEnv.isInstalled', true);
     }
 
