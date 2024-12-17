@@ -55,6 +55,7 @@ class MailContentsController extends MailAdminAppController
      * @param int ブログコンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(MailContentsAdminServiceInterface $service, int $id)
     {
@@ -99,6 +100,7 @@ class MailContentsController extends MailAdminAppController
      * @return Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function redirectEditMail($template)
     {
@@ -135,6 +137,7 @@ class MailContentsController extends MailAdminAppController
      * @return Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function redirectEditForm($template)
     {

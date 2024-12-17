@@ -12,7 +12,6 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
-use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -90,7 +89,23 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $mailContentServices = $this->getService(MailContentsServiceInterface::class);
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //Postデータを生成
+        $mailContent = $mailContentServices->get(1);
+        $mailContent->description = 'this is api edit';
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_contents/edit/1', $mailContent->toArray());
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('メールフォーム「お問い合わせ」を更新しました。');
+
+        //エラーを発生した場合
+        $this->post('/baser/admin/bc-mail/mail_contents/edit/222', $mailContent->toArray());
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -98,7 +113,12 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function test_redirectEditMail()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->execPrivateMethod($this->MailContentsController, 'redirectEditMail', ['default']);
+        $this->assertEquals(302, $rs->getStatusCode());
+        $this->assertEquals(
+            ['https://localhost/baser/admin/bc-theme-file/theme_files/edit/BcFront/BcMail/email/text/default.php'],
+            $rs->getHeader('Location')
+        );
     }
 
     /**
@@ -106,7 +126,12 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function test_redirectEditForm()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->execPrivateMethod($this->MailContentsController, 'redirectEditForm', ['default']);
+        $this->assertEquals(302, $rs->getStatusCode());
+        $this->assertEquals(
+            ['https://localhost/baser/admin/bc-theme-file/theme_files/edit/BcFront/BcMail/etc/Mail/default/index.php'],
+            $rs->getHeader('Location')
+        );
     }
 
     /**

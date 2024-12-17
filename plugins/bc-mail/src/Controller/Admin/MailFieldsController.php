@@ -78,6 +78,7 @@ class MailFieldsController extends MailAdminAppController
      * プラグインの環境をチェックする
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _checkEnv()
     {
