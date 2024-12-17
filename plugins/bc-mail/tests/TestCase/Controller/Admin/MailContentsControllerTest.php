@@ -113,7 +113,12 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function test_redirectEditMail()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->execPrivateMethod($this->MailContentsController, 'redirectEditMail', ['default']);
+        $this->assertEquals(302, $rs->getStatusCode());
+        $this->assertEquals(
+            ['https://localhost/baser/admin/bc-theme-file/theme_files/edit/BcFront/BcMail/email/text/default.php'],
+            $rs->getHeader('Location')
+        );
     }
 
     /**
