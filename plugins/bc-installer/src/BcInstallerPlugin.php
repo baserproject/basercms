@@ -47,6 +47,7 @@ class BcInstallerPlugin extends BcPlugin
      * @param \Cake\Routing\RouteBuilder $routes
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function routes($routes): void
     {

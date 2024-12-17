@@ -9,7 +9,9 @@ use BcInstaller\Command\InstallCommand;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Console\CommandCollection;
+use Cake\Core\Configure;
 use Cake\Core\Container;
+use Cake\Routing\Router;
 
 class BcInstallerPluginTest extends BcTestCase
 {
@@ -40,7 +42,17 @@ class BcInstallerPluginTest extends BcTestCase
      */
     public function test_routes()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        Configure::write('BcEnv.isInstalled', false);
+        $routes = Router::createRouteBuilder('/install');
+        $this->BcInstallerPlugin->routes($routes);
+        $result = Router::parseRequest($this->getRequest('/install'));
+        $this->assertEquals('Installations', $result['controller']);
+
+        $routes = Router::createRouteBuilder('/');
+        $this->BcInstallerPlugin->routes($routes);
+        $result = Router::parseRequest($this->getRequest('/'));
+        $this->assertEquals('Installations', $result['controller']);
+        Configure::write('BcEnv.isInstalled', true);
     }
 
     /**
