@@ -10,13 +10,18 @@
  */
 namespace BcMail\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcBaserHelper;
 use BcMail\Model\Entity\MailField;
+use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
 use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\View\Helper\MailformHelper;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
+use BcMail\View\MailFrontAppView;
 use Cake\ORM\ResultSet;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -71,7 +76,23 @@ class MailformHelperTest extends BcTestCase
      */
     public function testAuthCaptcha()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        SiteFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
+
+        //準備
+        $view = new MailFrontAppView($this->getRequest('/contact/'));
+        $view->setPlugin('BcMail');
+        $options['helper'] = new BcBaserHelper($view);
+        $this->MailformHelper = new MailformHelper($view);
+
+        //対象メッソどを呼ぶ
+        ob_start();
+        $this->MailformHelper->authCaptcha('auth_captcha', $options);
+        $result = ob_get_clean();
+        //戻る値を確認
+        $this->assertTextContains(' alt="認証画像" class="auth-captcha-image"', $result);
     }
 
     /**
