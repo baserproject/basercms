@@ -163,6 +163,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function attachment(MailMessagesServiceInterface $service)
     {
@@ -189,7 +190,6 @@ class MailMessagesController extends MailAdminAppController
         }
         Header(sprintf('Content-type: %s; name=%s', $mineType, $file));
         echo file_get_contents($filePath);
-        exit();
     }
 
     /**
