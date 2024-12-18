@@ -33,6 +33,7 @@ class InstallerMailer extends BcAdminMailer
      * @param PasswordRequest|EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function installed(string $email)
     {
