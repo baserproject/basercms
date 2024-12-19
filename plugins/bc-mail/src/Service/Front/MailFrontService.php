@@ -249,14 +249,9 @@ class MailFrontService implements MailFrontServiceInterface
                 ]);
             }
             if ($mailContent->save_info) return;
-            foreach($mailFields as $field) {
-                if ($field->type !== 'file') continue;
-                // 削除フラグをセット
-                $mailMessage->{$field->field_name . '_delete'} = true;
-            }
-            // TODO ucmitz 未検証
-            $mailMessagesTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-            $mailMessagesTable->getFileUploader()->deleteFiles($mailMessage, $mailMessage);
+            /** @var MailMessagesService $mailMessagesService */
+            $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+            $mailMessagesService->delete($mailMessage->id);
         } catch (\Throwable $e) {
             throw $e;
         }
