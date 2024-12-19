@@ -367,13 +367,7 @@ class MailController extends MailAppController
 			// データの入力チェックを行う
 			if ($this->MailMessage->validates()) {
 
-				// 送信データを保存するか確認
-				if ($this->dbDatas['mailContent']['MailContent']['save_info']) {
-					// validation OK
-					$result = $this->MailMessage->save(null, false);
-				} else {
-					$result = $this->MailMessage->data;
-				}
+				$result = $this->MailMessage->save(null, false);
 
 				if ($result) {
 
@@ -409,22 +403,7 @@ class MailController extends MailAppController
 					// メール送信
 					if ($this->_sendEmail($sendEmailOptions)) {
 						if (!$this->dbDatas['mailContent']['MailContent']['save_info']) {
-							$fileRecords = [];
-							foreach($this->dbDatas['mailFields'] as $key => $field) {
-								if ($field['MailField']['type'] !== 'file') {
-									continue;
-								}
-								// 削除フラグをセット
-								$field_name = $field['MailField']['field_name'];
-								$fileRecords['MailMessage'] = [
-									$field_name => $this->request->data['MailMessage'][$field_name],
-									$field_name . '_delete' => true,
-								];
-								// BcUploadBehavior::deleteFiles() はデータベースのデータを削除する前提となっているため、
-								// Model->data['MailMessage']['field_name'] に、配列ではなく、文字列がセットされている状態を想定しているので状態を模倣する
-								$this->MailMessage->data['MailMessage'][$field_name] = $this->request->data['MailMessage'][$field_name];
-							}
-							$this->MailMessage->deleteFiles($fileRecords);
+							$this->MailMessage->delete($result['MailMessage']['id']);
 						}
 
 						$this->Session->delete('Mail.valid');
@@ -434,6 +413,10 @@ class MailController extends MailAppController
 							'data' => $this->request->data
 						]);
 					} else {
+						if (!$this->dbDatas['mailContent']['MailContent']['save_info']) {
+							$this->MailMessage->delete($result['MailMessage']['id']);
+						}
+
 						$this->BcMessage->setError(
 							__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。')
 						);
