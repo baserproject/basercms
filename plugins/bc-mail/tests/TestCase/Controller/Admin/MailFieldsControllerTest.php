@@ -13,14 +13,13 @@
 namespace BcMail\Test\TestCase\Controller\Admin;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BcMail\Controller\Admin\MailFieldsController;
-use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
-use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -77,7 +76,31 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1
+        ])->persist();
+
+        //正常テスト・エラーにならない
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_fields/view/1/1');
+        $request = $this->loginAdmin($request);
+        $this->MailFieldsController = new MailFieldsController($request);
+        $event = new Event('filter');
+        $this->MailFieldsController->beforeFilter($event);
+
+        //異常テスト
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_fields/view/2222/1');
+        $request = $this->loginAdmin($request);
+        $this->MailFieldsController = new MailFieldsController($request);
+        $event = new Event('filter');
+        $this->expectExceptionMessage('コンテンツデータが見つかりません。');
+        $this->expectException('BaserCore\Error\BcException');
+        $this->MailFieldsController->beforeFilter($event);
     }
 
     /**
