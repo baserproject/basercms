@@ -275,6 +275,7 @@ class MailformHelper extends BcFreezeHelper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function authCaptcha(string $fieldName, array $options = [])
     {

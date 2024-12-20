@@ -207,6 +207,47 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testAttachment()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        MailContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['name' => 'name_test', 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1])->persist();
+        $mailMessageTable = TableRegistry::getTableLocator()->get('mail_message_1');
+        $mailMessageTable->save(new Entity(['id' => 1, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
+        $mailMessageTable->save(new Entity(['id' => 2, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
+
+        ob_start();
+        $this->get('/baser/admin/bc-mail/mail_messages/attachment/1/00000002_tel.jpg');
+        $actualIsHelp = ob_get_clean();
+        $this->assertNotEmpty($actualIsHelp);
+
+        //不要テーブルを削除
+        $MailMessagesService->dropTable(1);
+    }
+
+    /**
+     * test download_csv
+     */
+    public function testDownloadCsv()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        MailContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['name' => 'name_test', 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1])->persist();
+        $mailMessageTable = TableRegistry::getTableLocator()->get('mail_message_1');
+        $mailMessageTable->save(new Entity(['id' => 1, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
+        $mailMessageTable->save(new Entity(['id' => 2, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
+
+        //対象メソッドをテスト
+        $this->get('/baser/admin/bc-mail/mail_messages/download_csv/1');
+        $this->assertResponseCode(200);
+
+        //不要テーブルを削除
+        $MailMessagesService->dropTable(1);
     }
 }
