@@ -11,7 +11,9 @@
 
 namespace BcInstaller\Test\TestCase\Controller\Admin;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Controller\Admin\InstallationsController;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 
 /**
@@ -22,7 +24,8 @@ use Cake\Event\Event;
 class InstallationsControllerTest extends BcTestCase
 {
 
-    /**
+    use BcContainerTrait;
+
     /**
      * setup
      */
@@ -57,7 +60,16 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write("BcEnv.isInstalled", false);
+
+        $this->get('/');
+
+        //CSRFがあるか確認すること
+        $_cookies = $this->getPrivateProperty($this->_response, '_cookies');
+        $cookies = $this->getPrivateProperty($_cookies, 'cookies');
+        $this->assertNotEmpty($cookies['csrfToken;;/']);
+
+        Configure::write("BcEnv.isInstalled", false);
     }
 
     /**
