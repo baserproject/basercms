@@ -69,7 +69,7 @@ class InstallationsControllerTest extends BcTestCase
         $cookies = $this->getPrivateProperty($_cookies, 'cookies');
         $this->assertNotEmpty($cookies['csrfToken;;/']);
 
-        Configure::write("BcEnv.isInstalled", false);
+        Configure::write("BcEnv.isInstalled", true);
     }
 
     /**
