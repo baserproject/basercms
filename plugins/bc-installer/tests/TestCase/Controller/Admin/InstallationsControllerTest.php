@@ -12,6 +12,7 @@
 namespace BcInstaller\Test\TestCase\Controller\Admin;
 use BaserCore\TestSuite\BcTestCase;
 use BcInstaller\Controller\Admin\InstallationsController;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 
 /**
@@ -65,7 +66,12 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testStep2()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write("BcEnv.isInstalled", false);
+
+        $this->get('/baser/admin/bc-installer/installations/step2');
+        $this->assertResponseCode(200);
+
+        Configure::write("BcEnv.isInstalled", true);
     }
 
     /**
