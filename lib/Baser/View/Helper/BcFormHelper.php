@@ -1423,6 +1423,7 @@ DOC_END;
 						foreach($wyears as $value) {
 							list($w, $year) = explode('-', $value);
 							$year = sprintf('%02d', $year);
+							$value = $w . '-' . $year;
 							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
 						}
 					}
