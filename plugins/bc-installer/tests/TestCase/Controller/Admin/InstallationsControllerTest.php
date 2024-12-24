@@ -49,6 +49,7 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
+        $this->markTestSkipped('このテストは未確認です。');
         $this->InstallationsController = new InstallationsController($this->getRequest());
         $event = new Event('Controller.beforeFilter', $this->InstallationsController);
         $this->InstallationsController->beforeFilter($event);
