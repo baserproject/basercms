@@ -1853,6 +1853,59 @@ class BcUtil
     }
 
     /**
+     * ヘルパーのnamespaceを書き換える
+     * @param $newPlugin
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function changeHelperNameSpace($newPlugin)
+    {
+        $pluginPath = BcUtil::getPluginPath($newPlugin);
+        if (!$pluginPath) return false;
+        if(file_exists($pluginPath . 'src/view/helper' . DS . 'Helper.php')) {
+           $helperClassPath = $pluginPath . 'stc/view/helper' . DS . $newPlugin . 'Helper.php';
+        }elseif (file_exists($pluginPath . 'src/view/helper' . DS . $newPlugin . 'Helper.php')) {
+           $helperClassPath = $pluginPath . 'src/view/helper' . DS . $newPlugin . 'Helper.php';
+        }else{
+           return false;
+        }
+        $file = new BcFile($helperClassPath);
+        $data = $file->read();
+        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . '\View\Helper;', $data));
+        return true;
+    }
+
+    /**
+      * へルパーのクラス名を変更する
+      * @param string $oldPlugin
+      * @param string $newPlugin
+      * @return bool
+      */
+      public static function changeHelperClassName(string $oldPlugin, string $newPlugin)
+      {
+          $pluginPath = BcUtil::getPluginPath($newPlugin);
+          if (!$pluginPath) return false;
+          $oldTypePath = $pluginPath . 'src/View/Helper' . DS . 'helper.php';
+          $oldPath = $pluginPath . 'src/view/Helper' . DS . $oldPlugin . 'Helper.php';
+          $newPath = $pluginPath . 'src/view/Helper' . DS . $newPlugin . 'Helper.php';
+          if(!file_exists($newPath)) {
+              if(file_exists($oldTypePath)) {
+                  rename($oldTypePath, $newPath);
+              } elseif(file_exists($oldPath)) {
+                  rename($oldPath, $newPath);
+              } else {
+                  return false;
+              }
+          }
+          $file = new BcFile($newPath);
+          $data = $file->read();
+          $file->write(preg_replace('/class\s+.*?Helper/', 'class ' . $newPlugin . 'Helper', $data));
+          return true;
+      }
+
+    /**
      * httpからのフルURLを取得する
      *
      * @param mixed $url
