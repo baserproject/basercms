@@ -90,6 +90,8 @@ class FavoritesServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         $this->loadFixtureScenario(FavoritesScenario::class);
         $result = $this->FavoritesService->getIndex(['num' => 2]);
         $this->assertEquals(2, $result->all()->count());
@@ -144,6 +146,8 @@ class FavoritesServiceTest extends BcTestCase
     public function testDelete()
     {
         $this->loadFixtureScenario(FavoritesScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
         $this->FavoritesService->delete(1);
         $users = $this->FavoritesService->getIndex([]);
         $this->assertEquals(5, $users->all()->count());
