@@ -10,10 +10,12 @@
  */
 
 namespace BcInstaller\Test\TestCase\Controller\Admin;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcInstaller\Controller\Admin\InstallationsController;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class InstallationsControllerTest
@@ -22,6 +24,7 @@ use Cake\Event\Event;
  */
 class InstallationsControllerTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
 
     /**
     /**
@@ -30,6 +33,8 @@ class InstallationsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
@@ -66,10 +71,16 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testStep2()
     {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
         Configure::write("BcEnv.isInstalled", false);
 
         $this->get('/baser/admin/bc-installer/installations/step2');
         $this->assertResponseCode(200);
+
+        $this->post('/baser/admin/bc-installer/installations/step2', ['mode'=>'next']);
+        $this->assertResponseCode(302);
 
         Configure::write("BcEnv.isInstalled", true);
     }
