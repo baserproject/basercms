@@ -102,7 +102,41 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testStep3()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        Configure::write("BcEnv.isInstalled", false);
+
+        $this->get('/baser/admin/bc-installer/installations/step3');
+        $this->assertResponseCode(200);
+
+        $config = [
+            'mode' => 'back',
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => '',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(302);
+        $this->assertRedirect('/baser/admin/bc-installer/installations/step2');
+
+        $config['mode'] = 'checkDb';
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+
+        $config['mode'] = 'createDb';
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+
+
+        Configure::write("BcEnv.isInstalled", true);
     }
 
     /**
