@@ -62,7 +62,10 @@ class InstallationsControllerTest extends BcTestCase
     public function testIndex()
     {
         Configure::write("BcEnv.isInstalled", false);
-
+        //backup file
+        copy(ROOT . DS . 'config' . DS . '.env', ROOT . DS . 'config' . DS . '.env.bak');
+        copy(ROOT . DS . 'config' . DS . 'install.php', ROOT . DS . 'config' . DS . 'install.php.bak');
+        copy(ROOT . DS . 'vendor' . DS . 'autoload.php', ROOT . DS . 'vendor' . DS . 'autoload.php.bak');
         $this->get('/');
 
         //CSRFがあるか確認すること
@@ -71,6 +74,10 @@ class InstallationsControllerTest extends BcTestCase
         $this->assertNotEmpty($cookies['csrfToken;;/']);
 
         Configure::write("BcEnv.isInstalled", true);
+        //backup
+        rename(ROOT . DS . 'config' . DS . '.env.bak', ROOT . DS . 'config' . DS . '.env');
+        rename(ROOT . DS . 'config' . DS . 'install.php.bak', ROOT . DS . 'config' . DS . 'install.php');
+        rename(ROOT . DS . 'vendor' . DS . 'autoload.php.bak', ROOT . DS . 'vendor' . DS . 'autoload.php');
     }
 
     /**
