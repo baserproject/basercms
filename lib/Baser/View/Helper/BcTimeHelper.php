@@ -83,7 +83,7 @@ class BcTimeHelper extends TimeHelper
 		if (!preg_match($this->warekiRegex, $date, $matches)) {
 			return false;
 		}
-		return $matches['year'];
+		return sprintf('%02d', $matches['year']);
 	}
 
 	/**

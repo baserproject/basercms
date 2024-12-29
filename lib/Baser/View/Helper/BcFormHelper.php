@@ -1349,7 +1349,7 @@ DOC_END;
 				break;
 			case 'day':
 				for($i = 1; $i <= 31; $i++) {
-					$data[sprintf('%02d', $i)] = $i;
+					$data[sprintf('%02d', $i)] = sprintf('%02d', $i);
 				}
 				break;
 			case 'month':
@@ -1422,6 +1422,8 @@ DOC_END;
 					if ($wyears) {
 						foreach($wyears as $value) {
 							list($w, $year) = explode('-', $value);
+							$year = sprintf('%02d', $year);
+							$value = $w . '-' . $year;
 							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
 						}
 					}
