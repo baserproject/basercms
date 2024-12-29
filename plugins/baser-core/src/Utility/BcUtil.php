@@ -16,6 +16,7 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Entity\UserInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
@@ -133,12 +134,12 @@ class BcUtil
      *
      * $prefix を指定したとしても authentication より取得できた場合はそちらを優先する
      *
-     * @return User|false
+     * @return UserInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser()
+    public static function loginUser(): UserInterface|false
     {
         $request = Router::getRequest();
         if (!$request) return false;
@@ -229,7 +230,7 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isSuperUser($user = null): bool
+    public static function isSuperUser(?UserInterface $user = null): bool
     {
         /** @var User $User */
         $loginUser = $user ?? self::loginUser();

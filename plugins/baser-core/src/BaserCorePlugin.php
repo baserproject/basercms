@@ -471,6 +471,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function setupSessionAuth(AuthenticationService $service, array $authSetting)
     {
+        if($authSetting['userModel'] === 'BaserCore.Users' && empty($authSetting['finder'])) {
+            $authSetting['finder'] = 'available';
+        }
         $service->setConfig([
             'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
             'queryParam' => 'redirect',
@@ -512,7 +515,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder'] ?? null
             ],
             'passwordHasher' => $passwordHasher
         ]);

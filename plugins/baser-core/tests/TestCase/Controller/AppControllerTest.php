@@ -396,4 +396,23 @@ class AppControllerTest extends BcTestCase
             [500, '', '']
         ];
     }
+
+    /**
+     * Test requirePermission
+     */
+    public function testRequirePermission()
+    {
+        $request = $this->getRequest('/baser/admin/baser-core/users/');
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        $request = $request->withParam('prefix', 'Mypage');
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        Configure::write('BcPrefixAuth.Mypage.requirePermission', true);
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        Configure::write('BcPrefixAuth.Mypage.requirePermission', false);
+        $this->assertFalse($this->AppController->requirePermission($request));
+    }
+
 }
