@@ -165,7 +165,6 @@ class UsersController extends AppController
 				// EVENT Users.afterLogin
 				$this->dispatchEvent('afterLogin', [
 					'user' => $this->BcAuth->user(),
-					'loginRedirect' => $this->BcAuth->redirect(),
 				]);
 
 				$this->redirect($this->BcAuth->redirectUrl());
