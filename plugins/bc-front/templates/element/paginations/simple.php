@@ -23,7 +23,7 @@
  */
 try {
   $pageCount = $this->Paginator->counter('{{pages}}');
-} catch (\Cake\Core\Exception\CakeException) {
+} catch (\Cake\Core\Exception\CakeException $e) {
   return;
 }
 if (!isset($modules)) {
