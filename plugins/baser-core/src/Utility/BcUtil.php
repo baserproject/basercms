@@ -1797,6 +1797,105 @@ class BcUtil
     }
 
     /**
+     * namespaceを書き換える
+     */
+    public static function changeNameSpace($copyTheme)
+    {
+        $themePath = BcUtil::getPluginPath($copyTheme);
+        if(!$themePath) return false;
+
+        // プラグインのnamespaceを変更
+        if(file_exists($themePath . 'src' . DS . 'Plugin.php')) {
+            $pluginClassPath = $themePath . 'src' . DS . 'Plugin.php';
+        } elseif(file_exists($themePath . 'src' . DS . $copyTheme . 'Plugin.php')) {
+            $pluginClassPath = $themePath . 'src' . DS . $copyTheme . 'Plugin.php';
+        } else {
+            return false;
+        }
+
+        if($pluginClassPath) {
+            $file = new BcFile($pluginClassPath);
+            $data = $file->read();
+            $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $copyTheme . ';', $data));
+        } else {
+            return false;
+        }
+
+
+        // ヘルパーのnamespaceを変更
+        if(file_exists($themePath . 'src/view/helper' . DS . 'Helper.php')) {
+            $helperClassPath = $themePath . 'src/view/helper' . DS . $copyTheme . 'Helper.php';
+         }elseif (file_exists($themePath . 'src/view/helper' . DS . $copyTheme . 'Helper.php')) {
+            $helperClassPath = $themePath . 'src/view/helper' . DS . $copyTheme . 'Helper.php';
+         }else{
+            return false;
+         }
+
+         if($helperClassPath) {
+            $file = new BcFile($helperClassPath);
+            $data = $file->read();
+            $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $copyTheme . '\View\Helper;', $data));
+         } else {
+            return false;
+         }
+    }
+
+
+    /**
+     * クラス名を変更する
+     */
+    public static function changeClassName(string $orgTheme,string $copyTheme)
+    {
+        $pluginPath = BcUtil::getPluginPath($copyTheme);
+        if (!$pluginPath) return false;
+
+        // プラグインのクラス名を変更
+        $oldTypePluginPath = $pluginPath . 'src' . DS . 'Plugin.php';
+        $oldPluginPath = $pluginPath . 'src' . DS . $orgTheme . 'Plugin.php';
+        $newPluginPath = $pluginPath . 'src' . DS . $copyTheme . 'Plugin.php';
+
+        if(!file_exists($newPluginPath)) {
+            if(file_exists($oldTypePluginPath)) {
+                rename($oldTypePluginPath, $newPluginPath);
+            } elseif(file_exists($oldPluginPath)) {
+                rename($oldPluginPath, $newPluginPath);
+            } else {
+                return false;
+            }
+        }
+
+        if($newPluginPath) {
+            $file = new BcFile($newPluginPath);
+            $data = $file->read();
+            $file->write(preg_replace('/class\s+.*?Plugin/', 'class ' . $copyTheme . 'Plugin', $data));
+        } else {
+            return false;
+        }
+
+        // ヘルパーのクラス名を変更
+        $oldTypeHelperPath = $pluginPath . 'src/View/Helper' . DS . 'helper.php';
+        $oldHelperPath = $pluginPath . 'src/view/Helper' . DS . $orgTheme . 'Helper.php';
+        $newHelperPath = $pluginPath . 'src/view/Helper' . DS . $copyTheme . 'Helper.php';
+        if(!file_exists($newHelperPath)) {
+            if(file_exists($oldTypeHelperPath)) {
+                rename($oldTypeHelperPath, $newHelperPath);
+            } elseif(file_exists($oldHelperPath)) {
+                rename($oldHelperPath, $newHelperPath);
+            } else {
+                return false;
+            }
+        }
+
+        if($newHelperPath){
+            $file = new BcFile($newHelperPath);
+            $data = $file->read();
+            $file->write(preg_replace('/class\s+.*?Helper/', 'class ' . $copyTheme . 'Helper', $data));
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * プラグインの namespace を書き換える
      * @param $newPlugin
      * @return bool
@@ -1851,59 +1950,6 @@ class BcUtil
         $file->write(preg_replace('/class\s+.*?Plugin/', 'class ' . $newPlugin . 'Plugin', $data));
         return true;
     }
-
-    /**
-     * ヘルパーのnamespaceを書き換える
-     * @param $newPlugin
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public static function changeHelperNameSpace($newPlugin)
-    {
-        $pluginPath = BcUtil::getPluginPath($newPlugin);
-        if (!$pluginPath) return false;
-        if(file_exists($pluginPath . 'src/view/helper' . DS . 'Helper.php')) {
-           $helperClassPath = $pluginPath . 'stc/view/helper' . DS . $newPlugin . 'Helper.php';
-        }elseif (file_exists($pluginPath . 'src/view/helper' . DS . $newPlugin . 'Helper.php')) {
-           $helperClassPath = $pluginPath . 'src/view/helper' . DS . $newPlugin . 'Helper.php';
-        }else{
-           return false;
-        }
-        $file = new BcFile($helperClassPath);
-        $data = $file->read();
-        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . '\View\Helper;', $data));
-        return true;
-    }
-
-    /**
-      * へルパーのクラス名を変更する
-      * @param string $oldPlugin
-      * @param string $newPlugin
-      * @return bool
-      */
-      public static function changeHelperClassName(string $oldPlugin, string $newPlugin)
-      {
-          $pluginPath = BcUtil::getPluginPath($newPlugin);
-          if (!$pluginPath) return false;
-          $oldTypePath = $pluginPath . 'src/View/Helper' . DS . 'helper.php';
-          $oldPath = $pluginPath . 'src/view/Helper' . DS . $oldPlugin . 'Helper.php';
-          $newPath = $pluginPath . 'src/view/Helper' . DS . $newPlugin . 'Helper.php';
-          if(!file_exists($newPath)) {
-              if(file_exists($oldTypePath)) {
-                  rename($oldTypePath, $newPath);
-              } elseif(file_exists($oldPath)) {
-                  rename($oldPath, $newPath);
-              } else {
-                  return false;
-              }
-          }
-          $file = new BcFile($newPath);
-          $data = $file->read();
-          $file->write(preg_replace('/class\s+.*?Helper/', 'class ' . $newPlugin . 'Helper', $data));
-          return true;
-      }
 
     /**
      * httpからのフルURLを取得する

@@ -397,10 +397,8 @@ class ThemesService implements ThemesServiceInterface
                 );
             }
         }
-        BcUtil::changePluginClassName($oldTheme, $newTheme);
-        BcUtil::changePluginNameSpace($newTheme);
-        BcUtil::changeHelperClassName($oldTheme,$newTheme);
-        BcUtil::changeHelperNameSpace($newTheme);
+        BcUtil::changeClassName($oldTheme,$newTheme);
+        BcUtil::changeNameSpace($newTheme);
         return true;
     }
 
