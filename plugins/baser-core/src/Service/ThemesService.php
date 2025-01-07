@@ -32,6 +32,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Laminas\Diactoros\UploadedFile;
+use BaserCore\Utility\BcFile;
 
 /**
  * ThemesService
@@ -363,6 +364,51 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
+     * ヘルパーのnamespaceを変更する
+     */
+    public function changeHelperNameSpace($newTheme)
+    {
+        $pluginPath = BcUtil::getPluginPath($newTheme);
+        if (!$pluginPath) return false;
+        if(file_exists($pluginPath . 'src/view/helper' . DS . 'Helper.php')) {
+            $helperClassPath = $pluginPath . 'stc/view/helper' . DS . $newTheme . 'Helper.php';
+         }elseif (file_exists($pluginPath . 'src/view/helper' . DS . $newTheme . 'Helper.php')) {
+            $helperClassPath = $pluginPath . 'src/view/helper' . DS . $newTheme . 'Helper.php';
+         }else{
+            return false;
+         }
+         $file = new BcFile($helperClassPath);
+         $data = $file->read();
+         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data));
+         return true;
+    }
+
+    /**
+     * ヘルパーのクラス名を変更する
+     */
+    public function ChangeHelperClassName($oldTheme,$newTheme)
+    {
+        $pluginPath = BcUtil::getPluginPath($newTheme);
+        if (!$pluginPath) return false;
+        $oldTypePath = $pluginPath . 'src/View/Helper' . DS . 'helper.php';
+        $oldPath = $pluginPath . 'src/view/Helper' . DS . $oldTheme . 'Helper.php';
+        $newPath = $pluginPath . 'src/view/Helper' . DS . $newTheme . 'Helper.php';
+        if(!file_exists($newPath)) {
+            if(file_exists($oldTypePath)) {
+                rename($oldTypePath, $newPath);
+            } elseif(file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+            } else {
+                return false;
+            }
+        }
+        $file = new BcFile($newPath);
+        $data = $file->read();
+        $file->write(preg_replace('/class\s+.*?Helper/', 'class ' . $newTheme . 'Helper', $data));
+        return true;
+    }
+
+    /**
      * コピーする
      *
      * @checked
@@ -397,8 +443,10 @@ class ThemesService implements ThemesServiceInterface
                 );
             }
         }
-        BcUtil::changeClassName($oldTheme,$newTheme);
-        BcUtil::changeNameSpace($newTheme);
+        BcUtil::changePluginClassName($oldTheme, $newTheme);
+        BcUtil::changePluginNameSpace($newTheme);
+        $this->ChangeHelperClassName($oldTheme,$newTheme);
+        $this->changeHelperNameSpace($newTheme);
         return true;
     }
 
