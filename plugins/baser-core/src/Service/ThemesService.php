@@ -370,10 +370,10 @@ class ThemesService implements ThemesServiceInterface
     {
         $pluginPath = BcUtil::getPluginPath($newTheme);
         if (!$pluginPath) return false;
-        if(file_exists($pluginPath . 'src/view/helper' . DS . 'Helper.php')) {
-            $helperClassPath = $pluginPath . 'stc/view/helper' . DS . $newTheme . 'Helper.php';
-         }elseif (file_exists($pluginPath . 'src/view/helper' . DS . $newTheme . 'Helper.php')) {
-            $helperClassPath = $pluginPath . 'src/view/helper' . DS . $newTheme . 'Helper.php';
+        if(file_exists($pluginPath . 'src/View/Helper' . DS . 'Helper.php')) {
+            $helperClassPath = $pluginPath . 'src/View/Helper' . DS . $newTheme . 'Helper.php';
+         }elseif (file_exists($pluginPath . 'src/View/Helper' . DS . $newTheme . 'Helper.php')) {
+            $helperClassPath = $pluginPath . 'src/View/Helper' . DS . $newTheme . 'Helper.php';
          }else{
             return false;
          }
@@ -390,9 +390,9 @@ class ThemesService implements ThemesServiceInterface
     {
         $pluginPath = BcUtil::getPluginPath($newTheme);
         if (!$pluginPath) return false;
-        $oldTypePath = $pluginPath . 'src/View/Helper' . DS . 'helper.php';
-        $oldPath = $pluginPath . 'src/view/Helper' . DS . $oldTheme . 'Helper.php';
-        $newPath = $pluginPath . 'src/view/Helper' . DS . $newTheme . 'Helper.php';
+        $oldTypePath = $pluginPath . 'src/View/Helper' . DS . 'Helper.php';
+        $oldPath = $pluginPath . 'src/View/Helper' . DS . $oldTheme . 'Helper.php';
+        $newPath = $pluginPath . 'src/View/Helper' . DS . $newTheme . 'Helper.php';
         if(!file_exists($newPath)) {
             if(file_exists($oldTypePath)) {
                 rename($oldTypePath, $newPath);
