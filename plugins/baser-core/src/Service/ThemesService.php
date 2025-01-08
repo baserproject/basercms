@@ -364,32 +364,18 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
-     * ヘルパーのnamespaceを変更する
+     * helperとnamespaceを変更する
+     * @checked
+     * @notodo
      */
-    public function changeHelperNameSpace($newTheme)
-    {
-        $pluginPath = BcUtil::getPluginPath($newTheme);
-        if (!$pluginPath) return false;
-        if (file_exists($pluginPath . 'src' . DS .'View' . DS .'Helper'. DS . $newTheme. 'Helper.php')) {
-            $helperClassPath = $pluginPath . 'src' . DS .'View' . DS .'Helper'. DS . $newTheme. 'Helper.php';
-         }else{
-            return false;
-         }
-         $file = new BcFile($helperClassPath);
-         $data = $file->read();
-         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data));
-         return true;
-    }
 
-    /**
-     * ヘルパーのクラス名を変更する
-     */
-    public function ChangeHelperClassName($oldTheme,$newTheme)
+     public function changeHelper(string $newTheme, string $className): bool
     {
         $pluginPath = BcUtil::getPluginPath($newTheme);
         if (!$pluginPath) return false;
-        $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $oldTheme . 'Helper.php';
-        $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $newTheme . 'Helper.php';
+        $helperClassName = preg_replace('/Helper$/', '', $className) . 'CopyHelper';
+        $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $className . '.php';
+        $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $helperClassName . '.php';
         if(!file_exists($newPath))
         {
             if(file_exists($oldPath)) {
@@ -398,10 +384,12 @@ class ThemesService implements ThemesServiceInterface
                 return false;
             }
         }
-        $file = new BcFile($newPath);
-        $data = $file->read();
-        $file->write(preg_replace('/class\s+.*?Helper/', 'class ' . $newTheme . 'Helper', $data));
-        return true;
+         $file = new BcFile($newPath);
+         $data = $file->read();
+         $tmpHelperNameSpace = preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data);
+         $helperNameSpace = preg_replace('/class\s+.*?Helper/', 'class ' . $helperClassName , $tmpHelperNameSpace);
+         $file->write($helperNameSpace);
+         return true;
     }
 
     /**
@@ -441,8 +429,15 @@ class ThemesService implements ThemesServiceInterface
         }
         BcUtil::changePluginClassName($oldTheme, $newTheme);
         BcUtil::changePluginNameSpace($newTheme);
-        $this->ChangeHelperClassName($oldTheme,$newTheme);
-        $this->changeHelperNameSpace($newTheme);
+
+        $folder = new BcFolder(BASER_THEMES . $newTheme . DS . 'src' . DS . 'View' . DS . 'Helper');
+        $files = $folder->getFiles();
+
+        foreach($files as $file)
+        {
+            $className = basename($file, '.php');
+            $this->changeHelper($newTheme,$className);
+        }
         return true;
     }
 
