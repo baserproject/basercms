@@ -185,9 +185,6 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      */
     public function preview(string $fieldName, string $type, CustomField $field): string
     {
-        if(is_null($this->{$type})) {
-            throw new BcException(__d('baser_core', 'ヘルパー "{0}Helper" を定義してください', $type));
-        }
         if (method_exists($this->{$type}, 'preview')) {
             return $this->{$type}->preview(new CustomLink([
                 'name' => $fieldName,

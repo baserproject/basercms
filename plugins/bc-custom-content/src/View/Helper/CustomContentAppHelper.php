@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\View\Helper;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\Helper\BcBaserHelper;
@@ -82,6 +83,8 @@ class CustomContentAppHelper extends Helper
                     "$plugin",
                     ['className' => "$plugin.$plugin"]
                 );
+            } else {
+                throw new BcException(__d('baser_core', 'ヘルパー "{0}Helper" を定義してください', $plugin));
             }
         }
     }
