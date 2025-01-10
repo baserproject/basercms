@@ -11,10 +11,12 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Error\BcException;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Entity\UserInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
@@ -132,12 +134,12 @@ class BcUtil
      *
      * $prefix を指定したとしても authentication より取得できた場合はそちらを優先する
      *
-     * @return User|false
+     * @return UserInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser()
+    public static function loginUser(): UserInterface|false
     {
         $request = Router::getRequest();
         if (!$request) return false;
@@ -228,7 +230,7 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isSuperUser($user = null): bool
+    public static function isSuperUser(?UserInterface $user = null): bool
     {
         /** @var User $User */
         $loginUser = $user ?? self::loginUser();
@@ -1641,6 +1643,13 @@ class BcUtil
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオフにすることはできません。'));
+        }
+
         $globalEventManager = $eventManager->instance();
         $eventListeners = [
             'local' => $eventManager->prioritisedListeners($eventKey),
@@ -1674,6 +1683,13 @@ class BcUtil
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオンにすることはできません。'));
+        }
+
         $globalEventManager = $eventManager->instance();
         if (!empty($eventListeners['local'])) {
             foreach($eventListeners['local'] as $priority => $listeners) {

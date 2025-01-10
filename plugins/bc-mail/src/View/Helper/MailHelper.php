@@ -96,6 +96,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパーに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFormTemplates($siteId = 1)
     {
@@ -126,6 +127,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getMailTemplates($siteId = 1)
     {
@@ -208,6 +210,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function link($title, $contentsName, $datas = [], $options = [])
     {
@@ -242,6 +245,7 @@ class MailHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getToken()
     {
@@ -254,6 +258,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function token()
     {
@@ -336,6 +341,7 @@ class MailHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishedMailContents(int $siteId)
     {

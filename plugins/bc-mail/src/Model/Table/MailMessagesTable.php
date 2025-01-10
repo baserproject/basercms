@@ -161,6 +161,7 @@ class MailMessagesTable extends MailAppTable
      * アップロード設定を行う
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupUpload(int $mailContentId)
     {
@@ -193,6 +194,7 @@ class MailMessagesTable extends MailAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterMarshal(Event $event)
     {

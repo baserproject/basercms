@@ -137,3 +137,5 @@ node_modules
 /LOCAL_TODO.md
 /LOCAL_Q&A.md
 /.cache
+/docker/nginx/*
+/docker/proxy/*

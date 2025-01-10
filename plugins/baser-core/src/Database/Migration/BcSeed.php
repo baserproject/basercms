@@ -35,10 +35,19 @@ class BcSeed extends AbstractSeed
      * @return Table
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function table(string $tableName, array $options = []): Table
     {
-        $prefix = ConnectionManager::get($this->input->getOption('connection'))->config()['prefix'];
+        if($this->input->hasParameterOption('connection')) {
+            $connection = $this->input->getParameterOption('connection');
+        } elseif($this->input->hasParameterOption('--connection')) {
+            $connection = $this->input->getParameterOption('--connection');
+        } else {
+            $connection = 'default';
+        }
+
+        $prefix = ConnectionManager::get($connection)->config()['prefix'];
         return parent::table($prefix . $tableName);
     }
 

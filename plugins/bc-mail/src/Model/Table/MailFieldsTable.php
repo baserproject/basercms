@@ -159,6 +159,7 @@ class MailFieldsTable extends MailAppTable
      * @return array source
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null)
     {
@@ -273,6 +274,7 @@ class MailFieldsTable extends MailAppTable
      * @return EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(?int $id, MailField $data = null, array $options = [])
     {

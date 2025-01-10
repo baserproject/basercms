@@ -64,6 +64,7 @@ class MaildataHelper extends BcTextHelper
      * @return string メール用データ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function toDisplayString(string $type, $value, bool $prefixSpace = true)
     {
@@ -77,7 +78,7 @@ class MaildataHelper extends BcTextHelper
             case 'number':
             case 'password':
                 $result = $value;
-
+                break;
             case 'pref':
                 $prefs = $this->prefList();
                 $options = [];

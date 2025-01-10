@@ -362,7 +362,6 @@ class ThemesService implements ThemesServiceInterface
 
         return $result;
     }
-
     /**
      * helperとnamespaceを変更する
      * @checked

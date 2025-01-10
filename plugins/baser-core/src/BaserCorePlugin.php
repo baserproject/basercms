@@ -280,7 +280,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $themes = [];
         foreach($sites as $site) {
             if ($site->theme) {
-                if (!is_dir(CorePlugin::path($site->theme))) continue;
+                if (!CorePlugin::isLoaded($site->theme) || !is_dir(CorePlugin::path($site->theme))) continue;
                 if(in_array($site->theme, $themes)) continue;
                 $themes[] = $site->theme;
             }
@@ -471,6 +471,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function setupSessionAuth(AuthenticationService $service, array $authSetting)
     {
+        if($authSetting['userModel'] === 'BaserCore.Users' && empty($authSetting['finder'])) {
+            $authSetting['finder'] = 'available';
+        }
         $service->setConfig([
             'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
             'queryParam' => 'redirect',
@@ -512,7 +515,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder'] ?? null
             ],
             'passwordHasher' => $passwordHasher
         ]);

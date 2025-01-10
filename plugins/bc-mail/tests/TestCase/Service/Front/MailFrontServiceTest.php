@@ -12,6 +12,7 @@
 namespace BcMail\Test\TestCase\Service\Front;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
@@ -29,6 +30,7 @@ use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\ORM\Entity;
+use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use InvalidArgumentException;
@@ -46,6 +48,7 @@ class MailFrontServiceTest extends BcTestCase
      */
     use ScenarioAwareTrait;
     use IntegrationTestTrait;
+    use EmailTrait;
 
     /**
      * set up
@@ -483,7 +486,6 @@ class MailFrontServiceTest extends BcTestCase
 
     /**
      * test sendMail
-     * @throws \Throwable
      */
     public function test_sendMail()
     {
@@ -491,6 +493,7 @@ class MailFrontServiceTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(MailContentsScenario::class);
         $this->loadFixtureScenario(MailFieldsScenario::class);
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
         $MailContentsService = $this->getService(MailContentsServiceInterface::class);
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         MailMessagesFactory::make(
@@ -525,8 +528,9 @@ class MailFrontServiceTest extends BcTestCase
         ])->persist();
         // normal case
         $mailContent = $MailContentsService->get(99);
-        $this->expectException(InvalidArgumentException::class);
         $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
+        $this->assertMailSentTo('t@gm.com');
+        $this->assertMailSubjectContains('お問い合わせを頂きました99');
     }
 
     /**

@@ -369,14 +369,44 @@ class CustomEntriesTableTest extends BcTestCase
      */
     public function test_setupValidate()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
         //準備
+        CustomFieldFactory::make([
+            'id' => 1,
+            'validate' => '["NUMBER","EMAIL","HANKAKU","ZENKAKU_KATAKANA","ZENKAKU_HIRAGANA","DATETIME","EMAIL_CONFIRM"]',
+            'meta' => '{"BcCustomContent":{"email_confirm":"","max_file_size":"1","file_ext":"true"}}',
+            'regex' => '[0-9]'
+        ])->persist();
+        CustomLinkFactory::make(['id' => 1, 'name' => 'test', 'custom_table_id' => 1, 'custom_field_id' => 1,])->persist();
 
-        //正常系実行
+        $this->CustomEntriesTable->setLinks(1);
+        $files = new UploadedFile(
+            'image.png',
+            10,
+            UPLOAD_ERR_INI_SIZE,
+            'image.png',
+            'png'
+        );
+        $this->CustomEntriesTable->setupValidate(['test' => $files]);
+        $validator = $this->CustomEntriesTable->getValidator();
 
-        //異常系実行
-
-
+        //正規表現のバリデーションをセットアップする
+        $this->assertNotEmpty($validator['test']->rules()['regex']);
+        //Eメールチェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['email']);
+        //数値チェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['numeric']);
+        //半角チェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['asciiAlphaNumeric']);
+        //全角カタカナチェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['checkKatakana']);
+        //全角ひらがなチェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['checkHiragana']);
+        //日付チェックをセットする
+        $this->assertNotEmpty($validator['test']->rules()['dateString']);
+        //ファイルアップロード上限バリデーションをセットアップする
+        $this->assertNotEmpty($validator['test']->rules()['fileCheck']);
+        //ファイル拡張子バリデーションをセットアップする
+        $this->assertNotEmpty($validator['test']->rules()['fileExt']);
     }
 
     /**

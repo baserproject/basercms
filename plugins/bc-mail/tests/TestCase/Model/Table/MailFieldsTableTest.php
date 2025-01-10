@@ -163,7 +163,16 @@ class MailFieldsTableTest extends BcTestCase
      */
     public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //$field = null
+        $rs = $this->MailFieldsTable->getControlSource();
+        $this->assertEquals('テキスト', $rs['type']['text']);
+        $this->assertEquals('Eメール形式チェック', $rs['valid_ex']['VALID_EMAIL']);
+        $this->assertEquals('半角変換', $rs['auto_convert']['CONVERT_HANKAKU']);
+
+        //$field != null
+        $rs = $this->MailFieldsTable->getControlSource('type');
+        $this->assertEquals('テキストエリア', $rs['textarea']);
+        $this->assertEquals('隠しフィールド', $rs['hidden']);
     }
 
     /**
@@ -235,54 +244,41 @@ class MailFieldsTableTest extends BcTestCase
 
     /**
      * フィールドデータをコピーする
-     *
-     * @param int $id
-     * @param array $data
-     * @param array $sortUpdateOff
-     * @param array $expected 期待値
-     * @dataProvider copyDataProvider
      */
-    public function testCopy($id, $data, $sortUpdateOff)
+    public function testCopy()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $options = ['sortUpdateOff' => $sortUpdateOff];
-        $result = $this->MailField->copy($id, $data, $options);
+        //準備
+        MailFieldsFactory::make([
+            'id' => 1,
+            'mail_content_id' => 1,
+            'no' => 1,
+            'name' => '性',
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'head' => 'お名前',
+            'attention' => '',
+            'before_attachment' => '',
+            'after_attachment' => '',
+            'source' => '資料請求|問い合わせ|その他',
+            'size' => 1,
+            'text_rows' => 1,
+            'maxlength' => 1,
+            'options' => '',
+            'class' => '',
+            'default_value' => '',
+            'description' => '',
+            'group_field' => '',
+            'group_valid' => '',
+            'valid' => ''
+        ])->persist();
 
-        if ($id) {
-            $this->assertEquals('姓漢字_copy', $result['MailField']['name'], '$idからコピーができません');
-            if (!$sortUpdateOff) {
-                $this->assertEquals(19, $result['MailField']['sort'], 'sortを正しく設定できません');
-            } else {
-                $this->assertEquals(1, $result['MailField']['sort'], 'sortを正しく設定できません');
-            }
-        } else {
-            $this->assertEquals('hogeName_copy', $result['MailField']['name'], '$dataからコピーができません');
-            if (!$sortUpdateOff) {
-                $this->assertEquals(19, $result['MailField']['sort'], 'sortを正しく設定できません');
-            } else {
-                $this->assertEquals(999, $result['MailField']['sort'], 'sortを正しく設定できません');
-            }
-        }
-    }
+        $options = ['sortUpdateOff' => false];
+        $result = $this->MailFieldsTable->copy(1, null, $options);
+        $this->assertEquals('性_copy', $result['name']);
 
-    public static function copyDataProvider()
-    {
-        return [
-            [1, [], false],
-            [false, ['MailField' => [
-                'mail_content_id' => 1,
-                'field_name' => 'name_1',
-                'name' => 'hogeName',
-                'sort' => 999,
-            ]], false],
-            [1, [], true],
-            [false, ['MailField' => [
-                'mail_content_id' => 1,
-                'field_name' => 'name_1',
-                'name' => 'hogeName',
-                'sort' => 999,
-            ]], true],
-        ];
+        $data = MailFieldsFactory::make(['mail_content_id' => 2, 'field_name' => 'name_2', 'name' => 'hogeName', 'sort' => 999])->getEntity();
+        $result = $this->MailFieldsTable->copy(false, $data, $options);
+        $this->assertEquals('hogeName', $result['name']);
     }
 
     /**

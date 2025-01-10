@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\View\Helper;
 
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BcCustomContent\Model\Entity\CustomEntry;
@@ -147,6 +148,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function control(CustomLink $customLink, array $options = []): string
     {
@@ -179,9 +181,13 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function preview(string $fieldName, string $type, CustomField $field): string
     {
+        if(is_null($this->{$type})) {
+            throw new BcException(__d('baser_core', 'ヘルパー "{0}Helper" を定義してください', $type));
+        }
         if (method_exists($this->{$type}, 'preview')) {
             return $this->{$type}->preview(new CustomLink([
                 'name' => $fieldName,
@@ -199,6 +205,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function error(CustomLink $link, $options = []): string
     {
@@ -319,6 +326,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * プラグインのメタフィールドを表示する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function displayPluginMeta()
     {

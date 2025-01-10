@@ -56,6 +56,7 @@ class CustomContentAppHelper extends Helper
      * @param array $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $view, array $config = [])
     {
@@ -67,6 +68,7 @@ class CustomContentAppHelper extends Helper
      * プラグインのヘルパーを読み込む
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function loadPluginHelper(): void
     {
@@ -129,6 +131,7 @@ class CustomContentAppHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function searchControl(CustomLink $customLink, array $options = []): string
     {

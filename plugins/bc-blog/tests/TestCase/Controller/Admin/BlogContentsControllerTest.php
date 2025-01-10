@@ -177,7 +177,10 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_redirectEditBlog()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $controller = new BlogContentsController($this->getRequest());
+        $rs = $this->execPrivateMethod($controller, 'redirectEditBlog', ['BcColumn']);
+        $this->assertEquals('https://localhost/baser/admin/bc-theme-file/theme_files/edit/BcFront/BcBlog/etc/Blog/BcColumn/index.php', $rs->getHeader('Location')[0]);
+        $this->assertEquals(302, $rs->getStatusCode());
     }
 
 }

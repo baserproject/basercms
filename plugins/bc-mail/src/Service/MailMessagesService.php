@@ -143,11 +143,7 @@ class MailMessagesService implements MailMessagesServiceInterface
             $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
             $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContent->id, 'MailFields.use_field' => true])->all();
             $this->MailMessages->convertToDb($mailFields, $entity);
-            if ($mailContent->save_info) {
-                return $this->MailMessages->saveOrFail($entity);
-            } else {
-                return $entity;
-            }
+            return $this->MailMessages->saveOrFail($entity);
         }
         throw new PersistenceFailedException($entity, __d('baser_core', '入力エラーです。内容を見直してください。'));
     }
@@ -181,6 +177,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $entity, array $postData): ?EntityInterface
     {
