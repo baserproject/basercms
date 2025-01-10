@@ -32,6 +32,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Laminas\Diactoros\UploadedFile;
+use BaserCore\Utility\BcFile;
 
 /**
  * ThemesService
@@ -361,6 +362,34 @@ class ThemesService implements ThemesServiceInterface
 
         return $result;
     }
+    /**
+     * helperとnamespaceを変更する
+     * @checked
+     * @notodo
+     */
+
+     public function changeHelper(string $newTheme, string $className): bool
+    {
+        $pluginPath = BcUtil::getPluginPath($newTheme);
+        if (!$pluginPath) return false;
+        $helperClassName = preg_replace('/Helper$/', '', $className) . 'CopyHelper';
+        $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $className . '.php';
+        $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $helperClassName . '.php';
+        if(!file_exists($newPath))
+        {
+            if(file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+            } else {
+                return false;
+            }
+        }
+         $file = new BcFile($newPath);
+         $data = $file->read();
+         $tmpHelperNameSpace = preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data);
+         $helperNameSpace = preg_replace('/class\s+.*?Helper/', 'class ' . $helperClassName , $tmpHelperNameSpace);
+         $file->write($helperNameSpace);
+         return true;
+    }
 
     /**
      * コピーする
@@ -399,6 +428,15 @@ class ThemesService implements ThemesServiceInterface
         }
         BcUtil::changePluginClassName($oldTheme, $newTheme);
         BcUtil::changePluginNameSpace($newTheme);
+
+        $folder = new BcFolder(BASER_THEMES . $newTheme . DS . 'src' . DS . 'View' . DS . 'Helper');
+        $files = $folder->getFiles();
+
+        foreach($files as $file)
+        {
+            $className = basename($file, '.php');
+            $this->changeHelper($newTheme,$className);
+        }
         return true;
     }
 
