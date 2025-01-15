@@ -366,6 +366,7 @@ class ThemesService implements ThemesServiceInterface
      * helperとnamespaceを変更する
      * @checked
      * @notodo
+     * @unitTest
      */
 
      public function changeHelper(string $newTheme, string $className): bool
