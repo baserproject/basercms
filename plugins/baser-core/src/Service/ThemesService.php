@@ -376,9 +376,6 @@ class ThemesService implements ThemesServiceInterface
         $helperClassName = preg_replace('/Helper$/', '', $className) . 'CopyHelper';
         $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $className . '.php';
         $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $helperClassName . '.php';
-        $helperClassName = preg_replace('/Helper$/', '', $className) . 'CopyHelper';
-        $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $className . '.php';
-        $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $helperClassName . '.php';
         if(!file_exists($newPath))
         {
             if(file_exists($oldPath)) {
@@ -387,12 +384,6 @@ class ThemesService implements ThemesServiceInterface
                 return false;
             }
         }
-         $file = new BcFile($newPath);
-         $data = $file->read();
-         $tmpHelperNameSpace = preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data);
-         $helperNameSpace = preg_replace('/class\s+.*?Helper/', 'class ' . $helperClassName , $tmpHelperNameSpace);
-         $file->write($helperNameSpace);
-         return true;
          $file = new BcFile($newPath);
          $data = $file->read();
          $tmpHelperNameSpace = preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data);
