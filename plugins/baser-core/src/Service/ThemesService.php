@@ -438,15 +438,6 @@ class ThemesService implements ThemesServiceInterface
             $className = basename($file, '.php');
             $this->changeHelper($newTheme,$className);
         }
-
-        $folder = new BcFolder(BASER_THEMES . $newTheme . DS . 'src' . DS . 'View' . DS . 'Helper');
-        $files = $folder->getFiles();
-
-        foreach($files as $file)
-        {
-            $className = basename($file, '.php');
-            $this->changeHelper($newTheme,$className);
-        }
         return true;
     }
 
