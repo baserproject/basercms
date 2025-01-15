@@ -280,7 +280,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $themes = [];
         foreach($sites as $site) {
             if ($site->theme) {
-                if (!CorePlugin::isLoaded($site->theme) || !is_dir(CorePlugin::path($site->theme))) continue;
+                if (!CorePlugin::isLoaded($site->theme) && !is_dir(CorePlugin::path($site->theme))) continue;
                 if(in_array($site->theme, $themes)) continue;
                 $themes[] = $site->theme;
             }
