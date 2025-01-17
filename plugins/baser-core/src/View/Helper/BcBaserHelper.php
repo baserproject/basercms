@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcBlog\Model\Entity\BlogPost;
@@ -220,6 +221,7 @@ class BcBaserHelper extends Helper
      * @param array $settings ヘルパ設定値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $View, $settings = [])
     {
@@ -1255,6 +1257,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function pagination($name = 'default', $data = [], $options = [])
     {
@@ -1306,6 +1309,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function scripts()
     {
@@ -1714,6 +1718,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _initPluginBasers()
     {
@@ -1741,6 +1746,7 @@ class BcBaserHelper extends Helper
      * @return mixed|void PluginBaserHelper の戻り値
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __call($method, $params)
     {
@@ -1920,6 +1926,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGlobalMenu($level = 5, $options = [])
     {
@@ -1986,6 +1993,7 @@ class BcBaserHelper extends Helper
      * @return string サイトマップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSitemap($siteId = 0)
     {
@@ -2064,8 +2072,9 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function page($url, $params = [], $options = [])
+    public function page(string $url, array $params = [], array $options = []): void
     {
         if(
             in_array('pageRecursive', $this->getView()->getVars())
@@ -2092,6 +2101,7 @@ class BcBaserHelper extends Helper
             }
         }
 
+        /** @var PagesService $pagesService */
         $pagesService = $this->getService(PagesServiceInterface::class);
         try {
             $page = $pagesService->get($content->entity_id);
@@ -2099,12 +2109,13 @@ class BcBaserHelper extends Helper
             return;
         }
 
-        // urlを取得
-        if (empty($this->getView()->subDir)) {
-            $url = '/../Pages/' . $page->page_template;
+        $pageTemplate = $pagesService->getPageTemplate($page);
+        if (!$this->getView()->getSubDir()) {
+            $url = '/../Pages/' . $pageTemplate;
         } else {
-            $url = '../Pages/' . $page->page_template;
+            $url = '../Pages/' . $pageTemplate;
         }
+
         $page->content = $content;
         $params['page'] = $page;
         $this->element($url, $params, ['subDir' => $options['subDir']]);
@@ -2122,6 +2133,7 @@ class BcBaserHelper extends Helper
      * @return bool 同じ場合には true を返す
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isCurrentUrl($url)
     {
@@ -2234,6 +2246,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function googleAnalytics($data = [], $options = [])
     {
@@ -2316,6 +2329,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSiteSearchForm($data = [], $options = [])
     {
@@ -2472,6 +2486,7 @@ class BcBaserHelper extends Helper
      * 更新情報を出力する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateInfo(): void
     {
@@ -2497,15 +2512,15 @@ class BcBaserHelper extends Helper
      * 関連サイトのリンク一覧を取得
      *
      * @param int $id コンテンツID
+     * @param array $excludeIds 除外するサイトID
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getRelatedSiteLinks($id = null, $excludeIds = [])
+    public function getRelatedSiteLinks(int $id = null, array $excludeIds = []): string
     {
         $options = [];
-        if ($excludeIds) {
-            $options['excludeIds'] = $excludeIds;
-        }
+        if ($excludeIds) $options['excludeIds'] = $excludeIds;
         $links = $this->BcContents->getRelatedSiteLinks($id, $options);
         return $this->getElement('related_site_links', ['links' => $links]);
     }

@@ -33,6 +33,7 @@ class MailContentsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(MailContentsServiceInterface $service)
     {

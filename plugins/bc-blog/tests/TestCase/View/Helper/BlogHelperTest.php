@@ -498,13 +498,14 @@ class BlogHelperTest extends BcTestCase
 
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'https://main.com');
+        Configure::write('BcEnv.host', 'main.com');
         $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $base? ['base' => $base] : []));
         $options = [
             'base' => $useBase
         ];
 
         $result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
-        $this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
+        $this->assertEquals($expected, $result, 'カテゴリ一覧へのURLを正しく取得できません');
 
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }

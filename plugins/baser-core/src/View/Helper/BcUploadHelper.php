@@ -26,6 +26,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use Cake\View\Helper\HtmlHelper;
+use Laminas\Diactoros\UploadedFile;
 use Throwable;
 
 /**
@@ -116,6 +117,7 @@ class BcUploadHelper  extends Helper
         ], $options);
 
         $this->initField($options);
+        unset($options['table']);
 
         $tmp = false;
 
@@ -158,7 +160,7 @@ class BcUploadHelper  extends Helper
             $basePath = '/baser-core/uploads/tmp/';
         }
 
-        if (is_array($value)) {
+        if (is_array($value) || $value instanceof UploadedFile) {
             return false;
         }
 
@@ -263,6 +265,7 @@ class BcUploadHelper  extends Helper
         ], $options);
 
         $this->initField($options);
+        unset($options['table']);
 
         try {
             $settings = $this->getBcUploadSetting();
@@ -481,6 +484,7 @@ class BcUploadHelper  extends Helper
 	 * @return string パス
      * @checked
      * @noTodo
+     * @unitTest
 	 */
 	public function getBasePath($settings, $isTheme = false)
 	{

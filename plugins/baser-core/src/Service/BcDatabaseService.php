@@ -324,11 +324,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadDefaultDataPattern(string $theme, string $pattern, string $dbConfigKeyName = 'default'): bool
     {
-        $plugins = array_merge(
-            ['BaserCore'],
-            Configure::read('BcApp.corePlugins'),
-            BcUtil::getCurrentThemesPlugins()
-        );
+        $folderUtility = new BcFolder(Plugin::path($theme) . 'config' . DS . 'data' . DS . $pattern);
+        $plugins = $folderUtility->getFolders();
 
 		$db = $this->getDataSource($dbConfigKeyName);
 		$db->begin();
@@ -663,14 +660,15 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * データベースシーケンスをアップデートする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function updateSequence()
     {
         $db = ConnectionManager::get('default');
-        if($db->config()['driver'] !== Postgres::class) return true;
+        if ($db->config()['driver'] !== Postgres::class) return true;
         $tables = $db->getSchemaCollection()->listTables();
         $result = true;
-        foreach($tables as $table) {
+        foreach ($tables as $table) {
             if (preg_match('/(^|_)phinxlog$/', $table)) continue;
             $sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
             if (!$db->execute($sql)) $result = false;
@@ -1051,7 +1049,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'schema' => $schema
         ]);
 
-        $eventManager = EventManager::instance();
+        $eventManager = new EventManager();
         $beforeRenderListeners = BcUtil::offEvent($eventManager, 'View.beforeRender');
         $afterRenderListeners = BcUtil::offEvent($eventManager, 'View.afterRender');
 

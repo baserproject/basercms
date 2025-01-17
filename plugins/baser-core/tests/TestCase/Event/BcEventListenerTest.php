@@ -21,6 +21,19 @@ class BcEventListenerTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->BcEventListener = $this->getMockBuilder(BcEventListener::class)
+            ->onlyMethods(['getAction'])
+            ->setMockClassName('TestAction')
+            ->getMock();
+
+        $this->assertEquals('TestAction', $this->BcEventListener->plugin);
+    }
+
+    /**
      * Test getAction
      *
      */
@@ -44,5 +57,51 @@ class BcEventListenerTest extends BcTestCase
         // when isContainController is false
         $result = $this->BcEventListener->getAction(false);
         $this->assertEquals('Index', $result);
+    }
+
+    /**
+     * Test isAction
+     * @param $currentAction
+     * @param $actionToCheck
+     * @param $isContainController
+     * @param $expected
+     * @dataProvider isActionDataProvider
+     */
+    public function testIsAction($currentAction, $actionToCheck, $isContainController, $expected)
+    {
+        $this->BcEventListener = $this->getMockBuilder(BcEventListener::class)
+            ->onlyMethods(['getAction'])
+            ->getMock();
+
+        $this->BcEventListener->method('getAction')
+            ->with($isContainController)
+            ->willReturn($currentAction);
+
+        $result = $this->BcEventListener->isAction($actionToCheck, $isContainController);
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function isActionDataProvider()
+    {
+        return [
+            ['Users.Index', 'Users.Index', true, true],
+            ['Users.Index', 'Users.View', true, false],
+            ['Users.Index', ['Users.View', 'Users.Index'], true, true],
+            ['Users.Index', ['Users.View', 'Users.Edit'], true, false],
+            ['Index', 'Index', false, true],
+            ['Index', 'View', false, false],
+            ['Users.Index', 'Users.Index', true, true],
+        ];
+    }
+
+
+    /**
+     * test implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $this->BcEventListener->events = ['isAction' => ['priority' => 100]];
+        $rs = $this->BcEventListener->implementedEvents();
+        $this->assertNotEmpty($rs);
     }
 }

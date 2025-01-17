@@ -14,8 +14,7 @@ namespace BaserCore\Model\Entity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\Entity as EntityAlias;
+use Cake\ORM\Entity;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -35,7 +34,7 @@ use DateTime;
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  */
-class User extends EntityAlias
+class User extends Entity implements UserInterface
 {
 
     /**
@@ -84,7 +83,7 @@ class User extends EntityAlias
      * @noTodo
      * @unitTest
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         if (empty($this->user_groups)) {
             return false;
@@ -114,6 +113,7 @@ class User extends EntityAlias
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isAddableToAdminGroup(): bool
     {
@@ -186,7 +186,7 @@ class User extends EntityAlias
      * @noTodo
      * @unitTest
      */
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         if (!empty($this->nickname)) {
             return $this->nickname;

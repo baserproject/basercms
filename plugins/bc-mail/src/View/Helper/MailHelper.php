@@ -96,6 +96,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパーに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFormTemplates($siteId = 1)
     {
@@ -126,6 +127,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getMailTemplates($siteId = 1)
     {
@@ -198,6 +200,7 @@ class MailHelper extends Helper
 
     /**
      * メールフォームへのリンクを生成する
+     * $contentsNameはコンテンツ管理上の１階層のみ対応
      *
      * @param string $title リンクのタイトル
      * @param string $contentsName メールフォームのコンテンツ名
@@ -207,15 +210,32 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function link($title, $contentsName, $datas = [], $options = [])
     {
         if ($datas && is_array($datas)) {
             foreach ($datas as $key => $data) {
-                $datas[$key] = base64UrlsafeEncode($data);
+                $datas[$key] = BcUtil::base64UrlsafeEncode($data);
             }
         }
-        $link = array_merge(['plugin' => '', 'controller' => $contentsName, 'action' => 'index'], $datas);
+
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find('all')
+            ->where([
+                'Contents.name' => $contentsName,
+                'Contents.plugin' => 'BcMail',
+                'Contents.type' => 'MailContent',
+                ])
+            ->first();
+
+        $link = [
+            'plugin' => 'BcMail',
+            'controller' => 'Mail',
+            'action' => 'index',
+            'entityId' => $content->entity_id,
+            '?' => $datas,
+        ];
         $this->BcBaser->link($title, $link, $options);
     }
 
@@ -225,6 +245,7 @@ class MailHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getToken()
     {
@@ -237,6 +258,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function token()
     {
@@ -319,6 +341,7 @@ class MailHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishedMailContents(int $siteId)
     {

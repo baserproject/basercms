@@ -34,6 +34,7 @@ class BcMigration extends AbstractMigration
      * @return \Migrations\Table
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function table(string $tableName, array $options = []): Table
     {

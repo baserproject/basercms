@@ -37,6 +37,7 @@ use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * MailFrontService
@@ -247,17 +248,18 @@ class MailFrontService implements MailFrontServiceInterface
                     $sendEmailOptions
                 ]);
             }
-            if ($mailContent->save_info) return;
-            foreach($mailFields as $field) {
-                if ($field->type !== 'file') continue;
-                // 削除フラグをセット
-                $mailMessage->{$field->field_name . '_delete'} = true;
-            }
-            // TODO ucmitz 未検証
-            $mailMessagesTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-            $mailMessagesTable->getFileUploader()->deleteFiles($mailMessage, $mailMessage);
         } catch (\Throwable $e) {
+            if (!$mailContent->save_info) {
+                /** @var MailMessagesService $mailMessagesService */
+                $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+                $mailMessagesService->delete($mailMessage->id);
+            }
             throw $e;
+        }
+        if (!$mailContent->save_info) {
+            /** @var MailMessagesService $mailMessagesService */
+            $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+            $mailMessagesService->delete($mailMessage->id);
         }
     }
 
@@ -425,7 +427,7 @@ class MailFrontService implements MailFrontServiceInterface
         }
         foreach($mailFields as $mailField) {
             if ($mailField->type !== 'file') continue;
-            $tmp_name = Hash::get($postData, $mailField->field_name . '.tmp_name');
+            $tmp_name = Hash::get($_FILES, $mailField->field_name . '.tmp_name');
             if ($tmp_name && !is_uploaded_file($tmp_name)) {
                 return false;
             }

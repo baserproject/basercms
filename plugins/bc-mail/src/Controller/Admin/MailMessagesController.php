@@ -54,6 +54,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -80,6 +81,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {
@@ -107,6 +109,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(
         MailMessagesAdminServiceInterface $service,
@@ -128,6 +131,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(
         MailMessagesServiceInterface $service,
@@ -159,6 +163,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function attachment(MailMessagesServiceInterface $service)
     {
@@ -185,7 +190,6 @@ class MailMessagesController extends MailAdminAppController
         }
         Header(sprintf('Content-type: %s; name=%s', $mineType, $file));
         echo file_get_contents($filePath);
-        exit();
     }
 
     /**
@@ -195,6 +199,7 @@ class MailMessagesController extends MailAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download_csv(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {

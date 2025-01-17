@@ -140,4 +140,30 @@ class PluginsAdminServiceTest extends BcTestCase
         ];
     }
 
+    /**
+     * test getViewVarsForAdd
+     */
+    public function test_getViewVarsForAdd()
+    {
+        $vars = $this->PluginsAdmin->getViewVarsForAdd();
+        $this->assertTrue(isset($vars['isPluginsDirWritable']));
+    }
+
+    /**
+     * test isPluginsDirWritable
+     */
+    public function test_isPluginsDirWritable()
+    {
+        $result = $this->PluginsAdmin->isPluginsDirWritable();
+        $this->assertTrue($result);
+    }
+
+    /**
+     *test whichPhp
+     */
+    public function testWhichPhp()
+    {
+        $this->assertEquals('/usr/local/bin/php', $this->PluginsAdmin->whichPhp());
+    }
+
 }

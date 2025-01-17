@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Event;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcAdminAppView;
 use BcBlog\Event\BcBlogViewEventListener;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
@@ -43,6 +44,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
         parent::setUp();
         $this->Listener = new BcBlogViewEventListener();
         $this->loadFixtureScenario(InitAppScenario::class);
+
     }
 
     /**
@@ -115,6 +117,44 @@ class BcBlogViewEventListenerTest extends BcTestCase
         $this->assertEquals(1, $config['BlogContent1']['siteId']);
         $this->assertEquals('test', $config['BlogContent1']['title']);
         $this->assertEquals('blog-content', $config['BlogContent1']['type']);
+    }
+
+    /**
+     * Test leftOfToolbar
+     *
+     * @return void
+     */
+
+    public function testLeftOfToolbar(): void
+    {
+        //with isAdminSystem false
+        $this->loginAdmin($this->getRequest('/abc'));
+        $View = new BcAdminAppView();
+        ob_start();
+        $this->Listener->leftOfToolbar(new Event('leftOfToolbar', $View));
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
+
+        //with isAdminSystem true
+        $this->loginAdmin($this->getRequest('/'));
+        BlogContentFactory::make([
+            'id' => '1',
+            'template' => 'default',
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'site_id' => 1,
+            'entity_id' => 1,
+        ])->persist();
+        $View = new BcAdminAppView();
+        ob_start();
+        $this->Listener->leftOfToolbar(new Event('leftOfToolbar', $View));
+        $result = ob_get_clean();
+        $this->assertNotNull($result);
     }
 
 }

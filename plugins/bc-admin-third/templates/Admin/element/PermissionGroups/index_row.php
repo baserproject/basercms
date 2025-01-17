@@ -35,9 +35,13 @@ if (!$entity->status) {
   <td class="bca-table-listup__tbody-td">
     <?php echo $entity->amount ?>
   </td>
-  <td class="bca-table-listup__tbody-td">
-    <?php echo $this->BcText->arrayValue($entity->status, [0 => '×', 1 => '〇']) ?>
-  </td>
+<?php
+// TODO こちらのIssueに関連するため一旦コメントアウト、仕様をどうするか検討が必要
+// https://github.com/baserproject/basercms/pull/3384
+?>
+<!--  <td class="bca-table-listup__tbody-td">-->
+<!--    --><?php //echo $this->BcText->arrayValue($entity->status, [0 => '×', 1 => '〇']) ?>
+<!--  </td>-->
   <?php echo $this->BcListTable->dispatchShowRow($entity) ?>
   <td class="bca-table-listup__tbody-td">
     <?php echo $this->BcTime->format($entity->created); ?><br>

@@ -49,6 +49,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BcMail\View\Helper\MailHelper;
 
 /**
  * ブログヘルパー
@@ -128,7 +129,7 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function setContent($blogContentId = null)
+    public function setContent($blogContentId = null, $contentId = null)
     {
         if($this->currentBlogContent) {
             if(is_null($blogContentId)) return;
@@ -147,18 +148,12 @@ class BlogHelper extends Helper
                 throw $e;
             }
             $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-            // 現在のサイトにエイリアスが存在するのであればそちらを優先する
-            $site = $this->_View->getRequest()->getAttribute('currentSite');
-            $content = null;
-            if (!empty($site->id)) {
+
+            if($contentId) {
                 $content = $contentTable->find()->where([
-                    'Contents.entity_id' => $this->currentBlogContent->id,
-                    'Contents.type' => 'BlogContent',
-                    'Contents.alias_id IS NOT' => null,
-                    'Contents.site_id' => $site->id
+                    'Contents.id' => $contentId,
                 ])->first();
-            }
-            if(!$content) {
+            } else {
                 $content = $contentTable->find()->where([
                     'Contents.entity_id' => $this->currentBlogContent->id,
                     'Contents.type' => 'BlogContent',
@@ -454,9 +449,9 @@ class BlogHelper extends Helper
     public function postContent(
         BlogPost $post,
         bool $moreText = true,
-        bool $moreLink = false,
+        mixed $moreLink = false,
         mixed $cut = false,
-        bool $lastText = false
+        mixed $lastText = false
     )
     {
         echo $this->getPostContent($post, $moreText, $moreLink, $cut, $lastText);
@@ -482,7 +477,7 @@ class BlogHelper extends Helper
         bool $moreText = true,
         mixed $moreLink = false,
         mixed $cut = false,
-        bool $lastText = false
+        mixed $lastText = false
     )
     {
         if ($cut) {
@@ -1302,7 +1297,6 @@ class BlogHelper extends Helper
      */
     public function mailFormLink($title, $contentsName, $datas = [], $options = [])
     {
-        App::uses('MailHelper', 'BcMail.View/Helper');
         $MailHelper = new MailHelper($this->_View);
         $MailHelper->link($title, $contentsName, $datas, $options);
     }
@@ -1744,18 +1738,20 @@ class BlogHelper extends Helper
             $data = ['posts' => $blogPosts];
         }
 
-        if(is_array($contentsName)) {
-            $blogContent = $blogContentsService->findByName($contentsName[0]);
-        } else {
-            $blogContent = $blogContentsService->findByName($contentsName);
-        }
-
         $currentBlogContentId = null;
         if($this->currentBlogContent) {
             $currentBlogContentId = $this->currentBlogContent->id;
         }
-        if (isset($blogContent->id))
-            $this->setContent($blogContent->id);
+
+        if(!empty($options['contentUrl'])) {
+            $blogContent = $blogContentsService->findByUrl($options['contentUrl'][0]);
+        } elseif(!empty($options['contentId'])) {
+            $blogContent = $blogContentsService->findByContentId($options['contentId'][0]);
+        }
+        if (isset($blogContent->id)) {
+            $this->setContent($blogContent->id, $blogContent->content->id);
+        }
+
         $this->BcBaser->element($template, $data);
 
         if($currentBlogContentId) {

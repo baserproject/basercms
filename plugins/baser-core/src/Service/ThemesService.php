@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcSiteConfig;
@@ -22,6 +23,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcZip;
 use BcMail\Service\MailMessagesServiceInterface;
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
@@ -30,6 +32,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Laminas\Diactoros\UploadedFile;
+use BaserCore\Utility\BcFile;
 
 /**
  * ThemesService
@@ -285,6 +288,12 @@ class ThemesService implements ThemesServiceInterface
      */
     public function installThemesPlugins(string $theme)
     {
+        $paths = App::path('plugins');
+        $path = BcUtil::getPluginPath($theme) . 'plugins' . DS;
+        if(!is_dir($path)) return;
+        if(!in_array($path, $paths)) {
+            Configure::write('App.paths.plugins', array_merge($paths, [$path]));
+        }
         /* @var PluginsService $pluginsService */
         $pluginsService = $this->getService(PluginsServiceInterface::class);
         $plugins = BcUtil::getThemesPlugins($theme);
@@ -353,6 +362,35 @@ class ThemesService implements ThemesServiceInterface
 
         return $result;
     }
+    /**
+     * helperとnamespaceを変更する
+     * @checked
+     * @notodo
+     * @unitTest
+     */
+
+     public function changeHelper(string $newTheme, string $className): bool
+    {
+        $pluginPath = BcUtil::getPluginPath($newTheme);
+        if (!$pluginPath) return false;
+        $helperClassName = preg_replace('/Helper$/', '', $className) . 'CopyHelper';
+        $oldPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $className . '.php';
+        $newPath = $pluginPath . 'src'. DS .'View' . DS .'Helper' . DS . $helperClassName . '.php';
+        if(!file_exists($newPath))
+        {
+            if(file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+            } else {
+                return false;
+            }
+        }
+         $file = new BcFile($newPath);
+         $data = $file->read();
+         $tmpHelperNameSpace = preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . '\View\Helper;', $data);
+         $helperNameSpace = preg_replace('/class\s+.*?Helper/', 'class ' . $helperClassName , $tmpHelperNameSpace);
+         $file->write($helperNameSpace);
+         return true;
+    }
 
     /**
      * コピーする
@@ -391,6 +429,15 @@ class ThemesService implements ThemesServiceInterface
         }
         BcUtil::changePluginClassName($oldTheme, $newTheme);
         BcUtil::changePluginNameSpace($newTheme);
+
+        $folder = new BcFolder(BASER_THEMES . $newTheme . DS . 'src' . DS . 'View' . DS . 'Helper');
+        $files = $folder->getFiles();
+
+        foreach($files as $file)
+        {
+            $className = basename($file, '.php');
+            $this->changeHelper($newTheme,$className);
+        }
         return true;
     }
 
@@ -535,12 +582,15 @@ class ThemesService implements ThemesServiceInterface
         $tables = $db->getSchemaCollection()->listTables();
         $tableList = $dbService->getAppTableList();
         if (!isset($tableList[$plugin])) return true;
+
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
         $result = true;
         foreach($tables as $table) {
+            $baredTable = preg_replace('/^' . $prefix . '/', '', $table);
             if (in_array($table, $tableList[$plugin])) {
                 if (in_array($table, $exclude)) continue;
                 if (!$dbService->writeCsv($table, [
-                    'path' => $path . $table . '.csv',
+                    'path' => $path . $baredTable . '.csv',
                     'encoding' => 'UTF-8',
                     'init' => false,
                     'plugin' => $plugin

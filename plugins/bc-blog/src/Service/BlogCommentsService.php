@@ -153,7 +153,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @param array $postData
      * @return EntityInterface
      * @checked
-     * @unitTest 
+     * @unitTest
      */
     public function add(int $blogContentId, int $blogPostId, array $postData)
     {
@@ -213,6 +213,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @throws \Throwable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sendCommentToAdmin(EntityInterface $entity)
     {

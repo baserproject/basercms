@@ -31,6 +31,7 @@ class UploadsController extends AppController
      * @return \Cake\Http\Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tmp()
     {
@@ -80,7 +81,7 @@ class UploadsController extends AppController
         if (!$size) {
             $data = base64_decode($session->read('Upload.' . $sessioName . '.data'));
         } else {
-            if (is_dir(TMP . 'uploads')) {
+            if (!is_dir(TMP . 'uploads')) {
                 mkdir(TMP . 'uploads');
                 chmod(TMP . 'uploads', 0777);
             }

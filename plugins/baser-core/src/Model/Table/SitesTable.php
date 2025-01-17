@@ -212,7 +212,7 @@ class SitesTable extends AppTable
      */
     public function getPublishedAll(): ResultSetInterface
     {
-        return $this->find()->where(['status' => true])->all();
+        return $this->find()->where(['Sites.status' => true])->all();
     }
 
     /**
@@ -236,7 +236,7 @@ class SitesTable extends AppTable
 
         $conditions = [];
         if (!is_null($options['status'])) {
-            $conditions = ['status' => $options['status']];
+            $conditions = ['Sites.status' => $options['status']];
         }
 
         if (!is_null($mainSiteId)) {
@@ -467,10 +467,14 @@ class SitesTable extends AppTable
         $url = preg_replace('/(^\/|\/$)/', '', $url);
         $urlAry = explode('/', $url);
         $domain = BcUtil::getCurrentDomain();
+        $mainDomain = BcUtil::getMainDomain();
         $subDomain = BcUtil::getSubDomain();
+        $isAnotherDomain = ($domain !== $mainDomain);
         $where = [];
         for($i = count($urlAry); $i > 0; $i--) {
-            $where['or'][] = ['alias' => implode('/', $urlAry)];
+            if(!$isAnotherDomain) {
+                $where['or'][] = ['alias' => implode('/', $urlAry)];
+            }
             if ($subDomain) {
                 $where['or'][] = [
                     'domain_type' => 1,

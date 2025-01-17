@@ -113,7 +113,6 @@ class BcComposerTest extends BcTestCase
      */
     public function test_require()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $orgPath = ROOT . DS . 'composer.json';
         $backupPath = ROOT . DS . 'composer.json.bak';
         $orgLockPath = ROOT . DS . 'composer.lock';
@@ -124,39 +123,40 @@ class BcComposerTest extends BcTestCase
         copy($orgLockPath, $backupLockPath);
 
         // replace を削除
-        // baserCMS5.0.0が、CakePHP4.4.* に依存するため、一旦、CakePHP4.4.* に戻す
+        // baserCMS5.1系が、CakePHP5.0.10 に依存するため、一旦、CakePHP5.0.10 に戻す
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "4.5.*"', '"cakephp/cakephp": "4.4.*"' , $data);
-        $data = preg_replace($regex, '' , $data);
+        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
+        BcComposer::deleteReplace();
         BcComposer::update();
 
         // インストール
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.0');
+        $result = BcComposer::require('baser-core', '5.1.1');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.1"'));
 
         // アップデート
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.1');
+        $result = BcComposer::require('baser-core', '5.1.2');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.1"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.2"'));
 
         // ダウングレード
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.0');
+        $result = BcComposer::require('baser-core', '5.1.1');
         $this->assertEquals(0, $result['code']);
         $file = new BcFile($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.1.1"'));
 
         // エラー
         $result = BcComposer::require('bc-content-link', '100.0.0');
@@ -204,7 +204,7 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
         $folder->delete();
-        BcComposer::update();
+        BcComposer::install();
     }
 
     /**
@@ -234,36 +234,52 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test selfUpdate
+     */
+    public function testSelfUpdate()
+    {
+        /**
+         * 次のエラーが発生するため、テストをスキップ
+         * The repository at "/var/www/html" does not have the correct ownership and git refuses to use it:
+         * 次のコマンドを実行するように調整しても解決しなかった
+         * git config --global --add safe.directory /var/www/html/
+         */
+        $this->markTestIncomplete('このメソッドを利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要');
+        BcComposer::setup();
+        $rs = BcComposer::selfUpdate();
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+        $this->assertMatchesRegularExpression("/(You are already using the latest available Composer version|Upgrading to version)/", $rs['out'][1]);
+    }
+
+    /**
      * test setupComposerForDistribution
      */
     public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $composer = TMP_TESTS . 'composer.json';
-        copy(ROOT . DS . 'composer.json', $composer);
+        $srcComposerJsonPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.json';
+        $srcComposerLockPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.lock';
+        $composerJson = TMP_TESTS . 'composer.json';
+        $composerLock = TMP_TESTS . 'composer.lock';
+        copy($srcComposerJsonPath, $composerJson);
+        copy($srcComposerLockPath, $composerLock);
 
         // 実行
         BcComposer::setup('', TMP_TESTS);
-
-        // 5.1.0 のテストの場合、5.1.1 との依存関係の問題があるためライブラリを調整
-        // このままでは、今後のリリースのタイミングでまた依存関係が変わる可能性があるため
-        // 特定のバージョンの composer.json を別途用意しておいた方が良さそう
-        // >>>
-        BcComposer::require('josegonzalez/dotenv', '^3.2');
-        sleep(1);
-        BcComposer::require('mobiledetect/mobiledetectlib', '^4.8.03');
-        // <<<
-
-        BcComposer::setupComposerForDistribution('5.1.0');
-        $file = new BcFile($composer);
+        BcComposer::setupComposerForDistribution('5.1.1');
+        $file = new BcFile($composerJson);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
-        $this->assertFileExists(TMP_TESTS . 'composer.lock');
+        $file = new BcFile($composerLock);
+        $data = $file->read();
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core"'));
 
         // バックアップをリストア
-        unlink($composer);
-        unlink(TMP_TESTS . 'composer.lock');
+        unlink($composerJson);
+        unlink($composerLock);
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
     }
 
@@ -302,4 +318,43 @@ class BcComposerTest extends BcTestCase
         ];
     }
 
+    /**
+     * test deleteReplace
+     * @return void
+     */
+    public function testDeleteReplace()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+        BcComposer::setup();
+        BcComposer::deleteReplace();
+        $file = new BcFile($orgPath);
+        $data = $file->read();
+        $this->assertFalse(strpos($data, '"replace": {'));
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+    }
+
+    /**
+     * test execCommand
+     */
+    public function testExecCommand()
+    {
+        /**
+         * 次のエラーが発生するため、テストをスキップ
+         * The repository at "/var/www/html" does not have the correct ownership and git refuses to use it:
+         * 次のコマンドを実行するように調整しても解決しなかった
+         * git config --global --add safe.directory /var/www/html/
+         */
+        $this->markTestIncomplete('このメソッドを利用すると全体のテストが失敗してしまうためスキップ。対応方法検討要');
+        BcComposer::setup();
+        $rs = BcComposer::execCommand('update --with-all-dependencies --ignore-platform-req=ext-xdebug');
+
+        $this->assertEquals(0, $rs['code']);
+        $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+    }
 }

@@ -34,6 +34,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {
@@ -49,6 +50,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterRender(Event $event)
     {
@@ -64,6 +66,7 @@ class BcShortCodeEventListener implements EventListenerInterface
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execShortCode(View $view)
     {
@@ -94,7 +97,7 @@ class BcShortCodeEventListener implements EventListenerInterface
                             }
                         }
 
-                        if (isset($view->{$func[0]})) {
+                        if ($view->helpers()->{$func[0]}) {
                             $Helper = $view->{$func[0]};
                         } else {
                             $className = $plugin . "\\" . "View\\Helper\\" . $func[0] . 'Helper';

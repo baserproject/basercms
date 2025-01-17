@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 use ArrayObject;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
+use BaserCore\Utility\BcUtil;
+use Cake\Database\Connection;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
@@ -49,6 +51,7 @@ class BcContentsBehaviorTest extends BcTestCase
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcContents');
         $this->contentService = new ContentsService();
+        $this->BcContentsBehavior = new BcContentsBehavior($this->table);
     }
 
     /**
@@ -198,6 +201,59 @@ class BcContentsBehaviorTest extends BcTestCase
         ]);
         $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->all()->isEmpty());
 
+    }
+
+    /**
+     * test onAlias
+     */
+    public function testOnAlias()
+    {
+        $this->BcContentsBehavior->onAlias();
+
+        $conditions = $this->BcContentsBehavior->Contents->getConditions();
+
+        $this->assertArrayHasKey('Contents.type', $conditions);
+        $this->assertEquals('ContentFolder', $conditions['Contents.type']);
+    }
+
+    /**
+     * test offAlias
+     *
+     */
+    public function testOffAlias()
+    {
+        $this->BcContentsBehavior->offAlias();
+
+        $conditions = $this->BcContentsBehavior->Contents->getConditions();
+
+        $this->assertArrayHasKey('Contents.type', $conditions);
+        $this->assertArrayHasKey('Contents.alias_id IS', $conditions);
+
+        $this->assertNull($conditions['Contents.alias_id IS']);
+        $this->assertEquals('ContentFolder', $conditions['Contents.type']);
+    }
+
+    /**
+     * test getType
+     */
+    public function testGetType()
+    {
+        //prefix = ""
+        $this->table->setTable('unittest_baser_contents');
+        $rs = $this->BcContentsBehavior->getType();
+        //戻り確認
+        $this->assertEquals('UnittestBaserContent', $rs);
+
+        //prefix = "unittest_"
+        $dbConfig = BcUtil::getCurrentDbConfig();
+        $dbConfig['prefix'] = 'unittest_';
+        $connection = new Connection($dbConfig);
+        $this->table->setConnection($connection);
+        $this->table->setTable('unittest_baser_contents');
+
+        $rs = $this->BcContentsBehavior->getType();
+        //戻り確認
+        $this->assertEquals('BaserContent', $rs);
     }
 
 }

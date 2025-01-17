@@ -160,6 +160,7 @@ class BcTestCase extends TestCase
      * クラスメソッド名を取得する
      * @checked
      * @noTodo
+     * @unitTest テストができないのでスキップ
      */
     public function classMethod()
     {

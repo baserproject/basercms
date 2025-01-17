@@ -62,6 +62,7 @@ abstract class BcAbstractDetector
      * @param array $config 設定の配列
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($name, array $config)
     {
@@ -77,6 +78,7 @@ abstract class BcAbstractDetector
      * @return BcAbstractDetector|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function find($name)
     {
@@ -93,6 +95,7 @@ abstract class BcAbstractDetector
      * @return BcAbstractDetector[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function findAll()
     {
@@ -116,6 +119,7 @@ abstract class BcAbstractDetector
      * @return BcAbstractDetector|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function findCurrent()
     {

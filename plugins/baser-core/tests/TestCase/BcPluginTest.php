@@ -11,28 +11,24 @@
 
 namespace BaserCore\Test\TestCase;
 
+use App\Application;
 use BaserCore\BcPlugin;
 use BaserCore\Service\SitesService;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Factory\PluginFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\PluginsScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UserScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -56,14 +52,6 @@ class BcPluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);
-        $this->loadFixtureScenario(PluginsScenario::class);
         $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
     }
 
@@ -84,6 +72,16 @@ class BcPluginTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->BcPlugin->migrations);
+    }
+
+    /**
+     * test bootstrap
+     */
+    public function testBootstrap()
+    {
+        $app = new Application(CONFIG);
+        $this->BcPlugin->bootstrap($app);
+        $this->assertTrue(Configure::isConfigured('baser'));
     }
 
     /**
@@ -137,6 +135,10 @@ class BcPluginTest extends BcTestCase
      */
     public function testRoutes()
     {
+        SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
+        ContentFactory::make( ['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+        $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
         $routes = Router::createRouteBuilder('/');
         $this->BcPlugin->routes($routes);
 
@@ -546,6 +548,22 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
      */
     public function test_applyAsTheme()
     {
+        SiteFactory::make(['id' => '1', 'theme' => 'BcFront', 'main_site_id' => null])->persist();
+        ContentFactory::make([
+                'id' => 1,
+                'plugin' => 'BaserCore',
+                'type' => 'ContentFolder',
+                'entity_id' => 1,
+                'site_id' => 1,
+                'parent_id' => 0,
+                'lft' => 1,
+                'rght' => 2,
+                'level' => 0,
+                'status' => true,
+                'site_root' => true,
+            ])->persist();
+        ContentFolderFactory::make(['id' => '1', 'folder_template' => 'baserCMSサンプル'])->persist();
+
         $targetId = 1;
         $currentTheme = 'BcFront';
         $SiteService = new SitesService();
@@ -559,10 +577,40 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
     }
 
     /**
+     * test frontPageRouting
+     */
+    public function testFrontPageRouting()
+    {
+        // 管理画面のプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/baser/admin/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+
+        // フロントエンドのプラグイン用ルーティング
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/bc-blog/blog_contents/edit/1'));
+        $this->assertEquals('BlogContents', $result['controller']);
+    }
+
+    /**
      * test Rest API
      */
     public function testRestApi()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make(
+            [
+                'id' => 1,
+                'plugin' => 'BaserCore',
+                'type' => 'ContentFolder',
+                'site_id' => 1,
+                'parent_id' => 0,
+                'lft' => 1,
+                'rght' => 2,
+            ]
+        )->persist();
         Router::resetRoutes();
         // 件数確認
         PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
@@ -614,6 +662,44 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $this->get('/baser/api/admin/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(0, count($result->pages));
+    }
+
+    /**
+     * test contentsRoutingForReverse
+     */
+    public function testContentsRoutingForReverse()
+    {
+        SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+        $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
+        $routes = Router::createRouteBuilder('/');
+        $this->BcPlugin->routes($routes);
+        $this->getRequest('/');
+        $this->assertEquals('/news/', Router::url([
+            'plugin' => 'BcBlog',
+            'controller' => 'Blog',
+            'action' => 'index',
+            'entityId' => 31
+        ]));
+    }
+
+    /**
+     * test siteRouting
+     */
+    public function testSiteRouting()
+    {
+        SiteFactory::make(['id' => '1', 'main_site_id' => null])->persist();
+        SiteFactory::make(['id' => '2', 'main_site_id' => 1, 'alias' => 's'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 31, 'url' => '/news/', 'site_id' => 1])->persist();
+
+        Router::reload();
+        $routes = Router::createRouteBuilder('');
+        $_SERVER['REQUEST_URI'] = '/s/';
+        $this->BcPlugin->clearCurrentSite();
+        $this->BcPlugin->routes($routes);
+        $result = Router::parseRequest($this->getRequest('/s/bc-blog/blog_contents/index'));
+        $this->assertEquals('BlogContents', $result['controller']);
     }
 
 }

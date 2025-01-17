@@ -19,6 +19,7 @@ use BaserCore\Service\Front\BcFrontContentsService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
+use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
@@ -28,9 +29,9 @@ use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\Paging\PaginatedResultSet;
-use Cake\Datasource\ResultSetInterface;
+use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * CustomContentFrontService
@@ -114,13 +115,13 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * 一覧用の View 変数を取得する
      *
      * @param EntityInterface $customContent
-     * @param PaginatedResultSet $customEntries
+     * @param PaginatedInterface $customEntries
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(EntityInterface $customContent, PaginatedResultSet $customEntries): array
+    public function getViewVarsForIndex(EntityInterface $customContent, PaginatedInterface $customEntries): array
     {
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
@@ -238,11 +239,23 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         $customContent = $this->ContentsService->get($request->getParam('entityId'));
         $controller->set($this->getViewVarsForView($customContent, $entryId, true));
         $customEntry = $controller->viewBuilder()->getVar('customEntry');
-        $entity = $this->EntriesService->CustomEntries->patchEntity(
-            $customEntry?? $this->EntriesService->CustomEntries->newEmptyEntity(),
-            $request->getData()
+
+        BcCcFileUtil::setupUploader($customContent->custom_table_id);
+
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
+
+        $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
+        $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
+
+        $entity = $customEntriesTable->patchEntity(
+            $customEntry ?? $customEntriesTable->newEmptyEntity(),
+            $postEntity
         );
-        $entity = $this->EntriesService->CustomEntries->decodeRow($entity);
+
+        BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
+
+        $entity = $customEntriesTable->decodeRow($entity);
         $controller->set(['customEntry' => $entity]);
 
         // テンプレートの変更

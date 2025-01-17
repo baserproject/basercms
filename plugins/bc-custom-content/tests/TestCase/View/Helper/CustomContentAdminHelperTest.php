@@ -4,15 +4,18 @@ namespace BcCustomContent\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\View\BlogAdminAppView;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomEntryFactory;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\View\Helper\CustomContentAdminHelper;
+use Cake\View\Form\EntityContext;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -209,6 +212,26 @@ class CustomContentAdminHelperTest extends BcTestCase
         $rs = $this->CustomContentAdminHelper->required($customLink);
         $this->assertEquals("<span class=\"bca-label\" data-bca-label-type=\"required\">必須</span>\n", $rs);
     }
+
+    /**
+     * test control
+     */
+    public function testControl()
+    {
+        $customLink = CustomLinkFactory::make([
+            'name' => 'test custom link',
+            'title' => null,
+            'display_admin_list' => 1,
+            'status' => 1,
+            'custom_field' => [
+                'type' => 'BcCcTextarea',
+            ],
+            'parent_id' => 1,
+        ])->getEntity();
+        $rs = $this->CustomContentAdminHelper->control($customLink);
+        $this->assertTextContains('<textarea name="test custom link" class="bca-textarea__textarea" id="test-custom-link">',$rs);
+    }
+
     /**
      * test attention
      */
@@ -229,9 +252,16 @@ class CustomContentAdminHelperTest extends BcTestCase
     /*
      * test preview
      */
-    public function test_preview()
+    public function testPreview()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
+        $customField = CustomFieldFactory::make([
+            'name' => 'test custom field',
+            'type' => 'BcCcDate',
+            'status' => 1,
+        ])->getEntity();
+
+        $rs = $this->CustomContentAdminHelper->preview('preview.BcCcDate', 'BcCcDate', $customField);
+        $this->assertTextContains('<span class="bca-textbox"><input type="text" name="preview[BcCcDate]" autocomplete="off"', $rs);
     }
 
     /*
@@ -461,5 +491,44 @@ class CustomContentAdminHelperTest extends BcTestCase
         $currentEntry = new CustomEntry(['id' => 3, 'level' => 1]);
         $result = $this->CustomContentAdminHelper->isEnabledMoveDownEntry($entries, $currentEntry);
         $this->assertFalse($result);
+    }
+
+    /**
+     * test error
+     */
+    public function testError()
+    {
+        //準備
+        $customLink = CustomLinkFactory::make(['name' => ''])->getEntity();
+        $customLinkParent = CustomLinkFactory::make(['group_valid' => true])->getEntity();
+        $customLink->setError('name', ['_empty' => 'フィールド名を入力してください。']);
+        $this->CustomContentAdminHelper->BcAdminForm->context(new EntityContext(['entity' => $customLink, 'table' => 'custom_links']));
+
+        //テスト
+        $rs = $this->CustomContentAdminHelper->error($customLink, ['fieldName' => 'name']);
+        $this->assertEquals('<div class="error-message" id="name-error">フィールド名を入力してください。</div>', $rs);
+
+        //異常系 $options['parent']->group_valid = true: return ''
+        $rs = $this->CustomContentAdminHelper->error($customLink, ['parent' => $customLinkParent]);
+        $this->assertEquals('', $rs);
+    }
+
+    /**
+     * test displayPluginMeta
+     */
+    public function testDisplayPluginMeta()
+    {
+        //準備
+        $view = new BlogAdminAppView($this->getRequest('/baser/admin'));
+        $view->loadHelper('BcAdminForm');
+        $this->CustomContentAdminHelper = new CustomContentAdminHelper($view);
+
+        //テスト
+        ob_start();
+        $this->CustomContentAdminHelper->displayPluginMeta();
+        $output = ob_get_clean();
+
+        //戻り値を確認
+        $this->assertTextContains('<label for="">自動補完郵便番号設定</label> ', $output);
     }
 }

@@ -75,7 +75,7 @@ class AppController extends BaseController
         parent::__construct($request, $response, $name, $eventManager, $components);
 
         // CSRFトークンの場合は高速化のためここで処理を終了
-        if(!$request->is('requestview')) return;
+        if(!BcUtil::isConsole() && !$request->is('requestview')) return;
 
         $request->getSession()->start();
 
@@ -162,7 +162,7 @@ class AppController extends BaseController
             return;
         }
 
-        if (!$this->checkPermission()) {
+        if ($this->requirePermission($this->getRequest()) && !$this->checkPermission()) {
             $prefix = BcUtil::getRequestPrefix($this->getRequest());
             if ($prefix === 'Api/Admin') {
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
@@ -188,6 +188,25 @@ class AppController extends BaseController
     }
 
     /**
+     * パーミッションが必要かどうかを確認する
+     *
+     * デフォルトは true であるが、設定ファイルで明示的に false に
+     * 設定されている場合は false となる。
+     *
+     * @param ServerRequest $request
+     * @return bool
+     */
+    public function requirePermission(ServerRequest $request): bool
+    {
+        $prefix = BcUtil::getRequestPrefix($request);
+        $requirePermission = Configure::read("BcPrefixAuth.{$prefix}.requirePermission");
+        if($requirePermission !== false) {
+            $requirePermission = true;
+        }
+        return $requirePermission;
+    }
+
+    /**
      * アクセスルールの権限を確認する
      *
      * 現在アクセスしているURLについて権限があるかどうかを確認する。
@@ -195,6 +214,7 @@ class AppController extends BaseController
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     private function checkPermission()
     {
@@ -510,6 +530,7 @@ class AppController extends BaseController
      * @deprecated since 5.0.5 このメソッドは非推奨です。
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function ajaxError(int $errorNo = 500, $message = '')
     {

@@ -46,6 +46,7 @@ class BcZip
      * BcZip constructor.
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -62,6 +63,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function extract($source, $target)
     {
@@ -91,6 +93,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _extractByPhpLib($source, $target)
     {
@@ -112,6 +115,7 @@ class BcZip
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _extractByCommand($source, $target)
     {
@@ -122,7 +126,7 @@ class BcZip
         $unzipCommand = $return1[0];
         $target = preg_replace('/\/$/', '', $target);
         $command = $unzipCommand . ' -o ' . $this->_escapePath($source) . ' -d ' . $this->_escapePath($target);
-        exec($command, $return2);
+        exec($command . ' 2>&1', $return2);
         if (!empty($return2[2])) {
             $path = str_replace('  inflating: ' . $target, '', $return2[2]);
             $path = preg_replace('/^\//', '', $path);
@@ -143,6 +147,7 @@ class BcZip
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _escapePath($path)
     {
@@ -161,6 +166,7 @@ class BcZip
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create($sorce, $dist)
     {
@@ -179,6 +185,7 @@ class BcZip
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function zipSub($za, $path, $parentPath = '')
     {

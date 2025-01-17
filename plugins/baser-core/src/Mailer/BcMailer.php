@@ -48,6 +48,7 @@ class BcMailer extends Mailer
      * @param null $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($config = null)
     {
@@ -58,9 +59,13 @@ class BcMailer extends Mailer
         if ($site) $this->viewBuilder()
             ->setTheme($site->theme)
             ->setClassName('BaserCore.BcFrontEmail');
-        $this->setFrom([
-            BcSiteConfig::get('email') => BcSiteConfig::get('formal_name')
-        ]);
+        $adminMail = BcSiteConfig::get('email');
+        if (strpos($adminMail, ',') !== false) {
+            [$fromAdmin] = explode(',', $adminMail);
+        } else {
+            $fromAdmin = $adminMail;
+        }
+        $this->setFrom($fromAdmin, BcSiteConfig::get('formal_name'));
     }
 
     /**
@@ -68,6 +73,7 @@ class BcMailer extends Mailer
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setEmailTransport()
     {
@@ -105,6 +111,7 @@ class BcMailer extends Mailer
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPlugin(): ?string
     {
@@ -119,6 +126,7 @@ class BcMailer extends Mailer
      * @psalm-return array{headers: string, message: string}
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deliver(string $content = ''): array
     {

@@ -92,10 +92,10 @@ class BlogController extends BlogFrontAppController
         $blogContentId = (int)$currentContent?->entity_id;
 
         /* @var BlogContent $blogContent */
-        $blogContent = $blogContentsService->get(
-            $blogContentId,
-            ['status' => 'publish']
-        );
+        $blogContent = $blogContentsService->get($blogContentId, [
+            'status' => 'publish',
+            'contentId' => $currentContent?->id
+        ]);
 
         if ($this->getRequest()->is('rss')) {
             $listCount = $blogContent->feed_count;
@@ -371,12 +371,12 @@ class BlogController extends BlogFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
         $this->viewBuilder()->disableAutoLayout();
         $service->render($this->getRequest(), $token);
-        exit();
     }
 
 }

@@ -128,6 +128,7 @@ class BcAdminAppController extends AppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function __updateFirstAccess()
     {

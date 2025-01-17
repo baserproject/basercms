@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -145,6 +146,28 @@ class AppControllerTest extends BcTestCase
     {
         $this->AppController->beforeRender(new Event('beforeRender'));
         $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getVars()['currentAdminTheme']);
+    }
+
+    /**
+     * test checkPermission
+     */
+    public function testCheckPermission()
+    {
+        //準備
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
+        $permissionsService->addCheck("/fuga", false);
+        $permissionsService->addCheck("/piyo", true);
+
+        Configure::write('BcApp.adminGroupId', 2);
+        $this->loginAdmin($this->getRequest('/'));
+
+        //result = false test
+        $this->AppController->setRequest($this->getRequest('/fuga'));
+        $this->assertFalse($this->execPrivateMethod($this->AppController, 'checkPermission', []));
+
+        //result = true test
+        $this->AppController->setRequest($this->getRequest('/piyo'));
+        $this->assertTrue($this->execPrivateMethod($this->AppController, 'checkPermission', []));
     }
 
     /**
@@ -343,6 +366,53 @@ class AppControllerTest extends BcTestCase
             ['dblogs testSaveDblog message guest', null],
             ['dblogs testSaveDblog message login', 1]
         ];
+    }
+
+    /**
+     * Test ajaxError
+     * @param $errorNo
+     * @param $message
+     * @param $expectedOutput
+     * @dataProvider ajaxErrorDataProvider
+     */
+    public function testAjaxError($errorNo, $message, $expectedOutput)
+    {
+        ob_start();
+        $this->AppController->ajaxError($errorNo, $message);
+        $output = ob_get_clean();
+
+        $response = $this->AppController->getResponse();
+
+        $this->assertEquals($errorNo, $response->getStatusCode());
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public static function ajaxErrorDataProvider()
+    {
+        return [
+            [400, 'This is an error message.', "This is an error message."],
+            [404, ['Error 1', 'Error 2'], "Error 1<br>Error 2"],
+            [500, [['Error 1a', 'Error 1b'], 'Error 2'], "Error 1a<br />Error 1b<br>Error 2"],
+            [500, '', '']
+        ];
+    }
+
+    /**
+     * Test requirePermission
+     */
+    public function testRequirePermission()
+    {
+        $request = $this->getRequest('/baser/admin/baser-core/users/');
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        $request = $request->withParam('prefix', 'Mypage');
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        Configure::write('BcPrefixAuth.Mypage.requirePermission', true);
+        $this->assertTrue($this->AppController->requirePermission($request));
+
+        Configure::write('BcPrefixAuth.Mypage.requirePermission', false);
+        $this->assertFalse($this->AppController->requirePermission($request));
     }
 
 }

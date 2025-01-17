@@ -19,7 +19,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcSearchBoxHelper;
 use Cake\Event\Event;
-use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -43,8 +42,7 @@ class BcSearchBoxHelperTest extends BcTestCase
         $this->loadFixtureScenario(ContentsScenario::class);
         $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(PagesScenario::class);
-        $BcAdminAppView = new BcAdminAppView();
-        $BcAdminAppView->setRequest($this->getRequest()->withParam('action', 'index'));
+        $BcAdminAppView = new BcAdminAppView($this->getRequest()->withParam('action', 'index'));
         $this->BcSearchBoxHelper = new BcSearchBoxHelper($BcAdminAppView);
     }
 

@@ -58,4 +58,25 @@ class BcApiUtil
             ),
         ];
     }
+
+    /**
+     * JWTキーを作成する
+     *
+     * @return bool
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public static function createJwt(): bool
+    {
+        $command = "openssl genrsa -out " . CONFIG . "jwt.key 1024 2>&1";
+        exec($command, $out, $code);
+        if($code === 0) {
+            $command = "openssl rsa -in " . CONFIG . "jwt.key -outform PEM -pubout -out " . CONFIG . "jwt.pem 2>&1";
+            exec($command, $out, $code);
+            return ($code === 0);
+        } else {
+            return false;
+        }
+    }
 }

@@ -33,6 +33,7 @@ class UsersController extends BcFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

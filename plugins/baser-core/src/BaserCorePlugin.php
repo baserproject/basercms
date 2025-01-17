@@ -17,6 +17,7 @@ use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Authenticator\SessionAuthenticator;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Command\ComposerCommand;
+use BaserCore\Command\CreateJwtCommand;
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\Command\SetupInstallCommand;
 use BaserCore\Command\SetupTestCommand;
@@ -42,7 +43,6 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Database\Exception\MissingConnectionException;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
-use Cake\Http\Middleware\HttpsEnforcerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
 use Cake\I18n\I18n;
@@ -151,7 +151,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         /**
-         * プラグインロード
+         * テーマ・プラグインロード
          */
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
@@ -164,19 +164,19 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
-        $app->addPlugin('Authentication');
-        $app->addPlugin('Migrations');
 
-        $this->addTheme($app);
-
-        $plugins = BcUtil::getEnablePlugins();
-        if ($plugins) {
-            foreach($plugins as $plugin) {
-                if (BcUtil::includePluginClass($plugin->name)) {
-                    $this->loadPlugin($app, $plugin->name, $plugin->priority);
-                }
-            }
-        }
+        // 利用可能なテーマを取得
+        $themes = $this->getAvailableThemes();
+        // プラグインを追加する前にテーマが保有するプラグインのパスをセット
+        $this->setupThemePlugin($themes);
+        // テーマが保有するプラグインも含めてプラグインを読み込む
+        $this->addPlugin($app);
+        // ======================================================
+        // テーマはプラグインの後に読み込む
+        // テーマもプラグインとして扱う場合があるため、
+        // その場合に、テーマでプラグインの設定等を上書きできるようにする
+        // ======================================================
+        $this->addTheme($app, $themes);
 
         /**
          * デフォルトテンプレートを設定する
@@ -195,47 +195,97 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     }
 
     /**
+     * プラグインを追加する
+     * @param PluginApplicationInterface $app
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function addPlugin(PluginApplicationInterface $app): void
+    {
+        $app->addPlugin('Authentication');
+        $app->addPlugin('Migrations');
+
+        $plugins = BcUtil::getEnablePlugins();
+        if(!$plugins) return;
+        foreach($plugins as $plugin) {
+            if (!BcUtil::includePluginClass($plugin->name)) continue;
+            $this->loadPlugin($app, $plugin->name, $plugin->priority);
+        }
+    }
+
+    /**
      * テーマを追加する
-     *
-     * テーマ内のプラグインも追加する
      *
      * @param PluginApplicationInterface $application
      * @noTodo
      * @checked
      */
-    public function addTheme(PluginApplicationInterface $application)
+    public function addTheme(PluginApplicationInterface $application, array $themes): void
     {
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-'));
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-'));
         if (!BcUtil::isInstalled()) return;
-        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        try {
-            $sites = $sitesTable->find()->where(['Sites.status' => true]);
-        } catch (MissingConnectionException) {
-            return;
-        }
 
-        $path = [];
-        foreach($sites as $site) {
-            if ($site->theme) {
-                if(!BcUtil::includePluginClass($site->theme)) continue;
-                try {
-                    $application->addPlugin($site->theme);
-                    $pluginPath = CorePlugin::path($site->theme) . 'plugins' . DS;
-                    if (!is_dir($pluginPath)) continue;
-                    $path[] = $pluginPath;
-                } catch (MissingPluginException $e) {
-                    $this->log($e->getMessage());
-                }
+        foreach($themes as $theme) {
+            if(!BcUtil::includePluginClass($theme)) continue;
+            try {
+                $application->addPlugin($theme);
+            } catch (MissingPluginException $e) {
+                $this->log($e->getMessage());
             }
         }
-        // テーマプラグインを追加
-        if($path) {
+    }
+
+    /**
+     * テーマが保有するプラグインのパスを追加する
+     * @param array $themes
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function setupThemePlugin(array $themes): void
+    {
+        if (!BcUtil::isInstalled()) return;
+        if(!$themes) return;
+        $path = [];
+        foreach($themes as $theme) {
+            $pluginsPath = CorePlugin::path($theme) . 'plugins' . DS;
+            if (!is_dir($pluginsPath)) continue;
+            $path[] = $pluginsPath;
+        }
+        if(isset($path) && $path) {
             Configure::write('App.paths.plugins', array_merge(
                 Configure::read('App.paths.plugins'),
                 $path
             ));
         }
+    }
+
+    /**
+     * 利用可能なテーマを取得する
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getAvailableThemes(): array
+    {
+        if (!BcUtil::isInstalled()) return [];
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        try {
+            $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        } catch (MissingConnectionException) {
+            return [];
+        }
+        $themes = [];
+        foreach($sites as $site) {
+            if ($site->theme) {
+                if (!CorePlugin::isLoaded($site->theme) && !is_dir(CorePlugin::path($site->theme))) continue;
+                if(in_array($site->theme, $themes)) continue;
+                $themes[] = $site->theme;
+            }
+        }
+        return $themes;
     }
 
     /**
@@ -421,6 +471,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function setupSessionAuth(AuthenticationService $service, array $authSetting)
     {
+        if($authSetting['userModel'] === 'BaserCore.Users' && empty($authSetting['finder'])) {
+            $authSetting['finder'] = 'available';
+        }
         $service->setConfig([
             'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
             'queryParam' => 'redirect',
@@ -435,6 +488,25 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             ],
             'loginUrl' => Router::url($authSetting['loginAction']),
         ]);
+
+        $passwordHasher = null;
+        if(!empty($authSetting['passwordHasher'])) {
+            $passwordHasher = $authSetting['passwordHasher'];
+        } elseif(env('HASH_TYPE') === 'sha1') {
+            // .env に HASH_TYPE で sha1が設定されている場合 4系のハッシュアルゴリズムを使用
+            $passwordHasher = [
+                'className' => 'Authentication.Fallback',
+                'hashers' => [
+                    'Authentication.Default',
+                    [
+                        'className' => 'Authentication.Legacy',
+                        'hashType' => 'sha1',
+                        'salt' => true
+                    ]
+                ]
+            ];
+        }
+
         $service->loadIdentifier('Authentication.Password', [
             'fields' => [
                 'username' => $authSetting['username'],
@@ -443,8 +515,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder'] ?? null
             ],
+            'passwordHasher' => $passwordHasher
         ]);
         return $service;
     }
@@ -670,6 +743,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $commands->add('update', UpdateCommand::class);
         $commands->add('create release', CreateReleaseCommand::class);
         $commands->add('setup install', SetupInstallCommand::class);
+        $commands->add('create jwt', CreateJwtCommand::class);
         return $commands;
     }
 

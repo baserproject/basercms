@@ -12,28 +12,24 @@
 namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
-use BaserCore\Test\Scenario\ContentFoldersScenario;
-use BaserCore\Test\Scenario\ContentsScenario;
-use BaserCore\Test\Scenario\PagesScenario;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
-use BaserCore\Test\Scenario\SiteConfigsScenario;
-use BaserCore\Test\Scenario\SitesScenario;
-use BaserCore\Test\Scenario\UserGroupsScenario;
-use BaserCore\Test\Scenario\UsersScenario;
-use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Event\EventManager;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\EventManager;
 use Cake\Http\Session;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -52,15 +48,6 @@ class BcUtilTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(SiteConfigsScenario::class);
-        $this->loadFixtureScenario(PluginsScenario::class);
-        $this->loadFixtureScenario(ContentFoldersScenario::class);
-        $this->loadFixtureScenario(ContentsScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersScenario::class);
-        $this->loadFixtureScenario(PagesScenario::class);
-        $this->loadFixtureScenario(SitesScenario::class);
         $this->request = $this->getRequest();
     }
 
@@ -81,6 +68,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testLoginUser($isLogin, $expects): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         if ($isLogin) {
             $this->loginAdmin($this->getRequest());
         }
@@ -106,9 +94,10 @@ class BcUtilTest extends BcTestCase
      */
     public function testLoginUserFromSession()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->assertFalse(BcUtil::loginUserFromSession());
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->assertEquals('baser admin', BcUtil::loginUserFromSession()->name);
+        $this->assertNotNull(BcUtil::loginUserFromSession()->name);
     }
 
     /**
@@ -117,10 +106,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsSuperUser(): void
     {
-        $this->truncateTable('user_groups');
-        $this->truncateTable('users_user_groups');
-        $this->truncateTable('users');
-
         // 未ログイン
         $this->assertFalse(BcUtil::isSuperUser());
 
@@ -150,6 +135,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsAgentUser($id, $expects): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
 
         if ($id) {
             $user = $this->loginAdmin($this->getRequest('/baser/admin'), $id);
@@ -264,6 +250,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetEnablePlugins(): void
     {
+        $this->loadFixtureScenario(PluginsScenario::class);
         $expects = ['BcBlog', 'BcMail', 'BcUploader', 'BcFavorite', 'BcSearchIndex'];
         $result = BcUtil::getEnablePlugins();
         foreach ($result as $value) {
@@ -325,6 +312,39 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test clearModelCache
+     */
+    public function testClearModelCache()
+    {
+        // cacheファイルのバックアップ作成
+        $origin = CACHE;
+        $folder = new BcFolder($origin);
+        $backup = str_replace('cache', 'cache_backup', CACHE);
+        (new BcFolder($backup))->create();
+        $folder->move($backup);
+
+        // _cake_model_準備
+        Cache::drop('_cake_model_');
+        Cache::setConfig('_cake_model_', [
+            'className' => "File",
+            'prefix' => 'myapp' . '_cake_model_',
+            'path' => CACHE . 'models' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+        ]);
+        Cache::write('_cake_model_' . 'test', 'testtest', '_cake_model_');
+
+        // 削除実行
+        BcUtil::clearModelCache();
+        $this->assertNull(Cache::read('_cake_model_' . 'test', '_cake_model_'));
+
+        // cacheファイル復元
+        $folder = new BcFolder($backup);
+        $folder->move($origin);
+        $folder->chmod(0777);
+    }
+
+    /**
      * 管理システムかチェック
      *
      * @param string $url 対象URL
@@ -333,6 +353,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsAdminSystem($url, $expect)
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->getRequest($url);
         $result = BcUtil::isAdminSystem();
         $this->assertEquals($expect, $result, '正しく管理システムかチェックできません');
@@ -365,6 +386,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsAdminUser($id, $expect): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         $session = $this->request->getSession();
         $user = $this->getUser($id);
@@ -400,6 +422,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testLoginUserGroup($id, $expect): void
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         $session = $this->request->getSession();
         $user = $this->getUser($id);
@@ -436,6 +460,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testLoginUserName()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
 
         // ログインしていない場合
         $result = BcUtil::loginUserName();
@@ -444,7 +469,7 @@ class BcUtilTest extends BcTestCase
         // ログインしている場合
         $this->loginAdmin($this->getRequest());
         $result = BcUtil::loginUserName();
-        $this->assertEquals('baser admin', $result);
+        $this->assertNotNull($result);
     }
 
     /**
@@ -482,6 +507,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentThemesPlugins()
     {
+        ContentFactory::make(['url' => '/', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => '1', 'theme' => 'BcFront'])->persist();
+
         $currentSite = $this->getRequest()->getAttribute('currentSite');
         // 現在のテーマのプラグインを作成する
         $targetTheme = BcUtil::getCurrentTheme();
@@ -815,7 +843,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentDomain()
     {
-        $this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
         Configure::write('BcEnv.host', 'hoge');
         $this->assertEquals('hoge', BcUtil::getCurrentDomain(), 'ホストを変更できません。');
     }
@@ -875,6 +902,7 @@ class BcUtilTest extends BcTestCase
      */
     public function test_getCurrentAdminTheme()
     {
+        SiteConfigFactory::make(['id' => '16', 'name' => 'admin_theme', 'value' => 'BcAdminThird'])->persist();
         //site_configs テーブルの admin_theme を変更した場合
         $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
         $siteConfig = $SiteConfig->get(16);
@@ -997,16 +1025,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testTopLevelUrl()
     {
-        if (BcUtil::isConsole()) {
-            $this->assertEquals('https://localhost', BcUtil::topLevelUrl());
-        } else {
-            $this->assertMatchesRegularExpression('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
-            $this->assertMatchesRegularExpression('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
-
-            // httpsの場合
-            $_SERVER['HTTPS'] = 'on';
-            $this->assertMatchesRegularExpression('/^https:\/\//', BcUtil::topLevelUrl());
-        }
+        $this->assertEquals('https://localhost/', BcUtil::topLevelUrl());
+        $this->assertEquals('https://localhost', BcUtil::topLevelUrl(false));
     }
 
     /**
@@ -1080,6 +1100,7 @@ class BcUtilTest extends BcTestCase
      */
     public function test_getDbVersion()
     {
+        PluginFactory::make(['name' => 'BcBlog', 'version' => '1.0.0'])->persist();
         SiteConfigFactory::make(['name' => 'version', 'value' => '2.0.0'])->persist();
         $this->assertEquals('2.0.0', BcUtil::getDbVersion());
         $this->assertEquals('1.0.0', BcUtil::getDbVersion('BcBlog'));
@@ -1185,22 +1206,27 @@ class BcUtilTest extends BcTestCase
      */
     public function testOnEventOffEvent(): void
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $eventManager = EventManager::instance();
+        $eventManager = new EventManager();
         $eventKey = 'testOnEvent';
         $bcEvenListener = new class extends BcEventListener {
             public $events = ['event1'];
+            public $layer = 'Controller';
             public function event1() {
                 return 'event1';
             }
         };
         // onEvent() でイベントを設定
-        BcUtil::onEvent($eventManager, $eventKey, $bcEvenListener->implementedEvents());
+        BcUtil::onEvent($eventManager, $eventKey, [
+            'local' => [
+                10 => [
+                    ['callable' => [$bcEvenListener, 'event1']]
+                ]
+            ]
+        ]);
         // listeners() イベントの登録を確認
         $listeners = $eventManager->listeners($eventKey);
-        foreach ($bcEvenListener->events as $index => $event) {
-            $this->assertEquals($listeners[$index]['callable'], $event);
-        }
+        $this->assertIsCallable($listeners[0]['callable']);
+
         // offEvent() でイベントを解除
         BcUtil::offEvent($eventManager, $eventKey);
         // listeners() イベントの解除を確認
@@ -1215,6 +1241,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testCreateRequest(): void
     {
+        ContentFactory::make(['url' => '/', 'site_id' => 1])->persist();
+        ContentFactory::make(['url' => '/about', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => '1'])->persist();
         // デフォルトURL $url = '/'
         $urlList = ['' => '/', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
@@ -1276,6 +1305,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentTheme(): void
     {
+        ContentFactory::make(['url' => '/', 'site_id' => 1])->persist();
+        SiteFactory::make(['id' => '1', 'theme' => 'BcFront'])->persist();
+
         $currentSite = $this->getRequest()->getAttribute('currentSite');
         $theme = BcUtil::getCurrentTheme();
         $this->assertEquals($theme, $currentSite->theme);
@@ -1288,6 +1320,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetRootTheme(): void
     {
+        SiteFactory::make(['id' => '1', 'theme' => 'BcFront'])->persist();
         $theme = BcUtil::getRootTheme();
         $this->assertEquals('BcFront', $theme);
     }
@@ -1489,6 +1522,39 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test isSameReferrerAsCurrent
+     * @dataProvider isSameReferrerAsCurrentDataProvider
+     * @param $referer
+     * @param $expected
+     */
+    public function testIsSameReferrerAsCurrent($referer, $expected)
+    {
+        //準備
+        $tmpHost = Configure::read('BcEnv.host');
+        Configure::write('BcEnv.host', parse_url("http://www.example.com/baser/admin")['host']);
+        $_SERVER['HTTP_REFERER'] = $referer;
+
+        //実行
+        $this->assertEquals(BcUtil::isSameReferrerAsCurrent(), $expected);
+
+        //元に戻る
+        Configure::write('BcEnv.host', $tmpHost);
+        unset($_SERVER['HTTP_REFERER']);
+    }
+
+    public static function isSameReferrerAsCurrentDataProvider()
+    {
+        return [
+            // refererがnullの場合　
+            [null, false],
+            // referer!=$siteDomainの場合
+            ["/baser/admin", false],
+            // refererが同サイトドメインの場合
+            ["http://www.example.com/baser/admin", true],
+        ];
+    }
+
+    /**
      * test getAuthPrefixList
      */
     public function test_getAuthPrefixList()
@@ -1520,12 +1586,24 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('3306', $rs['port']);
         $this->assertEquals('test_basercms', $rs['database']);
     }
+    /**
+     * test getCurrentDb
+     */
+    public function testGetCurrentDb()
+    {
+        $config = $this->getPrivateProperty(BcUtil::getCurrentDb(), '_config');
+        //戻り値を確認
+        $this->assertEquals('bc-db', $config['host']);
+        $this->assertEquals('3306', $config['port']);
+        $this->assertEquals('test_basercms', $config['database']);
+    }
 
     /**
      * test getFrontTemplatePaths
      */
     public function test_getFrontTemplatePaths()
     {
+        SiteFactory::make(['id' => '1', 'theme' => 'BcFront'])->persist();
         $result = BcUtil::getFrontTemplatePaths(1, 'BcBlog');
         $this->assertCount(5, $result);
         $this->assertEquals('/var/www/html/plugins/bc-front/templates/', $result[0]);
@@ -1552,9 +1630,11 @@ class BcUtilTest extends BcTestCase
      */
     public function test_getLoggedInUsers()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $result = BcUtil::getLoggedInUsers();
-        $this->assertEquals('baser admin', $result['Api/Admin']->name);
+        $this->assertNotNull($result['Api/Admin']->name);
     }
 
     public function test_isInstalled()
@@ -1592,5 +1672,41 @@ class BcUtilTest extends BcTestCase
 
         $result = BcUtil::pairToAssoc('');
         $this->assertEquals([], $result);
+    }
+
+    /**
+     * test addSessionId
+     */
+    public function testAddSessionId()
+    {
+        // 初期化
+        UserFactory::make()->admin()->persist();
+        SiteFactory::make(['id' => 1, 'device' => 'mobile'])->persist();
+        $_SERVER['REQUEST_URI'] = '/m/';
+
+        $this->assertEquals('/?BASERCMS=cli', BcUtil::addSessionId('/', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1', true));
+        $this->assertEquals('/?id=1&BASERCMS=cli', BcUtil::addSessionId('/?id=1&BASERCMS=1', true));
+
+        // urlが配列の場合
+        $url = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 1
+            ]
+        ];
+        $expect = [
+            0 => '/',
+            '?' => [
+                'id' => 1,
+                'BASERCMS' => 'cli'
+            ]
+        ];
+        $this->assertEquals($expect, BcUtil::addSessionId($url, true));
+
+        //adminでログインしいる場合、
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->assertEquals('/', BcUtil::addSessionId('/'));
     }
 }

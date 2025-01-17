@@ -65,6 +65,7 @@ class BcComposer
      * @throws Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function setup(string $php = '', $dir = '')
     {
@@ -161,6 +162,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function require(string $package, string $version)
     {
@@ -201,6 +203,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function selfUpdate()
     {
@@ -223,6 +226,7 @@ class BcComposer
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function execCommand(string $command)
     {
@@ -300,7 +304,11 @@ class BcComposer
     {
         $file = new BcFile(self::$currentDir . 'composer.json');
         $json = $file->read();
-        $json = preg_replace('/"replace"\s*:\s*?{[^}]+?},/', '', $json);
+        $data = json_decode($json, true);
+        if(isset($data['replace'])) {
+            unset($data['replace']);
+        }
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $file->write($json);
     }
 

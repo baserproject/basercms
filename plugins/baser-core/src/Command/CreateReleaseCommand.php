@@ -36,6 +36,7 @@ class CreateReleaseCommand extends Command
      * @return \Cake\Console\ConsoleOptionParser
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
@@ -58,6 +59,7 @@ class CreateReleaseCommand extends Command
      * @return int|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
@@ -77,9 +79,9 @@ class CreateReleaseCommand extends Command
         BcComposer::setup('', $packagePath);
         $result = BcComposer::setupComposerForDistribution($version);
         if($result['code'] === 0) {
-            $io->out(__d('baser_core', 'Composer による lock ファイルの更新に失敗アップデートが完了しました。'));
+            $io->out(__d('baser_core', '- Composer による lock ファイルの更新が完了しました。'));
         } else {
-            $message = __d('baser_core', 'Composer による lock ファイルの更新に失敗しました。ログを確認してください。');
+            $message = __d('baser_core', '- Composer による lock ファイルの更新に失敗しました。ログを確認してください。');
             $this->log($message);
             $this->log(implode("\n", $result['out']));
             $io->error($message);
@@ -108,6 +110,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clonePackage(string $packagePath, string $branch)
     {
@@ -124,6 +127,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deletePlugins(string $packagePath)
     {
@@ -160,6 +164,7 @@ class CreateReleaseCommand extends Command
      * @param string $packagePath
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteExcludeFiles(string $packagePath)
     {

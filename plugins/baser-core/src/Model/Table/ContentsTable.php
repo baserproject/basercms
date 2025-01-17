@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\Chronos\Chronos;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -97,15 +98,6 @@ class ContentsTable extends AppTable
      * @var bool
      */
     protected $updatingSystemData = true;
-
-    /**
-     * 保存前の親ID
-     *
-     * IDの変更比較に利用
-     *
-     * @var null
-     */
-    public $beforeSaveParentId = null;
 
     /**
      * Implemented Events
@@ -365,12 +357,10 @@ class ContentsTable extends AppTable
             }
         } else {
             if (isset($content['name'])) {
-                try {
-                    $oldName = $this->get($content['id'])->name;
-                } catch (\Exception $e) {
-                    $oldName = null;
-                }
-                if($content['name'] !== $oldName) {
+                $old = $this->get($content['id']);
+                $content['lft'] = $old->lft;
+                $content['rght'] = $old->rght;
+                if($content['name'] !== $old->name) {
                     $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
                 }
             }
@@ -419,7 +409,7 @@ class ContentsTable extends AppTable
         $query = $this->find()->where(['name LIKE' => $name . '%', 'site_root' => false]);
         if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
-            $query = $query->andWhere(['id <>' => $contentId]);
+            $query = $query->andWhere(['Contents.id <>' => $contentId]);
         }
         $datas = $query->select('name')->orderBy('name')->all()->toArray();
         $datas = Hash::extract($datas, '{n}.name');
@@ -467,9 +457,6 @@ class ContentsTable extends AppTable
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($entity->id)) {
-            $this->beforeSaveParentId = $entity->parent_id;
-        }
         if (!empty($entity->name)) {
             $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         }
@@ -497,11 +484,6 @@ class ContentsTable extends AppTable
                 $this->updateChildren($entity->id);
             }
             $this->updateRelateSubSiteContent($entity);
-            if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
-                $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-                $SiteConfig->updateContentsSortLastModified();
-                $this->beforeSaveParentId = null;
-            }
         }
     }
 
@@ -1221,41 +1203,32 @@ class ContentsTable extends AppTable
      * 関連サイトの関連コンテンツを取得する
      *
      * @param int $id
+     * @param array $options オプション
+     *  - `excludeIds` : 除外するサイトID
      * @return array|false
      */
-    public function getRelatedSiteContents($id, $options = [])
+    public function getRelatedSiteContents(int $id, array $options = []): array
     {
         $options = array_merge([
             'excludeIds' => []
         ], $options);
+
         $conditions = [
             ['OR' => [
-                ['Content.id' => $id],
-                ['Content.main_site_content_id' => $id]
+                ['Contents.id' => $id],
+                ['Contents.main_site_content_id' => $id]
             ]],
-            ['OR' => [
-                ['Site.status' => true],
-                ['Site.status' => null]    // ルートメインサイト
-            ]]
+            ['Sites.status' => true]
         ];
         if ($options['excludeIds']) {
-            if (count($options['excludeIds']) == 1) {
-                $options['excludeIds'] = $options['excludeIds'][0];
-            }
-            $conditions['Content.site_id <>'] = $options['excludeIds'];
+            $conditions['Contents.site_id NOT IN'] = $options['excludeIds'];
         }
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
-        $contents = $this->find('all',
-        conditions: $conditions,
-        order: ['Content.id'],
-        recursive: 0);
-        $mainSite = $this->Sites->getRootMain();
-        foreach($contents as $key => $content) {
-            if ($content['Content']['site_id'] == 0) {
-                $contents[$key]['Site'] = $mainSite;
-            }
-        }
-        return $contents;
+
+        return $this->find('all',
+            conditions: $conditions,
+            order: ['Contents.id']
+        )->contain('Sites')->toArray();
     }
 
     /**
@@ -1493,6 +1466,7 @@ class ContentsTable extends AppTable
     {
         $offset = (int)$offset;
         $content = $this->get($id);
+        $this->disableSoftDelete();
         if ($offset > 0) {
             $result = $this->moveDown($content, abs($offset));
         } elseif ($offset < 0) {
@@ -1500,6 +1474,7 @@ class ContentsTable extends AppTable
         } else {
             $result = true;
         }
+        $this->enableSoftDelete();
         return $result? $content : false;
     }
 

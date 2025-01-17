@@ -23,6 +23,8 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontService;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use BcCustomContent\Test\Scenario\CustomTablesScenario;
@@ -320,6 +322,9 @@ class CustomContentsFrontServiceTest extends BcTestCase
             'publish_end' => '9999-11-30 23:59:59',
             'has_child' => 0
         ]);
+
+        CustomLinkFactory::make(['name' => 'file'])->persist();
+        CustomFieldFactory::make(['id' => 1, 'type' => 'BcCcFile'])->persist();
 
         //フィクチャーからデーターを生成
         $this->loadFixtureScenario(CustomContentsScenario::class);

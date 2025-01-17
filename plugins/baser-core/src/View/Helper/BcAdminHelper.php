@@ -99,6 +99,7 @@ class BcAdminHelper extends Helper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function convertAdminMenuGroups($adminMenuGroups)
     {
@@ -425,6 +426,7 @@ class BcAdminHelper extends Helper
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsAddLink()
     {
@@ -477,6 +479,7 @@ class BcAdminHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addLink(): void
     {
@@ -520,10 +523,11 @@ class BcAdminHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function firstAccess()
     {
-        if($this->getView()->getRequest()->getParam('controller') === 'installations') return;
+        if ($this->getView()->getRequest()->getParam('controller') === 'installations') return;
         $this->BcBaser->element('first_access');
     }
 

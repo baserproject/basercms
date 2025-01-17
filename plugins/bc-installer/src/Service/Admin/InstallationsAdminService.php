@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Service\InstallationsService;
@@ -76,6 +77,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep3(ServerRequest $request): array
     {
@@ -108,6 +110,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getDefaultValuesStep4(ServerRequest $request): array
     {
@@ -135,6 +138,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function writeDbSettingToSession(ServerRequest $request, array $data): void
     {
@@ -181,6 +185,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function readDbSetting(ServerRequest $request, array $installationData = []): array
     {
@@ -227,13 +232,11 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteAllTables(ServerRequest $request): bool
     {
         $dbConfig = $this->readDbSetting($request);
-        if (!$dbConfig) {
-            $dbConfig = ConnectionManager::getConfig('default');
-        }
         return $this->BcDatabase->deleteTables('default', $dbConfig);
     }
 
@@ -247,16 +250,13 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @throws PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initAdmin(ServerRequest $request): void
     {
         // サイト基本設定登録
         $this->setAdminEmailAndVersion($request->getData('admin_email'));
         $this->setSiteName($request->getData('site_name'));
-
-        // SecuritySalt設定
-        $salt = $this->setSecuritySalt();
-        $request->getSession()->write('Installation.salt', $salt);
 
         // 管理ユーザー登録
         $user = [
@@ -279,14 +279,14 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param ServerRequest $request
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initFiles(ServerRequest $request): void
     {
         // インストールファイルを生成する
-        $securitySalt = $request->getSession()->read('Installation.salt');
-        $this->createInstallFile($this->readDbSetting($request), $securitySalt);
+        $this->createInstallFile($this->readDbSetting($request));
         // JWTキーを作成する
-        $this->createJwt();
+        BcApiUtil::createJwt();
         // アップロード用初期フォルダを作成する
         $this->createDefaultFiles();
         // エディタテンプレート用の画像を配置
@@ -300,6 +300,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return \Cake\Datasource\ConnectionInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function connectDb(ServerRequest $request): \Cake\Datasource\ConnectionInterface
     {
@@ -315,12 +316,12 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function login(ServerRequest $request, Response $response): void
     {
         // ログインするとセッションが初期化されてしまうので一旦取得しておく
         $installationSetting = $request->getSession()->read('Installation');
-        Configure::write('Security.salt', $installationSetting['salt']);
         /* @var UsersService $usersService */
         $usersService = $this->getService(UsersServiceInterface::class);
         $usersService->login($request, $response, $installationSetting['id']);
@@ -332,6 +333,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @param ServerRequest $request
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initDb(ServerRequest $request): void
     {

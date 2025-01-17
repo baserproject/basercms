@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Model\Entity\Permission;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -217,10 +216,15 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->BcAdminApp->setRequest($this->getRequest('https://localhost/index'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertNull($this->_response);
-        $this->BcAdminApp->setRequest($this->getRequest('http://localhost/index'));
+        $this->BcAdminApp->setRequest($this->getRequest('http://main.com/index'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertRedirect('https://localhost/index');
         $this->BcAdminApp->setRequest($this->getRequest('https://localhost/baser/admin'));
+        $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
+        // ユニットテストにおいては、現在のサイトのURLの取得を https固定にしているため
+        // http://localhost/ と https://localhost/ は同一サイトとして扱われリダイレクトしない
+        $this->BcAdminApp->setRequest($this->getRequest('http://localhost/'));
         $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
         $this->assertNull($this->_response);
     }
@@ -247,5 +251,20 @@ class BcAdminAppControllerTest extends BcTestCase
         $siteConfigsService->setValue('password_reset_days', 0);
         $this->get('/baser/admin');
         $this->assertResponseCode(200);
+    }
+
+    /**
+     * test updateFirstAccess
+     */
+    public function testUpdateFirstAccess()
+    {
+        //before test
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->setValue('first_access', true);
+        $this->assertEquals(1, $siteConfigsService->getValue('first_access'));
+
+        //after test
+        $this->execPrivateMethod($this->BcAdminApp, '__updateFirstAccess');
+        $this->assertEquals('', $siteConfigsService->getValue('first_access'));
     }
 }

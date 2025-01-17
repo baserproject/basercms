@@ -1,11 +1,2 @@
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
- *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
- */
-$((function(){$("#AlertMessage");var e=$("#AdminUsersLoginScript").attr("data-isEnableLoginCredit");if(e&&$("body").hide(),e){var n=$("body"),i=$("#Logo");n.append($("<div>&nbsp;</div>").attr("id","Credit").show()),$("#HeaderInner").css("height","50px"),i.css("position","absolute"),i.css("z-index","10000"),t(e),n.fadeIn(50)}function t(e){e?$.bcCredit.show():function(e){var n=$("#Credit"),i=$("#Logo");n.length&&($("#HeaderInner").css("height","auto"),i.css("position","relative"),i.css("z-index","0"),$("#Wrap").css("height","280px"),e?(n.length&&n.fadeOut(1e3,e),e()):n.length&&n.fadeOut(1e3))}()}$("#Login").click((function(){t(!1)})),$("#LoginInner").click((function(e){e&&e.stopPropagation?e.stopPropagation():window.event.cancelBubble=!0}))}));
+({mounted:function(){this.initView()},initView:function(){var i=$("#AdminUsersLoginScript").attr("data-isEnableLoginCredit");if(i){var e=$("body").hide(),n=$("#Logo");e.append($("<div>&nbsp;</div>").attr("id","Credit").show()),$("#HeaderInner").css("height","50px"),n.css("position","absolute"),n.css("z-index","10000"),this.changeView(i),e.fadeIn(50)}this.registerEvents()},registerEvents:function(){$("#Login").click((function(){changeView(!1)})),$("#LoginInner").click((function(i){i&&i.stopPropagation?i.stopPropagation():window.event.cancelBubble=!0})),$("#BtnLogin").click((function(){$.bcUtil.showLoader()}))},changeView:function(i){i?$.bcCredit.show():this.openCredit()},openCredit:function(i){var e=$("#Credit"),n=$("#Logo");e.length&&($("#HeaderInner").css("height","auto"),n.css("position","relative"),n.css("z-index","0"),$("#Wrap").css("height","280px"),i?(e.length&&e.fadeOut(1e3,i),i()):e.length&&e.fadeOut(1e3))}}).mounted();
 //# sourceMappingURL=login.bundle.js.map

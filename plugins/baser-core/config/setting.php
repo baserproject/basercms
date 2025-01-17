@@ -169,7 +169,7 @@ return [
         /**
          * 現在のリクエストのホスト
          */
-        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null,
+        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : 'localhost',
         /**
          * インストール済かどうか
          *
@@ -328,6 +328,11 @@ return [
         'twoFactorAuthenticationCodeAllowTime' => 10,
 
         /**
+         * 4系のパスワードでログインする際に、新しいハッシュアルゴリズムでハッシュ化するかどうか
+         */
+        'needsPasswordRehash' => true,
+
+        /**
          * エディタ
          */
         'editors' => [
@@ -411,6 +416,16 @@ return [
          * /config/routes.php を有効化するかどうか
          */
         'enableRootRoutes' => false,
+
+        /**
+         * bc_formのテンプレートを指定
+         * config/bc_form.phpを差し替える         
+         *  プラグイン記法 (プラグイン名.テンプレート名)
+         */
+        //basercms/plugins/baser-core/src/View/AppView.php
+        'AppFormTemplate' => 'BaserCore.bc_form',
+        //basercms/plugins/baser-core/src/View/BcAdminAppView.php
+        'AdminFormTemplate' => 'BaserCore.bc_form',
 
         /**
          * システムナビ

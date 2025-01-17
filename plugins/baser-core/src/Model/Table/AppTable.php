@@ -13,9 +13,7 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
-use Cake\I18n\FrozenTime;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -69,6 +67,7 @@ class AppTable extends Table
      * @return AppTable
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setTable(string $table)
     {
@@ -83,6 +82,7 @@ class AppTable extends Table
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTable(): string
     {
@@ -100,6 +100,7 @@ class AppTable extends Table
      * @return BelongsToMany
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function belongsToMany(string $associated, array $options = []): BelongsToMany
     {
@@ -125,6 +126,7 @@ class AppTable extends Table
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addPrefix($table)
     {
@@ -266,6 +268,7 @@ class AppTable extends Table
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function sortup($id, $conditions)
     {
