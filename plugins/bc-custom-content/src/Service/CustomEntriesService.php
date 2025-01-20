@@ -278,6 +278,11 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             $conditions['CustomEntries.creator_id'] = $params['creator_id'];
         }
 
+        // 作成日
+        if (!is_null($params['created'])) {
+            $conditions['CustomEntries.created LIKE']  = $params['created'] . '%';
+        }
+
         // custom_content_id
         if (!is_null($params['custom_content_id'])) {
             $query->contain('CustomTables.CustomContents');

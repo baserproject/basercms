@@ -237,6 +237,19 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
+     * 年別アーカイブページ用のテンプレートを取得する
+     * @param CustomContent $customContent
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getYearTemplate(CustomContent $customContent): string
+    {
+        return 'CustomContent' . DS . $customContent->template . DS . 'year';
+    }
+
+    /**
      * カスタムエントリーの詳細ページ用のプレビューのセットアップを行う
      *
      * @param Controller $controller

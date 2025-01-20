@@ -133,4 +133,32 @@ class CustomContentController extends BcFrontAppController
 
     $this->render($service->getArchivesTemplate($customContent));
     }
+
+    /**
+     * 年別のアーカイブを表示する
+     *
+     * ### URL例
+     * - 年別記事一覧： /products/year/2025
+     */
+    public function year(CustomContentFrontServiceInterface $service, $year)
+    {
+        $customContent = $service->getCustomContent(
+            (int)$this->getRequest()->getAttribute('currentContent')->entity_id
+        );
+
+        if(!$customContent->custom_table_id) {
+            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->notFound();
+        };
+
+        $this->set($service->getViewVarsForIndex(
+            $customContent,
+            $this->paginate(
+                $service->getCustomEntries($customContent, [
+                    'created' => $year . '%',
+                ]),
+            )));
+
+        $this->render($service->getArchivesTemplate($customContent));
+    }
 }
