@@ -271,6 +271,9 @@ class BcValidation extends Validation
         } elseif(is_array($file)) {
             $fileName = $file['name'];
             $type = $file['type'];
+            if ($file['error']) {
+                return __d('baser_core', 'ファイルのアップロードに失敗したため、拡張子の判定に失敗しました。');
+            }
         } else {
             $fileName = $file;
             $type = null;
