@@ -129,6 +129,12 @@ class Imageresizer
             @unlink($savePath);
         }
 
+        // ConfigのresizeResolutionの値があって、デフォルト（96dpi）より小さい場合、解像度を上書きする
+        $resizeResolution = \Cake\Core\Configure::read('resizeResolution');
+        if (!empty($resizeResolution) && (int) $resizeResolution < 96 ){
+            imageresolution($newImage, $resizeResolution, $resizeResolution);
+        }
+
         switch($image_type) {
             case IMAGETYPE_GIF:
                 if ($savePath) {
