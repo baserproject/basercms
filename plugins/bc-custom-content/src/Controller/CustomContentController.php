@@ -106,31 +106,4 @@ class CustomContentController extends BcFrontAppController
         $this->render($service->getViewTemplate($customContent));
     }
 
-    /**
-     * カスタムエントリーのアーカイブを表示する
-     *
-     * ### URL例
-     * - カテゴリ別記事一覧： /products/archives/category/category-name
-     */
-    public function archives(CustomContentFrontServiceInterface $service, $field, $value)
-    {
-        $customContent = $service->getCustomContent(
-            (int)$this->getRequest()->getAttribute('currentContent')->entity_id
-        );
-
-        if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
-            $this->notFound();
-        };
-
-    $this->set($service->getViewVarsForIndex(
-        $customContent,
-        $this->paginate(
-            $service->getCustomEntries($customContent, [
-            $field => urldecode($value)
-        ]),
-    )));
-
-    $this->render($service->getArchivesTemplate($customContent));
-    }
 }
