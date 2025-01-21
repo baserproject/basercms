@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
 use BcCustomContent\Model\Entity\CustomField;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 /**
@@ -373,4 +374,42 @@ class CustomContentHelper extends CustomContentAppHelper
         return (bool)$customLink->display_front;
     }
 
+    /**
+     * フィールド名を指定して、登録されているアイテムのリストを取得する
+     *
+     * @param string $fieldName
+     */
+    public function getFieldItemList(string $fieldName, $link = true)
+    {
+        // カスタムテーブルのIDを取得
+        $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        // カスタムテーブルの情報を取得
+        $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
+        // カスタムテーブルのIDを指定して、テーブル情報を取得
+        $targetTable = $tables->find()
+        ->where(['id' => $targetEntries->tableId])
+        ->first();
+
+        // フィールド名を指定して、登録されているアイテムのリストを取得
+        $targetFields = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
+        $records = $targetFields->find()
+        ->where(['name' => $fieldName])
+        ->all()
+        ->toArray();
+
+        foreach ($records as $record) {
+            $values = preg_split('/\R/u', $record->source);
+        }
+
+        // リンクを表示する
+        if ($link) {
+            $linkValues = [];
+            foreach ($values as $value) {
+                $linkValues[] = '<a href="/' . $targetTable->name . '/archives/' . $record->name . '/' . $value . '">' . $value . '</a>';
+            }
+            return $linkValues;
+        }
+        return $values;
+
+    }
 }
