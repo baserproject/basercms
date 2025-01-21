@@ -804,10 +804,10 @@ class BlogHelperTest extends BaserTestCase
 	public function tagListDataProvider()
 	{
 		return [
-			['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
-			['/(?=\/tag\/タグ１).*?(?=\/tag\/タグ２).*?(?=\/tag\/タグ３)/s', '/s/blog3/'],
-			['/(?=\/tags\/タグ１).*?(?=\/tags\/タグ２).*?(?=\/tags\/タグ３).*?(?=\/tags\/タグ４).*?(?=\/tags\/タグ５)/s', null],
-			['/(?=\/tag\/タグ１).*?\(2\)/s', 'blog1', ['postCount' => true]],
+			['/(?=\/tag\/%E3%82%BF%E3%82%B0%EF%BC%91).*?(?!.*\/tag\/%E3%82%BF%E3%82%B0%EF%BC%92).*?(?!.*\/tag\/%E3%82%BF%E3%82%B0%EF%BC%93)/s', 'blog1'],
+			['/(?=\/tag\/%E3%82%BF%E3%82%B0%EF%BC%91).*?(?=\/tag\/%E3%82%BF%E3%82%B0%EF%BC%92).*?(?=\/tag\/%E3%82%BF%E3%82%B0%EF%BC%93)/s', '/s/blog3/'],
+			['/(?=\/tags\/%E3%82%BF%E3%82%B0%EF%BC%91).*?(?=\/tags\/%E3%82%BF%E3%82%B0%EF%BC%92).*?(?=\/tags\/%E3%82%BF%E3%82%B0%EF%BC%93).*?(?=\/tags\/%E3%82%BF%E3%82%B0%EF%BC%94).*?(?=\/tags\/%E3%82%BF%E3%82%B0%EF%BC%95)/s', null],
+			['/(?=\/tag\/%E3%82%BF%E3%82%B0%EF%BC%91).*?\(2\)/s', 'blog1', ['postCount' => true]],
 		];
 	}
 
@@ -836,13 +836,13 @@ class BlogHelperTest extends BaserTestCase
 	public function getTagLinkUrlDataProvider()
 	{
 		return [
-			['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
-			['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
-			['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-			['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
-			['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
-			['/', null, 'タグ１', '', false, '/tags/タグ１'],
-			['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
+			['/', 1, 'タグ１', '', false, '/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%91'],
+			['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%91'],
+			['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%91'],
+			['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%92'],
+			['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%92'],
+			['/', null, 'タグ１', '', false, '/tags/%E3%82%BF%E3%82%B0%EF%BC%91'],
+			['/s/', null, 'タグ２', '', false, '/s/tags/%E3%82%BF%E3%82%B0%EF%BC%92']
 		];
 	}
 
@@ -871,10 +871,10 @@ class BlogHelperTest extends BaserTestCase
 	public function getTagLinkDataProvider()
 	{
 		return [
-			['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
-			['<a href="/s/blog3/archives/tag/タグ２">タグ２</a>', '/s/', 3, 'タグ２'],
-			['<a href="/tags/タグ１">タグ１</a>', '/', null, 'タグ１'],
-			['<a href="/s/tags/タグ２">タグ２</a>', '/s/', null, 'タグ２']
+			['<a href="/news/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%91">タグ１</a>', '/', 1, 'タグ１'],
+			['<a href="/s/blog3/archives/tag/%E3%82%BF%E3%82%B0%EF%BC%92">タグ２</a>', '/s/', 3, 'タグ２'],
+			['<a href="/tags/%E3%82%BF%E3%82%B0%EF%BC%91">タグ１</a>', '/', null, 'タグ１'],
+			['<a href="/s/tags/%E3%82%BF%E3%82%B0%EF%BC%92">タグ２</a>', '/s/', null, 'タグ２']
 		];
 	}
 
