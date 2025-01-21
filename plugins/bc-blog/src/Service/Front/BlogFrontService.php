@@ -27,6 +27,7 @@ use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Exception\RedirectException;
 use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -372,6 +373,12 @@ class BlogFrontService implements BlogFrontServiceInterface
                 $post->blog_content_id,
                 $post->id
             ] : '';
+
+            // スラッグが設定されている記事にNOでアクセスした場合はリダイレクト
+            if ($post->name && $post->name !== $no) {
+                $postUrl = $this->BlogPostsService->getUrl($post->blog_content->content, $post, true);
+                throw new RedirectException($postUrl);
+            }
         }
 
         // ナビゲーションを設定
