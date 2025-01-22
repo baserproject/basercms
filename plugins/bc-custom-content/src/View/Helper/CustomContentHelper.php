@@ -412,4 +412,31 @@ class CustomContentHelper extends CustomContentAppHelper
         return $values;
 
     }
+
+    /**
+     * カスタムエントリーが存在する年のリストを取得する
+     */
+    public function getYearList()
+    {
+        // カスタムテーブルのIDを取得
+        $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        // カスタムテーブルの情報を取得
+        $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
+        // カスタムテーブルのIDを指定して、テーブル情報を取得
+        $targetTable = $tables->find()
+        ->where(['id' => $targetEntries->tableId])
+        ->first();
+
+        $records = $targetEntries->find()
+        ->select(['year' => 'YEAR(created)'])
+        ->distinct(['year'])
+        ->all()
+        ->toArray();
+
+        $years = [];
+        foreach ($records as $record) {
+            $years[] = '<a href="/' . $targetTable->name . '/year/' . $record->year . '">' . $record->year . '</a>';
+        }
+        return $years;
+    }
 }
