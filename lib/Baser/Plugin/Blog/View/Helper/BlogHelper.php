@@ -1452,11 +1452,11 @@ class BlogHelper extends AppHelper
 			if (!empty($this->content['url'])) {
 				$site = BcSite::findByUrl($this->content['url']);
 				$url = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
-				$url = $url . 'archives/tag/' . $tag['name'];
+				$url = $url . 'archives/tag/' . rawurlencode($tag['name']);
 			}
 		}
 		if (!$url) {
-			$url = '/tags/' . $tag['name'];
+			$url = '/tags/' . rawurlencode($tag['name']);
 			$site = BcSite::findCurrent(true);
 			if ($site && $site->alias && !$site->useSubDomain) {
 				$url = '/' . $site->alias . $url;
