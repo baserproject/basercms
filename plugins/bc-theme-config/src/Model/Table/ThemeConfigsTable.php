@@ -131,11 +131,9 @@ class ThemeConfigsTable extends AppTable
         $validator->add('logo_link', [
             'urlCheck' => [
                 'rule' => function ($value, $context) {
-                    // 空白またはルートパス（/）の場合はバリデーションをスキップ
                     if (empty($value) || $value === '/') {
                         return true;
                     }
-                    // それ以外の場合はURL形式をチェック
                     return filter_var($value, FILTER_VALIDATE_URL) !== false;
                 },
                 'message' => __d('baser_core', '無効なURLです')
@@ -151,11 +149,17 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_1',[
+
+        $validator->add('main_image_link_1', [
             'urlCheck' => [
-                'rule' => ['url', true],
+                'rule' => function ($value) {
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_2
@@ -167,11 +171,16 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_2',[
+        $validator->add('main_image_link_2', [
             'urlCheck' => [
-                'rule' => ['url', true],
+               'rule' => function ($value) {
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_3
@@ -183,11 +192,16 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_3',[
+        $validator->add('main_image_link_3', [
             'urlCheck' => [
-                'rule' => ['url', true],
+                'rule' => function ($value, $context) {
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_4
@@ -199,11 +213,16 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_4',[
+        $validator->add('main_image_link_4', [
             'urlCheck' => [
-                'rule' => ['url', true],
+                'rule' => function ($value) {
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_5
@@ -215,11 +234,16 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_5',[
+        $validator->add('main_image_link_5', [
             'urlCheck' => [
-                'rule' => ['url', true],
+                'rule' => function ($value, $context) {
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
         return $validator;
     }
