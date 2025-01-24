@@ -24,6 +24,7 @@ use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Migrations\Db\Table\Index;
 
 /**
  * CustomContentHelper
@@ -379,33 +380,36 @@ class CustomContentHelper extends CustomContentAppHelper
      *
      * @param string $fieldName
      */
-    public function getFieldItemList(string $fieldName, $link = true)
+    public function getFieldItemList(Int $contentId, string $fieldName, array $options = [])
     {
-        // カスタムテーブルのIDを取得
-        $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
-        // カスタムテーブルの情報を取得
-        $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
-        // カスタムテーブルのIDを指定して、テーブル情報を取得
-        $targetTable = $tables->find()
-        ->where(['id' => $targetEntries->tableId])
-        ->first();
+        $options = array_merge([
+            'link' => true
+        ], $options);
 
-        // フィールド名を指定して、登録されているアイテムのリストを取得
-        $targetFields = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
-        $records = $targetFields->find()
-        ->where(['name' => $fieldName])
-        ->all()
-        ->toArray();
+        $customContentsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+        $customContentsTable->CustomTables->setHasManyLinksByAll();
+        $customLink = $customContentsTable->find()
+            ->where([
+                'Contents.id' => (int)$contentId
+            ])
+            ->contain( [
+                'Contents',
+                'CustomTables',
+                'CustomTables.CustomLinks' => function ($q) use ($fieldName) {
+                    return $q->where(['CustomLinks.name' => $fieldName]);
+                },
+                'CustomTables.CustomLinks.CustomFields'
+            ])
+            ->first();
 
-        foreach ($records as $record) {
-            $values = preg_split('/\R/u', $record->source);
-        }
+        $records = $customLink->custom_table->custom_links[0]->custom_field;
+        $values = explode("\n", $records->source);
 
         // リンクを表示する
-        if ($link) {
+        if ($options['link'] == true) {
             $linkValues = [];
             foreach ($values as $value) {
-                $linkValues[] = '<a href="/' . $targetTable->name . '/archives/' . $record->name . '/' . $value . '">' . $value . '</a>';
+                $linkValues[] = $this->BcBaser->getLink($value, '/' . $customLink->content->name . '/archives/' . $fieldName . '/' . $value);
             }
             return $linkValues;
         }
@@ -424,18 +428,18 @@ class CustomContentHelper extends CustomContentAppHelper
         $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
         // カスタムテーブルのIDを指定して、テーブル情報を取得
         $targetTable = $tables->find()
-        ->where(['id' => $targetEntries->tableId])
-        ->first();
+            ->where(['id' => $targetEntries->tableId])
+            ->first();
 
         $records = $targetEntries->find()
-        ->select(['year' => 'YEAR(created)'])
-        ->distinct(['year'])
-        ->all()
-        ->toArray();
+            ->select(['year' => 'YEAR(created)'])
+            ->distinct(['year'])
+            ->all()
+            ->toArray();
 
-        $years = [];
         foreach ($records as $record) {
-            $years[] = '<a href="/' . $targetTable->name . '/year/' . $record->year . '">' . $record->year . '</a>';
+            $years[] = $this->BcBaser->getLink($record->year, '/' . $targetTable->name . '/year/' . $record->year);
+            // $years[] = '<a href="/' . $targetTable->name . '/year/' . $record->year . '">' . $record->year . '</a>';
         }
         return $years;
     }

@@ -123,15 +123,28 @@ class CustomContentController extends BcFrontAppController
             $this->notFound();
         };
 
-    $this->set($service->getViewVarsForIndex(
-        $customContent,
-        $this->paginate(
-            $service->getCustomEntries($customContent, [
-            $field => urldecode($value)
-        ]),
-    )));
+        // フィールドが対象のカスタムフィールドかチェック
+        $fieldsService = $service->getCustomFields();
+        $fieldData = $fieldsService->findByName($field);
+        foreach ($fieldData as $targetFieldData) {
+            $type = $targetFieldData->type;
+        }
 
-    $this->render($service->getArchivesTemplate($customContent));
+        $targetTypeArray = ['BcCcMultiple', 'BcCcRadio', 'BcCcSelect', 'BcCcPref', 'BcCcRelated'];
+        if (!in_array($type, $targetTypeArray)) {
+            $this->BcMessage->setWarning(__d('baser_core', '指定されたフィールドはアーカイブ対象に設定されていません。'));
+            $this->notFound();
+        }
+
+        $this->set($service->getViewVarsForArchives(
+            $customContent,
+            $this->paginate(
+                $service->getCustomEntries($customContent, [
+                $field => urldecode($value)
+            ]),
+        )));
+
+        $this->render($service->getArchivesTemplate($customContent));
     }
 
     /**
@@ -151,11 +164,11 @@ class CustomContentController extends BcFrontAppController
             $this->notFound();
         };
 
-        $this->set($service->getViewVarsForIndex(
+        $this->set($service->getViewVarsForYear(
             $customContent,
             $this->paginate(
                 $service->getCustomEntries($customContent, [
-                    'created' => $year . '%',
+                    'published' => $year . '%',
                 ]),
             )));
 

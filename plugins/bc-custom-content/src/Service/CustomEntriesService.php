@@ -278,9 +278,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             $conditions['CustomEntries.creator_id'] = $params['creator_id'];
         }
 
-        // 作成日
-        if (!is_null($params['created'])) {
-            $conditions['CustomEntries.created LIKE']  = $params['created'] . '%';
+        // 公開日
+        if (!is_null($params['published'])) {
+            $conditions['CustomEntries.published LIKE']  = $params['published'];
         }
 
         // custom_content_id

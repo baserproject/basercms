@@ -25,6 +25,7 @@ use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesService;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use Cake\Controller\Controller;
@@ -112,6 +113,14 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
+     * カスタムフィールドの一覧データを取得する
+     */
+    public function getCustomFields()
+    {
+        return $this->getService(CustomFieldsServiceInterface::class);
+    }
+
+    /**
      * 一覧用の View 変数を取得する
      *
      * @param EntityInterface $customContent
@@ -132,6 +141,96 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             ->setForeignKey('custom_table_id')
             ->setSort(['CustomLinks.lft' => 'ASC'])
             ->setFinder('all');
+        $customTable = $customTables->get($customContent->custom_table_id, [
+            'contain' => [
+                'CustomLinks' => [
+                    'conditions' => ['CustomLinks.status' => true],
+                    'CustomFields'
+                ]
+            ]
+        ]);
+
+        return [
+            'customContent' => $customContent,
+            'customEntries' => $customEntries,
+            'customTable' => $customTable,
+            'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
+            'editLink' => BcUtil::loginUser()? [
+                'prefix' => 'Admin',
+                'plugin' => 'BcCustomContent',
+                'controller' => 'CustomContents',
+                'action' => 'edit',
+                $customContent->id
+            ] : null,
+        ];
+    }
+
+    /**
+     * アーカイブページ用の View 変数を取得する
+     *
+     * @param EntityInterface $customContent
+     * @param PaginatedInterface $customEntries
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getViewVarsForArchives(EntityInterface $customContent, PaginatedInterface $customEntries): array
+    {
+        /** @var CustomContent $customContent */
+        /** @var CustomTablesService $customTables */
+        $customTables = $this->getService(CustomTablesServiceInterface::class);
+        $customTables->CustomTables->hasMany('CustomLinks')
+            ->setClassName('BcCustomContent.CustomLinks')
+            ->setForeignKey('custom_table_id')
+            ->setSort(['CustomLinks.lft' => 'ASC'])
+            ->setFinder('all');
+        //カスタムテーブルidを元に紐づいたカスタムリンクを取得
+        $customTable = $customTables->get($customContent->custom_table_id, [
+            'contain' => [
+                'CustomLinks' => [
+                    'conditions' => ['CustomLinks.status' => true],
+                    'CustomFields'
+                ]
+            ]
+        ]);
+
+        return [
+            'customContent' => $customContent,
+            'customEntries' => $customEntries,
+            'customTable' => $customTable,
+            'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
+            'editLink' => BcUtil::loginUser()? [
+                'prefix' => 'Admin',
+                'plugin' => 'BcCustomContent',
+                'controller' => 'CustomContents',
+                'action' => 'edit',
+                $customContent->id
+            ] : null,
+        ];
+    }
+
+    /**
+     * 年別アーカイブページ用の View 変数を取得する
+     *
+     * @param EntityInterface $customContent
+     * @param PaginatedInterface $customEntries
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getViewVarsForYear(EntityInterface $customContent, PaginatedInterface $customEntries): array
+    {
+        /** @var CustomContent $customContent */
+        /** @var CustomTablesService $customTables */
+        $customTables = $this->getService(CustomTablesServiceInterface::class);
+        $customTables->CustomTables->hasMany('CustomLinks')
+            ->setClassName('BcCustomContent.CustomLinks')
+            ->setForeignKey('custom_table_id')
+            ->setSort(['CustomLinks.lft' => 'ASC'])
+            ->setFinder('all');
+        //カスタムテーブルidを元に紐づいたカスタムリンクを取得
         $customTable = $customTables->get($customContent->custom_table_id, [
             'contain' => [
                 'CustomLinks' => [
