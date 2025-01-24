@@ -130,7 +130,14 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('logo_link', [
             'urlCheck' => [
-                'rule' => ['url', true],
+                'rule' => function ($value, $context) {
+                    // 空白またはルートパス（/）の場合はバリデーションをスキップ
+                    if (empty($value) || $value === '/') {
+                        return true;
+                    }
+                    // それ以外の場合はURL形式をチェック
+                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
+                },
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);
