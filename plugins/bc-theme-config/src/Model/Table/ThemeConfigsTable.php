@@ -127,18 +127,13 @@ class ThemeConfigsTable extends AppTable
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
         ]);
-
         $validator->add('logo_link', [
             'urlCheck' => [
-                'rule' => function ($value, $context) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-            ]
-        ]);
+                ]
+            ]);
 
         // main_image_1
         $validator->add('main_image_1', [
@@ -152,12 +147,8 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_1', [
             'urlCheck' => [
-                'rule' => function ($value) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);
@@ -173,12 +164,8 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_2', [
             'urlCheck' => [
-               'rule' => function ($value) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);
@@ -194,12 +181,8 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_3', [
             'urlCheck' => [
-                'rule' => function ($value, $context) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);
@@ -215,12 +198,8 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_4', [
             'urlCheck' => [
-                'rule' => function ($value) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);
@@ -236,12 +215,8 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_5', [
             'urlCheck' => [
-                'rule' => function ($value, $context) {
-                    if (empty($value) || $value === '/') {
-                        return true;
-                    }
-                    return filter_var($value, FILTER_VALIDATE_URL) !== false;
-                },
+                'rule' => 'urlCheck',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
         ]);

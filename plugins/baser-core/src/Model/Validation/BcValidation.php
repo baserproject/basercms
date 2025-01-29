@@ -671,4 +671,15 @@ class BcValidation extends Validation
             return false;
         }
     }
+
+    /**
+     * url形式 (ルートパスと空白許容)であることを確認する
+     * @param $string
+     * @return bool
+     */
+    public static function urlCheck($value):bool
+    {
+       return preg_match('/^($|\/|\/[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]*)*|[a-zA-Z0-9\-\.]+:\/\/[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\.\/?&=]*)*)$/', $value);
+    }
+
 }
