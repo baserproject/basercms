@@ -679,7 +679,23 @@ class BcValidation extends Validation
      */
     public static function urlCheck($value):bool
     {
-       return preg_match('/^($|\/|\/[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]*)*|[a-zA-Z0-9\-\.]+:\/\/[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\.\/?&=]*)*)$/', $value);
+
+        // 文字列チェック
+        if(!is_string($value)) {
+            return false;
+        }
+
+        // 空文字は許容
+        if ($value === '') {
+            return true;
+        }
+
+        // `parse_url` でパス部分を取得
+        $parsedUrl = parse_url($value);
+
+
+        // `path` の存在を確認し、スラッシュから始まっているかをチェック
+        return isset($parsedUrl['path']) && preg_match('/^\/[a-zA-Z0-9\-_\/]*$/', $parsedUrl['path']);
     }
 
 }
