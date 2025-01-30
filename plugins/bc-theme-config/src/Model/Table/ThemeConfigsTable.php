@@ -129,7 +129,7 @@ class ThemeConfigsTable extends AppTable
         ]);
         $validator->add('logo_link', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
                 ]
@@ -147,7 +147,7 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_1', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
@@ -164,7 +164,7 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_2', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
@@ -181,7 +181,7 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_3', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
@@ -198,7 +198,7 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_4', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]
@@ -215,7 +215,7 @@ class ThemeConfigsTable extends AppTable
 
         $validator->add('main_image_link_5', [
             'urlCheck' => [
-                'rule' => 'urlCheck',
+                'rule' => 'rootPath',
                 'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
             ]

@@ -677,7 +677,7 @@ class BcValidation extends Validation
      * @param $string
      * @return bool
      */
-    public static function urlCheck($value):bool
+    public static function rootPath($value):bool
     {
 
         // 文字列チェック
@@ -685,7 +685,7 @@ class BcValidation extends Validation
             return false;
         }
 
-        // 空文字は許容
+        // 入力値が空文字は許容
         if ($value === '') {
             return true;
         }
