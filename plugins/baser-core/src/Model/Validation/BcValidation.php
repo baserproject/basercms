@@ -671,4 +671,31 @@ class BcValidation extends Validation
             return false;
         }
     }
+
+    /**
+     * url形式 (ルートパスと空白許容)であることを確認する
+     * @param $string
+     * @return bool
+     */
+    public static function rootPath($value):bool
+    {
+
+        // 文字列チェック
+        if(!is_string($value)) {
+            return false;
+        }
+
+        // 入力値が空文字は許容
+        if ($value === '') {
+            return true;
+        }
+
+        // `parse_url` でパス部分を取得
+        $parsedUrl = parse_url($value);
+
+
+        // `path` の存在を確認し、スラッシュから始まっているかをチェック
+        return isset($parsedUrl['path']) && preg_match('/^\/[a-zA-Z0-9\-_\/]*$/', $parsedUrl['path']);
+    }
+
 }
