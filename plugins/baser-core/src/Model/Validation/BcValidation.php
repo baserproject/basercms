@@ -677,7 +677,7 @@ class BcValidation extends Validation
      * @param $string
      * @return bool
      */
-    public static function rootPath($value):bool
+    public static function rootPathCheck($value):bool
     {
 
         // 文字列チェック
