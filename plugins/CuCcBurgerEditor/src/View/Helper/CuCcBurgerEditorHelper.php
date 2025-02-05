@@ -46,7 +46,7 @@ class CuCcBurgerEditorHelper extends Helper
     public function control($field): string
     {
 
-        return $this->BcAdminForm->editor($field, [
+        return $this->BcAdminForm->editor($field->name, [
             'type' => 'editor',
             'editor' => "BurgerEditor.BurgerEditor",
             'editorUseDraft' => $field->custom_field->meta['CuCcBurgerEditor']['editor_use_draft'],
