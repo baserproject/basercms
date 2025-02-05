@@ -246,7 +246,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'title' => null,
             'creator_id' => null,
             'status' => null,
-            'custom_content_id' => null
+            'custom_content_id' => null,
+            'published' => null
         ], $params);
 
         // 公開状態
