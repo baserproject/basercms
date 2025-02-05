@@ -48,8 +48,7 @@ if(!empty($child)) {
     ]) ?>
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.custom_field_id", [
       'type' => 'hidden',
-      'value' => $customLink->custom_field_id,
-      'class' => 'custom-field-id',
+      'value' => $customLink->custom_field_id
     ]) ?>
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.sort", [
       'type' => 'hidden',

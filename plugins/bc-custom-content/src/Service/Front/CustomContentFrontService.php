@@ -113,14 +113,6 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
-     * カスタムフィールドの一覧データを取得する
-     */
-    public function getCustomFields()
-    {
-        return $this->getService(CustomFieldsServiceInterface::class);
-    }
-
-    /**
      * 一覧用の View 変数を取得する
      *
      * @param EntityInterface $customContent
@@ -175,7 +167,11 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchives(EntityInterface $customContent, PaginatedInterface $customEntries): array
+    public function getViewVarsForArchives(
+        EntityInterface $customContent,
+        PaginatedInterface $customEntries,
+        string $archivesName
+    ): array
     {
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
@@ -200,13 +196,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             'customEntries' => $customEntries,
             'customTable' => $customTable,
             'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
-            'editLink' => BcUtil::loginUser()? [
-                'prefix' => 'Admin',
-                'plugin' => 'BcCustomContent',
-                'controller' => 'CustomContents',
-                'action' => 'edit',
-                $customContent->id
-            ] : null,
+            'archivesName' => $archivesName
         ];
     }
 
@@ -215,12 +205,17 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      *
      * @param EntityInterface $customContent
      * @param PaginatedInterface $customEntries
+     * @param string $archivesName
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForYear(EntityInterface $customContent, PaginatedInterface $customEntries): array
+    public function getViewVarsForYear(
+        EntityInterface $customContent,
+        PaginatedInterface $customEntries,
+        string $archivesName
+    ): array
     {
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
@@ -245,13 +240,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             'customEntries' => $customEntries,
             'customTable' => $customTable,
             'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
-            'editLink' => BcUtil::loginUser()? [
-                'prefix' => 'Admin',
-                'plugin' => 'BcCustomContent',
-                'controller' => 'CustomContents',
-                'action' => 'edit',
-                $customContent->id
-            ] : null,
+            'archivesName' => $archivesName
         ];
     }
 

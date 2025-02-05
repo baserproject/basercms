@@ -46,6 +46,7 @@ return [
              * `useCheckMaxFileSize`: ファイルアップロードサイズ制限の利用（デフォルト false）
              * `useCheckFileExt`: ファイル拡張子チェックの利用（デフォルト false）
              * `loop`: ループ機能に対応しているかどうか（デフォルト false）
+             * `hasArchives` : アーカイブ機能に対応しているかどうか（デフォルト false）
              */
             'BcCcText' => [
                 'category' => __d('baser_core', '基本'),

@@ -15,6 +15,7 @@
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \Cake\ORM\ResultSet $customEntries
  * @var \BcCustomContent\Model\Entity\CustomContent $customContent
+ * @var string $archivesName
  * @checked
  * @noTodo
  * @unitTest
@@ -26,11 +27,11 @@ $this->BcBaser->setDescription($customContent->content->description);
 
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
+<h3 class="bs-cc-archives-title"><?php echo __d('baser_core', '{0}年', h($archivesName)) ?></h3>
+
 <div class="bs-cc-description">
 <?php $this->BcBaser->customContentDescription($customContent) ?>
 </div>
-
-<?php $this->BcBaser->element('custom_entries_search') ?>
 
 <section class="bs-cc-entries">
 <?php if($customEntries): ?>

@@ -30,7 +30,7 @@
     <span class="preview-icon" @click="hidePreview">PREVIEW</span>
     <table class="form-table bca-form-table" data-bca-table-type="type2">
     <?php foreach($flatLinks as $link): ?>
-      <?php if ($link->custom_field->type === 'group' || $link->custom_field->type === 'CuCcBurgerEditor') continue ?>
+      <?php if ($link->custom_field->type === 'group') continue ?>
       <tr v-show="showPreview['<?php echo $link->id ?>']">
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label($link->name, '{{link.title}}') ?>&nbsp;&nbsp;

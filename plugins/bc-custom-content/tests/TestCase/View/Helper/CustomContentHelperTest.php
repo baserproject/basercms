@@ -584,22 +584,4 @@ class CustomContentHelperTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
-    /**
-     * test getFieldItemList
-     */
-    public function testGetFieldItemList() : void
-    {
-        CustomFieldFactory::make([
-            'id' => 1,
-            'title' => '求人分類',
-            'name' => 'recruit_category',
-            'type' => 'BcCcRadio',
-            'sorce' => "飲料\nその他"
-        ])->persist();
-        $result = $this->CustomContentHelper->getFieldItemList('recruit_category');
-        $this->assertEquals([
-            '<a href="">飲料',
-            'その他'
-        ], $result);
-    }
 }

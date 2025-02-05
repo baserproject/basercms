@@ -170,17 +170,11 @@ if (!$customTable->isContentTable()) {
 <div class="bca-section" data-bca-section-type="form-group">
   <table id="FormTable" class="form-table bca-form-table">
     <?php if ($customTable->custom_links): ?>
-      <?php $fieldTypes = Configure::read('BcCustomContent.fieldTypes'); ?>
         <?php foreach($customTable->custom_links as $customLink): ?>
+          <?php $showHeading = Configure::read("BcCustomContent.fieldTypes.{$customLink->custom_field->type}.showHeading"); ?>
           <?php /** @var \BcCustomContent\Model\Entity\CustomLink $customLink */ ?>
             <?php if (!$this->CustomContent->isEnableField($customLink)) continue ?>
               <tr>
-                <?php
-                $showHeading = null;
-                if(array_key_exists('showHeading', $fieldTypes[$customLink->custom_field->type])) {
-                  $showHeading = $fieldTypes[$customLink->custom_field->type]['showHeading'];
-                }
-                ?>
                 <?php if($showHeading !== false): ?>
                   <th class="col-head bca-form-table__label">
                     <?php echo $this->CustomContentAdmin->label($customLink) ?>&nbsp;&nbsp;

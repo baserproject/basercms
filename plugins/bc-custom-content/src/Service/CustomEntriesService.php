@@ -247,7 +247,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'creator_id' => null,
             'status' => null,
             'custom_content_id' => null,
-            'published' => null
+            'published' => null,
+            'publishedYear' => null
         ], $params);
 
         // 公開状態
@@ -281,7 +282,12 @@ class CustomEntriesService implements CustomEntriesServiceInterface
 
         // 公開日
         if (!is_null($params['published'])) {
-            $conditions['CustomEntries.published LIKE']  = $params['published'];
+            $conditions['CustomEntries.published']  = $params['published'];
+        }
+
+        // 公開年
+        if (!is_null($params['publishedYear'])) {
+            $conditions['YEAR(CustomEntries.published)']  = $params['publishedYear'];
         }
 
         // custom_content_id

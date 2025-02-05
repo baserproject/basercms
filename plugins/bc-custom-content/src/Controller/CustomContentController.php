@@ -12,10 +12,13 @@
 namespace BcCustomContent\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
+use BcCustomContent\Service\CustomFieldsServiceInterface;
+use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Core\Configure;
 
 /**
  * CustomContentController
@@ -59,7 +62,7 @@ class CustomContentController extends BcFrontAppController
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
 
@@ -86,7 +89,7 @@ class CustomContentController extends BcFrontAppController
     public function view(CustomContentFrontServiceInterface $service, $entryId)
     {
         if(!$this->getRequest()->getAttribute('currentContent')->entity_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
         $customContent = $service->getCustomContent(
@@ -94,7 +97,7 @@ class CustomContentController extends BcFrontAppController
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
 
@@ -111,38 +114,43 @@ class CustomContentController extends BcFrontAppController
      *
      * ### URL例
      * - カテゴリ別記事一覧： /products/archives/category/category-name
+     * @param CustomContentFrontServiceInterface $service
+     * @param CustomLinksServiceInterface $customFieldsService
+     * @param string $field
+     * @param string $value
      */
-    public function archives(CustomContentFrontServiceInterface $service, $field, $value)
-    {
+    public function archives(
+        CustomContentFrontServiceInterface $service,
+        CustomLinksServiceInterface $customLinksService,
+        string $field,
+        string $value
+    ) {
         $customContent = $service->getCustomContent(
             (int)$this->getRequest()->getAttribute('currentContent')->entity_id
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
-        };
+        }
 
         // フィールドが対象のカスタムフィールドかチェック
-        $fieldsService = $service->getCustomFields();
-        $fieldData = $fieldsService->findByName($field);
-        foreach ($fieldData as $targetFieldData) {
-            $type = $targetFieldData->type;
-        }
-
-        $targetTypeArray = ['BcCcMultiple', 'BcCcRadio', 'BcCcSelect', 'BcCcPref', 'BcCcRelated'];
-        if (!in_array($type, $targetTypeArray)) {
-            $this->BcMessage->setWarning(__d('baser_core', '指定されたフィールドはアーカイブ対象に設定されていません。'));
+        $customLink = $customLinksService->findByName($field, [
+            'contain' => ['CustomFields']
+        ]);
+        if(!Configure::read("BcCustomContent.fieldTypes.{$customLink['custom_field']['type']}.hasArchives")) {
+            $this->log(__d('baser_core', '指定されたフィールドはアーカイブ対象に設定されていません。'));
             $this->notFound();
         }
 
+        $value = urldecode($value);
         $this->set($service->getViewVarsForArchives(
             $customContent,
             $this->paginate(
                 $service->getCustomEntries($customContent, [
-                $field => urldecode($value)
-            ]),
-        )));
+                $field => $value
+            ])
+        ), $value));
 
         $this->render($service->getArchivesTemplate($customContent));
     }
@@ -160,18 +168,20 @@ class CustomContentController extends BcFrontAppController
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
-        };
+        }
 
         $this->set($service->getViewVarsForYear(
             $customContent,
             $this->paginate(
                 $service->getCustomEntries($customContent, [
-                    'published' => $year . '%',
+                    'publishedYear' => $year,
                 ]),
-            )));
+            ),
+            $year
+        ));
 
-        $this->render($service->getArchivesTemplate($customContent));
+        $this->render($service->getYearTemplate($customContent));
     }
 }

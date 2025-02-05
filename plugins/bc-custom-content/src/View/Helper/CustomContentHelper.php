@@ -24,7 +24,6 @@ use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
-use Migrations\Db\Table\Index;
 
 /**
  * CustomContentHelper

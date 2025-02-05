@@ -41,7 +41,7 @@ let customLinks = new Vue({
             currentParentId: null,
             tableId: script.attr('data-tableId'),
             displayPreview: true,
-            isAdd: script.attr('data-isAdd')
+            isAdd: script.attr('data-isAdd'),
         }
     },
 
@@ -206,7 +206,8 @@ let customLinks = new Vue({
             this.link = Object.assign({}, this.links[index]);
             this.field = this.link.custom_field;
             this.currentParentId = this.link.parent_id;
-            this.initPreview(this.link.id);
+            const setting = this.settings[this.field.type];
+            this.initPreview(this.link.id, setting);
             this.loadParentList();
             this.changeGroupFunction();
 
@@ -281,14 +282,15 @@ let customLinks = new Vue({
          * プレビューを初期化する
          *
          * @param id
+         * @param setting
          */
-        initPreview: function (id) {
+        initPreview: function (id, setting) {
             this.displayPreview = true;
             this.showPreview['NonSupport'] = false;
             Object.keys(this.showPreview).forEach(function (key) {
                 this.showPreview[key] = false;
             }, this);
-            if (id && this.links[id].custom_field.type !== 'group') {
+            if (id && setting.preview && this.links[id].custom_field.type !== 'group') {
                 this.showPreview[id] = true;
             } else {
                 this.showPreview['NonSupport'] = true;
@@ -427,16 +429,14 @@ $(function () {
                 jQuery(ui.helper).css({
                     'width': jQuery(this).width()
                 });
-                let currentType = $(this).find("input.custom-field-type").val();
-                    if(currentType.length > 0){
+                const currentType = $(this).find("input.custom-field-type").val();
+                if(currentType.length > 0){
+                    const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
+                    const onlyOnOnTable = fieldTypes[currentType].onlyOneOnTable;
                     $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
                         var type = $(this).find("input.custom-field-type").val();
-                        if(currentType == type){
-                            const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
-                            var onryOnOnTable = fieldTypes[currentType].onlyOneOnTable;
-                            if(onryOnOnTable === true){
-                                event.preventDefault();
-                            }
+                        if(currentType === type && onlyOnOnTable === true){
+                            event.preventDefault();
                         }
                     });
                 }
@@ -479,6 +479,7 @@ $(function () {
                 $(`#${inUseFieldId} input[name='template[name]']`).attr('name', `custom_links[new-${baseId}][name]`);
                 $(`#${inUseFieldId} input[name='template[custom_field_id]']`).attr('name', `custom_links[new-${baseId}][custom_field_id]`);
                 $(`#${inUseFieldId} input[name='template[sort]']`).attr('name', `custom_links[new-${baseId}][sort]`);
+                $(`#${inUseFieldId} input[name='template[type]']`).attr('name', `custom_links[new-${baseId}][type]`);
                 $(`#${inUseFieldId} input[name='template[title]']`).attr('name', `custom_links[new-${baseId}][title]`);
                 $(`#${inUseFieldId} input[name='template[display_front]']`).attr('name', `custom_links[new-${baseId}][display_front]`);
                 $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
