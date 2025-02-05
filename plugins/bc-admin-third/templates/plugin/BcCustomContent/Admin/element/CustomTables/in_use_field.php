@@ -48,12 +48,18 @@ if(!empty($child)) {
     ]) ?>
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.custom_field_id", [
       'type' => 'hidden',
-      'value' => $customLink->custom_field_id
+      'value' => $customLink->custom_field_id,
+      'class' => 'custom-field-id',
     ]) ?>
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.sort", [
       'type' => 'hidden',
       'value' => $i,
       'class' => $sortClass
+    ]) ?>
+    <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.type", [
+      'type' => 'hidden',
+      'value' => $customLink->custom_field->type,
+      'class' => 'custom-field-type',
     ]) ?>
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.title", [
       'type' => 'text',
