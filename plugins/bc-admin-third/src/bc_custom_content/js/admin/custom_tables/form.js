@@ -427,6 +427,19 @@ $(function () {
                 jQuery(ui.helper).css({
                     'width': jQuery(this).width()
                 });
+                let currentType = $(this).find("input.custom-field-type").val();
+                    if(currentType.length > 0){
+                    $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
+                        var type = $(this).find("input.custom-field-type").val();
+                        if(currentType == type){
+                            const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
+                            var onryOnOnTable = fieldTypes[currentType].onlyOneOnTable;
+                            if(onryOnOnTable === true){
+                                event.preventDefault();
+                            }
+                        }
+                    });
+                }
             },
         });
         // 利用中のフィールドを並べ替える
