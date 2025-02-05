@@ -24,10 +24,6 @@ $this->BcBaser->setTitle($customContent->content->title);
 $this->BcBaser->setDescription($customContent->content->description);
 ?>
 
-<?php var_dump($this->CustomContent->getFieldItemList(
-  $this->getRequest()->getAttribute('currentContent')->id,
-  'employment_status'
-)) ?>
 
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
