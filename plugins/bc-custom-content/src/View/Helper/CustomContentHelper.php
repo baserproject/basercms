@@ -385,6 +385,16 @@ class CustomContentHelper extends CustomContentAppHelper
             'link' => true
         ], $options);
 
+        // カスタムエントリーを取得
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customEntries = $customEntriesTable->find()
+            ->select([$fieldName])
+            ->distinct()
+            ->all()
+            ->toArray();
+
+        $values = Hash::extract($customEntries, '{n}.' . $fieldName);
+
         $customContentsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
         $customContentsTable->CustomTables->setHasManyLinksByAll();
         $customLink = $customContentsTable->find()
@@ -393,16 +403,8 @@ class CustomContentHelper extends CustomContentAppHelper
             ])
             ->contain( [
                 'Contents',
-                'CustomTables',
-                'CustomTables.CustomLinks' => function ($q) use ($fieldName) {
-                    return $q->where(['CustomLinks.name' => $fieldName]);
-                },
-                'CustomTables.CustomLinks.CustomFields'
             ])
             ->first();
-
-        $records = $customLink->custom_table->custom_links[0]->custom_field;
-        $values = explode("\n", $records->source);
 
         // リンクを表示する
         if ($options['link'] == true) {
