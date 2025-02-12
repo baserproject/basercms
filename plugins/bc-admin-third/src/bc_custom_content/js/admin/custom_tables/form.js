@@ -407,7 +407,7 @@ $(function () {
     init();
     changeType();
     registerEventToInUseField();
-
+    let isUndraggable = false;
     /**
      * 初期化
      */
@@ -432,11 +432,36 @@ $(function () {
                 const currentType = $(this).find("input.custom-field-type").val();
                 if(currentType.length > 0){
                     const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
-                    const onlyOnOnTable = fieldTypes[currentType].onlyOneOnTable;
+                    const onlyOneOnTable = fieldTypes[currentType].onlyOneOnTable;
                     $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
                         var type = $(this).find("input.custom-field-type").val();
-                        if(currentType === type && onlyOnOnTable === true){
+                        if(currentType === type && onlyOneOnTable === true){
                             event.preventDefault();
+                        }
+                    });
+                }
+            },
+            stop: function (event, ui) {
+                const currentType = $(this).find("input.custom-field-type").val();
+                console.log(currentType);
+                if(currentType.length > 0){
+                    const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
+                    const onlyOneOnTable = fieldTypes[currentType].onlyOneOnTable;
+                    let isTargetType = false;
+                    $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
+                        var type = $(this).find("input.custom-field-type").val();
+                        console.log('type');
+                        console.log(type);
+                        console.log('currentType');
+                        console.log(currentType);
+                        if(currentType === type && onlyOneOnTable === true){
+                            isTargetType = true;
+                            $(event.target).find('.custom-field-content__head').addClass('isUndraggable');
+                            return;
+                            // console.log(event.target);
+                        }
+                        if(isTargetType === true){
+                            $(event.target).find('.custom-field-content__head').addClass('isUndraggable');
                         }
                     });
                 }
