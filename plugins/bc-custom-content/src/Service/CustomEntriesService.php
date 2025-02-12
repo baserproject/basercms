@@ -319,7 +319,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
                 if (in_array($controlType, ['text', 'textarea'])) {
                     $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
-                } elseif ($controlType === 'multiCheckbox' && is_array($value)) {
+                } elseif ($controlType === 'multiCheckbox') {
+                    if (!is_array($value)) $value = [$value];
                     $c = [];
                     foreach ($value as $v) {
                         $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
