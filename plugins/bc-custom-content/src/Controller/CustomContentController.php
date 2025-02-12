@@ -147,10 +147,13 @@ class CustomContentController extends BcFrontAppController
         $this->set($service->getViewVarsForArchives(
             $customContent,
             $this->paginate(
-                $service->getCustomEntries($customContent, [
-                $field => $value
-            ])
-        ), $value));
+                $service->getCustomEntries($customContent, array_merge($this->getRequest()->getQueryParams(), [
+                    $field => $value
+                ])),
+                ['limit' => $customContent->list_count]
+            ),
+            $value
+        ));
 
         $this->render($service->getArchivesTemplate($customContent));
     }
@@ -175,9 +178,10 @@ class CustomContentController extends BcFrontAppController
         $this->set($service->getViewVarsForYear(
             $customContent,
             $this->paginate(
-                $service->getCustomEntries($customContent, [
+                $service->getCustomEntries($customContent, array_merge($this->getRequest()->getQueryParams(), [
                     'publishedYear' => $year,
-                ]),
+                ])),
+                ['limit' => $customContent->list_count]
             ),
             $year
         ));
