@@ -403,7 +403,6 @@ let customLinks = new Vue({
 });
 
 $(function () {
-
     init();
     changeType();
     registerEventToInUseField();
@@ -433,39 +432,20 @@ $(function () {
                 if(currentType.length > 0){
                     const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
                     const onlyOneOnTable = fieldTypes[currentType].onlyOneOnTable;
-                    $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
-                        var type = $(this).find("input.custom-field-type").val();
-                        if(currentType === type && onlyOneOnTable === true){
-                            event.preventDefault();
-                        }
-                    });
+                    if(onlyOneOnTable && isTargetDeployed(currentType)) {
+                        event.preventDefault();
+                    }
                 }
             },
-            // stop: function (event, ui) {
-            //     const currentType = $(this).find("input.custom-field-type").val();
-            //     console.log(currentType);
-            //     if(currentType.length > 0){
-            //         const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
-            //         const onlyOneOnTable = fieldTypes[currentType].onlyOneOnTable;
-            //         let isTargetType = false;
-            //         $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
-            //             var type = $(this).find("input.custom-field-type").val();
-            //             console.log('type');
-            //             console.log(type);
-            //             console.log('currentType');
-            //             console.log(currentType);
-            //             if(currentType === type && onlyOneOnTable === true){
-            //                 isTargetType = true;
-            //                 $(event.target).find('.custom-field-content__head').addClass('isUndraggable');
-            //                 return;
-            //                 // console.log(event.target);
-            //             }
-            //             if(isTargetType === true){
-            //                 $(event.target).find('.custom-field-content__head').addClass('isUndraggable');
-            //             }
-            //         });
-            //     }
-            // },
+            stop: function (event, ui) {
+                // DOM生成完了後に実行が必要
+                requestAnimationFrame(() => {
+                    // requestAnimationFrame を利用してもDOMの生成が間に合わなかったため、setTimeout で対応
+                    setTimeout(() => {
+                        checkDeployedOnlyOneOnTableTypes();
+                    }, 500);
+                });
+            },
         });
         // 利用中のフィールドを並べ替える
         $("#CustomFieldSettingTarget").sortable({
@@ -532,6 +512,50 @@ $(function () {
                 updateSort();
             },
         });
+        checkDeployedOnlyOneOnTableTypes();
+    }
+
+    /**
+     * 利用中のフィールドに対してOnlyOneOnTableのタイプが配置されているかチェックを行い、
+     * 配置されている場合は利用できるフィールドの対象のタイプにis-deployedクラスを付与する
+     */
+    function checkDeployedOnlyOneOnTableTypes() {
+        let deployedTypes = getDeployedOnlyOneOnTableTypes();
+        $("#CustomFieldSettingSource .custom-field-type").each(function(){
+            if(deployedTypes.indexOf($(this).val()) !== -1) {
+                $(this).parent().addClass('is-deployed');
+            }
+        });
+    }
+
+    /**
+     * ターゲットに配置済のOnlyOneOnTableのタイプを取得
+     */
+    function getDeployedOnlyOneOnTableTypes() {
+        let types = [];
+        Object.keys(customLinks.settings).forEach(key => {
+            if(customLinks.settings[key].onlyOneOnTable && isTargetDeployed(key)) {
+                types.push(key);
+            }
+        });
+        return types;
+    }
+
+    /**
+     * ターゲットに配置済かどうか
+     * @param targetType
+     * @returns {boolean}
+     */
+    function isTargetDeployed(targetType) {
+        let isDeployed = false;
+        $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
+            var type = $(this).find("input.custom-field-type").val();
+            if(targetType === type){
+                isDeployed = true;
+                return true;
+            }
+        });
+        return isDeployed;
     }
 
     /**
