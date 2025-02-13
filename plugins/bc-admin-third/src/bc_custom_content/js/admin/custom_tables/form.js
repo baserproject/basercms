@@ -604,6 +604,16 @@ $(function () {
                 $(this).remove();
                 updateSort();
             })
+            // onlyOneOnTable のタイプが削除された場合は、利用できるフィールドの対象のタイプにis-deployedクラスを削除する
+            let deletedFieldType = $(this).parent().parent().find("input.custom-field-type").val();
+            //deletedFieldTypeがonlyOneOnTableのタイプであるかチェック
+            if(customLinks.settings[deletedFieldType].onlyOneOnTable === true) {
+                $("#CustomFieldSettingSource .custom-field-type").each(function(){
+                    if($(this).val() === deletedFieldType && $(this).parent().hasClass('is-deployed')) {
+                        $(this).parent().removeClass('is-deployed');
+                    }
+                });
+            };
         });
     }
 
