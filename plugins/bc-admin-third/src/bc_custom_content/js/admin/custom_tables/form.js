@@ -437,15 +437,6 @@ $(function () {
                     }
                 }
             },
-            stop: function (event, ui) {
-                // DOM生成完了後に実行が必要
-                requestAnimationFrame(() => {
-                    // requestAnimationFrame を利用してもDOMの生成が間に合わなかったため、setTimeout で対応
-                    setTimeout(() => {
-                        checkDeployedOnlyOneOnTableTypes();
-                    }, 500);
-                });
-            },
         });
         // 利用中のフィールドを並べ替える
         $("#CustomFieldSettingTarget").sortable({
@@ -497,6 +488,7 @@ $(function () {
 
                 registerEventToInUseField(inUseFieldId);
                 updateSort();
+                checkDeployedOnlyOneOnTableTypes();
             },
         });
         // 利用中のフィールドを並べ替える
