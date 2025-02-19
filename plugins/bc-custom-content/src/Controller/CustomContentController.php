@@ -101,10 +101,14 @@ class CustomContentController extends BcFrontAppController
             $this->notFound();
         }
 
-        $this->set($service->getViewVarsForView(
-            $customContent,
-            $entryId
-        ));
+        try {
+            $this->set($service->getViewVarsForView(
+                $customContent,
+                $entryId
+            ));
+        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+            $this->notFound();
+        }
 
         $this->render($service->getViewTemplate($customContent));
     }

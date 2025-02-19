@@ -36,6 +36,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
 
 /**
@@ -420,12 +421,18 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             );
         }
 
-        return $this->CustomEntries->find()
+        // findを変数にいれる
+        $entitiy = $this->CustomEntries->find()
             ->select($this->createSelect($options))
             ->select($this->CustomEntries->CustomTables)
             ->where($conditions)
             ->contain($options['contain'])
             ->first();
+            if (!$entitiy) {
+                throw new RecordNotFoundException();
+            } else {
+                return $entitiy;
+            }
     }
 
     /**

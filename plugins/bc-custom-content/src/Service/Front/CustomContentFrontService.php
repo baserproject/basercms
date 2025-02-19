@@ -265,7 +265,6 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         } else {
             $options = ['status' => 'publish'];
             $entity = $this->EntriesService->get($entryId, $options);
-            if (!$entity) throw new NotFoundException();
         }
 
         /** @var CustomContent $customContent */
