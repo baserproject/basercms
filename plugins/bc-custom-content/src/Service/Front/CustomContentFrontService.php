@@ -358,16 +358,18 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         BcCcFileUtil::setupUploader($customContent->custom_table_id);
 
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        if($customEntriesTable->hasBehavior('BaserCore.BcUpload')) {
+            $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
+            $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
+        } else {
+            $postEntity = $request->getData();
+        }
+
         $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
-
-        $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
-        $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
-
         $entity = $customEntriesTable->patchEntity(
             $customEntry ?? $customEntriesTable->newEmptyEntity(),
             $postEntity
         );
-
         BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
 
         $entity = $customEntriesTable->decodeRow($entity);
