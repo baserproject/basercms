@@ -48,3 +48,6 @@ $this->BcBaser->setDescription($customContent->content->description);
   <p><?php echo __d('baser_core', 'エントリーが存在しません。') ?></p>
 <?php endif ?>
 </section>
+
+<!-- /Elements/paginations/simple.php -->
+<?php $this->BcBaser->pagination('simple'); ?>
