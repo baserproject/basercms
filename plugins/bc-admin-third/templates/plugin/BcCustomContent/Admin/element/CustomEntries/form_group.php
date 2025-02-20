@@ -19,18 +19,25 @@
 if(empty($customLink->children)) return;
 ?>
 
-<?php foreach($customLink->children as $child): ?>
-
-  <?php if ($child->before_linefeed): ?><br><?php endif ?>
-
-  <?php echo $this->CustomContentAdmin->label($child) ?>
-  <?php $this->BcBaser->element('CustomEntries/form_field', [
-    'customLink' => $child,
-    'parent' => $customLink
-  ]) ?>
-
-  <?php if ($child->after_linefeed): ?><br><?php endif ?>
-
-<?php endforeach ?>
-
+<table class="bca-form-table">
+  <?php foreach($customLink->children as $child): ?>
+    <tr>
+      <th class="bca-form-table__label">
+        <?php echo $this->CustomContentAdmin->label($child, [
+          'fieldName' => "{$customLink->name}.{$key}.{$child->name}"
+        ]) ?>&nbsp;&nbsp;
+        <?php echo $this->CustomContentAdmin->required($child) ?>
+      </th>
+      <td class="bca-form-table__input">
+        <?php echo $this->CustomContentAdmin->control($child, [
+          'fieldName' => "{$customLink->name}.{$key}.{$child->name}",
+        ]) ?>
+        <?php echo $this->CustomContentAdmin->error($child, [
+          'fieldName' => "{$customLink->name}_{$key}_{$child->name}",
+        ]) ?>
+        <?php $this->BcAdminForm->unlockField("{$customLink->name}.{$child->name}") ?>
+      </td>
+    </tr>
+  <?php endforeach ?>
+</table>
 <?php echo $this->CustomContentAdmin->getGroupErrors($customLink) ?>
