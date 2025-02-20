@@ -165,13 +165,16 @@ class AppController extends BaseController
         if ($this->requirePermission($this->getRequest()) && !$this->checkPermission()) {
             $prefix = BcUtil::getRequestPrefix($this->getRequest());
             if ($prefix === 'Api/Admin') {
-                throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
+                throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                    [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
             } else {
                 if (BcUtil::loginUser()) {
                     if ($this->getRequest()->getMethod() === 'GET') {
-                        $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                        $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                            [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
                     } else {
-                        $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。'));
+                        $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                            [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
                     }
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
                 } else {

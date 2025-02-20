@@ -598,7 +598,9 @@ return [
             '/baser-core/users/logout',
             '/baser-core/password_requests/*',
             '/baser/api/admin/baser-core/users/login.json',
-            '/baser/api/admin/baser-core/users/refresh_token.json'
+            '/baser/api/admin/baser-core/users/refresh_token.json',
+            '/baser/api/admin/baser-core/utilities/save_search_opened/*/*.json',
+            '/baser/api/admin/baser-core/plugins/get_available_core_version_info.json',
         ]
     ],
 

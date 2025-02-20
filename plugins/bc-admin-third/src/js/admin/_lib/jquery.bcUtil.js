@@ -269,7 +269,7 @@ import Cookies from 'js-cookie'
         showApiError: function (response) {
             let message = response.responseJSON.message;
             let errors = response.responseJSON.errors;
-            if(errors !== undefined) {
+            if (errors !== undefined && errors) {
                 message += "<br>";
                 Object.keys(errors).forEach(function (key) {
                     message += "<ul>"
