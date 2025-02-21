@@ -27,7 +27,7 @@ return [
                 'label' => __d('baser_core', 'チェックボックス'),
                 'columnType' => 'boolean',
                 'controlType' => 'checkbox',
-                'preview' => false,
+                'preview' => true,
                 'loop' => true
             ]
         ]

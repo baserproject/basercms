@@ -440,7 +440,6 @@ class CustomContentHelper extends CustomContentAppHelper
 
         foreach ($records as $record) {
             $years[] = $this->BcBaser->getLink($record->year, '/' . $targetTable->name . '/year/' . $record->year);
-            // $years[] = '<a href="/' . $targetTable->name . '/year/' . $record->year . '">' . $record->year . '</a>';
         }
         return $years;
     }

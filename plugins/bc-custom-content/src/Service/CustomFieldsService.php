@@ -97,27 +97,6 @@ class CustomFieldsService implements CustomFieldsServiceInterface
     }
 
     /**
-     * フィールド名をもとにカスタムフィールドの単一データを取得する
-     *
-     * @param string $name
-     * @return EntityInterface
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function findByName(string $name, array $queryParams = [])
-    {
-        $options = array_merge([
-            'status' => null
-        ], $queryParams);
-        $conditions = [
-            'CustomFields.name' => $name
-        ];
-        if(!is_null($options['status'])) $conditions = ['CustomFields.status' => $options['status']];
-        return $this->CustomFields->find()->where($conditions)->toArray();
-    }
-
-    /**
      * カスタムフィールドの一覧データを取得する
      *
      * @param array $queryParams

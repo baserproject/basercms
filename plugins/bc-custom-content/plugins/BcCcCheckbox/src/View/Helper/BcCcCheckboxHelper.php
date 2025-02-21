@@ -96,13 +96,18 @@ class BcCcCheckboxHelper extends Helper
      * @param CustomLink $link
      * @param array $options
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
         if($fieldValue === true) {
             $fieldValue = $link->custom_field->meta['BcCcCheckbox']['label'];
+            return h($fieldValue);
+        } else {
+            return '';
         }
-		return h($fieldValue);
     }
 
 }

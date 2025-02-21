@@ -49,5 +49,4 @@ $this->BcBaser->setDescription($customContent->content->description);
 <?php endif ?>
 </section>
 
-<!-- /Elements/paginations/simple.php -->
 <?php $this->BcBaser->pagination('simple'); ?>

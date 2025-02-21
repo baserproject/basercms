@@ -41,7 +41,7 @@ let customLinks = new Vue({
             currentParentId: null,
             tableId: script.attr('data-tableId'),
             displayPreview: true,
-            isAdd: script.attr('data-isAdd'),
+            isAdd: script.attr('data-isAdd')
         }
     },
 
@@ -406,7 +406,6 @@ $(function () {
     init();
     changeType();
     registerEventToInUseField();
-    let isUndraggable = false;
     /**
      * 初期化
      */
