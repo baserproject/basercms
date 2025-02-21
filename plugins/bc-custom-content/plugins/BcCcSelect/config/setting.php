@@ -29,7 +29,8 @@ return [
                 'controlType' => 'select',
                 'preview' => true,
                 'useSource' => true,
-                'loop' => true
+                'loop' => true,
+                'hasArchives' => true,
             ]
         ]
     ]

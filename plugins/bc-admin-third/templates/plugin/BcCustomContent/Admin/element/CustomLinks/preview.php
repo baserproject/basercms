@@ -38,7 +38,7 @@
         </th>
         <td class="col-input bca-form-table__input">
           <span>{{ link.before_head }}</span>
-          <?php echo $this->CustomContentAdmin->control($link) ?>
+          <?php echo $this->CustomContentAdmin->control($link, ['preview' => true]) ?>
           <span>{{ link.after_head }}</span>
           <i class="bca-icon--question-circle bca-help" v-show="link.description"></i>
           <div class="bca-helptext" v-html="linkHtmlDescription">

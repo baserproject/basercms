@@ -28,7 +28,8 @@ return [
                 'columnType' => 'string',
                 'controlType' => 'select',
                 'preview' => true,
-                'loop' => true
+                'loop' => true,
+                'hasArchives' => true,
             ]
         ]
     ]

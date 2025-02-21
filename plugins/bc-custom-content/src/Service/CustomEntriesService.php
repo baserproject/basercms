@@ -36,6 +36,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
 
 /**
@@ -246,7 +247,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'title' => null,
             'creator_id' => null,
             'status' => null,
-            'custom_content_id' => null
+            'custom_content_id' => null,
+            'published' => null,
+            'publishedYear' => null
         ], $params);
 
         // 公開状態
@@ -278,6 +281,16 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             $conditions['CustomEntries.creator_id'] = $params['creator_id'];
         }
 
+        // 公開日
+        if (!is_null($params['published'])) {
+            $conditions['CustomEntries.published']  = $params['published'];
+        }
+
+        // 公開年
+        if (!is_null($params['publishedYear'])) {
+            $conditions['YEAR(CustomEntries.published)']  = $params['publishedYear'];
+        }
+
         // custom_content_id
         if (!is_null($params['custom_content_id'])) {
             $query->contain('CustomTables.CustomContents');
@@ -307,7 +320,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
                 if (in_array($controlType, ['text', 'textarea'])) {
                     $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
-                } elseif ($controlType === 'multiCheckbox' && is_array($value)) {
+                } elseif ($controlType === 'multiCheckbox') {
+                    if (!is_array($value)) $value = [$value];
                     $c = [];
                     foreach ($value as $v) {
                         $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
@@ -407,12 +421,18 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             );
         }
 
-        return $this->CustomEntries->find()
+        // findを変数にいれる
+        $entitiy = $this->CustomEntries->find()
             ->select($this->createSelect($options))
             ->select($this->CustomEntries->CustomTables)
             ->where($conditions)
             ->contain($options['contain'])
             ->first();
+            if (!$entitiy) {
+                throw new RecordNotFoundException();
+            } else {
+                return $entitiy;
+            }
     }
 
     /**

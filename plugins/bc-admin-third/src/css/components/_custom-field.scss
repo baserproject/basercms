@@ -93,6 +93,13 @@
   height: 100%;
 }
 
+.custom-field-setting {
+  .is-deployed {
+    color:#CCC;
+    cursor: not-allowed;
+  }
+}
+
 #CustomFieldPreview {
   background-color: #fff;
   border-top: 1px solid #CCC;

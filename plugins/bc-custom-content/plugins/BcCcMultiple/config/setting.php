@@ -29,7 +29,8 @@ return [
                 'controlType' => 'multiCheckbox',
                 'preview' => true,
                 'useSource' => true,
-                'loop' => true
+                'loop' => true,
+                'hasArchives' => true,
             ]
         ]
     ]

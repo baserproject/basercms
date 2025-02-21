@@ -9,6 +9,8 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use Cake\Core\Configure;
+
 /**
  * @var \BcCustomContent\View\CustomContentAdminAppView $this
  * @var \BcCustomContent\Model\Entity\CustomTable $customTable
@@ -168,33 +170,36 @@ if (!$customTable->isContentTable()) {
 <div class="bca-section" data-bca-section-type="form-group">
   <table id="FormTable" class="form-table bca-form-table">
     <?php if ($customTable->custom_links): ?>
-      <?php foreach($customTable->custom_links as $customLink): ?>
-        <?php /** @var \BcCustomContent\Model\Entity\CustomLink $customLink */ ?>
-        <?php if (!$this->CustomContent->isEnableField($customLink)) continue ?>
-        <tr>
-          <th class="col-head bca-form-table__label">
-            <?php echo $this->CustomContentAdmin->label($customLink) ?>&nbsp;&nbsp;
-            <?php echo $this->CustomContentAdmin->required($customLink) ?>
-          </th>
-          <td class="col-input bca-form-table__input">
-            <?php
-            if ($customLink->custom_field->type === 'group') {
-              if ($customLink->use_loop) {
-                $this->BcBaser->element('CustomEntries/form_loop', ['customLink' => $customLink]);
-              } else {
-                $this->BcBaser->element('CustomEntries/form_group', ['customLink' => $customLink]);
-              }
-            } else {
-              $this->BcBaser->element('CustomEntries/form_field', [
-                'customLink' => $customLink,
-                'parent' => null
-              ]);
-            }
-            ?>
-          </td>
-        </tr>
-<?php endforeach ?>
-    <?php endif ?>
+        <?php foreach($customTable->custom_links as $customLink): ?>
+          <?php $showHeading = Configure::read("BcCustomContent.fieldTypes.{$customLink->custom_field->type}.showHeading"); ?>
+          <?php /** @var \BcCustomContent\Model\Entity\CustomLink $customLink */ ?>
+            <?php if (!$this->CustomContent->isEnableField($customLink)) continue ?>
+              <tr>
+                <?php if($showHeading !== false): ?>
+                  <th class="col-head bca-form-table__label">
+                    <?php echo $this->CustomContentAdmin->label($customLink) ?>&nbsp;&nbsp;
+                    <?php echo $this->CustomContentAdmin->required($customLink) ?>
+                  </th>
+                <?php endif ?>
+                  <td class="col-input bca-form-table__input" <?php echo $showHeading === false ? 'colspan="2"' : '' ?>>
+                    <?php
+                    if ($customLink->custom_field->type === 'group') {
+                      if ($customLink->use_loop) {
+                        $this->BcBaser->element('CustomEntries/form_loop', ['customLink' => $customLink]);
+                      } else {
+                        $this->BcBaser->element('CustomEntries/form_group', ['customLink' => $customLink]);
+                      }
+                    } else {
+                      $this->BcBaser->element('CustomEntries/form_field', [
+                        'customLink' => $customLink,
+                        'parent' => null
+                      ]);
+                    }
+                    ?>
+                  </td>
+              </tr>
+          <?php endforeach ?>
+      <?php endif ?>
   </table>
 </div>
 

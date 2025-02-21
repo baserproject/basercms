@@ -29,7 +29,8 @@ return [
                 'controlType' => 'radio',
                 'useSource' => true,
                 'preview' => true,
-                'loop' => true
+                'loop' => true,
+                'hasArchives' => true,
             ]
         ]
     ]
