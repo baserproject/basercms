@@ -74,3 +74,8 @@ if (BcUtil::isConsole()) {
     Configure::write('App.fullBaseUrl', 'https://localhost');
 }
 
+/**
+ * X-Powered-Byヘッダーを送信を削除
+ * 脆弱性につながるためPHPバージョンを隠蔽
+ */
+header_remove('X-Powered-By');
