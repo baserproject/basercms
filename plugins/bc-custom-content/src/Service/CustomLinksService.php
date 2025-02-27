@@ -333,6 +333,10 @@ class CustomLinksService implements CustomLinksServiceInterface
         if(!is_null($options['contain'])) {
             $query->contain($options['contain']);
         }
+        $entitiy = $query->first();
+        if(!$entitiy) {
+            return [];
+        }
         return $query->first()->toArray();
     }
 
