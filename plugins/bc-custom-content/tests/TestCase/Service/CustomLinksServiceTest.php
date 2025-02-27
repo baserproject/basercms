@@ -371,4 +371,21 @@ class CustomLinksServiceTest extends BcTestCase
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_category');
     }
+
+    /**
+     * test findByName
+     */
+    public function testFindByName()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //サービスメソッドを呼ぶ
+        $result = $this->CustomLinksService->findByName('feature', ['contain' => ['CustomFields']]);
+        //戻る値を確認
+        $this->assertEquals('この仕事の特徴', $result['title']);
+
+        //存在しないフィールド名を指定した場合、空の配列を返す
+        $result = $this->CustomLinksService->findByName('test', ['contain' => ['CustomFields']]);
+        $this->assertEquals([], $result);
+    }
 }
