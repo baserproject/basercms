@@ -24,6 +24,7 @@ use Cake\Http\Response;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Service\PermissionGroupsServiceInterface;
 
 /**
  * Class PluginsController
@@ -200,18 +201,21 @@ class PluginsController extends BcAdminAppController
      * 無効化
      *
      * @param PluginsServiceInterface $service
+     * @param PermissionGroupsServiceInterface $permissionGroupService
      * @param string $name プラグイン名
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function detach(PluginsServiceInterface $service, $name)
+    public function detach(PluginsServiceInterface $service, PermissionGroupsServiceInterface $permissionGroupService, $name)
     {
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser_core', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
         if ($service->detach(rawurldecode($name))) {
+            // アクセスルールを削除
+            $permissionGroupService->deleteByPlugin($name);
             $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'プラグイン「%s」を無効にしました。'), rawurldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser_core', 'プラグインの無効化に失敗しました。'));
