@@ -99,6 +99,9 @@ class BcAppHelper extends Helper
 		} else {
 			$webPath = Router::url('/' . $asset[0]);
 		}
+		if (strpos($asset[0], DS) !== 0) {
+			$webPath = DS . $webPath;
+		}
 		// <<<
 
 		$file = $asset[0];
