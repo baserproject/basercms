@@ -18,6 +18,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
@@ -619,7 +620,6 @@ class CustomContentHelperTest extends BcTestCase
         $customEntriesCategory = $customEntriesService->get(1);
         $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
         $customEntriesService->update($customEntriesCategory, $arrayCategory);
-
 
         //対象メソッドをコール
         $rs = $this->CustomContentHelper->getFieldItemList(100, 'category');

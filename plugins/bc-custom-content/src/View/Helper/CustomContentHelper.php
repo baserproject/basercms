@@ -388,15 +388,17 @@ class CustomContentHelper extends CustomContentAppHelper
 
         $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
         $customField = $customFieldsTable->find()
+            ->matching('CustomLinks', function($q) use($fieldName) {
+                return $q->where(['CustomLinks.name' => $fieldName]);
+            })
+            ->matching('CustomLinks.CustomTables.CustomContents.Contents', function($q) use($contentId) {
+                return $q->where(['Contents.id' => $contentId]);
+            })
             ->contain([
-                'CustomLinks' => function($q) use($fieldName) {
-                    return $q->where(['CustomLinks.name' => $fieldName]);
-                },
+                'CustomLinks',
                 'CustomLinks.CustomTables',
                 'CustomLinks.CustomTables.CustomContents',
-                'CustomLinks.CustomTables.CustomContents.Contents' => function($q) use($contentId) {
-                    return $q->where( ['Contents.id' => (int)$contentId]);
-                },
+                'CustomLinks.CustomTables.CustomContents.Contents'
             ]
         )->first();
 
