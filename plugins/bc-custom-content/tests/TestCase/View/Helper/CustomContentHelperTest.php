@@ -584,4 +584,49 @@ class CustomContentHelperTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+    /**
+     * test getFieldItemList
+     */
+    public function testGetFieldItemList()
+    {
+        //サービスクラス
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        //データ生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        $customEntriesService->setup(1);
+        $customEntriesCategory = $customEntriesService->get(1);
+        $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
+        $customEntriesService->update($customEntriesCategory, $arrayCategory);
+
+
+        //対象メソッドをコール
+        $rs = $this->CustomContentHelper->getFieldItemList(100, 'category');
+        //戻り値を確認
+        $this->assertEquals('', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
 }

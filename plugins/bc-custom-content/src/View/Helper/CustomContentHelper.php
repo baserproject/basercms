@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
 use BcCustomContent\Model\Entity\CustomField;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
@@ -385,32 +386,59 @@ class CustomContentHelper extends CustomContentAppHelper
             'link' => true
         ], $options);
 
-        // カスタムエントリーを取得
+        $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
+        $customField = $customFieldsTable->find()
+            ->contain([
+                'CustomLinks' => function($q) use($fieldName) {
+                    return $q->where(['CustomLinks.name' => $fieldName]);
+                },
+                'CustomLinks.CustomTables',
+                'CustomLinks.CustomTables.CustomContents',
+                'CustomLinks.CustomTables.CustomContents.Contents' => function($q) use($contentId) {
+                    return $q->where( ['Contents.id' => (int)$contentId]);
+                },
+            ]
+        )->first();
+
+        if(!$customField) {
+            return [];
+        }
+
+        $type = $customField->type;
+        $hasArchives = Configure::read('BcCustomContent.fieldTypes.' . $type . '.hasArchives');
+        if($hasArchives !== true) {
+            return [];
+        }
+
+        if (method_exists($this->{$type}, 'getFieldItemList')) {
+            $source = $this->{$type}->getFieldItemList($contentId, $fieldName, $options);
+            // 配列のキーが連想配列かどうかを確認し、連想配列の場合はキーを取得
+            if(!isset($source[0])) {
+                $targets = array_keys($source);
+                $values = array_values($source);
+            } else {
+                $targets = $values = $source;
+            }
+        } else {
+            $targets = $values = explode("\n", $customField->source);
+        }
+
+        $customContent = $customField->custom_links[0]->custom_table->custom_content;
+
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
-        $customEntries = $customEntriesTable->find()
-            ->select([$fieldName])
-            ->distinct()
-            ->all()
-            ->toArray();
-
-        $values = Hash::extract($customEntries, '{n}.' . $fieldName);
-
-        $customContentsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
-        $customContentsTable->CustomTables->setHasManyLinksByAll();
-        $customLink = $customContentsTable->find()
-            ->where([
-                'Contents.id' => (int)$contentId
-            ])
-            ->contain( [
-                'Contents',
-            ])
-            ->first();
+        $customEntriesTable->setup($customContent->custom_table_id);
+        foreach ($targets as $key => $item) {
+            if($customEntriesTable->find()->where([$fieldName => $item])->count() === 0) {
+                unset($values[$key]);
+                unset($targets[$key]);
+            }
+        }
 
         // リンクを表示する
         if ($options['link'] == true) {
             $linkValues = [];
-            foreach ($values as $value) {
-                $linkValues[] = $this->BcBaser->getLink($value, '/' . $customLink->content->name . '/archives/' . $fieldName . '/' . $value);
+            foreach ($values as $key => $value) {
+                $linkValues[] = $this->BcBaser->getLink($value, '/' . $customContent->content->name . '/archives/' . $fieldName . '/' . $targets[$key]);
             }
             return $linkValues;
         }
