@@ -555,7 +555,9 @@ class UsersController extends AppController
 					);
 
 					if ($selfUpdate) {
-						$this->admin_logout();
+						$user = $this->User->read(null, $id);
+						$user['User']['UserGroup'] = $user['UserGroup'];
+						$this->BcAuth->login($user['User']);
 					}
 					$this->BcMessage->setSuccess(
 						sprintf('ユーザー「%s」を更新しました。', $this->request->data['User']['name'])

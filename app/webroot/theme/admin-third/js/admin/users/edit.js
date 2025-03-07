@@ -1,15 +1,7 @@
 $(function () {
     $("#BtnSave").click(function () {
-        if ($("#SelfUpdate").html()) {
-            if (confirm(bcI18n.confirmMessage1)) {
-                $.bcUtil.showLoader();
-                return true;
-            }
-        } else {
-            $.bcUtil.showLoader();
-            return true;
-        }
-        return false;
+        $.bcUtil.showLoader();
+        return true;
     });
     $("#btnSetUserGroupDefault").click(function () {
         if (!confirm(bcI18n.confirmMessage2)) {
