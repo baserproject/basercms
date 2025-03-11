@@ -20,8 +20,10 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcCustomContent\Model\Entity\CustomField;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -426,11 +428,11 @@ class CustomContentHelper extends CustomContentAppHelper
         }
 
         $customContent = $customField->custom_links[0]->custom_table->custom_content;
-
+        $customContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
         $customEntriesTable->setup($customContent->custom_table_id);
         foreach ($targets as $key => $item) {
-            if($customEntriesTable->find()->where([$fieldName => $item])->count() === 0) {
+            if($customContentFrontService->getCustomEntries($customContent, [$fieldName => $item])->count() === 0) {
                 unset($values[$key]);
                 unset($targets[$key]);
             }
@@ -451,10 +453,27 @@ class CustomContentHelper extends CustomContentAppHelper
     /**
      * カスタムエントリーが存在する年のリストを取得する
      */
-    public function getYearList()
+    public function getYearList(Int $contentId)
     {
+        $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentTable->find()
+            ->select(['entity_id'])
+            ->where(['id' => $contentId])
+            ->first();
+        $entityId = $content->entity_id;
+        if(!$entityId) {
+            return [];
+        }
+
+        $customContentTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+        $customTable = $customContentTable->find()
+            ->select(['custom_table_id'])
+            ->where(['id' => $entityId])
+            ->first();
+
         // カスタムテーブルのIDを取得
         $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $targetEntries->setup($customTable->custom_table_id);
         // カスタムテーブルの情報を取得
         $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
         // カスタムテーブルのIDを指定して、テーブル情報を取得
