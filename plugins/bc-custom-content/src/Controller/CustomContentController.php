@@ -16,6 +16,7 @@ use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * CustomContentController
@@ -98,10 +99,17 @@ class CustomContentController extends BcFrontAppController
             $this->notFound();
         }
 
-        $this->set($service->getViewVarsForView(
-            $customContent,
-            $entryId
-        ));
+        try {
+            $this->set($service->getViewVarsForView(
+                $customContent,
+                $entryId
+            ));
+        } catch (RecordNotFoundException) {
+            $this->notFound();
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError($e->getMessage());
+            $this->notFound();
+        }
 
         $this->render($service->getViewTemplate($customContent));
     }

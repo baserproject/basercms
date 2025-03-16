@@ -29,6 +29,7 @@ use BcCustomContent\Utility\CustomContentUtil;
 use BcCustomContent\View\Helper\CustomContentArrayTrait;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
@@ -407,12 +408,17 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             );
         }
 
-        return $this->CustomEntries->find()
+        $entity = $this->CustomEntries->find()
             ->select($this->createSelect($options))
             ->select($this->CustomEntries->CustomTables)
             ->where($conditions)
             ->contain($options['contain'])
             ->first();
+        if (!$entity) {
+            throw new RecordNotFoundException();
+        } else {
+            return $entity;
+        }
     }
 
     /**
