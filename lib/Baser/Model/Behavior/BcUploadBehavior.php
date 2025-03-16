@@ -206,7 +206,10 @@ class BcUploadBehavior extends ModelBehavior
 		}
 		// <<<
 
-		$data = isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data;
+		// TreeBehavior で、lft、rght が更新されている場合、古いデータに巻き戻ってしまうため、
+		// $Model->data ではなく、最新データを取得する
+		$data = $Model->find('first', ['conditions' => [$Model->alias . '.id' => $Model->id]])[$Model->alias];
+
         if ($Model->exists() && isset($this->oldEntity[$Model->alias])) {
             $this->BcFileUploader[$Model->alias]->deleteExistingFiles($this->oldEntity[$Model->alias]);
         }
