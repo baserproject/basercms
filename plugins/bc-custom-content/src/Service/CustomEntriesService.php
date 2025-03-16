@@ -397,10 +397,14 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
 
         if (is_numeric($id)) {
-            $conditions = array_merge_recursive(
-                $conditions,
-                ['CustomEntries.id' => $id]
-            );
+            $conditions = array_merge_recursive($conditions, [
+                'CustomEntries.id' => $id,
+            ]);
+            if($options['status'] === 'publish') {
+                $conditions = array_merge_recursive($conditions, [
+                    'CustomEntries.name' => ''
+                ]);
+            }
         } else {
             $conditions = array_merge_recursive(
                 $conditions,
