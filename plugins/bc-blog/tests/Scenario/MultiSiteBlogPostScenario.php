@@ -118,7 +118,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'id' => 1,
             'user_id' => 1,
             'blog_content_id' => 6,
-            'blog_category_id' => 6,
+            'blog_category_id' => null,
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',
@@ -169,6 +169,26 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',
+            'status' => 1,
+            'exclude_search' => 0,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 7,
+            'blog_content_id' => 6,
+            'blog_category_id' => null,
+            'no' => 4,
+            'name' => '日本語スラッグ',
+            'title' => '日本語スラッグ記事タイトル',
+            'status' => 1,
+            'exclude_search' => 0,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 8,
+            'blog_content_id' => 6,
+            'blog_category_id' => null,
+            'no' => 5,
+            'name' => null,
+            'title' => 'スラッグがない記事',
             'status' => 1,
             'exclude_search' => 0,
         ])->persist();
