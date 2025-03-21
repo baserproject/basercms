@@ -355,6 +355,9 @@ class BlogFrontService implements BlogFrontServiceInterface
     {
         $isPreview = (bool)$request->getQuery('preview');
         $no = $request->getParam('pass.0');
+        if (is_string($no)) {
+            $no = rawurldecode($no);
+        }
         $post = $editLink = null;
         if($isPreview) {
             if($no) {
