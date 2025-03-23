@@ -2552,10 +2552,6 @@ class BcBaserHelper extends Helper
         if (empty($this->getView()->getRequest()->getAttribute('currentSite'))) {
             return;
         }
-        // TODO ucmitz 未実装
-        // >>>
-        return;
-        // <<<
         $this->setCanonicalUrl();
         $this->setAlternateUrl();
     }
@@ -2612,22 +2608,27 @@ class BcBaserHelper extends Helper
      */
     public function setAlternateUrl()
     {
-
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $subSite = $sites->getSubByUrl($this->_View->getRequest()->getPath(), false, BcAgent::find('smartphone'));
+        $view = $this->getView();
+        $request = $view->getRequest();
+        $path = $request->getPath();
+        $subSite = $sites->getSubByUrl($path, false, BcAgent::find('smartphone'));
         if (!$subSite || $subSite->same_main_url) {
             return;
         }
-        $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-            $this->_View->getRequest()->getPath(),
-            $this->_View->getRequest()->getAttribute('currentSite')->id
-        )));
-        $this->_View->set('meta',
+
+        $url = $subSite->makeUrl(new ServerRequest(['url' => $this->BcContents->getPureUrl(
+            $path,
+            $request->getAttribute('currentSite')->id
+        )]));
+
+        $view->assign('meta',
             $this->BcHtml->meta('alternate',
-                $this->BcHtml->url($url, true),
+                null,
                 [
                     'rel' => 'alternate',
                     'media' => 'only screen and (max-width: 640px)',
+                    'link' => $this->getUrl($url, true),
                     'type' => null,
                     'title' => null,
                     'inline' => false
