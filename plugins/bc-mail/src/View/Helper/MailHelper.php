@@ -78,12 +78,24 @@ class MailHelper extends Helper
         if (isset($this->currentMailContent)) {
             return;
         }
-        if ($mailContentId) {
-            $MailContent = ClassRegistry::init('BcMail.MailContent');
-            $MailContent->reduceAssociations([]);
-            $this->currentMailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
-        } elseif ($this->_View->get('mailContent')) {
+        if ($this->_View->get('mailContent')) {
             $this->currentMailContent = $this->_View->get('mailContent');
+        } else {
+            // _ViewからmailContentをget出来ない場合、$mailContentsからfindする
+            if (!$mailContentId) {
+                $params = $this->_View->getRequest()->getAttribute('params');
+                if (!empty($params['plugin']) && !empty($params['entityId']) && $params['plugin'] == 'BcMail') {
+                    $mailContentId = $params['entityId'];
+                } else {
+                    return;
+                }
+            }
+            $MailContent = TableRegistry::getTableLocator()->get('BcMail.MailContents');
+            $this->currentMailContent = $MailContent->find('all')
+                ->where([
+                    'MailContents.id' => $mailContentId,
+                ])
+                ->first();
         }
     }
 
