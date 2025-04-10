@@ -34,7 +34,7 @@ $this->BcBaser->setDescription($customContent->content->description);
 </div>
 
 <section class="bs-cc-entries">
-<?php if($customEntries): ?>
+<?php if ($customEntries): ?>
   <?php foreach($customEntries as $entry): ?>
   <article class="bs-cc-entries__item clearfix">
     <span class="bs-cc-entries__item-title">

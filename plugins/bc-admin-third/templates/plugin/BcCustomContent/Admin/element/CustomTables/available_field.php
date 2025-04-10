@@ -28,10 +28,10 @@ $this->BcAdminForm->unlockField('template');
       <span class="custom-field-content__head-text"><?php echo h($field->title) ?></span>
       <small>（<?php echo h($field->getTypeTitle()) ?>）</small>
       <?php echo $this->BcAdminForm->control('current_type', [
-      'type' => 'hidden',
-      'value' => $field->type,
-      'class' => 'custom-field-type']
-      )?>
+        'type' => 'hidden',
+        'value' => $field->type,
+        'class' => 'custom-field-type'
+      ])?>
     </div>
   </div>
 </div>

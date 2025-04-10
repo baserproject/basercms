@@ -12,7 +12,6 @@
 namespace BcCustomContent\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
-use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use BaserCore\Annotation\UnitTest;
@@ -133,7 +132,7 @@ class CustomContentController extends BcFrontAppController
             (int)$this->getRequest()->getAttribute('currentContent')->entity_id
         );
 
-        if(!$customContent->custom_table_id) {
+        if (!$customContent->custom_table_id) {
             $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
@@ -174,7 +173,7 @@ class CustomContentController extends BcFrontAppController
             (int)$this->getRequest()->getAttribute('currentContent')->entity_id
         );
 
-        if(!$customContent->custom_table_id) {
+        if (!$customContent->custom_table_id) {
             $this->log(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }

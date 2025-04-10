@@ -18,7 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
-use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;

@@ -18,7 +18,6 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
 use BcCustomContent\Controller\CustomContentController;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
-use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;

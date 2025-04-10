@@ -45,10 +45,10 @@ $this->BcBaser->setTitle($customEntry->title);
         ?>
         <tr>
         <?php if($showHeading !== false): ?>
-            <th>
-              <?php echo $this->BcBaser->getCustomFieldTitle($customEntry, $customLink->name) ?>
-            </th>
-          <?php endif ?>
+          <th>
+            <?php echo $this->BcBaser->getCustomFieldTitle($customEntry, $customLink->name) ?>
+          </th>
+        <?php endif ?>
           <td<?php echo $showHeading === false ? ' colspan="2"' : '' ?>>
             <?php if (empty($customLink->children)): ?>
               <?php echo $this->BcBaser->getCustomFieldValue($customEntry, $customLink->name) ?>

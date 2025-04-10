@@ -151,7 +151,7 @@ class BcCcRelatedHelper extends Helper
         return $entry->{$entry->custom_table->display_field};
     }
 
-    public function getFieldItemList(Int $contentId, string $fieldName, array $options = [])
+    public function getFieldItemList(Int $contentId, string $fieldName)
     {
         $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
         $customField = $customFieldsTable->find()

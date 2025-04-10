@@ -432,7 +432,7 @@ class CustomContentHelper extends CustomContentAppHelper
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
         $customEntriesTable->setup($customContent->custom_table_id);
         foreach ($targets as $key => $item) {
-            if($customContentFrontService->getCustomEntries($customContent, [$fieldName => $item])->count() === 0) {
+            if ($customContentFrontService->getCustomEntries($customContent, [$fieldName => $item])->count() === 0) {
                 unset($values[$key]);
                 unset($targets[$key]);
             }

@@ -25,7 +25,6 @@ use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesService;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
-use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use Cake\Controller\Controller;
@@ -357,7 +356,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         BcCcFileUtil::setupUploader($customContent->custom_table_id);
 
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
-        if($customEntriesTable->hasBehavior('BaserCore.BcUpload')) {
+        if ($customEntriesTable->hasBehavior('BaserCore.BcUpload')) {
             $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
             $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
         } else {
