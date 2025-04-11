@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\PluginFactory;
@@ -21,6 +22,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -2182,17 +2184,29 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetAlternateUrl($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        Configure::write('BcSite.use_site_device_setting', true);
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make([
+            'id' => 2,
+            'main_site_id' => 1,
+            'alias' => 's',
+            'device' => 'smartphone'
+        ])->persist();
+        ContentFactory::make([
+            'site_id' => 1,
+            'url' => $url
+        ])->persist();
+
+        $siteConfig = BcContainer::get()->get(SiteConfigsServiceInterface::class);
+        $siteConfig->setValue('use_site_device_setting', true);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->BcBaser->setAlternateUrl();
-        $this->assertEquals($expected, $this->_View->fetch('meta'));
+        $this->assertEquals($expected, $this->BcBaser->getView()->fetch('meta'));
     }
 
     public static function setAlternateUrlDataProvider()
     {
         return [
-            ['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
+            ['/', '<link href="https://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)">'],
             ['/s/', '']
         ];
     }
@@ -2203,15 +2217,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetCanonicalUrl($siteId, $url, $expected)
     {
-        // TODO FixtureManager が削除できたら、ここも削除する
-        // >>>
-        $this->truncateTable('sites');
-        $this->truncateTable('contents');
-        $this->truncateTable('content_folders');
-        $this->truncateTable('users');
-        $this->truncateTable('user_groups');
-        // <<<
-
         $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make([
             'id' => 2,

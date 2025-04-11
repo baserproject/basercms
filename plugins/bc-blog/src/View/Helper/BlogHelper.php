@@ -1541,11 +1541,11 @@ class BlogHelper extends Helper
                 $sitesService = $this->getService(SitesServiceInterface::class);
                 $site = $sitesService->findByUrl($this->currentContent->url);
                 $url = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
-                $url = $url . 'archives/tag/' . $tag->name;
+                $url = $url . 'archives/tag/' . rawurlencode($tag->name);
             }
         }
         if (!$url) {
-            $url = '/tags/' . $tag->name;
+            $url = '/tags/' . rawurlencode($tag->name);
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->findByUrl($this->_View->getRequest()->getPath());
             if ($site && $site->alias && !$site->useSubDomain) {

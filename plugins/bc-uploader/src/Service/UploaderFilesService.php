@@ -214,6 +214,13 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         }
         /** @var UploadedFile $file */
         $file = $postData['file'];
+        $fileError = $file->getError();
+        if ($fileError === UPLOAD_ERR_INI_SIZE) {
+            throw new BcException(__d('baser_core',
+                '送信できるデータ量を超えています。 {0} 以内のデータを送信してください。',
+                [ini_get('upload_max_filesize')]
+            ));
+        }
         $name = $file->getClientFilename();
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
         $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());

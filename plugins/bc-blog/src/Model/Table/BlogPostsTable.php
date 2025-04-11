@@ -842,7 +842,7 @@ class BlogPostsTable extends BlogAppTable
         } else {
             $conditions = array_merge_recursive(
                 $conditions,
-                ['BlogPosts.name' => rawurldecode($no)]
+                ['BlogPosts.name' => $no]
             );
         }
         $entity = $this->find()->where($conditions)

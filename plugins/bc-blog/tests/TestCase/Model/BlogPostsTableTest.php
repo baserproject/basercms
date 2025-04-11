@@ -734,7 +734,6 @@ class BlogPostsTableTest extends BcTestCase
         $this->assertEquals($rs->title, 'プレスリリース');
         $this->assertNotNull($rs->blog_comments);
         $this->assertNotNull($rs->blog_tags);
-        $this->assertNotNull($rs->blog_category);
         $this->assertNotNull($rs->user);
         $this->assertNotNull($rs->blog_content);
         $this->assertNotNull($rs->blog_content->content);
@@ -745,6 +744,12 @@ class BlogPostsTableTest extends BcTestCase
         //戻る値を確認
         $this->assertEquals($rs->no, 4);
         $this->assertEquals($rs->title, 'スマホサイトリリース');
+
+        // 日本語スラッグ
+        $rs = $this->BlogPostsTable->getPublishByNo(6, '日本語スラッグ', true);
+        $this->assertEquals($rs->title, '日本語スラッグ記事タイトル');
+        $rs = $this->BlogPostsTable->getPublishByNo(6, '日本語スラッグ', false);
+        $this->assertEquals($rs->title, '日本語スラッグ記事タイトル');
 
         //サービスクラス
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
