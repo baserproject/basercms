@@ -20,7 +20,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcCustomContent\Model\Entity\CustomField;
-use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
@@ -460,10 +459,9 @@ class CustomContentHelper extends CustomContentAppHelper
             ->select(['entity_id'])
             ->where(['id' => $contentId])
             ->first();
+        if (!$content) return [];
         $entityId = $content->entity_id;
-        if(!$entityId) {
-            return [];
-        }
+        if(!$entityId) return [];
 
         $customContentTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
         $customTable = $customContentTable->find()

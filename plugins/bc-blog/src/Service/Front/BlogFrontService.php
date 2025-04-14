@@ -388,7 +388,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         if ($post && $post->blog_category_id) {
             $crumbs = array_merge($crumbs, $this->getCategoryCrumbs(
                 $request->getAttribute('currentContent')->url,
-                $post->blog_category->id,
+                $post->blog_category->id?? null,
                 false
             ));
         }

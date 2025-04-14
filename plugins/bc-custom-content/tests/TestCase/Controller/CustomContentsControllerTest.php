@@ -116,9 +116,10 @@ class CustomContentsControllerTest extends BcTestCase
         //存在しないURLを指定した場合、
         $this->get('/test-false/');
         $this->assertResponseCode(404);
-        $this->assertEquals(
+        $log = file_get_contents(LOGS . 'cli-error.log');
+        $this->assertTextContains(
             'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。',
-            $_SESSION['Flash']['flash'][0]['message']
+            $log
         );
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
@@ -162,9 +163,10 @@ class CustomContentsControllerTest extends BcTestCase
         //存在しないURLを指定した場合、
         $this->get('/test-false/view/プログラマー');
         $this->assertResponseCode(404);
-        $this->assertEquals(
+        $log = file_get_contents(LOGS . 'cli-error.log');
+        $this->assertTextContains(
             'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。',
-            $_SESSION['Flash']['flash'][0]['message']
+            $log
         );
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');

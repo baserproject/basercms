@@ -12,6 +12,7 @@
 namespace BcBlog\Test\Scenario;
 
 use BaserCore\Test\Scenario\MultiSiteScenario;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
@@ -52,6 +53,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();
         $this->createBlogPosts();
+        $this->createBlogCategories();
         return null;
     }
 
@@ -199,6 +201,20 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'posted' => null,
         ])->persist();
         return null;
+    }
+
+    /**
+     * ブログカテゴリを作成
+     * @return void
+     */
+    public function createBlogCategories()
+    {
+        BlogCategoryFactory::make([
+            'id' => 6,
+            'blog_content_id' => 6,
+            'lft' => 1,
+            'rght' => 2
+        ])->persist();
     }
 
 }
