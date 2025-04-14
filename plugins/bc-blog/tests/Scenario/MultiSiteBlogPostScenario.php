@@ -118,7 +118,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'id' => 1,
             'user_id' => 1,
             'blog_content_id' => 6,
-            'blog_category_id' => null,
+            'blog_category_id' => 6,
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',
@@ -144,6 +144,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '英語サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         BlogPostFactory::make([
             'id' => 4,
@@ -153,6 +154,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         BlogPostFactory::make([
             'id' => 5,
@@ -162,6 +164,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         BlogPostFactory::make([
             'id' => 6,
@@ -171,6 +174,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'プレスリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         BlogPostFactory::make([
             'id' => 7,
@@ -181,6 +185,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '日本語スラッグ記事タイトル',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         BlogPostFactory::make([
             'id' => 8,
@@ -191,6 +196,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'スラッグがない記事',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => null,
         ])->persist();
         return null;
     }
