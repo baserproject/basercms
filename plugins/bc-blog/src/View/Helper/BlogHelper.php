@@ -1717,10 +1717,6 @@ class BlogHelper extends Helper
             'data' => [],
         ], $options);
 
-        if ($options['preview'] === false) {
-            $options['status'] = 'publish';
-        }
-
         if (!$contentsName && empty($options['contentsTemplate'])) {
             throw new BcException(__d('baser_core', '$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。'));
         }
@@ -1779,6 +1775,10 @@ class BlogHelper extends Helper
             'limit' => $num
         ], $options);
 
+        if ($options['preview'] === false) {
+            $options['status'] = 'publish';
+        }
+        
         $options = $this->parseContentName($contentsName, $options);
         return $this->getService(BlogPostsServiceInterface::class)->getIndex($options);
     }
