@@ -302,7 +302,7 @@ class CustomEntriesServiceTest extends BcTestCase
         //idで取得
         $result = $this->CustomEntriesService->get(1);
         $this->assertEquals(1, $result->id);
-        $this->assertEquals('プログラマー', $result->name);
+        $this->assertEquals('Webエンジニア・Webプログラマー', $result->title);
         //名前で取得
         $result = $this->CustomEntriesService->get('プログラマー 2');
         $this->assertEquals(2, $result->id);

@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcCustomContent\Test\TestCase\Service;
+namespace BcCustomContent\Test\TestCase\Service\Admin;
 
 
 use BaserCore\Service\BcDatabaseServiceInterface;
@@ -263,7 +263,7 @@ class CustomEntriesAdminServiceTest extends BcTestCase
         $rs = $this->CustomEntriesAdminService->getPublishLinkForEdit(ContentFactory::get(100), CustomEntryFactory::get(1));
 
         //戻る値を確認
-        $this->assertEquals('https://localhost/test/view/プログラマー', $rs);
+        $this->assertEquals('https://localhost/test/view/1', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');

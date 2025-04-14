@@ -153,7 +153,7 @@ class CustomContentsControllerTest extends BcTestCase
         $this->loadFixtureScenario(CustomFieldsScenario::class);
 
         //対象URLをコル
-        $this->get('/test/view/プログラマー');
+        $this->get('/test/view/プログラマー 2');
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertResponseCode(200);
         $this->assertEquals('サービスタイトル', $vars['title']);

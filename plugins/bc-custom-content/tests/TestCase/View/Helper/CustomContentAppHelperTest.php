@@ -145,9 +145,9 @@ class CustomContentAppHelperTest extends BcTestCase
         $view = new View($this->getRequest()->withAttribute('currentContent', $customContent->content));
         $this->CustomContentAppHelper = new CustomContentAppHelper($view);
         //case CustomEntry name is not empty
-        $rs = $this->CustomContentAppHelper->getEntryUrl($customEntriesService->get(1));
+        $rs = $this->CustomContentAppHelper->getEntryUrl($customEntriesService->get(2));
         //check result return
-        $this->assertEquals($siteUrl . 'test/view/プログラマー', $rs);
+        $this->assertEquals($siteUrl . 'test/view/プログラマー 2', $rs);
         /**
          * case CustomEntry name is null
          */
