@@ -197,7 +197,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'name' => null,
             'title' => 'スラッグがない記事',
             'status' => 1,
-            'exclude_search' => 0,
+            'exclude_search' => 1,
             'posted' => null,
         ])->persist();
         return null;

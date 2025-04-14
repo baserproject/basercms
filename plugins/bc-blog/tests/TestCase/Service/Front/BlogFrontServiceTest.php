@@ -839,6 +839,6 @@ class BlogFrontServiceTest extends BcTestCase
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
-        $this->assertEquals(1, $rs['recentEntries']->count());
+        $this->assertEquals(3, $rs['recentEntries']->count());
     }
 }

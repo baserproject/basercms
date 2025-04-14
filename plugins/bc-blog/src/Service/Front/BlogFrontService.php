@@ -659,7 +659,7 @@ class BlogFrontService implements BlogFrontServiceInterface
                 ['BlogPosts.blog_content_id' => $blogContentId],
                 $this->BlogPostsService->BlogPosts->getConditionAllowPublish()
             ))
-            ->order(['BlogPosts.posted DESC']);
+            ->orderBy(['BlogPosts.posted DESC']);
         if ($limit) {
             $query->limit($limit);
         }

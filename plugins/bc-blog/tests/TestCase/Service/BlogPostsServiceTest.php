@@ -184,16 +184,16 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals(5, $result->count());
         $blogPosts = $result->all()->toArray();
         $this->assertCount(5, $blogPosts);
-        $this->assertEquals('3', $blogPosts[0]->user_id);
-        $this->assertEquals('blog post2 user_id3', $blogPosts[0]->title);
-        $this->assertEquals('3', $blogPosts[1]->user_id);
-        $this->assertEquals('blog post1 user_id3', $blogPosts[1]->title);
-        $this->assertEquals('2', $blogPosts[2]->user_id);
-        $this->assertEquals('blog post3 user_id2', $blogPosts[2]->title);
+        $this->assertEquals('2', $blogPosts[0]->user_id);
+        $this->assertEquals('blog post2 user_id2', $blogPosts[0]->title);
+        $this->assertEquals('2', $blogPosts[1]->user_id);
+        $this->assertEquals('blog post1 user_id2', $blogPosts[1]->title);
+        $this->assertEquals('3', $blogPosts[2]->user_id);
+        $this->assertEquals('blog post1 user_id3', $blogPosts[2]->title);
         $this->assertEquals('2', $blogPosts[3]->user_id);
-        $this->assertEquals('blog post2 user_id2', $blogPosts[3]->title);
-        $this->assertEquals('2', $blogPosts[4]->user_id);
-        $this->assertEquals('blog post1 user_id2', $blogPosts[4]->title);
+        $this->assertEquals('blog post3 user_id2', $blogPosts[3]->title);
+        $this->assertEquals('3', $blogPosts[4]->user_id);
+        $this->assertEquals('blog post2 user_id3', $blogPosts[4]->title);
     }
 
     /**

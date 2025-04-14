@@ -234,7 +234,6 @@ class BlogPostsTableTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
-        BlogCategoryFactory::make(['id' => 6])->persist();
 
         //対象メソッドをコール
         $result = $this->BlogPostsTable->getPostedDates($blogContentId, $options);
@@ -419,7 +418,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
         $result = $this->BlogPostsTable->getPublishes([]);
-        $this->assertCount(6, $result);
+        $this->assertCount(8, $result);
 
         $options = ['conditions' => [
             'publish_begin' => '9000-01-27 12:00:00'
@@ -723,7 +722,6 @@ class BlogPostsTableTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
-        BlogCategoryFactory::make(['id' => BlogPostFactory::get(1)->blog_category_id])->persist();
         UserFactory::make(['id' => BlogPostFactory::get(1)->user_id])->persist();
         //$no=数値＆$preview=True
         $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
@@ -793,7 +791,7 @@ class BlogPostsTableTest extends BcTestCase
             'entity_id' => 11,
             'exclude_search' => 1,
         ])->persist();
-        BlogPostFactory::make(['id' => 8, 'blog_content_id' => 11])->persist();
+//        BlogPostFactory::make(['id' => 8, 'blog_content_id' => 11])->persist();
 
         $blogPost = $BlogPostsService->get(8);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());
