@@ -12,7 +12,6 @@
 namespace BcEditorTemplate\Controller\Admin;
 
 use BaserCore\Error\BcException;
-use BaserCore\Utility\BcSiteConfig;
 use BcEditorTemplate\Service\EditorTemplatesService;
 use BcEditorTemplate\Service\EditorTemplatesServiceInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
