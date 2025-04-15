@@ -584,4 +584,110 @@ class CustomContentHelperTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+    /**
+     * test getFieldItemList
+     */
+    public function testGetFieldItemList()
+    {
+        // 準備
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        $customEntriesService->setup(1);
+        $customEntriesCategory = $customEntriesService->get(1);
+        $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
+        $customEntriesService->update($customEntriesCategory, $arrayCategory);
+
+        // 存在するフィールド（リンクあり）
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'category');
+        $this->assertEquals([
+            '<a href="/test/archives/category/1">Webエンジニア・Webプログラマー</a>'
+        ], $result);
+
+        // 存在するフィールド（リンクなし）
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'category', ['link' => false]);
+        $this->assertEquals([
+            'Webエンジニア・Webプログラマー'
+        ], $result);
+
+        // 存在しないフィールド名を指定した場合
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'hoge', ['link' => false]);
+        $this->assertEquals([], $result);
+
+        // 存在しないコンテンツIDを指定した場合
+        $result = $this->CustomContentHelper->getFieldItemList(999, 'category', ['link' => false]);
+        $this->assertEquals([], $result);
+
+        // 不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+     /**
+     * test getGetYearList
+     */
+    public function testGetYearList()
+    {
+        // 準備
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        $customEntriesService->setup(1);
+        $customEntriesCategory = $customEntriesService->get(1);
+        $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
+        $customEntriesService->update($customEntriesCategory, $arrayCategory);
+
+        // 存在する場合
+        $result = $this->CustomContentHelper->getYearList(100);
+        $this->assertEquals([
+            '<a href="/recruit_categories/year/2023">2023</a>',
+            '<a href="/recruit_categories/year/2025">2025</a>'
+        ], $result);
+
+        // 存在しないコンテンツIDを指定した場合
+        $result = $this->CustomContentHelper->getYearList(999);
+        $this->assertEquals([], $result);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
 }

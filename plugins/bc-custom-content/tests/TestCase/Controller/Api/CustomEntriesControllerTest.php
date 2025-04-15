@@ -12,7 +12,6 @@
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\BcDatabaseServiceInterface;
-use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;

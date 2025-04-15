@@ -234,7 +234,6 @@ class BlogPostsTableTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
-        BlogCategoryFactory::make(['id' => 6])->persist();
 
         //対象メソッドをコール
         $result = $this->BlogPostsTable->getPostedDates($blogContentId, $options);
@@ -249,10 +248,18 @@ class BlogPostsTableTest extends BcTestCase
     public static function getPostedDatesDataProvider()
     {
         return [
-            [6, [], ['201501' => ['year' => '2015', 'month' => '01', 'count' => null]]],
-            [7, [], ['201602' => ['year' => '2016', 'month' => '02', 'count' => null]]],
-            [6, ['category' => true], ['201501-6' => ['year' => '2015', 'month' => '01', 'count' => null]]],
-            [6, ['viewCount' => true, 'type' => 'year'], ['2015' => ['year' => '2015', 'month' => null, 'count' => 1]]],
+            [6, [], [
+                '201503' => ['year' => '2015', 'month' => '03', 'count' => null],
+                '201502' => ['year' => '2015', 'month' => '02', 'count' => null],
+                '201501' => ['year' => '2015', 'month' => '01', 'count' => null],
+            ]],
+            [7, [], ['201501' => ['year' => '2015', 'month' => '01', 'count' => null]]],
+            [6, ['category' => true], [
+                '201503' => ['year' => '2015', 'month' => '03', 'count' => null],
+                '201502' => ['year' => '2015', 'month' => '02', 'count' => null],
+                '201501-6' => ['year' => '2015', 'month' => '01', 'count' => null], // カテゴリはテスト中に挿入
+            ]],
+            [6, ['viewCount' => true, 'type' => 'year'], ['2015' => ['year' => '2015', 'month' => null, 'count' => 3]]],
         ];
     }
 
@@ -278,7 +285,7 @@ class BlogPostsTableTest extends BcTestCase
         return [
             [6, 2015, 1, ['2015-01-27']],
             [6, 2016, 1, []],
-            [7, 2016, 2, ['2016-02-10']],
+            [7, 2015, 1, ['2015-01-27']],
         ];
     }
 
@@ -321,10 +328,10 @@ class BlogPostsTableTest extends BcTestCase
         $result = $this->BlogPostsTable->existsEntry(6, 2016, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 2);
         $this->assertFalse($result);
 
-        $result = $this->BlogPostsTable->existsEntry(7, 2016, 2);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
         $this->assertTrue($result);
     }
 
@@ -419,7 +426,7 @@ class BlogPostsTableTest extends BcTestCase
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
         $result = $this->BlogPostsTable->getPublishes([]);
-        $this->assertCount(6, $result);
+        $this->assertCount(8, $result);
 
         $options = ['conditions' => [
             'publish_begin' => '9000-01-27 12:00:00'
@@ -723,7 +730,6 @@ class BlogPostsTableTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
-        BlogCategoryFactory::make(['id' => BlogPostFactory::get(1)->blog_category_id])->persist();
         UserFactory::make(['id' => BlogPostFactory::get(1)->user_id])->persist();
         //$no=数値＆$preview=True
         $rs = $this->BlogPostsTable->getPublishByNo(6, 3, true);
@@ -793,7 +799,7 @@ class BlogPostsTableTest extends BcTestCase
             'entity_id' => 11,
             'exclude_search' => 1,
         ])->persist();
-        BlogPostFactory::make(['id' => 8, 'blog_content_id' => 11])->persist();
+//        BlogPostFactory::make(['id' => 8, 'blog_content_id' => 11])->persist();
 
         $blogPost = $BlogPostsService->get(8);
         $this->BlogPostsTable->beforeSave(new Event("beforeSave"), $blogPost, new ArrayObject());

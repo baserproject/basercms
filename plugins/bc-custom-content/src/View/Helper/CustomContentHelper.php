@@ -22,6 +22,9 @@ use BaserCore\Annotation\Checked;
 use BcCustomContent\Model\Entity\CustomField;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 /**
@@ -373,4 +376,118 @@ class CustomContentHelper extends CustomContentAppHelper
         return (bool)$customLink->display_front;
     }
 
+    /**
+     * フィールド名を指定して、登録されているアイテムのリストを取得する
+     *
+     * @param string $fieldName
+     */
+    public function getFieldItemList(Int $contentId, string $fieldName, array $options = [])
+    {
+        $options = array_merge([
+            'link' => true
+        ], $options);
+
+        $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
+        $customField = $customFieldsTable->find()
+            ->matching('CustomLinks', function($q) use($fieldName) {
+                return $q->where(['CustomLinks.name' => $fieldName]);
+            })
+            ->matching('CustomLinks.CustomTables.CustomContents.Contents', function($q) use($contentId) {
+                return $q->where(['Contents.id' => $contentId]);
+            })
+            ->contain([
+                'CustomLinks',
+                'CustomLinks.CustomTables',
+                'CustomLinks.CustomTables.CustomContents',
+                'CustomLinks.CustomTables.CustomContents.Contents'
+            ]
+        )->first();
+
+        if(!$customField) {
+            return [];
+        }
+
+        $type = $customField->type;
+        $hasArchives = Configure::read('BcCustomContent.fieldTypes.' . $type . '.hasArchives');
+        if($hasArchives !== true) {
+            return [];
+        }
+
+        if (method_exists($this->{$type}, 'getFieldItemList')) {
+            $source = $this->{$type}->getFieldItemList($contentId, $fieldName, $options);
+            // 配列のキーが連想配列かどうかを確認し、連想配列の場合はキーを取得
+            if(!isset($source[0])) {
+                $targets = array_keys($source);
+                $values = array_values($source);
+            } else {
+                $targets = $values = $source;
+            }
+        } else {
+            $targets = $values = explode("\n", $customField->source);
+        }
+
+        $customContent = $customField->custom_links[0]->custom_table->custom_content;
+        $customContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customEntriesTable->setup($customContent->custom_table_id);
+        foreach ($targets as $key => $item) {
+            if ($customContentFrontService->getCustomEntries($customContent, [$fieldName => $item])->count() === 0) {
+                unset($values[$key]);
+                unset($targets[$key]);
+            }
+        }
+
+        // リンクを表示する
+        if ($options['link'] == true) {
+            $linkValues = [];
+            foreach ($values as $key => $value) {
+                $linkValues[] = $this->BcBaser->getLink($value, '/' . $customContent->content->name . '/archives/' . $fieldName . '/' . $targets[$key]);
+            }
+            return $linkValues;
+        }
+        return $values;
+
+    }
+
+    /**
+     * カスタムエントリーが存在する年のリストを取得する
+     */
+    public function getYearList(Int $contentId)
+    {
+        $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentTable->find()
+            ->select(['entity_id'])
+            ->where(['id' => $contentId])
+            ->first();
+        if (!$content) return [];
+        $entityId = $content->entity_id;
+        if(!$entityId) return [];
+
+        $customContentTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+        $customTable = $customContentTable->find()
+            ->select(['custom_table_id'])
+            ->where(['id' => $entityId])
+            ->first();
+
+        // カスタムテーブルのIDを取得
+        $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $targetEntries->setup($customTable->custom_table_id);
+        // カスタムテーブルの情報を取得
+        $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
+        // カスタムテーブルのIDを指定して、テーブル情報を取得
+        $targetTable = $tables->find()
+            ->where(['id' => $targetEntries->tableId])
+            ->first();
+
+        $records = $targetEntries->find()
+            ->select(['year' => 'YEAR(created)'])
+            ->distinct(['year'])
+            ->all()
+            ->toArray();
+
+        foreach ($records as $record) {
+            $years[] = $this->BcBaser->getLink($record->year, '/' . $targetTable->name . '/year/' . $record->year);
+        }
+        return $years;
+    }
 }

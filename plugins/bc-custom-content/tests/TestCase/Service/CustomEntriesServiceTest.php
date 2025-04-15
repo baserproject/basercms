@@ -12,7 +12,6 @@
 namespace BcCustomContent\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\Content;
-use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomEntriesTable;
@@ -21,7 +20,6 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
@@ -304,15 +302,14 @@ class CustomEntriesServiceTest extends BcTestCase
         //idで取得
         $result = $this->CustomEntriesService->get(1);
         $this->assertEquals(1, $result->id);
-        $this->assertEquals('プログラマー', $result->name);
+        $this->assertEquals('Webエンジニア・Webプログラマー', $result->title);
         //名前で取得
         $result = $this->CustomEntriesService->get('プログラマー 2');
         $this->assertEquals(2, $result->id);
 
         //異常系実行
-        $result = $this->CustomEntriesService->get(99);
-        $this->assertNull($result);
-
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->get(99);
     }
 
     /**
@@ -487,8 +484,8 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->delete(1);
         $this->assertTrue($result);
         // レコードが存在しない
-        $rs = $this->CustomEntriesService->get(1);
-        $this->assertNull($rs);
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->get(1);
         //異常系実行
         $this->expectException(TypeError::class);
         $this->CustomEntriesService->delete(999);

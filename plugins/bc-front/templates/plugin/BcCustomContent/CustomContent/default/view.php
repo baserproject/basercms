@@ -9,6 +9,8 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use Cake\Core\Configure;
+
 /**
  * カスタムコンテンツエントリー詳細
  *
@@ -39,12 +41,15 @@ $this->BcBaser->setTitle($customEntry->title);
     <table>
       <?php foreach($customLinks as $customLink):
         if (!$this->BcBaser->isDisplayCustomField($customEntry, $customLink->name)) continue;
+        $showHeading = Configure::read("BcCustomContent.fieldTypes.{$customLink->custom_field->type}.showHeading");
         ?>
         <tr>
+        <?php if($showHeading !== false): ?>
           <th>
             <?php echo $this->BcBaser->getCustomFieldTitle($customEntry, $customLink->name) ?>
           </th>
-          <td>
+        <?php endif ?>
+          <td<?php echo $showHeading === false ? ' colspan="2"' : '' ?>>
             <?php if (empty($customLink->children)): ?>
               <?php echo $this->BcBaser->getCustomFieldValue($customEntry, $customLink->name) ?>
             <?php else: ?>

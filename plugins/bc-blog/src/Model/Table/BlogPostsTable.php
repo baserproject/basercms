@@ -322,6 +322,7 @@ class BlogPostsTable extends BlogAppTable
         $postedDates = [];
         $counter = 0;
         foreach($posts as $post) {
+            if(empty($post->posted)) continue;
             $year = date('Y', strtotime($post->posted));
             $month = date('m', strtotime($post->posted));
             if ($options['type'] === 'year') {

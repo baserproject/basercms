@@ -18,7 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Controller\Api\MailMessagesController;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
-use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;

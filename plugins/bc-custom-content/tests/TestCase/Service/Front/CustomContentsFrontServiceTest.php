@@ -27,6 +27,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -383,6 +384,178 @@ class CustomContentsFrontServiceTest extends BcTestCase
         $this->assertArrayHasKey('customEntries', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('customTable', $controller->viewBuilder()->getVars());
         $this->assertArrayHasKey('currentWidgetAreaId', $controller->viewBuilder()->getVars());
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getViewVarsForArchives
+     */
+    public function testGetViewVarsForArchives()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+        $customEntry = $this->getService(CustomEntriesServiceInterface::class);
+        $controller = new CustomContentController($this->getRequest());
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customEntry->addFields(1, [$customLink]);
+
+        //対象メソッドをコール
+        $customEntry->setup(1);
+        $rs = $this->CustomContentFrontService->getViewVarsForArchives(
+            $customContent->get(1),
+            $controller->paginate($customEntry->getIndex([])),
+            'test'
+        );
+
+        //戻る値を確認
+        $this->assertArrayHasKey('customContent', $rs);
+        $this->assertArrayHasKey('customEntries', $rs);
+        $this->assertArrayHasKey('customTable', $rs);
+        $this->assertArrayHasKey('currentWidgetAreaId', $rs);
+        $this->assertArrayHasKey('archivesName', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getViewVarsForYear
+     */
+    public function testGetViewVarsForYear()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+        $customEntry = $this->getService(CustomEntriesServiceInterface::class);
+        $controller = new CustomContentController($this->getRequest());
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        //対象メソッドをコール
+        $customEntry->setup(1);
+        $rs = $this->CustomContentFrontService->getViewVarsForYear(
+            $customContent->get(1),
+            $controller->paginate($customEntry->getIndex([])),
+            '2021'
+        );
+
+        //戻る値を確認
+        $this->assertArrayHasKey('customContent', $rs);
+        $this->assertArrayHasKey('customEntries', $rs);
+        $this->assertArrayHasKey('customTable', $rs);
+        $this->assertArrayHasKey('currentWidgetAreaId', $rs);
+        $this->assertArrayHasKey('archivesName', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getArchivesTemplate
+     */
+    public function testGetArchivesTemplate()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomContentFrontService->getArchivesTemplate($customContent->get(1));
+
+        //戻る値を確認
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'archives', $rs);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getYearTemplate
+     */
+    public function testGetYearTemplate()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContent = $this->getService(CustomContentsServiceInterface::class);
+
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //対象メソッドをコール
+        $rs = $this->CustomContentFrontService->getYearTemplate($customContent->get(1));
+
+        //戻る値を確認
+        $this->assertEquals('CustomContent' . DS . 'default' . DS . 'year', $rs);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');

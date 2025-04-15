@@ -1385,7 +1385,7 @@ class BlogHelperTest extends BcTestCase
 
         //$contentsNameを設定した場合、
         $rs = $this->Blog->getPosts(['/news/'])->toArray();
-        $this->assertEquals('プレスリリース', $rs[0]['title']);
+        $this->assertEquals('スラッグがない記事', $rs[0]['title']);
 
         //$contentsNameを間違った場合、
         $rs = $this->Blog->getPosts(['news5'])->toArray();
