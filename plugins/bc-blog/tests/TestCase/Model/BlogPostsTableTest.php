@@ -248,10 +248,18 @@ class BlogPostsTableTest extends BcTestCase
     public static function getPostedDatesDataProvider()
     {
         return [
-            [6, [], ['201501' => ['year' => '2015', 'month' => '01', 'count' => null]]],
-            [7, [], ['201602' => ['year' => '2016', 'month' => '02', 'count' => null]]],
-            [6, ['category' => true], ['201501-6' => ['year' => '2015', 'month' => '01', 'count' => null]]],
-            [6, ['viewCount' => true, 'type' => 'year'], ['2015' => ['year' => '2015', 'month' => null, 'count' => 1]]],
+            [6, [], [
+                '201503' => ['year' => '2015', 'month' => '03', 'count' => null],
+                '201502' => ['year' => '2015', 'month' => '02', 'count' => null],
+                '201501' => ['year' => '2015', 'month' => '01', 'count' => null],
+            ]],
+            [7, [], ['201501' => ['year' => '2015', 'month' => '01', 'count' => null]]],
+            [6, ['category' => true], [
+                '201503' => ['year' => '2015', 'month' => '03', 'count' => null],
+                '201502' => ['year' => '2015', 'month' => '02', 'count' => null],
+                '201501-6' => ['year' => '2015', 'month' => '01', 'count' => null], // カテゴリはテスト中に挿入
+            ]],
+            [6, ['viewCount' => true, 'type' => 'year'], ['2015' => ['year' => '2015', 'month' => null, 'count' => 3]]],
         ];
     }
 
