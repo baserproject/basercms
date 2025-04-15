@@ -11,7 +11,6 @@
 
 namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
 
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -63,7 +62,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     /**
      * test index
      */
-    public function testAdmin_index()
+    public function testIndex()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
@@ -117,7 +116,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     /**
      * Test add
      */
-    public function testAdmin_add()
+    public function testAdd()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
@@ -183,7 +182,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     /**
      * Test edit
      */
-    public function testAdmin_edit()
+    public function testEdit()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
@@ -213,7 +212,7 @@ class EditorTemplatesControllerTest extends BcTestCase
     /**
      * Test delete
      */
-    public function testAdmin_delete()
+    public function testDelete()
     {
         //delete
         $this->loadFixtureScenario(EditorTemplatesScenario::class);
@@ -237,7 +236,7 @@ class EditorTemplatesControllerTest extends BcTestCase
         EditorTemplateFactory::get(11);
     }
 
-    public function test_js()
+    public function testJs()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();

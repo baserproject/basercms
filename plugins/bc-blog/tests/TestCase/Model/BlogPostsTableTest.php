@@ -285,7 +285,7 @@ class BlogPostsTableTest extends BcTestCase
         return [
             [6, 2015, 1, ['2015-01-27']],
             [6, 2016, 1, []],
-            [7, 2016, 2, ['2016-02-10']],
+            [7, 2015, 1, ['2015-01-27']],
         ];
     }
 
@@ -328,10 +328,10 @@ class BlogPostsTableTest extends BcTestCase
         $result = $this->BlogPostsTable->existsEntry(6, 2016, 1);
         $this->assertFalse($result);
 
-        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 2);
         $this->assertFalse($result);
 
-        $result = $this->BlogPostsTable->existsEntry(7, 2016, 2);
+        $result = $this->BlogPostsTable->existsEntry(7, 2015, 1);
         $this->assertTrue($result);
     }
 

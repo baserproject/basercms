@@ -774,8 +774,8 @@ class BlogFrontServiceTest extends BcTestCase
     {
         return [
             [6, 2014, 12, true, false],
-            [7, 2016, 3, false, true],
-            [6, 2015, 1, false, false],
+            [7, 2016, 3, false, false],
+            [6, 2015, 1, true, false],
         ];
     }
 
