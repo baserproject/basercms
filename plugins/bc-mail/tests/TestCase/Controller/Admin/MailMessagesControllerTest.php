@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 use BcMail\Controller\Admin\MailMessagesController;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
@@ -209,6 +210,10 @@ class MailMessagesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+        $filePath = WWW_ROOT . 'files' . DS . 'mail' . DS . 'limited' . DS . '1' . DS . 'messages' . DS . '00000002_tel.jpg';
+        $file = new BcFile($filePath);
+        $file->create();
+        $file->write('test');
 
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $MailMessagesService->createTable(1);
@@ -218,13 +223,14 @@ class MailMessagesControllerTest extends BcTestCase
         $mailMessageTable->save(new Entity(['id' => 1, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
         $mailMessageTable->save(new Entity(['id' => 2, 'created' => '2016-07-29 18:02:53', 'modified' => '2020-09-14 21:10:41']));
 
-        ob_start();
         $this->get('/baser/admin/bc-mail/mail_messages/attachment/1/00000002_tel.jpg');
-        $actualIsHelp = ob_get_clean();
-        $this->assertNotEmpty($actualIsHelp);
+        $this->assertResponseCode(200);
+        $this->assertResponseNotEmpty();
 
         //不要テーブルを削除
         $MailMessagesService->dropTable(1);
+        //不要ファイルを削除
+        (new BcFile($filePath))->delete();
     }
 
     /**

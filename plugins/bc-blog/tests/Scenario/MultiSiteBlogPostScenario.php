@@ -136,7 +136,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'スマホサイトリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => '2016-02-10 12:57:59',
+            'posted' => '2015-01-27 13:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
@@ -146,7 +146,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '英語サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => null,
+            'posted' => '2015-01-28 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 4,
@@ -156,7 +156,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => null,
+            'posted' => '2015-02-15 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 5,
@@ -166,7 +166,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => null,
+            'posted' => '2015-02-20 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 6,
@@ -176,7 +176,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'プレスリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => null,
+            'posted' => '2015-02-25 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 7,
@@ -187,7 +187,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '日本語スラッグ記事タイトル',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => null,
+            'posted' => '2015-02-26 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 8,
@@ -198,7 +198,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => 'スラッグがない記事',
             'status' => 1,
             'exclude_search' => 1,
-            'posted' => null,
+            'posted' => '2015-03-05 12:57:59',
         ])->persist();
         return null;
     }
