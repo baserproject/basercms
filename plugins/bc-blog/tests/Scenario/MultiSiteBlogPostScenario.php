@@ -130,6 +130,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
+            'user_id' => 1,
             'blog_content_id' => 7,
             'no' => 4,
             'name' => 'smartphone_release',
@@ -140,6 +141,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
+            'user_id' => 2,
             'blog_content_id' => 8,
             'no' => 5,
             'name' => 'english_release',
@@ -150,6 +152,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 4,
+            'user_id' => 2,
             'blog_content_id' => 9,
             'no' => 6,
             'name' => 'another_domain_release',
@@ -160,6 +163,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 5,
+            'user_id' => 2,
             'blog_content_id' => 10,
             'no' => 7,
             'name' => 'sub_domain_release',
@@ -170,6 +174,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 6,
+            'user_id' => 2,
             'blog_content_id' => 11,
             'no' => 3,
             'name' => 'release',
@@ -180,6 +185,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 7,
+            'user_id' => 2,
             'blog_content_id' => 6,
             'blog_category_id' => null,
             'no' => 4,
@@ -191,6 +197,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 8,
+            'user_id' => 2,
             'blog_content_id' => 6,
             'blog_category_id' => null,
             'no' => 5,
