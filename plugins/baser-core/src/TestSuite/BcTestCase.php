@@ -165,9 +165,8 @@ class BcTestCase extends TestCase
     public function classMethod()
     {
         $test = $this->provides()[0];
+        ob_end_flush();
         echo "\n" . $test->getTarget() . ' ';
-        ob_get_flush();
-        ob_end_clean();
         ob_start();
     }
 
