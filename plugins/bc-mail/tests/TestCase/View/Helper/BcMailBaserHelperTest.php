@@ -37,6 +37,10 @@ class BcMailBaserHelperTest extends BcTestCase
         $this->assertEquals(['Mail', 'isMail'], $methods['isMail']);
         $this->assertEquals(['Mail', 'descriptionExists'], $methods['mailFormDescriptionExists']);
         $this->assertEquals(['Mail', 'description'], $methods['mailFormDescription']);
+        $this->assertEquals(['Mail', 'thanksExists'], $methods['mailFormThanksExists']);
+        $this->assertEquals(['Mail', 'thanks'], $methods['mailFormThanks']);
+        $this->assertEquals(['Mail', 'unpublishExists'], $methods['mailFormUnpublishExists']);
+        $this->assertEquals(['Mail', 'unpublish'], $methods['mailFormUnpublish']);
         $this->assertEquals(['Mailform', 'freeze'], $methods['freezeMailForm']);
         $this->assertEquals(['Mailform', 'create'], $methods['createMailForm']);
         $this->assertEquals(['Mailform', 'hidden'], $methods['mailFormHidden']);

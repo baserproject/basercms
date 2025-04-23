@@ -22,6 +22,16 @@ class CreateMailContents extends BcMigration
                 'limit' => null,
                 'null' => true,
             ])
+            ->addColumn('thanks', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('unpublish', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addColumn('sender_1', 'text', [
                 'default' => null,
                 'limit' => null,
