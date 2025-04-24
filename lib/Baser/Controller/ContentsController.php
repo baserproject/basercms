@@ -370,6 +370,7 @@ class ContentsController extends AppController
 				$this->redirect(['action' => 'edit_alias', $id]);
 			}
 			if ($this->Content->save($this->request->data)) {
+				clearDataCache();
 				$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
 				$srcContent = $srcContent['Content'];
 				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
