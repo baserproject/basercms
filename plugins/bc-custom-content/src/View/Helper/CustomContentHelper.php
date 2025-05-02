@@ -173,7 +173,7 @@ class CustomContentHelper extends CustomContentAppHelper
      */
     public function getPublished(CustomEntry $entry)
     {
-        return $this->BcTime->format($entry->created);
+        return $this->BcTime->format($entry->published);
     }
 
     /**
