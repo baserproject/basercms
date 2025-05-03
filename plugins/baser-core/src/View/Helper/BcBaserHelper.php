@@ -1281,18 +1281,18 @@ class BcBaserHelper extends Helper
     public function content()
     {
         /*** contentHeader ***/
-        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $this->dispatchLayerEvent('contentHeader', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentHeader ***/
-        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->getView()->getName()]);
+        $this->dispatchLayerEvent('contentHeader', [], ['layer' => 'View', 'class' => $this->getView()->getName()]);
 
         echo $this->getView()->fetch('content');
 
         /*** contentFooter ***/
-        $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $this->dispatchLayerEvent('contentFooter', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentFooter ***/
-        $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->getView()->getName()]);
+        $this->dispatchLayerEvent('contentFooter', [], ['layer' => 'View', 'class' => $this->getView()->getName()]);
     }
 
     /**
