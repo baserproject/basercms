@@ -42,7 +42,7 @@
     "jquery-colorbox": "^1.6.4",
     "js-cookie": "^3.0.1",
     "popper.js": "^1.16.1",
-    "vue": "^2.7.14",
+    "vue": "^3.0.0",
     "vue-loader": "^15.11.1",
     "vuelidate": "^0.7.7"
   }
