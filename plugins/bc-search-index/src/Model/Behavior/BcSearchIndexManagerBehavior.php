@@ -215,7 +215,8 @@ class BcSearchIndexManagerBehavior extends Behavior
             $before = $this->SearchIndexes->find()
                 ->where([
                     'model' => $searchIndex['model'],
-                    'model_id' => $searchIndex['model_id']
+                    'model_id' => $searchIndex['model_id'],
+                    'content_id' => $searchIndex['content_id'],
                 ])->first();
         }
         if ($before) {

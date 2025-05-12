@@ -178,8 +178,8 @@ class AppController extends BaseController
                     }
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
                 } else {
-                    $url = Router::url(Configure::read("BcPrefixAuth.{$prefix}.loginAction"))
-                        . '?redirect=' . urlencode(Router::url());
+                    $url = Router::url(Configure::read("BcPrefixAuth.{$prefix}.loginAction"), true)
+                        . '?redirect=' . rawurlencode($this->getRequest()->getPath());
                 }
                 return $this->redirect($url);
             }
