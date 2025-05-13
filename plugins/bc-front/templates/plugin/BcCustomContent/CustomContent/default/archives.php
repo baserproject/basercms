@@ -21,7 +21,7 @@
  * @unitTest
  */
 $this->BcBaser->setTitle($customContent->content->title);
-$this->BcBaser->setDescription($customContent->content->description);
+$this->BcBaser->setDescription($customContent->description);
 ?>
 
 
