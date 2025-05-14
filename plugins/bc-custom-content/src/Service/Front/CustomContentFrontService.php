@@ -371,6 +371,18 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
 
         $entity = $customEntriesTable->decodeRow($entity);
+
+        if ($request->getQuery('preview') === 'draft') {
+            $customFields = $customEntriesTable->links;
+            foreach ($customFields as $customField) {
+                if ($customField->custom_field->type !== 'CuCcBurgerEditor') {
+                    continue;
+                }
+                $name = $customField->name;
+                $entity->$name = $entity->detail_draft;
+            }
+        }
+
         $controller->set(['customEntry' => $entity]);
 
         // テンプレートの変更
