@@ -373,7 +373,7 @@ class CustomContentHelper extends CustomContentAppHelper
     public function isDisplayField(CustomEntry $entry, string $fieldName)
     {
         $customLink = $this->getLink($entry->custom_table_id, $fieldName);
-        return (bool)$customLink->display_front;
+        return ($customLink->display_front && $customLink->status);
     }
 
     /**

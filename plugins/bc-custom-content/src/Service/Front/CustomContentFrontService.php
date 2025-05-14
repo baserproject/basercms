@@ -32,6 +32,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 
 /**
  * CustomContentFrontService
@@ -374,12 +375,13 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
 
         if ($request->getQuery('preview') === 'draft') {
             $customFields = $customEntriesTable->links;
+            $fieldNames = Hash::extract($customFields, '{n}.name');
             foreach ($customFields as $customField) {
-                if ($customField->custom_field->type !== 'CuCcBurgerEditor') {
+                $draftFieldName = $customField->name . '_draft';
+                if(!in_array($draftFieldName,  $fieldNames)) {
                     continue;
                 }
-                $name = $customField->name;
-                $entity->$name = $entity->detail_draft;
+                $entity->{$customField->name} = $entity->{$draftFieldName};
             }
         }
 

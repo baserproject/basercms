@@ -45,7 +45,7 @@ const customEntriesForm = {
         const action = form.attr('action');
 
         var previewMode  = '&preview=default';
-        if ($("#ContentPreviewMode").val() == 'draft') {
+        if ($("#ContentPreviewMode").val() === 'draft') {
             previewMode = '&preview=draft';
         }
 
