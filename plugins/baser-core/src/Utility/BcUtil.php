@@ -25,7 +25,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Database\Exception\MissingConnectionException;
-use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Http\UriFactory;

@@ -310,4 +310,34 @@ class CustomLinksService implements CustomLinksServiceInterface
         }
     }
 
+    /**
+     * フィールド名をもとにカスタムリンクの単一データを取得する
+     *
+     * @param string $name
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function findByName(string $name, array $queryParams = [])
+    {
+        $options = array_merge([
+            'status' => null,
+            'contain' => null
+        ], $queryParams);
+        $conditions = [
+            'CustomLinks.name' => $name
+        ];
+        if(!is_null($options['status'])) $conditions = ['CustomLinks.status' => $options['status']];
+        $query = $this->CustomLinks->find()->where($conditions);
+        if(!is_null($options['contain'])) {
+            $query->contain($options['contain']);
+        }
+        $entitiy = $query->first();
+        if(!$entitiy) {
+            return [];
+        }
+        return $query->first()->toArray();
+    }
+
 }

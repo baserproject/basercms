@@ -33,7 +33,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
 ?>
 
 
-<?php echo $this->BcAdminForm->create($entity, ['type' => 'file', 'novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create($entity, ['type' => 'file', 'novalidate' => true, 'id' => 'CustomEntriesForm']) ?>
 <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('custom_table_id', ['type' => 'hidden']) ?>
 

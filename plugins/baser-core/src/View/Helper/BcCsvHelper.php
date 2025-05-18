@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -209,7 +210,7 @@ class BcCsvHelper extends Helper
      */
     public function download($fileName, $debug = false)
     {
-        if (!$debug) {
+        if (!$debug && !BcUtil::isTest()) {
             for($i = 0; $i < ob_get_level(); $i++) {
                 ob_end_flush();
             }

@@ -145,6 +145,8 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      *
      * @param CustomLink $link
      * @param array $options
+     *  - `class` : クラス名
+     *  - `preview` : プレビュー表示として呼び出すかどうか
      * @return string
      * @checked
      * @noTodo
@@ -153,6 +155,8 @@ class CustomContentAdminHelper extends CustomContentAppHelper
     public function control(CustomLink $customLink, array $options = []): string
     {
         $options = array_merge_recursive(BcUtil::pairToAssoc($customLink->options), [
+            'class' => null,
+            'preview' => false
         ], $options);
 
         if ($customLink->class) $options['class'] = $customLink->class;
@@ -160,6 +164,8 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if (!$customLink->custom_field) return '';
         /** @var CustomField $field */
         $field = $customLink->custom_field;
+
+        if(!isset($this->{$field->type})) return '';
 
         $tmpName = $customLink->name;
         $customLink->name = $this->getFieldName($customLink, $options);

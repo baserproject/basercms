@@ -160,13 +160,13 @@ class MailMessagesController extends MailAdminAppController
     /**
      * メールフォームに添付したファイルを開く
      * @param MailMessagesServiceInterface $service
-     * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
     public function attachment(MailMessagesServiceInterface $service)
     {
+        $this->disableAutoRender();
         $args = func_get_args();
         $mailContentId = $args[1];
         unset($args[0], $args[1]);
@@ -178,18 +178,31 @@ class MailMessagesController extends MailAdminAppController
 
         // basePath配下でない場合は表示しない
         if (strpos($filePath, $basePath) !== 0) {
-                $this->notFound();
+            $this->notFound();
         }
 
         $ext = BcUtil::decodeContent(null, $file);
-        $mineType = 'application/octet-stream';
         if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
-            Header("Content-disposition: attachment; filename=" . $file);
+            $isImage = false;
+            $isDownload = true;
+            $mineType = 'application/octet-stream';
         } else {
+            $isImage = true;
+            $isDownload = false;
             $mineType = 'image/' . $ext;
         }
-        Header(sprintf('Content-type: %s; name=%s', $mineType, $file));
-        echo file_get_contents($filePath);
+
+        $response = $this->getResponse()
+            ->withHeader('Content-type', sprintf('%s; name=%s', $mineType, $file))
+            ->withFile($filePath, [
+                'name' => $file,
+                'download' => $isDownload,
+            ]);
+        if(!$isImage) {
+            $response = $response->withHeader('Content-disposition', sprintf('attachment; filename=%s', $file));
+        }
+
+        $this->setResponse($response);
     }
 
     /**

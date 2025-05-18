@@ -12,6 +12,7 @@
 namespace BcBlog\Test\Scenario;
 
 use BaserCore\Test\Scenario\MultiSiteScenario;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
@@ -52,6 +53,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         $this->loadFixtureScenario(MultiSiteScenario::class);
         $this->createBlogContents();
         $this->createBlogPosts();
+        $this->createBlogCategories();
         return null;
     }
 
@@ -118,7 +120,7 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'id' => 1,
             'user_id' => 1,
             'blog_content_id' => 6,
-            'blog_category_id' => null,
+            'blog_category_id' => 6,
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',
@@ -128,52 +130,62 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
         ])->persist();
         BlogPostFactory::make([
             'id' => 2,
+            'user_id' => 1,
             'blog_content_id' => 7,
             'no' => 4,
             'name' => 'smartphone_release',
             'title' => 'スマホサイトリリース',
             'status' => 1,
             'exclude_search' => 0,
-            'posted' => '2016-02-10 12:57:59',
+            'posted' => '2015-01-27 13:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 3,
+            'user_id' => 2,
             'blog_content_id' => 8,
             'no' => 5,
             'name' => 'english_release',
             'title' => '英語サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => '2015-01-28 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 4,
+            'user_id' => 2,
             'blog_content_id' => 9,
             'no' => 6,
             'name' => 'another_domain_release',
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => '2015-02-15 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 5,
+            'user_id' => 2,
             'blog_content_id' => 10,
             'no' => 7,
             'name' => 'sub_domain_release',
             'title' => '別サイトリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => '2015-02-20 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 6,
+            'user_id' => 2,
             'blog_content_id' => 11,
             'no' => 3,
             'name' => 'release',
             'title' => 'プレスリリース',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => '2015-02-25 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 7,
+            'user_id' => 2,
             'blog_content_id' => 6,
             'blog_category_id' => null,
             'no' => 4,
@@ -181,18 +193,35 @@ class MultiSiteBlogPostScenario implements FixtureScenarioInterface
             'title' => '日本語スラッグ記事タイトル',
             'status' => 1,
             'exclude_search' => 0,
+            'posted' => '2015-02-26 12:57:59',
         ])->persist();
         BlogPostFactory::make([
             'id' => 8,
+            'user_id' => 2,
             'blog_content_id' => 6,
             'blog_category_id' => null,
             'no' => 5,
             'name' => null,
             'title' => 'スラッグがない記事',
             'status' => 1,
-            'exclude_search' => 0,
+            'exclude_search' => 1,
+            'posted' => '2015-03-05 12:57:59',
         ])->persist();
         return null;
+    }
+
+    /**
+     * ブログカテゴリを作成
+     * @return void
+     */
+    public function createBlogCategories()
+    {
+        BlogCategoryFactory::make([
+            'id' => 6,
+            'blog_content_id' => 6,
+            'lft' => 1,
+            'rght' => 2
+        ])->persist();
     }
 
 }

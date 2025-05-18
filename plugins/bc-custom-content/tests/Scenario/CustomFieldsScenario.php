@@ -33,6 +33,9 @@ class CustomFieldsScenario implements FixtureScenarioInterface
             'title' => '求人分類',
             'name' => 'recruit_category',
             'type' => 'BcCcRelated',
+            'meta' => json_encode(['BcCcRelated' => [
+                'custom_table_id' => 1,
+            ]])
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
