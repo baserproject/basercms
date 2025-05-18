@@ -70,6 +70,8 @@ class MailContentsControllerTest extends BcTestCase
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('description test', $result->mailContent->description);
+        $this->assertEquals('thanks test', $result->mailContent->thanks);
+        $this->assertEquals('unpublish test', $result->mailContent->unpublish);
         $this->assertEquals('baserCMSサンプル', $result->mailContent->sender_name);
         $this->assertEquals('【baserCMS】お問い合わせ頂きありがとうございます。', $result->mailContent->subject_user);
     }

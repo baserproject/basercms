@@ -212,6 +212,88 @@ class MailHelper extends Helper
     }
 
     /**
+     * メールフォームの送信完了文を取得する
+     * @return string メールフォームの送信完了文
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getThanks(): string
+    {
+        return $this->currentMailContent->thanks;
+    }
+
+    /**
+     * メールの送信完了文を出力する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーのためテスト不要
+     */
+    public function thanks(): void
+    {
+        echo $this->getThanks();
+    }
+
+    /**
+     * メールの送信完了文が設定されているかどうかを判定する
+     *
+     * @return bool 設定されている場合 true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function thanksExists(): bool
+    {
+        if (empty($this->currentMailContent->thanks)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * メールフォームの受付停止文を取得する
+     * @return string メールフォームの受付停止文
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUnpublish(): string
+    {
+        return $this->currentMailContent->unpublish;
+    }
+
+    /**
+     * メールの受付停止文を出力する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーのためテスト不要
+     */
+    public function unpublish(): void
+    {
+        echo $this->getUnpublish();
+    }
+
+    /**
+     * メールの受付停止文が設定されているかどうかを判定する
+     *
+     * @return bool 設定されている場合 true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublishExists(): bool
+    {
+        if (empty($this->currentMailContent->unpublish)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * メールフォームへのリンクを生成する
      * $contentsNameはコンテンツ管理上の１階層のみ対応
      *

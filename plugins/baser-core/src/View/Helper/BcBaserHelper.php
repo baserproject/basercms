@@ -127,6 +127,10 @@ use BaserCore\Annotation\Doc;
  * @method array getMailFormGroupValidErrors(array $mailFields, string $groupValid, array $options = [], bool $distinct = true)
  * @method bool isMailFormGroupLastField(ResultSet $mailFields, MailField $currentMailField)
  * @method string mailFormLabel(string $fieldName, ?string $text = null, array $options = [])
+ * @method bool mailFormThanksExists()
+ * @method void mailFormThanks()
+ * @method bool mailFormUnpublishExists()
+ * @method void mailFormUnpublish()
  *
  * ### BcUploadHelper
  * @method void setTableToUpload(string $tableName)
