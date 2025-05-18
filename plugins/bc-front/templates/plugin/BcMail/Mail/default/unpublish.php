@@ -23,4 +23,10 @@
 
 <h3 class="bs-mail-title-sub"><?php echo __d('baser_core', '受付中止') ?></h3>
 
-<div class="bs-mail-form"><p><?php echo __d('baser_core', '現在、受付を中止しています。') ?></p></div>
+<div class="bs-mail-form">
+  <?php if ($this->BcBaser->mailFormUnpublishExists()): ?>
+    <?php $this->BcBaser->mailFormUnpublish() ?>
+  <?php else: ?>
+    <p><?php echo __d('baser_core', '現在、受付を中止しています。') ?></p>
+  <?php endif ?>
+</div>
