@@ -13,16 +13,15 @@ namespace BcMail\Test\TestCase\Model\Table;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BcMail\Model\Entity\MailContent;
+use BcMail\Model\Table\MailContentsTable;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Scenario\MailContentsScenario;
-use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailContentTest
  *
- * @property MailContent $MailContent
+ * @property MailContentsTable $MailContent
  */
 class MailContentsTableTest extends BcTestCase
 {
@@ -434,6 +433,10 @@ class MailContentsTableTest extends BcTestCase
         //containsScript
         $errors = $validator->validate(['description' => '<script></script>']);
         $this->assertEquals('説明文でスクリプトの入力は許可されていません。', current($errors['description']));
+        $errors = $validator->validate(['thanks' => '<script></script>']);
+        $this->assertEquals('送信完了文でスクリプトの入力は許可されていません。', current($errors['thanks']));
+        $errors = $validator->validate(['unpublish' => '<script></script>']);
+        $this->assertEquals('受付中止文でスクリプトの入力は許可されていません。', current($errors['unpublish']));
 
         //emails
         $errors = $validator->validate(['sender_1' => 'カタカナ', 'sender_2' => 'カタカナ']);

@@ -104,24 +104,13 @@ class MailHelperTest extends BcTestCase
     }
 
     /**
-     * 送信完了文の取得結果
-     *
-     * public function testThank() {
-     * $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドのためスキップします。');
-     * }
-     */
-
-    /**
      * 送信完了文を取得する
      */
     public function testGetThanks()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        ClassRegistry::flush();
-        $this->Mail->setMailContent(1);
-        $expected = '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>';
-        $result = $this->Mail->getThanks();
-        $this->assertEquals($result, $expected, "送信完了文の取得結果が違います。");
+        $this->MailHelper->currentMailContent = new Entity(['thanks' => 'ありがとうございました。']);
+        $result = $this->MailHelper->getThanks();
+        $this->assertEquals($result, 'ありがとうございました。');
     }
 
     /**
@@ -157,24 +146,13 @@ class MailHelperTest extends BcTestCase
     }
 
     /**
-     * 受付中止文の取得結果
-     *
-     * public function testUnpublish() {
-     * $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドのためスキップします。');
-     * }
-     */
-
-    /**
      * 受付中止文を取得する
      */
     public function testGetUnpublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        ClassRegistry::flush();
-        $this->Mail->setMailContent(1);
-        $expected = '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>';
-        $result = $this->Mail->getUnpublish();
-        $this->assertEquals($result, $expected, "受付中止文の取得結果が違います。");
+        $this->MailHelper->currentMailContent = new Entity(['unpublish' => '受付中止です。']);
+        $result = $this->MailHelper->getUnpublish();
+        $this->assertEquals($result, '受付中止です。');
     }
 
     /**

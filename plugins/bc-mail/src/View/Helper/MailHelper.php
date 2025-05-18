@@ -218,7 +218,7 @@ class MailHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getThanks()
+    public function getThanks(): string
     {
         return $this->currentMailContent->thanks;
     }
@@ -231,7 +231,7 @@ class MailHelper extends Helper
      * @noTodo
      * @unitTest ラッパーのためテスト不要
      */
-    public function thanks()
+    public function thanks(): void
     {
         echo $this->getThanks();
     }
@@ -239,12 +239,12 @@ class MailHelper extends Helper
     /**
      * メールの送信完了文が設定されているかどうかを判定する
      *
-     * @return boolean 設定されている場合 true を返す
+     * @return bool 設定されている場合 true を返す
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function thanksExists()
+    public function thanksExists(): bool
     {
         if (empty($this->currentMailContent->thanks)) {
             return false;
@@ -259,7 +259,7 @@ class MailHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getUnpublish()
+    public function getUnpublish(): string
     {
         return $this->currentMailContent->unpublish;
     }
@@ -272,7 +272,7 @@ class MailHelper extends Helper
      * @noTodo
      * @unitTest ラッパーのためテスト不要
      */
-    public function unpublish()
+    public function unpublish(): void
     {
         echo $this->getUnpublish();
     }
@@ -280,12 +280,12 @@ class MailHelper extends Helper
     /**
      * メールの受付停止文が設定されているかどうかを判定する
      *
-     * @return boolean 設定されている場合 true を返す
+     * @return bool 設定されている場合 true を返す
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function unpublishExists()
+    public function unpublishExists(): bool
     {
         if (empty($this->currentMailContent->unpublish)) {
             return false;
