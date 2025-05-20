@@ -31,6 +31,7 @@ $base = $attributes['base'];
   <meta charset="UTF-8">
   <meta name="robots" content="noindex,nofollow"/>
   <title><?= h($this->fetch('title')) ?></title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <?= $this->fetch('meta') ?>
   <?php $this->BcBaser->css([
     'vendor/bootstrap-4.1.3/bootstrap',
