@@ -157,7 +157,7 @@ class BlogFrontServiceTest extends BcTestCase
         $this->loginAdmin($request);
 
         //対象メソッドをコル
-        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([]));
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
