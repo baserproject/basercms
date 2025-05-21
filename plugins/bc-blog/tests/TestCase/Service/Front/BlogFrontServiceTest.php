@@ -155,9 +155,10 @@ class BlogFrontServiceTest extends BcTestCase
             'Content' => ContentFactory::get(1)
         ]);
         $this->loginAdmin($request);
+        $this->setRequest()->is('rss');
 
         //対象メソッドをコル
-        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([]));
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
