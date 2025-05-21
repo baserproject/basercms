@@ -139,11 +139,13 @@ class BlogFrontServiceTest extends BcTestCase
         // データ生成
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        $limit = $blogContentService->get(1)->feed_count;
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 1,
             'no' => 1,
             'title' => 'blog post title',
+            'limit' => $listCount,
             'status' => true
         ])->persist();
 
