@@ -34,6 +34,7 @@ use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Datasource\Paging\NumericPaginator;
 
 /**
  * BlogFrontServiceTest
@@ -139,13 +140,11 @@ class BlogFrontServiceTest extends BcTestCase
         // データ生成
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
-        $limit = $blogContentService->get(1)->feed_count;
         BlogPostFactory::make([
             'id' => 1,
             'blog_content_id' => 1,
             'no' => 1,
             'title' => 'blog post title',
-            'limit' => $listCount,
             'status' => true
         ])->persist();
 
@@ -158,7 +157,9 @@ class BlogFrontServiceTest extends BcTestCase
         $this->loginAdmin($request);
 
         //対象メソッドをコル
-        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        $paginator = new NumericPaginator();
+        $posts = $paginator->paginate($blogPostsService->getIndex([]));
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $posts);
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
