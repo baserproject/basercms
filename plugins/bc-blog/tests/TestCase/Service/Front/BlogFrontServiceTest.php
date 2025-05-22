@@ -151,8 +151,7 @@ class BlogFrontServiceTest extends BcTestCase
         //パラメーターの準備
         $request = $this->getRequest()->withQueryParams([
             'Site' => SiteFactory::get(1),
-            'Content' => ContentFactory::get(1),
-            'type' => 'rss',
+            'Content' => ContentFactory::get(1)
         ]);
         $this->loginAdmin($request);
 
