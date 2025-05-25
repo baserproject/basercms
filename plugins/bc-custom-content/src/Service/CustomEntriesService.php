@@ -825,18 +825,25 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     private function normalizeDateString(string $dateString): string
     {
-        if (is_array(json_decode($dateString, true))) {
+        if (empty($dateString)) {
             return $dateString;
         }
-
-        if (preg_match('/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/', $dateString, $matches)) {
-            $year = $matches[1];
-            $month = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-            $day = str_pad($matches[3], 2, '0', STR_PAD_LEFT);
-            return "$year/$month/$day";
+        
+        $timestamp = strtotime($dateString);
+        
+        if ($timestamp === false) {
+            return $dateString;
         }
-
-        return $dateString;
+        
+        if (strpos($dateString, ':') !== false) {
+            if (strpos($dateString, ':') === strrpos($dateString, ':')) {
+                return date('Y/m/d H:i', $timestamp);
+            } else {
+                return date('Y/m/d H:i:s', $timestamp);
+            }
+        } else {
+            return date('Y/m/d', $timestamp);
+        }
     }
 
 }
