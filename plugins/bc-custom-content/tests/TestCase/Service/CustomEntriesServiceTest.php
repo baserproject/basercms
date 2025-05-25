@@ -36,6 +36,8 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use TypeError;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * CustomEntriesServiceTest
@@ -1023,6 +1025,43 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->expectException(RecordNotFoundException::class);
         $this->CustomEntriesService->moveDown(99);
 
+    }
+
+    /**
+     * test normalizeDateString
+     */
+    public function test_normalizeDateString()
+    {
+        $reflection = new ReflectionClass($this->CustomEntriesService);
+        $method = $reflection->getMethod('normalizeDateString');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/4');
+        $this->assertEquals('2025/05/04', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10');
+        $this->assertEquals('2025/05/10', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/10/5');
+        $this->assertEquals('2025/10/05', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/05/04');
+        $this->assertEquals('2025/05/04', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01:30');
+        $this->assertEquals('2025/05/10 00:01:30', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/05/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, 'not a date');
+        $this->assertEquals('not a date', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '');
+        $this->assertEquals('', $result);
     }
 
 }
