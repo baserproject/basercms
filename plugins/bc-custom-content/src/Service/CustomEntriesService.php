@@ -773,6 +773,11 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             /** @var CustomLink $link */
             if (empty($data[$link->name])) continue;
             $value = $data[$link->name];
+            
+            if ($link->custom_field->type === 'BcCcDate' || $link->custom_field->type === 'BcCcDateTime') {
+                $value = $this->normalizeDateString($value);
+            }
+            
             // 半角処理
             if ($link->custom_field->auto_convert === 'CONVERT_HANKAKU') {
                 $value = mb_convert_kana($value, 'a');
@@ -810,6 +815,28 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     public function moveDown(int $id)
     {
         return $this->CustomEntries->moveDown($this->get($id, ['contain' => ['CustomTables']]));
+    }
+
+    /**
+     * 日付文字列を正規化する（月日の0埋めを行う）
+     *
+     * @param string $dateString
+     * @return string
+     */
+    private function normalizeDateString(string $dateString): string
+    {
+        if (is_array(json_decode($dateString, true))) {
+            return $dateString;
+        }
+        
+        if (preg_match('/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/', $dateString, $matches)) {
+            $year = $matches[1];
+            $month = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+            $day = str_pad($matches[3], 2, '0', STR_PAD_LEFT);
+            return "$year/$month/$day";
+        }
+        
+        return $dateString;
     }
 
 }
