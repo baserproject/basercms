@@ -1048,9 +1048,14 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $method->invoke($this->CustomEntriesService, '2025/05/04');
         $this->assertEquals('2025/05/04', $result);
         
-        $jsonData = json_encode(['year' => 2025, 'month' => 5, 'day' => 4]);
-        $result = $method->invoke($this->CustomEntriesService, $jsonData);
-        $this->assertEquals($jsonData, $result);
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01:30');
+        $this->assertEquals('2025/05/10 00:01:30', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/05/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
         
         $result = $method->invoke($this->CustomEntriesService, 'not a date');
         $this->assertEquals('not a date', $result);
