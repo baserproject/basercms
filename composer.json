@@ -83,7 +83,7 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
-        "install": [
+        "app-install": [
             "composer install --no-plugins",
             "bin/cake setup install",
             "bin/cake install https://localhost foo@example.com baserCMS1234 basercms --host bc-db --username root --password root"
