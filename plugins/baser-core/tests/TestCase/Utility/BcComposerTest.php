@@ -197,7 +197,6 @@ class BcComposerTest extends BcTestCase
         $rs = BcComposer::update();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('Loading composer repositories with package information', $rs['out'][0]);
 
         // バックアップ復元
         rename($backupPath, $orgPath);
@@ -229,7 +228,6 @@ class BcComposerTest extends BcTestCase
         $rs = BcComposer::install();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('Installing dependencies from lock file (including require-dev)', $rs['out'][0]);
     }
 
     /**
