@@ -30,7 +30,7 @@ use BcCustomContent\View\Helper\CustomContentArrayTrait;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -176,7 +176,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
 
         if ($options['order']) {
-            $query->order($this->createOrder($options['order'], $options['direction']));
+            $query->orderBy($this->createOrder($options['order'], $options['direction']));
         }
 
         if (!empty($options['limit'])) {
@@ -228,14 +228,14 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     /**
      * 検索条件を作成しセットする
      *
-     * @param Query $query
+     * @param SelectQuery $query
      * @param array $params
-     * @return Query
+     * @return SelectQuery
      * @notodo
      * @checked
      * @unitTest
      */
-    public function createIndexConditions(Query $query, array $params)
+    public function createIndexConditions(SelectQuery $query, array $params)
     {
         foreach ($params as $key => $value) {
             if ($value === '') unset($params[$key]);
@@ -697,7 +697,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
         $parentsSrc = $this->CustomEntries->find('treeList')
             ->where($conditions)
-            ->order(['lft'])
+            ->orderBy(['lft'])
             ->all();
         $parents = [];
         foreach($parentsSrc as $key => $value) {

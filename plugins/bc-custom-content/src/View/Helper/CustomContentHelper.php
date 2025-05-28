@@ -276,12 +276,12 @@ class CustomContentHelper extends CustomContentAppHelper
      * Get Field
      * @param int $tableId
      * @param string $fieldName
-     * @return false
+     * @return CustomField|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getField(int $tableId, string $fieldName)
+    public function getField(int $tableId, string $fieldName): CustomField|false
     {
         $link = $this->getLink($tableId, $fieldName);
         if (!$link || empty($link->custom_field)) return false;
