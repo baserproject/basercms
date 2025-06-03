@@ -364,10 +364,13 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         }
 
         $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
-        $entity = $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999));
+        if ($customEntriesTable->hasBehavior('BcUpload')) {
+            // BcUpload ビヘイビアがある場合は、アップロードファイルを保存
+            $postEntity = $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999))->toArray();
+        }
         $entity = $customEntriesTable->patchEntity(
             $customEntry ?? $customEntriesTable->newEmptyEntity(),
-            ($postEntity)? $entity->toArray(): []
+            ($postEntity) ? $postEntity : []
         );
         BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
 
