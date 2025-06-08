@@ -40,7 +40,6 @@ $base = $attributes['base'];
     '../js/vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min.css',
     'admin/style'
   ]) ?>
-  <?= $this->fetch('css') ?>
   <?= $this->BcBaser->declarationI18n() ?>
   <?= $this->BcBaser->i18nScript([
     'commonCancel' => __d('baser_core', 'キャンセル'),
