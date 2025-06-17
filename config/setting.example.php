@@ -15,4 +15,11 @@
  * plugins/baser-core/config/setting.php の値をカスタマイズする場合は、ここに定義する。
  */
 
-return [];
+return ['BcApp' => [
+    /**
+     * スーパーユーザーID
+     * @params int or array
+     */
+    'superUserId' => 1,
+    ]
+];

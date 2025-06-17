@@ -102,7 +102,11 @@ class User extends Entity implements UserInterface
      */
     public function isSuper(): bool
     {
-        return (Configure::read('BcApp.superUserId') === $this->id);
+        $superUserId = Configure::read('BcApp.superUserId');
+        if (is_array($superUserId)) {
+            return in_array($this->id, $superUserId);
+        }
+        return $superUserId === $this->id;
     }
 
     /**
