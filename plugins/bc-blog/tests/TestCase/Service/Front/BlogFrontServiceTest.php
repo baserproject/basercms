@@ -34,6 +34,7 @@ use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Datasource\Paging\NumericPaginator;
 
 /**
  * BlogFrontServiceTest
@@ -155,7 +156,9 @@ class BlogFrontServiceTest extends BcTestCase
         $this->loginAdmin($request);
 
         //対象メソッドをコル
-        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        $paginator = new NumericPaginator();
+        $posts = $paginator->paginate($blogPostsService->getIndex([]));
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $posts);
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);

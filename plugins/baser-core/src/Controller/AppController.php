@@ -255,8 +255,18 @@ class AppController extends BaseController
      */
     public function setupFrontView(): void
     {
-        $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
-        $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
+        $builder = $this->viewBuilder();
+        $builder->setClassName('BaserCore.BcFrontApp');
+        $builder->setTheme(BcUtil::getCurrentTheme());
+        if($this->getRequest()->is('rss')) {
+            $response = $this->getResponse();
+            $this->setResponse($response
+                ->withType($response->getMimeType('rss'))
+                ->withCharset(Configure::read('App.encoding'))
+            );
+            $builder->setTemplatePath((string)$builder->getTemplatePath() . DS . 'rss');
+            $builder->setLayoutPath('rss');
+        }
     }
 
     /**

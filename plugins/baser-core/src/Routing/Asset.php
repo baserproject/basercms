@@ -319,6 +319,9 @@ class Asset
                 // >>>
                 //}
                 // ---
+                } elseif(is_file(Configure::read('App.wwwRoot') . $file)) {
+                    // フロントデフォルトテーマよりドキュメントルート直下のアセットを優先する
+                    $webPath = $requestWebroot . $asset[0];
                 } else {
                     $coreFrontTheme = Configure::read('BcApp.coreFrontTheme');
                     $theme = static::inflectString($coreFrontTheme) . '/';

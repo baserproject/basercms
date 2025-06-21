@@ -50,7 +50,7 @@ jobs:
       - name: Install
         run: |
           cd docker
-          docker exec bc-php composer run-script install
+          docker exec bc-php composer run-script app-install
 
       - name: Run test suite
         run: |

@@ -115,14 +115,14 @@ class BlogFrontService implements BlogFrontServiceInterface
      *
      * @param ServerRequest $request
      * @param BlogContent $blogContent
-     * @param ResultSet $posts
+     * @param PaginatedResultSet $posts
      * @return array
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
+    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet $posts): array
     {
         $site = $request->getAttribute('currentSite');
         return [
