@@ -64,6 +64,7 @@ class InstallationsController extends BcAdminAppController
      * @return void
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function index()
     {
