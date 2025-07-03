@@ -64,8 +64,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
           ]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext"><?php echo __d('baser_core', '「名」は省略する事ができます。') ?></div>
-        <?php echo $this->BcAdminForm->error('real_name_1', __d('baser_core', '姓を入力してください')) ?>
-        <?php echo $this->BcAdminForm->error('real_name_2', __d('baser_core', '名を入力してください')) ?>
+        <?php echo $this->BcAdminForm->error('real_name_1') ?>
+        <?php echo $this->BcAdminForm->error('real_name_2') ?>
       </td>
     </tr>
     <tr>
