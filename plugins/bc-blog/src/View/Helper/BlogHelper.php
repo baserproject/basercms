@@ -1704,7 +1704,7 @@ class BlogHelper extends Helper
      *  - `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
      *  - `data` : エレメントに渡したい変数（初期値 : array）
      *  - `return` : 出力結果を echo せずに返す場合に true を指定（初期値 : false）
-     * @return void
+     * @return void|string
      * @checked
      * @noTodo
      * @unitTest
