@@ -191,7 +191,7 @@ $(function () {
         $.bcToken.check(function () {
             return $.ajax({
                 type: "post",
-                url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_categories.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_categories/add.json',
                 data: {
                     'blog_content_id': blogContentId,
                     'name': name,

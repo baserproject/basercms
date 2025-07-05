@@ -331,6 +331,7 @@ class BlogCategoriesTable extends BlogAppTable
             'prefix' => 'Api/Admin',
             'controller' => 'BlogCategories',
             'action' => 'add',
+            '_ext' => 'json',
             $blogContentId
         ]));
         return $permissionsService->check($addUrl, $userGroupId);
