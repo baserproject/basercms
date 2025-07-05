@@ -155,7 +155,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
         if ($options['contain'] == null)
             $options['contain'] = [];
-        $query = $this->BlogPosts->find('all', ['draft' => $options['draft']])
+        $query = $this->BlogPosts->find('all', draft: $options['draft'])
             ->contain($options['contain']);
 
         if ($options['order']) {
