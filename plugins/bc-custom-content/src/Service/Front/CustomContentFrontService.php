@@ -364,7 +364,12 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         }
 
         $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
-        $entity = $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999));
+
+        // setupUploaderが呼ばれてファイルフィールドがあれば、saveTmpFilesメソッドが使えるようになる.
+        $entity = $customEntriesTable->behaviors()->hasMethod('saveTmpFiles')
+        ? $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999))
+        : $customEntriesTable->newEntity($postEntity);
+
         $entity = $customEntriesTable->patchEntity(
             $customEntry ?? $customEntriesTable->newEmptyEntity(),
             ($postEntity)? $entity->toArray(): []
