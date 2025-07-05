@@ -107,7 +107,7 @@ class BlogTagsTable extends BlogAppTable
             'prefix' => 'Api/Admin',
             'controller' => 'BlogTags',
             'action' => 'add',
-            $blogContentId
+            '_ext' => 'json'
         ]));
         return $permissionsService->check($addUrl, $userGroupId);
     }
