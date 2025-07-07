@@ -459,7 +459,11 @@ class PermissionsService implements PermissionsServiceInterface
         // RESTful なルーティングに対応
         // URL上アクションがなく、parseRequest で、アクションが index に設定された場合、
         // POST メソッドであれば add アクションに変換する
-        if($urlArray['_ext'] === 'json' && $urlArray['action'] === 'index' && $method === 'POST') {
+        if(!empty($urlArray['_ext'])
+            && $urlArray['_ext'] === 'json'
+            && $urlArray['action'] === 'index'
+            && $method === 'POST'
+        ) {
             if(!preg_match('/\/index\.json$/', $url)) {
                 $url = preg_replace('/\.json$/', '/add.json', $url);
             }
