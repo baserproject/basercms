@@ -155,6 +155,8 @@ use BaserCore\Annotation\Doc;
  * @method bool isDisplayCustomField(CustomEntry $entry, string $fieldName)
  * @method string getCustomFieldTitle(mixed $entry, string $fieldName)
  * @method string|array getCustomFieldValue(mixed $entry, string $fieldName, array $options = [])
+ * @method string getCustomEntries(int $tableId, int $limit, array $options = [])
+ * @method string customEntries(int $tableId, int $limit, array $options = [])
  *
  * ### TextHelper
  * @method string truncateText(string $text, int $length = 100, array $options = [])
