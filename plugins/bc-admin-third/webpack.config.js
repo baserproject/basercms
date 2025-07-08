@@ -36,9 +36,9 @@ module.exports = {
         path: path.join(__dirname, 'webroot/js')
     },
     resolve: {
-        alias: {
-            process: "process/browser"
-        }
+        fallback: {
+            'process/browser': require.resolve('process/browser'),
+        },
     },
     optimization: {
         splitChunks: {
