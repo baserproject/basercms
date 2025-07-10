@@ -34,5 +34,5 @@ $this->BcUpload->setTable('BaserCore.Contents');
 		<?php endforeach ?>
 	</ul>
 <?php else: ?>
-  <p class="bs-blog-no-data"><?php echo __d('baser_core', '配下のコンテンツがありません。'); ?></p>
+  <p class="bs-contents-no-data"><?php echo __d('baser_core', '配下のコンテンツがありません。'); ?></p>
 <?php endif ?>
