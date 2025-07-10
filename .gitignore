@@ -18,6 +18,7 @@ app/View/Pages/*
 !app/View/Pages/empty
 app/webroot/theme/*
 !app/webroot/theme/empty
+!app/webroot/theme/.htaccess
 app/webroot/sitemap.xml
 nbproject/
 lib/Cake/Console/Templates/skel/tmp/cache/models/*
