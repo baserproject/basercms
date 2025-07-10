@@ -145,6 +145,19 @@ $this->BcBaser->js('admin/users/edit', false);
 				</div>
 			</td>
 		</tr>
+
+<?php if($this->request->action == 'admin_add' || $deletable): ?>
+		<tr>
+			<th class="col-head bca-form-table__label">
+				<?php echo $this->BcForm->label('status', __d('baser_core', '利用状態')) ?>
+			</th>
+			<td class="col-input bca-form-table__input">
+				<?php echo $this->BcForm->input('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
+				<?php echo $this->BcForm->error('status') ?>
+			</td>
+		</tr>
+<?php endif ?>
+
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
