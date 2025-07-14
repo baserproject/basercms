@@ -55,6 +55,8 @@ class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperIn
             'getCustomFieldTitle' => ['CustomContent', 'getFieldTitle'],
             'getCustomFieldValue' => ['CustomContent', 'getFieldValue'],
             'getCustomContentTitle' => ['CustomContent', 'getTitle'],
+            'customEntries' => ['CustomContent', 'entries'],
+            'getCustomEntries' => ['CustomContent', 'getEntries']
         ];
     }
 

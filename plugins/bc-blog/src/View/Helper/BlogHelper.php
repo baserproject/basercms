@@ -37,7 +37,6 @@ use BcBlog\Service\BlogTagsService;
 use BcBlog\Service\BlogTagsServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -1704,7 +1703,8 @@ class BlogHelper extends Helper
      *  - `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
      *  - `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
      *  - `data` : エレメントに渡したい変数（初期値 : array）
-     * @return void
+     *  - `return` : 出力結果を echo せずに返す場合に true を指定（初期値 : false）
+     * @return void|string
      * @checked
      * @noTodo
      * @unitTest
@@ -1715,6 +1715,7 @@ class BlogHelper extends Helper
             'preview' => false,
             'page' => 1,
             'data' => [],
+            'return' => false,
         ], $options);
 
         if (!$contentsName && empty($options['contentsTemplate'])) {
@@ -1748,10 +1749,16 @@ class BlogHelper extends Helper
             $this->setContent($blogContent->id, $blogContent->content->id);
         }
 
-        $this->BcBaser->element($template, $data);
+        $output = $this->BcBaser->getElement($template, $data);
 
         if($currentBlogContentId) {
             $this->setContent($currentBlogContentId);
+        }
+
+        if($options['return']) {
+            return $output;
+        } else {
+            echo $output;
         }
     }
 
@@ -1778,7 +1785,7 @@ class BlogHelper extends Helper
         if ($options['preview'] === false) {
             $options['status'] = 'publish';
         }
-        
+
         $options = $this->parseContentName($contentsName, $options);
         return $this->getService(BlogPostsServiceInterface::class)->getIndex($options);
     }

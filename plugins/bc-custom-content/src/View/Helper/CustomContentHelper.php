@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\View\Helper;
 
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcTimeHelper;
@@ -24,6 +25,7 @@ use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
 use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
@@ -489,5 +491,61 @@ class CustomContentHelper extends CustomContentAppHelper
             $years[] = $this->BcBaser->getLink($record->year, '/' . $targetTable->name . '/year/' . $record->year);
         }
         return $years;
+    }
+
+    /**
+     * エントリーリストを取得する
+     * @param string $contentsName
+     * @param int $limit
+     * @param array $options
+     * @return string
+     */
+    public function getEntries(string $contentsName, int $limit = 5, array $options = []): string
+    {
+        $options = array_merge([
+            'limit' => $limit,
+        ], $options);
+        $contentService = $this->getService(ContentsServiceInterface::class);
+        $url = $this->parseContentsName($contentsName);
+        $content = $contentService->Contents->findByUrl($url, ['Contain' => ['CustomContents']]);
+        if($content->type !== 'CustomContent') {
+            throw new NotFoundException(__d('baser_core', '指定されたコンテンツは存在しません。'));
+        }
+        $service = $this->getService(CustomContentFrontServiceInterface::class);
+        $customContent = $service->ContentsService->get($content->entity_id);
+        $service->EntriesService->setup($content->entity_id);
+        $entities = $service->EntriesService->getIndex($options);
+        return $this->BcBaser->getElement("BcCustomContent.../CustomContent/{$customContent->template}/entries", [
+            'customEntries' => $entities,
+            'customContent' => $customContent
+        ]);
+    }
+
+    /**
+     * コンテンツ名を解析する
+     * @param string $contentsName
+     * @return string
+     */
+    Public function parseContentsName (string $contentsName): string
+    {
+        if(!preg_match('/^\//', $contentsName)) {
+            $contentsName = '/' . $contentsName;
+        }
+        if(!preg_match('/\/$/', $contentsName)) {
+            $contentsName .= '/';
+        }
+        return $contentsName;
+    }
+
+    /**
+     * エントリーリストを出力する
+     * @param string $contentsName
+     * @param int $limit
+     * @param array $options
+     * @return void
+     */
+    public function entries(string $contentsName, int $limit = 5, array $options = []): void
+    {
+        echo $this->getEntries($contentsName, $limit, $options);
     }
 }

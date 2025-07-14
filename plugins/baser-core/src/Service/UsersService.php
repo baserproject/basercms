@@ -17,11 +17,9 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
@@ -40,6 +38,7 @@ use Cake\Http\Response;
  * @property UsersTable $Users
  * @property LoginStoresTable $LoginStores
  */
+#[\AllowDynamicProperties]
 class UsersService implements UsersServiceInterface
 {
 
