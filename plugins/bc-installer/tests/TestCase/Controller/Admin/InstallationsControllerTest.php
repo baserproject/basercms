@@ -12,6 +12,7 @@
 namespace BcInstaller\Test\TestCase\Controller\Admin;
 use BaserCore\TestSuite\BcTestCase;
 use BcInstaller\Controller\Admin\InstallationsController;
+use Cake\Event\Event;
 
 /**
  * Class InstallationsControllerTest
@@ -45,7 +46,10 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->InstallationsController = new InstallationsController($this->getRequest());
+        $event = new Event('Controller.beforeFilter', $this->InstallationsController);
+        $this->InstallationsController->beforeFilter($event);
+        $this->assertEquals(300, ini_get("max_execution_time"));
     }
 
     /**

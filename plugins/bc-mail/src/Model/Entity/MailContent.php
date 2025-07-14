@@ -24,6 +24,8 @@ use Cake\ORM\TableRegistry;
  * Class MailContent
  * @property int $id
  * @property string $description
+ * @property string $thanks
+ * @property string $unpublish
  * @property string $sender_1
  * @property string $sender_2
  * @property string $sender_name
@@ -60,6 +62,7 @@ class MailContent extends Entity
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNumberOfMessages()
     {

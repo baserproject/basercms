@@ -33,7 +33,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
 ?>
 
 
-<?php echo $this->BcAdminForm->create($entity, ['type' => 'file', 'novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create($entity, ['type' => 'file', 'novalidate' => true, 'id' => 'CustomEntriesForm']) ?>
 <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('custom_table_id', ['type' => 'hidden']) ?>
 
@@ -43,10 +43,10 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
     <?php echo $this->BcAdminForm->label('id', 'No') ?> : <strong><?php echo $entity->id ?></strong>
   </span>
   <span class="bca-post__url">
-    <a href="<?php echo $entryUrl ?>"
+    <a href="<?php echo h($entryUrl) ?>"
        class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
       <i class="bca-icon--globe"></i>
-      <?php echo $entryUrl ?>
+      <?php echo h($entryUrl) ?>
     </a>
     <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',

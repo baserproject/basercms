@@ -11,10 +11,12 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Error\BcException;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Entity\UserInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
@@ -23,7 +25,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Database\Exception\MissingConnectionException;
-use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Http\UriFactory;
@@ -132,12 +133,12 @@ class BcUtil
      *
      * $prefix を指定したとしても authentication より取得できた場合はそちらを優先する
      *
-     * @return User|false
+     * @return UserInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser()
+    public static function loginUser(): UserInterface|false
     {
         $request = Router::getRequest();
         if (!$request) return false;
@@ -228,7 +229,7 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isSuperUser($user = null): bool
+    public static function isSuperUser(?UserInterface $user = null): bool
     {
         /** @var User $User */
         $loginUser = $user ?? self::loginUser();
@@ -351,6 +352,7 @@ class BcUtil
      */
     public static function verpoint($version)
     {
+        if(!$version) return 0;
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
@@ -1114,9 +1116,9 @@ class BcUtil
      */
     public static function getContentsItem(): array
     {
-        $items = Configure::read('BcContents.items');
+        $plugins = Configure::read('BcContents.items');
         $createdItems = [];
-        foreach($items as $name => $items) {
+        foreach($plugins as $name => $items) {
             foreach($items as $type => $item) {
                 $item['plugin'] = $name;
                 $item['type'] = $type;
@@ -1641,12 +1643,30 @@ class BcUtil
      */
     public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
     {
-        $eventListeners = $eventManager->listeners($eventKey);
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオフにすることはできません。'));
+        }
+
         $globalEventManager = $eventManager->instance();
-        if ($eventListeners) {
-            foreach($eventListeners as $eventListener) {
-                $eventManager->off($eventKey, $eventListener['callable']);
-                $globalEventManager->off($eventKey, $eventListener['callable']);
+        $eventListeners = [
+            'local' => $eventManager->prioritisedListeners($eventKey),
+            'global' => $globalEventManager->prioritisedListeners($eventKey)
+        ];
+        if ($eventListeners['local']) {
+            foreach($eventListeners['local'] as $listeners) {
+                foreach($listeners as $listener) {
+                    $eventManager->off($eventKey, $listener['callable']);
+                }
+            }
+        }
+        if ($eventListeners['global']) {
+            foreach($eventListeners['global'] as $listeners) {
+                foreach($listeners as $listener) {
+                    $globalEventManager->off($eventKey, $listener['callable']);
+                }
             }
         }
         return $eventListeners;
@@ -1656,16 +1676,33 @@ class BcUtil
      * イベントをオンにする
      * @param EventManagerInterface $eventManager
      * @param string $eventKey
-     * @param EventListenerInterface[] $eventListeners
+     * @param array $eventListeners
      * @checked
      * @noTodo
      * @unitTest
      */
     public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
     {
-        if ($eventListeners) {
-            foreach($eventListeners as $eventListener) {
-                $eventManager->on($eventKey, $eventListener['callable']);
+        $reflection = new ReflectionClass($eventManager);
+        $property = $reflection->getProperty('_isGlobal');
+        $property->setAccessible(true);
+        if($property->getValue($eventManager)) {
+            throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオンにすることはできません。'));
+        }
+
+        $globalEventManager = $eventManager->instance();
+        if (!empty($eventListeners['local'])) {
+            foreach($eventListeners['local'] as $priority => $listeners) {
+                foreach($listeners as $listener) {
+                    $eventManager->on($eventKey, ['priority' => $priority], $listener['callable']);
+                }
+            }
+        }
+        if (!empty($eventListeners['global'])) {
+            foreach($eventListeners['global'] as $priority => $listeners) {
+                foreach($listeners as $listener) {
+                    $globalEventManager->on($eventKey, ['priority' => $priority], $listener['callable']);
+                }
             }
         }
     }

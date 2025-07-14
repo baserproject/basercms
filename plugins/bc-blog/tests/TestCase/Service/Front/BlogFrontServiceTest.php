@@ -34,6 +34,7 @@ use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Datasource\Paging\NumericPaginator;
 
 /**
  * BlogFrontServiceTest
@@ -155,7 +156,9 @@ class BlogFrontServiceTest extends BcTestCase
         $this->loginAdmin($request);
 
         //対象メソッドをコル
-        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $blogPostsService->getIndex([])->all());
+        $paginator = new NumericPaginator();
+        $posts = $paginator->paginate($blogPostsService->getIndex([]));
+        $rs = $this->BlogFrontService->getViewVarsForIndexRss($request, $blogContentService->get(1), $posts);
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
@@ -298,6 +301,15 @@ class BlogFrontServiceTest extends BcTestCase
             'title' => 'blog post title',
             'status' => true
         ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 1,
+            'no' => 2,
+            'name' => 'slug-test',
+            'title' => 'blog post title2',
+            'blog_category_id' => BlogPostFactory::get(1)->get('blog_category_id'),
+            'status' => true
+        ])->persist();
         BlogCategoryFactory::make([
             'id' => BlogPostFactory::get(1)->get('blog_category_id'),
             'blog_content_id' => 1,
@@ -348,13 +360,38 @@ class BlogFrontServiceTest extends BcTestCase
         $this->assertEquals($rs['crumbs'], $crumbsExpected);
 
 
-        //$noが存在しない場合、
-        $this->expectException('Cake\Http\Exception\NotFoundException');
-        $this->BlogFrontService->getViewVarsForSingle(
-            $this->getRequest(),
+        // $noが存在しない場合
+        try {
+            $this->BlogFrontService->getViewVarsForSingle(
+                $this->getRequest(),
+                $BlogContentsService->get(1),
+                ['blog', 'test']
+            );
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertSame('Cake\Http\Exception\NotFoundException', get_class($e));
+        }
+
+        // スラッグが設定されている記事にスラッグでアクセス
+        $result = $this->BlogFrontService->getViewVarsForSingle(
+            $request->withParam('pass', ['slug-test']),
             $BlogContentsService->get(1),
             ['blog', 'test']
         );
+        $this->assertEquals($result['post']->title, 'blog post title2');
+
+        // スラッグが設定されている記事にNOでアクセス
+        try {
+            $this->BlogFrontService->getViewVarsForSingle(
+                $request->withParam('pass', ['2']),
+                $BlogContentsService->get(1),
+                ['blog', 'test']
+            );
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals('https://localhost/archives/slug-test', $e->getMessage());
+            $this->assertSame('Cake\Http\Exception\RedirectException', get_class($e));
+        }
     }
 
     /**
@@ -740,8 +777,8 @@ class BlogFrontServiceTest extends BcTestCase
     {
         return [
             [6, 2014, 12, true, false],
-            [7, 2016, 3, false, true],
-            [6, 2015, 1, false, false],
+            [7, 2016, 3, false, false],
+            [6, 2015, 1, true, false],
         ];
     }
 
@@ -805,6 +842,6 @@ class BlogFrontServiceTest extends BcTestCase
 
         //戻る値を確認
         $this->assertArrayHasKey('blogContent', $rs);
-        $this->assertEquals(1, $rs['recentEntries']->count());
+        $this->assertEquals(3, $rs['recentEntries']->count());
     }
 }

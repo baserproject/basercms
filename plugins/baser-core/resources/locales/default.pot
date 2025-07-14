@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2024-01-22 17:44+0900\n"
+"POT-Creation-Date: 2024-10-14 09:42+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./vendor/cakephp/cakephp/src/View/Helper/PaginatorHelper.php:1258
-msgid "View"
+#: ./plugins/baser-core/src/Model/Table/SoftDeleteTrait.php:64
+msgid "Configured field `{0}` is missing from the table `{1}`."
 msgstr ""
 

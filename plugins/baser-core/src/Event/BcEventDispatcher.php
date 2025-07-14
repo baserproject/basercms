@@ -45,13 +45,14 @@ class BcEventDispatcher
      * @return boolean|Event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function dispatch($name, $subject, $data = [], $options = [])
     {
         $options = array_merge([
             'layer' => '',
-            'plugin' => method_exists($subject, 'getPlugin')? $subject->getPlugin() : '',
-            'class' => method_exists($subject, 'getName')? $subject->getName() : ''
+            'plugin' => method_exists($subject, 'getPlugin') ? $subject->getPlugin() : '',
+            'class' => method_exists($subject, 'getName') ? $subject->getName() : ''
         ], $options);
 
         $eventName = '';

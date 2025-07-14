@@ -10,26 +10,36 @@
  */
 namespace BcMail\Test\TestCase\View\Helper;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcFrontAppView;
 use BcMail\Model\Entity\MailContent;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\View\Helper\MailHelper;
 use Cake\ORM\Entity;
-use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class MailHelperTest
  *
- * @property MailHelper $Mail
+ * @property MailHelper $MailHelper
  */
 class MailHelperTest extends BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
     /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->MailHelper = new MailHelper(new View());
+        SiteFactory::make(['id' => '1'])->persist();
+        $view = new BcFrontAppView($this->getRequest('/'));
+        $this->MailHelper = new MailHelper($view);
     }
 
     /**
@@ -37,7 +47,7 @@ class MailHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
-//        unset($this->Mail);
+        unset($this->MailHelper);
         parent::tearDown();
     }
 
@@ -94,6 +104,90 @@ class MailHelperTest extends BcTestCase
     }
 
     /**
+     * 送信完了文を取得する
+     */
+    public function testGetThanks()
+    {
+        $this->MailHelper->currentMailContent = new Entity(['thanks' => 'ありがとうございました。']);
+        $result = $this->MailHelper->getThanks();
+        $this->assertEquals($result, 'ありがとうございました。');
+    }
+
+    /**
+     * 送信完了文の存在確認
+     * @param $thanks
+     * @param $expected
+     * @dataProvider ThanksExistsProvider
+     */
+    public function testThanksExists($thanks, $expected)
+    {
+        //setUp
+        $mailContent = new Entity([
+            'thanks' => $thanks
+        ]);
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $result = $this->MailHelper->thanksExists();
+
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function thanksExistsProvider()
+    {
+        return [
+            ['This is a test thanks', true],
+            ['', false],
+            [null, false],
+            ['0', false],
+            ['   ', true],
+            ['<p>This is a <strong>HTML</strong> thanks</p>', true],
+        ];
+    }
+
+    /**
+     * 受付中止文を取得する
+     */
+    public function testGetUnpublish()
+    {
+        $this->MailHelper->currentMailContent = new Entity(['unpublish' => '受付中止です。']);
+        $result = $this->MailHelper->getUnpublish();
+        $this->assertEquals($result, '受付中止です。');
+    }
+
+    /**
+     * 受付中止文の存在確認
+     * @param $unpublish
+     * @param $expected
+     * @dataProvider ThanksExistsProvider
+     */
+    public function testUnpublishExists($unpublish, $expected)
+    {
+        //setUp
+        $mailContent = new Entity([
+            'unpublish' => $unpublish
+        ]);
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $result = $this->MailHelper->unpublishExists();
+
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function unpublishExistsProvider()
+    {
+        return [
+            ['This is a test unpublish', true],
+            ['', false],
+            [null, false],
+            ['0', false],
+            ['   ', true],
+            ['<p>This is a <strong>HTML</strong> unpublish</p>', true],
+        ];
+    }
+
+    /**
      * メールフォームを取得
      */
     public function testGetForm()
@@ -112,16 +206,8 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetFormTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new View(null);
-        $View->set('siteConfig', Configure::read('BcSite'));
-        $this->Mail->BcBaser = new BcBaserHelper($View);
-        $result = $this->Mail->getFormTemplates();
-        $expected = [
-            'default' => 'default',
-            'smartphone' => 'smartphone'
-        ];
-        $this->assertEquals($result, $expected, 'フォームテンプレートの取得結果が違います。');
+        $result = $this->MailHelper->getFormTemplates(1);
+        $this->assertEquals(['default' => 'default'], $result);
     }
 
     /**
@@ -129,19 +215,8 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetMailTemplates()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $View = new View(null);
-        $View->set('siteConfig', Configure::read('BcSite'));
-        $this->Mail->BcBaser = new BcBaserHelper($View);
-        $result = $this->Mail->getMailTemplates();
-        $expected = [
-            'mail_default' => 'mail_default',
-            'default' => 'default',
-            'reset_password' => 'reset_password',
-            'send_activate_url' => 'send_activate_url',
-            'send_activate_urls' => 'send_activate_urls',
-        ];
-        $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
+        $result = $this->MailHelper->getMailTemplates(1);
+        $this->assertEquals(['mail_default' => 'mail_default'], $result);
     }
 
     /**
@@ -149,35 +224,29 @@ class MailHelperTest extends BcTestCase
      */
     public function testGetToken()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Mail->getToken();
+        $result = $this->MailHelper->getToken();
         $expected = '/<script.*<\/script>.*/s';
-        $this->assertMatchesRegularExpression($expected, $result, 'スクリプトが取得できません。');
+        $this->assertMatchesRegularExpression($expected, $result);
     }
 
     /**
      * メールフォームへのリンクを取得
      * @dataProvider linkProvider
      */
-    public function testLink($title, $contentsName, $expected)
+    public function testLink($title, $contentsName, $url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        ContentFactory::make(['plugin' => 'BcMail', 'type' => 'MailContent', 'name' => $contentsName, 'url' => $url, 'entity_id' => 1])->persist();
         $this->expectOutputString($expected);
-        $this->Mail->link($title, $contentsName, $datas = [], $options = []);
+        $this->MailHelper->link($title, $contentsName);
     }
 
     public static function linkProvider()
     {
         return [
-            ['タイトル', 'Members', '<a href="/Members">タイトル</a>'],
-            [' ', 'a', '<a href="/a"> </a>'],
-            [' ', ' ', '<a href="/ "> </a>'],
-            [' ', '///', '<a href="/"> </a>'],
-            [' ', '////a', '<a href="/a"> </a>'],
-            [' ', '////a//a/aa', '<a href="/a/a/aa"> </a>'],
-            [' ', '/../../../../a', '<a href="/../../../../a"> </a>'],
-            ['', 'javascript:void(0);', '<a href="/javascript:void(0);"></a>'],
-            ['<script>alert(1)</script>', '////a', '<a href="/a"><script>alert(1)</script></a>']
+            ['タイトル', '/Members/', '/a/', '<a href="/a/index">タイトル</a>'],
+            [' ', 'a', '/a/', '<a href="/a/index"> </a>'],
+            [' ', ' ', '', '<a href="/bc-mail/mail"> </a>'],
+            [' ', '///', '///', '<a href="/index"> </a>'],
         ];
     }
 
@@ -252,6 +321,74 @@ class MailHelperTest extends BcTestCase
     }
 
     /**
+     * test thanksExists
+     */
+    public function test_thanksExists()
+    {
+        $mailContent = new MailContent();
+        $mailContent->thanks = 'test thanks';
+
+        //with thanks
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->thanksExists();
+        $this->assertTrue($rs);
+
+        //with empty thanks
+        $mailContent->thanks = '';
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->thanksExists();
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test testGetThanks
+     */
+    public function test_getThanks()
+    {
+        $mailContent = new MailContent();
+        $mailContent->thanks = 'test thanks';
+
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $rs = $this->MailHelper->getThanks();
+        $this->assertEquals('test thanks', $rs);
+    }
+
+    /**
+     * test unpublishExists
+     */
+    public function test_unpublishExists()
+    {
+        $mailContent = new MailContent();
+        $mailContent->unpublish = 'test unpublish';
+
+        //with unpublish
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->unpublishExists();
+        $this->assertTrue($rs);
+
+        //with empty unpublish
+        $mailContent->unpublish = '';
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->unpublishExists();
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test testGetUnpublish
+     */
+    public function test_getUnpublish()
+    {
+        $mailContent = new MailContent();
+        $mailContent->unpublish = 'test unpublish';
+
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $rs = $this->MailHelper->getUnpublish();
+        $this->assertEquals('test unpublish', $rs);
+    }
+
+    /**
      * test isMail
      */
     public function test_isMail()
@@ -265,5 +402,15 @@ class MailHelperTest extends BcTestCase
         $this->MailHelper->getView()->setRequest($this->getRequest()->withAttribute('currentContent', $content));
         $result = $this->MailHelper->isMail();
         $this->assertTrue($result);
+    }
+
+    /**
+     * test getPublishedMailContents
+     */
+    public function testGetPublishedMailContents()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $rs = $this->MailHelper->getPublishedMailContents(1);
+        $this->assertEquals(1, $rs->count());
     }
 }

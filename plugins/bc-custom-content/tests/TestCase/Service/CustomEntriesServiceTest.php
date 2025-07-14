@@ -12,7 +12,6 @@
 namespace BcCustomContent\Test\TestCase\Service;
 
 use BaserCore\Model\Entity\Content;
-use BaserCore\Model\Entity\User;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcCustomContent\Model\Table\CustomEntriesTable;
@@ -21,7 +20,6 @@ use BcCustomContent\Service\CustomEntriesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
@@ -38,6 +36,8 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use TypeError;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * CustomEntriesServiceTest
@@ -87,7 +87,26 @@ class CustomEntriesServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //正常系実行
+        $rs = $this->CustomEntriesService->getNew(1);
+
+        $this->assertEquals(1, $rs->custom_table_id);
+        $this->assertEquals(1, $rs->creator_id);
+        $this->assertEquals(0, $rs->status);
+
+        $this->CustomEntriesService->dropTable(1);
     }
 
     /**
@@ -285,15 +304,14 @@ class CustomEntriesServiceTest extends BcTestCase
         //idで取得
         $result = $this->CustomEntriesService->get(1);
         $this->assertEquals(1, $result->id);
-        $this->assertEquals('プログラマー', $result->name);
+        $this->assertEquals('Webエンジニア・Webプログラマー', $result->title);
         //名前で取得
         $result = $this->CustomEntriesService->get('プログラマー 2');
         $this->assertEquals(2, $result->id);
 
         //異常系実行
-        $result = $this->CustomEntriesService->get(99);
-        $this->assertNull($result);
-
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->get(99);
     }
 
     /**
@@ -468,8 +486,8 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->delete(1);
         $this->assertTrue($result);
         // レコードが存在しない
-        $rs = $this->CustomEntriesService->get(1);
-        $this->assertNull($rs);
+        $this->expectException(RecordNotFoundException::class);
+        $this->CustomEntriesService->get(1);
         //異常系実行
         $this->expectException(TypeError::class);
         $this->CustomEntriesService->delete(999);
@@ -1007,6 +1025,43 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->expectException(RecordNotFoundException::class);
         $this->CustomEntriesService->moveDown(99);
 
+    }
+
+    /**
+     * test normalizeDateString
+     */
+    public function test_normalizeDateString()
+    {
+        $reflection = new ReflectionClass($this->CustomEntriesService);
+        $method = $reflection->getMethod('normalizeDateString');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/4');
+        $this->assertEquals('2025/05/04', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10');
+        $this->assertEquals('2025/05/10', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/10/5');
+        $this->assertEquals('2025/10/05', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/05/04');
+        $this->assertEquals('2025/05/04', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01:30');
+        $this->assertEquals('2025/05/10 00:01:30', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '2025/05/10 00:01');
+        $this->assertEquals('2025/05/10 00:01', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, 'not a date');
+        $this->assertEquals('not a date', $result);
+        
+        $result = $method->invoke($this->CustomEntriesService, '');
+        $this->assertEquals('', $result);
     }
 
 }

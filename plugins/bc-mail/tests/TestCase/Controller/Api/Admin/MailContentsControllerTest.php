@@ -70,6 +70,8 @@ class MailContentsControllerTest extends BcTestCase
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('description test', $result->mailContent->description);
+        $this->assertEquals('thanks test', $result->mailContent->thanks);
+        $this->assertEquals('unpublish test', $result->mailContent->unpublish);
         $this->assertEquals('baserCMSサンプル', $result->mailContent->sender_name);
         $this->assertEquals('【baserCMS】お問い合わせ頂きありがとうございます。', $result->mailContent->subject_user);
     }
@@ -214,5 +216,27 @@ class MailContentsControllerTest extends BcTestCase
         // 戻るメッセージを確認
         $this->assertEquals($result->message, 'メールフォームのコピー「メールコンテンツコピー」を追加しました。');
         $this->assertNotNull($result->mailContent);
+    }
+
+    /**
+     * test index
+     */
+    public function test_index()
+    {
+        //create data
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+
+        $this->get("/baser/api/admin/bc-mail/mail_contents/index.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        //List of mail contents
+        $this->assertCount(2, $result->mailContents);
+
+        //Query is set to limit = 1, only one result is returned
+        $this->get("/baser/api/admin/bc-mail/mail_contents/index.json?limit=1&token=" . $this->accessToken);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(1, $result->mailContents);
     }
 }

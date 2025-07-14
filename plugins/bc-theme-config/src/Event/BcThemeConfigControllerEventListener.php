@@ -13,6 +13,9 @@ namespace BcThemeConfig\Event;
 
 use BaserCore\Event\BcControllerEventListener;
 use Cake\Event\Event;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcThemeConfigControllerEventListener
@@ -32,6 +35,9 @@ class BcThemeConfigControllerEventListener extends BcControllerEventListener
      * テーマ適用後イベント
      * @param Event $event
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreThemesAfterApply(Event $event)
     {

@@ -75,7 +75,7 @@ class AppController extends BaseController
         parent::__construct($request, $response, $name, $eventManager, $components);
 
         // CSRFトークンの場合は高速化のためここで処理を終了
-        if(!$request->is('requestview')) return;
+        if(!BcUtil::isConsole() && !$request->is('requestview')) return;
 
         $request->getSession()->start();
 
@@ -162,21 +162,24 @@ class AppController extends BaseController
             return;
         }
 
-        if (!$this->checkPermission()) {
+        if ($this->requirePermission($this->getRequest()) && !$this->checkPermission()) {
             $prefix = BcUtil::getRequestPrefix($this->getRequest());
             if ($prefix === 'Api/Admin') {
-                throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
+                throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                    [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
             } else {
                 if (BcUtil::loginUser()) {
                     if ($this->getRequest()->getMethod() === 'GET') {
-                        $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                        $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                            [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
                     } else {
-                        $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。'));
+                        $this->BcMessage->setError(__d('baser_core', '実行した操作は許可されていません。必要な場合、システム管理者に「{0} {1}」へのアクセス許可を依頼してください。',
+                            [$this->getRequest()->getMethod(), $this->getRequest()->getPath()]));
                     }
                     $url = Configure::read("BcPrefixAuth.{$prefix}.loginRedirect");
                 } else {
-                    $url = Router::url(Configure::read("BcPrefixAuth.{$prefix}.loginAction"))
-                        . '?redirect=' . urlencode(Router::url());
+                    $url = Router::url(Configure::read("BcPrefixAuth.{$prefix}.loginAction"), true)
+                        . '?redirect=' . rawurlencode($this->getRequest()->getPath());
                 }
                 return $this->redirect($url);
             }
@@ -188,6 +191,25 @@ class AppController extends BaseController
     }
 
     /**
+     * パーミッションが必要かどうかを確認する
+     *
+     * デフォルトは true であるが、設定ファイルで明示的に false に
+     * 設定されている場合は false となる。
+     *
+     * @param ServerRequest $request
+     * @return bool
+     */
+    public function requirePermission(ServerRequest $request): bool
+    {
+        $prefix = BcUtil::getRequestPrefix($request);
+        $requirePermission = Configure::read("BcPrefixAuth.{$prefix}.requirePermission");
+        if($requirePermission !== false) {
+            $requirePermission = true;
+        }
+        return $requirePermission;
+    }
+
+    /**
      * アクセスルールの権限を確認する
      *
      * 現在アクセスしているURLについて権限があるかどうかを確認する。
@@ -195,6 +217,7 @@ class AppController extends BaseController
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     private function checkPermission()
     {
@@ -232,8 +255,18 @@ class AppController extends BaseController
      */
     public function setupFrontView(): void
     {
-        $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
-        $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
+        $builder = $this->viewBuilder();
+        $builder->setClassName('BaserCore.BcFrontApp');
+        $builder->setTheme(BcUtil::getCurrentTheme());
+        if($this->getRequest()->is('rss')) {
+            $response = $this->getResponse();
+            $this->setResponse($response
+                ->withType($response->getMimeType('rss'))
+                ->withCharset(Configure::read('App.encoding'))
+            );
+            $builder->setTemplatePath((string)$builder->getTemplatePath() . DS . 'rss');
+            $builder->setLayoutPath('rss');
+        }
     }
 
     /**

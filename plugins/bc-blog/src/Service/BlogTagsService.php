@@ -260,6 +260,7 @@ class BlogTagsService implements BlogTagsServiceInterface
     {
         if (!$ids) return true;
         $db = $this->BlogTags->getConnection();
+        if (!method_exists($this, $method)) return false;
         $db->begin();
         foreach($ids as $id) {
             if (!$this->$method($id)) {

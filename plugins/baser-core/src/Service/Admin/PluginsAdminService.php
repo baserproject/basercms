@@ -126,6 +126,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return mixed|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function whichPhp()
     {
@@ -206,6 +207,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function isPluginsDirWritable()
     {

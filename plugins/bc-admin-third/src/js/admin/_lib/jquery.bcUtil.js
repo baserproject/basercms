@@ -112,6 +112,11 @@ import Cookies from 'js-cookie'
          * @param message
          */
         showNoticeMessage: function (message) {
+            message = message.replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
             $.bcUtil.hideMessage();
             $("#BcSystemMessage")
                 .removeClass('notice-messge alert-message')
@@ -264,7 +269,7 @@ import Cookies from 'js-cookie'
         showApiError: function (response) {
             let message = response.responseJSON.message;
             let errors = response.responseJSON.errors;
-            if(errors !== undefined) {
+            if (errors !== undefined && errors) {
                 message += "<br>";
                 Object.keys(errors).forEach(function (key) {
                     message += "<ul>"

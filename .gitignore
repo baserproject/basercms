@@ -131,6 +131,11 @@ node_modules
 # db
 /db/*
 !/db/.gitkeep
+# profiler
+/profiler/*
 # etc
-LOCAL_TODO.md
-LOCAL_Q&A.md
+/LOCAL_TODO.md
+/LOCAL_Q&A.md
+/.cache
+/docker/nginx/*
+/docker/proxy/*

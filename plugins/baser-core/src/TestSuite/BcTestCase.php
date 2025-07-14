@@ -160,12 +160,19 @@ class BcTestCase extends TestCase
      * クラスメソッド名を取得する
      * @checked
      * @noTodo
+     * @unitTest テストができないのでスキップ
      */
     public function classMethod()
     {
         $test = $this->provides()[0];
+        $contents = ob_get_contents();
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
         echo "\n" . $test->getTarget() . ' ';
-        ob_end_flush();
+        if($contents) {
+            echo $contents;
+        }
         ob_start();
     }
 

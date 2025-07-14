@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\View\Helper;
 
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BcCustomContent\Model\Entity\CustomEntry;
@@ -144,13 +145,18 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      *
      * @param CustomLink $link
      * @param array $options
+     *  - `class` : クラス名
+     *  - `preview` : プレビュー表示として呼び出すかどうか
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function control(CustomLink $customLink, array $options = []): string
     {
         $options = array_merge_recursive(BcUtil::pairToAssoc($customLink->options), [
+            'class' => null,
+            'preview' => false
         ], $options);
 
         if ($customLink->class) $options['class'] = $customLink->class;
@@ -158,6 +164,8 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if (!$customLink->custom_field) return '';
         /** @var CustomField $field */
         $field = $customLink->custom_field;
+
+        if(!isset($this->{$field->type})) return '';
 
         $tmpName = $customLink->name;
         $customLink->name = $this->getFieldName($customLink, $options);
@@ -179,6 +187,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function preview(string $fieldName, string $type, CustomField $field): string
     {
@@ -199,6 +208,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function error(CustomLink $link, $options = []): string
     {
@@ -231,7 +241,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if ($link->description) {
             return '<i class="bca-icon--question-circle bca-help"></i>' .
                 '<div class="bca-helptext">' .
-                $link->description .
+                preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $link->description) .
                 '</div>';
         }
         return '';
@@ -319,6 +329,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      * プラグインのメタフィールドを表示する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function displayPluginMeta()
     {

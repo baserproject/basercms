@@ -23,7 +23,7 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Admin',
             'items' => [
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/admin/baser-core/content_folders/edit/*', 'method' => 'POST', 'auth' => false]
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/admin/baser-core/content_folders/edit/*', 'method' => 'POST', 'auth' => true]
             ]
         ],
 
@@ -33,9 +33,11 @@ return [
             'type' => 'Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧'), 'url' => '/baser/admin/baser-core/contents/index', 'method' => '*', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '登録'), 'url' => '/baser/admin/baser-core/contents/add', 'method' => '*', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/admin/baser-core/contents/delete', 'method' => '*', 'auth' => true],
                 'Edit' => ['title' => __d('baser_core', 'ゴミ箱'), 'url' => '/baser/admin/baser-core/contents/trash_index', 'method' => 'GET', 'auth' => true],
                 'EditAlias' => ['title' => __d('baser_core', 'エイリアス編集'), 'url' => '/baser/admin/baser-core/contents/edit_alias/*', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser_core', 'ゴミ箱から戻す'), 'method' => 'POST', 'url' => '/baser/admin/baser-core/contents/trash_return/*', 'auth' => true],
+                'TrashReturn' => ['title' => __d('baser_core', 'ゴミ箱から戻す'), 'method' => 'POST', 'url' => '/baser/admin/baser-core/contents/trash_return/*', 'auth' => true],
             ]
         ],
 
@@ -186,7 +188,7 @@ return [
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/content_folders/index.json', 'method' => '*', 'auth' => true],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/content_folders/view/*.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/content_folders/add.json', 'method' => 'POST', 'auth' => false],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/content_folders/add.json', 'method' => 'POST', 'auth' => true],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/content_folders/edit/*.json', 'method' => 'POST', 'auth' => false],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/content_folders/delete/*.json', 'method' => 'POST', 'auth' => false]
             ]

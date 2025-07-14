@@ -252,6 +252,7 @@ class MailformHelper extends BcFreezeHelper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create($context = null, $options = []): string
     {
@@ -274,6 +275,7 @@ class MailformHelper extends BcFreezeHelper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function authCaptcha(string $fieldName, array $options = [])
     {
@@ -305,6 +307,7 @@ class MailformHelper extends BcFreezeHelper
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getGroupValidErrors(ResultSetInterface $mailFields, string $groupValid, array $options = [], bool $distinct = true)
     {

@@ -36,10 +36,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     <?php echo $this->BcAdminForm->control('no', ['type' => 'hidden']) ?>
   </span>
   <span class="bca-post__url">
-    <a href="<?php echo $fullUrl ?>"
+    <a href="<?php echo h($fullUrl) ?>"
        class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
       <i class="bca-icon--globe"></i>
-      <?php echo $fullUrl ?>
+      <?php echo h($fullUrl) ?>
     </a>
     <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',

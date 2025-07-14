@@ -99,6 +99,10 @@ class PagesService implements PagesServiceInterface
             } else {
                 $title = '';
             }
+            $authorId = null;
+            if(BcUtil::isAdminUser()) {
+                $authorId = BcUtil::loginUser()->id;
+            }
 		    return $this->Pages->newEntity([
 				'content' => [
                     'name' => $name,
@@ -110,7 +114,8 @@ class PagesService implements PagesServiceInterface
                     'site_root' => false,
                     'site_id' => $parent->site_id,
                     'parent_id' => $parent->id,
-                    'self_status' => false
+                    'self_status' => false,
+                    'author_id' => $authorId
                 ]
 			], ['associated' => ['Contents' => ['validate' => false]]]);
 		}
@@ -226,6 +231,7 @@ class PagesService implements PagesServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function createIndexConditions(Query $query, $options = [])
     {

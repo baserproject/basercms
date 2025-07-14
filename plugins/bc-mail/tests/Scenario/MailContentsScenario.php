@@ -54,6 +54,8 @@ class MailContentsScenario implements FixtureScenarioInterface
         MailContentFactory::make([
             'id' => 1,
             'description' => 'description test',
+            'thanks' => 'thanks test',
+            'unpublish' => 'unpublish test',
             'sender_name' => 'baserCMSサンプル',
             'subject_user' => '【baserCMS】お問い合わせ頂きありがとうございます。',
             'subject_admin' => '【baserCMS】お問い合わせを受け付けました',
@@ -80,6 +82,8 @@ class MailContentsScenario implements FixtureScenarioInterface
 
         MailContentFactory::make([
             'description' => 'description test 2',
+            'thanks' => 'thanks test 2',
+            'unpublish' => 'unpublish test 2',
             'sender_name' => '送信先名を入力してください',
             'subject_user' => 'お問い合わせ頂きありがとうございます',
             'subject_admin' => 'お問い合わせを頂きました',

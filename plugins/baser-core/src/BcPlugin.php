@@ -83,6 +83,7 @@ class BcPlugin extends BasePlugin
      * @param PluginApplicationInterface $app
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
@@ -465,6 +466,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function contentsRoutingForReverse(RouteBuilder $routes, string $plugin)
     {
@@ -493,6 +495,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function frontPageRouting(RouteBuilder $routes, string $plugin)
     {
@@ -569,6 +572,7 @@ class BcPlugin extends BasePlugin
      * @return RouteBuilder
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function siteRouting(RouteBuilder $routes, string $plugin)
     {

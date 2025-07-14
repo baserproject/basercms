@@ -83,7 +83,7 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
-        "install": [
+        "app-install": [
             "composer install --no-plugins",
             "bin/cake setup install",
             "bin/cake install https://localhost foo@example.com baserCMS1234 basercms --host bc-db --username root --password root"
@@ -108,23 +108,23 @@
         }
     },
     "replace": {
-        "baserproject/baser-core": "5.1.2",
-        "baserproject/bc-admin-third": "5.1.2",
-        "baserproject/bc-blog": "5.1.2",
-        "baserproject/bc-column": "5.1.2",
-        "baserproject/bc-content-link": "5.1.2",
-        "baserproject/bc-custom-content": "5.1.2",
-        "baserproject/bc-editor-template": "5.1.2",
-        "baserproject/bc-favorite": "5.1.2",
-        "baserproject/bc-front": "5.1.2",
-        "baserproject/bc-installer": "5.1.2",
-        "baserproject/bc-mail": "5.1.2",
-        "baserproject/bc-plugin-sample": "5.1.2",
-        "baserproject/bc-search-index": "5.1.2",
-        "baserproject/bc-theme-config": "5.1.2",
-        "baserproject/bc-theme-file": "5.1.2",
-        "baserproject/bc-theme-sample": "5.1.2",
-        "baserproject/bc-uploader": "5.1.2",
-        "baserproject/bc-widget-area": "5.1.2"
+        "baserproject/baser-core": "5.1.8",
+        "baserproject/bc-admin-third": "5.1.8",
+        "baserproject/bc-blog": "5.1.8",
+        "baserproject/bc-column": "5.1.8",
+        "baserproject/bc-content-link": "5.1.8",
+        "baserproject/bc-custom-content": "5.1.8",
+        "baserproject/bc-editor-template": "5.1.8",
+        "baserproject/bc-favorite": "5.1.8",
+        "baserproject/bc-front": "5.1.8",
+        "baserproject/bc-installer": "5.1.8",
+        "baserproject/bc-mail": "5.1.8",
+        "baserproject/bc-plugin-sample": "5.1.8",
+        "baserproject/bc-search-index": "5.1.8",
+        "baserproject/bc-theme-config": "5.1.8",
+        "baserproject/bc-theme-file": "5.1.8",
+        "baserproject/bc-theme-sample": "5.1.8",
+        "baserproject/bc-uploader": "5.1.8",
+        "baserproject/bc-widget-area": "5.1.8"
     }
 }

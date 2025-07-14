@@ -252,4 +252,19 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->get('/baser/admin');
         $this->assertResponseCode(200);
     }
+
+    /**
+     * test updateFirstAccess
+     */
+    public function testUpdateFirstAccess()
+    {
+        //before test
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->setValue('first_access', true);
+        $this->assertEquals(1, $siteConfigsService->getValue('first_access'));
+
+        //after test
+        $this->execPrivateMethod($this->BcAdminApp, '__updateFirstAccess');
+        $this->assertEquals('', $siteConfigsService->getValue('first_access'));
+    }
 }

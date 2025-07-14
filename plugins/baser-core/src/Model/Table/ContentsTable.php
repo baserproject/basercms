@@ -409,7 +409,7 @@ class ContentsTable extends AppTable
         $query = $this->find()->where(['name LIKE' => $name . '%', 'site_root' => false]);
         if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
-            $query = $query->andWhere(['id <>' => $contentId]);
+            $query = $query->andWhere(['Contents.id <>' => $contentId]);
         }
         $datas = $query->select('name')->orderBy('name')->all()->toArray();
         $datas = Hash::extract($datas, '{n}.name');
@@ -1221,7 +1221,7 @@ class ContentsTable extends AppTable
             ['Sites.status' => true]
         ];
         if ($options['excludeIds']) {
-            $conditions['Contents.site_id <>'] = $options['excludeIds'];
+            $conditions['Contents.site_id NOT IN'] = $options['excludeIds'];
         }
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
 

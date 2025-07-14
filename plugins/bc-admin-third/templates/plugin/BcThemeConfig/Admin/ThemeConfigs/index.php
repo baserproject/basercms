@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->css('vendor/colpick', ['inline' => false]);
+$this->BcBaser->css('vendor/colpick', false);
 $this->BcBaser->js(['vendor/colpick'], false);
 $this->BcAdmin->setTitle(__d('baser_core', 'テーマ設定'));
 $this->BcAdmin->setHelp('theme_configs_form');
@@ -81,6 +81,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('logo_link', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('logo_link') ?>
     </td>
   </tr>
   <tr>
@@ -92,6 +93,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('main_image_link_1', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('main_image_link_1') ?>
     </td>
   </tr>
   <tr>
@@ -103,6 +105,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('main_image_link_2', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('main_image_link_2') ?>
     </td>
   </tr>
   <tr>
@@ -114,6 +117,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('main_image_link_3', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('main_image_link_3') ?>
     </td>
   </tr>
   <tr>
@@ -125,6 +129,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('main_image_link_4', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('main_image_link_4') ?>
     </td>
   </tr>
   <tr>
@@ -136,6 +141,7 @@ $this->BcAdmin->setHelp('theme_configs_form');
       <small>[<?php echo __d('baser_core', '説明文') ?>]</small><br>
       <?php echo $this->BcAdminForm->control('main_image_link_5', ['type' => 'text', 'size' => 50]) ?>
       <small>[<?php echo __d('baser_core', 'リンク先URL') ?>]</small>
+      <?php echo $this->BcAdminForm->error('main_image_link_5') ?>
     </td>
   </tr>
   <?php echo $this->BcAdminForm->dispatchAfterForm() ?>

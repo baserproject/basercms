@@ -34,8 +34,12 @@ if (Configure::read('debug') == 0 && $mailContent->redirect_url) {
 <h3 class="bs-mail-title-sub"><?php echo __d('baser_core', 'メール送信完了') ?></h3>
 
 <div class="bs-mail-form">
-  <p><?php echo __d('baser_core', 'お問い合わせ頂きありがとうございました。') ?>
-    <?php echo __d('baser_core', '確認次第、ご連絡させて頂きます。') ?></p>
+  <?php if ($this->BcBaser->mailFormThanksExists()): ?>
+    <?php $this->BcBaser->mailFormThanks() ?>
+  <?php else: ?>
+    <p><?php echo __d('baser_core', 'お問い合わせ頂きありがとうございました。') ?>
+      <?php echo __d('baser_core', '確認次第、ご連絡させて頂きます。') ?></p>
+  <?php endif ?>
   <?php if (!$this->BcBaser->isDebug() && $mailContent->redirect_url): ?>
     <p>※<?php echo __d('baser_core', '{0} 秒後にトップページへ自動的に移動します。', 5) ?></p>
     <p><a href="<?php echo $mailContent->redirect_url; ?>"><?php echo __d('baser_core', '移動しない場合はコチラをクリックしてください。') ?></a></p>

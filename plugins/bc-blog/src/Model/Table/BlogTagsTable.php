@@ -91,7 +91,7 @@ class BlogTagsTable extends BlogAppTable
 
     /**
      * アクセス制限としてブログタグの新規追加ができるか確認する
-     *
+     * 管理画面における権限を前提とする
      * @param array $userGroupId ユーザーグループID
      * @param int $blogContentId ブログコンテンツID
      * @checked
@@ -104,10 +104,9 @@ class BlogTagsTable extends BlogAppTable
         $permissionsService = $this->getService(PermissionsServiceInterface::class);
         $addUrl = preg_replace('|^/index.php|', '', Router::url([
             'plugin' => 'BcBlog',
-            'prefix' => 'Api/Admin',
+            'prefix' => 'Admin',
             'controller' => 'BlogTags',
-            'action' => 'add',
-            $blogContentId
+            'action' => 'add'
         ]));
         return $permissionsService->check($addUrl, $userGroupId);
     }

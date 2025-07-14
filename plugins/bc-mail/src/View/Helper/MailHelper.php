@@ -78,12 +78,25 @@ class MailHelper extends Helper
         if (isset($this->currentMailContent)) {
             return;
         }
-        if ($mailContentId) {
-            $MailContent = ClassRegistry::init('BcMail.MailContent');
-            $MailContent->reduceAssociations([]);
-            $this->currentMailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
-        } elseif ($this->_View->get('mailContent')) {
-            $this->currentMailContent = $this->_View->get('mailContent');
+        $view = $this->getView();
+        if ($view->get('mailContent')) {
+            $this->currentMailContent = $view->get('mailContent');
+        } else {
+            // _ViewからmailContentをget出来ない場合、$mailContentsからfindする
+            if (!$mailContentId) {
+                $params = $view->getRequest()->getAttribute('params');
+                if (!empty($params['plugin']) && !empty($params['entityId']) && $params['plugin'] == 'BcMail') {
+                    $mailContentId = $params['entityId'];
+                } else {
+                    return;
+                }
+            }
+            $mailContentsTable = TableRegistry::getTableLocator()->get('BcMail.MailContents');
+            $this->currentMailContent = $mailContentsTable->find('all')
+                ->where([
+                    'MailContents.id' => $mailContentId,
+                ])
+                ->first();
         }
     }
 
@@ -96,6 +109,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパーに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFormTemplates($siteId = 1)
     {
@@ -126,6 +140,7 @@ class MailHelper extends Helper
      * @todo 他のヘルパに移動する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getMailTemplates($siteId = 1)
     {
@@ -197,7 +212,90 @@ class MailHelper extends Helper
     }
 
     /**
+     * メールフォームの送信完了文を取得する
+     * @return string メールフォームの送信完了文
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getThanks(): string
+    {
+        return $this->currentMailContent->thanks;
+    }
+
+    /**
+     * メールの送信完了文を出力する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーのためテスト不要
+     */
+    public function thanks(): void
+    {
+        echo $this->getThanks();
+    }
+
+    /**
+     * メールの送信完了文が設定されているかどうかを判定する
+     *
+     * @return bool 設定されている場合 true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function thanksExists(): bool
+    {
+        if (empty($this->currentMailContent->thanks)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * メールフォームの受付停止文を取得する
+     * @return string メールフォームの受付停止文
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUnpublish(): string
+    {
+        return $this->currentMailContent->unpublish;
+    }
+
+    /**
+     * メールの受付停止文を出力する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーのためテスト不要
+     */
+    public function unpublish(): void
+    {
+        echo $this->getUnpublish();
+    }
+
+    /**
+     * メールの受付停止文が設定されているかどうかを判定する
+     *
+     * @return bool 設定されている場合 true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublishExists(): bool
+    {
+        if (empty($this->currentMailContent->unpublish)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * メールフォームへのリンクを生成する
+     * $contentsNameはコンテンツ管理上の１階層のみ対応
      *
      * @param string $title リンクのタイトル
      * @param string $contentsName メールフォームのコンテンツ名
@@ -207,15 +305,32 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function link($title, $contentsName, $datas = [], $options = [])
     {
         if ($datas && is_array($datas)) {
             foreach ($datas as $key => $data) {
-                $datas[$key] = base64UrlsafeEncode($data);
+                $datas[$key] = BcUtil::base64UrlsafeEncode($data);
             }
         }
-        $link = array_merge(['plugin' => '', 'controller' => $contentsName, 'action' => 'index'], $datas);
+
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find('all')
+            ->where([
+                'Contents.name' => $contentsName,
+                'Contents.plugin' => 'BcMail',
+                'Contents.type' => 'MailContent',
+                ])
+            ->first();
+
+        $link = [
+            'plugin' => 'BcMail',
+            'controller' => 'Mail',
+            'action' => 'index',
+            'entityId' => $content->entity_id,
+            '?' => $datas,
+        ];
         $this->BcBaser->link($title, $link, $options);
     }
 
@@ -225,6 +340,7 @@ class MailHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getToken()
     {
@@ -237,6 +353,7 @@ class MailHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function token()
     {
@@ -319,6 +436,7 @@ class MailHelper extends Helper
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getPublishedMailContents(int $siteId)
     {

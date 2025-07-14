@@ -155,7 +155,8 @@ class BlogPostsService implements BlogPostsServiceInterface
         if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
         if ($options['contain'] == null)
             $options['contain'] = [];
-        $query = $this->BlogPosts->find()->contain($options['contain']);
+        $query = $this->BlogPosts->find('all', draft: $options['draft'])
+            ->contain($options['contain']);
 
         if ($options['order']) {
             $query->orderBy($this->createOrder($options['order'], $options['direction']));
@@ -262,17 +263,19 @@ class BlogPostsService implements BlogPostsServiceInterface
             $conditions = $this->BlogPosts->getConditionAllowPublish();
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
             $query->contain(['BlogContents' => ['Contents']]);
-            if($params['draft'] === false) {
-                $query->selectAllExcept($this->BlogPosts, ['content_draft', 'detail_draft']);
-                $query = $this->selectContains($query);
-            }
         } elseif ((string)$params['status'] === '0') {
             $conditions = ['BlogPosts.status' => false];
         } else {
             $conditions = [];
         }
-        // ID
-        if ($params['id']) $conditions["BlogPosts.id"] = $params['id'];
+        // ID【blog】一覧表示でブログIDを指定する時、IDが複数の場合エラーになる問題を解決
+        if ($params['id']) {
+            if (is_array($params['id'])) {
+                $conditions["BlogPosts.id IN"] = $params['id'];
+            } else {
+                $conditions["BlogPosts.id"] = $params['id'];
+            }
+        }
         // タイトル
         if (!is_null($params['title'])) $conditions['BlogPosts.title LIKE'] = '%' . $params['title'] . '%';
         // ユーザーID
@@ -342,51 +345,6 @@ class BlogPostsService implements BlogPostsServiceInterface
             $conditions = $this->createKeywordCondition($conditions, $params['keyword']);
         }
         return $query->where($conditions);
-    }
-
-    /**
-     * Contains を select を前提として適用する
-     * select を利用した場合、関連テーブルのカラムを指定しないと、取得できないため
-     * @param Query $query
-     * @param array $contains
-     * @return Query
-     * @noTodo
-     * @checked
-     */
-    public function selectContains(Query $query, array $contains = [])
-    {
-        if(!$contains) $contains = $query->getContain();
-        if(isset($contains['BlogContents'])) {
-            $query->contain(['BlogContents' => function($q) {
-                return $q->select($this->BlogPosts->BlogContents);
-            }]);
-        }
-        if(isset($contains['BlogContents']['Contents'])) {
-            $query->contain(['BlogContents.Contents' => function($q) {
-                return $q->select($this->BlogPosts->BlogContents->Contents);
-            }]);
-        }
-        if(isset($contains['Users'])) {
-            $query->contain(['Users' => function($q) {
-                return $q->select($this->BlogPosts->Users);
-            }]);
-        }
-        if(isset($contains['BlogComments'])) {
-            $query->contain(['BlogComments' => function($q) {
-                return $q->select($this->BlogPosts->BlogComments);
-            }]);
-        }
-        if(isset($contains['BlogCategories'])) {
-            $query->contain(['BlogCategories' => function($q) {
-                return $q->select($this->BlogPosts->BlogCategories);
-            }]);
-        }
-        if(isset($contains['BlogTags'])) {
-            $query->contain(['BlogTags' => function($q) {
-                return $q->select($this->BlogPosts->BlogTags);
-            }]);
-        }
-        return $query;
     }
 
     /**
@@ -762,6 +720,7 @@ class BlogPostsService implements BlogPostsServiceInterface
     {
         if (!$ids) return true;
         $db = $this->BlogPosts->getConnection();
+        if (!method_exists($this, $method)) return false;
         $db->begin();
         foreach($ids as $id) {
             if (!$this->$method($id)) {
@@ -974,7 +933,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         /** @var ContentsServiceInterface $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $contentUrl = $contentsService->getUrl(rawurldecode($content->url), $full, !empty($site->use_subdomain), false);
-        $no = ($post->name)?: $post->no;
+        $no = ($post->name)? rawurlencode($post->name) : $post->no;
         return $contentUrl . 'archives/' . $no;
     }
 

@@ -132,11 +132,11 @@ class BlogPostsServiceTest extends BcTestCase
         UserFactory::make(['id' => 2, 'name' => 'test user1'])->persist();
         UserFactory::make(['id' => 3, 'name' => 'test user2'])->persist();
         UserFactory::make(['id' => 4, 'name' => 'test user3'])->persist();
-        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post1 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post2 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post3 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '4', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post1 user_id3'])->persist();
-        BlogPostFactory::make(['id' => '5', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post2 user_id3'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post1 user_id2', 'posted' => '2025-01-01 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post2 user_id2', 'posted' => '2025-01-02 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post3 user_id2', 'posted' => '2025-01-03 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '4', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post1 user_id3', 'posted' => '2025-01-04 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '5', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post2 user_id3', 'posted' => '2025-01-05 00:00:00'])->persist();
 
         // サービスメソッドを呼ぶ
         // num 取得件数 2件
@@ -190,10 +190,6 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals('blog post1 user_id3', $blogPosts[1]->title);
         $this->assertEquals('2', $blogPosts[2]->user_id);
         $this->assertEquals('blog post3 user_id2', $blogPosts[2]->title);
-        $this->assertEquals('2', $blogPosts[3]->user_id);
-        $this->assertEquals('blog post2 user_id2', $blogPosts[3]->title);
-        $this->assertEquals('2', $blogPosts[4]->user_id);
-        $this->assertEquals('blog post1 user_id2', $blogPosts[4]->title);
     }
 
     /**
@@ -891,7 +887,10 @@ class BlogPostsServiceTest extends BcTestCase
     public function testBatch()
     {
         // データを生成
-        $this->loadFixtureScenario(BlogContentScenario::class, 5, 1, null, 'news1', '/news/');
+        BlogContentFactory::make([
+            'id' => 5,
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+        ])->persist();
         BlogPostFactory::make(['id' => '1', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '2', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
         BlogPostFactory::make(['id' => '3', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
@@ -914,10 +913,13 @@ class BlogPostsServiceTest extends BcTestCase
         // 戻り値を確認
         $this->assertTrue($result);
 
+        // 存在しない処理を指定した場合は false を返すこと
+        $this->assertFalse($this->BlogPostsService->batch('test', [1, 2, 3]));
+
         // 存在しない id を指定された場合は例外が発生すること
         // サービスメソッドを呼ぶ
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $result = $this->BlogPostsService->batch('delete', [1, 2, 3]);
+        $this->BlogPostsService->batch('delete', [1, 2, 3]);
     }
 
     /**

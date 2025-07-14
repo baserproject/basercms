@@ -29,7 +29,7 @@ $this->loadHelper('BcMail.Mail');
         <ul class="bca-content-info__list">
           <li class="bca-content-info__list-item">
             <?php foreach($this->Mail->getPublishedMailContents($site->id) as $mailContent): ?>
-              <?php echo $mailContent->content->title ?>：
+              <?php echo h($mailContent->content->title) ?>：
               <?php $this->BcBaser->link(
                 __d('baser_core', '{0} 件', $mailContent->getNumberOfMessages()),
                 ['plugin' => 'BcMail', 'controller' => 'MailMessages', 'action' => 'index', $mailContent->id]

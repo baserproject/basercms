@@ -84,16 +84,17 @@ class UploadConfigsServiceTest extends BcTestCase
      */
     public function test_clearCache()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        UploaderConfigFactory::make(['name' => 'name_1', 'value' => 'value_1'])->persist();
+
         //実行前の確認
         $this->UploaderConfigsService->get();
         $entity = $this->getPrivateProperty($this->UploaderConfigsService, 'entity');
         $this->assertNotNull($entity);
+
         //正常系実行
         $this->UploaderConfigsService->clearCache();
         $result = $this->getPrivateProperty($this->UploaderConfigsService, 'entity');
         $this->assertNull($result);
-
     }
 
     /**

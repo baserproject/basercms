@@ -11,13 +11,23 @@
 
 namespace BcThemeConfig\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcAdminAppView;
+use BcThemeConfig\View\Helper\BcThemeConfigHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcThemeConfigHelperTest
  */
 class BcThemeConfigHelperTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+
+    /**
+     * @var $BcThemeConfigHelper
+     */
+    private $BcThemeConfigHelper;
 
     /**
      * set up
@@ -25,6 +35,9 @@ class BcThemeConfigHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $BcAdminAppView = new BcAdminAppView($this->getRequest('/'));
+        $this->BcThemeConfigHelper = new BcThemeConfigHelper($BcAdminAppView);
     }
 
     /**
@@ -41,9 +54,10 @@ class BcThemeConfigHelperTest extends BcTestCase
      */
     public function testLogo()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS"\/>/');
-        $this->BcBaser->logo();
+        ob_start();
+        $this->BcThemeConfigHelper->logo();
+        $result = ob_get_clean();
+        $this->assertEquals('<img src="/bc_front/img/logo.png" alt="">', $result);
     }
 
     /**
@@ -54,9 +68,10 @@ class BcThemeConfigHelperTest extends BcTestCase
      */
     public function testMainImage($options, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->expectOutputRegex('/' . $expect . '/s');
-        $this->BcBaser->mainImage($options);
+        ob_start();
+        $this->BcThemeConfigHelper->mainImage($options);
+        $result = ob_get_clean();
+        $this->assertEquals($expect, $result);
     }
 
     /**
@@ -78,16 +93,23 @@ class BcThemeConfigHelperTest extends BcTestCase
     public static function mainImageDataProvider()
     {
         return [
-            [[], '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'],
-            [['num' => 2], 'main_image_2'],
-            [['all' => true, 'num' => 2], '^(.*main_image_1.*main_image_2)'],
-            [['all' => true, 'class' => 'test-class', 'id' => 'test-id'], '^(.*id="test-id".*class="test-class")'],
-            [['popup' => true], 'href="\/theme\/nada-icons\/img\/main_image_1.jpg"'],
-            [['alt' => 'テスト'], 'alt="テスト"'],
-            [['link' => '/test'], 'href="\/test"'],
-            [['maxWidth' => '200', 'maxHeight' => '200'], 'width="200"'],
-            [['width' => '200', 'height' => '200'], '^(.*width="200".*height="200")'],
-            [['hoge' => 'hoge'], 'main_image_1'],
+            [[], '<img src="/bc_front/img/main_image_1.jpg" alt="">'],
+            [['num' => 2], '<img src="/bc_front/img/main_image_2.jpg" alt="">'],
+            [['all' => true, 'num' => 2], '<ul id="MainImage">
+<li><img src="/bc_front/img/main_image_1.jpg" alt=""></li>
+<li><img src="/bc_front/img/main_image_2.jpg" alt=""></li>
+
+</ul>'],
+            [['all' => true, 'class' => 'test-class', 'id' => 'test-id'], '<ul id="test-id" class="test-class">
+<li><img src="/bc_front/img/main_image_1.jpg" alt=""></li>
+
+</ul>'],
+            [['popup' => true], '<a href="/bc_front/img/main_image_1.jpg" rel="colorbox"><img src="/bc_front/img/main_image_1.jpg" alt=""></a>'],
+            [['alt' => 'テスト'], '<img src="/bc_front/img/main_image_1.jpg" alt="テスト">'],
+            [['link' => '/test'], '<a href="/test"><img src="/bc_front/img/main_image_1.jpg" alt=""></a>'],
+            [['maxWidth' => '200', 'maxHeight' => '200'], '<img src="/bc_front/img/main_image_1.jpg" width="200" alt="">'],
+            [['width' => '200', 'height' => '200'], '<img src="/bc_front/img/main_image_1.jpg" width="200" height="200" alt="">'],
+            [['hoge' => 'hoge'], '<img src="/bc_front/img/main_image_1.jpg" alt="">'],
         ];
     }
 

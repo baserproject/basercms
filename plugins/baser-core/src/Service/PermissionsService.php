@@ -456,6 +456,19 @@ class PermissionsService implements PermissionsServiceInterface
             return true;
         }
 
+        // RESTful なルーティングに対応
+        // URL上アクションがなく、parseRequest で、アクションが index に設定された場合、
+        // POST メソッドであれば add アクションに変換する
+        if(!empty($urlArray['_ext'])
+            && $urlArray['_ext'] === 'json'
+            && $urlArray['action'] === 'index'
+            && $method === 'POST'
+        ) {
+            if(!preg_match('/\/index\.json$/', $url)) {
+                $url = preg_replace('/\.json$/', '/add.json', $url);
+            }
+        }
+
         // プレフィックスがない場合はフロントとみなす
         if(empty($urlArray['prefix'])) {
             $prefix = 'Front';
@@ -478,13 +491,6 @@ class PermissionsService implements PermissionsServiceInterface
         if($userGroup) {
             $type = (int)$userGroup->getAuthPrefixSetting($prefix, 'type');
             if ($type === 1) return true;
-        }
-
-        if($prefix === 'Api/Admin') {
-            // 管理画面からAPIのURLを参照した場合は無条件に true
-            if (BcUtil::isAdminSystem()) return true;
-            // 管理画面から呼び出された API は無条件に true
-            if (BcUtil::isSameReferrerAsCurrent()) return true;
         }
 
         // URLのプレフィックスを標準の文字列に戻す
@@ -677,6 +683,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = [])
     {

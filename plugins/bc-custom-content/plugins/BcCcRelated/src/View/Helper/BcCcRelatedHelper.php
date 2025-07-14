@@ -19,6 +19,8 @@ use BcCustomContent\Model\Entity\CustomField;
 use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -147,6 +149,46 @@ class BcCcRelatedHelper extends Helper
             return $entry;
 
         return $entry->{$entry->custom_table->display_field};
+    }
+
+    public function getFieldItemList(Int $contentId, string $fieldName)
+    {
+        $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
+        $customField = $customFieldsTable->find()
+            ->contain([
+                'CustomLinks' => function($q) use($fieldName) {
+                    return $q->where(['CustomLinks.name' => $fieldName]);
+                },
+                'CustomLinks.CustomTables',
+                'CustomLinks.CustomTables.CustomContents',
+                'CustomLinks.CustomTables.CustomContents.Contents' => function($q) use($contentId) {
+                    return $q->where( ['Contents.id' => (int)$contentId]);
+                },
+            ])->first();
+
+        $displayField = $customField->custom_links[0]->custom_table->display_field;
+        $customTableId = $customField->meta['BcCcRelated']['custom_table_id']?? null;
+        if($customTableId === null) return [];
+
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customEntriesTable->setup($customTableId);
+        $query = $customEntriesTable->find()
+            ->select([
+                'CustomEntries.id',
+                'CustomEntries.' . $displayField
+        ]);
+
+        $filterName = $customField->meta['BcCcRelated']['filter_name']?? null;
+        $filterValue = $customField->meta['BcCcRelated']['filter_value']?? null;
+
+        if($filterName && $filterValue) {
+            $query->where(['CustomEntries.' . $filterName => $filterValue]);
+        }
+        $customEntries = $query->all()->toArray();
+
+        $entryTitles = Hash::combine($customEntries, '{n}.id', '{n}.' . $displayField);
+
+        return $entryTitles;
     }
 
 }

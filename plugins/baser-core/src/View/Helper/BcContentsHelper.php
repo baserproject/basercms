@@ -141,11 +141,13 @@ class BcContentsHelper extends Helper
                 if (!empty($item['routes'][$method])) {
                     $route = $item['routes'][$method];
                     $item['url'][$method] = Router::url($route);
+                    $item['permissionCheckUrl'][$method] = Router::url([...$route, '_base' => false]);
                 }
             }
             // disabled
             if (!empty($item['url']['add'])) {
-                $item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], Hash::extract($user->user_groups, '{n}.id')));
+                $item['addDisabled'] = !($this->PermissionsService->check($item['permissionCheckUrl']['add'],
+                    Hash::extract($user->user_groups, '{n}.id')));
             } else {
                 $item['addDisabled'] = true;
             }
@@ -167,10 +169,10 @@ class BcContentsHelper extends Helper
     public function isActionAvailable($type, $action, $entityId): bool
     {
         $user = BcUtil::loginUser();
-        if (!isset($this->getConfig('items')[$type]['url'][$action])) {
+        if (!isset($this->getConfig('items')[$type]['permissionCheckUrl'][$action])) {
             return false;
         }
-        $url = $this->getConfig('items')[$type]['url'][$action] . '/' . $entityId;
+        $url = $this->getConfig('items')[$type]['permissionCheckUrl'][$action] . '/' . $entityId;
         if (isset($user->user_groups)) {
             $userGroups = $user->user_groups;
             $userGroupIds = [];
@@ -279,6 +281,7 @@ class BcContentsHelper extends Helper
      *  - `siteId` : サイトID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTree(int $id = 1, ?int $level = null, array $options = []): ResultSetDecorator
     {
@@ -402,6 +405,9 @@ class BcContentsHelper extends Helper
      *
      * @param int $id
      * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getRelatedSiteLinks($id = null, $options = [])
     {

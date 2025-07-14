@@ -125,24 +125,42 @@ class BcContentsHelperTest extends BcTestCase
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider getPageListDataProvider
      */
-    public function testGetTree($id, $level, $expectedCount, $expectedTitle, $message = null)
+    public function testGetTree($id, $level, $expectedCount, $expectedTitle)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->BcContents->getTree($id, $level);
+        $this->truncateTable('contents');
+        //データ生成
+        ContentFactory::make(['id' => 1, 'lft' => 1, 'rght' => 100, 'site_root' => true])->persist();
+        //'id' => 1の子
+        ContentFactory::make(['id' => 2, 'lft' => 2, 'rght' => 14, 'title' => 'トップページ', 'parent_id' => 1])->persist();
+        ContentFactory::make(['id' => 3, 'lft' => 15, 'rght' => 16, 'parent_id' => 1])->persist();
+        ContentFactory::make(['id' => 4, 'lft' => 17, 'rght' => 18, 'parent_id' => 1])->persist();
+        ContentFactory::make(['id' => 5, 'lft' => 19, 'rght' => 20, 'parent_id' => 1])->persist();
+
+        //'id' => 2の子
+        ContentFactory::make(['id' => 6, 'lft' => 3, 'rght' => 7, 'title' => 'サービス', 'parent_id' => 2])->persist();
+        ContentFactory::make(['id' => 7, 'lft' => 8, 'rght' => 9, 'parent_id' => 2])->persist();
+        ContentFactory::make(['id' => 8, 'lft' => 10, 'rght' => 11, 'parent_id' => 2])->persist();
+        ContentFactory::make(['id' => 9, 'lft' => 12, 'rght' => 13, 'parent_id' => 2])->persist();
+        //'id' => 6の子
+        ContentFactory::make(['id' => 10, 'lft' => 5, 'rght' => 6, 'title' => 'サブサービス１', 'parent_id' => 6])->persist();
+        //'id' => 3の子
+
+        $result = $this->BcContents->getTree($id, $level)->toArray();
+
         $resultTitle = null;
         $resultCount = null;
-        switch($level) {
+        switch ($level) {
             case 1:
-                if (!empty($result[0]['Content']['title'])) {
-                    $resultTitle = $result[0]['Content']['title'];
+                if (!empty($result[0]['title'])) {
+                    $resultTitle = $result[0]['title'];
                     $resultCount = count($result);
                 }
                 break;
             case 2:
                 if ($result) {
-                    foreach($result as $data) {
+                    foreach ($result as $data) {
                         if ($data['children']) {
-                            $resultTitle = $data['children'][0]['Content']['title'];
+                            $resultTitle = $data['children'][0]['title'];
                             $resultCount = count($data['children']);
                         }
                     }
@@ -150,11 +168,11 @@ class BcContentsHelperTest extends BcTestCase
                 break;
             case 3:
                 if ($result) {
-                    foreach($result as $data) {
+                    foreach ($result as $data) {
                         if ($data['children']) {
-                            foreach($data['children'] as $data2) {
+                            foreach ($data['children'] as $data2) {
                                 if ($data2['children']) {
-                                    $resultTitle = $data2['children'][0]['Content']['title'];
+                                    $resultTitle = $data2['children'][0]['title'];
                                     $resultCount = count($data2['children']);
                                 }
                             }
@@ -163,22 +181,19 @@ class BcContentsHelperTest extends BcTestCase
                 }
                 break;
         }
-        $this->assertEquals($expectedCount, $resultCount, 'カウントエラー：' . $message);
-        $this->assertEquals($expectedTitle, $resultTitle, 'タイトルエラー：' . $message);
+        $this->assertEquals($expectedCount, $resultCount);
+        $this->assertEquals($expectedTitle, $resultTitle);
     }
 
     public static function getPageListDataProvider()
     {
         return [
             // PC版
-            [1, 1, 7, 'トップページ', 'PC版１階層目のデータが正常に取得できません'],
-            [1, 2, 4, 'サービス', 'PC版２階層目のデータが正常に取得できません'],
-            [1, 3, 1, 'サブサービス１', 'PC版３階層目のデータが正常に取得できません'],
+            [1, 1, 4, 'トップページ'],
+            [1, 2, 4, 'サービス'],
+            [1, 3, 1, 'サブサービス１'],
             // ケータイ
-            [2, 1, 3, 'トップページ', 'ケータイ版１階層目のデータが正常に取得できません'],
-            // スマホ
-            [3, 1, 7, 'トップページ', 'スマホ版１階層目のデータが正常に取得できません'],
-            [3, 2, 1, 'サービス１', 'スマホ版２階層目のデータが正常に取得できません']
+            [2, 1, 4, 'サービス']
         ];
     }
 
@@ -216,7 +231,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         // TODO: configが設定されてない場合だとすべてtrueで通ってしまうため再確認要
         $this->loginAdmin($this->getRequest(), $userGroup);
-        $this->BcContents->setConfig('items.' . $type . '.url.' . $action, 'sample');
+        $this->BcContents->setConfig('items.' . $type . '.permissionCheckUrl.' . $action, 'sample');
         $result = $this->BcContents->isActionAvailable($type, $action, $entityId);
         $this->assertEquals($expect, $result);
     }
@@ -377,9 +392,10 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks($id, $options, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcContents->request = $this->_getRequest('/');
-        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
+        ContentFactory::make(['site_id' => 1, 'url' => '/'])->persist();
+        ContentFactory::make(['site_id' => 2, 'main_site_content_id' => 1, 'url' => '/en/'])->persist();
+        ContentFactory::make(['site_id' => 3, 'main_site_content_id' => 3, 'url' => '/en/about'])->persist();
+
         $result = $this->BcContents->getRelatedSiteLinks($id, $options);
         $this->assertEquals($expect, $result);
     }
@@ -387,18 +403,11 @@ class BcContentsHelperTest extends BcTestCase
     public static function getRelatedSiteLinksDataProvider()
     {
         return [
-            // IDが空 オプションも空
-            [null, [], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            // IDが空  オプション excludeIds 0~2
-            ['', ['excludeIds' => [0]], [0 => ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], 1 => ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [false, ['excludeIds' => [1]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [0, ['excludeIds' => [2]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index']]],
-            // IDが空  オプション excludeIds 3~
-            [0, ['excludeIds' => [3]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            [0, ['excludeIds' => [99]], [['prefix' => '', 'name' => 'パソコン', 'url' => '/index'], ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index']]],
-            // IDに値が入っていれば、false
-            [1, ['excludeIds' => [0]], [['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/'], ['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/']]],
-            [99, [], []],
+            [null, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
+            [0, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/index']]],
+            [1, [], [['prefix' => '', 'name' => 'メインサイト', 'url' => '/'], ['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
+            [1, ['excludeIds' => [1]], [['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/']]],
+            [3, [], [['prefix' => 'en', 'name' => '英語サイト', 'url' => '/en/about']]],
         ];
     }
 
@@ -910,4 +919,5 @@ class BcContentsHelperTest extends BcTestCase
         $rs = $this->BcContents->isFolder();
         $this->assertTrue($rs);
     }
+
 }

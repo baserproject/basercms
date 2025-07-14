@@ -328,6 +328,11 @@ return [
         'twoFactorAuthenticationCodeAllowTime' => 10,
 
         /**
+         * 4系のパスワードでログインする際に、新しいハッシュアルゴリズムでハッシュ化するかどうか
+         */
+        'needsPasswordRehash' => true,
+
+        /**
          * エディタ
          */
         'editors' => [
@@ -411,6 +416,16 @@ return [
          * /config/routes.php を有効化するかどうか
          */
         'enableRootRoutes' => false,
+
+        /**
+         * bc_formのテンプレートを指定
+         * config/bc_form.phpを差し替える         
+         *  プラグイン記法 (プラグイン名.テンプレート名)
+         */
+        //basercms/plugins/baser-core/src/View/AppView.php
+        'AppFormTemplate' => 'BaserCore.bc_form',
+        //basercms/plugins/baser-core/src/View/BcAdminAppView.php
+        'AdminFormTemplate' => 'BaserCore.bc_form',
 
         /**
          * システムナビ
@@ -583,7 +598,9 @@ return [
             '/baser-core/users/logout',
             '/baser-core/password_requests/*',
             '/baser/api/admin/baser-core/users/login.json',
-            '/baser/api/admin/baser-core/users/refresh_token.json'
+            '/baser/api/admin/baser-core/users/refresh_token.json',
+            '/baser/api/admin/baser-core/utilities/save_search_opened/*/*.json',
+            '/baser/api/admin/baser-core/plugins/get_available_core_version_info.json',
         ]
     ],
 

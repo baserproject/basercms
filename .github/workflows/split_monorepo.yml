@@ -5,6 +5,7 @@ on:
     branches:
       - 5.0.x
       - 5.1.x
+      - 5.2.x
     tags:
       - '*'
 jobs:
