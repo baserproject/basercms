@@ -37,6 +37,10 @@
         &nbsp;&nbsp;
         <?php echo $this->BcAdminForm->label('meta.BcCcRelated.filter_value', __d('baser_core', '絞り込み値')) ?>&nbsp;&nbsp;
         <?php echo $this->BcAdminForm->control('meta.BcCcRelated.filter_value', ['type' => 'text', 'size' => 20]) ?>
+        <br>
+        <?php $options = [ 'select' => 'セレクトボックス', 'radio' => 'ラジオボタン', 'multiCheckbox' => 'マルチチェックボックス']; ?>
+        <?php echo $this->BcAdminForm->label('meta.BcCcRelated.display_type', __d('baser_core', 'タイプ')) ?>&nbsp;&nbsp;
+        <?php echo $this->BcAdminForm->control('meta.BcCcRelated.display_type', ['type' => 'select', 'options' => $options]) ?>　　
         <i class="bca-icon--question-circle bca-help"></i>　　
         <div class="bca-helptext">
           <?php echo __d('baser_core', 'データの絞り込みを行う場合、絞り込みのフィールド名と値を設定します。') ?>
