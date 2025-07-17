@@ -85,8 +85,9 @@ class BcCcRelatedHelper extends Helper
             $list = [];
         }
 
+        $optionsType = $field->meta["BcCcRelated"]["display_type"];
         $options = array_merge([
-            'type' => 'select',
+            'type' => $optionsType,
             'options' => $list,
             'empty' => __d('baser_core', '選択してください'),
         ], $options);
@@ -143,7 +144,15 @@ class BcCcRelatedHelper extends Helper
         /** @var CustomEntriesServiceInterface $entriesService */
         $entriesService = $this->getService(CustomEntriesServiceInterface::class);
         $entriesService->setup($link->custom_field->meta['BcCcRelated']['custom_table_id']);
-        $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
+        if(is_array($fieldValue)){
+            foreach($fieldValue as $value) {
+                $entry = $entriesService->get($value, ['contain' => 'CustomTables']);
+                $entries[] = $entry->title;
+            }
+            return implode(' ', $entries);
+        }else{
+            $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
+        }
 
         if ($options['getRelatedBody'])
             return $entry;
