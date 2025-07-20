@@ -71,7 +71,7 @@ class BlogContentsService implements BlogContentsServiceInterface
             'status' => ''
         ], $queryParams);
 
-        $query = $this->BlogContents->find()->order([
+        $query = $this->BlogContents->find()->orderBy([
             'BlogContents.id'
         ]);
 
@@ -79,16 +79,46 @@ class BlogContentsService implements BlogContentsServiceInterface
             $query->limit($queryParams['limit']);
         }
 
-        if (!empty($queryParams['description'])) {
-            $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
+        $query = $this->createIndexConditions($query, $queryParams);
+        return $query;
+    }
+
+    /**
+     * createIndexConditions
+     * @param Query $query
+     * @param array $params
+     * @return Query
+     */
+    public function createIndexConditions(Query $query, array $params): Query
+    {
+        $params = array_merge([
+            'name' => null,
+            'title' => null,
+            'description' => null,
+            'status' => '',
+        ], $params);
+
+        if (!is_null($params['description'])) {
+            $query->where(['description LIKE' => '%' . $params['description'] . '%']);
         }
 
-        if ($queryParams['status'] === 'publish') {
+        if ($params['status'] === 'publish') {
             $fields = $this->BlogContents->getSchema()->columns();
             $query = $query->contain(['Contents'])->select($fields);
             $query->where($this->BlogContents->Contents->getConditionAllowPublish());
         }
 
+        if( !is_null($params['name'])) {
+            $query->matching('Contents', function($q) use ($params) {
+                return $q->where(['Contents.name' => $params['name']]);
+            });
+        }
+
+        if( !is_null($params['title'])) {
+            $query->matching('Contents', function($q) use ($params) {
+                return $q->where(['Contents.title LIKE' => '%' . $params['title'] . '%']);
+            });
+        }
         return $query;
     }
 

@@ -87,19 +87,50 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         $queryParams = array_merge([
             'status' => ''
         ], $queryParams);
-
         $query = $this->BlogCategories->find($type);
+        $query = $this->createIndexConditions($query, $blogContentId, $queryParams);
+        return $query;
+    }
+
+    /**
+     * createIndexConditions
+     *
+     * @param Query $query
+     * @param int $blogContentId
+     * @param array $params
+     * @return Query
+     * @checked
+     * @noTodo
+     */
+    private function createIndexConditions(Query $query, int $blogContentId, array $params = []): Query
+    {
+        foreach($params as $key => $value) {
+            if ($value === '') unset($params[$key]);
+        }
+        $params = array_merge([
+            'name' => null,
+            'title' => null,
+            'status' => ''
+        ], $params);
+
         $conditions = [];
-        if ($queryParams['status'] === 'publish') {
+        if ($params['status'] === 'publish') {
             $fields = $this->BlogCategories->getSchema()->columns();
             $query = $query->contain(['BlogContents' => ['Contents']])
                 ->select($fields);
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
             $conditions = array_merge($conditions, ['BlogCategories.status' => true]);
         }
+        if ($blogContentId) {
+            $conditions = array_merge($conditions, ['BlogCategories.blog_content_id' => $blogContentId]);
+        }
+        if(!is_null($params['name'])) {
+            $conditions['BlogCategories.name LIKE'] = '%' . $params['name'] . '%';
+        }
+        if(!is_null($params['title'])) {
+            $conditions['BlogCategories.title LIKE'] = '%' . $params['title'] . '%';
+        }
 
-
-        if ($blogContentId) $conditions = array_merge($conditions, ['BlogCategories.blog_content_id' => $blogContentId]);
         return $query->where($conditions);
     }
 
