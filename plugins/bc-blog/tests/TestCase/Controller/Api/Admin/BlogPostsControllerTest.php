@@ -99,6 +99,7 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_add()
     {
+        BlogContentFactory::make(['id' => 1])->persist();
         // postデータを生成
         $postData = [
             'user_id' => 1,
@@ -153,7 +154,10 @@ class BlogPostsControllerTest extends BcTestCase
 
         //正常の時を確認
         //編集データーを生成
-        $data = ['title' => 'blog post edit'];
+        $data = [
+            'title' => 'blog post edit',
+            'blog_content_id' => 1,
+        ];
         //APIをコル
         $this->post('/baser/api/admin/bc-blog/blog_posts/edit/1.json?token=' . $this->accessToken, $data);
         //ステータスを確認
@@ -165,7 +169,10 @@ class BlogPostsControllerTest extends BcTestCase
 
         //エラーを発生した場合を確認
         //APIをコル
-        $this->post('/baser/api/admin/bc-blog/blog_posts/edit/1.json?token=' . $this->accessToken, ['name' => str_repeat('a', 256)]);
+        $this->post('/baser/api/admin/bc-blog/blog_posts/edit/1.json?token=' . $this->accessToken, [
+            'name' => str_repeat('a', 256),
+            'blog_content_id' => 1,
+        ]);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
