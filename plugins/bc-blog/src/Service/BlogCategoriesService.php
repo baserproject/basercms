@@ -101,6 +101,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function createIndexConditions(Query $query, int $blogContentId, array $params = []): Query
     {

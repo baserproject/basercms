@@ -88,6 +88,9 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @param Query $query
      * @param array $params
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createIndexConditions(Query $query, array $params): Query
     {

@@ -303,4 +303,25 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals($rs[101], 'title 101');
         $this->assertEquals($rs[102], 'title 102');
     }
+
+    /**
+     * createIndexConditionsのテスト
+     */
+    public function test_createIndexConditions()
+    {
+        $table = $this->BlogCategories->BlogCategories;
+        $query = $table->find();
+        $blogContentId = 1;
+        $params = [
+            'name' => 'cat',
+            'title' => 'タイトル',
+            'status' => 'publish'
+        ];
+        $resultQuery = $this->execPrivateMethod($this->BlogCategories, 'createIndexConditions', [$query, $blogContentId, $params]);
+        $sql = $resultQuery->sql();
+        $this->assertStringContainsString('BlogCategories.name LIKE', $sql);
+        $this->assertStringContainsString('BlogCategories.title LIKE', $sql);
+        $this->assertStringContainsString('BlogCategories.blog_content_id', $sql);
+        $this->assertStringContainsString('BlogCategories.status', $sql);
+    }
 }
