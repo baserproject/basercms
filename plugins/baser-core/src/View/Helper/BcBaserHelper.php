@@ -157,6 +157,12 @@ use BaserCore\Annotation\Doc;
  * @method string|array getCustomFieldValue(mixed $entry, string $fieldName, array $options = [])
  * @method string getCustomEntries(int $tableId, int $limit, array $options = [])
  * @method string customEntries(int $tableId, int $limit, array $options = [])
+ * @method bool hasPrevCustomEntry(CustomEntry $entry)
+ * @method bool hasNextCustomEntry(CustomEntry $entry)
+ * @method CustomEntry getPrevCustomEntry(CustomEntry $entry)
+ * @method CustomEntry getNextCustomEntry(CustomEntry $entry)
+ * @method string prevCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
+ * @method string nextCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
  *
  * ### TextHelper
  * @method string truncateText(string $text, int $length = 100, array $options = [])
