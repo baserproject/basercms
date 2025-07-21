@@ -66,14 +66,16 @@ class CustomLinksService implements CustomLinksServiceInterface
         $options = array_merge([
             'status' => '',
             'contain' => [
-                'CustomFields',
-                'CustomTables' => ['CustomContents' => ['Contents']]
+                'CustomFields'
             ]
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->CustomLinks->CustomTables->CustomContents->Contents->getConditionAllowPublish();
             $conditions = array_merge($conditions, ['CustomLinks.status' => true]);
+            $options['contain'][] = ['CustomTables' => [
+                'CustomContents' => ['Contents']
+            ]];
         }
         return $this->CustomLinks->get($id,
             contain: $options['contain'],
