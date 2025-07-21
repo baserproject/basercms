@@ -120,6 +120,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      * @param Query $query
      * @param array $params
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createIndexConditions(Query $query, $params): Query
     {

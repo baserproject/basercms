@@ -141,6 +141,7 @@ class UsersService implements UsersServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function createIndexConditions(Query $query, array $params): Query
     {

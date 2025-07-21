@@ -361,4 +361,56 @@ class BlogContentsServiceTest extends BcTestCase
         $this->assertNull($rs);
     }
 
+
+    /**
+     * test createIndexConditions
+     */
+    public function test_createIndexConditions()
+    {
+        $service = new BlogContentsService();
+
+        // descriptionのみ
+        $conditions = ['description' => '説明文'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('description LIKE', $sql);
+
+        // status=publishのみ
+        $conditions = ['status' => 'publish'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('status =', $sql); // 公開条件
+
+        // nameのみ
+        $conditions = ['name' => 'ブログ名'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('name =', $sql);
+
+        // titleのみ
+        $conditions = ['title' => 'タイトル'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('title LIKE', $sql);
+
+        // description + status + name + title の複合条件
+        $conditions = [
+            'description' => '複合',
+            'status' => 'publish',
+            'name' => '複合名',
+            'title' => '複合タイトル'
+        ];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('description LIKE', $sql);
+        $this->assertStringContainsString('status =', $sql);
+        $this->assertStringContainsString('name =', $sql);
+        $this->assertStringContainsString('title LIKE', $sql);
+    }
+
 }

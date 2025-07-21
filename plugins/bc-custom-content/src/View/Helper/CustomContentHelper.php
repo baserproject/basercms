@@ -11,23 +11,25 @@
 
 namespace BcCustomContent\View\Helper;
 
-use BaserCore\Service\ContentsServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\Helper\BcTimeHelper;
-use BcCustomContent\Model\Entity\CustomContent;
-use BcCustomContent\Model\Entity\CustomEntry;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\View\Helper\BcTimeHelper;
+use Cake\Http\Exception\NotFoundException;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomField;
+use BaserCore\Service\ContentsServiceInterface;
+use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
-use Cake\Core\Configure;
-use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
+use Cake\Datasource\EntityInterface;
 
 /**
  * CustomContentHelper
@@ -548,4 +550,114 @@ class CustomContentHelper extends CustomContentAppHelper
     {
         echo $this->getEntries($contentsName, $limit, $options);
     }
+
+    /**
+     * 指定したCustomEntryの前のエントリーを取得する
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function getPrevEntry(CustomEntry|EntityInterface $entry)
+    {
+        $service = $this->getService(CustomEntriesServiceInterface::class);
+        return $service->getPrevEntry($entry);
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーを取得する
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function getNextEntry(CustomEntry|EntityInterface $entry)
+    {
+        $service = $this->getService(CustomEntriesServiceInterface::class);
+        return $service->getNextEntry($entry);
+    }
+
+    /**
+     * 指定したCustomEntryの前のエントリーが存在するか判定する
+     * @param CustomEntry $entry
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function hasPrevEntry(CustomEntry|EntityInterface $entry): bool
+    {
+        return $this->getPrevEntry($entry) !== null;
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーが存在するか判定する
+     * @param CustomEntry $entry
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function hasNextEntry(CustomEntry|EntityInterface $entry): bool
+    {
+        return $this->getNextEntry($entry) !== null;
+    }
+
+    /**
+     * 前のエントリーへのリンクを出力する
+     * @param CustomEntry $entry 現在のエントリー
+     * @param array $options リンクタグのオプション（text: リンクテキスト, default: '前の記事へ', htmlAttributes: aタグ属性）
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function prevLink(CustomEntry|EntityInterface $entry, string $title = '', array $options = []): void
+    {
+        $prev = $this->getPrevEntry($entry);
+        $options = array_merge(['class' => 'prev-link', 'arrow' => '≪ '], $options);
+        $arrow = $options['arrow'];
+        unset($options['arrow']);
+        if ($prev) {
+            if (!$title) {
+                $title = $prev->title;
+            }
+            if ($arrow) {
+                $title = $arrow . $title;
+            }
+            $url = $this->getEntryUrl($prev, false);
+            echo $this->BcBaser->getLink($title, $url, $options);
+        }
+    }
+
+    /**
+     * 次のエントリーへのリンクを出力する
+     * @param CustomEntry $entry 現在のエントリー
+     * @param string $title リンクテキスト（空の場合は自動生成）
+     * @param array $options リンクタグのオプション（class, arrowなど）
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function nextLink(CustomEntry|EntityInterface $entry, string $title = '', array $options = []): void
+    {
+        $next = $this->getNextEntry($entry);
+        $options = array_merge(['class' => 'next-link', 'arrow' => ' ≫'], $options);
+        $arrow = $options['arrow'];
+        unset($options['arrow']);
+        if ($next) {
+            if (!$title) {
+                $title = $next->title;
+            }
+            if ($arrow) {
+                $title = $title . $arrow;
+            }
+            $url = $this->getEntryUrl($next, false);
+            echo $this->BcBaser->getLink($title, $url, $options);
+        }
+    }
+
 }
