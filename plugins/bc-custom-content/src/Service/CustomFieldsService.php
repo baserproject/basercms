@@ -127,7 +127,7 @@ class CustomFieldsService implements CustomFieldsServiceInterface
             'status' => null,
             'title' => null,
             'type' => null,
-            'nama' => null
+            'name' => null
         ], $params);
         $conditions = [];
         if(!is_null($params['status'])) $conditions = ['CustomFields.status' => $params['status']];
