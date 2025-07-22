@@ -43,8 +43,6 @@ tests.sqlite
 nbproject/*
 # Visual Studio Code
 .vscode
-# cline
-.clinerules
 # nova
 .nova
 # Sass preprocessor
