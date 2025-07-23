@@ -43,8 +43,6 @@ tests.sqlite
 nbproject/*
 # Visual Studio Code
 .vscode
-# cline
-.clinerules
 # nova
 .nova
 # Sass preprocessor
@@ -141,3 +139,4 @@ node_modules
 /.cache
 /docker/nginx/*
 /docker/proxy/*
+/.github/instructions/local.instructions.md
