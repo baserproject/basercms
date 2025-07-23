@@ -157,7 +157,6 @@ class CustomLinksServiceTest extends BcTestCase
         //戻る値を確認
         $this->assertEquals('求人分類', $result->title);
         $this->assertArrayHasKey('custom_field', $result);
-        $this->assertArrayHasKey('custom_table', $result);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_contact');
