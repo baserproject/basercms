@@ -163,6 +163,7 @@ use BaserCore\Annotation\Doc;
  * @method CustomEntry getNextCustomEntry(CustomEntry $entry)
  * @method string prevCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
  * @method string nextCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
+ * @method string getCustomEntryUrl(CustomEntry $entry, bool $full = true, bool $base = true)
  *
  * ### TextHelper
  * @method string truncateText(string $text, int $length = 100, array $options = [])
