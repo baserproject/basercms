@@ -136,7 +136,8 @@ class BcCcRelatedHelper extends Helper
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
         $options = array_merge([
-            'getRelatedBody' => false
+            'getRelatedBody' => false,
+            'separator' => ' / ',
         ], $options);
 
         if (!$fieldValue) return '';
@@ -147,9 +148,12 @@ class BcCcRelatedHelper extends Helper
         if(is_array($fieldValue)){
             foreach($fieldValue as $value) {
                 $entry = $entriesService->get($value, ['contain' => 'CustomTables']);
-                $entries[] = $entry->title;
+                $entries[] = $entry->{$entry->custom_table->display_field};
             }
-            return implode(' ', $entries);
+            if ($options['getRelatedBody']) {
+                return $entries;
+            }
+            return implode($options['separator'], $entries);
         }else{
             $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
         }
