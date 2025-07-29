@@ -131,7 +131,7 @@ class UploaderViewEventListener extends BcViewEventListener
 
 		$css = $this->BcHtml->url('/uploader/css/ckeditor/contents.css');
 		return <<< DOC_END
-			$(window).load(function(){
+			$(window).on('load', function() {
 				if(!(CKEDITOR.config.contentsCss instanceof Array)) {
 					CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss];
 				}

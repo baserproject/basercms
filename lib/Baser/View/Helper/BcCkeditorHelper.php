@@ -296,7 +296,7 @@ class BcCkeditorHelper extends AppHelper
 		}
 
 		$this->BcHtml->scriptBlock("var editor_" . $field . ";", ["inline" => false]);
-		$jscode = "$(window).load(function(){";
+		$jscode = "$(window).on('load',function(){";
 		if (!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms'," . $this->JqueryEngine->object($this->style) . ");";
 			$this->inited = true;

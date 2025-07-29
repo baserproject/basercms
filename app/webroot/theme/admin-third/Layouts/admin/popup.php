@@ -28,8 +28,8 @@
 		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
 		$this->BcBaser->js([
-			'admin/vendors/jquery-2.1.4.min',
-			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/jquery-3.7.1.min',
+			'admin/vendors/jquery-ui-1.14.1.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
 			'admin/vendors/jquery.bt.min',
 			'admin/vendors/jquery.corner-2.12',

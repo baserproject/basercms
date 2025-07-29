@@ -77,7 +77,7 @@ $(function () {
         modal: true,
         open: function (event, ui) {
 
-            if ($(".favorite-menu-list .selected").size() == 0) {
+            if ($(".favorite-menu-list .selected").length() == 0) {
                 $(this).dialog('option', 'title', bcI18n.favoriteTitle1);
                 $("#FavoriteName").val($("#CurrentPageName").html());
                 $("#FavoriteUrl").val($("#CurrentPageUrl").html());

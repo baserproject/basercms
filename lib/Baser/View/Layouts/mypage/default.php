@@ -30,15 +30,15 @@
 	<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
 		$this->BcBaser->js([
-			'admin/vendors/jquery-2.1.4.min',
-			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/jquery-3.7.1.min',
+			'admin/vendors/jquery-ui-1.14.1.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
 			'admin/vendors/jquery.corner-2.12',
 			'admin/vendors/jquery.bt.min',
 			'admin/vendors/jquery.contextMenu-1.0/jquery.contextMenu',
-			'admin/vendors/jquery.form-2.94',
+			'admin/vendors/jquery.form',
 			'admin/vendors/jquery.validate.min',
-			'admin/vendors/jquery.colorbox-1.6.1.min',
+			'admin/vendors/jquery.colorbox-1.6.4.min',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/credit',
 			'admin/vendors/validate_messages_ja',

@@ -71,14 +71,14 @@
 		<?php
 		$this->BcBaser->js([
 			'admin/vue.min',
-			'admin/vendors/jquery-2.1.4.min',
-			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/jquery-3.7.1.min',
+			'admin/vendors/jquery-ui-1.14.1.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
 			'admin/vendors/jquery.bt.min',
 			'admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
-			'admin/vendors/jquery.form-2.94',
+			'admin/vendors/jquery.form',
 			'admin/vendors/jquery.validate.min',
-      		'admin/vendors/jquery.colorbox-1.6.1.min',
+			'admin/vendors/jquery.colorbox-1.6.4.min',
 			'admin/vendors/bootstrap-4.1.3/bootstrap.bundle.min',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/jquery.bcConfirm',
