@@ -124,6 +124,9 @@ class CustomLinksService implements CustomLinksServiceInterface
      * @param int $tableId
      * @param array $params
      * @return QueryInterface
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function createIndexConditions(QueryInterface $query, int $tableId, array $params): QueryInterface
     {
@@ -134,7 +137,13 @@ class CustomLinksService implements CustomLinksServiceInterface
 
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
         if ($params['status'] === 'publish') {
-            $params ['contain'] = ['CustomTables' => ['CustomContents' => ['Contents']]];
+            $publishContain = ['CustomTables' => ['CustomContents' => ['Contents']]];
+            if (!isset($params['contain'])) {
+                $params['contain'] = $publishContain;
+            } else {
+                // 既存のcontainと公開用のcontainをマージ
+                $params['contain'] = array_merge_recursive($params['contain'], $publishContain);
+            }
             $fields = $this->CustomLinks->getSchema()->columns();
             $query->select($fields);
             $conditions = array_merge(
@@ -147,7 +156,7 @@ class CustomLinksService implements CustomLinksServiceInterface
             $conditions = array_merge($conditions, ['CustomLinks.name' => $params['name']]);
         }
 
-        if (is_null($params['contain'])) $params['contain'] = [];
+        if (!isset($params['contain']) || is_null($params['contain'])) $params['contain'] = [];
         return $query->where($conditions)->contain($params['contain']);
     }
 

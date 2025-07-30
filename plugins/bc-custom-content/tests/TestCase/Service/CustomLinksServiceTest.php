@@ -387,4 +387,125 @@ class CustomLinksServiceTest extends BcTestCase
         $result = $this->CustomLinksService->findByName('test', ['contain' => ['CustomFields']]);
         $this->assertEquals([], $result);
     }
+
+    /**
+     * test createIndexConditions
+     */
+    public function test_createIndexConditions()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        $tableId = 1;
+
+        // テストケース1: 基本的な条件のみ（status=null, name=null）
+        $query1 = $this->CustomLinksService->CustomLinks->find();
+        $params1 = [];
+        $result1 = $this->CustomLinksService->createIndexConditions($query1, $tableId, $params1);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result1);
+
+        // 実際にクエリを実行して結果を確認
+        $results1 = $result1->toArray();
+        $this->assertIsArray($results1);
+
+        // テストケース2: status='publish'が指定された場合
+        $query2 = $this->CustomLinksService->CustomLinks->find();
+        $params2 = ['status' => 'publish'];
+        $result2 = $this->CustomLinksService->createIndexConditions($query2, $tableId, $params2);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result2);
+
+        // 実際にクエリを実行して結果を確認
+        $results2 = $result2->toArray();
+        $this->assertIsArray($results2);
+
+        // テストケース3: nameパラメータが指定された場合（存在するname）
+        $query3 = $this->CustomLinksService->CustomLinks->find();
+        $params3 = ['name' => 'recruit_category'];
+        $result3 = $this->CustomLinksService->createIndexConditions($query3, $tableId, $params3);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result3);
+
+        // 実際にクエリを実行して結果を確認
+        $results3 = $result3->toArray();
+        $this->assertIsArray($results3);
+        // recruit_categoryという名前のレコードが存在することを確認
+        $this->assertGreaterThan(0, count($results3));
+
+        // テストケース4: statusとnameの両方が指定された場合
+        $query4 = $this->CustomLinksService->CustomLinks->find();
+        $params4 = ['status' => 'publish', 'name' => 'recruit_category'];
+        $result4 = $this->CustomLinksService->createIndexConditions($query4, $tableId, $params4);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result4);
+
+        // 実際にクエリを実行して結果を確認
+        $results4 = $result4->toArray();
+        $this->assertIsArray($results4);
+
+        // テストケース5: containパラメータが指定された場合
+        $query5 = $this->CustomLinksService->CustomLinks->find();
+        $params5 = ['contain' => ['CustomFields']];
+        $result5 = $this->CustomLinksService->createIndexConditions($query5, $tableId, $params5);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result5);
+
+        // テストケース6: containがnullの場合
+        $query6 = $this->CustomLinksService->CustomLinks->find();
+        $params6 = ['contain' => null];
+        $result6 = $this->CustomLinksService->createIndexConditions($query6, $tableId, $params6);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result6);
+
+        // クエリが正常に実行できることを確認
+        $results6 = $result6->toArray();
+        $this->assertIsArray($results6);
+
+        // テストケース7: 存在しないnameを指定した場合
+        $query7 = $this->CustomLinksService->CustomLinks->find();
+        $params7 = ['name' => 'nonexistent_field'];
+        $result7 = $this->CustomLinksService->createIndexConditions($query7, $tableId, $params7);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result7);
+
+        // 結果が空であることを確認
+        $results7 = $result7->toArray();
+        $this->assertEmpty($results7);
+
+        // テストケース8: 空のパラメータ配列
+        $query8 = $this->CustomLinksService->CustomLinks->find();
+        $params8 = [];
+        $result8 = $this->CustomLinksService->createIndexConditions($query8, $tableId, $params8);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result8);
+
+        // クエリが正常に実行できることを確認
+        $results8 = $result8->toArray();
+        $this->assertIsArray($results8);
+
+        // テストケース9: status='publish'とcontainが両方指定された場合（マージのテスト）
+        $query9 = $this->CustomLinksService->CustomLinks->find();
+        $params9 = [
+            'status' => 'publish',
+            'contain' => ['CustomFields']
+        ];
+        $result9 = $this->CustomLinksService->createIndexConditions($query9, $tableId, $params9);
+
+        // メソッドが正常に動作することを確認
+        $this->assertInstanceOf(\Cake\Datasource\QueryInterface::class, $result9);
+
+        // 実際にクエリを実行して結果を確認
+        $results9 = $result9->toArray();
+        $this->assertIsArray($results9);
+    }
 }
