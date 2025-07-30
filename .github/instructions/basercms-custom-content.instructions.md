@@ -16,6 +16,18 @@ plugins/bc-front/templates/plugin/BcCustomContent/CustomContent/default/ 内の�
 ```php
 $this->BcBaser->getCustomFieldValue($customEntry, 'カスタムフィールド名')
 ```
+
+## ヘルパの利用
+テンプレートで利用するカスタムコンテンツのヘルパは、`CustomContentHelper` を利用できますので参考にします。
+ただし、実際の利用は、`BcBaserHelper` を通して行います。
+`BcBaserHelper` を通して実行する方法は、`CustomContentBaserHelper` を利用して、マジックメソッドで関連付けを行っています。
+
+```php
+// CustomContentBaserHelper の定義例
+// $this->BcBaser->getCustomFieldValue() で、CustomContentHelper::getFieldValue を呼び出す
+'getCustomFieldValue' => ['CustomContent', 'getFieldValue'],
+```
+
 ## アーカイブページ
 
 ### URLについて
