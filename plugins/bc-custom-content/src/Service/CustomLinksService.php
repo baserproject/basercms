@@ -13,6 +13,7 @@ namespace BcCustomContent\Service;
 
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Table\CustomLinksTable;
+use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\QueryInterface;
 use Cake\ORM\Table;
@@ -194,7 +195,10 @@ class CustomLinksService implements CustomLinksServiceInterface
             $entity = $this->CustomLinks->saveOrFail($entity);
             /** @var CustomEntriesService $customEntriesService */
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
-            $customEntriesService->addField($entity->custom_table_id, $entity->name, $entity->type);
+            $field = $this->CustomLinks->CustomFields->get($entity->custom_field_id);
+            $columnType = CustomContentUtil::getPluginSetting($field->type, 'columnType');
+            if (!$columnType) $columnType = 'text';
+            $customEntriesService->addField($entity->custom_table_id, $entity->name, $columnType);
         } catch (\Throwable $e) {
             $this->CustomLinks->getConnection()->rollback();
             throw $e;

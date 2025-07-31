@@ -43,6 +43,7 @@ class CustomFieldFactory extends CakephpBaseFactory
         $this->setDefaultData(function (Generator $faker) {
             return [
                 'title' => 'test',
+                'type' => 'text',
                 'status' => 1,
                 'default_value' => '',
                 'validate' => '',

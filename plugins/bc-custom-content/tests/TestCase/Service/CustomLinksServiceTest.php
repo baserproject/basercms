@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -231,6 +232,9 @@ class CustomLinksServiceTest extends BcTestCase
         $customTable = $this->getService(CustomTablesServiceInterface::class);
 
         //テストデータを生成
+        CustomFieldFactory::make([
+            'id' => 1
+        ])->persist();
         $customTable->create([
             'type' => 'contact',
             'name' => 'contact',
