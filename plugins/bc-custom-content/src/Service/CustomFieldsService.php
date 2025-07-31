@@ -173,6 +173,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
+        if(empty($postData['meta']) && $entity->meta) {
+            $postData['meta'] = $entity->meta;
+        }
         $entity = $this->CustomFields->patchEntity($entity, $postData);
         return $this->CustomFields->saveOrFail($entity);
     }
