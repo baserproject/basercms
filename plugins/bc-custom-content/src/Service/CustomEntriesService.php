@@ -318,7 +318,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
 
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
                 if($link->custom_field->type == "BcCcRelated"){
-                    if ($link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
+                    if (!empty($link->custom_field->meta['BcCcRelated']['display_type']) && $link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
                         if (!is_array($value))$value = [$value];
                         $c = [];
                         foreach ($value as $v) {
