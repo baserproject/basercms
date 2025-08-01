@@ -200,7 +200,7 @@ class MailContentsServiceTest extends BcTestCase
 
         $data = [
             'description' => 'Nghiem',
-            'list_count' => 'abc'
+            'form_template' =>  'あいう'
         ];
         $this->expectException(PersistenceFailedException::class);
         $this->MailContentsService->update($mailContent, $data);
