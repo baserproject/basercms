@@ -12,7 +12,6 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
@@ -149,10 +148,11 @@ class BlogContentsServiceTest extends BcTestCase
 
         $data = [
             'id' => 100,
-            'description' => '更新した!'
+            'description' => '更新した!',
+            'feed_count' => 'abc',
         ];
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
-        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->expectExceptionMessage("RSSフィード出力件数は100までの数値で入力してください。");
         $this->BlogContentsService->update($record, $data);
     }
 
