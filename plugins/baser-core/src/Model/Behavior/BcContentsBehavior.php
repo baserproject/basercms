@@ -151,7 +151,7 @@ class BcContentsBehavior extends Behavior
     {
         if (empty($entity->content)) {
             $entity->content = $this->Contents->find('all', ...['withDeleted'])
-                ->where(['entity_id' => $entity->id])
+                ->where(['Contents.entity_id' => $entity->id])
                 ->first();
         }
     }

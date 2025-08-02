@@ -360,15 +360,15 @@ class ContentsService implements ContentsServiceInterface
         ], $options);
 
         $conditions = [
-            'type' => 'ContentFolder',
-            'alias_id IS NULL'
+            'Contents.type' => 'ContentFolder',
+            'Contents.alias_id IS NULL'
         ];
 
         if (!is_null($siteId)) {
-            $conditions['site_id'] = $siteId;
+            $conditions['Contents.site_id'] = $siteId;
         }
         if ($options['excludeId']) {
-            $conditions['id <>'] = $options['excludeId'];
+            $conditions['Contents.id <>'] = $options['excludeId'];
         }
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
@@ -500,7 +500,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function hardDelete($id, $enableTree = false): bool
     {
-        $content = $this->Contents->find()->where(['id' => $id])->first();
+        $content = $this->Contents->find()->where(['Contents.id' => $id])->first();
         if (!$content) {
             $content = $this->getTrash($id);
         }
