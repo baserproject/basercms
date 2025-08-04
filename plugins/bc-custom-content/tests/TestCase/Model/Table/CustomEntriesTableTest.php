@@ -829,6 +829,7 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
+            'name' => 'meta',
             'custom_table_id' => 1,
             'custom_field_id' => 1
         ])->persist();
@@ -856,6 +857,7 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
+            'name' => 'meta',
             'custom_table_id' => 1,
             'custom_field_id' => 1
         ])->persist();
@@ -865,8 +867,15 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 2,
+            'name' => 'meta',
             'custom_table_id' => 2,
             'custom_field_id' => 2
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 3,
+            'name' => 'noname',
+            'custom_table_id' => 1,
+            'custom_field_id' => 1
         ])->persist();
 
         //ArrayObject
@@ -880,7 +889,7 @@ class CustomEntriesTableTest extends BcTestCase
 
         //$controlType === 'file'
         $this->CustomEntriesTable->setLinks(2);
-        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
         //戻り値を確認
         $this->assertEquals('プログラマー', $rs['name']);
         //配列場合、
@@ -893,13 +902,21 @@ class CustomEntriesTableTest extends BcTestCase
 
         //$controlType !== 'file'
         $this->CustomEntriesTable->setLinks(1);
-        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
         //戻り値を確認
         $this->assertEquals('プログラマー', $rs['name']);
         //配列場合、
         //__loop-src__がunsetされたか確認すること
         //json_encodeができるか確認すること
         $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $rs['meta']);
+
+        // 対象外の項目の配列はJSONに交換されない
+        $this->CustomEntriesTable->setLinks(3);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
+        $this->assertEquals([
+            '__loop-src__' => 'aaa',
+            'BcCcCheckbox' => ['label' => '']
+        ], $rs['meta']);
     }
 
     /**
