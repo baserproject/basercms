@@ -610,7 +610,7 @@ class CustomEntriesTable extends AppTable
                 if ($link->name === $key) {
                     $fieldLink = $link;
                     break;
-                };
+                }
             }
             if (empty($fieldLink)) continue;
             $controlType = CustomContentUtil::getPluginSetting($fieldLink->custom_field->type, 'controlType');
