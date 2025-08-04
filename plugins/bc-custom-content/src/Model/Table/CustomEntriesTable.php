@@ -644,12 +644,15 @@ class CustomEntriesTable extends AppTable
     {
         if(empty($this->links)) return $content;
         foreach($content as $key => $value) {
-            $link = null;
+            $fieldLink = null;
             foreach($this->links as $link) {
-                if ($link->name === $key) break;
+                if ($link->name === $key) {
+                    $fieldLink = $link;
+                    break;
+                }
             }
-            if (empty($link)) continue;
-            $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
+            if (empty($fieldLink)) continue;
+            $controlType = CustomContentUtil::getPluginSetting($fieldLink->custom_field->type, 'controlType');
             if ($controlType === 'file') continue;
             if (is_array($value)) {
                 unset($value['__loop-src__']);
