@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use Cake\ORM\RulesChecker;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Error\MissingColumnException;
@@ -162,22 +163,26 @@ trait SoftDeleteTrait
      * @param EntityInterface $entity entity
      * @return bool true in case of success, false otherwise.
      */
-    public function hardDelete(EntityInterface $entity)
+    public function hardDelete(EntityInterface $entity, array $options = [])
     {
         if(!$this->enabled) {
             throw new \BadMethodCallException('SoftDeleteTrait is not enabled');
         }
 
+        $options = new ArrayObject($options);
+
         $event = $this->dispatchEvent('Model.beforeDelete', [
             'entity' => $entity,
-            'options' => new \ArrayObject(),
+            'options' => $options,
         ]);
-
         if ($event->isStopped()) {
             return $event->getResult();
         }
 
-        $this->_associations->cascadeDelete($entity, []);
+        $this->_associations->cascadeDelete(
+            $entity,
+            ['_primary' => false] + $options->getArrayCopy()
+        );
 
         $primaryKey = (array)$this->getPrimaryKey();
         $query = $this->deleteQuery();
@@ -193,7 +198,7 @@ trait SoftDeleteTrait
 
         $this->dispatchEvent('Model.afterDelete', [
             'entity' => $entity,
-            'options' => new \ArrayObject(),
+            'options' => $options,
         ]);
 
         return $success;
