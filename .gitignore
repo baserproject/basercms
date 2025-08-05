@@ -140,3 +140,4 @@ node_modules
 /docker/nginx/*
 /docker/proxy/*
 /.github/instructions/local.instructions.md
+/.serena
