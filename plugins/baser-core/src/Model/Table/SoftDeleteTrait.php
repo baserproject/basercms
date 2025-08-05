@@ -123,20 +123,6 @@ trait SoftDeleteTrait
             return false;
         }
 
-        $event = $this->dispatchEvent('Model.beforeDelete', [
-            'entity' => $entity,
-            'options' => $options,
-        ]);
-
-        if ($event->isStopped()) {
-            return $event->getResult();
-        }
-
-        $this->_associations->cascadeDelete(
-            $entity,
-            ['_primary' => false] + $options->getArrayCopy()
-        );
-
         $query = $this->updateQuery();
         $conditions = (array)$entity->extract($primaryKey);
         $statement = $query->update($this->getTable())
@@ -148,11 +134,6 @@ trait SoftDeleteTrait
         if (!$success) {
             return $success;
         }
-
-        $this->dispatchEvent('Model.afterDelete', [
-            'entity' => $entity,
-            'options' => $options,
-        ]);
 
         return $success;
     }
@@ -186,9 +167,18 @@ trait SoftDeleteTrait
         if(!$this->enabled) {
             throw new \BadMethodCallException('SoftDeleteTrait is not enabled');
         }
-        if (!$this->delete($entity)) {
-            return false;
+
+        $event = $this->dispatchEvent('Model.beforeDelete', [
+            'entity' => $entity,
+            'options' => new \ArrayObject(),
+        ]);
+
+        if ($event->isStopped()) {
+            return $event->getResult();
         }
+
+        $this->_associations->cascadeDelete($entity, []);
+
         $primaryKey = (array)$this->getPrimaryKey();
         $query = $this->deleteQuery();
         $conditions = (array)$entity->extract($primaryKey);
@@ -200,6 +190,11 @@ trait SoftDeleteTrait
         if (!$success) {
             return $success;
         }
+
+        $this->dispatchEvent('Model.afterDelete', [
+            'entity' => $entity,
+            'options' => new \ArrayObject(),
+        ]);
 
         return $success;
     }
