@@ -272,7 +272,8 @@ class ContentsService implements ContentsServiceInterface
 
         // folder_id
         if (!is_null($params['folder_id']) && $params['folder_id']) {
-            $folder = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']])->first();
+            $folder = $this->Contents->find()->select(['lft', 'rght'])
+                 ->where(['Contents.id' => $queryParams['folder_id']])->first();
             $conditions[] = ['Contents.rght <' => $folder->rght, 'Contents.lft >' => $folder->lft];
         }
 
@@ -1216,7 +1217,11 @@ class ContentsService implements ContentsServiceInterface
         }
         // 移動先に同一コンテンツが存在するか確認
         $movedContent = $this->Contents->find()
-            ->where(['parent_id' => $parentId, 'name' => $currentContent->name, 'id !=' => $currentContent->id])
+            ->where([
+                'Contents.parent_id' => $parentId,
+                'Contents.name' => $currentContent->name,
+                'Contents.id !=' => $currentContent->id
+            ])
             ->first();
         if ($movedContent) {
             return false;
@@ -1460,7 +1465,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getTitlesById($ids): array
     {
-        return $this->Contents->find('list')->select(['id', 'title'])->where(['id IN' => $ids])->toArray();
+        return $this->Contents->find('list')->select(['id', 'title'])->where(['Contents.id IN' => $ids])->toArray();
     }
 
     /**
