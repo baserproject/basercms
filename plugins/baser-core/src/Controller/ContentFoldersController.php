@@ -53,7 +53,7 @@ class ContentFoldersController extends BcFrontAppController
         // コンテンツフォルダのindex機能を使用しないときは403にする
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig = $siteConfigsService->get();
-        if (!empty($siteConfig->use_contents_folder_forbidden) || env('FOLDER_INDEX') == 'Forbidden') {
+        if (!empty($siteConfig->use_contents_folder_forbidden)) {
             throw new \Cake\Http\Exception\ForbiddenException(__d('baser_core', 'indexページが見つかりませんでした。'));
             exit;
         }

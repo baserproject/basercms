@@ -427,24 +427,15 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         </th>
         <td class="col-input bca-form-table__input">
           <?php
-          $checed['checked'] = env('FOLDER_INDEX') == 'Forbidden' ? 'checked' : false;
-          if ($checed['checked']) {
-            echo $this->BcAdminForm->control('use_contents_folder_forbidden', [
-              'type' => 'hidden',
-              'label' => __d('baser_core', 'コンテンツフォルダindex機能を利用しない')
-            ]);
-            echo 'コンテンツフォルダindex機能を利用しない（.env の設定が優先されています。）';
-          } else {
             echo $this->BcAdminForm->control('use_contents_folder_forbidden', [
               'type' => 'checkbox',
               $checed,
-              'label' => __d('baser_core', 'コンテンツフォルダindex機能を利用しない')
+              'label' => __d('baser_core', 'コンテンツフォルダの一覧機能を利用しない')
             ]);
-          }
           ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
-            <?php echo __d('baser_core', 'indexページの無いコンテツフォルダにアクセスした際に、<br>index機能を使わずに403を返します。<br> config/.envでも export FOLDER_INDEX="Forbidden" の記述で設定できます。') ?>
+            <?php echo __d('baser_core', 'indexページの無いコンテツフォルダにアクセスした際に、<br>一覧機能を使わずに403を返します。') ?>
           </div>
           <?php echo $this->BcAdminForm->error('use_contents_folder_forbidden') ?>
         </td>
