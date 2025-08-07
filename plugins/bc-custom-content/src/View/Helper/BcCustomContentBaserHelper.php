@@ -63,6 +63,7 @@ class BcCustomContentBaserHelper extends Helper implements BcPluginBaserHelperIn
             'getNextCustomEntry' => ['CustomContent', 'getNextEntry'],
             'prevCustomEntryLink' => ['CustomContent', 'prevLink'],
             'nextCustomEntryLink' => ['CustomContent', 'nextLink'],
+            'getCustomEntryUrl' => ['CustomContent', 'getEntryUrl'],
         ];
     }
 

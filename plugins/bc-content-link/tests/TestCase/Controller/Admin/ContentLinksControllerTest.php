@@ -110,14 +110,14 @@ class ContentLinksControllerTest extends BcTestCase
 
         //実行失敗場合、
         $data = [
-            'url' => '/test-edit-2'
+            'url' => ''
         ];
         $this->post('/baser/admin/bc-content-link/content_links/edit/1', $data);
         //リダイレクトしないを確認
         $this->assertResponseCode(200);
         //エラーメッセージを確認
         $vars = $this->_controller->viewBuilder()->getVars();
-        $this->assertEquals(['content' => ['_required' => "関連するコンテンツがありません"]], $vars['contentLink']->getErrors());
+        $this->assertEquals(['url' => ['_empty' => "リンク先URLを入力してください。"]], $vars['contentLink']->getErrors());
     }
 
     /**

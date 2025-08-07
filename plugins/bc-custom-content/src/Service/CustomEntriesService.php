@@ -317,20 +317,34 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 }
 
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
-                if (in_array($controlType, ['text', 'textarea'])) {
-                    $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
-                } elseif ($controlType === 'multiCheckbox') {
-                    if (!is_array($value)) $value = [$value];
-                    $c = [];
-                    foreach ($value as $v) {
-                        $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                if($link->custom_field->type == "BcCcRelated"){
+                    if (!empty($link->custom_field->meta['BcCcRelated']['display_type']) && $link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
+                        if (!is_array($value))$value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
                     }
-                    $conditions[] = ['AND' => $c];
-                } elseif ($controlType === 'checkbox') {
-                    if ($value) $conditions["CustomEntries.$key"] = $value;
-                } else {
-                    $conditions["CustomEntries.$key"] = $value;
+                }else{
+                    if (in_array($controlType, ['text', 'textarea'])) {
+                        $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
+                    } elseif ($controlType === 'multiCheckbox') {
+                        if (!is_array($value)) $value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } elseif ($controlType === 'checkbox') {
+                        if ($value) $conditions["CustomEntries.$key"] = $value;
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
+                    }
                 }
+
             }
         }
 
@@ -769,6 +783,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function autoConvert(array $data): array
     {
+        if(empty($this->CustomEntries->links)) return $data;
         foreach($this->CustomEntries->links as $link) {
             /** @var CustomLink $link */
             if (empty($data[$link->name])) continue;

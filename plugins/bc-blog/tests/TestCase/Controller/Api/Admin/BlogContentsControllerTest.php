@@ -12,7 +12,6 @@
 namespace BcBlog\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -176,13 +175,18 @@ class BlogContentsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('ブログ「更新 ブログ」を更新しました。', $result->message);
         $this->assertEquals('更新した!', $result->blogContent->description);
+
         //実行失敗
-        $data = ['id' => 100, 'description' => '更新した!'];
+        $data = [
+            'id' => 100,
+            'description' => '更新した!',
+            'feed_count' => 'abc'
+        ];
         $this->post('/baser/api/admin/bc-blog/blog_contents/edit/100.json?token=' . $this->accessToken, $data);
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
+        $this->assertEquals('RSSフィード出力件数は100までの数値で入力してください。', $result->errors->feed_count->range);
     }
 
     /**
