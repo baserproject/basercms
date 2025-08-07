@@ -783,6 +783,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function autoConvert(array $data): array
     {
+        if(empty($this->CustomEntries->links)) return $data;
         foreach($this->CustomEntries->links as $link) {
             /** @var CustomLink $link */
             if (empty($data[$link->name])) continue;
