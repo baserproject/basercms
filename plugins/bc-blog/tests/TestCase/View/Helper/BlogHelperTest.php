@@ -582,7 +582,7 @@ class BlogHelperTest extends BcTestCase
                 [],
                 '<ul class="bc-blog-category-list depth-1">
         <li class="bc-blog-category-list__item">
-      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+      <a href="/news/archives/category/name-1/name-2/name-3/name-4" current="1">title 1</a>          </li>
 </ul>'
             ],
             [
@@ -597,7 +597,7 @@ class BlogHelperTest extends BcTestCase
                 [],
                 '<ul class="bc-blog-category-list depth-1">
         <li class="bc-blog-category-list__item">
-      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1(2)</a>          </li>
+      <a href="/news/archives/category/name-1/name-2/name-3/name-4" current="1">title 1(2)</a>          </li>
 </ul>'
             ],
         ];
