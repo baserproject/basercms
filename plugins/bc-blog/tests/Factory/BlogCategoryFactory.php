@@ -48,8 +48,8 @@ class BlogCategoryFactory extends CakephpBaseFactory
                 'title' => $faker->title(),
                 'status' => true,
                 'parent_id' => null,
-                'lft' => null,
-                'rght' => null,
+                'lft' => 1,
+                'rght' => 2,
                 'created' => $faker->date(),
                 'modified' => $faker->date()
             ];
