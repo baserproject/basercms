@@ -2215,8 +2215,11 @@ class BcBaserHelperTest extends BcTestCase
      * testSetAlternateUrl
      * @dataProvider setCanonicalUrlDataProvider
      */
-    public function testSetCanonicalUrl($siteId, $url, $expected)
+    public function testSetCanonicalUrl($siteId, $url, $expected, $canonicalUrl = null)
     {
+        if (!is_null($canonicalUrl)) {
+            $this->BcBaser->getView()->set('canonicalUrl', $canonicalUrl);
+        }
         $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make([
             'id' => 2,
@@ -2241,6 +2244,8 @@ class BcBaserHelperTest extends BcTestCase
             [1, '/index.html', '<link href="https://localhost/" rel="canonical">'],
             [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical">'],
             [2, '/s/', '<link href="https://localhost/" rel="canonical">'],
+            [1, '/', '<link href="https://example.com" rel="canonical">', 'https://example.com'],
+            [1, '/', '', false],
         ];
     }
 
