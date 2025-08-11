@@ -2577,6 +2577,25 @@ class BcBaserHelper extends Helper
      */
     public function setCanonicalUrl()
     {
+        $canonicalUrl = $this->_View->get('canonicalUrl');
+        if ($canonicalUrl === false) {
+            return;
+        }
+        if ($canonicalUrl) {
+            $this->_View->assign('meta',
+                $this->BcHtml->meta('canonical',
+                    $this->getUrl($canonicalUrl, true),
+                    [
+                        'rel' => 'canonical',
+                        'type' => null,
+                        'title' => null,
+                        'inline' => false
+                    ]
+                )
+            );
+            return;
+        }
+
         $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
         if (!$currentSite) return;
 
