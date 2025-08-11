@@ -317,20 +317,34 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 }
 
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
-                if (in_array($controlType, ['text', 'textarea'])) {
-                    $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
-                } elseif ($controlType === 'multiCheckbox') {
-                    if (!is_array($value)) $value = [$value];
-                    $c = [];
-                    foreach ($value as $v) {
-                        $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                if($link->custom_field->type == "BcCcRelated"){
+                    if (!empty($link->custom_field->meta['BcCcRelated']['display_type']) && $link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
+                        if (!is_array($value))$value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
                     }
-                    $conditions[] = ['AND' => $c];
-                } elseif ($controlType === 'checkbox') {
-                    if ($value) $conditions["CustomEntries.$key"] = $value;
-                } else {
-                    $conditions["CustomEntries.$key"] = $value;
+                }else{
+                    if (in_array($controlType, ['text', 'textarea'])) {
+                        $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
+                    } elseif ($controlType === 'multiCheckbox') {
+                        if (!is_array($value)) $value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } elseif ($controlType === 'checkbox') {
+                        if ($value) $conditions["CustomEntries.$key"] = $value;
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
+                    }
                 }
+
             }
         }
 
@@ -769,6 +783,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function autoConvert(array $data): array
     {
+        if(empty($this->CustomEntries->links)) return $data;
         foreach($this->CustomEntries->links as $link) {
             /** @var CustomLink $link */
             if (empty($data[$link->name])) continue;
@@ -828,13 +843,13 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         if (empty($dateString)) {
             return $dateString;
         }
-        
+
         $timestamp = strtotime($dateString);
-        
+
         if ($timestamp === false) {
             return $dateString;
         }
-        
+
         if (strpos($dateString, ':') !== false) {
             if (strpos($dateString, ':') === strrpos($dateString, ':')) {
                 return date('Y/m/d H:i', $timestamp);
@@ -844,6 +859,103 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         } else {
             return date('Y/m/d', $timestamp);
         }
+    }
+
+    /**
+     * 指定したCustomEntryの前のエントリーを取得する
+     *
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPrevEntry(EntityInterface|CustomEntry $entry)
+    {
+        // CustomContentのlist_order, list_directionを取得
+        $customTable = $this->CustomTables->get($entry->custom_table_id, [
+            'contain' => ['CustomContents']
+        ]);
+        $customContent = $customTable->custom_content;
+        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
+        // orderBy用配列生成
+        $orderBy = [$orderField => 'ASC', 'id' => 'ASC'];
+        if($orderDirection === 'DESC') {
+            $operator = '>';
+        } else {
+            $operator = '<';
+        }
+        $query = $this->CustomEntries->find()
+            ->where([
+                'custom_table_id' => $entry->custom_table_id,
+                'status' => true,
+                $orderField . ' ' . $operator => $entry->{$orderField}
+            ])
+            ->orderBy($orderBy)
+            ->limit(1);
+        $prev = $query->first();
+        // 同じ値の場合はidで判定
+        if (!$prev) {
+            $query = $this->CustomEntries->find()
+                ->where([
+                    'custom_table_id' => $entry->custom_table_id,
+                    'status' => true,
+                    $orderField => $entry->{$orderField},
+                    'id ' . $operator => $entry->id
+                ])
+                ->orderBy($orderBy)
+                ->limit(1);
+            $prev = $query->first();
+        }
+        return $prev;
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーを取得する
+     *
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNextEntry(EntityInterface|CustomEntry $entry)
+    {
+        // CustomContentのlist_order, list_directionを取得
+        $customTable = $this->CustomTables->get($entry->custom_table_id, [
+            'contain' => ['CustomContents']
+        ]);
+        $customContent = $customTable->custom_content;
+        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
+        // orderBy用配列生成
+        $orderBy = [$orderField => 'DESC', 'id' => 'DESC'];
+        $operator = $orderDirection === 'DESC' ? '<' : '>';
+
+        $query = $this->CustomEntries->find()
+            ->where([
+                'custom_table_id' => $entry->custom_table_id,
+                'status' => true,
+                $orderField . ' ' . $operator => $entry->{$orderField}
+            ])
+            ->orderBy($orderBy)
+            ->limit(1);
+        $next = $query->first();
+        // 同じ値の場合はidで判定
+        if (!$next) {
+            $query = $this->CustomEntries->find()
+                ->where([
+                    'custom_table_id' => $entry->custom_table_id,
+                    'status' => true,
+                    $orderField => $entry->{$orderField},
+                    'id ' . $operator => $entry->id
+                ])
+                ->orderBy($orderBy)
+                ->limit(1);
+            $next = $query->first();
+        }
+        return $next;
     }
 
 }

@@ -100,6 +100,11 @@ class BlogPostsController extends BcAdminApiController
 
         $blogPost = $errors = null;
         try {
+            $blogContentId = $this->getRequest()->getData('blog_content_id');
+            if (!$blogContentId) {
+                throw new \InvalidArgumentException(__d('baser_core', 'ブログコンテンツIDが指定されていません。'));
+            }
+            $service->setupUpload($blogContentId);
             $blogPost = $service->create($this->request->getData());
             $message = __d('baser_core', '記事「{0}」を追加しました。', $blogPost->title);
             $this->BcMessage->setSuccess($message, true, false);
@@ -138,6 +143,11 @@ class BlogPostsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $blogPost = $errors = null;
         try {
+            $blogContentId = $this->getRequest()->getData('blog_content_id');
+            if (!$blogContentId) {
+                throw new \InvalidArgumentException(__d('baser_core', 'ブログコンテンツIDが指定されていません。'));
+            }
+            $service->setupUpload($blogContentId);
             $blogPost = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', '記事「{0}」を更新しました。', $blogPost->title);
             $this->BcMessage->setSuccess($message, true, false);

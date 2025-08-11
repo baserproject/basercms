@@ -249,6 +249,9 @@ class BlogHelper extends Helper
      */
     public function getTitle()
     {
+        if(!$this->currentContent) {
+            $this->setContent();
+        }
         return $this->currentContent->title;
     }
 

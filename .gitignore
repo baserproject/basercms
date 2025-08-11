@@ -139,3 +139,5 @@ node_modules
 /.cache
 /docker/nginx/*
 /docker/proxy/*
+/.github/instructions/local.instructions.md
+/.serena

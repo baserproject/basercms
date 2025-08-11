@@ -346,6 +346,7 @@ class BlogContentsTable extends BlogAppTable
      */
     public function constructEyeCatchSize($data)
     {
+        if(!$data) return $data;
         $eyeCatchSize = BcUtil::unserialize($data->eye_catch_size);
         // プロパティを変更するとエラー情報が消えてしまうので一旦退避
         $errors = $data->getErrors();

@@ -11,33 +11,31 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
-use BaserCore\Model\Entity\Content;
-use BaserCore\Test\Factory\UserFactory;
-use BaserCore\TestSuite\BcTestCase;
-use BcCustomContent\Model\Table\CustomEntriesTable;
-use BcCustomContent\Model\Table\CustomTablesTable;
-use BcCustomContent\Service\CustomEntriesService;
-use BaserCore\Test\Scenario\InitAppScenario;
-use BcCustomContent\Service\CustomEntriesServiceInterface;
-use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Factory\CustomFieldFactory;
-use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use BcCustomContent\Test\Scenario\CustomEntriesScenario;
-use BcCustomContent\Test\Scenario\CustomFieldsScenario;
-use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\Entity;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\ORM\TableRegistry;
-use BcCustomContent\Test\Factory\CustomLinkFactory;
-use Cake\Database\ValueBinder;
-use Cake\TestSuite\IntegrationTestTrait;
-use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use BaserCore\Service\BcDatabaseService;
-use BaserCore\Service\BcDatabaseServiceInterface;
 use TypeError;
+use Cake\ORM\Entity;
 use ReflectionClass;
-use ReflectionMethod;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use Cake\Database\ValueBinder;
+use BaserCore\Model\Entity\Content;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Service\BcDatabaseService;
+use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Service\BcDatabaseServiceInterface;
+use BcCustomContent\Service\CustomEntriesService;
+use BcCustomContent\Model\Table\CustomTablesTable;
+use BcCustomContent\Model\Table\CustomEntriesTable;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
 
 /**
  * CustomEntriesServiceTest
@@ -46,6 +44,77 @@ use ReflectionMethod;
  */
 class CustomEntriesServiceTest extends BcTestCase
 {
+    /**
+     * test getPrevEntry
+     */
+    public function test_getPrevEntry()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $customTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $entry1 = $this->CustomEntriesService->get(1); // 最初のエントリー
+        $entry2 = $this->CustomEntriesService->get(2); // 2番目
+        $entry3 = $this->CustomEntriesService->get(3); // 3番目
+
+        // entry1の前はentry2
+        $prev = $this->CustomEntriesService->getPrevEntry($entry1);
+        $this->assertEquals($entry2->id, $prev->id);
+        // entry2の前はentry3
+        $prev = $this->CustomEntriesService->getPrevEntry($entry2);
+        $this->assertEquals($entry3->id, $prev->id);
+        // entry3の前はnull
+        $prev = $this->CustomEntriesService->getPrevEntry($entry3);
+        $this->assertNull($prev);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getNextEntry
+     */
+    public function test_getNextEntry()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $customTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $entry1 = $this->CustomEntriesService->get(1); // 最初のエントリー
+        $entry2 = $this->CustomEntriesService->get(2); // 2番目
+        $entry3 = $this->CustomEntriesService->get(3); // 3番目
+
+        // entry1の次はentry2
+        $next = $this->CustomEntriesService->getNextEntry($entry3);
+        $this->assertEquals($entry2->id, $next->id);
+        // entry2の次はentry3
+        $next = $this->CustomEntriesService->getNextEntry($entry2);
+        $this->assertEquals($entry1->id, $next->id);
+        // entry3の次はnull
+        $next = $this->CustomEntriesService->getNextEntry($entry1);
+        $this->assertNull($next);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
 
     /**
      * ScenarioAwareTrait
@@ -1038,28 +1107,28 @@ class CustomEntriesServiceTest extends BcTestCase
 
         $result = $method->invoke($this->CustomEntriesService, '2025/5/4');
         $this->assertEquals('2025/05/04', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/5/10');
         $this->assertEquals('2025/05/10', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/10/5');
         $this->assertEquals('2025/10/05', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/05/04');
         $this->assertEquals('2025/05/04', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01');
         $this->assertEquals('2025/05/10 00:01', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/5/10 00:01:30');
         $this->assertEquals('2025/05/10 00:01:30', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '2025/05/10 00:01');
         $this->assertEquals('2025/05/10 00:01', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, 'not a date');
         $this->assertEquals('not a date', $result);
-        
+
         $result = $method->invoke($this->CustomEntriesService, '');
         $this->assertEquals('', $result);
     }

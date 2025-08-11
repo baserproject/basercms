@@ -16,6 +16,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -115,6 +116,10 @@ class CustomLinksControllerTest extends BcTestCase
         $customTable = $this->getService(CustomTablesServiceInterface::class);
 
         //テストデータを生成
+        CustomFieldFactory::make([
+            'id' => 1,
+            'name' => 'recruit_category',
+        ])->persist();
         $customTable->create([
             'type' => 'recruit',
             'name' => 'recruit',

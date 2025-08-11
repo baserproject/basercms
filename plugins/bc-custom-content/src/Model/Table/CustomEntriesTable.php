@@ -468,7 +468,7 @@ class CustomEntriesTable extends AppTable
      * @return Validator
      * @checked
      * @noTodo
-     * @unitTest 
+     * @unitTest
      */
     public function setValidateZenkakuHiragana(Validator $validator, CustomLink $link): Validator
     {
@@ -604,6 +604,7 @@ class CustomEntriesTable extends AppTable
      */
     public function autoConvert(ArrayObject $content)
     {
+        if(empty($this->links)) return $content;
         foreach($content as $key => $value) {
             $fieldLink = null;
             foreach($this->links as $link) {

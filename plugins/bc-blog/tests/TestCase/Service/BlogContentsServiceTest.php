@@ -12,7 +12,6 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
@@ -149,10 +148,11 @@ class BlogContentsServiceTest extends BcTestCase
 
         $data = [
             'id' => 100,
-            'description' => '更新した!'
+            'description' => '更新した!',
+            'feed_count' => 'abc',
         ];
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
-        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->expectExceptionMessage("RSSフィード出力件数は100までの数値で入力してください。");
         $this->BlogContentsService->update($record, $data);
     }
 
@@ -359,6 +359,58 @@ class BlogContentsServiceTest extends BcTestCase
         //with empty url
         $rs = $this->BlogContentsService->findByUrl('');
         $this->assertNull($rs);
+    }
+
+
+    /**
+     * test createIndexConditions
+     */
+    public function test_createIndexConditions()
+    {
+        $service = new BlogContentsService();
+
+        // descriptionのみ
+        $conditions = ['description' => '説明文'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('description LIKE', $sql);
+
+        // status=publishのみ
+        $conditions = ['status' => 'publish'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('status =', $sql); // 公開条件
+
+        // nameのみ
+        $conditions = ['name' => 'ブログ名'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('name =', $sql);
+
+        // titleのみ
+        $conditions = ['title' => 'タイトル'];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('title LIKE', $sql);
+
+        // description + status + name + title の複合条件
+        $conditions = [
+            'description' => '複合',
+            'status' => 'publish',
+            'name' => '複合名',
+            'title' => '複合タイトル'
+        ];
+        $query = $service->BlogContents->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('description LIKE', $sql);
+        $this->assertStringContainsString('status =', $sql);
+        $this->assertStringContainsString('name =', $sql);
+        $this->assertStringContainsString('title LIKE', $sql);
     }
 
 }

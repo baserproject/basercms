@@ -367,4 +367,70 @@ class UsersServiceTest extends BcTestCase
         $this->assertFalse($this->Users->isAvailable(3));
     }
 
+    /**
+     * test createIndexConditions
+     * UsersService::createIndexConditions の SQL条件生成を直接検証
+     */
+    public function test_createIndexConditions()
+    {
+        $query = $this->Users->Users->find();
+        // user_group_id
+        $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['user_group_id' => 2]]);
+        $this->assertStringContainsString('INNER JOIN user_groups UserGroups', $result->sql());
+        $this->assertStringContainsString('UserGroups.id = :c0', $result->sql());
+        $binder = $result->getValueBinder();
+        $params = $binder->bindings();
+        $found = false;
+        foreach ($params as $param) {
+            if ($param['value'] === 2) {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found, 'バインド値 2 が存在すること');
+
+        // name
+        $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['name' => 'admin']]);
+        $this->assertStringContainsString('name LIKE', $result->sql());
+        $binder = $result->getValueBinder();
+        $params = $binder->bindings();
+        $found = false;
+        foreach ($params as $param) {
+            if ($param['value'] === '%admin%') {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found, 'バインド値 %admin% が存在すること');
+
+        // email
+        $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['email' => 'test@example.com']]);
+        $this->assertStringContainsString('email LIKE', $result->sql());
+        $binder = $result->getValueBinder();
+        $params = $binder->bindings();
+        $found = false;
+        foreach ($params as $param) {
+            if ($param['value'] === '%test@example.com%') {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found, 'バインド値 %test@example.com% が存在すること');
+
+        // real_name
+        $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['real_name' => '山田']]);
+        $this->assertStringContainsString('real_name_1 LIKE', $result->sql());
+        $this->assertStringContainsString('real_name_2 LIKE', $result->sql());
+        $binder = $result->getValueBinder();
+        $params = $binder->bindings();
+        $found = false;
+        foreach ($params as $param) {
+            if ($param['value'] === '%山田%') {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found, 'バインド値 %山田% が存在すること');
+    }
+
 }

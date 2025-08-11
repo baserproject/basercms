@@ -21,6 +21,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Model\Entity\CustomContent;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesService;
@@ -363,19 +364,29 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             $postEntity = $request->getData();
         }
 
-        $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
-
         if ($postEntity && $customEntriesTable->hasBehavior('BcUpload')) {
-            // BcUpload ビヘイビアがある場合は、アップロードファイルを保存
+            // マルチチェックボックスを一旦変換
+            $tmpEntity = $customEntriesTable->patchEntity(
+                $customEntry ?? $customEntriesTable->newEmptyEntity(),
+                ($postEntity)?? []
+            );
+            // beforeMarshal イベントをオフにして一時ファイルを保存
+            $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
             $entity = $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999));
-            $postEntity = $entity->toArray();
+            // イベントオフの状態で、CustomEntry にキャスト
+            $entity = $customEntriesTable->newEntity($entity->toArray());
+            BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
+            // 一時エンティティをマージ
+            $entity = $customEntriesTable->patchEntity(
+                $entity,
+                $tmpEntity->toArray()
+            );
+        } else {
+            $entity = $customEntriesTable->patchEntity(
+                $customEntry ?? $customEntriesTable->newEmptyEntity(),
+                ($postEntity) ?? []
+            );
         }
-        $entity = $customEntriesTable->patchEntity(
-            $customEntry ?? $customEntriesTable->newEmptyEntity(),
-            $postEntity
-        );
-
-        BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
 
         $entity = $customEntriesTable->decodeRow($entity);
 
