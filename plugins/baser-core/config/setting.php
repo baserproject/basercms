@@ -384,10 +384,11 @@ return [
 
         /**
          * POST送信において CSRF をスキップするURL
+         * キーを指定しておかないとプラグインの設定をマージする場合に上書きされてしまう
          */
         'skipCsrfUrl' => [
-            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
-            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
+            'UsersLogin' => ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
+            'UsersRefreshToken' => ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
         ],
 
         /**
@@ -419,7 +420,7 @@ return [
 
         /**
          * bc_formのテンプレートを指定
-         * config/bc_form.phpを差し替える         
+         * config/bc_form.phpを差し替える
          *  プラグイン記法 (プラグイン名.テンプレート名)
          */
         //basercms/plugins/baser-core/src/View/AppView.php
