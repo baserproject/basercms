@@ -429,7 +429,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
           <?php
             echo $this->BcAdminForm->control('use_contents_folder_forbidden', [
               'type' => 'checkbox',
-              $checed,
               'label' => __d('baser_core', 'コンテンツフォルダの一覧機能を利用しない')
             ]);
           ?>
