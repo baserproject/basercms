@@ -13,6 +13,7 @@ namespace BcBlog\Test\Scenario;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
@@ -42,6 +43,8 @@ class BlogContentScenario implements FixtureScenarioInterface
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
             ->treeNode($id, $siteId, $parentId, $name, $url, $id, true, $tile)->persist();
         BlogContentFactory::make(['id' => $id, 'description' => 'ディスクリプション', 'template' => 'default'])->persist();
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $contentsTable->recover();
         return null;
     }
 
