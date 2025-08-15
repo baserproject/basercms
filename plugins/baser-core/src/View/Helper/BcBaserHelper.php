@@ -495,7 +495,7 @@ class BcBaserHelper extends Helper
         // - ハッシュタグから始まるURL
         $full = false;
         if (BcUtil::isInstalled()
-            && ($this->isSSL() && $ssl)
+            && ($ssl)
             && !(preg_match('/^(javascript|https?|ftp|tel|mailto):/', $srcUrl))
             && !(strpos($srcUrl, '//') === 0)
             && !preg_match('/^#/', $srcUrl)) {
