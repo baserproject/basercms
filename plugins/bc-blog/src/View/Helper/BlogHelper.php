@@ -662,11 +662,11 @@ class BlogHelper extends Helper
             foreach($post->blog_tags as $tag) {
                 if ($options['link']) {
                     $options['escape'] = true;
-                    $tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, $options), );
+                    $tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, false), $options);
                 } else {
                     $tags[] = [
                         'name' => $tag['name'],
-                        'url' => $this->getTagLinkUrl($crossingId, $tag, $options)
+                        'url' => $this->getTagLinkUrl($crossingId, $tag)
                     ];
                 }
             }
