@@ -647,7 +647,8 @@ class BlogHelper extends Helper
             'separator' => ' , ',
             'tag' => true,
             'crossing' => false,
-            'link' => true
+            'link' => true,
+            'ssl' => $this->BcBaser->isSSL()
         ], $options);
         $tags = [];
         if ($options['crossing']) {
