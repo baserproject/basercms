@@ -372,7 +372,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                     $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
 
                     // 設定ファイルでスキップの定義がされている場合はスキップ
-                    if(in_array($request->getPath(), $this->getSkipCsrfUrl())) return true;
+                    if($this->isSkipCsrfUrl($request->getPath())) return true;
 
                     // 領域が REST API でない場合はスキップしない
                     if (empty($authSetting['isRestApi'])) return false;
@@ -408,6 +408,47 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             $skipUrl[] = Router::url($url);
         }
         return $skipUrl;
+    }
+
+    /**
+     * CSRF をスキップするURLかどうかをワイルドカードパターンで判定
+     *
+     * ワイルドカード（*）を使用したパターンマッチングに対応
+     * 例: '/api/*' は '/api/users', '/api/posts' などにマッチ
+     *
+     * @param string $path チェック対象のパス
+     * @return bool スキップする場合は true
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    protected function isSkipCsrfUrl(string $path): bool
+    {
+        $skipUrls = $this->getSkipCsrfUrl();
+
+        foreach ($skipUrls as $skipUrl) {
+            // 完全一致チェック（従来の動作を維持）
+            if ($path === $skipUrl) {
+                return true;
+            }
+
+            // ワイルドカードパターンマッチング
+            if (strpos($skipUrl, '*') !== false) {
+                // ワイルドカードを正規表現に変換
+                $pattern = str_replace(
+                    ['*', '/'],
+                    ['.*', '\/'],
+                    $skipUrl
+                );
+                $pattern = '/^' . $pattern . '$/';
+
+                if (preg_match($pattern, $path)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
