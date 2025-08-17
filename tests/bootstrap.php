@@ -113,4 +113,5 @@ include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
     ['plugin' => 'BcThemeFile'],
     ['plugin' => 'BcUploader'],
     ['plugin' => 'BcWidgetArea'],
+    ['plugin' => 'CuMcp'],
 ]);
