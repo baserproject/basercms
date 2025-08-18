@@ -55,7 +55,6 @@ class ContentFoldersController extends BcFrontAppController
         $siteConfig = $siteConfigsService->get();
         if (!empty($siteConfig->use_contents_folder_forbidden)) {
             throw new \Cake\Http\Exception\ForbiddenException(__d('baser_core', 'indexページが見つかりませんでした。'));
-            exit;
         }
         $contentFolder = $service->get(
             $this->getRequest()->getAttribute('currentContent')->entity_id,
