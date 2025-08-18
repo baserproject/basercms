@@ -18,8 +18,7 @@
         "cakephp/plugin-installer": "^2.0",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "6.1.0",
-        "mobiledetect/mobiledetectlib": "^3.74",
-        "ecatchup/cu-mcp": "dev-main"
+        "mobiledetect/mobiledetectlib": "^3.74"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -127,14 +126,5 @@
         "baserproject/bc-theme-sample": "5.1.9",
         "baserproject/bc-uploader": "5.1.9",
         "baserproject/bc-widget-area": "5.1.9"
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./plugins/CuMcp",
-            "options": {
-                "symlink": true
-            }
-        }
-    ]
+    }
 }
