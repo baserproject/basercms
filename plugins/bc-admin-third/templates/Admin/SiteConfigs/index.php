@@ -421,6 +421,25 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false);
         </td>
       </tr>
 
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_contents_folder_forbidden', __d('baser_core', 'コンテンツフォルダ')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php
+            echo $this->BcAdminForm->control('use_contents_folder_forbidden', [
+              'type' => 'checkbox',
+              'label' => __d('baser_core', 'コンテンツフォルダの一覧機能を利用しない')
+            ]);
+          ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <?php echo __d('baser_core', 'indexページの無いコンテツフォルダにアクセスした際に、<br>一覧機能を使わずに403を返します。') ?>
+          </div>
+          <?php echo $this->BcAdminForm->error('use_contents_folder_forbidden') ?>
+        </td>
+      </tr>
+
       <?php echo $this->BcAdminForm->dispatchAfterForm('Site') ?>
 
     </table>
