@@ -271,6 +271,7 @@ return [
             'BcEditorTemplate',
             'BcFavorite',
             'BcMail',
+            'BcSeo',
             'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',

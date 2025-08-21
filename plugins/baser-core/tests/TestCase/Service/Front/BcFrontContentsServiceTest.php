@@ -55,11 +55,10 @@ class BcFrontContentsServiceTest extends BcTestCase
      */
     public function test_getViewVarsForFront()
     {
-        ContentFactory::make(['id' => 100, 'title' => 'test title', 'description' => 'description test', 'lft'=>1, 'rght'=>2])->persist();
+        ContentFactory::make(['id' => 100, 'title' => 'test title', 'lft'=>1, 'rght'=>2])->persist();
         $contentService = new ContentsService();
         $content = $contentService->get(100);
         $rs = $this->BcFrontContentsService->getViewVarsForFront($content, true);
-        $this->assertEquals('description test',$rs['description']);
         $this->assertEquals('test title',$rs['title']);
         $this->assertEquals('test title',$rs['crumbs'][0]['name']);
     }

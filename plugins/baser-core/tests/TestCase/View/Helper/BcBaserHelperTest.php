@@ -812,56 +812,41 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * meta タグ用のキーワードを取得する
-     * @param string $expected 期待値
-     * @param string|null $keyword 設定されるキーワードの文字列
+     * @param string $keyword 設定されるキーワードの文字列
      * @dataProvider getKeywordsDataProvider
      */
-    public function testGetKeywords($expected, $keyword = null)
+    public function testGetKeywords($keyword)
     {
-        SiteFactory::make(['id' => 1, 'keyword' => 'baser,CMS,コンテンツマネジメントシステム,開発支援'])->persist();
-        ContentFactory::make(['id' => 1, 'url' => '/about', 'site_id' => 1])->persist();
-
         $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/about')));
-
-        if ($keyword !== null) {
-            $this->BcBaser->setKeywords($keyword);
-        }
-        $this->assertEquals($expected, $this->BcBaser->getKeywords());
+        $this->BcBaser->setKeywords($keyword);
+        $this->assertEquals($keyword, $this->BcBaser->getKeywords());
     }
 
     public static function getKeywordsDataProvider()
     {
         return [
             ['baser,CMS,コンテンツマネジメントシステム,開発支援'],
-            ['baser,CMS,コンテンツマネジメントシステム,開発支援', ''],
-            ['baserCMS,国産,オープンソース', 'baserCMS,国産,オープンソース'],
+            ['baserCMS,国産,オープンソース'],
         ];
     }
 
     /**
      * meta タグ用のページ説明文を取得する
-     * @param string $expected 期待値
-     * @param string|null $description 設定されるキーワードの文字列
+     * @param string $description 設定されるキーワードの文字列
      * @return void
      * @dataProvider getDescriptionDataProvider
      */
-    public function testGetDescription($expected, $description = null)
+    public function testGetDescription($description)
     {
-        SiteFactory::make(['id' => 1, 'alias' => 'test', 'description' => 'baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'])->persist();
-        ContentFactory::make(['id' => 1, 'url' => '/test/', 'site_id' => 1])->persist();
-
         $this->BcBaser = new BcBaserHelper(new View($this->getRequest('/test/')));
-
-        if ($description !== null) {
-            $this->BcBaser->setDescription($description);
-        }
-        $this->assertEquals($expected, $this->BcBaser->getDescription());
+        $this->BcBaser->setDescription($description);
+        $this->assertEquals($description, $this->BcBaser->getDescription());
     }
 
     public static function getDescriptionDataProvider()
     {
         return [
-            ['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
+            ['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'],
             ['国産オープンソースのホームページです', '国産オープンソースのホームページです']
         ];
     }

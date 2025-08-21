@@ -30,7 +30,6 @@ class CreateContents extends BcMigration
             ->addColumn('rght', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('level', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('title', 'string', ['null' => true, 'default' => null, 'limit' => null])
-            ->addColumn('description', 'text', ['null' => true, 'default' => null, 'limit' => null])
             ->addColumn('eyecatch', 'string', ['null' => true, 'default' => null, 'limit' => null])
             ->addColumn('author_id', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('layout_template', 'string', ['null' => true, 'default' => null, 'limit' => 50])

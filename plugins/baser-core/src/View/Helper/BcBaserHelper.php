@@ -921,8 +921,9 @@ class BcBaserHelper extends Helper
         if (!empty($keywords)) {
             return $keywords;
         }
-        $currentSite = $this->getView()->getRequest()->getAttribute('currentSite');
-        return $currentSite->keyword ?? '';
+
+        $meta = $this->getSeoMeta(['keywords']);
+        return $meta['keywords']['value'] ?? '';
     }
 
     /**
@@ -939,11 +940,9 @@ class BcBaserHelper extends Helper
         if (!empty($description)) {
             return $description;
         }
-        if ($this->isHome()) {
-            $currentSite = $this->getView()->getRequest()->getAttribute('currentSite');
-            return $currentSite->description ?? '';
-        }
-        return '';
+
+        $meta = $this->getSeoMeta(['description']);
+        return $meta['description']['value'] ?? '';
     }
 
     /**

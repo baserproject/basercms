@@ -43,8 +43,6 @@ class SiteFactory extends CakephpBaseFactory
                 'alias' => null,
                 'theme' => 'BcThemeSample',
                 'status' => true,
-                'keyword' => implode(',', [$faker->text(5), $faker->text(5), $faker->text(5)]),
-                'description' => $faker->text(100),
                 'use_subdomain' => false,
                 'relate_main_site' => false,
                 'device' => null,

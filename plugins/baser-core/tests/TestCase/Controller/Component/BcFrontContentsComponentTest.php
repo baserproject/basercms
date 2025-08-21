@@ -101,7 +101,6 @@ class BcFrontContentsComponentTest extends BcTestCase
         $layout = $Controller->viewBuilder()->getLayout();
         $vars = $Controller->viewBuilder()->getVars();
         $this->assertEquals($this->ContentsService->getParentLayoutTemplate($page->content->id), $layout);
-        $this->assertIsString($vars['description']);
         $this->assertIsString($vars['title']);
 
     }
