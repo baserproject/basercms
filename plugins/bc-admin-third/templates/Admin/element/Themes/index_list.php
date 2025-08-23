@@ -73,7 +73,7 @@ use Cake\Core\Configure;
             <?php endif ?>
           </p>
         </div>
-        <?php if ($defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
+        <?php if ($defaultDataPatterns && $this->BCBaser->isLinkEnabled($this->Url->build(['action' => 'load_default_data_pattern']))): ?>
           <?php echo $this->BcAdminForm->create(null, ['url' => ['action' => 'load_default_data_pattern'], 'id' => 'ThemeLoadDefaultDataPatternForm']) ?>
           <?php echo $this->BcAdminForm->control('default_data_pattern', ['type' => 'select', 'options' => $defaultDataPatterns]) ?>
           <?php echo $this->BcAdminForm->submit(__d('baser_core', '初期データ読込'), ['class' => 'bca-btn', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern']) ?>
