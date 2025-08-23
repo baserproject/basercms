@@ -63,9 +63,11 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function get($id): EntityInterface
+    public function get($id, array $queryParams = []): EntityInterface
     {
-        return $this->SearchIndexes->get($id);
+        return $this->SearchIndexes->get($id,
+            conditions: $this->createIndexConditions($queryParams)
+        );
     }
 
     /**
