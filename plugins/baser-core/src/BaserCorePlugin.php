@@ -561,7 +561,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             ];
         }
 
-        $service->loadIdentifier('Authentication.Password', [
+        $service->identifiers()->load('Authentication.Password', [
             'fields' => [
                 'username' => $authSetting['username'],
                 'password' => $authSetting['password']
@@ -604,7 +604,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 'userModel' => $authSetting['userModel'],
             ],
         ]);
-        $service->loadIdentifier('Authentication.JwtSubject', [
+        $service->identifiers()->load('Authentication.JwtSubject', [
             'resolver' => [
                 'className' => 'BaserCore.PrefixOrm',
                 'userModel' => $authSetting['userModel'],
@@ -618,7 +618,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 'password' => $authSetting['password']
             ],
         ]);
-        $service->loadIdentifier('Authentication.Password', [
+        $service->identifiers()->load('Authentication.Password', [
             'returnPayload' => false,
             'fields' => [
                 'username' => $authSetting['username'],
