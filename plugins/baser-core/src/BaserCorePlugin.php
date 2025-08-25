@@ -251,6 +251,10 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $path = [];
         foreach($themes as $theme) {
             $pluginsPath = CorePlugin::path($theme) . 'plugins' . DS;
+            // path() を実行するとプラグインクラスがコレクションに登録されてしまう
+            // ここで登録されてしまうと、対象プラグインの bootstrap() が正常に実行されないため
+            // ここでは一旦削除する。
+            CorePlugin::getCollection()->remove($theme);
             if (!is_dir($pluginsPath)) continue;
             $path[] = $pluginsPath;
         }
@@ -280,7 +284,16 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $themes = [];
         foreach($sites as $site) {
             if ($site->theme) {
-                if (!CorePlugin::isLoaded($site->theme) && !is_dir(CorePlugin::path($site->theme))) continue;
+                if (!CorePlugin::isLoaded($site->theme)) {
+                	$pluginPath = CorePlugin::path($site->theme);
+                    // path() を実行するとプラグインクラスがコレクションに登録されてしまう
+                    // ここで登録されてしまうと、対象プラグインの bootstrap() が正常に実行されないため
+                    // ここでは一旦削除する。
+                	CorePlugin::getCollection()->remove($site->theme);
+                	if(!is_dir($pluginPath)) {
+                		continue;
+                	}
+                }
                 if(in_array($site->theme, $themes)) continue;
                 $themes[] = $site->theme;
             }

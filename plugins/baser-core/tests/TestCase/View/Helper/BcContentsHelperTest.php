@@ -231,7 +231,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         // TODO: configが設定されてない場合だとすべてtrueで通ってしまうため再確認要
         $this->loginAdmin($this->getRequest(), $userGroup);
-        $this->BcContents->setConfig('items.' . $type . '.url.' . $action, 'sample');
+        $this->BcContents->setConfig('items.' . $type . '.permissionCheckUrl.' . $action, 'sample');
         $result = $this->BcContents->isActionAvailable($type, $action, $entityId);
         $this->assertEquals($expect, $result);
     }

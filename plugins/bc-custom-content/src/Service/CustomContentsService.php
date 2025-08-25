@@ -175,7 +175,7 @@ class CustomContentsService implements CustomContentsServiceInterface
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
         }
-        if ($postData['custom_table_id']) {
+        if (!empty($postData['custom_table_id'])) {
             $options['validate'] = 'withTable';
         }
 
@@ -276,6 +276,7 @@ class CustomContentsService implements CustomContentsServiceInterface
 
         $templatesPaths = array_merge(
             [Plugin::templatePath($site->getAppliedTheme()) . 'plugin' . DS . 'BcCustomContent' . DS],
+            [Plugin::templatePath($site->getAppliedTheme())],
             App::path('templates'),
             [Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . 'plugin' . DS . 'BcCustomContent' . DS],
             [Plugin::templatePath('BcCustomContent')]

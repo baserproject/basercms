@@ -259,42 +259,53 @@ class CustomFieldsServiceTest extends BcTestCase
     }
 
     /**
-     * test getControlSource
+     * test createIndexConditions
      */
-    public function test_getControlSource()
+    public function test_createIndexConditions()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        //$field == 'field_type'
-        $rs = $this->CustomFieldsService->getControlSource('field_type');
-        $this->assertArrayHasKey('基本', $rs);
-        $this->assertArrayHasKey('日付', $rs);
-        $this->assertArrayHasKey('選択', $rs);
-        $this->assertArrayHasKey('コンテンツ', $rs);
-        $this->assertArrayHasKey('その他', $rs);
+        $service = $this->CustomFieldsService;
 
-        //$field == 'validate'
-        $rs = $this->CustomFieldsService->getControlSource('validate');
-        $this->assertEquals($rs, [
-            'EMAIL' => 'Eメール形式チェック',
-            'EMAIL_CONFIRM' => 'Eメール比較チェック',
-            'NUMBER' => '数値チェック',
-            'HANKAKU' => '半角英数チェック',
-            'ZENKAKU_KATAKANA' => '全角カタカナチェック',
-            'ZENKAKU_HIRAGANA' => '全角ひらがなチェック',
-            'DATETIME' => '日付チェック',
-            'MAX_FILE_SIZE' => 'ファイルアップロードサイズ制限',
-            'FILE_EXT' => 'ファイル拡張子チェック'
-        ]);
+        // statusのみ
+        $conditions = ['status' => 1];
+        $query = $service->CustomFields->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('status =', $sql);
 
-        //$field == 'validate'
-        $rs = $this->CustomFieldsService->getControlSource('auto_convert');
-        $this->assertEquals($rs, [
-            'CONVERT_HANKAKU' => '半角変換',
-            'CONVERT_ZENKAKU' => '全角変換'
-        ]);
+        // titleのみ
+        $conditions = ['title' => 'テスト'];
+        $query = $service->CustomFields->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('title LIKE', $sql);
 
-        //$field == 'other'
-        $rs = $this->CustomFieldsService->getControlSource('other');
-        $this->assertEquals($rs, []);
+        // typeのみ
+        $conditions = ['type' => 'BcCcText'];
+        $query = $service->CustomFields->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('field_type =', $sql);
+
+        // nameのみ
+        $conditions = ['name' => 'test_name'];
+        $query = $service->CustomFields->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('name =', $sql);
+
+        // status + title + type + name の複合条件
+        $conditions = [
+            'status' => 1,
+            'title' => '複合',
+            'type' => 'BcCcText',
+            'name' => '複合名'
+        ];
+        $query = $service->CustomFields->find();
+        $query = $service->createIndexConditions($query, $conditions);
+        $sql = $query->sql();
+        $this->assertStringContainsString('status =', $sql);
+        $this->assertStringContainsString('title LIKE', $sql);
+        $this->assertStringContainsString('field_type =', $sql);
+        $this->assertStringContainsString('name =', $sql);
     }
 }

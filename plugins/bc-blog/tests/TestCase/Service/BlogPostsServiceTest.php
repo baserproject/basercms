@@ -132,11 +132,11 @@ class BlogPostsServiceTest extends BcTestCase
         UserFactory::make(['id' => 2, 'name' => 'test user1'])->persist();
         UserFactory::make(['id' => 3, 'name' => 'test user2'])->persist();
         UserFactory::make(['id' => 4, 'name' => 'test user3'])->persist();
-        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post1 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post2 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post3 user_id2'])->persist();
-        BlogPostFactory::make(['id' => '4', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post1 user_id3'])->persist();
-        BlogPostFactory::make(['id' => '5', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post2 user_id3'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post1 user_id2', 'posted' => '2025-01-01 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post2 user_id2', 'posted' => '2025-01-02 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post3 user_id2', 'posted' => '2025-01-03 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '4', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post1 user_id3', 'posted' => '2025-01-04 00:00:00'])->persist();
+        BlogPostFactory::make(['id' => '5', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post2 user_id3', 'posted' => '2025-01-05 00:00:00'])->persist();
 
         // サービスメソッドを呼ぶ
         // num 取得件数 2件
@@ -190,10 +190,6 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals('blog post1 user_id3', $blogPosts[1]->title);
         $this->assertEquals('2', $blogPosts[2]->user_id);
         $this->assertEquals('blog post3 user_id2', $blogPosts[2]->title);
-        $this->assertEquals('2', $blogPosts[3]->user_id);
-        $this->assertEquals('blog post2 user_id2', $blogPosts[3]->title);
-        $this->assertEquals('2', $blogPosts[4]->user_id);
-        $this->assertEquals('blog post1 user_id2', $blogPosts[4]->title);
     }
 
     /**

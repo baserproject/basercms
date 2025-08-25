@@ -11,18 +11,25 @@
 
 namespace BcCustomContent\View\Helper;
 
-use BaserCore\Utility\BcContainerTrait;
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\Helper\BcTimeHelper;
-use BcCustomContent\Model\Entity\CustomContent;
-use BcCustomContent\Model\Entity\CustomEntry;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\View\Helper\BcTimeHelper;
+use Cake\Http\Exception\NotFoundException;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomField;
+use BaserCore\Service\ContentsServiceInterface;
+use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
-use Cake\Utility\Hash;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
+use Cake\Datasource\EntityInterface;
 
 /**
  * CustomContentHelper
@@ -170,7 +177,7 @@ class CustomContentHelper extends CustomContentAppHelper
      */
     public function getPublished(CustomEntry $entry)
     {
-        return $this->BcTime->format($entry->created);
+        return $this->BcTime->format($entry->published);
     }
 
     /**
@@ -273,12 +280,12 @@ class CustomContentHelper extends CustomContentAppHelper
      * Get Field
      * @param int $tableId
      * @param string $fieldName
-     * @return false
+     * @return CustomField|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getField(int $tableId, string $fieldName)
+    public function getField(int $tableId, string $fieldName): CustomField|false
     {
         $link = $this->getLink($tableId, $fieldName);
         if (!$link || empty($link->custom_field)) return false;
@@ -371,6 +378,286 @@ class CustomContentHelper extends CustomContentAppHelper
     {
         $customLink = $this->getLink($entry->custom_table_id, $fieldName);
         return (bool)$customLink->display_front;
+    }
+
+    /**
+     * フィールド名を指定して、登録されているアイテムのリストを取得する
+     *
+     * @param string $fieldName
+     */
+    public function getFieldItemList(Int $contentId, string $fieldName, array $options = [])
+    {
+        $options = array_merge([
+            'link' => true
+        ], $options);
+
+        $customFieldsTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomFields');
+        $customField = $customFieldsTable->find()
+            ->matching('CustomLinks', function($q) use($fieldName) {
+                return $q->where(['CustomLinks.name' => $fieldName]);
+            })
+            ->matching('CustomLinks.CustomTables.CustomContents.Contents', function($q) use($contentId) {
+                return $q->where(['Contents.id' => $contentId]);
+            })
+            ->contain([
+                'CustomLinks',
+                'CustomLinks.CustomTables',
+                'CustomLinks.CustomTables.CustomContents',
+                'CustomLinks.CustomTables.CustomContents.Contents'
+            ]
+        )->first();
+
+        if(!$customField) {
+            return [];
+        }
+
+        $type = $customField->type;
+        $hasArchives = Configure::read('BcCustomContent.fieldTypes.' . $type . '.hasArchives');
+        if($hasArchives !== true) {
+            return [];
+        }
+
+        if (method_exists($this->{$type}, 'getFieldItemList')) {
+            $source = $this->{$type}->getFieldItemList($contentId, $fieldName, $options);
+            // 配列のキーが連想配列かどうかを確認し、連想配列の場合はキーを取得
+            if(!isset($source[0])) {
+                $targets = array_keys($source);
+                $values = array_values($source);
+            } else {
+                $targets = $values = $source;
+            }
+        } else {
+            $targets = $values = explode("\n", $customField->source);
+        }
+
+        $customContent = $customField->custom_links[0]->custom_table->custom_content;
+        $customContentFrontService = $this->getService(CustomContentFrontServiceInterface::class);
+        $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customEntriesTable->setup($customContent->custom_table_id);
+        foreach ($targets as $key => $item) {
+            if ($customContentFrontService->getCustomEntries($customContent, [$fieldName => $item])->count() === 0) {
+                unset($values[$key]);
+                unset($targets[$key]);
+            }
+        }
+
+        // リンクを表示する
+        if ($options['link'] == true) {
+            $linkValues = [];
+            foreach ($values as $key => $value) {
+                $linkValues[] = $this->BcBaser->getLink($value, '/' . $customContent->content->name . '/archives/' . $fieldName . '/' . $targets[$key]);
+            }
+            return $linkValues;
+        }
+        return $values;
+
+    }
+
+    /**
+     * カスタムエントリーが存在する年のリストを取得する
+     */
+    public function getYearList(Int $contentId)
+    {
+        $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentTable->find()
+            ->select(['entity_id'])
+            ->where(['id' => $contentId])
+            ->first();
+        if (!$content) return [];
+        $entityId = $content->entity_id;
+        if(!$entityId) return [];
+
+        $customContentTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+        $customTable = $customContentTable->find()
+            ->select(['custom_table_id'])
+            ->where(['id' => $entityId])
+            ->first();
+
+        // カスタムテーブルのIDを取得
+        $targetEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $targetEntries->setup($customTable->custom_table_id);
+        // カスタムテーブルの情報を取得
+        $tables = TableRegistry::getTableLocator()->get('BcCustomContent.CustomTables');
+        // カスタムテーブルのIDを指定して、テーブル情報を取得
+        $targetTable = $tables->find()
+            ->where(['id' => $targetEntries->tableId])
+            ->first();
+
+        $records = $targetEntries->find()
+            ->select(['year' => 'YEAR(created)'])
+            ->distinct(['year'])
+            ->all()
+            ->toArray();
+
+        foreach ($records as $record) {
+            $years[] = $this->BcBaser->getLink($record->year, '/' . $targetTable->name . '/year/' . $record->year);
+        }
+        return $years;
+    }
+
+    /**
+     * エントリーリストを取得する
+     * @param string $contentsName
+     * @param int $limit
+     * @param array $options
+     * @return string
+     */
+    public function getEntries(string $contentsName, int $limit = 5, array $options = []): string
+    {
+        $options = array_merge([
+            'limit' => $limit,
+        ], $options);
+        $contentService = $this->getService(ContentsServiceInterface::class);
+        $url = $this->parseContentsName($contentsName);
+        $content = $contentService->Contents->findByUrl($url, ['Contain' => ['CustomContents']]);
+        if($content->type !== 'CustomContent') {
+            throw new NotFoundException(__d('baser_core', '指定されたコンテンツは存在しません。'));
+        }
+        $service = $this->getService(CustomContentFrontServiceInterface::class);
+        $customContent = $service->ContentsService->get($content->entity_id);
+        $service->EntriesService->setup($content->entity_id);
+        $entities = $service->EntriesService->getIndex($options);
+        return $this->BcBaser->getElement("BcCustomContent.../CustomContent/{$customContent->template}/entries", [
+            'customEntries' => $entities,
+            'customContent' => $customContent
+        ]);
+    }
+
+    /**
+     * コンテンツ名を解析する
+     * @param string $contentsName
+     * @return string
+     */
+    Public function parseContentsName (string $contentsName): string
+    {
+        if(!preg_match('/^\//', $contentsName)) {
+            $contentsName = '/' . $contentsName;
+        }
+        if(!preg_match('/\/$/', $contentsName)) {
+            $contentsName .= '/';
+        }
+        return $contentsName;
+    }
+
+    /**
+     * エントリーリストを出力する
+     * @param string $contentsName
+     * @param int $limit
+     * @param array $options
+     * @return void
+     */
+    public function entries(string $contentsName, int $limit = 5, array $options = []): void
+    {
+        echo $this->getEntries($contentsName, $limit, $options);
+    }
+
+    /**
+     * 指定したCustomEntryの前のエントリーを取得する
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function getPrevEntry(CustomEntry|EntityInterface $entry)
+    {
+        $service = $this->getService(CustomEntriesServiceInterface::class);
+        return $service->getPrevEntry($entry);
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーを取得する
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function getNextEntry(CustomEntry|EntityInterface $entry)
+    {
+        $service = $this->getService(CustomEntriesServiceInterface::class);
+        return $service->getNextEntry($entry);
+    }
+
+    /**
+     * 指定したCustomEntryの前のエントリーが存在するか判定する
+     * @param CustomEntry $entry
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function hasPrevEntry(CustomEntry|EntityInterface $entry): bool
+    {
+        return $this->getPrevEntry($entry) !== null;
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーが存在するか判定する
+     * @param CustomEntry $entry
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドに付きテスト不要
+     */
+    public function hasNextEntry(CustomEntry|EntityInterface $entry): bool
+    {
+        return $this->getNextEntry($entry) !== null;
+    }
+
+    /**
+     * 前のエントリーへのリンクを出力する
+     * @param CustomEntry $entry 現在のエントリー
+     * @param array $options リンクタグのオプション（text: リンクテキスト, default: '前の記事へ', htmlAttributes: aタグ属性）
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function prevLink(CustomEntry|EntityInterface $entry, string $title = '', array $options = []): void
+    {
+        $prev = $this->getPrevEntry($entry);
+        $options = array_merge(['class' => 'prev-link', 'arrow' => '≪ '], $options);
+        $arrow = $options['arrow'];
+        unset($options['arrow']);
+        if ($prev) {
+            if (!$title) {
+                $title = $prev->title;
+            }
+            if ($arrow) {
+                $title = $arrow . $title;
+            }
+            $url = $this->getEntryUrl($prev, false);
+            echo $this->BcBaser->getLink($title, $url, $options);
+        }
+    }
+
+    /**
+     * 次のエントリーへのリンクを出力する
+     * @param CustomEntry $entry 現在のエントリー
+     * @param string $title リンクテキスト（空の場合は自動生成）
+     * @param array $options リンクタグのオプション（class, arrowなど）
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function nextLink(CustomEntry|EntityInterface $entry, string $title = '', array $options = []): void
+    {
+        $next = $this->getNextEntry($entry);
+        $options = array_merge(['class' => 'next-link', 'arrow' => ' ≫'], $options);
+        $arrow = $options['arrow'];
+        unset($options['arrow']);
+        if ($next) {
+            if (!$title) {
+                $title = $next->title;
+            }
+            if ($arrow) {
+                $title = $title . $arrow;
+            }
+            $url = $this->getEntryUrl($next, false);
+            echo $this->BcBaser->getLink($title, $url, $options);
+        }
     }
 
 }

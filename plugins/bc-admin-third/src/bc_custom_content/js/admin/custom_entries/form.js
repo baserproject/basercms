@@ -43,7 +43,13 @@ const customEntriesForm = {
         window.open('', 'preview');
         const form = $(this).parents('form');
         const action = form.attr('action');
-        const previewUrl = $.bcUtil.adminBaseUrl + 'baser-core/preview/view?url=' + customEntriesForm.fullUrl + '&preview=default';
+
+        var previewMode  = '&preview=default';
+        if ($("#ContentPreviewMode").val() == 'draft') {
+            previewMode = '&preview=draft';
+        }
+
+        const previewUrl = $.bcUtil.adminBaseUrl + 'baser-core/preview/view?url=' + customEntriesForm.fullUrl + previewMode;
         const tokenUrl = $.bcUtil.baseUrl + '/baser-core/bc_form/get_token?requestview=false'
         form.attr('target', 'preview').attr('action', previewUrl).submit();
         form.attr('target', '_self').attr('action', action);

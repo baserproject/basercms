@@ -236,6 +236,8 @@ class CustomTablesService implements CustomTablesServiceInterface
                 }
             }
 
+            $currentHasChild = $entity->has_child;
+
             /** @var CustomTable $entity */
             $entity = $this->CustomTables->patchEntity($entity, $postData);
             $entity = $this->CustomTables->saveOrFail($entity);
@@ -259,6 +261,12 @@ class CustomTablesService implements CustomTablesServiceInterface
 
             // フィールドの追加処理
             $customEntriesService->addFields($entity->id, $entity->custom_links);
+
+            if(!$currentHasChild && !empty($postData['has_child'])) {
+                $customEntriesService->setup($entity->id);
+                $customEntriesService->CustomEntries->addBehavior('Tree', ['level' => 'level']);
+                $customEntriesService->CustomEntries->recover();
+            }
 
         } catch (\Throwable $e) {
             $this->CustomTables->getConnection()->rollback();

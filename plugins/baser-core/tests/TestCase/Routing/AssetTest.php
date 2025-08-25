@@ -60,4 +60,56 @@ class AssetTest extends BcTestCase
         $folder->delete();
     }
 
+    /**
+     * webrootメソッドのカスタマイズ部分のテスト
+     *
+     * 1. フロントテーマ（BcThemeSample）が最優先
+     * 2. フロントテーマ削除→ドキュメントルート直下が優先
+     * 3. ドキュメントルート削除→フロントデフォルトテーマが優先
+     * 4. フロントデフォルトテーマ削除→管理画面テーマが優先
+     */
+    public function testWebrootCustomize()
+    {
+        \Cake\Core\Configure::write('BcApp.coreFrontTheme', 'BcFront');
+        \Cake\Core\Configure::write('BcApp.coreAdminTheme', 'BcAdminThird');
+
+        $file = 'css/priority.css';
+        $wwwRoot = ROOT . DS . 'webroot' . DS;
+        $frontThemeDir = $wwwRoot . 'bc_theme_sample' . DS . 'css' . DS;
+        $frontDefaultThemeDir = $wwwRoot . 'bc_front' . DS . 'css' . DS;
+        $adminThemeDir = $wwwRoot . 'bc_admin_third' . DS . 'css' . DS;
+        $docRootDir = $wwwRoot . 'css' . DS;
+
+        // すべての場所にファイルを作成
+        @mkdir($frontThemeDir, 0777, true);
+        @mkdir($frontDefaultThemeDir, 0777, true);
+        @mkdir($adminThemeDir, 0777, true);
+        @mkdir($docRootDir, 0777, true);
+        file_put_contents($frontThemeDir . 'priority.css', 'body{color:red;}');
+        file_put_contents($frontDefaultThemeDir . 'priority.css', 'body{color:blue;}');
+        file_put_contents($adminThemeDir . 'priority.css', 'body{color:green;}');
+        file_put_contents($docRootDir . 'priority.css', 'body{color:yellow;}');
+
+        // 1. フロントテーマ（BcThemeSample）が最優先
+        $result = \Cake\Routing\Asset::webroot($file, ['theme' => 'BcThemeSample']);
+        $this->assertEquals('/bc_theme_sample/css/priority.css', $result, 'フロントテーマ（BcThemeSample）が最優先');
+
+        // 2. フロントテーマ削除→ドキュメントルート直下が優先
+        unlink($frontThemeDir . 'priority.css');
+        $result = \Cake\Routing\Asset::webroot($file, ['theme' => 'BcThemeSample']);
+        $this->assertEquals('/css/priority.css', $result, 'ドキュメントルート直下が2番目');
+
+        // 3. ドキュメントルート削除→フロントデフォルトテーマが優先
+        unlink($docRootDir . 'priority.css');
+        $result = \Cake\Routing\Asset::webroot($file, ['theme' => 'BcThemeSample']);
+        $this->assertEquals('/bc_front/css/priority.css', $result, 'フロントデフォルトテーマが3番目');
+
+        // 4. フロントデフォルトテーマ削除→管理画面テーマが優先
+        unlink($frontDefaultThemeDir . 'priority.css');
+        $result = \Cake\Routing\Asset::webroot($file, ['theme' => 'BcThemeSample']);
+        $this->assertEquals('/bc_admin_third/css/priority.css', $result, '管理画面デフォルトテーマが4番目');
+
+        // 後始末
+        unlink($adminThemeDir . 'priority.css');
+    }
 }

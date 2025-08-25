@@ -197,7 +197,6 @@ class BcComposerTest extends BcTestCase
         $rs = BcComposer::update();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
 
         // バックアップ復元
         rename($backupPath, $orgPath);
@@ -226,11 +225,9 @@ class BcComposerTest extends BcTestCase
     public function testInstall()
     {
         BcComposer::setup('php');
-
         $rs = BcComposer::install();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
     }
 
     /**

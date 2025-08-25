@@ -178,13 +178,16 @@ class CustomContentsControllerTest extends BcTestCase
         $this->assertEquals('データが見つかりません。', $result->message);
 
         //無効なIDを指定した場合、
-        $this->post('/baser/api/admin/bc-custom-content/custom_contents/edit/1.json?token=' . $this->accessToken, ['custom_table_id' => 1]);
+        $this->post('/baser/api/admin/bc-custom-content/custom_contents/edit/1.json?token=' . $this->accessToken, [
+            'custom_table_id' => 1,
+            'list_count' => 'abc'
+        ]);
         //ステータスを確認
         $this->assertResponseCode(400);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
+        $this->assertEquals('一覧表示件数は100までの数値で入力してください。', $result->errors->list_count->range);
     }
 
     /**

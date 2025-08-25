@@ -25,7 +25,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Database\Exception\MissingConnectionException;
-use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Http\UriFactory;
@@ -353,6 +352,7 @@ class BcUtil
      */
     public static function verpoint($version)
     {
+        if(!$version) return 0;
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {

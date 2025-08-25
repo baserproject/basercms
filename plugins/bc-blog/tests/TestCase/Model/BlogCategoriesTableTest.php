@@ -17,7 +17,6 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcBlog\Model\Entity\BlogCategory;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
@@ -453,7 +452,7 @@ class BlogCategoriesTableTest extends BcTestCase
             'id' => 3,
             'name' => '新着情報記事管理',
             'user_group_id' => 3,
-            'url' => '/baser/api/admin/bc-blog/*',
+            'url' => '/baser/admin/bc-blog/*',
             'auth' => true,
             'status' => true
         ])->persist();
@@ -466,7 +465,7 @@ class BlogCategoriesTableTest extends BcTestCase
             'id' => 2,
             'name' => '新着情報記事管理ブロック',
             'user_group_id' => 2,
-            'url' => '/baser/api/admin/bc-blog/*',
+            'url' => '/baser/admin/bc-blog/*',
             'auth' => false,
             'status' => true
         ])->persist();

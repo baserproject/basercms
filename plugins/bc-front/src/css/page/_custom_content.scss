@@ -53,7 +53,13 @@
   &-description {
     margin-bottom: 60px;
   }
-
+  &-archives-title {
+    font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    padding: 0 !important;;
+    background: none !important;
+    font-size: 24px !important;
+    overflow-wrap: anywhere;
+  }
   &-entries {
     letter-spacing: 0.05rem;
     line-height: 1.6;

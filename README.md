@@ -12,7 +12,7 @@
     </a>
 </p>
 
-baserCMS is a website development framework with WebAPI that runs on PHP8 and CakePHP4.
+baserCMS is a website development framework with WebAPI that runs on PHP8 and CakePHP5.
 
 The plugins such as "Mail Forms" and "Blogs", which are the minimum required for the Website, are equipped from the beginning as "Core Plugins", and a mechanism is provided to centrally manage those "Contents". The management system also has a tree-like display that makes it easy to understand the site structure, and intuitive operation is possible. It also has a REST API and "Custom Content", and can also be used as a "Headless CMS".
 

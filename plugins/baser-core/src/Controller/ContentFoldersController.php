@@ -16,6 +16,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\Front\ContentFoldersFrontServiceInterface;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -48,6 +50,12 @@ class ContentFoldersController extends BcFrontAppController
      */
     public function view(ContentFoldersFrontServiceInterface $service)
     {
+        // コンテンツフォルダのindex機能を使用しないときは403にする
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfig = $siteConfigsService->get();
+        if (!empty($siteConfig->use_contents_folder_forbidden)) {
+            throw new \Cake\Http\Exception\ForbiddenException(__d('baser_core', 'indexページが見つかりませんでした。'));
+        }
         $contentFolder = $service->get(
             $this->getRequest()->getAttribute('currentContent')->entity_id,
             ['status' => 'publish']
