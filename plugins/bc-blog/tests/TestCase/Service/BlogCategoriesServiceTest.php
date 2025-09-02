@@ -324,4 +324,67 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertStringContainsString('BlogCategories.blog_content_id', $sql);
         $this->assertStringContainsString('BlogCategories.status', $sql);
     }
+
+    /**
+     * getIndexのページネーションテスト
+     */
+    public function test_getIndexWithPagination()
+    {
+        // テストデータの準備
+        $this->loadFixtureScenario(BlogContentScenario::class);
+
+        for ($i = 1; $i <= 10; $i++) {
+            BlogCategoryFactory::make([
+                'id' => $i,
+                'blog_content_id' => 1,
+                'title' => "テストカテゴリ{$i}",
+                'name' => "test-category-{$i}",
+                'status' => 1
+            ])->persist();
+        }
+
+        // limit=3でテスト
+        $query = $this->BlogCategories->getIndex(1, ['limit' => 3]);
+        $results = $query->toArray();
+        $this->assertCount(3, $results);
+
+        // page=2, limit=3でテスト
+        $query = $this->BlogCategories->getIndex(1, ['limit' => 3, 'page' => 2]);
+        $results = $query->toArray();
+        $this->assertCount(3, $results);
+
+        // page=4, limit=3でテスト（空の結果）
+        $query = $this->BlogCategories->getIndex(1, ['limit' => 3, 'page' => 4]);
+        $results = $query->toArray();
+        $this->assertCount(1, $results); // 10件のうち最後の1件
+
+        // page=5, limit=3でテスト（空の結果）
+        $query = $this->BlogCategories->getIndex(1, ['limit' => 3, 'page' => 5]);
+        $results = $query->toArray();
+        $this->assertCount(0, $results);
+    }
+
+    /**
+     * createIndexConditionsのページネーションテスト
+     */
+    public function test_createIndexConditionsWithPagination()
+    {
+        $table = $this->BlogCategories->BlogCategories;
+        $query = $table->find();
+        $blogContentId = 1;
+
+        // limitパラメータのテスト
+        $params = ['limit' => 5];
+        $resultQuery = $this->execPrivateMethod($this->BlogCategories, 'createIndexConditions', [$query, $blogContentId, $params]);
+        $sql = $resultQuery->sql();
+        $this->assertStringContainsString('LIMIT 5', $sql);
+
+        // limit + pageパラメータのテスト
+        $query = $table->find();
+        $params = ['limit' => 3, 'page' => 2];
+        $resultQuery = $this->execPrivateMethod($this->BlogCategories, 'createIndexConditions', [$query, $blogContentId, $params]);
+        $sql = $resultQuery->sql();
+        $this->assertStringContainsString('LIMIT 3', $sql);
+        $this->assertStringContainsString('OFFSET 3', $sql); // (page-1) * limit = (2-1) * 3 = 3
+    }
 }
