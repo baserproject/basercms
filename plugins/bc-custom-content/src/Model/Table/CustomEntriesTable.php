@@ -96,6 +96,44 @@ class CustomEntriesTable extends AppTable
         /** @var Content $content */
         if (!$customContent) return false;
         $content = $customContent->content;
+
+        $status = $entry->status;
+        $publishBegin = $entry->publish_begin;
+        $publishEnd = $entry->publish_end;
+        // コンテンツのステータスを優先する
+        if (!$content->status) {
+            $status = false;
+        }
+
+        if ($publishBegin) {
+            if ((!empty($content->publish_begin) && $content->publish_begin > $publishBegin)) {
+                // コンテンツの公開開始の方が遅い場合
+                $publishBegin = $content->publish_begin;
+            } elseif (!empty($content->publish_end) && $content->publish_end < $publishBegin) {
+                // 記事の公開開始より、コンテンツの公開終了が早い場合
+                $publishBegin = $content->publish_end;
+            }
+        } else {
+            if (!empty($content->publish_begin)) {
+                // 記事の公開開始が定められていない
+                $publishBegin = $content->publish_begin;
+            }
+        }
+        if ($publishEnd) {
+            if (!empty($content->publish_end) && $content->publish_end < $publishEnd) {
+                // コンテンツの公開終了の方が早い場合
+                $publishEnd = $content->publish_end;
+            } elseif (!empty($content->publish_begin) && $content->publish_begin < $publishEnd) {
+                // 記事の公開終了より、コンテンツの公開開始が早い場合
+                $publishEnd = $content->publish_begin;
+            }
+        } else {
+            if (!empty($content->publish_end)) {
+                // 記事の公開終了が定められていない
+                $publishEnd = $content->publish_end;
+            }
+        }
+
         return [
             'type' => __d('baser_core', 'カスタムコンテンツ'),
             'model_id' => $entry->id,
@@ -104,9 +142,9 @@ class CustomEntriesTable extends AppTable
             'title' => $entry->title,
             'detail' => $this->createSearchDetail($entry),
             'url' => $content->url . 'view/' . ($entry->name?: $entry->id),
-            'status' => $content->status,
-            'publish_begin' => $content->publish_begin,
-            'publish_end' => $content->publish_end
+            'status' => $status,
+            'publish_begin' => $publishBegin,
+            'publish_end' => $publishEnd
         ];
     }
 
