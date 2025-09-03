@@ -118,6 +118,8 @@ node_modules
 /webroot/bc_custom_content
 /webroot/bc_spa_sample
 /webroot/debug_kit
+/webroot/.gitignore
+
 # key
 /config/*.key
 /config/*.pem
