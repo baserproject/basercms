@@ -67,8 +67,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
         }
         return $this->BlogCategories->get($id,
-        conditions: $conditions,
-        contain: $contain);
+            conditions: $conditions,
+            contain: $contain
+        );
     }
 
     /**

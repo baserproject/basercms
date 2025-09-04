@@ -102,7 +102,7 @@ class BlogContentsService implements BlogContentsServiceInterface
         ], $params);
 
         if (!is_null($params['description'])) {
-            $query->where(['description LIKE' => '%' . $params['description'] . '%']);
+            $query->where(['BlogContents.description LIKE' => '%' . $params['description'] . '%']);
         }
 
         if ($params['status'] === 'publish') {
