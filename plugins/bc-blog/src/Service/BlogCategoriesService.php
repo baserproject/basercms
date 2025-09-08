@@ -67,8 +67,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
         }
         return $this->BlogCategories->get($id,
-        conditions: $conditions,
-        contain: $contain);
+            conditions: $conditions,
+            contain: $contain
+        );
     }
 
     /**
@@ -136,13 +137,10 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
         $query = $query->where($conditions);
 
-        // ページネーション処理
         if (!empty($params['limit'])) {
             if (!empty($params['page'])) {
-                // page()メソッドを使用してページネーション
                 $query = $query->page($params['page'], $params['limit']);
             } else {
-                // limitのみ指定の場合
                 $query = $query->limit($params['limit']);
             }
         }

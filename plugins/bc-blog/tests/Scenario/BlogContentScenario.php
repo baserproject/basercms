@@ -36,7 +36,7 @@ class BlogContentScenario implements FixtureScenarioInterface
     {
         $id = $args[0] ?? 1;
         $siteId = $args[1] ?? 1;
-        $parentId = $args[2] ?? 1;
+        $parentId = $args[2];
         $name = $args[3] ?? 'blog';
         $url = $args[4] ?? '/blog/';
         $tile = $args[5] ?? '';

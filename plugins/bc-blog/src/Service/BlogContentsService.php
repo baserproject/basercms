@@ -76,7 +76,11 @@ class BlogContentsService implements BlogContentsServiceInterface
         ]);
 
         if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+            if (!empty($queryParams['page'])) {
+                $query = $query->page($queryParams['page'], $queryParams['limit']);
+            } else {
+                $query = $query->limit($queryParams['limit']);
+            }
         }
 
         $query = $this->createIndexConditions($query, $queryParams);
@@ -102,7 +106,7 @@ class BlogContentsService implements BlogContentsServiceInterface
         ], $params);
 
         if (!is_null($params['description'])) {
-            $query->where(['description LIKE' => '%' . $params['description'] . '%']);
+            $query->where(['BlogContents.description LIKE' => '%' . $params['description'] . '%']);
         }
 
         if ($params['status'] === 'publish') {
