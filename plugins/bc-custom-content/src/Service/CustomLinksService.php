@@ -100,6 +100,8 @@ class CustomLinksService implements CustomLinksServiceInterface
         $options = array_merge([
             'finder' => 'threaded',
             'status' => null,
+            'limit' => null,
+            'page' => null,
             'for' => null,
             'contain' => [
                 'CustomFields',
@@ -116,6 +118,14 @@ class CustomLinksService implements CustomLinksServiceInterface
 
         $query = $this->CustomLinks->find($options['finder'], ...$findOptions)
             ->orderBy('CustomLinks.lft ASC');
+
+        if (!is_null($options['limit'])) {
+            if(!is_null($options['page'])) {
+                $query = $query->limit($options['limit'])->page($options['page']);
+            } else {
+                $query = $query->limit($options['limit']);
+            }
+        }
         return $this->createIndexConditions($query, $tableId, $options);
     }
 
