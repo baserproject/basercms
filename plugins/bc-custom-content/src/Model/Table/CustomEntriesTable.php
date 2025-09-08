@@ -336,8 +336,15 @@ class CustomEntriesTable extends AppTable
      */
     public function setValidateFileExt(Validator $validator, CustomLink $link)
     {
-        if (empty($link->custom_field->meta['BcCustomContent']['file_ext'])) return $validator;
-        $fileExt = explode(',', $link->custom_field->meta['BcCustomContent']['file_ext']);
+        if ($link->custom_field->type !== 'BcCcFile') {
+            return $validator;
+        }
+
+        $fileExt = ['gif', 'jpg', 'jpeg', 'png', 'pdf'];
+        if (!empty($link->custom_field->meta['BcCustomContent']['file_ext'])) {
+            $fileExt = explode(',', $link->custom_field->meta['BcCustomContent']['file_ext']);
+        }
+
         $validator->add($link->name, [
             'fileExt' => [
                 'provider' => 'bc',
