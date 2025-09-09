@@ -372,6 +372,7 @@ class CustomEntriesTableTest extends BcTestCase
         //準備
         CustomFieldFactory::make([
             'id' => 1,
+            'type' => 'BcCcFile',
             'validate' => '["NUMBER","EMAIL","HANKAKU","ZENKAKU_KATAKANA","ZENKAKU_HIRAGANA","DATETIME","EMAIL_CONFIRM"]',
             'meta' => '{"BcCustomContent":{"email_confirm":"","max_file_size":"1","file_ext":"true"}}',
             'regex' => '[0-9]'
@@ -472,23 +473,21 @@ class CustomEntriesTableTest extends BcTestCase
     {
         $validator = $this->CustomEntriesTable->getValidator('default');
         $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
-        $customField = CustomFieldFactory::make()->getEntity();
+        $customField = CustomFieldFactory::make(['type' => 'BcCcFile'])->getEntity();
         /**
          * file_ext is null
          */
         $customField->meta = ['BcCustomContent' => ['file_ext' => null]];
         $customLink->custom_field = $customField;
         $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
-        //check result return
-        $this->assertArrayNotHasKey('test', $rs);
+        $this->assertEquals(['gif', 'jpg', 'jpeg', 'png', 'pdf'], $rs['test']->rule('fileExt')->get('pass')[0]);
         /**
          * file_ext is not null
          */
         $customField->meta = ['BcCustomContent' => ['file_ext' => 'jpg,png,gif']];
         $customLink->custom_field = $customField;
         $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
-        //check result return
-        $this->assertArrayHasKey('test', $rs);
+        $this->assertEquals(['jpg', 'png', 'gif'], $rs['test']->rule('fileExt')->get('pass')[0]);
         /**
          * check message return
          * after when setValidateFileExt
