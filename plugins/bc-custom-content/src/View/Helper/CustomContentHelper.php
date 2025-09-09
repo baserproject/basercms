@@ -515,7 +515,7 @@ class CustomContentHelper extends CustomContentAppHelper
         }
         $service = $this->getService(CustomContentFrontServiceInterface::class);
         $customContent = $service->ContentsService->get($content->entity_id);
-        $service->EntriesService->setup($content->entity_id);
+        $service->EntriesService->setup($customContent->custom_table_id);
         $entities = $service->EntriesService->getIndex($options);
         return $this->BcBaser->getElement("BcCustomContent.../CustomContent/{$customContent->template}/entries", [
             'customEntries' => $entities,
