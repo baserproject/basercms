@@ -285,7 +285,11 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         foreach($sites as $site) {
             if ($site->theme) {
                 if (!CorePlugin::isLoaded($site->theme)) {
-                	$pluginPath = CorePlugin::path($site->theme);
+                    try {
+                        $pluginPath = CorePlugin::path($site->theme);
+                    } catch (\Throwable) {
+                        continue;
+                    }
                     // path() を実行するとプラグインクラスがコレクションに登録されてしまう
                     // ここで登録されてしまうと、対象プラグインの bootstrap() が正常に実行されないため
                     // ここでは一旦削除する。
