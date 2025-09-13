@@ -149,7 +149,8 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             's' => null,
             'c' => null,
             'f' => null,
-            'q' => null
+            'q' => null,
+            'op' => 'and'
         ], $options);
 
         if (!is_null($options['s'])) $options['site_id'] = $options['s'];
@@ -181,8 +182,8 @@ class SearchIndexesService implements SearchIndexesServiceInterface
         if (!is_null($options['keyword'])) {
             $query = $this->parseQuery($options['keyword']);
             foreach($query as $key => $value) {
-                $conditions['and'][$key]['or'][] = ['SearchIndexes.title LIKE' => "%{$value}%"];
-                $conditions['and'][$key]['or'][] = ['SearchIndexes.detail LIKE' => "%{$value}%"];
+                $conditions[$options['op']][$key]['or'][] = ['SearchIndexes.title LIKE' => "%{$value}%"];
+                $conditions[$options['op']][$key]['or'][] = ['SearchIndexes.detail LIKE' => "%{$value}%"];
             }
         }
 
