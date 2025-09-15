@@ -551,7 +551,9 @@ class PermissionsService implements PermissionsServiceInterface
     {
         if(strpos($url, '{loginUserId}') !== false) {
             $user = BcUtil::loginUser();
-            $url = str_replace('{loginUserId}', $user->id, $url);
+            if($user) {
+                $url = str_replace('{loginUserId}', $user->id, $url);
+            }
         }
         $prefix = BcUtil::getPrefix();
         if($prefix !== '/baser/admin') {
