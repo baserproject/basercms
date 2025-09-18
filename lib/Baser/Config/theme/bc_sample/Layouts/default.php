@@ -27,15 +27,15 @@
 	<?php $this->BcBaser->icon() ?>
 	<?php $this->BcBaser->css([
 		'style',
-		'jquery-ui/jquery-ui-1.11.4',
+		'jquery-ui/jquery-ui-1.14.1',
 		'colorbox/colorbox-1.6.1',
 		'editor'
 	]) ?>
 	<?php $this->BcBaser->js([
-		'jquery-1.11.3.min',
-		'jquery-ui-1.11.4.min',
+		'jquery-3.7.1.min',
+		'jquery-ui-1.14.1.min',
 		'jquery.bxslider-4.12.min',
-		'jquery.colorbox-1.6.1.min',
+		'jquery.colorbox-1.6.4.min',
 		'i18n/ui.datepicker-ja',
 		'jquery-accessibleMegaMenu',
 		'startup'

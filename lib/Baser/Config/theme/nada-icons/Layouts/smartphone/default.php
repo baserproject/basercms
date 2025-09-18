@@ -15,7 +15,7 @@
 		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->css(array('admin/html5reset-1.6.1', 'smartphone/style')) ?>
 		<?php $this->BcBaser->js(array(
-				'jquery-1.7.2.min',
+				'jquery-3.7.1.min',
 				'smartphone/startup.js',
 				'startup',
 				'jquery.bxSlider.min',
