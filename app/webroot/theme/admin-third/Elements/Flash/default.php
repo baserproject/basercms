@@ -1,4 +1,4 @@
-z<?php
+<?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
