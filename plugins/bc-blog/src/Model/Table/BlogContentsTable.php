@@ -87,10 +87,11 @@ class BlogContentsTable extends BlogAppTable
         $validator->scalar('list_direction')
             ->notEmptyString('list_direction', __d('baser_core', '一覧に表示する順番を指定してください。'));
 
-        $validator->add('eye_catch_size_thumb_width', 'checkEyeCatchSize', [
-            'provider' => 'blogContent',
-            'rule' => 'checkEyeCatchSize',
-            'message' => __d('baser_core', 'アイキャッチ画像のサイズが不正です。')]);
+        $validator->allowEmptyString('eye_catch_size_thumb_width')
+            ->add('eye_catch_size_thumb_width', 'checkEyeCatchSize', [
+                'provider' => 'blogContent',
+                'rule' => 'checkEyeCatchSize',
+                'message' => __d('baser_core', 'アイキャッチ画像のサイズが不正です。')]);
 
         return $validator;
     }

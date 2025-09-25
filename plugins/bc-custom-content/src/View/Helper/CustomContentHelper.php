@@ -506,6 +506,9 @@ class CustomContentHelper extends CustomContentAppHelper
     {
         $options = array_merge([
             'limit' => $limit,
+            'status' => 'publish',
+            'order' => 'created',
+            'direction' => 'DESC',
         ], $options);
         $contentService = $this->getService(ContentsServiceInterface::class);
         $url = $this->parseContentsName($contentsName);
@@ -513,9 +516,11 @@ class CustomContentHelper extends CustomContentAppHelper
         if($content->type !== 'CustomContent') {
             throw new NotFoundException(__d('baser_core', '指定されたコンテンツは存在しません。'));
         }
+        $request = $this->getView()->getRequest()->withAttribute('currentContent', $content);
+        $this->getView()->setRequest($request);
         $service = $this->getService(CustomContentFrontServiceInterface::class);
         $customContent = $service->ContentsService->get($content->entity_id);
-        $service->EntriesService->setup($content->entity_id);
+        $service->EntriesService->setup($customContent->custom_table_id);
         $entities = $service->EntriesService->getIndex($options);
         return $this->BcBaser->getElement("BcCustomContent.../CustomContent/{$customContent->template}/entries", [
             'customEntries' => $entities,
