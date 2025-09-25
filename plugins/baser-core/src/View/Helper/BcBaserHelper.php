@@ -435,6 +435,7 @@ class BcBaserHelper extends Helper
      *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
      *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
      *    - `enabled` : リンクが有効かどうか（初期値 : true）
+     *    - `full` : URLをフルパスで出力するかどうか（初期値 : false）
      *     ※ その他のパラメータについては、HtmlHelper::image() を参照。
      * @param bool $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -453,7 +454,8 @@ class BcBaserHelper extends Helper
             'prefix' => false,
             'forceTitle' => false,
             'ssl' => $this->isSSL(),
-            'enabled' => true
+            'enabled' => true,
+            'full' => false
         ], $options);
 
         // EVENT Html.beforeGetLink
@@ -489,13 +491,14 @@ class BcBaserHelper extends Helper
             }
         }
 
+        // $options['full'] がtrueの場合、常にフルパスとする
         // 現在SSLの場合、特定の条件でフルパスとする
         // - //(スラッシュスラッシュ)から始まるURL
         // - http / https 以外のプロトコル
         // - ハッシュタグから始まるURL
-        $full = false;
+        $full = $options['full'];
         if (BcUtil::isInstalled()
-            && ($this->isSSL() || $ssl)
+            && ($full && $ssl)
             && !(preg_match('/^(javascript|https?|ftp|tel|mailto):/', $srcUrl))
             && !(strpos($srcUrl, '//') === 0)
             && !preg_match('/^#/', $srcUrl)) {
