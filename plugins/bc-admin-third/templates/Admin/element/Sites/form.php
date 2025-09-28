@@ -88,26 +88,6 @@ $this->BcBaser->i18nScript([
       <?php echo $this->BcAdminForm->error('title') ?>
     </td>
   </tr>
-  <tr>
-    <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('keyword', __d('baser_core', 'サイト基本キーワード')) ?></th>
-    <td
-      class="bca-form-table__input"><?php echo $this->BcAdminForm->control('keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'bca-textbox__input full-width']) ?>
-      <i class="bca-icon--question-circle bca-help"></i>
-      <div class="bca-helptext"><?php echo __d('baser_core', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaKeywords() ?&gt; で出力します。') ?></div>
-      <?php echo $this->BcAdminForm->error('keyword') ?>
-    </td>
-  </tr>
-  <tr>
-    <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('description', __d('baser_core', 'サイト基本説明文')) ?></th>
-    <td
-      class="bca-form-table__input"><?php echo $this->BcAdminForm->control('description', ['type' => 'textarea', 'cols' => 20, 'rows' => 6, 'maxlength' => 255, 'counter' => true]) ?>
-      <i class="bca-icon--question-circle bca-help"></i>
-      <div class="bca-helptext"><?php echo __d('baser_core', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaDescription() ?&gt; で出力します。') ?></div>
-      <?php echo $this->BcAdminForm->error('description') ?>
-    </td>
-  </tr>
   <?php if(!$isMainOnCurrentDisplay): ?>
   <tr>
     <th

@@ -138,7 +138,6 @@ class BcContentsEventListenerTest extends BcTestCase
         $result = $event->getData('out');
         $checkList = [
             $out, // outの文章が含まれているかチェック
-            "説明文", // content_optionsの文章が含まれているかチェック
             "一覧に戻る", // content_actionsの文章が含まれているかチェック
             "関連コンテンツ", // content_relatedの文章が含まれているかチェック
             "その他情報" // content_infoの文章が含まれているかチェック

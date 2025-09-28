@@ -46,8 +46,6 @@ class BcFrontContentsService
         return [
             // パンくず
             'crumbs' => $this->getCrumbs($content->id, $viewContentCrumb),
-            // 説明文
-            'description' => $content->description,
             // タイトル
             'title' => $content->title
         ];
