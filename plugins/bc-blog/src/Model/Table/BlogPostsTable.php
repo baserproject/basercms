@@ -145,6 +145,7 @@ class BlogPostsTable extends BlogAppTable
             ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
+            ->allowEmptyString('content')
             ->scalar('content')
             ->add('content', [
                 'containsScript' => [

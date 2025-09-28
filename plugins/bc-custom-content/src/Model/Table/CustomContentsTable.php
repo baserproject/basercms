@@ -60,8 +60,7 @@ class CustomContentsTable extends AppTable
     public function validationWithTable(Validator $validator): Validator
     {
         $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
-        $validator->requirePresence('list_count', 'update')
-            ->notEmptyString('list_count', __d('baser_core', '一覧表示件数は必須項目です。'))
+        $validator->allowEmptyString('list_count')
             ->range('list_count', [0, 100], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
             ->add('list_count', 'halfText', [
                 'provider' => 'bc',
@@ -119,4 +118,31 @@ class CustomContentsTable extends AppTable
         ];
     }
 
+    /**
+     * 関連するエントリーの検索インデックスを作成する
+     *
+     * @param EntityInterface $entity
+     * @return void
+     */
+    public function createRelatedSearchIndexes(EntityInterface $entity)
+    {
+        if (!$entity || !isset($entity->custom_table_id)) {
+            return;
+        }
+        $customEntriyTable = $this->CustomTables->getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customEntriyTable->setUp($entity->custom_table_id);
+
+        $entries = $customEntriyTable->find()
+            ->all();
+        if (!$entries->count()) {
+            return;
+        }
+
+        foreach ($entries as $entry) {
+            // 入れ子になっているとエラーになるため、一旦配列に変換してから再度patchEntityする
+            $entry = $entry->toArray();
+            $entity = $customEntriyTable->patchEntity($customEntriyTable->newEmptyEntity(), $entry);
+            $customEntriyTable->save($entity);
+        }
+    }
 }

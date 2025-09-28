@@ -18,14 +18,15 @@
         "cakephp/plugin-installer": "^2.0",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "6.1.0",
-        "mobiledetect/mobiledetectlib": "^3.74"
+        "josegonzalez/dotenv": "^4.0",
+        "mobiledetect/mobiledetectlib": "^3.74",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
         "cakephp/bake": "^3.0.0",
         "cakephp/cakephp-codesniffer": "^5.0",
         "cakephp/debug_kit": "^5.0.0",
-        "josegonzalez/dotenv": "^4.0",
         "phpunit/phpunit": "10.5.31",
         "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^3.0",

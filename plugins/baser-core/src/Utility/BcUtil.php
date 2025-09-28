@@ -780,6 +780,9 @@ class BcUtil
      */
     public static function isConsole()
     {
+        if(!isset($_ENV['IS_CONSOLE'])) {
+            $_ENV['IS_CONSOLE'] = (php_sapi_name() === 'cli');
+        }
         return (bool)$_ENV['IS_CONSOLE'];
     }
 

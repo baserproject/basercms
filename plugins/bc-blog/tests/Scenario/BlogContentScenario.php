@@ -34,12 +34,12 @@ class BlogContentScenario implements FixtureScenarioInterface
      */
     public function load(...$args): mixed
     {
-        $id = $args[0];
-        $siteId = $args[1];
-        $parentId = $args[2];
-        $name = $args[3];
-        $url = $args[4];
-        $tile = $args[5]?? '';
+        $id = $args[0] ?? 1;
+        $siteId = $args[1] ?? 1;
+        $parentId = $args[2] ?? 1;
+        $name = $args[3] ?? 'blog';
+        $url = $args[4] ?? '/blog/';
+        $tile = $args[5] ?? '';
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
             ->treeNode($id, $siteId, $parentId, $name, $url, $id, true, $tile)->persist();
         BlogContentFactory::make(['id' => $id, 'description' => 'ディスクリプション', 'template' => 'default'])->persist();

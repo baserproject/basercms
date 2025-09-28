@@ -127,7 +127,7 @@ $this->BcAdmin->setHelp('custom_fields_form');
             </li>
             <li>
               <strong><?php echo __d('baser_core', 'ファイル拡張子チェック') ?></strong><br>
-              <?php echo __d('baser_core', '利用するには、「アップロードを許可する拡張子」に拡張子をカンマ区切りで入力します」') ?>
+              <?php echo __d('baser_core', '利用するには、「アップロードを許可する拡張子」に拡張子をカンマ区切りで入力します。未設定の場合は「gif,jpg,jpeg,png,pdf」を許可します。') ?>
             </li>
           </ul>
         </div>
