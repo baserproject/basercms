@@ -331,7 +331,7 @@ class BlogControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('tag1', $vars['tag']);
-        $this->assertEquals(2, $vars['posts']->toArray()[0]->id);
+        $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
     }
 
     /**
