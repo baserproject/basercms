@@ -38,6 +38,8 @@ jobs:
             split_repository: 'bc-mail'
           - local_path: 'bc-search-index'
             split_repository: 'bc-search-index'
+          - local_path: 'bc-seo'
+            split_repository: 'bc-seo'
           - local_path: 'bc-theme-config'
             split_repository: 'bc-theme-config'
           - local_path: 'bc-theme-file'
