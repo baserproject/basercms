@@ -30,6 +30,7 @@
         "baserproject/bc-uploader": "5.2.x-dev",
         "baserproject/bc-widget-area": "5.2.x-dev",
         "josegonzalez/dotenv": "^4.0",
+        "psr/http-message": "^1.0",
         "ext-mbstring": "*",
         "ext-zip": "*",
         "ext-gd": "*"

@@ -54,6 +54,7 @@ use BaserCore\View\Helper\BcBaserHelper;
  * @property UrlHelper $Url
  * @property BcAdminAppView $BcAdminAppView
  */
+#[\AllowDynamicProperties]
 class BcBaserHelperTest extends BcTestCase
 {
 
@@ -349,6 +350,7 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
+            ['full', ['/test'], ['full' => true], '<a href="https://localhost/test">full</a>'], // フルパス
         ];
     }
 

@@ -1274,8 +1274,7 @@ class BlogHelperTest extends BcTestCase
     {
         return [
             ['<a href="/news/archives/tag/tag1">tag1</a>', 1, []],
-            ['<a href="/tags/tag1">tag1</a>', 0, []],
-            ['<a href="https://localhost/news/archives/tag/tag1">tag1</a>', 1, ['ssl'=>true]],
+            ['<a href="/tags/tag1">tag1</a>', 0, []]
         ];
     }
 

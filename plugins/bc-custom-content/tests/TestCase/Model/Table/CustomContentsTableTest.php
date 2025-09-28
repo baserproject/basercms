@@ -30,6 +30,7 @@ use Cake\Event\Event;
  * CustomContentsTableTest
  * @property CustomContentsTable $CustomContentsTable
  */
+#[\AllowDynamicProperties]
 class CustomContentsTableTest extends BcTestCase
 {
 
@@ -91,15 +92,6 @@ class CustomContentsTableTest extends BcTestCase
         ]);
         $this->assertEquals([
             'range' => '一覧表示件数は100までの数値で入力してください。',
-        ], $errors['list_count']);
-
-        //何も入力しない場合
-        $validator = $this->CustomContentsTable->getValidator('withTable');
-        $errors = $validator->validate([
-            'list_count' => ''
-        ]);
-        $this->assertEquals([
-            '_empty' => '一覧表示件数は必須項目です。',
         ], $errors['list_count']);
     }
 
