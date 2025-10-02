@@ -145,6 +145,11 @@ class UsersService implements UsersServiceInterface
      */
     private function createIndexConditions(Query $query, array $params): Query
     {
+        foreach($params as $key => $value) {
+            if ($value === '') unset($params[$key]);
+        }
+        if (empty($params)) return $query;
+
         $params = array_merge([
             'user_group_id' => null,
             'name' => null,
@@ -152,7 +157,7 @@ class UsersService implements UsersServiceInterface
             'real_name' => null
         ], $params);
 
-        if (!is_null($params['user_group_id']) && $params['user_group_id'] !== '') {
+        if (!is_null($params['user_group_id'])) {
             $query->matching('UserGroups', function($q) use ($params) {
                 return $q->where(['UserGroups.id' => $params['user_group_id']]);
             });
