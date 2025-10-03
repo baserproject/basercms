@@ -8,6 +8,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+import { createApp } from 'vue';
 
 /**
  * サイドバーのコンテンツメニューを設定する
@@ -42,37 +43,44 @@ window.addEventListener('DOMContentLoaded', function () {
 		/**
 		 * for deubg
 		 */
-		// console.log($.extend(true, {}, contentList));
-		// console.log($.extend(true, {}, systemList));
-
 		tmpl.hidden = false;
 		var isSystemSettingPage = systemList.some(function (item) { return (item.current || item.expanded); });
-		var app = new Vue({
-			el: tmpl,
-			data: {
-				systemExpanded: isSystemSettingPage,
-				baseURL: $.baseUrl(),
-				currentSiteId: data.currentSiteId,
-				contentList: contentList,
-				isSystemSettingPage: isSystemSettingPage,
-				systemList: systemList,
-				availableVersions: null,
-				useUpdateNotice: data.useUpdateNotice
+		var app = createApp({
+			data() {
+				return {
+					systemExpanded: isSystemSettingPage,
+					baseURL: $.baseUrl(),
+					currentSiteId: data.currentSiteId,
+					contentList: contentList,
+					isSystemSettingPage: isSystemSettingPage,
+					systemList: systemList,
+					availableVersions: null,
+					useUpdateNotice: data.useUpdateNotice
+				};
+			},
+			computed: {
+				filteredContentList() {
+					return this.contentList.filter(content => {
+						return !content.siteId || content.siteId === this.currentSiteId || content.siteId === null;
+					});
+				}
 			},
             mounted() {
                 if(!this.useUpdateNotice) return;
+                const appInstance = this;
                 $.get($.bcUtil.apiAdminBaseUrl + 'baser-core/plugins/get_available_core_version_info.json', function (response){
                     if(response.availableCoreVersionInfo !== undefined) {
-                        app.availableVersions = Object.keys(response.availableCoreVersionInfo.versions).length;
+                        appInstance.availableVersions = Object.keys(response.availableCoreVersionInfo.versions).length;
                     }
                 });
             },
 			methods: {
 				openSystem () {
-					app.systemExpanded = !app.systemExpanded;
+					this.systemExpanded = !this.systemExpanded;
 				}
 			}
 		});
+		app.mount(tmpl);
 
 	} else {
 

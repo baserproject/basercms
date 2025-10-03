@@ -8,9 +8,8 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-import Vue from 'vue/dist/vue.js'
+import { createApp } from 'vue'
 import FavoriteIndex from "./index.vue";
-import Vuelidate from 'vuelidate'
 
 /**
  * よく使う項目の処理を行う
@@ -32,13 +31,12 @@ const favoriteList = {
     initView() {
         $("body").append($("#FavoritesMenu"));
 
-        Vue.use(Vuelidate)
-        new Vue({
-            el: '#FavoriteMenu',
+        const app = createApp({
             components: {
                 FavoriteIndex
             },
         });
+        app.mount('#FavoriteMenu');
 
         $("#BtnFavoriteHelp").bt({
             trigger: 'click',
