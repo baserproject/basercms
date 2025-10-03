@@ -128,7 +128,6 @@ return [
                 'download' => ['title' => __d('baser_core', 'ダウンロード'), 'url' => '/baser/admin/baser-core/themes/download/*', 'method' => 'GET', 'auth' => false],
                 'download_default_data_pattern' => ['title' => __d('baser_core', '初期データダウンロード'), 'url' => '/baser/admin/baser-core/themes/download_default_data_pattern', 'method' => 'GET', 'auth' => false],
                 'get_market_themes' => ['title' => __d('baser_core', 'マーケットのテーマ取得'), 'url' => '/baser/admin/baser-core/themes/get_market_themes', 'method' => 'GET', 'auth' => false],
-                'load_default_data_pattern' => ['title' => __d('baser_core', '初期データ読み込み'), 'url' => '/baser/admin/baser-core/themes/load_default_data_pattern', 'method' => 'POST', 'auth' => false],
                 'screenshot' => ['title' => __d('baser_core', 'スクリーンショット'), 'url' => '/baser/admin/baser-core/themes/screenshot/*', 'method' => 'GET', 'auth' => false],
             ]
         ],
@@ -170,10 +169,8 @@ return [
                 'Credit' => ['title' => __d('baser_core', 'クレジット'), 'url' => '/baser/admin/baser-core/utilities/credit', 'method' => 'GET', 'auth' => true],
                 'Info' => ['title' => __d('baser_core', '環境情報'), 'url' => '/baser/admin/baser-core/utilities/info', 'method' => 'GET', 'auth' => false],
                 'LogMaintenance' => ['title' => __d('baser_core', 'ログメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/log_maintenance/*', 'method' => 'POST', 'auth' => false],
-                'Maintenance' => ['title' => __d('baser_core', 'データメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/maintenance/*', 'method' => 'POST', 'auth' => false],
                 'Phpinfo' => ['title' => __d('baser_core', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => true],
                 'ResetContentsTree' => ['title' => __d('baser_core', 'ツリー構造リセット', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/reset_contents_tree', 'method' => 'POST', 'auth' => false],
-                'ResetData' => ['title' => __d('baser_core', 'コア初期データ読み込み'), 'url' => '/baser/admin/baser-core/utilities/reset_data', 'method' => 'POST', 'auth' => false],
                 'VerityContents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/admin/baser-core/utilities/verity_contents_tree', 'method' => 'POST', 'auth' => false],
             ]
         ],
@@ -315,7 +312,6 @@ return [
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/themes/delete/*.json', 'method' => 'POST', 'auth' => false],
                 'GetMarketThemes' => ['title' => __d('baser_core', 'マーケットのテーマを取得'), 'url' => '/baser/api/admin/baser-core/themes/get_market_themes.json', 'method' => 'GET', 'auth' => false],
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/themes/index.json', 'method' => 'GET', 'auth' => false],
-                'LoadDefaultData' => ['title' => __d('baser_core', '初期データ読み込み'), 'url' => '/baser/api/admin/baser-core/themes/load_default_data/*.json', 'method' => 'POST', 'auth' => false],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/themes/view/*.json', 'method' => 'GET', 'auth' => false],
             ]
         ],
@@ -355,10 +351,8 @@ return [
             'items' => [
                 'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/admin/baser-core/utilities/clear_cache.json', 'method' => 'GET', 'auth' => true],
                 'delete_log' => ['title' => __d('baser_core', 'ログ削除'), 'url' => '/baser/api/admin/baser-core/utilities/delete_log.json', 'method' => 'POST', 'auth' => false],
-                'download_backup' => ['title' => __d('baser_core', 'DBバックアップダウンロード'), 'url' => '/baser/api/admin/baser-core/utilities/download_backup.json', 'method' => 'GET', 'auth' => false],
                 'download_log' => ['title' => __d('baser_core', 'ログダウンロード'), 'url' => '/baser/api/admin/baser-core/utilities/download_log.json', 'method' => 'GET', 'auth' => false],
                 'reset_contents_tree' => ['title' => __d('baser_core', 'ツリー構造リセット'), 'url' => '/baser/api/admin/baser-core/utilities/reset_contents_tree.json', 'method' => 'POST', 'auth' => false],
-                'restore_db' => ['title' => __d('baser_core', 'DBバックアップ復元'), 'url' => '/baser/api/admin/baser-core/utilities/restore_db.json', 'method' => 'POST', 'auth' => false],
                 'save_search_opened' => ['title' => __d('baser_core', '検索ボックス開閉状態保存'), 'url' => '/baser/api/admin/baser-core/utilities/save_search_opened/*.json', 'method' => 'POST', 'auth' => true],
                 'verity_contents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/api/admin/baser-core/utilities/verity_contents_tree.json', 'method' => 'POST', 'auth' => false],
             ]

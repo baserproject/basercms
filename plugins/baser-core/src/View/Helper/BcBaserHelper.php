@@ -408,7 +408,7 @@ class BcBaserHelper extends Helper
      *    - `escapeTitle` : タイトルをエスケープするかどうか（初期値 : true）
      *    - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
      *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
-     *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+     *    - `full` : URLをフルパスで出力するかどうか（初期値 : false）
      *     ※ その他のパラメータについては、HtmlHelper::link() を参照。
      * @param string $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -433,8 +433,8 @@ class BcBaserHelper extends Helper
      *    - `escapeTitle` : タイトルをエスケープするかどうか（初期値 : true）
      *    - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
      *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
-     *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
      *    - `enabled` : リンクが有効かどうか（初期値 : true）
+     *    - `full` : URLをフルパスで出力するかどうか（初期値 : false）
      *     ※ その他のパラメータについては、HtmlHelper::image() を参照。
      * @param bool $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -452,8 +452,8 @@ class BcBaserHelper extends Helper
             'escape' => true,
             'prefix' => false,
             'forceTitle' => false,
-            'ssl' => $this->isSSL(),
-            'enabled' => true
+            'enabled' => true,
+            'full' => false
         ], $options);
 
         // EVENT Html.beforeGetLink
@@ -470,9 +470,9 @@ class BcBaserHelper extends Helper
         $request = $this->getView()->getRequest();
         $prefix = $options['prefix'];
         $forceTitle = $options['forceTitle'];
-        $ssl = $options['ssl'];
         $enabled = $options['enabled'];
-        unset($options['prefix'], $options['forceTitle'], $options['ssl'], $options['enabled']);
+        $full = $options['full'];
+        unset($options['prefix'], $options['forceTitle'], $options['enabled'], $options['full']);
 
         if ($prefix && is_array($url) && !empty($request->getParam('prefix'))) {
             $url[$request->getParam('prefix')] = true;
@@ -489,17 +489,14 @@ class BcBaserHelper extends Helper
             }
         }
 
-        // 現在SSLの場合、特定の条件でフルパスとする
-        // - //(スラッシュスラッシュ)から始まるURL
-        // - http / https 以外のプロトコル
-        // - ハッシュタグから始まるURL
-        $full = false;
         if (BcUtil::isInstalled()
-            && ($this->isSSL() || $ssl)
+            && ($full)
             && !(preg_match('/^(javascript|https?|ftp|tel|mailto):/', $srcUrl))
             && !(strpos($srcUrl, '//') === 0)
             && !preg_match('/^#/', $srcUrl)) {
             $full = true;
+        } else {
+            $full = false;
         }
 
         if (preg_match('{^' . BcUtil::getPrefix(true) . '\/}', $srcUrl) || !isset($this->BcContents)) {
