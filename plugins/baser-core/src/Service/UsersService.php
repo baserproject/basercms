@@ -145,6 +145,13 @@ class UsersService implements UsersServiceInterface
      */
     private function createIndexConditions(Query $query, array $params): Query
     {
+        foreach ($params as $key => $value) {
+            if ($value === '') {
+                unset($params[$key]);
+            }
+        }
+        if (empty($params)) return $query;
+
         $params = array_merge([
             'user_group_id' => null,
             'name' => null,
