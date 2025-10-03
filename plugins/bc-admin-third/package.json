@@ -13,7 +13,8 @@
   },
   "homepage": "https://github.com/baserproject/basercms#readme",
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "build": "gulp build"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
