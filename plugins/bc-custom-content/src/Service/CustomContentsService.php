@@ -70,6 +70,8 @@ class CustomContentsService implements CustomContentsServiceInterface
     {
         $queryParams = array_merge([
             'status' => 'publish',
+            'limit' => null,
+            'page' => null,
             'contain' => ['Contents']
         ], $queryParams);
 
@@ -81,7 +83,11 @@ class CustomContentsService implements CustomContentsServiceInterface
         }
 
         if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+            if (!empty($queryParams['page'])) {
+                $query = $query->page($queryParams['page'], $queryParams['limit']);
+            } else {
+                $query = $query->limit($queryParams['limit']);
+            }
         }
 
         if ($queryParams['status'] === 'publish') {
@@ -175,7 +181,7 @@ class CustomContentsService implements CustomContentsServiceInterface
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
         }
-        if ($postData['custom_table_id']) {
+        if (!empty($postData['custom_table_id'])) {
             $options['validate'] = 'withTable';
         }
 
@@ -276,6 +282,7 @@ class CustomContentsService implements CustomContentsServiceInterface
 
         $templatesPaths = array_merge(
             [Plugin::templatePath($site->getAppliedTheme()) . 'plugin' . DS . 'BcCustomContent' . DS],
+            [Plugin::templatePath($site->getAppliedTheme())],
             App::path('templates'),
             [Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . 'plugin' . DS . 'BcCustomContent' . DS],
             [Plugin::templatePath('BcCustomContent')]

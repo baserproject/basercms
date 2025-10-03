@@ -456,6 +456,19 @@ class PermissionsService implements PermissionsServiceInterface
             return true;
         }
 
+        // RESTful なルーティングに対応
+        // URL上アクションがなく、parseRequest で、アクションが index に設定された場合、
+        // POST メソッドであれば add アクションに変換する
+        if(!empty($urlArray['_ext'])
+            && $urlArray['_ext'] === 'json'
+            && $urlArray['action'] === 'index'
+            && $method === 'POST'
+        ) {
+            if(!preg_match('/\/index\.json$/', $url)) {
+                $url = preg_replace('/\.json$/', '/add.json', $url);
+            }
+        }
+
         // プレフィックスがない場合はフロントとみなす
         if(empty($urlArray['prefix'])) {
             $prefix = 'Front';
@@ -538,7 +551,9 @@ class PermissionsService implements PermissionsServiceInterface
     {
         if(strpos($url, '{loginUserId}') !== false) {
             $user = BcUtil::loginUser();
-            $url = str_replace('{loginUserId}', $user->id, $url);
+            if($user) {
+                $url = str_replace('{loginUserId}', $user->id, $url);
+            }
         }
         $prefix = BcUtil::getPrefix();
         if($prefix !== '/baser/admin') {

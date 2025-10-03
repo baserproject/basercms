@@ -102,10 +102,13 @@ class UploadsController extends AppController
             unlink($path);
         }
 
-        if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
-            Header("Content-disposition: attachment; filename=" . $name);
+        $response = $this->getResponse()
+            ->withHeader('Content-type', sprintf('%s; name=%s', $type, $name))
+            ->withStringBody($data);
+        if($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
+            $response = $response->withHeader('Content-disposition', sprintf('attachment; filename=%s', $name));
         }
-        Header("Content-type: " . $type . "; name=" . $name);
+        $this->setResponse($response);
         return $data;
     }
 

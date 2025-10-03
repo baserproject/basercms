@@ -372,6 +372,7 @@ class CustomEntriesTableTest extends BcTestCase
         //準備
         CustomFieldFactory::make([
             'id' => 1,
+            'type' => 'BcCcFile',
             'validate' => '["NUMBER","EMAIL","HANKAKU","ZENKAKU_KATAKANA","ZENKAKU_HIRAGANA","DATETIME","EMAIL_CONFIRM"]',
             'meta' => '{"BcCustomContent":{"email_confirm":"","max_file_size":"1","file_ext":"true"}}',
             'regex' => '[0-9]'
@@ -472,23 +473,21 @@ class CustomEntriesTableTest extends BcTestCase
     {
         $validator = $this->CustomEntriesTable->getValidator('default');
         $customLink = CustomLinkFactory::make(['name' => 'test'])->getEntity();
-        $customField = CustomFieldFactory::make()->getEntity();
+        $customField = CustomFieldFactory::make(['type' => 'BcCcFile'])->getEntity();
         /**
          * file_ext is null
          */
         $customField->meta = ['BcCustomContent' => ['file_ext' => null]];
         $customLink->custom_field = $customField;
         $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
-        //check result return
-        $this->assertArrayNotHasKey('test', $rs);
+        $this->assertEquals(['gif', 'jpg', 'jpeg', 'png', 'pdf'], $rs['test']->rule('fileExt')->get('pass')[0]);
         /**
          * file_ext is not null
          */
         $customField->meta = ['BcCustomContent' => ['file_ext' => 'jpg,png,gif']];
         $customLink->custom_field = $customField;
         $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $customLink);
-        //check result return
-        $this->assertArrayHasKey('test', $rs);
+        $this->assertEquals(['jpg', 'png', 'gif'], $rs['test']->rule('fileExt')->get('pass')[0]);
         /**
          * check message return
          * after when setValidateFileExt
@@ -829,6 +828,7 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
+            'name' => 'meta',
             'custom_table_id' => 1,
             'custom_field_id' => 1
         ])->persist();
@@ -856,6 +856,7 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 1,
+            'name' => 'meta',
             'custom_table_id' => 1,
             'custom_field_id' => 1
         ])->persist();
@@ -865,8 +866,15 @@ class CustomEntriesTableTest extends BcTestCase
         ])->persist();
         CustomLinkFactory::make([
             'id' => 2,
+            'name' => 'meta',
             'custom_table_id' => 2,
             'custom_field_id' => 2
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 3,
+            'name' => 'noname',
+            'custom_table_id' => 1,
+            'custom_field_id' => 1
         ])->persist();
 
         //ArrayObject
@@ -880,7 +888,7 @@ class CustomEntriesTableTest extends BcTestCase
 
         //$controlType === 'file'
         $this->CustomEntriesTable->setLinks(2);
-        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
         //戻り値を確認
         $this->assertEquals('プログラマー', $rs['name']);
         //配列場合、
@@ -893,13 +901,21 @@ class CustomEntriesTableTest extends BcTestCase
 
         //$controlType !== 'file'
         $this->CustomEntriesTable->setLinks(1);
-        $rs = $this->CustomEntriesTable->autoConvert($arrayObject);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
         //戻り値を確認
         $this->assertEquals('プログラマー', $rs['name']);
         //配列場合、
         //__loop-src__がunsetされたか確認すること
         //json_encodeができるか確認すること
         $this->assertEquals('{"BcCcCheckbox":{"label":""}}', $rs['meta']);
+
+        // 対象外の項目の配列はJSONに交換されない
+        $this->CustomEntriesTable->setLinks(3);
+        $rs = $this->CustomEntriesTable->autoConvert(clone $arrayObject);
+        $this->assertEquals([
+            '__loop-src__' => 'aaa',
+            'BcCcCheckbox' => ['label' => '']
+        ], $rs['meta']);
     }
 
     /**

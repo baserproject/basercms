@@ -115,14 +115,14 @@ class BlogFrontService implements BlogFrontServiceInterface
      *
      * @param ServerRequest $request
      * @param BlogContent $blogContent
-     * @param ResultSet $posts
+     * @param PaginatedResultSet $posts
      * @return array
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
+    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet $posts): array
     {
         $site = $request->getAttribute('currentSite');
         return [
@@ -355,6 +355,9 @@ class BlogFrontService implements BlogFrontServiceInterface
     {
         $isPreview = (bool)$request->getQuery('preview');
         $no = $request->getParam('pass.0');
+        if (is_string($no)) {
+            $no = rawurldecode($no);
+        }
         $post = $editLink = null;
         if($isPreview) {
             if($no) {
@@ -385,7 +388,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         if ($post && $post->blog_category_id) {
             $crumbs = array_merge($crumbs, $this->getCategoryCrumbs(
                 $request->getAttribute('currentContent')->url,
-                $post->blog_category->id,
+                $post->blog_category->id?? null,
                 false
             ));
         }
@@ -656,7 +659,7 @@ class BlogFrontService implements BlogFrontServiceInterface
                 ['BlogPosts.blog_content_id' => $blogContentId],
                 $this->BlogPostsService->BlogPosts->getConditionAllowPublish()
             ))
-            ->order(['BlogPosts.posted DESC']);
+            ->orderBy(['BlogPosts.posted DESC']);
         if ($limit) {
             $query->limit($limit);
         }

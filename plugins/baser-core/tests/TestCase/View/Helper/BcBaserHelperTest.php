@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\PluginFactory;
@@ -21,6 +22,7 @@ use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcContentsHelper;
@@ -52,6 +54,7 @@ use BaserCore\View\Helper\BcBaserHelper;
  * @property UrlHelper $Url
  * @property BcAdminAppView $BcAdminAppView
  */
+#[\AllowDynamicProperties]
 class BcBaserHelperTest extends BcTestCase
 {
 
@@ -347,6 +350,7 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
+            ['full', ['/test'], ['full' => true], '<a href="https://localhost/test">full</a>'], // フルパス
         ];
     }
 
@@ -2182,17 +2186,29 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetAlternateUrl($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        Configure::write('BcSite.use_site_device_setting', true);
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make([
+            'id' => 2,
+            'main_site_id' => 1,
+            'alias' => 's',
+            'device' => 'smartphone'
+        ])->persist();
+        ContentFactory::make([
+            'site_id' => 1,
+            'url' => $url
+        ])->persist();
+
+        $siteConfig = BcContainer::get()->get(SiteConfigsServiceInterface::class);
+        $siteConfig->setValue('use_site_device_setting', true);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->BcBaser->setAlternateUrl();
-        $this->assertEquals($expected, $this->_View->fetch('meta'));
+        $this->assertEquals($expected, $this->BcBaser->getView()->fetch('meta'));
     }
 
     public static function setAlternateUrlDataProvider()
     {
         return [
-            ['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
+            ['/', '<link href="https://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)">'],
             ['/s/', '']
         ];
     }
@@ -2201,17 +2217,11 @@ class BcBaserHelperTest extends BcTestCase
      * testSetAlternateUrl
      * @dataProvider setCanonicalUrlDataProvider
      */
-    public function testSetCanonicalUrl($siteId, $url, $expected)
+    public function testSetCanonicalUrl($siteId, $url, $expected, $canonicalUrl = null)
     {
-        // TODO FixtureManager が削除できたら、ここも削除する
-        // >>>
-        $this->truncateTable('sites');
-        $this->truncateTable('contents');
-        $this->truncateTable('content_folders');
-        $this->truncateTable('users');
-        $this->truncateTable('user_groups');
-        // <<<
-
+        if (!is_null($canonicalUrl)) {
+            $this->BcBaser->getView()->set('canonicalUrl', $canonicalUrl);
+        }
         $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make([
             'id' => 2,
@@ -2236,6 +2246,8 @@ class BcBaserHelperTest extends BcTestCase
             [1, '/index.html', '<link href="https://localhost/" rel="canonical">'],
             [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical">'],
             [2, '/s/', '<link href="https://localhost/" rel="canonical">'],
+            [1, '/', '<link href="https://example.com" rel="canonical">', 'https://example.com'],
+            [1, '/', '', false],
         ];
     }
 

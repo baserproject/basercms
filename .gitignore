@@ -118,9 +118,12 @@ node_modules
 /webroot/bc_custom_content
 /webroot/bc_spa_sample
 /webroot/debug_kit
-# jwt
-/config/jwt.key
-/config/jwt.pem
+/webroot/.gitignore
+
+# key
+/config/*.key
+/config/*.pem
+# settings
 /config/setting.php
 /config/install.php
 # composer
@@ -139,3 +142,5 @@ node_modules
 /.cache
 /docker/nginx/*
 /docker/proxy/*
+/.github/instructions/local.instructions.md
+/.serena

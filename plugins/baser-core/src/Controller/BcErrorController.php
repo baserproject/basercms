@@ -66,13 +66,15 @@ class BcErrorController extends BcFrontAppController
         $url = BcUtil::fullUrl($request->getUri()->getPath());
         try {
             $site = $sitesTable->findByUrl($url);
-        } catch(MissingConnectionException) {
+        } catch (MissingConnectionException) {
             return $request;
         }
         $url = '/';
-        if($site->alias) $url .= $site->alias . '/';
+        if ($site) {
+            $request = $request->withAttribute('currentSite', $site);
+            if ($site->alias) $url .= $site->alias . '/';
+        }
         $content = $contentsTable->findByUrl($url);
-        $request = $request->withAttribute('currentSite', $site);
         return $request->withAttribute('currentContent', $content);
     }
 

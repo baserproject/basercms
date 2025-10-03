@@ -150,8 +150,11 @@ class ContentLinksServiceTest extends BcTestCase
         $this->assertEquals($rs['content']['title'], 'test edit link');
 
         //実行失敗
+        $data = [
+            'url' => ''
+        ];
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
-        $this->expectExceptionMessage("関連するコンテンツがありません");
-        $this->ContentLinksService->update($contentLink, []);
+        $this->expectExceptionMessage("リンク先URLを入力してください。");
+        $this->ContentLinksService->update($contentLink, $data);
     }
 }

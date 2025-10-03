@@ -67,8 +67,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
         }
         return $this->BlogCategories->get($id,
-        conditions: $conditions,
-        contain: $contain);
+            conditions: $conditions,
+            contain: $contain
+        );
     }
 
     /**
@@ -87,20 +88,64 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         $queryParams = array_merge([
             'status' => ''
         ], $queryParams);
-
         $query = $this->BlogCategories->find($type);
+        $query = $this->createIndexConditions($query, $blogContentId, $queryParams);
+        return $query;
+    }
+
+    /**
+     * createIndexConditions
+     *
+     * @param Query $query
+     * @param int $blogContentId
+     * @param array $params
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function createIndexConditions(Query $query, int $blogContentId, array $params = []): Query
+    {
+        foreach($params as $key => $value) {
+            if ($value === '') unset($params[$key]);
+        }
+        $params = array_merge([
+            'name' => null,
+            'title' => null,
+            'status' => '',
+            'limit' => null,
+            'page' => null
+        ], $params);
+
         $conditions = [];
-        if ($queryParams['status'] === 'publish') {
+        if ($params['status'] === 'publish') {
             $fields = $this->BlogCategories->getSchema()->columns();
             $query = $query->contain(['BlogContents' => ['Contents']])
                 ->select($fields);
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
             $conditions = array_merge($conditions, ['BlogCategories.status' => true]);
         }
+        if ($blogContentId) {
+            $conditions = array_merge($conditions, ['BlogCategories.blog_content_id' => $blogContentId]);
+        }
+        if(!is_null($params['name'])) {
+            $conditions['BlogCategories.name LIKE'] = '%' . $params['name'] . '%';
+        }
+        if(!is_null($params['title'])) {
+            $conditions['BlogCategories.title LIKE'] = '%' . $params['title'] . '%';
+        }
 
+        $query = $query->where($conditions);
 
-        if ($blogContentId) $conditions = array_merge($conditions, ['BlogCategories.blog_content_id' => $blogContentId]);
-        return $query->where($conditions);
+        if (!empty($params['limit'])) {
+            if (!empty($params['page'])) {
+                $query = $query->page($params['page'], $params['limit']);
+            } else {
+                $query = $query->limit($params['limit']);
+            }
+        }
+
+        return $query;
     }
 
     /**

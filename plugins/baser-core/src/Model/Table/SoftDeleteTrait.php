@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use Cake\ORM\RulesChecker;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Error\MissingColumnException;
@@ -123,20 +124,6 @@ trait SoftDeleteTrait
             return false;
         }
 
-        $event = $this->dispatchEvent('Model.beforeDelete', [
-            'entity' => $entity,
-            'options' => $options,
-        ]);
-
-        if ($event->isStopped()) {
-            return $event->getResult();
-        }
-
-        $this->_associations->cascadeDelete(
-            $entity,
-            ['_primary' => false] + $options->getArrayCopy()
-        );
-
         $query = $this->updateQuery();
         $conditions = (array)$entity->extract($primaryKey);
         $statement = $query->update($this->getTable())
@@ -148,11 +135,6 @@ trait SoftDeleteTrait
         if (!$success) {
             return $success;
         }
-
-        $this->dispatchEvent('Model.afterDelete', [
-            'entity' => $entity,
-            'options' => $options,
-        ]);
 
         return $success;
     }
@@ -181,14 +163,27 @@ trait SoftDeleteTrait
      * @param EntityInterface $entity entity
      * @return bool true in case of success, false otherwise.
      */
-    public function hardDelete(EntityInterface $entity)
+    public function hardDelete(EntityInterface $entity, array $options = [])
     {
         if(!$this->enabled) {
             throw new \BadMethodCallException('SoftDeleteTrait is not enabled');
         }
-        if (!$this->delete($entity)) {
-            return false;
+
+        $options = new ArrayObject($options);
+
+        $event = $this->dispatchEvent('Model.beforeDelete', [
+            'entity' => $entity,
+            'options' => $options,
+        ]);
+        if ($event->isStopped()) {
+            return $event->getResult();
         }
+
+        $this->_associations->cascadeDelete(
+            $entity,
+            ['_primary' => false] + $options->getArrayCopy()
+        );
+
         $primaryKey = (array)$this->getPrimaryKey();
         $query = $this->deleteQuery();
         $conditions = (array)$entity->extract($primaryKey);
@@ -200,6 +195,11 @@ trait SoftDeleteTrait
         if (!$success) {
             return $success;
         }
+
+        $this->dispatchEvent('Model.afterDelete', [
+            'entity' => $entity,
+            'options' => $options,
+        ]);
 
         return $success;
     }

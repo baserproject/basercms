@@ -27,6 +27,7 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -226,12 +227,27 @@ class BlogControllerTest extends BcTestCase
      */
     public function test_posts()
     {
-        $this->markTestIncomplete('このテストはまだ実装されていません。');
-        //準備
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
 
-        //正常系実行
+        // スラッグが設定されている記事
+        $this->get('/news/archives/release');
+        $this->assertResponseOk();
+        $this->get('/news/archives/3');
+        $this->assertRedirect('/news/archives/release');
 
-        //異常系実行
+        // 日本語のスラッグが設定されている記事
+        $this->get('/news/archives/' . rawurlencode('日本語スラッグ'));
+        $this->assertResponseOk();
+        $this->get('/news/archives/4');
+        $this->assertRedirect('/news/archives/' . rawurlencode('日本語スラッグ'));
+
+        // スラッグが設定されていない記事
+        $this->get('/news/archives/5');
+        $this->assertResponseOk();
+
+        // 404
+        $this->get('/news/archives/9999');
+        $this->assertResponseCode(404);
 
 
     }

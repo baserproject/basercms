@@ -155,6 +155,15 @@ use BaserCore\Annotation\Doc;
  * @method bool isDisplayCustomField(CustomEntry $entry, string $fieldName)
  * @method string getCustomFieldTitle(mixed $entry, string $fieldName)
  * @method string|array getCustomFieldValue(mixed $entry, string $fieldName, array $options = [])
+ * @method string getCustomEntries(int $tableId, int $limit, array $options = [])
+ * @method string customEntries(int $tableId, int $limit, array $options = [])
+ * @method bool hasPrevCustomEntry(CustomEntry $entry)
+ * @method bool hasNextCustomEntry(CustomEntry $entry)
+ * @method CustomEntry getPrevCustomEntry(CustomEntry $entry)
+ * @method CustomEntry getNextCustomEntry(CustomEntry $entry)
+ * @method string prevCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
+ * @method string nextCustomEntryLink(CustomEntry $entry, string $title = '', array $htmlAttributes = [])
+ * @method string getCustomEntryUrl(CustomEntry $entry, bool $full = true, bool $base = true)
  *
  * ### TextHelper
  * @method string truncateText(string $text, int $length = 100, array $options = [])
@@ -399,7 +408,7 @@ class BcBaserHelper extends Helper
      *    - `escapeTitle` : タイトルをエスケープするかどうか（初期値 : true）
      *    - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
      *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
-     *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+     *    - `full` : URLをフルパスで出力するかどうか（初期値 : false）
      *     ※ その他のパラメータについては、HtmlHelper::link() を参照。
      * @param string $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -424,8 +433,8 @@ class BcBaserHelper extends Helper
      *    - `escapeTitle` : タイトルをエスケープするかどうか（初期値 : true）
      *    - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
      *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
-     *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
      *    - `enabled` : リンクが有効かどうか（初期値 : true）
+     *    - `full` : URLをフルパスで出力するかどうか（初期値 : false）
      *     ※ その他のパラメータについては、HtmlHelper::image() を参照。
      * @param bool $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -443,8 +452,8 @@ class BcBaserHelper extends Helper
             'escape' => true,
             'prefix' => false,
             'forceTitle' => false,
-            'ssl' => $this->isSSL(),
-            'enabled' => true
+            'enabled' => true,
+            'full' => false
         ], $options);
 
         // EVENT Html.beforeGetLink
@@ -461,9 +470,9 @@ class BcBaserHelper extends Helper
         $request = $this->getView()->getRequest();
         $prefix = $options['prefix'];
         $forceTitle = $options['forceTitle'];
-        $ssl = $options['ssl'];
         $enabled = $options['enabled'];
-        unset($options['prefix'], $options['forceTitle'], $options['ssl'], $options['enabled']);
+        $full = $options['full'];
+        unset($options['prefix'], $options['forceTitle'], $options['enabled'], $options['full']);
 
         if ($prefix && is_array($url) && !empty($request->getParam('prefix'))) {
             $url[$request->getParam('prefix')] = true;
@@ -480,17 +489,14 @@ class BcBaserHelper extends Helper
             }
         }
 
-        // 現在SSLの場合、特定の条件でフルパスとする
-        // - //(スラッシュスラッシュ)から始まるURL
-        // - http / https 以外のプロトコル
-        // - ハッシュタグから始まるURL
-        $full = false;
         if (BcUtil::isInstalled()
-            && ($this->isSSL() || $ssl)
+            && ($full)
             && !(preg_match('/^(javascript|https?|ftp|tel|mailto):/', $srcUrl))
             && !(strpos($srcUrl, '//') === 0)
             && !preg_match('/^#/', $srcUrl)) {
             $full = true;
+        } else {
+            $full = false;
         }
 
         if (preg_match('{^' . BcUtil::getPrefix(true) . '\/}', $srcUrl) || !isset($this->BcContents)) {
@@ -1281,18 +1287,18 @@ class BcBaserHelper extends Helper
     public function content()
     {
         /*** contentHeader ***/
-        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $this->dispatchLayerEvent('contentHeader', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentHeader ***/
-        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->getView()->getName()]);
+        $this->dispatchLayerEvent('contentHeader', [], ['layer' => 'View', 'class' => $this->getView()->getName()]);
 
         echo $this->getView()->fetch('content');
 
         /*** contentFooter ***/
-        $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $this->dispatchLayerEvent('contentFooter', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentFooter ***/
-        $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->getView()->getName()]);
+        $this->dispatchLayerEvent('contentFooter', [], ['layer' => 'View', 'class' => $this->getView()->getName()]);
     }
 
     /**
@@ -2552,10 +2558,6 @@ class BcBaserHelper extends Helper
         if (empty($this->getView()->getRequest()->getAttribute('currentSite'))) {
             return;
         }
-        // TODO ucmitz 未実装
-        // >>>
-        return;
-        // <<<
         $this->setCanonicalUrl();
         $this->setAlternateUrl();
     }
@@ -2572,6 +2574,25 @@ class BcBaserHelper extends Helper
      */
     public function setCanonicalUrl()
     {
+        $canonicalUrl = $this->_View->get('canonicalUrl');
+        if ($canonicalUrl === false) {
+            return;
+        }
+        if ($canonicalUrl) {
+            $this->_View->assign('meta',
+                $this->BcHtml->meta('canonical',
+                    $this->getUrl($canonicalUrl, true),
+                    [
+                        'rel' => 'canonical',
+                        'type' => null,
+                        'title' => null,
+                        'inline' => false
+                    ]
+                )
+            );
+            return;
+        }
+
         $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
         if (!$currentSite) return;
 
@@ -2612,22 +2633,27 @@ class BcBaserHelper extends Helper
      */
     public function setAlternateUrl()
     {
-
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $subSite = $sites->getSubByUrl($this->_View->getRequest()->getPath(), false, BcAgent::find('smartphone'));
+        $view = $this->getView();
+        $request = $view->getRequest();
+        $path = $request->getPath();
+        $subSite = $sites->getSubByUrl($path, false, BcAgent::find('smartphone'));
         if (!$subSite || $subSite->same_main_url) {
             return;
         }
-        $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-            $this->_View->getRequest()->getPath(),
-            $this->_View->getRequest()->getAttribute('currentSite')->id
-        )));
-        $this->_View->set('meta',
+
+        $url = $subSite->makeUrl(new ServerRequest(['url' => $this->BcContents->getPureUrl(
+            $path,
+            $request->getAttribute('currentSite')->id
+        )]));
+
+        $view->assign('meta',
             $this->BcHtml->meta('alternate',
-                $this->BcHtml->url($url, true),
+                null,
                 [
                     'rel' => 'alternate',
                     'media' => 'only screen and (max-width: 640px)',
+                    'link' => $this->getUrl($url, true),
                     'type' => null,
                     'title' => null,
                     'inline' => false

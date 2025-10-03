@@ -21,6 +21,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Model\Entity\CustomContent;
+use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomEntriesService;
@@ -157,6 +158,93 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
+     * アーカイブページ用の View 変数を取得する
+     *
+     * @param EntityInterface $customContent
+     * @param PaginatedInterface $customEntries
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getViewVarsForArchives(
+        EntityInterface $customContent,
+        PaginatedInterface $customEntries,
+        string $archivesName
+    ): array
+    {
+        /** @var CustomContent $customContent */
+        /** @var CustomTablesService $customTables */
+        $customTables = $this->getService(CustomTablesServiceInterface::class);
+        $customTables->CustomTables->hasMany('CustomLinks')
+            ->setClassName('BcCustomContent.CustomLinks')
+            ->setForeignKey('custom_table_id')
+            ->setSort(['CustomLinks.lft' => 'ASC'])
+            ->setFinder('all');
+        //カスタムテーブルidを元に紐づいたカスタムリンクを取得
+        $customTable = $customTables->get($customContent->custom_table_id, [
+            'contain' => [
+                'CustomLinks' => [
+                    'conditions' => ['CustomLinks.status' => true],
+                    'CustomFields'
+                ]
+            ]
+        ]);
+
+        return [
+            'customContent' => $customContent,
+            'customEntries' => $customEntries,
+            'customTable' => $customTable,
+            'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
+            'archivesName' => $archivesName
+        ];
+    }
+
+    /**
+     * 年別アーカイブページ用の View 変数を取得する
+     *
+     * @param EntityInterface $customContent
+     * @param PaginatedInterface $customEntries
+     * @param string $archivesName
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getViewVarsForYear(
+        EntityInterface $customContent,
+        PaginatedInterface $customEntries,
+        string $archivesName
+    ): array
+    {
+        /** @var CustomContent $customContent */
+        /** @var CustomTablesService $customTables */
+        $customTables = $this->getService(CustomTablesServiceInterface::class);
+        $customTables->CustomTables->hasMany('CustomLinks')
+            ->setClassName('BcCustomContent.CustomLinks')
+            ->setForeignKey('custom_table_id')
+            ->setSort(['CustomLinks.lft' => 'ASC'])
+            ->setFinder('all');
+        //カスタムテーブルidを元に紐づいたカスタムリンクを取得
+        $customTable = $customTables->get($customContent->custom_table_id, [
+            'contain' => [
+                'CustomLinks' => [
+                    'conditions' => ['CustomLinks.status' => true],
+                    'CustomFields'
+                ]
+            ]
+        ]);
+
+        return [
+            'customContent' => $customContent,
+            'customEntries' => $customEntries,
+            'customTable' => $customTable,
+            'currentWidgetAreaId' => $customContent->widget_area?? BcSiteConfig::get('widget_area'),
+            'archivesName' => $archivesName
+        ];
+    }
+
+    /**
      * 詳細ページ用の View 変数を取得する
      *
      * @param EntityInterface $customContent
@@ -223,6 +311,32 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         return 'CustomContent' . DS . $customContent->template . DS . 'view';
     }
 
+        /**
+     * アーカイブページ用のテンプレートを取得する
+     * @param CustomContent $customContent
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getArchivesTemplate(CustomContent $customContent): string
+    {
+        return 'CustomContent' . DS . $customContent->template . DS . 'archives';
+    }
+
+    /**
+     * 年別アーカイブページ用のテンプレートを取得する
+     * @param CustomContent $customContent
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getYearTemplate(CustomContent $customContent): string
+    {
+        return 'CustomContent' . DS . $customContent->template . DS . 'year';
+    }
+
     /**
      * カスタムエントリーの詳細ページ用のプレビューのセットアップを行う
      *
@@ -243,19 +357,50 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         BcCcFileUtil::setupUploader($customContent->custom_table_id);
 
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
-        $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
+        if ($customEntriesTable->hasBehavior('BaserCore.BcUpload')) {
+            $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
+            $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
+        } else {
+            $postEntity = $request->getData();
+        }
 
-        $postEntity = $customEntriesTable->saveTmpFiles($request->getData(), mt_rand(0, 99999999));
-        $postEntity = $postEntity?$postEntity->toArray(): $request->getData();
-
-        $entity = $customEntriesTable->patchEntity(
-            $customEntry ?? $customEntriesTable->newEmptyEntity(),
-            $postEntity
-        );
-
-        BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
+        if ($postEntity && $customEntriesTable->hasBehavior('BcUpload')) {
+            // マルチチェックボックスを一旦変換
+            $tmpEntity = $customEntriesTable->patchEntity(
+                $customEntry ?? $customEntriesTable->newEmptyEntity(),
+                ($postEntity)?? []
+            );
+            // beforeMarshal イベントをオフにして一時ファイルを保存
+            $events = BcUtil::offEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal');
+            $entity = $customEntriesTable->saveTmpFiles($postEntity, mt_rand(0, 99999999));
+            // イベントオフの状態で、CustomEntry にキャスト
+            $entity = $customEntriesTable->newEntity($entity->toArray());
+            BcUtil::onEvent($customEntriesTable->getEventManager(), 'Model.beforeMarshal', $events);
+            // 一時エンティティをマージ
+            $entity = $customEntriesTable->patchEntity(
+                $entity,
+                $tmpEntity->toArray()
+            );
+        } else {
+            $entity = $customEntriesTable->patchEntity(
+                $customEntry ?? $customEntriesTable->newEmptyEntity(),
+                ($postEntity) ?? []
+            );
+        }
 
         $entity = $customEntriesTable->decodeRow($entity);
+
+        if ($request->getQuery('preview') === 'draft') {
+            $customFields = $customEntriesTable->links;
+            foreach ($customFields as $customField) {
+                if ($customField->custom_field->type !== 'CuCcBurgerEditor') {
+                    continue;
+                }
+                $name = $customField->name;
+                $entity->$name = $entity->detail_draft;
+            }
+        }
+
         $controller->set(['customEntry' => $entity]);
 
         // テンプレートの変更

@@ -29,8 +29,8 @@ use BcCustomContent\Utility\CustomContentUtil;
 use BcCustomContent\View\Helper\CustomContentArrayTrait;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\Query;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -176,7 +176,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
 
         if ($options['order']) {
-            $query->order($this->createOrder($options['order'], $options['direction']));
+            $query->orderBy($this->createOrder($options['order'], $options['direction']));
         }
 
         if (!empty($options['limit'])) {
@@ -228,14 +228,14 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     /**
      * 検索条件を作成しセットする
      *
-     * @param Query $query
+     * @param SelectQuery $query
      * @param array $params
-     * @return Query
+     * @return SelectQuery
      * @notodo
      * @checked
      * @unitTest
      */
-    public function createIndexConditions(Query $query, array $params)
+    public function createIndexConditions(SelectQuery $query, array $params)
     {
         foreach ($params as $key => $value) {
             if ($value === '') unset($params[$key]);
@@ -246,7 +246,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'title' => null,
             'creator_id' => null,
             'status' => null,
-            'custom_content_id' => null
+            'custom_content_id' => null,
+            'published' => null,
+            'publishedYear' => null
         ], $params);
 
         // 公開状態
@@ -278,6 +280,16 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             $conditions['CustomEntries.creator_id'] = $params['creator_id'];
         }
 
+        // 公開日
+        if (!is_null($params['published'])) {
+            $conditions['CustomEntries.published']  = $params['published'];
+        }
+
+        // 公開年
+        if (!is_null($params['publishedYear'])) {
+            $conditions['YEAR(CustomEntries.published)']  = $params['publishedYear'];
+        }
+
         // custom_content_id
         if (!is_null($params['custom_content_id'])) {
             $query->contain('CustomTables.CustomContents');
@@ -305,19 +317,34 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 }
 
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
-                if (in_array($controlType, ['text', 'textarea'])) {
-                    $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
-                } elseif ($controlType === 'multiCheckbox' && is_array($value)) {
-                    $c = [];
-                    foreach ($value as $v) {
-                        $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                if($link->custom_field->type == "BcCcRelated"){
+                    if (!empty($link->custom_field->meta['BcCcRelated']['display_type']) && $link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
+                        if (!is_array($value))$value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
                     }
-                    $conditions[] = ['AND' => $c];
-                } elseif ($controlType === 'checkbox') {
-                    if ($value) $conditions["CustomEntries.$key"] = $value;
-                } else {
-                    $conditions["CustomEntries.$key"] = $value;
+                }else{
+                    if (in_array($controlType, ['text', 'textarea'])) {
+                        $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
+                    } elseif ($controlType === 'multiCheckbox') {
+                        if (!is_array($value)) $value = [$value];
+                        $c = [];
+                        foreach ($value as $v) {
+                            $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
+                        }
+                        $conditions[] = ['AND' => $c];
+                    } elseif ($controlType === 'checkbox') {
+                        if ($value) $conditions["CustomEntries.$key"] = $value;
+                    } else {
+                        $conditions["CustomEntries.$key"] = $value;
+                    }
                 }
+
             }
         }
 
@@ -396,10 +423,14 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
 
         if (is_numeric($id)) {
-            $conditions = array_merge_recursive(
-                $conditions,
-                ['CustomEntries.id' => $id]
-            );
+            $conditions = array_merge_recursive($conditions, [
+                'CustomEntries.id' => $id,
+            ]);
+            if($options['status'] === 'publish') {
+                $conditions = array_merge_recursive($conditions, [
+                    'CustomEntries.name' => ''
+                ]);
+            }
         } else {
             $conditions = array_merge_recursive(
                 $conditions,
@@ -407,12 +438,17 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             );
         }
 
-        return $this->CustomEntries->find()
+        $entity = $this->CustomEntries->find()
             ->select($this->createSelect($options))
             ->select($this->CustomEntries->CustomTables)
             ->where($conditions)
             ->contain($options['contain'])
             ->first();
+        if (!$entity) {
+            throw new RecordNotFoundException();
+        } else {
+            return $entity;
+        }
     }
 
     /**
@@ -675,7 +711,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
         $parentsSrc = $this->CustomEntries->find('treeList')
             ->where($conditions)
-            ->order(['lft'])
+            ->orderBy(['lft'])
             ->all();
         $parents = [];
         foreach($parentsSrc as $key => $value) {
@@ -747,10 +783,16 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function autoConvert(array $data): array
     {
+        if(empty($this->CustomEntries->links)) return $data;
         foreach($this->CustomEntries->links as $link) {
             /** @var CustomLink $link */
             if (empty($data[$link->name])) continue;
             $value = $data[$link->name];
+
+            if ($link->custom_field->type === 'BcCcDate' || $link->custom_field->type === 'BcCcDateTime') {
+                $value = $this->normalizeDateString($value);
+            }
+
             // 半角処理
             if ($link->custom_field->auto_convert === 'CONVERT_HANKAKU') {
                 $value = mb_convert_kana($value, 'a');
@@ -788,6 +830,132 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     public function moveDown(int $id)
     {
         return $this->CustomEntries->moveDown($this->get($id, ['contain' => ['CustomTables']]));
+    }
+
+    /**
+     * 日付文字列を正規化する（月日の0埋めを行う）
+     *
+     * @param string $dateString
+     * @return string
+     */
+    private function normalizeDateString(string $dateString): string
+    {
+        if (empty($dateString)) {
+            return $dateString;
+        }
+
+        $timestamp = strtotime($dateString);
+
+        if ($timestamp === false) {
+            return $dateString;
+        }
+
+        if (strpos($dateString, ':') !== false) {
+            if (strpos($dateString, ':') === strrpos($dateString, ':')) {
+                return date('Y/m/d H:i', $timestamp);
+            } else {
+                return date('Y/m/d H:i:s', $timestamp);
+            }
+        } else {
+            return date('Y/m/d', $timestamp);
+        }
+    }
+
+    /**
+     * 指定したCustomEntryの前のエントリーを取得する
+     *
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPrevEntry(EntityInterface|CustomEntry $entry)
+    {
+        // CustomContentのlist_order, list_directionを取得
+        $customTable = $this->CustomTables->get($entry->custom_table_id, [
+            'contain' => ['CustomContents']
+        ]);
+        $customContent = $customTable->custom_content;
+        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
+        // orderBy用配列生成
+        $orderBy = [$orderField => 'ASC', 'id' => 'ASC'];
+        if($orderDirection === 'DESC') {
+            $operator = '>';
+        } else {
+            $operator = '<';
+        }
+        $query = $this->CustomEntries->find()
+            ->where([
+                'custom_table_id' => $entry->custom_table_id,
+                'status' => true,
+                $orderField . ' ' . $operator => $entry->{$orderField}
+            ])
+            ->orderBy($orderBy)
+            ->limit(1);
+        $prev = $query->first();
+        // 同じ値の場合はidで判定
+        if (!$prev) {
+            $query = $this->CustomEntries->find()
+                ->where([
+                    'custom_table_id' => $entry->custom_table_id,
+                    'status' => true,
+                    $orderField => $entry->{$orderField},
+                    'id ' . $operator => $entry->id
+                ])
+                ->orderBy($orderBy)
+                ->limit(1);
+            $prev = $query->first();
+        }
+        return $prev;
+    }
+
+    /**
+     * 指定したCustomEntryの次のエントリーを取得する
+     *
+     * @param CustomEntry $entry
+     * @return CustomEntry|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNextEntry(EntityInterface|CustomEntry $entry)
+    {
+        // CustomContentのlist_order, list_directionを取得
+        $customTable = $this->CustomTables->get($entry->custom_table_id, [
+            'contain' => ['CustomContents']
+        ]);
+        $customContent = $customTable->custom_content;
+        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
+        // orderBy用配列生成
+        $orderBy = [$orderField => 'DESC', 'id' => 'DESC'];
+        $operator = $orderDirection === 'DESC' ? '<' : '>';
+
+        $query = $this->CustomEntries->find()
+            ->where([
+                'custom_table_id' => $entry->custom_table_id,
+                'status' => true,
+                $orderField . ' ' . $operator => $entry->{$orderField}
+            ])
+            ->orderBy($orderBy)
+            ->limit(1);
+        $next = $query->first();
+        // 同じ値の場合はidで判定
+        if (!$next) {
+            $query = $this->CustomEntries->find()
+                ->where([
+                    'custom_table_id' => $entry->custom_table_id,
+                    'status' => true,
+                    $orderField => $entry->{$orderField},
+                    'id ' . $operator => $entry->id
+                ])
+                ->orderBy($orderBy)
+                ->limit(1);
+            $next = $query->first();
+        }
+        return $next;
     }
 
 }

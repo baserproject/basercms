@@ -97,6 +97,7 @@ class CustomFieldsTable extends AppTable
             ->integer('max_length', __d('baser_core', '最大文字数は整数を入力してください。'));
 
         $validator
+            ->allowEmptyString('source')
             ->add('source', [
                 'checkSelectList' => [
                     'provider' => 'bc',
@@ -105,6 +106,7 @@ class CustomFieldsTable extends AppTable
                 ]
             ]);
         $validator
+            ->allowEmptyString('meta')
             ->add('meta', [
                 'checkAlphaNumericWithJson' => [
                     'rule' => ['checkWithJson', 'BcCustomContent.email_confirm', "/^[a-z0-9_]+$/"],

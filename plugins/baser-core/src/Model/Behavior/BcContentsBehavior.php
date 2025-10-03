@@ -125,7 +125,7 @@ class BcContentsBehavior extends Behavior
     public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
     {
         if ($options['validate']) {
-            if (!isset($data['content'])) {
+            if (!isset($entity->content)) {
                 $entity->setError('content', ['_required' => __d('baser_core', '関連するコンテンツがありません')]);
             } else {
                 [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
@@ -151,7 +151,7 @@ class BcContentsBehavior extends Behavior
     {
         if (empty($entity->content)) {
             $entity->content = $this->Contents->find('all', ...['withDeleted'])
-                ->where(['entity_id' => $entity->id])
+                ->where(['Contents.entity_id' => $entity->id])
                 ->first();
         }
     }
