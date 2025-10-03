@@ -38,8 +38,8 @@
 
 <script>
 
-const {validationMixin, default: Vuelidate} = require('vuelidate')
-const {required} = require('vuelidate/lib/validators')
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import axios from "axios";
 
 export default {
@@ -47,6 +47,13 @@ export default {
      * name
      */
     name: "FavoriteForm",
+
+    /**
+     * setup
+     */
+    setup() {
+        return { v$: useVuelidate() }
+    },
 
     /**
      * Data
@@ -68,9 +75,11 @@ export default {
     /**
      * Validations
      */
-    validations: {
-        name: {required},
-        url: {required}
+    validations() {
+        return {
+            name: {required},
+            url: {required}
+        }
     },
 
     /**

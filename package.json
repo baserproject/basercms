@@ -14,8 +14,7 @@
   "homepage": "https://github.com/baserproject/basercms#readme",
   "workspaces": [
     "plugins/bc-admin-third",
-    "plugins/bc-front",
-    "plugins/BcSpaSample"
+    "plugins/bc-front"
   ],
   "private": true
 }
