@@ -8,29 +8,25 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-import Modal from '../../../../js/common/modal.vue';
+import Modal from '../../../../js/admin/common/vue/modal.vue';
 import axios from '../../../../../../../node_modules/axios'
+
+let createApp = require('vue').createApp;
+const script = $("#AdminCustomTablesFormScript");
+const settings = JSON.parse(script.attr('data-setting'));
 
 /**
  * Custom Links Vue
- *
- * @type {Vue}
  */
-let customLinks = new Vue({
-
-    /**
-     * Element
-     */
-    el: '#AdminCustomTable',
+let app = createApp({
 
     /**
      * data
      * @returns Object
      */
     data: function () {
-        const script = $("#AdminCustomTablesFormScript");
         return {
-            settings: JSON.parse(script.attr('data-setting')),
+            settings: settings,
             links: JSON.parse(script.attr('data-links')),
             link: {},
             field: {},
@@ -240,12 +236,13 @@ let customLinks = new Vue({
             }, 500);
 
             // 一番下までスクロールしたらプレビューを非表示にする
+            const self = this;
             $modelWindow.on('scroll', function () {
                 var bottom = $('.modal-content').innerHeight() - $modelWindow.innerHeight();
                 if (bottom <= $modelWindow.scrollTop()) {
                     $preview.fadeOut(500);
                 } else {
-                    if (customLinks.displayPreview && $preview.css('display') === 'none') {
+                    if (self.displayPreview && $preview.css('display') === 'none') {
                         $preview.fadeIn(500);
                     }
                 }
@@ -524,8 +521,8 @@ $(function () {
      */
     function getDeployedOnlyOneOnTableTypes() {
         let types = [];
-        Object.keys(customLinks.settings).forEach(key => {
-            if(customLinks.settings[key].onlyOneOnTable && isTargetDeployed(key)) {
+        Object.keys(settings).forEach(key => {
+            if(settings[key].onlyOneOnTable && isTargetDeployed(key)) {
                 types.push(key);
             }
         });
@@ -598,7 +595,7 @@ $(function () {
             // onlyOneOnTable のタイプが削除された場合は、利用できるフィールドの対象のタイプにis-deployedクラスを削除する
             let deletedFieldType = $(this).parent().parent().find("input.custom-field-type").val();
             //deletedFieldTypeがonlyOneOnTableのタイプであるかチェック
-            if(customLinks.settings[deletedFieldType].onlyOneOnTable === true) {
+            if(settings[deletedFieldType].onlyOneOnTable === true) {
                 $("#CustomFieldSettingSource .custom-field-type").each(function(){
                     if($(this).val() === deletedFieldType && $(this).parent().hasClass('is-deployed')) {
                         $(this).parent().removeClass('is-deployed');
@@ -644,3 +641,4 @@ $(function () {
 
 });
 
+app.mount('#AdminCustomTable');

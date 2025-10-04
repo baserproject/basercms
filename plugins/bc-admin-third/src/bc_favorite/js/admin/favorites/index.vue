@@ -63,7 +63,7 @@
                     @formUpdated="formUpdated"
                     @formSubmitted="formSubmitted"
                 />
-                <template slot="footer">
+                <template #footer>
                     <button class="bca-btn" type="button" @click="$refs.modalFavoriteForm.closeModal()">{{ buttonCancel }}</button>&nbsp;
                     <button class="bca-btn" type="button" @click="$refs.FavoriteForm.formSubmit()" :disabled="formError">
                         {{ buttonSubmit }}
@@ -78,7 +78,7 @@
 <script>
 import axios from "axios";
 import FavoriteForm from "./form.vue";
-import Modal from "../../../../js/common/modal.vue";
+import Modal from "../../../../js/admin/common/vue/modal.vue";
 
 export default {
 

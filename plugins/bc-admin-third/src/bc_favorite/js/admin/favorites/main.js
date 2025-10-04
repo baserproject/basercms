@@ -8,7 +8,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-import { createApp } from 'vue'
+let createApp = require('vue').createApp;
 import FavoriteIndex from "./index.vue";
 
 /**
@@ -16,6 +16,8 @@ import FavoriteIndex from "./index.vue";
  */
 
 const favoriteList = {
+
+    app: null,
 
     /**
      * 初期化
@@ -31,12 +33,13 @@ const favoriteList = {
     initView() {
         $("body").append($("#FavoritesMenu"));
 
-        const app = createApp({
+        this.app = createApp({
             components: {
                 FavoriteIndex
-            },
+            }
         });
-        app.mount('#FavoriteMenu');
+
+        window.favoriteApp = this.app.mount('#FavoriteMenu');
 
         $("#BtnFavoriteHelp").bt({
             trigger: 'click',
@@ -86,7 +89,9 @@ const favoriteList = {
      */
     registerEvents() {
         $("#BtnFavoriteAdd").click(function () {
-            document.querySelector('#FavoriteListWrap').__vue__.openModal();
+            if (window.favoriteApp && window.favoriteApp.$refs && window.favoriteApp.$refs.favoriteIndex) {
+                window.favoriteApp.$refs.favoriteIndex.openModal();
+            }
         });
         $("#FavoriteAjaxForm").submit(function () {
             return false

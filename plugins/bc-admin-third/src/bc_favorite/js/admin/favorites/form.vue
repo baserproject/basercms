@@ -23,14 +23,14 @@
                 <span class="bca-textbox">
                     <input class="required" type="text" v-model="name" id="FavoriteName" :placeholder="labelTitle" size=30 name="name" @input="formUpdated" autofocus/>
                 </span><br>
-                <div class="invalid-feedback" v-if="$v.name.$invalid">{{ alertRequire }}</div>
+                <div class="invalid-feedback" v-if="v$.name.$invalid">{{ alertRequire }}</div>
             </dd>
             <dt><label for="FavoriteUrl"/>{{ labelUrl }}</dt>
             <dd>
                 <span class="bca-textbox">
                     <input class="required" type="text" v-model="url" id="FavoriteUrl" :placeholder="labelUrl" size=30 name="url" @input="formUpdated"/>
                 </span><br>
-                <div class="invalid-feedback" v-if="$v.url.$invalid">{{ alertRequire }}</div>
+                <div class="invalid-feedback" v-if="v$.url.$invalid">{{ alertRequire }}</div>
             </dd>
         </dl>
     </form>
@@ -117,7 +117,7 @@ export default {
          * Form Updated
          */
         formUpdated: function () {
-            this.$emit("formUpdated", this.$v.$invalid);
+            this.$emit("formUpdated", this.v$.$invalid);
         },
 
         /**
