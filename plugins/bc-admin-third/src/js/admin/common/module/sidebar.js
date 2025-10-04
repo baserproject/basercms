@@ -8,7 +8,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-import { createApp } from 'vue';
+let createApp = require('vue').createApp;
 
 /**
  * サイドバーのコンテンツメニューを設定する

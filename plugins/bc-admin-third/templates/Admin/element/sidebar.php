@@ -30,8 +30,7 @@ use BaserCore\View\BcAdminAppView;
 
   <nav class="bca-nav__main" data-js-tmpl="AdminMenu" hidden>
     <h2 class="bca-nav__main-title"><?php echo __d('baser_core', '管理メニュー') ?></h2>
-    <div v-for="content in contentList" class="bca-nav__sub"
-         v-if="!content.siteId || content.siteId === currentSiteId || content.siteId === null"
+    <div v-for="content in filteredContentList" class="bca-nav__sub"
          v-bind:data-content-type="content.type"
          v-bind:data-content-is-current="content.current" v-bind:data-content-is-expanded="content.expanded">
       <h3 class="bca-nav__sub-title">
@@ -82,8 +81,6 @@ use BaserCore\View\BcAdminAppView;
       </a>
     </div>
   </nav>
-
-  <nav class="bca-nav__main" data-js-container="AdminMenu" hidden></nav>
 
   <?php if ($useAdminSideBanner): ?>
     <div id="BannerArea" class="bca-banners">

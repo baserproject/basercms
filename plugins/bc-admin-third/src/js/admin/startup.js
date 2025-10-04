@@ -8,6 +8,9 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+import { Tooltip } from "bootstrap";
+import "jquery-colorbox";
+
 /**
  * ブラウザ判別用
  * TOOD ucmitz 未検証
@@ -248,22 +251,15 @@ if (!document.queryCommandSupported('copy')) {
             copyArea.select();
             document.execCommand("copy");
             copyArea.remove();
-
-            // コピー完了のツールチップ表示 bootstrap tooltip
-            $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
-            $("#BtnCopyUrl").tooltip({title: 'コピーしました'});
-            $("#BtnCopyUrl").tooltip('show');
+            Tooltip.getInstance(this)?.dispose();
+            new Tooltip(this, {title: 'コピーしました', trigger: 'manual'}).show();
             return false;
         },
         'mouseenter': function () {
-            // console.log('マウス ホバー');
-            $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
-            $("#BtnCopyUrl").tooltip({title: '公開URLをコピー'});
-            $("#BtnCopyUrl").tooltip('show');
+            new Tooltip(this, {title: '公開URLをコピー', trigger: 'hover'}).show();
         },
         'mouseleave': function () {
-            // console.log('マウス アウト');
-            $("#BtnCopyUrl").tooltip('hide');
+            Tooltip.getInstance(this)?.hide();
         }
     });
 }

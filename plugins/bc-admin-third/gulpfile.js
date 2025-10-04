@@ -54,4 +54,6 @@ gulp.task('watch', function(){
     gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
 });
 
+gulp.task('build', gulp.parallel('css', 'bundle'));
+
 gulp.task('default', gulp.task('watch'));

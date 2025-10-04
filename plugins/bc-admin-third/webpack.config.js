@@ -17,11 +17,11 @@ let entries = {};
 
 glob.sync("./src/**/*.js").map(function (file) {
     if (!file.search('./src/js/admin/', '')) {
-        if (!file.replace('./src/js/admin/', '').match(/^_/)) {
+        if (!file.replace('./src/js/admin/', '').match(/^common\//)) {
             entries[file.replace('./src/', '').split('.').shift()] = file;
         }
     } else if (file.match(/\.\/src\/.+\/js\/admin\//, '')) {
-        if (!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^_/)) {
+        if (!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^common\//)) {
             entries[file.replace(/\.\/src\//, '').split('.').shift()] = file;
         }
     }
