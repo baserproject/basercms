@@ -99,17 +99,26 @@ class BlogTagsService implements BlogTagsServiceInterface
     public function getIndex(array $queryParams)
     {
         $params = array_merge([
-            'conditions' => [],        // 検索条件のベース
-            'direction' => 'ASC',    // 並び方向
-            'sort' => 'name',        // 並び順対象のフィールド
+            'conditions' => [],     // 検索条件のベース
+            'direction' => 'ASC',   // 並び方向
+            'sort' => 'name',       // 並び順対象のフィールド
             'contentId' => null,    // 《条件》ブログコンテンツID
-            'contentUrl' => null,    // 《条件》コンテンツURL
-            'siteId' => null,        // 《条件》サイトID
+            'contentUrl' => null,   // 《条件》コンテンツURL
+            'siteId' => null,       // 《条件》サイトID
             'name' => null,
+            'limit' => null,
+            'page' => null,         // ページ番号
             'contain' => ['BlogPosts' => ['BlogContents' => ['Contents']]]
         ], $queryParams);
 
         $query = $this->BlogTags->find();
+        if (!empty($params['limit'])) {
+            if (!empty($params['page'])) {
+                $query = $query->page($params['page'], $params['limit']);
+            } else {
+                $query = $query->limit($params['limit']);
+            }
+        }
         $query = $this->createIndexConditions($query, $params);
         $query = $this->createIndexOrder($query, $params);
         return $query;

@@ -8,7 +8,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const glob = require("glob");
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
@@ -17,11 +17,11 @@ let entries = {};
 
 glob.sync("./src/**/*.js").map(function (file) {
     if (!file.search('./src/js/admin/', '')) {
-        if (!file.replace('./src/js/admin/', '').match(/^_/)) {
+        if (!file.replace('./src/js/admin/', '').match(/^common\//)) {
             entries[file.replace('./src/', '').split('.').shift()] = file;
         }
     } else if (file.match(/\.\/src\/.+\/js\/admin\//, '')) {
-        if (!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^_/)) {
+        if (!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^common\//)) {
             entries[file.replace(/\.\/src\//, '').split('.').shift()] = file;
         }
     }
@@ -51,6 +51,12 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
+        // Vue 3用の定義
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: JSON.stringify(true),
+            __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false)
+        }),
         // webpack5 に移行時の問題に必要となった
         // vuelidate を読み込む際に、process が見つからないというエラーがあり、BcFavoriteが動かなくなったため
         // npm で、process をインストールして利用する

@@ -215,6 +215,9 @@ class BcAdminAppController extends AppController
         } else {
             $siteUrl = Configure::read('BcEnv.siteUrl');
         }
+        if(BcUtil::isTest()) {
+            $siteUrl = 'https://localhost/';
+        }
         if (!$siteUrl) {
             return;
         }

@@ -9,17 +9,15 @@
  */
 
 
-import "bootstrap";
-import "jquery-colorbox";
-import "./_lib/jquery.baseUrl.js";
-import "./_lib/jquery.bcUtil.js";
-import "./_lib/jquery.bcToken.js";
-import "./_lib/jquery.bcSortable.js";
-import "./_lib/jquery.bcBatch.js";
-import "./_lib/jquery.bcTree.js";
-import "./_lib/jquery.bcConfirm.js";
-import "./_lib/jquery.bcJwt.js";
-import "./_lib/jquery.bcTimeUtil.js";
-import "./_lib/jquery.bcCredit.js";
-import "./_lib/jquery.bcCkeditor.js";
-import "./_module/sidebar.js";
+import "./common/lib/jquery.baseUrl.js";
+import "./common/lib/jquery.bcUtil.js";
+import "./common/lib/jquery.bcToken.js";
+import "./common/lib/jquery.bcSortable.js";
+import "./common/lib/jquery.bcBatch.js";
+import "./common/lib/jquery.bcTree.js";
+import "./common/lib/jquery.bcConfirm.js";
+import "./common/lib/jquery.bcJwt.js";
+import "./common/lib/jquery.bcTimeUtil.js";
+import "./common/lib/jquery.bcCredit.js";
+import "./common/lib/jquery.bcCkeditor.js";
+import "./common/module/sidebar.js";

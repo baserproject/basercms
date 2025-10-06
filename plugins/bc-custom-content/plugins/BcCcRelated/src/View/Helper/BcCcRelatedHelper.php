@@ -85,7 +85,7 @@ class BcCcRelatedHelper extends Helper
             $list = [];
         }
 
-        $optionsType = $field->meta["BcCcRelated"]["display_type"];
+        $optionsType = $field->meta["BcCcRelated"]["display_type"]?? '';
         $options = array_merge([
             'type' => $optionsType,
             'options' => $list,

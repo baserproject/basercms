@@ -204,7 +204,7 @@ class BcUploadBehavior extends Behavior
         $beforeSaveListeners = BcUtil::offEvent($eventManager, 'Model.beforeSave');
         $afterSaveListeners = BcUtil::offEvent($eventManager, 'Model.afterSave');
 
-        $this->table()->save($entity, ['validate' => false]);
+        $this->table()->save($entity, ['validate' => false, 'associated' => false]);
 
         BcUtil::onEvent($eventManager, 'Model.beforeSave', $beforeSaveListeners);
         BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveListeners);

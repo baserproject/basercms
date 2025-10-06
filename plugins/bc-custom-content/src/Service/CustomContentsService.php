@@ -70,6 +70,8 @@ class CustomContentsService implements CustomContentsServiceInterface
     {
         $queryParams = array_merge([
             'status' => 'publish',
+            'limit' => null,
+            'page' => null,
             'contain' => ['Contents']
         ], $queryParams);
 
@@ -81,7 +83,11 @@ class CustomContentsService implements CustomContentsServiceInterface
         }
 
         if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+            if (!empty($queryParams['page'])) {
+                $query = $query->page($queryParams['page'], $queryParams['limit']);
+            } else {
+                $query = $query->limit($queryParams['limit']);
+            }
         }
 
         if ($queryParams['status'] === 'publish') {

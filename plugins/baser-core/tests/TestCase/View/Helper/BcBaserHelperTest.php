@@ -54,6 +54,7 @@ use BaserCore\View\Helper\BcBaserHelper;
  * @property UrlHelper $Url
  * @property BcAdminAppView $BcAdminAppView
  */
+#[\AllowDynamicProperties]
 class BcBaserHelperTest extends BcTestCase
 {
 
@@ -349,6 +350,7 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
+            ['full', ['/test'], ['full' => true], '<a href="https://localhost/test">full</a>'], // フルパス
         ];
     }
 
@@ -2215,8 +2217,11 @@ class BcBaserHelperTest extends BcTestCase
      * testSetAlternateUrl
      * @dataProvider setCanonicalUrlDataProvider
      */
-    public function testSetCanonicalUrl($siteId, $url, $expected)
+    public function testSetCanonicalUrl($siteId, $url, $expected, $canonicalUrl = null)
     {
+        if (!is_null($canonicalUrl)) {
+            $this->BcBaser->getView()->set('canonicalUrl', $canonicalUrl);
+        }
         $this->loadFixtureScenario(InitAppScenario::class);
         SiteFactory::make([
             'id' => 2,
@@ -2241,6 +2246,8 @@ class BcBaserHelperTest extends BcTestCase
             [1, '/index.html', '<link href="https://localhost/" rel="canonical">'],
             [1, '/about/index.html', '<link href="https://localhost/about/" rel="canonical">'],
             [2, '/s/', '<link href="https://localhost/" rel="canonical">'],
+            [1, '/', '<link href="https://example.com" rel="canonical">', 'https://example.com'],
+            [1, '/', '', false],
         ];
     }
 

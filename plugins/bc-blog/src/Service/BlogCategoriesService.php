@@ -67,8 +67,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
         }
         return $this->BlogCategories->get($id,
-        conditions: $conditions,
-        contain: $contain);
+            conditions: $conditions,
+            contain: $contain
+        );
     }
 
     /**
@@ -111,7 +112,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         $params = array_merge([
             'name' => null,
             'title' => null,
-            'status' => ''
+            'status' => '',
+            'limit' => null,
+            'page' => null
         ], $params);
 
         $conditions = [];
@@ -132,7 +135,17 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
             $conditions['BlogCategories.title LIKE'] = '%' . $params['title'] . '%';
         }
 
-        return $query->where($conditions);
+        $query = $query->where($conditions);
+
+        if (!empty($params['limit'])) {
+            if (!empty($params['page'])) {
+                $query = $query->page($params['page'], $params['limit']);
+            } else {
+                $query = $query->limit($params['limit']);
+            }
+        }
+
+        return $query;
     }
 
     /**
