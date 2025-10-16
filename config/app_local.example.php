@@ -91,4 +91,6 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+    // thmbnailの解像度を変更する場合
+    // 'resizeResolution' => 72,
 ];
