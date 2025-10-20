@@ -16,7 +16,7 @@
 		<?php $this->BcBaser->css('style') ?>
 
 <?php $this->BcBaser->js(array(
-			'jquery-1.7.2.min',
+			'jquery-3.7.1.min',
 			'jquery.bxSlider.min',
 			'jquery.easing.1.3',
 			'nada-icons'

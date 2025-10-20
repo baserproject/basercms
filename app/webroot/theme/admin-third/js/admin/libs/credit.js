@@ -34,7 +34,7 @@ function credit() {
                 openedFavorite = true;
                 hideTarget = "#Contents, #SideBar";
             }
-            if ($("#Credit").size()) {
+            if ($("#Credit").length) {
                 isLogin = true;
                 $("#Credit").remove();
             }

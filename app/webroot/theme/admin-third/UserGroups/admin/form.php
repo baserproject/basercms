@@ -22,7 +22,7 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 
 
 <script type="text/javascript">
-	$(window).load(function () {
+	$(window).on('load',function () {
 		<?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
 		$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
 		<?php endif ?>

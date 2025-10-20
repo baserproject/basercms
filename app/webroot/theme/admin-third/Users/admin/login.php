@@ -107,7 +107,7 @@ CSS_END
 
 		function openCredit(completeHandler) {
 
-			if (!$("#Credit").size()) {
+			if (!$("#Credit").length()) {
 				return;
 			}
 
