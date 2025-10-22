@@ -890,7 +890,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             ->where([
                 'CustomEntries.custom_table_id' => $entry->custom_table_id,
                 'CustomEntries.status' => true,
-                $orderField . ' ' . $operator => $entry->{$orderField}
+                'CustomEntries.' . $orderField . ' ' . $operator => $entry->{$orderField}
             ])
             ->orderBy($orderBy)
             ->limit(1);
@@ -901,7 +901,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 ->where([
                     'CustomEntries.custom_table_id' => $entry->custom_table_id,
                     'CustomEntries.status' => true,
-                    $orderField => $entry->{$orderField},
+                    'CustomEntries.' . $orderField => $entry->{$orderField},
                     'CustomEntries.id ' . $operator => $entry->id
                 ])
                 ->orderBy($orderBy)
@@ -937,7 +937,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             ->where([
                 'CustomEntries.custom_table_id' => $entry->custom_table_id,
                 'CustomEntries.status' => true,
-                $orderField . ' ' . $operator => $entry->{$orderField}
+                'CustomEntries.' . $orderField . ' ' . $operator => $entry->{$orderField}
             ])
             ->orderBy($orderBy)
             ->limit(1);
@@ -948,7 +948,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 ->where([
                     'CustomEntries.custom_table_id' => $entry->custom_table_id,
                     'CustomEntries.status' => true,
-                    $orderField => $entry->{$orderField},
+                    'CustomEntries.' . $orderField => $entry->{$orderField},
                     'CustomEntries.id ' . $operator => $entry->id
                 ])
                 ->orderBy($orderBy)
