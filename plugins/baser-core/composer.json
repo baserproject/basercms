@@ -25,6 +25,7 @@
         "baserproject/bc-installer": "5.2.x-dev",
         "baserproject/bc-mail": "5.2.x-dev",
         "baserproject/bc-search-index": "5.2.x-dev",
+        "baserproject/bc-seo": "5.2.x-dev",
         "baserproject/bc-theme-config": "5.2.x-dev",
         "baserproject/bc-theme-file": "5.2.x-dev",
         "baserproject/bc-uploader": "5.2.x-dev",
