@@ -208,7 +208,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         $entities = [];
         foreach($srcEntities->toArray() as $key => $value) {
             /* @var CustomEntry $entity */
-            $entity = $this->CustomEntries->find()->where(['id' => $key])->first();
+            $entity = $this->CustomEntries->find()->where(['CustomEntries.id' => $key])->first();
             if (!preg_match("/^([_]+)/i", $value, $matches)) {
                 $entity->depth = 0;
                 $entities[] = $entity;
@@ -888,9 +888,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         }
         $query = $this->CustomEntries->find()
             ->where([
-                'custom_table_id' => $entry->custom_table_id,
-                'status' => true,
-                $orderField . ' ' . $operator => $entry->{$orderField}
+                'CustomEntries.custom_table_id' => $entry->custom_table_id,
+                'CustomEntries.status' => true,
+                'CustomEntries.' . $orderField . ' ' . $operator => $entry->{$orderField}
             ])
             ->orderBy($orderBy)
             ->limit(1);
@@ -899,10 +899,10 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         if (!$prev) {
             $query = $this->CustomEntries->find()
                 ->where([
-                    'custom_table_id' => $entry->custom_table_id,
-                    'status' => true,
-                    $orderField => $entry->{$orderField},
-                    'id ' . $operator => $entry->id
+                    'CustomEntries.custom_table_id' => $entry->custom_table_id,
+                    'CustomEntries.status' => true,
+                    'CustomEntries.' . $orderField => $entry->{$orderField},
+                    'CustomEntries.id ' . $operator => $entry->id
                 ])
                 ->orderBy($orderBy)
                 ->limit(1);
@@ -935,9 +935,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
 
         $query = $this->CustomEntries->find()
             ->where([
-                'custom_table_id' => $entry->custom_table_id,
-                'status' => true,
-                $orderField . ' ' . $operator => $entry->{$orderField}
+                'CustomEntries.custom_table_id' => $entry->custom_table_id,
+                'CustomEntries.status' => true,
+                'CustomEntries.' . $orderField . ' ' . $operator => $entry->{$orderField}
             ])
             ->orderBy($orderBy)
             ->limit(1);
@@ -946,10 +946,10 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         if (!$next) {
             $query = $this->CustomEntries->find()
                 ->where([
-                    'custom_table_id' => $entry->custom_table_id,
-                    'status' => true,
-                    $orderField => $entry->{$orderField},
-                    'id ' . $operator => $entry->id
+                    'CustomEntries.custom_table_id' => $entry->custom_table_id,
+                    'CustomEntries.status' => true,
+                    'CustomEntries.' . $orderField => $entry->{$orderField},
+                    'CustomEntries.id ' . $operator => $entry->id
                 ])
                 ->orderBy($orderBy)
                 ->limit(1);
