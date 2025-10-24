@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$(function(){$("#BtnSave").click(function(){return!!confirm(bcI18n.message1)&&($.bcUtil.showLoader(),!0)})});
+$((function(){$("#BtnSave").click((function(){return!!confirm(bcI18n.message1)&&($.bcUtil.showLoader(),!0)}))}));
 //# sourceMappingURL=add.bundle.js.map

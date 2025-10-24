@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$(function(){$("#FileList").bind("loadTableComplete",function(){$(".btn-delete").click(function(){return confirm(bcI18n.uploaderConfirmMessage1)&&$.bcToken.submitToken($(this).attr("href")),!1})})});
+$((function(){$("#FileList").bind("loadTableComplete",(function(){$(".btn-delete").click((function(){return confirm(bcI18n.uploaderConfirmMessage1)&&$.bcToken.submitToken($(this).attr("href")),!1}))}))}));
 //# sourceMappingURL=index_table.bundle.js.map

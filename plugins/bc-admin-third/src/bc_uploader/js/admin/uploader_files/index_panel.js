@@ -270,7 +270,7 @@ uploaderFilesIndex = {
         var usePermission = Number($("#UsePermission").html());
         var disabled = false;
         if (parseInt(loginUserGroupId) !== 1 && usePermission) {
-            if (parseInt(loginUserId) !== fileUserId) {
+            if (parseInt(loginUserId) !== parseInt(fileUserId)) {
                 disabled = true;
             }
         }

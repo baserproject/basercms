@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$(function(){$("#ThemeFilesMenu").accordion({collapsible:!0,heightStyle:"content",active:parseInt($(".selected-plugin").attr("data-id"))})});
+$((function(){$("#ThemeFilesMenu").accordion({collapsible:!0,heightStyle:"content",active:parseInt($(".selected-plugin").attr("data-id"))})}));
 //# sourceMappingURL=submenus.bundle.js.map
