@@ -341,7 +341,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      */
     public function getNamesById($ids): array
     {
-        return $this->BlogCategories->find('list')->where(['id IN' => $ids])->toArray();
+        return $this->BlogCategories->find('list')->where(['BlogCategories.id IN' => $ids])->toArray();
     }
 
     /**
