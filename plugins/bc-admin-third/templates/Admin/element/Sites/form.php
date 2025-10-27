@@ -60,8 +60,14 @@ $this->BcBaser->i18nScript([
         style="white-space: nowrap;"><small>[<?php echo $this->BcAdminForm->label('alias', __d('baser_core', 'エイリアス')) ?>]</small>
 			<?php echo $this->BcAdminForm->control('alias', ['type' => 'text', 'size' => '10']) ?></span>
       <i class="bca-icon--question-circle bca-help"></i>
-      <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サイトのURLに利用します。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。空欄に設定した場合、自動的に識別名称と同じものを設定します。') ?></div>
+      <div class="bca-helptext">
+          <?php echo __d('baser_core', 'サイトのURLに利用します。空欄に設定した場合、自動的に識別名称と同じものを設定します。<br><br>
+          ■ 外部ドメインを利用する場合<br>
+          半角英数、ハイフン（-）・アンダースコア（_）・スラッシュ（/）が利用できます。<br>
+          ■ 外部ドメインを利用しない場合<br>
+          半角英数、ハイフン（-）・アンダースコア（_）・ドット（.）が利用できます。
+          ') ?>
+      </div>
       <?php echo $this->BcAdminForm->error('name') ?>
       <?php echo $this->BcAdminForm->error('alias') ?>
     </td>
