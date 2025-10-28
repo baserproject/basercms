@@ -16,13 +16,14 @@ const webpack = require('webpack');
 let entries = {};
 
 glob.sync("./src/**/*.js").map(function (file) {
-    if (!file.search('./src/js/admin/', '')) {
-        if (!file.replace('./src/js/admin/', '').match(/^common\//)) {
-            entries[file.replace('./src/', '').split('.').shift()] = file;
+    if (file.indexOf('src/js/admin/') === 0) {
+        if (!file.replace('src/js/admin/', '').match(/^common\//)) {
+            entries[file.replace('src/', '').split('.').shift()] = './' + file;
         }
-    } else if (file.match(/\.\/src\/.+\/js\/admin\//, '')) {
-        if (!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^common\//)) {
-            entries[file.replace(/\.\/src\//, '').split('.').shift()] = file;
+    }
+    else if (file.match(/src\/.+\/js\/admin\//)) {
+        if (!file.replace(/src\/.+\/js\/admin\//, '').match(/^common\//)) {
+            entries[file.replace('src/', '').split('.').shift()] = './' + file;
         }
     }
 });
@@ -36,6 +37,10 @@ module.exports = {
         path: path.join(__dirname, 'webroot/js')
     },
     resolve: {
+        modules: [
+            path.resolve(__dirname, '../../node_modules'),
+            'node_modules'
+        ],
         fallback: {
             'process/browser': require.resolve('process/browser'),
         },

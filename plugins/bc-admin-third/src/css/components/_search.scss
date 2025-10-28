@@ -1,3 +1,4 @@
+@use "../theme/var" as *;
 .bca-search {
   font-size: $label_font_size_medium;
   border-bottom: 1px solid $color_main_contents_border_color;

@@ -1,3 +1,5 @@
+@use "../theme/var" as *;
+@use "../base/mixin" as *;
 .bca-nav-favorite {
   font-size: 1.6rem;
   // border: 0;

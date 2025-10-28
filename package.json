@@ -16,5 +16,8 @@
     "plugins/bc-admin-third",
     "plugins/bc-front"
   ],
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0"
+  }
 }

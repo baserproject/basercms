@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "glob-parent": ">=5.1.2",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.1",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^5.0.0",
     "gulp-uglify": "^3.0.2",

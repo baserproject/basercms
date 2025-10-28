@@ -9,7 +9,7 @@
  */
 
 import Modal from '../../../../js/admin/common/vue/modal.vue';
-import axios from '../../../../../../../node_modules/axios'
+import axios from 'axios'
 
 let createApp = require('vue').createApp;
 const script = $("#AdminCustomTablesFormScript");
