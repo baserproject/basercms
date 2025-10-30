@@ -34,7 +34,7 @@ class BcUtil extends CakeObject
 	public static function isAdminSystem($url = null)
 	{
 		if (!$url) {
-			$request = Router::getRequest(true);
+			$request = Router::getRequest();
 			if ($request) {
 				$url = $request->url;
 			} else {
