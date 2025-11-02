@@ -320,4 +320,18 @@
       color: #FFF;
     }
   }
+
+  &__user-list {
+    font-size:1.1rem;
+    margin:0;
+    .tag:not(:first-child) {
+      &::before {
+        content: "/";
+        color:#ddd;
+      }
+    }
+    a {
+      white-space: nowrap;
+    }
+  }
 }

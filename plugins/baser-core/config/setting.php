@@ -577,6 +577,11 @@ return [
                 // 'symbol',
             ],
         ],
+
+        /**
+         * ユーザーグループにユーザーリストを表示するかどうか
+         */
+        'isDisplayUserListInUserGroup' => true,
     ],
 
     /**
