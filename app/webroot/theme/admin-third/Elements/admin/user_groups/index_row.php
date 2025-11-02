@@ -19,19 +19,26 @@
 <tr>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['UserGroup']['id'] ?></td>
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']], ['escape' => true]) ?>
-		<?php if (!empty($data['User'])): ?><br>
+		<?php if (Configure::read('BcApp.isDisplayUserListInUserGroup') && !empty($data['User'])): ?>
+			<p class="bca-table-listup__user-list">
 			<?php foreach($data['User'] as $user): ?>
-				<span
-					class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']], ['escape' => true]) ?></span>
+				<span class="tag">
+					<?php $this->BcBaser->link(
+						$this->BcBaser->getUserName($user),
+						['controller' => 'users', 'action' => 'edit', $user['id']],
+						['escape' => true]
+					) ?>
+				</span>
 			<?php endforeach ?>
+			</p>
 		<?php endif ?>
 	</td>
-	<td class="bca-table-listup__tbody-td"><?php echo h($data['UserGroup']['title']) ?></td>
+	<td class="bca-table-listup__tbody-td" nowrap><?php echo h($data['UserGroup']['title']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?>
+	<td class="bca-table-listup__tbody-td" nowrap><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?>
 		<br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>
-	<td class="bca-table-listup__tbody-td">
+	<td class="bca-table-listup__tbody-td" nowrap>
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
 			<?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>
 		<?php endif ?>

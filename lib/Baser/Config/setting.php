@@ -475,7 +475,11 @@ $config['BcApp'] = [
 	// システムメッセージの言語につてサイト設定を利用する
 	// 	- false：ブラウザ
 	// 	- true：サイト設定
-	'systemMessageLangFromSiteSetting' => true
+	'systemMessageLangFromSiteSetting' => true,
+	/**
+	 * ユーザーグループにユーザーリストを表示するかどうか
+	 */
+	'isDisplayUserListInUserGroup' => true,
 ];
 
 /**
