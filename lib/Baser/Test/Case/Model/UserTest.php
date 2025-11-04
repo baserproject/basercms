@@ -277,7 +277,10 @@ class UserTest extends BaserTestCase
 	public function testGetDefaultValue()
 	{
 		$result = $this->User->getDefaultValue();
-		$expected = ['User' => ['user_group_id' => 1]];
+		$expected = ['User' => [
+			'user_group_id' => 1,
+			'status' => true
+		]];
 		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
 	}
 
