@@ -60,8 +60,14 @@ $this->BcBaser->i18nScript([
         style="white-space: nowrap;"><small>[<?php echo $this->BcAdminForm->label('alias', __d('baser_core', 'エイリアス')) ?>]</small>
 			<?php echo $this->BcAdminForm->control('alias', ['type' => 'text', 'size' => '10']) ?></span>
       <i class="bca-icon--question-circle bca-help"></i>
-      <div
-        class="bca-helptext"><?php echo __d('baser_core', 'サイトのURLに利用します。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。空欄に設定した場合、自動的に識別名称と同じものを設定します。') ?></div>
+      <div class="bca-helptext">
+          <?php echo __d('baser_core', 'サイトのURLに利用します。空欄に設定した場合、自動的に識別名称と同じものを設定します。<br><br>
+          ■ 外部ドメインを利用する場合<br>
+          半角英数、ハイフン（-）・アンダースコア（_）・スラッシュ（/）が利用できます。<br>
+          ■ 外部ドメインを利用しない場合<br>
+          半角英数、ハイフン（-）・アンダースコア（_）・ドット（.）が利用できます。
+          ') ?>
+      </div>
       <?php echo $this->BcAdminForm->error('name') ?>
       <?php echo $this->BcAdminForm->error('alias') ?>
     </td>
@@ -86,26 +92,6 @@ $this->BcBaser->i18nScript([
       <i class="bca-icon--question-circle bca-help"></i>
       <div class="bca-helptext"><?php echo __d('baser_core', 'サイトのタイトルを入力します。タイトルタグに利用されます。') ?></div>
       <?php echo $this->BcAdminForm->error('title') ?>
-    </td>
-  </tr>
-  <tr>
-    <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('keyword', __d('baser_core', 'サイト基本キーワード')) ?></th>
-    <td
-      class="bca-form-table__input"><?php echo $this->BcAdminForm->control('keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'bca-textbox__input full-width']) ?>
-      <i class="bca-icon--question-circle bca-help"></i>
-      <div class="bca-helptext"><?php echo __d('baser_core', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaKeywords() ?&gt; で出力します。') ?></div>
-      <?php echo $this->BcAdminForm->error('keyword') ?>
-    </td>
-  </tr>
-  <tr>
-    <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('description', __d('baser_core', 'サイト基本説明文')) ?></th>
-    <td
-      class="bca-form-table__input"><?php echo $this->BcAdminForm->control('description', ['type' => 'textarea', 'cols' => 20, 'rows' => 6, 'maxlength' => 255, 'counter' => true]) ?>
-      <i class="bca-icon--question-circle bca-help"></i>
-      <div class="bca-helptext"><?php echo __d('baser_core', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaDescription() ?&gt; で出力します。') ?></div>
-      <?php echo $this->BcAdminForm->error('description') ?>
     </td>
   </tr>
   <?php if(!$isMainOnCurrentDisplay): ?>

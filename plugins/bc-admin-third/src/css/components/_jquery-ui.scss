@@ -1,3 +1,5 @@
+@use "../theme/var" as *;
+@use "../base/mixin" as *;
 .ui-dialog {
   padding: 0 !important;
   dt {

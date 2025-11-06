@@ -331,12 +331,11 @@ class BlogContentsServiceTest extends BcTestCase
     {
         //generate data
         BlogContentFactory::make(['id' => 1])->persist();
-        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'title' => 'test', 'description' => 'BaserCMS', 'entity_id' => 1, 'site_id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'title' => 'test', 'entity_id' => 1, 'site_id' => 1])->persist();
         SiteFactory::make(['id' => 1, 'theme' => 'BcBlog'])->persist();
 
         $rs = $this->BlogContentsService->findByContentId(1);
         $this->assertEquals('test', $rs->content->title);
-        $this->assertEquals('BaserCMS', $rs->content->description);
 
         //with invalid content id
         $rs = $this->BlogContentsService->findByContentId(999);

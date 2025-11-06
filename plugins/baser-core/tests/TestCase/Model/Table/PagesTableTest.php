@@ -164,7 +164,7 @@ class PagesTableTest extends BcTestCase
             'type' => 'ページ',
             'content_id' => $page->content->id,
             'title' => $page->content->title,
-            'detail' => $page->content->description . ' ' . $page->contents,
+            'detail' => $page->contents,
             'url' => $page->content->url,
             'status' => $page->content->status,
             'site_id' => $page->content->site_id,

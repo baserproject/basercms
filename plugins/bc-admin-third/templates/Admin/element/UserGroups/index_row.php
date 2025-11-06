@@ -10,7 +10,7 @@
  */
 
 use BaserCore\Model\Entity\UserGroup;
-use BaserCore\View\AppView;
+use Cake\Core\Configure;
 
 /**
  * user groups index row
@@ -24,20 +24,28 @@ use BaserCore\View\AppView;
 
 <tr>
   <td class="bca-table-listup__tbody-td"><?php echo $userGroup->id ?></td>
-  <td
-    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($userGroup->name, ['action' => 'edit', $userGroup->id], ['escape' => true]) ?>
-    <?php if ($userGroup->users): ?><br>
+  <td class="bca-table-listup__tbody-td">
+    <?php $this->BcBaser->link($userGroup->name, ['action' => 'edit', $userGroup->id], ['escape' => true]) ?>
+    <?php if (Configure::read('BcApp.isDisplayUserListInUserGroup') && $userGroup->users): ?>
+    <p class="bca-table-listup__user-list">
       <?php foreach($userGroup->users as $user): ?>
-        <span
-          class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user->id, ['escape' => true]]) ?></span>
+        <span class="tag">
+          <?php $this->BcBaser->link(
+            $this->BcBaser->getUserName($user),
+            ['controller' => 'users', 'action' => 'edit', $user->id],
+            ['escape' => true]
+          ) ?>
+        </span>
       <?php endforeach ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($userGroup->title) ?></td>
+  <td class="bca-table-listup__tbody-td" nowrap><?php echo h($userGroup->title) ?></td>
   <?php echo $this->BcListTable->dispatchShowRow($userGroup) ?>
-  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($userGroup->created, 'yyyy-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($userGroup->modified, 'yyyy-MM-dd') ?></td>
-  <td class="bca-table-listup__tbody-td">
+  <td class="bca-table-listup__tbody-td" nowrap>
+    <?php echo $this->BcTime->format($userGroup->created, 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($userGroup->modified, 'yyyy-MM-dd') ?>
+  </td>
+  <td class="bca-table-listup__tbody-td" nowrap>
     <?php if ($userGroup->name != 'admins'): ?>
       <?php $this->BcBaser->link('', [
         'controller' => 'permission_groups',

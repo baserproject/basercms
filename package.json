@@ -14,8 +14,10 @@
   "homepage": "https://github.com/baserproject/basercms#readme",
   "workspaces": [
     "plugins/bc-admin-third",
-    "plugins/bc-front",
-    "plugins/BcSpaSample"
+    "plugins/bc-front"
   ],
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0"
+  }
 }

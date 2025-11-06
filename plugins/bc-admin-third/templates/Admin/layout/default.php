@@ -68,9 +68,8 @@ $base = $attributes['base'];
     'bcConfirmAlertMessage1' => __d('baser_core', 'メッセージを指定してください。'),
     'bcConfirmAlertMessage2' => __d('baser_core', 'コールバック処理が登録されていません。')
   ], ['block' => false]) ?>
-  <?php $this->BcBaser->js([
+    <?php $this->BcBaser->js([
     'admin/vendor.bundle',
-    'vendor/vue.min',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
     'vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
@@ -79,8 +78,7 @@ $base = $attributes['base'];
     'vendor/jquery.validate.1.19.3.min',
     'vendor/jquery.validate_ja',
     'vendor/jquery.form-2.94',
-    'vendor/jquery.timepicker',
-    'vendor/bootstrap-4.1.3/bootstrap.bundle.min'
+    'vendor/jquery.timepicker'
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',

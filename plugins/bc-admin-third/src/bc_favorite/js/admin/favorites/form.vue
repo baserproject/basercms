@@ -23,14 +23,14 @@
                 <span class="bca-textbox">
                     <input class="required" type="text" v-model="name" id="FavoriteName" :placeholder="labelTitle" size=30 name="name" @input="formUpdated" autofocus/>
                 </span><br>
-                <div class="invalid-feedback" v-if="$v.name.$invalid">{{ alertRequire }}</div>
+                <div class="invalid-feedback" v-if="v$.name.$invalid">{{ alertRequire }}</div>
             </dd>
             <dt><label for="FavoriteUrl"/>{{ labelUrl }}</dt>
             <dd>
                 <span class="bca-textbox">
                     <input class="required" type="text" v-model="url" id="FavoriteUrl" :placeholder="labelUrl" size=30 name="url" @input="formUpdated"/>
                 </span><br>
-                <div class="invalid-feedback" v-if="$v.url.$invalid">{{ alertRequire }}</div>
+                <div class="invalid-feedback" v-if="v$.url.$invalid">{{ alertRequire }}</div>
             </dd>
         </dl>
     </form>
@@ -38,8 +38,8 @@
 
 <script>
 
-const {validationMixin, default: Vuelidate} = require('vuelidate')
-const {required} = require('vuelidate/lib/validators')
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import axios from "axios";
 
 export default {
@@ -47,6 +47,13 @@ export default {
      * name
      */
     name: "FavoriteForm",
+
+    /**
+     * setup
+     */
+    setup() {
+        return { v$: useVuelidate() }
+    },
 
     /**
      * Data
@@ -68,9 +75,11 @@ export default {
     /**
      * Validations
      */
-    validations: {
-        name: {required},
-        url: {required}
+    validations() {
+        return {
+            name: {required},
+            url: {required}
+        }
     },
 
     /**
@@ -108,7 +117,7 @@ export default {
          * Form Updated
          */
         formUpdated: function () {
-            this.$emit("formUpdated", this.$v.$invalid);
+            this.$emit("formUpdated", this.v$.$invalid);
         },
 
         /**

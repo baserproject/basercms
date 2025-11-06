@@ -1,11 +1,11 @@
+@use "../theme/var" as *;
 $height: 40px;
 @font-face {
   font-family: "Font Awesome baserCMS Toolbar";
   font-style: normal;
   font-weight: 900;
   font-display: auto;
-  src: url("../../fonts/admin/fa-solid-900.eot");
-  src: url("../../fonts/admin/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../../fonts/admin/fa-solid-900.woff2") format("woff2"), url("../../fonts/admin/fa-solid-900.woff") format("woff"), url("../../fonts/admin/fa-solid-900.ttf") format("truetype"), url("../../fonts/admin/fa-solid-900.svg#fontawesome") format("svg");
+  src: url("../webfonts/fa-brands-900.woff2") format("woff2");
 }
 body {
   margin-top: 40px !important;
@@ -60,6 +60,7 @@ body {
       padding: 0!important;
       color: $color_toolbar_text!important;
       vertical-align: top!important;
+      white-space: nowrap;
     }
   }
 
@@ -140,6 +141,7 @@ body {
         list-style: none!important;
         display: block!important;
         height: 100%!important;
+        white-space: nowrap;
 
         > a {
           display: flex!important;

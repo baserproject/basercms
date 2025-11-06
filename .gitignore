@@ -86,6 +86,7 @@ yarn-error.log
 !/plugins/BcThemeSample
 !/plugins/cakephp-soft-delete
 !/plugins/BcColumn
+!/plugins/bc-seo
 /plugins/*/vendor
 /plugins/*/composer.lock
 /profile/*

@@ -123,7 +123,7 @@ class BlogContentsTable extends BlogAppTable
             'order' => 'posted DESC',
             'foreignKey' => 'blog_content_id',
             'dependent' => true,
-            'exclusive' => false,
+            'cascadeCallbacks' => true,
         ]);
         $this->hasMany('BlogCategories', [
             'className' => 'BcBlog.BlogCategories',
@@ -131,7 +131,7 @@ class BlogContentsTable extends BlogAppTable
             'limit' => 10,
             'foreignKey' => 'blog_content_id',
             'dependent' => true,
-            'exclusive' => false,
+            'cascadeCallbacks' => true,
         ]);
     }
 

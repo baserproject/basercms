@@ -220,17 +220,13 @@ class PagesTable extends AppTable
             $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
         }
         $detail = $page->contents;
-        $description = '';
-        if (!empty($content->description)) {
-            $description = $content->description;
-        }
         return [
             'model_id' => $modelId,
             'type' => __d('baser_core', 'ページ'),
             'content_id' => $content->id,
             'site_id' => $content->site_id,
             'title' => $content->title,
-            'detail' => $description . ' ' . $detail,
+            'detail' => $detail,
             'url' => $url,
             'status' => $content->status,
             'publish_begin' => $content->publish_begin,
@@ -281,7 +277,6 @@ class PagesTable extends AppTable
             'title' => $newTitle ?? $oldPage->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
-            'description' => $page->content->description,
             'layout_template' => $page->content->layout_tmplate ?? ''
         ]);
 

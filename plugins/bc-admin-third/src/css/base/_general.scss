@@ -1,3 +1,6 @@
+@use "../theme/var" as *;
+@use "mixin" as *;
+
 // old
 a {
   color: $color_text_link;

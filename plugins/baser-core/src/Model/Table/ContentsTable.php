@@ -664,7 +664,6 @@ class ContentsTable extends AppTable
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
                     $content->name = $data->name;
                     $content->title = $data->title;
-                    $content->description = $data->description;
                     $content->self_status = $data->self_status;
                     $content->self_publish_begin = $data->self_publish_begin;
                     $content->self_publish_end = $data->self_publish_end;

@@ -271,6 +271,7 @@ return [
             'BcEditorTemplate',
             'BcFavorite',
             'BcMail',
+            'BcSeo',
             'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',
@@ -576,6 +577,11 @@ return [
                 // 'symbol',
             ],
         ],
+
+        /**
+         * ユーザーグループにユーザーリストを表示するかどうか
+         */
+        'isDisplayUserListInUserGroup' => true,
     ],
 
     /**

@@ -74,7 +74,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
     <?php $this->BcBaser->element('CustomLinks/form') ?>
 
-    <template slot="footer">
+    <template #footer>
       <button class="bca-btn" type="button" @click="$refs.modalCustomLinkDetail.closeModal()">キャンセル</button>&nbsp;
       <button class="bca-btn" type="button" @click="saveLink">保存</button>
     </template>

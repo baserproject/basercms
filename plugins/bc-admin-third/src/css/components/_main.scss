@@ -1,3 +1,5 @@
+@use "../theme/var" as *;
+@use "../base/mixin" as *;
 .bca-main {
   font-size: $label_font_size_small;
   position: relative;

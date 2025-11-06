@@ -1,10 +1,14 @@
 //
 // # アイコン
 //
-@import '../../vendor/Font-Awesome/fontawesome';
-@import '../../vendor/Font-Awesome/solid';
-@import '../../vendor/Font-Awesome/brands';
-@import '../../vendor/Font-Awesome/regular';
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/variables" as fa-vars with (
+  $font-path: "../webfonts"
+);
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/functions" as fa-funcs;
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/brands";
+@use "../../../../../node_modules/@fortawesome/fontawesome-free/scss/regular";
 
 
 /**
@@ -14,11 +18,11 @@
  */
 
 // ダッシュボード
-$bca-icon--dashboard: $fa-var-home;
+$bca-icon--dashboard: fa-vars.$var-home;
 // コンテンツ管理
-$bca-icon--contents: $fa-var-sitemap;
+$bca-icon--contents: fa-vars.$var-sitemap;
 // 設定
-$bca-icon--system: $fa-var-cog;
+$bca-icon--system: fa-vars.$var-cog;
 
 
 
@@ -29,17 +33,17 @@ $bca-icon--system: $fa-var-cog;
  */
 
 // サイト基本設定
-$bca-icon--siteconfigs: $fa-var-bars;
+$bca-icon--siteconfigs: fa-vars.$var-bars;
 // ユーザー管理
-$bca-icon--users: $fa-var-user;
+$bca-icon--users: fa-vars.$var-user;
 // サブサイト管理
-$bca-icon--sites: $fa-var-id-card;
+$bca-icon--sites: fa-vars.$var-id-card;
 // テーマ管理
-$bca-icon--theme: $fa-var-paint-brush;
+$bca-icon--theme: fa-vars.$var-paint-brush;
 // プラグイン管理
-$bca-icon--plugin: $fa-var-plug;
+$bca-icon--plugin: fa-vars.$var-plug;
 // ユーティリティ
-$bca-icon--tools: $fa-var-wrench;
+$bca-icon--tools: fa-vars.$var-wrench;
 
 
 /**
@@ -49,85 +53,85 @@ $bca-icon--tools: $fa-var-wrench;
  */
 
 // 公開
-$bca-icon--publish: $fa-var-play-circle;
+$bca-icon--publish: fa-vars.$var-play-circle;
 // 非公開
-$bca-icon--unpublish: $fa-var-pause-circle;
+$bca-icon--unpublish: fa-vars.$var-pause-circle;
 // 確認
-$bca-icon--preview: $fa-var-eye;
+$bca-icon--preview: fa-vars.$var-eye;
 // 編集
-$bca-icon--edit: $fa-var-pencil-alt;
+$bca-icon--edit: fa-vars.$var-pencil-alt;
 // 複製
-$bca-icon--copy: $fa-var-copy;
+$bca-icon--copy: fa-vars.$var-copy;
 // 削除
-$bca-icon--delete: $fa-var-trash-alt;
+$bca-icon--delete: fa-vars.$var-trash-alt;
 // 一覧
-$bca-icon--th-list: $fa-var-th-list;
+$bca-icon--th-list: fa-vars.$var-th-list;
 // 一覧に戻る
-$bca-icon--back-to-list: $fa-var-chevron-left;
+$bca-icon--back-to-list: fa-vars.$var-chevron-left;
 // お気に入り
-$bca-icon--favorite: $fa-var-heart;
+$bca-icon--favorite: fa-vars.$var-heart;
 // メニューアイテム
-$bca-icon--menuitem: $fa-var-angle-right;
+$bca-icon--menuitem: fa-vars.$var-angle-right;
 // 追加
-$bca-icon--add: $fa-var-plus-circle;
+$bca-icon--add: fa-vars.$var-plus-circle;
 // ヘルプ
-$bca-icon--help: $fa-var-question-circle;
+$bca-icon--help: fa-vars.$var-question-circle;
 // // ヘルプ（浮き輪）
-// 'rescue: $fa-var-life-ring;
+// 'rescue: fa-vars.$var-life-ring;
 // 制限（鍵)
-$bca-icon--permission: $fa-var-lock;
+$bca-icon--permission: fa-vars.$var-lock;
 // 適用
-$bca-icon--apply: $fa-var-check-square;
+$bca-icon--apply: fa-vars.$var-check-square;
 // HOME
-$bca-icon--home: $fa-var-home;
+$bca-icon--home: fa-vars.$var-home;
 // ログイン（切り替え）
-$bca-icon--switch: $fa-var-sign-in-alt;
+$bca-icon--switch: fa-vars.$var-sign-in-alt;
 // 開く
-$bca-icon--open: $fa-var-folder-open;
+$bca-icon--open: fa-vars.$var-folder-open;
 // テキストコピー
-$bca-icon--textcopy: $fa-var-paste;
+$bca-icon--textcopy: fa-vars.$var-paste;
 // ダウンロード
-$bca-icon--download: $fa-var-download;
+$bca-icon--download: fa-vars.$var-download;
 // ドラッグ可能
-$bca-icon--draggable: $fa-var-arrows-alt-v;
+$bca-icon--draggable: fa-vars.$var-arrows-alt-v;
 // フォルダ
-$bca-icon--folder: $fa-var-folder;
+$bca-icon--folder: fa-vars.$var-folder;
 // フォルダ（オープン）
-$bca-icon--folder-open: $fa-var-folder-open;
+$bca-icon--folder-open: fa-vars.$var-folder-open;
 // ファイル
-$bca-icon--file: $fa-var-file;
+$bca-icon--file: fa-vars.$var-file;
 // 1階層上に戻る
-$bca-icon--up-directory: $fa-var-arrow-up;
+$bca-icon--up-directory: fa-vars.$var-arrow-up;
 // 矢印　右
-$bca-icon--arrow-right: $fa-var-arrow-right;
+$bca-icon--arrow-right: fa-vars.$var-arrow-right;
 // 矢印　左
-$bca-icon--arrow-left: $fa-var-arrow-left;
+$bca-icon--arrow-left: fa-vars.$var-arrow-left;
 // 矢印　上
-$bca-icon--arrow-up: $fa-var-arrow-up;
+$bca-icon--arrow-up: fa-vars.$var-arrow-up;
 // 矢印　下
-$bca-icon--arrow-down: $fa-var-arrow-down;
+$bca-icon--arrow-down: fa-vars.$var-arrow-down;
 // ファイルリスト
-$bca-icon--file-list: $fa-var-file-alt;
+$bca-icon--file-list: fa-vars.$var-file-alt;
 // アップデート
-$bca-icon--update: $fa-var-sync;
+$bca-icon--update: fa-vars.$var-sync;
 // 設定
-$bca-icon--setting: $fa-var-cog;
+$bca-icon--setting: fa-vars.$var-cog;
 // 検索
-$bca-icon--search: $fa-var-search;
+$bca-icon--search: fa-vars.$var-search;
 // クリア
-$bca-icon--clear: $fa-var-sync;
+$bca-icon--clear: fa-vars.$var-sync;
 // 名称変更
-$bca-icon--rename: $fa-var-i-cursor;
+$bca-icon--rename: fa-vars.$var-i-cursor;
 // もとに戻す
-$bca-icon--undo: $fa-var-undo;
+$bca-icon--undo: fa-vars.$var-undo;
 // もとに戻す
-$bca-icon--ban: $fa-var-ban;
+$bca-icon--ban: fa-vars.$var-ban;
 // リンク
-$bca-icon--link: $fa-var-link;
+$bca-icon--link: fa-vars.$var-link;
 // エイリアス
-$bca-icon--alias: $fa-var-external-link-square-alt;
+$bca-icon--alias: fa-vars.$var-external-link-square-alt;
 // 機能ボタン
-$bca-icon--ellipsis-h: $fa-var-ellipsis-h;
+$bca-icon--ellipsis-h: fa-vars.$var-ellipsis-h;
 
 /**
  *
@@ -136,9 +140,9 @@ $bca-icon--ellipsis-h: $fa-var-ellipsis-h;
  */
 
 // datetimepicker（日付）
-$bca-icon--datetimepicker-date: $fa-var-calendar;
+$bca-icon--datetimepicker-date: fa-vars.$var-calendar;
 // datetimepicker（時刻）
-$bca-icon--datetimepicker-time: $fa-var-clock;
+$bca-icon--datetimepicker-time: fa-vars.$var-clock;
 
 
 
@@ -149,9 +153,9 @@ $bca-icon--datetimepicker-time: $fa-var-clock;
  */
 
 // デフォルト
-$bca-icon--list-default: $fa-var-angle-right;
+$bca-icon--list-default: fa-vars.$var-angle-right;
 // 丸
-$bca-icon--list-circle: $fa-var-circle;
+$bca-icon--list-circle: fa-vars.$var-circle;
 
 
 
@@ -162,11 +166,11 @@ $bca-icon--list-circle: $fa-var-circle;
  */
 
 // エラー
-$bca-icon--error: $fa-var-exclamation-triangle;
+$bca-icon--error: fa-vars.$var-exclamation-triangle;
 // アラート
-$bca-icon--alert: $fa-var-exclamation-triangle;
+$bca-icon--alert: fa-vars.$var-exclamation-triangle;
 // 注意
-$bca-icon--notification: $fa-var-info-circle;
+$bca-icon--notification: fa-vars.$var-info-circle;
 
 
 
@@ -177,50 +181,50 @@ $bca-icon--notification: $fa-var-info-circle;
  */
 
 // Facebook
-$bca-icon--facebook: $fa-var-facebook-f;
+$bca-icon--facebook: fa-vars.$var-facebook-f;
 // Twitter
-$bca-icon--twitter: $fa-var-twitter;
+$bca-icon--twitter: fa-vars.$var-twitter;
 
 
 
 // 次
-$bca-icon--next: $fa-var-angle-right;
+$bca-icon--next: fa-vars.$var-angle-right;
 // 前
-$bca-icon--back: $fa-var-angle-left;
+$bca-icon--back: fa-vars.$var-angle-left;
 // 矢印　三角上
-$bca-icon--asc: $fa-var-caret-up;
+$bca-icon--asc: fa-vars.$var-caret-up;
 // 矢印　三角下
-$bca-icon--desc: $fa-var-caret-down;
+$bca-icon--desc: fa-vars.$var-caret-down;
 
 
 // 下矢印
-$bca-icon--chevron-down: $fa-var-chevron-down;
+$bca-icon--chevron-down: fa-vars.$var-chevron-down;
 
 
 // 一覧
-$bca-icon--list: $fa-var-list-ul;
+$bca-icon--list: fa-vars.$var-list-ul;
 // プラス
-$bca-icon--plus-square: $fa-var-plus-square;
+$bca-icon--plus-square: fa-vars.$var-plus-square;
 //
-$bca-icon--question-circle: $fa-var-question-circle;
+$bca-icon--question-circle: fa-vars.$var-question-circle;
 // マイナス
-$bca-icon--minus-square: $fa-var-minus-square;
+$bca-icon--minus-square: fa-vars.$var-minus-square;
 // ブックマーク
-$bca-icon--bookmark: $fa-var-bookmark;
+$bca-icon--bookmark: fa-vars.$var-bookmark;
 // 地球
-$bca-icon--globe: $fa-var-globe-americas;
+$bca-icon--globe: fa-vars.$var-globe-americas;
 // ファイル
-$bca-icon--file: $fa-var-file;
+$bca-icon--file: fa-vars.$var-file;
 
-$bca-icon--mail: $fa-var-envelope;
+$bca-icon--mail: fa-vars.$var-envelope;
 
 
 // -------------------------------------------------
 
 @mixin bca-icon-base($icon) {
   &::before {
-    @extend .#{$fa-css-prefix};
-    content: fa-content($icon);
+    @extend .#{fa-vars.$css-prefix}-solid;
+    content: fa-funcs.fa-content($icon);
     @content;
   }
 }
@@ -236,7 +240,7 @@ $bca-icon--mail: $fa-var-envelope;
 %bca-icon {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 7 Free';
   font-size: 95%;
   font-style: normal;
   font-stretch: normal;
@@ -489,5 +493,5 @@ $bca-icon--mail: $fa-var-envelope;
   font-weight: 900;
 }
 %fab {
-  font-family: 'Font Awesome 5 Brands';
+  font-family: 'Font Awesome 7 Brands';
 }

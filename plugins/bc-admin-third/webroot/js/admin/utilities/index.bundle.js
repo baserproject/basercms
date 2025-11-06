@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$((function(){$("#BtnCredit").click($.bcCredit.show)}));
+$(function(){$("#BtnCredit").click($.bcCredit.show)});
 //# sourceMappingURL=index.bundle.js.map

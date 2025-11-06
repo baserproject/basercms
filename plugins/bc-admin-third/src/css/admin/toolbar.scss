@@ -1,7 +1,6 @@
 @charset "utf-8";
 
-@import '../theme/var/colors';
-@import '../theme/var/dimensions';
-@import '../components/toolbar';
+@use '../theme/var' as *;
+@use '../components/toolbar';
 
 

@@ -53,16 +53,6 @@ class CreateSites extends BcMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('keyword', 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
-            ->addColumn('description', 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addColumn('use_subdomain', 'boolean', [
                 'default' => false,
                 'limit' => null,

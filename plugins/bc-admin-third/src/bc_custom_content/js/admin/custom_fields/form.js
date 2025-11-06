@@ -8,13 +8,9 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+let createApp = require('vue').createApp;
 
-let vm = new Vue({
-
-    /**
-     * Element
-     */
-    el: '#AdminCustomFieldsForm',
+let app = createApp({
 
     /**
      * data
@@ -157,12 +153,13 @@ let vm = new Vue({
             this.initValidateOptionControls();
             $preview = $("#CustomFieldPreview");
             $preview.appendTo('body');
+            const self = this;
             $(window).on('scroll', function () {
                 var bottom = $(document).innerHeight() - $(window).innerHeight();
                 if (bottom <= $(window).scrollTop() + 10) {
                     $preview.fadeOut(500);
                 } else {
-                    if (vm.displayPreview && $preview.css('display') === 'none') {
+                    if (self.displayPreview && $preview.css('display') === 'none') {
                         $preview.fadeIn(500);
                     }
                 }
@@ -480,3 +477,5 @@ let vm = new Vue({
         }
     }
 });
+
+app.mount('#AdminCustomFieldsForm');

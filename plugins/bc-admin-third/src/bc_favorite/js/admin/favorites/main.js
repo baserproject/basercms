@@ -8,15 +8,16 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-import Vue from 'vue/dist/vue.js'
+let createApp = require('vue').createApp;
 import FavoriteIndex from "./index.vue";
-import Vuelidate from 'vuelidate'
 
 /**
  * よく使う項目の処理を行う
  */
 
 const favoriteList = {
+
+    app: null,
 
     /**
      * 初期化
@@ -32,13 +33,13 @@ const favoriteList = {
     initView() {
         $("body").append($("#FavoritesMenu"));
 
-        Vue.use(Vuelidate)
-        new Vue({
-            el: '#FavoriteMenu',
+        this.app = createApp({
             components: {
                 FavoriteIndex
-            },
+            }
         });
+
+        window.favoriteApp = this.app.mount('#FavoriteMenu');
 
         $("#BtnFavoriteHelp").bt({
             trigger: 'click',
@@ -88,7 +89,9 @@ const favoriteList = {
      */
     registerEvents() {
         $("#BtnFavoriteAdd").click(function () {
-            document.querySelector('#FavoriteListWrap').__vue__.openModal();
+            if (window.favoriteApp && window.favoriteApp.$refs && window.favoriteApp.$refs.favoriteIndex) {
+                window.favoriteApp.$refs.favoriteIndex.openModal();
+            }
         });
         $("#FavoriteAjaxForm").submit(function () {
             return false

@@ -1,3 +1,4 @@
+@use "../theme/var" as *;
 /* list-table
 ----------------------------------------------- */
 //.contents-body .list-table{
@@ -138,7 +139,7 @@
   &__thead-th,
   &__tbody-th,
   &__tbody-td {
-    padding: 1em 1em 1em 0.5em;
+    padding: 0.5em;
     text-align: left;
   }
 
@@ -217,7 +218,7 @@
   }
 
   &__tbody-td {
-    line-height: 1.6;
+    line-height: 1.3;
     // 選択
     &--select {
       padding: 10px;
@@ -228,11 +229,14 @@
       }
     }
 
+    ul {
+      margin:0;
+    }
+
     // タイトル
     &--title {
       min-width: 200px;
       max-width: 500px;
-      font-size: 1.3rem;
     }
 
     // カテゴリ
@@ -317,6 +321,20 @@
     th, td {
       background: $color_background_menu_current_primary;
       color: #FFF;
+    }
+  }
+
+  &__user-list {
+    font-size:1.1rem;
+    margin:0;
+    .tag:not(:first-child) {
+      &::before {
+        content: "/";
+        color:#ddd;
+      }
+    }
+    a {
+      white-space: nowrap;
     }
   }
 }

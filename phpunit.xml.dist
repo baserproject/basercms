@@ -30,6 +30,9 @@
         <testsuite name="BcFavorite">
             <directory>plugins/bc-favorite/tests/TestCase</directory>
         </testsuite>
+        <testsuite name="BcSeo">
+            <directory>plugins/bc-seo/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcInstaller">
             <directory>plugins/bc-installer/tests/TestCase</directory>
         </testsuite>

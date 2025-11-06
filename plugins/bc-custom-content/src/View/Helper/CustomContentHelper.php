@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\View\Helper;
 
+use BcCustomContent\Service\CustomEntriesService;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -580,6 +581,7 @@ class CustomContentHelper extends CustomContentAppHelper
      */
     public function getNextEntry(CustomEntry|EntityInterface $entry)
     {
+        /** @var CustomEntriesService $service */
         $service = $this->getService(CustomEntriesServiceInterface::class);
         return $service->getNextEntry($entry);
     }

@@ -89,27 +89,32 @@ class UserGroupsService implements UserGroupsServiceInterface
     /**
      * ユーザーグループ全件取得する
      *
-     * @param array $options
+     * @param array $queryParams
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex($options = []): Query
+    public function getIndex($queryParams = []): Query
     {
-        $options = array_merge([
+        $queryParams = array_merge([
             'finder' => 'all',
             'exclude_admin' => false,
-            'order' => null
-        ], $options);
+            'order' => null,
+            'contain' => ['Users'],
+        ], $queryParams);
 
-        $query = $this->UserGroups->find($options['finder']);
+        $query = $this->UserGroups->find($queryParams['finder']);
 
-        if($options['exclude_admin']) {
+        if($queryParams['contain']) {
+            $query->contain($queryParams['contain']);
+        }
+
+        if($queryParams['exclude_admin']) {
             $query->where(['id <>' => Configure::read('BcApp.adminGroupId')]);
         }
 
-        if(!is_null($options['order'])) $query->orderBy($options['order']);
+        if(!is_null($queryParams['order'])) $query->orderBy($queryParams['order']);
 
         return $query;
     }

@@ -50,7 +50,6 @@ class ContentFactory extends CakephpBaseFactory
                 'rght' => null,
                 'level' => 1,
                 'title' => $faker->title(50),
-                'description' => $faker->text(100),
                 'eyecatch' => null,
                 'author_id' => 1,
                 'layout_template' => 'default',
