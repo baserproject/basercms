@@ -74,7 +74,7 @@ class SeoHelper extends Helper
         $metaValueLayers = [];
         if ($content) {
             // サイト
-            $metaValueLayers[] = $this->getMetaValues('Sites', 0, $content->site->id);
+            $metaValueLayers[] = $this->getMetaValues('Sites', 0, $content->site_id);
 
             // コンテンツ管理で管理されていないページの場合、currentContentにサイトのトップが入ってくるため対策
             // BcFrontMiddleware->setCurrentに仕様の記載あり
