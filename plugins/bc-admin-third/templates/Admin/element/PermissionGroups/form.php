@@ -105,6 +105,8 @@
           'data-bca-btn-type' => 'add',
           'data-bca-btn-size' => 'sm',
         ]) ?>
+
+        <?php echo $this->BcAdminForm->error('permissions') ?>
       </td>
     </tr>
 <?php endif ?>
