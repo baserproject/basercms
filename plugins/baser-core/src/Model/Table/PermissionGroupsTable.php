@@ -65,10 +65,6 @@ class PermissionGroupsTable extends AppTable
             ->maxLength('name', 60, __d('baser_core', 'ルールグループ名は60文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', 'ルールグループ名を入力してください。'));
 
-        $validator
-            ->requirePresence('permissions', 'update', __d('baser_core', 'ルールが設定されていません。'))
-            ->notEmptyArray('permissions', __d('baser_core', 'ルールが設定されていません。'));
-
         return $validator;
     }
 
