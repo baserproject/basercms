@@ -568,6 +568,7 @@ class CustomContentHelper extends CustomContentAppHelper
     public function getPrevEntry(CustomEntry|EntityInterface $entry)
     {
         $service = $this->getService(CustomEntriesServiceInterface::class);
+        $service->setup($entry->custom_table_id);
         return $service->getPrevEntry($entry);
     }
 
@@ -583,6 +584,7 @@ class CustomContentHelper extends CustomContentAppHelper
     {
         /** @var CustomEntriesService $service */
         $service = $this->getService(CustomEntriesServiceInterface::class);
+        $service->setup($entry->custom_table_id);
         return $service->getNextEntry($entry);
     }
 
