@@ -44,7 +44,7 @@
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.13.0",
     "bootstrap": "^5.3.8",
-    "glob": "^11.0.3",
+    "glob": "^11.1.0",
     "jquery-colorbox": "^1.6.4",
     "js-cookie": "^3.0.1",
     "popper.js": "^1.16.1",
