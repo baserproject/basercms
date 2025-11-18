@@ -35,7 +35,7 @@ class UploadsController extends AppController
      */
     public function tmp()
     {
-        return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
+        return $this->output(func_get_args(), func_num_args());
     }
 
     /**
@@ -108,8 +108,7 @@ class UploadsController extends AppController
         if($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
             $response = $response->withHeader('Content-disposition', sprintf('attachment; filename=%s', $name));
         }
-        $this->setResponse($response);
-        return $data;
+        return $response;
     }
 
 }
