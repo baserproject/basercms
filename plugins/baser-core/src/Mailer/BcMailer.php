@@ -80,15 +80,15 @@ class BcMailer extends Mailer
         /** @var SiteConfigsService $siteConfigsService */
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig = $siteConfigsService->get();
-        if ($siteConfig->smtp_host && $siteConfig->smtp_user && $siteConfig->smtp_password) {
+        if ($siteConfig->smtp_host) {
             $type = 'smtp';
             $config = [
                 'className' => 'Smtp',
                 'host' => $siteConfig->smtp_host,
-                'username' => $siteConfig->smtp_user,
-                'password' => $siteConfig->smtp_password
+                'username' => $siteConfig->smtp_user ? $siteConfig->smtp_user : null,
+                'password' => $siteConfig->smtp_password ? $siteConfig->smtp_password : null,
             ];
-            if ($siteConfig->smtp_port) $config['port'] = $siteConfig->smtp_port;
+            $config['port'] = $siteConfig->smtp_port ? $siteConfig->smtp_port : 25;
             if ($siteConfig->smtp_tls) $config['tls'] = $siteConfig->smtp_tls;
             if (!TransportFactory::getConfig($type)) {
                 TransportFactory::setConfig($type, $config);
