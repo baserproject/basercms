@@ -460,7 +460,7 @@ class PagesController extends AppController
 			if ($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
 				$previewData = $this->Session->read($sessionKey);
-				$this->request->params['Content']['eyecatch'] = $previewData['Content']['eyecatch'];
+				$this->request->params['Content']['eyecatch'] = !empty($previewData['Content']['eyecatch']) ? $previewData['Content']['eyecatch'] : '';
 
 				if (!is_null($previewData)) {
 					$this->Session->delete($sessionKey);
