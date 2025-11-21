@@ -1,13 +1,8 @@
-# Uncomment the following to prevent the httpoxy vulnerability
-# See: https://httpoxy.org/
-#<IfModule mod_headers.c>
-#    RequestHeader unset Proxy
-#</IfModule>
-
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteBase    /
-    RewriteRule ^(\.well-known/.*)$ webroot/$1 [L]
-    RewriteRule    ^$    webroot/    [L]
-    RewriteRule    (.*) webroot/$1    [L]
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule \.(ico|map)$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
