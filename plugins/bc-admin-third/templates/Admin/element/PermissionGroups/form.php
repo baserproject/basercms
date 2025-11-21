@@ -57,7 +57,6 @@
 <?php if($this->getRequest()->getParam('action') === 'edit'): ?>
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ルール')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
 

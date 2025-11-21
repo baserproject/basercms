@@ -23,7 +23,6 @@ class SeoHelper extends Helper
 {
     private $fields;
     private $seoMetasTable;
-    private $customEntriesTable;
 
     public array $helpers = [
         'BaserCore.BcBaser',
@@ -40,9 +39,6 @@ class SeoHelper extends Helper
 
         $this->fields = Configure::read('BcSeo.fields');
         $this->seoMetasTable = TableRegistry::getTableLocator()->get('BcSeo.SeoMetas');
-        if (TableRegistry::getTableLocator()->exists('BcCustomContent.CustomEntries')) {
-            $this->customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
-        }
         $this->getView()->set('canonicalUrl', false);
     }
 
@@ -118,7 +114,7 @@ class SeoHelper extends Helper
             $customEntry = $this->getView()->get('customEntry');
             if ($customEntry->id) {
                 $metaValueLayers[] = $this->getMetaValues('CustomEntries',
-                    $this->customEntriesTable->tableId, $customEntry->id);
+                    $customEntry->custom_table_id, $customEntry->id);
             }
         }
 
