@@ -1,9 +1,9 @@
 {
     "name": "baserproject/basercms",
     "description": "baserCMS plugin for CakePHP",
-    "homepage": "https://basercms.net",
     "license": "MIT",
     "type": "project",
+    "homepage": "https://basercms.net",
     "require": {
         "php": ">=8.1",
         "ext-gd": "*",
@@ -31,6 +31,33 @@
         "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^3.0",
         "vierge-noire/cakephp-test-suite-light": "^3.0"
+    },
+    "replace": {
+        "baserproject/baser-core": "5.2.0",
+        "baserproject/bc-admin-third": "5.2.0",
+        "baserproject/bc-blog": "5.2.0",
+        "baserproject/bc-column": "5.2.0",
+        "baserproject/bc-content-link": "5.2.0",
+        "baserproject/bc-custom-content": "5.2.0",
+        "baserproject/bc-editor-template": "5.2.0",
+        "baserproject/bc-favorite": "5.2.0",
+        "baserproject/bc-front": "5.2.0",
+        "baserproject/bc-installer": "5.2.0",
+        "baserproject/bc-mail": "5.2.0",
+        "baserproject/bc-plugin-sample": "5.2.0",
+        "baserproject/bc-search-index": "5.2.0",
+        "baserproject/bc-seo": "5.2.0",
+        "baserproject/bc-theme-config": "5.2.0",
+        "baserproject/bc-theme-file": "5.2.0",
+        "baserproject/bc-theme-sample": "5.2.0",
+        "baserproject/bc-uploader": "5.2.0",
+        "baserproject/bc-widget-area": "5.2.0"
+    },
+    "suggest": {
+        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
+        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
+        "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code.",
+        "cakephp/repl": "Console tools for a REPL interface for CakePHP applications."
     },
     "autoload": {
         "psr-4": {
@@ -75,6 +102,13 @@
             "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
         }
     },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-update-cmd": "App\\Console\\Installer::postInstall",
@@ -96,39 +130,5 @@
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpunit --colors=always"
         ]
-    },
-    "suggest": {
-        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
-        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
-        "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code.",
-        "cakephp/repl": "Console tools for a REPL interface for CakePHP applications."
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "cakephp/plugin-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    },
-    "replace": {
-        "baserproject/baser-core": "5.2.0",
-        "baserproject/bc-admin-third": "5.2.0",
-        "baserproject/bc-blog": "5.2.0",
-        "baserproject/bc-column": "5.2.0",
-        "baserproject/bc-content-link": "5.2.0",
-        "baserproject/bc-custom-content": "5.2.0",
-        "baserproject/bc-editor-template": "5.2.0",
-        "baserproject/bc-favorite": "5.2.0",
-        "baserproject/bc-front": "5.2.0",
-        "baserproject/bc-installer": "5.2.0",
-        "baserproject/bc-mail": "5.2.0",
-        "baserproject/bc-plugin-sample": "5.2.0",
-        "baserproject/bc-search-index": "5.2.0",
-        "baserproject/bc-seo": "5.2.0",
-        "baserproject/bc-theme-config": "5.2.0",
-        "baserproject/bc-theme-file": "5.2.0",
-        "baserproject/bc-theme-sample": "5.2.0",
-        "baserproject/bc-uploader": "5.2.0",
-        "baserproject/bc-widget-area": "5.2.0"
     }
 }
