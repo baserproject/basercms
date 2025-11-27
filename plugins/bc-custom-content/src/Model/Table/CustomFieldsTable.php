@@ -86,15 +86,15 @@ class CustomFieldsTable extends AppTable
 
         $validator
             ->allowEmptyString('size')
-            ->integer('size', __d('baser_core', '横幅サイズは整数を入力してください。'));
+            ->naturalNumber('size', __d('baser_core', '横幅サイズは0以上の整数を入力してください。'));
 
         $validator
             ->allowEmptyString('line')
-            ->integer('line', __d('baser_core', '行数は整数を入力してください。'));
+            ->naturalNumber('line', __d('baser_core', '行数は0以上の整数を入力してください。'));
 
         $validator
             ->allowEmptyString('max_length')
-            ->integer('max_length', __d('baser_core', '最大文字数は整数を入力してください。'));
+            ->naturalNumber('max_length', __d('baser_core', '最大文字数は0以上の整数を入力してください。'));
 
         $validator
             ->allowEmptyString('source')

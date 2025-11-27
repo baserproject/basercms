@@ -338,7 +338,7 @@ template {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* 
+/*
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -10451,7 +10451,6 @@ body {
   margin: -1px 0 0 !important;
   padding: 0;
   position: absolute !important;
-  right: 0 !important;
   border: 1px solid #ccc !important;
   box-shadow: 0 1px 3px #ccc !important;
   background-color: #fff !important;
