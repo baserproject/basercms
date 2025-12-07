@@ -118,7 +118,10 @@ class PluginsController extends BcAdminAppController
             if (!$this->viewBuilder()->getVar('isWritableComposerLock')) {
                 $message[] = __d('baser_core', ROOT . DS . 'composer.lock に書き込み権限を設定してください。');
             }
-            if($message) {
+            if ($this->viewBuilder()->getVar('isDevelopmentVersion')) {
+                $message[] = __d('baser_core', "現在開発版を利用しているため、アップデートは利用できません。\n（plugins フォルダに、baserCMSコアが存在する場合、開発版として認識されます。）");
+            }
+            if ($message) {
                 $this->BcMessage->setError(implode("\n", $message));
             }
         }

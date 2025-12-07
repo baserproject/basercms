@@ -2314,4 +2314,13 @@ class BcUtil
         return false;
     }
 
+    /**
+     * 開発版かどうかを判定
+     * @return bool
+     */
+    public static function isDevelopmentVersion(): bool
+    {
+        return is_dir(ROOT . DS . 'plugins' . DS . 'baser-core');
+    }
+
 }
