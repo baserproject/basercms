@@ -42,6 +42,8 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
         <?php echo __d('baser_core', '手動アップデート手順') ?>
       </h2>
       <ol>
+        <li>最新版の composer.json / composer.lock を配置</li>
+        <li>vendor を一旦削除し、composer install を実行</li>
         <li>plugins 内の、baserCMSコアのプラグイン群を手動で入れ替え</li>
         <li>BcUpdateSupporterプラグインで、アップデートスクリプトを実行</li>
         <li>BcUpdateSupporterプラグインで、データベースのバージョンを更新</li>
