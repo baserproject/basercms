@@ -1042,6 +1042,7 @@ class BcBaserHelper extends AppHelper
 	 *  - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
 	 *    - `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
 	 *    - `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+	 *    - `fullUrl` : サイト内リンクのときに、絶対パスで返すかどうか（初期値 : true ※後方互換のため）
 	 *     ※ その他のパラメータについては、HtmlHelper::image() を参照。
 	 * @param bool $confirmMessage 確認メッセージ（初期値 : false）
 	 *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
@@ -1059,7 +1060,8 @@ class BcBaserHelper extends AppHelper
 			'escape' => false,
 			'prefix' => false,
 			'forceTitle' => false,
-			'ssl' => $this->isSSL()
+			'ssl' => $this->isSSL(),
+			'fullUrl' => true
 		], $options);
 
 		/*** beforeGetLink ***/
@@ -1080,10 +1082,12 @@ class BcBaserHelper extends AppHelper
 		}
 		$forceTitle = $options['forceTitle'];
 		$ssl = $options['ssl'];
+		$fullUrl = $options['fullUrl'];
 
 		unset($options['prefix']);
 		unset($options['forceTitle']);
 		unset($options['ssl']);
+		unset($options['fullUrl']);
 
 		// 管理システムメニュー対策
 		// プレフィックスが変更された場合も正常動作させる為
@@ -1145,11 +1149,21 @@ class BcBaserHelper extends AppHelper
 				$_url = 'index.php/' . $_url;
 			}
 			if (!$ssl && !$admin) {
-				$url = Configure::read('BcEnv.siteUrl') . $_url;
+				if ($fullUrl) { // フルパスで取得
+					$url = Configure::read('BcEnv.siteUrl') . $_url;
+				} else { // baserCMSの設置パスも含めたルートパスで取得
+					$passArray = explode($_SERVER["HTTP_HOST"], Configure::read('BcEnv.siteUrl'));
+					$url = isset($passArray[1]) ? $passArray[1]. $_url : '/'.  $_url;
+				}
 			} else {
 				$sslUrl = Configure::read('BcEnv.sslUrl');
 				if ($sslUrl) {
-					$url = $sslUrl . $_url;
+					if ($fullUrl) { // フルパスで取得
+						$url = $sslUrl . $_url;
+					} else { // baserCMSの設置パスも含めたルートパスで取得
+						$passArray = explode($_SERVER["HTTP_HOST"], $sslUrl);
+						$url = isset($passArray[1]) ? $passArray[1]. $_url : '/'.  $_url;
+					}
 				} else {
 					$url = '/' . $_url;
 				}
