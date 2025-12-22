@@ -74,10 +74,11 @@ const updateForm = {
             if ($inputPhp.val() !== ''){
                 if(updateForm.isUpdatable) {
                     $btnUpdate.removeAttr('disabled');
+                    $btnDownload.removeAttr('disabled');
                 } else {
                     $btnUpdate.attr('disabled', 'disabled');
+                    $btnDownload.attr('disabled', 'disabled');
                 }
-                $btnDownload.removeAttr('disabled');
             } else {
                 $btnUpdate.attr('disabled', 'disabled');
                 $btnDownload.attr('disabled', 'disabled');

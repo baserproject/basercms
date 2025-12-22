@@ -1709,4 +1709,14 @@ class BcUtilTest extends BcTestCase
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals('/', BcUtil::addSessionId('/'));
     }
+
+    /**
+     * test isDevelopmentVersion
+     */
+    public function testIsDevelopmentVersion()
+    {
+        // 開発環境（baser-coreディレクトリが存在する）であることを確認
+        $this->assertTrue(BcUtil::isDevelopmentVersion());
+    }
+
 }

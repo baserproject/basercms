@@ -91,13 +91,14 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $isWritableVendor = is_writable(ROOT . DS . 'vendor');
         $isWritableComposerJson = is_writable(ROOT . DS . 'composer.json');
         $isWritableComposerLock = is_writable(ROOT . DS . 'composer.lock');
+        $isDevelopmentVersion = BcUtil::isDevelopmentVersion();
         $requireUpdate = $this->isRequireUpdate(
             $programVersion,
             $dbVersion,
             $availableVersion
         );
         if($entity->name === 'BaserCore') {
-            $isUpdatable = ($requireUpdate && $isWritableVendor && $isWritableComposerJson && $isWritableComposerLock);
+            $isUpdatable = (!$isDevelopmentVersion && $requireUpdate && $isWritableVendor && $isWritableComposerJson && $isWritableComposerLock);
         } else {
             $isUpdatable = $requireUpdate;
         }
@@ -117,7 +118,8 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
             'isWritableVendor' => $isWritableVendor,
             'isWritableComposerJson' => $isWritableComposerJson,
             'isWritableComposerLock' => $isWritableComposerLock,
-            'isUpdatable' => $isUpdatable
+            'isUpdatable' => $isUpdatable,
+            'isDevelopmentVersion' => $isDevelopmentVersion
         ];
     }
 

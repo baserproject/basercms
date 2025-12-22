@@ -19,6 +19,7 @@ use BaserCore\View\BcAdminAppView;
  * @var bool $isCore
  * @var bool $isUpdatable
  * @var bool $coreDownloaded
+ * @var bool $isDevelopmentVersion
  */
 $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSコア｜アップデート'));
 $this->BcBaser->i18nScript([
@@ -35,6 +36,20 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
 
 
 <div class="bca-plugin-update">
+  <?php if ($isDevelopmentVersion): ?>
+    <div class="bca-panel-box">
+      <h2 class="bca-main__heading" data-bca-heading-size="lg">
+        <?php echo __d('baser_core', '手動アップデート手順') ?>
+      </h2>
+      <ol>
+        <li>最新版の composer.json / composer.lock を配置</li>
+        <li>vendor を一旦削除し、composer install を実行</li>
+        <li>plugins 内の、baserCMSコアのプラグイン群を手動で入れ替え</li>
+        <li>BcUpdateSupporterプラグインで、アップデートスクリプトを実行</li>
+        <li>BcUpdateSupporterプラグインで、データベースのバージョンを更新</li>
+      </ol>
+    </div>
+  <?php endif ?>
 
   <?php $this->BcBaser->element('Plugins/update_now_status') ?>
 
