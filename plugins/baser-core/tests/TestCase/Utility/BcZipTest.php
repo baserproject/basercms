@@ -184,6 +184,7 @@ class BcZipTest extends BcTestCase
 
         $this->assertFalse($result);
         $this->assertFileDoesNotExist($targetPath . 'evil.txt');
+        $this->assertFileDoesNotExist(TMP . 'evil.txt');
 
         $folder = new BcFolder($zipSrcPath);
         $folder->delete();
@@ -363,6 +364,7 @@ class BcZipTest extends BcTestCase
 
         $this->assertFalse($result);
         $this->assertFileDoesNotExist($targetPath . 'evil_cmd.txt');
+        $this->assertFileDoesNotExist(TMP . 'evil_cmd.txt');
 
         $folder = new BcFolder($zipSrcPath);
         $folder->delete();

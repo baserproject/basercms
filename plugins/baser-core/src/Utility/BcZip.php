@@ -151,7 +151,7 @@ class BcZip
                 continue;
             }
             if (!$this->_isZipEntrySafe($entry, $targetPath)) {
-                $this->error = 'Invalid zip entry path: ' . $entry;
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $entry);
                 return false;
             }
         }
@@ -195,6 +195,9 @@ class BcZip
      * @param string $entry
      * @param string $targetPath
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _isZipEntrySafe($entry, $targetPath)
     {
@@ -206,11 +209,12 @@ class BcZip
             return false;
         }
         $normalizedEntry = $this->_normalizeRelativePath($entry);
+        // "." や "a/.." 等で正規化後に空になるエントリは展開対象として無意味なため拒否する。
         if ($normalizedEntry === null || $normalizedEntry === '') {
             return false;
         }
         $destPath = $this->_normalizeAbsolutePath($targetPath . '/' . $normalizedEntry);
-        if ($destPath === '') {
+        if ($destPath === null || $destPath === '') {
             return false;
         }
         $comparisonDest = $destPath . '/';
@@ -229,13 +233,16 @@ class BcZip
      *
      * @param string $targetPath
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _validateZipEntries($targetPath)
     {
         for ($i = 0; $i < $this->Zip->numFiles; $i++) {
             $entry = $this->Zip->getNameIndex($i);
             if ($entry === false || !$this->_isZipEntrySafe($entry, $targetPath)) {
-                $this->error = 'Invalid zip entry path: ' . (string)$entry;
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $entry);
                 return false;
             }
         }
@@ -249,6 +256,9 @@ class BcZip
      *
      * @param string $target
      * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _normalizeTargetPath($target)
     {
@@ -257,7 +267,7 @@ class BcZip
             $trimmedTarget = $target;
         }
         if ($trimmedTarget === '') {
-            $this->error = 'Target directory not found.';
+            $this->error = __d('baser_core', 'Target directory not found.');
             return false;
         }
         $targetPath = realpath($trimmedTarget);
@@ -265,7 +275,7 @@ class BcZip
             // ディレクトリ作成は行わず、比較用の基準パスのみ構成する。
             $parentPath = realpath(dirname($trimmedTarget));
             if ($parentPath === false || !is_dir($parentPath)) {
-                $this->error = 'Target directory not found.';
+                $this->error = __d('baser_core', 'Target directory not found.');
                 return false;
             }
             $targetPath = $parentPath . '/' . basename($trimmedTarget);
@@ -278,6 +288,9 @@ class BcZip
      *
      * @param string $path
      * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _normalizeRelativePath($path)
     {
@@ -303,7 +316,10 @@ class BcZip
      * 絶対パスを正規化する
      *
      * @param string $path
-     * @return string
+     * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _normalizeAbsolutePath($path)
     {
@@ -322,6 +338,8 @@ class BcZip
             if ($part === '..') {
                 if (!empty($parts)) {
                     array_pop($parts);
+                } else {
+                    return null;
                 }
                 continue;
             }
