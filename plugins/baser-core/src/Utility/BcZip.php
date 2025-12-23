@@ -263,9 +263,6 @@ class BcZip
     protected function _normalizeTargetPath($target)
     {
         $trimmedTarget = rtrim($target, "/\\");
-        if ($trimmedTarget === '' && ($target === '/' || $target === '\\')) {
-            $trimmedTarget = $target;
-        }
         if ($trimmedTarget === '') {
             $this->error = __d('baser_core', 'Target directory not found.');
             return false;
