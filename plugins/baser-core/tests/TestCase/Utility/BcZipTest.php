@@ -160,6 +160,79 @@ class BcZipTest extends BcTestCase
     }
 
     /**
+     * test _extractByPhpLib rejects zip slip
+     */
+    public function testExtractByPhpLibRejectsZipSlip()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'zipslip.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('../evil.txt', 'nope');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFileDoesNotExist($targetPath . 'evil.txt');
+
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
+    }
+
+    /**
+     * test _normalizeTargetPath allows missing target with existing parent
+     */
+    public function testNormalizeTargetPathAllowsMissingTarget()
+    {
+        $parent = TMP . 'zip_target_parent' . DS;
+        if (!file_exists($parent)) {
+            mkdir($parent, 0777, true);
+        }
+
+        $target = $parent . 'child' . DS;
+        $result = $this->execPrivateMethod($this->BcZip, '_normalizeTargetPath', [$target]);
+
+        $expectedParent = rtrim(str_replace('\\', '/', realpath($parent)), '/');
+        $this->assertEquals($expectedParent . '/child', $result);
+
+        $folder = new BcFolder($parent);
+        $folder->delete();
+    }
+
+    /**
+     * test _isZipEntrySafe rejects invalid entries
+     */
+    public function testIsZipEntrySafeRejectsInvalidEntries()
+    {
+        $targetDir = TMP . 'zip_safe_target' . DS;
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        $targetPath = rtrim(str_replace('\\', '/', realpath($targetDir)), '/');
+
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['/etc/passwd', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['C:/Windows/system.ini', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ["evil\0.txt", $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['../evil.txt', $targetPath]));
+        $this->assertTrue($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['good/file.txt', $targetPath]));
+
+        $folder = new BcFolder($targetDir);
+        $folder->delete();
+    }
+
+    /**
      * test _escapePath
      * @param $path
      * @param $expected
@@ -263,5 +336,37 @@ class BcZipTest extends BcTestCase
         $rs = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [TMP_TESTS . 'test_extract.zip', TMP_TESTS]);
         //戻り値を確認
         $this->assertFalse($rs);
+    }
+
+    /**
+     * test _extractByCommand rejects zip slip
+     */
+    public function testExtractByCommandRejectsZipSlip()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'zipslip_cmd.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('../evil_cmd.txt', 'nope');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFileDoesNotExist($targetPath . 'evil_cmd.txt');
+
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
     }
 }
