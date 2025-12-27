@@ -97,4 +97,22 @@ $(function () {
         }
     }
 
+    // サブサイトにドメイン（サブドメイン）を使用するかどうかの表示
+    chengeUseDomein($("input[name='data[Site][use_subdomain]']:checked").val());
+     $("input[name='data[Site][use_subdomain]']").click(function() {
+        //変数valueにcheckedされたradioボタンのvalue値を取得する
+        use_subdomain = $("input[name='data[Site][use_subdomain]']:checked").val();
+        chengeUseDomein(use_subdomain);
+    });
+    function chengeUseDomein(use_subdomain) {
+        if (use_subdomain == 0) {
+            //ドメインを利用しない場合は、ドメインタイプは利用しない
+            $(".domain_type").hide('slow');
+            $("#SiteDomainType0").prop("checked", true);
+        } else {
+            //ドメインを利用する場合は、ドメインタイプのラジオボタンを表示
+            $(".domain_type").show('slow');
+        }
+    }
+
 });
