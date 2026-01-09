@@ -485,7 +485,7 @@ class CustomContentHelper extends CustomContentAppHelper
             ->first();
 
         $records = $targetEntries->find()
-            ->select(['year' => 'YEAR(created)'])
+            ->select(['year' => 'YEAR(published)'])
             ->distinct(['year'])
             ->all()
             ->toArray();
