@@ -357,7 +357,7 @@ class MailController extends MailFrontAppController
      */
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
-        $this->viewBuilder()->disableAutoLayout();
+        $this->disableAutoRender();
         $service->render($this->getRequest(), $token);
     }
 

@@ -584,4 +584,198 @@ class CustomContentHelperTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+    /**
+     * test getFieldItemList
+     */
+    public function testGetFieldItemList()
+    {
+        // 準備
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        $customEntriesService->setup(1);
+        $customEntriesCategory = $customEntriesService->get(1);
+        $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
+        $customEntriesService->update($customEntriesCategory, $arrayCategory);
+
+        // 存在するフィールド（リンクあり）
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'category');
+        $this->assertEquals([
+            '<a href="/test/archives/category/1">Webエンジニア・Webプログラマー</a>'
+        ], $result);
+
+        // 存在するフィールド（リンクなし）
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'category', ['link' => false]);
+        $this->assertEquals([
+            'Webエンジニア・Webプログラマー'
+        ], $result);
+
+        // 存在しないフィールド名を指定した場合
+        $result = $this->CustomContentHelper->getFieldItemList(100, 'hoge', ['link' => false]);
+        $this->assertEquals([], $result);
+
+        // 存在しないコンテンツIDを指定した場合
+        $result = $this->CustomContentHelper->getFieldItemList(999, 'category', ['link' => false]);
+        $this->assertEquals([], $result);
+
+        // 不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+     /**
+     * test getGetYearList
+     */
+    public function testGetYearList()
+    {
+        // 準備
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        $customEntriesService->setup(1);
+        $customEntriesCategory = $customEntriesService->get(1);
+        $arrayCategory = array_merge($customEntriesCategory->toArray(), ['category' => 1]);
+        $customEntriesService->update($customEntriesCategory, $arrayCategory);
+
+        // 存在する場合
+        $result = $this->CustomContentHelper->getYearList(100);
+        $this->assertEquals([
+            '<a href="/recruit_categories/year/2023">2023</a>',
+            '<a href="/recruit_categories/year/2025">2025</a>'
+        ], $result);
+
+        // 存在しないコンテンツIDを指定した場合
+        $result = $this->CustomContentHelper->getYearList(999);
+        $this->assertEquals([], $result);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test prevLink
+     */
+    public function testPrevLink()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->CustomContentHelper->getView()->setRequest($this->getRequest('/test/'));
+
+        // テーブル作成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'test_table',
+            'title' => 'テストテーブル',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $customEntriesService->setup(1);
+        // エントリー作成
+        $entry = $customEntriesService->create([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'title' => '記事1',
+            'published' => '2023-01-01 00:00:00',
+            'status' => true
+        ]);
+        $customEntriesService->create([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'title' => '記事2',
+            'published' => '2023-01-02 00:00:00',
+            'status' => true
+        ]);
+        ob_start();
+        $this->CustomContentHelper->prevLink($entry);
+        $output = ob_get_clean();
+        $this->assertEquals('<a href="/test/view/2" class="prev-link">≪ 記事2</a>', $output);
+        $dataBaseService->dropTable('custom_entry_1_test_table');
+    }
+
+    /**
+     * test nextLink
+     */
+    public function testNextLink()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTableService = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->CustomContentHelper->getView()->setRequest($this->getRequest('/test/'));
+
+        // テーブル作成
+        $customTableService->create([
+            'id' => 1,
+            'name' => 'test_table',
+            'title' => 'テストテーブル',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $customEntriesService->setup(1);
+        // エントリー作成
+        $customEntriesService->create([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'title' => '記事1',
+            'published' => '2023-01-01 00:00:00',
+            'status' => true
+        ]);
+        $entry = $customEntriesService->create([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'title' => '記事2',
+            'published' => '2023-01-02 00:00:00',
+            'status' => true
+        ]);
+        ob_start();
+        $this->CustomContentHelper->nextLink($entry, '', []);
+        $output = ob_get_clean();
+        $this->assertEquals('<a href="/test/view/1" class="next-link">記事1 ≫</a>', $output);
+        $dataBaseService->dropTable('custom_entry_1_test_table');
+    }
 }

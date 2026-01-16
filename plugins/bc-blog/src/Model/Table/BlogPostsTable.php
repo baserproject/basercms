@@ -145,6 +145,7 @@ class BlogPostsTable extends BlogAppTable
             ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
         $validator
+            ->allowEmptyString('content')
             ->scalar('content')
             ->add('content', [
                 'containsScript' => [
@@ -322,6 +323,7 @@ class BlogPostsTable extends BlogAppTable
         $postedDates = [];
         $counter = 0;
         foreach($posts as $post) {
+            if(empty($post->posted)) continue;
             $year = date('Y', strtotime($post->posted));
             $month = date('m', strtotime($post->posted));
             if ($options['type'] === 'year') {
@@ -842,7 +844,7 @@ class BlogPostsTable extends BlogAppTable
         } else {
             $conditions = array_merge_recursive(
                 $conditions,
-                ['BlogPosts.name' => rawurldecode($no)]
+                ['BlogPosts.name' => $no]
             );
         }
         $entity = $this->find()->where($conditions)

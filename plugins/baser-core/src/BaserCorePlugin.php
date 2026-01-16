@@ -33,8 +33,10 @@ use BaserCore\Middleware\BcRedirectSubSiteMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcEvent;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
+use Cake\Cache\Cache;
 use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
@@ -107,7 +109,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
          * 言語設定
          * ブラウザよりベースとなる言語を設定
          */
-        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !BcUtil::isTest()) {
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !BcUtil::isTest()) {
             I18n::setLocale(BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
         }
 
@@ -127,6 +129,18 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
          * プラグインごとの設定ファイル読み込み
          */
         parent::bootstrap($app);
+
+        /**
+         * vendor 配下で baserCMSのプラグインを持っているもののパスを追加
+         * bootstrap の後でないとキャッシュが使えないため、ここで呼び出す
+         */
+        $pluginVendorPath = $this->getPluginVendorPath();
+        if ($pluginVendorPath) {
+            Configure::write('App.paths.plugins', array_merge(
+                Configure::read('App.paths.plugins'),
+                $this->getPluginVendorPath()
+            ));
+        }
 
         /**
          * 文字コードの検出順を指定
@@ -159,7 +173,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         // CSRFトークンの場合は高速化のためここで処理を終了
-        if(!empty($_SERVER['REQUEST_URI']) && preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
+        if (!empty($_SERVER['REQUEST_URI']) && preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
             return;
         }
 
@@ -207,7 +221,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $app->addPlugin('Migrations');
 
         $plugins = BcUtil::getEnablePlugins();
-        if(!$plugins) return;
+        if (!$plugins) return;
         foreach($plugins as $plugin) {
             if (!BcUtil::includePluginClass($plugin->name)) continue;
             $this->loadPlugin($app, $plugin->name, $plugin->priority);
@@ -228,7 +242,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         if (!BcUtil::isInstalled()) return;
 
         foreach($themes as $theme) {
-            if(!BcUtil::includePluginClass($theme)) continue;
+            if (!BcUtil::includePluginClass($theme)) continue;
             try {
                 $application->addPlugin($theme);
             } catch (MissingPluginException $e) {
@@ -247,14 +261,18 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     public function setupThemePlugin(array $themes): void
     {
         if (!BcUtil::isInstalled()) return;
-        if(!$themes) return;
+        if (!$themes) return;
         $path = [];
         foreach($themes as $theme) {
             $pluginsPath = CorePlugin::path($theme) . 'plugins' . DS;
+            // path() を実行するとプラグインクラスがコレクションに登録されてしまう
+            // ここで登録されてしまうと、対象プラグインの bootstrap() が正常に実行されないため
+            // ここでは一旦削除する。
+            CorePlugin::getCollection()->remove($theme);
             if (!is_dir($pluginsPath)) continue;
             $path[] = $pluginsPath;
         }
-        if(isset($path) && $path) {
+        if (isset($path) && $path) {
             Configure::write('App.paths.plugins', array_merge(
                 Configure::read('App.paths.plugins'),
                 $path
@@ -280,8 +298,21 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $themes = [];
         foreach($sites as $site) {
             if ($site->theme) {
-                if (!CorePlugin::isLoaded($site->theme) || !is_dir(CorePlugin::path($site->theme))) continue;
-                if(in_array($site->theme, $themes)) continue;
+                if (!CorePlugin::isLoaded($site->theme)) {
+                    try {
+                        $pluginPath = CorePlugin::path($site->theme);
+                    } catch (\Throwable) {
+                        continue;
+                    }
+                    // path() を実行するとプラグインクラスがコレクションに登録されてしまう
+                    // ここで登録されてしまうと、対象プラグインの bootstrap() が正常に実行されないため
+                    // ここでは一旦削除する。
+                    CorePlugin::getCollection()->remove($site->theme);
+                    if (!is_dir($pluginPath)) {
+                        continue;
+                    }
+                }
+                if (in_array($site->theme, $themes)) continue;
                 $themes[] = $site->theme;
             }
         }
@@ -359,15 +390,15 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                     $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
 
                     // 設定ファイルでスキップの定義がされている場合はスキップ
-                    if(in_array($request->getPath(), $this->getSkipCsrfUrl())) return true;
+                    if ($this->isSkipCsrfUrl($request->getPath())) return true;
 
                     // 領域が REST API でない場合はスキップしない
                     if (empty($authSetting['isRestApi'])) return false;
 
                     $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
-                    if($authenticator) {
+                    if ($authenticator) {
                         // 認証済の際、セッション認証以外はスキップ
-                        if(!$authenticator instanceof SessionAuthenticator) return true;
+                        if (!$authenticator instanceof SessionAuthenticator) return true;
                     }
                     return false;
                 });
@@ -395,6 +426,47 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             $skipUrl[] = Router::url($url);
         }
         return $skipUrl;
+    }
+
+    /**
+     * CSRF をスキップするURLかどうかをワイルドカードパターンで判定
+     *
+     * ワイルドカード（*）を使用したパターンマッチングに対応
+     * 例: '/api/*' は '/api/users', '/api/posts' などにマッチ
+     *
+     * @param string $path チェック対象のパス
+     * @return bool スキップする場合は true
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    protected function isSkipCsrfUrl(string $path): bool
+    {
+        $skipUrls = $this->getSkipCsrfUrl();
+
+        foreach($skipUrls as $skipUrl) {
+            // 完全一致チェック（従来の動作を維持）
+            if ($path === $skipUrl) {
+                return true;
+            }
+
+            // ワイルドカードパターンマッチング
+            if (strpos($skipUrl, '*') !== false) {
+                // ワイルドカードを正規表現に変換
+                $pattern = str_replace(
+                    ['*', '/'],
+                    ['.*', '\/'],
+                    $skipUrl
+                );
+                $pattern = '/^' . $pattern . '$/';
+
+                if (preg_match($pattern, $path)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -431,7 +503,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 break;
             case 'Jwt':
                 $this->setupJwtAuth($service, $authSetting, $prefix);
-                if($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
+                if ($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
                     // セッションを持っている場合もログイン状態とみなす
                     $service->loadAuthenticator('Authentication.Session', [
                         'sessionKey' => $authSetting['sessionKey'],
@@ -454,9 +526,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function isRequiredAuthentication(array $authSetting)
     {
-        if(!$authSetting || empty($authSetting['type'])) return false;
-        if(!empty($authSetting['disabled'])) return false;
-        if(!BcUtil::isInstalled()) return false;
+        if (!$authSetting || empty($authSetting['type'])) return false;
+        if (!empty($authSetting['disabled'])) return false;
+        if (!BcUtil::isInstalled()) return false;
         return true;
     }
 
@@ -471,6 +543,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function setupSessionAuth(AuthenticationService $service, array $authSetting)
     {
+        if ($authSetting['userModel'] === 'BaserCore.Users' && empty($authSetting['finder'])) {
+            $authSetting['finder'] = 'available';
+        }
         $service->setConfig([
             'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
             'queryParam' => 'redirect',
@@ -487,9 +562,9 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         ]);
 
         $passwordHasher = null;
-        if(!empty($authSetting['passwordHasher'])) {
+        if (!empty($authSetting['passwordHasher'])) {
             $passwordHasher = $authSetting['passwordHasher'];
-        } elseif(env('HASH_TYPE') === 'sha1') {
+        } elseif (env('HASH_TYPE') === 'sha1') {
             // .env に HASH_TYPE で sha1が設定されている場合 4系のハッシュアルゴリズムを使用
             $passwordHasher = [
                 'className' => 'Authentication.Fallback',
@@ -504,7 +579,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             ];
         }
 
-        $service->loadIdentifier('Authentication.Password', [
+        $service->identifiers()->load('Authentication.Password', [
             'fields' => [
                 'username' => $authSetting['username'],
                 'password' => $authSetting['password']
@@ -512,7 +587,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder'] ?? null
             ],
             'passwordHasher' => $passwordHasher
         ]);
@@ -547,11 +622,11 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 'userModel' => $authSetting['userModel'],
             ],
         ]);
-        $service->loadIdentifier('Authentication.JwtSubject', [
+        $service->identifiers()->load('Authentication.JwtSubject', [
             'resolver' => [
                 'className' => 'BaserCore.PrefixOrm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available',
+                'finder' => $authSetting['finder'] ?? 'available',
                 'prefix' => $prefix,
             ],
         ]);
@@ -561,7 +636,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 'password' => $authSetting['password']
             ],
         ]);
-        $service->loadIdentifier('Authentication.Password', [
+        $service->identifiers()->load('Authentication.Password', [
             'returnPayload' => false,
             'fields' => [
                 'username' => $authSetting['username'],
@@ -570,7 +645,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => $authSetting['finder']?? 'available'
+                'finder' => $authSetting['finder'] ?? 'available'
             ],
         ]);
         return $service;
@@ -706,7 +781,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      * @param array $options
      * @return void
      */
-    public function updateDefaultData($options = []) : void
+    public function updateDefaultData($options = []): void
     {
         // コンテンツの作成日を更新
         $this->updateDateNow('BaserCore.Contents', ['created_date'], [], $options);
@@ -742,6 +817,49 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $commands->add('setup install', SetupInstallCommand::class);
         $commands->add('create jwt', CreateJwtCommand::class);
         return $commands;
+    }
+
+    /**
+     * baserCMSのプラグインを保有しているベンダーパスを取得する
+     * @param bool $force
+     * @return array
+     */
+    public function getPluginVendorPath(bool $force = false): array
+    {
+        if (!BcUtil::isInstalled() && !$force) return [];
+        $pluginVendorPaths = Cache::read('plugin_vendor_paths', '_bc_env_');
+        if (!Configure::read('debug') && !$force && $pluginVendorPaths) {
+            return $pluginVendorPaths;
+        }
+        if (empty($pluginVendorPaths)) {
+            $pluginVendorPaths = [];
+        }
+        $folder = new BcFolder(ROOT . DS . 'vendor');
+        $vendorPaths = $folder->getFolders(['full' => true]);
+        foreach($vendorPaths as $vendorPath) {
+            if (preg_match('/baserproject$/', $vendorPath)) continue;
+            $folder = new BcFolder($vendorPath);
+            $packagePaths = $folder->getFolders(['full' => true]);
+            $hasPlugin = false;
+            foreach($packagePaths as $packagePath) {
+                if (!file_exists($packagePath . DS . 'config.php')) continue;
+                $config = require $packagePath . DS . 'config.php';
+                $type = $config['type'] ?? null;
+                if (!is_array($type)) $type = [$type];
+                if (!in_array('Plugin', $type) && !in_array('CorePlugin', $type)) continue;
+                if (!in_array($vendorPath . DS, $pluginVendorPaths)) {
+                    $hasPlugin = true;
+                    break;
+                }
+            }
+            if ($hasPlugin) {
+                $pluginVendorPaths[] = $vendorPath . DS;
+            }
+        }
+        if ($pluginVendorPaths) {
+            Cache::write('enable_plugin_paths', $pluginVendorPaths, '_bc_env_');
+        }
+        return $pluginVendorPaths;
     }
 
 }

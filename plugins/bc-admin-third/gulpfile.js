@@ -13,7 +13,7 @@ const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const webpackConfig = require("./webpack.config");
 const plumber = require('gulp-plumber');
-const sass = require('gulp-sass')(require('sass'));
+const sass = require('gulp-sass')(require('sass-embedded'));
 const postcss = require("gulp-postcss");
 const cssImport = require("postcss-import");
 const JS_DEV_DIR = ['./src/**/*.js', './src/**/*.vue'];
@@ -37,7 +37,10 @@ gulp.task('css', () => {
 			this.emit('end');
 		},
 	}))
-	.pipe(sass())
+	.pipe(sass({
+		api: 'modern-compiler',
+		loadPaths: ['../../node_modules']
+	}).on('error', sass.logError))
 	.pipe(postcss(plugins))
 	.pipe(gulp.dest(CSS_DIST_DIR, {
 	    sourcemaps: true
@@ -53,5 +56,7 @@ gulp.task('watch', function(){
     gulp.watch(CSS_DEV_DIR, gulp.task('css'));
     gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
 });
+
+gulp.task('build', gulp.parallel('css', 'bundle'));
 
 gulp.task('default', gulp.task('watch'));

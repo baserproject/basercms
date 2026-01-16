@@ -271,6 +271,7 @@ return [
             'BcEditorTemplate',
             'BcFavorite',
             'BcMail',
+            'BcSeo',
             'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',
@@ -384,10 +385,11 @@ return [
 
         /**
          * POST送信において CSRF をスキップするURL
+         * キーを指定しておかないとプラグインの設定をマージする場合に上書きされてしまう
          */
         'skipCsrfUrl' => [
-            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
-            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
+            'UsersLogin' => ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
+            'UsersRefreshToken' => ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
         ],
 
         /**
@@ -419,7 +421,7 @@ return [
 
         /**
          * bc_formのテンプレートを指定
-         * config/bc_form.phpを差し替える         
+         * config/bc_form.phpを差し替える
          *  プラグイン記法 (プラグイン名.テンプレート名)
          */
         //basercms/plugins/baser-core/src/View/AppView.php
@@ -575,6 +577,11 @@ return [
                 // 'symbol',
             ],
         ],
+
+        /**
+         * ユーザーグループにユーザーリストを表示するかどうか
+         */
+        'isDisplayUserListInUserGroup' => true,
     ],
 
     /**
@@ -598,7 +605,9 @@ return [
             '/baser-core/users/logout',
             '/baser-core/password_requests/*',
             '/baser/api/admin/baser-core/users/login.json',
-            '/baser/api/admin/baser-core/users/refresh_token.json'
+            '/baser/api/admin/baser-core/users/refresh_token.json',
+            '/baser/api/admin/baser-core/utilities/save_search_opened/*/*.json',
+            '/baser/api/admin/baser-core/plugins/get_available_core_version_info.json',
         ]
     ],
 

@@ -1,3 +1,7 @@
+@use "sass:color";
+@use "../theme/var" as *;
+@use "../base/mixin" as *;
+
 //
 // # ボタンアイコン（アイコンのみ/テキストなし)
 //
@@ -80,7 +84,7 @@
   // ログイン
   &[data-bca-btn-type=login] {
     color: $color_lightest;
-    $color_darken: darken($color_primary, 5%);
+    $color_darken: color.adjust($color_primary, $lightness: -5%);
     border: 1px solid $color_darken;
     background-image: linear-gradient($color_primary 10%, $color_darken 100%);
     &:hover,

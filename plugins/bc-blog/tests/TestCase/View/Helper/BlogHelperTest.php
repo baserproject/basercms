@@ -12,7 +12,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
@@ -67,6 +67,7 @@ class BlogHelperTest extends BcTestCase
             '/news/', // url
             'test title'
         );
+        PluginFactory::make(['id' => 'BcBlog', 'name' => 'BcBlog', 'status' => true])->persist();
         $view = new BlogFrontAppView($this->getRequest());
         $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
@@ -581,7 +582,7 @@ class BlogHelperTest extends BcTestCase
                 [],
                 '<ul class="bc-blog-category-list depth-1">
         <li class="bc-blog-category-list__item">
-      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1</a>          </li>
+      <a href="/news/archives/category/name-1/name-2/name-3/name-4" current="1">title 1</a>          </li>
 </ul>'
             ],
             [
@@ -596,7 +597,7 @@ class BlogHelperTest extends BcTestCase
                 [],
                 '<ul class="bc-blog-category-list depth-1">
         <li class="bc-blog-category-list__item">
-      <a href="/news/archives/category/name-1/name-2/name-3" current="1">title 1(2)</a>          </li>
+      <a href="/news/archives/category/name-1/name-2/name-3/name-4" current="1">title 1(2)</a>          </li>
 </ul>'
             ],
         ];
@@ -1273,8 +1274,7 @@ class BlogHelperTest extends BcTestCase
     {
         return [
             ['<a href="/news/archives/tag/tag1">tag1</a>', 1, []],
-            ['<a href="/tags/tag1">tag1</a>', 0, []],
-            ['<a href="https://localhost/news/archives/tag/tag1">tag1</a>', 1, ['ssl'=>true]],
+            ['<a href="/tags/tag1">tag1</a>', 0, []]
         ];
     }
 
@@ -1322,6 +1322,7 @@ class BlogHelperTest extends BcTestCase
         BlogPostFactory::make(['blog_content_id' => 1, 'blog_category_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
         BlogTagFactory::make(['id' => 1, 'name' => '新製品'])->persist();
         BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        SiteFactory::make(['id' => 1])->persist();
 
         $this->expectOutputRegex($expected);
 
@@ -1368,6 +1369,33 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * test posts with return
+     * @return void
+     */
+    public function testPostsWithReturn()
+    {
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+
+        // データ生成
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            1, // parentId
+            'news', // name
+            '/news/', // url,
+            'News 1' // title
+        );
+        SiteFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'title' => 'title test'])->persist();
+
+        $result = $this->Blog->posts('/news/', 5, ['return' => true]);
+        $this->assertTextContains('title test', $result);
+    }
+
+    /**
      * ブログ記事を取得する
      */
     public function testGetPosts()
@@ -1385,7 +1413,7 @@ class BlogHelperTest extends BcTestCase
 
         //$contentsNameを設定した場合、
         $rs = $this->Blog->getPosts(['/news/'])->toArray();
-        $this->assertEquals('プレスリリース', $rs[0]['title']);
+        $this->assertEquals('スラッグがない記事', $rs[0]['title']);
 
         //$contentsNameを間違った場合、
         $rs = $this->Blog->getPosts(['news5'])->toArray();

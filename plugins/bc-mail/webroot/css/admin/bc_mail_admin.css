@@ -11,7 +11,14 @@
 .bca-icon--mail::before {
   content: "\f0e0";
   font-weight: 400;
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 7 Free';
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
 }
 
 .jstree-proton .bca-icon--mail {

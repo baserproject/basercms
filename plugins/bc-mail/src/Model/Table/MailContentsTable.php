@@ -157,6 +157,30 @@ class MailContentsTable extends MailAppTable
                 ]
             ]);
 
+        // thanks
+        $validator
+            ->scalar('thanks')
+            ->allowEmptyString('thanks')
+            ->add('thanks', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '送信完了文でスクリプトの入力は許可されていません。')
+                ]
+            ]);
+
+        // unpublish
+        $validator
+            ->scalar('unpublish')
+            ->allowEmptyString('unpublish')
+            ->add('unpublish', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '受付中止文でスクリプトの入力は許可されていません。')
+                ]
+            ]);
+
         // publish_end
         $validator
         ->add('publish_end', [

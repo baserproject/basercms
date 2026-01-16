@@ -1,0 +1,18 @@
+{
+    "name": "baserproject/bc-seo",
+    "description": "BcSeo plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "autoload": {
+        "psr-4": {
+            "BcSeo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcSeo\\Test\\": "tests/"
+        }
+    }
+}

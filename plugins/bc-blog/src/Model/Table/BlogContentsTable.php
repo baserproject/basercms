@@ -87,10 +87,11 @@ class BlogContentsTable extends BlogAppTable
         $validator->scalar('list_direction')
             ->notEmptyString('list_direction', __d('baser_core', '一覧に表示する順番を指定してください。'));
 
-        $validator->add('eye_catch_size_thumb_width', 'checkEyeCatchSize', [
-            'provider' => 'blogContent',
-            'rule' => 'checkEyeCatchSize',
-            'message' => __d('baser_core', 'アイキャッチ画像のサイズが不正です。')]);
+        $validator->allowEmptyString('eye_catch_size_thumb_width')
+            ->add('eye_catch_size_thumb_width', 'checkEyeCatchSize', [
+                'provider' => 'blogContent',
+                'rule' => 'checkEyeCatchSize',
+                'message' => __d('baser_core', 'アイキャッチ画像のサイズが不正です。')]);
 
         return $validator;
     }
@@ -122,7 +123,7 @@ class BlogContentsTable extends BlogAppTable
             'order' => 'posted DESC',
             'foreignKey' => 'blog_content_id',
             'dependent' => true,
-            'exclusive' => false,
+            'cascadeCallbacks' => true,
         ]);
         $this->hasMany('BlogCategories', [
             'className' => 'BcBlog.BlogCategories',
@@ -130,7 +131,7 @@ class BlogContentsTable extends BlogAppTable
             'limit' => 10,
             'foreignKey' => 'blog_content_id',
             'dependent' => true,
-            'exclusive' => false,
+            'cascadeCallbacks' => true,
         ]);
     }
 
@@ -346,6 +347,7 @@ class BlogContentsTable extends BlogAppTable
      */
     public function constructEyeCatchSize($data)
     {
+        if(!$data) return $data;
         $eyeCatchSize = BcUtil::unserialize($data->eye_catch_size);
         // プロパティを変更するとエラー情報が消えてしまうので一旦退避
         $errors = $data->getErrors();

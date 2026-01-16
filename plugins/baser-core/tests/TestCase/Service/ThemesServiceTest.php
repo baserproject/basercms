@@ -160,6 +160,35 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * testChangeHelper
+     */
+
+     public function testChangeHelper()
+     {
+        $rs = $this->ThemesService->copy('BcThemeSample');
+        $this->assertTrue($rs);
+        //コピーを確認
+        $this->assertTrue(is_dir(BASER_THEMES . 'BcThemeSampleCopy'), 'テーマのコピーが確認できませんでした。');
+
+        $pluginPath = BcUtil::getPluginPath('BcThemeSampleCopy');
+
+        // プラグインのnamespace置き換えを確認
+        $file = new BcFile($pluginPath . 'src' . DS . 'BcThemeSampleCopyPlugin.php');
+        $data = $file->read();
+        $this->assertTrue(str_contains($data, 'namespace BcThemeSampleCopy'), 'pluginファイルのnamespace の書き換えが確認できませんでした。');
+
+
+        $file = new BcFile($pluginPath . 'src' . DS . 'View' . DS .'Helper' . DS . 'BcThemeSampleCopyHelper.php');
+        $data = $file->read();
+        // ヘルパーのnamespaceの置き換えを確認
+        $this->assertTrue(str_contains($data, 'namespace BcThemeSampleCopy'), 'Helperファイルのnamespace の書き換えが確認できませんでした。');
+        // ヘルパーのクラス名書き換えを確認
+        $this->assertTrue(str_contains($data,'class BcThemeSampleCopyHelper'),'Helperファイルのクラス名の書き換えが確認できませんでした。');
+
+        $this->ThemesService->delete('BcThemeSampleCopy');
+     }
+ 
+    /**
      * test copy
      * @return void
      */

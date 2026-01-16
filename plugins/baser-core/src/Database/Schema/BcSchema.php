@@ -118,6 +118,15 @@ class BcSchema extends TableSchema
         }
         if (!empty($this->fields['_constraints'])) {
             foreach($this->fields['_constraints'] as $name => $data) {
+                // タイプが存在しない場合は、index とみなす
+                if(empty($data['type'])) {
+                    $data['type'] = 'index';
+                    $data['columns'] = [$data['column']];
+                    unset($data['column']);
+                    $this->fields['_indexes'][$name] = $data;
+                    unset($this->fields['_constraints'][$name]);
+                    continue;
+                }
                 if ($data['type'] !== TableSchema::CONSTRAINT_FOREIGN) {
                     $this->addConstraint($name, $data);
                 } else {

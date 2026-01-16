@@ -1,3 +1,4 @@
+@use "../theme/var" as *;
 /* bca-data-list
 ----------------------------------------------- */
 
@@ -7,7 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   &__sub {
     flex: 1;
@@ -21,6 +22,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 15px;
+    margin-top: 10px;
   }
 }

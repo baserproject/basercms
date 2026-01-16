@@ -39,6 +39,40 @@
    </span>
 </section>
 
+<section class="bca-section bca-section__mail-thanks">
+  <label for="MailContentThanksTmp" class="bca-form-table__label -label">
+    <?php echo $this->BcAdminForm->label('thanks', __d('baser_core', 'メールフォーム送信完了文')) ?>
+  </label>
+  <span class="bca-form-table__input-wrap">
+    <?php
+    echo $this->BcAdminForm->ckeditor('thanks', [
+      'editorWidth' => 'auto',
+      'editorHeight' => '120px',
+      'editorToolType' => 'simple',
+      'editorEnterBr' => $editorEnterBr
+    ])
+    ?>
+    <?php echo $this->BcAdminForm->error('thanks') ?>
+   </span>
+</section>
+
+<section class="bca-section bca-section__mail-unpublish">
+  <label for="MailContentUnpublishTmp" class="bca-form-table__label -label">
+    <?php echo $this->BcAdminForm->label('unpublish', __d('baser_core', 'メールフォーム受付中止文')) ?>
+  </label>
+  <span class="bca-form-table__input-wrap">
+    <?php
+    echo $this->BcAdminForm->ckeditor('unpublish', [
+      'editorWidth' => 'auto',
+      'editorHeight' => '120px',
+      'editorToolType' => 'simple',
+      'editorEnterBr' => $editorEnterBr
+    ])
+    ?>
+    <?php echo $this->BcAdminForm->error('unpublish') ?>
+   </span>
+</section>
+
 <div class="section">
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>

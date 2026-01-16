@@ -8,29 +8,25 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-import Modal from '../../../../js/common/modal.vue';
-import axios from '../../../../../../../node_modules/axios'
+import Modal from '../../../../js/admin/common/vue/modal.vue';
+import axios from 'axios'
+
+let createApp = require('vue').createApp;
+const script = $("#AdminCustomTablesFormScript");
+const settings = JSON.parse(script.attr('data-setting'));
 
 /**
  * Custom Links Vue
- *
- * @type {Vue}
  */
-let customLinks = new Vue({
-
-    /**
-     * Element
-     */
-    el: '#AdminCustomTable',
+let app = createApp({
 
     /**
      * data
      * @returns Object
      */
     data: function () {
-        const script = $("#AdminCustomTablesFormScript");
         return {
-            settings: JSON.parse(script.attr('data-setting')),
+            settings: settings,
             links: JSON.parse(script.attr('data-links')),
             link: {},
             field: {},
@@ -206,7 +202,8 @@ let customLinks = new Vue({
             this.link = Object.assign({}, this.links[index]);
             this.field = this.link.custom_field;
             this.currentParentId = this.link.parent_id;
-            this.initPreview(this.link.id);
+            const setting = this.settings[this.field.type];
+            this.initPreview(this.link.id, setting);
             this.loadParentList();
             this.changeGroupFunction();
 
@@ -239,12 +236,13 @@ let customLinks = new Vue({
             }, 500);
 
             // 一番下までスクロールしたらプレビューを非表示にする
+            const self = this;
             $modelWindow.on('scroll', function () {
                 var bottom = $('.modal-content').innerHeight() - $modelWindow.innerHeight();
                 if (bottom <= $modelWindow.scrollTop()) {
                     $preview.fadeOut(500);
                 } else {
-                    if (customLinks.displayPreview && $preview.css('display') === 'none') {
+                    if (self.displayPreview && $preview.css('display') === 'none') {
                         $preview.fadeIn(500);
                     }
                 }
@@ -281,14 +279,15 @@ let customLinks = new Vue({
          * プレビューを初期化する
          *
          * @param id
+         * @param setting
          */
-        initPreview: function (id) {
+        initPreview: function (id, setting) {
             this.displayPreview = true;
             this.showPreview['NonSupport'] = false;
             Object.keys(this.showPreview).forEach(function (key) {
                 this.showPreview[key] = false;
             }, this);
-            if (id && this.links[id].custom_field.type !== 'group') {
+            if (id && setting.preview && this.links[id].custom_field.type !== 'group') {
                 this.showPreview[id] = true;
             } else {
                 this.showPreview['NonSupport'] = true;
@@ -401,11 +400,9 @@ let customLinks = new Vue({
 });
 
 $(function () {
-
     init();
     changeType();
     registerEventToInUseField();
-
     /**
      * 初期化
      */
@@ -427,6 +424,14 @@ $(function () {
                 jQuery(ui.helper).css({
                     'width': jQuery(this).width()
                 });
+                const currentType = $(this).find("input.custom-field-type").val();
+                if(currentType.length > 0){
+                    const fieldTypes = $("#AdminCustomTablesFormScript").data('setting');
+                    const onlyOneOnTable = fieldTypes[currentType].onlyOneOnTable;
+                    if(onlyOneOnTable && isTargetDeployed(currentType)) {
+                        event.preventDefault();
+                    }
+                }
             },
         });
         // 利用中のフィールドを並べ替える
@@ -466,6 +471,7 @@ $(function () {
                 $(`#${inUseFieldId} input[name='template[name]']`).attr('name', `custom_links[new-${baseId}][name]`);
                 $(`#${inUseFieldId} input[name='template[custom_field_id]']`).attr('name', `custom_links[new-${baseId}][custom_field_id]`);
                 $(`#${inUseFieldId} input[name='template[sort]']`).attr('name', `custom_links[new-${baseId}][sort]`);
+                $(`#${inUseFieldId} input[name='template[type]']`).attr('name', `custom_links[new-${baseId}][type]`);
                 $(`#${inUseFieldId} input[name='template[title]']`).attr('name', `custom_links[new-${baseId}][title]`);
                 $(`#${inUseFieldId} input[name='template[display_front]']`).attr('name', `custom_links[new-${baseId}][display_front]`);
                 $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
@@ -478,6 +484,7 @@ $(function () {
 
                 registerEventToInUseField(inUseFieldId);
                 updateSort();
+                checkDeployedOnlyOneOnTableTypes();
             },
         });
         // 利用中のフィールドを並べ替える
@@ -493,6 +500,50 @@ $(function () {
                 updateSort();
             },
         });
+        checkDeployedOnlyOneOnTableTypes();
+    }
+
+    /**
+     * 利用中のフィールドに対してOnlyOneOnTableのタイプが配置されているかチェックを行い、
+     * 配置されている場合は利用できるフィールドの対象のタイプにis-deployedクラスを付与する
+     */
+    function checkDeployedOnlyOneOnTableTypes() {
+        let deployedTypes = getDeployedOnlyOneOnTableTypes();
+        $("#CustomFieldSettingSource .custom-field-type").each(function(){
+            if(deployedTypes.indexOf($(this).val()) !== -1) {
+                $(this).parent().addClass('is-deployed');
+            }
+        });
+    }
+
+    /**
+     * ターゲットに配置済のOnlyOneOnTableのタイプを取得
+     */
+    function getDeployedOnlyOneOnTableTypes() {
+        let types = [];
+        Object.keys(settings).forEach(key => {
+            if(settings[key].onlyOneOnTable && isTargetDeployed(key)) {
+                types.push(key);
+            }
+        });
+        return types;
+    }
+
+    /**
+     * ターゲットに配置済かどうか
+     * @param targetType
+     * @returns {boolean}
+     */
+    function isTargetDeployed(targetType) {
+        let isDeployed = false;
+        $("#CustomFieldSettingTarget").find("[id*='InUseField']").each(function(){
+            var type = $(this).find("input.custom-field-type").val();
+            if(targetType === type){
+                isDeployed = true;
+                return true;
+            }
+        });
+        return isDeployed;
     }
 
     /**
@@ -541,6 +592,16 @@ $(function () {
                 $(this).remove();
                 updateSort();
             })
+            // onlyOneOnTable のタイプが削除された場合は、利用できるフィールドの対象のタイプにis-deployedクラスを削除する
+            let deletedFieldType = $(this).parent().parent().find("input.custom-field-type").val();
+            //deletedFieldTypeがonlyOneOnTableのタイプであるかチェック
+            if(settings[deletedFieldType].onlyOneOnTable === true) {
+                $("#CustomFieldSettingSource .custom-field-type").each(function(){
+                    if($(this).val() === deletedFieldType && $(this).parent().hasClass('is-deployed')) {
+                        $(this).parent().removeClass('is-deployed');
+                    }
+                });
+            };
         });
     }
 
@@ -580,3 +641,4 @@ $(function () {
 
 });
 
+app.mount('#AdminCustomTable');

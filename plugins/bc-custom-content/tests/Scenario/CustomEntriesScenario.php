@@ -29,19 +29,22 @@ class CustomEntriesScenario implements FixtureScenarioInterface
         CustomEntryFactory::make([
             'id' => 1,
             'custom_table_id' => 1,
-            'name' => 'プログラマー',
+            'name' => '',
             'title' => 'Webエンジニア・Webプログラマー',
-            'created' => '2023-01-30 07:09:22',
+            'published' => '2023-01-30 07:09:22',
+            'created' => '2023-01-29 07:09:22',
         ])->persist();
         CustomEntryFactory::make([
             'id' => 2,
             'custom_table_id' => 1,
             'name' => 'プログラマー 2',
+            'published' => '2025-01-30 07:09:22',
         ])->persist();
         CustomEntryFactory::make([
             'id' => 3,
             'custom_table_id' => 1,
             'name' => 'プログラマー 3',
+            'published' => '2025-01-30 07:09:22',
         ])->persist();
         return null;
     }

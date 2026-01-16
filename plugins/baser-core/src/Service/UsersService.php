@@ -17,11 +17,9 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
@@ -40,6 +38,7 @@ use Cake\Http\Response;
  * @property UsersTable $Users
  * @property LoginStoresTable $LoginStores
  */
+#[\AllowDynamicProperties]
 class UsersService implements UsersServiceInterface
 {
 
@@ -131,19 +130,51 @@ class UsersService implements UsersServiceInterface
             $query->limit($queryParams['limit']);
         }
 
-        if (!empty($queryParams['user_group_id'])) {
-            $query->matching('UserGroups', function($q) use ($queryParams) {
-                return $q->where(['UserGroups.id' => $queryParams['user_group_id']]);
+        $query = $this->createIndexConditions($query, $queryParams);
+        return $query;
+    }
+
+    /**
+     * createIndexConditions
+     *
+     * @param array $params
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function createIndexConditions(Query $query, array $params): Query
+    {
+        foreach ($params as $key => $value) {
+            if ($value === '') {
+                unset($params[$key]);
+            }
+        }
+        if (empty($params)) return $query;
+
+        $params = array_merge([
+            'user_group_id' => null,
+            'name' => null,
+            'email' => null,
+            'real_name' => null
+        ], $params);
+
+        if (!is_null($params['user_group_id'])) {
+            $query->matching('UserGroups', function($q) use ($params) {
+                return $q->where(['UserGroups.id' => $params['user_group_id']]);
             });
         }
-        if (!empty($queryParams['name'])) {
-            $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+        if (!is_null($params['name'])) {
+            $query->where(['name LIKE' => '%' . $params['name'] . '%']);
         }
-        if (!empty($queryParams['real_name'])) {
+        if (!is_null($params['real_name'])) {
             $query->where(['OR' => [
-                ['real_name_1 LIKE' => '%' . $queryParams['real_name'] . '%'],
-                ['real_name_2 LIKE' => '%' . $queryParams['real_name'] . '%'],
+                ['real_name_1 LIKE' => '%' . $params['real_name'] . '%'],
+                ['real_name_2 LIKE' => '%' . $params['real_name'] . '%'],
             ]]);
+        }
+        if(!is_null($params['email'])) {
+            $query->where(['email LIKE' => '%' . $params['email'] . '%']);
         }
         return $query;
     }

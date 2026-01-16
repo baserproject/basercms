@@ -12,7 +12,6 @@
 namespace BcEditorTemplate\Controller\Admin;
 
 use BaserCore\Error\BcException;
-use BaserCore\Utility\BcSiteConfig;
 use BcEditorTemplate\Service\EditorTemplatesService;
 use BcEditorTemplate\Service\EditorTemplatesServiceInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
@@ -166,11 +165,12 @@ class EditorTemplatesController extends BcAdminAppController
      */
     public function js(EditorTemplatesServiceInterface $service)
     {
-        header('Content-Type: text/javascript; name="editor_templates.js"');
         $this->viewBuilder()->disableAutoLayout();
         $this->set([
             'templates' => $service->getIndex()
         ]);
+        $response = $this->getResponse()->withHeader('Content-Type', 'text/javascript; name="editor_templates.js"');
+        $this->setResponse($response);
         $this->viewBuilder()->addHelper('BaserCore.BcArray');
     }
 

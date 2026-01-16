@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Service\Admin\PermissionGroupsAdminService;
 use BaserCore\Service\Admin\PermissionGroupsAdminServiceInterface;
 use BaserCore\Service\PermissionGroupsServiceInterface;
+use BaserCore\Utility\BcUtil;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -173,7 +174,11 @@ class PermissionGroupsController extends BcAdminAppController
         } else {
             $this->BcMessage->setError(__d('baser_core', 'アクセスルールの再構築に失敗しました。'));
         }
-        return $this->redirect(['action' => 'index', $userGroupId]);
+        if(BcUtil::isAdminUser()) {
+            return $this->redirect(['action' => 'index', $userGroupId]);
+        } else {
+            return $this->redirect(['controller' => 'Dashboard', 'action' => 'index']);
+        }
     }
 
 }

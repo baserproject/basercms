@@ -41,6 +41,8 @@ class BcSeed extends AbstractSeed
     {
         if($this->input->hasParameterOption('connection')) {
             $connection = $this->input->getParameterOption('connection');
+        } elseif($this->input->hasParameterOption('--connection')) {
+            $connection = $this->input->getParameterOption('--connection');
         } else {
             $connection = 'default';
         }

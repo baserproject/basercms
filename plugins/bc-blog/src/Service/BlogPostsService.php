@@ -29,7 +29,6 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\QueryInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -131,6 +130,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         $options = array_merge([
             'num' => null,
             'limit' => null,
+            'page' => null,
             'direction' => 'DESC',    // 並び方向
             'order' => 'posted',    // 並び順対象のフィールド
             'sort' => null,
@@ -155,7 +155,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
         if ($options['contain'] == null)
             $options['contain'] = [];
-        $query = $this->BlogPosts->find('all', ['draft' => $options['draft']])
+        $query = $this->BlogPosts->find('all', draft: $options['draft'])
             ->contain($options['contain']);
 
         if ($options['order']) {
@@ -163,8 +163,11 @@ class BlogPostsService implements BlogPostsServiceInterface
             unset($options['order'], $options['direction']);
         }
         if (!empty($options['limit'])) {
-            $query->limit($options['limit']);
-            unset($options['limit']);
+            if (!empty($options['page'])) {
+                $query = $query->page($options['page'], $options['limit']);
+            } else {
+                $query = $query->limit($options['limit']);
+            }
         }
         if (!empty($options)) {
             $query = $this->createIndexConditions($query, $options);

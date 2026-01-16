@@ -315,6 +315,10 @@ class BcTimeHelper extends TimeHelper
             $format = 'yyyy/MM/dd';
         } elseif ($format === 'Y.m.d') {
             $format = 'yyyy.MM.dd';
+        } elseif ($format === 'Y年m月d日') {
+            $format = 'yyyy年MM月dd日';
+        } elseif ($format === 'Y年n月j日') {
+            $format = 'yyyy年M月d日';
         }
         if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
             return "";

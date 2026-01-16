@@ -16,6 +16,7 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Entity\UserInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
@@ -24,7 +25,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Database\Exception\MissingConnectionException;
-use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
 use Cake\Http\UriFactory;
@@ -133,12 +133,12 @@ class BcUtil
      *
      * $prefix を指定したとしても authentication より取得できた場合はそちらを優先する
      *
-     * @return User|false
+     * @return UserInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser()
+    public static function loginUser(): UserInterface|false
     {
         $request = Router::getRequest();
         if (!$request) return false;
@@ -229,7 +229,7 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isSuperUser($user = null): bool
+    public static function isSuperUser(?UserInterface $user = null): bool
     {
         /** @var User $User */
         $loginUser = $user ?? self::loginUser();
@@ -352,6 +352,7 @@ class BcUtil
      */
     public static function verpoint($version)
     {
+        if(!$version) return 0;
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
@@ -779,6 +780,9 @@ class BcUtil
      */
     public static function isConsole()
     {
+        if(!isset($_ENV['IS_CONSOLE'])) {
+            $_ENV['IS_CONSOLE'] = (php_sapi_name() === 'cli');
+        }
         return (bool)$_ENV['IS_CONSOLE'];
     }
 
@@ -2308,6 +2312,15 @@ class BcUtil
             trigger_error('baserCMSのバージョンが特定できません。');
         }
         return false;
+    }
+
+    /**
+     * 開発版かどうかを判定
+     * @return bool
+     */
+    public static function isDevelopmentVersion(): bool
+    {
+        return is_dir(ROOT . DS . 'plugins' . DS . 'baser-core');
     }
 
 }

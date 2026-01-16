@@ -27,6 +27,11 @@ $this->BcAdminForm->unlockField('template');
     <div class="custom-field-content__head-title">
       <span class="custom-field-content__head-text"><?php echo h($field->title) ?></span>
       <small>（<?php echo h($field->getTypeTitle()) ?>）</small>
+      <?php echo $this->BcAdminForm->control('current_type', [
+        'type' => 'hidden',
+        'value' => $field->type,
+        'class' => 'custom-field-type'
+      ])?>
     </div>
   </div>
 </div>
@@ -50,6 +55,11 @@ $this->BcAdminForm->unlockField('template');
       'type' => 'hidden',
       'value' => $field->id
     ]) ?>
+    <?php echo $this->BcAdminForm->control('template.type', [
+      'type' => 'hidden',
+      'value' => $field->type,
+      'class' => 'custom-field-type']
+    ) ?>
     <?php echo $this->BcAdminForm->control('template.sort', [
       'type' => 'hidden',
       'class' => 'bca-textbox__input custom-field-sort'

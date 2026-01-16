@@ -27,6 +27,7 @@ use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\Paging\PaginatedResultSet;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Exception\RedirectException;
 use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -114,14 +115,14 @@ class BlogFrontService implements BlogFrontServiceInterface
      *
      * @param ServerRequest $request
      * @param BlogContent $blogContent
-     * @param ResultSet $posts
+     * @param PaginatedResultSet $posts
      * @return array
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
+    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, PaginatedResultSet $posts): array
     {
         $site = $request->getAttribute('currentSite');
         return [
@@ -354,6 +355,9 @@ class BlogFrontService implements BlogFrontServiceInterface
     {
         $isPreview = (bool)$request->getQuery('preview');
         $no = $request->getParam('pass.0');
+        if (is_string($no)) {
+            $no = rawurldecode($no);
+        }
         $post = $editLink = null;
         if($isPreview) {
             if($no) {
@@ -372,13 +376,19 @@ class BlogFrontService implements BlogFrontServiceInterface
                 $post->blog_content_id,
                 $post->id
             ] : '';
+
+            // スラッグが設定されている記事にNOでアクセスした場合はリダイレクト
+            if ($post->name && $post->name !== $no) {
+                $postUrl = $this->BlogPostsService->getUrl($post->blog_content->content, $post, true);
+                throw new RedirectException($postUrl);
+            }
         }
 
         // ナビゲーションを設定
         if ($post && $post->blog_category_id) {
             $crumbs = array_merge($crumbs, $this->getCategoryCrumbs(
                 $request->getAttribute('currentContent')->url,
-                $post->blog_category->id,
+                $post->blog_category->id?? null,
                 false
             ));
         }
@@ -649,7 +659,7 @@ class BlogFrontService implements BlogFrontServiceInterface
                 ['BlogPosts.blog_content_id' => $blogContentId],
                 $this->BlogPostsService->BlogPosts->getConditionAllowPublish()
             ))
-            ->order(['BlogPosts.posted DESC']);
+            ->orderBy(['BlogPosts.posted DESC']);
         if ($limit) {
             $query->limit($limit);
         }

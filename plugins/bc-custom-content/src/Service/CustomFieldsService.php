@@ -16,6 +16,7 @@ use BcCustomContent\Model\Table\CustomEntriesTable;
 use BcCustomContent\Model\Table\CustomFieldsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -110,9 +111,39 @@ class CustomFieldsService implements CustomFieldsServiceInterface
         $options = array_merge([
             'status' => null
         ], $queryParams);
+        $query = $this->CustomFields->find();
+        return $this->createIndexConditions($query, $options);
+    }
+
+    /**
+     * カスタムフィールドの一覧データを取得するための条件を作成する
+     * @param Query $query
+     * @param array $params
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function createIndexConditions(Query $query, $params): Query
+    {
+        $params = array_merge([
+            'status' => null,
+            'title' => null,
+            'type' => null,
+            'name' => null
+        ], $params);
         $conditions = [];
-        if(!is_null($options['status'])) $conditions = ['CustomFields.status' => $options['status']];
-        return $this->CustomFields->find()->where($conditions);
+        if(!is_null($params['status'])) $conditions = ['CustomFields.status' => $params['status']];
+        if(!is_null($params['title'])) {
+            $conditions[] = ['CustomFields.title LIKE' => '%' . $params['title'] . '%'];
+        }
+        if(!is_null($params['type'])) {
+            $conditions[] = ['CustomFields.field_type' => $params['type']];
+        }
+        if(!is_null($params['name'])) {
+            $conditions[] = ['CustomFields.name' => $params['name']];
+        }
+        return $query->where($conditions);
     }
 
     /**
@@ -142,6 +173,9 @@ class CustomFieldsService implements CustomFieldsServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
+        if(empty($postData['meta']) && $entity->meta) {
+            $postData['meta'] = $entity->meta;
+        }
         $entity = $this->CustomFields->patchEntity($entity, $postData);
         return $this->CustomFields->saveOrFail($entity);
     }

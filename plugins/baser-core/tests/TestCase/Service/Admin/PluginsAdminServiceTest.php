@@ -77,24 +77,22 @@ class PluginsAdminServiceTest extends BcTestCase
     {
         $this->loadFixtureScenario(PluginsScenario::class);
         $vars = $this->PluginsAdmin->getViewVarsForUpdate($this->PluginsAdmin->get(1));
-        $this->assertEquals([
-            'plugin',
-            'scriptNum',
-            'scriptMessages',
-            'dbVersion',
-            'programVersion',
-            'dbVerPoint',
-            'programVerPoint',
-            'availableVersion',
-            'log',
-            'coreDownloaded',
-            'php',
-            'isCore',
-            'isWritableVendor',
-            'isWritableComposerJson',
-            'isWritableComposerLock',
-            'isUpdatable'
-        ], array_keys($vars));
+        $this->assertArrayHasKey('plugin', $vars);
+        $this->assertArrayHasKey('scriptNum', $vars);
+        $this->assertArrayHasKey('scriptMessages', $vars);
+        $this->assertArrayHasKey('dbVersion', $vars);
+        $this->assertArrayHasKey('programVersion', $vars);
+        $this->assertArrayHasKey('dbVerPoint', $vars);
+        $this->assertArrayHasKey('programVerPoint', $vars);
+        $this->assertArrayHasKey('availableVersion', $vars);
+        $this->assertArrayHasKey('log', $vars);
+        $this->assertArrayHasKey('coreDownloaded', $vars);
+        $this->assertArrayHasKey('php', $vars);
+        $this->assertArrayHasKey('isCore', $vars);
+        $this->assertArrayHasKey('isWritableVendor', $vars);
+        $this->assertArrayHasKey('isWritableComposerJson', $vars);
+        $this->assertArrayHasKey('isWritableComposerLock', $vars);
+        $this->assertArrayHasKey('isUpdatable', $vars);
     }
 
     /**

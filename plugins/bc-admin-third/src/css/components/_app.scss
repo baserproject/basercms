@@ -1,3 +1,5 @@
+@use "../theme/var" as *;
+@use "../base/mixin" as *;
 .bca-app {
   display: grid;
   min-height: calc(100vh - 40px);

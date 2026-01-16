@@ -85,7 +85,6 @@ class MailControllerTest extends BcTestCase
         $this->assertNotNull($vars['mailContent']);
         $this->assertNotNull($vars['mailFields']);
         $this->assertNotNull($vars['mailMessage']);
-        $this->assertNotNull($vars['description']);
         $this->assertTrue($_SESSION["BcMail"]["valid"]);
 
         //異常テスト

@@ -127,13 +127,13 @@ class ThemeConfigsTable extends AppTable
                 'message' => __d('baser_core', '許可されていないファイルです。')
             ]
         ]);
-
         $validator->add('logo_link', [
-            'urlCheck' => [
-                'rule' => ['url', true],
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-            ]
-        ]);
+                ]
+            ]);
 
         // main_image_1
         $validator->add('main_image_1', [
@@ -144,11 +144,13 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_1',[
-            'urlCheck' => [
-                'rule' => ['url', true],
+
+        $validator->add('main_image_link_1', [
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_2
@@ -160,11 +162,12 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_2',[
-            'urlCheck' => [
-                'rule' => ['url', true],
+        $validator->add('main_image_link_2', [
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_3
@@ -176,11 +179,12 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_3',[
-            'urlCheck' => [
-                'rule' => ['url', true],
+        $validator->add('main_image_link_3', [
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_4
@@ -192,11 +196,12 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_4',[
-            'urlCheck' => [
-                'rule' => ['url', true],
+        $validator->add('main_image_link_4', [
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
 
         // main_image_5
@@ -208,11 +213,12 @@ class ThemeConfigsTable extends AppTable
             ]
         ]);
 
-        $validator->add('main_image_link_5',[
-            'urlCheck' => [
-                'rule' => ['url', true],
+        $validator->add('main_image_link_5', [
+            'linkUrl' => [
+                'rule' => 'rootPath',
+                'provider' => 'bc',
                 'message' => __d('baser_core', '無効なURLです')
-           ]
+            ]
         ]);
         return $validator;
     }

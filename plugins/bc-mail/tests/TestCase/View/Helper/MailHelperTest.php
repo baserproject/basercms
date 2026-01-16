@@ -104,6 +104,90 @@ class MailHelperTest extends BcTestCase
     }
 
     /**
+     * 送信完了文を取得する
+     */
+    public function testGetThanks()
+    {
+        $this->MailHelper->currentMailContent = new Entity(['thanks' => 'ありがとうございました。']);
+        $result = $this->MailHelper->getThanks();
+        $this->assertEquals($result, 'ありがとうございました。');
+    }
+
+    /**
+     * 送信完了文の存在確認
+     * @param $thanks
+     * @param $expected
+     * @dataProvider ThanksExistsProvider
+     */
+    public function testThanksExists($thanks, $expected)
+    {
+        //setUp
+        $mailContent = new Entity([
+            'thanks' => $thanks
+        ]);
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $result = $this->MailHelper->thanksExists();
+
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function thanksExistsProvider()
+    {
+        return [
+            ['This is a test thanks', true],
+            ['', false],
+            [null, false],
+            ['0', false],
+            ['   ', true],
+            ['<p>This is a <strong>HTML</strong> thanks</p>', true],
+        ];
+    }
+
+    /**
+     * 受付中止文を取得する
+     */
+    public function testGetUnpublish()
+    {
+        $this->MailHelper->currentMailContent = new Entity(['unpublish' => '受付中止です。']);
+        $result = $this->MailHelper->getUnpublish();
+        $this->assertEquals($result, '受付中止です。');
+    }
+
+    /**
+     * 受付中止文の存在確認
+     * @param $unpublish
+     * @param $expected
+     * @dataProvider ThanksExistsProvider
+     */
+    public function testUnpublishExists($unpublish, $expected)
+    {
+        //setUp
+        $mailContent = new Entity([
+            'unpublish' => $unpublish
+        ]);
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $result = $this->MailHelper->unpublishExists();
+
+        $this->assertEquals($expected, $result);
+    }
+
+
+    public static function unpublishExistsProvider()
+    {
+        return [
+            ['This is a test unpublish', true],
+            ['', false],
+            [null, false],
+            ['0', false],
+            ['   ', true],
+            ['<p>This is a <strong>HTML</strong> unpublish</p>', true],
+        ];
+    }
+
+    /**
      * メールフォームを取得
      */
     public function testGetForm()
@@ -234,6 +318,74 @@ class MailHelperTest extends BcTestCase
 
         $rs = $this->MailHelper->getDescription();
         $this->assertEquals('test description', $rs);
+    }
+
+    /**
+     * test thanksExists
+     */
+    public function test_thanksExists()
+    {
+        $mailContent = new MailContent();
+        $mailContent->thanks = 'test thanks';
+
+        //with thanks
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->thanksExists();
+        $this->assertTrue($rs);
+
+        //with empty thanks
+        $mailContent->thanks = '';
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->thanksExists();
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test testGetThanks
+     */
+    public function test_getThanks()
+    {
+        $mailContent = new MailContent();
+        $mailContent->thanks = 'test thanks';
+
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $rs = $this->MailHelper->getThanks();
+        $this->assertEquals('test thanks', $rs);
+    }
+
+    /**
+     * test unpublishExists
+     */
+    public function test_unpublishExists()
+    {
+        $mailContent = new MailContent();
+        $mailContent->unpublish = 'test unpublish';
+
+        //with unpublish
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->unpublishExists();
+        $this->assertTrue($rs);
+
+        //with empty unpublish
+        $mailContent->unpublish = '';
+        $this->MailHelper->currentMailContent = $mailContent;
+        $rs = $this->MailHelper->unpublishExists();
+        $this->assertFalse($rs);
+    }
+
+    /**
+     * test testGetUnpublish
+     */
+    public function test_getUnpublish()
+    {
+        $mailContent = new MailContent();
+        $mailContent->unpublish = 'test unpublish';
+
+        $this->MailHelper->currentMailContent = $mailContent;
+
+        $rs = $this->MailHelper->getUnpublish();
+        $this->assertEquals('test unpublish', $rs);
     }
 
     /**

@@ -71,8 +71,7 @@ $this->BcBaser->js('BcBlog.blog_comment.bundle.js', true, [
       <td><?php echo $this->BcForm->control('name', ['type' => 'text', 'required' => false]) ?></td>
     </tr>
     <tr>
-      <th><?php echo $this->BcForm->label('email', __d('baser_core', 'メールアドレス')) ?>
-        <span class="required"><?php echo __d('baser_core', '必須') ?></span></th>
+      <th><?php echo $this->BcForm->label('email', __d('baser_core', 'メールアドレス')) ?></th>
       <td>
         <?php echo $this->BcForm->control('email', ['type' => 'text', 'size' => 30, 'required' => false]) ?>
         &nbsp;

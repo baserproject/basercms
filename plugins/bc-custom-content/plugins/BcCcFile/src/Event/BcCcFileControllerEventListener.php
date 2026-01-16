@@ -67,7 +67,7 @@ class BcCcFileControllerEventListener extends BcControllerEventListener
     {
         /** @var Controller $controller */
         $controller = $event->getSubject();
-        if($this->isAction('Index', false)) {
+        if(in_array($this->getAction(false), ['Index', 'Archives', 'Year'])) {
             $table = $controller->viewBuilder()->getVar('customTable');
             if(!$table) throw new BcException(__d('baser_core', 'ビュー変数 $customTable がセットされていません。'));
             BcCcFileUtil::setupUploader($table->id);

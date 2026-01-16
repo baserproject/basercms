@@ -79,7 +79,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     protected function _isAvailableDelete($content)
     {
         if(!BcUtil::loginUser()->user_groups) return false;
-        $path = BcUtil::getPrefix() . 'baser-core/contents/delete';
+        $path = BcUtil::getPrefix() . '/baser-core/contents/delete';
         $userGroupIds = Hash::extract(BcUtil::loginUser()->user_groups, '{n}.id');
         $service = $this->getService(PermissionsServiceInterface::class);
         return ($content->id && $service->check($path, $userGroupIds) && !$content->site_root);

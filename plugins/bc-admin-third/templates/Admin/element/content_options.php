@@ -45,19 +45,6 @@ $this->BcUpload->setTable('BaserCore.Contents');
   </div>
   <div class="bca-collapse" id="formContentsOptionBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">
-      <tr>
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.description", __d('baser_core', '説明文')) ?></th>
-        <td class="col-input bca-form-table__input">
-          <?php if ($editable): ?>
-            <?php echo $this->BcAdminForm->control("content.description", ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
-          <?php else: ?>
-            <?php echo h($this->BcAdminForm->getSourceValue("content.description")) ?>
-            <?php echo $this->BcAdminForm->hidden("content.description") ?>
-          <?php endif ?>
-          <?php echo $this->BcAdminForm->error("content.description") ?>
-        </td>
-      </tr>
 <?php if(!$content->site_root): ?>
       <tr>
         <th class="col-head bca-form-table__label">

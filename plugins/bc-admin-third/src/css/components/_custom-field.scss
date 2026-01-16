@@ -1,3 +1,4 @@
+@use "../theme/var" as *;
 .custom-field-setting {
   display: flex;
 
@@ -91,6 +92,13 @@
 #CustomFieldSettingTarget {
   min-height: 400px;
   height: 100%;
+}
+
+.custom-field-setting {
+  .is-deployed {
+    color:#CCC;
+    cursor: not-allowed;
+  }
 }
 
 #CustomFieldPreview {

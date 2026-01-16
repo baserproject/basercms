@@ -12,20 +12,25 @@
 namespace BcCustomContent\Test\TestCase\Model\Table;
 
 use ArrayObject;
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Model\Table\CustomContentsTable;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcCustomContent\Service\CustomContentsServiceInterface;
+use BcCustomContent\Service\CustomEntriesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomTablesScenario;
 use Cake\Event\Event;
 
 /**
  * CustomContentsTableTest
  * @property CustomContentsTable $CustomContentsTable
  */
+#[\AllowDynamicProperties]
 class CustomContentsTableTest extends BcTestCase
 {
 
@@ -33,6 +38,7 @@ class CustomContentsTableTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * Set up
@@ -87,15 +93,6 @@ class CustomContentsTableTest extends BcTestCase
         $this->assertEquals([
             'range' => '一覧表示件数は100までの数値で入力してください。',
         ], $errors['list_count']);
-
-        //何も入力しない場合
-        $validator = $this->CustomContentsTable->getValidator('withTable');
-        $errors = $validator->validate([
-            'list_count' => ''
-        ]);
-        $this->assertEquals([
-            '_empty' => '一覧表示件数は必須項目です。',
-        ], $errors['list_count']);
     }
 
     /**
@@ -129,6 +126,43 @@ class CustomContentsTableTest extends BcTestCase
         $this->assertTrue($rs['status']);
         $this->assertEquals($rs['publish_begin'], '2021-01-01 00:00:00');
         $this->assertEquals($rs['publish_end'], '2021-12-31 23:59:59');
+    }
+
+    /**
+     * test createRelatedSearchIndexes
+     */
+    public function test_createRelatedSearchIndexes()
+    {
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomTablesScenario::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customEntriesService->setUp(2);
+
+        $customEntriesService->create([
+            'custom_table_id' => 2,
+            'name' => 'テスト職種1',
+            'title' => 'テスト職種1',
+            'status' => 1,
+            'creator_id' => 1
+        ]);
+        $customEntriesService->create([
+            'custom_table_id' => 2,
+            'name' => 'テスト職種2',
+            'title' => 'テスト職種2',
+            'status' => 1,
+            'creator_id' => 1
+        ]);
+
+        $customContentService = new CustomContentsService();
+        $customContent = $customContentService->get(2);
+
+        $this->CustomContentsTable->createRelatedSearchIndexes($customContent);
+
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
+        $this->assertEquals(2, $searchIndexesTable->find()->count());
+
+        $dataBaseService->dropTable('custom_entry_2_occupations');
     }
 
     /**

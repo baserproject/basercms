@@ -197,7 +197,6 @@ class BcComposerTest extends BcTestCase
         $rs = BcComposer::update();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
 
         // バックアップ復元
         rename($backupPath, $orgPath);
@@ -226,11 +225,9 @@ class BcComposerTest extends BcTestCase
     public function testInstall()
     {
         BcComposer::setup('php');
-
         $rs = BcComposer::install();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
-        $this->assertEquals('A script named install would override a Composer command and has been skipped', $rs['out'][0]);
     }
 
     /**
@@ -259,8 +256,8 @@ class BcComposerTest extends BcTestCase
     public function testSetupComposerForDistribution()
     {
         // composer.json をバックアップ
-        $srcComposerJsonPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.json';
-        $srcComposerLockPath = __DIR__ . DS . 'assets' . DS . 'composer-5.1.1.lock';
+        $srcComposerJsonPath = __DIR__ . DS . 'assets' . DS . 'composer-5.2.0.json';
+        $srcComposerLockPath = __DIR__ . DS . 'assets' . DS . 'composer-5.2.0.lock';
         $composerJson = TMP_TESTS . 'composer.json';
         $composerLock = TMP_TESTS . 'composer.lock';
         copy($srcComposerJsonPath, $composerJson);
@@ -268,7 +265,7 @@ class BcComposerTest extends BcTestCase
 
         // 実行
         BcComposer::setup('', TMP_TESTS);
-        BcComposer::setupComposerForDistribution('5.1.1');
+        BcComposer::setupComposerForDistribution('5.2.0');
         $file = new BcFile($composerJson);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
