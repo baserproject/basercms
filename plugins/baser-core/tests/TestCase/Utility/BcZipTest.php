@@ -34,7 +34,7 @@ class BcZipTest extends BcTestCase
      */
     public function testCreate()
     {
-        // create zip file
+        // ZIPファイルを作成
         $zipSrcPath = TMP . 'zip' . DS;
         mkdir($zipSrcPath);
 
@@ -44,13 +44,13 @@ class BcZipTest extends BcTestCase
         $this->BcZip->create($zipSrcPath, $zipFile);
         $this->assertFileExists($zipFile);
 
-        // check zip file
+        // ZIPファイルを確認
         $za = new \ZipArchive();
         $za->open($zipFile);
         $this->assertTrue($za->locateName('test.txt') !== false);
         $za->close();
 
-        // clean up
+        // クリーンアップ
         unlink($zipFile);
         unlink($zipSrcPath . '/test.txt');
         rmdir($zipSrcPath);
@@ -96,7 +96,7 @@ class BcZipTest extends BcTestCase
      */
     public function testExtractByPhpLib()
     {
-        // create zip file
+        // ZIPファイルを作成
         $zipSrcPath = TMP . 'zip' . DS;
         $sourceZip = $zipSrcPath . 'test.zip';
         $targetPath = TMP . 'extracted' . DS;
@@ -118,12 +118,12 @@ class BcZipTest extends BcTestCase
         $this->assertTrue($result);
         $this->assertEquals('testfolder', $this->BcZip->topArchiveName);
 
-        // check extracted file
+        // 展開されたファイルを確認
         $extractedFile = $targetPath . 'testfolder' . DS . 'testfile.txt';
         $this->assertFileExists($extractedFile);
         $this->assertEquals('This is a test file.', file_get_contents($extractedFile));
 
-        // clean up
+        // クリーンアップ
         $folder = new BcFolder($zipSrcPath);
         $folder->delete();
         $folder = new BcFolder($targetPath);
@@ -131,7 +131,7 @@ class BcZipTest extends BcTestCase
     }
 
     /**
-     * test testExtractByPhpLibReturnsFalse
+     * test ExtractByPhpLibReturnsFalse
      */
     public function testExtractByPhpLibReturnsFalse()
     {
@@ -149,13 +149,92 @@ class BcZipTest extends BcTestCase
         $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
 
         $this->assertFalse($result);
-        //check target path is empty
+        // ターゲットパスが空であることを確認
         $this->assertEmpty(glob($targetPath . '*'));
 
-        // clean up
+        // クリーンアップ
         $folder = new BcFolder($zipSrcPath);
         $folder->delete();
         $folder = new BcFolder($targetPath);
+        $folder->delete();
+    }
+
+    /**
+     * test ExtractByPhpLibRejectsZipSlip
+     */
+    public function testExtractByPhpLibRejectsZipSlip()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'zipslip.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('../evil.txt', 'nope');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFileDoesNotExist($targetPath . 'evil.txt');
+        $this->assertFileDoesNotExist(TMP . 'evil.txt');
+
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
+    }
+
+    /**
+     * test NormalizeTargetPathAllowsMissingTarget
+     */
+    public function testNormalizeTargetPathAllowsMissingTarget()
+    {
+        $parent = TMP . 'zip_target_parent' . DS;
+        if (!file_exists($parent)) {
+            mkdir($parent, 0777, true);
+        }
+
+        $target = $parent . 'child' . DS;
+        $result = $this->execPrivateMethod($this->BcZip, '_normalizeTargetPath', [$target]);
+
+        $expectedParent = rtrim(str_replace('\\', '/', realpath($parent)), '/');
+        $this->assertEquals($expectedParent . '/child', $result);
+
+        $folder = new BcFolder($parent);
+        $folder->delete();
+    }
+
+    /**
+     * test IsZipEntrySafeRejectsInvalidEntries
+     */
+    public function testIsZipEntrySafeRejectsInvalidEntries()
+    {
+        $targetDir = TMP . 'zip_safe_target' . DS;
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        $targetPath = rtrim(str_replace('\\', '/', realpath($targetDir)), '/');
+
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['/etc/passwd', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['C:/Windows/system.ini', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ["evil\0.txt", $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['../evil.txt', $targetPath]));
+        $this->assertTrue($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['good/file.txt', $targetPath]));
+        
+        // ディレクトリエントリ
+        $this->assertTrue($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['folder/', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['/', $targetPath]));
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_isZipEntrySafe', ['../folder/', $targetPath]));
+
+        $folder = new BcFolder($targetDir);
         $folder->delete();
     }
 
@@ -190,7 +269,7 @@ class BcZipTest extends BcTestCase
      */
     public function testZipSub()
     {
-        //create zip file
+        // ZIPファイルを作成
         $tempDir = TMP . 'zip_test_' . uniqid();
         $subDir = $tempDir . DS . 'subdir';
         $zipFile = TMP . 'test_archive.zip';
@@ -203,14 +282,14 @@ class BcZipTest extends BcTestCase
 
         $this->BcZip->create($tempDir, $zipFile);
 
-        //check zip file
+        // ZIPファイルを確認
         $this->assertFileExists($zipFile);
 
-        //check content of zip file
+        // ZIPファイルの内容を確認
         $zip = new ZipArchive();
         $this->assertTrue($zip->open($zipFile));
 
-        // 3 files: file1.txt, subdir/file2.txt, subdir
+        // 3つのファイル: file1.txt, subdir/file2.txt, subdir
         $this->assertEquals(3, $zip->numFiles);
 
         $this->assertTrue($zip->locateName('file1.txt') !== false);
@@ -224,7 +303,7 @@ class BcZipTest extends BcTestCase
 
         $zip->close();
 
-        //clean up
+        // クリーンアップ
         unlink($zipFile);
         $folder = new BcFolder($tempDir);
         $folder->delete();
@@ -263,5 +342,116 @@ class BcZipTest extends BcTestCase
         $rs = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [TMP_TESTS . 'test_extract.zip', TMP_TESTS]);
         //戻り値を確認
         $this->assertFalse($rs);
+    }
+
+    /**
+     * test ExtractByCommandRejectsZipSlip
+     */
+    public function testExtractByCommandRejectsZipSlip()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'zipslip_cmd.zip';
+        $targetPath = TMP . 'extracted' . DS;
+
+        if (!file_exists($zipSrcPath)) {
+            mkdir($zipSrcPath, 0777, true);
+        }
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('../evil_cmd.txt', 'nope');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFileDoesNotExist($targetPath . 'evil_cmd.txt');
+        $this->assertFileDoesNotExist(TMP . 'evil_cmd.txt');
+
+        $folder = new BcFolder($zipSrcPath);
+        $folder->delete();
+        $folder = new BcFolder($targetPath);
+        $folder->delete();
+    }
+
+    /**
+     * test _validateZipEntries
+     */
+    public function testValidateZipEntries()
+    {
+        $zipFile = TMP . 'validate.zip';
+
+        // 1. 正常なエントリ
+        $zip = new \ZipArchive();
+        $zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFromString('file1.txt', 'content');
+        $zip->addFromString('dir/file2.txt', 'content');
+        $zip->close();
+
+        $targetPath = rtrim(TMP, '/\\');
+
+        $this->BcZip->Zip->open($zipFile);
+        $this->assertTrue($this->execPrivateMethod($this->BcZip, '_validateZipEntries', [$targetPath]));
+        $this->BcZip->Zip->close();
+
+        // 2. 不正なエントリ (Zip Slip)
+        $zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFromString('../evil.txt', 'content');
+        $zip->close();
+
+        $this->BcZip->Zip->open($zipFile);
+        $this->assertFalse($this->execPrivateMethod($this->BcZip, '_validateZipEntries', [$targetPath]));
+        $this->BcZip->Zip->close();
+
+        // 3. 空のZIP
+        // Note: ZipArchive は空の場合ファイルを作成しない可能性がある
+        $zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->close();
+
+        if (file_exists($zipFile)) {
+            if ($this->BcZip->Zip->open($zipFile) === true) {
+                $this->assertTrue($this->execPrivateMethod($this->BcZip, '_validateZipEntries', [$targetPath]));
+                $this->BcZip->Zip->close();
+            }
+        }
+
+        // クリーンアップ
+        if (file_exists($zipFile)) {
+            unlink($zipFile);
+        }
+    }
+
+    /**
+     * test _normalizeRelativePath
+     */
+    public function testNormalizeRelativePath()
+    {
+        $this->assertEquals('folder', $this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['folder/']));
+        $this->assertEquals('folder/file.txt', $this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['folder/file.txt']));
+        $this->assertEquals('', $this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['/']));
+        $this->assertEquals('', $this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['./']));
+        $this->assertEquals('a', $this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['a/b/../']));
+        $this->assertNull($this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['..']));
+        $this->assertNull($this->execPrivateMethod($this->BcZip, '_normalizeRelativePath', ['../']));
+    }
+
+    /**
+     * test _normalizeAbsolutePath
+     */
+    public function testNormalizeAbsolutePath()
+    {
+        $this->assertEquals('/var/www', $this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['/var/www']));
+        $this->assertEquals('/var/www', $this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['/var/www/']));
+        $this->assertEquals('/var', $this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['/var/www/..']));
+        $this->assertNull($this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['/..']));
+        $this->assertNull($this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['/../var']));
+
+        // Windowsパスのシミュレーション
+        $this->assertEquals('C:/Windows', $this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['C:/Windows']));
+        $this->assertEquals('C:/', $this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['C:/Windows/..']));
+        $this->assertNull($this->execPrivateMethod($this->BcZip, '_normalizeAbsolutePath', ['C:/..']));
     }
 }
