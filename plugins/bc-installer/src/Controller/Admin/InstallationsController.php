@@ -80,6 +80,7 @@ class InstallationsController extends BcAdminAppController
      * @return void
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function step2(InstallationsAdminServiceInterface $service)
     {
