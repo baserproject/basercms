@@ -419,6 +419,7 @@ const mailFieldsForm = {
      * 自動変換フィールド用の表示設定
      */
     initViewForAutozip() {
+        this.$spanValidNumber.show(); //数値チェック
         this.$spanValidRegex.show();
         this.$rowSize.show();
         this.$rowMaxlength.show();
