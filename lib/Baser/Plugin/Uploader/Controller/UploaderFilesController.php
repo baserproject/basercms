@@ -514,6 +514,11 @@ class UploaderFilesController extends AppController
 				"sig" => "application/pgp-signature",
 				"spl" => "application/futuresplash",
 				"doc" => "application/msword",
+				"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"xls" => "application/vnd.ms-excel",
+				"xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+				"ppt" => "application/vnd.ms-powerpoint",
+				"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 				"ai" => "application/postscript",
 				"torrent" => "application/x-bittorrent",
 				"dvi" => "application/x-dvi",
@@ -541,7 +546,14 @@ class UploaderFilesController extends AppController
 				"asf" => "video/x-ms-asf",
 				"wmv" => "video/x-ms-wmv"
 			];
-			header("Content-type: " . $contentsMaping[$ext]);
+
+			if (isset($contentsMaping[$ext])) {
+				$contentType = $contentsMaping[$ext];
+			} else {
+				$contentType = 'application/octet-stream';
+			}
+
+			header("Content-Type: " . $contentType);
 			readfile(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename);
 			exit();
 		} else {
