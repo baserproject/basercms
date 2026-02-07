@@ -108,7 +108,7 @@ class UploaderFilesController extends BcFrontAppController
 
             $this->setResponse(
                 $this->getResponse()
-                    ->withHeader('Content-type', $contentType)
+                    ->withHeader('Content-Type', $contentType)
                     ->withBody(new Stream(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename))
             );
             $this->disableAutoRender();
