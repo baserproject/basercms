@@ -108,6 +108,10 @@ class BlogPostsController extends BcAdminApiController
             $blogPost = $service->create($this->request->getData());
             $message = __d('baser_core', '記事「{0}」を追加しました。', $blogPost->title);
             $this->BcMessage->setSuccess($message, true, false);
+            // EVENT BlogPosts.afterAdd
+            $this->dispatchLayerEvent('afterAdd', [
+                'data' => $blogPost,
+            ]);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
