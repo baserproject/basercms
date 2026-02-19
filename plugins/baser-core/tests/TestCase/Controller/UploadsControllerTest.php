@@ -48,7 +48,9 @@ class UploadsControllerTest extends BcTestCase
      */
     public function testTmp()
     {
-        mkdir(TMP . 'uploads');
+        if (!is_dir(TMP . 'uploads')) {
+            mkdir(TMP . 'uploads');
+        }
         touch(TMP . 'uploads/test.gif');
         copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', TMP . 'uploads/test.gif');
 

@@ -251,10 +251,19 @@ class BcFileUploader
     {
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
-            if (isset($data[$name . '_tmp']) && $this->moveFileSessionToTmp($data, $name)) {
+
+            // _tmp値が存在し、かつ新しいファイルがアップロードされていない場合のみ、セッションから復元
+            // 新しいファイルがアップロードされている場合は、そちらを優先してセッション復元をスキップ
+            $hasNewFile = !empty($data[$name])
+                && is_array($data[$name])
+                && !empty($data[$name]['tmp_name'])
+                && strpos($data[$name]['tmp_name'], '/tmp/') === 0;
+
+            if (isset($data[$name . '_tmp']) && !$hasNewFile && $this->moveFileSessionToTmp($data, $name)) {
                 $data[$setting['name']] = $this->getUploadingFiles($data['_bc_upload_id'])[$setting['name']];
                 // セッションに一時ファイルが保存されている場合は復元する
-                unset($data[$setting['name'] . '_tmp']);
+                // 注: _tmp値は削除せず保持（バリデーションエラー時のrollbackFileで使用）
+                // unset($data[$setting['name'] . '_tmp']);
             }
         }
     }
@@ -478,9 +487,19 @@ class BcFileUploader
         $fileName = $data[$fieldName . '_tmp'];
         $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
         $tmpName = $this->savePath . $sessionKey;
-        $fileData = base64_decode($this->Session->read('Upload.' . $sessionKey . '.data'));
+        $fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
+
+        // セッションにデータが存在しない場合は処理をスキップ
+        if ($fileData === null) {
+            return false;
+        }
+
+        $fileData = base64_decode($fileData);
         $fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
-        $this->Session->delete('Upload.' . $sessionKey);
+
+        // 注: バリデーションエラーが繰り返される場合に備えて、セッションは削除しない
+        // 保存成功時に削除される（BcFileUploader::saveFiles() → BcFileUploader::deleteFiles()）
+        // $this->Session->delete('Upload.' . $sessionKey);
 
         // サイズを取得
         if (ini_get('mbstring.func_overload') & 2 && function_exists('mb_strlen')) {
@@ -1091,7 +1110,6 @@ class BcFileUploader
     public function saveTmpFiles($data, $tmpId)
     {
         if (!$data) return false;
-        $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
         $data = $this->setupRequestData($data);
         $files = $this->getUploadingFiles($data['_bc_upload_id']);
@@ -1139,6 +1157,7 @@ class BcFileUploader
         $fileName = $this->getSaveTmpFileName($setting, $file, $entity);
         $this->rotateImage($file['tmp_name']);
         $name = str_replace(['.', '/'], ['_', '_'], $fileName);
+
         $this->Session->write('Upload.' . $name, $setting);
         $this->Session->write('Upload.' . $name . '.type', $file['type']);
         $this->Session->write('Upload.' . $name . '.data', base64_encode(file_get_contents($file['tmp_name'])));
@@ -1162,8 +1181,31 @@ class BcFileUploader
                 $entity[$setting['namefield']] = $this->tmpId;
             }
             $fileName = $this->getFieldBasename($setting, $file, $entity);
+
+            // getFieldBasename()がfalseを返した場合（entity_idが空など）、
+            // 代替のファイル名を生成（tmpId + フィールド名 + タイムスタンプ）
+            if ($fileName === false) {
+                // _bc_upload_idがある場合はそれを使用、なければ'tmp'を使用
+                $tmpId = !empty($entity['_bc_upload_id']) ? $entity['_bc_upload_id'] : 'tmp';
+                $fileName = $tmpId . '_' . $setting['name'] . '_' . time() . '.' . $file['ext'];
+            } else {
+                // 一時ファイルの場合、ファイル名にタイムスタンプを追加してユニーク化
+                // （バリデーションエラー時に新しいファイルをアップロードした際のブラウザキャッシュ問題を回避）
+                $pathInfo = pathinfo($fileName);
+                $dirname = $pathInfo['dirname'];
+                if ($dirname === '.') {
+                    $fileName = $pathInfo['filename'] . '_' . time() . '.' . $pathInfo['extension'];
+                } else {
+                    $fileName = $dirname . '/' .
+                                $pathInfo['filename'] . '_' .
+                                time() . '.' .
+                                $pathInfo['extension'];
+                }
+            }
         } else {
-            $fileName = $this->tmpId . '_' . $setting['name'] . '.' . $file['ext'];
+            // namefieldが指定されていない場合
+            $tmpId = !empty($entity['_bc_upload_id']) ? $entity['_bc_upload_id'] : 'tmp';
+            $fileName = $tmpId . '_' . $setting['name'] . '_' . time() . '.' . $file['ext'];
         }
         return $fileName;
     }
@@ -1195,16 +1237,53 @@ class BcFileUploader
      * ファイルアップロード対象のデータを元に戻す
      *
      * @param EntityInterface $entity
+     * @param bool $force エラーがなくても強制実行する場合に true を指定
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function rollbackFile(EntityInterface $entity)
+    public function rollbackFile(EntityInterface $entity, bool $force = false)
     {
-        if (!$entity->getErrors()) return;
+        if (!$force && !$entity->getErrors()) return;
+
+        // バリデーションエラー時、アップロードされたファイルをセッションに保存して復元可能にする
+        $uploadingFiles = $this->getUploadingFiles($entity->_bc_upload_id);
+
         foreach($this->settings['fields'] as $setting) {
             // 値を入れ直すとエラー状態がリセットされてしまうので改めてセットしなおす
             $error = $entity->getError($setting['name']);
+
+            // 実際にユーザーが新規アップロードしたファイルかを判定
+            // PHPの一時ファイル(/tmp/)から始まる場合のみ新規アップロードとみなす
+            // （セッションから復元されたファイルは /var/www/... のパスになる）
+            $isNewUpload = !empty($uploadingFiles[$setting['name']])
+                && !empty($uploadingFiles[$setting['name']]['tmp_name'])
+                && strpos($uploadingFiles[$setting['name']]['tmp_name'], '/tmp/') === 0;
+
+            // 新しいファイルがアップロードされている場合：セッションを新規ファイルで更新
+            if ($isNewUpload) {
+                $tmpFileName = $this->saveTmpFile($setting, $uploadingFiles[$setting['name']], $entity);
+                if ($tmpFileName) {
+                    // _tmpサフィックスでファイル名を保持（次回のリクエストで復元用）
+                    $entity->{$setting['name'] . '_tmp'} = $tmpFileName;
+                }
+            } else {
+                // 新しいファイルがアップロードされていない場合：既存のセッション画像を保持
+                // リクエストデータ（hidden フィールド）から_tmp値を取得
+                // （getOriginal()ではなく、エンティティの現在の値を取得）
+                $tmpValue = $entity->get($setting['name'] . '_tmp');
+
+                if ($tmpValue) {
+                    $entity->{$setting['name'] . '_tmp'} = $tmpValue;
+                } else {
+                    // フォールバック: getOriginal()でも試す（念のため）
+                    $originalTmpValue = $entity->getOriginal($setting['name'] . '_tmp');
+                    if ($originalTmpValue) {
+                        $entity->{$setting['name'] . '_tmp'} = $originalTmpValue;
+                    }
+                }
+            }
+
             $entity->{$setting['name']} = $entity->getOriginal($setting['name']);
             if ($error) $entity->setError($setting['name'], $error);
         }

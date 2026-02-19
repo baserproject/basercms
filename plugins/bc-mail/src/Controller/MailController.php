@@ -196,11 +196,23 @@ class MailController extends MailFrontAppController
                 $this->getRequest()->getData('captcha_id'),
                 $this->getRequest()->getData('auth_captcha')
             )) {
+                // 別途バリデーションを行い、キャプチャのエラーとマージしてセット
+                $mailMessagesService->setup($mailContent->id, $this->getRequest()->getData());
+                $validateEntity = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                if (!$validateEntity->getErrors()) {
+                    $validateEntity = $mailMessagesService->MailMessages->saveTmpFiles(
+                        $this->getRequest()->getData(),
+                        mt_rand(0, 99999999)
+                    );
+                }
+
                 // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
                 $mailMessage = new MailMessage($this->getRequest()->getData(), ['source' => 'BcMail.MailMessages']);
-
-                // 別途バリデーションを行い、キャプチャのエラーとマージしてセット
-                $validateEntity = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                foreach ($validateEntity->toArray() as $key => $value) {
+                    if (str_ends_with((string) $key, '_tmp') && $value) {
+                        $mailMessage->set($key, $value);
+                    }
+                }
                 $errors = $validateEntity->getErrors();
                 $errors['auth_captcha'] = __d('baser_core', '画像の文字が間違っています。再度入力してください。');
                 $mailMessage->setErrors($errors);

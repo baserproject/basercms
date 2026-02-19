@@ -101,7 +101,9 @@ class BcUploadHelper  extends Helper
      */
     public function fileLink($fieldName, $entity, $options = [])
     {
-        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
+        if(!($entity instanceof EntityInterface)) {
+            throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
+        }
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -143,17 +145,34 @@ class BcUploadHelper  extends Helper
 
         $basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
+        // tmp画像優先表示ロジック: fieldName変更前に_tmp値をチェック（セッションキー命名・変換は現状維持）
+        $originalFieldName = $fieldName;
+        $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+
+        // ネストフィールドの場合（例：seo_meta.og_image）、短いフィールド名でも試す
+        $shortFieldName = $fieldName;
+        if (strpos($fieldName, '.') !== false) {
+            [, $shortFieldName] = explode('.', $fieldName);
+            if (!$sessionKey) {
+                $sessionKey = Hash::get($entity, $shortFieldName . '_tmp');
+            }
+        }
+
         if (empty($options['value'])) {
             $value = Hash::get($entity, $fieldName);
             if (!$value && strpos($fieldName, '.') !== false) {
                 [, $fieldName] = explode('.', $fieldName);
                 $value = Hash::get($entity, $fieldName);
+                // fieldNameが変更された場合も_tmp値を再チェック
+                if (!$sessionKey) {
+                    $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+                }
             }
         } else {
             $value = $options['value'];
         }
 
-        $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+        // セッションに一時ファイルがある場合は優先表示
         if ($sessionKey) {
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);
@@ -187,7 +206,24 @@ class BcUploadHelper  extends Helper
                 } else {
                     $figcaptionOptions['class'] = 'file-name';
                 }
-                if ($uploadSettings['type'] == 'image' || in_array($ext, $this->table->getBehavior('BcUpload')->BcFileUploader[$this->table->getAlias()]->imgExts)) {
+                $imgExts = [];
+                if ($this->table->hasBehavior('BcUpload')) {
+                    $behavior = $this->table->getBehavior('BcUpload');
+                    $alias = $this->table->getAlias();
+                    $imgExts = [];
+                    try {
+                        $ref = new \ReflectionClass($behavior);
+                        if ($ref->hasProperty('BcFileUploader')) {
+                            $prop = $ref->getProperty('BcFileUploader');
+                            $prop->setAccessible(true);
+                            $bcFileUploader = $prop->getValue($behavior);
+                            if ($bcFileUploader && isset($bcFileUploader[$alias]) && property_exists($bcFileUploader[$alias], 'imgExts')) {
+                                $imgExts = $bcFileUploader[$alias]->imgExts;
+                            }
+                        }
+                    } catch (\ReflectionException $e) {}
+                }
+                if ($uploadSettings['type'] == 'image' || in_array($ext, $imgExts)) {
                     $imgOptions = array_merge([
                         'imgsize' => $options['imgsize'],
                         'rel' => $options['rel'],
@@ -200,7 +236,7 @@ class BcUploadHelper  extends Helper
                     if ($tmp) {
                         $imgOptions['tmp'] = true;
                     }
-                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->uploadImage($originalFieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
                 } else {
                     $filePath = $basePath . $value;
                     $linkOptions = ['target' => '_blank'];
@@ -315,6 +351,7 @@ class BcUploadHelper  extends Helper
             unset($linkOptions['class']);
         }
 
+        // tmp画像優先表示ロジック（セッションキー命名・変換は現状維持）
         if($entity) {
             $sessionKey = Hash::get($entity, $fieldName . '_tmp');
             if ($sessionKey) {
@@ -353,9 +390,9 @@ class BcUploadHelper  extends Helper
             $options['imgsize'] = 'default';
         }
         if ($options['tmp']) {
-            $options['link'] = false;
             $fileUrl = '/baser-core/uploads/tmp/';
-            if ($options['imgsize']) {
+            $maxSizeUrl = $fileUrl . str_replace('/', '_', $fileName);
+            if ($options['imgsize'] && $options['imgsize'] !== 'default') {
                 $fileUrl .= $options['imgsize'] . '/';
             }
         }
@@ -363,7 +400,7 @@ class BcUploadHelper  extends Helper
         if ($fileName == $options['noimage']) {
             $mostSizeUrl = $fileName;
         } elseif ($options['tmp']) {
-            $mostSizeUrl = $fileUrl . str_replace(['.', '/'], ['_', '_'], $fileName);
+            $mostSizeUrl = $fileUrl . str_replace('/', '_', $fileName);
         } else {
             $check = false;
             $maxSizeExists = false;

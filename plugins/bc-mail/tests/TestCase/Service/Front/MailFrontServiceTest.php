@@ -30,10 +30,12 @@ use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\ORM\Entity;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use InvalidArgumentException;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * MailContentsServiceTest
@@ -369,6 +371,167 @@ class MailFrontServiceTest extends BcTestCase
         $result = $this->MailFrontService->confirm($mailContent, $postData);
         $this->assertInstanceOf(MailMessage::class, $result);
         $this->assertEquals('Nghiem 1', $result['name_1']);
+    }
+
+    /**
+     * test confirm keeps tmp field on validation error
+     */
+    public function test_confirmKeepsTmpFieldOnValidationError()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        MailFieldsFactory::make([
+            'id' => 98,
+            'mail_content_id' => 1,
+            'name' => '添付',
+            'field_name' => 'file_1',
+            'type' => 'file',
+            'use_field' => 1,
+            'valid' => 0,
+            'options' => 'fileExt|jpg',
+            'valid_ex' => 'VALID_FILE_EXT',
+        ])->persist();
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => '必須項目',
+            'field_name' => 'required_name',
+            'type' => 'text',
+            'use_field' => 1,
+            'valid' => 1,
+        ])->persist();
+
+        $tmpFile = tempnam('/tmp', 'mail_front_service_');
+        $jpgFile = $tmpFile . '.jpg';
+        rename($tmpFile, $jpgFile);
+        file_put_contents($jpgFile, 'dummy');
+        $upload = new UploadedFile(
+            $jpgFile,
+            0,
+            UPLOAD_ERR_OK,
+            'dummy.jpg',
+            'image/jpeg'
+        );
+
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessagesService->createTable(1);
+        $postData = [
+            'name_1' => '姓',
+            'name_2' => '名',
+            'required_name' => '',
+            'file_1' => $upload,
+        ];
+        $mailMessagesService->setup(1, $postData);
+
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+
+        $this->expectException(PersistenceFailedException::class);
+
+        try {
+            $this->MailFrontService->confirm($mailContent, $postData);
+        } catch (PersistenceFailedException $e) {
+            $entity = $e->getEntity();
+            $this->assertNotEmpty($entity->get('file_1_tmp'));
+            $this->assertStringEndsWith('.jpg', $entity->get('file_1_tmp'));
+            throw $e;
+        }
+    }
+
+    /**
+     * test confirm keeps tmp field on success
+     */
+    public function test_confirmKeepsTmpFieldOnSuccess()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        MailFieldsFactory::make([
+            'id' => 97,
+            'mail_content_id' => 1,
+            'name' => '添付',
+            'field_name' => 'file_1',
+            'type' => 'file',
+            'use_field' => 1,
+            'valid' => 0,
+            'options' => 'fileExt|jpg',
+            'valid_ex' => 'VALID_FILE_EXT',
+        ])->persist();
+
+        $tmpFile = tempnam('/tmp', 'mail_front_service_success_');
+        $jpgFile = $tmpFile . '.jpg';
+        rename($tmpFile, $jpgFile);
+        file_put_contents($jpgFile, 'dummy');
+        $upload = new UploadedFile(
+            $jpgFile,
+            0,
+            UPLOAD_ERR_OK,
+            'dummy.jpg',
+            'image/jpeg'
+        );
+
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessagesService->createTable(1);
+        $postData = [
+            'name_1' => '姓',
+            'name_2' => '名',
+            'file_1' => $upload,
+        ];
+        $mailMessagesService->setup(1, $postData);
+
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+
+        $result = $this->MailFrontService->confirm($mailContent, $postData);
+
+        $this->assertInstanceOf(MailMessage::class, $result);
+        $this->assertNotEmpty($result->get('file_1_tmp'));
+        $this->assertNotEmpty($result->get('file_1'));
+    }
+
+    /**
+     * test confirm keeps existing tmp field without re-upload
+     */
+    public function test_confirmKeepsExistingTmpFieldWithoutReupload()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        MailFieldsFactory::make([
+            'id' => 96,
+            'mail_content_id' => 1,
+            'name' => '添付',
+            'field_name' => 'file_1',
+            'type' => 'file',
+            'use_field' => 1,
+            'valid' => 0,
+            'options' => 'fileExt|jpg',
+            'valid_ex' => 'VALID_FILE_EXT',
+        ])->persist();
+
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessagesService->createTable(1);
+        $postData = [
+            'name_1' => '姓',
+            'name_2' => '名',
+            'file_1_tmp' => '1_file_1234567890.jpg',
+        ];
+        $mailMessagesService->setup(1, $postData);
+
+        // rollback 後に再送される hidden 値だけの状態を再現
+        $entity = $mailMessagesService->MailMessages->newEntity($postData);
+        $this->assertEquals('1_file_1234567890.jpg', $entity->get('file_1_tmp'));
+
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $mailContent = $MailContentsService->get(1);
+
+        $result = $this->MailFrontService->confirm($mailContent, $postData);
+
+        $this->assertEquals('1_file_1234567890.jpg', $result->get('file_1_tmp'));
     }
 
     /**

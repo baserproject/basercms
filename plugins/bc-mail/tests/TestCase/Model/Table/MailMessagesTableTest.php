@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Model\Table\MailMessagesTable;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Test\TestCase\Model\Array;
@@ -701,6 +702,56 @@ class MailMessagesTableTest extends BcTestCase
         $this->MailMessage->afterMarshal($event);
         $entity = $event->getData('entity');
         $this->assertCount(1, $entity->getErrors()['_not_complate']);
+    }
+
+    /**
+     * test afterMarshal calls rollbackFile
+     * バリデーションエラー時にrollbackFile()が呼ばれることを確認
+     */
+    public function testAfterMarshalCallsRollbackFile()
+    {
+        // prepare
+        MailFieldsFactory::make([
+            'id' => 101,
+            'mail_content_id' => 1,
+            'field_name' => 'file',
+            'type' => 'file',
+            'use_field' => 1,
+            'valid' => '1', // 必須フィールド
+        ])->persist();
+        MailFieldsFactory::make([
+            'id' => 102,
+            'mail_content_id' => 1,
+            'field_name' => 'name',
+            'type' => 'text',
+            'use_field' => 1,
+            'valid' => '1', // 必須フィールド
+        ])->persist();
+
+        // テーブルを作成
+        $messagesService = $this->getService(MailMessagesServiceInterface::class);
+        $messagesService->createTable(1);
+
+        $this->MailMessage->setup(1, ['name' => '', 'file_tmp' => '1_file_1234567890.jpg']);
+
+        // バリデーションエラーを持つエンティティを作成（nameが空で必須エラー）
+        $mailMessage = $this->MailMessage->newEntity([
+            'name' => '', // 必須フィールドが空
+            'file_tmp' => '1_file_1234567890.jpg',
+        ]);
+
+        // _bc_upload_idを設定（BcUploadBehaviorが使用）
+        $mailMessage->_bc_upload_id = 'test_upload_id';
+
+        // バリデーションエラーがあることを確認
+        $this->assertTrue($mailMessage->hasErrors());
+
+        // file_tmp値が保持されることを確認（rollbackFile()が呼ばれた証拠）
+        $this->assertNotEmpty($mailMessage->get('file_tmp'));
+        $this->assertEquals('1_file_1234567890.jpg', $mailMessage->get('file_tmp'));
+
+        // テーブルを削除
+        $messagesService->dropTable(1);
     }
 
 }

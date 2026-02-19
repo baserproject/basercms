@@ -135,6 +135,12 @@ class BcUploadBehavior extends Behavior
         $this->oldEntity[$this->table()->getAlias()][$data['_bc_upload_id']] = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
         // ファイルアップロード用のフィールドのエンティティ変換を許可する
         $options['accessibleFields']['_bc_upload_id'] = true;
+
+        // バリデーションエラー時の_tmp値保持のため、_tmpフィールドも許可
+        $settings = $this->BcFileUploader[$this->table()->getAlias()]->getSettings();
+        foreach ($settings['fields'] as $setting) {
+            $options['accessibleFields'][$setting['name'] . '_tmp'] = true;
+        }
     }
 
     /**
@@ -150,8 +156,43 @@ class BcUploadBehavior extends Behavior
      */
     public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        // 現在のエンティティにエラーがある場合
         if ($entity->getErrors()) {
             $this->BcFileUploader[$this->table()->getAlias()]->rollbackFile($entity);
+        }
+
+        // アソシエーションエンティティ（例: BlogContent->content、BlogPost->seo_meta）にもrollbackFile()を適用
+        // 複数モデルの場合、関連するContentなどのエンティティのバリデーションエラーにも対応
+        foreach ($this->table()->associations() as $association) {
+            $associationName = $association->getName();
+            // アソシエーション名をプロパティ名に変換（例: "Contents" → "content", "BlogCategories" → "blog_categories"）
+            $associationProperty = \Cake\Utility\Inflector::variable($associationName);
+
+            // アソシエーションのプロパティ名も確認（CakePHPのORM定義による）
+            $associationPropertyName = $association->getProperty();
+
+            // 実際のプロパティ名を特定（両方試す）
+            $associatedEntity = null;
+            if (isset($entity->{$associationProperty}) && $entity->{$associationProperty} instanceof EntityInterface) {
+                $associatedEntity = $entity->{$associationProperty};
+            } elseif (isset($entity->{$associationPropertyName}) && $entity->{$associationPropertyName} instanceof EntityInterface) {
+                $associatedEntity = $entity->{$associationPropertyName};
+            }
+
+            if ($associatedEntity) {
+                $associatedTable = $association->getTarget();
+                if ($associatedTable->hasBehavior('BcUpload')) {
+                    $associatedBehavior = $associatedTable->getBehavior('BcUpload');
+
+                    // メインエンティティにエラーがある場合、アソシエーションエンティティのファイルも復元する
+                    // $force=true でエンティティ自身のエラー有無チェックをスキップ
+                    if ($entity->getErrors()) {
+                        $associatedBehavior->BcFileUploader[$associatedTable->getAlias()]->rollbackFile($associatedEntity, true);
+                    } else {
+                        $associatedBehavior->BcFileUploader[$associatedTable->getAlias()]->rollbackFile($associatedEntity);
+                    }
+                }
+            }
         }
     }
 

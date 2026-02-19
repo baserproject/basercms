@@ -796,7 +796,13 @@ SCRIPT_END;
     {
         $options = $this->_initInputField($fieldName, $options);
 
-        $table = $this->getTable($fieldName);
+        // optionsで明示的にtableが指定されている場合はそれを使う（動的アソシエーション対応）
+        if (!empty($options['table'])) {
+            $table = TableRegistry::getTableLocator()->get($options['table']);
+        } else {
+            $table = $this->getTable($fieldName);
+        }
+
         if (!$table || !$table->hasBehavior('BcUpload')) {
             return parent::file($fieldName, $options);
         }
@@ -857,7 +863,53 @@ SCRIPT_END;
         unset($options['deleteSpan'], $options['deleteCheckbox'], $options['deleteLabel']);
         unset($options['figure'], $options['img'], $options['figcaption'], $options['div'], $options['table']);
 
-        $fileLinkTag = $this->BcUpload->fileLink($fieldName, $this->_getContext()->entity(), $linkOptions);
+        // コンテキストからエンティティデータを取得
+        // fieldNameに'.'が含まれる場合（例：content.eyecatch）、モデル名を抽出
+        $modelName = null;
+        if (strpos($fieldName, '.') !== false) {
+            [$modelName, $shortFieldName] = explode('.', $fieldName);
+        } else {
+            $shortFieldName = $fieldName;
+        }
+
+        // コンテキストから既存のエンティティを取得（バリデーションエラー時の_tmp値を保持）
+        $context = $this->context();
+        $entity = null;
+        if ($context instanceof \Cake\View\Form\EntityContext) {
+            try {
+                if ($modelName) {
+                    // ネストされたフィールドの場合（例：content.eyecatch）
+                    $entity = $context->entity([$modelName]);
+                } else {
+                    // トップレベルのフィールドの場合はfieldName全体で取得を試みる
+                    $entity = $context->entity(explode('.', $fieldName));
+                }
+            } catch (\Exception $e) {
+                // エンティティ取得失敗時は後続の処理で新規作成
+                $entity = null;
+            }
+        }
+
+        // エンティティが取得できない場合は新規作成
+        if (!$entity) {
+            if ($modelName && method_exists($table, 'newEmptyEntity')) {
+                // まずコンテキストから配列を取得（バリデーションエラー時の_tmp値が含まれている）
+                $modelData = $context ? $context->val($modelName) : null;
+                // コンテキストから取得できない場合は、リクエストデータから取得
+                if (!$modelData || !is_array($modelData)) {
+                    $modelData = $this->getSourceValue($modelName);
+                }
+                if (is_array($modelData)) {
+                    $entity = $table->newEntity($modelData, ['validate' => false]);
+                } else {
+                    $entity = $table->newEmptyEntity();
+                }
+            } else {
+                $entity = $table->newEmptyEntity();
+            }
+        }
+
+        $fileLinkTag = $this->BcUpload->fileLink($fieldName, $entity, $linkOptions);
         $fileTag = parent::file($fieldName, $options);
 
         if (empty($options['value'])) {
@@ -875,7 +927,35 @@ SCRIPT_END;
         }
         $hiddenValue = $this->getSourceValue($fieldName . '_');
         $fileValue = $this->getSourceValue($fieldName);
+        // _tmp値の取得: rollbackFile()で設定された値を優先するため、コンテキストから取得
+        $tmpValue = null;
+        $context = $this->context();
+        if ($context) {
+            // ネストされたフィールド（content.eyecatch）の場合、まず完全なパスで試す
+            $tmpValue = $context->val($fieldName . '_tmp');
+            // 取得できない場合は、shortFieldNameで試す
+            if (!$tmpValue && $shortFieldName !== $fieldName) {
+                $tmpValue = $context->val($shortFieldName . '_tmp');
+            }
+            // 動的アソシエーション（ContentFiveTitle）の配列から取得を試みる
+            if (!$tmpValue && $modelName) {
+                // modelNameが存在する場合（例：content_five_title.title_5）
+                // まず配列を取得してから、_tmpキーを取得
+                $arrayData = $context->val($modelName);
+                if (is_array($arrayData) && isset($arrayData[$shortFieldName . '_tmp'])) {
+                    $tmpValue = $arrayData[$shortFieldName . '_tmp'];
+                }
+            }
+        }
+        // コンテキストから取得できない場合は、リクエストデータから取得（後方互換性のため）
+        if (!$tmpValue) {
+            $tmpValue = $this->getSourceValue($fieldName . '_tmp');
+            if (!$tmpValue && strpos($fieldName, '.') !== false) {
+                $tmpValue = $this->getSourceValue($shortFieldName . '_tmp');
+            }
+        }
 
+        // hidden値管理（複数ファイルフィールド対応、セッションキー命名・変換は現状維持）
         $hiddenTag = '';
         if ($fileLinkTag) {
             if (is_object($fileValue) && empty($fileValue->getClientFileName()) && $hiddenValue) {
@@ -888,10 +968,18 @@ SCRIPT_END;
             }
         }
 
+        // バリデーションエラー時のセッション画像参照用にtmpサフィックスのhidden値を追加（fileLinkTagの有無に関わらず）
+        if ($tmpValue) {
+            $hiddenTag .= $this->hidden($fieldName . '_tmp', ['value' => $tmpValue]);
+        }
+
         $out = $fileTag;
 
         if ($fileLinkTag) {
             $out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
+        } elseif ($hiddenTag) {
+            // fileLinkTagがなくてもhidden値があれば出力
+            $out .= $hiddenTag;
         }
 
         if (isset($divOptions)) {
@@ -942,6 +1030,10 @@ SCRIPT_END;
             return false;
         }
 
+        // $entityが配列の場合はgetSource()を呼ばずにfalseを返す
+        if (is_array($entity)) {
+            return false;
+        }
         $alias = $entity->getSource();
         $plugin = '';
         if (strpos($alias, '.')) {
@@ -997,7 +1089,12 @@ SCRIPT_END;
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
 
-        $output = parent::control($fieldName, $options);
+        // type='file'の場合は直接file()メソッドを呼び出す（バリデーションエラー時のファイル保持対応）
+        if (!empty($options['type']) && $options['type'] === 'file') {
+            $output = $this->file($fieldName, $options);
+        } else {
+            $output = parent::control($fieldName, $options);
+        }
 
         // EVENT Form.afterControl
         $event = $this->dispatchLayerEvent('afterControl', [

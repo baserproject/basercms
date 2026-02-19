@@ -123,7 +123,7 @@ class BcUploadHelperTest extends BcTestCase
         $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
         $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]*?><\/a>/', $result);
 
-        // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
+        // 一時ファイルへのリンク（デフォルトでは colorbox 付きリンクで拡大できる）
         $options = [
             'tmp' => true
         ];
@@ -131,7 +131,7 @@ class BcUploadHelperTest extends BcTestCase
             'eyecatch' => 'template1.jpg',
             'eyecatch_tmp' => 'test'
         ]), $options);
-        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt="">';
+        $expects = '<a href="/baser-core/uploads/tmp/test" rel="colorbox"><img src="/baser-core/uploads/tmp/medium/test" alt=""></a>';
         $this->assertEquals($expects, $result);
 
         $options = [
@@ -198,6 +198,66 @@ class BcUploadHelperTest extends BcTestCase
         $this->BcUpload->setTable('contents');
         // テーブルがセットされたかどうか確認する
         $this->assertEquals('contents', $this->getPrivateProperty($this->BcUpload, 'table')->getTable());
+    }
+
+    /**
+     * test fileLink with _tmp value
+     * {field}_tmp値がある場合、/baser-core/uploads/tmp/パスを使って優先表示する
+     */
+    public function testFileLinkWithTmpValue()
+    {
+        $data = [
+            'eyecatch' => 'original_image.jpg',
+            'eyecatch_tmp' => 'session_eyecatch_key.jpg',
+        ];
+        $result = $this->BcUpload->fileLink('eyecatch', new Content($data));
+
+        // セッション画像のパス(/baser-core/uploads/tmp/)が使われていることを確認
+        $this->assertStringContainsString('/baser-core/uploads/tmp/', $result, '_tmp値がある場合は/baser-core/uploads/tmp/パスを使うべきです');
+        // セッションキー変換: '.' と '/' が '_' に変換される
+        $expectedKey = str_replace('/', '_', 'session_eyecatch_key.jpg');
+        $this->assertStringContainsString($expectedKey, $result, 'セッションキーが正しく変換されていません');
+        $this->assertStringContainsString('rel="colorbox"', $result, 'tmp画像でもcolorboxリンクが付与されるべきです');
+    }
+
+    /**
+     * test uploadImage auto-detects _tmp value
+     * {field}_tmpがエンティティにセットされていれば、tmp=trueを明示しなくてもtmpパスで画像URLが生成される
+     */
+    public function testUploadImageAutoTmpValue()
+    {
+        $data = [
+            'eyecatch' => 'original_image.jpg',
+            'eyecatch_tmp' => 'session_og_image.jpg',
+        ];
+
+        // tmp=trueを明示しない（自動検出のテスト）
+        $result = $this->BcUpload->uploadImage('eyecatch', new Content($data));
+
+        // tmpパスが自動的に使われることを確認
+        $this->assertStringContainsString('/baser-core/uploads/tmp/', $result, '_tmp値がある場合は自動的にtmpパスを使うべきです');
+        // セッションキー変換: '.' と '/' が '_' に変換される
+        $expectedKey = str_replace('/', '_', 'session_og_image.jpg');
+        $this->assertStringContainsString($expectedKey, $result, 'セッションキーが正しく変換されていません');
+        $this->assertStringContainsString('href="/baser-core/uploads/tmp/' . $expectedKey . '"', $result, 'tmp画像の拡大リンク先は元サイズであるべきです');
+        $this->assertStringContainsString('rel="colorbox"', $result, 'tmp画像でもcolorboxリンクが付与されるべきです');
+    }
+
+    /**
+     * test uploadImage tmp with link false
+     * tmp画像でも link=false が明示された場合はリンクを出力しない
+     */
+    public function testUploadImageTmpWithLinkFalse()
+    {
+        $result = $this->BcUpload->uploadImage('eyecatch', new Content([
+            'eyecatch' => 'template1.jpg',
+            'eyecatch_tmp' => 'test'
+        ]), [
+            'tmp' => true,
+            'link' => false,
+        ]);
+
+        $this->assertEquals('<img src="/baser-core/uploads/tmp/medium/test" alt="">', $result);
     }
 
 }
