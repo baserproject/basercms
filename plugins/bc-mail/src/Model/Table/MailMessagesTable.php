@@ -203,6 +203,9 @@ class MailMessagesTable extends MailAppTable
         $this->_validGroupComplete($entity);
         // バリデートグループエラーチェック
         $this->_validGroupErrorCheck($entity);
+
+        // BcUploadBehavior::afterMarshal() がバリデーションエラー時の rollbackFile() を担うため、
+        // ここでの二重呼び出しは不要（重複実行による tmp ファイル再生成を防ぐ）
     }
 
     /**
@@ -449,7 +452,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
         foreach($this->mailFields as $mailField) {
             // 対象フィールドがあれば、バリデートグループごとに配列に格納する
-            $valids = explode(',', $mailField->valid_ex);
+            $valids = explode(',', (string) $mailField->valid_ex);
             if (in_array('VALID_GROUP_COMPLATE', $valids)) {
                 $dists[$mailField->group_valid][] = [
                     'name' => $mailField->field_name,

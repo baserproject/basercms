@@ -1113,7 +1113,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testScripts()
     {
-        $themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
+        $themeConfigTags = [
+            '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />',
+            '<link rel="stylesheet" href="/files/theme_configs/config.css">'
+        ];
 
         // CSS
         $expected = '
@@ -1124,6 +1127,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->css('admin/layout', false);
         $this->BcBaser->scripts();
         $result = ob_get_clean();
+        $result = str_replace($themeConfigTags, '', $result);
         $this->assertEquals($expected, $result);
 
         $view = $this->BcBaser->getView();
@@ -1140,7 +1144,7 @@ class BcBaserHelperTest extends BcTestCase
         ob_start();
         $this->BcBaser->scripts();
         $result = ob_get_clean();
-        $result = str_replace($themeConfigTag, '', $result);
+        $result = str_replace($themeConfigTags, '', $result);
         $this->assertEquals($expected, $result);
 
         $view->assign('script', '');

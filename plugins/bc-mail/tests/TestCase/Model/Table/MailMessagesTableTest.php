@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Model\Table\MailFieldsTable;
 use BcMail\Model\Table\MailMessagesTable;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use BcMail\Test\TestCase\Model\Array;
@@ -23,6 +24,7 @@ use Cake\Core\Exception\CakeException;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\TestSuite\IntegrationTestTrait;
+use Laminas\Diactoros\UploadedFile;
 use Cake\Validation\Validator;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use TypeError;
@@ -701,6 +703,80 @@ class MailMessagesTableTest extends BcTestCase
         $this->MailMessage->afterMarshal($event);
         $entity = $event->getData('entity');
         $this->assertCount(1, $entity->getErrors()['_not_complate']);
+    }
+
+    /**
+     * test afterMarshal calls rollbackFile
+     * バリデーションエラー時にrollbackFile()が呼ばれることを確認
+     */
+    public function testAfterMarshalCallsRollbackFile()
+    {
+        // prepare
+        MailFieldsFactory::make([
+            'id' => 101,
+            'mail_content_id' => 1,
+            'field_name' => 'file',
+            'type' => 'file',
+            'use_field' => 1,
+            'valid' => '1', // 必須フィールド
+        ])->persist();
+        MailFieldsFactory::make([
+            'id' => 102,
+            'mail_content_id' => 1,
+            'field_name' => 'name',
+            'type' => 'text',
+            'use_field' => 1,
+            'valid' => '1', // 必須フィールド
+        ])->persist();
+
+        // テーブルを作成
+        $messagesService = $this->getService(MailMessagesServiceInterface::class);
+        $messagesService->createTable(1);
+
+        // saveTmpFile() が file_get_contents() するため実際の tmp ファイルが必要
+        $tmpPath = tempnam(sys_get_temp_dir(), 'bc_test_');
+        file_put_contents($tmpPath, 'fake image content');
+
+        try {
+            $this->MailMessage->setup(1, ['name' => '']);
+
+            // file_tmp は渡さず実際のアップロードデータのみ渡す
+            // → rollbackFile() が設定した file_tmp だけが entity に残ることを確認できる
+            $uploadedFile = new UploadedFile(
+                $tmpPath,
+                filesize($tmpPath),
+                UPLOAD_ERR_OK,
+                'test.jpg',
+                'image/jpeg'
+            );
+            $mailMessage = $this->MailMessage->newEntity([
+                'name' => '', // 必須フィールドが空→バリデーションエラー
+                'file' => $uploadedFile,
+            ]);
+
+            // バリデーションエラーがあることを確認
+            $this->assertTrue($mailMessage->hasErrors());
+
+            // rollbackFile() の副作用として file_tmp が新規設定されること
+            // （入力データに file_tmp を含めていないため、設定されていれば rollbackFile が呼ばれた証明）
+            $tmpValue = $mailMessage->get('file_tmp');
+            $this->assertNotEmpty($tmpValue, 'rollbackFile() により file_tmp が設定されているべきです');
+            $this->assertStringContainsString('_file_', $tmpValue, 'file_tmp はフィールド名を含む生成名のはずです');
+
+            // rollbackFile() の副作用としてセッションに Upload データが退避されること
+            $behavior = $this->MailMessage->getBehavior('BcUpload');
+            $uploader = $behavior->BcFileUploader[$this->MailMessage->getAlias()];
+            $sessionKey = str_replace(['.', '/'], ['_', '_'], $tmpValue);
+            $this->assertNotEmpty(
+                $uploader->Session->read('Upload.' . $sessionKey),
+                'rollbackFile() によりセッションに Upload データが退避されているべきです'
+            );
+        } finally {
+            if (file_exists($tmpPath)) {
+                unlink($tmpPath);
+            }
+            $messagesService->dropTable(1);
+        }
     }
 
 }
