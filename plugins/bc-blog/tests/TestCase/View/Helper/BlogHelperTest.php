@@ -973,7 +973,7 @@ class BlogHelperTest extends BcTestCase
         // 一時保存データと画像サイズのテスト
         $options = ['table' => 'BcBlog.BlogPosts', 'tmp' => true, 'imgsize' => 'mobile_thumb'];
         $result = $this->Blog->getEyeCatch($post, $options);
-        $expected = '/\<img src\=\"\/baser-core\/uploads\/tmp\/mobile_thumb\/test-eye_catch_jpg\"/';
+        $expected = '/\<img src\=\"\/baser-core\/uploads\/tmp\/mobile_thumb\/test-eye_catch\.jpg\"/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
         // class属性のテスト

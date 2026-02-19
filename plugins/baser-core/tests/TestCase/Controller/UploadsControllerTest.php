@@ -48,7 +48,11 @@ class UploadsControllerTest extends BcTestCase
      */
     public function testTmp()
     {
-        mkdir(TMP . 'uploads');
+        $createdDir = false;
+        if (!is_dir(TMP . 'uploads')) {
+            mkdir(TMP . 'uploads');
+            $createdDir = true;
+        }
         touch(TMP . 'uploads/test.gif');
         copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', TMP . 'uploads/test.gif');
 
@@ -63,7 +67,9 @@ class UploadsControllerTest extends BcTestCase
         $this->assertNotEmpty($this->_controller->getResponse()->getBody());
 
         @unlink(TMP . 'uploads/test.gif');
-        rmdir(TMP . 'uploads');
+        if ($createdDir) {
+            rmdir(TMP . 'uploads');
+        }
     }
     /**
      * セッションに保存した一時ファイルを出力する

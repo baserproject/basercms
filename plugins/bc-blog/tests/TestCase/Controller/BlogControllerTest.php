@@ -349,7 +349,9 @@ class BlogControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('tag1', $vars['tag']);
-        $this->assertEquals(1, $vars['posts']->toArray()[0]->id);
+        $postIds = array_map(fn($post) => $post->id, $vars['posts']->toArray());
+        sort($postIds);
+        $this->assertSame([1, 2], $postIds);
     }
 
     /**
