@@ -69,7 +69,7 @@ class BcApiUtil
      */
     public static function createJwt(): bool
     {
-        $command = "openssl genrsa -out " . CONFIG . "jwt.key 1024 2>&1";
+        $command = "openssl genrsa -out " . CONFIG . "jwt.key 2048 2>&1";
         exec($command, $out, $code);
         if($code === 0) {
             $command = "openssl rsa -in " . CONFIG . "jwt.key -outform PEM -pubout -out " . CONFIG . "jwt.pem 2>&1";

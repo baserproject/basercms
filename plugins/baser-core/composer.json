@@ -12,7 +12,7 @@
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
         "doctrine/annotations": "^1.12",
-        "firebase/php-jwt": "6.1.0",
+        "firebase/php-jwt": "7.0.2",
         "mobiledetect/mobiledetectlib": "^3.74",
         "ext-json": "*",
         "baserproject/bc-admin-third": "5.2.2",
