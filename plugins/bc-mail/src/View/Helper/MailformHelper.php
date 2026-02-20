@@ -179,11 +179,26 @@ class MailformHelper extends BcFreezeHelper
                 if (!empty($attributes['templateVars.tag'])) {
                     // 取得した値が有効なタグか確認
                     $validTags = ['div', 'span', 'p', 'li', 'dt', 'dd', 'label'];
+                    $rawTemplateTag = $attributes['templateVars.tag'];
                     foreach ($validTags as $validTag) {
                         // templateVars.tagが有効なタグ名から始まっている場合、$attributes['templateVars']['tag'] にセット
-                        if (str_starts_with($attributes['templateVars.tag'], $validTag)) {
-                            $attributes['templateVars']['tag'] = $attributes['templateVars.tag'];
-                            break;
+                        if (str_starts_with($rawTemplateTag, $validTag)) {
+                            // 検証済みのタグ名のみをtemplateVars['tag']にセット
+                            $attributes['templateVars']['tag'] = $validTag;
+                            // 先頭のタグ名以降の文字列を取得（例: ' class="checkbox"'）
+                            $rest = trim(substr($rawTemplateTag, strlen($validTag)));
+                            if ($rest !== '') {
+                                $rests = explode(' ', $rest);
+                                foreach ($rests as $key => $restPart) {
+                                    // タグ名を除外した属性値の中で、onclickやonchangeなどのイベント属性が含まれている場合、unsetする
+                                    if (str_starts_with($restPart, 'on')) {
+                                        unset($rests[$key]);
+                                    }
+                                }
+                                if (!empty($rests) && isset($attributes['templateVars']['tag'])) {
+                                    $attributes['templateVars']['tag'] .= ' ' . implode(' ', $rests);
+                                }
+                            }
                         }
                     }
                     // inputタグに出力されないようにunset
