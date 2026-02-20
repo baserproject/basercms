@@ -175,6 +175,20 @@ class MailformHelper extends BcFreezeHelper
                 $attributes['value'] = null;
                 $attributes['empty'] = false;
                 $attributes['templateVars']['tag'] = 'span';
+                // オプションでtemplateVars.tagが指定されていた場合の対応
+                if (!empty($attributes['templateVars.tag'])) {
+                    // 取得した値が有効なタグか確認
+                    $validTags = ['div', 'span', 'p', 'li', 'dt', 'dd', 'label'];
+                    foreach ($validTags as $validTag) {
+                        // templateVars.tagが有効なタグ名から始まっている場合、$attributes['templateVars']['tag'] にセット
+                        if (str_starts_with($attributes['templateVars.tag'], $validTag)) {
+                            $attributes['templateVars']['tag'] = $attributes['templateVars.tag'];
+                            break;
+                        }
+                    }
+                    // inputタグに出力されないようにunset
+                    unset($attributes['templateVars.tag']);
+                }
                 $out = $this->select($fieldName, $options, $attributes);
                 break;
             case 'file':
