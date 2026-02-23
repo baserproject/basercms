@@ -312,6 +312,14 @@ class BcComposer
         $file->write($json);
     }
 
+    /**
+     * 脆弱パッケージの導入を禁止を解除する
+     * ユニットテストで過去バージョンのインストールテストがあるため、一時的に解除するのに利用する
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public static function disableBlockInsecure()
     {
         $file = new BcFile(self::$currentDir . 'composer.json');

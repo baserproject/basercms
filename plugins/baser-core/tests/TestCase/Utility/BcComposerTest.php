@@ -341,6 +341,30 @@ class BcComposerTest extends BcTestCase
     }
 
     /**
+     * test disableBlockInsecure
+     * @return void
+     */
+    public function testDisableBlockInsecure()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+
+        BcComposer::setup();
+        BcComposer::disableBlockInsecure();
+
+        $file = new BcFile($orgPath);
+        $data = json_decode($file->read(), true);
+
+        $this->assertFalse($data['config']['audit']['block-insecure']);
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+    }
+
+    /**
      * test execCommand
      */
     public function testExecCommand()
