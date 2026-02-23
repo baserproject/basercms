@@ -312,4 +312,14 @@ class BcComposer
         $file->write($json);
     }
 
+    public static function disableBlockInsecure()
+    {
+        $file = new BcFile(self::$currentDir . 'composer.json');
+        $json = $file->read();
+        $data = json_decode($json, true);
+        $data['config']['audit']['block-insecure'] = false;
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $file->write($json);
+    }
+
 }

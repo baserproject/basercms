@@ -14,6 +14,7 @@ namespace BaserCore\Command;
 use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
+use BaserCore\Utility\BcUtil;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -77,6 +78,9 @@ class CreateReleaseCommand extends Command
 
         $io->out(__d('baser_core', '- composer.json / composer.lock をセットアップします。'));
         BcComposer::setup('', $packagePath);
+        if(BcUtil::isTest()) {
+            BcComposer::disableBlockInsecure();
+        }
         $result = BcComposer::setupComposerForDistribution($version);
         if($result['code'] === 0) {
             $io->out(__d('baser_core', '- Composer による lock ファイルの更新が完了しました。'));
