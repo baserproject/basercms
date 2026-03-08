@@ -1,4 +1,4 @@
-(()=>{"use strict";var e,t={1825:(e,t,r)=>{var a=r(284);r(4335);
+(()=>{"use strict";var e,t={1825(e,t,r){var a=r(284);r(4335);
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
