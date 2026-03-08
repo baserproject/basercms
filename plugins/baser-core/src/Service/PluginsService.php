@@ -265,7 +265,8 @@ class PluginsService implements PluginsServiceInterface
         try {
             $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
             foreach($plugins as $pluginName => $plugin) {
-                $pluginsTable->update($pluginName, $plugin['version']);
+            	$version = explode('-', $plugin['version'])[0];
+                $pluginsTable->update($pluginName, $version);
                 BcUpdateLog::set(__d('baser_core', '{0} プラグイン {1} へのアップデートが完了しました。', $pluginName, $plugin['version']));
             }
         } catch (\Throwable $e) {
@@ -748,7 +749,7 @@ class PluginsService implements PluginsServiceInterface
         if (!BcSiteConfig::get('use_update_notice')) return [];
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
-        if (!$coreReleaseInfo) {
+        if (!$coreReleaseInfo || empty($coreReleaseInfo['latest'])) {
             $releaseUrl = Configure::read('BcApp.coreReleaseUrl');
             $http = new Client();
             try {

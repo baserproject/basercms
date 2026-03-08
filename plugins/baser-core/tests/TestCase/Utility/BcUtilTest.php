@@ -241,7 +241,7 @@ class BcUtilTest extends BcTestCase
 
         $version = 'baserCMS 3.0.6.1 beta';
         $result = BcUtil::verpoint($version);
-        $this->assertEquals(false, $result, '正しくバージョンを特定する一意の数値を取得できません');
+        $this->assertEquals(3000006001, $result, '正しくバージョンを特定する一意の数値を取得できません');
     }
 
     /**

@@ -343,7 +343,6 @@ class BcUtil
      * ２つ目以降のバージョン番号は３桁として結合
      * 1.5.9 => 1005009
      * ※ ２つ目以降のバージョン番号は999までとする
-     * β版の場合はfalseを返す
      *
      * @param int|false $version
      * @checked
@@ -356,12 +355,7 @@ class BcUtil
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
-                if (isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
-                    return false;
-                }
                 $maches[4] = str_replace('.', '', $maches[4]);
-            } elseif (isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
-                return false;
             } else {
                 $maches[4] = 0;
             }
