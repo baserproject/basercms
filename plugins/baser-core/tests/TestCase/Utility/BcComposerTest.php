@@ -128,10 +128,12 @@ class BcComposerTest extends BcTestCase
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
         $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
         BcComposer::deleteReplace();
+        BcComposer::disableBlockInsecure();
         BcComposer::update();
 
         // インストール
@@ -190,10 +192,11 @@ class BcComposerTest extends BcTestCase
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
         $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
-
+        BcComposer::disableBlockInsecure();
         $rs = BcComposer::update();
         //戻り値を確認
         $this->assertEquals(0, $rs['code']);
@@ -265,6 +268,7 @@ class BcComposerTest extends BcTestCase
 
         // 実行
         BcComposer::setup('', TMP_TESTS);
+        BcComposer::disableBlockInsecure();
         BcComposer::setupComposerForDistribution('5.2.0');
         $file = new BcFile($composerJson);
         $data = $file->read();
@@ -331,6 +335,30 @@ class BcComposerTest extends BcTestCase
         $file = new BcFile($orgPath);
         $data = $file->read();
         $this->assertFalse(strpos($data, '"replace": {'));
+
+        // バックアップ復元
+        rename($backupPath, $orgPath);
+    }
+
+    /**
+     * test disableBlockInsecure
+     * @return void
+     */
+    public function testDisableBlockInsecure()
+    {
+        $orgPath = ROOT . DS . 'composer.json';
+        $backupPath = ROOT . DS . 'composer.json.bak';
+
+        // バックアップ作成
+        copy($orgPath, $backupPath);
+
+        BcComposer::setup();
+        BcComposer::disableBlockInsecure();
+
+        $file = new BcFile($orgPath);
+        $data = json_decode($file->read(), true);
+
+        $this->assertFalse($data['config']['audit']['block-insecure']);
 
         // バックアップ復元
         rename($backupPath, $orgPath);

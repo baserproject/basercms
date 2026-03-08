@@ -100,6 +100,10 @@ class PagesController extends BcAdminApiController
             $page = $service->create($this->request->getData());
             $message = __d('baser_core', '固定ページ「{0}」を追加しました。', $page->content->title);
             $this->BcMessage->setSuccess($message, true, false);
+            // EVENT Pages.afterAdd
+            $this->dispatchLayerEvent('afterAdd', [
+                'data' => $page,
+            ]);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");

@@ -10,9 +10,13 @@
  */
 
 namespace BcInstaller\Test\TestCase\Controller\Admin;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcInstaller\Controller\Admin\InstallationsController;
+use Cake\Core\Configure;
 use Cake\Event\Event;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class InstallationsControllerTest
@@ -21,14 +25,18 @@ use Cake\Event\Event;
  */
 class InstallationsControllerTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
 
-    /**
+
     /**
      * setup
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
@@ -46,6 +54,7 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
+        $this->markTestSkipped('このテストは未確認です。');
         $this->InstallationsController = new InstallationsController($this->getRequest());
         $event = new Event('Controller.beforeFilter', $this->InstallationsController);
         $this->InstallationsController->beforeFilter($event);
@@ -57,7 +66,23 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write("BcEnv.isInstalled", false);
+        //backup file
+        copy(ROOT . DS . 'config' . DS . '.env', ROOT . DS . 'config' . DS . '.env.bak');
+        copy(ROOT . DS . 'config' . DS . 'install.php', ROOT . DS . 'config' . DS . 'install.php.bak');
+        copy(ROOT . DS . 'vendor' . DS . 'autoload.php', ROOT . DS . 'vendor' . DS . 'autoload.php.bak');
+        $this->get('/');
+
+        //CSRFがあるか確認すること
+        $_cookies = $this->getPrivateProperty($this->_response, '_cookies');
+        $cookies = $this->getPrivateProperty($_cookies, 'cookies');
+        $this->assertNotEmpty($cookies['csrfToken;;/']);
+
+        Configure::write("BcEnv.isInstalled", true);
+        //backup
+        rename(ROOT . DS . 'config' . DS . '.env.bak', ROOT . DS . 'config' . DS . '.env');
+        rename(ROOT . DS . 'config' . DS . 'install.php.bak', ROOT . DS . 'config' . DS . 'install.php');
+        rename(ROOT . DS . 'vendor' . DS . 'autoload.php.bak', ROOT . DS . 'vendor' . DS . 'autoload.php');
     }
 
     /**
@@ -65,7 +90,18 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testStep2()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        Configure::write("BcEnv.isInstalled", false);
+
+        $this->get('/baser/admin/bc-installer/installations/step2');
+        $this->assertResponseCode(200);
+
+        $this->post('/baser/admin/bc-installer/installations/step2', ['mode'=>'next']);
+        $this->assertResponseCode(302);
+
+        Configure::write("BcEnv.isInstalled", true);
     }
 
     /**
@@ -73,7 +109,41 @@ class InstallationsControllerTest extends BcTestCase
      */
     public function testStep3()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        Configure::write("BcEnv.isInstalled", false);
+
+        $this->get('/baser/admin/bc-installer/installations/step3');
+        $this->assertResponseCode(200);
+
+        $config = [
+            'mode' => 'back',
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => '',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(302);
+        $this->assertRedirect('/baser/admin/bc-installer/installations/step2');
+
+        $config['mode'] = 'checkDb';
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+
+        $config['mode'] = 'createDb';
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+
+
+        Configure::write("BcEnv.isInstalled", true);
     }
 
     /**

@@ -60,14 +60,26 @@ class PasswordRequestsController extends BcAdminAppController
         $passwordRequest = $service->getNew();
         $this->set('passwordRequest', clone $passwordRequest);
         if (!$this->request->is(['patch', 'post', 'put'])) return;
-        $message = 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。';
+        $message = __d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。');
+        $isError = false;
         try {
-            $service->update($passwordRequest, $this->request->getData());    
+            $service->update($passwordRequest, $this->request->getData());
         } catch (RecordNotFoundException) {
         } catch (PersistenceFailedException) {
-            $message = '入力エラーです。内容を修正してください。';
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+            $isError = true;
+        } catch (\Throwable $e) {
+            $message = $e->getMessage();
+            if($message === 'Could not send email: unknown') {
+                $message = __d('baser_core', 'メールが送信できません。管理者に連絡してください。');
+            }
+            $isError = true;
         }
-        $this->BcMessage->setSuccess(__d('baser_core', $message));
+        if($isError) {
+            $this->BcMessage->setError($message);
+        } else {
+            $this->BcMessage->setSuccess($message);
+        }
         $this->redirect(['action' => 'entry']);
     }
 

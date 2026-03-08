@@ -75,7 +75,7 @@ class BcZip
             $result = $this->_extractByCommand($source, $target);
         }
         if ($result) {
-            $extractedPath = $target . $this->topArchiveName;
+            $extractedPath = rtrim($target, "/\\") . DS . $this->topArchiveName;
             $Folder = new BcFolder($extractedPath);
             $Folder->chmod( 0777);
             if ($this->Zip) $this->Zip->close();
@@ -97,14 +97,25 @@ class BcZip
      */
     protected function _extractByPhpLib($source, $target)
     {
-        if ($this->Zip->open($source) === true && $this->Zip->extractTo($target)) {
+        if ($this->Zip->open($source) !== true) {
+            return false;
+        }
+        $targetPath = $this->_normalizeTargetPath($target);
+        if ($targetPath === false) {
+            $this->Zip->close();
+            return false;
+        }
+        if (!$this->_validateZipEntries($targetPath)) {
+            $this->Zip->close();
+            return false;
+        }
+        if ($this->Zip->extractTo($target)) {
             $archivePath = $this->Zip->getNameIndex(0);
             $archivePathAry = explode('/', $archivePath);
             $this->topArchiveName = $archivePathAry[0];
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -124,7 +135,27 @@ class BcZip
             return false;
         }
         $unzipCommand = $return1[0];
-        $target = preg_replace('/\/$/', '', $target);
+        $targetPath = $this->_normalizeTargetPath($target);
+        if ($targetPath === false) {
+            return false;
+        }
+        $listCommand = $unzipCommand . ' -Z -1 ' . $this->_escapePath($source);
+        exec($listCommand . ' 2>&1', $entries, $listStatus);
+        if ($listStatus !== 0) {
+            $this->error = $entries;
+            return false;
+        }
+        foreach ($entries as $entry) {
+            $entry = trim($entry);
+            if ($entry === '') {
+                continue;
+            }
+            if (!$this->_isZipEntrySafe($entry, $targetPath)) {
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $entry);
+                return false;
+            }
+        }
+        $target = rtrim($target, "/\\");
         $command = $unzipCommand . ' -o ' . $this->_escapePath($source) . ' -d ' . $this->_escapePath($target);
         exec($command . ' 2>&1', $return2);
         if (!empty($return2[2])) {
@@ -156,6 +187,166 @@ class BcZip
             $pathAry[$key] = escapeshellarg($value);
         }
         return implode(DS, $pathAry);
+    }
+
+    /**
+     * ZIPエントリがターゲット配下か確認する
+     *
+     * @param string $entry
+     * @param string $targetPath
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _isZipEntrySafe($entry, $targetPath)
+    {
+        $entry = str_replace('\\', '/', $entry);
+        if ($entry === '' || strpos($entry, "\0") !== false) {
+            return false;
+        }
+        if (preg_match('/^[A-Za-z]:\//', $entry) || strpos($entry, '/') === 0) {
+            return false;
+        }
+        $normalizedEntry = $this->_normalizeRelativePath($entry);
+        // "." や "a/.." 等で正規化後に空になるエントリは展開対象として無意味なため拒否する。
+        if ($normalizedEntry === null || $normalizedEntry === '') {
+            return false;
+        }
+        $destPath = $this->_normalizeAbsolutePath($targetPath . '/' . $normalizedEntry);
+        if ($destPath === null || $destPath === '') {
+            return false;
+        }
+        $comparisonDest = $destPath . '/';
+        $comparisonTarget = $targetPath . '/';
+        if (DIRECTORY_SEPARATOR === '\\') {
+            // Windows 互換性のため、大文字小文字を無視して比較する。
+            $comparisonDest = strtolower($comparisonDest);
+            $comparisonTarget = strtolower($comparisonTarget);
+        }
+        // 展開先がターゲット配下に収まることを保証する。
+        return (strpos($comparisonDest, $comparisonTarget) === 0);
+    }
+
+    /**
+     * ZIPエントリ一覧を検証する
+     *
+     * @param string $targetPath
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _validateZipEntries($targetPath)
+    {
+        for ($i = 0; $i < $this->Zip->numFiles; $i++) {
+            $entry = $this->Zip->getNameIndex($i);
+            if ($entry === false || !$this->_isZipEntrySafe($entry, $targetPath)) {
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $entry);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 展開先ディレクトリの正規化
+     *
+     * 展開前検証用に、存在しない場合は親ディレクトリで解決して基準パスを作る。
+     *
+     * @param string $target
+     * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _normalizeTargetPath($target)
+    {
+        $trimmedTarget = rtrim($target, "/\\");
+        if ($trimmedTarget === '') {
+            $this->error = __d('baser_core', 'Target directory not found.');
+            return false;
+        }
+        $targetPath = realpath($trimmedTarget);
+        if ($targetPath === false) {
+            // ディレクトリ作成は行わず、比較用の基準パスのみ構成する。
+            $parentPath = realpath(dirname($trimmedTarget));
+            if ($parentPath === false || !is_dir($parentPath)) {
+                $this->error = __d('baser_core', 'Target directory not found.');
+                return false;
+            }
+            $targetPath = $parentPath . '/' . basename($trimmedTarget);
+        }
+        return rtrim(str_replace('\\', '/', $targetPath), '/');
+    }
+
+    /**
+     * 相対パスを正規化する
+     *
+     * @param string $path
+     * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _normalizeRelativePath($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        $parts = [];
+        foreach (explode('/', $path) as $part) {
+            if ($part === '' || $part === '.') {
+                continue;
+            }
+            if ($part === '..') {
+                if (empty($parts)) {
+                    return null;
+                }
+                array_pop($parts);
+                continue;
+            }
+            $parts[] = $part;
+        }
+        return implode('/', $parts);
+    }
+
+    /**
+     * 絶対パスを正規化する
+     *
+     * @param string $path
+     * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _normalizeAbsolutePath($path)
+    {
+        // ZIP 内のエントリはまだ実在しないため、realpath() は使えない。
+        $path = str_replace('\\', '/', $path);
+        $drive = '';
+        if (preg_match('/^[A-Za-z]:/', $path)) {
+            $drive = strtoupper($path[0]) . ':';
+            $path = substr($path, 2);
+        }
+        $parts = [];
+        foreach (explode('/', $path) as $part) {
+            if ($part === '' || $part === '.') {
+                continue;
+            }
+            if ($part === '..') {
+                if (!empty($parts)) {
+                    array_pop($parts);
+                } else {
+                    return null;
+                }
+                continue;
+            }
+            $parts[] = $part;
+        }
+        $normalized = implode('/', $parts);
+        if ($drive !== '') {
+            return $drive . '/' . $normalized;
+        }
+        return '/' . $normalized;
     }
 
     /**

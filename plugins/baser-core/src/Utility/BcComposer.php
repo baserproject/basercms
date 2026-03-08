@@ -312,4 +312,22 @@ class BcComposer
         $file->write($json);
     }
 
+    /**
+     * 脆弱パッケージの導入を禁止を解除する
+     * ユニットテストで過去バージョンのインストールテストがあるため、一時的に解除するのに利用する
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function disableBlockInsecure()
+    {
+        $file = new BcFile(self::$currentDir . 'composer.json');
+        $json = $file->read();
+        $data = json_decode($json, true);
+        $data['config']['audit']['block-insecure'] = false;
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $file->write($json);
+    }
+
 }
