@@ -153,6 +153,12 @@ class MailFrontServiceTest extends BcTestCase
         $this->assertEquals('name_test', $result['content']->name);
         $this->assertEquals('description test', $result['mailContent']->description);
         $this->assertEquals('test_name', $result['mailConfig']->name);
+        // clientIp が渡された場合、other['ip'] に設定される
+        $result = $this->MailFrontService->createMailData($mailConfig, $mailContent, $mailFields, $mailMessages, ['clientIp' => '192.168.1.1']);
+        $this->assertEquals('192.168.1.1', $result['other']['ip']);
+        // clientIp が渡されない場合、other['ip'] は空文字
+        $result = $this->MailFrontService->createMailData($mailConfig, $mailContent, $mailFields, $mailMessages, []);
+        $this->assertEquals('', $result['other']['ip']);
     }
     /**
      * test getAdminMail
@@ -528,9 +534,11 @@ class MailFrontServiceTest extends BcTestCase
         ])->persist();
         // normal case
         $mailContent = $MailContentsService->get(99);
-        $this->MailFrontService->sendMail($mailContent, $mailMessage, []);
+        $this->MailFrontService->sendMail($mailContent, $mailMessage, ['clientIp' => '192.168.1.1']);
         $this->assertMailSentTo('t@gm.com');
         $this->assertMailSubjectContains('お問い合わせを頂きました99');
+        // 管理者宛メールにIPアドレスが含まれていること
+        $this->assertMailContainsText('192.168.1.1');
     }
 
     /**

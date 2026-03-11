@@ -302,6 +302,7 @@ class MailController extends MailFrontAppController
 
         // メール送信
         try {
+            $sendEmailOptions['clientIp'] = $this->getRequest()->clientIp();
             $service->sendMail($mailContent, $entity, $sendEmailOptions);
             $this->getRequest()->getSession()->delete('BcMail.valid');
         } catch (\Throwable $e) {
