@@ -121,7 +121,7 @@ class MailController extends MailFrontAppController
             $this->response = $this->response
                 ->withHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
                 ->withHeader('Pragma', 'no-cache')
-                ->withHeader('Expires', date(DATE_RFC1123, strtotime('-1 day')));
+                ->withHeader('Expires', gmdate(DATE_RFC1123, strtotime('-1 day')));
         }
     }
 
