@@ -43,7 +43,7 @@ $(function () {
         },
         update: function (event, ui) {
             // jQueryUI 1.8.14 より、 ui.item.attr("id")で id が取得できない
-            if ($(ui.item[0]).attr("id").match(/^Setting/i)) {
+            if ($(ui.item.context).attr("id").match(/^Setting/i)) {
                 widgetAreaUpdateSortedIds();
                 return;
             }
@@ -57,7 +57,7 @@ $(function () {
             });
 
             baseId++;
-            var id = $(ui.item[0]).attr("id").replace('Widget', '');
+            var id = $(ui.item.context).attr("id").replace('Widget', '');
             var sourceId = id.replace('Widget', '');
             var settingId = 'Setting' + (baseId);
             var tmpId = 'Tmp' + (baseId);
@@ -101,32 +101,16 @@ $(function () {
             accept: 'div.draggable',
             tolderance: 'intersect'
         });
-    $("div.draggable").draggable({
-        scroll: true,
-        helper: function() {
-            // cloneした要素に元のidをコピー
-            var clone = $(this).clone();
-            var originalId = $(this).attr("id");
-            if (!originalId) {
-                // 元の要素にidが無い場合は付与
-                originalId = "Widget-" + Date.now();
-                $(this).attr("id", originalId);
-            }
-            clone.attr("id", originalId);
-            return clone;
-        },
-        opacity: 0.80,
-        revert: 'invalid',
-        cursor: 'move',
-        connectToSortable: '#Target',
-        containment: 'body',
-        start: function(event, ui) {
-            if (!$(this).attr("id")) {
-                var tempId = "Widget-" + Date.now();
-                $(this).attr("id", tempId);
-            }
-        }
-    });
+    $("div.draggable").draggable(
+        {
+            scroll: true,
+            helper: 'clone',
+            opacity: 0.80,
+            revert: 'invalid',
+            cursor: 'move',
+            connectToSortable: '#Target',
+            containment: 'body'
+        });
 
     $("#Target .sortable").each(function (k, v) {
         registWidgetEvent($(this).attr('id').replace('Setting', ''));
