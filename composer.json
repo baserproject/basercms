@@ -34,6 +34,12 @@
         "vendor-dir": "vendors/",
         "allow-plugins": {
             "composer/installers": true
+        },
+        "audit": {
+          "ignore": [
+            "PKSA-z3gr-8qht-p93v",
+            "PKSA-w57n-mhp6-c9sd"
+          ]
         }
     },
     "scripts": {
