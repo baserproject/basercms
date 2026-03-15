@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Service\UserGroupsService;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\LoginStoresScenario;
 use BaserCore\Test\Scenario\PermissionsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
@@ -122,10 +124,57 @@ class UserGroupsControllerTest extends BcTestCase
      */
     public function testDelete()
     {
+        // ユーザーが存在しないユーザーグループを作成
+        $userGroupsTable = $this->getTableLocator()->get('UserGroups');
+        $userGroup = $userGroupsTable->newEntity([
+            'name' => 'test_api_empty_group',
+            'title' => 'テスト用API空グループ',
+            'auth_prefix' => 'Admin',
+            'use_move_contents' => false
+        ]);
+        $userGroupsTable->save($userGroup);
+        $newId = $userGroup->id;
+
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/UserGroups/delete/1.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/baser-core/user_groups/delete/' . $newId . '.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
+        
+        // 削除されたことを確認
+        $deletedGroup = $userGroupsTable->find()->where(['id' => $newId])->first();
+        $this->assertNull($deletedGroup);
+    }
+
+    /**
+     * Test delete with users
+     * ユーザーが所属しているユーザーグループは削除できないことを確認
+     */
+    public function testDeleteWithUsers()
+    {
+        // ユーザーを作成
+        $user = UserFactory::make([
+            'id' => 100,
+            'name' => 'test_user',
+            'password' => 'password',
+            'real_name_1' => 'test',
+            'real_name_2' => 'user',
+            'email' => 'testuser@example.com',
+            'nickname' => 'テストユーザー',
+            'status' => true
+        ])->persist();
+
+        // ユーザーグループとユーザーの関連付けを作成
+        UsersUserGroupFactory::make([
+            'user_id' => 100,
+            'user_group_id' => 2
+        ])->persist();
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/api/admin/baser-core/user_groups/delete/2.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ユーザーが所属しているユーザーグループは削除できません。', $result->message);
     }
 
     /**
