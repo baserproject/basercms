@@ -8,7 +8,8 @@
     $.fn.fixedMenu=function(){
         return this.each(function(){
             var menu= $(this);
-            menu.find('ul li > a').bind('click',function(){
+            menu.find('ul li > a').bind('click',function(e){
+				if (e.isDefaultPrevented()) return;
 				if ($(this).parent().hasClass('active')){
 					$(this).parent().removeClass('active');
 				}
