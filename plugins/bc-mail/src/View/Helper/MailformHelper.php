@@ -175,13 +175,13 @@ class MailformHelper extends BcFreezeHelper
                 $attributes['value'] = null;
                 $attributes['empty'] = false;
                 $attributes['templateVars']['tag'] = 'span';
-                // オプションでtemplateVars.tagが指定されていた場合の対応
-                if (!empty($attributes['templateVars.tag'])) {
+                // オプションでcheckboxWrapTagが指定されていた場合の対応
+                if (!empty($attributes['checkboxWrapTag'])) {
                     // 取得した値が有効なタグか確認
                     $validTags = ['div', 'span', 'p', 'li', 'dt', 'dd', 'label'];
-                    $rawTemplateTag = $attributes['templateVars.tag'];
+                    $rawTemplateTag = $attributes['checkboxWrapTag'];
                     foreach ($validTags as $validTag) {
-                        // templateVars.tagが有効なタグ名から始まっている場合、$attributes['templateVars']['tag'] にセット
+                        // checkboxWrapTagが有効なタグ名から始まっている場合、$attributes['templateVars']['tag'] にセット
                         if (str_starts_with($rawTemplateTag, $validTag)) {
                             // 検証済みのタグ名のみをtemplateVars['tag']にセット
                             $attributes['templateVars']['tag'] = $validTag;
@@ -202,7 +202,7 @@ class MailformHelper extends BcFreezeHelper
                         }
                     }
                     // inputタグに出力されないようにunset
-                    unset($attributes['templateVars.tag']);
+                    unset($attributes['checkboxWrapTag']);
                 }
                 $out = $this->select($fieldName, $options, $attributes);
                 break;

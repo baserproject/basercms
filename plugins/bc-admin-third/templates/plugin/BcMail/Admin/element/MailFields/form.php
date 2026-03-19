@@ -255,8 +255,8 @@
               <dd>プレースホルダー：利用するには、次の形式のように | 区切りで入力します。「placeholder|プレースホルダーの内容」</dd>
               <dt>empty</dt>
               <dd>セレクトボックスの何も選択していないときの表示は、次の形式のように | 区切りで入力します。「empty|何も選択していないときのメッセージ」</dd>
-              <dt>templateVars.tag</dt>
-              <dd>マルチチェックボックスでそれぞれのインプットタグをラッピングする要素を指定します。例）templateVars.tag|div class="checkbox"（div class="checkbox"で囲む）<br>※デフォルトはspanタグでラッピングされます。</dd>
+              <dt>checkboxWrapTag</dt>
+              <dd>マルチチェックボックスでそれぞれのインプットタグをラッピングする要素を指定します。例）checkboxWrapTag|div class="checkbox"（div class="checkbox"で囲む）<br>※デフォルトはspanタグでラッピングされます。</dd>
             </dl>
           </div>
         </td>
