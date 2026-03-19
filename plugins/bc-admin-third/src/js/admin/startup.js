@@ -236,26 +236,24 @@ function saveAccordionState(targetSel, isOpen) {
 }
 
 // 初期状態の復元
-$(function() {
-    const state = loadAccordionState();
-    $("[data-bca-collapse='collapse']").each(function() {
-        const btn = $(this);
-        const targetSel = btn.attr('data-bca-target');
-        if (!targetSel) return;
+const state = loadAccordionState();
+$("[data-bca-collapse='collapse']").each(function() {
+    const btn = $(this);
+    const targetSel = btn.attr('data-bca-target');
+    if (!targetSel) return;
 
-        const target = $(targetSel);
-        // localStorageに保存された状態があればそれを適用
-        if (state.hasOwnProperty(targetSel)) {
-            const isOpen = state[targetSel];
-            if (isOpen) {
-                target.attr('data-bca-state', 'open').show();
-                btn.attr('data-bca-state', 'open').attr('aria-expanded', 'false');
-            } else {
-                target.attr('data-bca-state', '').hide();
-                btn.attr('data-bca-state', '').attr('aria-expanded', 'true');
-            }
+    const target = $(targetSel);
+    // localStorageに保存された状態があればそれを適用
+    if (state.hasOwnProperty(targetSel)) {
+        const isOpen = state[targetSel];
+        if (isOpen) {
+            target.attr('data-bca-state', 'open').show();
+            btn.attr('data-bca-state', 'open').attr('aria-expanded', 'false');
+        } else {
+            target.attr('data-bca-state', '').hide();
+            btn.attr('data-bca-state', '').attr('aria-expanded', 'true');
         }
-    });
+    }
 });
 
 // 開閉イベント
