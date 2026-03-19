@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Utility\BcContainerTrait;
@@ -172,13 +173,17 @@ class UserGroupsService implements UserGroupsServiceInterface
      *
      * @param int $id
      * @return bool
+     * @throws BcException ユーザーが所属している場合
      * @checked
      * @noTodo
      * @unitTest
      */
     public function delete(int $id): bool
     {
-        $userGroup = $this->UserGroups->get($id);
+        $userGroup = $this->UserGroups->get($id, ['contain' => ['Users']]);
+        if (!empty($userGroup->users)) {
+            throw new BcException(__d('baser_core', 'ユーザーが所属しているユーザーグループは削除できません。'));
+        }
         return $this->UserGroups->delete($userGroup);
     }
 
