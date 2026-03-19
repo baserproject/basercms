@@ -90,7 +90,9 @@ class BlogPostsControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertCount(2, $result->blogPosts);
-        $this->assertEquals('bl title 11', $result->blogPosts[0]->title);
+        $this->assertEqualsCanonicalizing(['bl title 11', 'bl title 22'], array_map(function ($blogPost) {
+            return $blogPost->title;
+        }, $result->blogPosts));
     }
 
 
