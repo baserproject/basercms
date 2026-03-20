@@ -207,20 +207,77 @@ $.bcJwt.init();
 /**
  * collapse　オプション、詳細設定の折りたたみ開閉
  */
+
+// アコーディオン開閉状態の保存・復元（プラグイン＋コントローラー単位で保存）
+function getAccordionStorageKey() {
+    const path = location.pathname;
+    // パスを分割して最初の4セグメント（/baser/admin/plugin/controller）まで取得
+    const segments = path.split('/').filter(s => s); // 空文字を除外
+    const keyPath = segments.slice(0, 4).join('/');
+    return 'bc-admin-third-ac_state-/' + keyPath;
+}
+
+function loadAccordionState() {
+    try {
+        return JSON.parse(localStorage.getItem(getAccordionStorageKey()) || '{}');
+    } catch (e) {
+        return {};
+    }
+}
+
+function saveAccordionState(targetSel, isOpen) {
+    try {
+        const state = loadAccordionState();
+        state[targetSel] = isOpen;
+        localStorage.setItem(getAccordionStorageKey(), JSON.stringify(state));
+    } catch (e) {
+        // localStorage が使えない環境では何もしない
+    }
+}
+
+// 初期状態の復元
+const state = loadAccordionState();
+$("[data-bca-collapse='collapse']").each(function() {
+    const btn = $(this);
+    const targetSel = btn.attr('data-bca-target');
+    if (!targetSel) return;
+
+    const target = $(targetSel);
+    // localStorageに保存された状態があればそれを適用
+    if (state.hasOwnProperty(targetSel)) {
+        const isOpen = state[targetSel];
+        if (isOpen) {
+            target.attr('data-bca-state', 'open').show();
+            btn.attr('data-bca-state', 'open').attr('aria-expanded', 'false');
+        } else {
+            target.attr('data-bca-state', '').hide();
+            btn.attr('data-bca-state', '').attr('aria-expanded', 'true');
+        }
+    }
+});
+
+// 開閉イベント
 $("[data-bca-collapse='collapse']").on({
     'click': function () {
-        const target = $(this).attr('data-bca-target');
+        const targetSel = $(this).attr('data-bca-target');
+        if (!targetSel) return false;
+
+        const target = $(targetSel);
         // data-bca-state属性でtoggle
-        if ($(target).attr('data-bca-state') == 'open') {
+        if (target.attr('data-bca-state') == 'open') {
             // 対象ID要素:非表示
-            $(target).attr('data-bca-state', '').slideUp();
+            target.attr('data-bca-state', '').slideUp();
             // ボタンの制御
             $(this).attr('data-bca-state', '').attr('aria-expanded', 'true');
+            // localStorage に保存
+            saveAccordionState(targetSel, false);
         } else {
             // 対象ID要素:表示
-            $(target).attr('data-bca-state', 'open').slideDown();
+            target.attr('data-bca-state', 'open').slideDown();
             // ボタンの制御
             $(this).attr('data-bca-state', 'open').attr('aria-expanded', 'false');
+            // localStorage に保存
+            saveAccordionState(targetSel, true);
         }
         return false;
     }
