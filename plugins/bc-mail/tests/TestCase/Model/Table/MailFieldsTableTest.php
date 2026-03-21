@@ -159,6 +159,35 @@ class MailFieldsTableTest extends BcTestCase
     }
 
     /**
+     * test validationDefault reserved word check
+     * @dataProvider validationDefaultReservedDataProvider
+     */
+    public function test_validationDefaultReserved($fieldName, $expected)
+    {
+        $validator = $this->MailFieldsTable->getValidator('default');
+        $errors = $validator->validate([
+            'mail_content_id' => 999,
+            'field_name' => $fieldName,
+        ]);
+        if ($expected) {
+            $this->assertArrayNotHasKey('reserved', $errors['field_name'] ?? []);
+        } else {
+            $this->assertArrayHasKey('reserved', $errors['field_name']);
+            $this->assertEquals('システム予約名称のため利用できません。', $errors['field_name']['reserved']);
+        }
+    }
+
+    public static function validationDefaultReservedDataProvider()
+    {
+        return [
+            ['test_field', true],
+            ['select', false],
+            ['insert', false],
+            ['update', false],
+        ];
+    }
+
+    /**
      * コントロールソースを取得する
      */
     public function testGetControlSource()

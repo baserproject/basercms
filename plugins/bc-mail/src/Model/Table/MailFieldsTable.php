@@ -58,6 +58,7 @@ class MailFieldsTable extends MailAppTable
      */
     public function validationDefault(Validator $validator): Validator
     {
+        $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
@@ -80,6 +81,12 @@ class MailFieldsTable extends MailAppTable
                     'rule' => 'duplicateMailField',
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のあるフィールド名です。')
+                ]])
+            ->add('field_name', [
+                'reserved' => [
+                    'rule' => ['reserved'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
                 ]]);
         $validator
             ->scalar('type')
