@@ -188,7 +188,13 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function createOrder($sort, $direction)
     {
         $order = '';
-        if (strtoupper($direction) === 'RANDOM') {
+        $direction = strtoupper($direction);
+        // direction のサニタイズ (許容されるのは ASC, DESC, RANDOM のみ)
+        if (!in_array($direction, ['ASC', 'DESC', 'RANDOM'])) {
+            $direction = 'DESC';
+        }
+
+        if ($direction === 'RANDOM') {
             // TODO ucmitz 未実装
 //            $datasource = strtolower(preg_replace('/^Database\/Bc/', '', ConnectionManager::getDataSource($this->useDbConfig)->config['datasource']));
             $datasource = 'mysql';
@@ -204,7 +210,10 @@ class BlogPostsService implements BlogPostsServiceInterface
                     break;
             }
         } else {
-            if (strpos($sort, '.') === false) {
+            // sort のサニタイズ (英数字, アンダースコア, ドットのみ許容)
+            if (!preg_match('/^[a-zA-Z0-9_.]+$/', $sort)) {
+                $sort = 'BlogPosts.posted';
+            } elseif (strpos($sort, '.') === false) {
                 $sort = 'BlogPosts.' . $sort;
             }
             $order = "{$sort} {$direction}, BlogPosts.id {$direction}";

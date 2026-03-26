@@ -421,6 +421,19 @@ class BlogPostsServiceTest extends BcTestCase
         //random
         $result = $this->BlogPostsService->createOrder('test', 'random');
         $this->assertEquals('RAND()', $result);
+
+        // --- SQLインジェクション対策のテスト ---
+        // direction に不正な値
+        $result = $this->BlogPostsService->createOrder('test', 'ASC, (SELECT SLEEP(10))');
+        $this->assertEquals('BlogPosts.test DESC, BlogPosts.id DESC', $result);
+
+        // sort に不正な値
+        $result = $this->BlogPostsService->createOrder('BlogPosts.posted, (SELECT SLEEP(10))', 'ASC');
+        $this->assertEquals('BlogPosts.posted ASC, BlogPosts.id ASC', $result);
+
+        // 両方に不正な値
+        $result = $this->BlogPostsService->createOrder('BlogPosts.id; DROP TABLE users;', 'DELETE');
+        $this->assertEquals('BlogPosts.posted DESC, BlogPosts.id DESC', $result);
     }
 
     /**
