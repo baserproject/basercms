@@ -815,9 +815,6 @@ EOF;
 
     /**
      * test getCoreUpdate の脆弱性回避
-     * @checked
-     * @noTodo
-     * @unitTest
      */
     public function test_getCoreUpdate_vulnerability()
     {
