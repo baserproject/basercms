@@ -506,10 +506,10 @@ class BcValidationTest extends BcTestCase
      * @return void
      * @dataProvider containsScriptDataProvider
      */
-    public function testContainsScript($value, $expect)
+    public function testContainsScript($value, $expect, $admin = false)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        if ($expect) Router::setRequest($this->loginAdmin($this->getRequest()));
+        if ($admin) Router::setRequest($this->loginAdmin($this->getRequest()));
         $result = $this->BcValidation->containsScript($value);
         $this->assertEquals($expect, $result);
     }
@@ -526,7 +526,24 @@ class BcValidationTest extends BcTestCase
             // jsコードへのリンクがある場合
             ['<a href="javascript:doSomething();">click me</a>', false],
             // アドミンユーザーでログインしてる場合
-            ['<a href="javascript:doSomething();">click me</a>', true],
+            ['<a href="javascript:doSomething();">click me</a>', true, true],
+
+            ['<iframe src="javascript:alert(origin)">', false],
+            ['<a href="&#x6a;avascript:alert(origin)">click me</a> ', false],
+            ['<iframe srcdoc="&lt;script&gt;alert(origin)&lt;/script&gt;">', false],
+            ['<form action="javascript:alert(1)"><input type="submit"></form>', false],
+            ['<style>@keyframes slidein {}</style><xss style="animation-duration:1s;animation-name:slidein;animation-iteration-count:2" onwebkitanimationiteration="alert(origin)"></xss>', false],
+            ['<img srcset="images/small.jpg 320w, images/medium.jpg 640w, images/large.jpg 1280w" src="images/large.jpg" sizes="(max-width:1280px) 100vw, 1280px">', true],
+            ['<meta http-equiv="refresh" content="0; url=http://;url=javascript:alert(\'xss\');">', false],
+            ['<iframe src="javascript:alert(\'xss\');"></iframe>', false],
+            ['<iframe src="https://example.com"></iframe>', true],
+            ['<a href="jav&#x09;ascript:alert(\'XSS\');">link</a>', false],
+            ['<a href="jav&#x0A;ascript:alert(\'XSS\');">link</a>', false],
+            ['<a href="jav&#x0D;ascript:alert(\'XSS\');">link</a>', false],
+            ['<object data=# codebase="javascript:alert(origin)//">', false],
+            ['<object data="javascript:alert(1)">', false],
+            ['<button formaction="javascript:alert(1)">click</button>', false],
+            ['<object data="https://example.com/movie.mp4" type="video/mp4"></object>', true],
         ];
     }
 
