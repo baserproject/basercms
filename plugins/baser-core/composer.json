@@ -13,6 +13,7 @@
         "cakephp/plugin-installer": "^2.0",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "7.0.2",
+        "ezyang/htmlpurifier": "^4.19",
         "mobiledetect/mobiledetectlib": "^3.74",
         "ext-json": "*",
         "baserproject/bc-admin-third": "5.2.x-dev",

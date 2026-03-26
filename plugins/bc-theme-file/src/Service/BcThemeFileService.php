@@ -14,6 +14,7 @@ namespace BcThemeFile\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
@@ -63,6 +64,39 @@ class BcThemeFileService implements BcThemeFileServiceInterface
                 $viewPath = Plugin::templatePath($theme);
             }
         }
-        return $viewPath . $type . DS . $path;
+        $baseDir = $viewPath . $type . DS;
+        $fullPath = $baseDir . $path;
+
+        $resolvedBase = realpath($baseDir);
+        if ($resolvedBase !== false) {
+            $resolvedBase = rtrim($resolvedBase, DS) . DS;
+            $targetDir = realpath(dirname($fullPath));
+            if ($targetDir === false) {
+                $targetDir = $this->normalizePath(dirname($fullPath));
+            }
+            if (!str_starts_with(rtrim($targetDir, DS) . DS, $resolvedBase)) {
+                throw new BcException(__d('baser_core', 'パスにテーマディレクトリ外への参照が含まれています。'));
+            }
+        }
+
+        return $fullPath;
+    }
+
+    /**
+     * パスを正規化する（../ を解決する）
+     * @param string $path
+     * @return string
+     */
+    private function normalizePath(string $path): string
+    {
+        $parts = [];
+        foreach (explode(DS, str_replace(['/', '\\'], DS, $path)) as $part) {
+            if ($part === '..') {
+                array_pop($parts);
+            } elseif ($part !== '' && $part !== '.') {
+                $parts[] = $part;
+            }
+        }
+        return DS . implode(DS, $parts);
     }
 }

@@ -306,17 +306,54 @@ class BcComposerTest extends BcTestCase
         return [
             [
                 'self-update',
-                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar self-update 2>&1"
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | 'php' '/var/www/html/composer/composer.phar' self-update 2>&1"
             ],
             [
                 'install',
-                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar install 2>&1"
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | 'php' '/var/www/html/composer/composer.phar' install 2>&1"
             ],
             [
                 'require vendor/package',
-                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | php /var/www/html/composer/composer.phar require vendor/package 2>&1"
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | 'php' '/var/www/html/composer/composer.phar' require vendor/package 2>&1"
+            ],
+            [
+                'require "baserproject/baser-core:5.0.0; touch /tmp/rce_test;"',
+                "cd /var/www/html/; export HOME=/var/www/html/composer/; echo y | 'php' '/var/www/html/composer/composer.phar' require \"baserproject/baser-core:5.0.0; touch /tmp/rce_test;\" 2>&1"
             ],
         ];
+    }
+
+    /**
+     * test require の脆弱性回避
+     */
+    public function test_require_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_require';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        BcComposer::setup();
+        // 実際には実行されない（バージョン管理などが失敗するため）が、コマンドラインがエスケープされていることを間接的に確認
+        ob_start();
+        BcComposer::require('baser-core', '5.0.0; touch ' . $rceFile);
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'BcComposer::require でOSコマンドインジェクションが発生しました');
+    }
+
+    /**
+     * test installComposer の脆弱性回避
+     */
+    public function test_installComposer_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_installComposer';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        BcComposer::setup('php; touch ' . $rceFile);
+        ob_start();
+        BcComposer::installComposer();
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'BcComposer::installComposer でOSコマンドインジェクションが発生しました');
     }
 
     /**
@@ -381,5 +418,22 @@ class BcComposerTest extends BcTestCase
 
         $this->assertEquals(0, $rs['code']);
         $this->assertEquals("A script named install would override a Composer command and has been skipped", $rs['out'][0]);
+    }
+
+    /**
+     * test execCommand の脆弱性回避
+     */
+    public function test_execCommand_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_execCommand';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        BcComposer::setup();
+        // BcComposer::require のように、内部でエスケープされて渡されるケースを想定
+        ob_start();
+        BcComposer::execCommand('require ' . escapeshellarg("baserproject/baser-core:5.0.0; touch {$rceFile};"));
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'BcComposer::execCommand でOSコマンドインジェクションが発生しました');
     }
 }

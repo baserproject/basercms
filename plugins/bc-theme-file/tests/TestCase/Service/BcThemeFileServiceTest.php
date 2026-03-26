@@ -57,4 +57,23 @@ class BcThemeFileServiceTest extends BcTestCase
         $themePath = $this->BcThemeFileService->getFullpath('BcThemeSample', '', 'layout', 'default.php');
         $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout/default.php', $themePath);
     }
+
+    /**
+     * test getFullpath - パストラバーサル攻撃を拒否する
+     * @dataProvider provideGetFullpathPathTraversal
+     */
+    public function test_getFullpath_pathTraversal(string $path): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->BcThemeFileService->getFullpath('BcThemeSample', '', 'layout', $path);
+    }
+
+    public static function provideGetFullpathPathTraversal(): array
+    {
+        return [
+            'webrootへの traversal' => ['../../../../webroot/shell.php'],
+            'configへの traversal' => ['../../../../config/app.php'],
+            '相対パスのみ' => ['../../../evil.php'],
+        ];
+    }
 }
