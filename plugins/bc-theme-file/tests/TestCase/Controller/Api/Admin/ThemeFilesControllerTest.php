@@ -80,7 +80,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //実際にファイルが作成されいてるか確認すること
         $this->assertTrue(file_exists($fullpath . 'test/base_name_1.php'));
         //作成されたファイルを削除
-        unlink($fullpath . 'base_name_1.php');
+        unlink($fullpath . 'test/base_name_1.php');
     }
 
     /**
