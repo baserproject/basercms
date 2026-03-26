@@ -119,7 +119,7 @@ $(function () {
                                 .attr('id', 'blog-tags-ids-' + result.blogTag.id))
                             .append($('<label class="bca-checkbox__label">')
                                 .attr('for', 'blog-tags-ids-' + result.blogTag.id)
-                                .html(result.blogTag.name));
+                                .text(result.blogTag.name));
                         $("#BlogTags").append(checkbox);
                         $('input[name="blog_tags[_ids][]"]').last().prop('checked', true);
                         $("#blog-tag-name").val('');
