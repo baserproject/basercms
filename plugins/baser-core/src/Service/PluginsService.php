@@ -818,8 +818,12 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
-        if(!preg_match('/[0-9]+\.[0-9x*]+\.[0-9x*]+/', $targetVersion)) {
+        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $targetVersion)) {
             throw new BcException(__d('baser_core', 'バージョン番号が不正です。'));
+        }
+
+        if(!preg_match('/^[a-zA-Z0-9\/\.\-_]+$/', $php)) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
         }
 
         if (function_exists('ini_set')) {

