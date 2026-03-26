@@ -63,7 +63,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'theme' => 'BcThemeSample',
             'parent' => $fullpath,
             'type' => 'layout',
-            'path' => '',
+            'path' => 'test/',
             'base_name' => 'base_name_1',
             'contents' => 'this is a content!',
             'ext' => 'php',
@@ -76,9 +76,9 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('ファイル「base_name_1.php」を作成しました。', $result->message);
-        $this->assertEquals($fullpath . 'base_name_1.php', $result->entity->fullpath);
+        $this->assertEquals($fullpath . 'test/base_name_1.php', $result->entity->fullpath);
         //実際にファイルが作成されいてるか確認すること
-        $this->assertTrue(file_exists($fullpath . 'base_name_1.php'));
+        $this->assertTrue(file_exists($fullpath . 'test/base_name_1.php'));
         //作成されたファイルを削除
         unlink($fullpath . 'base_name_1.php');
     }

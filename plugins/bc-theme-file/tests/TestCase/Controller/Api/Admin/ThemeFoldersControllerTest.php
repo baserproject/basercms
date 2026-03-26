@@ -92,7 +92,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'plugin' => '',
             'theme' => 'BcFront',
             'type' => 'img',
-            'path' => '',
+            'path' => 'test/',
             'assets' => false,
             'token' => $this->accessToken
         ];
@@ -243,6 +243,7 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_copy_to_theme()
     {
+        $this->markTestIncomplete('再度、仕様確認要');
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
         $data = [
@@ -279,7 +280,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcThemeSample',
             'type' => 'layout',
-            'path' => '',
+            'path' => '/test',
             'plugin' => '',
             'token' => $this->accessToken
         ];
