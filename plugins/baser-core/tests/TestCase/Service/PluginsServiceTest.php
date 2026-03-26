@@ -792,9 +792,6 @@ EOF;
 
     /**
      * test rollbackCore の脆弱性回避
-     * @checked
-     * @noTodo
-     * @unitTest
      */
     public function test_rollbackCore_vulnerability()
     {
