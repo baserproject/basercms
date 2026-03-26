@@ -11,6 +11,11 @@
 
 namespace BaserCore\Service;
 
+use PhpParser\ParserFactory;
+use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\Error;
 use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\AppTable;
@@ -1149,6 +1154,50 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     }
 
     /**
+     * Check schema
+     */
+    private function isValidSchemaFile(string $filePath): bool
+    {
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $code = file_get_contents($filePath);
+
+        try {
+            $ast = $parser->parse($code);
+        } catch (Error) {
+            return false;
+        }
+
+        $result = [
+            'extendsBcSchema' => false,
+            'hasDangerousOverride' => false
+        ];
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($result) extends NodeVisitorAbstract {
+            public $result;
+            public function __construct(&$result) {
+                $this->result = &$result;
+            }
+
+            public function enterNode(Node $node) {
+                if ($node instanceof Node\Stmt\Class_) {
+                    if ($node->extends && $node->extends->toString() === 'BcSchema') {
+                        $this->result['extendsBcSchema'] = true;
+                        foreach ($node->getMethods() as $method) {
+                            $methodName = $method->name->toString();
+                            if (in_array($methodName, ['drop', 'create'])) {
+                                $this->result['hasDangerousOverride'] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        $traverser->traverse($ast);
+        return $result['extendsBcSchema'] && !$result['hasDangerousOverride'];
+    }
+
+    /**
      * スキーマを読み込む
      *
      * @param $options
@@ -1165,7 +1214,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'file' => '',
             'prefix' => ''
         ], $options);
+
+        $filePath = $options['path'] . $options['file'];
         $schemaName = basename($options['file'], '.php');
+        // Check if the uploaded PHP file is safe
+        if (!$this->isValidSchemaFile($filePath)) {
+            throw new \Exception("\r\n無効なスキーマファイル: BcSchema を継承し、drop/create メソッドをオーバーライドしてはいけません");
+        }
+
         require_once $options['path'] . $options['file'];
         /* @var BcSchema $schema */
         $schema = new $schemaName();
@@ -1184,6 +1240,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
         return true;
     }
+
+
+
+
 
     /**
      * datasource名を取得
