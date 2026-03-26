@@ -72,7 +72,7 @@ class BcComposerTest extends BcTestCase
             unlink(ROOT . DS . 'composer' . DS . 'composer.phar');
         }
 
-        BcComposer::$composerDir = '';
+        BcComposer::$composerDir = '/sys/';
         BcComposer::$export = '';
         BcComposer::installComposer();
         $this->assertFileDoesNotExist(BcComposer::$composerDir . 'composer.phar');
@@ -101,7 +101,7 @@ class BcComposerTest extends BcTestCase
      */
     public function testCheckComposerError()
     {
-        BcComposer::$composerDir = '';
+        BcComposer::$composerDir = '/sys/';
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('composer がインストールできません。All settings correct for using Composer');
