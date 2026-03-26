@@ -18,6 +18,7 @@ use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -66,6 +67,9 @@ class MailMessagesController extends BcApiController
         try {
             $service->setup($mailContentId, $this->getRequest()->getData());
             $mailContent = $mailContentsService->get($mailContentId);
+            if (!$mailFrontService->isAccepting($mailContent)) {
+                throw new ForbiddenException(__d('baser_core', 'このメールフォームは現在受け付けていません。'));
+            }
             $mailMessage = $service->create($mailContent, $this->request->getData());
             //メールを送信
             // EVENT Mail.beforeSendEmail
@@ -90,6 +94,9 @@ class MailMessagesController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
             $mailMessage = $e->getEntity();
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+        } catch (ForbiddenException $e) {
+            $this->setResponse($this->response->withStatus(403));
+            $message = $e->getMessage();
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
