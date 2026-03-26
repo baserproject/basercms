@@ -14,6 +14,7 @@
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "7.0.2",
         "ezyang/htmlpurifier": "^4.19",
+        "robmorgan/phinx": "0.16.10",
         "mobiledetect/mobiledetectlib": "^3.74",
         "ext-json": "*",
         "baserproject/bc-admin-third": "5.2.x-dev",

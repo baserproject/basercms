@@ -21,7 +21,8 @@
         "ezyang/htmlpurifier": "^4.19",
         "josegonzalez/dotenv": "^4.0",
         "mobiledetect/mobiledetectlib": "^3.74",
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
+        "robmorgan/phinx": "0.16.10"
     },
     "require-dev": {
         "ext-xdebug": "*",
