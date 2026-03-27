@@ -85,11 +85,11 @@ class CreateReleaseCommandTest extends BcTestCase
         $this->assertExitCode(Command::CODE_ERROR);
 
         //正常テスト
-        $this->exec('create release 5.1.1');
+        $this->exec('create release 5.2.3');
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。');
-        $this->assertTrue(file_exists(TMP . 'basercms-5.1.1.zip'));
-        unlink(TMP . 'basercms-5.1.1.zip');
+        $this->assertTrue(file_exists(TMP . 'basercms-5.2.3.zip'));
+        unlink(TMP . 'basercms-5.2.3.zip');
     }
 
     /**
