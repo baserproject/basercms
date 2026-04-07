@@ -379,6 +379,35 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * メインサイトの site_root 更新時、連携先サブサイトのURL名を維持する
+     */
+    public function testUpdateRelateSubSiteContentKeepsRelatedSiteRootName()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+
+        $sitesTable = $this->getTableLocator()->get('BaserCore.Sites');
+        $sitesTable->updateAll([
+            'status' => true,
+            'relate_main_site' => true,
+            'alias' => 's',
+        ], ['id' => 2]);
+        $relatedRootContentId = $sitesTable->getRootContentId(2);
+        $this->Contents->updateAll(['name' => 's'], ['id' => $relatedRootContentId]);
+
+        $content = $this->Contents->get(1);
+        $content->title = 'メインサイト2';
+        $content->modified_date = FrozenTime::now();
+
+        $result = $this->execPrivateMethod($this->Contents, 'updateRelateSubSiteContent', [$content]);
+
+        $this->assertTrue($result);
+
+        $relatedRoot = $this->Contents->get($relatedRootContentId);
+        $this->assertEquals('s', $relatedRoot->name);
+        $this->assertEquals('メインサイト2', $relatedRoot->title);
+    }
+
+    /**
      * メインサイトで新規コンテンツ作成時、連携先サブサイトの関連コンテンツにも URL を設定する
      */
     public function testUpdateRelateSubSiteContentSetsUrlOnCreatedRelatedContent()
