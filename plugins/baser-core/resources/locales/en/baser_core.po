@@ -11544,6 +11544,10 @@ msgstr "Scripts are not allowed in the summary field."
 msgid "草稿欄に保存できるデータ量を超えています。"
 msgstr "Exceeding savable data amount for draft."
 
+#: plugins/baser-core/src/Model/Table/PagesTable.php:147
+msgid "草稿欄でPHPの構文エラーが発生しました。"
+msgstr "A PHP syntax error occurred in the draft field."
+
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:166
 msgid "草稿欄でスクリプトの入力は許可されていません。"
 msgstr "You are not allowed to enter scripts in the draft field."

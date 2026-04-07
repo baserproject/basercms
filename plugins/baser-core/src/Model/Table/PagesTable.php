@@ -140,17 +140,17 @@ class PagesTable extends AppTable
         $validator
         ->scalar('draft')
         ->allowEmptyString('draft', null)
-        ->maxLengthBytes('draft', 16777215, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('draft', 16777215, __d('baser_core', '草稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
-            'message' => __d('baser_core', '本稿欄でPHPの構文エラーが発生しました。')
+            'message' => __d('baser_core', '草稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('draft', [
             'containsScript' => [
                 'rule' => ['containsScript'],
                 'provider' => 'bc',
-                'message' => __d('baser_core', '本稿欄でスクリプトの入力は許可されていません。')
+                'message' => __d('baser_core', '草稿欄でスクリプトの入力は許可されていません。')
             ]
         ]);
 

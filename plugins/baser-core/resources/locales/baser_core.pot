@@ -9830,6 +9830,10 @@ msgstr ""
 msgid "草稿欄に保存できるデータ量を超えています。"
 msgstr ""
 
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:147
+msgid "草稿欄でPHPの構文エラーが発生しました。"
+msgstr ""
+
 #: ./plugins/bc-blog/src/Model/Table/BlogPostsTable.php:166
 msgid "草稿欄でスクリプトの入力は許可されていません。"
 msgstr ""
