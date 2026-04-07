@@ -157,6 +157,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     'editorEnterBr' => $editorEnterBr
   ], $editorOptions)) ?>
   <?php echo $this->BcAdminForm->error('detail') ?>
+  <?php echo $this->BcAdminForm->error('detail_draft') ?>
   </span>
 </section>
 
