@@ -781,6 +781,9 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
+        if (is_null($url)) {
+            $url = '/';
+        }
         if(preg_match('/^http/', $url)) $full = false;
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';

@@ -379,6 +379,36 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * メインサイトで新規コンテンツ作成時、連携先サブサイトの関連コンテンツにも URL を設定する
+     */
+    public function testUpdateRelateSubSiteContentSetsUrlOnCreatedRelatedContent()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+
+        $sitesTable = $this->getTableLocator()->get('BaserCore.Sites');
+        $sitesTable->updateAll(['status' => true], ['id' => 2]);
+
+        $content = $this->Contents->createContent([
+            'name' => 'issue4325',
+            'title' => 'Issue4325',
+            'parent_id' => 1,
+            'site_id' => 1,
+            'self_status' => true,
+            'created_date' => FrozenTime::now(),
+        ], 'BaserCore', 'Page', 999, false);
+
+        $relatedContent = $this->Contents->find()
+            ->where([
+                'site_id' => 2,
+                'alias_id' => $content->id,
+            ])
+            ->first();
+
+        $this->assertNotNull($relatedContent);
+        $this->assertNotEmpty($relatedContent->url);
+    }
+
+    /**
      * 現在のフォルダのURLを元に別サイトにフォルダを生成する
      * 最下層のIDを返却する
      */

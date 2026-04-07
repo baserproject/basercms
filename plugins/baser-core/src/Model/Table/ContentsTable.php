@@ -625,10 +625,6 @@ class ContentsTable extends AppTable
         if ($sites->all()->isEmpty()) {
             return true;
         }
-        // 連携サイトに紐づくコンテンツがない場合は終了
-        if ($this->find()->where(['site_id' => $sites->first()->id])->all()->isEmpty()) {
-            return true;
-        }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
             $this->getEventManager()->off('Model.beforeMarshal');
@@ -644,6 +640,9 @@ class ContentsTable extends AppTable
         $result = true;
         foreach($sites as $site) {
             if (!$site->status) {
+                continue;
+            }
+            if (!$this->find()->select(['id'])->where(['site_id' => $site->id, 'site_root' => true])->first()) {
                 continue;
             }
             $url = $pureUrl;
@@ -710,7 +709,8 @@ class ContentsTable extends AppTable
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
             }
             $this->offEvent('Model.afterSave');
-            if (!$this->save($content)) {
+            $savedContent = $this->save($content);
+            if (!$savedContent || !$this->updateSystemData($savedContent)) {
                 $result = false;
             }
             $this->onEvent('Model.afterSave');
