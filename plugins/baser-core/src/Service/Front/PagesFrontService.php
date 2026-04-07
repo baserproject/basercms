@@ -15,7 +15,6 @@ use BaserCore\Model\Entity\Page;
 use BaserCore\Service\PagesService;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
-use Cake\Http\Exception\NotFoundException;
 use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -63,15 +62,6 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
                 $pageArray['contents'] = $pageArray['draft'];
             }
             $page = $this->Pages->patchEntity($page, $pageArray);
-
-            $validationErrors = $page->getErrors();
-            if ($validationErrors) {
-                foreach($validationErrors as $columnsErros) {
-                    foreach($columnsErros as $error) {
-                        throw new NotFoundException($error);
-                    }
-                }
-            }
             $page->content = $this->Contents->saveTmpFiles($request->getData('content'), mt_rand(0, 99999999));
         }
         unset($vars['editLink']);
