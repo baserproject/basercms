@@ -76,6 +76,12 @@ class MailFieldsTable extends MailAppTable
                     'message' => __d('baser_core', 'フィールド名は小文字の半角英数字、アンダースコアのみで入力してください。')
                 ]])
             ->add('field_name', [
+                'reserved' => [
+                    'rule' => ['reserved'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'システム予約名称のため利用できません。')
+                ]])
+            ->add('field_name', [
                 'duplicateMailField' => [
                     'rule' => 'duplicateMailField',
                     'provider' => 'table',
