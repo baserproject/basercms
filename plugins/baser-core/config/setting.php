@@ -582,6 +582,19 @@ return [
          * ユーザーグループにユーザーリストを表示するかどうか
          */
         'isDisplayUserListInUserGroup' => true,
+
+        /**
+         * 画像アップロード時のJPEG圧縮品質 (0-100)
+         * config/setting.php にて上書きできます
+         */
+        'imageJpegQuality' => 90,
+
+        /**
+         * 画像アップロード時のPNG圧縮レベル (0-9)
+         * 0が無圧縮、9が最大圧縮（PNGは可逆圧縮のため品質劣化なし）
+         * config/setting.php にて上書きできます
+         */
+        'imagePngQuality' => 6,
     ],
 
     /**

@@ -14,6 +14,7 @@ namespace BaserCore\Vendor;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Core\Configure;
 
 /**
  * Imagereizer
@@ -28,7 +29,7 @@ class Imageresizer
      * @param int $newWidth 幅
      * @param int $newHeight 高さ
      * @param bool $trimming トリミングするかどうか
-     * @param array $quality 圧縮レベル (JPEG: 100 (0-100), PNG: 6 (0-9))
+     * @param array $quality 圧縮レベル (JPEG: 90 (0-100), PNG: 6 (0-9)) ※BcApp.imageJpegQuality / BcApp.imagePngQuality で上書き可能
      * @return boolean
      * @checked
      * @noTodo
@@ -37,8 +38,8 @@ class Imageresizer
     {
         // 画像種類別の圧縮レベルのデフォルト値
         $quality = $quality + [
-                IMAGETYPE_JPEG => 100,    //  0 - 100
-                IMAGETYPE_PNG => 6,        // 	0 - 9
+                IMAGETYPE_JPEG => Configure::read('BcApp.imageJpegQuality'),    //  0 - 100
+                IMAGETYPE_PNG => Configure::read('BcApp.imagePngQuality'),        // 	0 - 9
             ];
 
         // 元画像のサイズを取得
