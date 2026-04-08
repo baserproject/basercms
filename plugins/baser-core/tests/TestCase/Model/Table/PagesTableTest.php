@@ -85,6 +85,11 @@ class PagesTableTest extends BcTestCase
             $fields[] = $key;
         }
         $this->assertEquals(['id','contents', 'draft'], $fields);
+
+        $errors = $validator->validate([
+            'draft' => '<?php echo $test; ?>'
+        ]);
+        $this->assertEquals('草稿欄でスクリプトの入力は許可されていません。', current($errors['draft']));
     }
 
     public function test既存ページチェック正常()
