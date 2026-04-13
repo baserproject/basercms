@@ -103,6 +103,9 @@ class BcCcTextareaHelper extends Helper
      */
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
+        if (isset($options['escape']) && !$options['escape']) {
+            return nl2br($fieldValue);
+        }
         return nl2br(h($fieldValue));
     }
 
