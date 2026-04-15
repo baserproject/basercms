@@ -158,6 +158,17 @@ class MailFieldsTableTest extends BcTestCase
         $this->assertEquals('既に登録のあるフィールド名です。', current($errors['field_name']));
     }
 
+    public function test_validationDefaultReserved()
+    {
+        $validator = $this->MailFieldsTable->getValidator('default');
+        $errors = $validator->validate([
+            'mail_content_id' => 1,
+            'field_name' => 'select'
+        ]);
+
+        $this->assertEquals('システム予約名称のため利用できません。', current($errors['field_name']));
+    }
+
     /**
      * コントロールソースを取得する
      */
