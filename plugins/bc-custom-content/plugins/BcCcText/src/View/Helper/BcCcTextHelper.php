@@ -103,7 +103,7 @@ class BcCcTextHelper extends Helper
     {
         if ($fieldValue === null) return '';
         if (isset($options['escape']) && !$options['escape']) {
-            return nl2br((string) $fieldValue);
+            return  $fieldValue;
         }
         return h($fieldValue);
     }
