@@ -46,3 +46,8 @@ License
 -------
 
 Licensed under the MIT license since version 2.0
+
+Powered by
+-------
+
+<a href="https://jb.gg/OpenSource"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg" style="width:150px;" alt="JetBrains logo."></a>
