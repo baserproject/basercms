@@ -1,3 +1,5 @@
+@use "../common/mixin";
+
 /**
  * Mail Form
  */
@@ -91,8 +93,8 @@
 
   input[type=submit],
   input[type=reset] {
-    @include bs-button();
-    @include bs-mq() {
+    @include mixin.bs-button();
+    @include mixin.bs-mq() {
       width: 100%;
       margin: 10px 0;
     }

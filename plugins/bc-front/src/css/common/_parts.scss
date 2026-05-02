@@ -1,3 +1,5 @@
+@use "mixin";
+
 /**
  * Parts
  */
@@ -179,7 +181,7 @@
     a,
     &.disabled {
       border-radius: 0 5px 5px 0;
-      @include bs-mq() {
+      @include mixin.bs-mq() {
         border-left: none;
       }
     }
@@ -187,7 +189,7 @@
 
   &__number {
     display: inline-block;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       display: none;
     }
 
@@ -199,7 +201,7 @@
     a {
       display: inline-block;
       padding: 4px 11px;
-      @include bs-mq() {
+      @include mixin.bs-mq() {
         display: none;
       }
     }
@@ -225,7 +227,7 @@
   color: #CCC;
   box-sizing: border-box;
   line-height: 2em;
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     box-sizing: border-box;
     width: 100%;
     padding: 15px 20px;
@@ -273,7 +275,7 @@
     width: 47%;
     display: block;
     text-decoration: none;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       font-size: 12px;
     }
 
