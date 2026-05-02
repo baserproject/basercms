@@ -1,3 +1,5 @@
+@use "../common/mixin";
+
 /**
  * Blog
  */
@@ -97,7 +99,7 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include bs-mq() {
+      @include mixin.bs-mq() {
         margin-bottom: 6px !important;;
       }
     }
@@ -113,7 +115,7 @@
   &__meta {
     text-align: right;
     margin-bottom: 30px;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       margin-bottom: 40px;
       padding-right: 10px;
     }
@@ -149,7 +151,7 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include bs-mq() {
+      @include mixin.bs-mq() {
         padding-left: 10px;
       }
     }
@@ -182,7 +184,7 @@
     width: 47%;
     display: block;
     text-decoration: none;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       font-size: 12px;
     }
 
@@ -299,6 +301,6 @@
   }
 
   .button {
-    @include bs-button();
+    @include mixin.bs-button();
   }
 }

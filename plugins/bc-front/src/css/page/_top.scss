@@ -1,3 +1,5 @@
+@use "../common/mixin";
+
 /**
  * Top Page
  */
@@ -31,7 +33,7 @@
   h2 {
     font-weight: bold !important;
   }
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     margin-bottom: 100px;
   }
 }
@@ -88,7 +90,7 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include bs-mq() {
+      @include mixin.bs-mq() {
         margin-bottom: 6px !important;;
       }
     }
@@ -124,7 +126,7 @@
 .bs-top-post-to-list {
   text-align: right;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     text-align: center;
   }
 
@@ -137,7 +139,7 @@
     background-color: #001800;
     color: #fff !important;
     text-decoration: none;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       font-size: 12px;
       padding: 12px 60px;
     }

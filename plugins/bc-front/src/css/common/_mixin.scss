@@ -1,3 +1,4 @@
+@use "sass:map";
 /**
  * Mixin
  */
@@ -8,7 +9,7 @@ $breakpoints: (
 ) !default;
 
 @mixin bs-mq($breakpoint: md) {
-  @media #{map-get($breakpoints, $breakpoint)} {
+  @media #{map.get($breakpoints, $breakpoint)} {
     @content;
   }
 }

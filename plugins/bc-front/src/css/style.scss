@@ -13,18 +13,18 @@
  * デフォルトスタイル
  */
 
-@import "common/mixin";
-@import "common/normalize";
-@import "common/base";
-@import "common/main";
-@import "common/header";
-@import "common/footer";
-@import "common/sub";
-@import "common/parts";
-@import "page/top";
-@import "page/blog";
-@import "page/mail";
-@import "page/search";
-@import "page/custom_content";
-@import "page/login";
-@import "page/error";
+@use "common/mixin";
+@use "common/normalize";
+@use "common/base";
+@use "common/main";
+@use "common/header";
+@use "common/footer";
+@use "common/sub";
+@use "common/parts";
+@use "page/top";
+@use "page/blog";
+@use "page/mail";
+@use "page/search";
+@use "page/custom_content";
+@use "page/login";
+@use "page/error";

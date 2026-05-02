@@ -14,7 +14,7 @@
  * 管理画面でも呼び出される
  */
 
-@import "common/editor";
-@import "common/bge_setting";
-@import "common/bge";
+@use "common/editor";
+@use "common/bge_setting";
+@use "common/bge";
 

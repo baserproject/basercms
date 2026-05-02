@@ -37,7 +37,10 @@ gulp.task('css', () => {
 			this.emit('end');
 		},
 	}))
-	.pipe(sass())
+	.pipe(sass({
+		api: 'modern-compiler',
+		loadPaths: ['../../node_modules']
+	}).on('error', sass.logError))
 	.pipe(postcss(plugins))
 	.pipe(gulp.dest(CSS_DIST_DIR, {
 	    sourcemaps: true
@@ -53,5 +56,7 @@ gulp.task('watch', function(){
     gulp.watch(CSS_DEV_DIR, gulp.task('css'));
     gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
 });
+
+gulp.task('build', gulp.parallel('css', 'bundle'));
 
 gulp.task('default', gulp.task('watch'));

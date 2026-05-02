@@ -42,7 +42,7 @@
         "cakephp/bake": "^3.0.0",
         "cakephp/cakephp-codesniffer": "^5.0",
         "cakephp/debug_kit": "^5.0.0",
-        "phpunit/phpunit": "10.5.31",
+        "phpunit/phpunit": "10.5.62",
         "symplify/monorepo-builder": "^11.2",
         "vierge-noire/cakephp-fixture-factories": "^3.0",
         "vierge-noire/cakephp-test-suite-light": "^3.0",
