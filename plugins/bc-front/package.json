@@ -13,13 +13,14 @@
   },
   "homepage": "https://github.com/baserproject/basercms#readme",
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "build": "gulp build"
   },
   "devDependencies": {
     "glob-parent": ">=5.1.2",
     "gulp": "^5.0.1",
     "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^5.0.0",
+    "gulp-sass": "^6.0.1",
     "gulp-uglify": "^3.0.2",
     "sass": "^1.51.0"
   }
