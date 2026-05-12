@@ -17,6 +17,9 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Utility\BcEditSession;
 use Cake\Event\Event;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
@@ -60,6 +63,7 @@ class PagesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        BcEditSession::clear('page', 2);
         parent::tearDown();
     }
 
@@ -205,6 +209,30 @@ class PagesControllerTest extends BcTestCase
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
         $this->assertEquals('testEdit', $this->PagesService->get($id)->page_template);
         $this->assertEquals('pageTestUpdate', $this->PagesService->get($id)->content->name);
+    }
+
+    /**
+     * testEditWarnsWhenAnotherUserIsEditing
+     */
+    public function testEditWarnsWhenAnotherUserIsEditing()
+    {
+        BcEditSession::clear('page', 2);
+        UserFactory::make([
+            'id' => 2,
+            'nickname' => 'ニックネーム2'
+        ])->persist();
+        UsersUserGroupFactory::make([
+            'user_id' => 2,
+            'user_group_id' => 1
+        ])->persist();
+        BcEditSession::mark('page', 2, $this->getUser(2));
+
+        $this->loginAdmin($this->getRequest('/'));
+        $this->get('/baser/admin/baser-core/pages/edit/2');
+
+        $this->assertResponseSuccess();
+        $this->assertEquals('この固定ページは現在「ニックネーム2」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 
     /**

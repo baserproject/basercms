@@ -13,8 +13,11 @@
 namespace BcBlog\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcEditSession;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Admin\BlogPostsController;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -58,6 +61,7 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        BcEditSession::clear('blog_post', 1);
         parent::tearDown();
     }
 
@@ -214,6 +218,44 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         // メッセージを確認
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
+    }
+
+    /**
+     * testEditWarnsWhenAnotherUserIsEditing
+     */
+    public function testEditWarnsWhenAnotherUserIsEditing()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        SiteConfigFactory::make([
+            'name' => 'content_types',
+            'value' => ''
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'editor',
+            'value' => 'BaserCore.BcCkeditor'
+        ])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make([
+            'id' => '1',
+            'blog_content_id' => '1'
+        ])->persist();
+        BcEditSession::clear('blog_post', 1);
+        UserFactory::make([
+            'id' => 2,
+            'nickname' => 'ニックネーム2'
+        ])->persist();
+        UsersUserGroupFactory::make([
+            'user_id' => 2,
+            'user_group_id' => 1
+        ])->persist();
+        BcEditSession::mark('blog_post', 1, $this->getUser(2));
+
+        $this->get('/baser/admin/bc-blog/blog_posts/edit/1/1');
+
+        $this->assertResponseSuccess();
+        $this->assertEquals('この記事は現在「ニックネーム2」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 
     /**
