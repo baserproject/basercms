@@ -147,8 +147,8 @@ class PagesController extends BcAdminAppController
                 );
             }
         }
-        if (!$this->request->is(['patch', 'post', 'put'])) {
-            $editingUser = BcEditSession::mark('page', $id, BcUtil::loginUser());
+        if ($this->request->is(['get', 'head'])) {
+            $editingUser = BcEditSession::mark('page', $id, BcUtil::loginUser() ?: null);
             if ($editingUser) {
                 $this->BcMessage->setWarning(__d('baser_core',
                     'この固定ページは現在「{0}」さんが編集中です。',

@@ -250,8 +250,8 @@ class BlogPostsController extends BlogAdminAppController
                 }
             }
         }
-        if (!$this->request->is(['post', 'put'])) {
-            $editingUser = BcEditSession::mark('blog_post', $id, BcUtil::loginUser());
+        if ($this->request->is(['get', 'head'])) {
+            $editingUser = BcEditSession::mark('blog_post', $id, BcUtil::loginUser() ?: null);
             if ($editingUser) {
                 $this->BcMessage->setWarning(__d('baser_core',
                     'この記事は現在「{0}」さんが編集中です。',

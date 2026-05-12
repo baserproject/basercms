@@ -219,7 +219,7 @@ class PagesControllerTest extends BcTestCase
         BcEditSession::clear('page', 2);
         UserFactory::make([
             'id' => 2,
-            'nickname' => 'ニックネーム2'
+            'nickname' => '<b>ニックネーム2</b>'
         ])->persist();
         UsersUserGroupFactory::make([
             'user_id' => 2,
@@ -231,7 +231,7 @@ class PagesControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/pages/edit/2');
 
         $this->assertResponseSuccess();
-        $this->assertEquals('この固定ページは現在「ニックネーム2」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertEquals('この固定ページは現在「&lt;b&gt;ニックネーム2&lt;/b&gt;」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
         $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 

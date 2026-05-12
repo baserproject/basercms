@@ -243,7 +243,7 @@ class BlogPostsControllerTest extends BcTestCase
         BcEditSession::clear('blog_post', 1);
         UserFactory::make([
             'id' => 2,
-            'nickname' => 'ニックネーム2'
+            'nickname' => '<b>ニックネーム2</b>'
         ])->persist();
         UsersUserGroupFactory::make([
             'user_id' => 2,
@@ -254,7 +254,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->get('/baser/admin/bc-blog/blog_posts/edit/1/1');
 
         $this->assertResponseSuccess();
-        $this->assertEquals('この記事は現在「ニックネーム2」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertEquals('この記事は現在「&lt;b&gt;ニックネーム2&lt;/b&gt;」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
         $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 

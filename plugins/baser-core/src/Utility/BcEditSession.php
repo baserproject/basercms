@@ -13,6 +13,7 @@ namespace BaserCore\Utility;
 
 use BaserCore\Model\Entity\UserInterface;
 use Cake\Cache\Cache;
+use Cake\Cache\Engine\FileEngine;
 
 /**
  * BcEditSession
@@ -23,7 +24,7 @@ class BcEditSession
     /**
      * Cache config name
      */
-    public const CACHE_CONFIG = 'default';
+    public const CACHE_CONFIG = '_bc_edit_session_';
 
     /**
      * Cache key prefix
@@ -49,6 +50,7 @@ class BcEditSession
             return null;
         }
 
+        self::ensureCacheConfig();
         $key = self::createKey($type, $id);
         $current = Cache::read($key, self::CACHE_CONFIG);
 
@@ -62,7 +64,7 @@ class BcEditSession
 
         Cache::write($key, [
             'user_id' => $user->id,
-            'user_name' => $user->getDisplayName(),
+            'user_name' => h((string)$user->getDisplayName()),
             'started' => time()
         ], self::CACHE_CONFIG);
 
@@ -78,7 +80,28 @@ class BcEditSession
      */
     public static function clear(string $type, int $id): bool
     {
+        self::ensureCacheConfig();
         return Cache::delete(self::createKey($type, $id), self::CACHE_CONFIG);
+    }
+
+    /**
+     * Ensure edit-session cache config exists.
+     *
+     * @return void
+     */
+    private static function ensureCacheConfig(): void
+    {
+        if (Cache::getConfig(self::CACHE_CONFIG)) {
+            return;
+        }
+
+        Cache::setConfig(self::CACHE_CONFIG, [
+            'className' => FileEngine::class,
+            'path' => CACHE . 'bc_edit_session' . DS,
+            'prefix' => 'bc_edit_session_',
+            'duration' => '+' . self::EXPIRES . ' seconds',
+            'serialize' => true,
+        ]);
     }
 
     /**
