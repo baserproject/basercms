@@ -251,6 +251,7 @@ class BlogPostsControllerTest extends BcTestCase
         ])->persist();
         BcEditSession::mark('blog_post', 1, $this->getUser(2));
 
+        $this->loginAdmin($this->getRequest('/'));
         $this->get('/baser/admin/bc-blog/blog_posts/edit/1/1');
 
         $this->assertResponseSuccess();

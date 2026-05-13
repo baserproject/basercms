@@ -64,6 +64,7 @@ class PagesControllerTest extends BcTestCase
     public function tearDown(): void
     {
         BcEditSession::clear('page', 2);
+        BcEditSession::clear('page', 16);
         parent::tearDown();
     }
 
@@ -216,7 +217,8 @@ class PagesControllerTest extends BcTestCase
      */
     public function testEditWarnsWhenAnotherUserIsEditing()
     {
-        BcEditSession::clear('page', 2);
+        $page = $this->PagesService->get(16);
+        BcEditSession::clear('page', $page->id);
         UserFactory::make([
             'id' => 2,
             'nickname' => '<b>ニックネーム2</b>'
@@ -225,10 +227,10 @@ class PagesControllerTest extends BcTestCase
             'user_id' => 2,
             'user_group_id' => 1
         ])->persist();
-        BcEditSession::mark('page', 2, $this->getUser(2));
+        BcEditSession::mark('page', $page->id, $this->getUser(2));
 
         $this->loginAdmin($this->getRequest('/'));
-        $this->get('/baser/admin/baser-core/pages/edit/2');
+        $this->get('/baser/admin/baser-core/pages/edit/' . $page->id);
 
         $this->assertResponseSuccess();
         $this->assertEquals('この固定ページは現在「&lt;b&gt;ニックネーム2&lt;/b&gt;」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
