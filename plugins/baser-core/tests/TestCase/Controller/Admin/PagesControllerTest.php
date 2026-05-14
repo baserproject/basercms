@@ -218,16 +218,21 @@ class PagesControllerTest extends BcTestCase
     public function testEditWarnsWhenAnotherUserIsEditing()
     {
         $page = $this->PagesService->get(16);
+        $editingUserId = 99;
         BcEditSession::clear('page', $page->id);
         UserFactory::make([
-            'id' => 2,
+            'id' => $editingUserId,
             'nickname' => '<b>ニックネーム2</b>'
         ])->persist();
         UsersUserGroupFactory::make([
-            'user_id' => 2,
+            'user_id' => $editingUserId,
             'user_group_id' => 1
         ])->persist();
-        BcEditSession::mark('page', $page->id, $this->getUser(2));
+        BcEditSession::mark('page', $page->id, $this->getUser($editingUserId));
+        $this->assertSame(
+            '&lt;b&gt;ニックネーム2&lt;/b&gt;',
+            BcEditSession::mark('page', $page->id, $this->getUser(1))['user_name']
+        );
 
         $this->loginAdmin($this->getRequest('/'));
         $this->get('/baser/admin/baser-core/pages/edit/' . $page->id);

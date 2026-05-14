@@ -240,16 +240,21 @@ class BlogPostsControllerTest extends BcTestCase
             'id' => '1',
             'blog_content_id' => '1'
         ])->persist();
+        $editingUserId = 99;
         BcEditSession::clear('blog_post', 1);
         UserFactory::make([
-            'id' => 2,
+            'id' => $editingUserId,
             'nickname' => '<b>ニックネーム2</b>'
         ])->persist();
         UsersUserGroupFactory::make([
-            'user_id' => 2,
+            'user_id' => $editingUserId,
             'user_group_id' => 1
         ])->persist();
-        BcEditSession::mark('blog_post', 1, $this->getUser(2));
+        BcEditSession::mark('blog_post', 1, $this->getUser($editingUserId));
+        $this->assertSame(
+            '&lt;b&gt;ニックネーム2&lt;/b&gt;',
+            BcEditSession::mark('blog_post', 1, $this->getUser(1))['user_name']
+        );
 
         $this->loginAdmin($this->getRequest('/'));
         $this->get('/baser/admin/bc-blog/blog_posts/edit/1/1');
