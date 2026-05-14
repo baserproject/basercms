@@ -361,39 +361,6 @@
   border: 0;
   margin: auto;
 }
-.bs-main-contents address, .bs-main-contents button, .bs-main-contents caption, .bs-main-contents cite, .bs-main-contents code, .bs-main-contents dfn, .bs-main-contents em, .bs-main-contents input, .bs-main-contents optgroup, .bs-main-contents option, .bs-main-contents select, .bs-main-contents strong, .bs-main-contents textarea, .bs-main-contents th, .bs-main-contents var,
-.bge-contents address,
-.bge-contents button,
-.bge-contents caption,
-.bge-contents cite,
-.bge-contents code,
-.bge-contents dfn,
-.bge-contents em,
-.bge-contents input,
-.bge-contents optgroup,
-.bge-contents option,
-.bge-contents select,
-.bge-contents strong,
-.bge-contents textarea,
-.bge-contents th,
-.bge-contents var,
-.cke_editable address,
-.cke_editable button,
-.cke_editable caption,
-.cke_editable cite,
-.cke_editable code,
-.cke_editable dfn,
-.cke_editable em,
-.cke_editable input,
-.cke_editable optgroup,
-.cke_editable option,
-.cke_editable select,
-.cke_editable strong,
-.cke_editable textarea,
-.cke_editable th,
-.cke_editable var {
-  font: inherit;
-}
 .bs-main-contents small,
 .bge-contents small,
 .cke_editable small {
