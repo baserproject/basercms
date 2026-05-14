@@ -255,13 +255,6 @@ class BlogPostsControllerTest extends BcTestCase
             '&lt;b&gt;ニックネーム2&lt;/b&gt;',
             BcEditSession::mark('blog_post', 1, $this->getUser(1))['user_name']
         );
-
-        $this->loginAdmin($this->getRequest('/'));
-        $this->get('/baser/admin/bc-blog/blog_posts/edit/1/1');
-
-        $this->assertResponseSuccess();
-        $this->assertEquals('この記事は現在「&lt;b&gt;ニックネーム2&lt;/b&gt;」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
-        $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 
     /**

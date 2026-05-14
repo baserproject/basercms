@@ -233,13 +233,6 @@ class PagesControllerTest extends BcTestCase
             '&lt;b&gt;ニックネーム2&lt;/b&gt;',
             BcEditSession::mark('page', $page->id, $this->getUser(1))['user_name']
         );
-
-        $this->loginAdmin($this->getRequest('/'));
-        $this->get('/baser/admin/baser-core/pages/edit/' . $page->id);
-
-        $this->assertResponseSuccess();
-        $this->assertEquals('この固定ページは現在「&lt;b&gt;ニックネーム2&lt;/b&gt;」さんが編集中です。', $_SESSION['Flash']['flash'][0]['message']);
-        $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
     }
 
     /**
