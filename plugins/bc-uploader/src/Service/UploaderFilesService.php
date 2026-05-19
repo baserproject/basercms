@@ -225,6 +225,28 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
         $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
         $postData['alt'] = $name;
+        // delete() の前に savePathを取得・保持
+        $fileUploader = $this->UploaderFiles->getFileUploader();
+        $savePath = $fileUploader ? $fileUploader->savePath : null;
+        // 同名レコードが存在し編集権限がある場合は削除して上書き
+        $existingEntity = $this->UploaderFiles->find()->where(['UploaderFiles.name' => $name])->first();
+        if ($existingEntity && $this->isEditable($existingEntity->toArray())) {
+            $this->UploaderFiles->delete($existingEntity);
+        }
+        // DBレコードなしで物理ファイルが残っている場合（孤立ファイル）も直接削除して上書きする
+        if ($savePath) {
+            $info = pathinfo($name);
+            $basename = $info['filename'];
+            $ext = $info['extension'];
+            $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
+            foreach ([$savePath, $savePath . 'limited' . DS] as $dir) {
+                if (file_exists($dir . $name)) unlink($dir . $name);
+                foreach ($sizes as $size) {
+                    $thumb = $basename . '__' . $size . '.' . $ext;
+                    if (file_exists($dir . $thumb)) unlink($dir . $thumb);
+                }
+            }
+        }
         $entity = $this->UploaderFiles->patchEntity($this->getNew(), $postData);
         return $this->UploaderFiles->saveOrFail($entity);
     }
