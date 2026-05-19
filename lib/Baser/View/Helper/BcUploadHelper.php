@@ -101,6 +101,13 @@ class BcUploadHelper extends BcAppHelper
 					return false;
 				}
 			}
+		} else {
+			$sessionKey = $this->value($fieldName . '_tmp');
+			if ($sessionKey && $value === $sessionKey) {
+				$tmp = true;
+				$value = str_replace('/', '_', $sessionKey);
+				$basePath = '/uploads/tmp/';
+			}
 		}
 
 		/* ファイルのパスを取得 */
