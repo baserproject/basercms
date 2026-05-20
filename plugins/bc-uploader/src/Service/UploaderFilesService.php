@@ -227,32 +227,17 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         $postData['alt'] = $name;
         // 「上書きを許容する」チェックボックスがONの時のみ上書き処理を行う
         if (!empty($postData['overwrite'])) {
-            $fileUploader = $this->UploaderFiles->getFileUploader();
-            $savePath = $fileUploader ? $fileUploader->savePath : null;
             $info = pathinfo($name);
             $basename = $info['filename'];
             $ext = $info['extension'];
-            // test.jpg, test__1.jpg 等を全件取得（LIKE検索）して削除
-            $existingEntities = $this->UploaderFiles->find()
+            // test.png / test__2.png / test__3.png を削除対象とする
+            $pattern = '/^' . preg_quote($basename, '/') . '(__\d+)?\.' . preg_quote($ext, '/') . '$/i';
+            $candidates = $this->UploaderFiles->find()
                 ->where(['UploaderFiles.name LIKE' => $basename . '%.' . $ext])
                 ->all()->toList();
-            foreach ($existingEntities as $existingEntity) {
-                if ($this->isEditable($existingEntity->toArray())) {
-                    $this->UploaderFiles->delete($existingEntity);
-                }
-            }
-            if ($savePath) {
-                $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
-                foreach ([$savePath, $savePath . 'limited' . DS] as $dir) {
-                    if (!is_dir($dir)) continue;
-                    foreach (glob($dir . $basename . '*.' . $ext) ?: [] as $f) {
-                        @unlink($f);
-                    }
-                    foreach ($sizes as $size) {
-                        foreach (glob($dir . $basename . '*__' . $size . '.' . $ext) ?: [] as $f) {
-                            @unlink($f);
-                        }
-                    }
+            foreach ($candidates as $candidate) {
+                if (preg_match($pattern, $candidate->name) && $this->isEditable($candidate->toArray())) {
+                    $this->UploaderFiles->delete($candidate);
                 }
             }
         }
