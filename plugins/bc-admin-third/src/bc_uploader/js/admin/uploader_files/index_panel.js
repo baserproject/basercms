@@ -29,6 +29,11 @@ uploaderFilesIndex = {
     categoryId: null,
 
     /**
+     * 上書きフラグ（ajax_list再描画後もチェック状態を保持するため変数で管理）
+     */
+    overwrite: false,
+
+    /**
      * 起動処理
      */
     mounted() {
@@ -197,6 +202,9 @@ uploaderFilesIndex = {
                 let fd = new FormData();
                 fd.append('file', $file.prop('files')[0]);
                 fd.append('_csrfToken', $.bcToken.key);
+                if (uploaderFilesIndex.overwrite) {
+                    fd.append('overwrite', '1');
+                }
                 $uploaderCategoryId = $("#UploaderFileUploaderCategoryId" + listId);
                 if ($uploaderCategoryId.length) {
                     fd.append('uploader_category_id', $uploaderCategoryId.val());
@@ -354,6 +362,13 @@ uploaderFilesIndex = {
 
         // ファイルアップロードイベントを登録
         $('#UploaderFileFile' + listId).change(uploaderFilesIndex.uploaderFileFileChangeHandler);
+
+        // 上書きチェックボックスの状態を復元し、変更イベントを登録
+        let $overwrite = $('#UploaderFileOverwrite' + listId);
+        $overwrite.prop('checked', uploaderFilesIndex.overwrite);
+        $overwrite.off('change.overwriteEvent').on('change.overwriteEvent', function () {
+            uploaderFilesIndex.overwrite = $(this).is(':checked');
+        });
 
         if (listId) {
             $selectableFile.bind('mouseenter.selectEvent', function () {
