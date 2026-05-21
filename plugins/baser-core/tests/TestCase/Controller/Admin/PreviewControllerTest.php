@@ -92,6 +92,11 @@ class PreviewControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=draft', $page->toArray());
         $this->assertResponseOk();
         $this->assertEquals($page->draft, $this->viewVariable('page')['contents']);
+
+        $page->content['title'] = '';
+        $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=default', $page->toArray());
+        $this->assertResponseOk();
+        $this->assertSame('', $this->viewVariable('page')->content->title);
     }
 
     /**
