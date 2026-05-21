@@ -147,3 +147,4 @@ node_modules
 /docker/proxy/*
 /.github/instructions/local.instructions.md
 /.serena
+/.claude/settings.local.json
