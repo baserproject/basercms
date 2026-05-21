@@ -17,6 +17,9 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Utility\BcEditSession;
 use Cake\Event\Event;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
@@ -60,6 +63,8 @@ class PagesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        BcEditSession::clear('page', 2);
+        BcEditSession::clear('page', 16);
         parent::tearDown();
     }
 
@@ -205,6 +210,29 @@ class PagesControllerTest extends BcTestCase
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
         $this->assertEquals('testEdit', $this->PagesService->get($id)->page_template);
         $this->assertEquals('pageTestUpdate', $this->PagesService->get($id)->content->name);
+    }
+
+    /**
+     * testEditWarnsWhenAnotherUserIsEditing
+     */
+    public function testEditWarnsWhenAnotherUserIsEditing()
+    {
+        $page = $this->PagesService->get(16);
+        $editingUserId = 99;
+        BcEditSession::clear('page', $page->id);
+        UserFactory::make([
+            'id' => $editingUserId,
+            'nickname' => '<b>ニックネーム2</b>'
+        ])->persist();
+        UsersUserGroupFactory::make([
+            'user_id' => $editingUserId,
+            'user_group_id' => 1
+        ])->persist();
+        BcEditSession::mark('page', $page->id, $this->getUser($editingUserId));
+        $this->assertSame(
+            '&lt;b&gt;ニックネーム2&lt;/b&gt;',
+            BcEditSession::mark('page', $page->id, $this->getUser(1))['user_name']
+        );
     }
 
     /**

@@ -15,6 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcEditSession;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\Admin\BlogPostsAdminService;
@@ -247,6 +248,15 @@ class BlogPostsController extends BlogAdminAppController
                 } else {
                     $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
                 }
+            }
+        }
+        if ($this->request->is(['get', 'head'])) {
+            $editingUser = BcEditSession::mark('blog_post', $id, BcUtil::loginUser() ?: null);
+            if ($editingUser) {
+                $this->BcMessage->setWarning(__d('baser_core',
+                    'この記事は現在「{0}」さんが編集中です。',
+                    $editingUser['user_name']
+                ));
             }
         }
         $this->set($service->getViewVarsForEdit($this->getRequest(), $post, BcUtil::loginUser()));

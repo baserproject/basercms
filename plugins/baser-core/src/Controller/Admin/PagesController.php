@@ -14,6 +14,8 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Service\Admin\PagesAdminServiceInterface;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Utility\BcEditSession;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Annotation\NoTodo;
@@ -143,6 +145,15 @@ class PagesController extends BcAdminAppController
                 $this->BcMessage->setError(
                     __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
                 );
+            }
+        }
+        if ($this->request->is(['get', 'head'])) {
+            $editingUser = BcEditSession::mark('page', $id, BcUtil::loginUser() ?: null);
+            if ($editingUser) {
+                $this->BcMessage->setWarning(__d('baser_core',
+                    'この固定ページは現在「{0}」さんが編集中です。',
+                    $editingUser['user_name']
+                ));
             }
         }
         $this->set($service->getViewVarsForEdit($page));

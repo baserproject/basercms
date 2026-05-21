@@ -13,8 +13,11 @@
 namespace BcBlog\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcEditSession;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Admin\BlogPostsController;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -58,6 +61,7 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        BcEditSession::clear('blog_post', 1);
         parent::tearDown();
     }
 
@@ -214,6 +218,43 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         // メッセージを確認
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
+    }
+
+    /**
+     * testEditWarnsWhenAnotherUserIsEditing
+     */
+    public function testEditWarnsWhenAnotherUserIsEditing()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        SiteConfigFactory::make([
+            'name' => 'content_types',
+            'value' => ''
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'editor',
+            'value' => 'BaserCore.BcCkeditor'
+        ])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make([
+            'id' => '1',
+            'blog_content_id' => '1'
+        ])->persist();
+        $editingUserId = 99;
+        BcEditSession::clear('blog_post', 1);
+        UserFactory::make([
+            'id' => $editingUserId,
+            'nickname' => '<b>ニックネーム2</b>'
+        ])->persist();
+        UsersUserGroupFactory::make([
+            'user_id' => $editingUserId,
+            'user_group_id' => 1
+        ])->persist();
+        BcEditSession::mark('blog_post', 1, $this->getUser($editingUserId));
+        $this->assertSame(
+            '&lt;b&gt;ニックネーム2&lt;/b&gt;',
+            BcEditSession::mark('blog_post', 1, $this->getUser(1))['user_name']
+        );
     }
 
     /**
