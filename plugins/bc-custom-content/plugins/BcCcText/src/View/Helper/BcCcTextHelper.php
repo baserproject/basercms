@@ -101,6 +101,10 @@ class BcCcTextHelper extends Helper
      */
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
+        if ($fieldValue === null) return '';
+        if (isset($options['escape']) && !$options['escape']) {
+            return  $fieldValue;
+        }
         return h($fieldValue);
     }
 

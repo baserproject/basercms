@@ -301,6 +301,12 @@ class CustomContentHelperTest extends BcTestCase
             [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['beforeLinefeed' => false], '1&nbsp;プログラマー&nbsp;1<br>'], //isAdminSystem = true && beforeLinefeed = false
             [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterHead' => false], '<br>1&nbsp;プログラマー<br>'], //isAdminSystem = true && afterHead = false
             [true, 'BcCcRelated', '/baser/admin', 'recruit_category', 1, ['afterLinefeed' => false], '<br>1&nbsp;プログラマー&nbsp;1'], //isAdminSystem = true && afterLinefeed = false
+            [true, 'BcCcText', '/', 'recruit_category', '<strong>タグ</strong>', [], '&lt;strong&gt;タグ&lt;/strong&gt;'], // デフォルトではエスケープされる
+            [true, 'BcCcTextarea', '/', 'recruit_category', '<strong>タグ</strong>', [], '&lt;strong&gt;タグ&lt;/strong&gt;'], // デフォルトではエスケープされる
+            [true, 'BcCcText', '/', 'recruit_category', '<strong>タグ</strong>', ['escape' => false], '<strong>タグ</strong>'], // escape=false でタグを保持
+            [true, 'BcCcTextarea', '/', 'recruit_category', '<strong>タグ</strong>', ['escape' => false], '<strong>タグ</strong>'], // escape=false でタグを保持
+            [true, 'BcCcText', '/', 'recruit_category', null, ['escape' => false], ''], // 空値でも例外にならない
+            [true, 'BcCcTextarea', '/', 'recruit_category', null, ['escape' => false], ''], // 空値でも例外にならない
         ];
     }
 

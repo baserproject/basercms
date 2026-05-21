@@ -226,6 +226,7 @@ class CustomContentHelper extends CustomContentAppHelper
     {
         if (is_array($entry)) $entry = new CustomEntry($entry);
         $options = array_merge([
+            'escape' => true,
             'beforeHead' => true,
             'afterHead' => true,
             'beforeLinefeed' => true,
