@@ -298,7 +298,7 @@ class CustomTablesServiceTest extends BcTestCase
             'name' => 'お問い合わせタイトル',
         ];
         $this->expectException(PersistenceFailedException::class);
-        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数小文字とアンダースコアのみで入力してください。")');
         $this->CustomTablesService->create($data);
     }
 
@@ -363,7 +363,7 @@ class CustomTablesServiceTest extends BcTestCase
 
         //エラーする時をテスト
         $this->expectException(PersistenceFailedException::class);
-        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数字とアンダースコアのみで入力してください。")');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (name.regex: "識別名は半角英数小文字とアンダースコアのみで入力してください。")');
         $this->CustomTablesService->update($this->CustomTablesService->get(1), ['name' => 'あああああ']);
     }
 
