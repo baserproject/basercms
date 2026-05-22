@@ -88,7 +88,7 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
     {
         /* @var \BcMail\Service\MailContentsService $mailContentsService */
         $mailContentsService = $this->getService(MailContentsServiceInterface::class);
-        $mailField->valid_ex = explode(',', $mailField->valid_ex);
+        $mailField->valid_ex = explode(',', (string) $mailField->valid_ex);
         $mailContent = $mailContentsService->get($mailContentId);
         return [
             'mailContent' => $mailContent,
