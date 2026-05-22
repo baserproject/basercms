@@ -513,6 +513,21 @@ class PermissionsServiceTest extends BcTestCase
         $expected = '/^\/admin\/posts(|\/.*?)$/is';
         $result = $this->PermissionsService->convertRegexUrl($url);
         $this->assertEquals($expected, $result);
+
+        // DB保存の標準プレフィックス(/baser/admin)が実際のプレフィックスに変換されることを確認
+        $baserCorePrefix = BcUtil::getBaserCorePrefix();
+        $adminPrefix = BcUtil::getAdminPrefix();
+        $apiPrefix = Configure::read('BcApp.apiPrefix');
+
+        $url = '/baser/admin/baser-core/contents/index';
+        $expected = '/^\/' . preg_quote($baserCorePrefix . '/' . $adminPrefix . '/baser-core/contents/index', '/') . '$/is';
+        $result = $this->PermissionsService->convertRegexUrl($url);
+        $this->assertEquals($expected, $result);
+
+        $url = '/baser/api/admin/baser-core/contents/index.json';
+        $expected = '/^\/' . preg_quote($baserCorePrefix . '/' . $apiPrefix . '/' . $adminPrefix . '/baser-core/contents/index.json', '/') . '$/is';
+        $result = $this->PermissionsService->convertRegexUrl($url);
+        $this->assertEquals($expected, $result);
     }
 
     /**
