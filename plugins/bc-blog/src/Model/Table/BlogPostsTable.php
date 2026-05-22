@@ -28,7 +28,6 @@ use Cake\Database\Driver\Sqlite;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
-use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
@@ -675,8 +674,17 @@ class BlogPostsTable extends BlogAppTable
         }
 
         $data->user_id = BcUtil::loginUser()['id'];
-        if ($data->name) $data->name .= '_copy';
-        $data->title .= '_copy';
+        if ($data->name) {
+            $baseName = $data->name;
+            $copySuffix = '_copy';
+            $data->name = mb_substr($baseName, 0, 255 - mb_strlen($copySuffix)) . $copySuffix;
+            for ($i = 1; $i <= 10 && $this->exists(['BlogPosts.name' => $data->name]); $i++) {
+                $suffix = '_' . $i;
+                $duplicateSuffix = $copySuffix . $suffix;
+                $data->name = mb_substr($baseName, 0, 255 - mb_strlen($duplicateSuffix)) . $duplicateSuffix;
+            }
+        }
+        $data->title = mb_substr($data->title, 0, 250) . '_copy';
         $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
         $data->status = false;
         $data->posted = \Cake\I18n\DateTime::now();
@@ -714,13 +722,6 @@ class BlogPostsTable extends BlogAppTable
                 'oldData' => $oldData,
             ]);
             return $result;
-        } catch (PersistenceFailedException $e) {
-            if ($e->getEntity()->getError('name')) {
-                $data->eye_catch = $eyeCatch;
-                return $this->copy(null, $data);
-            } else {
-                return false;
-            }
         } catch (BcException $e) {
             throw $e;
         }
