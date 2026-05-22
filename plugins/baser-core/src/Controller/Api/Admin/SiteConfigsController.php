@@ -102,7 +102,7 @@ class SiteConfigsController extends BcAdminApiController
             );
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(401));
-            $message = __d('baser_core', 'ログを確認してください。');
+            $message = __d('baser_core', 'ログを確認してください。') . $e->getMessage();
         }
 
         $this->set('message', $message);
