@@ -50,10 +50,13 @@ $uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFiles.upload
           'div' => false
         ]) ?>
 			</span>
-          <label style="margin-left:8px">
-            <input type="checkbox" id="UploaderFileOverwrite<?= h($listId) ?>" value="1">
-            <?= __d('baser_core', '上書きを許容する') ?>
-          </label>
+          <?php echo $this->BcAdminForm->control('overwrite', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', '上書きを許容する'),
+            'id' => 'UploaderFileOverwrite' . $listId,
+            'value' => '1',
+            'checked' => false,
+          ]) ?>
         </div>
       </div>
     <?php else: ?>

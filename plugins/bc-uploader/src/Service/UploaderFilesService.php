@@ -225,19 +225,14 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
         $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
         $postData['alt'] = $name;
-        // 「上書きを許容する」チェックボックスがONの時のみ上書き処理を行う
+        // 「上書きを許容する」チェックボックスがONの時のみ上書き処理を行う(完全一致のみ削除する)
         if (!empty($postData['overwrite'])) {
-            $info = pathinfo($name);
-            $basename = $info['filename'];
-            $ext = $info['extension'];
-            // test.png / test__2.png / test__3.png を削除対象とする
-            $pattern = '/^' . preg_quote($basename, '/') . '(__\d+)?\.' . preg_quote($ext, '/') . '$/i';
-            $candidates = $this->UploaderFiles->find()
-                ->where(['UploaderFiles.name LIKE' => $basename . '%.' . $ext])
+            $existingEntities = $this->UploaderFiles->find()
+                ->where(['UploaderFiles.name' => $name])
                 ->all()->toList();
-            foreach ($candidates as $candidate) {
-                if (preg_match($pattern, $candidate->name) && $this->isEditable($candidate->toArray())) {
-                    $this->UploaderFiles->delete($candidate);
+            foreach ($existingEntities as $existingEntity) {
+                if ($this->isEditable($existingEntity->toArray())) {
+                    $this->UploaderFiles->delete($existingEntity);
                 }
             }
         }
