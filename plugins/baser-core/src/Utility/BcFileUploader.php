@@ -12,11 +12,13 @@
 namespace BaserCore\Utility;
 
 use ArrayObject;
+use Cake\Core\Configure;
 use Cake\Http\Session;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use BaserCore\Vendor\Imageresizer;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\Note;
@@ -742,10 +744,17 @@ class BcFileUploader
         $oldSaveDir = '';
         if (file_exists($saveDir . $oldName)) {
             $oldSaveDir = $saveDir;
-        } elseif (file_exists($saveDirInTheme . $oldName)) {
+        } elseif ($saveDirInTheme !== false && file_exists($saveDirInTheme . $oldName)) {
             $oldSaveDir = $saveDirInTheme;
+        } else {
+            // 管理画面からの操作時など getSaveDir(true) が正しいテーマを参照しない場合に
+            // コアフロントテーマの files ディレクトリも確認する（初期データ複製対応）
+            $coreFrontThemeSaveDir = $this->getCoreFrontThemeSaveDir();
+            if ($coreFrontThemeSaveDir && file_exists($coreFrontThemeSaveDir . $oldName)) {
+                $oldSaveDir = $coreFrontThemeSaveDir;
+            }
         }
-        if (!file_exists($oldSaveDir . $oldName)) {
+        if (!$oldSaveDir || !file_exists($oldSaveDir . $oldName)) {
             return '';
         }
         $newName = $this->getFieldBasename($setting, $file, $entity);
@@ -935,6 +944,33 @@ class BcFileUploader
         } else {
             return $basename . '.' . $ext;
         }
+    }
+
+    /**
+     * コアフロントテーマの files 保存ディレクトリを取得する
+     *
+     * 管理画面からファイルを操作する場合など getSaveDir(true) が正しいテーマを
+     * 参照できないケースのフォールバックとして使用する
+     * （初期データのアイキャッチはコアフロントテーマ側に保存されているため）
+     *
+     * @return string|false
+     */
+    private function getCoreFrontThemeSaveDir(): string|false
+    {
+        $frontTheme = Configure::read('BcApp.coreFrontTheme');
+        if (!$frontTheme) return false;
+        $pluginPath = ROOT . DS . 'plugins' . DS;
+        if (is_dir($pluginPath . $frontTheme)) {
+            $basePath = $pluginPath . $frontTheme . DS . 'webroot' . DS . 'files' . DS;
+        } elseif (is_dir($pluginPath . Inflector::dasherize($frontTheme))) {
+            $basePath = $pluginPath . Inflector::dasherize($frontTheme) . DS . 'webroot' . DS . 'files' . DS;
+        } else {
+            return false;
+        }
+        if ($this->settings['saveDir']) {
+            return $basePath . $this->settings['saveDir'] . DS;
+        }
+        return $basePath;
     }
 
     /**
