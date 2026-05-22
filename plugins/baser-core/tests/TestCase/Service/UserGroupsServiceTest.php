@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Core\Configure;
 
 /**
  * Class UserGroupsServiceTest
@@ -91,6 +92,28 @@ class UserGroupsServiceTest extends BcTestCase
     {
         $userGroups = $this->UserGroups->getIndex();
         $this->assertEquals(3, $userGroups->count());
+    }
+
+    /**
+     * Test getIndex with isDisplayUserListInUserGroup false
+     */
+    public function testGetIndex_ContainCheck()
+    {
+        Configure::write('BcApp.isDisplayUserListInUserGroup', true);
+        $userGroups = $this->UserGroups->getIndex();
+        $this->assertEquals(3, $userGroups->count());
+
+        foreach ($userGroups as $userGroup) {
+            $this->assertTrue($userGroup->has('users'));
+        }
+
+        Configure::write('BcApp.isDisplayUserListInUserGroup', false);
+        $userGroups = $this->UserGroups->getIndex();
+        $this->assertEquals(3, $userGroups->count());
+
+        foreach ($userGroups as $userGroup) {
+            $this->assertFalse($userGroup->has('users'));
+        }
     }
 
     /**
