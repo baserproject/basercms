@@ -4566,6 +4566,16 @@ msgstr ""
 msgid "半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください"
 msgstr ""
 
+#: ./plugins/bc-admin-third/templates/Admin/Users/edit_password.php:56
+#: ./plugins/bc-admin-third/templates/Admin/element/Users/form.php:149
+msgid "{0}文字以上で入力してください。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/Admin/Users/edit_password.php:63
+#: ./plugins/bc-admin-third/templates/Admin/element/Users/form.php:156
+msgid "{0}を含む必要があります。"
+msgstr ""
+
 #: ./plugins/bc-admin-third/templates/Admin/Users/index.php:24
 msgid "ユーザー一覧"
 msgstr ""

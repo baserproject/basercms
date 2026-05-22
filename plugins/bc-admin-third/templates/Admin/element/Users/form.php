@@ -10,7 +10,9 @@
  */
 
 use BaserCore\Model\Entity\User;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\View\BcAdminAppView;
+use Cake\Core\Configure;
 
 /**
  * Users Form
@@ -144,6 +146,28 @@ $this->BcBaser->js('admin/users/form.bundle', false);
               <?php endif; ?>
               <?php echo __d('baser_core', '確認のため２回入力してください。') ?></li>
             <li><?php echo __d('baser_core', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください') ?></li>
+            <li>
+              <?php if (BcSiteConfig::get('allow_simple_password')): ?>
+                <?php echo __d('baser_core', '{0}文字以上で入力してください。', 6) ?>
+              <?php else: ?>
+                <?php echo __d('baser_core', '{0}文字以上で入力してください。', Configure::read('BcApp.passwordRule.minLength') ?: 12) ?>
+              <?php endif ?>
+            </li>
+            <?php if (!BcSiteConfig::get('allow_simple_password')): ?>
+              <?php
+              $requiredCharacterTypeNames = [
+                'numeric'   => __d('baser_core', '数字'),
+                'uppercase' => __d('baser_core', '大文字英字'),
+                'lowercase' => __d('baser_core', '小文字英字'),
+                'symbol'    => __d('baser_core', '記号'),
+              ];
+              $requiredTypes = Configure::read('BcApp.passwordRule.requiredCharacterTypes') ?: [];
+              $requiredNames = array_values(array_intersect_key($requiredCharacterTypeNames, array_flip($requiredTypes)));
+              ?>
+              <?php if ($requiredNames): ?>
+                <li><?php echo __d('baser_core', '{0}を含む必要があります。', implode('・', $requiredNames)) ?></li>
+              <?php endif ?>
+            <?php endif ?>
           </ul>
         </div>
         <?php echo $this->BcAdminForm->error('password') ?>
