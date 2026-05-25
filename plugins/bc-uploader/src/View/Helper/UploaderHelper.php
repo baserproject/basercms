@@ -77,6 +77,8 @@ class UploaderHelper extends Helper
         $ext = $pathInfo['extension'];
         $_options = ['alt' => $uploaderFile->alt];
         $options = array_merge($_options, $options);
+        // 上書きアップロード後のブラウザキャッシュ対策: modified のタイムスタンプをクエリパラメータとして付与
+        $cacheBuster = $uploaderFile->modified ? '?t=' . $uploaderFile->modified->getTimestamp() : '';
         if (in_array(strtolower($ext), ['gif', 'jpg', 'png'])) {
             if (isset($options['size'])) {
                 $resizeName = $pathInfo['filename'] . '__' . $options['size'] . '.' . $ext;
@@ -86,9 +88,11 @@ class UploaderHelper extends Helper
                     $savePath = $this->savePath . $resizeName;
                 }
                 if (file_exists($savePath)) {
-                    $imgUrl = $this->getFileUrl($resizeName);
+                    $imgUrl = $this->getFileUrl($resizeName) . $cacheBuster;
                     unset($options['size']);
                 }
+            } else {
+                $imgUrl .= $cacheBuster;
             }
             return $this->Html->image($imgUrl, $options);
         } else {

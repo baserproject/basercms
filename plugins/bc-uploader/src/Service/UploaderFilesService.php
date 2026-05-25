@@ -225,6 +225,17 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
         $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
         $postData['alt'] = $name;
+        // 「上書きを許容する」チェックボックスがONの時のみ上書き処理を行う(完全一致のみ削除する)
+        if (!empty($postData['overwrite'])) {
+            $existingEntities = $this->UploaderFiles->find()
+                ->where(['UploaderFiles.name' => $name])
+                ->all()->toList();
+            foreach ($existingEntities as $existingEntity) {
+                if ($this->isEditable($existingEntity->toArray())) {
+                    $this->UploaderFiles->delete($existingEntity);
+                }
+            }
+        }
         $entity = $this->UploaderFiles->patchEntity($this->getNew(), $postData);
         return $this->UploaderFiles->saveOrFail($entity);
     }
