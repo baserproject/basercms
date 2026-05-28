@@ -14,6 +14,7 @@ namespace BcUploader\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * UploaderFilesServiceInterface
@@ -32,6 +33,14 @@ interface UploaderFilesServiceInterface
      * @unitTest
      */
     public function getControlSource($field = null, $options = []);
+
+    /**
+     * アップロードファイル名から既存のエンティティを取得する
+     *
+     * @param string $name
+     * @return EntityInterface
+     */
+    public function getByName(string $name): EntityInterface;
 
     /**
      * ファイル名から実ファイルが存在するかどうかを取得する

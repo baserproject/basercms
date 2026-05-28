@@ -59,7 +59,12 @@ class UploaderFilesController extends BcAdminApiController
 
         $entity = $errors = null;
         try {
-            $entity = $service->create($this->request->getData());
+            if ($this->request->getData('overwrite')) {
+                $entity = $service->getByName($this->request->getUploadedFile('file')->getClientFilename());
+                $entity = $service->update($entity, $this->request->getData());
+            } else {
+                $entity = $service->create($this->request->getData());
+            }
             $message = __d('baser_core', 'アップロードファイル「{0}」を追加しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {

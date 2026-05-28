@@ -21,6 +21,7 @@ use BcUploader\Model\Entity\UploaderFile;
 use BcUploader\Model\Table\UploaderFilesTable;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Laminas\Diactoros\UploadedFile;
 use Cake\ORM\Table;
 
@@ -72,7 +73,8 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     public function getIndex(array $queryParams = [])
     {
         $params = array_merge([
-            'num' => null
+            'num' => null,
+            'name' => null,
         ], $queryParams);
 
         $conditions = $this->createAdminIndexConditions($params);
@@ -225,17 +227,6 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
         $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
         $postData['alt'] = $name;
-        // 「上書きを許容する」チェックボックスがONの時のみ上書き処理を行う(完全一致のみ削除する)
-        if (!empty($postData['overwrite'])) {
-            $existingEntities = $this->UploaderFiles->find()
-                ->where(['UploaderFiles.name' => $name])
-                ->all()->toList();
-            foreach ($existingEntities as $existingEntity) {
-                if ($this->isEditable($existingEntity->toArray())) {
-                    $this->UploaderFiles->delete($existingEntity);
-                }
-            }
-        }
         $entity = $this->UploaderFiles->patchEntity($this->getNew(), $postData);
         return $this->UploaderFiles->saveOrFail($entity);
     }
@@ -301,19 +292,38 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     }
 
     /**
+     * アップロードファイル名から既存のエンティティを取得する
+     *
+     * 上書きアップロード時に既存レコードを取得するために使用する。
+     * 保存時のファイル名正規化（create() 参照）と同じルールで
+     * ファイル名を変換した上で完全一致検索する。
+     *
+     * @param string $name
+     * @return EntityInterface
+     * @throws RecordNotFoundException
+     */
+    public function getByName(string $name): EntityInterface
+    {
+        $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
+        return $this->UploaderFiles->find()
+            ->where(['UploaderFiles.name' => $name])
+            ->firstOrFail();
+    }
+
+    /**
      * ファイル名から実ファイルが存在するかどうかを取得する
      * @param string $name
      * @return array|false
      */
     public function filesExistsByName(string $name)
     {
-        /** @var UploaderFile $entity */
-        $entity = $this->UploaderFiles->find()->where(['UploaderFiles.name' => $name])->first();
-        if ($entity) {
-            return $entity->filesExists();
-        } else {
+        try {
+            /** @var UploaderFile $entity */
+            $entity = $this->getByName($name);
+        } catch (RecordNotFoundException $e) {
             return false;
         }
+        return $entity->filesExists();
     }
 
 }
