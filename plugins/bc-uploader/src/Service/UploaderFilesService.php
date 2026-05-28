@@ -246,6 +246,20 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if(!$this->isEditable($postData)) {
             throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
+        if(!empty($postData['overwrite']) && !empty($postData['file'])) {
+            $file = $postData['file'];
+            $fileError = $file->getError();
+            if ($fileError === UPLOAD_ERR_INI_SIZE) {
+                throw new BcException(__d('baser_core',
+                    '送信できるデータ量を超えています。 {0} 以内のデータを送信してください。',
+                    [ini_get('upload_max_filesize')]
+                ));
+            }
+            $name = $file->getClientFilename();
+            $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
+            $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
+            $postData['id'] = $entity->id;
+        }
         if (!empty($postData['publish_begin'])) {
             $postData['publish_begin'] = new \Cake\I18n\DateTime($postData['publish_begin']);
         }

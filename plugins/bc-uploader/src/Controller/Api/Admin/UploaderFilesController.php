@@ -71,6 +71,9 @@ class UploaderFilesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser_core', "同じ名称のファイルが存在しないため処理に失敗しました。");
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
