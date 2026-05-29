@@ -547,8 +547,10 @@ class PermissionsService implements PermissionsServiceInterface
             }
         }
         $baserCorePrefix = BcUtil::getBaserCorePrefix();
-        $adminPrefix = BcUtil::getAdminPrefix();
         $apiPrefix = Configure::read('BcApp.apiPrefix');
+        $adminPrefix = BcUtil::getAdminPrefix();
+        $apiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias') ?: '/' . $apiPrefix . '/admin';
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . $adminPrefix;
         // DB に保存された標準プレフィックス(/baser/api/admin, /baser/admin)を
         // .env の設定値に基づく実際のプレフィックスに変換する
         $url = preg_replace(
@@ -557,8 +559,8 @@ class PermissionsService implements PermissionsServiceInterface
                 '/^\/baser\/admin/',
             ],
             [
-                '/' . $baserCorePrefix . '/' . $apiPrefix . '/' . $adminPrefix,
-                '/' . $baserCorePrefix . '/' . $adminPrefix,
+                '/' . $baserCorePrefix . $apiAdminAlias,
+                '/' . $baserCorePrefix . $adminAlias,
             ],
             $url
         );
