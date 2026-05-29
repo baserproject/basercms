@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Api\Admin;
 
 use BaserCore\Service\SiteConfigsServiceInterface;
 use Cake\Core\Configure;
+use Cake\Log\Log;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -102,7 +103,8 @@ class SiteConfigsController extends BcAdminApiController
             );
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(401));
-            $message = __d('baser_core', 'ログを確認してください。') . $e->getMessage();
+            Log::error($e->getMessage());
+            $message = __d('baser_core', 'ログを確認してください。');
         }
 
         $this->set('message', $message);

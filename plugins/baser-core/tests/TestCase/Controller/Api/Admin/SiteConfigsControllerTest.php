@@ -105,7 +105,11 @@ class SiteConfigsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testCheckSendmail()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = ['email' => 'invalid-mail-address'];
+        $this->post('/baser/api/admin/baser-core/site_configs/check_sendmail.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(401);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ログを確認してください。', $result->message);
     }
 
 }
