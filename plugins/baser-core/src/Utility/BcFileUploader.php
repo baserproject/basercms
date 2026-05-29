@@ -13,6 +13,7 @@ namespace BaserCore\Utility;
 
 use ArrayObject;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Http\Session;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
@@ -959,14 +960,23 @@ class BcFileUploader
     {
         $frontTheme = Configure::read('BcApp.coreFrontTheme');
         if (!$frontTheme) return false;
-        $pluginPath = ROOT . DS . 'plugins' . DS;
-        if (is_dir($pluginPath . $frontTheme)) {
-            $basePath = $pluginPath . $frontTheme . DS . 'webroot' . DS . 'files' . DS;
-        } elseif (is_dir($pluginPath . Inflector::dasherize($frontTheme))) {
-            $basePath = $pluginPath . Inflector::dasherize($frontTheme) . DS . 'webroot' . DS . 'files' . DS;
-        } else {
-            return false;
+        $basePath = false;
+        $themeCandidates = array_unique([
+            $frontTheme,
+            Inflector::camelize($frontTheme, '-'),
+        ]);
+        foreach ($themeCandidates as $themeCandidate) {
+            try {
+                $candidatePath = Plugin::path($themeCandidate) . 'webroot' . DS . 'files' . DS;
+            } catch (\Throwable $e) {
+                continue;
+            }
+            if (is_dir($candidatePath)) {
+                $basePath = $candidatePath;
+                break;
+            }
         }
+        if (!$basePath) return false;
         if ($this->settings['saveDir']) {
             return $basePath . $this->settings['saveDir'] . DS;
         }
