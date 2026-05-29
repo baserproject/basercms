@@ -28,7 +28,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 /**
  * Class PermissionsService
@@ -493,14 +492,6 @@ class PermissionsService implements PermissionsServiceInterface
             if ($type === 1) return true;
         }
 
-        // URLのプレフィックスを標準の文字列に戻す
-        foreach(Configure::read('BcPrefixAuth') as $key => $value) {
-            $prefixAreas = Configure::read('BcApp.' . Inflector::variable($key) . 'Prefix');
-            if(!$prefixAreas) continue;
-            $regex = '/^' . preg_quote('/' . Configure::read('BcApp.baserCorePrefix') . '/' . $prefixAreas . '/', '/') . '/';
-            $url = preg_replace($regex, '/baser/' . Inflector::underscore($key) . '/', $url);
-        }
-
         return $this->isAuthorized($prefixAuthSetting['permissionType'], $url, $method, $groupPermission);
     }
 
@@ -555,10 +546,24 @@ class PermissionsService implements PermissionsServiceInterface
                 $url = str_replace('{loginUserId}', $user->id, $url);
             }
         }
-        $prefix = BcUtil::getPrefix();
-        if($prefix !== '/baser/admin') {
-            $url = preg_replace('/^\/baser\/admin/', BcUtil::getPrefix(), $url);
-        }
+        $baserCorePrefix = BcUtil::getBaserCorePrefix();
+        $apiPrefix = Configure::read('BcApp.apiPrefix');
+        $adminPrefix = BcUtil::getAdminPrefix();
+        $apiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias') ?: '/' . $apiPrefix . '/admin';
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . $adminPrefix;
+        // DB に保存された標準プレフィックス(/baser/api/admin, /baser/admin)を
+        // .env の設定値に基づく実際のプレフィックスに変換する
+        $url = preg_replace(
+            [
+                '/^\/baser\/' . preg_quote($apiPrefix, '/') . '\/admin/',
+                '/^\/baser\/admin/',
+            ],
+            [
+                '/' . $baserCorePrefix . $apiAdminAlias,
+                '/' . $baserCorePrefix . $adminAlias,
+            ],
+            $url
+        );
         $pattern = preg_quote($url, '/');
         $pattern = str_replace('\*', '.*?', $pattern);
         return '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
