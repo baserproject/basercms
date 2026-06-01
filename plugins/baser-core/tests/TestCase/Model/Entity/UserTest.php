@@ -108,35 +108,40 @@ class UserTest extends BcTestCase
         //スーパーユーザー
         UserFactory::make(['id' => 2])->persist();
         Configure::write('BcApp.superUserId', 2);
-        //Adminーザー
+        //システム管理ユーザー
         UserFactory::make(['id' => 3])->persist();
         UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 1])->persist();
-        //スーパーでもAdminでもないーザー
+        //スーパーユーザーでもシステム管理ユーザーでもないユーザー
         UserFactory::make(['id' => 4])->persist();
+        //スーパーユーザーでもシステム管理ユーザーでもなく、かつ自身とは別のユーザー
+        UserFactory::make(['id' => 5])->persist();
 
-        //自身がAdminを設定
+        //自身がシステム管理ユーザーを設定
         $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups');
 
-        //ターゲットがAdmin：false
+        //ターゲットがシステム管理ユーザー：false
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
-        //ターゲットがスーパーじゃない：true
+        //ターゲットがスーパーユーザーじゃない：true
         $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
-        //ターゲットがスーパー：false
+        //ターゲットがスーパーユーザー：false
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
 
-        //自身がスーパーを設定
+        //自身がスーパーユーザーを設定
         $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups');
-        //ターゲットがスーパー：false
+        //ターゲットがスーパーユーザー：false
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
-        //ターゲットがスーパーじゃない：true
+        //ターゲットがスーパーユーザーじゃない：true
         $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
 
-        //自身がスーパーでもAdminでもないを設定 ：false
+        //自身がスーパーユーザーでもシステム管理ユーザーでもないを設定
         $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups');
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(1, contain: 'UserGroups')));
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(2, contain: 'UserGroups')));
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(3, contain: 'UserGroups')));
+        // 自身の削除は不可
         $this->assertFalse($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(4, contain: 'UserGroups')));
+        // 管理者でない他ユーザーの削除は可（アクセスルール判定は別途）
+        $this->assertTrue($this->User->isDeletableUser($this->getTableLocator()->get('BaserCore.Users')->get(5, contain: 'UserGroups')));
     }
 
     /**

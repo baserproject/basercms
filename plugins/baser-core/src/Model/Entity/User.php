@@ -144,8 +144,11 @@ class User extends Entity implements UserInterface
      * 対象ユーザーに対して削除可能かどうか判定する
      *
      * 利用可能条件
-     * - 自身がスーパーユーザーで対象がスーパーユーザーでない場合
-     * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
+     * - 自身に対する削除でない場合
+     * - 自身がスーパーユーザーの場合は、対象がスーパーユーザーでない場合
+     * - 自身がスーパーユーザーでない場合は、対象がシステム管理ユーザーでもスーパーユーザーでもない場合
+     *
+     * 実際の削除可否は、コントローラーで行うアクセスルール判定を経た上で判定される
      * @param EntityInterface|User $targetUser
      * @return bool
      * @checked
@@ -154,8 +157,13 @@ class User extends Entity implements UserInterface
      */
     public function isDeletableUser(EntityInterface $targetUser): bool
     {
-        return (($this->isSuper() && !$targetUser->isSuper()) ||
-            ($this->isAdmin() && !$targetUser->isAdmin()) && !$targetUser->isSuper());
+        if ($this->id === $targetUser->id) {
+            return false;
+        }
+        if ($this->isSuper()) {
+            return !$targetUser->isSuper();
+        }
+        return !$targetUser->isAdmin() && !$targetUser->isSuper();
     }
 
     /**
