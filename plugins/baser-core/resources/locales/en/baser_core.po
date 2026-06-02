@@ -8577,7 +8577,7 @@ msgstr "Table"
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:54
 msgid "テーブルを選択してください"
-msgstr "SPlease select Table"
+msgstr "Please select Table"
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:58
 msgid "コンテンツに紐付けるテーブルを選択します。"
@@ -9882,7 +9882,7 @@ msgstr "Received Emails"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/Dashboard/mail_messages.php:34
 msgid "{0} 件"
-msgstr "%s Items"
+msgstr "{0} Items"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:27
 msgid "メールフォーム説明文"
@@ -15099,15 +15099,10 @@ msgstr "Widgets"
 #~ msgid "更新日に不正な文字列が入っています。"
 #~ msgstr "There are invalid strings in Update Date."
 
-#, fuzzy
-#~| msgid "PHPの構文エラーが発生しました。"
-#~ msgid "草稿欄でPHPの構文エラーが発生しました。"
-#~ msgstr "PHP syntax error occured."
-
 #~ msgid "PHPの構文エラーが発生しました。"
 #~ msgstr "PHP syntax error occured."
 
-#, fuzzy
+#~#, fuzzy
 #~| msgid "このURLの登録は許可されていません。"
 #~ msgid "スクリプトの入力は許可されていません。"
 #~ msgstr "This URL's registration is not allowed."

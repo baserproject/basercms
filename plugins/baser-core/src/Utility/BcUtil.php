@@ -2317,4 +2317,34 @@ class BcUtil
         return is_dir(ROOT . DS . 'plugins' . DS . 'baser-core');
     }
 
+    /**
+     * locale から言語コードを取得する
+     *
+     * @param string|null $locale
+     * @param string $default
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getLocaleLanguageCode(?string $locale = null, string $default = 'ja'): string
+    {
+        $locale = strtolower((string) ($locale ?? \Cake\I18n\I18n::getLocale()));
+        return preg_replace('/[_-].*$/', '', $locale) ?: $default;
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     *
+     * @param string|null $locale
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isJapaneseLocale(?string $locale = null): bool
+    {
+        return self::getLocaleLanguageCode($locale) === 'ja';
+    }
+
 }

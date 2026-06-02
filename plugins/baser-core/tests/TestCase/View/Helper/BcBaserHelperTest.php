@@ -459,6 +459,34 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * html lang 用の言語コードを取得する
+     */
+    public function testGetHtmlLang(): void
+    {
+        $originalLocale = \Cake\I18n\I18n::getLocale();
+        try {
+            \Cake\I18n\I18n::setLocale('ja_JP');
+            $this->assertSame('ja', $this->BcBaser->getHtmlLang());
+        } finally {
+            \Cake\I18n\I18n::setLocale($originalLocale);
+        }
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     */
+    public function testIsJapaneseLocale(): void
+    {
+        $originalLocale = \Cake\I18n\I18n::getLocale();
+        try {
+            \Cake\I18n\I18n::setLocale('ja_JP');
+            $this->assertTrue($this->BcBaser->isJapaneseLocale());
+        } finally {
+            \Cake\I18n\I18n::setLocale($originalLocale);
+        }
+    }
+
+    /**
      * Test BcBaser->flashが適切なflashメッセージを出力してるかテスト
      *
      * @return void

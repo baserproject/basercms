@@ -2885,4 +2885,30 @@ class BcBaserHelper extends Helper
         return BcUtil::fullUrl($url);
     }
 
+    /**
+     * html の lang 属性に使う言語コードを取得する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getHtmlLang(): string
+    {
+        return BcUtil::getLocaleLanguageCode();
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isJapaneseLocale(): bool
+    {
+        return BcUtil::isJapaneseLocale();
+    }
+
 }
