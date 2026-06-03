@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\TwoFactorAuthenticationsService;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -40,6 +41,11 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
     public $TwoFactorAuthentications;
 
     /**
+     * @var mixed
+     */
+    private $originalAllowTime;
+
+    /**
      * Set Up
      *
      * @return void
@@ -47,6 +53,8 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->originalAllowTime = Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime');
+        Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', 10);
         $this->TwoFactorAuthenticationsService = new TwoFactorAuthenticationsService();
         $this->TwoFactorAuthentications = TableRegistry::getTableLocator()->get('BaserCore.TwoFactorAuthentications');
     }
@@ -58,6 +66,8 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', $this->originalAllowTime);
+        unset($this->originalAllowTime);
         unset($this->TwoFactorAuthenticationsService);
         unset($this->TwoFactorAuthentications);
         parent::tearDown();
@@ -123,7 +133,8 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
      */
     public function testVerify($expected, $saveData, $verifyData)
     {
-        $this->TwoFactorAuthentications->save($this->TwoFactorAuthentications->newEntity($saveData));
+        $twoFactorAuthentication = $this->TwoFactorAuthentications->newEntity($saveData);
+        $this->assertNotFalse($this->TwoFactorAuthentications->save($twoFactorAuthentication));
         $result = $this->TwoFactorAuthenticationsService->verify($verifyData['user_id'], $verifyData['code']);
         $this->assertEquals($expected, $result);
     }
