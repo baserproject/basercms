@@ -67,10 +67,10 @@ class BcCcPrefHelper extends Helper
      * @param CustomLink $link
      * @return string
      */
-    public function preview(CustomLink $link)
+    public function preview(CustomLink $link): string
     {
         $options = [
-            ':value' => 'entity.default_value'
+            'v-model' => 'entity.default_value'
         ];
         return $this->control($link, $options);
     }

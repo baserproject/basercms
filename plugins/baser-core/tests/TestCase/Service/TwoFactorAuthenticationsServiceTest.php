@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\TwoFactorAuthenticationsService;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -123,9 +124,15 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
      */
     public function testVerify($expected, $saveData, $verifyData)
     {
-        $this->TwoFactorAuthentications->save($this->TwoFactorAuthentications->newEntity($saveData));
-        $result = $this->TwoFactorAuthenticationsService->verify($verifyData['user_id'], $verifyData['code']);
-        $this->assertEquals($expected, $result);
+        $allowTime = Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime');
+        Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', 10);
+        try {
+            $this->TwoFactorAuthentications->save($this->TwoFactorAuthentications->newEntity($saveData));
+            $result = $this->TwoFactorAuthenticationsService->verify($verifyData['user_id'], $verifyData['code']);
+            $this->assertEquals($expected, $result);
+        } finally {
+            Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', $allowTime);
+        }
     }
 
     public static function getTestVerifyProvider()
