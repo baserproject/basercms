@@ -572,8 +572,18 @@ class BcUtil
                 return false;
             }
         }
-        $adminPrefix = BcUtil::getPrefix(true);
-        return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
+        $baserCorePrefix = (string) BcUtil::getBaserCorePrefix();
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . BcUtil::getAdminPrefix();
+        $apiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias')
+            ?: '/' . (string) Configure::read('BcApp.apiPrefix') . '/admin';
+
+        $prefixes = [
+            $baserCorePrefix . $adminAlias,
+            $baserCorePrefix . $apiAdminAlias,
+        ];
+        $prefixes = array_map(fn($prefix) => preg_quote(ltrim($prefix, '/'), '/'), $prefixes);
+
+        return (bool) preg_match('/^\/?(?:' . implode('|', $prefixes) . ')(?:$|\/)/', $url);
     }
 
     /**

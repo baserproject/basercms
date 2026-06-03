@@ -349,14 +349,26 @@ class BcUtilTest extends BcTestCase
      *
      * @param string $url 対象URL
      * @param bool $expect 期待値
+     * @param string|null $apiPrefix APIプレフィックス
      * @dataProvider isAdminSystemDataProvider
      */
-    public function testIsAdminSystem($url, $expect)
+    public function testIsAdminSystem($url, $expect, ?string $apiPrefix = null)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->getRequest($url);
-        $result = BcUtil::isAdminSystem();
-        $this->assertEquals($expect, $result, '正しく管理システムかチェックできません');
+        $currentApiPrefix = Configure::read('BcApp.apiPrefix');
+        $currentApiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias');
+        if ($apiPrefix !== null) {
+            Configure::write('BcApp.apiPrefix', $apiPrefix);
+            Configure::write('BcPrefixAuth.Api/Admin.alias', '/' . $apiPrefix . '/admin');
+        }
+        try {
+            $this->getRequest($url);
+            $result = BcUtil::isAdminSystem();
+            $this->assertEquals($expect, $result, '正しく管理システムかチェックできません');
+        } finally {
+            Configure::write('BcApp.apiPrefix', $currentApiPrefix);
+            Configure::write('BcPrefixAuth.Api/Admin.alias', $currentApiAdminAlias);
+        }
     }
 
     /**
@@ -371,6 +383,13 @@ class BcUtilTest extends BcTestCase
             ['baser/admin/hoge', true],
             ['/baser/admin/hoge', true],
             ['baser/admin/', true],
+            ['baser/api/admin', true],
+            ['baser/api/admin/hoge', true],
+            ['/baser/api/admin/hoge', true],
+            ['baser/api/admin/', true],
+            ['baser/rest/admin/hoge', true, 'rest'],
+            ['baser/api/admin/hoge', false, 'rest'],
+            ['baser/api', false],
             ['hoge', false],
             ['hoge/', false],
         ];
@@ -1545,7 +1564,7 @@ class BcUtilTest extends BcTestCase
     public static function isSameReferrerAsCurrentDataProvider()
     {
         return [
-            // refererがnullの場合　
+            // refererがnullの場合
             [null, false],
             // referer!=$siteDomainの場合
             ["/baser/admin", false],
