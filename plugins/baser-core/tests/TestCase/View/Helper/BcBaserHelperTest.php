@@ -569,11 +569,17 @@ class BcBaserHelperTest extends BcTestCase
 
         if (!empty($options['language'])){
             $_SERVER['HTTP_ACCEPT_LANGUAGE'] = $options['language'];
-            unset($options['device']);
+            unset($options['language']);
+        }
+
+        $request = $this->getRequest($url);
+        if (!empty($options['requestParams'])) {
+            $request = $request->withAttribute('params', array_merge((array) $request->getAttribute('params'), $options['requestParams']));
+            unset($options['requestParams']);
         }
 
         $this->BcBaser = new BcBaserHelper(new View());
-        $this->BcBaser->getView()->setRequest($this->getRequest($url));
+        $this->BcBaser->getView()->setRequest($request);
 
         if (!empty($options['error'])) {
             $reflectionClass = new ReflectionClass(get_class($this->BcBaser->getView()));
@@ -616,6 +622,9 @@ class BcBaserHelperTest extends BcTestCase
             ['Hoge', '/about', false, ['default' => 'Hoge']],
             ['service_service1', '/service/service1', true, ['underscore' => true]],
             ['Error!!!', '/', false, ['error' => 'Error!!!']],
+            // プラグイン（フロント）
+            ['MailMessages', '/mail_messages', false, ['requestParams' => ['plugin' => 'BcMail', 'controller' => 'MailMessages', 'action' => 'index']]],
+            ['MailMessagesIndex', '/mail_messages', true, ['requestParams' => ['plugin' => 'BcMail', 'controller' => 'MailMessages', 'action' => 'index']]],
             // スマートフォン
             ['Home', '/s/', false, ['device' => 'iPhone']],
             // 英語サイト

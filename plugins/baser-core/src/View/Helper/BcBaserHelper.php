@@ -743,8 +743,8 @@ class BcBaserHelper extends Helper
         if (isset($url[1])) $url1 = $url[1];
         if (isset($url[2])) $url2 = $url[2];
 
-        // 固定ページの場合
-        if (!BcUtil::isAdminSystem()) {
+        // 固定ページの場合（プラグインルーティング時を除く）
+        if (!BcUtil::isAdminSystem() && (!$plugin || $plugin === 'BaserCore')) {
             $pageUrl = h($request->getPath());
             if ($pageUrl === false) $pageUrl = '/';
 
@@ -758,7 +758,7 @@ class BcBaserHelper extends Helper
             $aryUrl = explode('/', $pageUrl);
         } else {
             // プラグインルーティングの場合
-            if ((($url1 == '' && in_array($action, ['index', 'mobile_index', 'smartphone_index'])) || ($url1 == $action)) && $url2 != $action && $plugin) {
+            if ((($url1 == '' && in_array($action, ['index', 'mobile_index', 'smartphone_index'], true)) || ($url1 == $action)) && $url2 != $action && $plugin) {
                 $prefix = $plugin = '';
                 $controller = $url0;
             }
