@@ -108,6 +108,9 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
   box-shadow: 0 -5px 3px -3px #999;
 
@@ -147,6 +150,9 @@
   position: fixed;
   bottom: 56px;
   width: 100%;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
   box-shadow: 0 -5px 3px -3px #999;
 
