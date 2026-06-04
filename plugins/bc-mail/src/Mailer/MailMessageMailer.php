@@ -50,12 +50,15 @@ class MailMessageMailer extends BcMailer
             'toAdmin' => [],
         ], $options);
         if (strpos($adminMail, ',') !== false) {
-            [$fromAdmin] = explode(',', $adminMail);
+            $adminMails = array_map('trim', explode(',', $adminMail));
+            $adminMails = array_values(array_filter($adminMails, static fn($mail) => $mail !== ''));
+            $fromAdmin = $adminMails[0] ?? $adminMail;
+            $toAdmin = $adminMails;
         } else {
-            $fromAdmin = $adminMail;
+            $toAdmin = $adminMail;
         }
         $data['other']['mode'] = 'admin';
-        $this->setTo($adminMail)
+        $this->setTo($toAdmin)
             ->setFrom($fromAdmin, $this->getFrom($mailContent))
             ->setSubject($mailContent->subject_admin)
             ->setAttachments($attachments)
@@ -102,7 +105,7 @@ class MailMessageMailer extends BcMailer
             'toUser' => [],
         ], $options);
         if (strpos($adminMail, ',') !== false) {
-            [$fromAdmin] = explode(',', $adminMail);
+            [$fromAdmin] = array_map('trim', explode(',', $adminMail));
         } else {
             $fromAdmin = $adminMail;
         }
