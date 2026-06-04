@@ -49,14 +49,7 @@ class MailMessageMailer extends BcMailer
         $options = array_merge([
             'toAdmin' => [],
         ], $options);
-        if (strpos($adminMail, ',') !== false) {
-            $adminMails = array_map('trim', explode(',', $adminMail));
-            $adminMails = array_values(array_filter($adminMails, static fn($mail) => $mail !== ''));
-            $fromAdmin = $adminMails[0] ?? $adminMail;
-            $toAdmin = $adminMails;
-        } else {
-            $toAdmin = $adminMail;
-        }
+        [$fromAdmin, $toAdmin] = $this->parseAndNormalizeMailAddresses($adminMail);
         $data['other']['mode'] = 'admin';
         $this->setTo($toAdmin)
             ->setFrom($fromAdmin, $this->getFrom($mailContent))
@@ -69,9 +62,10 @@ class MailMessageMailer extends BcMailer
         if($mailContent->sender_2) {
             $this->setBcc(strpos($mailContent->sender_2, ',') === false? $mailContent->sender_2: explode(',', $mailContent->sender_2));
         }
-        if($userMail) {
+        [$replyToUser] = $this->parseAndNormalizeMailAddresses($userMail);
+        if($replyToUser) {
             // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
-            $this->setReplyTo(strpos($userMail, ',') === false? $userMail : strstr($userMail, ',', true));
+            $this->setReplyTo($replyToUser);
         }
         if (empty($options['toAdmin'])) return;
         foreach($options['toAdmin'] as $key => $value) {
@@ -104,13 +98,10 @@ class MailMessageMailer extends BcMailer
         $options = array_merge([
             'toUser' => [],
         ], $options);
-        if (strpos($adminMail, ',') !== false) {
-            [$fromAdmin] = array_map('trim', explode(',', $adminMail));
-        } else {
-            $fromAdmin = $adminMail;
-        }
+        [$fromAdmin] = $this->parseAndNormalizeMailAddresses($adminMail);
+        [, $toUser] = $this->parseAndNormalizeMailAddresses($userMail);
         $data['other']['mode'] = 'user';
-        $this->setTo($userMail)
+        $this->setTo($toUser)
             ->setFrom($fromAdmin, $this->getFrom($mailContent))
             ->setReplyTo($fromAdmin)
             ->setSubject($mailContent->subject_user)
@@ -140,6 +131,22 @@ class MailMessageMailer extends BcMailer
     public function getFrom(EntityInterface $mailContent) {
         if($mailContent->sender_name) return $mailContent->sender_name;
         return $mailContent->content->site->display_name;
+    }
+
+    /**
+     * メールアドレス文字列を分割・正規化する
+     *
+     * @param string $mailAddresses
+     * @return array{0: string, 1: array}
+     */
+    private function parseAndNormalizeMailAddresses(string $mailAddresses): array
+    {
+        $recipients = array_values(array_filter(
+            array_map('trim', explode(',', $mailAddresses)),
+            static fn($mail) => $mail !== ''
+        ));
+        $primaryAddress = $recipients[0] ?? '';
+        return [$primaryAddress, $recipients];
     }
 
 }
