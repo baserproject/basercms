@@ -11,7 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'description' => 'コンテンツやブログ記事などにSEO用の設定を追加します。',
+    'title' => __d('baser_core', 'SEO設定'),
+    'description' => __d('baser_core', 'コンテンツやブログ記事などにSEO用の設定を追加します。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'adminLink' => ['plugin' => 'BcSeo', 'controller' => 'SeoConfigs', 'action' => 'update_db'],
