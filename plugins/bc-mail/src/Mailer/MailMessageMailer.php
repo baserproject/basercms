@@ -64,7 +64,7 @@ class MailMessageMailer extends BcMailer
         }
         [$replyToUser] = $this->parseAndNormalizeMailAddresses($userMail);
         if($replyToUser) {
-            // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
+            // カンマ区切りで複数設定されていた場合先頭のアドレスをreplyToに利用
             $this->setReplyTo($replyToUser);
         }
         if (empty($options['toAdmin'])) return;
