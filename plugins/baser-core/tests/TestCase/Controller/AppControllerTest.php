@@ -337,7 +337,7 @@ class AppControllerTest extends BcTestCase
      * @return void
      * @dataProvider saveDblogDataProvider
      */
-    public function testSaveDblog(string $message, int $userId = null): void
+    public function testSaveDblog(string $message, ?int $userId = null): void
     {
         $request =$this->getRequest('/baser/admin/baser-core/users/');
         if (isset($userId)) $this->loginAdmin($request, $userId);

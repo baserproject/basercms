@@ -65,7 +65,7 @@ use BaserCore\Annotation\Doc;
  * @property BcXmlHelper $BcXml
  *
  * ### BcContentsHelper
- * @method EntityInterface getParentContent(int $id = null, bool $direct = true)
+ * @method EntityInterface getParentContent(?int $id = null, bool $direct = true)
  * @method Site getCurrentSite()
  * @method Content getCurrentContent()
  *
@@ -74,8 +74,8 @@ use BaserCore\Annotation\Doc;
  * @method void logo(array $options = [])
  *
  * ### BcWidgetAreaHelper
- * @method void widgetArea(int $no = null, array $options = [])
- * @method string getWidgetArea(int $no = null, array $options = [])
+ * @method void widgetArea(?int $no = null, array $options = [])
+ * @method string getWidgetArea(?int $no = null, array $options = [])
  * @method bool isMail() MailHelper
  *
  * ### BlogHelper
@@ -118,7 +118,7 @@ use BaserCore\Annotation\Doc;
  * @method string createMailForm($context = null, $options = [])
  * @method string mailFormHidden($fieldName, $options = [])
  * @method void mailFormAuthCaptcha(string $fieldName, array $options = [])
- * @method string mailFormSubmit(string $caption = null, array $options = [])
+ * @method string mailFormSubmit(?string $caption = null, array $options = [])
  * @method string endMailForm(array $secureAttributes = [])
  * @method MailformHelper unlockMailFormField(string $name)
  * @method mixed getMailFormSourceValue(string $fieldname, array $options = [])
@@ -2526,7 +2526,7 @@ class BcBaserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getRelatedSiteLinks(int $id = null, array $excludeIds = []): string
+    public function getRelatedSiteLinks(?int $id = null, array $excludeIds = []): string
     {
         $options = [];
         if ($excludeIds) $options['excludeIds'] = $excludeIds;

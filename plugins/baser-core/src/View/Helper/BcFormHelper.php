@@ -570,7 +570,7 @@ SCRIPT_END;
      * @noTodo
      * @unitTest
      */
-    public function submit(string $caption = null, array $options = []): string
+    public function submit(?string $caption = null, array $options = []): string
     {
         // CUSTOMIZE ADD 2016/06/08 ryuring
         // >>>

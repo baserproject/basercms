@@ -300,7 +300,7 @@ class MailContentsTable extends MailAppTable
         int $newParentId,
         string|null $newTitle,
         int $newAuthorId,
-        int $newSiteId = null
+        ?int $newSiteId = null
     ) {
         $data = $this->find()->where(['MailContents.id' => $id])->contain('Contents')->first();
         $oldData = clone $data;

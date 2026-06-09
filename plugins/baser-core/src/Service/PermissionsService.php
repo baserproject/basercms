@@ -85,7 +85,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(int $userGroupId = null, int $permissionGroupId = null): EntityInterface
+    public function getNew(?int $userGroupId = null, ?int $permissionGroupId = null): EntityInterface
     {
         return $this->Permissions->newEntity(
             $this->autoFillRecord([

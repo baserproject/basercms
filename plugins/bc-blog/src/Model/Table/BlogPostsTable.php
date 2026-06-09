@@ -660,7 +660,7 @@ class BlogPostsTable extends BlogAppTable
      * @noTodo
      * @unitTest
      */
-    public function copy($id = null, BlogPost $data = null)
+    public function copy($id = null, ?BlogPost $data = null)
     {
         if ($id) $data = $this->find()->where(['BlogPosts.id' => $id])->contain('BlogTags')->first();
         $oldData = clone $data;

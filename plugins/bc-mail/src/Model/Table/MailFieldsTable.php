@@ -282,7 +282,7 @@ class MailFieldsTable extends MailAppTable
      * @noTodo
      * @unitTest
      */
-    public function copy(?int $id, MailField $data = null, array $options = [])
+    public function copy(?int $id, ?MailField $data = null, array $options = [])
     {
         $options = array_merge([
             'sortUpdateOff' => false,

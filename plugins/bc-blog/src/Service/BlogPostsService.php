@@ -374,8 +374,8 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function createCategoryCondition(
         array $conditions,
         string $category,
-        int $blogContentId = null,
-        array|string $contentUrl = null,
+        ?int $blogContentId = null,
+        array|string|null $contentUrl = null,
         bool $force = false)
     {
         $categoryConditions = ['BlogCategories.name' => $category];

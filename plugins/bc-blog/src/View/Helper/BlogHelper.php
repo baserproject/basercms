@@ -2135,7 +2135,7 @@ class BlogHelper extends Helper
         bool $limit = false,
         bool $viewCount = false,
         int $depth = 1,
-        string $contentType = null
+        ?string $contentType = null
     )
     {
         /** @var BlogFrontService $blogFrontService */

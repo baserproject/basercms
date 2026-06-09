@@ -104,7 +104,7 @@ class PermissionsController extends BcAdminAppController
 	public function add(
 	    PermissionsAdminServiceInterface $service,
 	    int $userGroupId,
-	    int $permissionGroupId = null
+	    ?int $permissionGroupId = null
 	) {
         if ($this->request->is('post')) {
             try {

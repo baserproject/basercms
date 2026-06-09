@@ -2245,8 +2245,8 @@ class BcUtil
     public static function triggerDeprecatedError(
         string $target,
         string $since,
-        string $remove = null,
-        string $note = null
+        ?string $remove = null,
+        ?string $note = null
     ): void
     {
         if (!Configure::read('debug')) return;
@@ -2268,8 +2268,8 @@ class BcUtil
     public static function getDeprecatedMessage(
         string $target,
         string $since,
-        string $remove = null,
-        string $note = null
+        ?string $remove = null,
+        ?string $note = null
     ): string
     {
         $message = sprintf(__d('baser_core', '%s は、バージョン %s より非推奨となりました。'), $target, $since);

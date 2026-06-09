@@ -255,7 +255,7 @@ class PagesTable extends AppTable
         int $newParentId,
         string|null $newTitle,
         int $newAuthorId,
-        int $newSiteId = null)
+        ?int $newSiteId = null)
     {
         $page = $this->get($id, contain: ['Contents']);
         $oldPage = clone $page;
