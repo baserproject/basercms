@@ -318,9 +318,15 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      */
     public function getByName(string $name): EntityInterface
     {
+        $query = $this->UploaderFiles->find();
+        $driver = $query->getConnection()->getDriver();
         $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
-        return $this->UploaderFiles->find()
-            ->where(['UploaderFiles.name' => $name])
+        if ($driver instanceof \Cake\Database\Driver\Mysql) {
+            $conditions = ['UploaderFiles.name COLLATE utf8mb4_bin =' => $name];
+        } else {
+            $conditions = ['UploaderFiles.name' => $name];
+        }
+        return $query->where($conditions)
             ->firstOrFail();
     }
 

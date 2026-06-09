@@ -23,7 +23,6 @@ use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
@@ -335,10 +334,15 @@ class UploadFilesServiceTest extends BcTestCase
         //準備
         UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'user_id' => 1])->persist();
         UploaderFileFactory::make(['id' => 2, 'name' => 'a_b.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 3, 'name' => 'Social_New.jpg', 'user_id' => 1])->persist();
 
         //正常系実行: 完全一致で取得できる
         $result = $this->UploaderFilesService->getByName('social_new.jpg');
         $this->assertEquals(1, $result->id);
+
+        //正常系実行: 大文字・小文字を識別して取得できる
+        $result = $this->UploaderFilesService->getByName('Social_New.jpg');
+        $this->assertEquals(3, $result->id);
 
         //正常系実行: 保存時の正規化と同じルール（'/' → '_'）でファイル名が変換されてマッチする
         $result = $this->UploaderFilesService->getByName('a/b.jpg');
