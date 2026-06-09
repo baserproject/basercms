@@ -1,0 +1,41 @@
+name: PR auto-assign
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const maintainers = ['ryuring', 'kaburk', 'katokaisya'];
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            const assoc = pr.author_association; // OWNER / MEMBER / COLLABORATOR / CONTRIBUTOR ...
+            const isInternal = ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(assoc);
+
+            // Reviewers: 社内・外部とも常にメンテナ3名（作成者本人は除外）
+            const reviewers = maintainers.filter(m => m !== author);
+            if (reviewers.length > 0) {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                reviewers,
+              });
+            }
+
+            // Assignees: 社内→作成者 / 外部→メンテナ3名
+            const assignees = isInternal ? [author] : maintainers;
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              assignees,
+            });
