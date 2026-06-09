@@ -26,7 +26,7 @@ use BaserCore\View\BcAdminAppView;
 $isSiteRelated = $this->BcContents->isSiteRelated($content);
 $isPublish = $this->BcContents->isAllowPublish($content, true);
 $isSiteRoot = $content->site_root;
-$isAlias = (boolean)$content->alias_id;
+$isAlias = (bool)$content->alias_id;
 $items = $this->BcContents->getConfig('items');
 if (!empty($items[$content->type])) {
   $type = $content->type;

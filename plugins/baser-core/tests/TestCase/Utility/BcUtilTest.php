@@ -285,7 +285,7 @@ class BcUtilTest extends BcTestCase
         $folder->move($backup);
 
         // cache環境準備
-        $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
+        $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_translations_', 'models' => '_cake_model_'];
 
         foreach ($cacheList as $path => $cacheName) {
             Cache::drop($cacheName);

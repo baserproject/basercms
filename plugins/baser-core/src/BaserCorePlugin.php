@@ -177,7 +177,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
             return;
         }
 
-        if (BcUtil::isTest()) $app->addPlugin('CakephpFixtureFactories');
+        if (BcUtil::isTest() && !$app->getPlugins()->has('CakephpFixtureFactories')) $app->addPlugin('CakephpFixtureFactories');
 
         // 利用可能なテーマを取得
         $themes = $this->getAvailableThemes();
@@ -217,8 +217,8 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     public function addPlugin(PluginApplicationInterface $app): void
     {
-        $app->addPlugin('Authentication');
-        $app->addPlugin('Migrations');
+        if (!$app->getPlugins()->has('Authentication')) $app->addPlugin('Authentication');
+        if (!$app->getPlugins()->has('Migrations')) $app->addPlugin('Migrations');
 
         $plugins = BcUtil::getEnablePlugins();
         if (!$plugins) return;
@@ -349,6 +349,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
      */
     function loadPlugin(PluginApplicationInterface $application, $plugin, $priority)
     {
+        if ($application->getPlugins()->has($plugin)) return true;
         try {
             $application->addPlugin($plugin);
         } catch (MissingPluginException $e) {

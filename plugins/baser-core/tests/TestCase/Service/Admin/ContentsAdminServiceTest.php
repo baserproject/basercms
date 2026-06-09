@@ -57,7 +57,9 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $this->loadPlugins([
             'BcBlog',
-            'BcCustomContent'
+            'BcCustomContent',
+            'BcContentLink',
+            'BcMail'
         ]);
         parent::setUp();
         $this->loadFixtureScenario(UserScenario::class);

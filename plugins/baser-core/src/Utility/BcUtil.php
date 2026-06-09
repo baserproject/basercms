@@ -529,7 +529,7 @@ class BcUtil
      */
     public static function clearAllCache(): void
     {
-        Cache::clear('_cake_core_');
+        Cache::clear('_cake_translations_');
         self::clearModelCache();
         Cache::clear('_bc_env_');
         Cache::clear('_bc_update_');
@@ -573,7 +573,7 @@ class BcUtil
             }
         }
         $adminPrefix = BcUtil::getPrefix(true);
-        return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
+        return (bool)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
     }
 
     /**
