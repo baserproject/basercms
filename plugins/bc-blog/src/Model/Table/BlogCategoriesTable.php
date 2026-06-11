@@ -328,10 +328,10 @@ class BlogCategoriesTable extends BlogAppTable
             'blog_category_id IN' => array_column($categories, 'id'),
             ...$this->BlogPosts->getConditionAllowPublish()
         ];
-        $query = $this->BlogPosts->find()
-            ->select([
+        $query = $this->BlogPosts->find();
+        $query->select([
                 'blog_category_id',
-                'post_count' => $this->BlogPosts->find()->func()->count('*')
+                'post_count' => $query->func()->count('*'),
             ])
             ->where($postConditions)
             ->groupBy('blog_category_id');
