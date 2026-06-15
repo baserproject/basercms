@@ -226,6 +226,7 @@ class BlogCategoriesTable extends BlogAppTable
             'conditions' => [],
             'threaded' => false,
             'categoryPostCounts' => [],
+        ], $options);
         if ($viewCount && !$options['threaded'] && empty($options['categoryPostCounts'])) {
             $options['categoryPostCounts'] = $this->getCategoryPostCounts($blogContentId);
         }
