@@ -176,7 +176,7 @@ class ContentFoldersTable extends AppTable
             'site_id' => $newSiteId,
             'description' => $entity->content->description,
             'eyecatch' => $entity->content->eyecatch,
-            'layout_template' => $entity->content->layout_tmplate ?? ''
+            'layout_template' => $entity->content->layout_template ?? ''
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);

@@ -166,6 +166,8 @@ class ContentLinksTableTest extends BcTestCase
     {
         //データを生成
         $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+        $contents = $this->getTableLocator()->get('BaserCore.Contents');
+        $contents->updateAll(['layout_template' => 'link_layout'], ['id' => 1]);
         //コピーメソッドをコール
         $rs = $this->ContentLinks->copy(1, 2, 'new title', 1, 2);
         //戻る値を確認
@@ -173,11 +175,13 @@ class ContentLinksTableTest extends BcTestCase
         $this->assertEquals(1, $rs->content->parent_id);
         $this->assertEquals(1, $rs->content->author_id);
         $this->assertEquals(2, $rs->content->site_id);
+        $this->assertEquals('link_layout', $rs->content->layout_template);
         $this->assertEquals(2, $rs->id);
 
         //DBに存在するか確認
         $copiedContentLink = $this->ContentLinks->get(2, contain: ['Contents']);
         //コピー後の url の値の確認
         $this->assertEquals('/new_title', $copiedContentLink->content->url);
+        $this->assertEquals('link_layout', $copiedContentLink->content->layout_template);
     }
 }

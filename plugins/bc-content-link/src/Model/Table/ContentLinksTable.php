@@ -109,7 +109,7 @@ class ContentLinksTable extends AppTable
             'site_id' => $newSiteId,
             'description' => $entity->content->description,
             'eyecatch' => $entity->content->eyecatch,
-            'layout_template' => $entity->content->layout_tmplate ?? '',
+            'layout_template' => $entity->content->layout_template ?? '',
             'url' => $entity->content->url
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {

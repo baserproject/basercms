@@ -191,12 +191,16 @@ class PagesTableTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loadFixtureScenario(PagesScenario::class);
         $this->loadFixtureScenario(ContentsScenario::class);
+        $sourcePage = $this->Pages->get($id, contain: ['Contents']);
+        $contents = $this->getTableLocator()->get('BaserCore.Contents');
+        $contents->updateAll(['layout_template' => 'page_layout'], ['id' => $sourcePage->content->id]);
         $this->loginAdmin($this->getRequest());
         $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
         $page = $this->Pages->get($result->id, contain: ['Contents' => ['Sites']]);
         $this->assertStringContainsString("_2", $page->content->name);
         $this->assertEquals("hoge1", $page->content->title);
         $this->assertEquals(10, $page->content->author_id);
+        $this->assertEquals('page_layout', $page->content->layout_template);
     }
 
     public static function copyDataProvider()
