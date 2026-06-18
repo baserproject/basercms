@@ -83,7 +83,7 @@ class BcSeoHelperEventListener extends BcHelperEventListener
                 foreach ($seoForm['eventIds'] as $configEventId) {
                     if ($eventId === $configEventId) {
                         $type = $configType;
-                        break;
+                        break 2;
                     }
                 }
             }
