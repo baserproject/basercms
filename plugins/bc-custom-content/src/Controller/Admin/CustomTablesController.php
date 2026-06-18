@@ -44,7 +44,7 @@ class CustomTablesController extends CustomContentAdminAppController
         if ($this->request->getParam('action') === 'delete') {
             $this->FormProtection->setConfig('validate', false);
         }
-        return parent::beforeFilter($event);
+        parent::beforeFilter($event);
     }
 
     /**

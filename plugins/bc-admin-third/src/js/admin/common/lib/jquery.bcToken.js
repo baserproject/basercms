@@ -185,7 +185,8 @@
         replaceLinkToSubmitToken: function (selector) {
             $(selector).each(function () {
                 if ($(this).attr('onclick')) {
-                    var regex = /document\.(post_.+?).submit\(\)/;
+                    // CakePHP 5.2 で postLink の onclick が submit() から requestSubmit() に変更されたため両対応とする
+                    var regex = /document\.(post_.+?)\.(?:request)?[Ss]ubmit\(\)/;
                     var result = $(this).attr('onclick').match(regex);
                     if (result) {
                         $(this).attr('data-post-link-form-id', result[1]);

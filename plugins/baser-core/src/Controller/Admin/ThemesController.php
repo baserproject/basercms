@@ -216,25 +216,25 @@ class ThemesController extends BcAdminAppController
 
         $bcZip = new BcZip();
         $bcZip->create($tmpDir, $distPath);
-        header("Cache-Control: no-store");
-        header("Content-Type: application/zip");
-        header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
-        header("Content-Length: " . filesize($distPath));
-        while (ob_get_level()) { ob_end_clean(); }
-        echo readfile($distPath);
-
+        $content = file_get_contents($distPath);
         BcUtil::emptyFolder($tmpDir);
         unlink($distPath);
+        return $this->getResponse()
+            ->withType('zip')
+            ->withHeader('Cache-Control', 'no-store')
+            ->withHeader('Content-Disposition', 'attachment; filename="' . basename($distPath) . '"')
+            ->withStringBody($content);
     }
 
     /**
      * ダウンロード
      *
      * @param ThemesServiceInterface $service
+     * @return \Cake\Http\Response
      * @checked
      * @noTodo
      */
-    public function download(ThemesServiceInterface $service): void
+    public function download(ThemesServiceInterface $service): \Cake\Http\Response
     {
         $this->autoRender = false;
         $theme = BcUtil::getCurrentTheme();
@@ -243,16 +243,14 @@ class ThemesController extends BcAdminAppController
 
         $bcZip = new BcZip();
         $bcZip->create($tmpDir, $distPath);
-
-        header("Cache-Control: no-store");
-        header("Content-Type: application/zip");
-        header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
-        header("Content-Length: " . filesize($distPath));
-        while (ob_get_level()) { ob_end_clean(); }
-        echo readfile($distPath);
-
+        $content = file_get_contents($distPath);
         BcUtil::emptyFolder($tmpDir);
         unlink($distPath);
+        return $this->getResponse()
+            ->withType('zip')
+            ->withHeader('Cache-Control', 'no-store')
+            ->withHeader('Content-Disposition', 'attachment; filename="' . basename($distPath) . '"')
+            ->withStringBody($content);
     }
 
     /**

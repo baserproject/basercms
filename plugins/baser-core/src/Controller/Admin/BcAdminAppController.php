@@ -60,7 +60,7 @@ class BcAdminAppController extends AppController
     /**
      * Before Filter
      * @param EventInterface $event
-     * @return Response|void|null
+     * @return void
      * @checked
      * @noTodo
      */
@@ -72,12 +72,14 @@ class BcAdminAppController extends AppController
         $result = $usersService->checkAutoLogin($this->request, $this->response);
         if ($result) {
             $this->setResponse($usersService->setCookieAutoLoginKey($this->getResponse(), $result->id));
-            return $this->redirect($this->getRequest()->getPath());
+            $event->setResult($this->redirect($this->getRequest()->getPath()));
+            return;
         }
 
         // ログインユーザ再読込
         if (!$usersService->reload($this->request)) {
-            return $this->redirect($this->Authentication->logout());
+            $event->setResult($this->redirect($this->Authentication->logout()));
+            return;
         }
 
         // パスワード更新日時のチェック
@@ -92,14 +94,18 @@ class BcAdminAppController extends AppController
         )) {
             $this->BcMessage->setError(__d('baser_core',
                 '管理画面を利用するには定期的なパスワードの再設定が必要です。'));
-            return $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'edit_password',
-                '?'=> ['redirect' => $this->getRequest()->getRequestTarget()]]);
+            $event->setResult($this->redirect(['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'edit_password',
+                '?'=> ['redirect' => $this->getRequest()->getRequestTarget()]]));
+            return;
         }
 
-        $response = parent::beforeFilter($event);
-        if ($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
         $response = $this->redirectIfIsNotSameSite();
-        if ($response) return $response;
+        if ($response) {
+            $event->setResult($response);
+            return;
+        }
     }
 
     /**

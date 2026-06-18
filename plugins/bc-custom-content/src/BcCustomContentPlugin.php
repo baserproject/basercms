@@ -115,6 +115,9 @@ class BcCustomContentPlugin extends BcPlugin
             // 設定ファイルを読み込む
             if (!BcUtil::includePluginClass($pluginName)) continue;
             $pluginCollection = CakePlugin::getCollection();
+            // CakePHP 5.2 では PluginCollection::add() が二重登録で例外を投げるため、
+            // 既に読み込まれている場合はスキップする。
+            if ($pluginCollection->has($pluginName)) continue;
             $plugin = $pluginCollection->create($pluginName);
             $pluginCollection->add($plugin);
             BcEvent::registerPluginEvent($pluginName);

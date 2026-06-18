@@ -573,7 +573,7 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
         if ($theme) {
-            $Folder->delete($path);
+            (new BcFolder($path))->delete();
         }
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }

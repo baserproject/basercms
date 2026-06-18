@@ -45,6 +45,13 @@ class ThemeFilesController extends BcAdminAppController
 {
 
     /**
+     * テーマファイルタイプ
+     *
+     * @var array
+     */
+    public $_tempalteTypes = [];
+
+    /**
      * ThemeFilesController constructor.
      * @param ServerRequest|null $request
      * @param Response|null $response

@@ -65,7 +65,7 @@ class MailMessagesController extends BcAdminApiController
             'mailMessages' => $mailMessages,
             'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['mailMessages', 'message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessages', 'message']);
     }
 
     /**
@@ -103,7 +103,7 @@ class MailMessagesController extends BcAdminApiController
             'mailMessage' => $mailMessage,
             'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message']);
     }
 
     /**

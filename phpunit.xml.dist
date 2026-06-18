@@ -9,6 +9,8 @@
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
+        <!-- .env の有無に依存せずテストを日本語ロケールで実行する（検証メッセージ等の i18n 不一致を防ぐ） -->
+        <env name="APP_DEFAULT_LOCALE" value="ja_JP"/>
     </php>
 
     <testsuites>

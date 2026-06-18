@@ -33,7 +33,7 @@ use BaserCore\Model\Entity\ContentFolder;
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => Router::url(["plugin" => "BaserCore", "controller" => "preview", "action" => "view"]),
   'data-fullurl' => rawurldecode($fullUrl),
-  'data-current' => $content,
+  'data-current' => json_encode($content),
   'data-settings' => $this->BcContents->getJsonItems()
 ]);
 $this->BcBaser->i18nScript([

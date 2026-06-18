@@ -126,7 +126,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertResponseCode(500);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("データベース処理中にエラーが発生しました。SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'name' at row 1", $result->message);
+        $this->assertTextContains("データベース処理中にエラーが発生しました。SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'name' at row 1", $result->message);
     }
 
     /**
@@ -193,7 +193,8 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertResponseCode(500);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。__clone method called on non-object', $result->message);
+        // PHP 8.5 で null を clone した際のエラーメッセージが変更された
+        $this->assertEquals('データベース処理中にエラーが発生しました。clone(): Argument #1 ($object) must be of type object, null given', $result->message);
     }
 
     /**

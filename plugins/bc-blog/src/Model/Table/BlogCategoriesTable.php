@@ -211,8 +211,8 @@ class BlogCategoriesTable extends BlogAppTable
      * @unitTest
      */
     protected function _getCategoryList(
-        int   $blogContentId = null,
-        int   $parentId = null,
+        ?int  $blogContentId = null,
+        ?int  $parentId = null,
         bool  $viewCount = false,
         int   $depth = 1,
         int   $current = 1,
@@ -371,7 +371,7 @@ class BlogCategoriesTable extends BlogAppTable
             ],
             'recursive' => -1
         ], $options);
-        return $this->find('all', $options)->first();
+        return $this->find('all', ...$options)->first();
 
     }
     /**

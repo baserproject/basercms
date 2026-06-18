@@ -67,7 +67,8 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testInitialize(): void
     {
-        $this->BlogCategoriesTable->initialize([]);
+        // テーブルは getTableLocator() 取得時に初期化済み。CakePHP 5.2 では initialize() を再呼び出しすると
+        // 同名アソシエーションの重複設定で例外となるため、再呼び出しはせず初期化済みの状態を検証する。
         $this->assertEquals('blog_categories', $this->BlogCategoriesTable->getTable());
         $this->assertEquals('id', $this->BlogCategoriesTable->getPrimaryKey());
         $this->assertTrue($this->BlogCategoriesTable->hasBehavior('Timestamp'));

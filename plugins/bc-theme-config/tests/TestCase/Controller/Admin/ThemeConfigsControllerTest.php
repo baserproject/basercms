@@ -68,19 +68,33 @@ class ThemeConfigsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->loadFixtureScenario(ThemeConfigsScenario::class);
-        $data = [
-            'name_add' => 'value_edit'
-        ];
-        $this->post("/baser/admin/bc-theme-config/theme_configs/index", $data);
-        //ステータスを確認
-        $this->assertResponseSuccess();
-        $this->assertFlashMessage('テーマ設定を保存しました。');
-        $this->assertRedirect([
-            'plugin' => 'BcThemeConfig',
-            'prefix' => 'Admin',
-            'controller' => 'ThemeConfigs',
-            'action' => 'index'
-        ]);
+        // 色未指定の保存で ThemeConfigsService::updateColorConfig() が現在テーマ（bc-front）の
+        // config.css を unlink する。Git 管理ファイルのため退避し、finally で復元する。
+        $configPath = ROOT . DS . 'plugins' . DS . 'bc-front' . DS . 'webroot' . DS . 'css' . DS . 'config.css';
+        $configBackup = file_exists($configPath) ? file_get_contents($configPath) : null;
+        $configMode = file_exists($configPath) ? (fileperms($configPath) & 0777) : null;
+        try {
+            $data = [
+                'name_add' => 'value_edit'
+            ];
+            $this->post("/baser/admin/bc-theme-config/theme_configs/index", $data);
+            //ステータスを確認
+            $this->assertResponseSuccess();
+            $this->assertFlashMessage('テーマ設定を保存しました。');
+            $this->assertRedirect([
+                'plugin' => 'BcThemeConfig',
+                'prefix' => 'Admin',
+                'controller' => 'ThemeConfigs',
+                'action' => 'index'
+            ]);
+        } finally {
+            if ($configBackup !== null && !file_exists($configPath)) {
+                file_put_contents($configPath, $configBackup);
+                if ($configMode !== null) {
+                    chmod($configPath, $configMode);
+                }
+            }
+        }
     }
 
 }

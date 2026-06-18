@@ -326,15 +326,20 @@ class ContentFoldersService implements ContentFoldersServiceInterface
         } else {
             $contentFolder = $this->ContentFolders->find()->where(['Contents.site_id' => $site->id, 'Contents.site_root' => true])->contain(['Contents'])->first();
             if (is_null($contentFolder)) throw new RecordNotFoundException('Record not found in table "content_folders"');
-            $data = [
-                'content' => [
-                    'id' => $contentFolder->content->id,
-                    'name' => ($site->alias) ? : $site->name,
-                    'parent_id' => $rootContentId,
-                    'title' => $site->display_name,
-                    'self_status' => $site->status,
-                ]
+            $contentData = [
+                'id' => $contentFolder->content->id,
+                'name' => ($site->alias) ? : $site->name,
+                'title' => $site->display_name,
+                'self_status' => $site->status,
             ];
+            // メインサイトのルート（$rootContentId が null）の場合、parent_id を変更しない。
+            // CakePHP 5.2 の TreeBehavior では、ルートコンテンツ（parent_id=0）に対して
+            // parent_id=null をセットするとルートへの移動として lft/rght が再計算され、
+            // ツリーが破損してしまうため。サブサイトのルートのみ親を設定する。
+            if (!is_null($rootContentId)) {
+                $contentData['parent_id'] = $rootContentId;
+            }
+            $data = ['content' => $contentData];
             $contentFolder = $this->update($contentFolder, $data);
             if ($isUpdateChildrenUrl) {
                 $this->Contents->updateChildrenUrl($contentFolder->content->id);

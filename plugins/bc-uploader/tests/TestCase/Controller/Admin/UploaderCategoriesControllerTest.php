@@ -240,6 +240,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //異常系実行
         $this->post('/baser/admin/bc-uploader/uploader_categories/copy/10');
         $this->assertResponseCode(302);
-        $this->assertFlashMessage('データベース処理中にエラーが発生しました。__clone method called on non-object');
+        // PHP 8.5 で null を clone した際のエラーメッセージが変更された
+        $this->assertFlashMessage('データベース処理中にエラーが発生しました。clone(): Argument #1 ($object) must be of type object, null given');
     }
 }

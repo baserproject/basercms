@@ -66,7 +66,6 @@ class AppViewTest extends BcTestCase
         // コントローラー名をセット
         $ref = new ReflectionClass($this->AppView);
         $property = $ref->getProperty('name');
-        $property->setAccessible(true);
         $property->setValue($this->AppView, 'Users');
 
         // コントローラー名を指定しない場合
@@ -102,7 +101,6 @@ class AppViewTest extends BcTestCase
         // コントローラー名をセット
         $ref = new ReflectionClass($this->AppView);
         $property = $ref->getProperty('name');
-        $property->setAccessible(true);
         $property->setValue($this->AppView, 'Users');
 
         // コントローラー名を指定しない場合
@@ -138,7 +136,6 @@ class AppViewTest extends BcTestCase
         // コントローラー名をセット
         $ref = new ReflectionClass($this->AppView);
         $property = $ref->getProperty('name');
-        $property->setAccessible(true);
         $property->setValue($this->AppView, 'Users');
 
         // コントローラー名を指定しない場合

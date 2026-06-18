@@ -375,7 +375,6 @@ class SitesTableTest extends BcTestCase
         $this->Sites->beforeSave(new Event('beforeSave'), $site, new ArrayObject());
         $reflectionClass = new ReflectionClass(get_class($this->Sites));
         $property = $reflectionClass->getProperty('changedAlias');
-        $property->setAccessible(true);
         $this->assertTrue($property->getValue($this->Sites));
     }
 

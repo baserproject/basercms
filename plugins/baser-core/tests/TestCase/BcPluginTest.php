@@ -323,7 +323,7 @@ $this->log(\'test\');');
         $log = $file->read();
         $this->assertStringContainsString('test', $log);
         // 初期化
-        $folder->delete($updatePath);
+        (new BcFolder($updatePath))->delete();
     }
 
     /**
@@ -386,7 +386,7 @@ $this->log(\'test\');');
         $this->assertEquals('datetime', $tableSchema->getColumnType('name'));
 
         // 初期化
-        $folder->delete($pluginPath);
+        (new BcFolder($pluginPath))->delete();
         $this->dropTable('bc_test');
         $this->dropTable('bc_test_phinxlog');
     }
@@ -416,8 +416,8 @@ $this->log(\'test\');');
         $file = new BcFile($migrationPath . '20220627000000_AlterBcTest.php', 'w');
         $file->create();
         $file->write('<?php
-use Migrations\AbstractMigration;
-class AlterBcTest extends AbstractMigration
+use Migrations\BaseMigration;
+class AlterBcTest extends BaseMigration
 {
     public function change()
     {
@@ -438,8 +438,8 @@ class AlterBcTest extends AbstractMigration
         $file = new BcFile($migrationPath . '20220626000000_InitialBcTest.php', 'w');
         $file->create();
         $file->write('<?php
-use Migrations\AbstractMigration;
-class InitialBcTest extends AbstractMigration
+use Migrations\BaseMigration;
+class InitialBcTest extends BaseMigration
 {
     public function up()
     {

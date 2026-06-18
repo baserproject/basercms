@@ -128,11 +128,8 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         /** @var CustomTablesService $customTables */
         $customTables = $this->getService(CustomTablesServiceInterface::class);
         // finder を threaded から all に変更
-        $customTables->CustomTables->hasMany('CustomLinks')
-            ->setClassName('BcCustomContent.CustomLinks')
-            ->setForeignKey('custom_table_id')
-            ->setSort(['CustomLinks.lft' => 'ASC'])
-            ->setFinder('all');
+        // CakePHP 5.2 では同名アソシエーションの再設定が例外となるため、ガード済みのメソッドで finder を all に切り替える
+        $customTables->CustomTables->setHasManyLinksByAll();
         $customTable = $customTables->get($customContent->custom_table_id, [
             'contain' => [
                 'CustomLinks' => [
@@ -176,11 +173,8 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
         $customTables = $this->getService(CustomTablesServiceInterface::class);
-        $customTables->CustomTables->hasMany('CustomLinks')
-            ->setClassName('BcCustomContent.CustomLinks')
-            ->setForeignKey('custom_table_id')
-            ->setSort(['CustomLinks.lft' => 'ASC'])
-            ->setFinder('all');
+        // CakePHP 5.2 では同名アソシエーションの再設定が例外となるため、ガード済みのメソッドで finder を all に切り替える
+        $customTables->CustomTables->setHasManyLinksByAll();
         //カスタムテーブルidを元に紐づいたカスタムリンクを取得
         $customTable = $customTables->get($customContent->custom_table_id, [
             'contain' => [
@@ -220,11 +214,8 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         /** @var CustomContent $customContent */
         /** @var CustomTablesService $customTables */
         $customTables = $this->getService(CustomTablesServiceInterface::class);
-        $customTables->CustomTables->hasMany('CustomLinks')
-            ->setClassName('BcCustomContent.CustomLinks')
-            ->setForeignKey('custom_table_id')
-            ->setSort(['CustomLinks.lft' => 'ASC'])
-            ->setFinder('all');
+        // CakePHP 5.2 では同名アソシエーションの再設定が例外となるため、ガード済みのメソッドで finder を all に切り替える
+        $customTables->CustomTables->setHasManyLinksByAll();
         //カスタムテーブルidを元に紐づいたカスタムリンクを取得
         $customTable = $customTables->get($customContent->custom_table_id, [
             'contain' => [

@@ -53,7 +53,12 @@ use BaserCore\ServiceProvider\BcServiceProvider;
 
 /**
  * Class BcTestCase
+ *
+ * テストクラスでは setUp() で各サービス／テーブルをプロパティに代入する慣習があり、
+ * PHP 8.2 の動的プロパティ非推奨を回避するため、基底クラスに付与する。
+ * この属性は子クラスにも継承されるため、全テストクラスに適用される。
  */
+#[\AllowDynamicProperties]
 class BcTestCase extends TestCase
 {
 
@@ -135,12 +140,10 @@ class BcTestCase extends TestCase
         $_SERVER['SCRIPT_FILENAME'] = ROOT . DS . 'webroot' . DS . 'index.php';
         $this->Application = new Application(CONFIG);
         $this->Application->bootstrap();
+        // テスト用アプリのプラグイン読み込み・bootstrap・ルート接続をまとめて行う
+        $this->loadTestAppPlugins();
+        // コンテナを build して BcContainer に確定させる（Application.buildContainer イベント経由）
         $this->Application->getContainer();
-        $builder = Router::createRouteBuilder('/');
-        $this->Application->pluginBootstrap();
-        $this->Application->pluginRoutes($builder);
-        if (!$this->Application->getPlugins()->has('CakephpFixtureFactories')) $this->Application->addPlugin('CakephpFixtureFactories');
-        $this->BaserCore = $this->Application->getPlugins()->get('BaserCore');
         $container = BcContainer::get();
         $container->addServiceProvider(new BcServiceProvider());
         $container->addServiceProvider(new BcSearchIndexServiceProvider());
@@ -154,6 +157,66 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcCustomContentServiceProvider());
         $container->addServiceProvider(new BcThemeConfigServiceProvider());
         EventManager::instance(new EventManager());
+        // 直前のテスト（コントローラ系で BcFrontAppController / BaserCorePlugin が I18n::setLocale した等）による
+        // ロケール汚染をリセットし、各テストを既定ロケール（App.defaultLocale）で開始する。
+        // I18n のロケールは静的でテスト間に残存するため、bootstrap/pluginBootstrap 完了後の末尾でリセットする。
+        \Cake\I18n\I18n::setLocale(Configure::read('App.defaultLocale'));
+    }
+
+    /**
+     * テスト用アプリのプラグイン読み込み・bootstrap・ルート接続を行う
+     *
+     * 【各 app へのプラグイン読み込み】
+     * CakePHP 5.2 では Application を new するたびにグローバルの Plugin コレクションがリセットされ、
+     * テスト用DB（plugins テーブルが空）からはコンテンツプラグインが読み込まれない。
+     * tests/bootstrap.php で退避したプラグイン一覧（BcApp.testAppPluginsToLoad）を、次の 2 つの app に読み込ませる。
+     *  - $this->appPluginsToLoad: 統合テストがリクエストごとに生成する app（IntegrationTestTrait::createApp()）向け。
+     *    これが無いと $this->get()/$this->post() の app にプラグインが無く、ルートが欠落して 404 等になる。
+     *  - $this->Application: setUp 自身が bootstrap する app 向け。これが無いと Plugin::isLoaded('BcXxx') が false となり、
+     *    ヘルパテスト等のテンプレート解決（pluginSplit）が失敗する。
+     *
+     * 【スナップショット bootstrap】
+     * CakePHP 5.2 では BaseApplication::pluginBootstrap() が PluginCollection の live なイテレータを走査するが、
+     * BaserCorePlugin::bootstrap() がイテレーション中に addPlugin()/remove()（テーマ追加・DebugKit 削除等）で
+     * コレクションを変更するため、直後に並ぶプラグイン（例: BcBlog）の bootstrap() がスキップされ
+     * setting.php が読み込まれない。そこで live イテレーションを使わず、未 bootstrap が無くなるまで
+     * スナップショット単位で bootstrap して取りこぼしを防ぐ。
+     *
+     * @return void
+     */
+    protected function loadTestAppPlugins(): void
+    {
+        // --- 各 app へのプラグイン読み込み ---
+        $plugins = (array)Configure::read('BcApp.testAppPluginsToLoad', []);
+        // 統合テストの per-request app（createApp()）向け
+        $this->appPluginsToLoad = $plugins;
+        // setUp 自身の app 向け
+        foreach ($plugins as $plugin) {
+            if (!$this->Application->getPlugins()->has($plugin)) {
+                $this->Application->addPlugin($plugin);
+            }
+        }
+        // --- 未 bootstrap のプラグインが無くなるまでスナップショット単位で bootstrap する ---
+        $booted = [];
+        do {
+            $pending = [];
+            foreach ($this->Application->getPlugins() as $plugin) {
+                if ($plugin->isEnabled('bootstrap') && !in_array($plugin->getName(), $booted, true)) {
+                    $pending[] = $plugin;
+                }
+            }
+            foreach ($pending as $plugin) {
+                $booted[] = $plugin->getName();
+                $plugin->bootstrap($this->Application);
+            }
+        } while ($pending);
+        // --- プラグインルートの接続・CakephpFixtureFactories の追加・BaserCore の保持 ---
+        $builder = Router::createRouteBuilder('/');
+        $this->Application->pluginRoutes($builder);
+        if (!$this->Application->getPlugins()->has('CakephpFixtureFactories')) {
+            $this->Application->addPlugin('CakephpFixtureFactories');
+        }
+        $this->BaserCore = $this->Application->getPlugins()->get('BaserCore');
     }
 
     /**
@@ -248,7 +311,6 @@ class BcTestCase extends TestCase
         }
         $reflectionClass = new ReflectionClass($authentication);
         $result = $reflectionClass->getProperty('_result');
-        $result->setAccessible(true);
         $result->setValue($authentication, new Result($user, Result::SUCCESS));
         $request = $authentication->persistIdentity($request, new Response, $user)['request'];
         return $request;
@@ -294,8 +356,15 @@ class BcTestCase extends TestCase
         $listener->method('implementedEvents')
             ->willReturn([$layer . '.' . $eventName => ['callable' => $methodName]]);
         // コールバック定義
+        // CakePHP 5 ではイベントリスナーからの戻り値が非推奨のため、
+        // コールバックの戻り値は $event->setResult() に変換する。
         $listener->method($methodName)
-            ->willReturn($this->returnCallback($callback));
+            ->willReturnCallback(function ($event) use ($callback) {
+                $result = $callback($event);
+                if ($result !== null) {
+                    $event->setResult($result);
+                }
+            });
         EventManager::instance()->on($listener);
         return $listener;
     }
@@ -314,7 +383,6 @@ class BcTestCase extends TestCase
     {
         $ref = new ReflectionClass($class);
         $method = $ref->getMethod($method);
-        $method->setAccessible(true);
         $value = $method->invokeArgs($class, $args);
         return $value;
     }
@@ -334,7 +402,6 @@ class BcTestCase extends TestCase
     {
         $ref = new ReflectionClass($class);
         $property = $ref->getProperty($property);
-        $property->setAccessible(true);
         return $property->getValue($class);
     }
 
@@ -365,7 +432,6 @@ class BcTestCase extends TestCase
         $EventManager = EventManager::instance();
         $reflectionClass = new ReflectionClass(get_class($EventManager));
         $property = $reflectionClass->getProperty('_listeners');
-        $property->setAccessible(true);
         $property->setValue($EventManager, []);
     }
 

@@ -63,8 +63,8 @@ class ContentsController extends BcAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
         $this->FormProtection->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
@@ -148,7 +148,7 @@ class ContentsController extends BcAdminAppController
                 'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
             ]
         ], 'get' => true]);
-        $contents = $service->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']);
+        $contents = $service->getTrashIndex($this->request->getQueryParams(), 'threaded')->orderBy(['site_id', 'lft']);
         $this->set($service->getViewVarsForTrashIndex($contents));
     }
 

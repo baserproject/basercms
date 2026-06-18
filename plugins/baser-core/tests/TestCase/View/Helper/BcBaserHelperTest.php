@@ -180,7 +180,6 @@ class BcBaserHelperTest extends BcTestCase
         $view->setTheme('BcAdminThird');
         $reflectionClass = new ReflectionClass($view);
         $pathsForPlugin = $reflectionClass->getProperty('_pathsForPlugin');
-        $pathsForPlugin->setAccessible(true);
         $pathsForPlugin->setValue($view, []);
         $this->assertTextContains('<div id="Footer" class="bca-footer" data-loggedin="">', $this->BcBaser->getElement('footer'));
 
@@ -578,7 +577,6 @@ class BcBaserHelperTest extends BcTestCase
         if (!empty($options['error'])) {
             $reflectionClass = new ReflectionClass(get_class($this->BcBaser->getView()));
             $property = $reflectionClass->getProperty('name');
-            $property->setAccessible(true);
             $property->setValue($this->BcBaser->getView(), 'CakeError');
         }
 
@@ -1113,7 +1111,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testScripts()
     {
-        $themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
+        // CakePHP 5.2 の HtmlHelper は HTML5 形式（type 属性なし・自己終了なし）で出力する
+        $themeConfigTag = '<link rel="stylesheet" href="/files/theme_configs/config.css">';
 
         // CSS
         $expected = '
@@ -1124,6 +1123,9 @@ class BcBaserHelperTest extends BcTestCase
         $this->BcBaser->css('admin/layout', false);
         $this->BcBaser->scripts();
         $result = ob_get_clean();
+        // テーマカラー設定（/files/theme_configs/config.css）が存在する環境では
+        // 自動的にリンクが出力されるため、検証対象から除外する。
+        $result = str_replace($themeConfigTag, '', $result);
         $this->assertEquals($expected, $result);
 
         $view = $this->BcBaser->getView();

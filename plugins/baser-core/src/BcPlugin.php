@@ -208,7 +208,8 @@ class BcPlugin extends BasePlugin
      */
     public function createAssetsSymlink(): bool
     {
-        $command = ROOT . DS . 'bin' . DS . 'cake plugin assets symlink';
+        // 標準エラー（シンボリックリンク警告等）を exec に捕捉させ、画面・テストログへの漏れを防ぐ
+        $command = ROOT . DS . 'bin' . DS . 'cake plugin assets symlink 2>&1';
         exec($command, $out, $code);
         return ($code === 0);
     }
@@ -527,7 +528,8 @@ class BcPlugin extends BasePlugin
     public function prefixRouting(RouteBuilder $routes, string $plugin)
     {
         $prefixSettings = Configure::read('BcPrefixAuth');
-        foreach($prefixSettings as $prefix => $setting) {
+        // BcPrefixAuth が未設定（null）の場合に foreach の警告が出ないよう配列にキャストする
+        foreach((array)$prefixSettings as $prefix => $setting) {
             if($prefix === 'Front') continue;
             if(!empty($setting['disabled'])) continue;
             if(empty($setting['alias'])) throw new BcException(__d('baser_core', 'BcPrefixAuth の {0} で alias が指定されていません。', $prefix));

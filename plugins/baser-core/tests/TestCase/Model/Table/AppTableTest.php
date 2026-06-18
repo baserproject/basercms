@@ -130,6 +130,9 @@ class AppTableTest extends BcTestCase
         $this->App = $this->getTableLocator()->get('BaserCore.App')->setConnection($connection);
 
         $this->App = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        // CakePHP 5.2 では同名エイリアスのアソシエーションを二重定義すると例外となるため、
+        // 既に定義済みの Users アソシエーションを削除してから検証する。
+        $this->App->associations()->remove('Users');
         //Usersに連携
         $rs = $this->App->belongsToMany('Users', [
             'className' => 'BaserCore.Users',

@@ -99,16 +99,14 @@ class BcAdminAppViewTest extends BcTestCase
         Configure::write('BcApp.customAdminTheme', $pluginName);
         $reflection = new ReflectionClass($this->BcAdminAppView);
         $method = $reflection->getMethod('_paths');
-        $method->setAccessible(true);
         $result = $method->invoke($this->BcAdminAppView, 'BaserCore', false);
         $this->assertEquals(ROOT . '/plugins/' . $pluginDashName . '/templates/', $result[0]);
         $this->assertEquals(ROOT . '/plugins/' . $pluginName . '/templates/', $result[1]);
 
         $method = $reflection->getMethod('_getElementFileName');
-        $method->setAccessible(true);
         $result = $method->invoke($this->BcAdminAppView, 'sidebar');
         $this->assertEquals(ROOT . '/plugins/' . $pluginName . '/templates/Admin/element/sidebar.php', $result);
-        $folder->delete($pluginDir);
+        (new BcFolder($pluginDir))->delete();
     }
 
 }

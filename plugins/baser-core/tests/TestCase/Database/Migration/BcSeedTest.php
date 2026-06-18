@@ -14,8 +14,7 @@ namespace BaserCore\Test\TestCase\Database\Migration;
 use BaserCore\Database\Migration\BcSeed;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Datasource\ConnectionManager;
-use Phinx\Db\Adapter\AdapterFactory;
-use Symfony\Component\Console\Input\ArgvInput;
+use Migrations\Db\Adapter\AdapterFactory;
 
 /**
  * Class BcSeedTest
@@ -61,19 +60,14 @@ class BcSeedTest extends BcTestCase
      */
     public function testTable()
     {
-        //準備　Adapterをセットアップ
-        $input = new ArgvInput(['cli.php', 'foo']);
-        $this->BcSeed->setInput($input);
-        $options = [
-            'adapter' => 'mysql',
-            'host' => 'bc-db',
-            'user' => 'root',
-            'pass' => 'root',
-            'port' => '3306',
-            'name' => 'test_basercms'
-        ];
+        //準備　Adapterをセットアップ（接続のプレフィックスを参照するため）
+        // ドライバ名（mysql / postgres / sqlite など）をアダプタ種別として利用する
+        $connection = ConnectionManager::get('test');
+        $driverClass = get_class($connection->getDriver());
+        $adapterType = strtolower(substr($driverClass, (int)strrpos($driverClass, '\\') + 1));
+        $options = ['adapter' => $adapterType, 'connection' => $connection] + (array)$connection->config();
         $factory = AdapterFactory::instance();
-        $adapter = $factory->getAdapter('mysql', $options);
+        $adapter = $factory->getAdapter($adapterType, $options);
         $this->BcSeed->setAdapter($adapter);
 
         // 実行

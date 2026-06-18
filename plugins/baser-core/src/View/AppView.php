@@ -164,7 +164,10 @@ class AppView extends View
         $paths = $this->_paths($plugin);
         foreach ($paths as $path) {
             if (is_file($path . $name)) {
-                return $this->_checkFilePath($path . $name, $path);
+                // CakePHP 5.2 の _checkFilePath() は第2引数をプラグイン名として _paths() に渡すため、
+                // ファイルシステムパス($path)ではなくプラグイン名($plugin)を渡す。
+                // (テンプレートに '..' を含む場合のパストラバーサル判定で利用される)
+                return $this->_checkFilePath($path . $name, $plugin);
             }
         }
 
@@ -211,7 +214,8 @@ class AppView extends View
 
         foreach ($this->getLayoutPaths($plugin) as $path) {
             if (is_file($path . $name)) {
-                return $this->_checkFilePath($path . $name, $path);
+                // CakePHP 5.2 の _checkFilePath() は第2引数をプラグイン名として扱うため $plugin を渡す。
+                return $this->_checkFilePath($path . $name, $plugin);
             }
         }
 

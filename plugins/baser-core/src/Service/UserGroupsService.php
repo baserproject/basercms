@@ -180,7 +180,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function delete(int $id): bool
     {
-        $userGroup = $this->UserGroups->get($id, ['contain' => ['Users']]);
+        $userGroup = $this->UserGroups->get($id, contain: ['Users']);
         if (!empty($userGroup->users)) {
             throw new BcException(__d('baser_core', 'ユーザーが所属しているユーザーグループは削除できません。'));
         }

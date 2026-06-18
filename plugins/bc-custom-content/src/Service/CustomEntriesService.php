@@ -204,7 +204,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function getTreeIndex(array $queryParams): \ArrayObject
     {
-        $srcEntities = $this->CustomEntries->find('treeList')->order(['lft'])->all();
+        $srcEntities = $this->CustomEntries->find('treeList')->orderBy(['lft'])->all();
         $entities = [];
         foreach($srcEntities->toArray() as $key => $value) {
             /* @var CustomEntry $entity */
@@ -881,9 +881,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     public function getPrevEntry(EntityInterface|CustomEntry $entry)
     {
         // CustomContentのlist_order, list_directionを取得
-        $customTable = $this->CustomTables->get($entry->custom_table_id, [
-            'contain' => ['CustomContents']
-        ]);
+        $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
         $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
@@ -929,9 +927,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     public function getNextEntry(EntityInterface|CustomEntry $entry)
     {
         // CustomContentのlist_order, list_directionを取得
-        $customTable = $this->CustomTables->get($entry->custom_table_id, [
-            'contain' => ['CustomContents']
-        ]);
+        $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
         $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';

@@ -72,7 +72,8 @@ class BcAdminApiController extends BcApiController
 
         // ユーザーの有効チェック
         if (!$this->isAvailableUser()) {
-            return $this->response->withStatus(401);
+            $event->setResult($this->response->withStatus(401));
+            return;
         }
 
         // トークンタイプチェック
@@ -80,12 +81,13 @@ class BcAdminApiController extends BcApiController
         if ($auth instanceof JwtAuthenticator) {
             $payload = $auth->getPayload();
             if ($payload->token_type !== 'access_token' && $this->getRequest()->getParam('action') !== 'refresh_token') {
-                return $this->response->withStatus(401);
+                $event->setResult($this->response->withStatus(401));
+                return;
             }
         }
 
         // 親の beforeFilter で認可チェックが入るので一番最後とする
-        return parent::beforeFilter($event);
+        parent::beforeFilter($event);
     }
 
     /**

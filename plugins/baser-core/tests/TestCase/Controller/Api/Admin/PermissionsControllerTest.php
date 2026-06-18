@@ -227,7 +227,7 @@ class PermissionsControllerTest extends BcTestCase
         $permissions = $this->getTableLocator()->get('Permissions');
         $permissionList = $permissions
             ->find()
-            ->order(['sort' => 'ASC'])
+            ->orderBy(['sort' => 'ASC'])
             ->select('id')
             ->limit(3)
             ->all();
@@ -238,7 +238,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken, $data);
         $permissionList = $permissions
             ->find()
-            ->order(['sort' => 'ASC'])
+            ->orderBy(['sort' => 'ASC'])
             ->select('id')
             ->limit(3)
             ->all();

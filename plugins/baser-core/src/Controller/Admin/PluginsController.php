@@ -43,8 +43,8 @@ class PluginsController extends BcAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
         $this->FormProtection->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
     }
 

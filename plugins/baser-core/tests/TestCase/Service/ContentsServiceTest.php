@@ -594,6 +594,8 @@ class ContentsServiceTest extends BcTestCase
         $newContent = $this->ContentsService->getIndex(['name' => 'testEdit'])->first();
         $newContent->name = $name;
         $newContent->site->name = 'ucmitz'; // site側でエラーが出るため
+        // SiteFactoryのデフォルトnameがエイリアスとして保存されるため有効な値で上書きする
+        $newContent->site->alias = 'ucmitz';
         $this->ContentsService->update($this->ContentsService->get($newContent->id), $newContent->toArray());
         $this->assertEquals($this->ContentsService->get($newContent->id)->name, $name);
     }

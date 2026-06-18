@@ -27,7 +27,6 @@ use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
 use Cake\Http\ServerRequest;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -290,7 +289,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getUserMail(ResultSetInterface $mailFields, EntityInterface $mailMessage): string
+    public function getUserMail(iterable $mailFields, EntityInterface $mailMessage): string
     {
         $userMail = '';
         foreach($mailFields as $mailField) {
@@ -318,7 +317,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @checked
      * @noTodo
      */
-    public function getAttachments(ResultSetInterface $mailFields, EntityInterface $mailMessage): array
+    public function getAttachments(iterable $mailFields, EntityInterface $mailMessage): array
     {
         $attachments = [];
         /** @var MailMessagesService $mailMessagesService */
@@ -349,7 +348,7 @@ class MailFrontService implements MailFrontServiceInterface
     public function createMailData(
         EntityInterface $mailConfig,
         EntityInterface $mailContent,
-        ResultSetInterface $mailFields,
+        iterable $mailFields,
         EntityInterface $mailMessage,
         array $options)
     {
@@ -395,7 +394,7 @@ class MailFrontService implements MailFrontServiceInterface
     /**
      * メールコンテンツに関連するメールフィールドを取得する
      * @param int $mailContentId
-     * @return \Cake\Datasource\ResultSetInterface
+     * @return array
      * @checked
      * @noTodo
      */
@@ -403,7 +402,9 @@ class MailFrontService implements MailFrontServiceInterface
     {
         /** @var MailFieldsService $mailFieldsService */
         $mailFieldsService = $this->getService(MailFieldsServiceInterface::class);
-        return $mailFieldsService->getIndex($mailContentId, ['use_field' => true])->all();
+        // CakePHP 5.2 で ResultSet はクローン不可・共有イテレータのため、
+        // テンプレートのループ内でフィールドを再走査しても影響が出ないよう配列で返す
+        return $mailFieldsService->getIndex($mailContentId, ['use_field' => true])->all()->toArray();
     }
 
     /**

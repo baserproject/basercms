@@ -68,7 +68,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
          */
         if(filter_var(env('TRUST_PROXY', false), FILTER_VALIDATE_BOOLEAN)) {
             $request->trustProxy = true;
-            $request->addDetector('https', function() {
+            $request->addDetector('https', function($request) {
                 $detectors = [
                     ['env' => 'HTTP_X_FORWARDED_SSL', 'options' => [1, 'on']],
                     ['env' => 'HTTP_X_FORWARDED_PROTO', 'options' => [1, 'https']],
@@ -76,7 +76,10 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
                 ];
                 foreach($detectors as $detect) {
                     $pattern = '/' . implode('|', $detect['options']) . '/i';
-                    if(preg_match($pattern, (string)env($detect['env']))){
+                    // グローバルの env() ではなくリクエストの環境変数を参照する。
+                    // 本番では $_SERVER 由来でリクエスト環境にも設定されるため挙動は同じだが、
+                    // 統合テストでは configRequest() で環境を再現できるようになる。
+                    if(preg_match($pattern, (string)$request->getEnv($detect['env']))){
                         return true;
                     }
                 }

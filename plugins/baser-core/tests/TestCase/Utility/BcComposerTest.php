@@ -129,6 +129,7 @@ class BcComposerTest extends BcTestCase
         $regex = '/("replace": {.+?},)/s';
         $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
         $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        $data = str_replace('"cakephp/cakephp": "5.2.*"', '"cakephp/cakephp": "5.0.*"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');

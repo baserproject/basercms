@@ -24,18 +24,23 @@ class BcCaptchaService implements BcCaptchaServiceInterface
 {
 
     /**
-     * キャプチャ画象を表示する
+     * キャプチャ画像を生成して画像データを返す
      *
-     * @return void
+     * @return string 画像のバイナリデータ
      * @checked
      * @noTodo
      */
-    public function render(ServerRequest $request, string $token): void
+    public function render(ServerRequest $request, string $token): string
     {
         require_once BASER_VENDORS . 'kcaptcha/kcaptcha.php';
+        // KCAPTCHA はコンストラクタで画像を直接出力するため、出力バッファで取得する
+        // （CakePHP 5 では直接出力するとヘッダー送信済みエラーとなるため Response 経由で返す）
+        ob_start();
         $kcaptcha = new KCAPTCHA();
+        $image = ob_get_clean();
         $key = 'captcha.' . $token;
         $request->getSession()->write($key, $kcaptcha->getKeyString());
+        return $image;
     }
 
     /**

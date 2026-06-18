@@ -17,7 +17,7 @@ services:
 
   bc-php:
     container_name: bc-php
-    image: baserproject/basercms:php8.1
+    image: baserproject/basercms:php8.5
     volumes:
       - ../:/var/www/html:delegated
       - ./php/php.ini:/usr/local/etc/php/conf.d/99-custom.ini

@@ -146,7 +146,8 @@ class BcComposer
      */
     public static function installComposer()
     {
-        $command = 'cd ' . escapeshellarg(self::$composerDir) . '; ' . self::$export . ' curl -sS https://getcomposer.org/installer | ' . escapeshellarg(self::$php) . ' 2>&1';
+        // curl と php 双方の標準エラーを exec に捕捉させるため、パイプライン全体をサブシェルで囲んで 2>&1 する
+        $command = 'cd ' . escapeshellarg(self::$composerDir) . '; ( ' . self::$export . ' curl -sS https://getcomposer.org/installer | ' . escapeshellarg(self::$php) . ' ) 2>&1';
         exec($command, $out, $code);
         return [
             'out' => $out,

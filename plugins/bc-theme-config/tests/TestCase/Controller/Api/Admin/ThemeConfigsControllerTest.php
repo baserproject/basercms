@@ -86,33 +86,47 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        //アップローダープラグインを更新
-        $data = [
-            'name_add' => 'value_edit'
-        ];
-        //APIを呼ぶ
-        $this->post("/baser/api/admin/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
-        //ステータスを確認
-        $this->assertResponseSuccess();
-        //戻る値を確認
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマ設定を保存しました。', $result->message);
-        $this->assertEquals('value_edit', $result->themeConfig->name_add);
+        // 色未指定の保存で ThemeConfigsService::updateColorConfig() が現在テーマ（bc-front）の
+        // config.css を unlink する。Git 管理ファイルのため退避し、finally で復元する。
+        $configPath = ROOT . DS . 'plugins' . DS . 'bc-front' . DS . 'webroot' . DS . 'css' . DS . 'config.css';
+        $configBackup = file_exists($configPath) ? file_get_contents($configPath) : null;
+        $configMode = file_exists($configPath) ? (fileperms($configPath) & 0777) : null;
+        try {
+            //アップローダープラグインを更新
+            $data = [
+                'name_add' => 'value_edit'
+            ];
+            //APIを呼ぶ
+            $this->post("/baser/api/admin/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
+            //ステータスを確認
+            $this->assertResponseSuccess();
+            //戻る値を確認
+            $result = json_decode((string)$this->_response->getBody());
+            $this->assertEquals('テーマ設定を保存しました。', $result->message);
+            $this->assertEquals('value_edit', $result->themeConfig->name_add);
 
-        //アップローダープラグインを保存する時エラーを発生
-        $data = [
-            'test'
-        ];
-        //APIを呼ぶ
-        $this->post("/baser/api/admin/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
-        //ステータスを確認
-        $this->assertResponseCode(500);
-        //戻る値を確認
-        $result = json_decode((string)$this->_response->getBody());
-        $this->stringContains(
-            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php',
-            $result->message
-        );
+            //アップローダープラグインを保存する時エラーを発生
+            $data = [
+                'test'
+            ];
+            //APIを呼ぶ
+            $this->post("/baser/api/admin/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
+            //ステータスを確認
+            $this->assertResponseCode(500);
+            //戻る値を確認
+            $result = json_decode((string)$this->_response->getBody());
+            $this->stringContains(
+                'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php',
+                $result->message
+            );
+        } finally {
+            if ($configBackup !== null && !file_exists($configPath)) {
+                file_put_contents($configPath, $configBackup);
+                if ($configMode !== null) {
+                    chmod($configPath, $configMode);
+                }
+            }
+        }
     }
 
 }

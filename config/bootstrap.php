@@ -70,7 +70,10 @@ if(file_exists(CAKE . 'functions.php')) {
 */
 if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    // 既に定義済みの環境変数（実環境変数・phpunit の <env> 等）は上書きせずスキップする。
+    // これにより .env の有無に関わらず、外部から渡した値（例: APP_DEFAULT_LOCALE）が優先される。
     $dotenv->parse()
+        ->skipExisting()
         ->putenv()
         ->toEnv()
         ->toServer();

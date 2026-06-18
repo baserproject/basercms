@@ -65,7 +65,7 @@ $this->BcAdmin->setTitle(__d('baser_core',
           if ($body) {
             $body = $this->BcText->autoLink($body, ['target' => '_blank']);
           }
-          echo nl2br($body);
+          echo nl2br($body?? '');
         }
       }
       if (!empty($mailMessage->{$field->field_name})) {

@@ -110,11 +110,25 @@ class ThemeConfigsServiceTest extends BcTestCase
         //データを生成
         $this->getRequest()->getAttribute('currentSite');
         SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcThemeSample'])->persist();
-        //テストメソッドをコール
-        $this->ThemeConfigsService->update(['logo_alt' => 'baserCMS']);
-        //テーマ設定のデータが更新されたか確認すること
-        $themeConfigs = $this->ThemeConfigsService->get();
-        $this->assertEquals($themeConfigs->logo_alt, 'baserCMS');
+        // 色未指定の保存で updateColorConfig() が現在テーマ（BcThemeSample）の config.css を
+        // unlink する。Git 管理ファイルのため退避し、finally で復元する。
+        $configPath = ROOT . DS . 'plugins' . DS . 'BcThemeSample' . DS . 'webroot' . DS . 'css' . DS . 'config.css';
+        $configBackup = file_exists($configPath) ? file_get_contents($configPath) : null;
+        $configMode = file_exists($configPath) ? (fileperms($configPath) & 0777) : null;
+        try {
+            //テストメソッドをコール
+            $this->ThemeConfigsService->update(['logo_alt' => 'baserCMS']);
+            //テーマ設定のデータが更新されたか確認すること
+            $themeConfigs = $this->ThemeConfigsService->get();
+            $this->assertEquals($themeConfigs->logo_alt, 'baserCMS');
+        } finally {
+            if ($configBackup !== null && !file_exists($configPath)) {
+                file_put_contents($configPath, $configBackup);
+                if ($configMode !== null) {
+                    chmod($configPath, $configMode);
+                }
+            }
+        }
     }
 
     /**
@@ -196,7 +210,7 @@ class ThemeConfigsServiceTest extends BcTestCase
 
         //元に戻るため、変更する前内容を取得する
         $configPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
-        $fileContentBefore = file_get_contents($configPath);
+        $fileContentBefore = file_exists($configPath) ? file_get_contents($configPath) : '';
 
         //テストメソッドをコール
         $rs = $this->ThemeConfigsService->updateColorConfig($this->ThemeConfigsService->get());
