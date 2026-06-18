@@ -488,4 +488,22 @@ class BcTextHelperTest extends BcTestCase
 
     }
 
+    /**
+     * autoLinkUrls の末尾スラッシュ補正のテスト
+     */
+    public function testAutoLinkUrlsTrailingSlash()
+    {
+        $result = $this->Helper->autoLinkUrls('https://example.com/');
+        $this->assertMatchesRegularExpression('/href=[\'\"]https:\/\/example\\.com\/[\'\"]/', $result);
+        $this->assertStringContainsString('>https://example.com/</a>', $result);
+        $this->assertStringNotContainsString('</a>/', $result);
+
+        $resultWithPath = $this->Helper->autoLinkUrls('https://example.com/path/');
+        $this->assertStringContainsString('>https://example.com/path/</a>', $resultWithPath);
+
+        $resultWithText = $this->Helper->autoLinkUrls('URL: https://example.com/ end');
+        $this->assertStringContainsString('>https://example.com/</a> end', $resultWithText);
+        $this->assertStringNotContainsString('</a>/ end', $resultWithText);
+    }
+
 }
