@@ -5059,6 +5059,16 @@ msgstr ""
 "Please enter only with half-size alphabets and numbers (alphabets are "
 "distinct by large or small), spaces, symbols (._-:/()#,@[]+=&;{}!$*)."
 
+#: plugins/bc-admin-third/templates/Admin/Users/edit_password.php:56
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:149
+msgid "{0}文字以上で入力してください。"
+msgstr "Please enter {0} or more characters."
+
+#: plugins/bc-admin-third/templates/Admin/Users/edit_password.php:63
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:156
+msgid "{0}を含む必要があります。"
+msgstr "{0} is required."
+
 #: plugins/bc-admin-third/templates/Admin/Users/index.php:24
 msgid "ユーザー一覧"
 msgstr "User List"
