@@ -338,7 +338,7 @@ template {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* 
+/*
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -14471,6 +14471,9 @@ table.cake-sql-log tr td {
   position: fixed;
   bottom: 0;
   width: 100%;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
   box-shadow: 0 -5px 3px -3px #999;
 }
@@ -14505,6 +14508,9 @@ table.cake-sql-log tr td {
   position: fixed;
   bottom: 56px;
   width: 100%;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
   box-shadow: 0 -5px 3px -3px #999;
 }
