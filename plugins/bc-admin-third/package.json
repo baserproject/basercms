@@ -17,7 +17,7 @@
     "build": "gulp build"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.28.5",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "babel-loader": "^8.4.1",
