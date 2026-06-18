@@ -95,7 +95,7 @@ if (!empty($mailFields)) {
 			}
 
 			/* 説明欄 */
-			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field->valid_ex));
+			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', (string) $field->valid_ex));
 			if(!$isGroupValidComplate) {
 				echo $this->BcBaser->mailFormError("MailMessage." . $field->field_name);
 			}
