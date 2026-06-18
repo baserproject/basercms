@@ -6,7 +6,6 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteBase    /
     RewriteRule ^(\.well-known/.*)$ webroot/$1 [L]
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
