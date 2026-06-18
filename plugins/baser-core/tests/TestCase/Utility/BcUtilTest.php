@@ -180,6 +180,27 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * locale から言語コードを取得する
+     */
+    public function testGetLocaleLanguageCode(): void
+    {
+        $this->assertSame('ja', BcUtil::getLocaleLanguageCode('ja_JP'));
+        $this->assertSame('en', BcUtil::getLocaleLanguageCode('en_US'));
+        $this->assertSame('fr', BcUtil::getLocaleLanguageCode('fr-FR'));
+        $this->assertSame('ja', BcUtil::getLocaleLanguageCode('', 'ja'));
+    }
+
+    /**
+     * 日本語 locale かどうか判定する
+     */
+    public function testIsJapaneseLocale(): void
+    {
+        $this->assertTrue(BcUtil::isJapaneseLocale('ja_JP'));
+        $this->assertTrue(BcUtil::isJapaneseLocale('ja'));
+        $this->assertFalse(BcUtil::isJapaneseLocale('en_US'));
+    }
+
+    /**
      * Test getVersion
      * @return void
      */
@@ -1545,7 +1566,7 @@ class BcUtilTest extends BcTestCase
     public static function isSameReferrerAsCurrentDataProvider()
     {
         return [
-            // refererがnullの場合　
+            // refererがnullの場合
             [null, false],
             // referer!=$siteDomainの場合
             ["/baser/admin", false],

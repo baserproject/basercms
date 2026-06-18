@@ -19,6 +19,7 @@
  */
 CKEDITOR.plugins.add('draft',
 {
+	lang: 'en,ja',
 /**
  * 初期化処理
  */
@@ -46,10 +47,10 @@ CKEDITOR.plugins.add('draft',
 
 		if ( editor.ui.addButton )
 		{
-			editor.ui.addButton( 'Draft', { label : '草　稿', command : 'changeDraft'});
-			editor.ui.addButton( 'Publish', { label : '本　稿', command : 'changePublish'});
-			editor.ui.addButton( 'CopyDraft', { label : '草稿を本稿にコピー', command : 'copyDraft'});
-			editor.ui.addButton( 'CopyPublish', { label : '本稿を草稿にコピー', command : 'copyPublish'});
+			editor.ui.addButton( 'Draft', { label : editor.lang.draft.buttonDraft, command : 'changeDraft'});
+			editor.ui.addButton( 'Publish', { label : editor.lang.draft.buttonPublish, command : 'changePublish'});
+			editor.ui.addButton( 'CopyDraft', { label : editor.lang.draft.buttonCopyDraft, command : 'copyDraft'});
+			editor.ui.addButton( 'CopyPublish', { label : editor.lang.draft.buttonCopyPublish, command : 'copyPublish'});
 		}
 		editor.on('pluginsLoaded', function(event) {
 			event.editor.draftMode = 'publish';

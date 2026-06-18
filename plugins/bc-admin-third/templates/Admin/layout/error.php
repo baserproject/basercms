@@ -1,5 +1,11 @@
+<?php
+$jsFiles = [];
+if ($this->BcBaser->isJapaneseLocale()) {
+  $jsFiles[] = 'vendor/i18n/ui.datepicker-ja';
+}
+?>
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="<?= h($this->BcBaser->getHtmlLang()) ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex,nofollow"/>
@@ -12,15 +18,14 @@
     'admin/style',
   ]) ?>
   <?php echo $this->fetch('css') ?>
-  <?php $this->BcBaser->js([
+  <?php $this->BcBaser->js(array_merge([
     'admin/vendor.bundle',
     'vendor/vue.min',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
-    'vendor/jquery-ui-1.11.4.min.js',
-    'vendor/i18n/ui.datepicker-ja',
+    'vendor/jquery-ui-1.13.0.min',
     'vendor/jquery.timepicker',
-  ]) ?>
+  ], $jsFiles)) ?>
   <?php echo $this->fetch('script') ?>
 </head>
 
