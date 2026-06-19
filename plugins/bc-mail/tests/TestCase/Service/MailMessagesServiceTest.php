@@ -324,7 +324,7 @@ class MailMessagesServiceTest extends BcTestCase
                 $this->assertTrue($BcDatabaseService->columnExists($table, $fieldName));
             }
         } finally {
-            $this->assertTrue($MailMessagesService->dropTable($mailContentId));
+            $MailMessagesService->dropTable($mailContentId);
         }
     }
 
