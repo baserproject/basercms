@@ -224,8 +224,12 @@ class BlogCategoriesTable extends BlogAppTable
             'siteId' => null,
             'order' => 'BlogCategories.lft asc',
             'conditions' => [],
-            'threaded' => false
+            'threaded' => false,
+            'categoryPostCounts' => [],
         ], $options);
+        if ($viewCount && !$options['threaded'] && empty($options['categoryPostCounts'])) {
+            $options['categoryPostCounts'] = $this->getCategoryPostCounts($blogContentId);
+        }
 
         // 検索条件
         $conditions = $options['conditions'];
@@ -261,7 +265,6 @@ class BlogCategoriesTable extends BlogAppTable
 
         // 検索実行
         $query = $this->find($findType)
-            ->contain(['BlogPosts' => ['BlogContents' => ['Contents']]])
             ->where($conditions)
             ->select($fields)
             ->orderBy($options['order']);
@@ -280,20 +283,7 @@ class BlogCategoriesTable extends BlogAppTable
             foreach ($entities as $entity) {
                 // 表示件数
                 if ($viewCount) {
-                    $childrenIds = $this->find('list', keyField: 'id', valueField: 'id')
-                        ->where([
-                            ['BlogCategories.lft > ' => $entity->lft],
-                            ['BlogCategories.rght < ' => $entity->rght]
-                        ])->toArray();
-                    $categoryId = [$entity->id];
-                    if ($childrenIds) {
-                        $categoryId = array_merge($categoryId, $childrenIds);
-                    }
-                    $entity->count = $this->BlogPosts->find()
-                        ->where(array_merge(
-                            ['BlogPosts.blog_category_id IN' => $categoryId],
-                            $this->BlogPosts->getConditionAllowPublish()
-                        ))->count();
+                    $entity->count = $options['categoryPostCounts'][$entity->id] ?? 0;
                 }
                 // 子カテゴリ
                 if ($current < $depth) {
@@ -311,6 +301,66 @@ class BlogCategoriesTable extends BlogAppTable
             }
         }
         return $entities;
+    }
+
+    /**
+     * カテゴリごとの記事数を集計
+     *
+     * @param int|null $blogContentId
+     * @return array
+     */
+    private function getCategoryPostCounts(?int $blogContentId): array
+    {
+        $conditions = [];
+        if ($blogContentId) {
+            $conditions['BlogCategories.blog_content_id'] = $blogContentId;
+        }
+        $categories = $this->find()
+            ->select(['id', 'lft', 'rght'])
+            ->where($conditions)
+            ->all()
+            ->toList();
+        if (!$categories) {
+            return [];
+        }
+
+        $postCounts = [];
+        $postConditions = [
+            'blog_category_id IN' => array_column($categories, 'id'),
+            ...$this->BlogPosts->getConditionAllowPublish()
+        ];
+        $query = $this->BlogPosts->find();
+        $query->select([
+                'blog_category_id',
+                'post_count' => $query->func()->count('*'),
+            ])
+            ->where($postConditions)
+            ->groupBy('blog_category_id');
+        foreach ($query as $countRow) {
+            $postCounts[$countRow['blog_category_id']] = $countRow['post_count'];
+        }
+
+        $categoryPostCounts = [];
+        foreach ($categories as $category) {
+            $categoryId = $category['id'];
+            $totalCount = $postCounts[$categoryId] ?? 0;
+
+            // 子カテゴリの記事件数を親へ加算
+            foreach ($categories as $targetCategory) {
+                $targetCategoryId = $targetCategory['id'];
+                if ($targetCategoryId === $categoryId) {
+                    continue;
+                }
+                if ($targetCategory['lft'] <= $category['lft'] || $targetCategory['rght'] >= $category['rght']) {
+                    continue;
+                }
+                $totalCount += $postCounts[$targetCategoryId] ?? 0;
+            }
+
+            $categoryPostCounts[$categoryId] = $totalCount;
+        }
+
+        return $categoryPostCounts;
     }
 
     /**

@@ -641,6 +641,66 @@ class BlogPostsTableTest extends BcTestCase
     }
 
     /**
+     * コピーする（255文字境界で _copy を維持できる）
+     */
+    public function testCopyWithMaxLengthName()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+
+        $sourceName = str_repeat('a', 255);
+        $sourceTitle = str_repeat('b', 255);
+        BlogPostFactory::make([
+            'id' => 100,
+            'blog_content_id' => 6,
+            'no' => 100,
+            'name' => $sourceName,
+            'title' => $sourceTitle,
+            'status' => 1,
+        ])->persist();
+
+        $result = $this->BlogPostsTable->copy(100);
+
+        $this->assertEquals(255, mb_strlen($result->name));
+        $this->assertStringEndsWith('_copy', $result->name);
+        $this->assertEquals(255, mb_strlen($result->title));
+        $this->assertStringEndsWith('_copy', $result->title);
+    }
+
+    /**
+     * コピーする（重複時に _copy_1 を維持できる）
+     */
+    public function testCopyWithDuplicatedMaxLengthName()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+
+        $sourceName = str_repeat('a', 255);
+        $copiedName = mb_substr($sourceName, 0, 255 - mb_strlen('_copy')) . '_copy';
+        BlogPostFactory::make([
+            'id' => 101,
+            'blog_content_id' => 6,
+            'no' => 101,
+            'name' => $sourceName,
+            'title' => '元記事',
+            'status' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 102,
+            'blog_content_id' => 6,
+            'no' => 102,
+            'name' => $copiedName,
+            'title' => '重複記事',
+            'status' => 1,
+        ])->persist();
+
+        $result = $this->BlogPostsTable->copy(101);
+
+        $this->assertEquals(255, mb_strlen($result->name));
+        $this->assertStringEndsWith('_copy_1', $result->name);
+    }
+
+    /**
      * プレビュー用のデータを生成する
      */
     public function testCreatePreviewData()

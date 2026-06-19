@@ -53,10 +53,26 @@ echo $this->BcBaser->getCustomFieldValue($customEntry, 'field_name');
 ```
 
 ## textarea の表示について
-内部的に nl2br() が適用されているので、改行はそのまま表示されます。
+デフォルトでは内部的に `nl2br(h())` が適用されるため、改行はそのまま表示され、HTMLタグはエスケープされます。
+
+`escape => false` を指定するとエスケープと `nl2br()` が無効になり、フィールド値をそのまま出力できます。
+span タグなどの HTML を含む場合に利用しますが、出力値の信頼性を確認した上で使用してください。
+
+```php
+echo $this->BcBaser->getCustomFieldValue($customEntry, 'field_name', ['escape' => false]);
+```
+
+`escape => false` にすると `nl2br()` も無効になるため、改行を `<br>` に変換したい場合は呼び出し側で `nl2br()` を適用してください。
+
+```php
+echo nl2br($this->BcBaser->getCustomFieldValue($customEntry, 'field_name', ['escape' => false]));
+```
 
 ## CSSの作成
 - 既存のテーマにテンプレートを追加作成する場合、CSSの作成時、Aタグの文字色は親設定を引き継いでいる可能性があるので、important を付けておく。
 
 ## その他
-- テキストエリアは h() でエスケープすると改行が<br> として表示されてしまうので使わない。
+- テキスト・テキストエリアフィールドはデフォルトで `h()` によるエスケープが有効です。
+- `escape => false` を指定すると `h()` によるエスケープを無効化できます（テキスト・テキストエリア両フィールド対応）。これにより span タグなどの HTML をそのまま出力できます。
+- テキストエリアで `escape => false` を指定した場合、`nl2br()` も同時に無効になります。
+- `escape => false` を使用する際は、出力する値が信頼済みの入力に限定されていることを確認してください（XSS に注意）。

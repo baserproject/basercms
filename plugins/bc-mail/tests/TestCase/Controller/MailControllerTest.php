@@ -18,6 +18,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\View\Helper\MailformHelper;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -73,7 +74,7 @@ class MailControllerTest extends BcTestCase
     public function test_index()
     {
         //準備
-        SiteFactory::make(['id' => 1])->persist();
+        $this->loadFixtureScenario(InitAppScenario::class);
         MailFieldsFactory::make(['mail_content_id' => 1, 'no' => 1])->persist();
         ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         MailContentFactory::make(['id' => 1, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
@@ -151,15 +152,15 @@ class MailControllerTest extends BcTestCase
      */
     public function testSubmit()
     {
-        $this->markTestIncomplete('このテストは未確認です');
         //準備
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
+        $this->loadFixtureScenario(InitAppScenario::class);
         SiteConfigFactory::make(['name' => 'email', 'value' => 'abc@gmail.com'])->persist();
         SiteConfigFactory::make(['name' => 'admin-theme', 'value' => 'test theme'])->persist();
-        SiteFactory::make(['id' => 1])->persist();
-        MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'sex'])->persist();
+        MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'sex', 'valid' => 0, 'use_field' => 1])->persist();
+        MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'name_1', 'valid' => 1, 'use_field' => 1])->persist();
         ContentFactory::make(['id' => 1, 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1, 'url' => '/contact/', 'site_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         MailContentFactory::make([
             'id' => 1,
@@ -170,10 +171,18 @@ class MailControllerTest extends BcTestCase
             'sender_1' => 't@gm.com'
         ])->persist();
 
+        // 回帰テスト: バリデーションエラー時に 500 にならず確認画面を再表示する
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessagesService->createTable(1);
         $this->session(['BcMail' => ['valid' => true]]);
-        $this->post('/contact/submit/', ['sex' => 1]);
-        $this->assertResponseCode(302);
-        $this->assertRedirect('/contact/thanks');
+        $this->post('/contact/submit/', ['sex' => 1, 'name_1' => '']);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertNotNull($vars['mailContent']);
+        $this->assertNotNull($vars['mailFields']);
+        $this->assertNotNull($vars['mailMessage']);
+        $this->assertArrayHasKey('name_1', $vars['mailMessage']->getErrors());
+        $mailMessagesService->dropTable(1);
     }
 
     /**

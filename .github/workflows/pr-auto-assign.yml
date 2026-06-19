@@ -69,8 +69,12 @@ jobs:
             if (event === 'pull_request_target' && (action === 'opened' || action === 'reopened')) {
               const reviewers = MAINTAINERS.filter(m => m !== author); // 作成者本人は除外
               if (reviewers.length) {
-                await github.rest.pulls.requestReviewers(
-                  { owner, repo, pull_number: number, reviewers });
+                try {
+                  await github.rest.pulls.requestReviewers(
+                    { owner, repo, pull_number: number, reviewers });
+                } catch (e) {
+                  console.log(`Skipping review request due to permissions: ${e.message}`);
+                }
               }
               await setAssignees(MAINTAINERS);
               await removeLabel();

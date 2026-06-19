@@ -110,10 +110,18 @@ class InstallationsController extends BcAdminAppController
             $this->setRequest($this->request->withParsedBody($service->getDefaultValuesStep3($this->getRequest())));
         } else {
             $service->writeDbSettingToSession($this->getRequest(), $this->getRequest()->getData());
+            $dbPrefix = $this->request->getData('dbPrefix');
+            $dbPrefix = is_string($dbPrefix) ? $dbPrefix : '';
+            $invalidPrefix = $dbPrefix !== '' && !preg_match('/^[a-z0-9_]+_$/', $dbPrefix);
+            $invalidPrefixMessage = __d('baser_core', 'プレフィックスは半角英小文字・数字・アンダースコアの組み合わせとし末尾はアンダースコアにしてください。（例）mysite_');
             switch($this->request->getData('mode')) {
                 case 'back':
                     return $this->redirect(['action' => 'step2']);
                 case 'checkDb':
+                    if ($invalidPrefix) {
+                        $this->BcMessage->setError($invalidPrefixMessage);
+                        break;
+                    }
                     try {
                         $service->testConnectDb($service->readDbSetting($this->getRequest()));
                         $this->BcMessage->setInfo(__d('baser_core', 'データベースへの接続に成功しました。'));
@@ -125,6 +133,10 @@ class InstallationsController extends BcAdminAppController
                     }
                     break;
                 case 'createDb':
+                    if ($invalidPrefix) {
+                        $this->BcMessage->setError($invalidPrefixMessage);
+                        break;
+                    }
                     ini_set("max_execution_time", 180);
                     try {
                         $service->deleteAllTables($this->getRequest());

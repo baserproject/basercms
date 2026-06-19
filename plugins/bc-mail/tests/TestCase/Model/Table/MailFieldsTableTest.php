@@ -146,6 +146,23 @@ class MailFieldsTableTest extends BcTestCase
         $this->assertEquals('グループ入力チェックは半角英数字、ハイフン、アンダースコアで入力してください。', current($errors['group_valid']));
     }
 
+    public function test_validationDefaultAllowHyphenOnlyForGroupFields()
+    {
+        $validator = $this->MailFieldsTable->getValidator('default');
+        $errors = $validator->validate([
+            'name' => 'test',
+            'mail_content_id' => 999,
+            'type' => 'text',
+            'field_name' => 'field-name',
+            'group_field' => 'Group-Name',
+            'group_valid' => 'Group-Valid'
+        ]);
+
+        $this->assertEquals('フィールド名は小文字の半角英数字、アンダースコアのみで入力してください。', current($errors['field_name']));
+        $this->assertArrayNotHasKey('group_field', $errors);
+        $this->assertArrayNotHasKey('group_valid', $errors);
+    }
+
     public function test_validationDefaultDuplicate()
     {
         MailFieldsFactory::make(['mail_content_id' => 1, 'field_name' => 'field_1'])->persist();
@@ -212,7 +229,7 @@ class MailFieldsTableTest extends BcTestCase
 
     /**
      * メールフィールドの値として正しい文字列か検証する
-     * 半角英数-_
+     * 半角小文字英数字とアンダースコア
      */
     public function testHalfTextMailField()
     {
@@ -224,6 +241,27 @@ class MailFieldsTableTest extends BcTestCase
         //case false
         $string = 'abcABC123_';
         $result = $this->MailFieldsTable->halfTextMailField($string);
+        $this->assertFalse($result);
+
+        //case false
+        $string = 'abc123-_';
+        $result = $this->MailFieldsTable->halfTextMailField($string);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * グループ系フィールドの値として正しい文字列か検証する
+     */
+    public function testHalfTextMailGroupField()
+    {
+        //case true
+        $string = 'abcABC123-_';
+        $result = $this->MailFieldsTable->halfTextMailGroupField($string);
+        $this->assertTrue($result);
+
+        //case false
+        $string = 'abcABC123-_:!';
+        $result = $this->MailFieldsTable->halfTextMailGroupField($string);
         $this->assertFalse($result);
     }
 

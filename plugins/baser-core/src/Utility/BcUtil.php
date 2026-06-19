@@ -572,8 +572,18 @@ class BcUtil
                 return false;
             }
         }
-        $adminPrefix = BcUtil::getPrefix(true);
-        return (bool)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
+        $baserCorePrefix = (string) BcUtil::getBaserCorePrefix();
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . BcUtil::getAdminPrefix();
+        $apiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias')
+            ?: '/' . (string) Configure::read('BcApp.apiPrefix') . '/admin';
+
+        $prefixes = [
+            $baserCorePrefix . $adminAlias,
+            $baserCorePrefix . $apiAdminAlias,
+        ];
+        $prefixes = array_map(fn($prefix) => preg_quote(ltrim($prefix, '/'), '/'), $prefixes);
+
+        return (bool) preg_match('/^\/?(?:' . implode('|', $prefixes) . ')(?:$|\/)/', $url);
     }
 
     /**
@@ -2314,6 +2324,36 @@ class BcUtil
     public static function isDevelopmentVersion(): bool
     {
         return is_dir(ROOT . DS . 'plugins' . DS . 'baser-core');
+    }
+
+    /**
+     * locale から言語コードを取得する
+     *
+     * @param string|null $locale
+     * @param string $default
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getLocaleLanguageCode(?string $locale = null, string $default = 'ja'): string
+    {
+        $locale = strtolower((string) ($locale ?? \Cake\I18n\I18n::getLocale()));
+        return preg_replace('/[_-].*$/', '', $locale) ?: $default;
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     *
+     * @param string|null $locale
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isJapaneseLocale(?string $locale = null): bool
+    {
+        return self::getLocaleLanguageCode($locale) === 'ja';
     }
 
 }

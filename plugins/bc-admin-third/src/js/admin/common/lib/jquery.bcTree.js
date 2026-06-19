@@ -902,6 +902,12 @@
                                 data.contentId = result.content.id;
                                 data.contentEntityId = result.content.entity_id;
                                 data.name = decodeURIComponent(result.content.name);
+                                var settingsKey = data.alias ? 'ContentAlias' : data.contentType;
+                                if ($.bcTree.settings[settingsKey] !== undefined) {
+                                    data.editDisabled = !!$.bcTree.settings[settingsKey].editDisabled;
+                                    data.manageDisabled = !!$.bcTree.settings[settingsKey].manageDisabled;
+                                    data.deleteDisabled = !!$.bcTree.settings[settingsKey].deleteDisabled;
+                                }
                                 node.data.jstree = data;
                                 $.bcTree.refreshTree();
                             },

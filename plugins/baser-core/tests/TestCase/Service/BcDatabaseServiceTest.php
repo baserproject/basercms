@@ -348,15 +348,31 @@ class BcDatabaseServiceTest extends BcTestCase
         //SJIS のCSVファイルを作成
         $options = [
             'path' => $path,
-            'encoding' => 'sjis',
+            'encoding' => 'SJIS-win',
             'init' => false,
         ];
         $this->BcDatabaseService->writeCsv('contents', $options);
-        $rs = $this->BcDatabaseService->loadCsvToArray($path);
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'SJIS-win');
         $this->assertIsArray($rs);
         // 戻り値の配列の値のエンコードがUTF-8になっている事を確認
         $this->assertEquals('メインサイト', $rs[0]['title']);
         $this->assertTrue(mb_check_encoding($rs[0]['title'], 'UTF-8'));
+
+        // SJISのCSVで「能」や埋め込み引用符を含んでも正しくUTF-8へ変換できることを確認
+        $csvContent = "\"a\",\"i\",\"u\",\"e\"\n";
+        $csvContent .= "\"あ\",\"い\",\"う\",\"能\"\"能\"\n";
+        file_put_contents($path, mb_convert_encoding($csvContent, 'SJIS-win', 'UTF-8'));
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'SJIS-win');
+        $this->assertEquals('能"能', $rs[0]['e']);
+        $this->assertTrue(mb_check_encoding($rs[0]['e'], 'UTF-8'));
+
+        // 長大な引用符を含む値でも、列が欠落せずに読み込めることを確認
+        $csvContent = "\"a\",\"i\",\"u\",\"e\"\n";
+        $csvContent .= "\"あ\",\"い\",\"う\",\"" . str_repeat('""', 13000) . "\"\n";
+        file_put_contents($path, $csvContent);
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'UTF-8');
+        $this->assertCount(4, $rs[0]);
+        $this->assertEquals(13000, strlen($rs[0]['e']));
 
         $file = new BcFile($path);
         $file->delete();

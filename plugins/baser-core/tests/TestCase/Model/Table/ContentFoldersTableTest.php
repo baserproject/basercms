@@ -204,6 +204,7 @@ class ContentFoldersTableTest extends BcTestCase
 
         //戻り値を確認
         $this->assertEquals('new title', $rs->content->title);
+        $this->assertEquals('default', $rs->content->layout_template);
 
         //DBに存在するか確認すること
         $query = $contentFolders->find()->where(['folder_template' => 'baserCMSサンプル']);

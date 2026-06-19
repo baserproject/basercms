@@ -32,7 +32,7 @@ $(function () {
             } else if ($dbPrefix.val() && !$dbPrefix.val().match(/[_]$/)) {
                 alert(bcI18n.message5);
                 result = false;
-            } else if ($dbPrefix.val() && !$dbPrefix.val().match(/^[a-zA-z0-9_]+_$/)) {
+            } else if ($dbPrefix.val() && !$dbPrefix.val().match(/^[a-z0-9_]+_$/)) {
                 alert(bcI18n.message6);
                 result = false;
             } else if ($dbName.val().match(/^.*\..*$/)) {

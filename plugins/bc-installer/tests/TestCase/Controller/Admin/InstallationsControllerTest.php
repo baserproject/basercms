@@ -147,6 +147,66 @@ class InstallationsControllerTest extends BcTestCase
     }
 
     /**
+     * Step 3: データベースの接続設定（無効なプレフィックス / mode=checkDb）
+     */
+    public function testStep3InvalidPrefixCheckDb()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        Configure::write("BcEnv.isInstalled", false);
+
+        $config = [
+            'mode' => 'checkDb',
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => 'MySite_',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('プレフィックスは半角英小文字・数字・アンダースコアの組み合わせとし末尾はアンダースコアにしてください。');
+
+        Configure::write("BcEnv.isInstalled", true);
+    }
+
+    /**
+     * Step 3: データベースの接続設定（無効なプレフィックス / mode=createDb）
+     */
+    public function testStep3InvalidPrefixCreateDb()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        Configure::write("BcEnv.isInstalled", false);
+
+        $config = [
+            'mode' => 'createDb',
+            'dbType' => 'mysql',
+            'dbHost' => 'localhost',
+            'dbPrefix' => 'MySite_',
+            'dbPort' => '3306',
+            'dbUsername' => 'dbUsername',
+            'dbPassword' => 'dbPassword',
+            'dbSchema' => 'dbSchema',
+            'dbName' => 'basercms',
+            'dbEncoding' => 'utf-8',
+            'dbDataPattern' => 'BcThemeSample.default'
+        ];
+
+        $this->post('/baser/admin/bc-installer/installations/step3', $config);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('プレフィックスは半角英小文字・数字・アンダースコアの組み合わせとし末尾はアンダースコアにしてください。');
+
+        Configure::write("BcEnv.isInstalled", true);
+    }
+
+    /**
      * Step 4: データベース生成／管理者ユーザー作成
      */
     public function testStep4()

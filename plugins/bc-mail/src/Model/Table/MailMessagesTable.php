@@ -257,7 +257,7 @@ class MailMessagesTable extends MailAppTable
 
             // ### 拡張バリデーション
             if ($mailField->valid_ex && !empty($mailField->use_field)) {
-                $valids = explode(',', $mailField->valid_ex);
+                $valids = explode(',', (string) $mailField->valid_ex);
                 foreach($valids as $valid) {
                     $options = preg_split('/(?<!\\\)\|/', $mailField->options);
                     /**
@@ -454,7 +454,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
         foreach($this->mailFields as $mailField) {
             // 対象フィールドがあれば、バリデートグループごとに配列に格納する
-            $valids = explode(',', $mailField->valid_ex);
+            $valids = explode(',', (string) $mailField->valid_ex);
             if (in_array('VALID_GROUP_COMPLATE', $valids)) {
                 // PHP 8.5 で null を配列オフセットに使うのは非推奨のため空文字に変換する
                 $dists[$mailField->group_valid ?? ''][] = [
@@ -528,9 +528,9 @@ class MailMessagesTable extends MailAppTable
 
         foreach($mailFields as $key => $value) {
             $fieldName = $value->field_name;
-            $value->before_attachment = strip_tags($value->before_attachment);
-            $value->after_attachment = str_replace(["<br />", "<br>"], "\n", strip_tags($value->after_attachment, "<br>"));
-            $value->head = str_replace(["<br />", "<br>"], "", strip_tags($value->head, "<br>"));
+            $value->before_attachment = strip_tags((string) $value->before_attachment);
+            $value->after_attachment = str_replace(["<br />", "<br>"], "\n", strip_tags((string) $value->after_attachment, "<br>"));
+            $value->head = str_replace(["<br />", "<br>"], "", strip_tags((string) $value->head, "<br>"));
             if ($value->no_send) {
                 unset($message->{$fieldName});
             }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Plugin;
 use Cake\View\Helper;
 use Cake\Utility\Inflector;
@@ -207,8 +208,21 @@ class BcCkeditorHelper extends Helper
      */
     protected function build($fieldName, $options = [])
     {
+        static $langExistsCache = [];
+
+        $editorLanguage = BcUtil::getLocaleLanguageCode();
+
+        if (!isset($langExistsCache[$editorLanguage])) {
+            // CKEditor の言語JSがない場合、要求すると 404 で初期化が失敗するため ja にフォールバック
+            $editorLanguagePath = Plugin::path('BcAdminThird') . 'webroot' . DS . 'js' . DS . 'vendor' . DS . 'ckeditor' . DS . 'lang' . DS . $editorLanguage . '.js';
+            $langExistsCache[$editorLanguage] = file_exists($editorLanguagePath);
+        }
+        if (!$langExistsCache[$editorLanguage]) {
+            $editorLanguage = 'ja';
+        }
+
         $options = array_merge([
-            'editorLanguage' => 'ja', // 言語
+            'editorLanguage' => $editorLanguage, // 言語
             'editorSkin' => 'moono', // スキン
             'editorToolType' => 'normal', // ツールバータイプ
             'editorToolbar' => [], // ツールバータイプ

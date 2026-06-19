@@ -14,6 +14,8 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCkeditorHelper;
+use Cake\Core\Plugin;
+use Cake\I18n\I18n;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -109,6 +111,50 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/<input type="hidden" name="ContentPreviewMode"/', $result);
         $jsResult = $this->BcCkeditor->getView()->fetch('script');
         $this->assertMatchesRegularExpression('/let config = JSON\.parse\(\'\{"ckeditorField/', $jsResult);
+    }
+
+    /**
+     * Test build locale-aware editor language
+     */
+    public function testBuildEditorLanguageByLocale()
+    {
+        $this->BcCkeditor->getView()->setTheme('BcAdminThird');
+        $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
+        $this->BcCkeditor->getView()->setRequest($request);
+        $this->BcCkeditor->BcAdminForm->create();
+
+        $originalLocale = I18n::getLocale();
+        try {
+            I18n::setLocale('en_US');
+            $this->execPrivateMethod($this->BcCkeditor, 'build', ['Page.contents', []]);
+            $jsResult = $this->BcCkeditor->getView()->fetch('script');
+            $editorLanguagePath = Plugin::path('BcAdminThird') . 'webroot' . DS . 'js' . DS . 'vendor' . DS . 'ckeditor' . DS . 'lang' . DS . 'en.js';
+            $this->assertFileExists($editorLanguagePath);
+            $this->assertStringContainsString('"language":"en"', $jsResult);
+        } finally {
+            I18n::setLocale($originalLocale);
+        }
+    }
+
+    /**
+     * Test build falls back to ja for unsupported locale
+     */
+    public function testBuildEditorLanguageFallbackToJa()
+    {
+        $this->BcCkeditor->getView()->setTheme('BcAdminThird');
+        $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
+        $this->BcCkeditor->getView()->setRequest($request);
+        $this->BcCkeditor->BcAdminForm->create();
+
+        $originalLocale = I18n::getLocale();
+        try {
+            I18n::setLocale('fr_FR');
+            $this->execPrivateMethod($this->BcCkeditor, 'build', ['Page.contents', []]);
+            $jsResult = $this->BcCkeditor->getView()->fetch('script');
+            $this->assertStringContainsString('"language":"ja"', $jsResult);
+        } finally {
+            I18n::setLocale($originalLocale);
+        }
     }
 
     /**
