@@ -107,6 +107,9 @@
     },
     "config": {
         "sort-packages": true,
+        "platform": {
+            "php": "8.1"
+        },
         "allow-plugins": {
             "cakephp/plugin-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
