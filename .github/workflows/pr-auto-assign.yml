@@ -1,0 +1,100 @@
+name: PR auto-assign
+
+# プルリクの Reviewers / Assignees / ラベルを自動管理するワークフロー。
+# 仕様:
+#   - PR作成・再オープン: Reviewers=メンテナ固定 / Assignees=メンテナ固定
+#   - Changes requested : 社内PR→Assignees=作成者 / 外部PR→ラベル「修正待ち」付与
+#   - 再レビュー依頼     : Assignees=メンテナに戻す / ラベル「修正待ち」解除
+#
+# 事前準備:
+#   1) 下の MAINTAINERS をメンテナ3名の GitHub ユーザー名に置き換える
+#   2) リポジトリに「修正待ち」ラベルを作成しておく（Issues → Labels → New label）
+
+on:
+  pull_request_target:
+    types: [opened, reopened, review_requested]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  manage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const MAINTAINERS = ['ryuring', 'kaburk', 'katokaisya'];
+            const AWAITING_LABEL = '修正待ち';
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const number = pr.number;
+            const author = pr.user.login;
+            const event = context.eventName;
+            const action = context.payload.action;
+            const isInternal = ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(pr.author_association);
+
+            // Assignees を「指定リストだけ」に揃える（既存は外す）
+            const setAssignees = async (logins) => {
+              const current = (pr.assignees || []).map(a => a.login);
+              const toRemove = current.filter(l => !logins.includes(l));
+              const toAdd = logins.filter(l => !current.includes(l));
+              if (toRemove.length) {
+                await github.rest.issues.removeAssignees(
+                  { owner, repo, issue_number: number, assignees: toRemove });
+              }
+              if (toAdd.length) {
+                await github.rest.issues.addAssignees(
+                  { owner, repo, issue_number: number, assignees: toAdd });
+              }
+            };
+
+            const addLabel = async () => {
+              await github.rest.issues.addLabels(
+                { owner, repo, issue_number: number, labels: [AWAITING_LABEL] });
+            };
+            const removeLabel = async () => {
+              try {
+                await github.rest.issues.removeLabel(
+                  { owner, repo, issue_number: number, name: AWAITING_LABEL });
+              } catch (e) { /* 未付与なら無視 */ }
+            };
+
+            // ① PR作成・再オープン
+            if (event === 'pull_request_target' && (action === 'opened' || action === 'reopened')) {
+              const reviewers = MAINTAINERS.filter(m => m !== author); // 作成者本人は除外
+              if (reviewers.length) {
+                try {
+                  await github.rest.pulls.requestReviewers(
+                    { owner, repo, pull_number: number, reviewers });
+                } catch (e) {
+                  console.log(`Skipping review request due to permissions: ${e.message}`);
+                }
+              }
+              await setAssignees(MAINTAINERS);
+              await removeLabel();
+              return;
+            }
+
+            // ② Changes requested
+            if (event === 'pull_request_review'
+                && context.payload.review.state === 'changes_requested') {
+              await addLabel();
+              if (isInternal) {
+                await setAssignees([author]); // 社内PRは作成者へバトン
+              }
+              // 外部PRは Assignee 変更不可のためラベルのみ
+              return;
+            }
+
+            // ③ 再レビュー依頼（修正後にメンテナへ戻す）
+            if (event === 'pull_request_target' && action === 'review_requested') {
+              await setAssignees(MAINTAINERS);
+              await removeLabel();
+              return;
+            }

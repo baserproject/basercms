@@ -102,6 +102,19 @@ class BcContentsHelperTest extends BcTestCase
         $result = $this->BcContents->getConfig('items');
         $this->assertNotNull($result);
         $this->assertEquals('無所属コンテンツ', $result["Default"]["title"]);
+
+        // editDisabled/manageDisabled/deleteDisabled が各アイテムにセットされることを確認
+        foreach ($result as $type => $item) {
+            $this->assertArrayHasKey('editDisabled', $item, "type:{$type} に editDisabled がない");
+            $this->assertArrayHasKey('manageDisabled', $item, "type:{$type} に manageDisabled がない");
+            $this->assertArrayHasKey('deleteDisabled', $item, "type:{$type} に deleteDisabled がない");
+            $this->assertIsBool($item['editDisabled'], "type:{$type} の editDisabled が bool でない");
+            $this->assertIsBool($item['manageDisabled'], "type:{$type} の manageDisabled が bool でない");
+            $this->assertIsBool($item['deleteDisabled'], "type:{$type} の deleteDisabled が bool でない");
+        }
+
+        // manage URL が存在しない ContentFolder は manageDisabled = true になる
+        $this->assertTrue($result['ContentFolder']['manageDisabled']);
     }
 
     /**

@@ -255,7 +255,7 @@ class PagesTable extends AppTable
         int $newParentId,
         string|null $newTitle,
         int $newAuthorId,
-        int $newSiteId = null)
+        ?int $newSiteId = null)
     {
         $page = $this->get($id, contain: ['Contents']);
         $oldPage = clone $page;
@@ -277,7 +277,7 @@ class PagesTable extends AppTable
             'title' => $newTitle ?? $oldPage->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
-            'layout_template' => $page->content->layout_tmplate ?? ''
+            'layout_template' => $page->content->layout_template ?? ''
         ]);
 
         if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {

@@ -184,6 +184,19 @@ class BcAdminFormHelperTest extends BcTestCase
         $controlDatePicker = $this->BcAdminForm->control($name, $optionsDatePicker);
         $this->assertEquals($controlDatePicker, $this->BcAdminForm->control($name, ['type' => 'datePicker']));
 
+        $optionsTime = array_replace_recursive($options, [
+            'type' => 'time',
+            'class' => 'bca-textbox__input',
+            'templateVars' => [
+                'class' => 'bca-textbox'
+            ],
+            'labelOptions' => [
+                'class' => 'bca-textbox__label'
+            ]
+        ]);
+        $controlTime = $this->BcAdminForm->control($name, $optionsTime);
+        $this->assertEquals($controlTime, $this->BcAdminForm->control($name, ['type' => 'time']));
+
         $optionsTextarea = array_replace_recursive($options, [
             'type' => 'textarea',
             'class' => 'bca-textarea__textarea',

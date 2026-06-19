@@ -126,8 +126,8 @@ class MailFieldsTable extends MailAppTable
             ->scalar('group_field')
             ->maxLength('group_field', 255, __d('baser_core', 'グループ名は255文字以内で入力してください。'))
             ->add('group_field', [
-                'halfTextMailField' => [
-                    'rule' => 'halfTextMailField',
+                'halfTextMailGroupField' => [
+                    'rule' => 'halfTextMailGroupField',
                     'provider' => 'table',
                     'message' => __d('baser_core', 'グループ名は半角英数字、ハイフン、アンダースコアで入力してください。')
                 ]]);
@@ -135,8 +135,8 @@ class MailFieldsTable extends MailAppTable
             ->scalar('group_valid')
             ->maxLength('group_valid', 255, __d('baser_core', 'グループ入力チェックは255文字以内で入力してください。'))
             ->add('group_valid', [
-                'halfTextMailField' => [
-                    'rule' => 'halfTextMailField',
+                'halfTextMailGroupField' => [
+                    'rule' => 'halfTextMailGroupField',
                     'provider' => 'table',
                     'message' => __d('baser_core', 'グループ入力チェックは半角英数字、ハイフン、アンダースコアで入力してください。')
                 ]]);
@@ -233,7 +233,7 @@ class MailFieldsTable extends MailAppTable
 
     /**
      * メールフィールドの値として正しい文字列か検証する
-     * 半角小文字英数-_
+     * 半角小文字英数字とアンダースコアを許容
      * メールフィールドは、DBテーブルのフィールドとして利用されるため、
      * 大文字を利用した場合にクォートを入れないとエラーとなってしまう
      *
@@ -282,7 +282,7 @@ class MailFieldsTable extends MailAppTable
      * @noTodo
      * @unitTest
      */
-    public function copy(?int $id, MailField $data = null, array $options = [])
+    public function copy(?int $id, ?MailField $data = null, array $options = [])
     {
         $options = array_merge([
             'sortUpdateOff' => false,
@@ -352,6 +352,22 @@ class MailFieldsTable extends MailAppTable
             $sourceList[] = preg_replace("/(^\s+|\r|\n\s+$)/u", '', $value);
         }
         return implode("\n", $sourceList);
+    }
+
+    /**
+     * グループ系フィールドの値として正しい文字列か検証する
+     * 半角英数字、ハイフン、アンダースコアを許容
+     *
+     * @param string $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function halfTextMailGroupField(string $value): bool
+    {
+        $pattern = "/^[a-zA-Z0-9_-]*$/";
+        return preg_match($pattern, $value) === 1;
     }
 
 }

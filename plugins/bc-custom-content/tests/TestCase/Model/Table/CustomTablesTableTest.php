@@ -97,7 +97,7 @@ class CustomTablesTableTest extends BcTestCase
         $errors = $validator->validate([
             'name' => 'あ',
         ]);
-        $this->assertEquals('識別名は半角英数字とアンダースコアのみで入力してください。', current($errors['name']));
+        $this->assertEquals('識別名は半角英数小文字とアンダースコアのみで入力してください。', current($errors['name']));
         //正常系実行
         $errors = $validator->validate([
             'name' => 'test',

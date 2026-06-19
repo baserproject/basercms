@@ -87,10 +87,18 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
     ]) ?>
   </div>
   <div class="bca-actions__sub">
+    <?php
+      $displayValue = $entity->{$entity->custom_table->display_field} ?? '';
+      if (is_array($displayValue) || (is_object($displayValue) && !($displayValue instanceof \Stringable))) {
+        $displayValue = (string) $entity->id;
+      } else {
+        $displayValue = (string) $displayValue;
+      }
+    ?>
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
     ['action' => 'delete', $tableId, $entity->id], [
       'block' => true,
-      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $entity->{$entity->custom_table->display_field}),
+      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $displayValue),
       'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',

@@ -266,7 +266,7 @@ class MailContentsService implements MailContentsServiceInterface
      * @checked
      * @noTodo
      */
-    public function getPublishedAll(int $siteId = null)
+    public function getPublishedAll(?int $siteId = null)
     {
         $query = $this->getIndex(['status' => 'publish']);
         if($siteId) {

@@ -51,7 +51,7 @@ class BcWidgetAreaHelper extends Helper
      * @noTodo
      * @unitTest ラッパーメソッドのためテスト不要
      */
-    public function widgetArea(int $no = null, array $options = [])
+    public function widgetArea(?int $no = null, array $options = [])
     {
         echo $this->getWidgetArea($no, $options);
     }
@@ -66,7 +66,7 @@ class BcWidgetAreaHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getWidgetArea(int $no = null, array $options = [])
+    public function getWidgetArea(?int $no = null, array $options = [])
     {
         if (!$no && !empty($this->_View->get('currentWidgetAreaId'))) {
             $no = $this->_View->get('currentWidgetAreaId');

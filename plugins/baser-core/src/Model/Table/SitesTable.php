@@ -540,8 +540,8 @@ class SitesTable extends AppTable
     public function getSubByUrl(
         $url,
         $sameMainUrl = false,
-        BcAbstractDetector $agent = null,
-        BcAbstractDetector $lang = null
+        ?BcAbstractDetector $agent = null,
+        ?BcAbstractDetector $lang = null
     )
     {
         $SiteConfigsService = new SiteConfigsService();

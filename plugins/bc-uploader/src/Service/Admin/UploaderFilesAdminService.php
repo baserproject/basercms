@@ -37,7 +37,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(int $id = null)
+    public function getViewVarsForIndex(?int $id = null)
     {
         return [
             'listId' => $id,
@@ -56,7 +56,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForAjaxList(PaginatedResultSet $entities, int $listId = null)
+    public function getViewVarsForAjaxList(PaginatedResultSet $entities, ?int $listId = null)
     {
         $uploaderConfig = $this->uploaderConfigsService->get();
         return [

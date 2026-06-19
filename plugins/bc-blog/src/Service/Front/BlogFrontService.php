@@ -573,7 +573,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         bool $limit = false,
         bool $viewCount = false,
         int $depth = 1,
-        string $contentType = null
+        ?string $contentType = null
     )
     {
         if ($limit === '0') $limit = false;

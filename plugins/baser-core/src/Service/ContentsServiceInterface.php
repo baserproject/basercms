@@ -243,7 +243,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getParentLayoutTemplate(int $id, int $parentId = null);
+    public function getParentLayoutTemplate(int $id, ?int $parentId = null);
 
     /**
      * コンテンツIDよりURLを取得する

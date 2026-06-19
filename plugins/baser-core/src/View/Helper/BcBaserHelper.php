@@ -65,7 +65,7 @@ use BaserCore\Annotation\Doc;
  * @property BcXmlHelper $BcXml
  *
  * ### BcContentsHelper
- * @method EntityInterface getParentContent(int $id = null, bool $direct = true)
+ * @method EntityInterface getParentContent(?int $id = null, bool $direct = true)
  * @method Site getCurrentSite()
  * @method Content getCurrentContent()
  *
@@ -74,8 +74,8 @@ use BaserCore\Annotation\Doc;
  * @method void logo(array $options = [])
  *
  * ### BcWidgetAreaHelper
- * @method void widgetArea(int $no = null, array $options = [])
- * @method string getWidgetArea(int $no = null, array $options = [])
+ * @method void widgetArea(?int $no = null, array $options = [])
+ * @method string getWidgetArea(?int $no = null, array $options = [])
  * @method bool isMail() MailHelper
  *
  * ### BlogHelper
@@ -118,7 +118,7 @@ use BaserCore\Annotation\Doc;
  * @method string createMailForm($context = null, $options = [])
  * @method string mailFormHidden($fieldName, $options = [])
  * @method void mailFormAuthCaptcha(string $fieldName, array $options = [])
- * @method string mailFormSubmit(string $caption = null, array $options = [])
+ * @method string mailFormSubmit(?string $caption = null, array $options = [])
  * @method string endMailForm(array $secureAttributes = [])
  * @method MailformHelper unlockMailFormField(string $name)
  * @method mixed getMailFormSourceValue(string $fieldname, array $options = [])
@@ -743,8 +743,8 @@ class BcBaserHelper extends Helper
         if (isset($url[1])) $url1 = $url[1];
         if (isset($url[2])) $url2 = $url[2];
 
-        // 固定ページの場合
-        if (!BcUtil::isAdminSystem()) {
+        // 固定ページの場合（プラグインルーティング時を除く）
+        if (!BcUtil::isAdminSystem() && (!$plugin || $plugin === 'BaserCore')) {
             $pageUrl = h($request->getPath());
             if ($pageUrl === false) $pageUrl = '/';
 
@@ -758,7 +758,7 @@ class BcBaserHelper extends Helper
             $aryUrl = explode('/', $pageUrl);
         } else {
             // プラグインルーティングの場合
-            if ((($url1 == '' && in_array($action, ['index', 'mobile_index', 'smartphone_index'])) || ($url1 == $action)) && $url2 != $action && $plugin) {
+            if ((($url1 == '' && in_array($action, ['index', 'mobile_index', 'smartphone_index'], true)) || ($url1 == $action)) && $url2 != $action && $plugin) {
                 $prefix = $plugin = '';
                 $controller = $url0;
             }
@@ -2526,7 +2526,7 @@ class BcBaserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getRelatedSiteLinks(int $id = null, array $excludeIds = []): string
+    public function getRelatedSiteLinks(?int $id = null, array $excludeIds = []): string
     {
         $options = [];
         if ($excludeIds) $options['excludeIds'] = $excludeIds;
@@ -2883,6 +2883,32 @@ class BcBaserHelper extends Helper
     public function getFullUrl(string $url): string
     {
         return BcUtil::fullUrl($url);
+    }
+
+    /**
+     * html の lang 属性に使う言語コードを取得する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getHtmlLang(): string
+    {
+        return BcUtil::getLocaleLanguageCode();
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isJapaneseLocale(): bool
+    {
+        return BcUtil::isJapaneseLocale();
     }
 
 }

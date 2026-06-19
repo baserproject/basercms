@@ -133,10 +133,15 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
      */
     public function testVerify($expected, $saveData, $verifyData)
     {
-        $twoFactorAuthentication = $this->TwoFactorAuthentications->newEntity($saveData);
-        $this->assertNotFalse($this->TwoFactorAuthentications->save($twoFactorAuthentication));
-        $result = $this->TwoFactorAuthenticationsService->verify($verifyData['user_id'], $verifyData['code']);
-        $this->assertEquals($expected, $result);
+        $allowTime = Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime');
+        Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', 10);
+        try {
+            $this->TwoFactorAuthentications->save($this->TwoFactorAuthentications->newEntity($saveData));
+            $result = $this->TwoFactorAuthenticationsService->verify($verifyData['user_id'], $verifyData['code']);
+            $this->assertEquals($expected, $result);
+        } finally {
+            Configure::write('BcApp.twoFactorAuthenticationCodeAllowTime', $allowTime);
+        }
     }
 
     public static function getTestVerifyProvider()
