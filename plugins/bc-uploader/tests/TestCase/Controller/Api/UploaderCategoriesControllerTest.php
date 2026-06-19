@@ -194,7 +194,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         // PHP 8.5 で null を clone した際のエラーメッセージが変更された
-        $this->assertEquals('データベース処理中にエラーが発生しました。clone(): Argument #1 ($object) must be of type object, null given', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "uploader_categories"', $result->message);
     }
 
     /**
