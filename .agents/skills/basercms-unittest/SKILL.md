@@ -1,6 +1,7 @@
 ---
 name: basercms-unittest
 description: baserCMS（CakePHP5 / PHPUnit）のユニットテストをローカル Docker 環境で実行・調査する手順。「ユニットテストを実行して」「全テストを走らせて」「このテストだけ流して」「テスト失敗を調べて」等のときに参照する。コンテナ名・実行コマンド・権限自動承認のためのコマンド整形・失敗の集計と切り分け方を収録。
+license: MIT
 ---
 
 # baserCMS ユニットテスト実行ガイド（ローカル）

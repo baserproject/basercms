@@ -1,6 +1,7 @@
 ---
 name: cakephp-migration
 description: baserCMS の CakePHP バージョンアップ（5.0 → 5.1 → 5.2 ～）対応の非推奨・破壊的変更パターン集と修正レシピ。「Association alias already set」「A validation rule with the name already exists」「_Token not found」「headers already sent」「Plugin named X is already loaded」「ResultSet/PaginatedResultSet のエラー」「order()/group() 非推奨」「イベントリスナーの戻り値非推奨」「find('all', $options) 非推奨」「Table::get の配列 options 非推奨／名前付き引数」「配列条件の null 値で例外」「_cake_core_ キャッシュ設定」「pluginBootstrap で後続プラグインの setting.php が読まれず Configure が null（live イテレーション）」「_checkFilePath で .. テンプレートが MissingPluginException/500」「TreeBehavior でルートに parent_id=null を入れて lft/rght 破損」「Entity::set 配列一括の非推奨」「AbstractMigration/AbstractSeed 非推奨 → BaseMigration/BaseSeed（cakephp/migrations 4.5+）」「config/routes.php の fallbacks() でテストのみ 404」等、CakePHP本体・関連パッケージ起因の問題の調査・修正時に参照する。新しい CakePHP バージョン対応時は本書にバージョン別追記する。PHP本体起因の問題は php-migration スキルを参照。
+license: MIT
 ---
 
 # CakePHP バージョン移行ガイド（baserCMS）
