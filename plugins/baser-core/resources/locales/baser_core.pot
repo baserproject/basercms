@@ -4566,6 +4566,16 @@ msgstr ""
 msgid "半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください"
 msgstr ""
 
+#: ./plugins/bc-admin-third/templates/Admin/Users/edit_password.php:56
+#: ./plugins/bc-admin-third/templates/Admin/element/Users/form.php:149
+msgid "{0}文字以上で入力してください。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/Admin/Users/edit_password.php:63
+#: ./plugins/bc-admin-third/templates/Admin/element/Users/form.php:156
+msgid "{0}を含む必要があります。"
+msgstr ""
+
 #: ./plugins/bc-admin-third/templates/Admin/Users/index.php:24
 msgid "ユーザー一覧"
 msgstr ""
@@ -7529,6 +7539,7 @@ msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:60
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:118
+#: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:87
 msgid "半角小文字英数字とアンダースコア（ _ ）のみ利用可能です。"
 msgstr ""
 
@@ -7842,10 +7853,6 @@ msgstr ""
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:80
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/index_list.php:29
 msgid "識別名"
-msgstr ""
-
-#: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:87
-msgid "半角英数字とアンダースコアのみ利用できます。"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:106
@@ -9830,6 +9837,10 @@ msgstr ""
 msgid "草稿欄に保存できるデータ量を超えています。"
 msgstr ""
 
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:147
+msgid "草稿欄でPHPの構文エラーが発生しました。"
+msgstr ""
+
 #: ./plugins/bc-blog/src/Model/Table/BlogPostsTable.php:166
 msgid "草稿欄でスクリプトの入力は許可されていません。"
 msgstr ""
@@ -10525,7 +10536,7 @@ msgid "識別名を入力してください。"
 msgstr ""
 
 #: ./plugins/bc-custom-content/src/Model/Table/CustomTablesTable.php:101
-msgid "識別名は半角英数字とアンダースコアのみで入力してください。"
+msgid "識別名は半角英数小文字とアンダースコアのみで入力してください。"
 msgstr ""
 
 #: ./plugins/bc-custom-content/src/Model/Table/CustomTablesTable.php:106

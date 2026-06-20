@@ -174,7 +174,7 @@ class CustomTablesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals(
-            '識別名は半角英数字とアンダースコアのみで入力してください。',
+            '識別名は半角英数小文字とアンダースコアのみで入力してください。',
             $result->errors->name->regex);
     }
 
@@ -219,7 +219,7 @@ class CustomTablesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals(
-            '識別名は半角英数字とアンダースコアのみで入力してください。',
+            '識別名は半角英数小文字とアンダースコアのみで入力してください。',
             $result->errors->name->regex);
 
         //不要なテーブルを削除

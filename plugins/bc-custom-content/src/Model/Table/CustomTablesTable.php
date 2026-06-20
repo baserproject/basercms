@@ -98,7 +98,7 @@ class CustomTablesTable extends AppTable
             ->scalar('name')
             ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', '識別名を入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', '識別名は半角英数字とアンダースコアのみで入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', '識別名は半角英数小文字とアンダースコアのみで入力してください。'))
             ->add('name', [
                 'validateUnique' => [
                     'rule' => ['validateUnique'],

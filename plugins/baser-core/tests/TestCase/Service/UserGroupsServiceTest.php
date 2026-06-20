@@ -11,10 +11,14 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\UserGroupsService;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\Core\Configure;
 
 /**
  * Class UserGroupsServiceTest
@@ -91,6 +95,28 @@ class UserGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * Test getIndex with isDisplayUserListInUserGroup false
+     */
+    public function testGetIndex_ContainCheck()
+    {
+        Configure::write('BcApp.isDisplayUserListInUserGroup', true);
+        $userGroups = $this->UserGroups->getIndex();
+        $this->assertEquals(3, $userGroups->count());
+
+        foreach ($userGroups as $userGroup) {
+            $this->assertTrue($userGroup->has('users'));
+        }
+
+        Configure::write('BcApp.isDisplayUserListInUserGroup', false);
+        $userGroups = $this->UserGroups->getIndex();
+        $this->assertEquals(3, $userGroups->count());
+
+        foreach ($userGroups as $userGroup) {
+            $this->assertFalse($userGroup->has('users'));
+        }
+    }
+
+    /**
      * Test create
      * @dataProvider createDataProvider
      */
@@ -140,6 +166,36 @@ class UserGroupsServiceTest extends BcTestCase
         $this->UserGroups->delete(3);
         $group = $this->UserGroups->UserGroups->find('all');
         $this->assertEquals(2, $group->count());
+    }
+
+    /**
+     * Test delete with users
+     * ユーザーが所属しているユーザーグループは削除できないことを確認
+     */
+    public function testDeleteWithUsers()
+    {
+        // ユーザーを作成
+        $user = UserFactory::make([
+            'id' => 10,
+            'name' => 'test_user',
+            'password' => 'password',
+            'real_name_1' => 'test',
+            'real_name_2' => 'user',
+            'email' => 'testuser@example.com',
+            'nickname' => 'テストユーザー',
+            'status' => true
+        ])->persist();
+
+        // ユーザーグループとユーザーの関連付けを作成
+        UsersUserGroupFactory::make([
+            'user_id' => 10,
+            'user_group_id' => 2
+        ])->persist();
+
+        // 削除を試みる
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('ユーザーが所属しているユーザーグループは削除できません。');
+        $this->UserGroups->delete(2);
     }
 
     /**

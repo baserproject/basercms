@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\UserGroupsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -154,6 +155,9 @@ class UserGroupsController extends BcAdminApiController
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = $e->getMessage();
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));

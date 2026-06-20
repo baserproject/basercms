@@ -24,9 +24,14 @@ use Cake\Utility\Inflector;
 $request = $this->getRequest();
 $attributes = $request->getAttributes();
 $base = $attributes['base'];
+$jsFiles = [];
+if ($this->BcBaser->isJapaneseLocale()) {
+  $jsFiles[] = 'vendor/i18n/ui.datepicker-ja';
+  $jsFiles[] = 'vendor/jquery.validate_ja';
+}
 ?>
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="<?= h($this->BcBaser->getHtmlLang()) ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex,nofollow"/>
@@ -68,18 +73,16 @@ $base = $attributes['base'];
     'bcConfirmAlertMessage1' => __d('baser_core', 'メッセージを指定してください。'),
     'bcConfirmAlertMessage2' => __d('baser_core', 'コールバック処理が登録されていません。')
   ], ['block' => false]) ?>
-    <?php $this->BcBaser->js([
+  <?php $this->BcBaser->js(array_merge([
     'admin/vendor.bundle',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
     'vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
     'vendor/jquery-ui-1.13.0.min',
-    'vendor/i18n/ui.datepicker-ja',
     'vendor/jquery.validate.1.19.3.min',
-    'vendor/jquery.validate_ja',
     'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker'
-  ]) ?>
+  ], $jsFiles)) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',
     'data-baseUrl' => h($base),

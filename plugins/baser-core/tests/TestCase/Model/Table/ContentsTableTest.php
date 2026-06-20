@@ -379,6 +379,65 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * メインサイトの site_root 更新時、連携先サブサイトのURL名を維持する
+     */
+    public function testUpdateRelateSubSiteContentKeepsRelatedSiteRootName()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+
+        $sitesTable = $this->getTableLocator()->get('BaserCore.Sites');
+        $sitesTable->updateAll([
+            'status' => true,
+            'relate_main_site' => true,
+            'alias' => 's',
+        ], ['id' => 2]);
+        $relatedRootContentId = $sitesTable->getRootContentId(2);
+        $this->Contents->updateAll(['name' => 's'], ['id' => $relatedRootContentId]);
+
+        $content = $this->Contents->get(1);
+        $content->title = 'メインサイト2';
+        $content->modified_date = FrozenTime::now();
+
+        $result = $this->execPrivateMethod($this->Contents, 'updateRelateSubSiteContent', [$content]);
+
+        $this->assertTrue($result);
+
+        $relatedRoot = $this->Contents->get($relatedRootContentId);
+        $this->assertEquals('s', $relatedRoot->name);
+        $this->assertEquals('メインサイト2', $relatedRoot->title);
+    }
+
+    /**
+     * メインサイトで新規コンテンツ作成時、連携先サブサイトの関連コンテンツにも URL を設定する
+     */
+    public function testUpdateRelateSubSiteContentSetsUrlOnCreatedRelatedContent()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+
+        $sitesTable = $this->getTableLocator()->get('BaserCore.Sites');
+        $sitesTable->updateAll(['status' => true], ['id' => 2]);
+
+        $content = $this->Contents->createContent([
+            'name' => 'issue4325',
+            'title' => 'Issue4325',
+            'parent_id' => 1,
+            'site_id' => 1,
+            'self_status' => true,
+            'created_date' => FrozenTime::now(),
+        ], 'BaserCore', 'Page', 999, false);
+
+        $relatedContent = $this->Contents->find()
+            ->where([
+                'site_id' => 2,
+                'alias_id' => $content->id,
+            ])
+            ->first();
+
+        $this->assertNotNull($relatedContent);
+        $this->assertNotEmpty($relatedContent->url);
+    }
+
+    /**
      * 現在のフォルダのURLを元に別サイトにフォルダを生成する
      * 最下層のIDを返却する
      */

@@ -625,10 +625,6 @@ class ContentsTable extends AppTable
         if ($sites->all()->isEmpty()) {
             return true;
         }
-        // 連携サイトに紐づくコンテンツがない場合は終了
-        if ($this->find()->where(['site_id' => $sites->first()->id])->all()->isEmpty()) {
-            return true;
-        }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
             $this->getEventManager()->off('Model.beforeMarshal');
@@ -646,6 +642,15 @@ class ContentsTable extends AppTable
             if (!$site->status) {
                 continue;
             }
+            $relatedContentName = $data->name;
+            $relatedParentId = null;
+            if (!$this->find()->select(['id'])->where(['site_id' => $site->id, 'site_root' => true])->first()) {
+                continue;
+            }
+            if (!empty($data->site_root)) {
+                $relatedContentName = $site->alias ?: $site->name ?: $data->name;
+                $relatedParentId = $data->id;
+            }
             $url = $pureUrl;
             $prefix = $this->Sites->getPrefix($site->id);
             if ($prefix) {
@@ -662,7 +667,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = $data->name;
+                    $content->name = $relatedContentName;
                     $content->title = $data->title;
                     $content->self_status = $data->self_status;
                     $content->self_publish_begin = $data->self_publish_begin;
@@ -677,9 +682,12 @@ class ContentsTable extends AppTable
                     if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                    if (is_null($relatedParentId)) {
+                        $relatedParentId = $this->copyContentFolderPath($url, $site->id);
+                    }
+                    $content->parent_id = $relatedParentId;
                 } else {
-                    $content->name = $data->name;
+                    $content->name = $relatedContentName;
                 }
             } else {
                 // 存在しない場合はエイリアスを作成
@@ -696,7 +704,7 @@ class ContentsTable extends AppTable
                 unset($content->modified);
                 unset($content->layout_template);
                 $content->created_date = $content->created = \Cake\I18n\DateTime::now();
-                $content->name = $data->name;
+                $content->name = $relatedContentName;
                 $content->main_site_content_id = $data->id;
                 $content->site_id = $site->id;
                 $url = $data->url;
@@ -706,11 +714,15 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                if (is_null($relatedParentId)) {
+                    $relatedParentId = $this->copyContentFolderPath($url, $site->id);
+                }
+                $content->parent_id = $relatedParentId;
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
             }
             $this->offEvent('Model.afterSave');
-            if (!$this->save($content)) {
+            $savedContent = $this->save($content);
+            if (!$savedContent || !$this->updateSystemData($savedContent)) {
                 $result = false;
             }
             $this->onEvent('Model.afterSave');

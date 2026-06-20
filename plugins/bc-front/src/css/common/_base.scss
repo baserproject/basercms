@@ -1,9 +1,11 @@
+@use "mixin";
+
 /**
  * Base
  */
 
 html {
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     position: relative;
     width: 100%;
     overflow-x: hidden;
@@ -19,7 +21,7 @@ body {
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     position: relative;
     width: 100%;
     overflow-x: hidden;
@@ -31,7 +33,7 @@ body {
   margin: 0 auto;
   min-width: 1300px;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     min-width: 100%;
   }
 }
@@ -42,7 +44,7 @@ body {
   padding: 0 40px;
   box-sizing: border-box;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     box-sizing: border-box;
     width: 100%;
     padding: 0 20px;

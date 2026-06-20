@@ -339,7 +339,7 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getRelatedContents(?int $contentId, int $parentId = null)
+    public function getRelatedContents(?int $contentId, ?int $parentId = null)
     {
 		if(!$contentId) {
 		    if($parentId) {

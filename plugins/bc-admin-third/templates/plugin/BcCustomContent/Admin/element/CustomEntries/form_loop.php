@@ -20,7 +20,8 @@
  */
 if (empty($customLink->children)) return;
 // 空の場合の対策（既にデータを持っていて、ループに対応していないフィールドタイプに変更した場合など
-echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
+echo $this->BcAdminForm->hidden($customLink->name, ['value' => '']);
+$this->BcAdminForm->unlockField($customLink->name);
 ?>
 
 
@@ -112,7 +113,6 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
           ]) ?>
         </td>
       </tr>
-      <?php $this->BcAdminForm->unlockField("{$customLink->name}") ?>
       <?php $this->BcAdminForm->unlockField("{$customLink->name}.__loop-src__.{$child->name}") ?>
     <?php endforeach ?>
   </table>

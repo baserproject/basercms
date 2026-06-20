@@ -12,6 +12,7 @@
 namespace BcMail\Controller;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Service\BcCaptchaServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcMail\Model\Entity\MailMessage;
@@ -115,14 +116,13 @@ class MailController extends MailFrontAppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-        // TODO ucmitz 未実装
-        /*
-        // キャッシュ対策
-        if (!isConsole() && !$this->request->getParam('requested')) {
-            header("Cache-Control: no-cache, no-store, must-revalidate");
-            header("Pragma: no-cache");
-            header("Expires: " . date(DATE_RFC1123, strtotime("-1 day")));
-        }*/
+        // キャッシュ対策: メールフォーム画面でCache-Controlヘッダーを出力
+        if (!BcUtil::isConsole() && !$this->request->getParam('requested')) {
+            $this->response = $this->response
+                ->withHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->withHeader('Pragma', 'no-cache')
+                ->withHeader('Expires', gmdate(DATE_RFC1123, strtotime('-1 day')));
+        }
     }
 
     /**
@@ -281,7 +281,7 @@ class MailController extends MailFrontAppController
             $entity = $mailMessagesService->create($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
-            $mailMessage->auth_captcha = '';
+            $entity->auth_captcha = '';
             $this->BcMessage->setError(__d('baser_core', '入力内容を確認し、再度送信してください。'));
             $this->set($service->getViewVarsForConfirm($mailContent, $entity));
             return $this->render($service->getConfirmTemplate($mailContent));
@@ -302,6 +302,7 @@ class MailController extends MailFrontAppController
 
         // メール送信
         try {
+            $sendEmailOptions['clientIp'] = $this->getRequest()->clientIp();
             $service->sendMail($mailContent, $entity, $sendEmailOptions);
             $this->getRequest()->getSession()->delete('BcMail.valid');
         } catch (\Throwable $e) {

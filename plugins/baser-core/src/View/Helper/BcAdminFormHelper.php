@@ -99,6 +99,7 @@ class BcAdminFormHelper extends BcFormHelper
                 case 'password':
                 case 'date':
                 case 'datePicker':
+                case 'time':
                 case 'tel':
                 case 'email':
                 case 'number':

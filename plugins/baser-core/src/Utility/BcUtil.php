@@ -343,7 +343,6 @@ class BcUtil
      * ２つ目以降のバージョン番号は３桁として結合
      * 1.5.9 => 1005009
      * ※ ２つ目以降のバージョン番号は999までとする
-     * β版の場合はfalseを返す
      *
      * @param int|false $version
      * @checked
@@ -356,12 +355,7 @@ class BcUtil
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
-                if (isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
-                    return false;
-                }
                 $maches[4] = str_replace('.', '', $maches[4]);
-            } elseif (isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
-                return false;
             } else {
                 $maches[4] = 0;
             }
@@ -578,8 +572,18 @@ class BcUtil
                 return false;
             }
         }
-        $adminPrefix = BcUtil::getPrefix(true);
-        return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
+        $baserCorePrefix = (string) BcUtil::getBaserCorePrefix();
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . BcUtil::getAdminPrefix();
+        $apiAdminAlias = Configure::read('BcPrefixAuth.Api/Admin.alias')
+            ?: '/' . (string) Configure::read('BcApp.apiPrefix') . '/admin';
+
+        $prefixes = [
+            $baserCorePrefix . $adminAlias,
+            $baserCorePrefix . $apiAdminAlias,
+        ];
+        $prefixes = array_map(fn($prefix) => preg_quote(ltrim($prefix, '/'), '/'), $prefixes);
+
+        return (bool) preg_match('/^\/?(?:' . implode('|', $prefixes) . ')(?:$|\/)/', $url);
     }
 
     /**
@@ -2251,8 +2255,8 @@ class BcUtil
     public static function triggerDeprecatedError(
         string $target,
         string $since,
-        string $remove = null,
-        string $note = null
+        ?string $remove = null,
+        ?string $note = null
     ): void
     {
         if (!Configure::read('debug')) return;
@@ -2274,8 +2278,8 @@ class BcUtil
     public static function getDeprecatedMessage(
         string $target,
         string $since,
-        string $remove = null,
-        string $note = null
+        ?string $remove = null,
+        ?string $note = null
     ): string
     {
         $message = sprintf(__d('baser_core', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
@@ -2321,6 +2325,36 @@ class BcUtil
     public static function isDevelopmentVersion(): bool
     {
         return is_dir(ROOT . DS . 'plugins' . DS . 'baser-core');
+    }
+
+    /**
+     * locale から言語コードを取得する
+     *
+     * @param string|null $locale
+     * @param string $default
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getLocaleLanguageCode(?string $locale = null, string $default = 'ja'): string
+    {
+        $locale = strtolower((string) ($locale ?? \Cake\I18n\I18n::getLocale()));
+        return preg_replace('/[_-].*$/', '', $locale) ?: $default;
+    }
+
+    /**
+     * 現在の locale が日本語かどうか判定する
+     *
+     * @param string|null $locale
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isJapaneseLocale(?string $locale = null): bool
+    {
+        return self::getLocaleLanguageCode($locale) === 'ja';
     }
 
 }

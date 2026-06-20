@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -138,10 +139,16 @@ class UserGroupsController extends BcAdminAppController
     public function delete(UserGroupsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $userGroup = $service->get($id);
-        if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
-        } else {
+        try {
+            $userGroup = $service->get($id);
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
+            } else {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
+            }
+        } catch (BcException $e) {
+            $this->BcMessage->setError($e->getMessage());
+        } catch (\Throwable $e) {
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         return $this->redirect(['action' => 'index']);

@@ -58,6 +58,14 @@ class MailformHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /*
+     * マルチチェックボックスのオプションでtemplateVars.tagが指定されていた場合、ホワイトリスト内のタグを出力する
+     */
+    public function testControlWithTemplateVarsTag()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
     /**
      * create
      * ファイル添付の対応のためにデフォルト値を変更

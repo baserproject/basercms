@@ -140,17 +140,17 @@ class PagesTable extends AppTable
         $validator
         ->scalar('draft')
         ->allowEmptyString('draft', null)
-        ->maxLengthBytes('draft', 16777215, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('draft', 16777215, __d('baser_core', '草稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
-            'message' => __d('baser_core', '本稿欄でPHPの構文エラーが発生しました。')
+            'message' => __d('baser_core', '草稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('draft', [
             'containsScript' => [
                 'rule' => ['containsScript'],
                 'provider' => 'bc',
-                'message' => __d('baser_core', '本稿欄でスクリプトの入力は許可されていません。')
+                'message' => __d('baser_core', '草稿欄でスクリプトの入力は許可されていません。')
             ]
         ]);
 
@@ -255,7 +255,7 @@ class PagesTable extends AppTable
         int $newParentId,
         string|null $newTitle,
         int $newAuthorId,
-        int $newSiteId = null)
+        ?int $newSiteId = null)
     {
         $page = $this->get($id, contain: ['Contents']);
         $oldPage = clone $page;
@@ -277,7 +277,7 @@ class PagesTable extends AppTable
             'title' => $newTitle ?? $oldPage->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
-            'layout_template' => $page->content->layout_tmplate ?? ''
+            'layout_template' => $page->content->layout_template ?? ''
         ]);
 
         if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {

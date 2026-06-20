@@ -507,6 +507,7 @@ class ContentsServiceTest extends BcTestCase
         return [
             //NOTE: another.comがそもそもSiteに無いため一旦コメントアウト
             // ノーマルURL
+            ['main.com', '', null, false, false, '/'],
             ['main.com', '', '/', false, false, '/'],
             ['main.com', '', '/index', false, false, '/'],
             ['main.com', '', '/news/archives/1', false, false, '/news/archives/1'],
@@ -520,6 +521,7 @@ class ContentsServiceTest extends BcTestCase
             // ['another.com', '', '/another.com/news/archives/1', false, true, '/news/archives/1'],
             // ['another.com', 'iPhone', '/another.com/s/news/archives/1', false, true, '/news/archives/1'],
             // フルURL
+            ['main.com', '', null, true, false, 'http://main.com/'],
             ['main.com', '', '/', true, false, 'http://main.com/'],
             ['main.com', '', '/index', true, false, 'http://main.com/'],
             ['main.com', '', '/news/archives/1', true, false, 'http://main.com/news/archives/1'],

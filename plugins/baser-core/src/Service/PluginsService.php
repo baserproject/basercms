@@ -265,7 +265,8 @@ class PluginsService implements PluginsServiceInterface
         try {
             $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
             foreach($plugins as $pluginName => $plugin) {
-                $pluginsTable->update($pluginName, $plugin['version']);
+            	$version = explode('-', $plugin['version'])[0];
+                $pluginsTable->update($pluginName, $version);
                 BcUpdateLog::set(__d('baser_core', '{0} プラグイン {1} へのアップデートが完了しました。', $pluginName, $plugin['version']));
             }
         } catch (\Throwable $e) {
@@ -304,7 +305,7 @@ class PluginsService implements PluginsServiceInterface
     public function rollbackCore(string $currentVersion, string $php): void
     {
         // 元のバージョンに戻す
-        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php composer ' . $currentVersion;
+        $command = escapeshellarg($php) . ' ' . escapeshellarg(ROOT . DS . 'bin' . DS . 'cake.php') . ' composer ' . escapeshellarg($currentVersion) . ' 2>&1';
         exec($command, $out, $code);
         if ($code !== 0) {
             throw new BcException(__d('baser_core', 'コアファイルを元に戻そうとしましたが失敗しました。ログを確認してください。'));
@@ -326,7 +327,7 @@ class PluginsService implements PluginsServiceInterface
 
         // マイグレーション、アップデートスクリプト実行、バージョン番号更新
         // マイグレーションファイルがプログラムに反映されないと実行できないため、別プロセスとして実行する
-        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php update --connection ' . $connection;
+        $command = escapeshellarg($php) . ' ' . escapeshellarg(ROOT . DS . 'bin' . DS . 'cake.php') . ' update --connection ' . escapeshellarg($connection) . ' 2>&1';
         $out = $code = null;
         exec($command, $out, $code);
         if ($code !== 0) {
@@ -748,7 +749,7 @@ class PluginsService implements PluginsServiceInterface
         if (!BcSiteConfig::get('use_update_notice')) return [];
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
-        if (!$coreReleaseInfo) {
+        if (!$coreReleaseInfo || empty($coreReleaseInfo['latest'])) {
             $releaseUrl = Configure::read('BcApp.coreReleaseUrl');
             $http = new Client();
             try {
@@ -817,8 +818,12 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
-        if(!preg_match('/[0-9]+\.[0-9x*]+\.[0-9x*]+/', $targetVersion)) {
+        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $targetVersion)) {
             throw new BcException(__d('baser_core', 'バージョン番号が不正です。'));
+        }
+
+        if(!preg_match('/^[a-zA-Z0-9\/\.\-_]+$/', $php)) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
         }
 
         if (function_exists('ini_set')) {
@@ -841,12 +846,12 @@ class PluginsService implements PluginsServiceInterface
         copy(ROOT . DS . 'composer.lock', TMP . 'update' . DS . 'composer.lock');
 
         // Composer 実行
-        $command = $php . ' ' . ROOT . DS . 'bin' . DS . 'cake.php composer ' . $targetVersion . ' --php ' . $php . ' --dir ' . TMP . 'update';
+        $command = escapeshellarg($php) . ' ' . escapeshellarg(ROOT . DS . 'bin' . DS . 'cake.php') . ' composer ' . escapeshellarg($targetVersion) . ' --php ' . escapeshellarg($php) . ' --dir ' . escapeshellarg(TMP . 'update');
         if ($force) {
             $command .= ' --force true';
         }
 
-        exec($command, $out, $code);
+        exec($command . ' 2>&1', $out, $code);
         if ($code !== 0) throw new BcException(__d('baser_core', '最新版のダウンロードに失敗しました。ログを確認してください。'));
 
         Cache::write('coreDownloaded', true, '_bc_update_');

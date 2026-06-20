@@ -387,9 +387,17 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function createOrder(string $order, string $direction)
     {
-        if (strpos($order, '.') === false) {
+        $direction = strtoupper($direction);
+        if (!in_array($direction, ['ASC', 'DESC'])) {
+            $direction = 'DESC';
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_.]+$/', $order)) {
+            $order = 'CustomEntries.id';
+        } elseif (strpos($order, '.') === false) {
             $order = "CustomEntries.{$order}";
         }
+
         if($order !== 'CustomEntries.id') {
             return "{$order} {$direction}, CustomEntries.id {$direction}";
         } else {

@@ -495,15 +495,57 @@ class BcValidation extends Validation
         if (BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
             return true;
         }
+
+        $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
+
         if (preg_match('/(<\?=|<\?php|<script)/i', $value)) {
             return false;
         }
         if (preg_match('/<[^>]+?(' . implode('|', $events) . ')\s*=[^<>]*?>/i', $value)) {
             return false;
         }
-        if (preg_match('/href\s*=\s*[^>]*?javascript\s*?:/i', $value)) {
+        if (preg_match('/(href|action|formaction|src|codebase|data)\s*=\s*[^>]*?j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i', $value)) {
             return false;
         }
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Core.CollectErrors', true); // エラー取得
+        $config->set('Cache.DefinitionImpl', null); // キャッシュ無効
+        $config->set('HTML.DefinitionID', 'basercms-containsScript');
+        $config->set('HTML.SafeIframe', true); // iframe許可
+        $config->set('URI.SafeIframeRegexp', '%^(https?:)?//%');
+
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            $def->addElement('form', 'Block', 'Flow', 'Common', [
+                'action' => 'URI',
+            ]);
+            $def->addElement('video', 'Block', 'Flow', 'Common', [
+                'src' => 'URI',
+            ]);
+            $def->addElement('source', 'Block', 'Empty', 'Common', [
+                'src' => 'URI',
+            ]);
+            $def->addElement('audio', 'Block', 'Flow', 'Common', [
+                'src' => 'URI',
+            ]);
+        }
+
+        $purifier = new \HTMLPurifier($config);
+        $purifier->purify($value);
+        $purifierErrors = $purifier->context->get('ErrorCollector');
+        foreach ($purifierErrors->getRaw() as $error) {
+            [$line, $severity, $message] = $error;
+            if ($severity !== E_ERROR) {
+                continue;
+            }
+            if (preg_match('/\b(script|meta|src|srcdoc|href|action)\b.* removed/i', $message)) {
+                return false;
+            }
+            if (preg_match('/\bon\w+.* removed/i', $message)) {
+                return false;
+            }
+        }
+
         return true;
     }
 

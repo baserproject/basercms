@@ -17,6 +17,9 @@
     "plugins/bc-front"
   ],
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0"
   }

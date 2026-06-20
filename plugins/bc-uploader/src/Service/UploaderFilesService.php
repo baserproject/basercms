@@ -21,6 +21,7 @@ use BcUploader\Model\Entity\UploaderFile;
 use BcUploader\Model\Table\UploaderFilesTable;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Laminas\Diactoros\UploadedFile;
 use Cake\ORM\Table;
 
@@ -72,7 +73,8 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     public function getIndex(array $queryParams = [])
     {
         $params = array_merge([
-            'num' => null
+            'num' => null,
+            'name' => null,
         ], $queryParams);
 
         $conditions = $this->createAdminIndexConditions($params);
@@ -244,6 +246,20 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if(!$this->isEditable($postData)) {
             throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
+        if(!empty($postData['overwrite']) && !empty($postData['file'])) {
+            $file = $postData['file'];
+            $fileError = $file->getError();
+            if ($fileError === UPLOAD_ERR_INI_SIZE) {
+                throw new BcException(__d('baser_core',
+                    '送信できるデータ量を超えています。 {0} 以内のデータを送信してください。',
+                    [ini_get('upload_max_filesize')]
+                ));
+            }
+            $name = $file->getClientFilename();
+            $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
+            $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
+            $postData['id'] = $entity->id;
+        }
         if (!empty($postData['publish_begin'])) {
             $postData['publish_begin'] = new \Cake\I18n\DateTime($postData['publish_begin']);
         }
@@ -290,19 +306,44 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     }
 
     /**
+     * アップロードファイル名から既存のエンティティを取得する
+     *
+     * 上書きアップロード時に既存レコードを取得するために使用する。
+     * 保存時のファイル名正規化（create() 参照）と同じルールで
+     * ファイル名を変換した上で完全一致検索する。
+     *
+     * @param string $name
+     * @return EntityInterface
+     * @throws RecordNotFoundException
+     */
+    public function getByName(string $name): EntityInterface
+    {
+        $query = $this->UploaderFiles->find();
+        $driver = $query->getConnection()->getDriver();
+        $name = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($name));
+        if ($driver instanceof \Cake\Database\Driver\Mysql) {
+            $conditions = ['UploaderFiles.name COLLATE utf8mb4_bin =' => $name];
+        } else {
+            $conditions = ['UploaderFiles.name' => $name];
+        }
+        return $query->where($conditions)
+            ->firstOrFail();
+    }
+
+    /**
      * ファイル名から実ファイルが存在するかどうかを取得する
      * @param string $name
      * @return array|false
      */
     public function filesExistsByName(string $name)
     {
-        /** @var UploaderFile $entity */
-        $entity = $this->UploaderFiles->find()->where(['UploaderFiles.name' => $name])->first();
-        if ($entity) {
-            return $entity->filesExists();
-        } else {
+        try {
+            /** @var UploaderFile $entity */
+            $entity = $this->getByName($name);
+        } catch (RecordNotFoundException $e) {
             return false;
         }
+        return $entity->filesExists();
     }
 
 }

@@ -1,3 +1,5 @@
+@use "mixin";
+
 /**
  * Sub
  */
@@ -14,7 +16,7 @@
     font-weight: bold;
   }
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     width: 100%;
     margin: 0 auto;
     padding: 40px 0 0 0;
@@ -24,7 +26,7 @@
 
 #Home .bs-sub-contents {
   padding: 100px 60px !important;
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     float: none;
     padding: 40px 0 0 0 !important;
     border-top: 1px solid #ddd;
@@ -131,7 +133,7 @@
         display: block;
         color: #000;
         text-decoration: none;
-        @include bs-mq() {
+        @include mixin.bs-mq() {
           text-align: center;
         }
 

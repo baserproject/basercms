@@ -50,8 +50,14 @@ function whichPhp()
 
 function command($phpPath)
 {
+    if (empty($phpPath)) {
+        $phpPath = 'php';
+    }
+    if (whichPhp() !== $phpPath && !preg_match('/\A([A-Za-z]:[\\\\\/]|\/)?(?:[\w\-\.]+[\\\\\/])*php[\w\-\.]*\z/i', $phpPath)) {
+        throw new Exception('有効なPHPコマンドパスを入力してください。（例: /usr/bin/php8.2, C:\\xampp\\php\\php.exe）');
+    }
+
     $phpPath = escapeshellarg($phpPath);
-    if (!$phpPath) $phpPath = 'php';
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');
     }

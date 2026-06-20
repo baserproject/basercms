@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\ContentsController;
+use BaserCore\Service\PagesService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentsService;
@@ -27,6 +28,7 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -157,6 +159,34 @@ class ContentsControllerTest extends BcTestCase
         if ($action === 'index' && $listType === 2) {
             $this->assertEquals(1, $ContentsController->getRequest()->getQuery('num'));
         }
+    }
+
+    /**
+     * サブサイトで自動連携を有効化していても、メインサイトで固定ページ追加後にサブサイトのコンテンツ管理が表示できる
+     */
+    public function testIndexAfterCreatingPageOnMainSiteWithRelatedSubSite(): void
+    {
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $sites->updateAll(['status' => true, 'relate_main_site' => true], ['id' => 2]);
+
+        $pagesService = new PagesService();
+        $pagesService->create([
+            'contents' => '<p>test</p>',
+            'draft' => '<p>test</p>',
+            'page_template' => 'issue4325',
+            'content' => [
+                'parent_id' => 1,
+                'title' => 'Issue4325固定ページ',
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'site_id' => 1,
+                'alias_id' => '',
+                'entity_id' => '',
+            ],
+        ]);
+
+        $this->get('/baser/admin/baser-core/contents/index?site_id=2&list_type=1');
+        $this->assertResponseOk();
     }
 
     public static function indexDataProvider()

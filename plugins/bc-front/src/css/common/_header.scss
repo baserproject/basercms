@@ -1,3 +1,5 @@
+@use "mixin";
+
 /**
  * Header
  */
@@ -14,7 +16,7 @@
     padding: 0 40px;
     box-sizing: border-box;
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       width: 100%;
       padding: 0 20px;
     }
@@ -32,7 +34,7 @@
       transition: all 300ms 0s ease;
     }
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       margin-top: 20px;
       margin-bottom: 20px;
     }
@@ -81,7 +83,7 @@
       }
     }
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       display: block;
     }
   }
@@ -89,7 +91,7 @@
   &__nav {
     font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     background-color: #001800;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       position: absolute;
       transform: translateX(100%);
       width: 100vw;
@@ -115,7 +117,7 @@
   padding: 0 40px;
   z-index: 15;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     width: 100%;
     padding: 0;
   }
@@ -170,7 +172,7 @@
   padding: 0;
   margin: 0;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     display: block;
   }
 
@@ -181,7 +183,7 @@
     text-decoration: none;
     font-weight: bold;
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       width: 100%;
       padding: 25px 0;
       text-align: center;
@@ -191,7 +193,7 @@
   a:link,
   a:visited {
     color: #fff;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       color: #fff;
     }
   }
@@ -203,7 +205,7 @@
     margin: 0 0 -1px 0;
     border: 1px solid transparent;
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       display: block;
       width: 100%;
       padding: 25px 0;
@@ -219,7 +221,7 @@
   > a.open {
     border: 1px solid #dedede;
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       border: 1px solid transparent;
     }
   }
@@ -230,7 +232,7 @@
     z-index: 2;
     color: #000;
 
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       background-color: transparent;
       border: 1px solid transparent;
       z-index: auto;
@@ -266,7 +268,7 @@
 
   &.open {
     display: block;
-    @include bs-mq() {
+    @include mixin.bs-mq() {
       display: none;
     }
   }

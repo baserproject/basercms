@@ -1,3 +1,5 @@
+@use "mixin";
+
 /**
  * Main
  */
@@ -8,7 +10,7 @@
   margin: 49px 0 160px;
   padding: 0;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     width: 100%;
   }
 }
@@ -16,7 +18,7 @@
 #Home .bs-main-contents {
   margin: 100px 0;
 
-  @include bs-mq() {
+  @include mixin.bs-mq() {
     float: none;
     padding: 0;
     margin: 40px 0;

@@ -23,7 +23,6 @@ use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use BcUploader\Test\Factory\UploaderConfigFactory;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
@@ -325,6 +324,49 @@ class UploadFilesServiceTest extends BcTestCase
         ];
         $result = $this->UploaderFilesService->isEditable($postData);
         $this->assertFalse($result);
+    }
+
+    /**
+     * test getByName
+     */
+    public function test_getByName()
+    {
+        //準備
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 2, 'name' => 'a_b.jpg', 'user_id' => 1])->persist();
+        UploaderFileFactory::make(['id' => 3, 'name' => 'Social_New.jpg', 'user_id' => 1])->persist();
+
+        //正常系実行: 完全一致で取得できる
+        $result = $this->UploaderFilesService->getByName('social_new.jpg');
+        $this->assertEquals(1, $result->id);
+
+        //正常系実行: 大文字・小文字を識別して取得できる
+        $result = $this->UploaderFilesService->getByName('Social_New.jpg');
+        $this->assertEquals(3, $result->id);
+
+        //正常系実行: 保存時の正規化と同じルール（'/' → '_'）でファイル名が変換されてマッチする
+        $result = $this->UploaderFilesService->getByName('a/b.jpg');
+        $this->assertEquals(2, $result->id);
+
+        //異常系実行: 該当なしは RecordNotFoundException
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->UploaderFilesService->getByName('not_found.jpg');
+    }
+
+    /**
+     * test filesExistsByName
+     */
+    public function test_filesExistsByName()
+    {
+        //準備
+        UploaderFileFactory::make(['id' => 1, 'name' => 'social_new.jpg', 'user_id' => 1])->persist();
+
+        //異常系実行: 該当なしは false
+        $this->assertFalse($this->UploaderFilesService->filesExistsByName('not_found.jpg'));
+
+        //正常系実行: エンティティは取得できるが、実ファイルが無いので filesExists() は空配列を返す
+        $result = $this->UploaderFilesService->filesExistsByName('social_new.jpg');
+        $this->assertIsArray($result);
     }
 
     /**

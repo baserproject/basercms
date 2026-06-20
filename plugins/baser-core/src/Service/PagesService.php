@@ -81,7 +81,7 @@ class PagesService implements PagesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(int $parentId = null, string $name = ''): EntityInterface
+    public function getNew(?int $parentId = null, string $name = ''): EntityInterface
     {
         $parent  = null;
 		if($parentId) {

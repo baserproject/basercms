@@ -343,8 +343,20 @@ class CustomEntriesServiceTest extends BcTestCase
         $order = 'test';
         $direction = 'asc';
         $result = $this->CustomEntriesService->createOrder($order, $direction);
-        $this->assertEquals('CustomEntries.test asc, CustomEntries.id asc', $result);
+        $this->assertEquals('CustomEntries.test ASC, CustomEntries.id ASC', $result);
 
+        // --- SQLインジェクション対策のテスト ---
+        // direction に不正な値
+        $result = $this->CustomEntriesService->createOrder('test', 'ASC, (SELECT SLEEP(10))');
+        $this->assertEquals('CustomEntries.test DESC, CustomEntries.id DESC', $result);
+
+        // order に不正な値
+        $result = $this->CustomEntriesService->createOrder('CustomEntries.title, (SELECT SLEEP(10))', 'ASC');
+        $this->assertEquals('CustomEntries.id ASC', $result);
+
+        // 両方に不正な値
+        $result = $this->CustomEntriesService->createOrder('CustomEntries.id; DROP TABLE users;', 'DELETE');
+        $this->assertEquals('CustomEntries.id DESC', $result);
     }
 
     /**

@@ -253,6 +253,18 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('options', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
           <?php echo $this->BcAdminForm->error('options') ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <p>inputタグに対してオプションを設定します。</p>
+            <dl>
+              <dt>placeholder</dt>
+              <dd>プレースホルダー：利用するには、次の形式のように | 区切りで入力します。「placeholder|プレースホルダーの内容」</dd>
+              <dt>empty</dt>
+              <dd>セレクトボックスの何も選択していないときの表示は、次の形式のように | 区切りで入力します。「empty|何も選択していないときのメッセージ」</dd>
+              <dt>checkboxWrapTag</dt>
+              <dd>マルチチェックボックスでそれぞれのインプットタグをラッピングする要素を指定します。例）checkboxWrapTag|div class="checkbox"（div class="checkbox"で囲む）<br>※デフォルトはspanタグでラッピングされます。</dd>
+            </dl>
+          </div>
         </td>
       </tr>
       <tr id="RowAutoComplete">

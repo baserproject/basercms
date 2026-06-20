@@ -175,6 +175,35 @@ class MailformHelper extends BcFreezeHelper
                 $attributes['value'] = null;
                 $attributes['empty'] = false;
                 $attributes['templateVars']['tag'] = 'span';
+                // オプションでcheckboxWrapTagが指定されていた場合の対応
+                if (!empty($attributes['checkboxWrapTag'])) {
+                    // 取得した値が有効なタグか確認
+                    $validTags = ['div', 'span', 'p', 'li', 'dt', 'dd', 'label'];
+                    $rawTemplateTag = $attributes['checkboxWrapTag'];
+                    foreach ($validTags as $validTag) {
+                        // checkboxWrapTagが有効なタグ名から始まっている場合、$attributes['templateVars']['tag'] にセット
+                        if (str_starts_with($rawTemplateTag, $validTag)) {
+                            // 検証済みのタグ名のみをtemplateVars['tag']にセット
+                            $attributes['templateVars']['tag'] = $validTag;
+                            // 先頭のタグ名以降の文字列を取得（例: ' class="checkbox"'）
+                            $rest = trim(substr($rawTemplateTag, strlen($validTag)));
+                            if ($rest !== '') {
+                                $rests = explode(' ', $rest);
+                                foreach ($rests as $key => $restPart) {
+                                    // タグ名を除外した属性値の中で、onclickやonchangeなどのイベント属性が含まれている場合、unsetする
+                                    if (str_starts_with($restPart, 'on')) {
+                                        unset($rests[$key]);
+                                    }
+                                }
+                                if (!empty($rests) && isset($attributes['templateVars']['tag'])) {
+                                    $attributes['templateVars']['tag'] .= ' ' . implode(' ', $rests);
+                                }
+                            }
+                        }
+                    }
+                    // inputタグに出力されないようにunset
+                    unset($attributes['checkboxWrapTag']);
+                }
                 $out = $this->select($fieldName, $options, $attributes);
                 break;
             case 'file':

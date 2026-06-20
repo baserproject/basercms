@@ -475,4 +475,55 @@ class BcTextHelper extends TextHelper
     }
 // <<<
 
+    /**
+     * テキスト内のURLを自動でリンク化
+     *
+     * CakePHP本体の autoLinkUrls() では、ドメインのみURLの末尾スラッシュが
+     * リンク外に出るケースがあるため、リンク直後のスラッシュだけ補正する。
+     *
+     * @param string $text テキスト
+     * @param array<string, mixed> $options リンクオプション
+     * @return string リンク化後テキスト
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function autoLinkUrls(string $text, array $options = []): string
+    {
+        $linkedText = parent::autoLinkUrls($text, $options);
+
+        return $this->fixTrailingSlashOutsideAnchor($linkedText);
+    }
+
+    /**
+     * ドメインのみURLで末尾スラッシュがリンク外に出る表示崩れを補正
+     *
+     * @param string $text リンク化後テキスト
+     * @return string 補正後テキスト
+     */
+    protected function fixTrailingSlashOutsideAnchor(string $text): string
+    {
+        // 壊れたパターンだけを対象に補正する。
+        // 例: <a href="https://example.com">https://example.com</a>/
+        //
+        // (?<before>) : href 属性より前の属性群（class, target など）
+        // (?<href>)   : href 値（スキーム + ドメインのみ。末尾スラッシュなし）
+        // (?<after>)  : href 属性より後の属性群
+        // (?<label>)  : リンク表示文字列（スキーム + ドメインのみ）
+        //
+        // 末尾の / は </a> の外側にあるものだけを拾い、直後が空白・タグ開始・行末の場合に限定する。
+        // パス付きURLや通常のリンクには触れず、副作用を避ける。
+        $result = preg_replace_callback(
+            '/<a\\b(?<before>[^>]*?)href="(?<href>(?:https?|ftp|nntp):\\/\\/[^"\\/\\s<]+)"(?<after>[^>]*)>(?<label>(?:https?|ftp|nntp):\\/\\/[^"\\/\\s<]+)<\\/a>\\/(?=[\\s<]|$)/u',
+            static function (array $matches): string {
+                $href = $matches['href'] . '/';
+                $label = $matches['label'] . '/';
+
+                return '<a' . $matches['before'] . 'href="' . $href . '"' . $matches['after'] . '>' . $label . '</a>';
+            },
+            $text
+        );
+
+        return $result ?? $text;
+    }
 }

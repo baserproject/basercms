@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BcBlog\Test\Scenario\BlogContentScenario;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
@@ -92,10 +93,16 @@ class PreviewControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=draft', $page->toArray());
         $this->assertResponseOk();
         $this->assertEquals($page->draft, $this->viewVariable('page')['contents']);
+
+        $page->content['title'] = '';
+        $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=default', $page->toArray());
+        $this->assertResponseOk();
+        $this->assertSame('', $this->viewVariable('page')->content->title);
     }
 
     /**
-     * test _createPreviewRequest
+     * プレビューURLからページ表示用のリクエストパラメータを生成できる
+     *
      * @return void
      */
     public function test_createPreviewRequest()
@@ -111,6 +118,68 @@ class PreviewControllerTest extends BcTestCase
         $this->assertEquals('view', $result->getParam('action'));
         $this->assertEquals(1, $result->getParam('entityId'));
         $this->assertEquals('Pages', $result->getParam('controller'));
+    }
+
+    /**
+     * サブフォルダ運用時でもトップページのプレビューURLを正しく解決できる
+     *
+     * /sub を取り除いた上で、PagesController の view に解決されることを確認する。
+     *
+     * @return void
+     */
+    public function test_createPreviewRequestWithSubfolderBase()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+
+        $request = $this->getRequest('/baser/admin/baser-core/preview/view')
+            ->withAttribute('base', '/sub')
+            ->withAttribute('webroot', '/sub/')
+            ->withQueryParams(['url' => 'https://localhost/sub/', 'preview' => 'default']);
+        $this->PreviewController->setRequest($request);
+
+        $result = $this->execPrivateMethod(
+            $this->PreviewController,
+            '_createPreviewRequest',
+            [$request]
+        );
+
+        $this->assertEquals('view', $result->getParam('action'));
+        $this->assertEquals(1, $result->getParam('entityId'));
+        $this->assertEquals('Pages', $result->getParam('controller'));
+    }
+
+    /**
+     * サブフォルダ運用時でもブログ記事URLを BlogController に解決できる
+     *
+     * /sub/news/archives/1 のようなURLが、BcBlog のブログ詳細ルートへ
+     * 正しくマッチすることを確認する。
+     *
+     * @return void
+     */
+    public function test_createPreviewRequestWithSubfolderBaseAndBlogUrl()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 10, 1, 1, 'news', '/news/');
+        $this->loginAdmin($this->getRequest('/'));
+
+        $request = $this->getRequest('/baser/admin/baser-core/preview/view')
+            ->withAttribute('base', '/sub')
+            ->withAttribute('webroot', '/sub/')
+            ->withQueryParams(['url' => 'https://localhost/sub/news/archives/1', 'preview' => 'publish']);
+        $this->PreviewController->setRequest($request);
+
+        $result = $this->execPrivateMethod(
+            $this->PreviewController,
+            '_createPreviewRequest',
+            [$request]
+        );
+
+        $this->assertEquals('Blog', $result->getParam('controller'));
+        $this->assertEquals('archives', $result->getParam('action'));
+        $this->assertEquals('BcBlog', $result->getParam('plugin'));
     }
 
     /**

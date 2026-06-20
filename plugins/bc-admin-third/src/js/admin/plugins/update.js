@@ -45,6 +45,12 @@ const updateForm = {
         $("#BtnUpdate").on('click', this.update);
         $("#BtnDownload").on('click', $.bcUtil.showLoader);
         $("#php").on('change', this.toggleUpdate);
+        $("#force").on('click', function(){
+        	if($('#force').prop('checked')) {
+        		updateForm.isUpdatable = true;
+        		updateForm.toggleUpdate();
+        	}
+        });
     },
 
     /**

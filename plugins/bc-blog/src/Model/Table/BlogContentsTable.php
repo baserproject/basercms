@@ -222,7 +222,7 @@ class BlogContentsTable extends BlogAppTable
         int $newParentId,
         string|null $newTitle,
         int $newAuthorId,
-        int $newSiteId = null
+        ?int $newSiteId = null
     )
     {
         $data = $this->find()->where(['BlogContents.id' => $id])->contain('Contents')->first();

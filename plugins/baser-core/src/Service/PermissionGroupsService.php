@@ -78,7 +78,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @noTodo
      * @checked
      */
-    public function get(int $id, int $userGroupId = null)
+    public function get(int $id, ?int $userGroupId = null)
     {
         $options = ['contain' => []];
         if (!is_null($userGroupId)) {

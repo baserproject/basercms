@@ -1,3 +1,6 @@
+@use "bge_setting";
+@use "editor";
+
 /**
  * BurgerEditor StyleSheet Style
  *
@@ -27,7 +30,7 @@
 
   &:active,
   &:focus {
-    box-shadow: 0 0 10px 0 $btnGlowColor, 0 0 10px 0 #fff;
+    box-shadow: 0 0 10px 0 bge_setting.$btnGlowColor, 0 0 10px 0 #fff;
   }
 }
 
@@ -89,7 +92,7 @@
   }
 
   &::after {
-    @include bge-icon;
+    @include bge_setting.bge-icon;
     content: '\f08e';
     font-size: 1em;
     color: #999;
@@ -121,7 +124,7 @@
   }
 
   &::before {
-    @include bge-icon;
+    @include bge_setting.bge-icon;
     content: '\f053';
     font-size: 1em;
     margin-top: -2px;
@@ -183,7 +186,7 @@
 
   &:active,
   &:focus {
-    box-shadow: 0 0 5px 1px $btnGlowColor;
+    box-shadow: 0 0 5px 1px bge_setting.$btnGlowColor;
     outline: none;
   }
 }
@@ -195,7 +198,7 @@
 }
 
 .bgt-google-maps-link {
-  @media screen and (max-width: $breakPoint) {
+  @media screen and (max-width: editor.$breakPoint) {
     margin-top: 10px;
     padding: 1em;
     text-decoration: none;
@@ -210,7 +213,7 @@
     }
 
     &::after {
-      @include bge-icon;
+      @include bge_setting.bge-icon;
       content: '\f08e';
       font-size: 1em;
       vertical-align: middle;
@@ -331,7 +334,7 @@
 .pc-only {
   display: block;
 
-  @media screen and (max-width: $breakPoint) {
+  @media screen and (max-width: editor.$breakPoint) {
     display: none;
   }
 }
@@ -339,7 +342,7 @@
 .sp-only {
   display: none;
 
-  @media screen and (max-width: $breakPoint) {
+  @media screen and (max-width: editor.$breakPoint) {
     display: block;
   }
 }

@@ -8,7 +8,7 @@
     <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
 </a>
     <a href="https://github.com/baserproject/basercms/actions/workflows/test.yml" target="_blank">
-        <img alt="Build Status" src="https://github.com/baserproject/basercms/actions/workflows/test.yml/badge.svg?branch=5.1.x">
+        <img alt="Build Status" src="https://github.com/baserproject/basercms/actions/workflows/test.yml/badge.svg?branch=5.2.x">
     </a>
 </p>
 
@@ -46,3 +46,8 @@ License
 -------
 
 Licensed under the MIT license since version 2.0
+
+Powered by
+-------
+
+<a href="https://jb.gg/OpenSource"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg" style="width:150px;" alt="JetBrains logo."></a>

@@ -111,4 +111,23 @@ class ComposerCommandTest extends BcTestCase
         (new BcFolder(TMP . 'update'))->delete();
     }
 
+    /**
+     * test execute の脆弱性回避
+     * @return void
+     */
+    public function test_execute_vulnerability()
+    {
+        $rceFile = TMP . 'rce_test_command';
+        if (file_exists($rceFile)) unlink($rceFile);
+
+        $maliciousVersion = '1.0.0; touch ' . $rceFile . ';';
+        // ConsoleIntegrationTestTrait の exec は引数をパースして Command に渡すため、
+        // ここで渡す引数はエスケープされている必要がある（実際のシェル実行をシミュレート）
+        ob_start();
+        $this->exec('composer ' . escapeshellarg($maliciousVersion));
+        ob_get_clean();
+
+        $this->assertFalse(file_exists($rceFile), 'ComposerCommand::execute でOSコマンドインジェクションが発生しました');
+    }
+
 }

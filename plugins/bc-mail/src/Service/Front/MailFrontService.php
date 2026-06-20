@@ -367,7 +367,8 @@ class MailFrontService implements MailFrontServiceInterface
             'mailContent' => $mailContent,
             'mailConfig' => $mailConfig,
             'other' => [
-                'date' => date('Y/m/d H:i')
+                'date' => date('Y/m/d H:i'),
+                'ip' => $options['clientIp'] ?? ''
             ]
         ], $options);
     }

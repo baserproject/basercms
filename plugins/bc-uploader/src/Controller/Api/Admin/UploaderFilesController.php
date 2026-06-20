@@ -59,13 +59,21 @@ class UploaderFilesController extends BcAdminApiController
 
         $entity = $errors = null;
         try {
-            $entity = $service->create($this->request->getData());
+            if ($this->request->getData('overwrite')) {
+                $entity = $service->getByName($this->request->getUploadedFile('file')->getClientFilename());
+                $entity = $service->update($entity, $this->request->getData());
+            } else {
+                $entity = $service->create($this->request->getData());
+            }
             $message = __d('baser_core', 'アップロードファイル「{0}」を追加しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser_core', "同じ名称のファイルが存在しないため処理に失敗しました。");
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());

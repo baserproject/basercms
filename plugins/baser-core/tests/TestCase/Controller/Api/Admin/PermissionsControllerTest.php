@@ -123,7 +123,7 @@ class PermissionsControllerTest extends BcTestCase
         $data->name = "システム管理 Update";
         $id = $data->id;
 
-        $this->post("/baser/api/admin/baser-core/permissions/edit/${id}.json?token=". $this->accessToken, $data->toArray());
+        $this->post("/baser/api/admin/baser-core/permissions/edit/{$id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
         $permission = $permissionsService->getIndex(['id' => $id])->first();
