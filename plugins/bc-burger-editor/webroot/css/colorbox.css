@@ -1,0 +1,175 @@
+/*
+    Colorbox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxWrapper {max-width:none;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto; -webkit-overflow-scrolling: touch;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
+.cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
+#colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
+
+/*
+    User Style:
+    Change the following styles to modify the appearance of Colorbox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay{background: rgba(10,10,10,.85);}
+#colorbox{outline:0;}
+    #cboxContent{margin:50px;background:#000;}
+        .cboxIframe{background:#fff;}
+        #cboxError{padding:50px; border:1px solid #fff;}
+        #cboxLoadedContent{border:2px solid #fff; background:#fff;}
+        #cboxTitle{position:absolute; top:-20px; left:0; color:#fff;}
+        #cboxCurrent{
+			position:absolute;
+			bottom: -40px;
+			left: 47.5%;
+			color:#fff;
+			line-height: 1;
+
+		}
+        #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+
+        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+        #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
+
+        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+        #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+
+        #cboxSlideshow {
+			position: absolute;
+			top: -20px;
+			right: 90px;
+			color: #fff;
+		}
+        #cboxPrevious {
+			position: absolute;
+			top: 45%;
+			left: -40px;
+			text-indent:-9999px;
+			width: 40px;
+			height: 40px;
+			outline: none;
+			border: none;
+		}
+        #cboxNext {
+			position:absolute;
+			top:45%;
+			right:-50px;
+			text-indent:-9999px;
+			width: 40px;
+			height: 40px;
+			outline: none;
+			border: none;
+		}
+		#cboxNext::after,
+		#cboxPrevious::after {
+			display: block;
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+		    width: 25px;
+		    height: 25px;
+		    border-top: solid 2px #fff;
+		    border-right: solid 2px #fff;
+		}
+		#cboxPrevious::after {
+			transform: rotate(225deg);
+			-webkit-transform: rotate(225deg);
+			-moz-transform: rotate(225deg);
+			-ms-transform: rotate(225deg);
+		}
+		#cboxNext::after {
+			transform: rotate(45deg);
+			-webkit-transform: rotate(45deg);
+		    -moz-transform: rotate(45deg);
+		    -ms-transform: rotate(45deg);
+		}
+        #cboxClose {
+			position: absolute;
+			top: -50px;
+			right: 0px;
+			display: block;
+			text-indent: -9999px;
+			outline: none;
+			border: none;
+			width: 25px;
+			height: 25px;
+			border: 2px solid #ffffff;
+			border-radius: 50%;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			-ms-border-radius: 50%;
+			padding: 18px;
+			background: rgba(0,0,0,.1);
+		}
+		#cboxClose::before,
+		#cboxClose::after {
+			content: "";
+			display: inline-block;
+			position: absolute;
+			top: 6px;
+			right: 17px;
+			transition: all 0.3s;
+			-webkit-transition: all 0.3s;
+			-moz-transition: all 0.3s;
+			-ms-transition: all 0.3s;
+			background: #ffffff;
+			width: 2px;
+			height: 25px;
+		}
+		#cboxClose::before {
+			-webkit-transform: rotate(45deg);
+		    transform: rotate(45deg);
+		    -moz-transform: rotate(45deg);
+		    -ms-transform: rotate(45deg);
+		}
+		#cboxClose::after {
+			transform: rotate(135deg);
+			-webkit-transform: rotate(135deg);
+		    -moz-transform: rotate(135deg);
+		    -ms-transform: rotate(135deg);
+		}
+        #cboxPrevious:hover,
+        #cboxNext:hover,
+        #cboxClose:hover {
+			opacity: .7;
+			-webkit-opacity: .7;
+			-moz-opacity: .7;
+			-ms-opacity: .7;
+		}
+
+		@media screen and (max-width: 768px) {
+			#cboxClose {
+				top: -50px;
+				width: 35px;
+				height: 35px;
+			}
+			#cboxContent {
+			    margin: 50px 0;
+			}
+	        #cboxPrevious {
+				top: auto;
+				bottom: -60px;
+				left: 0;
+			}
+	        #cboxNext {
+				top: auto;
+				bottom: -60px;
+				right: 0;
+			}
+			#cboxPrevious::after {
+				left: 12%;
+			}
+			#cboxNext::after {
+				left: 25%;
+			}
+		}

@@ -14,6 +14,7 @@
                 <path>plugins/baser-core/src</path>
                 <path>plugins/bc-admin-third/src</path>
                 <path>plugins/bc-blog/src</path>
+                <path>plugins/bc-burger-editor/src</path>
                 <path>plugins/bc-content-link/src</path>
                 <path>plugins/bc-custom-content/src</path>
                 <path>plugins/bc-editor-template/src</path>

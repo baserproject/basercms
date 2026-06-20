@@ -1,0 +1,32 @@
+{
+	"version": "3.5.0-alpha.2",
+	"name": "burger-editor",
+	"description": "BurgerEditor for baserCMS",
+	"author": "NPO baser foundation",
+	"license": "(MIT OR Apache-2.0) AND OFL-1.1",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": "24"
+	},
+	"scripts": {
+		"postinstall": "run-s install:admin:js install:admin:css install:admin:font install:admin:font:license install:public:js install:public:css",
+		"install:admin:js": "cp \"node_modules/@burger-editor/client/dist/js/admin/burger_editor.js\" \"webroot/js/admin/burger_editor.js\"",
+		"install:admin:css": "cp \"node_modules/@burger-editor/client/dist/css/admin/burger_editor.css\" \"webroot/css/admin/burger_editor.css\"",
+		"install:admin:font": "cp \"node_modules/@burger-editor/client/dist/fonts/fontawesome-webfont.woff2\" \"webroot/fonts/fontawesome-webfont.woff2\"; cp \"node_modules/@burger-editor/client/dist/fonts/icons.woff\" \"webroot/fonts/icons.woff\"",
+		"install:admin:font:license": "cp \"node_modules/@burger-editor/client/LICENSE-OFL-1.1\" \"webroot/fonts/LICENSE-OFL-1.1\"",
+		"install:public:js": "cp \"node_modules/@burger-editor/runtime/dist/bge_functions.min.js\" \"webroot/js/bge_modules/bge_functions.min.js\"",
+		"install:public:css": "cp \"node_modules/@burger-editor/css/bge_style_default.css\" \"webroot/css/bge_style_default.css\"; cp \"node_modules/@burger-editor/css/bge_style.css\" \"webroot/css/bge_style.css\""
+	},
+	"repository": {
+		"type": "git"
+	},
+	"devDependencies": {
+		"npm-run-all2": "9.0.1"
+	},
+	"dependencies": {
+		"@burger-editor/client": "3.5.0-alpha.2",
+		"@burger-editor/css": "3.5.0-alpha.2",
+		"@burger-editor/runtime": "3.5.0-alpha.2"
+	}
+}
