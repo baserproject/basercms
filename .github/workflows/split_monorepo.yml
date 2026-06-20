@@ -39,6 +39,8 @@ jobs:
             split_repository: 'bc-installer'
           - local_path: 'bc-mail'
             split_repository: 'bc-mail'
+          - local_path: 'bc-mcp'
+            split_repository: 'bc-mcp'
           - local_path: 'bc-search-index'
             split_repository: 'bc-search-index'
           - local_path: 'bc-seo'

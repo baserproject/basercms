@@ -41,6 +41,9 @@
         <testsuite name="BcMail">
             <directory>plugins/bc-mail/tests/TestCase</directory>
         </testsuite>
+        <testsuite name="BcMcp">
+            <directory>plugins/bc-mcp/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcSearchIndex">
             <directory>plugins/bc-search-index/tests/TestCase</directory>
         </testsuite>

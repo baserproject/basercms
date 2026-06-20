@@ -89,6 +89,7 @@ yarn-error.log
 !/plugins/cakephp-soft-delete
 !/plugins/BcColumn
 !/plugins/bc-seo
+!/plugins/bc-mcp
 /plugins/*/vendor
 /plugins/*/composer.lock
 /profile/*
@@ -119,6 +120,7 @@ node_modules
 /webroot/bc_theme_sample
 /webroot/bc_installer
 /webroot/bc_custom_content
+/webroot/bc_mcp
 /webroot/bc_spa_sample
 /webroot/debug_kit
 /webroot/.gitignore
