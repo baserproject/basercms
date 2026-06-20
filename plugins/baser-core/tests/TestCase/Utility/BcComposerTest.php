@@ -46,7 +46,7 @@ class BcComposerTest extends BcTestCase
         BcComposer::setup();
         $this->assertEquals('cd /var/www/html/;', BcComposer::$cd);
         $this->assertEquals('/var/www/html/composer/', BcComposer::$composerDir);
-        $this->assertEquals('export HOME=/var/www/html/composer/;', BcComposer::$export);
+        $this->assertEquals('export HOME=/var/www/html/composer/; export COMPOSER_CACHE_DIR=/var/www/html/composer/.composer/cache;', BcComposer::$export);
         $this->assertEquals('php', BcComposer::$php);
 
         // 環境を変更
