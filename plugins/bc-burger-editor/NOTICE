@@ -1,0 +1,22 @@
+This package bundles third-party and original fonts under dist/fonts.
+
+-------------------------------------------------------------------------------
+FontAwesome (webroot/fonts/fontawesome-webfont.woff2)
+-------------------------------------------------------------------------------
+The following notice is embedded in the font file:
+
+    Copyright Dave Gandy 2016. All rights reserved.
+    Font Family:  FontAwesome
+    Version:      Version 4.6.3 2016
+    Designer:     Dave Gandy
+    Manufacturer: Fort Awesome
+    Vendor URL:   http://fontawesome.io
+    License URL:  http://fontawesome.io/license/
+
+The font is licensed under the SIL Open Font License, Version 1.1. See the
+accompanying LICENSE-OFL-1.1 file for the full license text.
+
+-------------------------------------------------------------------------------
+bge-ui-icons (webroot/fonts/icons.woff)
+-------------------------------------------------------------------------------
+An original work of D-ZERO. Not covered by the SIL Open Font License above.

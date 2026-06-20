@@ -1,0 +1,86 @@
+{
+  "bg-category": {
+    "見出し / テキスト / テキスト+画像": {
+      "title": "大見出し",
+      "title2": "中見出し",
+      "wysiwyg": "1カラムテキスト",
+      "wysiwyg2": "2カラムテキスト",
+      "text-float-image1": "画像右寄せ<small>テキスト回り込み</small>",
+      "text-float-image2": "画像左寄せ<small>テキスト回り込み</small>",
+      "text-image1": "画像右寄せ<small>テキスト回り込み無し</small>",
+      "text-image2": "画像左寄せ<small>テキスト回り込み無し</small>"
+    },
+    "画像": {
+      "image1": "画像1列",
+      "image2": "画像2列",
+      "image3": "画像3列",
+      "image4": "画像4列",
+      "image5": "画像5列",
+      "trimmed-image2": "トリミング画像2列",
+      "trimmed-image3": "トリミング画像3列",
+      "trimmed-image4": "トリミング画像4列",
+      "trimmed-image5": "トリミング画像5列",
+      "image-link1": "画像1列<small>リンク付</small>",
+      "image-link2": "画像2列<small>リンク付</small>",
+      "image-link3": "画像3列<small>リンク付</small>",
+      "image-link4": "画像4列<small>リンク付</small>",
+      "image-link5": "画像5列<small>リンク付</small>",
+      "trimmed-image-link2": "トリミング画像2列<small>リンク付</small>",
+      "trimmed-image-link3": "トリミング画像3列<small>リンク付</small>",
+      "trimmed-image-link4": "トリミング画像4列<small>リンク付</small>",
+      "trimmed-image-link5": "トリミング画像5列<small>リンク付</small>"
+    },
+    "画像+テキスト": {
+      "image-text2": "画像2列<small>テキスト付</small>",
+      "image-text3": "画像3列<small>テキスト付</small>",
+      "image-text4": "画像4列<small>テキスト付</small>",
+      "image-text5": "画像5列<small>テキスト付</small>",
+      "image-link-text2": "画像2列<small>リンク・テキスト付</small>",
+      "image-link-text3": "画像3列<small>リンク・テキスト付</small>",
+      "image-link-text4": "画像4列<small>リンク・テキスト付</small>",
+      "image-link-text5": "画像5列<small>リンク・テキスト付</small>"
+    },
+    "ボタン": {
+      "button": "ボタン",
+      "button2": "ボタン x2",
+      "button3": "ボタン x3",
+      "download-file": "ファイル<br>ダウンロード",
+      "download-file2": "ファイル<br>ダウンロード x2",
+      "download-file3": "ファイル<br>ダウンロード x3"
+    },
+    "その他": {
+      "table": "2カラムテーブル",
+      "google-maps": "GoogleMaps",
+      "youtube": "YouTube",
+      "embed": "埋め込みタグ<small>script / form</small>",
+      "hr": "区切り線"
+    }
+  },
+  "bg-block-config": {
+  },
+  "ckeditor-config": {
+    "toolbar": [
+      ["Source", "ShowBlocks"],
+      ['Templates'],
+      ["NumberedList", "BulletedList", "Outdent", "Indent", "Blockquote"],
+      ["Bold", "Underline", "Strike", "Subscript", "Superscript"],
+      ["JustifyLeft", "JustifyCenter", "JustifyRight"],
+      ["Link", "Unlink", "Anchor"],
+      ["Table", "HorizontalRule", "Nbsp"],
+      ["Styles"],
+      ["FontSize"],
+      ["TextColor", "BGColor"]
+    ],
+    "stylesSet": [
+      { "name": "標準", "element": "p"},
+      { "name": "中見出し(Lv.3)", "element": "h3"},
+      { "name": "小見出し(Lv.4)", "element": "h4"},
+      { "name": "小見出し(Lv.5)", "element": "h5"},
+      { "name": "小見出し(Lv.6)", "element": "h6"},
+      { "name": "ボタン(茶)", "element": "a", "attributes": { "role": "button", "class": "btn-inline" } },
+      { "name": "ボタン(緑)", "element": "a", "attributes": { "role": "button", "class": "btn-inline--green" } },
+      { "name": "ボタン(黒)", "element": "a", "attributes": { "role": "button", "class": "btn-inline--black" } },
+      { "name": "ボタン(赤)", "element": "a", "attributes": { "role": "button", "class": "btn-inline--red" } }
+    ]
+  }
+}
