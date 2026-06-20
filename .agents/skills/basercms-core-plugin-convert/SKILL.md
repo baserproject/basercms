@@ -51,18 +51,37 @@ plugins/<bc-name>/
   tests/TestApp/        ← 削除（ルート tests/TestApp を使う）
   .github/              ← 単体 CI は不要（split 先リポジトリでも別管理）。既存コアに無ければ削除
   .gitignore            ← 既存コアに無ければ削除
+  VERSION.txt           ← 削除（バージョンは本体 monorepo 管理になる）
+  CHANGELOG.md          ← 削除（変更履歴も本体管理）
   .phpunit.cache / .phpunit.result.cache / .DS_Store / .idea ← 削除
 ```
+- 完成形は既存コア（`plugins/bc-blog`）に合わせる: `README.md / composer.json / config/ / config.php / src/ / tests/ / webroot/`（＋必要なら `templates/`・`webpack.config.js`）。
 - ⚠️ `.git` 削除は不可逆。nested git の独自履歴が必要なら事前に退避。
 
-## 3. シンボリックリンクをコミット対象から除外（webroot アセット）
+## 3. ルート `.gitignore` の調整（2 種類・向きが逆なので注意）
 
-baserCMS は `webroot/<plugin_underscored>` → `plugins/<bc-name>/webroot` のシンボリックリンクを生成する（例 `webroot/bc_mcp`）。コアプラグインはこれを**ルート `.gitignore` で除外**する（他コアと同じ並び）。
+### 3-1. プラグイン本体を「追跡対象」にする（無視の除外 `!`）
+ルート `.gitignore` は `/plugins/*` で**全プラグインを無視**し、コアプラグインだけ `!` で**ホワイトリスト**している。コア化したプラグインを `!/plugins/<bc-name>` で追跡対象に加える（**これを忘れると `git add` されず取り込まれない**）。
+```gitignore
+# plugins
+/plugins/*
+!/plugins/baser-core
+...
+!/plugins/bc-seo
+!/plugins/bc-mcp          ← 追加（無視の除外＝追跡対象化）
+/plugins/*/vendor
+/plugins/*/composer.lock
+```
+- 確認: `git check-ignore -v plugins/<bc-name>/composer.json`（何も返らなければ追跡対象）、`git status --short plugins/<bc-name>`。
+
+### 3-2. webroot シンボリックリンクは「無視」する
+baserCMS は `webroot/<plugin_underscored>` → `plugins/<bc-name>/webroot` のシンボリックリンクを生成する（例 `webroot/bc_mcp`）。実体は `plugins/<bc-name>/webroot` にあるため、**リンク側はルート `.gitignore` で無視**する（他コアと同じ並び）。
 ```gitignore
 /webroot/bc_blog
 /webroot/bc_custom_content
 /webroot/bc_mcp          ← 追加（アンダースコア表記）
 ```
+> 向きに注意: **`plugins/<bc-name>` は追跡（`!` で除外）／`webroot/<underscored>` は無視**。
 
 ---
 
@@ -192,8 +211,8 @@ gh repo view baserproject/bc-mcp --json name,url,visibility
 ## チェックリスト
 
 1. [ ] プラグイン名がコア規約（`bc-` プレフィックス／ケバブ／`Bc` namespace／`baserproject/bc-*`）
-2. [ ] `.git` / `vendor` / `bin` / `composer.lock` / `phpunit.xml.dist` / `tests/bootstrap.php` / `TestApp` 削除
-3. [ ] `webroot/<underscored>` を ルート `.gitignore` に追加
+2. [ ] `.git` / `vendor` / `bin` / `composer.lock` / `phpunit.xml.dist` / `tests/bootstrap.php` / `TestApp` / `VERSION.txt` / `CHANGELOG.md` 削除
+3. [ ] ルート `.gitignore`: `!/plugins/<bc-name>` で追跡対象化 ＋ `/webroot/<underscored>` を無視
 4. [ ] ルート `phpunit.xml.dist` に testsuite 追加
 5. [ ] ルート `tests/bootstrap.php` の Migrator に追加（マイグレーションがある場合）
 6. [ ] プラグイン `composer.json` をコア形式に簡素化（外部 require は残す）
