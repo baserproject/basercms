@@ -151,10 +151,11 @@ docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/monorepo-b
   - `autoload-dev.psr-4` に `"BcMcp\\Test\\": "plugins/bc-mcp/tests/"`
   - `require` にプラグインの外部依存（`league/oauth2-server` 等、`ext-*` 含む）
   - `replace` に `"baserproject/bc-mcp": "<monorepo版>"`（他コアに合わせる）
-- 反映後、依存取得とオートロード再生成:
+- **外部依存（`require`）を追加した場合のみ**、依存取得のため composer を回す:
   ```bash
   docker compose exec <container> sh -c "cd /var/www/html && composer update <added-packages> --no-interaction"
   ```
+- ⚠️ **`composer dump-autoload` は不要**（クラスを読ませる目的では回さない）。baserCMS はプラグイン機構（`BcPlugin` / CakePHP のプラグインロードが各プラグインの composer.json の psr-4 を解決）でクラスを認識・ロードするため、ルート autoloader の再生成に依存しない。**管理画面でプラグインを有効化**すれば読み込まれる。ルート `composer.json` の `autoload`/`replace` への登録は monorepo 管理・split 用のメタ情報として行う（コミット対象）。外部 `require` を足したときだけ上記の `composer update` で vendor を取得する。
 
 ### 5-4. `phpdoc.dist.xml` に `src` パスを追加
 ```xml
