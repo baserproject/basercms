@@ -22,6 +22,7 @@
                 <path>plugins/bc-installer/src</path>
                 <path>plugins/bc-mail/src</path>
                 <path>plugins/bc-search-index/src</path>
+                <path>plugins/bc-seo/src</path>
                 <path>plugins/bc-theme-config/src</path>
                 <path>plugins/bc-theme-file/src</path>
                 <path>plugins/bc-uploader/src</path>
