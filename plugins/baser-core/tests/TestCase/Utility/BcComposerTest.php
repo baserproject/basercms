@@ -217,10 +217,9 @@ class BcComposerTest extends BcTestCase
     {
         // キャッシュを作成
         BcComposer::setup();
-        BcComposer::selfUpdate();
-        $this->assertFileExists(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+        touch(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . 'test');
         BcComposer::clearCache();
-        $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+        $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . 'test');
     }
 
     /**
