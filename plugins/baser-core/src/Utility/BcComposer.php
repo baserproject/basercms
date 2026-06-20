@@ -77,7 +77,11 @@ class BcComposer
         self::$currentDir = $dir;
         self::$cd = "cd " . $dir . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
-        self::$export = "export HOME=" . self::$composerDir . ";";
+        // Composer は XDG Base Directory 仕様（/etc/xdg の有無や XDG_* 環境変数）により
+        // キャッシュディレクトリの位置が .composer/cache か .cache/composer かで変わるため、
+        // COMPOSER_CACHE_DIR を明示してキャッシュ位置を固定する
+        self::$export = "export HOME=" . self::$composerDir . ";"
+            . " export COMPOSER_CACHE_DIR=" . self::$composerDir . ".composer/cache;";
         self::$php = ($php)?: 'php';
         try {
             self::checkComposer();
