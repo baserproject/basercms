@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['8.1']
+        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
 
     steps:
 
@@ -35,7 +35,7 @@ jobs:
         run: |
           cd docker
           cp docker-compose.yml.default docker-compose.yml
-          sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml
+          sed -i -e "s/basercms:php8.5/basercms:php${{ matrix.php-version }}/g" docker-compose.yml
           sed -i -e "s/XDEBUG_MODE: \"debug\"/XDEBUG_MODE: \"off\"/g" docker-compose.yml
           docker compose up -d
 

@@ -371,7 +371,7 @@ class UsersControllerTest extends BcTestCase
 
         // コード入力画面: 認証コード検証 成功
         $twoFactorAuthentication = $this->TwoFactorAuthentications->find()
-            ->orderDesc('modified')
+            ->orderByDesc('modified')
             ->first();
         $this->post('/baser/admin/baser-core/users/login_code', ['code' => $twoFactorAuthentication->code]);
         $this->assertRedirect('/baser/admin');

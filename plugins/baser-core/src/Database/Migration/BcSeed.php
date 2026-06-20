@@ -12,17 +12,18 @@
 namespace BaserCore\Database\Migration;
 
 use BaserCore\Utility\BcUtil;
-use Cake\Datasource\ConnectionManager;
-use Migrations\AbstractSeed;
-use Phinx\Db\Table;
+use Migrations\BaseSeed;
+use Migrations\Db\Table;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
  * BcSeed
+ *
+ * CakePHP Migrations 4.5 以降、AbstractSeed は非推奨となり BaseSeed が推奨されたため移行。
  */
-class BcSeed extends AbstractSeed
+class BcSeed extends BaseSeed
 {
 
     /**
@@ -39,16 +40,9 @@ class BcSeed extends AbstractSeed
      */
     public function table(string $tableName, array $options = []): Table
     {
-        if($this->input->hasParameterOption('connection')) {
-            $connection = $this->input->getParameterOption('connection');
-        } elseif($this->input->hasParameterOption('--connection')) {
-            $connection = $this->input->getParameterOption('--connection');
-        } else {
-            $connection = 'default';
-        }
-
-        $prefix = ConnectionManager::get($connection)->config()['prefix'];
-        return parent::table($prefix . $tableName);
+        // BaseSeed では $this->input が無いため、実行中アダプターの接続からプレフィックスを取得する
+        $prefix = $this->getAdapter()->getConnection()->config()['prefix'] ?? '';
+        return parent::table($prefix . $tableName, $options);
     }
 
 }

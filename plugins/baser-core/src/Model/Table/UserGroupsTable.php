@@ -154,7 +154,7 @@ class UserGroupsTable extends AppTable
         }
 
         if ($result = $this->save($entity)) {
-            $permissions = $this->Permissions->find()->where(['user_group_id' => $id])->order(['sort'])->all();
+            $permissions = $this->Permissions->find()->where(['user_group_id' => $id])->orderBy(['sort'])->all();
             if ($permissions) {
                 foreach($permissions as $permission) {
                     $permission->user_group_id = $result->id;

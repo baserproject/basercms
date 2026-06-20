@@ -112,6 +112,12 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
                 $installMessage = sprintf(__d('baser_core', '%sに書き込み権限を与えてください'), $viewSavePath);
             }
         }
+        // limited フォルダが存在していても、限定公開ファイル保護用の .htaccess が
+        // 失われている場合は復元する。
+        if (is_dir($limitedPath) && !file_exists($limitedPath . DS . '.htaccess')) {
+            $File = new BcFile($limitedPath . DS . '.htaccess');
+            $File->write("Order allow,deny\nDeny from all");
+        }
         return $installMessage;
     }
 

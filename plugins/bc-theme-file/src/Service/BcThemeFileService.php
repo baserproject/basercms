@@ -70,9 +70,11 @@ class BcThemeFileService implements BcThemeFileServiceInterface
         $resolvedBase = realpath($baseDir);
         if ($resolvedBase !== false) {
             $resolvedBase = rtrim($resolvedBase, DS) . DS;
-            $targetDir = realpath(dirname($fullPath));
+            // $fullPath は作成先の親ディレクトリ（$path が空の場合は baseDir 自身）を指すため、
+            // dirname() ではなく $fullPath 自身がテーマディレクトリ内に収まっているかを検証する
+            $targetDir = realpath($fullPath);
             if ($targetDir === false) {
-                $targetDir = $this->normalizePath(dirname($fullPath));
+                $targetDir = $this->normalizePath($fullPath);
             }
             if (!str_starts_with(rtrim($targetDir, DS) . DS, $resolvedBase)) {
                 throw new BcException(__d('baser_core', 'パスにテーマディレクトリ外への参照が含まれています。'));

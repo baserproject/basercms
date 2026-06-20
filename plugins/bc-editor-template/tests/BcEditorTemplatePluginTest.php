@@ -15,8 +15,13 @@ class BcEditorTemplatePluginTest extends BcTestCase
         parent::setUp();
         BcUtil::includePluginClass('BcEditorTemplate');
         $plugins = Plugin::getCollection();
-        $this->Plugin = $plugins->create('BcEditorTemplate');
-        $plugins->add($this->Plugin);
+        // CakePHP 5.2 では二重 add で例外となるため、既に読み込まれている場合はそれを利用する
+        if ($plugins->has('BcEditorTemplate')) {
+            $this->Plugin = $plugins->get('BcEditorTemplate');
+        } else {
+            $this->Plugin = $plugins->create('BcEditorTemplate');
+            $plugins->add($this->Plugin);
+        }
     }
 
     public function tearDown(): void

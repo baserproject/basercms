@@ -46,7 +46,7 @@ class BcComposerTest extends BcTestCase
         BcComposer::setup();
         $this->assertEquals('cd /var/www/html/;', BcComposer::$cd);
         $this->assertEquals('/var/www/html/composer/', BcComposer::$composerDir);
-        $this->assertEquals('export HOME=/var/www/html/composer/;', BcComposer::$export);
+        $this->assertEquals('export HOME=/var/www/html/composer/; export COMPOSER_CACHE_DIR=/var/www/html/composer/.composer/cache;', BcComposer::$export);
         $this->assertEquals('php', BcComposer::$php);
 
         // 環境を変更
@@ -129,6 +129,7 @@ class BcComposerTest extends BcTestCase
         $regex = '/("replace": {.+?},)/s';
         $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
         $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        $data = str_replace('"cakephp/cakephp": "5.2.*"', '"cakephp/cakephp": "5.0.*"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
@@ -216,10 +217,9 @@ class BcComposerTest extends BcTestCase
     {
         // キャッシュを作成
         BcComposer::setup();
-        BcComposer::selfUpdate();
-        $this->assertFileExists(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+        (new BcFile(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . 'test'))->create();
         BcComposer::clearCache();
-        $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . '.htaccess');
+        $this->assertFileDoesNotExist(ROOT . DS . 'composer' . DS . '.composer' . DS . 'cache' . DS . 'test');
     }
 
     /**

@@ -457,11 +457,11 @@ class BlogHelperTest extends BcTestCase
         $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', $site));
         $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
         //'link'=>false
-        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $post = $BlogPostsService->BlogPosts->get(1, contain: ['BlogTags']);
         $result = $this->Blog->getTag($post, ['link'=>false]);
         $this->assertEquals('tag1', $result[0]['name']);
         //'link'=>true
-        $post = $BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $post = $BlogPostsService->BlogPosts->get(1, contain: ['BlogTags']);
         $result = $this->Blog->getTag($post, ['link'=>true]);
         $this->assertEquals('<a href="/news/archives/tag/tag1">tag1</a> , <a href="/news/archives/tag/tag2">tag2</a>', $result);
     }

@@ -74,8 +74,8 @@ class MailController extends MailFrontAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $redirect = parent::beforeFilter($event);
-        if($redirect) return $redirect;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
 
         if (!$this->request->getParam('entityId')) {
             $this->notFound();
@@ -351,7 +351,7 @@ class MailController extends MailFrontAppController
      *
      * @param BcCaptchaServiceInterface $service
      * @param string $token
-     * @return void
+     * @return \Cake\Http\Response
      * @checked
      * @noTodo
      * @unitTest
@@ -359,7 +359,11 @@ class MailController extends MailFrontAppController
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
         $this->disableAutoRender();
-        $service->render($this->getRequest(), $token);
+        $image = $service->render($this->getRequest(), $token);
+        $type = function_exists('imagejpeg') ? 'jpg' : (function_exists('imagegif') ? 'gif' : 'png');
+        return $this->getResponse()
+            ->withType($type)
+            ->withStringBody($image);
     }
 
 }

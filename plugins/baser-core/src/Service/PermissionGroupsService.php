@@ -168,7 +168,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
                     return $q->where(['Permissions.user_group_id' => $userGroupId]);
                 })
                 ->select(['amount' => $query->func()->count('Permissions.id')])
-                ->group(['PermissionGroups.id'])
+                ->groupBy(['PermissionGroups.id'])
                 ->enableAutoFields();
         }
         return $query;

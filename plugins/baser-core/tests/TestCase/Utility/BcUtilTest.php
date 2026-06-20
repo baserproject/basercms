@@ -306,7 +306,7 @@ class BcUtilTest extends BcTestCase
         $folder->move($backup);
 
         // cache環境準備
-        $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
+        $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_translations_', 'models' => '_cake_model_'];
 
         foreach ($cacheList as $path => $cacheName) {
             Cache::drop($cacheName);
@@ -613,7 +613,7 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
         if ($theme) {
-            $Folder->delete($path);
+            (new BcFolder($path))->delete();
         }
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }

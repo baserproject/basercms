@@ -14,8 +14,6 @@ namespace BcMail\View\Helper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
 use BcMail\Model\Entity\MailField;
-use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\ResultSet;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -329,7 +327,7 @@ class MailformHelper extends BcFreezeHelper
     /**
      * 指定したgroup_validをもつフィールドのエラーを取得する
      *
-     * @param ResultSetInterface $mailFields
+     * @param iterable $mailFields
      * @param string $groupValid
      * @param array $options
      * @param bool $distinct 同じエラーメッセージをまとめる
@@ -338,10 +336,10 @@ class MailformHelper extends BcFreezeHelper
      * @noTodo
      * @unitTest
      */
-    public function getGroupValidErrors(ResultSetInterface $mailFields, string $groupValid, array $options = [], bool $distinct = true)
+    public function getGroupValidErrors(iterable $mailFields, string $groupValid, array $options = [], bool $distinct = true)
     {
-        // 呼び出し元のイテレーションに影響が出ないようにクローンを作成
-        $mailFields = clone $mailFields;
+        // 呼び出し元のイテレーションに影響が出ないよう配列化する（CakePHP 5.2 で ResultSet はクローン不可）
+        $mailFields = is_array($mailFields) ? $mailFields : $mailFields->toArray();
         $errors = [];
         foreach ($mailFields as $mailField) {
             if ($mailField->group_valid !== $groupValid) continue;
@@ -371,29 +369,29 @@ class MailformHelper extends BcFreezeHelper
      * - 次のフィールドがないもの
      * - 次のフィールドがある、次のフィールドとグループが違うもの
      *
-     * @param ResultSet $mailFields
+     * @param iterable $mailFields
      * @param MailField $currentMailField
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isGroupLastField(ResultSet $mailFields, MailField $currentMailField)
+    public function isGroupLastField(iterable $mailFields, MailField $currentMailField)
     {
         if (empty($currentMailField->group_field)) return false;
-        $mailFields = clone $mailFields;
-        foreach ($mailFields as $mailField) {
-            if ($currentMailField === $mailField) break;
+        // 呼び出し元のイテレーションに影響が出ないよう配列化する（CakePHP 5.2 で ResultSet はクローン不可）
+        $fields = is_array($mailFields) ? array_values($mailFields) : $mailFields->toArray();
+        foreach ($fields as $i => $mailField) {
+            if ($currentMailField !== $mailField) continue;
+            // 次のフィールドを確認する
+            $nextField = $fields[$i + 1] ?? null;
+            if (!$nextField) return true;
+            if (!$nextField->group_field || $currentMailField->group_field !== $nextField->group_field) {
+                return true;
+            }
+            return false;
         }
-
-        $mailFields->next();
-        if(!$mailFields->valid()) return true;
-        $nextField = $mailFields->current();
-        if(!$nextField->group_field || $currentMailField->group_field !== $nextField->group_field) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
 }

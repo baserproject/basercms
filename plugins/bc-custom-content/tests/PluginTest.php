@@ -21,8 +21,13 @@ class PluginTest extends BcTestCase
         parent::setUp();
         BcUtil::includePluginClass('BcCustomContent');
         $plugins = Plugin::getCollection();
-        $this->Plugin = $plugins->create('BcCustomContent');
-        $plugins->add($this->Plugin);
+        // CakePHP 5.2 では二重 add で例外となるため、既に読み込まれている場合はそれを利用する
+        if ($plugins->has('BcCustomContent')) {
+            $this->Plugin = $plugins->get('BcCustomContent');
+        } else {
+            $this->Plugin = $plugins->create('BcCustomContent');
+            $plugins->add($this->Plugin);
+        }
     }
 
     public function tearDown(): void

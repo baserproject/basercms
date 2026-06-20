@@ -92,6 +92,9 @@ class UsersControllerTest extends BcTestCase
         $body = json_decode($this->_getBodyAsString());
         $this->get('/baser/api/admin/baser-core/users/refresh_token.json?token=' . $body->refresh_token);
         $this->assertResponseContains('access_token');
+        // TRUST_PROXY 有効時、baserCMS の https 判定は X-Forwarded-Proto 等を参照するため、
+        // HTTPS リクエスト（リバースプロキシ経由）を再現するため環境変数を設定する。
+        $this->configRequest(['environment' => ['HTTP_X_FORWARDED_PROTO' => 'https']]);
         $this->post('https://localhost/baser/api/admin/baser-core/users/login.json', [
             'email' => 'testuser1@example.com',
             'password' => 'password',

@@ -35,8 +35,8 @@ class SearchIndexesController extends BcAdminApiController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
         $this->FormProtection->setConfig('validate', false);
     }
 
@@ -86,7 +86,8 @@ class SearchIndexesController extends BcAdminApiController
         $allowMethod = [
             'delete' => __d('baser_core', '削除')
         ];
-        $method = $this->getRequest()->getData('batch');
+        // PHP 8.5 で null を配列オフセットに使うのは非推奨のため空文字に変換する
+        $method = $this->getRequest()->getData('batch') ?? '';
         if (!isset($allowMethod[$method])) {
             $this->setResponse($this->response->withStatus(500));
             $this->viewBuilder()->setOption('serialize', []);

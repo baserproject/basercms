@@ -73,8 +73,8 @@ class BlogPostsController extends BlogAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
 
         $blogContentId = $this->request->getParam('pass.0');
         if (!$blogContentId) throw new BcException(__d('baser_core', '不正なURLです。'));

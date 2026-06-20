@@ -129,16 +129,6 @@ class SitesTable extends AppTable
                     'message' => __d('baser_core', '識別名称は、利用しているプラグイン名をハイフン区切りにした名称と同じ名称は利用できません。別の名称に変更してください。')
                 ]]);
         $validator
-            ->scalar('alias')
-            ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
-            ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
-            ->add('alias', [
-                'checkSiteAlias' => [
-                    'rule' => ['checkSiteAlias'],
-                    'provider' => 'site',
-                    'message' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
-                ]]);
-        $validator
             ->scalar('display_name')
             ->maxLength('display_name', 50, __d('baser_core', 'サイト名は50文字以内で入力してください。'))
             ->requirePresence('display_name', 'create', __d('baser_core', 'サイト名を入力してください。'))
@@ -148,6 +138,12 @@ class SitesTable extends AppTable
             ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
             ->requirePresence('alias', 'create', __d('baser_core', 'エイリアスを入力してください。'))
             ->allowEmptyString('alias')
+            ->add('alias', [
+                'checkSiteAlias' => [
+                    'rule' => ['checkSiteAlias'],
+                    'provider' => 'site',
+                    'message' => __d('baser_core', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
+                ]])
             ->add('alias', [
                 'aliasUnique' => [
                     'rule' => 'validateUnique',
@@ -397,8 +393,9 @@ class SitesTable extends AppTable
         }
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
-        if (!$contentsService->hardDelete($content->id)) return false;
-        return true;
+        if (!$contentsService->hardDelete($content->id)) {
+            $event->setResult(false);
+        }
     }
 
     /**
@@ -763,7 +760,7 @@ class SitesTable extends AppTable
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * @return bool
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -777,7 +774,6 @@ class SitesTable extends AppTable
                 $this->changedAlias = true;
             }
         }
-        return true;
     }
 
     /**

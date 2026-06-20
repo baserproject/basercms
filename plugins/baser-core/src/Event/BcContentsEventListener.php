@@ -95,18 +95,18 @@ class BcContentsEventListener extends BcEventListener
      * Form After Create
      *
      * @param Event $event
-     * @return string|void
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function formAfterCreate(Event $event)
+    public function formAfterCreate(Event $event): void
     {
         if (!BcUtil::isAdminSystem()) return;
         if ($event->getData('id') === 'PermissionAjaxAddForm') return;
         if (!preg_match('/(AdminAddForm|AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) return;
         $View = $event->getSubject();
-        return $event->getData('out') . "\n" . $View->element('content_fields');
+        $event->setResult($event->getData('out') . "\n" . $View->element('content_fields'));
     }
 
     /**

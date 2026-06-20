@@ -95,11 +95,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $request = $this->getRequest('/baser/admin');
         $ref = new ReflectionClass($request);
         $detectors = $ref->getProperty('_detectors');
-        $detectors->setAccessible(true);
         $ref2 = new ReflectionClass(BcUtil::class);
         $detectors2 = $ref2->getProperty('_detectors');
-        $detectors2->setAccessible(true);
-        $detectors->setValue($detectors2->getValue());
+        $detectors->setValue(null, $detectors2->getValue());
         $request = $this->BcRequestFilterMiddleware->addDetectors($request);
         $this->assertTrue($request->is('admin'));
     }
@@ -114,11 +112,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $request = $this->getRequest('/baser/admin');
         $ref = new ReflectionClass($request);
         $detectors = $ref->getProperty('_detectors');
-        $detectors->setAccessible(true);
         $ref2 = new ReflectionClass(BcUtil::class);
         $detectors2 = $ref2->getProperty('_detectors');
-        $detectors2->setAccessible(true);
-        $detectors->setValue($detectors2->getValue());
+        $detectors->setValue(null, $detectors2->getValue());
         $this->expectException(\InvalidArgumentException::class);
         $request->is('admin');
     }

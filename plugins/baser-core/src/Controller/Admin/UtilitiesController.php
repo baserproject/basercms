@@ -124,15 +124,13 @@ class UtilitiesController extends BcAdminAppController
             case 'backup':
                 $this->autoRender = false;
                 $distPath = $service->backupDb($this->request->getQuery('backup_encoding'));
-                header("Cache-Control: no-store");
-                header("Content-Type: application/zip");
-                header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
-                header("Content-Length: " . filesize($distPath));
-                while (ob_get_level()) { ob_end_clean(); }
-                echo readfile($distPath);
-
+                $content = file_get_contents($distPath);
                 unlink($distPath);
-                return;
+                return $this->getResponse()
+                    ->withType('zip')
+                    ->withHeader('Cache-Control', 'no-store')
+                    ->withHeader('Content-Disposition', 'attachment; filename="' . basename($distPath) . '"')
+                    ->withStringBody($content);
             case 'restore':
                 $this->request->allowMethod(['post']);
                 try {
@@ -165,15 +163,13 @@ class UtilitiesController extends BcAdminAppController
                 $this->autoRender = false;
                 $distPath = $service->createLogZip();
                 if ($distPath) {
-                    header("Cache-Control: no-store");
-                    header("Content-Type: application/zip");
-                    header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
-                    header("Content-Length: " . filesize($distPath));
-                    while (ob_get_level()) { ob_end_clean(); }
-                    echo readfile($distPath);
-
+                    $content = file_get_contents($distPath);
                     unlink($distPath);
-                    return;
+                    return $this->getResponse()
+                        ->withType('zip')
+                        ->withHeader('Cache-Control', 'no-store')
+                        ->withHeader('Content-Disposition', 'attachment; filename="' . basename($distPath) . '"')
+                        ->withStringBody($content);
                 }
                 $this->BcMessage->setInfo('エラーログが存在しません。');
                 $this->redirect(['action' => 'log_maintenance']);

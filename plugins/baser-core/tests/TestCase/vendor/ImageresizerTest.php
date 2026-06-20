@@ -39,10 +39,10 @@ class ImageresizerTest extends BcTestCase
         $this->assertEquals($expectedWidth, imagesx($result));
         $this->assertEquals($expectedHeight, imagesy($result));
 
-        //delete image
-        imagedestroy($srcImage);
-        imagedestroy($newImage);
-        imagedestroy($result);
+        //delete image（PHP 8.5 で imagedestroy() は非推奨。参照を外して解放する）
+        unset($srcImage);
+        unset($newImage);
+        unset($result);
     }
 
     public static function copyAndResizeDataProvider()

@@ -43,27 +43,18 @@ class ThemeFoldersControllerTest extends BcTestCase
     }
 
     /**
-     * tearDown
-     *
-     * @return void
-     */
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
-    /**
      * test batch
      */
     public function test_batch()
     {
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         (new BcFolder($fullpath . 'delete_folder'))->create();
-        //APIをコール
+        //APIをコール（作成した delete_folder のみを対象にする。layout フォルダ自体を渡すと
+        //          default.php まで削除され、他テストの前提が壊れるため）
         $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
             [
                 'batch' => 'delete',
-                'batch_targets' => [$fullpath]
+                'batch_targets' => [$fullpath . 'delete_folder']
             ]);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
@@ -77,7 +68,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
             [
                 'batch' => 'create',
-                'batch_targets' => [$fullpath]
+                'batch_targets' => [$fullpath . 'delete_folder']
             ]);
         $this->assertResponseCode(500);
     }

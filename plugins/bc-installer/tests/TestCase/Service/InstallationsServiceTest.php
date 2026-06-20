@@ -91,7 +91,7 @@ class InstallationsServiceTest extends BcTestCase
         $this->assertEquals('8.0.0',$result['requirePhpVersion']);
         $this->assertEquals('128',$result['requirePhpMemory']);
         $this->assertEquals('UTF-8',$result['encoding']);
-        $this->assertEquals('8.1.5',$result['phpVersion']);
+        $this->assertEquals(phpversion(),$result['phpVersion']);
         $this->assertEquals('-1',$result['phpMemory']);
         $this->assertTrue($result['safeModeOff']);
         $this->assertTrue($result['configDirWritable']);
@@ -99,7 +99,7 @@ class InstallationsServiceTest extends BcTestCase
         $this->assertTrue($result['filesDirWritable']);
         $this->assertTrue($result['tmpDirWritable']);
         $this->assertTrue($result['dbDirWritable']);
-        $this->assertEquals('8.1.5',$result['phpActualVersion']);
+        $this->assertEquals(preg_replace('/[a-z-]/', '', phpversion()),$result['phpActualVersion']);
         $this->assertTrue($result['phpGd']);
         $this->assertTrue($result['phpPdo']);
         $this->assertTrue($result['phpXml']);
@@ -279,6 +279,7 @@ SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for test failed: ')
                 'type' => 'ContentFolder',
                 'entity_id' => 1,
                 'parent_id' => 0,
+                'lft' => 1,
                 'rght' => 48,
                 'site_root' => true
             ])->persist();

@@ -161,8 +161,9 @@ class CustomContentsTableTest extends BcTestCase
 
         $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(2, $searchIndexesTable->find()->count());
-
-        $dataBaseService->dropTable('custom_entry_2_occupations');
+        // custom_entry_2_occupations はマイグレーション（CreateCustomEntries2）で作成される固定テーブルのため、
+        // ここで drop すると以降のテスト・実行でテーブルが失われ、TruncateDirtyTables が
+        // 存在しないテーブルを参照して全体が連鎖的に失敗する。drop せずテスト間の truncate に任せる。
     }
 
     /**

@@ -57,6 +57,12 @@ $routes->scope('/', function (RouteBuilder $builder) {
      *
      * You can remove these routes once you've connected the
      * routes you want in your application.
+     *
+     * baserCMS では BaserCorePlugin::disableRootRoutes() により、本番・ユニットテストの
+     * 双方でこのフォールバックを無効化している（プラグインごとに必要なルートを接続するため）。
+     * disableRootRoutes() はコンソールでも isTest() 時は実行されるため、ここで fallbacks() を
+     * 接続してもテストで '/{controller}/{action}/*' がコンテンツルーティング（BcContentsRoute）を
+     * 隠す問題は発生しない。
      */
     $builder->fallbacks();
 });

@@ -65,8 +65,8 @@ class BlogController extends BlogFrontAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        $response = parent::beforeFilter($event);
-        if($response) return $response;
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
         $this->FormProtection->setConfig('validate', false);
@@ -368,7 +368,7 @@ class BlogController extends BlogFrontAppController
     /**
      * 認証用のキャプチャ画像を表示する
      *
-     * @return void
+     * @return \Cake\Http\Response
      * @checked
      * @noTodo
      * @unitTest
@@ -376,7 +376,11 @@ class BlogController extends BlogFrontAppController
     public function captcha(BcCaptchaServiceInterface $service, string $token)
     {
         $this->viewBuilder()->disableAutoLayout();
-        $service->render($this->getRequest(), $token);
+        $image = $service->render($this->getRequest(), $token);
+        $type = function_exists('imagejpeg') ? 'jpg' : (function_exists('imagegif') ? 'gif' : 'png');
+        return $this->getResponse()
+            ->withType($type)
+            ->withStringBody($image);
     }
 
 }

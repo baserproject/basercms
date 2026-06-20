@@ -106,7 +106,7 @@ class PluginsServiceTest extends BcTestCase
         }
         //期待されるプラグインを含むか
         $this->assertContains($expectedPlugin, $pluginNames);
-        $folder->delete($pluginPath);
+        (new BcFolder($pluginPath))->delete();
         if ($sortMode) {
             // フォルダ内プラグインが含まれてないか
             $this->assertNotContains('BcTest', $pluginNames);
@@ -147,7 +147,7 @@ class PluginsServiceTest extends BcTestCase
         } catch (\Exception $e) {
             $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
         }
-        $folder->delete($pluginPath);
+        (new BcFolder($pluginPath))->delete();
     }
 
     /**

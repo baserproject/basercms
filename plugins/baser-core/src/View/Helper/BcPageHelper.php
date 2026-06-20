@@ -13,7 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Page;
 use BaserCore\Utility\BcUtil;
-use Cake\Datasource\ResultSetDecorator;
+use Cake\Datasource\ResultSetInterface;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -92,7 +92,7 @@ class BcPageHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getPageList(int $id, ?int $level = null, array $options = []): ResultSetDecorator
+    public function getPageList(int $id, ?int $level = null, array $options = []): ResultSetInterface
     {
         $options['type'] = 'Page';
         return $this->BcContents->getTree($id, $level, $options);

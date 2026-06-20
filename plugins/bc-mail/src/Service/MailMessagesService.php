@@ -111,7 +111,7 @@ class MailMessagesService implements MailMessagesServiceInterface
         ], $queryParams);
         $query = $this->MailMessages->find();
         if ($options['order']) {
-            $query->order("{$options['order']} {$options['direction']}");
+            $query->orderBy("{$options['order']} {$options['direction']}");
             unset($options['order'], $options['direction']);
         }
         if (!empty($options['limit'])) {

@@ -43,7 +43,7 @@ class UploaderFilesController extends BcAdminAppController
     public function beforeFilter(EventInterface $event)
     {
         $this->viewBuilder()->addHelpers(['BcUploader.Uploader']);
-        return parent::beforeFilter($event);
+        parent::beforeFilter($event);
     }
 
     /**

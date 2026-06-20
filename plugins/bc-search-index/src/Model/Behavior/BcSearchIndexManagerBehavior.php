@@ -266,7 +266,7 @@ class BcSearchIndexManagerBehavior extends Behavior
     public function updateSearchIndexMeta()
     {
         $contentTypes = [];
-        $searchIndexes = $this->SearchIndexes->find()->select('type')->group('type')->where(['status' => true]);
+        $searchIndexes = $this->SearchIndexes->find()->select('type')->groupBy('type')->where(['status' => true]);
         foreach($searchIndexes as $searchIndex) {
             if ($searchIndex->type) {
                 $contentTypes[$searchIndex->type] = $searchIndex->type;

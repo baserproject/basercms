@@ -196,7 +196,11 @@ class BcTestCaseTest extends BcTestCase
         $this->assertEquals('0777', substr(sprintf('%o', fileperms(TMP . 'test')), -4));
         unlink(LOGS . 'cli-debug.log');
         rename(LOGS . 'cli-debug.bak.log', LOGS . 'cli-debug.log');
-        unlink(TMP . 'test');
+        // TMP . 'test' がファイルとして作成された場合のみ削除する
+        // （環境によっては同名のディレクトリが存在し、その場合は削除しない）
+        if (is_file(TMP . 'test')) {
+            unlink(TMP . 'test');
+        }
     }
 
     /**
