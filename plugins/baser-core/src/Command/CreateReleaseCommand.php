@@ -120,8 +120,9 @@ class CreateReleaseCommand extends Command
     {
         $tmp = TMP;
         $repository = Configure::read('BcApp.repositoryUrl');
-        exec("cd {$tmp}; git clone {$repository} basercms");
-        exec("cd {$packagePath}; git checkout {$branch}");
+        // git は進捗・メッセージを標準エラーへ出力するため、2>&1 で exec に捕捉させて画面・ログへの漏れを防ぐ
+        exec("cd {$tmp}; git clone {$repository} basercms 2>&1");
+        exec("cd {$packagePath}; git checkout {$branch} 2>&1");
     }
 
     /**

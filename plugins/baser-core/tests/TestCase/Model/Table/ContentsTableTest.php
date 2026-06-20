@@ -205,12 +205,15 @@ class ContentsTableTest extends BcTestCase
     {
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest());
-        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
-        $this->assertNotEmpty($result->getResult());
-        $content = (array)$result->getData('content');
-        if (isset($fields['title'])) {
-            $this->assertEquals($expected['limit'][0], strlen($content['title']));
-            $this->assertEquals($expected['limit'][1], strlen($content['name']));
+        // beforeMarshal は引数の ArrayObject を直接書き換えるため、その結果を検証する
+        $data = new ArrayObject($content);
+        $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => $data, 'options' => new ArrayObject()]);
+        $content = (array)$data;
+        if (array_key_exists('title', $content)) {
+            // title が254文字、name が230文字に切られているか
+            $this->assertEquals($expected['limit'][0], mb_strlen($content['title']));
+            $this->assertEquals($expected['limit'][1], mb_strlen($content['name']));
+            // 初期データが挿入されているか
             foreach($expected['auto'] as $field => $value) {
                 if ($field === "created_date") {
                     $this->assertInstanceOf($value, $content[$field]);
@@ -219,7 +222,8 @@ class ContentsTableTest extends BcTestCase
                 }
             }
         }
-        if (isset($fields['id'])) {
+        if (array_key_exists('modified_date', $content)) {
+            // 更新日が入れられているか
             $this->assertInstanceOf($expected[0], $content['modified_date']);
         }
     }
@@ -997,7 +1001,7 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateChildrenUrl()
     {
         $this->assertTrue($this->Contents->updateChildrenUrl(19));
-        $child = $this->Contents->find('children', for: 19)->select(['url', 'id'])->order('lft')->first();
+        $child = $this->Contents->find('children', for: 19)->select(['url', 'id'])->orderBy('lft')->first();
         $this->assertEquals('/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/', $child->url);
     }
 
@@ -1070,7 +1074,6 @@ class ContentsTableTest extends BcTestCase
     {
         $reflection = new ReflectionClass($this->Contents);
         $property = $reflection->getProperty('updatingSystemData');
-        $property->setAccessible(true);
         // 無効化
         $this->Contents->disableUpdatingSystemData();
         $this->assertFalse($property->getValue($this->Contents));

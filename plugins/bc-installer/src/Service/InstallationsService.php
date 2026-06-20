@@ -124,7 +124,7 @@ class InstallationsService implements InstallationsServiceInterface
             'pdoOk' => $status['phpPdo'],
             'xmlOk' => $status['phpXml'],
             'zipOk' => $status['phpZip'],
-            'phpVersionOk' => version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), $info['requirePhpVersion'], '>='),
+            'phpVersionOk' => version_compare((string)preg_replace('/[a-z-]/', '', $status['phpVersion']), (string)$info['requirePhpVersion'], '>='),
             'phpMemoryOk' => ((($status['phpMemory'] >= $info['requirePhpMemory']) || $status['phpMemory'] == -1) === true)
         ];
 
@@ -540,7 +540,7 @@ class InstallationsService implements InstallationsServiceInterface
             $dbFolderPath = ROOT . DS . 'db' . DS . 'sqlite';
             if (is_writable(dirname($dbFolderPath)) && (new BcFolder($dbFolderPath))->create()) {
                 $info = SQLite3::version();
-                if (version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {
+                if (version_compare((string)$info['versionString'], (string)Configure::read('BcRequire.winSQLiteVersion'), '>')) {
                     $dbsource['sqlite'] = 'SQLite';
                 }
             }

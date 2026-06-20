@@ -17,13 +17,10 @@ use BaserCore\Utility\BcUtil;
 use BcMail\View\Helper\MaildataHelper;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
-use Cake\ORM\Query;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Validation\Validator;
@@ -50,6 +47,14 @@ class MailMessagesTable extends MailAppTable
      * @var array
      */
     public $mailContent = [];
+
+    /**
+     * テーブルプレフィックス
+     *
+     * PHP 8.2+ の動的プロパティ非推奨に対応するため明示的に宣言する
+     * @var string
+     */
+    public $tablePrefix = '';
 
     /**
      * Initialize method
@@ -113,7 +118,7 @@ class MailMessagesTable extends MailAppTable
         $this->mailFields = $mailFieldsTable->find()->where([
             'MailFields.mail_content_id' => $mailContentId,
             'MailFields.use_field' => true
-        ])->all();
+        ])->all()->toArray();
     }
 
     /**
@@ -379,7 +384,7 @@ class MailMessagesTable extends MailAppTable
 
                         case 'VALID_EMAIL_CONFIRM':
                             $target = '';
-                            foreach(clone $this->mailFields as $value) {
+                            foreach($this->mailFields as $value) {
                                 if ($value->group_valid === $mailField->group_valid &&
                                     $value->field_name !== $mailField->field_name) {
                                     $target = $value->field_name;
@@ -451,7 +456,8 @@ class MailMessagesTable extends MailAppTable
             // 対象フィールドがあれば、バリデートグループごとに配列に格納する
             $valids = explode(',', (string) $mailField->valid_ex);
             if (in_array('VALID_GROUP_COMPLATE', $valids)) {
-                $dists[$mailField->group_valid][] = [
+                // PHP 8.5 で null を配列オフセットに使うのは非推奨のため空文字に変換する
+                $dists[$mailField->group_valid ?? ''][] = [
                     'name' => $mailField->field_name,
                     'value' => $entity->{$mailField->field_name}
                 ];
@@ -478,14 +484,14 @@ class MailMessagesTable extends MailAppTable
     /**
      * データベース用のデータに変換する
      *
-     * @param ResultSetInterface $mailFields
+     * @param iterable $mailFields
      * @param EntityInterface $mailMessage
      * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function convertToDb(ResultSetInterface $mailFields, EntityInterface $mailMessage)
+    public function convertToDb(iterable $mailFields, EntityInterface $mailMessage)
     {
         foreach($mailFields as $mailField) {
             if (empty($mailMessage->{$mailField->field_name})) continue;

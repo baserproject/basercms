@@ -198,7 +198,6 @@ class AppControllerTest extends BcTestCase
         $this->AppController->setTitle($template);
         $viewBuilder = new ReflectionClass($this->AppController->viewBuilder());
         $vars = $viewBuilder->getProperty('_vars');
-        $vars->setAccessible(true);
         $actual = $vars->getValue($this->AppController->viewBuilder())['title'];
         $this->assertEquals($template, $actual);
     }

@@ -56,9 +56,9 @@ class PrefixOrmResolver extends OrmResolver implements ResolverInterface
         $finders = (array)$this->_config['finder'];
         foreach($finders as $finder => $options) {
             if (is_string($options)) {
-                $query->find($options, ['prefix' => $prefix]);
+                $query->find($options, prefix: $prefix);
             } else {
-                $query->find($finder, array_merge(['prefix' => $prefix], $options));
+                $query->find($finder, ...array_merge(['prefix' => $prefix], $options));
             }
         }
 

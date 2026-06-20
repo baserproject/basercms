@@ -95,7 +95,8 @@ class BcContentsEventListenerTest extends BcTestCase
         ])); // content_fieldsの$contentが足りないため追加
         $event->setData('id', 'TestAdminEditForm')->setData('out', "testtest");
         // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
-        $result = @$this->BcContentsEventListener->formAfterCreate($event);
+        @$this->BcContentsEventListener->formAfterCreate($event);
+        $result = $event->getResult();
         // outの文章が含まれているかチェック
         $this->assertStringContainsString("testtest", $result);
         // content_fieldsの文章が含まれているかチェック

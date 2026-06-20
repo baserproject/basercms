@@ -529,7 +529,7 @@ class BcUtil
      */
     public static function clearAllCache(): void
     {
-        Cache::clear('_cake_core_');
+        Cache::clear('_cake_translations_');
         self::clearModelCache();
         Cache::clear('_bc_env_');
         Cache::clear('_bc_update_');
@@ -1024,7 +1024,8 @@ class BcUtil
      */
     public static function getDomain($url)
     {
-        $mainUrlInfo = parse_url($url);
+        // PHP 8.1+ では parse_url() に null を渡すと非推奨警告となるため文字列にキャストする
+        $mainUrlInfo = parse_url((string)$url);
         $host = $mainUrlInfo['host'] ?? '';
         if (!empty($mainUrlInfo['port'])) {
             $host .= ':' . $mainUrlInfo['port'];
@@ -1357,7 +1358,8 @@ class BcUtil
      */
     public static function decodeContent($content, $fileName = null)
     {
-        if (isset(self::$contentsMaping[$content])) {
+        // PHP 8.5 で null を配列オフセットに使うのは非推奨のため null は未該当として扱う
+        if ($content !== null && isset(self::$contentsMaping[$content])) {
             return self::$contentsMaping[$content];
         } elseif ($fileName) {
             return self::getExtension($fileName);
@@ -1652,7 +1654,6 @@ class BcUtil
     {
         $reflection = new ReflectionClass($eventManager);
         $property = $reflection->getProperty('_isGlobal');
-        $property->setAccessible(true);
         if($property->getValue($eventManager)) {
             throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオフにすることはできません。'));
         }
@@ -1692,7 +1693,6 @@ class BcUtil
     {
         $reflection = new ReflectionClass($eventManager);
         $property = $reflection->getProperty('_isGlobal');
-        $property->setAccessible(true);
         if($property->getValue($eventManager)) {
             throw new BcException(__d('baser_core', 'グローバルイベントマネージャーからはイベントをオンにすることはできません。'));
         }
@@ -1793,8 +1793,7 @@ class BcUtil
         // static プロパティで値が残ってしまうため
         $ref = new ReflectionClass($request);
         $detectors = $ref->getProperty('_detectors');
-        $detectors->setAccessible(true);
-        $detectors->setValue(self::$_detectors);
+        $detectors->setValue($request, self::$_detectors);
         $bcRequestFilter = new BcRequestFilterMiddleware();
         $request = $bcRequestFilter->addDetectors($request);
         return $request;

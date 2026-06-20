@@ -20,6 +20,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Utility\Inflector;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 
 class PreviewController extends BcAdminAppController
@@ -85,7 +86,7 @@ class PreviewController extends BcAdminAppController
      * プレビュー用のリクエストを作成する
      *
      * @param ServerRequest $request
-     * @return ServerRequest
+     * @return ServerRequestInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -149,10 +150,8 @@ class PreviewController extends BcAdminAppController
         //========================================================================
         $session = $request->getSession();
         $startedProperty = (new ReflectionClass($session))->getProperty('_started');
-        $startedProperty->setAccessible(true);
         $startedProperty->setValue($session, true);
         $sessionProperty = (new ReflectionClass($request))->getProperty('session');
-        $sessionProperty->setAccessible(true);
         $sessionProperty->setValue($request, $session);
         return $request;
     }

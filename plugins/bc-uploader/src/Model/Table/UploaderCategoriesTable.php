@@ -11,8 +11,10 @@
 
  namespace BcUploader\Model\Table;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Table\AppTable;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
@@ -91,8 +93,12 @@ class UploaderCategoriesTable extends AppTable
      */
     public function copy($id = null, $entity = [])
     {
-        if ($id) $entity = $this->find()->where(['UploaderCategories.id' => $id])->first();
-        $oldEntity = clone $entity;
+        $entity = $this->find()->where(['UploaderCategories.id' => $id])->first();
+        if($entity) {
+            $oldEntity = clone $entity;
+        } else {
+            throw new RecordNotFoundException('Record not found in table "uploader_categories"');
+        }
 
         // EVENT UploaderCategories.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [

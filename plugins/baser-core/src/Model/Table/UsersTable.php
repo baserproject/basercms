@@ -230,9 +230,23 @@ class UsersTable extends AppTable
         $symbol = ' ._-:/()#,@[]+=&;{}!$*';
         $quotedSymbol = preg_quote($symbol, '/');
 
+        // 複雑性のチェックが有効な場合は設定値、それ以外は 6 文字を最小文字数とする
+        // （CakePHP 5.2 では同名ルールの重複追加で例外となるため minLength は一度だけ追加する）
+        $SiteConfigsService = new SiteConfigsService();
+        $allowSimplePassword = (bool)$SiteConfigsService->getValue('allow_simple_password');
+        $passwordMinLength = 6;
+        $passwordMinLengthMessage = __d('baser_core', 'パスワードは6文字以上で入力してください。');
+        if (!$allowSimplePassword) {
+            $minLength = Configure::read('BcApp.passwordRule.minLength');
+            if ($minLength && is_numeric($minLength)) {
+                $passwordMinLength = $minLength;
+                $passwordMinLengthMessage = __d('baser_core', 'パスワードは{0}文字以上で入力してください。', $minLength);
+            }
+        }
+
         $validator
             ->scalar('password')
-            ->minLength('password', 6, __d('baser_core', 'パスワードは6文字以上で入力してください。'))
+            ->minLength('password', $passwordMinLength, $passwordMinLengthMessage)
             ->maxLength('password', 255, __d('baser_core', 'パスワードは255文字以内で入力してください。'))
             ->add('password', [
                 'passwordAlphaNumericPlus' => [
@@ -248,15 +262,7 @@ class UsersTable extends AppTable
                 ]]);
 
         // 複雑性のチェック
-        $SiteConfigsService = new SiteConfigsService();
-        if (!$SiteConfigsService->getValue('allow_simple_password')) {
-            // 最小文字数
-            $minLength = Configure::read('BcApp.passwordRule.minLength');
-            if ($minLength && is_numeric($minLength)) {
-                $validator->minLength('password', $minLength,
-                    __d('baser_core', 'パスワードは{0}文字以上で入力してください。', $minLength));
-            }
-
+        if (!$allowSimplePassword) {
             // 入力必須な文字種
             $requiredCharacterTypePatterns = [
                 'numeric' => [

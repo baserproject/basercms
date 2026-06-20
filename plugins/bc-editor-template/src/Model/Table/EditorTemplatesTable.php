@@ -86,7 +86,7 @@ class EditorTemplatesTable extends AppTable
                 ]
             ])
             ->add('image', [
-                'fileCheck' => [
+                'fileExt' => [
                     'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
                     'provider' => 'bc',
                     'message' => __d('baser_core', '許可されていないファイルです。')

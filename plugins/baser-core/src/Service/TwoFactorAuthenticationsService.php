@@ -81,7 +81,11 @@ class TwoFactorAuthenticationsService implements TwoFactorAuthenticationsService
             return false;
         }
 
-        $expire = time() - (Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime') * 60);
+        // time() ではなく Chronos 対応の現在時刻を使う。
+        // ユニットテストでは Chronos::setTestNow() により modified が固定時刻で保存されるため、
+        // 実時間を使うと長時間のテスト実行で allowTime の範囲外と判定されてしまう。
+        // 本番では実時刻と同じ値になるため挙動は変わらない。
+        $expire = \Cake\I18n\DateTime::now()->getTimestamp() - (Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime') * 60);
         $twoFactorAuthentication = $this->TwoFactorAuthentications->find()
             ->where(['user_id' => $userId])
             ->where(['code' => $code])

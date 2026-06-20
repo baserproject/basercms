@@ -1805,7 +1805,7 @@ class BcBaserHelper extends Helper
             $options = array_merge($options, $attributes);
         }
         foreach($search as $value) {
-            $text = str_replace($value, $this->BcHtml->tag($name, $value, $options), $text);
+            $text = str_replace($value, $this->BcHtml->tag($name, $value, $options), (string) $text);
         }
         return $text;
     }

@@ -79,7 +79,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
 
         $conditions = $this->createAdminIndexConditions($params);
         $query = $this->UploaderFiles->find()
-            ->order(['created DESC'])
+            ->orderBy(['created DESC'])
             ->where($conditions);
 
         if($params['num']) {

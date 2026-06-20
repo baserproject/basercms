@@ -115,3 +115,16 @@ include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
     ['plugin' => 'BcUploader'],
     ['plugin' => 'BcWidgetArea'],
 ]);
+
+// CakePHP 5.2 では Application を new するたびに BaseApplication::__construct 内の
+// Plugin::setCollection(new PluginCollection()) でグローバルのプラグインコレクションが
+// リセットされる。統合テストはリクエストごとに createApp() で Application を new するため、
+// Migrator がロードしたコンテンツプラグインが失われ、テスト用DB（plugins テーブルが空）からは
+// 読み込まれず、プラグインのルートが接続されなくなる。
+// そこで new される前のここで、ロード済みのプラグイン一覧を退避し、
+// BcTestCase で $this->appPluginsToLoad にセットして createApp() 時に再ロードさせる。
+// （BaserCore 等アプリ本体が必ず読み込むものは除外し、二重 addPlugin による例外を防ぐ）
+Configure::write('BcApp.testAppPluginsToLoad', array_values(array_diff(
+    \Cake\Core\Plugin::loaded(),
+    ['BaserCore', 'Authentication', 'Migrations', 'Bake', 'Cake/TwigView', 'CakephpFixtureFactories', 'DebugKit']
+)));

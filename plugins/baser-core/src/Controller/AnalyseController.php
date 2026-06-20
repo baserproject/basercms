@@ -38,7 +38,8 @@ class AnalyseController extends AppController
     ];
 
     private const CONVERT_CLASS_NAME = [
-        '\BaserCore\Routing\RouteCollection' => '\Cake\Routing\RouteCollection'
+        '\BaserCore\Routing\RouteCollection' => '\Cake\Routing\RouteCollection',
+        '\BaserCore\Routing\Asset' => '\Cake\Routing\Asset'
     ];
 
     /**

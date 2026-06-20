@@ -1115,7 +1115,6 @@ class CustomEntriesServiceTest extends BcTestCase
     {
         $reflection = new ReflectionClass($this->CustomEntriesService);
         $method = $reflection->getMethod('normalizeDateString');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->CustomEntriesService, '2025/5/4');
         $this->assertEquals('2025/05/04', $result);

@@ -65,7 +65,7 @@ class MailMessagesServiceTest extends BcTestCase
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $MailMessagesService->setup(1);
         $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-        $this->assertEquals('1', $mailMessageTable->mailFields->toArray()[0]->id);
+        $this->assertEquals('1', $mailMessageTable->mailFields[0]->id);
         $this->assertCount(3, $mailMessageTable->mailFields);
 
     }

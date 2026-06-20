@@ -48,7 +48,7 @@ class BcContentsRouteTest extends BcTestCase
     {
         parent::setUp();
         $this->BcContentsRoute = new BcContentsRoute('/', [], []);
-        $this->loadPlugins(['BcBlog']);
+        $this->loadPlugins(['BcBlog', 'BcContentLink', 'BcMail']);
     }
 
     /**

@@ -16,10 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Phinx\Db\Adapter\AdapterFactory;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
+use Migrations\Db\Adapter\AdapterFactory;
 
 /**
  * Class BcMigrationTest
@@ -45,7 +42,7 @@ class BcMigrationTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcMigration = new BcMigration('localhost', 20200101010101);
+        $this->BcMigration = new BcMigration(20200101010101);
     }
 
     /**
@@ -67,20 +64,14 @@ class BcMigrationTest extends BcTestCase
      */
     public function testTable()
     {
-        //準備　Adapterをセットアップ
-        $input = new ArgvInput(['cli.php', 'foo']);
-        $input->bind(new InputDefinition([new InputArgument('name')]));
-        $this->BcMigration->setInput($input);
-        $options = [
-            'adapter' => 'mysql',
-            'host' => 'bc-db',
-            'user' => 'root',
-            'pass' => 'root',
-            'port' => '3306',
-            'name' => 'test_basercms'
-        ];
+        //準備　Adapterをセットアップ（接続のプレフィックスを参照するため）
+        // ドライバ名（mysql / postgres / sqlite など）をアダプタ種別として利用する
+        $connection = ConnectionManager::get('test');
+        $driverClass = get_class($connection->getDriver());
+        $adapterType = strtolower(substr($driverClass, (int)strrpos($driverClass, '\\') + 1));
+        $options = ['adapter' => $adapterType, 'connection' => $connection] + (array)$connection->config();
         $factory = AdapterFactory::instance();
-        $adapter = $factory->getAdapter('mysql', $options);
+        $adapter = $factory->getAdapter($adapterType, $options);
         $this->BcMigration->setAdapter($adapter);
 
         // 実行

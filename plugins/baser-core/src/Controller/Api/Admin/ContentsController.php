@@ -544,7 +544,8 @@ class ContentsController extends BcAdminApiController
             'unpublish' => '非公開に',
             'delete' => '削除',
         ];
-        $method = $this->getRequest()->getData('batch');
+        // PHP 8.5 で null を配列オフセットに使うのは非推奨のため空文字に変換する
+        $method = $this->getRequest()->getData('batch') ?? '';
         if (!isset($allowMethod[$method])) {
             $this->setResponse($this->response->withStatus(500));
             $this->viewBuilder()->setOption('serialize', []);
