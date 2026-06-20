@@ -1,29 +1,35 @@
 {
   "version": 1,
   "skills": {
+    "basercms-core-plugin-convert": {
+      "source": "baserproject/baser-skills",
+      "sourceType": "github",
+      "skillPath": "skills/basercms-core-plugin-convert/SKILL.md",
+      "computedHash": "bf6555493a121bcf7a5ba4b7c64203dc747de038fce03a86ebf1ba3fde8cc697"
+    },
     "basercms-plugin-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-plugin-migration/SKILL.md",
-      "computedHash": "18ea6829b7b70d1670d9d417e048d12dab0bbfc758c5dc8e5f13ad32ea3a046b"
+      "computedHash": "d1cb2fcd8d508954ab005cf521531dea0afe0ff5e62b705b3e4ce0850af51c63"
     },
     "basercms-unittest": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-unittest/SKILL.md",
-      "computedHash": "aa6db1a19fcf136566b09b3e542f0e899abf57a8134ee9ec9402717e9d0a5e7c"
+      "computedHash": "fb1a1b5a38c9ca21ad2ff5d905dedeba2a37db8bb709d85ce46a4e7dc76b0272"
     },
     "cakephp-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/cakephp-migration/SKILL.md",
-      "computedHash": "6a13f9a745b65f87e4f5e2fd7860e5ee62960faab8fe7ed0e0282fc9bc0fbcf8"
+      "computedHash": "e5eacc335925733646a30cb9eb728b1239fd1eaf18e32ba7bf4f0cb156af4d92"
     },
     "php-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/php-migration/SKILL.md",
-      "computedHash": "48e77883a5f19751c0bcfe71bd4ced7c0be6f4804549bdf6ad55f7e1f0000119"
+      "computedHash": "9f71021b038a9445e81d1da27689ac1a519e7ffe5ed59cdd4c197d6774a59624"
     }
   }
 }
