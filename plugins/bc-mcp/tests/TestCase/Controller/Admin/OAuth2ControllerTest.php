@@ -75,11 +75,27 @@ class OAuth2ControllerTest extends BcTestCase
     private function requireMcpServer(): void
     {
         $mcpServerManager = new McpServerManger();
+        $config = $mcpServerManager->getServerConfig();
         if (!$mcpServerManager->isServerRunning()) {
-            $mcpServerManager->startMcpServer($mcpServerManager->getServerConfig());
+            $mcpServerManager->startMcpServer($config);
         }
-        if (!$mcpServerManager->isServerRunning()) {
-            $this->markTestSkipped('MCP サーバー（SSE）を起動できない環境のためスキップします。');
+        // プロセス存在だけでなく、プロキシが叩く 127.0.0.1:{port} へ実際に接続できるまで待つ。
+        // （CI ではプロセス起動後にポート bind が間に合わず接続拒否 → 500 になることがあるため）
+        $host = $config['host'] ?? '127.0.0.1';
+        $port = (int)($config['port'] ?? 3000);
+        $deadline = microtime(true) + 15.0;
+        $reachable = false;
+        while (microtime(true) < $deadline) {
+            $conn = @fsockopen($host, $port, $errno, $errstr, 1);
+            if ($conn) {
+                fclose($conn);
+                $reachable = true;
+                break;
+            }
+            usleep(300000); // 0.3秒
+        }
+        if (!$reachable) {
+            $this->markTestSkipped('MCP サーバー（SSE / ' . $host . ':' . $port . '）へ接続できない環境のためスキップします。');
         }
     }
 
