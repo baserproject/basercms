@@ -95,10 +95,18 @@ class OAuth2ControllerTest extends BcTestCase
             }
             usleep(300000); // 0.3秒
         }
-        $this->assertTrue(
-            $reachable,
-            sprintf('MCP サーバー（SSE / %s:%d）へ接続できませんでした。サーバーが起動しているか確認してください。', $host, $port)
-        );
+        if (!$reachable) {
+            // 失敗時はサーバーの起動ログを添えて原因を可視化する（CI で bin/cake bc_mcp.server が
+            // 起動できない理由＝コマンド未登録・DB未接続・ポート競合等がここに出る）。
+            $logFile = LOGS . 'bc_mcp_server.log';
+            $serverLog = is_file($logFile) ? (string)file_get_contents($logFile) : '(bc_mcp_server.log が存在しません＝サーバープロセスがログを出す前に失敗した可能性)';
+            $this->fail(sprintf(
+                "MCP サーバー（SSE / %s:%d）へ接続できませんでした。\n===== bc_mcp_server.log（末尾3000字） =====\n%s",
+                $host,
+                $port,
+                mb_substr($serverLog, -3000)
+            ));
+        }
     }
 
     /**
