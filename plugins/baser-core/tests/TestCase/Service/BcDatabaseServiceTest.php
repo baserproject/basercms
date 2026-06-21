@@ -824,6 +824,7 @@ class UserActionsSchema extends BcSchema
             'BcEditorTemplate',
             'BcFavorite',
             'BcMail',
+            'BcMcp',
             'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',
