@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Mcp\McpServerManger;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -75,6 +77,22 @@ class OAuth2ControllerTest extends BcTestCase
      */
     private function requireMcpServer(): void
     {
+        // サーバー子プロセスの `bin/cake bc_mcp.server` は default 接続の DB から
+        // 有効プラグイン（plugins テーブル status=true）を読んでロードする。BcMcp は
+        // defaultInstallCorePlugins に含めない方針のため `bin/cake install` では有効化されず、
+        // console に bc_mcp.server コマンドが登録されない（CI で起動失敗→500 の原因）。
+        // そこでテスト内で BcMcp を有効化しておく（既にあればスキップ）。
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        if (!$pluginsTable->exists(['name' => 'BcMcp'])) {
+            PluginFactory::make([
+                'name' => 'BcMcp',
+                'title' => 'baserCMS MCP Server',
+                'status' => true,
+                'db_init' => true,
+                'priority' => 100,
+            ])->persist();
+        }
+
         $mcpServerManager = new McpServerManger();
         $config = $mcpServerManager->getServerConfig();
         if (!$mcpServerManager->isServerRunning()) {
