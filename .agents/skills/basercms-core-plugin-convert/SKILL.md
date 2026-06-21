@@ -194,10 +194,15 @@ docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/monorepo-b
 docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/phpunit --testsuite BcMcp"
 ```
 - standalone 専用 bootstrap が用意していた前提（外部プロセス・環境変数・鍵等）が**全体 bootstrap には無い**ため、移行直後は失敗が出やすい。代表例:
-  - **外部プロセス依存**: プロキシ統合テスト等が**実サーバープロセス**を要する場合、standalone では bootstrap が起動していた。全体側では**該当テストの `setUp` で起動**する（起動済みなら再利用）。起動コマンドは `ROOT/bin/cake <command>`（アプリの cake と、コア登録済みのコマンド）を使う。
+  - **外部プロセス依存**: プロキシ統合テスト等が**実サーバープロセス**を要する場合、standalone では bootstrap が起動していた。全体側では**該当テストの先頭で起動**する（起動済みなら再利用）。起動コマンドは `ROOT/bin/cake <command>`（アプリの cake と、コア登録済みのコマンド）を使う。
+    **⚠️ ただし CI（GitHub Actions 等）ではバックグラウンドの常駐サーバーを起動・到達できないことが多い**。ローカルでは通るが CI で 500 になる典型。**起動できなければ `markTestSkipped`** にして、サーバーのある環境でのみ実行する（CI は安全にスキップ＝緑）。`setUp` 全体ではなく**サーバーが要る個別テストにだけ**ガードを入れる（他テストに 10 秒の起動待ちを波及させない）。
     ```php
-    $manager = new McpServerManger();
-    if (!$manager->isServerRunning()) { $manager->startMcpServer($manager->getServerConfig()); }
+    private function requireMcpServer(): void {
+        $m = new McpServerManger();
+        if (!$m->isServerRunning()) { $m->startMcpServer($m->getServerConfig()); }
+        if (!$m->isServerRunning()) { $this->markTestSkipped('MCP サーバーを起動できない環境のためスキップ'); }
+    }
+    // 実サーバーが要るテストの先頭で $this->requireMcpServer();
     ```
   - **マイグレーション未実行**: 4-2 の追加漏れ → テーブル不在で失敗。
   - **プラグイン未 bootstrap / サブプラグイン未ロード** 等は `basercms-plugin-migration` スキル（T-3〜T-5）参照。

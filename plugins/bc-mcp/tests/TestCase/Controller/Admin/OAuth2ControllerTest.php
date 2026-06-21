@@ -64,12 +64,22 @@ class OAuth2ControllerTest extends BcTestCase
                 'HTTPS' => 'off'
             ]
         ]);
+    }
 
-        // MCPプロキシ経由の統合テスト（/bc-mcp への転送）は実際の MCP サーバーが必要なため、
-        // 起動していなければ起動する（起動済みなら再利用）。
+    /**
+     * MCPプロキシ経由の統合テスト用に、実際の MCP サーバー（SSE）を用意する。
+     * 起動していなければ起動し、起動できない環境（CI 等）ではテストをスキップする。
+     *
+     * @return void
+     */
+    private function requireMcpServer(): void
+    {
         $mcpServerManager = new McpServerManger();
         if (!$mcpServerManager->isServerRunning()) {
             $mcpServerManager->startMcpServer($mcpServerManager->getServerConfig());
+        }
+        if (!$mcpServerManager->isServerRunning()) {
+            $this->markTestSkipped('MCP サーバー（SSE）を起動できない環境のためスキップします。');
         }
     }
 
@@ -135,6 +145,7 @@ class OAuth2ControllerTest extends BcTestCase
 
     public function testIntegration(): void
     {
+        $this->requireMcpServer();
         // MPCサーバーの接続ポイントにGETリクエストを送信
         $this->get('/bc-mcp');
         $this->assertResponseCode(401);
@@ -325,6 +336,7 @@ class OAuth2ControllerTest extends BcTestCase
      */
     public function testIntegrationWithPKCE(): void
     {
+        $this->requireMcpServer();
         // Step 1: OAuth2メタデータの取得
         $this->get('/.well-known/oauth-authorization-server/bc-mcp');
         $metadata = json_decode((string)$this->_response->getBody(), true);
