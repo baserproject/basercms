@@ -5058,16 +5058,16 @@
         },
         {
             "name": "cakephp/twig-view",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/twig-view.git",
-                "reference": "a9945eb6972d351c348551f5f9b7af2cea274c05"
+                "reference": "99a59407b138a0efff0ce3896cbf67e71a9c9cd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/twig-view/zipball/a9945eb6972d351c348551f5f9b7af2cea274c05",
-                "reference": "a9945eb6972d351c348551f5f9b7af2cea274c05",
+                "url": "https://api.github.com/repos/cakephp/twig-view/zipball/99a59407b138a0efff0ce3896cbf67e71a9c9cd3",
+                "reference": "99a59407b138a0efff0ce3896cbf67e71a9c9cd3",
                 "shasum": ""
             },
             "require": {
@@ -5116,7 +5116,7 @@
                 "issues": "https://github.com/cakephp/twig-view/issues",
                 "source": "https://github.com/cakephp/twig-view"
             },
-            "time": "2026-05-29T08:34:37+00:00"
+            "time": "2026-06-20T04:25:53+00:00"
         },
         {
             "name": "composer/class-map-generator",
