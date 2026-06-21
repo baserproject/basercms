@@ -68,7 +68,8 @@ class OAuth2ControllerTest extends BcTestCase
 
     /**
      * MCPプロキシ経由の統合テスト用に、実際の MCP サーバー（SSE）を用意する。
-     * 起動していなければ起動し、起動できない環境（CI 等）ではテストをスキップする。
+     * 起動していなければ起動し、プロキシが接続する 127.0.0.1:{port} へ実際に到達できるまで待つ。
+     * 到達できない場合はスキップせず明示的に失敗させる（サーバー起動の不具合を隠さない）。
      *
      * @return void
      */
@@ -80,7 +81,7 @@ class OAuth2ControllerTest extends BcTestCase
             $mcpServerManager->startMcpServer($config);
         }
         // プロセス存在だけでなく、プロキシが叩く 127.0.0.1:{port} へ実際に接続できるまで待つ。
-        // （CI ではプロセス起動後にポート bind が間に合わず接続拒否 → 500 になることがあるため）
+        // （プロセス起動直後はポート bind が間に合わず接続拒否 → 500 になることがあるため）
         $host = $config['host'] ?? '127.0.0.1';
         $port = (int)($config['port'] ?? 3000);
         $deadline = microtime(true) + 15.0;
@@ -94,9 +95,10 @@ class OAuth2ControllerTest extends BcTestCase
             }
             usleep(300000); // 0.3秒
         }
-        if (!$reachable) {
-            $this->markTestSkipped('MCP サーバー（SSE / ' . $host . ':' . $port . '）へ接続できない環境のためスキップします。');
-        }
+        $this->assertTrue(
+            $reachable,
+            sprintf('MCP サーバー（SSE / %s:%d）へ接続できませんでした。サーバーが起動しているか確認してください。', $host, $port)
+        );
     }
 
     /**
