@@ -260,17 +260,72 @@ class MailMessagesServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailFieldsScenario::class);
         $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
         $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
-        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
-        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
-        $this->assertFalse($BcDatabaseService->columnExists('mail_message_1', 'sex'));
-        $this->assertTrue($MailMessagesService->construction(1));
-        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_1'));
-        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'name_2'));
-        $this->assertTrue($BcDatabaseService->columnExists('mail_message_1', 'sex'));
-        $BcDatabaseService->removeColumn('mail_message_1', 'name_1');
-        $BcDatabaseService->removeColumn('mail_message_1', 'name_2');
-        $BcDatabaseService->removeColumn('mail_message_1', 'sex');
+        $table = 'mail_message_1';
+        $columns = ['name_1', 'name_2', 'sex'];
 
+        foreach ($columns as $column) {
+            if ($BcDatabaseService->columnExists($table, $column)) {
+                $BcDatabaseService->removeColumn($table, $column);
+            }
+        }
+
+        try {
+            foreach ($columns as $column) {
+                $this->assertFalse($BcDatabaseService->columnExists($table, $column));
+            }
+
+            $this->assertTrue($MailMessagesService->construction(1));
+
+            foreach ($columns as $column) {
+                $this->assertTrue($BcDatabaseService->columnExists($table, $column));
+            }
+        } finally {
+            // 他のテストへ影響しないよう、初期スキーマの状態へ戻す
+            $MailMessagesService->construction(1);
+        }
+    }
+
+    /**
+     * フィールド数が多い場合でも初回作成で受信テーブルのカラムが不足しないこと
+     */
+    public function testConstructionManyFieldsOnInitialCreate()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+
+        $mailContentId = 100;
+        $table = 'mail_message_' . $mailContentId;
+        if ($BcDatabaseService->tableExists($table)) {
+            $BcDatabaseService->dropTable($table);
+        }
+
+        $fieldNames = [];
+        for ($i = 1; $i <= 40; $i++) {
+            $fieldName = 'bulk_' . $i;
+            $fieldNames[] = $fieldName;
+            MailFieldsFactory::make([
+                'id' => 1000 + $i,
+                'mail_content_id' => $mailContentId,
+                'no' => $i,
+                'field_name' => $fieldName,
+                'name' => 'Bulk ' . $i,
+                'type' => 'text',
+                'use_field' => 1,
+                'sort' => 1000 + $i,
+            ])->persist();
+        }
+
+        try {
+            $this->assertTrue($MailMessagesService->construction($mailContentId));
+            foreach ($fieldNames as $fieldName) {
+                $this->assertTrue($BcDatabaseService->columnExists($table, $fieldName));
+            }
+        } finally {
+            $MailMessagesService->dropTable($mailContentId);
+        }
     }
 
     /**

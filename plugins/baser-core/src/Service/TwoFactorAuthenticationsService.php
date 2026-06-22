@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Mailer\TwoFactorAuthenticationMailer;
 use BaserCore\Model\Table\TwoFactorAuthenticationsTable;
 use Cake\Core\Configure;
+use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
 
@@ -81,12 +82,16 @@ class TwoFactorAuthenticationsService implements TwoFactorAuthenticationsService
             return false;
         }
 
-        $expire = time() - (Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime') * 60);
+        $allowTime = (int)Configure::read('BcApp.twoFactorAuthenticationCodeAllowTime', 10);
+        if ($allowTime < 1) {
+            $allowTime = 10;
+        }
+        $expire = FrozenTime::now()->subMinutes($allowTime);
         $twoFactorAuthentication = $this->TwoFactorAuthentications->find()
             ->where(['user_id' => $userId])
             ->where(['code' => $code])
             ->where(['is_verified' => 0])
-            ->where(['modified >=' => date('Y-m-d H:i:s', $expire)])
+            ->where(['modified >=' => $expire])
             ->first();
         if (!$twoFactorAuthentication) {
             return false;
