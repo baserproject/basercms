@@ -169,9 +169,14 @@ class UploaderCategoriesController extends BcAdminAppController
                 $entity = $service->get($id);
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データが見つかりません。'));
             }
-        } catch (\Throwable $e) {
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $nameErrors = $errors['name'] ?? null;
+            $message = $nameErrors ? (string)current($nameErrors) : __d('baser_core', '入力エラーです。内容を修正してください。');
+            $this->BcMessage->setError($message);
+        } catch (Throwable $e) {
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
