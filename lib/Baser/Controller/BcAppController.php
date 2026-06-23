@@ -421,7 +421,8 @@ class BcAppController extends Controller
 					}
 					$conditions = [
 						$userModel . '.id' => $user['id'],
-						$userModel . '.' . $nameField => $user[$nameField]
+						$userModel . '.' . $nameField => $user[$nameField],
+						$userModel . '.status' => true
 					];
 					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
