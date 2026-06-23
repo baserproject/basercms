@@ -234,9 +234,9 @@ class CustomContentsTool extends BaseMcpTool
      */
     public function editCustomContent(
         int $id,
-        string $name = null,
-        string $title = null,
-        int $customTableId = null,
+        ?string $name = null,
+        ?string $title = null,
+        ?int $customTableId = null,
         ?int $siteId = null,
         ?int $parentId = null,
         ?string $description = null,

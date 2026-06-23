@@ -297,6 +297,9 @@ abstract class BaseMcpTool
 
         // レスポンスヘッダーからContent-Typeを取得
         $headerMimeType = 'application/octet-stream';
+        if(function_exists('http_get_last_response_headers')) {
+            $http_response_header = http_get_last_response_headers();
+        }
         if (isset($http_response_header)) {
             foreach($http_response_header as $header) {
                 if (stripos($header, 'content-type:') === 0) {

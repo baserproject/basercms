@@ -95,7 +95,7 @@ class OAuth2Service
             new \DateInterval('PT1H')
         );
 
-        $authCodeGrant = new \League\OAuth2\Server\Grant\AuthCodeGrant(
+        $authCodeGrant = new \BcMcp\OAuth2\Grant\AuthCodeGrant(
             $authCodeRepository,
             $refreshTokenRepository,
             new \DateInterval('PT10M')
