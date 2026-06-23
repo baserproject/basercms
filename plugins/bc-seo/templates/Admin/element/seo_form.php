@@ -28,7 +28,7 @@
       data-bca-target="#SeoSettingBody" aria-expanded="false"
       aria-controls="SeoSettingBody"
     >
-      SEO設定
+      <?php echo __d('baser_core', 'SEO設定') ?>
       <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
     </button>
   </div>
