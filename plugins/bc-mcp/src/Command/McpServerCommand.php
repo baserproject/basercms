@@ -43,6 +43,11 @@ class McpServerCommand extends Command
                 'short' => 'c',
                 'help' => '設定ファイルのパス',
                 'default' => null
+            ])
+            ->addOption('connection', [
+                'help' => 'サーバーが使用する DB 接続名。default 以外を指定すると default にエイリアスする（主にテストで test 接続を使う用途）。'
+                    . 'プラグインのロード自体は bootstrap で環境変数 BC_CONNECTION により切り替わる。',
+                'default' => 'default'
             ]);
 
         return $parser;
@@ -63,6 +68,14 @@ class McpServerCommand extends Command
         $host = $args->getOption('host');
         $port = (int)$args->getOption('port');
         $configPath = $args->getOption('config');
+        $connection = (string)$args->getOption('connection');
+
+        // default 以外の接続が指定された場合は default にエイリアスし、サーバーの全 DB 操作を
+        // その接続へ向ける。bootstrap 時の env(BC_MCP_CONNECTION) と同じ切替を冪等に行う保険。
+        if ($connection !== '' && $connection !== 'default' && \Cake\Datasource\ConnectionManager::getConfig($connection)) {
+            \Cake\Datasource\ConnectionManager::alias($connection, 'default');
+            $io->out("DB 接続: {$connection}（default にエイリアス）");
+        }
 
         try {
             // MCPサーバーのインスタンス作成

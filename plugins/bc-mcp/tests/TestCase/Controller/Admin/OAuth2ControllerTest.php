@@ -95,6 +95,10 @@ class OAuth2ControllerTest extends BcTestCase
 
         $mcpServerManager = new McpServerManger();
         $config = $mcpServerManager->getServerConfig();
+        // 子プロセス（bin/cake bc_mcp.server）は別プロセスのため、テストが PluginFactory で
+        // 有効化した BcMcp を default 接続では見られない。test 接続（両プロセスで共有）を使わせ、
+        // 子プロセスの bootstrap でも BcMcp がロードされる（=コマンドが登録される）ようにする。
+        $config['connection'] = 'test';
         if (!$mcpServerManager->isServerRunning()) {
             $mcpServerManager->startMcpServer($config);
         }

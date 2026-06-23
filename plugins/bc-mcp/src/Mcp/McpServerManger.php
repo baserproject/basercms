@@ -23,13 +23,24 @@ class McpServerManger
             $logFile = $this->getLogFilePath();
             $cakeCommand = ROOT . DS . 'bin' . DS . 'cake';
 
+            // 任意の DB 接続を指定された場合は、子プロセスのプラグインロード（bootstrap）に効く
+            // 環境変数 BC_CONNECTION と、起動後の DB 操作に効く --connection オプションを併用する。
+            $envPrefix = '';
+            $connectionOption = '';
+            if (!empty($config['connection']) && $config['connection'] !== 'default') {
+                $envPrefix = 'BC_CONNECTION=' . escapeshellarg($config['connection']) . ' ';
+                $connectionOption = ' --connection=' . escapeshellarg($config['connection']);
+            }
+
             // バックグラウンドでMCPサーバーを起動
             $command = sprintf(
-                'cd %s && nohup %s bc_mcp.server --transport=sse --host=%s --port=%s > %s 2>&1 & echo $! > %s',
+                'cd %s && %snohup %s bc_mcp.server --transport=sse --host=%s --port=%s%s > %s 2>&1 & echo $! > %s',
                 ROOT,
+                $envPrefix,
                 $cakeCommand,
                 escapeshellarg($config['host']),
                 escapeshellarg($config['port']),
+                $connectionOption,
                 escapeshellarg($logFile),
                 escapeshellarg($pidFile)
             );
