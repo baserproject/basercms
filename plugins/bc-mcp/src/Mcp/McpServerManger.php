@@ -32,9 +32,13 @@ class McpServerManger
                 $connectionOption = ' --connection=' . escapeshellarg($config['connection']);
             }
 
-            // バックグラウンドでMCPサーバーを起動
+            // バックグラウンドでMCPサーバーを起動。
+            // nohup で SIGHUP から切り離しつつ、stdin/stdout/stderr をすべて親から切り離す
+            // （stdin は /dev/null、stdout/stderr はログファイルへ）。これをしないと SSE 常駐プロセスが
+            // 親プロセス（CI のステップ等）の継承 fd を掴んだままになり、出力パイプが EOF にならず
+            // ジョブが次ステップへ進めずハングする。$! は nohup 実行なので php プロセスの PID と一致する。
             $command = sprintf(
-                'cd %s && %snohup %s bc_mcp.server --transport=sse --host=%s --port=%s%s > %s 2>&1 & echo $! > %s',
+                'cd %s && %snohup %s bc_mcp.server --transport=sse --host=%s --port=%s%s < /dev/null > %s 2>&1 & echo $! > %s',
                 ROOT,
                 $envPrefix,
                 $cakeCommand,

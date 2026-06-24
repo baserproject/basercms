@@ -69,6 +69,24 @@ class OAuth2ControllerTest extends BcTestCase
     }
 
     /**
+     * tearDown method
+     *
+     * 統合テストで起動した MCP サーバー（SSE 常駐プロセス）を確実に停止する。
+     * 停止しないと CI 上で孤児プロセスがステップの fd を掴んだまま残り、
+     * ジョブが次のステップへ進めず無限待機する（GHA で 8.1 がハングした原因）。
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $mcpServerManager = new McpServerManger();
+        if ($mcpServerManager->isServerRunning()) {
+            $mcpServerManager->stopMcpServer();
+        }
+        parent::tearDown();
+    }
+
+    /**
      * MCPプロキシ経由の統合テスト用に、実際の MCP サーバー（SSE）を用意する。
      * 起動していなければ起動し、プロキシが接続する 127.0.0.1:{port} へ実際に到達できるまで待つ。
      * 到達できない場合はスキップせず明示的に失敗させる（サーバー起動の不具合を隠さない）。
