@@ -35,6 +35,12 @@
         <testsuite name="BcSeo">
             <directory>plugins/bc-seo/tests/TestCase</directory>
         </testsuite>
+        <!-- DB テーブルを持つが defaultInstallCorePlugins でないコアプラグインは、
+             BcInstaller の testStep3(createDb) が defaultInstall のみで全テーブルを作り直し
+             非 default のテーブルを失わせるため、BcInstaller より前に配置する。 -->
+        <testsuite name="BcMcp">
+            <directory>plugins/bc-mcp/tests/TestCase</directory>
+        </testsuite>
         <testsuite name="BcInstaller">
             <directory>plugins/bc-installer/tests/TestCase</directory>
         </testsuite>

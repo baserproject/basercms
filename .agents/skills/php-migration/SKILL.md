@@ -1,6 +1,7 @@
 ---
 name: php-migration
 description: baserCMS の PHP バージョンアップ（8.2/8.4/8.5 ～）対応の非推奨・破壊的変更パターン集と修正レシピ。「暗黙的nullableの非推奨警告」「Creation of dynamic property ... is deprecated」「fgetcsv の escape 警告」「ReflectionProperty::setValue の非推奨」「(integer)/(boolean) 等の非正規キャスト非推奨」「null を配列オフセットに使う非推奨」「curl_close/imagedestroy 等の自動解放関数非推奨」等、PHP本体起因のアップグレード警告/エラーの調査・修正時に参照する。新しい PHP バージョン対応時は本書にバージョン別追記する。CakePHP本体起因の問題は cakephp-migration スキルを参照。
+license: MIT
 ---
 
 # PHP バージョン移行ガイド（baserCMS）
@@ -170,7 +171,19 @@ $code = str_increment($code);
 `__serialize()` / `__unserialize()` を使う（PHP7 互換が不要なら移行）。
 
 ### 6. `$http_response_header` の非推奨
-スーパーグローバル `$http_response_header` が非推奨。`http_get_last_response_headers()` を使う。**※ `http_get_last_response_headers()` は 8.4+。8.1 維持中は `$http_response_header` のまま据え置く。**
+スーパーグローバル `$http_response_header` が 8.5 で非推奨。`http_get_last_response_headers()` を使う。**※ `http_get_last_response_headers()` は 8.4+** なので、8.1 互換を維持するなら**素朴な置換は不可**（8.1〜8.3 で undefined function の fatal になる）。
+- **8.1〜8.5 を一度に満たす互換パターン**（推奨）: 関数があれば使い、無ければ従来のスーパーグローバルにフォールバックする。8.5 では関数経由になるので非推奨を回避でき、8.1〜8.3 では関数が無いので `if` を素通りし、その下の `isset($http_response_header)`（直前の `file_get_contents` 等が設定するスーパーグローバル）を読む——どのバージョンでも fatal にならない。
+  ```php
+  // file_get_contents() 等の HTTP 取得直後
+  if (function_exists('http_get_last_response_headers')) { // 8.4+
+      $http_response_header = http_get_last_response_headers();
+  }
+  if (isset($http_response_header)) {                       // 8.1〜8.3 は従来のスーパーグローバルを参照
+      foreach ($http_response_header as $header) { /* Content-Type 抽出等 */ }
+  }
+  ```
+- **症状**: 8.5＋テスト（`Error.errorLevel = E_ALL`）では、このスーパーグローバル参照の非推奨が顕在化し、ファイル取得系を通るテストが不安定化・失敗することがある（baserCMS 実績: `BcMcp\Mcp\BaseMcpTool` の URL 画像取得で Content-Type 判定に使用）。
+- 単純に「8.1 維持中は据え置き」でも 8.5 では警告のみで動作はするが、テストを通すなら上記の互換パターンで解消する方が確実。
 
 ### 7. バッククォート演算子の非推奨
 `` `command` ``（`shell_exec()` のエイリアス）が非推奨。`shell_exec()` を直接使う。

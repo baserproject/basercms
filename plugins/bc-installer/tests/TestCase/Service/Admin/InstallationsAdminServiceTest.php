@@ -465,6 +465,7 @@ class InstallationsAdminServiceTest extends BcTestCase
             'BcEditorTemplate',
             'BcFavorite',
             'BcMail',
+            'BcMcp',
             'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',

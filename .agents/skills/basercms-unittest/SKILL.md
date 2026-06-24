@@ -1,6 +1,7 @@
 ---
 name: basercms-unittest
 description: baserCMS（CakePHP5 / PHPUnit）のユニットテストをローカル Docker 環境で実行・調査する手順。「ユニットテストを実行して」「全テストを走らせて」「このテストだけ流して」「テスト失敗を調べて」等のときに参照する。コンテナ名・実行コマンド・権限自動承認のためのコマンド整形・失敗の集計と切り分け方を収録。
+license: MIT
 ---
 
 # baserCMS ユニットテスト実行ガイド（ローカル）
@@ -22,8 +23,19 @@ baserCMS のユニットテストは Docker コンテナ上で実行する。実
 
 ## 実行コマンド
 
+### ⚠️ 最重要：phpunit の前に必ず `bin/cake setup test` を実行する
+`vendor/bin/phpunit` を**直叩きしない**。先に `bin/cake setup test`（テスト DB の初期化）を実行すること。正規フローは `composer run-script test`（＝`bin/cake setup test` → phpunit）で、CI（`test.yml`）もこれを使う。
+- **省略すると何が起きるか**: テスト DB に前回実行や初期データが残り、`Fixture`/`Factory` の INSERT が **PK 重複（例: `Duplicate entry '1' for key 'content_folders.PRIMARY'`）** や `table doesn't exist` で大量に落ちる。**コードは正しいのにテストだけ失敗**するため、退行と誤認しやすい（実際にこの取り違えが発生した）。
+- 単一テストでも、DB を使うものは事前に一度 `setup test` しておくと安全。
+```
+# 正規フロー（推奨）: setup test 込み
+docker exec basercms sh -c 'cd /var/www/html && composer run-script test 2>&1 | tail -45'
+# 個別に phpunit を回す場合も、先に setup test を一度実行しておく
+docker exec basercms sh -c 'cd /var/www/html && bin/cake setup test 2>&1 | tail -3'
+```
+
 ### 全テスト（フルスイート）
-出力が大きいのでコンテナ内のファイルに保存し、末尾だけ表示する。完走まで約10分強かかるため、必要に応じてバックグラウンド実行する。
+出力が大きいのでコンテナ内のファイルに保存し、末尾だけ表示する。完走まで約10分強かかるため、必要に応じてバックグラウンド実行する。**事前に `bin/cake setup test` 済みであること**。
 ```
 docker exec basercms sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage > /tmp/phpunit_full.log 2>&1; tail -45 /tmp/phpunit_full.log'
 ```
