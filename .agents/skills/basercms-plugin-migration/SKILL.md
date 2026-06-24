@@ -1,6 +1,7 @@
 ---
 name: basercms-plugin-migration
 description: 'baserCMS プラグインを 5.2系 から 5.3系（PHP 8.5 / CakePHP 5.2.x ベース、開発中）へ移行する際の baserCMS 固有の破壊的変更・非推奨・テスト基盤対応のレシピ集。「プラグインを5.3に対応」「baserCMS 5.3 マイグレーション」「PluginCollection::create(): $config null given」「Plugin named X is already loaded（統合テスト）」「BcApp.testAppPluginsToLoad」「plugins.php の null → []」「Class BcCcFile\... not found（サブプラグイン未ロード）」「Cannot set a node''s parent as itself（TreeBehavior + Content フィクスチャ）」「validateUnique(): Argument #2 not passed（vendor の CakePHP 二重ロード）」「MissingTemplateException error500.php でテストの真因がマスクされる」「BcFile コンストラクタ／delete() パス指定の非推奨」等、プラグイン本体・テスト基盤の移行時に参照する。PHP本体起因は php-migration、CakePHP本体起因は cakephp-migration、テスト実行手順は basercms-unittest スキルを参照。新しい baserCMS バージョン対応時は本書にバージョン別追記する。'
+license: MIT
 ---
 
 # baserCMS プラグイン バージョン移行ガイド（5.2 → 5.3）
