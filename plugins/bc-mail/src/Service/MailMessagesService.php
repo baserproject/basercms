@@ -276,6 +276,20 @@ class MailMessagesService implements MailMessagesServiceInterface
             'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
             'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
         ];
+        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+        $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContentId])->all();
+        foreach($mailFields as $mailField) {
+            $fieldName = $mailField->field_name;
+            // 既存カラム（created/modified 等）と衝突する場合は上書きしない
+            if (empty($fieldName) || $fieldName === 'id' || array_key_exists($fieldName, $schema)) {
+                continue;
+            }
+            $schema[$fieldName] = [
+                'type' => 'text',
+                'null' => true,
+                'default' => null,
+            ];
+        }
         $table = $this->MailMessages->createTableName($mailContentId);
         if ($this->BcDatabaseService->tableExists($table)) {
             $this->BcDatabaseService->dropTable($table);
@@ -348,23 +362,24 @@ class MailMessagesService implements MailMessagesServiceInterface
      */
     public function construction(int $mailContentId): bool
     {
-        $mailFieldClass = TableRegistry::getTableLocator()->get('BcMail.MailFields');
-        // フィールドリストを取得
-        $mailFields = $mailFieldClass->find()->where(['MailFields.mail_content_id' => $mailContentId])->all();
         if (!$this->BcDatabaseService->tableExists($this->MailMessages->createTableName($mailContentId))) {
             /* 初回の場合 */
-            $this->createTable($mailContentId);
-            $this->construction($mailContentId);
+            return $this->createTable($mailContentId);
         } else {
             /* 2回目以降の場合 */
+            $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+            // フィールドリストを取得
+            $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContentId])->all();
             $messageFields = TableRegistry::getTableLocator()
                 ->get('BaserCore.App')
                 ->getConnection()
                 ->getSchemaCollection()
                 ->describe($this->MailMessages->createTableName($mailContentId))->columns();
             foreach($mailFields as $mailField) {
-                if (!in_array($mailField->field_name, $messageFields)) {
-                    $this->addMessageField($mailContentId, $mailField->field_name);
+                if (!in_array($mailField->field_name, $messageFields, true)) {
+                    if (!$this->addMessageField($mailContentId, $mailField->field_name)) {
+                        return false;
+                    }
                 }
             }
         }

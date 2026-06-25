@@ -1,6 +1,7 @@
 ---
 name: plan-builder
 description: 作りたい機能をざっくり伝えると、選択式ヒアリングで要件を固め、実装計画と段階的なTODOチェックリストを生成し、TODOを1つずつ実装して各ステップで差分（diff）とウォークスルーを出力する。nextで次のTODOへ進む。特定のアプリ・言語・フレームワークに依存しない。「実装計画」「todo生成」「generate plan」「plan-builder」などの依頼が来たら使う。
+license: MIT
 ---
 
 # 概要

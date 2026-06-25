@@ -23,17 +23,17 @@ return [
            //     'ignoreParent' => true, // 親要素の設定を引き継がない
            // ],
            'description' => [
-               'title' => 'ディスクリプション',
+               'title' => __d('baser_core', 'ディスクリプション'),
                'type' => 'textarea',
                'name' => 'description',
            ],
            'keywords' => [
-               'title' => 'キーワード',
+               'title' => __d('baser_core', 'キーワード'),
                'type' => 'text',
                'name' => 'keywords',
            ],
            'canonical_url' => [
-               'title' => 'カノニカル URL',
+               'title' => __d('baser_core', 'カノニカル URL'),
                'type' => 'text',
                'rel' => 'canonical',
                'url' => true,
@@ -46,7 +46,7 @@ return [
                'ignoreParent' => true,
            ],
            'og_title' => [
-               'title' => 'OG タイトル',
+               'title' => __d('baser_core', 'OG タイトル'),
                'type' => 'text',
                'property' => 'og:title',
                'ignoreTypes' => [
@@ -55,22 +55,22 @@ return [
                'ignoreParent' => true,
            ],
            'og_description' => [
-               'title' => 'OG ディスクリプション',
+               'title' => __d('baser_core', 'OG ディスクリプション'),
                'type' => 'textarea',
                'property' => 'og:description',
            ],
            'og_type' => [
-               'title' => 'OG タイプ',
+               'title' => __d('baser_core', 'OG タイプ'),
                'type' => 'text',
                'property' => 'og:type',
            ],
            'og_image' => [
-               'title' => 'OG イメージ',
+               'title' => __d('baser_core', 'OG イメージ'),
                'type' => 'file',
                'property' => 'og:image',
            ],
            'og_url' => [
-               'title' => 'OG URL',
+               'title' => __d('baser_core', 'OG URL'),
                'type' => 'text',
                'property' => 'og:url',
                'url' => true,
