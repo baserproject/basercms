@@ -5,7 +5,7 @@
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-core-plugin-convert/SKILL.md",
-      "computedHash": "0499fef90c2be15544f5664e9e3ab4975beef655cf60c44be616547a23238759"
+      "computedHash": "7573f3bd924282ca8a0fc9399acb192cf2ab1d02aad19c4c8beb106b88abad4b"
     },
     "basercms-plugin-migration": {
       "source": "baserproject/baser-skills",
@@ -30,6 +30,12 @@
       "sourceType": "github",
       "skillPath": "skills/php-migration/SKILL.md",
       "computedHash": "9f71021b038a9445e81d1da27689ac1a519e7ffe5ed59cdd4c197d6774a59624"
+    },
+    "plan-builder": {
+      "source": "ecatchup/catchup-skills",
+      "sourceType": "github",
+      "skillPath": "skills/plan-builder/SKILL.md",
+      "computedHash": "2c0128761a113d42f726518c9045e1434d3644b8142459877b35317963e6784c"
     }
   }
 }
