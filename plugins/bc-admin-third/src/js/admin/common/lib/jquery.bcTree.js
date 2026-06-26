@@ -754,7 +754,11 @@
          */
         returnContent: function (node) {
             $.bcToken.check(function () {
-                return $(location).prop('href', $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_return/' + node.data.jstree.contentId);
+                // CSRF対策: 状態変更のため GET 遷移ではなく CSRF トークン付きの POST で送信する
+                var url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_return/' + node.data.jstree.contentId;
+                var $form = $('<form>', {method: 'post', action: url}).appendTo('body');
+                $('<input>', {type: 'hidden', name: '_csrfToken', value: $.bcToken.key}).appendTo($form);
+                return $form.submit();
             }, {hideLoader: false});
         },
 
