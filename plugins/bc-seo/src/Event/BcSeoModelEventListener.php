@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Collection\CollectionInterface;
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
@@ -32,6 +33,7 @@ class BcSeoModelEventListener extends BcModelEventListener
     public $events = [
         'beforeFind',
         'beforeMarshal',
+        'afterMarshal',
     ];
 
     private bool $isEdit;
@@ -75,6 +77,60 @@ class BcSeoModelEventListener extends BcModelEventListener
                 }
                 return $results;
             });
+        }
+    }
+
+    /**
+     * afterMarshal
+     *
+     * バリデーションエラー時に SeoMetas の og_image などファイルフィールドを
+     * セッションにロールバックして次回レンダリング時に復元できるようにする
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
+    {
+        if (!$this->isEdit()) {
+            return;
+        }
+        if (!$entity->getErrors()) {
+            return;
+        }
+
+        $table = $event->getSubject();
+
+        // entity->seo_meta（CustomEntries など直接アソシエーション）
+        $seoMetaEntity = null;
+        if (isset($entity->seo_meta) && $entity->seo_meta instanceof EntityInterface) {
+            // 親テーブルに BcUploadBehavior があり SeoMetas をアソシエーションとして持つ場合は
+            // BcUploadBehavior::afterMarshal() がアソシエーションループで処理するためスキップ
+            // （二重 rollbackFile() による tmp ファイル名の再生成・セッション重複書き込みを防ぐ）
+            if ($table->hasBehavior('BcUpload') && $table->hasAssociation('SeoMetas')) {
+                return;
+            }
+            $seoMetaEntity = $entity->seo_meta;
+        // entity->content->seo_meta（Pages/BlogContents など Content 経由）
+        } elseif (isset($entity->content) && $entity->content instanceof EntityInterface
+            && isset($entity->content->seo_meta) && $entity->content->seo_meta instanceof EntityInterface
+        ) {
+            $seoMetaEntity = $entity->content->seo_meta;
+        }
+
+        if (!$seoMetaEntity) {
+            return;
+        }
+
+        $seoMetasTable = TableRegistry::getTableLocator()->get('BcSeo.SeoMetas');
+        if (!$seoMetasTable->hasBehavior('BcUpload')) {
+            return;
+        }
+
+        $uploadBehavior = $seoMetasTable->getBehavior('BcUpload');
+        $uploadBehavior->BcFileUploader[$seoMetasTable->getAlias()]->rollbackFile($seoMetaEntity, true);
+
+        // Pages/BlogContents などの content->seo_meta 経由の場合、
+        // フォームレンダリング時に context()->val('seo_meta.*') が entity->seo_meta を参照するため
+        // rollbackFile 後の seoMetaEntity で同期する
+        if (!isset($entity->seo_meta) || !($entity->seo_meta instanceof EntityInterface)) {
+            $entity->seo_meta = $seoMetaEntity;
         }
     }
 

@@ -169,7 +169,14 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertFileExists($this->savePath . 'baser.power.gif');
         // 削除の場合
-        $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject(['id' => 6, 'eyecatch_delete' => true]), 'options' => new ArrayObject()]);
+        $deleteData = new ArrayObject(['id' => 6, 'eyecatch_delete' => true]);
+        $this->table->dispatchEvent('Model.beforeMarshal', ['data' => $deleteData, 'options' => new ArrayObject()]);
+        $entity->set('_bc_upload_id', $deleteData['_bc_upload_id']);
+        $this->BcUploadBehavior->oldEntity[$this->table->getAlias()][$deleteData['_bc_upload_id']] = new Entity([
+            'id' => 6,
+            'eyecatch' => 'baser.power.gif',
+            '_bc_upload_id' => $deleteData['_bc_upload_id']
+        ]);
         $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertEquals('', $return->getData('entity')->eyecatch);
         $this->assertFileDoesNotExist($this->savePath . 'baser.power.gif');
@@ -298,4 +305,91 @@ class BcUploadBehaviorTest extends BcTestCase
         ];
     }
 
+    /**
+     * test afterMarshal calls rollbackFile
+     * afterMarshalイベントでrollbackFileが呼ばれる
+     */
+    public function testAfterMarshalCallsRollbackFile()
+    {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $table = $this->table;
+
+        // アップロードファイルを準備
+        $tmpFile = '/tmp/test_upload_' . time() . '.jpg';
+        file_put_contents($tmpFile, 'test image data');
+
+        $uploadedFiles = normalizeUploadedFiles([
+            'eyecatch' => [
+                'name' => 'test.jpg',
+                'tmp_name' => $tmpFile,
+                'type' => 'image/jpeg',
+                'size' => 100,
+                'error' => 0
+            ]
+        ]);
+
+        $data = [
+            'id' => 1,
+            'name' => 'test',
+            'eyecatch' => $uploadedFiles['eyecatch']
+        ];
+
+        $entity = $table->newEntity($data);
+        $entity->setError('name', ['name field error']); // 他フィールドでバリデーションエラー
+
+        // eyecatch_tmpが設定されていることを確認（rollbackFileが実行された証拠）
+        $this->assertNotEmpty($entity->get('eyecatch_tmp'), 'rollbackFileが実行されていません');
+
+        @unlink($tmpFile);
+    }
+
+    /**
+     * test beforeMarshal adds accessible fields
+     * beforeMarshalで_tmpと_deleteがaccessibleFieldsに追加される
+     */
+    public function testBeforeMarshalAddsAccessibleFields()
+    {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $table = $this->table;
+
+        $data = [
+            'id' => 1,
+            'name' => 'test',
+            'eyecatch_tmp' => 'tmp_file.jpg',
+            'eyecatch_delete' => '1'
+        ];
+
+        $entity = $table->newEntity($data);
+
+        // _tmpと_deleteフィールドがアクセス可能になっていることを確認
+        $this->assertTrue($entity->isAccessible('eyecatch_tmp'), 'eyecatch_tmpがaccessibleではありません');
+        $this->assertTrue($entity->isAccessible('eyecatch_delete'), 'eyecatch_deleteがaccessibleではありません');
+
+        // 値が設定されていることを確認
+        $this->assertEquals('tmp_file.jpg', $entity->get('eyecatch_tmp'));
+        $this->assertEquals('1', $entity->get('eyecatch_delete'));
+    }
+
+    /**
+     * test afterMarshal does not rollback on success
+     * バリデーションエラーがない場合はrollbackFileを呼ばない（eyecatch_tmpが設定されない）
+     */
+    public function testAfterMarshalNoRollbackOnSuccess()
+    {
+        $this->loadFixtureScenario(ContentsScenario::class);
+
+        // エラーなしのエンティティを直接作成（バリデーションをスキップ）
+        $entity = new Entity(['id' => 1, 'name' => 'valid_name', '_bc_upload_id' => 'test_no_err_id']);
+        $this->assertFalse($entity->hasErrors(), 'エラーなしであるべきです');
+
+        // afterMarshal を手動でディスパッチ
+        $result = $this->table->dispatchEvent('Model.afterMarshal', [
+            'entity' => $entity,
+            'options' => new ArrayObject(),
+        ]);
+        $updatedEntity = $result->getData('entity');
+
+        // エラーなしの場合はrollbackFileが呼ばれないため、eyecatch_tmpが設定されていないことを確認
+        $this->assertEmpty($updatedEntity->get('eyecatch_tmp'), 'エラーなしの場合はeyecatch_tmpが設定されるべきではありません');
+    }
 }

@@ -133,6 +133,17 @@ class BcContentsBehavior extends Behavior
                 $entity->content->type = $entity->content->type ?? Inflector::classify($type);
             }
         }
+
+        // バリデーションエラー時、アソシエーションエンティティ（Content）のファイルアップロードも復元
+        // BlogContentなど、BcUploadBehaviorがアタッチされていないテーブルでも、
+        // 関連するContentテーブルのファイルアップロード処理を実行
+        if ($entity->getErrors() && isset($entity->content) && $entity->content instanceof EntityInterface) {
+            $contentsTable = $this->Contents->getTarget();
+            if ($contentsTable->hasBehavior('BcUpload')) {
+                $uploadBehavior = $contentsTable->getBehavior('BcUpload');
+                $uploadBehavior->BcFileUploader[$contentsTable->getAlias()]->rollbackFile($entity->content, true);
+            }
+        }
     }
 
     /**

@@ -101,7 +101,9 @@ class BcUploadHelper  extends Helper
      */
     public function fileLink($fieldName, $entity, $options = [])
     {
-        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
+        if(!($entity instanceof EntityInterface)) {
+            throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
+        }
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -143,17 +145,34 @@ class BcUploadHelper  extends Helper
 
         $basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
+        // tmp画像優先表示ロジック: fieldName変更前に_tmp値をチェック（セッションキー命名・変換は現状維持）
+        $originalFieldName = $fieldName;
+        $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+
+        // ネストフィールドの場合（例：seo_meta.og_image）、短いフィールド名でも試す
+        $shortFieldName = $fieldName;
+        if (strpos($fieldName, '.') !== false) {
+            [, $shortFieldName] = explode('.', $fieldName);
+            if (!$sessionKey) {
+                $sessionKey = Hash::get($entity, $shortFieldName . '_tmp');
+            }
+        }
+
         if (empty($options['value'])) {
             $value = Hash::get($entity, $fieldName);
             if (!$value && strpos($fieldName, '.') !== false) {
                 [, $fieldName] = explode('.', $fieldName);
                 $value = Hash::get($entity, $fieldName);
+                // fieldNameが変更された場合も_tmp値を再チェック
+                if (!$sessionKey) {
+                    $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+                }
             }
         } else {
             $value = $options['value'];
         }
 
-        $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+        // セッションに一時ファイルがある場合は優先表示
         if ($sessionKey) {
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);
@@ -187,7 +206,15 @@ class BcUploadHelper  extends Helper
                 } else {
                     $figcaptionOptions['class'] = 'file-name';
                 }
-                if ($uploadSettings['type'] == 'image' || in_array($ext, $this->table->getBehavior('BcUpload')->BcFileUploader[$this->table->getAlias()]->imgExts)) {
+                $imgExts = [];
+                if ($this->table->hasBehavior('BcUpload')) {
+                    $behavior = $this->table->getBehavior('BcUpload');
+                    $alias = $this->table->getAlias();
+                    if (isset($behavior->BcFileUploader[$alias])) {
+                        $imgExts = $behavior->BcFileUploader[$alias]->imgExts;
+                    }
+                }
+                if ($uploadSettings['type'] == 'image' || in_array($ext, $imgExts)) {
                     $imgOptions = array_merge([
                         'imgsize' => $options['imgsize'],
                         'rel' => $options['rel'],
@@ -200,7 +227,7 @@ class BcUploadHelper  extends Helper
                     if ($tmp) {
                         $imgOptions['tmp'] = true;
                     }
-                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->uploadImage($originalFieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
                 } else {
                     $filePath = $basePath . $value;
                     $linkOptions = ['target' => '_blank'];
@@ -274,6 +301,12 @@ class BcUploadHelper  extends Helper
         }
 
         $fileName = Hash::get($entity, $fieldName);
+        // ドット記法（例: seo_meta.og_image）の場合、エンティティがネスト先そのものであれば
+        // 短いフィールド名（最後のセグメント）でフォールバック取得
+        if (!$fileName && strpos($fieldName, '.') !== false) {
+            $parts = explode('.', $fieldName);
+            $fileName = Hash::get($entity, end($parts));
+        }
 
         // EVENT BcUpload.beforeUploadImage
         $event = $this->dispatchLayerEvent('beforeUploadImage', [
@@ -315,8 +348,14 @@ class BcUploadHelper  extends Helper
             unset($linkOptions['class']);
         }
 
+        // tmp画像優先表示ロジック（セッションキー命名・変換は現状維持）
         if($entity) {
             $sessionKey = Hash::get($entity, $fieldName . '_tmp');
+            // ドット記法の場合は短いフィールド名でも試みる
+            if (!$sessionKey && strpos($fieldName, '.') !== false) {
+                $parts = explode('.', $fieldName);
+                $sessionKey = Hash::get($entity, end($parts) . '_tmp');
+            }
             if ($sessionKey) {
                 $fileName = $sessionKey;
                 $options['tmp'] = true;
@@ -353,9 +392,9 @@ class BcUploadHelper  extends Helper
             $options['imgsize'] = 'default';
         }
         if ($options['tmp']) {
-            $options['link'] = false;
             $fileUrl = '/baser-core/uploads/tmp/';
-            if ($options['imgsize']) {
+            $maxSizeUrl = $fileUrl . str_replace('/', '_', $fileName);
+            if ($options['imgsize'] && $options['imgsize'] !== 'default') {
                 $fileUrl .= $options['imgsize'] . '/';
             }
         }
@@ -363,7 +402,7 @@ class BcUploadHelper  extends Helper
         if ($fileName == $options['noimage']) {
             $mostSizeUrl = $fileName;
         } elseif ($options['tmp']) {
-            $mostSizeUrl = $fileUrl . str_replace(['.', '/'], ['_', '_'], $fileName);
+            $mostSizeUrl = $fileUrl . str_replace('/', '_', $fileName);
         } else {
             $check = false;
             $maxSizeExists = false;

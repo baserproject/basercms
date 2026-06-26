@@ -267,7 +267,8 @@ class BcFileUploaderTest extends BcTestCase
         ];
         $entity = $this->BcFileUploader->saveTmpFiles($data, 1);
         $tmpId = $this->BcFileUploader->tmpId;
-        $this->assertEquals("00000001_eyecatch.png", $entity->eyecatch_tmp, 'saveTmpFiles()の返り値が正しくありません');
+        // タイムスタンプ付きファイル名を許容
+        $this->assertMatchesRegularExpression('/^00000001_eyecatch(_[0-9]+)?\\.png$/', $entity->eyecatch_tmp, 'saveTmpFiles()の返り値が正しくありません');
         $this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
         //不要なフォルダを削除
         (new BcFolder($filePath))->delete();
@@ -294,8 +295,11 @@ class BcFileUploaderTest extends BcTestCase
 
         $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $data);
         $this->BcFileUploader->tmpId = 1;
-        $this->BcFileUploader->saveTmpFile($this->BcFileUploader->settings['fields']['eyecatch'], $data, $entity);
-        $this->assertNotEmpty($_SESSION['Upload']['00000001_eyecatch_png']);
+        $fileName = $this->BcFileUploader->saveTmpFile($this->BcFileUploader->settings['fields']['eyecatch'], $data, $entity);
+        // タイムスタンプ付きファイル名を許容
+        $this->assertNotEmpty($fileName);
+        $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
+        $this->assertNotEmpty($_SESSION['Upload'][$sessionKey]);
         //不要なフォルダを削除
         (new BcFolder($filePath))->delete();
     }
@@ -320,9 +324,10 @@ class BcFileUploaderTest extends BcTestCase
         $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $data);
         $this->BcFileUploader->tmpId = 1;
         $file = $this->BcFileUploader->getSaveTmpFileName($this->BcFileUploader->settings['fields']['eyecatch'], $data, $entity);
-        $this->assertEquals('00000001_eyecatch.png', $file);
-        $file = $this->BcFileUploader->getSaveTmpFileName(['name' => 'eyecatch'], $data, $entity);
-        $this->assertEquals('1_eyecatch.png', $file);
+        // タイムスタンプ付きファイル名を許容
+        $this->assertMatchesRegularExpression('/^00000001_eyecatch(_[0-9]+)?\\.png$/', $file);
+        $file2 = $this->BcFileUploader->getSaveTmpFileName(['name' => 'eyecatch'], $data, $entity);
+        $this->assertMatchesRegularExpression('/^1_eyecatch(_[0-9]+)?\\.png$/', $file2);
         //不要なフォルダを削除
         (new BcFolder($filePath))->delete();
     }
@@ -1372,5 +1377,286 @@ class BcFileUploaderTest extends BcTestCase
                 ['image' => 'new_image.jpg', 'document' => 'new_document.pdf']
             ],
         ];
+    }
+
+    /**
+     * test rollbackFile with session save
+     * バリデーションエラー時に新規アップロードファイルがセッションに保存される
+     */
+    public function testRollbackFileWithSessionSave()
+    {
+        $session = $this->BcFileUploader->Session;
+
+        // アップロードファイルを準備(/tmp/で始まるパス)
+        $tmpFile = '/tmp/test_upload_' . time() . '.jpg';
+        file_put_contents($tmpFile, 'test image data');
+
+        $uploadingFiles = [
+            'eyecatch' => [
+                'name' => 'test.jpg',
+                'tmp_name' => $tmpFile,
+                'type' => 'image/jpeg',
+                'size' => 100,
+                'error' => 0,
+                'ext' => 'jpg'
+            ]
+        ];
+
+        $this->BcFileUploader->settings['fields'] = [
+            ['name' => 'eyecatch', 'type' => 'image', 'namefield' => 'id']
+        ];
+
+        $entity = new Entity(['id' => 1, 'eyecatch' => 'old_image.jpg', '_bc_upload_id' => 'test123']);
+        $entity->clean();
+        $entity->set('eyecatch', 'new_image.jpg');
+        $entity->setError('eyecatch', ['validation error']);
+
+        $this->BcFileUploader->setUploadingFiles($uploadingFiles, 'test123');
+        $this->BcFileUploader->rollbackFile($entity);
+
+        // _tmp値が設定されていることを確認
+        $this->assertNotEmpty($entity->get('eyecatch_tmp'), '_tmp値が設定されていません');
+
+        // セッションに保存されていることを確認
+        $sessionKey = str_replace(['.', '/'], ['_', '_'], $entity->get('eyecatch_tmp'));
+        $sessionData = $session->read('Upload.' . $sessionKey . '.data');
+        $this->assertNotEmpty($sessionData, 'セッションにファイルデータが保存されていません');
+
+        // 元の値にロールバックされていることを確認
+        $this->assertEquals('old_image.jpg', $entity->get('eyecatch'), '元の値にロールバックされていません');
+
+        // エラーが保持されていることを確認
+        $this->assertNotEmpty($entity->getError('eyecatch'), 'エラーが保持されていません');
+
+        @unlink($tmpFile);
+    }
+
+    /**
+     * test rollbackFile preserves _tmp value
+     * ファイルなし時に既存の_tmp値を保持する
+     */
+    public function testRollbackFilePreservesTmpValue()
+    {
+        $this->BcFileUploader->settings['fields'] = [
+            ['name' => 'eyecatch']
+        ];
+
+        $entity = new Entity([
+            'id' => 1,
+            'eyecatch' => 'old_image.jpg',
+            'eyecatch_tmp' => 'existing_tmp_file.jpg',
+            '_bc_upload_id' => 'test123'
+        ]);
+        $entity->clean();
+        $entity->set('eyecatch', 'old_image.jpg'); // ファイルアップロードなし
+        $entity->setError('eyecatch', ['validation error']);
+
+        // アップロードファイルなし
+        $this->BcFileUploader->setUploadingFiles([], 'test123');
+        $this->BcFileUploader->rollbackFile($entity);
+
+        // 既存の_tmp値が保持されていることを確認
+        $this->assertEquals('existing_tmp_file.jpg', $entity->get('eyecatch_tmp'), '既存の_tmp値が保持されていません');
+
+        // 元の値が保持されていることを確認
+        $this->assertEquals('old_image.jpg', $entity->get('eyecatch'), '元の値が保持されていません');
+    }
+
+    /**
+     * test getSaveTmpFileName with timestamp
+     * タイムスタンプ付きファイル名でユニーク化される
+     */
+    public function testGetSaveTmpFileNameWithTimestamp()
+    {
+        $setting = [
+            'name' => 'eyecatch',
+            'namefield' => 'id',
+            'nameformat' => '%08d'
+        ];
+
+        $file = [
+            'name' => 'test.jpg',
+            'ext' => 'jpg'
+        ];
+
+        $entity = new Entity(['id' => 1]);
+
+        $fileName1 = $this->BcFileUploader->getSaveTmpFileName($setting, $file, $entity);
+
+        // タイムスタンプが含まれていることを確認
+        $this->assertMatchesRegularExpression('/_\d+\.jpg$/', $fileName1, 'タイムスタンプが含まれていません');
+
+        // ファイル名の形式を確認 (00000001_eyecatch_timestamp.jpg)
+        $this->assertStringContainsString('00000001_eyecatch', $fileName1, 'nameフィールドが正しく生成されていません');
+
+        // 2回生成すると異なるタイムスタンプになることを確認（ユニーク性）
+        sleep(1);
+        $fileName2 = $this->BcFileUploader->getSaveTmpFileName($setting, $file, $entity);
+        $this->assertNotEquals($fileName1, $fileName2, 'タイムスタンプによるユニーク化が機能していません');
+    }
+
+    /**
+     * test setupTmpData restores from session
+     * _tmp値があり新規ファイルなしの場合、セッションからファイルを復元する
+     */
+    public function testSetupTmpDataRestoresFromSession()
+    {
+        // セッションにファイルデータを設定
+        $tmpFileName = 'eyecatch_restore_test.jpg';
+        $sessionKey = str_replace(['.', '/'], ['_', '_'], $tmpFileName);
+        $testContent = 'fake image content for restore test';
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.data', base64_encode($testContent));
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.type', 'image/jpeg');
+
+        // ArrayObjectとして渡す（実際のbeforeMarshalと同じ形式）
+        $data = new \ArrayObject([
+            '_bc_upload_id' => 'test_restore_id',
+            'eyecatch_tmp' => $tmpFileName,
+            // eyecatch フィールドなし（新規ファイルなし）
+        ]);
+
+        $this->BcFileUploader->setupTmpData($data);
+
+        // セッションから復元されてuploadingFilesに設定されていることを確認
+        $uploadingFiles = $this->BcFileUploader->getUploadingFiles('test_restore_id');
+        $this->assertNotEmpty($uploadingFiles['eyecatch'], 'セッションからファイルが復元されていません');
+        $this->assertEquals($tmpFileName, $uploadingFiles['eyecatch']['name'], '復元されたファイル名が正しくありません');
+
+        // 後片付け
+        @unlink($this->savePath . $sessionKey);
+    }
+
+    /**
+     * test setupTmpData skips session when new file exists
+     * _tmp値があっても /tmp/ から始まる新規ファイルがある場合はセッション復元をスキップする
+     */
+    public function testSetupTmpDataSkipsSessionWhenNewFileExists()
+    {
+        // セッションにファイルデータを設定
+        $tmpFileName = 'eyecatch_skip_test.jpg';
+        $sessionKey = str_replace(['.', '/'], ['_', '_'], $tmpFileName);
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.data', base64_encode('session image data'));
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.type', 'image/jpeg');
+
+        // 新規ファイルが /tmp/ から始まる（新規アップロード）
+        $data = new \ArrayObject([
+            '_bc_upload_id' => 'test_skip_id',
+            'eyecatch_tmp' => $tmpFileName,
+            'eyecatch' => [
+                'name' => 'new_file.jpg',
+                'tmp_name' => '/tmp/php_upload_new_file_test',
+                'type' => 'image/jpeg',
+                'size' => 100,
+                'error' => 0,
+            ],
+        ]);
+
+        $this->BcFileUploader->setupTmpData($data);
+
+        // 新規ファイルがあるのでセッションから復元されていないことを確認
+        $uploadingFiles = $this->BcFileUploader->getUploadingFiles('test_skip_id');
+        $this->assertEmpty($uploadingFiles['eyecatch'] ?? null, '新規ファイルがある場合はセッションから復元すべきではありません');
+
+        @unlink($this->savePath . $sessionKey);
+    }
+
+    /**
+     * test saveTmpFiles preserves existing tmp session without new upload
+     * file_tmp だけの再送時に既存の Upload セッションを消さない
+     */
+    public function testSaveTmpFilesPreservesExistingTmpSessionWithoutNewUpload()
+    {
+        $tmpFileName = 'eyecatch_keep_session.jpg';
+        $sessionKey = str_replace(['.', '/'], ['_', '_'], $tmpFileName);
+        $testContent = 'fake image content for keep session test';
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.data', base64_encode($testContent));
+        $this->BcFileUploader->Session->write('Upload.' . $sessionKey . '.type', 'image/jpeg');
+
+        $entity = $this->BcFileUploader->saveTmpFiles([
+            'eyecatch_tmp' => $tmpFileName
+        ], 1);
+
+        $this->assertEquals($tmpFileName, $entity->get('eyecatch_tmp'));
+        $this->assertEquals(base64_encode($testContent), $this->BcFileUploader->Session->read('Upload.' . $sessionKey . '.data'));
+        $this->assertEquals('image/jpeg', $this->BcFileUploader->Session->read('Upload.' . $sessionKey . '.type'));
+    }
+
+    /**
+     * test moveFileSessionToTmp returns false when session data is null
+     * セッションデータがnullの場合はfalseを返す（追加されたnullチェック）
+     */
+    public function testMoveFileSessionToTmpWithNullSession()
+    {
+        // セッションに何も書き込まない → null
+        $tmpFileName = 'nonexistent_session_file.jpg';
+        $data = [
+            '_bc_upload_id' => 'test_null_id',
+            'eyecatch_tmp' => $tmpFileName,
+        ];
+
+        $result = $this->BcFileUploader->moveFileSessionToTmp($data, 'eyecatch');
+
+        $this->assertFalse($result, 'セッションデータがnullの場合はfalseを返すべきです');
+    }
+
+    /**
+     * test rollbackFile with force=true
+     * $force=trueの場合、バリデーションエラーがなくても強制的にロールバックを実行する
+     */
+    public function testRollbackFileWithForce()
+    {
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'image'],
+        ];
+        $BcFileUploader->setUploadingFiles([], 'test_force_id');
+
+        // エラーなしのエンティティ
+        $entity = new Entity(['image' => 'original_image.jpg', '_bc_upload_id' => 'test_force_id']);
+        $entity->clean();
+        $entity->set('image', 'new_image.jpg');
+
+        $this->assertFalse($entity->hasErrors());
+
+        // $force=false の場合: エラーなしなのでスキップ
+        $BcFileUploader->rollbackFile($entity, false);
+        $this->assertEquals('new_image.jpg', $entity->get('image'), '$force=falseでエラーなしの場合はロールバックしないべきです');
+
+        // $force=true の場合: エラーなしでも強制実行
+        $BcFileUploader->rollbackFile($entity, true);
+        $this->assertEquals('original_image.jpg', $entity->get('image'), '$force=trueでエラーなしでも元の値に戻るべきです');
+    }
+
+    /**
+     * test rollbackFile original tmp fallback
+     * entity->get('field_tmp')がnullのとき、getOriginal()のフォールバックが機能する
+     */
+    public function testRollbackFileOriginalTmpFallback()
+    {
+        $BcFileUploader = new BcFileUploader();
+        $BcFileUploader->settings['fields'] = [
+            ['name' => 'eyecatch'],
+        ];
+        $BcFileUploader->setUploadingFiles([], 'test_fallback_id');
+
+        // getOriginal()のみに_tmp値がある状態を再現:
+        // 1. eyecatch_tmpをoriginalに設定 (cleanにより元の値になる)
+        // 2. eyecatch_tmpをnullにdirtyにする (get()はnullを返す)
+        $entity = new Entity([
+            'eyecatch' => 'old.jpg',
+            'eyecatch_tmp' => 'original_tmp.jpg',
+            '_bc_upload_id' => 'test_fallback_id',
+        ]);
+        $entity->clean();
+        $entity->set('eyecatch_tmp', null); // get()はnull、getOriginal()は'original_tmp.jpg'
+        $entity->setError('eyecatch', ['validation error']);
+
+        $this->assertNull($entity->get('eyecatch_tmp'));
+        $this->assertEquals('original_tmp.jpg', $entity->getOriginal('eyecatch_tmp'));
+
+        $BcFileUploader->rollbackFile($entity);
+
+        // getOriginal()フォールバックで_tmp値が設定されていることを確認
+        $this->assertEquals('original_tmp.jpg', $entity->get('eyecatch_tmp'), 'getOriginal()フォールバックで_tmp値が設定されるべきです');
     }
 }

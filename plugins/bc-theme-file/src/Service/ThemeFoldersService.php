@@ -108,11 +108,13 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         $themeFiles = [];
         $folders = [];
         foreach($folder->getFolders() as $file) {
+            if (str_starts_with($file, '.')) continue;
             if (in_array($file, $excludeFolderList)) continue;
             $folders[] = $this->get($params['fullpath'] . $file);
         }
         $themeFilesService = $this->getService(ThemeFilesServiceInterface::class);
         foreach($folder->getFiles() as $file) {
+            if (str_starts_with($file, '.')) continue;
             if (in_array($file, $excludeFileList)) continue;
             $themeFiles[] = $themeFilesService->get($params['fullpath'] . $file);
         }

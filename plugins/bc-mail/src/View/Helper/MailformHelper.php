@@ -75,25 +75,18 @@ class MailformHelper extends BcFreezeHelper
         if(!empty($attributes['text_rows'])) $attributes['rows'] = $attributes['text_rows'];
         unset($attributes['options'], $attributes['regex'], $attributes['text_rows']);
 
-        if ($this->freezed) {
-            unset($attributes['type']);
-        }
-
         $out = '';
         switch ($type) {
-
             case 'text':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $out = $this->text($fieldName, $attributes);
                 break;
-
-			case 'email':
-				unset($attributes['rows']);
-				unset($attributes['empty']);
-				$out = $this->email($fieldName, $attributes);
-				break;
-
+            case 'email':
+                unset($attributes['rows']);
+                unset($attributes['empty']);
+                $out = $this->email($fieldName, $attributes);
+                break;
             case 'radio':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -108,7 +101,6 @@ class MailformHelper extends BcFreezeHelper
                 $out = $this->hidden($fieldName, ['value' => '']);
                 $out .= $this->radio($fieldName, $options, $attributes);
                 break;
-
             case 'select':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -129,7 +121,6 @@ class MailformHelper extends BcFreezeHelper
                 $attributes['empty'] = $showEmpty;
                 $out = $this->select($fieldName, $options, $attributes);
                 break;
-
             case 'pref':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -137,7 +128,6 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['empty']);
                 $out = $this->prefTag($fieldName, null, $attributes, true);
                 break;
-
             case 'autozip':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
@@ -157,7 +147,6 @@ class MailformHelper extends BcFreezeHelper
                         'style' => 'width:auto!important'
                     ]));
                 break;
-
             case 'check':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -165,7 +154,6 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['empty']);
                 $out = $this->checkbox($fieldName, $attributes);
                 break;
-
             case 'multi_check':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -221,9 +209,7 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['maxFileSize']);
                 unset($attributes['fileExt']);
                 $out .= $this->file($fieldName, $attributes);
-
                 break;
-
             case 'date_time_calender':
                 unset($attributes['size']);
                 unset($attributes['rows']);
@@ -231,7 +217,6 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['empty']);
                 $out = $this->datepicker($fieldName, $attributes);
                 break;
-
             case 'textarea':
                 $attributes['cols'] = $attributes['size'];
                 unset($attributes['empty']);
@@ -241,14 +226,12 @@ class MailformHelper extends BcFreezeHelper
                 }
                 $out = $this->textarea($fieldName, $attributes);
                 break;
-
             case 'tel':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $attributes['type'] = 'tel';
                 $out = $this->tel($fieldName, $attributes);
                 break;
-
 			case 'number':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
@@ -256,17 +239,16 @@ class MailformHelper extends BcFreezeHelper
 				$attributes['type'] = 'number';
 				$out = $this->number($fieldName, $attributes);
 				break;
-
             case 'password':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $out = $this->password($fieldName, $attributes);
                 break;
-
             case 'hidden':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $out = $this->hidden($fieldName, $attributes);
+                break;
         }
         return $out;
     }
@@ -292,6 +274,25 @@ class MailformHelper extends BcFreezeHelper
             $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->_View->getRequest()->getAttribute('currentSite')->id);
         }
         return parent::create($context, $options);
+    }
+
+    /**
+     * ファイルタグを出力
+     *
+     * MailMessages テーブルの BcUpload 設定を利用して
+     * front 側でも tmp プレビューと確認画面のリンク表示を有効にする。
+     *
+     * @param string $fieldName
+     * @param array $options
+     * @return string
+     */
+    public function file($fieldName, $options = []): string
+    {
+        $options = array_merge([
+            'table' => 'BcMail.MailMessages'
+        ], $options);
+
+        return parent::file($fieldName, $options);
     }
 
     /**

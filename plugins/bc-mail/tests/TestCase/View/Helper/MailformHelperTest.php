@@ -16,8 +16,11 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcBaserHelper;
 use BcMail\Model\Entity\MailField;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Factory\MailMessagesFactory;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Service\MailFieldsServiceInterface;
+use BcMail\Model\Entity\MailMessage;
 use BcMail\View\Helper\MailformHelper;
 use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Scenario\MailFieldsScenario;
@@ -26,6 +29,9 @@ use Cake\ORM\ResultSet;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
+/**
+ * @property MailformHelper $MailformHelper
+ */
 class MailformHelperTest extends BcTestCase
 {
     /**
@@ -148,5 +154,42 @@ class MailformHelperTest extends BcTestCase
         $mailFields = $MailFieldsService->getIndex(1)->all();
         $rs = $this->MailformHelper->getGroupValidErrors($mailFields, 'field_name');
         $this->assertEquals([], $rs);
+    }
+
+    /**
+     * test file control renders tmp preview on front form
+     */
+    public function testControlFileWithTmpPreview()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => '添付',
+            'field_name' => 'file_1',
+            'type' => 'file',
+            'use_field' => 1,
+            'options' => 'fileExt|jpg',
+            'valid_ex' => 'VALID_FILE_EXT',
+        ])->persist();
+
+        $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $mailMessagesService->setup(1, ['file_1_tmp' => '1_file_1234567890.jpg']);
+
+        $view = new MailFrontAppView($this->getRequest('/contact/'));
+        $view->setPlugin('BcMail');
+        $this->MailformHelper = new MailformHelper($view);
+        $this->MailformHelper->freeze();
+
+        $entity = new MailMessage([
+            'file_1_tmp' => '1_file_1234567890.jpg'
+        ], ['source' => 'BcMail.MailMessages']);
+
+        $this->MailformHelper->create($entity);
+        $result = $this->MailformHelper->control('file_1', ['type' => 'file']);
+
+        $this->assertStringContainsString('name="file_1_tmp"', $result);
+        $this->assertStringContainsString('/baser-core/uploads/tmp/', $result);
     }
 }
