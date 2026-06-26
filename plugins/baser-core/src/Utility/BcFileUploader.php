@@ -81,6 +81,22 @@ class BcFileUploader
     public $imgExts = ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png'];
 
     /**
+     * サーバ上で実行され得る拡張子の禁止リスト
+     *
+     * 各機能側の許可リスト設定（カスタムフィールドの拡張子設定や allowedAdmin 等）に関わらず、
+     * 基盤側で無条件にブロックし、webroot への Web シェル設置（RCE）を防ぐ。
+     *
+     * @var array
+     */
+    public $deniedExts = [
+        'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'phps', 'pht', 'phar',
+        'cgi', 'pl', 'py', 'rb', 'sh', 'bash',
+        'asp', 'aspx', 'jsp', 'jspx',
+        'exe', 'bat', 'cmd', 'com', 'msi',
+        'htaccess', 'htpasswd',
+    ];
+
+    /**
      * アップロードしたかどうか
      *
      * afterSave のリネーム判定に利用
@@ -123,9 +139,16 @@ class BcFileUploader
         $this->table = $table;
         $this->settings = $this->getSettings($config);
         $this->savePath = $this->getSaveDir();
-        if (!is_dir($this->savePath)) {
-            $Folder = new BcFolder($this->savePath);
-            $Folder->create();
+        if ($this->savePath) {
+            if (!is_dir($this->savePath)) {
+                $Folder = new BcFolder($this->savePath);
+                $Folder->create();
+            }
+            // アップロードのベースディレクトリにスクリプト実行禁止の .htaccess を同梱する（RCE対策・Apache用）。
+            // ベースに1つ置けば配下のサブディレクトリへも再帰適用される。
+            if (is_dir(WWW_ROOT . 'files')) {
+                $this->putDenyExecutionHtaccess(WWW_ROOT . 'files' . DS);
+            }
         }
         $this->existsCheckDirs = $this->getExistsCheckDirs();
         $this->Session = new Session();
@@ -332,6 +355,10 @@ class BcFileUploader
      */
     public function isUploadable($fileType, $contentType, $file)
     {
+        // 実行系拡張子は設定に関わらず無条件で拒否する（Webシェル設置によるRCE対策）
+        if (!empty($file['name']) && $this->isDeniedFile($file['name'])) {
+            return false;
+        }
         if (!empty($file) && is_array($file) && (int)@$file['error'] === 0 && $file['name'] && $file['tmp_name']) {
             // タイプ別除外
             $targets = [];
@@ -351,6 +378,57 @@ class BcFileUploader
             $uploadable = false;
         }
         return $uploadable;
+    }
+
+    /**
+     * 実行され得る拒否拡張子を含むファイル名か判定する
+     *
+     * 多重拡張子（例: shell.php.jpg）でも検出できるよう、ファイル名のドット区切り全要素を検査する。
+     *
+     * @param string $fileName
+     * @return bool
+     * @noTodo
+     */
+    public function isDeniedFile($fileName)
+    {
+        if (empty($fileName)) return false;
+        $parts = explode('.', strtolower(basename($fileName)));
+        array_shift($parts); // ファイル名本体を除き、拡張子要素のみを検査対象にする
+        foreach($parts as $part) {
+            if (in_array($part, $this->deniedExts, true)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * アップロードディレクトリにスクリプト実行を禁止する .htaccess を設置する
+     *
+     * webroot/files 配下は .gitignore 対象でリポジトリに同梱できないため、
+     * ディレクトリ作成時にフレームクワークが生成する。Apache でのみ有効（nginx 等では無視され実害なし）。
+     * PHP 側の拡張子ハードブロックと併用する多層防御。
+     *
+     * @param string $dir
+     * @return void
+     * @noTodo
+     */
+    public function putDenyExecutionHtaccess($dir)
+    {
+        if (empty($dir) || !is_dir($dir)) return;
+        $htaccess = rtrim($dir, '/' . DS) . DS . '.htaccess';
+        if (file_exists($htaccess)) return;
+        $content = '# baserCMS: アップロードディレクトリでのスクリプト実行を禁止する（RCE対策）' . "\n"
+            . '<FilesMatch "(?i)\.(php|php3|php4|php5|php7|php8|phtml|phps|pht|phar|cgi|pl|py|asp|aspx|jsp)$">' . "\n"
+            . '    <IfModule mod_authz_core.c>' . "\n"
+            . '        Require all denied' . "\n"
+            . '    </IfModule>' . "\n"
+            . '    <IfModule !mod_authz_core.c>' . "\n"
+            . '        Order allow,deny' . "\n"
+            . '        Deny from all' . "\n"
+            . '    </IfModule>' . "\n"
+            . '</FilesMatch>' . "\n";
+        @file_put_contents($htaccess, $content);
     }
 
     /**
@@ -442,6 +520,12 @@ class BcFileUploader
 
         // .htaccessは保存させない
         if (preg_match('/\.htaccess$/is', $fileName)) {
+            return false;
+        }
+
+        // 実行系拡張子は設定に関わらず無条件で拒否する（Webシェル設置によるRCE対策）。
+        // 元のアップロード名・保存名の双方を検査し、多重拡張子も弾く。
+        if ($this->isDeniedFile($file['name'] ?? '') || $this->isDeniedFile($fileName)) {
             return false;
         }
 
@@ -1256,6 +1340,10 @@ class BcFileUploader
             } else {
                 return false;
             }
+        }
+        // 実行系拡張子は設定に関わらず無条件で拒否する（Webシェル設置によるRCE対策）
+        if ($this->isDeniedFile($file['name'] ?? '')) {
+            return false;
         }
         $fileName = $this->getSaveTmpFileName($setting, $file, $entity);
         $this->rotateImage($file['tmp_name']);
