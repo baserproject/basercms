@@ -407,11 +407,11 @@ class UsersController extends BcAdminAppController
                 ]);
                 $service->reLogin($this->request, $this->response);
                 $this->BcMessage->setSuccess(__d('baser_core', 'パスワードを更新しました。'));
-                if ($this->request->getQuery('redirect')) {
-                    $parsed = parse_url($this->request->getQuery('redirect'));
-                    if (empty($parsed['host']) && empty($parsed['scheme'])) {
-                        return $this->redirect(trim(BcUtil::siteUrl(), '/') . $this->request->getQuery('redirect'));
-                    }
+                $redirect = (string)$this->request->getQuery('redirect');
+                // オープンリダイレクト対策: 同一サイト内の絶対パス（単一の / で始まる）のみ許可する。
+                // protocol-relative（//, /\）・バックスラッシュ・スキーム付きの値は拒否する。
+                if ($redirect !== '' && strpos($redirect, '\\') === false && preg_match('#^/(?!/)#', $redirect)) {
+                    return $this->redirect($redirect);
                 }
                 return $this->redirect(['action' => 'edit_password']);
             } catch (PersistenceFailedException $e) {
