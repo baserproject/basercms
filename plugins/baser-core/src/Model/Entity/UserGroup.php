@@ -42,6 +42,8 @@ class UserGroup extends Entity
      */
     protected array $_accessible = [
         '*' => true,
+        // 主キーはリクエスト値で書き換えさせない（マスアサインメント対策）
+        'id' => false,
     ];
 
     /**

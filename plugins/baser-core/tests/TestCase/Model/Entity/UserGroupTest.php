@@ -22,6 +22,16 @@ class UserGroupTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * id はリクエスト値で書き換えできないこと（マスアサインメント対策）
+     */
+    public function testIdIsNotAccessible()
+    {
+        $userGroup = $this->UserGroup->newEntity(['id' => 999, 'name' => 'test', 'title' => 'テスト']);
+        $this->assertNull($userGroup->id);
+        $this->assertEquals('test', $userGroup->name);
+    }
+
     public function testIsAdmin()
     {
         $this->loadFixtureScenario(InitAppScenario::class);
