@@ -2107,6 +2107,22 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
+     * __call が __call 委譲メソッド（TextHelper::truncate → Cake\Utility\Text::truncate）も呼び出せること
+     *
+     * CakePHP のアップデートで TextHelper::truncate が実メソッドからマジックメソッドに
+     * なったため method_exists では判定できなくなった回帰の検証
+     * @return void
+     */
+    public function testCallTruncateText()
+    {
+        // 有効プラグインが無いと _initPluginBasers が早期 return し BaserCore baser が登録されないため persist する
+        PluginFactory::make(['name' => 'BcBlog'])->persist();
+        $this->BcBaser = new BcBaserHelper(new View($this->getRequest()));
+        $result = $this->BcBaser->truncateText('1234567890', 5, ['ellipsis' => '...', 'exact' => true]);
+        $this->assertEquals('12...', $result);
+    }
+
+    /**
      * test __construct
      * @return void
      */
