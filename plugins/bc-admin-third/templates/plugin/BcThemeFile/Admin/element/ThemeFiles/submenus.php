@@ -60,9 +60,9 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
       <?php foreach($types as $key => $type): ?>
         <li class="bca-main__submenu-list-item">
           <?php if ($theme !== $pluginVal['name']): ?>
-            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $pluginVal['name'], $key]) ?>
+            <?php $this->BcBaser->link(__d('baser_core', '{0} 一覧', $type), ['action' => 'index', $theme, $pluginVal['name'], $key]) ?>
           <?php else: ?>
-            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $key]) ?>
+            <?php $this->BcBaser->link(__d('baser_core', '{0} 一覧', $type), ['action' => 'index', $theme, $key]) ?>
           <?php endif ?>
         </li>
       <?php endforeach ?>

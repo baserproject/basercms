@@ -31,11 +31,11 @@ $title = '';
 if($blogArchiveType === 'category') $title = $blogCategory->title;
 if($blogArchiveType === 'author') $title = $author->getDisplayName();
 if($blogArchiveType === 'tag') $title = rawurldecode($blogTag->name);
-if($blogArchiveType === 'daily') $title = sprintf(__d('baser_core', '%s年%s月%s日'), $year, $month, $day);
-if($blogArchiveType === 'monthly') $title = sprintf(__d('baser_core', '%s年%s月'), $year, $month);
-if($blogArchiveType === 'yearly') $title = sprintf(__d('baser_core', '%s年'), $year);
+if($blogArchiveType === 'daily') $title = __d('baser_core', '{0}年{1}月{2}日', $year, $month, $day);
+if($blogArchiveType === 'monthly') $title = __d('baser_core', '{0}年{1}月', $year, $month);
+if($blogArchiveType === 'yearly') $title = __d('baser_core', '{0}年', $year);
 $this->BcBaser->setTitle($title);
-$this->BcBaser->setDescription($this->BcBaser->getBlogTitle() . '｜' . $this->BcBaser->getContentsTitle() . __d('baser_core', 'のアーカイブ一覧です。'));
+$this->BcBaser->setDescription($this->BcBaser->getBlogTitle() . '｜' .  __d('baser_core', '{0} のアーカイブ一覧です。', $this->BcBaser->getContentsTitle()));
 $this->BcBaser->setTableToUpload('BcBlog.BlogPosts');
 ?>
 

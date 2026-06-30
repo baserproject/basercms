@@ -158,7 +158,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
         $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => 'test', 'user_id' => 1, 'posted' => '2022-12-01 00:00:00']);
         $this->assertResponseCode(302);
-        $this->assertFlashMessage('記事「test」を追加しました。');
+        $this->assertFlashMessage('ブログ記事「test」を追加しました。');
         $this->assertRedirect(['action' => 'edit/1/1']);
 
         //失敗テスト
@@ -199,7 +199,7 @@ class BlogPostsControllerTest extends BcTestCase
         // ステータスを確認
         $this->assertResponseCode(302);
         // メッセージを確認
-        $this->assertFlashMessage('記事「blog post edit」を更新しました。');
+        $this->assertFlashMessage('ブログ記事「blog post edit」を更新しました。');
         // リダイレクトを確認
         $this->assertRedirect([
             'plugin' => 'BcBlog',

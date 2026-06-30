@@ -894,7 +894,7 @@ class ContentsService implements ContentsServiceInterface
         if ($newTitle) {
             $content->title = $newTitle;
         } else {
-            $content->title = sprintf(__d('baser_core', '%s のコピー'), $content->title);
+            $content->title = __d('baser_core', '{0} のコピー', $content->title);
         }
         $content->self_publish_begin = null;
         $content->self_publish_end = null;

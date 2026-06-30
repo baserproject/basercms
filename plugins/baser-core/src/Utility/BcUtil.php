@@ -2282,8 +2282,8 @@ class BcUtil
         ?string $note = null
     ): string
     {
-        $message = sprintf(__d('baser_core', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
-        if ($remove) $message .= sprintf(__d('baser_core', 'バージョン %s で削除される予定です。'), $remove);
+        $message = __d('baser_core', '{0} は、バージョン {1} より非推奨となりました。', $target, $since);
+        if ($remove) $message .= __d('baser_core', 'バージョン {0} で削除される予定です。', $remove);
         if ($note) $message .= $note;
         return $message;
     }

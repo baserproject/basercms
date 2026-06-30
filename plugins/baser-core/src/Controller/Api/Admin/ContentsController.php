@@ -43,7 +43,7 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -71,7 +71,7 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -167,7 +167,7 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -206,7 +206,7 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -236,7 +236,7 @@ class ContentsController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -273,7 +273,7 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -319,7 +319,7 @@ class ContentsController extends BcAdminApiController
                 $message = __d('baser_core', "入力エラーです。内容を修正してください。");
                 $this->setResponse($this->response->withStatus(400));
             } catch (\Throwable $e) {
-                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
                 $this->setResponse($this->response->withStatus(500));
             }
         } else {
@@ -418,7 +418,7 @@ class ContentsController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -452,7 +452,7 @@ class ContentsController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -501,8 +501,7 @@ class ContentsController extends BcAdminApiController
             $beforeContent = $service->get($this->request->getData('origin.id'));
             $beforeUrl = $beforeContent->url;
             $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
-            $message = sprintf(
-                __d('baser_core', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+            $message = __d('baser_core', "コンテンツ「{0}」の配置を移動しました。\n{1} > {2}",
                 $content->title,
                 rawurldecode($beforeUrl),
                 rawurldecode($content->url)
@@ -514,7 +513,7 @@ class ContentsController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -556,7 +555,7 @@ class ContentsController extends BcAdminApiController
             $names = $service->getTitlesById($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser_core', 'コンテンツ 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                __d('baser_core', 'コンテンツ 「{0}」 を {1} しました。', implode('」、「', $names), $allowMethod[$method]),
                 true,
                 false
             );
@@ -566,7 +565,7 @@ class ContentsController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 

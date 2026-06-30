@@ -110,7 +110,7 @@ class BcCcRelatedHelper extends Helper
         $options = [
             ':value' => 'entity.default_value'
         ];
-        return $this->control($link, $options) . '<br>※ 関連データはリアルタイムでのプレビューは未対応です。保存してから確認してください。';
+        return $this->control($link, $options) . '<br>' . __d('baser_core', '※ 関連データはリアルタイムでのプレビューは未対応です。保存してから確認してください。');
     }
 
     /**

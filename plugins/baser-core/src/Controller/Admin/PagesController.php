@@ -82,7 +82,7 @@ class PagesController extends BcAdminAppController
                 // site を取得するため page を再取得
                 $page = $service->get($page->id);
                 $url = $contentsService->getUrl($page->content->url, true, $page->content->site->useSubDomain);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', "固定ページ「%s」を登録しました。\n%s"), $page->content->title, rawurldecode($url)));
+                $this->BcMessage->setSuccess(__d('baser_core', "固定ページ「{0}」を登録しました。\n{1}", $page->content->title, rawurldecode($url)));
                 return $this->redirect(['action' => 'edit', $page->id]);
             } catch (PersistenceFailedException $e) {
                 $page = $e->getEntity();
@@ -91,7 +91,7 @@ class PagesController extends BcAdminAppController
                 );
             }  catch (\Exception $e) {
                 $this->BcMessage->setError(
-                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。') . $e->getMessage()
                 );
             }
 
@@ -134,7 +134,7 @@ class PagesController extends BcAdminAppController
                 ]);
 
                 $url = $contentsService->getUrl($page->content->url, true, $page->content->site->useSubDomain);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
+                $this->BcMessage->setSuccess(__d('baser_core', "固定ページ「{0}」を更新しました。\n{1}", $page->content->title, rawurldecode($url)));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $page = $e->getEntity();
@@ -143,7 +143,7 @@ class PagesController extends BcAdminAppController
                 );
             }  catch (\Exception $e) {
                 $this->BcMessage->setError(
-                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。') . $e->getMessage()
                 );
             }
         }

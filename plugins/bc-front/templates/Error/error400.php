@@ -62,9 +62,6 @@ $errorDescription = implode("\n", $title);
   <?php endif ?>
   <p class="bs-error-body__message">
     <strong><?php echo __d('baser_core', 'エラー'); ?>: </strong>
-    <?php printf(
-      __d('baser_core', 'アドレス %s に送信されたリクエストは無効です。'),
-      "<strong>'{$url}'</strong>"
-    ); ?>
+    <?php echo __d('baser_core', 'アドレス {0} に送信されたリクエストは無効です。', "<strong>'{$url}'</strong>"); ?>
   </p>
 </div>

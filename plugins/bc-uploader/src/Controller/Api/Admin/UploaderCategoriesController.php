@@ -71,7 +71,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -108,7 +108,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -146,7 +146,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -180,7 +180,7 @@ class UploaderCategoriesController extends BcAdminApiController
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -222,7 +222,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $names = $service->getTitlesById($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser_core', 'アップロードカテゴリ「%s」を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                __d('baser_core', 'アップロードカテゴリ「{0}」を {1} しました。', implode(__d('baser_core', '」、「'), $names), $allowMethod[$method]),
                 true,
                 false
             );
@@ -231,7 +231,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set(['message' => $message]);

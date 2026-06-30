@@ -57,7 +57,7 @@ class MailMessagesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -95,7 +95,7 @@ class MailMessagesController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -148,7 +148,7 @@ class MailMessagesController extends BcAdminApiController
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $mailMessage = null;
         }
         $this->set([
@@ -205,7 +205,7 @@ class MailMessagesController extends BcAdminApiController
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
             'message' => $message,
@@ -255,7 +255,7 @@ class MailMessagesController extends BcAdminApiController
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
             'message' => $message,
@@ -296,14 +296,14 @@ class MailMessagesController extends BcAdminApiController
             $service->setup($mailContentId);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser_core', 'メールメッセージ No %s を %s しました。'), implode(', ', $targets), $allowMethod[$method]),
+                __d('baser_core', 'メールメッセージ No {0} を {1} しました。', implode(', ', $targets), $allowMethod[$method]),
                 true,
                 false
             );
             $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set(['message' => $message, 'errors' => $errors]);
         $this->viewBuilder()->setOption('serialize', ['message', 'errors']);

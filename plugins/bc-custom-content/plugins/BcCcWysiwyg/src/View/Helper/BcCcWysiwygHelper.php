@@ -71,7 +71,7 @@ class BcCcWysiwygHelper extends Helper
         $options = [
             'value' => $link->custom_field->default_value,
         ];
-        return $this->control($link, $options) . '<br>※ Wysiwyg エディタはリアルタイムでのプレビューは未対応です。保存してから確認してください。';
+        return $this->control($link, $options) . '<br>' . __d('baser_core', '※ Wysiwyg エディタはリアルタイムでのプレビューは未対応です。保存してから確認してください。');
     }
 
     /**

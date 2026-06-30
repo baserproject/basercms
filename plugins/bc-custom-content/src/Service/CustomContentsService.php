@@ -179,7 +179,7 @@ class CustomContentsService implements CustomContentsServiceInterface
     public function update(EntityInterface $entity, array $postData, $options = []): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+            throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
         }
         if (!empty($postData['custom_table_id'])) {
             $options['validate'] = 'withTable';

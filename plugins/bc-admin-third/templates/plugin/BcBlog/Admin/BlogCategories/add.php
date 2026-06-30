@@ -17,10 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(
-  __d('baser_core', '%s｜新規カテゴリ登録'),
-  $blogContent->content->title
-));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規カテゴリ登録', $blogContent->content->title));
 $this->BcAdmin->setHelp('blog_categories_form');
 $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 ?>
