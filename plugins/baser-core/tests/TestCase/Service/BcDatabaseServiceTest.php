@@ -681,6 +681,55 @@ class UserActionsSchema extends BcSchema
     }
 
     /**
+     * Test loadSchema with fully qualified BcSchema
+     *
+     * BcDbMigrator 等が `extends \BaserCore\Database\Schema\BcSchema`（完全修飾名・use 文なし）で
+     * スキーマファイルを生成するケースでも、isValidSchemaFile が受理して読み込めることを検証する。
+     */
+    public function test_loadSchema_withFullyQualifiedBcSchema()
+    {
+        $path = TMP . 'schema' . DS;
+        $fileName = 'UserActionsFqnSchema.php';
+        $schemaFile = new BcFile($path . $fileName, true);
+        $table = 'user_actions_fqn';
+        // 完全修飾名（use 文なし）でスキーマファイルを生成
+        $schemaFile->write("<?php
+class UserActionsFqnSchema extends \\BaserCore\\Database\\Schema\\BcSchema
+{
+    public \$table = '$table';
+    public \$fields = [
+        'id' => ['type' => 'integer', 'autoIncrement' => true],
+        'contents' => ['type' => 'text', 'length' => 100],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
+        '_options' => [
+            'engine' => 'InnoDB',
+            'collation' => 'utf8_general_ci'
+        ]
+    ];
+}");
+        // Create処理実行（例外が投げられなければ FQN が受理されている）
+        $this->BcDatabaseService->loadSchema(['type' => 'create', 'path' => $path, 'file' => $fileName]);
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertContains($table, $tableList);
+        // Drop処理実行
+        $this->BcDatabaseService->loadSchema(['type' => 'drop', 'path' => $path, 'file' => $fileName]);
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertNotContains($table, $tableList);
+        // スキーマファイルを削除
+        $schemaFile->delete();
+    }
+
+    /**
      * Test getDatasourceName
      * @param $value
      * @param $expected

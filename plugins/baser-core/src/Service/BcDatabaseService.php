@@ -1186,7 +1186,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
             public function enterNode(Node $node) {
                 if ($node instanceof Node\Stmt\Class_) {
-                    if ($node->extends && $node->extends->toString() === 'BcSchema') {
+                    // 短縮名 'BcSchema' に加え、完全修飾名 'BaserCore\Database\Schema\BcSchema' も受理する
+                    // （BcDbMigrator 等が FQN で extends を生成するケースに対応。判定対象は同一クラスであり検証意図は変わらない）
+                    $extendsName = $node->extends ? ltrim($node->extends->toString(), '\\') : null;
+                    if ($extendsName === 'BcSchema' || $extendsName === BcSchema::class) {
                         $this->result['extendsBcSchema'] = true;
                         foreach ($node->getMethods() as $method) {
                             $methodName = $method->name->toString();
