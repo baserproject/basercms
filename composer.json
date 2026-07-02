@@ -13,7 +13,7 @@
         "ext-sqlite3": "*",
         "ext-zip": "*",
         "cakephp/authentication": "^3.0",
-        "cakephp/cakephp": "5.0.*",
+        "cakephp/cakephp": "5.1.*",
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
         "doctrine/annotations": "^1.12",

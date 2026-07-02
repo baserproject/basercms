@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a0193479f52dbb444d1f5ffb637d64f",
+    "content-hash": "84a944340270a87220831d40105c7370",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -76,31 +76,31 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "5.0.11",
+            "version": "5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "19af8494b1f2fdef1ab405385a6fed0db7699ef7"
+                "reference": "3b7d95dc6c5d34a8d9f080cc592bee03da316596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/19af8494b1f2fdef1ab405385a6fed0db7699ef7",
-                "reference": "19af8494b1f2fdef1ab405385a6fed0db7699ef7",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/3b7d95dc6c5d34a8d9f080cc592bee03da316596",
+                "reference": "3b7d95dc6c5d34a8d9f080cc592bee03da316596",
                 "shasum": ""
             },
             "require": {
-                "cakephp/chronos": "^3.0.2",
-                "composer/ca-bundle": "^1.2",
+                "cakephp/chronos": "^3.1",
+                "composer/ca-bundle": "^1.5",
                 "ext-intl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "laminas/laminas-diactoros": "^3.0",
+                "laminas/laminas-diactoros": "^3.3",
                 "laminas/laminas-httphandlerrunner": "^2.6",
                 "league/container": "^4.2",
                 "php": ">=8.1",
                 "psr/container": "^1.1 || ^2.0",
                 "psr/http-client": "^1.0.2",
-                "psr/http-factory": "^1.0.2",
+                "psr/http-factory": "^1.1",
                 "psr/http-message": "^1.1 || ^2.0",
                 "psr/http-server-handler": "^1.0.2",
                 "psr/http-server-middleware": "^1.0.2",
@@ -139,14 +139,13 @@
                 "mockery/mockery": "^1.6",
                 "paragonie/csp-builder": "^2.3 || ^3.0",
                 "phpstan/extension-installer": "^1.3",
-                "phpstan/phpstan": "1.12.3",
-                "phpunit/phpunit": "^10.1.0 <=10.5.3",
+                "phpstan/phpstan": "1.12.7",
+                "phpunit/phpunit": "^10.5.5 || ^11.1.3",
                 "symplify/phpstan-rules": "^12.4"
             },
             "suggest": {
                 "ext-curl": "To enable more efficient network calls in Http\\Client.",
                 "ext-openssl": "To use Security::encrypt() or have secure CSRF token generation.",
-                "lib-ICU": "To use locale-aware features in the I18n and Database packages",
                 "paragonie/csp-builder": "CSP builder, to use the CSP Middleware"
             },
             "type": "library",
@@ -192,7 +191,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2024-09-13T01:59:54+00:00"
+            "time": "2026-05-23T16:51:40+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -6763,7 +6762,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -6778,5 +6777,5 @@
     "platform-dev": {
         "ext-xdebug": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.9.0"
 }
