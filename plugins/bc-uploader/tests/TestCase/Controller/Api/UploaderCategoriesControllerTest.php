@@ -116,17 +116,18 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals('カテゴリ名を入力してください。', $result->errors->name->_empty);
 
-        //500エラーを確認
+        //400エラーを確認
         $data = [
             'name' => 'name...................................................'
         ];
         //APIを呼ぶ
         $this->post("/baser/api/admin/bc-uploader/uploader_categories/add.json?token=" . $this->accessToken, $data);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("データベース処理中にエラーが発生しました。SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'name' at row 1", $result->message);
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('カテゴリ名は50文字以内で入力してください。', $result->errors->name->maxLength);
     }
 
     /**
@@ -183,17 +184,28 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('アップロードカテゴリ「blog_copy」をコピーしました。', $result->message);
+        $this->assertEquals(__d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', 'blog_copy'), $result->message);
         $this->assertEquals('blog_copy', $result->uploaderCategory->name);
 
         //無効なアップロードカテゴリIDを指定した場合、
         //APIを呼ぶ
         $this->post("/baser/api/admin/bc-uploader/uploader_categories/copy/11.json?token=" . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。__clone method called on non-object', $result->message);
+        $this->assertEquals(__d('baser_core', 'データが見つかりません。'), $result->message);
+
+        // 48文字名をコピーすると _copy 付与で50文字超過になるため入力エラーになる
+        $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
+        $uploaderCategory = $uploaderCategories->get(1);
+        $uploaderCategory->name = str_repeat('a', 48);
+        $uploaderCategories->saveOrFail($uploaderCategory);
+        $this->post("/baser/api/admin/bc-uploader/uploader_categories/copy/1.json?token=" . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(__d('baser_core', '入力エラーです。内容を修正してください。'), $result->message);
+        $this->assertEquals(__d('baser_core', 'カテゴリ名は50文字以内で入力してください。'), $result->errors->name->maxLength);
     }
 
     /**

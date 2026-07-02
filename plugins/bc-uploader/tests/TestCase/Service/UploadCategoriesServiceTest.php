@@ -198,6 +198,22 @@ class UploadCategoriesServiceTest extends BcTestCase
     }
 
     /**
+     * test copy max length error
+     */
+    public function test_copy_max_length_error()
+    {
+        UploaderCategoryFactory::make(['id' => 1, 'name' => str_repeat('a', 48)])->persist();
+
+        try {
+            $this->UploaderCategoriesService->copy(1);
+            $this->fail('PersistenceFailedException が発生しませんでした。');
+        } catch (PersistenceFailedException $e) {
+            $this->assertArrayHasKey('name', $e->getEntity()->getErrors());
+            $this->assertArrayHasKey('maxLength', $e->getEntity()->getErrors()['name']);
+        }
+    }
+
+    /**
      * test batch
      */
     public function test_batch()
