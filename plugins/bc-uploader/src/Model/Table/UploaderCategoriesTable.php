@@ -68,6 +68,7 @@ class UploaderCategoriesTable extends AppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
+            ->maxLength('name', 50, __d('baser_core', 'カテゴリ名は50文字以内で入力してください。'))
             ->add('name', [
                 'notBlankOnlyString' => [
                     'rule' => ['notBlankOnlyString'],
@@ -89,9 +90,17 @@ class UploaderCategoriesTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function copy($id = null, $entity = [])
+    public function copy($id = null, $entity = null)
     {
-        if ($id) $entity = $this->find()->where(['UploaderCategories.id' => $id])->first();
+        if ($id) {
+            $entity = $this->find()->where(['UploaderCategories.id' => $id])->first();
+            if (!$entity) {
+                return false;
+            }
+        }
+        if (!$entity) {
+            return false;
+        }
         $oldEntity = clone $entity;
 
         // EVENT UploaderCategories.beforeCopy
@@ -121,10 +130,6 @@ class UploaderCategoriesTable extends AppTable
 
             return $entity;
         } catch (PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            if($entity->getError('name')) {
-                return $this->copy(null, $entity);
-            }
             throw $e;
         } catch (\Throwable $e) {
             throw $e;

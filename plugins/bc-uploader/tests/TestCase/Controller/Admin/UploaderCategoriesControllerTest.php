@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -240,6 +241,23 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //異常系実行
         $this->post('/baser/admin/bc-uploader/uploader_categories/copy/10');
         $this->assertResponseCode(302);
-        $this->assertFlashMessage('データベース処理中にエラーが発生しました。__clone method called on non-object');
+        $this->assertFlashMessage(__d('baser_core', 'データが見つかりません。'));
+    }
+
+    /**
+     * test copy max length error
+     */
+    public function test_copy_max_length_error()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        UploaderCategoryFactory::make(['id' => 1, 'name' => str_repeat('a', 48)])->persist();
+
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage(__d('baser_core', 'カテゴリ名は50文字以内で入力してください。'));
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
+        $this->assertEquals(1, TableRegistry::getTableLocator()->get('BcUploader.UploaderCategories')->find()->count());
     }
 }
