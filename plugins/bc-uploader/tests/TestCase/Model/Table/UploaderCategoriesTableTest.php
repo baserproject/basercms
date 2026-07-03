@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcUploader\Model\Table\UploaderCategoriesTable;
 use BcUploader\Test\Factory\UploaderCategoryFactory;
 use Cake\Event\Event;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -125,5 +126,21 @@ class UploaderCategoriesTableTest extends BcTestCase
         $rs = $this->UploaderCategoriesTable->copy(1);
         //イベントに入るかどうか確認
         $this->assertEquals('AfterCopy', $rs->name);
+    }
+
+    /**
+     * test copy max length error
+     */
+    public function testCopyMaxLengthError()
+    {
+        UploaderCategoryFactory::make(['id' => 1, 'name' => str_repeat('a', 48)])->persist();
+
+        try {
+            $this->UploaderCategoriesTable->copy(1);
+            $this->fail('PersistenceFailedException が発生しませんでした。');
+        } catch (PersistenceFailedException $e) {
+            $this->assertArrayHasKey('name', $e->getEntity()->getErrors());
+            $this->assertArrayHasKey('maxLength', $e->getEntity()->getErrors()['name']);
+        }
     }
 }
