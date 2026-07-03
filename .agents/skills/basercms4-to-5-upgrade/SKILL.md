@@ -16,7 +16,7 @@ license: MIT
 2.  **クラスの置換**: 廃止されたクラスは、代替クラスまたはPHP標準クラスに置き換えてください。
 3.  **アクセサの利用**: プロパティへの直接アクセスは避け、Getter/Setter を使用してください。
 4. アップグレードの詳細情報については https://baserproject.github.io/5/ver5_migration を参考にする。
-5. **【最重要・横断対応の原則】1画面の修正で見つけた不具合のうち、同じ原因がプラグイン/サイト全体に散在するものは、その場で“横断的に”一括対応する**。1箇所だけ直して次の画面で同じエラーに当たる、を繰り返さない。手順: ①エラーを直したら **同じパターンを `grep -rn` で全件洗い出す**（例: `$this->Form->input(`、`'multiple' => 'checkbox'`、単数 `get('Cpm.Cpm...')`、`searches/`、`Time->format($x)` 第2引数なし 等）→ ②機械的に一意な変換は `perl -pi` で一括適用 → ③**変更ファイルを全て `php -l` で検証** → ④非自明な箇所だけ個別対応。横断一括できる代表例は **basercms-plugin-4-to-5-upgrade スキルの C-0（機械的に一括変換できるパターン）** にカタログ化してある（見つけ次第追記する）。新しい横断パターンを見つけたらまず C-0 に追加してから一括実行する。プラグイン内部コード（Controller/Table/Entity/View/Helper/フォーム/Vue・JS）の具体的な書き換えは同スキルを参照。
+5. **【最重要・横断対応の原則】1画面の修正で見つけた不具合のうち、同じ原因がプラグイン/サイト全体に散在するものは、その場で“横断的に”一括対応する**。1箇所だけ直して次の画面で同じエラーに当たる、を繰り返さない。手順: ①エラーを直したら **同じパターンを `grep -rn` で全件洗い出す**（例: `$this->Form->input(`、`'multiple' => 'checkbox'`、単数 `get('Sample.Sample...')`、`searches/`、`Time->format($x)` 第2引数なし 等）→ ②機械的に一意な変換は `perl -pi` で一括適用 → ③**変更ファイルを全て `php -l` で検証** → ④非自明な箇所だけ個別対応。横断一括できる代表例は **basercms-plugin-4-to-5-upgrade スキルの C-0（機械的に一括変換できるパターン）** にカタログ化してある（見つけ次第追記する）。新しい横断パターンを見つけたらまず C-0 に追加してから一括実行する。プラグイン内部コード（Controller/Table/Entity/View/Helper/フォーム/Vue・JS）の具体的な書き換えは同スキルを参照。
 
 ## 標準移行フロー（この順で進める・正本）
 
@@ -69,7 +69,7 @@ license: MIT
 3.  **Implementation Plan Artifact**: 実装計画の詳細、ゴール、変更内容、検証計画。
 4.  **Walkthrough Artifact**: 作業の振り返り、検証結果の報告。
 
-**[重要・URLはリンク付きで提示]** ユーザーに**ブラウザでの動作確認を依頼する場合**（管理ログインURL・データメンテナンス画面・フロント確認 等）は、URL を**必ず Markdown のリンク付き**（`[https://...](https://...)`）で表示する。プレーンテキストのURLで出さない（ユーザーがクリックしてすぐ開けるようにするため）。例: `👉 [https://catchup-official.localhost/v5/baser/admin/baser-core/users/login](https://catchup-official.localhost/v5/baser/admin/baser-core/users/login)`。
+**[重要・URLはリンク付きで提示]** ユーザーに**ブラウザでの動作確認を依頼する場合**（管理ログインURL・データメンテナンス画面・フロント確認 等）は、URL を**必ず Markdown のリンク付き**（`[https://...](https://...)`）で表示する。プレーンテキストのURLで出さない（ユーザーがクリックしてすぐ開けるようにするため）。例: `👉 [https://localhost/v5/baser/admin/baser-core/users/login](https://localhost/v5/baser/admin/baser-core/users/login)`。
 
 
 ## baserCMSの最新版の取得
@@ -97,7 +97,7 @@ docker exec -w /var/www/html <container> bash -lc \
 - **パッケージ版の `vendor/` は空（`.gitkeep` のみ）なので `composer install` は必須**。展開直後に `test -d vendor` が真でも中身は空のことがある（`.gitkeep` だけでディレクトリが存在するため）。`vendor/autoload.php` の有無で判定し、無ければ `composer install` する。
 
 - **4系プラグインが使っていたサードパーティ製パッケージは v5 に明示的に `composer require` する**: 4系 `composer.json` 由来のライブラリ（例 `phpoffice/phpspreadsheet`）は v5 の `composer.json`/vendor に入っていないことがあり、`Class "PhpOffice\PhpSpreadsheet\Reader\Xlsx" not found` 等になる。4系の `composer.json` を参照し、PHP バージョン（v5 は 8.1+）に合うバージョンで導入する（例 `docker exec -w <v5> <container> composer require "phpoffice/phpspreadsheet:^1.29"` → 1.30.x が入る）。実行後 `php -r 'class_exists(...)'` で解決を確認。
-- **Excel/PDF 等の雛形アセット（.xlsx 等）は `templates/Admin/Excel/...` に移行され、4系の `View/Excel/admin/...` とはパス構成が違う**: 生成系コンポーネント（CpmExcel 等）が `Plugin::templatePath('Cpm') . 'Excel' . DS . 'admin' . DS . ...`（4系配置）を組み立てていると `File "..." does not exist`。`templatePath()` は**末尾スラッシュ付き**なので `. DS .` を足すと `//` になる点も注意。5系の実配置 `Plugin::templatePath('Cpm') . 'Admin' . DS . 'Excel' . DS . <controller> . DS . <file>.xlsx` に直す（実ファイル位置を `find <plugin> -iname "*.xlsx"` で確認）。
+- **Excel/PDF 等の雛形アセット（.xlsx 等）は `templates/Admin/Excel/...` に移行され、4系の `View/Excel/admin/...` とはパス構成が違う**: 生成系コンポーネント（SampleExcel 等）が `Plugin::templatePath('Sample') . 'Excel' . DS . 'admin' . DS . ...`（4系配置）を組み立てていると `File "..." does not exist`。`templatePath()` は**末尾スラッシュ付き**なので `. DS .` を足すと `//` になる点も注意。5系の実配置 `Plugin::templatePath('Sample') . 'Admin' . DS . 'Excel' . DS . <controller> . DS . <file>.xlsx` に直す（実ファイル位置を `find <plugin> -iname "*.xlsx"` で確認）。
 
 ## .env のコピー
 
@@ -397,7 +397,7 @@ UPDATE sites SET theme = '<CamelCaseTheme>' WHERE id = 1;
 
 ### G-2. baserCMS5 標準 `.gitignore` は `/plugins/*` を無視する → 自作プラグインを negation
 v5 同梱 `.gitignore` は `/plugins/*` を無視し、コア/サンプル（`!/plugins/baser-core`, `!/plugins/bc-*`, `!/plugins/BcColumn` 等）だけ negation で追跡する設計。**そのままでは変換済みの自作プラグインが追跡対象外**になる。
-- **対処**: 自作プラグインを `!/plugins/Cpm` のように negation 追記（`git check-ignore v5/plugins/Cpm` が空＝追跡可、で確認）。`/plugins/*/vendor`・`/plugins/*/node_modules`・`/plugins/*/composer.lock`・`schema-dump-default.lock` は無視のまま。
+- **対処**: 自作プラグインを `!/plugins/Sample` のように negation 追記（`git check-ignore v5/plugins/Sample` が空＝追跡可、で確認）。`/plugins/*/vendor`・`/plugins/*/node_modules`・`/plugins/*/composer.lock`・`schema-dump-default.lock` は無視のまま。
 
 ### G-3. アップロード実体 `webroot/files/*` は git に含めない
 v5 標準 `.gitignore` は `/webroot/files/*` を無視する（正しい既定）。4系から移行したアップロード（本プロジェクトは **1.7GB / 1万超ファイル**）を git に入れると repo 肥大化・clone 遅延・GitHub 制限で push 不可になり得る。**除外のまま**にし、実体は別途バックアップ／再コピーで運用する（`!/webroot/files/.gitkeep` で空ディレクトリ保持）。`git add -n v5 | wc -l` 等で巨大物の混入を事前確認するとよい。

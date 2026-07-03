@@ -109,7 +109,7 @@ $this->log(print_r($array, true), PROJECT_PLUGIN_ACTION);
 - **コンテキストレスフォームは `create(null, ...)`**。`create('Model')`（文字列）は `No context provider found for value of type string`。送信値の再表示が要るなら `create(null, ['valueSources' => ['data','context']])`（GET検索は `['query','context']`）。
 - **複数チェックボックスは options をループして `control('Model.field[]', ['type'=>'checkbox','value'=>$v,'checked'=>in_array((string)$v,$selected,true),'hiddenField'=>false])`**。`control(['multiple'=>'checkbox'])` や `multiCheckbox()` は崩れる。
 - **`control()` の `label` に HTML を入れるときは配列形式 `['text'=>'<span…>','escape'=>false]`**（文字列だとエスケープされ生表示）。
-- **`control()` が自動生成する id は小文字ハイフン**（`Text::slug`、例 `cpmcommit-period-year`）。JS から要素を掴むなら **フォーム委譲**（`$("#FormId").on('change','select,input',…)`）にするか、`control(..., ['id'=>'…'])` で明示する。`FormHelper::year()/month()/domId()` は廃止（`year`/`month` は `select`＋自前 options、`domId` は `Inflector::camelize(str_replace('.','_',$field))`）。
+- **`control()` が自動生成する id は小文字ハイフン**（`Text::slug`、例 `samplecommit-period-year`）。JS から要素を掴むなら **フォーム委譲**（`$("#FormId").on('change','select,input',…)`）にするか、`control(..., ['id'=>'…'])` で明示する。`FormHelper::year()/month()/domId()` は廃止（`year`/`month` は `select`＋自前 options、`domId` は `Inflector::camelize(str_replace('.','_',$field))`）。
 - **プラグイン提供のフォーム拡張フック**は `$this->BcFormTable->dispatchBefore()/dispatchAfter()`、`$this->BcAdminForm->dispatchAfterForm()`（旧 `$this->FormTable` / `$this->Form->dispatchAfterForm` の名前は不可）。
 
 ### 日付・数値・文字列ヘルパー
@@ -117,11 +117,11 @@ $this->log(print_r($array, true), PROJECT_PLUGIN_ACTION);
 - **`Number::format()` / `Text::truncate()` は第1引数 null 不可**（`string|int|float` / `string`）。nullable を渡す箇所は `format($x ?? 0, …)` / `truncate((string)$x, …)`。
 
 ### ORM・コントローラ
-- **テーブル取得**: コントローラは `$this->fetchTable('Plugin.Models')`、**Table / Lib / Helper / イベント内は `\Cake\ORM\TableRegistry::getTableLocator()->get('Plugin.Models')`**（`fetchTable` はコントローラ専用）。エイリアスは**複数形**（`Cpm.CpmProjects`）。`getControlSource('Plugin.Model.field')` も複数形でないと `MissingTableClassException`。
+- **テーブル取得**: コントローラは `$this->fetchTable('Plugin.Models')`、**Table / Lib / Helper / イベント内は `\Cake\ORM\TableRegistry::getTableLocator()->get('Plugin.Models')`**（`fetchTable` はコントローラ専用）。エイリアスは**複数形**（`Sample.SampleProjects`）。`getControlSource('Plugin.Model.field')` も複数形でないと `MissingTableClassException`。
 - **配列条件に IN は自動付与されない**: `where(['field'=>[1,2]])` は `= ?` になり `Cannot convert value Array`。複数値は `'field IN' => (array)$v`。**null 一致は `['field IS' => null]`**（`!=` は `IS NOT`）。空配列の `IN ()` は例外になるので空ならガード。
 - **belongsToMany（旧HABTM）の保存は `_ids`**: `patchEntity($e, $data + ['assoc'=>['_ids'=>[$id,…]]], ['associated'=>['Assoc']])`。表示は `contain(['Assoc'])`。
 - **name/value の KVS テーブル**は Table の `initialize()` に `$this->addBehavior('BaserCore.BcKeyValue')` を足すと `saveKeyValue([$key=>$value])` が使える。読み出しは `find()->where(['name'=>$key])->first()->value`。
-- **`getParam('controller')` は CamelCase**（`'CpmCosts'`）。テンプレ/分岐で `=== 'cpm_costs'`（スネーク）にすると常に false。リンク配列の `'controller'` も CamelCase（別プラグインは `'plugin'=>'Cards'`）。
+- **`getParam('controller')` は CamelCase**（`'SampleCosts'`）。テンプレ/分岐で `=== 'sample_costs'`（スネーク）にすると常に false。リンク配列の `'controller'` も CamelCase（別プラグインは `'plugin'=>'Crm'`）。
 - **テンプレートが参照する設定値**は `$this->set(\Cake\Core\Configure::read('Plugin'))` でまとめてビュー変数に供給する（個別 set 忘れで `Undefined variable`／`array_merge(... null)`）。
 
 ### View の罠
