@@ -818,7 +818,7 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
-        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $targetVersion)) {
+        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+|)$/', $targetVersion)) {
             throw new BcException(__d('baser_core', 'バージョン番号が不正です。'));
         }
 
