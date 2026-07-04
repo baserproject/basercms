@@ -94,7 +94,7 @@ class ThemesController extends BcAdminAppController
                 $this->getRequest()->getData('default_data_pattern')
             );
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser_core', '初期データの読み込みに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', '初期データの読み込みに失敗しました。') . $e->getMessage());
             return $this->redirect(['action' => 'index']);
         }
         if (!$result) {
@@ -125,7 +125,7 @@ class ThemesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', 'テーマ「{0}」のコピーに失敗しました。', $theme));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。') . $e->getMessage());
         }
         $this->redirect(['action' => 'index']);
     }
@@ -147,7 +147,7 @@ class ThemesController extends BcAdminAppController
             $service->delete($theme);
             $this->BcMessage->setInfo(__d('baser_core', 'テーマ「{0}」を削除しました。', $theme));
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。') . $e->getMessage());
         }
         $this->redirect(['action' => 'index']);
     }

@@ -33,10 +33,9 @@ use BaserCore\View\BcAdminAppView;
   <?php if ($isUpdatable): ?>
     <p><?php echo __d('baser_core', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。') ?></p>
     <p>
-      <?php echo sprintf(
-        __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'),
+      <?php echo __d('baser_core', 'baserCMSコアのアップデートがうまくいかない場合は、{0} にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。',
         $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank'])
-      ) ?>
+      )?>
     </p>
   <?php else: ?>
     <?php if ($dbVersion !== $programVersion): ?>

@@ -103,7 +103,7 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->delete("/baser/admin/bc-blog/blog_comments/delete/1/1");
         $this->assertResponseCode(302);
         $this->assertRedirect(['action' => 'index/1']);
-        $this->assertFlashMessage('ブログコメント No1 を削除しました。');
+        $this->assertFlashMessage('ブログコメント No.1 を削除しました。');
 
         $this->delete("/baser/admin/bc-blog/blog_comments/delete/1/2?blog_post_id=1");
         $this->assertRedirect(['action' => 'index/1?blog_post_id=1']);

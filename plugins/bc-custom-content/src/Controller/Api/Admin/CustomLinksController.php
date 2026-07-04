@@ -100,14 +100,14 @@ class CustomLinksController extends BcAdminApiController
         $customLink = $errors = null;
         try {
             $customLink = $service->create($this->request->getData());
-            $message = sprintf(__d('baser_core', 'カスタムリンク「%s」を追加しました。'), $customLink->title);
+            $message = __d('baser_core', 'カスタムリンク「{0}」を追加しました。', $customLink->title);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -146,7 +146,7 @@ class CustomLinksController extends BcAdminApiController
         } catch (\Throwable $e) {
             $entity = $e->getEntity();
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -185,7 +185,7 @@ class CustomLinksController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([

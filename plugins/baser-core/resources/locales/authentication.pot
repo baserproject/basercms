@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2026-06-30 19:18+0900\n"
+"POT-Creation-Date: 2026-06-26 19:17+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,7 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./plugins/baser-core/src/Model/Table/SoftDeleteTrait.php:65
-msgid "Configured field `{0}` is missing from the table `{1}`."
+#: ./vendor/cakephp/authentication/src/Authenticator/AuthenticationRequiredException.php:49
+#: ./vendor/cakephp/authentication/src/Authenticator/UnauthenticatedException.php:42
+msgid "Authentication is required to continue"
 msgstr ""
 

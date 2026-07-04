@@ -110,13 +110,13 @@ class PluginsController extends BcAdminAppController
         if($plugin->name === 'BaserCore') {
             $message = [];
             if (!$this->viewBuilder()->getVar('isWritableVendor')) {
-                $message[] = __d('baser_core', ROOT . DS . 'vendor に書き込み権限を設定してください。');
+                $message[] = __d('baser_core', '{0} に書き込み権限を設定してください。', ROOT . DS . 'vendor');
             }
             if (!$this->viewBuilder()->getVar('isWritableComposerJson')) {
-                $message[] = __d('baser_core', ROOT . DS . 'composer.json に書き込み権限を設定してください。');
+                $message[] = __d('baser_core', '{0} に書き込み権限を設定してください。', ROOT . DS . 'composer.json');
             }
             if (!$this->viewBuilder()->getVar('isWritableComposerLock')) {
-                $message[] = __d('baser_core', ROOT . DS . 'composer.lock に書き込み権限を設定してください。');
+                $message[] = __d('baser_core', '{0} に書き込み権限を設定してください。', ROOT . DS . 'composer.lock');
             }
             if ($this->viewBuilder()->getVar('isDevelopmentVersion')) {
                 $message[] = __d('baser_core', "現在開発版を利用しているため、アップデートは利用できません。\n（plugins フォルダに、baserCMSコアが存在する場合、開発版として認識されます。）");
@@ -219,7 +219,7 @@ class PluginsController extends BcAdminAppController
         if ($service->detach(rawurldecode($name))) {
             // アクセスルールを削除
             $permissionGroupService->deleteByPlugin($name);
-            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'プラグイン「%s」を無効にしました。'), rawurldecode($name)));
+            $this->BcMessage->setSuccess(__d('baser_core', 'プラグイン「{0}」を無効にしました。', rawurldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser_core', 'プラグインの無効化に失敗しました。'));
         }
@@ -247,9 +247,9 @@ class PluginsController extends BcAdminAppController
         }
         try {
             $service->uninstall(rawurldecode($name), $this->request->getData('connection') ?? 'default');
-            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'プラグイン「%s」を削除しました。'), $name));
+            $this->BcMessage->setSuccess(__d('baser_core', 'プラグイン「{0}」を削除しました。', $name));
         } catch (\Exception $e) {
-            $this->BcMessage->setError(__d('baser_core', 'プラグインの削除に失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'プラグインの削除に失敗しました。'). $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -278,7 +278,7 @@ class PluginsController extends BcAdminAppController
             try {
                 /* @var PluginsService $service */
                 $name = $service->add($this->getRequest()->getUploadedFiles());
-                $this->BcMessage->setInfo(sprintf(__d('baser_core', '新規プラグイン「%s」を追加しました。'), $name));
+                $this->BcMessage->setInfo(__d('baser_core', '新規プラグイン「{0}」を追加しました。', $name));
                 $this->redirect(['action' => 'index']);
             } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
@@ -327,7 +327,7 @@ class PluginsController extends BcAdminAppController
             $service->resetDb($this->request->getData('name'), $this->request->getData('connection') ?? 'default');
             $usersService->reLogin($this->request, $this->response);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser_core', '%s プラグインのデータを初期化しました。'), $plugin->title)
+                __d('baser_core', '{0} プラグインのデータを初期化しました。', $plugin->title)
             );
         } catch(\Exception $e) {
             $this->BcMessage->setError(__d('baser_core', 'リセット処理中にエラーが発生しました。') . $e->getMessage());

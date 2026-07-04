@@ -28,9 +28,9 @@ use BaserCore\View\BcAdminAppView;
         <h3 class="bca-content-info__title"><?php echo h($site['display_name']) ?></h3>
         <ul class="bca-content-info__list">
           <li class="bca-content-info__list-item">
-            <?php echo sprintf(__d('baser_core', '公開中： %s ページ'), $site['published']) ?><br>
-            <?php echo sprintf(__d('baser_core', '非公開： %s ページ'), $site['unpublished']) ?><br>
-            <?php echo sprintf(__d('baser_core', '合計： %s ページ'), $site['total']) ?>
+            <?php echo __d('baser_core', '公開中： {0} ページ', $site['published']) ?><br>
+            <?php echo __d('baser_core', '非公開： {0} ページ', $site['unpublished']) ?><br>
+            <?php echo __d('baser_core', '合計： {0} ページ', $site['total']) ?>
           </li>
         </ul>
       <?php endforeach ?>

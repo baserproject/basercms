@@ -20,7 +20,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール'));
 <div class="step-1">
 
   <div class="em-box bca-em-box">
-    <?php echo sprintf(__d('baser_core', '%s のインストールを開始します。<br>よろしければ「インストール開始」ボタンをクリックしてください。'), \Cake\Core\Configure::read('BcApp.title')) ?>
+    <?php echo __d('baser_core', '{0} のインストールを開始します。<br>よろしければ「インストール開始」ボタンをクリックしてください。', \Cake\Core\Configure::read('BcApp.title')) ?>
   </div>
 
   <div class="section bca-section">

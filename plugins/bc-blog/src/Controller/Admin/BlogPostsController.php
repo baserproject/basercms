@@ -175,7 +175,7 @@ class BlogPostsController extends BlogAdminAppController
             }
             try {
                 $post = $service->create($this->request->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', '記事「%s」を追加しました。'), $post->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を追加しました。', $post->title));
                 // EVENT BlogPosts.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $post
@@ -231,7 +231,7 @@ class BlogPostsController extends BlogAdminAppController
             try {
                 // データを保存
                 $post = $service->update($post, $this->request->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', '記事「%s」を更新しました。'), $post->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を更新しました。', $post->title));
                 // EVENT BlogPosts.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $post
@@ -308,7 +308,7 @@ class BlogPostsController extends BlogAdminAppController
             /* @var BlogPostsService $service */
             $result = $service->unpublish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」を非公開状態にしました。'), $result->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を非公開状態にしました。', $result->title));
             } else {
                 $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
@@ -333,7 +333,7 @@ class BlogPostsController extends BlogAdminAppController
             try {
                 /* @var BlogPostsService $service */
                 $result = $service->publish($id);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」を公開状態にしました。'), $result->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を公開状態にしました。', $result->title));
             } catch (BcException $e) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
@@ -361,7 +361,7 @@ class BlogPostsController extends BlogAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $service->copy($id);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」をコピーしました。'), $post->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」をコピーしました。', $post->title));
                 return $this->redirect(['action' => 'index', $blogContentId]);
 
             } catch (\Exception $e) {

@@ -163,7 +163,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を作成しました。'), $entity->name));
+                $this->BcMessage->setInfo(__d('baser_core', 'ファイル {0} を作成しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
@@ -202,7 +202,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $themeFileForm = $service->update($this->getRequest()->getData());
                 $themeFile = $service->get($themeFileForm->getData('fullpath'));
-                $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を更新しました。'), $themeFile->name));
+                $this->BcMessage->setInfo(__d('baser_core', 'ファイル {0} を更新しました。', $themeFile->name));
                 $this->redirect(array_merge(
                     [$args['theme'], $args['plugin'], $args['type']],
                     (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : [],
@@ -368,7 +368,7 @@ class ThemeFilesController extends BcAdminAppController
             $service->upload($args['fullpath'], $this->getRequest()->getData());
             $this->BcMessage->setSuccess(__d('baser_core', 'アップロードに成功しました。'));
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser_core', 'アップロードに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'アップロードに失敗しました。') . $e->getMessage());
         }
         $this->redirect(array_merge(['action' => 'index', $args['theme'], $args['plugin'], $args['type']], explode('/', $args['path'])));
     }

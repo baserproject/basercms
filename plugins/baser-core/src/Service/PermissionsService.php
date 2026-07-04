@@ -278,7 +278,11 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getMethodList() : array
     {
-        return (array) $this->Permissions::METHOD_LIST;
+        return [
+            '*' => __d('baser_core', '全て'),
+            'GET' => __d('baser_core', '表示のみ'),
+            'POST' => __d('baser_core', '表示と編集'),
+        ];
     }
 
     /**
@@ -291,7 +295,10 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getAuthList() : array
     {
-        return (array) $this->Permissions::AUTH_LIST;
+        return [
+            0 => __d('baser_core', '拒否'),
+            1 => __d('baser_core', '許可'),
+        ];
     }
 
     /**
