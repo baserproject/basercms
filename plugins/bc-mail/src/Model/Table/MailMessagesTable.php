@@ -203,6 +203,9 @@ class MailMessagesTable extends MailAppTable
         $this->_validGroupComplete($entity);
         // バリデートグループエラーチェック
         $this->_validGroupErrorCheck($entity);
+
+        // BcUploadBehavior::afterMarshal() がバリデーションエラー時の rollbackFile() を担うため、
+        // ここでの二重呼び出しは不要（重複実行による tmp ファイル再生成を防ぐ）
     }
 
     /**

@@ -808,4 +808,82 @@ class BcFormHelperTest extends BcTestCase
         $this->assertStringNotContainsString('<label>', $result);
     }
 
+    /**
+     * test control with table option
+     * tableオプションを使用したテーブル指定の動作確認
+     */
+    public function testControlWithTableOption()
+    {
+        // tableオプションを使用してアソシエーション先のテーブルを指定
+        $result = $this->BcForm->control('eyecatch', [
+            'type' => 'file',
+            'table' => 'BaserCore.Contents'
+        ]);
+
+        $this->assertStringContainsString('name="eyecatch"', $result, 'フィールド名が正しく出力されていません');
+        $this->assertStringContainsString('type="file"', $result, 'type属性が正しく出力されていません');
+    }
+
+    /**
+     * test file outputs hidden for _tmp value
+     * エンティティに{field}_tmp値がある場合、hidden[{field}_tmp]が出力される
+     */
+    public function testFileOutputsTmpHidden()
+    {
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->newEmptyEntity();
+        $content->eyecatch_tmp = 'session_eyecatch_file.jpg';
+
+        $this->BcForm->create($content);
+        // BcUploadHelperにテーブルを指定（fileLink()が必要とする）
+        $result = $this->BcForm->file('eyecatch', ['table' => 'BaserCore.Contents']);
+
+        // _tmp hidden が出力されていることを確認
+        $this->assertStringContainsString('name="eyecatch_tmp"', $result, 'eyecatch_tmp hiddenが出力されていません');
+        $this->assertStringContainsString('value="session_eyecatch_file.jpg"', $result, '_tmpの値が正しくありません');
+    }
+
+    /**
+     * test file nested field outputs hidden for _tmp value
+     * ネストフィールド(content.eyecatch)でも_tmp hiddenが出力される
+     */
+    public function testFileNestedFieldTmpHidden()
+    {
+        PageFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['id' => 1, 'plugin' => 'BaserCore', 'type' => 'Page', 'entity_id' => 1])->persist();
+
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->find()->where(['Pages.id' => 1])->contain(['Contents'])->first();
+
+        // content.eyecatch_tmp を設定
+        $page->content->eyecatch_tmp = 'session_content_eyecatch.jpg';
+
+        $this->BcForm->create($page);
+        // BcUploadHelperにContentsTableを指定（ネストフィールドでも同じ）
+        $result = $this->BcForm->file('content.eyecatch', ['table' => 'BaserCore.Contents']);
+
+        // ネストフィールドの _tmp hidden が出力されていることを確認（CakePHP はブラケット記法を使用）
+        $this->assertStringContainsString('name="content[eyecatch_tmp]"', $result, 'content.eyecatch_tmp hiddenが出力されていません');
+        $this->assertStringContainsString('value="session_content_eyecatch.jpg"', $result, '_tmpの値が正しくありません');
+    }
+
+    /**
+     * test control type=file also outputs tmp hidden
+     * control()にtype='file'を指定した場合も_tmp hiddenが出力される
+     */
+    public function testControlTypeFileOutputsTmpHidden()
+    {
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->newEmptyEntity();
+        $content->eyecatch_tmp = 'session_via_control.jpg';
+
+        $this->BcForm->create($content);
+        // BcUploadHelperにテーブルを指定（control(type=file)→file()経由でfileLink()が必要とする）
+        $result = $this->BcForm->control('eyecatch', ['type' => 'file', 'table' => 'BaserCore.Contents']);
+
+        // control(type='file')でも_tmp hiddenが出力されることを確認
+        $this->assertStringContainsString('name="eyecatch_tmp"', $result, 'control(type=file)でeyecatch_tmp hiddenが出力されていません');
+        $this->assertStringContainsString('value="session_via_control.jpg"', $result, '_tmpの値が正しくありません');
+    }
+
 }
