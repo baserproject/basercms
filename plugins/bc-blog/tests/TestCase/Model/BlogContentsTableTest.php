@@ -392,6 +392,36 @@ class BlogContentsTableTest extends BcTestCase
     }
 
     /**
+     * test copy でアイキャッチ画像が新IDでリネームコピーされること
+     *
+     * @return void
+     */
+    public function test_copyEyecatch()
+    {
+        UserFactory::make()->admin()->persist();
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $this->loginAdmin($this->getRequest());
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $savePath = $contentsTable->getSaveDir();
+        $source = $this->BlogContentsTable->find()->where(['BlogContents.id' => 6])->contain('Contents')->firstOrFail();
+        touch($savePath . 'test.png');
+        $contentsTable->updateAll(['eyecatch' => 'test.png'], ['id' => $source->content->id]);
+
+        $result = $this->BlogContentsTable->copy(6, 1, 'title_copy', 1, 0);
+
+        $newFileName = sprintf('%08d', $result->content->id) . '_eyecatch.png';
+        $this->assertEquals($newFileName, $result->content->eyecatch);
+        $this->assertFileExists($savePath . 'test.png');
+        $this->assertFileExists($savePath . $newFileName);
+        $copied = $this->BlogContentsTable->find()->where(['BlogContents.id' => $result->id])->contain('Contents')->firstOrFail();
+        $this->assertEquals($newFileName, $copied->content->eyecatch);
+
+        @unlink($savePath . 'test.png');
+        @unlink($savePath . $newFileName);
+    }
+
+    /**
      * フォームの初期値を取得する
      */
     public function testGetDefaultValue()
