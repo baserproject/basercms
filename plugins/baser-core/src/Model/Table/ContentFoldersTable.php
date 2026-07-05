@@ -17,6 +17,7 @@ use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\EventInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -148,7 +149,7 @@ class ContentFoldersTable extends AppTable
      * @param $newTitle
      * @param $newAuthorId
      * @param $newSiteId
-     * @return mixed page Or false
+     * @return mixed page
      * @checked
      * @noTodo
      * @unitTest
@@ -184,7 +185,15 @@ class ContentFoldersTable extends AppTable
         unset($entity->created);
         unset($entity->modified);
 
-        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+        $this->getConnection()->begin();
+        try {
+            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+            $entity->content = $this->Contents->copyEyecatchFile($entity->content);
+            $this->getConnection()->commit();
+        } catch (PersistenceFailedException $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
 
         // EVENT ContentFolders.afterCopy
         $this->dispatchLayerEvent('afterCopy', [

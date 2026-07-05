@@ -33,7 +33,7 @@ baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage 
 ## 5. ローカル検証
 1. `scripts/build-integration.sh [統合ブランチ名]` — 現ブランチ＋全 `security/GHSA-*` をマージ（競合は停止）
 2. `scripts/run-tests.sh` — ローカル全テスト（詳細は `basercms-unittest`）
-3. 必要なら統合ブランチを個人フォーク（例 `ryuring`）へ push して GHA を回す（**アドバイザリ fork では GHA は動かない**）
+3. 必要なら統合ブランチを個人フォーク（`<個人フォーク名>`）へ push して GHA を回す（**アドバイザリ fork では GHA は動かない**）
 
 ## 6. 最新 base への追従
 origin/base が進んだら各 PR ブランチへ base をマージし、push し直す。定番競合:

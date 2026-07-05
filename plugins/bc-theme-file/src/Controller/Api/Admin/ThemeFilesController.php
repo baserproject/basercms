@@ -52,7 +52,7 @@ class ThemeFilesController extends BcAdminApiController
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -88,7 +88,7 @@ class ThemeFilesController extends BcAdminApiController
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -123,7 +123,7 @@ class ThemeFilesController extends BcAdminApiController
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -157,7 +157,7 @@ class ThemeFilesController extends BcAdminApiController
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -195,7 +195,7 @@ class ThemeFilesController extends BcAdminApiController
             $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -252,7 +252,7 @@ class ThemeFilesController extends BcAdminApiController
             $imgDetail = $service->getImg($data);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -284,7 +284,7 @@ class ThemeFilesController extends BcAdminApiController
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -316,7 +316,7 @@ class ThemeFilesController extends BcAdminApiController
             $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([

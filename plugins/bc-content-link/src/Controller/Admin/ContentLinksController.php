@@ -77,7 +77,7 @@ class ContentLinksController extends BcAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $contentLink
                 ]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', "リンク「%s」を更新しました。"), $contentLink->content->title));
+                $this->BcMessage->setSuccess(__d('baser_core', "リンク「{0}」を更新しました。", $contentLink->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $contentLink = $e->getEntity();
@@ -86,7 +86,7 @@ class ContentLinksController extends BcAdminAppController
                 );
             }  catch (\Exception $e) {
                 $this->BcMessage->setError(
-                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。') . $e->getMessage()
                 );
             }
         }

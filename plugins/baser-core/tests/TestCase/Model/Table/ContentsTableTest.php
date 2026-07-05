@@ -1081,4 +1081,34 @@ class ContentsTableTest extends BcTestCase
         $this->Contents->enableUpdatingSystemData();
         $this->assertTrue($property->getValue($this->Contents));
     }
+
+    /**
+     * test copyEyecatchFile
+     *
+     * @return void
+     */
+    public function testCopyEyecatchFile()
+    {
+        // eyecatchが未設定の場合は何もせずそのまま返す
+        $content = $this->Contents->get(1);
+        $result = $this->Contents->copyEyecatchFile($content);
+        $this->assertSame($content, $result);
+
+        // eyecatchが設定されている場合は新IDでファイルをリネームコピーする
+        $savePath = $this->Contents->getSaveDir();
+        touch($savePath . 'test.txt');
+        $this->Contents->updateAll(['eyecatch' => 'test.txt'], ['id' => 1]);
+        $content = $this->Contents->get(1);
+
+        $result = $this->Contents->copyEyecatchFile($content);
+
+        $this->assertEquals('00000001_eyecatch.txt', $result->eyecatch);
+        $this->assertFileExists($savePath . 'test.txt');
+        $this->assertFileExists($savePath . '00000001_eyecatch.txt');
+        $saved = $this->Contents->get(1);
+        $this->assertEquals('00000001_eyecatch.txt', $saved->eyecatch);
+
+        @unlink($savePath . 'test.txt');
+        @unlink($savePath . '00000001_eyecatch.txt');
+    }
 }

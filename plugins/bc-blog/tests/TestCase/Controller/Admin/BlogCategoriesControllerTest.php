@@ -327,7 +327,7 @@ class BlogCategoriesControllerTest extends BcTestCase
         // ステータスを確認
         $this->assertResponseCode(302);
         // メッセージを確認
-        $this->assertFlashMessage('release を削除しました。');
+        $this->assertFlashMessage('カテゴリー「release」を削除しました。');
         // リダイレクトを確認
         $this->assertRedirect([
             'plugin' => 'BcBlog',

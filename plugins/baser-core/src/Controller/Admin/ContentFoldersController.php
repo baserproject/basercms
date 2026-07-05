@@ -60,18 +60,18 @@ class ContentFoldersController extends BcAdminAppController
         $contentFolder = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
-                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
                 $contentFolder = $service->update($contentFolder, $this->request->getData(), ['reconstructSearchIndices' => true]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'フォルダ「{0}」を更新しました。', $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $contentFolder = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーが発生しました。入力内容を確認してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($contentFolder));

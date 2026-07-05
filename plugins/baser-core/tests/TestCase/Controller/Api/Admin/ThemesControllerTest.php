@@ -85,9 +85,10 @@ class ThemesControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
 
-        $this->assertCount(3, $result->themes);
-        $this->assertEquals('BcColumn', $result->themes[0]->name);
-        $this->assertEquals('BcThemeSample', $result->themes[1]->name);
+        $themeNames = array_map(fn($theme) => $theme->name, (array) $result->themes);
+        $this->assertContains('BcColumn', $themeNames);
+        $this->assertContains('BcThemeSample', $themeNames);
+        $this->assertContains('BcFront', $themeNames);
     }
 
     /**

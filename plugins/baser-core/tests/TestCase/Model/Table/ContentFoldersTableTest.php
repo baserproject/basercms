@@ -210,4 +210,33 @@ class ContentFoldersTableTest extends BcTestCase
         $query = $contentFolders->find()->where(['folder_template' => 'baserCMSサンプル']);
         $this->assertEquals(2, $query->count());
     }
+
+    /**
+     * test copy でアイキャッチ画像がコピー先のIDでリネームコピーされること
+     *
+     * @return void
+     */
+    public function test_copyEyecatch()
+    {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $savePath = $contentsTable->getSaveDir();
+        $source = $this->ContentFolders->get(1, contain: ['Contents']);
+        touch($savePath . 'test.png');
+        $contentsTable->updateAll(['eyecatch' => 'test.png'], ['id' => $source->content->id]);
+
+        $rs = $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
+
+        $newFileName = sprintf('%08d', $rs->content->id) . '_eyecatch.png';
+        $this->assertEquals($newFileName, $rs->content->eyecatch);
+        $this->assertFileExists($savePath . 'test.png');
+        $this->assertFileExists($savePath . $newFileName);
+        $copied = $this->ContentFolders->get($rs->id, contain: ['Contents']);
+        $this->assertEquals($newFileName, $copied->content->eyecatch);
+
+        @unlink($savePath . 'test.png');
+        @unlink($savePath . $newFileName);
+    }
 }

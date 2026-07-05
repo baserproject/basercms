@@ -1,6 +1,6 @@
 ---
 name: cakephp-migration
-description: baserCMS の CakePHP バージョンアップ（5.0 → 5.1 → 5.2 ～）対応の非推奨・破壊的変更パターン集と修正レシピ。「Association alias already set」「A validation rule with the name already exists」「_Token not found」「headers already sent」「Plugin named X is already loaded」「ResultSet/PaginatedResultSet のエラー」「order()/group() 非推奨」「イベントリスナーの戻り値非推奨」「find('all', $options) 非推奨」「Table::get の配列 options 非推奨／名前付き引数」「配列条件の null 値で例外」「_cake_core_ キャッシュ設定」「pluginBootstrap で後続プラグインの setting.php が読まれず Configure が null（live イテレーション）」「_checkFilePath で .. テンプレートが MissingPluginException/500」「TreeBehavior でルートに parent_id=null を入れて lft/rght 破損」「Entity::set 配列一括の非推奨」「AbstractMigration/AbstractSeed 非推奨 → BaseMigration/BaseSeed（cakephp/migrations 4.5+）」「config/routes.php の fallbacks() でテストのみ 404」等、CakePHP本体・関連パッケージ起因の問題の調査・修正時に参照する。新しい CakePHP バージョン対応時は本書にバージョン別追記する。PHP本体起因の問題は php-migration スキルを参照。
+description: baserCMS の CakePHP バージョンアップ（5.0 → 5.1 → 5.2 ～）対応の非推奨・破壊的変更パターン集と修正レシピ。「Association alias already set」「A validation rule with the name already exists」「_Token not found」「headers already sent」「Plugin named X is already loaded」「ResultSet/PaginatedResultSet のエラー」「order()/group() 非推奨」「イベントリスナーの戻り値非推奨」「find('all', $options) 非推奨」「Table::get の配列 options 非推奨／名前付き引数」「配列条件の null 値で例外」「_cake_core_ キャッシュ設定」「pluginBootstrap で後続プラグインの setting.php が読まれず Configure が null（live イテレーション）」「_checkFilePath で .. テンプレートが MissingPluginException/500」「TreeBehavior でルートに parent_id=null を入れて lft/rght 破損」「Entity::set 配列一括の非推奨」「AbstractMigration/AbstractSeed 非推奨 → BaseMigration/BaseSeed（cakephp/migrations 4.5+）」「config/routes.php の fallbacks() でテストのみ 404」「ヘルパの実メソッドがマジックメソッド委譲化し method_exists が false（TextHelper::truncate→is_callable 判定）」等、CakePHP本体・関連パッケージ起因の問題の調査・修正時に参照する。新しい CakePHP バージョン対応時は本書にバージョン別追記する。PHP本体起因の問題は php-migration スキルを参照。
 license: MIT
 ---
 
@@ -200,6 +200,20 @@ $entity->set(['field' => $v, ...]);
 // After
 $table->patchEntity($entity, ['field' => $v, ...]);
 ```
+
+### 2-14. ヘルパの実メソッドがマジックメソッド委譲化 → `method_exists()` が false（`TextHelper::truncate` 等）
+CakePHP のアップデートで、これまで実宣言だったヘルパのメソッドが `__call` による委譲に置き換わることがある。代表例: `TextHelper::truncate`/`tail`/`highlight`/`excerpt`/`toList` は実メソッドを持たず、`TextHelper::__call()` が `Cake\Utility\Text::{$method}()` へ委譲する。
+- 影響: 呼び出し前に `method_exists($helper, 'truncate')` で存在確認しているコードは、`method_exists()` が**実宣言メソッドしか true にしない**ため false になり、当該機能が**静かに動かなくなる**（例外も出ず null 等を返す）。
+- baserCMS 実例: `BcBaserHelper::__call()` が `PluginBaserHelper::methods()` のマッピング（`'truncateText' => ['Text','truncate']`）を呼ぶ前のガードで `method_exists()` を使っており、`truncateText()` が無反応化した。
+- **修正**: ガードを `is_callable()` に変える。`is_callable([$obj, $method])` は実メソッドだけでなく `__call` を持つオブジェクトでも true を返す（マッピングが呼び出し対象の正本なので判定を緩めても設計上の安全性は保てる）。
+  ```php
+  // Before
+  if (method_exists($pluginBaser->{$helper}, $target)) { ... }
+  // After
+  if (is_callable([$pluginBaser->{$helper}, $target])) { ... }
+  ```
+- 検出: `grep -rn "method_exists(" --include="*.php"` で、対象が**ヘルパ/ユーティリティの委譲メソッド**になり得る箇所を洗う。`method_exists` と `is_callable` の非対称性（後者だけが `__call` を true にする）が要点。
+- テスト: `BcBaserHelper` 経由の委譲メソッドは、有効プラグインが無いと `_initPluginBasers()` が早期 return して BaserCore baser が登録されない（`PluginFactory::make(['name'=>'BcBlog'])->persist()` してから検証する）。
 
 ---
 

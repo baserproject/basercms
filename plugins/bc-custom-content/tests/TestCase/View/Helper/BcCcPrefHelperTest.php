@@ -1,11 +1,12 @@
 <?php
 /**
- * BcCcPref : baserCMS Custom Content Prefecture List Plugin
- * Copyright (c) Catchup, Inc. <https://catchup.co.jp>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright        Copyright (c) Catchup, Inc.
- * @link             https://catchup.co.jp
- * @license          MIT LICENSE
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 namespace BcCustomContent\Test\TestCase\View\Helper;

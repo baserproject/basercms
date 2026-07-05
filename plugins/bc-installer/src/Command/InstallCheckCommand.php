@@ -72,7 +72,7 @@ class InstallCheckCommand extends Command
         }
         $io->out('* PHP Memory Limit (' . $checkResult['phpMemory'] . 'MB)：' . (($checkResult['phpMemoryOk'])? 'OK' : 'NG'));
         if (!$checkResult['phpMemoryOk']) {
-            $io->out('　' . sprintf(__d('baser_core', 'memoty_limit の設定値を %s MB 以上に変更してください。'), Configure::read('BcRequire.phpMemory')));
+            $io->out('　' . __d('baser_core', 'memoty_limit の設定値を {0} MB 以上に変更してください。', Configure::read('BcRequire.phpMemory')));
         }
         $io->out('* Writable /config/ (' . (($checkResult['configDirWritable'])? 'True' : 'False') . ')：' . (($checkResult['configDirWritable'])? 'OK' : 'NG'));
         if (!$checkResult['configDirWritable']) {

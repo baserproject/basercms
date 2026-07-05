@@ -103,10 +103,7 @@ class BlogTagsController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $blogTag
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'タグ「%s」を追加しました。'),
-                    $blogTag->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログタグ「{0}」を追加しました。', $blogTag->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();
@@ -149,10 +146,7 @@ class BlogTagsController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $blogTag
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'タグ「%s」を更新しました。'),
-                    $blogTag->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログタグ「{0}」を更新しました。', $blogTag->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();

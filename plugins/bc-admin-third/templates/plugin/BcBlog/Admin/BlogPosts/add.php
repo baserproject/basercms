@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規記事登録'), $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規記事登録', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('blog_posts_form');
 ?>
 

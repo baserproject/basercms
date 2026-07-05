@@ -856,6 +856,25 @@ class ContentsTable extends AppTable
     }
 
     /**
+     * コピーされたコンテンツのアイキャッチ画像を、コピー先のコンテンツIDに基づく
+     * ファイル名でリネームコピーする
+     *
+     * @param EntityInterface $content 保存済み（IDが確定した）Contentエンティティ
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copyEyecatchFile(EntityInterface $content): EntityInterface
+    {
+        if (empty($content->eyecatch)) {
+            return $content;
+        }
+        $this->renameToBasenameFields($content, true);
+        return $this->saveOrFail($content);
+    }
+
+    /**
      * コンテンツデータよりURLを生成する
      *
      * @param int $id コンテンツID

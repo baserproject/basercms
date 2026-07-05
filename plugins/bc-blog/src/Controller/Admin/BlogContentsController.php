@@ -102,7 +102,7 @@ class BlogContentsController extends BlogAdminAppController
                 );
             } catch (BcException $e) {
                 $this->BcMessage->setError(
-                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。') . $e->getMessage()
                 );
             }
         }

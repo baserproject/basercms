@@ -184,4 +184,32 @@ class ContentLinksTableTest extends BcTestCase
         $this->assertEquals('/new_title', $copiedContentLink->content->url);
         $this->assertEquals('link_layout', $copiedContentLink->content->layout_template);
     }
+
+    /**
+     * test copy でアイキャッチ画像がコピー先のIDでリネームコピーされること
+     *
+     * @return void
+     */
+    public function test_copyEyecatch()
+    {
+        $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $savePath = $contentsTable->getSaveDir();
+        $source = $this->ContentLinks->get(1, contain: ['Contents']);
+        touch($savePath . 'test.png');
+        $contentsTable->updateAll(['eyecatch' => 'test.png'], ['id' => $source->content->id]);
+
+        $rs = $this->ContentLinks->copy(1, 2, 'new title', 1, 2);
+
+        $newFileName = sprintf('%08d', $rs->content->id) . '_eyecatch.png';
+        $this->assertEquals($newFileName, $rs->content->eyecatch);
+        $this->assertFileExists($savePath . 'test.png');
+        $this->assertFileExists($savePath . $newFileName);
+        $copied = $this->ContentLinks->get($rs->id, contain: ['Contents']);
+        $this->assertEquals($newFileName, $copied->content->eyecatch);
+
+        @unlink($savePath . 'test.png');
+        @unlink($savePath . $newFileName);
+    }
 }
