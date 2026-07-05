@@ -1,12 +1,12 @@
 ---
 name: basercms5-claude-workflow-setup
-description: 'baserCMS5（CakePHP5）の開発・移行を Claude Code で進めるときに、着手前に一度参照する「推奨ワークフロー環境セットアップ」スキル（提案ベース・実行は opt-in）。「5系プラグインの開発や移行をこれから始める」「どう進めるのがベストか」「設計→計画→実装の進め方/環境を整えたい」「パーミッションを整理して Auto mode で進めたい」等のときに最初に参照する。superpowers brainstorming での設計、permissions-audit でのパーミッション整理、その上での Auto mode 利用、spec/plan の Markdown プレビュー、brainstorming→plan プレビュー→spec 書き出しの順序を、強制せず"提案"する（やるかはユーザー判断、既に整っていればスキップ）。技術的な書き換えパターンは basercms5-development / basercms-plugin-4-to-5-upgrade / basercms-plugin-5x-update、テスト実行は basercms-unittest を参照。'
+description: 'baserCMS5（CakePHP5）の開発・移行を Claude Code で進めるときに、着手前に一度参照する「推奨ワークフロー環境セットアップ」スキル（提案ベース・実行は opt-in）。「5系プラグインの開発や移行をこれから始める」「どう進めるのがベストか」「設計→計画→実装の進め方/環境を整えたい」「パーミッションを整理して Auto mode で進めたい」等のときに最初に参照する。superpowers brainstorming での設計、permissions-audit でのパーミッション整理、その上での Auto mode 利用、spec/plan の Markdown プレビュー、brainstorming→plan プレビュー→spec 書き出しの順序を、強制せず"提案"する（やるかはユーザー判断、既に整っていればスキップ）。技術的な実装パターンは basercms5-plugin-development / basercms5-theme-development（共通ルールは basercms5-development）、移行の書き換えは basercms-plugin-4-to-5-upgrade / basercms-plugin-5x-update、テスト実行は basercms-unittest を参照。'
 license: MIT
 ---
 
 # baserCMS5 × Claude Code 開発/移行ワークフロー 環境セットアップ
 
-baserCMS5（CakePHP5）の開発・移行を **Claude Code で進めるときの「ベストな進め方の環境」を提案する**ための入口スキル。技術的な書き換えパターンは別スキル（`basercms5-development` ほか）に任せ、本スキルは**どう進めるか＝設計→パーミッション整理→Auto mode→実装**の段取りだけを扱う。
+baserCMS5（CakePHP5）の開発・移行を **Claude Code で進めるときの「ベストな進め方の環境」を提案する**ための入口スキル。技術的な実装・書き換えパターンは別スキル（`basercms5-plugin-development` / `basercms5-theme-development`、共通ルールは `basercms5-development` ほか）に任せ、本スキルは**どう進めるか＝設計→パーミッション整理→Auto mode→実装**の段取りだけを扱う。
 
 ## ★大前提（このスキルの性格）
 - **ユーザーに"学習してもらう（教える）"のが主目的**: このスキルは作業を代行するためのものではなく、**推奨ワークフロー（brainstorming で設計／permissions-audit で権限整理／Auto mode／spec・plan プレビュー）を、ユーザー自身が今後も使えるように「伝えて学習してもらう」**ためのもの。各ツールは「私（アシスタント）が黙って回す」のでなく、「**こういうときはこれを使うとよい**」とユーザーに教え、ユーザーが選んで使えるようにする。
@@ -55,7 +55,7 @@ baserCMS5（CakePHP5）の開発・移行を **Claude Code で進めるときの
 3. **Auto mode への切替を案内（ユーザー操作）**: パーミッション整理が済んだら、Claude Code の **Auto mode**（自動承認）に切り替えて進めると効率的、と案内する。**Auto mode はスキルからは有効化できない**ので、切替はユーザーが行う。整理前に Auto mode を勧めない（未整理のまま自動承認は危険）。
 4. **設計は superpowers `/brainstorming` を使うことを"ユーザーに推奨として伝える"**: このスキルが勝手に brainstorming を起動するのではない。**「新規開発や大きめの改修など、何かをやりたいときは、いきなり実装せず、プランモードに切り替えて `/brainstorming` スキルで設計してから進めるのがおすすめです」とユーザーに伝える**（提案）。これにより、ユーザーが「brainstorming で設計したい」と判断できるようになる（実際の設計対話は、探索→1問ずつ質問→2〜3案→セクションごと合意 の流れ）。
    - 補足: `brainstorming` は自動では起動せず、ユーザーがそれで進めたいとき（または「設計から」と依頼したとき）に呼び出される。superpowers 未導入なら前提節の導入案内へ誘導する。
-5. **実装フェーズへ**: 設計が固まったら下記「設計→計画→spec の順序」に従い、実装は技術スキル（`basercms5-development` / `basercms-plugin-4-to-5-upgrade` / `basercms-plugin-5x-update`）＋テストは `basercms-unittest` で進める。大規模プラグイン移行の進め方（横断コードチェック→横断構文5系化→テスト&ブラウザ）は `basercms-plugin-4-to-5-upgrade`「移行の進め方」を参照。
+5. **実装フェーズへ**: 設計が固まったら下記「設計→計画→spec の順序」に従い、実装は技術スキル（正本は `basercms5-plugin-development` / `basercms5-theme-development`、共通ルールは `basercms5-development`、移行は `basercms-plugin-4-to-5-upgrade` / `basercms-plugin-5x-update`）＋テストは `basercms-unittest` で進める。大規模プラグイン移行の進め方（横断コードチェック→横断構文5系化→テスト&ブラウザ）は `basercms-plugin-4-to-5-upgrade`「移行の進め方」を参照。
 
 ## 設計→計画→spec の順序（plan モードでレビューを挟む場合）
 > この手順の**正本はこのスキル**（`~/.claude/CLAUDE.md` 側は要点＋本スキルへの参照に集約済み・重複防止）。
@@ -89,7 +89,6 @@ spec（設計書）や plan（実装計画）など**レビュー目的の Markd
 ## 関連スキル
 - 設計: `superpowers:brainstorming` / 計画: `superpowers:writing-plans`
 - パーミッション整理: `permissions-audit`
-- 技術パターン（実装）: `basercms5-development`（5系開発ルール）/ `basercms-plugin-4-to-5-upgrade`（プラグイン4→5の書き換え＋「移行の進め方」）/ `basercms-plugin-5x-update`（5.x 間の更新）/ `basercms4-to-5-upgrade`（サイト全体の4→5）
+- 技術パターン（実装）: `basercms5-development`（5系共通ルールの基底）/ `basercms5-plugin-development`（プラグイン開発の正本）/ `basercms5-theme-development`（テーマ開発の正本）/ `basercms-plugin-4-to-5-upgrade`（プラグイン4→5の書き換え＋「移行の進め方」）/ `basercms-plugin-5x-update`（5.x 間の更新）/ `basercms4-to-5-upgrade`（サイト全体の4→5）
 - テスト実行: `basercms-unittest`
 - プレビュー変換: `markdown-to-html`
-- プラグイン固有: `sample-plugin-development`（Sample の業務知識・横断移行の成果物）

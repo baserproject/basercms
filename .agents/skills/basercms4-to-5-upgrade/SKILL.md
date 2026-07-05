@@ -1,6 +1,6 @@
 ---
 name: basercms4-to-5-upgrade
-description: 'baserCMS 4 (CakePHP 2ベース) のコード・サイトを baserCMS 5 (CakePHP 5ベース) へアップグレード／移行する際に AIエージェントが遵守すべきルールとパターン集。「baserCMS 4 から 5 へ移行」「4系を5系にアップグレード」「BcDbMigrator でデータ移行」「BcAddonMigrator でテーマ／プラグイン変換」「CakePHP 2 → CakePHP 5 への書き換え」「admin_ プレフィックスメソッドの Controller/Admin への移動」「config/setting.php・config.php の return 配列化」「init.php 廃止と PluginClass 作成」「migration_snapshot 生成」「site_configs theme → sites theme」「移行の標準フロー／工程の順序」「プラグインを DB で直接有効化」「テーマを DB で直接適用」「request->data／query／params の getter 化」「File/Folder クラス廃止」「ClassRegistry → TableRegistry」「FrozenTime → DateTime」「FixtureManager → FixtureFactory」等、4→5 アップグレード作業全般で参照する。プラグイン内部コード（Controller/Table/Entity/View/Helper/フォーム/Vue・JS）の具体的な書き換えパターンは basercms-plugin-4-to-5-upgrade、5.2→5.3 のプラグイン移行は basercms-plugin-5x-update、CakePHP本体起因は cakephp-migration、PHP本体起因は php-migration、テスト実行は basercms-unittest スキルを参照。'
+description: 'baserCMS 4 (CakePHP 2ベース) のコード・サイトを baserCMS 5 (CakePHP 5ベース) へアップグレード／移行する際に AIエージェントが遵守すべきルールとパターン集。「baserCMS 4 から 5 へ移行」「4系を5系にアップグレード」「BcDbMigrator でデータ移行」「BcAddonMigrator でテーマ／プラグイン変換」「CakePHP 2 → CakePHP 5 への書き換え」「admin_ プレフィックスメソッドの Controller/Admin への移動」「config/setting.php・config.php の return 配列化」「init.php 廃止と PluginClass 作成」「migration_snapshot 生成」「site_configs theme → sites theme」「移行の標準フロー／工程の順序」「プラグインを DB で直接有効化」「テーマを DB で直接適用」「request->data／query／params の getter 化」「File/Folder クラス廃止」「ClassRegistry → TableRegistry」「FrozenTime → DateTime」「FixtureManager → FixtureFactory」等、4→5 アップグレード作業全般で参照する。プラグイン内部コード（Controller/Table/Entity/View/Helper/フォーム/Vue・JS）の具体的な書き換えパターンは basercms-plugin-4-to-5-upgrade、テーマ（templates 中心）の移行は basercms-theme-4-to-5-upgrade、5.2→5.3 のプラグイン移行は basercms-plugin-5x-update、CakePHP本体起因は cakephp-migration、PHP本体起因は php-migration、テスト実行は basercms-unittest スキルを参照。移行先である5系での正しい書き方（開発の正本）は basercms5-plugin-development / basercms5-theme-development を参照。'
 license: MIT
 ---
 
@@ -37,7 +37,7 @@ license: MIT
 - [ ] **12. DB復元** — v5 管理画面「データメンテナンス」で変換済み zip をブラウザ復元（復元CLIなし・ユーザー実施）。**★必ず工程10-11（有効化・適用）の後**。直前に管理画面ログインの生存だけ確認（フロントは見ない）。復元後にテーブル生成・件数を SQL で検証 → 「データベース移行手順」節 4.
 - [ ] **13. アップロードファイルの移行** — `/files` → `/v5/webroot/files` → 「アップロードファイルの移行」節
 - [ ] **14. 移行台帳（ファイル一覧）の作成** — 対象プラグイン・テーマごとに構成ファイル一覧と状態を記した台帳を `docs/superpowers/` に作る（`.superpowers/` はSDD内部スクラッチなので置かない）。以降の横断チェック・動作確認の進捗と懸案はすべてここに記録する。**状態の語彙は「未着手／修正済み／非該当（理由付き）」を必ず区別する** — 横断チェックで grep にヒットしなかったファイルは「未着手」ではなく「非該当（既知パターンhitなし・最終検証は工程17の描画確認）」。集計表の「完了」は「既知パターンの横断適用が完了」の意味であり全ファイル個別検査済みではない、と台帳に明記する（誤解の実例あり）
-- [ ] **15. テーマの横断チェック → 5系化（下ごしらえまで）** — TH-系パターン（`siteConfig[]`廃止・`fullUrl()`廃止 等）を grep で全件洗い出して一括対応 → `basercms-plugin-4-to-5-upgrade` スキル（TH-系）。**完了基準は php -l 全通過まで。描画確認はここではしない**（工程17の最初にユーザーと行う）。テンプレのビュー変数は事前の全量マッピングをせず、grep で見つかる「4系特有で5系コアが供給しない変数（`$siteConfig` 等）」だけ先に書き換え、コア供給分は工程17の実描画＋ログ検出に任せる
+- [ ] **15. テーマの横断チェック → 5系化（下ごしらえまで）** — TH-系パターン（`siteConfig[]`廃止・`fullUrl()`廃止 等）を grep で全件洗い出して一括対応 → `basercms-theme-4-to-5-upgrade` スキル（TH-系＋テンプレート・テーマ描画系の F-系）。**完了基準は php -l 全通過まで。描画確認はここではしない**（工程17の最初にユーザーと行う）。テンプレのビュー変数は事前の全量マッピングをせず、grep で見つかる「4系特有で5系コアが供給しない変数（`$siteConfig` 等）」だけ先に書き換え、コア供給分は工程17の実描画＋ログ検出に任せる
 - [ ] **16. プラグインの横断チェック → 5系化（下ごしらえまで）** — C-0（機械一括変換カタログ）を先に全プラグインへ適用 → T-/C-系を個別対応。完了基準は php -l 全通過まで。**無理な改善（動くものの過剰リファクタ）はせず、気づきは台帳にメモして先へ進む** → `basercms-plugin-4-to-5-upgrade` スキル
 - [ ] **17. テーマ→プラグインの順に1つずつ動作確認（ユーザー協働）** — **★開始前に移行対象プラグインを一旦全部無効化し（`UPDATE plugins SET status=0 WHERE name IN (...)`＋キャッシュクリア）、まず「テーマのみ有効」の素の状態でフロント描画をユーザーと確認**（レイアウト→トップ→一覧→詳細の画面単位。500 は `error.log`、穴あき描画は `grep "Undefined variable"` で機械検出し、警告ゼロまで直す）。その後、確認対象プラグインを1つずつ有効化しながら進める。イベントリスナー等で他プラグインの影響を受けやすく、全部有効のままだと不具合の切り分けができないため。対象が他プラグインに依存する場合は**その依存プラグインだけ**を併せて有効化する。プラグインごとに次の順で:
   - a. コントローラ/テンプレート以外（Table/保存/集計）をユニットテストで確認（依存が重いものはスキップ可・台帳にメモ）→ `basercms-unittest` スキル
@@ -69,7 +69,9 @@ license: MIT
 3.  **Implementation Plan Artifact**: 実装計画の詳細、ゴール、変更内容、検証計画。
 4.  **Walkthrough Artifact**: 作業の振り返り、検証結果の報告。
 
-**[重要・URLはリンク付きで提示]** ユーザーに**ブラウザでの動作確認を依頼する場合**（管理ログインURL・データメンテナンス画面・フロント確認 等）は、URL を**必ず Markdown のリンク付き**（`[https://...](https://...)`）で表示する。プレーンテキストのURLで出さない（ユーザーがクリックしてすぐ開けるようにするため）。例: `👉 [https://localhost/v5/baser/admin/baser-core/users/login](https://localhost/v5/baser/admin/baser-core/users/login)`。
+**[重要・URLはリンク付きで提示]** ユーザーに**ブラウザでの動作確認を依頼する場合**（管理ログインURL・データメンテナンス画面・フロント確認 等）は、URL を**必ず Markdown のリンク付き**（`[https://...](https://...)`）で表示する。プレーンテキストのURLで出さない（ユーザーがクリックしてすぐ開けるようにするため）。例: `👉 [https://<project>.localhost/v5/baser/admin/baser-core/users/login](https://<project>.localhost/v5/baser/admin/baser-core/users/login)`。
+
+**[重要・ユーザーへの質問は毎回 AskUserQuestion（選択式プルダウン）で]** 方針確認・A/B選択・作業依頼の完了確認など**ユーザーの応答を待つ場面では、本文テキストで問いかけるだけでなく必ず AskUserQuestion ツールを使う**。プルダウンが出るとユーザーのスマホに通知が届くが、テキストだけの質問は通知されず気づかれない。移行は長丁場でユーザーが席を外すことが多いため、通知の有無が往復のリードタイムを大きく左右する（ユーザー要望・実運用で確立）。選択肢に収まらない場合も「その他」で自由入力できるので、迷ったらプルダウンにする。
 
 
 ## baserCMSの最新版の取得
@@ -160,6 +162,9 @@ bin/cake install [設置URL（例：https://localhost/v5/）] [管理者メー�
     4.  **復元 (v5)**: baserCMS 5 管理画面「データメンテナンス」で変換後 zip を復元（**復元CLIは無くブラウザ専用**）。**この工程はプラグイン棚卸し/変換の後**に行う（下記「プラグイン」注意点）。
         *   **復元は zip の中身基準で動く（実装確認済み）**: `UtilitiesService::_loadBackup()` は zip 内の全 `*Schema.php` を drop→create し全 CSV を投入するだけで、**`plugins` テーブルの有効/無効は参照しない**。したがって、変換済み zip にスキーマ＋CSV が入っているテーブルは、該当プラグインが無効でも取り込まれる（`unzip -l` で `<Table>Schema.php` の同梱を確認しておく）。
         *   **★復元は `plugins` テーブル自体も zip の内容（=v4 のプラグイン一覧・全行 status=0）で置き換える（実測）**: 復元前に行った有効化レコード（コアの BcBlog/BcMail 等を含む）は**全部消えて無効化される**。**復元後に必ず再有効化する**: コア標準6つ `UPDATE plugins SET status=1 WHERE name IN ('BcBlog','BcMail','BcUploader','BcSearchIndex','BcThemeConfig','BcWidgetArea')` ＋移行対象のうち確認済みのもの（動作確認工程中なら移行対象は 0 のままでよい）。BcDbMigrator/BcAddonMigrator の行も消えるので、引き続き使うなら再 INSERT。実施後 `bin/cake cache clear_all`。
+        *   **★`sites` テーブルも同様に上書きされ、テーマ適用が外れる（実測）**: 復元後は全サイト `theme='BcThemeSample'` に戻る（BcDbMigrator 変換の既定値。マルチサイトの各行も v4 から復元される）。フロントを開くと `MissingLayoutException`（探索パスに自作テーマが無い）で気づく。**復元後にテーマを再適用**: `UPDATE sites SET theme='<CamelCaseTheme>' WHERE id=<対象サイト>`＋キャッシュクリア。＝**「復元後の再設定3点セット: plugins 再有効化・sites.theme 再適用・cache clear_all」**として覚える。
+        *   **★手動導入したツールプラグイン（BcDbMigrator / BcAddonMigrator 等）も plugins テーブルごと消える**（復元は v4 由来の plugins で上書きするため。実測: 復元後に `bc_addon_migrator` コマンドが `Unknown command` になる）。ツールを再度使う場合は plugins テーブルへ再 INSERT（＋cache clear）してから実行する。
+        *   **★マルチサイトは復元後に `site_id` の整合を必ず検証する（実測・不整合あり）**: 復元データはテーブルごとに site_id の変換が食い違うことがある — `contents.site_id` は「v4 の id +1」（5系標準・メイン=1）に変換される一方、**`sites.id` は AUTO_INCREMENT で 2〜 に詰め直され、プラグイン系テーブル（search_indexes 等）の site_id は v4 のまま無変換**。結果、サブサイトの contents が存在しない site_id を指し、サブサイトURL（`/blog/` 等）が**全部 404** になる。検証SQL: `SELECT site_id, COUNT(*) FROM contents GROUP BY site_id` と `SELECT id, alias FROM sites` を突き合わせる。**修正は「5系標準＝contents の付番（v4 +1）」に他を合わせる**: `sites.id` と各テーブルの site_id を降順に UPDATE（衝突回避）し、`ALTER TABLE sites AUTO_INCREMENT=<最大+1>`。site_id カラムを持つテーブルは `information_schema.COLUMNS` で洗い出す。**再復元すると不整合も再発する**ので、統一SQLを控えておき復元のたびに再実行する。
         *   **復元前に管理画面が 500 になる場合、(b)変換組プラグインの無効化で回避してよい**: (b)組は boot/描画経路の4系残骸（Event リスナーの `viewVars` 参照等）で管理画面を壊しがち。上記のとおり復元は無効でもテーブルを取り込むので、`UPDATE plugins SET status=0 WHERE name IN (...)`＋キャッシュクリアで管理画面を復旧させてから復元してよい（どのみち動作確認工程では一旦全無効化する）。
 
 3.  **注意点**:
@@ -178,6 +183,11 @@ bin/cake install [設置URL（例：https://localhost/v5/）] [管理者メー�
 
 `/files` ディレクトリを `/v5/webroot/files` に移動してください。
 
+- **v4 並行稼働中は「移動」でなく「コピー」にする**（v4 側の表示を壊さない）。数GBあるためコンテナ内で `cp -a` するのが速い。
+- **★ネスト罠: `v5/webroot/files` は復元やプラグイン有効化の時点で既に一部生成されている**（`theme_configs/` `uploads/` やブログのディレクトリ骨格など）。そのため `cp -a /path/files /v5/webroot/files` とすると **`files/files/` にネストしてコピーされる**。既存ディレクトリへのマージは `cp -a /path/files/. /v5/webroot/files/`（末尾 `/.`）で中身をコピーする。ネストしてしまったら `cp -a .../files/files/. .../files/ && find .../files/files -delete` で解消。
+- **未移行時の症状**: アイキャッチ等のアップロード系URLは、実体ファイルが無いとヘルパのフォールバックで**ルート相対 `/files/...`（サブディレクトリ無し）**が出力され、v5 ページから v4 の files を誤参照する（v5 の `error.log` に `MissingRouteException: /files/...` が並ぶ）。files 移行後は `/v5/files/...` が正しく生成される。**この工程は「プラグイン有効化→描画確認」より前に済ませる**こと。
+- **移行後の検証**: 描画HTMLの `src` を `curl | grep -o 'src="[^"]*files[^"]*"'` で抜き、静的配信の 200 を確認する。ローカル環境では **DB は最新なのに files が古い**（本番から持ってきた時期のズレ）ことがあり、その 404 は移行起因ではない — v4 側の同パスにも実体が無いことで切り分ける。
+
 ## テーマの変換
 
 テーマの変換には、`BcAddonMigrator` プラグインを使用します。
@@ -195,6 +205,13 @@ bin/cake install [設置URL（例：https://localhost/v5/）] [管理者メー�
         THEME_NAME="my-custom-theme"  # 実際のテーマ名に置き換える
         THEME_CAMEL="MyCustomTheme"    # キャメルケースに変換
         
+        # ★【最重要・データ破壊注意】変換後の名前が「大文字小文字だけの差」になる場合
+        # （例: philosophy → Philosophy）、macOS 等のケースインセンシティブFSでは
+        # theme/<camel> が元ディレクトリと同一に解決され、一時コピーの削除で
+        # **元テーマ本体を削除してしまう**（実害あり。サブモジュールなら
+        # `git submodule update --init theme/<name>` で復旧できる）。
+        # 同名ケース差になるテーマは theme/ 配下でなく一時ディレクトリへコピーする:
+        #   cp -r "theme/${THEME_NAME}" "/tmp/${THEME_CAMEL}" して /tmp 側で zip する
         cp -r "theme/${THEME_NAME}" "theme/${THEME_CAMEL}"
         
         # 3. ZIP圧縮 (node_modules除外)
@@ -365,7 +382,7 @@ UPDATE sites SET theme = '<CamelCaseTheme>' WHERE id = 1;
 
 ## プラグイン内部コードの変換（別スキル）
 
-`BcAddonMigrator` で変換した後の **プラグイン内部コードの具体的な書き換え**（Controller の `$this->Model`→`fetchTable`、Table の `initialize()` アソシエーション宣言・`find()` クエリビルダ化、Entity/getControlSource、View/Helper、検索フォーム・編集フォームの `BcAdminForm`/`control()` 化、`Time::format` の ICU、`Number::format`/`Text::truncate` の null 対応、Vue・JS の `$.bcUtil.adminBaseUrl` 化と webpack 再ビルド、フロント表示エラーの症状別対処 等）は、専用スキル **basercms-plugin-4-to-5-upgrade** にカタログ化している。プラグインの画面を1枚ずつ通して動かす段階では、そちらを参照すること（C-0 機械一括変換カタログ／T- Table・ORM／C- Controller・画面／F- フロント表示エラー）。
+`BcAddonMigrator` で変換した後の **プラグイン内部コードの具体的な書き換え**（Controller の `$this->Model`→`fetchTable`、Table の `initialize()` アソシエーション宣言・`find()` クエリビルダ化、Entity/getControlSource、View/Helper、検索フォーム・編集フォームの `BcAdminForm`/`control()` 化、`Time::format` の ICU、`Number::format`/`Text::truncate` の null 対応、Vue・JS の `$.bcUtil.adminBaseUrl` 化と webpack 再ビルド、フロント表示エラーの症状別対処 等）は、専用スキル **basercms-plugin-4-to-5-upgrade** にカタログ化している。プラグインの画面を1枚ずつ通して動かす段階では、そちらを参照すること（C-0 機械一括変換カタログ／T- Table・ORM／C- Controller・画面／F- フロント表示エラーのうちプラグイン文脈分）。**テーマ（templates 中心）の移行パターン（TH-系＋テンプレート・テーマ描画系の F-系）は basercms-theme-4-to-5-upgrade スキル**に分割している。変換先＝5系の正しい書き方の正本は **basercms5-plugin-development**（プラグイン）／ **basercms5-theme-development**（テーマ）を参照。
 
 ## 移行の進め方（ユニットテスト先行 → ドメイン単位で画面結合）
 
@@ -376,7 +393,7 @@ UPDATE sites SET theme = '<CamelCaseTheme>' WHERE id = 1;
 1. **フェーズ1: ロジックをテスト駆動で移行**（人手ほぼ不要）。対象ドメイン（見積／請求／売上／集計 等）の Table/保存/集計/出力ロジックを、責務を整理しつつ TDD で5系化。Factory＋ユニットテストで「4系と同値」を数値で固定（RED→GREEN・回帰自動担保）。→ テスト基盤は **basercms-unittest**、変換パターンは **basercms-plugin-4-to-5-upgrade**（T-/C-/F-）。
 2. **フェーズ2: 薄いグルー層**。コントローラは「受け→Table/Service呼び→set」の薄さに保ち、ロジックはテスト済みの Table/Service へ寄せる。画面で確認すべき面積（テスト不能なグルー）を最小化。
 3. **フェーズ3: ドメイン単位で画面結合を1回**。ロジックが全部緑になってから、1回の画面セッションでテンプレート/JS・Vue/遷移/CSV・Excel/通知の結合を確認。事前に「どの画面で何を操作し何が期待結果か」のチェックリストを用意し、ユーザーは順に1往復するだけにする（リロードを「メソッドごと」でなく「ドメインごと」に集約）。
-4. **フェーズ4: スキルへフィードバック**。一段落ごとに、再利用可能な知見を該当スキル（プラグイン内部コード→basercms-plugin-4-to-5-upgrade、テスト→basercms-unittest、サイト手順→本スキル、5系開発一般→basercms5-development）へ反映。症状→原因→修正・コード断片・戒めまで残す。
+4. **フェーズ4: スキルへフィードバック**。一段落ごとに、再利用可能な知見を該当スキル（プラグイン内部コード→basercms-plugin-4-to-5-upgrade、テスト→basercms-unittest、サイト手順→本スキル、5系共通ルール→basercms5-development、5系の実装パターン→basercms5-plugin-development / basercms5-theme-development）へ反映。症状→原因→修正・コード断片・戒めまで残す。
 
 **結合タイミングはドメインごと**（見積を固める→見積画面を1回確認→次は請求…）。問題を新鮮なうちに発見でき手戻りが小さい。
 
