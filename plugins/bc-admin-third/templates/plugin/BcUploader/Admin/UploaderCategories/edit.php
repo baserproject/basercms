@@ -52,7 +52,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集
   <div class="bca-actions__sub">
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
       ['action' => 'delete', $this->BcAdminForm->getSourceValue('id')], [
-        'confirm' => sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('name')),
+        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $this->BcAdminForm->getSourceValue('name')),
         'block' => true,
         'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',

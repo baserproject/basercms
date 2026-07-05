@@ -342,7 +342,7 @@ class BlogController extends BlogFrontAppController
                 'message' => $message
             ]));
         } catch (Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             return $this->response->withStatus(500)->withStringBody(json_encode([
                 'message' => $message
             ]));

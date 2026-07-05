@@ -24,12 +24,11 @@
 <?php if (!empty($this->Paginator)): ?>
   <div class="bs-search__result-text">
     <?php echo $this->Paginator->counter(
-      sprintf(
-        __d('baser_core', '%s で検索した結果 %s〜%s件目 / %s 件'),
-        sprintf('<strong>%s</strong>', implode(' ', $query)),
-        '<strong>{{start}}</strong>',
-        '<strong>{{end}}</strong>',
-        '{{count}}'
-    )) ?>
+        __d('baser_core', '{0} で検索した結果 {1}〜{2}件目 / {3} 件',
+          sprintf('<strong>%s</strong>', implode(' ', $query)),
+          '<strong>{{start}}</strong>',
+          '<strong>{{end}}</strong>',
+          '{{count}}'
+      ) ?>
   </div>
 <?php endif ?>

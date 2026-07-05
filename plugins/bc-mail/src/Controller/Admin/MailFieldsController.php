@@ -161,7 +161,7 @@ class MailFieldsController extends MailAdminAppController
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (Exception $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForAdd(
@@ -209,7 +209,7 @@ class MailFieldsController extends MailAdminAppController
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (Exception $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit(
@@ -287,7 +287,7 @@ class MailFieldsController extends MailAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $result = $service->unpublish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'メールフィールド「%s」を無効状態にしました。'), $result->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を無効状態にしました。', $result->name));
             } else {
                 $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
@@ -310,7 +310,7 @@ class MailFieldsController extends MailAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $result = $service->publish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'メールフィールド「%s」を有効状態にしました。'), $result->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を有効状態にしました。', $result->name));
             } else {
                 $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }

@@ -346,7 +346,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 			foreach($plugins as $plugin) {
 				if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes, $dbConfigKeyName)) {
 					$result = false;
-					$this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+					$this->log(__d('baser_core', '{0} {1} の初期データのロードに失敗しました。', $theme . '.' . $pattern, $plugin));
 				}
 			}
 		} catch (\Throwable $e) {
@@ -362,7 +362,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 foreach($plugins as $plugin) {
                     if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes, $dbConfigKeyName)) {
                         $result = false;
-                        $this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+                        $this->log(__d('baser_core', '{0} {1} の初期データのロードに失敗しました。', $theme . '.' . $pattern, $plugin));
                     }
                 }
             }
@@ -414,7 +414,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if ($table !== $targetTable) continue;
                 try {
 					if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto', 'dbConfigKeyName' => $dbConfigKeyName])) {
-						$this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
+						$this->log(__d('baser_core', '{0} の読み込みに失敗。', $file));
 						$result = false;
 					}
 				} catch(\Throwable $e) {
@@ -1493,7 +1493,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $this->checkDbConnection($config);
         } catch (PDOException $e) {
             if ($e->getCode() === 2002) {
-                throw new PDOException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n" . $e->getMessage()));
+                throw new PDOException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n") . $e->getMessage());
             }
             throw $e;
         } catch (BcException $e) {
@@ -1518,14 +1518,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             case 'Cake\Database\Driver\Mysql' :
                 $result = $db->execute("SELECT version() as version")->fetch();
                 if (version_compare($result[0], Configure::read('BcRequire.MySQLVersion')) == -1) {
-                    throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
+                    throw new BcException(__d('baser_core', 'データベースのバージョンが {0} 以上か確認してください。', Configure::read('BcRequire.MySQLVersion')));
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
                 $result = $db->execute("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
-                    throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
+                    throw new BcException(__d('baser_core', 'データベースのバージョンが {0} 以上か確認してください。', Configure::read('BcRequire.PostgreSQLVersion')));
                 }
                 break;
         }

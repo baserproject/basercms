@@ -19,7 +19,7 @@
  * @unitTest
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
-$this->BcBaser->setDescription(sprintf(__d('baser_core', '%s のアーカイブ一覧です。'), $this->BcBaser->getContentsTitle()));
+$this->BcBaser->setDescription(__d('baser_core', '{0} のアーカイブ一覧です。', $this->BcBaser->getContentsTitle()));
 $this->BcBaser->setTitle($tag);
 $this->BcBaser->setTableToUpload('BcBlog.BlogPosts');
 ?>

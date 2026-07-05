@@ -2,7 +2,7 @@
 /**
  * ブログアーカイブ一覧
  */
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() .  __d('baser_core', 'のアーカイブ一覧です。'));
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . __d('baser_core', '{0} のアーカイブ一覧です。', $this->BcBaser->getContentsTitle()));
 ?>
 
 

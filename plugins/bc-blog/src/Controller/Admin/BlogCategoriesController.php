@@ -72,10 +72,7 @@ class BlogCategoriesController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterAdd', [
                     'blogCategory' => $blogCategory
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'カテゴリー「%s」を追加しました。'),
-                    $blogCategory->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'カテゴリー「{0}」を追加しました。', $blogCategory->name));
                 return $this->redirect(['action' => 'index', $blogContentId]);
             } catch (PersistenceFailedException $e) {
                 $blogCategory = $e->getEntity();
@@ -118,10 +115,7 @@ class BlogCategoriesController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'blogCategory' => $blogCategory
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'カテゴリー「%s」を更新しました。'),
-                    $blogCategory->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'カテゴリー「{0}」を更新しました。', $blogCategory->name));
                 $this->redirect(['action' => 'index', $blogContentId]);
             } catch (PersistenceFailedException $e) {
                 $blogCategory = $e->getEntity();
@@ -151,10 +145,7 @@ class BlogCategoriesController extends BlogAdminAppController
         /* @var BlogCategory $blogCategory */
         $blogCategory = $service->get($id);
         if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(sprintf(
-                __d('baser_core', '%s を削除しました。'),
-                $blogCategory->name
-            ));
+            $this->BcMessage->setSuccess(__d('baser_core', 'カテゴリー「{0}」を削除しました。', $blogCategory->name));
         } else {
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }

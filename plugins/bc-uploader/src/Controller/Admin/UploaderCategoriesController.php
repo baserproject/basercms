@@ -81,7 +81,7 @@ class UploaderCategoriesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', "入力エラーです。内容を修正してください。"));
             } catch (Throwable $e) {
                 $this->setResponse($this->response->withStatus(500));
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set(['uploaderCategory' => $entity ?? $service->getNew()]);
@@ -122,7 +122,7 @@ class UploaderCategoriesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', "入力エラーです。内容を修正してください。"));
             } catch (Throwable $e) {
                 $this->setResponse($this->response->withStatus(500));
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set(['uploaderCategory' => $entity]);

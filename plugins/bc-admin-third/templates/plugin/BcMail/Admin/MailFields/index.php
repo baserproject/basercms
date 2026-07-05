@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜メールフィールド一覧'), $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜メールフィールド一覧', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_index');
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $this->request->getParam('pass.0')],

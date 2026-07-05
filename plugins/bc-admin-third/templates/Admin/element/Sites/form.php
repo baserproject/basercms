@@ -211,7 +211,7 @@ $this->BcBaser->i18nScript([
       <td class=" bca-form-table__input">
         <?php echo $this->BcAdminForm->control('domain_type', [
           'type' => 'radio',
-          'options' => [1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '外部ドメイン')],
+          'options' => [1 => __d('baser_core', 'サブドメイン'), 2 => __d('baser_core', '外部ドメイン')],
           'default' => 0
         ]) ?>
         <?php echo $this->BcAdminForm->error('domain_type') ?>
