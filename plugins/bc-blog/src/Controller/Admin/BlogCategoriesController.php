@@ -41,7 +41,12 @@ class BlogCategoriesController extends BlogAdminAppController
         int $blogContentId
     )
     {
-        $this->set($service->getViewVarsForIndex($blogContentId));
+        // 表示形式（list_type）をセッションに保持し、追加・削除後のリダイレクトでも維持する
+        $this->setViewConditions('BlogCategories', ['default' => ['query' => [
+            'list_type' => 2,
+        ]]]);
+        $listType = $this->getRequest()->getQuery('list_type');
+        $this->set($service->getViewVarsForIndex($blogContentId, $listType !== null ? (int)$listType : null));
     }
 
     /**
@@ -82,9 +87,10 @@ class BlogCategoriesController extends BlogAdminAppController
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
+        $parentId = $this->getRequest()->getQuery('parent_id');
         $this->set($service->getViewVarsForAdd(
             $blogContentId,
-            $blogCategory ?? $service->getNew($blogContentId)
+            $blogCategory ?? $service->getNew((int)$blogContentId, $parentId? (int)$parentId : null)
         ));
     }
 
@@ -159,6 +165,46 @@ class BlogCategoriesController extends BlogAdminAppController
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         $this->redirect(['action' => 'index', $blogContentId]);
+    }
+
+    /**
+     * [ADMIN] ブログカテゴリのツリー構造のチェックを行う
+     *
+     * 問題がある場合にはログを出力する
+     *
+     * @param BlogCategoriesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verity_tree(BlogCategoriesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+        if (!$service->verityTree()) {
+            $this->BcMessage->setError(__d('baser_core', 'ブログカテゴリのツリー構造に問題があります。ログを確認してください。'));
+        } else {
+            $this->BcMessage->setSuccess(__d('baser_core', 'ブログカテゴリのツリー構造に問題はありません。'), false);
+        }
+        $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'index']);
+    }
+
+    /**
+     * [ADMIN] ブログカテゴリのツリー構造をリセットする
+     *
+     * @param BlogCategoriesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function reset_tree(BlogCategoriesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+        if ($service->resetTree()) {
+            $this->BcMessage->setSuccess(__d('baser_core', 'ブログカテゴリのツリー構造をリセットしました。'));
+        } else {
+            $this->BcMessage->setError(__d('baser_core', 'ブログカテゴリのツリー構造のリセットに失敗しました。'));
+        }
+        $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'index']);
     }
 
 }

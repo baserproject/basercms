@@ -15,9 +15,11 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCategoriesController;
+use BcBlog\Event\BcBlogViewEventListener;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Event\Event;
+use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -73,10 +75,23 @@ class BlogCategoriesControllerTest extends BcTestCase
     {
         BlogContentFactory::make(['id' => 1, 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9'])->persist();
         ContentFactory::make(['id' => 1, 'entity_id' => 1, 'type' => 'BlogContent', 'plugin' => 'BcBlog'])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'release', 'title' => 'プレスリリース', 'status' => 1, 'lft' => 1, 'rght' => 2])->persist();
         $this->get('/baser/admin/bc-blog/blog_categories/index');
         $this->assertResponseError();
+        // 表形式（デフォルト）
         $this->get('/baser/admin/bc-blog/blog_categories/index/1');
         $this->assertResponseOk();
+        // ツリー形式
+        $this->get('/baser/admin/bc-blog/blog_categories/index/1?list_type=1');
+        $this->assertResponseOk();
+        $this->assertResponseContains('id="BlogCategoryTreeList"');
+        // 表示形式はセッションに保存される
+        $this->assertSession('1', 'BcApp.viewConditions.BlogCategoriesIndex.query.list_type');
+        // セッションに保持された表示形式は、クエリなしのアクセスでも復元される
+        $this->session(['BcApp' => ['viewConditions' => ['BlogCategoriesIndex' => ['query' => ['list_type' => 1]]]]]);
+        $this->get('/baser/admin/bc-blog/blog_categories/index/1');
+        $this->assertResponseOk();
+        $this->assertResponseContains('id="BlogCategoryTreeList"');
     }
 
     /**
@@ -178,6 +193,73 @@ class BlogCategoriesControllerTest extends BcTestCase
         $data['name'] = 'test name';
         $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
+    }
+
+    /**
+     * [ADMIN] ブログカテゴリのツリー構造チェック
+     */
+    public function testAdmin_verity_tree()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // 正常なツリー
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'release', 'title' => 'プレスリリース', 'parent_id' => null, 'lft' => 1, 'rght' => 2])->persist();
+        $this->post('/baser/admin/bc-blog/blog_categories/verity_tree');
+        $this->assertResponseCode(302);
+        $this->assertRedirect(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Utilities', 'action' => 'index']);
+        $this->assertFlashMessage('ブログカテゴリのツリー構造に問題はありません。');
+
+        // 破損したツリー
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'broken', 'title' => 'B', 'parent_id' => null, 'lft' => 2, 'rght' => 1])->persist();
+        $this->post('/baser/admin/bc-blog/blog_categories/verity_tree');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ブログカテゴリのツリー構造に問題があります。ログを確認してください。');
+    }
+
+    /**
+     * [ADMIN] ブログカテゴリのツリー構造リセット
+     */
+    public function testAdmin_reset_tree()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        $this->post('/baser/admin/bc-blog/blog_categories/reset_tree');
+        $this->assertResponseCode(302);
+        $this->assertRedirect(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Utilities', 'action' => 'index']);
+        $this->assertFlashMessage('ブログカテゴリのツリー構造をリセットしました。');
+        // 全てルート直下にフラット化されている
+        $blogCategories = $this->getTableLocator()->get('BcBlog.BlogCategories');
+        $this->assertEquals(2, $blogCategories->find()->where(['parent_id IS' => null])->count());
+    }
+
+    /**
+     * [ADMIN] ユーティリティ画面にブログカテゴリのツリー構造チェック・リセットが表示される
+     */
+    public function testUtilitiesIndexContainsBlogCategoriesTreeSection()
+    {
+        // BcTestCase が EventManager をリセットするため、プラグイン読込時に
+        // 自動登録されるリスナーをテストでは明示的に登録する
+        EventManager::instance()->on(new BcBlogViewEventListener());
+        $this->get('/baser/admin/baser-core/utilities/index');
+        $this->assertResponseOk();
+        $this->assertResponseContains('blog_categories/verity_tree');
+        $this->assertResponseContains('blog_categories/reset_tree');
+    }
+
+    /**
+     * [ADMIN] 登録処理（子カテゴリを追加：parent_id クエリの反映）
+     */
+    public function testAdmin_add_withParentId()
+    {
+        BlogContentFactory::make(['id' => 1, 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9'])->persist();
+        ContentFactory::make(['id' => 1, 'entity_id' => 1, 'type' => 'BlogContent', 'plugin' => 'BcBlog'])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'release', 'title' => 'プレスリリース', 'status' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        // クエリで指定した親カテゴリが初期選択される
+        $this->get('/baser/admin/bc-blog/blog_categories/add/1?parent_id=1');
+        $this->assertResponseOk();
+        $this->assertResponseRegExp('/<option value="1" selected[^>]*>プレスリリース<\/option>/');
     }
 
     /**

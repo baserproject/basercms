@@ -79,7 +79,7 @@ $this->BcListTable->setColumnNumber(6);
       foreach($rowIdTmps as $rowIdTmp) {
         $rowGroupId[] = 'row-group-' . $rowIdTmp;
       }
-      $rowGroupClass = ' class="depth-' . $blogCategory->depth . ' ' . implode(' ', $rowGroupId) . '"';
+      $rowGroupClass = ' class="sortable depth-' . $blogCategory->depth . ' ' . implode(' ', $rowGroupId) . '"';
       ?>
       <?php $currentDepth = $blogCategory->depth ?>
       <?php $this->BcBaser->element('BlogCategories/index_row', ['blogCategory' => $blogCategory, 'rowGroupClass' => $rowGroupClass]) ?>

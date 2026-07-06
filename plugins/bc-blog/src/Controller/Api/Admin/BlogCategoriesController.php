@@ -278,4 +278,43 @@ class BlogCategoriesController extends BcAdminApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogCategory', 'message']);
     }
+
+    /**
+     * [API] カテゴリの配置を移動する（並び替え・再親付け）
+     *
+     * @param BlogCategoriesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function move(BlogCategoriesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $blogCategory = $errors = null;
+        try {
+            $blogCategory = $service->move(
+                $this->request->getData('origin'),
+                $this->request->getData('target')
+            );
+            $message = __d('baser_core', 'ブログカテゴリー「{0}」の配置を移動しました。', $blogCategory->title);
+            $this->BcMessage->setSuccess($message, true, false);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'blogCategory' => $blogCategory,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogCategory', 'errors']);
+    }
 }
