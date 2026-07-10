@@ -317,6 +317,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 }
 
                 $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
+                $logicalOperator = !empty($link->custom_field->meta['BcCustomContent']['or_search']) ? 'OR' : 'AND';
                 if($link->custom_field->type == "BcCcRelated"){
                     if (!empty($link->custom_field->meta['BcCcRelated']['display_type']) && $link->custom_field->meta['BcCcRelated']['display_type'] === 'multiCheckbox') {
                         if (!is_array($value))$value = [$value];
@@ -324,7 +325,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                         foreach ($value as $v) {
                             $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
                         }
-                        $conditions[] = ['AND' => $c];
+                        $conditions[] = [$logicalOperator => $c];
                     } else {
                         $conditions["CustomEntries.$key"] = $value;
                     }
@@ -337,7 +338,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                         foreach ($value as $v) {
                             $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
                         }
-                        $conditions[] = ['AND' => $c];
+                        $conditions[] = [$logicalOperator => $c];
                     } elseif ($controlType === 'checkbox') {
                         if ($value) $conditions["CustomEntries.$key"] = $value;
                     } else {
