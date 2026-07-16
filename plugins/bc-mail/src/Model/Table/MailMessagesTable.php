@@ -310,6 +310,7 @@ class MailMessagesTable extends MailAppTable
 
                         case 'VALID_FILE_EXT':
                             if (!empty($options['fileExt'])) {
+                                $validator->remove($mailField->field_name, 'fileExt');
                                 $validator->add($mailField->field_name, [
                                     'fileExt' => [
                                         'provider' => 'bc',
