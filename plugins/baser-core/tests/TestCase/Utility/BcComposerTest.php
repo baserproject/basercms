@@ -127,9 +127,12 @@ class BcComposerTest extends BcTestCase
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
-        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
-        $data = str_replace('"cakephp/cakephp": "5.2.*"', '"cakephp/cakephp": "5.0.*"', $data);
+        $data = str_replace('"cakephp/cakephp": "~5.2.0"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "~7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        // CakePHP5.0.10 とは互換性がないため、require-dev のバージョン制約も一旦緩和する
+        $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
+        $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
+        $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
@@ -170,7 +173,7 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
         $folder->delete();
-        BcComposer::update();
+        BcComposer::install();
     }
 
     /**
@@ -192,8 +195,12 @@ class BcComposerTest extends BcTestCase
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
-        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        $data = str_replace('"cakephp/cakephp": "~5.2.0"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "~7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        // CakePHP5.0.10 とは互換性がないため、require-dev のバージョン制約も一旦緩和する
+        $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
+        $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
+        $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
