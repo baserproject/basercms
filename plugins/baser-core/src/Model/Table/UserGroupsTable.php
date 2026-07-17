@@ -107,6 +107,12 @@ class UserGroupsTable extends AppTable
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser_core', '既に登録のある表示名です。')
+                ],
+                'noWhitespace' => [
+                    'rule' => function ($value) {
+                        return !preg_match('/[ 　]/u', $value);
+                    },
+                    'message' => __d('baser_core', '表示名に半角・全角スペースは使用できません。')
                 ]]);
 
         $validator
