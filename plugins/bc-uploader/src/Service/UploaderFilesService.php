@@ -284,7 +284,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if(!isset($postData['user_id'])) return false;
         $user = BcUtil::loginUser();
         if(!$user) return false;
-        if (!BcUtil::isAdminUser($user) && $postData['user_id'] !== $user->id) {
+        if (!BcUtil::isAdminUser($user) && (int)$postData['user_id'] !== (int)$user->id) {
             return false;
         }
         return true;
