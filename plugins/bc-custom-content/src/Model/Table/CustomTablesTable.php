@@ -116,7 +116,14 @@ class CustomTablesTable extends AppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
-            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
+            ->add('title', [
+                'bcUtileUrlencodeBlank' => [
+                    'rule' => ['bcUtileUrlencodeBlank'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+                ]
+            ]);
 
         return $validator;
     }

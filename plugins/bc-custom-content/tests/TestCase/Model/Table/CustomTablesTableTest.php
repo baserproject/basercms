@@ -98,6 +98,11 @@ class CustomTablesTableTest extends BcTestCase
             'name' => 'あ',
         ]);
         $this->assertEquals('識別名は半角英数小文字とアンダースコアのみで入力してください。', current($errors['name']));
+        //タイトルが半角スペース、全角スペースのみで構成されている
+        $errors = $validator->validate([
+            'title' => '　 ',
+        ]);
+        $this->assertEquals('タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。', current($errors['title']));
         //正常系実行
         $errors = $validator->validate([
             'name' => 'test',
