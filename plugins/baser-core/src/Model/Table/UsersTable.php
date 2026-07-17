@@ -155,7 +155,7 @@ class UsersTable extends AppTable
             ->add('real_name_1', [
                 'noWhitespace' => [
                     'rule' => function ($value) {
-                        return !preg_match('/[\s　]/u', $value);
+                        return !preg_match('/[ 　]/u', $value);
                     },
                     'message' => __d('baser_core', '名前[姓]に半角・全角スペースは使用できません。')
                 ]]);
@@ -166,7 +166,7 @@ class UsersTable extends AppTable
             ->add('real_name_2', [
                 'noWhitespace' => [
                     'rule' => function ($value) {
-                        return !preg_match('/[\s　]/u', $value);
+                        return !preg_match('/[ 　]/u', $value);
                     },
                     'message' => __d('baser_core', '名前[名]に半角・全角スペースは使用できません。')
                 ]]);
