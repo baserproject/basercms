@@ -243,7 +243,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
-        if(!$this->isEditable($postData)) {
+        if(!$this->isEditable($entity->toArray())) {
             throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
         if(!empty($postData['overwrite']) && !empty($postData['file'])) {
