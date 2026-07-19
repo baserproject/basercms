@@ -90,6 +90,8 @@ class ComposerCommand extends Command
             BcComposer::deleteReplace();
         }
 
+        BcComposer::relaxFrameworkConstraints();
+
         $result = BcComposer::require('baser-core', $version);
 
         if($result['code'] === 0) {
