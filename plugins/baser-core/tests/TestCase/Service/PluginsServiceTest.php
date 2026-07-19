@@ -613,7 +613,14 @@ EOF;
      */
     public function testGetCoreUpdateAndUpdateCoreFiles()
     {
-        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
+        // このテストは、monorepo自体(replaceでbaserproject/*を自己解決しており、
+        // vendor/plugins配下のいずれにもbaser-core自身のcomposer.jsonが存在しない)を
+        // ソースにして「cakephp 5.2系pin → cakephp 4.4系を要求する旧baser-core 5.0.15への
+        // ダウングレード」を試みるため、relaxFrameworkConstraints() が対象を検出できず、
+        // 別の要因で失敗する(ComposerCommandTest::testExecuteOnUpdateTmp と同根)。
+        // 実際の配布サイト(replaceを使わずbaser-coreが実インストールされる)を模した形に
+        // 調整してから再実装する
+        $this->markTestIncomplete('monorepo特有のreplace構成により、ダウングレード方向のシナリオ再現には別途テスト環境の調整が必要');
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
