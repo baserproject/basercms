@@ -304,6 +304,7 @@ class BcComposerTest extends BcTestCase
         // ルート composer.json (更新対象) を用意
         // cakephp/cakephp・cakephp/authentication は baser-core 自身と重複するpin、
         // baserproject/bc-blog は公式プラグイン、some-vendor/custom-plugin はユーザー独自追加を想定
+        // require-dev も、composer require が --with-all-dependencies でも解決対象にするため同様に検証する
         $composerJson = TMP_TESTS . 'composer.json';
         $rootData = [
             'require' => [
@@ -313,6 +314,10 @@ class BcComposerTest extends BcTestCase
                 'cakephp/authentication' => '^3.0',
                 'baserproject/bc-blog' => '5.2.8',
                 'some-vendor/custom-plugin' => '^1.0',
+            ],
+            'require-dev' => [
+                'cakephp/debug_kit' => '^5.0.0',
+                'some-vendor/dev-plugin' => '^1.0',
             ],
         ];
         (new BcFile($composerJson))->write(json_encode($rootData, JSON_PRETTY_PRINT));
@@ -325,6 +330,9 @@ class BcComposerTest extends BcTestCase
                 'php' => '>=8.1',
                 'cakephp/cakephp' => '5.2.*',
                 'cakephp/authentication' => '^3.0',
+            ],
+            'require-dev' => [
+                'cakephp/debug_kit' => '^5.2.4',
             ],
         ];
         (new BcFile($baserCoreDir . DS . 'composer.json'))->write(json_encode($baserCoreData, JSON_PRETTY_PRINT));
@@ -339,6 +347,8 @@ class BcComposerTest extends BcTestCase
         $this->assertArrayHasKey('ext-json', $data['require'], 'ext-* のプラットフォーム要件は残るべき');
         $this->assertArrayHasKey('baserproject/bc-blog', $data['require'], 'baserproject/* の公式プラグインは対象外として残るべき');
         $this->assertArrayHasKey('some-vendor/custom-plugin', $data['require'], 'baser-core が管理しないユーザー独自パッケージは残るべき');
+        $this->assertArrayNotHasKey('cakephp/debug_kit', $data['require-dev'], 'baser-core と重複する require-dev の cakephp/debug_kit は削除されるべき');
+        $this->assertArrayHasKey('some-vendor/dev-plugin', $data['require-dev'], 'baser-core が管理しないユーザー独自の require-dev パッケージは残るべき');
 
         // クリーンアップ
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
