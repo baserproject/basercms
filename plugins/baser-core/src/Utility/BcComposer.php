@@ -263,6 +263,7 @@ class BcComposer
     public static function setupComposerForDistribution(string $version)
     {
         self::deleteReplace();
+        self::relaxFrameworkConstraints();
         $result = self::require('baser-core', $version);
         (new BcFolder(self::$currentDir . 'vendor'))->delete();
         mkdir(self::$currentDir . 'vendor');
@@ -308,6 +309,52 @@ class BcComposer
         if(isset($data['replace'])) {
             unset($data['replace']);
         }
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $file->write($json);
+    }
+
+    /**
+     * baser-core が自身の composer.json で依存管理しているフレームワーク系パッケージについて、
+     * ルート composer.json 側の重複した明示pinを削除し、baser-core側の制約を優先させる
+     *
+     * 配布パッケージのルート composer.json は cakephp/cakephp 等、本来 baser-core の間接依存に
+     * すぎないパッケージを明示的に重複してrequireしている。この重複pinが古いバージョンのまま
+     * 残っていると、baser-core を新しいバージョンへ require する際、要求されるフレームワーク
+     * バージョンと衝突して失敗するため、require実行前に呼び出す。
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function relaxFrameworkConstraints()
+    {
+        $candidates = [
+            self::$currentDir . 'vendor' . DS . 'baserproject' . DS . 'baser-core' . DS . 'composer.json',
+            self::$currentDir . 'plugins' . DS . 'baser-core' . DS . 'composer.json',
+        ];
+        $baserCoreComposerJson = null;
+        foreach($candidates as $candidate) {
+            if (file_exists($candidate)) {
+                $baserCoreComposerJson = $candidate;
+                break;
+            }
+        }
+        if (!$baserCoreComposerJson) return;
+
+        $baserCoreData = json_decode((new BcFile($baserCoreComposerJson))->read(), true);
+        $baserCoreRequire = $baserCoreData['require'] ?? [];
+
+        $file = new BcFile(self::$currentDir . 'composer.json');
+        $data = json_decode($file->read(), true);
+        if (empty($data['require'])) return;
+
+        foreach(array_keys($baserCoreRequire) as $package) {
+            if (strpos($package, '/') === false) continue;
+            if (strpos($package, 'baserproject/') === 0) continue;
+            unset($data['require'][$package]);
+        }
+
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $file->write($json);
     }

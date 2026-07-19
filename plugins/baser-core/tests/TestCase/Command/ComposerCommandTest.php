@@ -91,7 +91,13 @@ class ComposerCommandTest extends BcTestCase
      */
 	public function testExecuteOnUpdateTmp()
     {
-        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
+        // このテストは、monorepo自体(replaceでbaserproject/*を自己解決しており、
+        // vendor/plugins配下のいずれにもbaser-core自身のcomposer.jsonが存在しない)を
+        // ソースにして「cakephp 5.2系pin → cakephp 4.4系を要求する旧baser-core 5.0.15への
+        // ダウングレード」を試みるため、relaxFrameworkConstraints() が対象を検出できず、
+        // 別の要因で失敗する。実際の配布サイト(replaceを使わずbaser-coreが実インストール
+        // される)を模した形に調整してから再実装する
+        $this->markTestIncomplete('monorepo特有のreplace構成により、ダウングレード方向のシナリオ再現には別途テスト環境の調整が必要');
         // 一時ファイル作成
         (new BcFolder(TMP . 'update'))->create();
         (new BcFolder(ROOT . DS . 'vendor'))->copy(TMP . 'update' . DS . 'vendor');
@@ -120,6 +126,11 @@ class ComposerCommandTest extends BcTestCase
         $rceFile = TMP . 'rce_test_command';
         if (file_exists($rceFile)) unlink($rceFile);
 
+        // --dir 未指定のため ROOT の composer.json が対象になり、
+        // relaxFrameworkConstraints() が実行される。require 失敗時も元の状態に戻すためバックアップする
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.json.bak');
+        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
+
         $maliciousVersion = '1.0.0; touch ' . $rceFile . ';';
         // ConsoleIntegrationTestTrait の exec は引数をパースして Command に渡すため、
         // ここで渡す引数はエスケープされている必要がある（実際のシェル実行をシミュレート）
@@ -128,6 +139,10 @@ class ComposerCommandTest extends BcTestCase
         ob_get_clean();
 
         $this->assertFalse(file_exists($rceFile), 'ComposerCommand::execute でOSコマンドインジェクションが発生しました');
+
+        // バックアップをリストア
+        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
     }
 
 }
