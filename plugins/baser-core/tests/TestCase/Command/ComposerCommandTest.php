@@ -86,6 +86,42 @@ class ComposerCommandTest extends BcTestCase
     }
 
     /**
+     * test execute の脆弱パッケージブロック解除
+     *
+     * 現行バージョンが5.2系以下の場合のみ、依存する CakePHP 5.0系がセキュリティアドバイザリの
+     * 対象になっている影響で発生する composer のダウンロードブロックを解除することを確認する
+     * @return void
+     */
+    public function test_executeDisablesBlockInsecureForOldVersion()
+    {
+        // composer.json / composer.lock / VERSION.txt をバックアップ
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.json.bak');
+        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
+        copy(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+
+        // 現行バージョンが5.2系以下の場合、disableBlockInsecure() が呼ばれるべき
+        (new BcFile(BASER . 'VERSION.txt'))->write('5.2.8');
+        $this->exec('composer 9999.9999.9999');
+        $data = json_decode((new BcFile(ROOT . DS . 'composer.json'))->read(), true);
+        $this->assertFalse($data['config']['audit']['block-insecure'] ?? true, '5.2系以下では disableBlockInsecure() が呼ばれるべき');
+
+        // composer.json を一旦バックアップから戻して次のケースへ
+        copy(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+
+        // 現行バージョンが5.3系以上の場合、disableBlockInsecure() は呼ばれないべき
+        (new BcFile(BASER . 'VERSION.txt'))->write('5.3.0');
+        $this->exec('composer 9999.9999.9999');
+        $data = json_decode((new BcFile(ROOT . DS . 'composer.json'))->read(), true);
+        $this->assertArrayNotHasKey('block-insecure', $data['config']['audit'] ?? [], '5.3系以上では disableBlockInsecure() は呼ばれないべき');
+
+        // バックアップをリストア
+        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
+        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
+        (new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject'))->delete();
+    }
+
+    /**
      * test execute on update tmp
      * @return void
      */

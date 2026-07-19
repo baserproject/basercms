@@ -348,16 +348,19 @@ class BcComposer
         if (!$baserCoreComposerJson) return;
 
         $baserCoreData = json_decode((new BcFile($baserCoreComposerJson))->read(), true);
-        $baserCoreRequire = $baserCoreData['require'] ?? [];
 
         $file = new BcFile(self::$currentDir . 'composer.json');
         $data = json_decode($file->read(), true);
-        if (empty($data['require'])) return;
 
-        foreach(array_keys($baserCoreRequire) as $package) {
-            if (strpos($package, '/') === false) continue;
-            if (strpos($package, 'baserproject/') === 0) continue;
-            unset($data['require'][$package]);
+        // composer require は --with-all-dependencies でも require-dev の解決を無視しないため、
+        // require と同様に require-dev 側の重複pinも対象にする
+        foreach(['require', 'require-dev'] as $section) {
+            if (empty($data[$section]) || empty($baserCoreData[$section])) continue;
+            foreach(array_keys($baserCoreData[$section]) as $package) {
+                if (strpos($package, '/') === false) continue;
+                if (strpos($package, 'baserproject/') === 0) continue;
+                unset($data[$section][$package]);
+            }
         }
 
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
