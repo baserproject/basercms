@@ -245,6 +245,13 @@ class BlogPostsTable extends BlogAppTable
             return;
         }
         $this->unsetExcluded();
+        // 新規登録時など blog_content が未ロードの場合は明示的に取得する
+        if (empty($entity->blog_content) && !empty($entity->blog_content_id)) {
+            $entity->blog_content = $this->BlogContents->find()
+                ->where(['BlogContents.id' => $entity->blog_content_id])
+                ->contain(['Contents'])
+                ->first();
+        }
         // 検索用テーブルに登録
         if ($entity->exclude_search
             || empty($entity->blog_content->content)
