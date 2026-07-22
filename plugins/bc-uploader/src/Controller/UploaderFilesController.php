@@ -54,6 +54,10 @@ class UploaderFilesController extends BcFrontAppController
             }
         }
 
+        if ($display && !file_exists(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename)) {
+            $display = false;
+        }
+
         if ($display) {
             $info = pathinfo($filename);
             $ext = $info['extension'];
