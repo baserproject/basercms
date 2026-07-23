@@ -68,7 +68,7 @@ class BcCcDateHelper extends Helper
         $options = [
             'v-model' => "entity.default_value"
         ];
-        return $this->control($link, $options) . '<br>※ 初期値はハイフン区切りで入力してください。';
+        return $this->control($link, $options);
     }
 
     /**
