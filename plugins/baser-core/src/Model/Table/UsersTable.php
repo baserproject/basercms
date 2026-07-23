@@ -79,6 +79,11 @@ class UsersTable extends AppTable
             (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
+        foreach(['real_name_1', 'real_name_2'] as $field) {
+            if (isset($data[$field]) && is_string($data[$field])) {
+                $data[$field] = preg_replace('/^[ 　]+|[ 　]+$/u', '', $data[$field]);
+            }
+        }
     }
 
     /**
@@ -151,25 +156,11 @@ class UsersTable extends AppTable
             ->scalar('real_name_1')
             ->maxLength('real_name_1', 50, __d('baser_core', '名前[姓]は50文字以内で入力してください。'))
             ->requirePresence('real_name_1', 'create', __d('baser_core', '名前[姓]を入力してください。'))
-            ->notEmptyString('real_name_1', __d('baser_core', '名前[姓]を入力してください。'))
-            ->add('real_name_1', [
-                'noWhitespace' => [
-                    'rule' => function ($value) {
-                        return !preg_match('/[ 　]/u', $value);
-                    },
-                    'message' => __d('baser_core', '名前[姓]に半角・全角スペースは使用できません。')
-                ]]);
+            ->notEmptyString('real_name_1', __d('baser_core', '名前[姓]を入力してください。'));
         $validator
             ->scalar('real_name_2')
             ->maxLength('real_name_2', 50, __d('baser_core', '名前[名]は50文字以内で入力してください。'))
-            ->allowEmptyString('real_name_2')
-            ->add('real_name_2', [
-                'noWhitespace' => [
-                    'rule' => function ($value) {
-                        return !preg_match('/[ 　]/u', $value);
-                    },
-                    'message' => __d('baser_core', '名前[名]に半角・全角スペースは使用できません。')
-                ]]);
+            ->allowEmptyString('real_name_2');
         $validator
             ->scalar('nickname')
             ->maxLength('nickname', 255, __d('baser_core', 'ニックネームは255文字以内で入力してください。'))
