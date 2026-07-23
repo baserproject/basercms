@@ -256,4 +256,74 @@ class BcContentsBehaviorTest extends BcTestCase
         $this->assertEquals('BaserContent', $rs);
     }
 
+    /**
+     * test afterMarshal rollbacks content file on error
+     * メインエンティティにエラーがある場合、Contentのeyecatch_tmpが保持される
+     */
+    public function testAfterMarshalRollbacksContentFileOnError()
+    {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+
+        // ContentアソシエーションつきでContentFolderを取得
+        $contentFolder = $this->table->find()->contain('Contents')->first();
+        $this->assertNotEmpty($contentFolder->content, 'Contentが取得できていません');
+
+        // content の eyecatch_tmp を設定（セッション画像の参照）
+        $contentFolder->content->set('eyecatch_tmp', 'session_content_eyecatch.jpg');
+
+        // メインエンティティに直接エラーを設定（validate=falseでバリデーション処理をスキップ）
+        $contentFolder->setError('folder_template', ['バリデーションエラー']);
+
+        $result = $this->table->dispatchEvent('Model.afterMarshal', [
+            'entity' => $contentFolder,
+            'data' => new ArrayObject($contentFolder->toArray()),
+            'options' => new ArrayObject(['validate' => false]),
+        ]);
+
+        $updatedEntity = $result->getData('entity');
+
+        // バリデーションエラー時、content.eyecatch_tmpが保持されていることを確認
+        $this->assertEquals(
+            'session_content_eyecatch.jpg',
+            $updatedEntity->content->get('eyecatch_tmp'),
+            'バリデーションエラー時にcontent.eyecatch_tmpが保持されるべきです'
+        );
+    }
+
+    /**
+     * test afterMarshal does not rollback content file on success
+     * メインエンティティにエラーがない場合、rollbackFileが呼ばれずeyecatchは変更されたまま
+     */
+    public function testAfterMarshalNoRollbackContentFileOnSuccess()
+    {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+
+        // ContentアソシエーションつきでContentFolderを取得
+        $contentFolder = $this->table->find()->contain('Contents')->first();
+        $this->assertNotEmpty($contentFolder->content, 'Contentが取得できていません');
+
+        // content の eyecatch を変更（dirty状態）
+        $contentFolder->content->set('eyecatch', 'new_eyecatch.jpg');
+
+        // メインエンティティにエラーなし
+        $this->assertFalse($contentFolder->hasErrors());
+
+        $result = $this->table->dispatchEvent('Model.afterMarshal', [
+            'entity' => $contentFolder,
+            'data' => new ArrayObject($contentFolder->toArray()),
+            'options' => new ArrayObject(['validate' => false]),
+        ]);
+
+        $updatedEntity = $result->getData('entity');
+
+        // エラーなしの場合はrollbackFileが呼ばれないため、eyecatchが変更されたままであることを確認
+        $this->assertEquals(
+            'new_eyecatch.jpg',
+            $updatedEntity->content->get('eyecatch'),
+            'エラーなしの場合はrollbackFileが呼ばれず、eyecatchが変更されたままであるべきです'
+        );
+    }
+
 }

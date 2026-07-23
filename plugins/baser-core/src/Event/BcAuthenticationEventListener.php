@@ -86,7 +86,7 @@ class BcAuthenticationEventListener implements EventListenerInterface
         try {
             $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
         } catch (\Exception $e) {
-            throw new HttpException(__d('baser_core', '認証コードの送信に失敗しました。'. $e->getMessage()));
+            throw new HttpException(__d('baser_core', '認証コードの送信に失敗しました。') . $e->getMessage());
         }
 
         // 認証コード入力画面にリダイレクト

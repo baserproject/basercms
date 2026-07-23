@@ -130,7 +130,7 @@ $this->BcAdmin->setHelp('custom_tables_form');
 <div id="CustomFieldSetting" class="custom-field-setting">
 
   <div class="custom-field-setting__panel">
-    <h2>利用中のフィールド</h2>
+    <h2><?php echo __d('baser_core', '利用中のフィールド'); ?></h2>
     <div id="CustomFieldSettingTarget">
       <?php if ($customLinks): ?>
         <?php $i = 1 ?>
@@ -147,7 +147,7 @@ $this->BcAdmin->setHelp('custom_tables_form');
 
   <div class="custom-field-setting__panel">
     <h2>
-      利用できるフィールド&nbsp;&nbsp;
+      <?php echo __d('baser_core', '利用できるフィールド'); ?>&nbsp;&nbsp;
       <?php $this->BcBaser->link(__d('baser_core', '新規登録'),
         ['controller' => 'CustomFields', 'action' => 'add'], [
           'class' => 'bca-btn',

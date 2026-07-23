@@ -283,7 +283,12 @@
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
-            <?php echo sprintf(__d('baser_core', 'メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser_core', 'ウィジェットエリア管理'), ['plugin' => 'BcWidgetArea', 'controller' => 'WidgetAreas', 'action' => 'index'])) ?>
+            <?php echo __d('baser_core',
+              'メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「{0}」より追加できます。',
+              $this->BcBaser->getLink(__d('baser_core', 'ウィジェットエリア管理'), [
+                'plugin' => 'BcWidgetArea', 'controller' => 'WidgetAreas', 'action' => 'index'
+              ])
+            ) ?>
           </div>
           <?php echo $this->BcAdminForm->error('widget_area') ?>
         </td>

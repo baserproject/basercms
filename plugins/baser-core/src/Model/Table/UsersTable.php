@@ -238,7 +238,7 @@ class UsersTable extends AppTable
                 'passwordAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus', $quotedSymbol],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(' . trim($symbol) . ')のみで入力してください。')
+                    'message' => __d('baser_core', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号({0})のみで入力してください。', trim($symbol))
                 ]])
             ->add('password', [
                 'passwordConfirm' => [

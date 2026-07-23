@@ -268,7 +268,7 @@ class UtilitiesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser_core', 'データのリセットに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'データのリセットに失敗しました。') . $e->getMessage());
         }
         $this->redirect(['action' => 'maintenance']);
     }

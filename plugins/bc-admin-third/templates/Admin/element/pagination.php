@@ -49,6 +49,6 @@ $this->Paginator->setTemplates([
     </div>
 <?php endif ?>
   <div class="page-result bca-page-result">
-    <?php echo $this->Paginator->counter(sprintf(__d('baser_core', '%s～%s 件'), '<span class="page-start-num">{{start}}</span>', '<span class="page-end-num">{{end}}</span>') . ' ／ ' . sprintf(__d('baser_core', '%s 件'), '<span class="page-total-num">{{count}}</span>')) ?>
+    <?php echo $this->Paginator->counter(__d('baser_core', '{0}～{1} 件', '<span class="page-start-num">{{start}}</span>', '<span class="page-end-num">{{end}}</span>') . ' ／ ' . __d('baser_core', '{0} 件', '<span class="page-total-num">{{count}}</span>')) ?>
   </div>
 </div>

@@ -17,5 +17,5 @@ return [
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'adminLink' => ['prefix' => 'Admin', 'plugin' => 'BcUploader', 'controller' => 'UploaderFiles', 'action' => 'index'],
-    'installMessage' => __d('baser_core', '登録ボタンをクリックする前に、サーバー上の ' . $viewFilesPath . ' に書き込み権限を与えてください。')
+    'installMessage' => __d('baser_core', '登録ボタンをクリックする前に、サーバー上の {0} に書き込み権限を与えてください。', $viewFilesPath)
 ];

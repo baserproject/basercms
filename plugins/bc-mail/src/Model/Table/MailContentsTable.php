@@ -317,7 +317,6 @@ class MailContentsTable extends MailAppTable
         $url = $data->content->url;
         $siteId = $data->content->site_id;
         $name = $data->content->name;
-        $eyeCatch = $data->content->eyecatch;
         unset($data->id);
         unset($data->created);
         unset($data->modified);
@@ -328,8 +327,8 @@ class MailContentsTable extends MailAppTable
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
             'exclude_search' => false,
-			'description' => $data->content->description,
-			'eyecatch' => $data->content->eyecatch
+            'description' => $data->content->description,
+            'eyecatch' => $data->content->eyecatch
         ]);
 
         $newEntity = $this->patchEntity($this->newEmptyEntity(), $data->toArray());
@@ -369,20 +368,7 @@ class MailContentsTable extends MailAppTable
             $messagesService->createTable($newEntity->id);
             $messagesService->construction($newEntity->id);
 
-            // TODO ucmitz 未実装
-            // >>>
-//            if ($eyeCatch) {
-//                $content = clone $data->content;
-//                $content->eyecatch = $eyeCatch;
-//                $content = $this->Contents->renameToBasenameFields(true);
-//                $result = $this->Content->save($content);
-//                if(!$result) {
-//                    $this->getConnection()->rollback();
-//                    return false;
-//                }
-//                $newEntity->content = $result;
-//            }
-            // <<<
+            $newEntity->content = $this->Contents->copyEyecatchFile($result->content);
 
             // EVENT BlogContents.afterCopy
             $this->dispatchLayerEvent('afterCopy', [

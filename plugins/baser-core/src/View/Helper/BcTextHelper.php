@@ -64,9 +64,9 @@ class BcTextHelper extends TextHelper
     public function booleanMark($value)
     {
         if ($value) {
-            return "○";
+            return __d('baser_core', '○');
         } else {
-            return "―";
+            return __d('baser_core', '―');
         }
     }
 
@@ -80,7 +80,7 @@ class BcTextHelper extends TextHelper
      */
     public function booleanMarkList()
     {
-        return [0 => "―", 1 => "○"];
+        return [0 => __d('baser_core', '―'), 1 => __d('baser_core', '○')];
     }
 
     /**
@@ -121,8 +121,8 @@ class BcTextHelper extends TextHelper
     public function booleanDoList($doText = null)
     {
         return [
-            0 => sprintf(__d('baser_core', '%s しない'), $doText),
-            1 => sprintf(__d('baser_core', '%s する'), $doText)
+            0 => __d('baser_core', '{0} しない', $doText),
+            1 => __d('baser_core', '{0} する', $doText)
         ];
     }
 

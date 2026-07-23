@@ -88,7 +88,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php if ($isUserGroupEditable): ?>
           <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroupList, 'error' => false]); ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext"><?php echo sprintf(__d('baser_core', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセスルールの設定をおこないます。'), $this->BcBaser->getLink(__d('baser_core', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには {0} より新しいグループを追加しアクセスルールの設定をおこないます。', $this->BcBaser->getLink(__d('baser_core', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
           <?php echo $this->BcAdminForm->error('user_groups') ?>
         <?php else: ?>
           <?php foreach($user->user_groups as $group): ?>

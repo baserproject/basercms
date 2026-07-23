@@ -43,7 +43,7 @@
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('status', __d('baser_core', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('status', ['type' => 'select', 'options' => ['unpublish' => "―", 'publish' => "○"], 'empty' => __d('baser_core', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('status', ['type' => 'select', 'options' => ['unpublish' => __d('baser_core', '―'), 'publish' => __d('baser_core', '○')], 'empty' => __d('baser_core', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('author_id', __d('baser_core', '作成者'), ['class' => 'bca-search__input-item-label']) ?>

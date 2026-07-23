@@ -10,10 +10,10 @@ baserCMS のユニットテストは Docker コンテナ上で実行する。実
 
 ## 実行環境
 
-- 実行は `docker compose`（`docker-compose.yml`の場所はユーザーに確認する）。
+- 実行は `docker compose`（`<プロジェクトのdocker-compose.yml配置パス>`）。
 - **PHPコンテナ名: `basercms`**、baserCMS 配置先: **`/var/www/html`**。
 - テスト設定: `phpunit.xml.dist`。`<testsuites>` にプラグインごとの testsuite が定義（BaserCore / BcBlog / BcCustomContent / BcMail / BcThemeFile …）。
-- DB はローカル環境依存。
+- DB はローカル環境依存（過去に `bc-db` ホスト無しの失敗があったが、現在は `<db-host>` コンテナを利用。この種の接続失敗は環境要因でスルー可）。
 - **実行前に必ずコンテナの稼働を確認する**。PHP コンテナ・DB コンテナが停止（`Exited`）していると `docker exec` が失敗する。`docker ps` で確認し、落ちていれば `docker start <container> <db-container>`、DB は mysqld が接続を受け付けるまで待つ（詳細は後述「事前確認: コンテナの稼働」）。
 
 ## コマンド整形（重要：権限の自動承認）
@@ -64,7 +64,7 @@ docker exec basercms sh -c 'cd /var/www/html && php -l plugins/baser-core/src/Co
 
 フルスイート（上記 `basercms` コンテナ）とは別に、**1プラグインだけを独立してテストできる**仕組み。4→5 移行中のプラグインを TDD で進めるのに有効（移植したテストが Table/Service 5系化の検証になる）。
 
-- **実行コンテナはアプリ側**（例: `project-name`、配置先 `/var/www/html/v5`）。DB ホストは Docker ネットワーク内でしか解決できないため、**phpunit はコンテナ内で実行**する（ホスト直叩きは接続不可）。
+- **実行コンテナはアプリ側**（例: `<container>`、配置先 `/var/www/html/v5`）。DB ホスト（例 `<db-host>`）は Docker ネットワーク内でしか解決できないため、**phpunit はコンテナ内で実行**する（ホスト直叩きは接続不可）。
 - プラグインは自前の `composer.json` / `vendor/` を持ち、baser-core を dev 依存として取り込む。
 
 ### tests/bootstrap.php と TestApp はどこから入手するか（重要）
@@ -88,7 +88,7 @@ docker exec basercms sh -c 'cd /var/www/html && php -l plugins/baser-core/src/Co
 2. `bin/cake bake bc_plugin Sample`（パスは `1`＝`plugins/`、確認は `y`）。**正しい "Sample" 名**で雛形が生成される。対話は `(echo 1; yes y) | ...` で流す。`| head` 等で**パイプを途中で閉じると SIGPIPE で生成が中断**するので、出力はファイルへリダイレクトして完走させる。
    - ハングしたら（対話待ちで停止）`pkill -f 'cake bake'` で止め、生成途中の plugin ディレクトリを `rm -rf` してからリトライする。
 3. 生成された `plugins/Sample/tests/bootstrap.php` と `plugins/Sample/tests/TestApp/` を、退避した本体 `plugins/Sample2/tests/` へ**移動**する（bootstrap.php と TestApp のみ。後述）。
-4. `TestApp/config/install.php` は **汎用値（host=127.0.0.1 / database=basercms,test_basercms）で生成される**ので、プロジェクトのDB（例 host={container_name} / database=db_name_v5・test_db_name_v5 / user=user_name）へ**必ず編集**する。
+4. `TestApp/config/install.php` は **汎用値（host=127.0.0.1 / database=basercms,test_basercms）で生成される**ので、プロジェクトのDB（例 host=<db-host> / database=<project>_v5・test_<project>_v5 / user=<dbuser>）へ**必ず編集**する。
 5. 生成側 `plugins/Sample` を削除し、本体を戻す（`plugins/Sample2` → `plugins/Sample`）。
 6. `vendor/bin/phpunit` で緑を確認。
 
@@ -118,9 +118,9 @@ docker exec basercms sh -c 'cd /var/www/html && php -l plugins/baser-core/src/Co
    ```
 2. `phpunit.xml.dist` … `bootstrap="tests/bootstrap.php"`、`<testsuite>` に `<directory>tests/TestCase/</directory>`、`<extensions>` に `Cake\TestSuite\Fixture\Extension\PHPUnitExtension`。
 3. `tests/bootstrap.php` … TestApp の `config/paths.php` 読込 → `vendor/autoload.php` → コア bootstrap → `Configure::load('app')` → **`Configure::load('install')` で test 用 Datasources を設定** → `(new Migrations\TestSuite\Migrator())->runMany([['plugin'=>'BaserCore'],['plugin'=>'<Plugin>']])` でスキーマ構築 → `Configure::write('BcApp.testAppPluginsToLoad', ['<Plugin>'])`。
-4. `tests/TestApp/`（最小アプリ骨格）… `config/install.php`（`Datasources.default` と **`Datasources.test`（test 用DB、例 `test_db_name_v5`）**）、`app.php`/`app_local.php`/`bootstrap.php`/`paths.php`/`plugins.php`/`routes.php`、`src/Application.php`、`src/Controller/AppController.php`。
+4. `tests/TestApp/`（最小アプリ骨格）… `config/install.php`（`Datasources.default` と **`Datasources.test`（test 用DB、例 `test_<project>_v5`）**）、`app.php`/`app_local.php`/`bootstrap.php`/`paths.php`/`plugins.php`/`routes.php`、`src/Application.php`、`src/Controller/AppController.php`。
 5. `config/Migrations/`（プラグイン側のスキーマ。`*_Initial.php` ＋ `schema-dump-default.lock`）。BaserCore 分は vendor から自動で流れる。
-6. **test 用 DB（例 `test_db_name_v5`）を事前作成**しておく。
+6. **test 用 DB（例 `test_<project>_v5`）を事前作成**しておく。
 
 ### ★罠: phinx 0.16.11 で migrations が壊れる（最重要）
 
@@ -138,12 +138,12 @@ composer.json の `require-dev` にも `"robmorgan/phinx": "0.16.10"` を明記�
 
 ### 事前確認①: 対象コンテナの特定（思い込み厳禁）
 
-**コンテナ名は決め打ちしない。** 環境には複数の baserCMS 系コンテナが同居することがある（例: `basercms`＝コア monorepo の開発環境 PHP 8.5、`project-name`＝本プロジェクト PHP 8.1）。名前が似ていて取り違えやすい。実行前に**対象アプリが入っているコンテナを実際に確認**する:
+**コンテナ名は決め打ちしない。** 環境には複数の baserCMS 系コンテナが同居することがある（例: `basercms`＝コア monorepo の開発環境 PHP 8.5、`<container>`＝本プロジェクト PHP 8.1）。名前が似ていて取り違えやすい。実行前に**対象アプリが入っているコンテナを実際に確認**する:
 ```
 docker ps -a --format '{{.Names}}\t{{.Status}}'                      # 候補を列挙
 docker exec <候補> sh -c 'ls -d /var/www/html/v5 >/dev/null 2>&1 && echo HIT; php -v | head -1'
 ```
-目的のパス（例 `/var/www/html/v5`）が存在し、想定の PHP バージョンが出るコンテナが正解。DB コンテナも同様に、接続先ホスト名（`install.php` の `host`）と一致する名前のものを使う（`bc-db` 等の別 DB と混同しない）。
+目的のパス（例 `/var/www/html/v5`）が存在し、想定の PHP バージョンが出るコンテナが正解。DB コンテナも同様に、接続先ホスト名（`install.php` の `host`、例 `<db-host>`）と一致する名前のものを使う（`bc-db` 等の別 DB と混同しない）。
 
 ### 事前確認②: コンテナの稼働（最初に必ず）
 
@@ -156,7 +156,7 @@ DB コンテナは起動直後は mysqld がまだ接続を受け付けないこ
 ```
 for i in $(seq 1 30); do docker exec <db-container> sh -c 'mysqladmin ping -h127.0.0.1 -u<user> -p<pass> 2>/dev/null | grep -q alive' && break; sleep 2; done
 ```
-（接続情報はプラグインの `tests/TestApp/config/install.php` の `Datasources.test`、本番は `v5/config/install.php` を参照。）
+（接続情報はプラグインの `tests/TestApp/config/install.php` の `Datasources.test`、本番は `v5/config/install.php` を参照。<container> では DB ホスト `<db-host>` / DB `test_<project>_v5` / user `<dbuser>`。）
 
 ### 実行コマンド
 
@@ -232,7 +232,7 @@ class SampleCommitFactory extends CakephpBaseFactory
   - データは Factory で用意（`SampleEstimateFactory::make([...])->persist()`）。
 - **GET 描画（200）に必要な前提**:
   - その画面が使うコンポーネント依存パッケージをスタンドアロン vendor にも入れる（例: Excel 出力に `phpoffice/phpspreadsheet`。無いと component が class_not_found で 500）。
-  - 画面が参照する**全テーブル**がテストDBにあること（見積 edit は `crm_companies` 等の別プラグインのテーブルも引く → 本番DDLで migration 補完）。不足は 500 の `Base table or view not found` で分かる。
+  - 画面が参照する**全テーブル**がテストDBにあること（見積 edit は `sample_dep_companies` 等の別プラグインのテーブルも引く → 本番DDLで migration 補完）。不足は 500 の `Base table or view not found` で分かる。
   - 500 の真因は `tests/TestApp/logs/error.log` を `tail`/`grep` で見る（IntegrationTest はステータス500に丸めるため）。
 - **GET 統合テストが捕まえる典型の移行漏れ**: テンプレートの4系 `FormHelper::create('Model')`（文字列モデル）→ `No context provider found ...`。5系は `$this->BcAdminForm->create(null, ['valueSources'=>['data','context']])`。`$this->Form->...` → `$this->BcAdminForm->...`、`$this->Form->value('x')` → `$this->getRequest()->getData('x')` 等（`basercms-plugin-4-to-5-upgrade` C-I/F系）。**302スモーク（未認証リダイレクト）だけでは描画エラーは分からない**ので、ログイン付き GET 統合テストで描画まで通すこと。
 - **★[最重要] `assertResponseSuccess()`（200）は `Undefined variable` 等の PHP warning を握り潰す**: テンプレが未 set のビュー変数（例: `$saleTypes`/`$billingStatuses` ＝ AppController::beforeRender の `set(Configure::read(...))` 欠落）を参照していても、warning は出るが描画は 200 で通り**テストは緑のまま**。＝描画テストが緑でも画面が「空のセレクト/壊れた列」で出荷されうる。**対策: 描画テストの後に `tests/TestApp/logs/error.log` を `grep "Undefined variable"`（または Warning/Deprecated）して pristine を確認する**。これを CI 的に締めると AppController 継承漏れ（`basercms-plugin-4-to-5-upgrade` C-0 表の set 行）等を確実に捕まえられる。
@@ -262,7 +262,7 @@ class SampleCommitFactory extends CakephpBaseFactory
 
 ## 並列でテストを回すときの注意（テストDBの競合）
 
-複数の作業を並列に進めるとき、**`vendor/bin/phpunit`（フルスイート）を同時に複数走らせない**こと。共有のテストDB `test_db_name_v5` を使うため、fixture の truncate / insert が競合して不安定になる（落ちたり相互汚染したり）。並列で書き換えを進める場合は、各並列ジョブは `php -l`（構文チェック）までに留め、**フルスイートは最後に1回だけ**まとめて実行する。
+複数の作業を並列に進めるとき、**`vendor/bin/phpunit`（フルスイート）を同時に複数走らせない**こと。共有のテストDB `test_<project>_v5` を使うため、fixture の truncate / insert が競合して不安定になる（落ちたり相互汚染したり）。並列で書き換えを進める場合は、各並列ジョブは `php -l`（構文チェック）までに留め、**フルスイートは最後に1回だけ**まとめて実行する。
 （移行全体をどの順序で進めるか＝横断コードチェック→構文5系化→テスト＆ブラウザ、という方法論は `basercms-plugin-4-to-5-upgrade`「移行の進め方」を参照。本スキルはテストの実行・調査のみを扱う。）
 
 ## メモ

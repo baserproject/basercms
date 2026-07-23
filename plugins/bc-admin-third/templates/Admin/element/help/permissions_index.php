@@ -25,7 +25,7 @@
   <li><?php echo __d('baser_core', '複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先されます。') ?></li>
   <li><?php echo __d('baser_core', 'URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。') ?></li>
   <li><?php echo __d('baser_core', '管理者グループ「admins」には、アクセスルールの設定はできません。') ?></li>
-  <li><?php echo sprintf(__d('baser_core', '一覧左上の「並び替え」をクリックすると、その際に各データに表示される %s マークをドラッグアンドドロップして行の並び替えができます。'), '<span class="sort-handle ui-sortable-handle" style="cursor: move;"><i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>ドラッグ可能</span>') ?></li>
+  <li><?php echo __d('baser_core', '一覧左上の「並び替え」をクリックすると、その際に各データに表示される {0} マークをドラッグアンドドロップして行の並び替えができます。', '<span class="sort-handle ui-sortable-handle" style="cursor: move;"><i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>ドラッグ可能</span>') ?></li>
 </ul>
 <div class="example-box">
   <div class="head"><?php echo __d('baser_core', '（例）ページ管理全体は許可しないが、特定のページ「No: ２」のみ許可を与える場合') ?></div>

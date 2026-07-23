@@ -469,4 +469,33 @@ class MailContentsTableTest extends BcTestCase
         $this->assertEquals($result['publish_end'], '2015-02-27 12:56:53');
     }
 
+    /**
+     * test copy でアイキャッチ画像が新IDでリネームコピーされること
+     *
+     * @return void
+     */
+    public function test_copyEyecatch()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $mailContentServices = $this->getService(MailContentsServiceInterface::class);
+        $source = $mailContentServices->get(1);
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $savePath = $contentsTable->getSaveDir();
+        touch($savePath . 'test.png');
+        $contentsTable->updateAll(['eyecatch' => 'test.png'], ['id' => $source->content->id]);
+
+        $result = $this->MailContent->copy(1, 1, 'title_copy', 1, 0);
+
+        $newFileName = sprintf('%08d', $result->content->id) . '_eyecatch.png';
+        $this->assertEquals($newFileName, $result->content->eyecatch);
+        $this->assertFileExists($savePath . 'test.png');
+        $this->assertFileExists($savePath . $newFileName);
+        $copied = $mailContentServices->get($result->id);
+        $this->assertEquals($newFileName, $copied->content->eyecatch);
+
+        @unlink($savePath . 'test.png');
+        @unlink($savePath . $newFileName);
+    }
+
 }
