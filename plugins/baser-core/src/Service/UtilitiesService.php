@@ -421,7 +421,8 @@ class UtilitiesService implements UtilitiesServiceInterface
         if(!is_dir($tmpPath)) {
             (new BcFolder())->create($tmpPath);
         }
-        $name = $uploaded['backup']->getClientFileName();
+        // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
+        $name = basename($uploaded['backup']->getClientFileName());
         $uploaded['backup']->moveTo($tmpPath . $name);
         $bcZip = new BcZip();
         if (!$bcZip->extract($tmpPath . $name, $tmpPath)) {

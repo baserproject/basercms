@@ -40,8 +40,11 @@ class UploaderFilesController extends BcAdminApiController
      */
     public function index(UploaderFilesServiceInterface $service)
     {
+        $queryParams = $this->request->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         $this->set([
-            'uploaderFiles' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'uploaderFiles' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['uploaderFiles']);
     }

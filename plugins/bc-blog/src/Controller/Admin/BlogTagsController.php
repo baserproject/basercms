@@ -66,8 +66,11 @@ class BlogTagsController extends BlogAdminAppController
                 'direction' => 'asc'
             ],
         ]]);
+        $queryParams = $this->getRequest()->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         try {
-            $blogTags = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+            $blogTags = $this->paginate($service->getIndex($queryParams));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index', $blogContentId]);
         }

@@ -92,6 +92,7 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
             'encoding' => $request->getQuery('encoding') ?? 'utf-8',
             'messages' => $this->MailMessages->convertMessageToCsv($this->getIndex()->all()->toArray()),
             'contentName' => $currentContent ? $request->getAttribute('currentContent')?->name : '',
+            'escapeFormula' => !$request->getQuery('disable_formula_escape'),
         ];
     }
 

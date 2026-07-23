@@ -11,10 +11,10 @@
 namespace BaserCore\Controller\Api\Admin;
 
 use Authentication\Authenticator\JwtAuthenticator;
+use Authentication\Authenticator\SessionAuthenticator;
 use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
@@ -63,9 +63,13 @@ class BcAdminApiController extends BcApiController
         }
 
         // 管理画面APIが許可されていない場合は弾く
-        // ただし、同じリファラからのアクセスは、Webブラウザの管理画面からのAJAXとして通す
+        // ただし、Webブラウザの管理画面 SPA（セッション認証）からのAJAXは通す。
+        // GHSA-wgvx-x5g3-9v29: なりすまし可能な Referer 一致判定（CWE-290）に代えて、
+        // 認証 provider が SessionAuthenticator かどうかで「ブラウザ管理画面か外部クライアントか」を判定する。
+        // （JWT 認証や未認証は SessionAuthenticator にならないため 403 となる）
         if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if (!BcUtil::isSameReferrerAsCurrent()) {
+            $provider = $this->Authentication->getAuthenticationService()->getAuthenticationProvider();
+            if (!($provider instanceof SessionAuthenticator)) {
                 throw new ForbiddenException(__d('baser_core', 'baser Admin APIは許可されていません。'));
             }
         }

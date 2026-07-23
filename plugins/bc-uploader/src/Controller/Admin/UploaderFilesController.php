@@ -106,9 +106,12 @@ class UploaderFilesController extends BcAdminAppController
                 ]],
             'type' => 'get'
         ]);
+        $queryParams = $this->getRequest()->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         $this->set(
             $service->getViewVarsForAjaxList(
-                $this->paginate($service->getIndex($this->getRequest()->getQueryParams())),
+                $this->paginate($service->getIndex($queryParams)),
                 $id
             )
         );
