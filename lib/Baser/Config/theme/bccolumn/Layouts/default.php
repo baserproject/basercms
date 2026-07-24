@@ -29,9 +29,9 @@
 		<?php $this->BcBaser->css('responsive') ?>
 
 <?php $this->BcBaser->js(array(
-			'jquery-1.7.2.min',
+			'jquery-3.7.1.min',
 			'jquery.bxSlider.min',
-			'jquery.colorbox-1.6.1.min',
+			'jquery.colorbox-1.6.4.min',
 			'baser.min',
 			'startup'
 )) ?>

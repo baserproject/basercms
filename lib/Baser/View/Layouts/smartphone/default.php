@@ -25,9 +25,9 @@
 			'admin/colorbox/colorbox-1.6.1']); ?>
 		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php $this->BcBaser->js([
-			'admin/vendors/jquery-2.1.4.min',
-			'admin/vendors/jquery-ui-1.11.4.min',
-			'admin/vendors/jquery.colorbox-1.6.1.min',
+			'admin/vendors/jquery-3.7.1.min',
+			'admin/vendors/jquery-ui-1.14.1.min',
+			'admin/vendors/jquery.colorbox-1.6.4.min',
 			'admin/vendors/jquery-accessibleMegaMenu',
 			'admin/libs/jquery.bcToken',
 			'admin/functions',
