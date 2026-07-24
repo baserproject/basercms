@@ -119,16 +119,6 @@ let app = createApp({
         },
 
         /**
-         * カスタムフィールドの編集画面へのリンクを取得
-         *
-         * @returns {string}
-         */
-        editFieldLinkUrl: function () {
-            if (!this.field) return '';
-            return $.bcUtil.adminBaseUrl + 'bc-custom-content/custom_fields/edit/' + this.field.id;
-        },
-
-        /**
          * 関連フィールドの ID より関連フィールドのタイトルを取得する
          *
          * @returns {(function(*): (*|string))|*}
@@ -180,6 +170,18 @@ let app = createApp({
          */
         saveTable: function () {
             $.bcUtil.showLoader();
+        },
+
+        /**
+         * マスターとなるカスタムフィールドの編集画面へ遷移する
+         *
+         * @param event
+         */
+        editField: function (event) {
+            event.preventDefault();
+            if (!this.field) return;
+            if (!confirm(bcI18n.confirmMessageOnEditField)) return;
+            location.href = $.bcUtil.adminBaseUrl + 'bc-custom-content/custom_fields/edit/' + this.field.id;
         },
 
         /**

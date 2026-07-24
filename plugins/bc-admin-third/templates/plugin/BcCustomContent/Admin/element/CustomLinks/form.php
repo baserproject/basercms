@@ -27,6 +27,7 @@ if ($fields->count()) {
 }
 $this->BcBaser->i18nScript([
   'confirmMessageOnSaveLink' => __d('baser_core', 'グループを変更する場合、対象のグループがループ機能を利用している場合に、このフィールドの既存のエントリーデータが失われます。それでも変更してもよろしいですか？'),
+  'confirmMessageOnEditField' => __d('baser_core', '現在編集中の内容を破棄してカスタムフィールドのマスタ編集画面に移動します。よろしいですか？'),
 ]);
 ?>
 
@@ -74,10 +75,9 @@ $this->BcBaser->i18nScript([
       <td class="col-input bca-form-table__input">
         {{ linkFieldTitle }}
         （{{ linkTypeTitle }}）
-        <?php $this->BcBaser->link(__d('baser_core', 'マスタ編集'), '', [
+        <?php $this->BcBaser->link(__d('baser_core', 'マスタ編集'), '#', [
           'class' => 'button-small',
-          ':href' => 'editFieldLinkUrl',
-          'confirm' => __d('baser_core', '現在編集中の内容を破棄してカスタムフィールドのマスタ編集画面に移動します。よろしいですか？')
+          '@click' => 'editField'
         ]) ?>
       </td>
     </tr>
