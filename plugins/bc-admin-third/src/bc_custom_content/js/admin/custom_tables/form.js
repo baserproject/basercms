@@ -174,11 +174,8 @@ let app = createApp({
 
         /**
          * マスターとなるカスタムフィールドの編集画面へ遷移する
-         *
-         * @param event
          */
-        editField: function (event) {
-            event.preventDefault();
+        editField: function () {
             if (!this.field) return;
             if (!confirm(bcI18n.confirmMessageOnEditField)) return;
             location.href = $.bcUtil.adminBaseUrl + 'bc-custom-content/custom_fields/edit/' + this.field.id;

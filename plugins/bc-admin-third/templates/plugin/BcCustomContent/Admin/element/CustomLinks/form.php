@@ -75,10 +75,9 @@ $this->BcBaser->i18nScript([
       <td class="col-input bca-form-table__input">
         {{ linkFieldTitle }}
         （{{ linkTypeTitle }}）
-        <?php $this->BcBaser->link(__d('baser_core', 'マスタ編集'), '#', [
-          'class' => 'button-small',
-          '@click' => 'editField'
-        ]) ?>
+        <button class="button-small" type="button" @click="editField">
+          <?php echo __d('baser_core', 'マスタ編集') ?>
+        </button>
       </td>
     </tr>
 
