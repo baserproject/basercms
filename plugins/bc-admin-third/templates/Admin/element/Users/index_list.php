@@ -23,19 +23,6 @@ use BaserCore\View\AppView;
 $this->BcListTable->setColumnNumber(9);
 ?>
 
-<script>
-  $(function () {
-    // ログインボタンの二重クリック防止
-    $('.btn-login').on('click', function (e) {
-      if ($(this).attr('disabled')) {
-        e.preventDefault();
-        return false;
-      }
-      $(this).attr('disabled', 'disabled');
-    });
-  });
-</script>
-
 <div class="bca-data-list__top">
   <div class="bca-data-list__sub">
     <?php $this->BcBaser->element('pagination') ?>
