@@ -703,7 +703,16 @@ class PluginsService implements PluginsServiceInterface
         $zip = new BcZip();
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->file(TMP . $name);
-        if (!in_array($mimeType, ['application/zip', 'application/x-zip-compressed'], true) || !$zip->extract(TMP . $name, TMP)) {
+        if (!in_array($mimeType, ['application/zip', 'application/x-zip-compressed'], true)) {
+            if (file_exists(TMP . $name)) {
+                unlink(TMP . $name);
+            }
+            throw new BcException(__d('baser_core', 'ZIPファイルをアップロードしてください。'));
+        }
+        if (!$zip->extract(TMP . $name, TMP)) {
+            if (file_exists(TMP . $name)) {
+                unlink(TMP . $name);
+            }
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
         $srcDirName = $zip->topArchiveName;
