@@ -24,7 +24,6 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\ORM\Exception\PersistenceFailedException;
-use BaserCore\Error\BcException;
 use Cake\Routing\Router;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -329,8 +328,6 @@ class UsersController extends BcAdminAppController
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $user = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
-            } catch (BcException $e) {
-                $this->BcMessage->setError($e->getMessage());
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
@@ -380,8 +377,6 @@ class UsersController extends BcAdminAppController
             } catch (PersistenceFailedException $e) {
                 $user = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
-            } catch (BcException $e) {
-                $this->BcMessage->setError($e->getMessage());
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
