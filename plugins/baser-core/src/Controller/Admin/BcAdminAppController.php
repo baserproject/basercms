@@ -78,6 +78,8 @@ class BcAdminAppController extends AppController
 
         // ログインユーザ再読込
         if (!$usersService->reload($this->request)) {
+            // 代理ログイン中に強制ログアウトとなる場合、セッションを残さないよう削除する。
+            $this->request->getSession()->delete('AuthAgent');
             $event->setResult($this->redirect($this->Authentication->logout()));
             return;
         }
