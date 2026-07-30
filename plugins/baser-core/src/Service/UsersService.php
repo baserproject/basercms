@@ -554,14 +554,14 @@ class UsersService implements UsersServiceInterface
             $user = $this->Users->find('available')->where([
                 'Users.id' => $sessionUser->id
             ])->first();
-            if($user) {
-                $session->write($sessionKey, $user);
-                return true;
-            } else {
-                $session->delete($sessionKey);
-                return false;
-            }
         } catch (Exception $e) {
+            $user = null;
+        }
+        if($user) {
+            $session->write($sessionKey, $user);
+            return true;
+        } else {
+            $session->delete('AuthAgent');
             $session->delete($sessionKey);
             return false;
         }
