@@ -9,6 +9,7 @@
         "php": ">=8.1",
         "cakephp/cakephp": "~5.2.0",
         "cakephp/authentication": "~3.3.7",
+        "cakephp/debug_kit": "~5.2.4",
         "cakephp/migrations": "~4.9.7",
         "cakephp/plugin-installer": "~2.0.2",
         "doctrine/annotations": "~1.14.4",
