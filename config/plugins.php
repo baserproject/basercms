@@ -11,5 +11,5 @@ return [
     'Migrations' => [
         'onlyCli' => true,
     ],
-    'BaserCore' => null
+    'BaserCore' => []
 ];
