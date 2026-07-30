@@ -28,7 +28,6 @@ jobs:
         with:
           script: |
             const MAINTAINERS = ['ryuring', 'kaburk', 'katokaisya'];
-            const COPILOT_REVIEWER = 'copilot-pull-request-reviewer[bot]';
             const AWAITING_LABEL = '修正待ち';
 
             const owner = context.repo.owner;
@@ -69,13 +68,12 @@ jobs:
             // ① PR作成・再オープン
             if (event === 'pull_request_target' && (action === 'opened' || action === 'reopened')) {
               const reviewers = MAINTAINERS.filter(m => m !== author); // 作成者本人は除外
-              reviewers.push(COPILOT_REVIEWER); // 外部PRでも自動アサインされるようActions経由で明示リクエスト
               if (reviewers.length) {
                 try {
                   await github.rest.pulls.requestReviewers(
                     { owner, repo, pull_number: number, reviewers });
                 } catch (e) {
-                  console.log(`Skipping review request due to permissions: ${e.message}`);
+                  console.log(`Failed to request reviewers (status: ${e.status}): ${e.message}`);
                 }
               }
               await setAssignees(MAINTAINERS);
