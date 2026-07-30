@@ -821,6 +821,41 @@ EOF;
     }
 
     /**
+     * updateCore は PHP 以外の任意バイナリパスを拒否する（任意バイナリ実行対策）
+     * @dataProvider provideNonPhpBinaryPath
+     */
+    public function test_updateCore_rejectsNonPhpBinary(string $php): void
+    {
+        $pluginsService = $this->getMockBuilder(PluginsService::class)
+            ->onlyMethods(['updateCoreFiles'])
+            ->getMock();
+        // updateCoreFiles が呼ばれる前に検証で弾かれること
+        $pluginsService->expects($this->never())->method('updateCoreFiles');
+        $this->expectException('BaserCore\Error\BcException');
+        $pluginsService->updateCore($php);
+    }
+
+    /**
+     * rollbackCore は PHP 以外の任意バイナリパスを拒否する（任意バイナリ実行対策）
+     * @dataProvider provideNonPhpBinaryPath
+     */
+    public function test_rollbackCore_rejectsNonPhpBinary(string $php): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->Plugins->rollbackCore('5.0.15', $php);
+    }
+
+    public static function provideNonPhpBinaryPath(): array
+    {
+        return [
+            'curlバイナリ' => ['/usr/bin/curl'],
+            'pythonバイナリ' => ['/usr/bin/python3'],
+            'bashバイナリ' => ['bash'],
+            'php偽装ディレクトリ配下の他バイナリ' => ['/usr/bin/php/../sh'],
+        ];
+    }
+
+    /**
      * test getCoreUpdate の脆弱性回避
      */
     public function test_getCoreUpdate_vulnerability()
