@@ -283,7 +283,7 @@ return [
             'items' => [
                 'CheckSendmail' => ['title' => __d('baser_core', 'メール送信テスト'), 'url' => '/baser/api/admin/baser-core/site_configs/check_sendmail.json', 'method' => 'POST', 'auth' => false],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/site_configs/edit.json', 'method' => 'POST', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/baser-core/site_configs/view.json', 'method' => 'GET', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/baser-core/site_configs/view.json', 'method' => 'GET', 'auth' => false],
             ]
         ],
 
@@ -295,9 +295,9 @@ return [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/sites/add.json', 'method' => 'POST', 'auth' => false],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/sites/delete/*.json', 'method' => 'POST', 'auth' => false],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/sites/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'GetSelectableDevicesAndLang' => ['title' => __d('baser_core', '選択可能な言語とデバイス取得'), 'url' => '/baser/api/admin/baser-core/sites/get_selectable_devices_and_lang/*.json', 'method' => 'GET', 'auth' => true],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/sites/index.json', 'method' => 'GET', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/sites/view/*.json', 'method' => 'GET', 'auth' => true],
+                'GetSelectableDevicesAndLang' => ['title' => __d('baser_core', '選択可能な言語とデバイス取得'), 'url' => '/baser/api/admin/baser-core/sites/get_selectable_devices_and_lang/*.json', 'method' => 'GET', 'auth' => false],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/sites/index.json', 'method' => 'GET', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/sites/view/*.json', 'method' => 'GET', 'auth' => false],
             ]
         ],
 

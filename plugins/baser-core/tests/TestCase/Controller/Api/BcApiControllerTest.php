@@ -66,13 +66,31 @@ class BcApiControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        // API ON
+        // API ON（コアプラグインでも通過）
         $this->get('/baser/api/baser-core/contents/index.json');
         $this->assertResponseCode(200);
-        // API OFF
+
+        // GHSA-wgvx-x5g3-9v29: API OFF（USE_CORE_API=false）時のコアプラグイン公開APIゲート
         $_SERVER['USE_CORE_API'] = 'false';
+
+        // (1) 同一オリジン（Origin と HTTP_HOST が一致）→ 通過
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $_SERVER['HTTP_ORIGIN'] = 'http://localhost';
+        $this->get('/baser/api/baser-core/contents/index.json');
+        $this->assertResponseCode(200);
+
+        // (2) 非同一オリジン（前方一致攻撃ドメイン）→ 403
+        $_SERVER['HTTP_ORIGIN'] = 'http://localhost.evil.com';
         $this->get('/baser/api/baser-core/contents/index.json');
         $this->assertResponseCode(403);
+
+        // (3) Origin/Referer 無し → 403
+        unset($_SERVER['HTTP_ORIGIN']);
+        $this->get('/baser/api/baser-core/contents/index.json');
+        $this->assertResponseCode(403);
+
+        // 初期化
+        unset($_SERVER['HTTP_HOST']);
         $_SERVER['USE_CORE_API'] = 'true';
     }
 

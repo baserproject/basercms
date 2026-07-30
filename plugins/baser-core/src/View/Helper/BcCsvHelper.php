@@ -58,6 +58,15 @@ class BcCsvHelper extends Helper
     public $exportBom = true;
 
     /**
+     * 数式インジェクション対策の有無
+     *
+     * 有効な場合、=, +, -, @ で始まる値の先頭にシングルクォーテーションを付与する
+     *
+     * @var boolean
+     */
+    public $escapeFormula = true;
+
+    /**
      * 出力データテンポラリファイルポインタ
      * @private resource|null
      */
@@ -182,11 +191,15 @@ class BcCsvHelper extends Helper
 
         $body = '';
         foreach($data as $key => $value) {
-            $value = str_replace(",", "、", $value);
-            $value = str_replace('"', '""', $value);
             if (is_array($value)) {
                 $value = implode('|', $value);
             }
+            $value = (string)$value;
+            if ($this->escapeFormula && $this->_isFormulaInjectionTarget($value)) {
+                $value = "'" . $value;
+            }
+            $value = str_replace(",", "、", $value);
+            $value = str_replace('"', '""', $value);
             $body .= '"' . $value . '"' . ',';
         }
 
@@ -196,6 +209,26 @@ class BcCsvHelper extends Helper
             $body = mb_convert_encoding($body, $this->encoding, $enc);
         }
         return $body;
+    }
+
+    /**
+     * 数式インジェクション対策の対象かどうかを判定する
+     *
+     * 先頭の空白を除いた値が =, +, -, @ で始まる場合に対象とする
+     *
+     * @param string $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function _isFormulaInjectionTarget(string $value): bool
+    {
+        $trimmedValue = ltrim($value);
+        if ($trimmedValue === '') {
+            return false;
+        }
+        return in_array($trimmedValue[0], ['=', '+', '-', '@'], true);
     }
 
     /**

@@ -67,26 +67,35 @@ class BcAdminApiControllerTest extends BcTestCase
     public function testBeforeFilter()
     {
         $token = $this->apiLoginAdmin(1);
-        // トークンタイプチェック
+        $sessionKey = \Cake\Core\Configure::read('BcPrefixAuth.Api/Admin.sessionKey');
+
+        // トークンタイプチェック（USE_CORE_ADMIN_API はテスト既定で true）
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['refresh_token']);
         $this->assertResponseCode(401);
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseOk();
 
-        // APIを無効
+        // GHSA-wgvx-x5g3-9v29: APIを無効化（USE_CORE_ADMIN_API=false）した際の挙動
         $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+
+        // (1) 外部クライアント想定：有効 JWT・セッション無し → 403（本丸：Referer 偽装では通らない）
         $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseCode(403);
 
-        // API無効、かつ、同じサイトからのリクエスト
+        // (2) Referer のみ設定・未認証 → 403（Referer なりすまし無効化＝CWE-290 是正の核心）
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['HTTP_REFERER'] = 'https://localhost';
-        $this->get('/baser/api/admin/baser-core/users/index.json?token=' . $token['access_token']);
+        $this->get('/baser/api/admin/baser-core/users/index.json');
+        $this->assertResponseCode(403);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['HTTP_REFERER']);
+
+        // (3) 管理画面 SPA 想定：セッション認証（JWT 無し）→ 200
+        $this->session([$sessionKey => $this->getUser(1)]);
+        $this->get('/baser/api/admin/baser-core/users/index.json');
         $this->assertResponseCode(200);
 
         // 初期化
-        unset($_SERVER['HTTP_HOST']);
-        unset($_SERVER['HTTP_REFERER']);
         $_SERVER['USE_CORE_ADMIN_API'] = 'true';
 
         // ユーザーの有効チェック
