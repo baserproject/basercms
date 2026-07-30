@@ -171,11 +171,11 @@ class ThemeFilesServiceTest extends BcTestCase
         //作成されたファイルを削除
         unlink($fullpath . 'test_update.php');
 
-        //異常系テスト・ファイル名を入力しない
-        $postData['base_name'] = '';
+        //異常系テスト・ファイル名を入力しない（パスは正常なテーマ配下のままフォーム検証で失敗させる）
+        $data['base_name'] = '';
         $this->expectException(BcFormFailedException::class);
         $this->expectExceptionMessage('ファイルの保存に失敗しました。');
-        $this->ThemeFileService->update($postData);
+        $this->ThemeFileService->update($data);
     }
 
     /**

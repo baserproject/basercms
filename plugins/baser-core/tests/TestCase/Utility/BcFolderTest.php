@@ -95,6 +95,35 @@ class BcFolderTest extends TestCase
 	}
 
     /**
+     * test Delete シンボリックリンクを含む場合
+     *
+     * ディレクトリへのシンボリックリンクがあっても、リンク先を辿らずにリンク自体を
+     * 削除し、対象ディレクトリを再帰的に削除できることを確認する。
+     * @return void
+     */
+    public function testDeleteWithSymlink()
+    {
+        // リンク先の実体（削除対象の外に置く）
+        $realTarget = TMP_TESTS . 'real_target';
+        (new BcFolder($realTarget))->create();
+        file_put_contents($realTarget . DS . 'keep.txt', 'data');
+
+        // 削除対象パッケージ
+        $package = TMP_TESTS . 'package';
+        (new BcFolder($package . DS . 'skills'))->create();
+        // ディレクトリへのシンボリックリンク
+        symlink($realTarget, $package . DS . 'skills' . DS . 'link');
+
+        $this->assertTrue((new BcFolder($package))->delete());
+        // パッケージは完全に削除される
+        $this->assertFalse(is_dir($package));
+        // リンク先の実体は削除されない（データ消失しない）
+        $this->assertTrue(is_file($realTarget . DS . 'keep.txt'));
+
+        (new BcFolder($realTarget))->delete();
+    }
+
+    /**
      * test chmod
      */
     public function test_chmod()
