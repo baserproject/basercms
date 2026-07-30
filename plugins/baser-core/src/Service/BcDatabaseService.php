@@ -670,12 +670,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     {
         $db = ConnectionManager::get('default');
         if ($db->config()['driver'] !== Postgres::class) return true;
+        $driver = $db->getDriver();
         $tables = $db->getSchemaCollection()->listTables();
         $result = true;
         foreach ($tables as $table) {
             if (preg_match('/(^|_)phinxlog$/', $table)) continue;
-            $sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
-            if (!$db->execute($sql)) $result = false;
+            $sequence = $this->getSequence($table);
+            $sql = 'select setval(:sequence, (select max(id) from ' . $driver->quoteIdentifier($table) . '));';
+            if (!$db->execute($sql, ['sequence' => $sequence])) $result = false;
         }
         return $result;
     }
@@ -785,17 +787,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $appEncoding = $this->_dbEncToPhp($this->getEncoding());
 
-        switch($db->config()['driver']) {
-            case Mysql::class:
-                $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
-                break;
-            case Postgres::class:
-                $sql = 'SELECT ' . implode(',', $schema->columns()) . ' FROM ' . $table;
-                break;
-            case Sqlite::class:
-                $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
-                break;
-        }
+        $driver = $db->getDriver();
+        $quotedColumns = array_map(
+            fn($column) => $driver->quoteIdentifier($column),
+            $schema->columns()
+        );
+        $sql = 'SELECT ' . implode(',', $quotedColumns) . ' FROM ' . $driver->quoteIdentifier($table);
 
         $query = $db->execute($sql);
         $records = $query->fetchAll('assoc');
@@ -1171,10 +1168,21 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         } catch (Error $e) {
             return false;
         }
+        if ($ast === null) {
+            return false;
+        }
+
+        // トップレベル文が Class_ / Use_ / Namespace_ / Declare_ 以外の任意コード（関数呼び出し等）を
+        // 含む場合は拒否する。クラス内容の検証だけでは、クラス定義外に置かれた文が
+        // require_once 時に無条件で実行されてしまうため（GHSA-cg65-f2m7-9fqj）。
+        if (!$this->hasOnlyAllowedTopLevelStatements($ast)) {
+            return false;
+        }
 
         $result = [
             'extendsBcSchema' => false,
-            'hasDangerousOverride' => false
+            'hasDangerousOverride' => false,
+            'classCount' => 0
         ];
 
         $traverser = new NodeTraverser();
@@ -1186,6 +1194,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
             public function enterNode(Node $node) {
                 if ($node instanceof Node\Stmt\Class_) {
+                    $this->result['classCount']++;
                     // 短縮名 'BcSchema' に加え、完全修飾名 'BaserCore\Database\Schema\BcSchema' も受理する
                     // （BcDbMigrator 等が FQN で extends を生成するケースに対応。判定対象は同一クラスであり検証意図は変わらない）
                     $extendsName = $node->extends ? ltrim($node->extends->toString(), '\\') : null;
@@ -1202,7 +1211,44 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             }
         });
         $traverser->traverse($ast);
-        return $result['extendsBcSchema'] && !$result['hasDangerousOverride'];
+        return $result['classCount'] === 1
+            && $result['extendsBcSchema']
+            && !$result['hasDangerousOverride'];
+    }
+
+    /**
+     * トップレベル文が Class_ / Use_ / Namespace_ / Declare_ のみで構成されているかを検証する
+     * （Namespace_ ブロック直下も同じホワイトリストで1段だけ検証する）
+     *
+     * @param Node\Stmt[] $stmts
+     * @return bool
+     */
+    private function hasOnlyAllowedTopLevelStatements(array $stmts): bool
+    {
+        $allowed = [
+            Node\Stmt\Declare_::class,
+            Node\Stmt\Use_::class,
+            Node\Stmt\Class_::class,
+        ];
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Node\Stmt\Namespace_) {
+                if (!$this->hasOnlyAllowedTopLevelStatements($stmt->stmts ?? [])) {
+                    return false;
+                }
+                continue;
+            }
+            $isAllowed = false;
+            foreach ($allowed as $allowedClass) {
+                if ($stmt instanceof $allowedClass) {
+                    $isAllowed = true;
+                    break;
+                }
+            }
+            if (!$isAllowed) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -1366,6 +1412,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
         $prefix = $dbConfig['prefix']?? '';
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
+        $driver = $db->getDriver();
         switch($datasource) {
             case 'mysql':
             case 'sqlite':
@@ -1375,7 +1422,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                         || preg_match("/^" . $prefix . "([^_].+)$/", $source)
                     ) {
                         try {
-                            $db->execute('DROP TABLE ' . $source);
+                            $db->execute('DROP TABLE ' . $driver->quoteIdentifier($source));
                         } catch (BcException $e) {
                         }
                     }
@@ -1389,23 +1436,23 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                         || preg_match("/^" . $prefix . "([^_].+)$/", $source)
                     ) {
                         try {
-                            $db->execute('DROP TABLE ' . $source);
+                            $db->execute('DROP TABLE ' . $driver->quoteIdentifier($source));
                         } catch (BcException $e) {
                         }
                     }
                 }
                 // シーケンスも削除
-                $sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
+                $sql = 'SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = :schema;';
                 $sequences = [];
                 try {
-                    $sequences = $db->execute($sql)->fetchAll('assoc');
+                    $sequences = $db->execute($sql, ['schema' => $dbConfig['schema']])->fetchAll('assoc');
                 } catch (BcException $e) {
                 }
                 if ($sequences) {
                     $sequences = Hash::extract($sequences, '0.sequence_name');
                     foreach($sequences as $sequence) {
                         if (!preg_match("/^" . $prefix . "([^_].+)$/", $sequence)) continue;
-                        $sql = 'DROP SEQUENCE ' . $sequence;
+                        $sql = 'DROP SEQUENCE ' . $driver->quoteIdentifier($sequence);
                         try {
                             $db->execute($sql);
                         } catch (BcException $e) {
@@ -1536,8 +1583,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         try {
             /* 一時的にテーブルを作成できるかテスト */
             $randomtablename = 'deleteme' . rand(100, 100000);
-            $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
-            $db->execute('drop TABLE ' . $randomtablename);
+            $quotedTable = $db->getDriver()->quoteIdentifier($randomtablename);
+            $db->execute("CREATE TABLE $quotedTable (a varchar(10))");
+            $db->execute('drop TABLE ' . $quotedTable);
         } catch (PDOException $e) {
             throw new PDOException(__d('baser_core', "データベースへの接続でエラーが発生しました。\n") . $e->getMessage());
         }
