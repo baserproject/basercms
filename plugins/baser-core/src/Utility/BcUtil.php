@@ -529,7 +529,9 @@ class BcUtil
      */
     public static function clearAllCache(): void
     {
-        Cache::clear('_cake_translations_');
+        if (in_array('_cake_translations_', Cache::configured(), true)) {
+            Cache::clear('_cake_translations_');
+        }
         self::clearModelCache();
         Cache::clear('_bc_env_');
         Cache::clear('_bc_update_');
