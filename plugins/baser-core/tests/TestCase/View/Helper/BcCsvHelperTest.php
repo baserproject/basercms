@@ -276,6 +276,47 @@ class BcCsvHelperTest extends BcTestCase
     }
 
     /**
+     * test _perseValue 数式インジェクション対策
+     *
+     * @param bool $escapeFormula
+     * @param array $input
+     * @param string $expected
+     * @dataProvider perseValueEscapeFormulaDataProvider
+     */
+    public function test_perseValueEscapeFormula($escapeFormula, $input, $expected)
+    {
+        $this->BcCsv->escapeFormula = $escapeFormula;
+        $rs = $this->execPrivateMethod($this->BcCsv, '_perseValue', [$input]);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public static function perseValueEscapeFormulaDataProvider()
+    {
+        return [
+            // = で始まる値はシングルクォーテーションを付与
+            [true, ['key1' => '=1+1'], "\"'=1+1\"\n"],
+            // + で始まる値はシングルクォーテーションを付与
+            [true, ['key1' => '+1+1'], "\"'+1+1\"\n"],
+            // - で始まる値はシングルクォーテーションを付与
+            [true, ['key1' => '-1+1'], "\"'-1+1\"\n"],
+            // @ で始まる値はシングルクォーテーションを付与
+            [true, ['key1' => '@SUM(1,2)'], "\"'@SUM(1、2)\"\n"],
+            // 先頭の空白を除いて数式記号で始まる値もシングルクォーテーションを付与
+            [true, ['key1' => ' =1+1'], "\"' =1+1\"\n"],
+            // 空白のみの値は付与しない
+            [true, ['key1' => '  '], "\"  \"\n"],
+            // 先頭以外の数式記号は付与しない
+            [true, ['key1' => '1=1'], "\"1=1\"\n"],
+            // 通常の値は付与しない
+            [true, ['key1' => 'baserCMS'], "\"baserCMS\"\n"],
+            // 無効化した場合は付与しない
+            [false, ['key1' => '=1+1'], "\"=1+1\"\n"],
+            // 複数の値が混在する場合
+            [true, ['key1' => '=1+1', 'key2' => 'baserCMS'], "\"'=1+1\",\"baserCMS\"\n"],
+        ];
+    }
+
+    /**
      * ファイルを保存する
      *
      * @param $fileName

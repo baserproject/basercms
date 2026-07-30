@@ -322,6 +322,7 @@ class MailMessagesController extends BcAdminApiController
         $result = $service->getViewVarsForDownloadCsv($mailContentId, $this->getRequest());
         $bcCsvHelper = new BcCsvHelper(new View());
         $bcCsvHelper->encoding = $result['encoding'];
+        $bcCsvHelper->escapeFormula = $result['escapeFormula'];
         $bcCsvHelper->addModelDatas('MailMessage', $result['messages']);
         $bcCsvHelper->download($result['contentName']);
     }
