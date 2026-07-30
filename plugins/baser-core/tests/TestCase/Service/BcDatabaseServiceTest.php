@@ -769,6 +769,16 @@ class UserActionsFqnSchema extends \\BaserCore\\Database\\Schema\\BcSchema
             'create メソッドをオーバーライド' => [
                 "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function create() { system('id'); }\n}"
             ],
+            // GHSA-5hvm-279m-gg7r: drop/create 以外のメソッドでも require 後のインスタンス化で実行され得るため拒否する
+            'BcSchema 継承クラスにコンストラクタ' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function __construct() { system('id'); }\n}"
+            ],
+            'BcSchema 継承クラスに任意メソッド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function foo() { system('id'); }\n}"
+            ],
+            'declare ブロック内に任意コード' => [
+                "<?php\ndeclare(ticks=1) {\n    system('id');\n}\nclass MaliciousSchema extends \\BaserCore\\Database\\Schema\\BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
             'クラスが2つ存在（2つ目に危険なコードを隠す）' => [
                 "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}\nclass Payload {\n    public function __construct() { system('id'); }\n}"
             ],
