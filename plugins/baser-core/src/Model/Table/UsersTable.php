@@ -79,6 +79,11 @@ class UsersTable extends AppTable
             (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
+        foreach(['real_name_1', 'real_name_2'] as $field) {
+            if (isset($data[$field]) && is_string($data[$field])) {
+                $data[$field] = preg_replace('/^[ 　]+|[ 　]+$/u', '', $data[$field]);
+            }
+        }
     }
 
     /**
