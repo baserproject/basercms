@@ -24,14 +24,15 @@ interface BlogCategoriesAdminServiceInterface
 
     /**
      * ブログカテゴリ一覧用の view 変数取得
-     * 
+     *
      * @param int $blogContentId
+     * @param int|null $listType 表示形式（1: ツリー形式 / 2: 表形式。null は表形式）
      * @return array
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function getViewVarsForIndex(int $blogContentId);
+    public function getViewVarsForIndex(int $blogContentId, ?int $listType = null);
 
     /**
      * ブログカテゴリー登録用の view 変数取得

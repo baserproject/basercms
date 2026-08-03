@@ -486,4 +486,111 @@ class BlogCategoriesTable extends BlogAppTable
     {
         return $this->find()->where(['id' => $parent_id])->first();
     }
+
+    /**
+     * 同一階層（同じ親）における並び順を取得する
+     *
+     * 指定した親配下（親なしはルート）のカテゴリを lft 昇順に並べ、対象 id の 1 始まりの順位を返す。
+     * id が空の場合は件数（＝末尾の位置）を返す。該当データが無い場合は false、
+     * id に一致するカテゴリが無い場合は null。
+     *
+     * TreeBehavior はスコープを持たず lft/rght は全ブログ横断の単一フォレストで管理されるため、
+     * ルート階層（親なし）では全ブログのルートカテゴリを対象とした順位を返す。
+     * moveUp()/moveDown() が実際に移動する兄弟の並びと一致させるための仕様。
+     *
+     * @param int|null $id 対象カテゴリID（null で末尾の位置＝件数）
+     * @param int|null $parentId 親カテゴリID（null でルート）
+     * @return int|false|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getOrderSameParent($id, $parentId)
+    {
+        if ($parentId) {
+            $conditions = ['BlogCategories.parent_id' => $parentId];
+        } else {
+            $conditions = ['BlogCategories.parent_id IS' => null];
+        }
+        $categories = $this->find()
+            ->select(['BlogCategories.id', 'BlogCategories.parent_id', 'BlogCategories.title'])
+            ->where($conditions)
+            ->orderBy('BlogCategories.lft');
+        if ($categories->all()->isEmpty()) {
+            return false;
+        }
+        if (!$id) {
+            return $categories->all()->count();
+        }
+        $order = null;
+        foreach ($categories as $key => $category) {
+            if ($id == $category->id) {
+                $order = $key + 1;
+                break;
+            }
+        }
+        return $order;
+    }
+
+    /**
+     * オフセットを元にカテゴリを移動する
+     *
+     * TreeBehavior により、同一階層（兄弟）内で指定位置数だけ上下に移動する。
+     * オフセットが正の場合は下へ、負の場合は上へ移動し、0 の場合は何もしない。
+     * 子カテゴリを持つ場合は、その子孫も含めて移動する。
+     *
+     * @param int $id 移動対象のカテゴリID
+     * @param int $offset 移動する位置数（正: 下、負: 上）
+     * @return EntityInterface|bool 成功時は対象エンティティ、失敗時は false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function moveOffset(int $id, int $offset)
+    {
+        $category = $this->get($id);
+        if ($offset > 0) {
+            $result = $this->moveDown($category, abs($offset));
+        } elseif ($offset < 0) {
+            $result = $this->moveUp($category, abs($offset));
+        } else {
+            $result = true;
+        }
+        return $result ? $category : false;
+    }
+
+    /**
+     * ブログカテゴリのツリー構造をリセットする
+     *
+     * コンテンツ管理のリセットと同様に、全てのカテゴリをルート直下にフラット化し、
+     * lft / rght を現在の並び順（lft 昇順）で振り直す。
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetTree(): bool
+    {
+        $this->removeBehavior('Tree');
+        $this->getConnection()->begin();
+        $result = true;
+        $categories = $this->find()->orderBy(['BlogCategories.lft' => 'ASC'])->all();
+        $count = 0;
+        foreach($categories as $category) {
+            $count++;
+            $category->parent_id = null;
+            $category->lft = $count;
+            $count++;
+            $category->rght = $count;
+            if (!$this->save($category)) $result = false;
+        }
+        $this->addBehavior('Tree');
+        if (!$result) {
+            $this->getConnection()->rollback();
+            return false;
+        }
+        $this->getConnection()->commit();
+        return true;
+    }
 }

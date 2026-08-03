@@ -587,4 +587,116 @@ class BlogCategoriesTableTest extends BcTestCase
         //戻り値を確認
         $this->assertEquals(11, $rs->id);
     }
+
+    /**
+     * test getOrderSameParent
+     *
+     * lft/rght は全ブログ横断の単一フォレストのため、ルート階層では
+     * 他ブログのルートカテゴリも含めた順位を返すことを確認する
+     */
+    public function test_getOrderSameParent()
+    {
+        // ブログ1・ブログ2 のルートカテゴリが lft 順で交錯するデータ
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'category-a', 'title' => 'A', 'parent_id' => null, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 2, 'name' => 'category-b', 'title' => 'B', 'parent_id' => null, 'lft' => 3, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'category-c', 'title' => 'C', 'parent_id' => null, 'lft' => 5, 'rght' => 8])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 3, 'lft' => 6, 'rght' => 7])->persist();
+
+        // ルート階層：他ブログのルートも含めたグローバル順位を返す
+        $this->assertEquals(1, $this->BlogCategoriesTable->getOrderSameParent(1, null));
+        $this->assertEquals(2, $this->BlogCategoriesTable->getOrderSameParent(2, null));
+        $this->assertEquals(3, $this->BlogCategoriesTable->getOrderSameParent(3, null));
+
+        // id 未指定はルート階層の件数（＝末尾の位置）
+        $this->assertEquals(3, $this->BlogCategoriesTable->getOrderSameParent(null, null));
+
+        // 子階層：親配下の順位を返す
+        $this->assertEquals(1, $this->BlogCategoriesTable->getOrderSameParent(4, 3));
+        $this->assertEquals(1, $this->BlogCategoriesTable->getOrderSameParent(null, 3));
+
+        // 対象親に子が無い場合は false
+        $this->assertFalse($this->BlogCategoriesTable->getOrderSameParent(null, 1));
+
+        // リストに存在しない id は null
+        $this->assertNull($this->BlogCategoriesTable->getOrderSameParent(4, null));
+    }
+
+    /**
+     * test moveOffset
+     */
+    public function test_moveOffset()
+    {
+        // 同一階層（ルート）の兄弟を 3 件生成（入れ子集合として正しい lft/rght を指定）
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'category-a', 'title' => 'A', 'parent_id' => null, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'category-b', 'title' => 'B', 'parent_id' => null, 'lft' => 3, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'category-c', 'title' => 'C', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+
+        // C を 1 つ上に移動（A, C, B の順になる）
+        $result = $this->BlogCategoriesTable->moveOffset(3, -1);
+        $this->assertNotFalse($result);
+        $names = $this->BlogCategoriesTable->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-a', 'category-c', 'category-b'], $names);
+
+        // A を 2 つ下に移動（C, B, A の順になる）
+        $this->BlogCategoriesTable->moveOffset(1, 2);
+        $names = $this->BlogCategoriesTable->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-c', 'category-b', 'category-a'], $names);
+
+        // オフセット 0 は並び順を変えず、対象エンティティを返す
+        $result = $this->BlogCategoriesTable->moveOffset(2, 0);
+        $this->assertNotFalse($result);
+        $this->assertEquals(2, $result->id);
+        $names = $this->BlogCategoriesTable->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-c', 'category-b', 'category-a'], $names);
+    }
+
+    /**
+     * test moveOffset 親子階層（サブツリーごと移動する）
+     */
+    public function test_moveOffset_withChildren()
+    {
+        // ルート parent1(1,4) にその子 child1(2,3)、ルート parent2(5,6) の入れ子集合
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'parent2', 'title' => 'P2', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+
+        // parent1 を 1 つ下へ → 子 child1 も一緒に移動し、parent2, parent1, child1 の順になる
+        $this->BlogCategoriesTable->moveOffset(1, 1);
+        $names = $this->BlogCategoriesTable->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['parent2', 'parent1', 'child1'], $names);
+
+        // 子が親の直下に留まっている（入れ子集合が壊れていない）ことを確認
+        $parent1 = $this->BlogCategoriesTable->get(1);
+        $child1 = $this->BlogCategoriesTable->get(2);
+        $this->assertEquals(1, $child1->parent_id);
+        $this->assertGreaterThan($parent1->lft, $child1->lft);
+        $this->assertLessThan($parent1->rght, $child1->rght);
+    }
+
+    /**
+     * test resetTree
+     *
+     * 複数ブログ・階層ありのデータが、全てルート直下にフラット化され
+     * lft / rght が元の並び順（lft 昇順）の連番で振り直されることを確認する
+     */
+    public function test_resetTree()
+    {
+        // blog1: parent1(1,4) > child1(2,3)、blog2: B(5,6)、blog1: C(lft/rght 破損)
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 2, 'name' => 'category-b', 'title' => 'B', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+        BlogCategoryFactory::make(['id' => 4, 'blog_content_id' => 1, 'name' => 'category-c', 'title' => 'C', 'parent_id' => null, 'lft' => 7, 'rght' => 7])->persist();
+
+        $this->assertTrue($this->BlogCategoriesTable->resetTree());
+
+        // 全カテゴリがルート直下・元の lft 昇順の連番になっている
+        $categories = $this->BlogCategoriesTable->find()->orderBy(['lft'])->all()->toArray();
+        $this->assertEquals(['parent1', 'child1', 'category-b', 'category-c'], array_column($categories, 'name'));
+        $count = 0;
+        foreach($categories as $category) {
+            $this->assertNull($category->parent_id);
+            $this->assertEquals(++$count, $category->lft);
+            $this->assertEquals(++$count, $category->rght);
+        }
+    }
 }
