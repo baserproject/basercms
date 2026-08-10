@@ -98,14 +98,81 @@ class BurgerEditorServiceTest extends BcTestCase
     }
 
     /**
+     * test getBasePath
+     *
+     * プラグインの基準パスを返す
+     */
+    public function test_getBasePath()
+    {
+        $result = $this->BurgerEditorService->getBasePath();
+        $this->assertSame(Plugin::path('BcBurgerEditor'), $result);
+        $this->assertDirectoryExists($result);
+    }
+
+    /**
+     * test getBlockPath
+     *
+     * 実在するブロックの基準パスを返す
+     */
+    public function test_getBlockPath()
+    {
+        $result = $this->BurgerEditorService->getBlockPath();
+        $this->assertSame(Plugin::path('BcBurgerEditor') . 'Addon' . DS . 'block' . DS, $result);
+        $this->assertDirectoryExists($result);
+    }
+
+    /**
+     * test getTypePath
+     *
+     * 実在するタイプの基準パスを返す
+     */
+    public function test_getTypePath()
+    {
+        $result = $this->BurgerEditorService->getTypePath();
+        $this->assertSame(Plugin::path('BcBurgerEditor') . 'Addon' . DS . 'type' . DS, $result);
+        $this->assertDirectoryExists($result);
+    }
+
+    /**
+     * test element
+     *
+     * タイプの表示用テンプレートが出力される
+     */
+    public function test_element()
+    {
+        ob_start();
+        $this->BurgerEditorService->element('embed');
+        $result = ob_get_clean();
+        $this->assertStringContainsString('<div class="valueembed">', $result);
+        $this->assertContains('embed', BurgerEditorService::getAddonList());
+    }
+
+    /**
+     * test element
+     *
+     * 存在しないタイプを指定しても何も出力されない
+     */
+    public function test_element_withMissingType()
+    {
+        ob_start();
+        $this->BurgerEditorService->element('not-exists-type');
+        $result = ob_get_clean();
+        $this->assertSame('', $result);
+    }
+
+    /**
      * test addAddonList / getAddonList
      *
      * 同じ名前は重複して登録されない
      */
     public function test_getAddonList()
     {
-        $before = BurgerEditorService::getAddonList();
-        $this->assertIsArray($before);
+        ob_start();
+        $this->BurgerEditorService->element('embed');
+        $this->BurgerEditorService->element('embed');
+        ob_end_clean();
+        $result = BurgerEditorService::getAddonList();
+        $this->assertSame(1, count(array_keys($result, 'embed')));
     }
 
 }

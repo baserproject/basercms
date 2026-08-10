@@ -11,6 +11,9 @@
 
 namespace BcBurgerEditor\Service;
 
+use BcBurgerEditor\Lib\BurgerEditorUtil;
+use Cake\Core\Plugin;
+
 class BurgerEditorService
 {
 
@@ -20,30 +23,57 @@ class BurgerEditorService
 
     public function __construct(array $config = [])
     {
-
-        $this->bgEditorBase = dirname(dirname(__FILE__)) . '/';
+        $this->bgEditorBase = Plugin::path('BcBurgerEditor');
     }
 
+    /**
+     * プラグインの基準パスを取得する
+     *
+     * @return string
+     */
     public function getBasePath()
     {
         return $this->bgEditorBase;
     }
 
+    /**
+     * ブロックの基準パスを取得する
+     *
+     * @return string
+     */
     public function getBlockPath()
     {
-        return $this->bgEditorBase . 'Addon' . DS . 'Block' . DS;
+        return BurgerEditorUtil::getAddonPath()[0] . 'block' . DS;
     }
 
+    /**
+     * タイプの基準パスを取得する
+     *
+     * @return string
+     */
     public function getTypePath()
     {
-        return $this->bgEditorBase . 'Addon' . DS . 'Type' . DS;
+        return BurgerEditorUtil::getAddonPath()[0] . 'type' . DS;
     }
 
+    /**
+     * タイプの表示用テンプレートを出力する
+     *
+     * Addon を提供するプラグイン側のタイプも対象とするため、
+     * パスの解決は BurgerEditorUtil に委譲する
+     *
+     * @param string $name タイプ名
+     * @return void
+     */
     public function element($name)
     {
         self::addAddonList($name);
+        $typePath = BurgerEditorUtil::getTypePath($name);
+        if (!$typePath || !file_exists($typePath . 'value.php')) {
+            return;
+        }
         echo '<div class="value' . $name . '">';
-        include $this->getTypePath() . $name . DS . 'value.php';
+        include $typePath . 'value.php';
         echo '</div>';
     }
 
