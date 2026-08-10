@@ -233,8 +233,9 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
                         $output = str_replace("__REPACE_MAP{$i}__", '<!-- delete google map api calling by BGE -->', $output);
                     }
                 }
-                $View->output = $output;
-
+                // renderLayout() はレイアウトの描画結果を content ブロックへ格納した上で
+                // afterLayout を発火し、その内容を返すため、ブロックへ書き戻す
+                $View->assign('content', $output);
             }
         }
         return true;
