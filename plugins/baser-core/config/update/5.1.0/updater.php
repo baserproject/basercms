@@ -25,7 +25,7 @@ $updateDir = __DIR__;
 if (is_writable(ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php')) {
     copy($updateDir . DS . 'src' . DS . 'View' . DS . 'AjaxView.php', ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php');
 } else {
-    BcUpdateLog::set(__d('baser_core', ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php に書き込み権限がありません。' . $updateDir . DS . 'src' . DS . 'View' . DS . 'AjaxView.php をコピーして手動で上書きしてください。'));
+    BcUpdateLog::set(__d('baser_core', '{0} に書き込み権限がありません。{1} をコピーして手動で上書きしてください。', ROOT . DS . 'src' . DS . 'View' . DS . 'AjaxView.php', $updateDir . DS . 'src' . DS . 'View' . DS . 'AjaxView.php'));
 }
 
 /**

@@ -93,6 +93,15 @@ class CustomContentsTableTest extends BcTestCase
         $this->assertEquals([
             'range' => '一覧表示件数は100までの数値で入力してください。',
         ], $errors['list_count']);
+
+        //空文字を入力した場合
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate([
+            'list_count' => ''
+        ]);
+        $this->assertEquals([
+            '_empty' => '一覧表示件数を入力してください。'
+        ], $errors['list_count']);
     }
 
     /**

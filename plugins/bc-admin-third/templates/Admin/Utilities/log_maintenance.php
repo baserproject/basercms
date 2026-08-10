@@ -40,7 +40,7 @@ $this->BcAdmin->setHelp('tools_log');
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'ログの削除') ?></h2>
 
   <p class="bca-main__text"><?php echo __d('baser_core', 'ログを削除します。サーバの容量を圧迫する場合時などに利用ください。') ?><br>
-    <?php echo sprintf(__d('baser_core', 'ログのサイズは、%sMBです。'), number_format($fileSize / 1000000, 2)) ?>
+    <?php echo __d('baser_core', 'ログのサイズは、{0} MBです。', number_format($fileSize / 1000000, 2)) ?>
   </p>
   <p class="bca-main__text">
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['delete'], [

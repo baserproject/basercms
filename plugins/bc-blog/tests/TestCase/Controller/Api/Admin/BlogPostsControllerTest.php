@@ -118,7 +118,7 @@ class BlogPostsControllerTest extends BcTestCase
         // 戻り値を確認
         $result = json_decode((string)$this->_response->getBody());
         //メッセージを確認
-        $this->assertEquals('記事「baserCMS inc. [デモ] の新しい記事」を追加しました。', $result->message);
+        $this->assertEquals('ブログ記事「baserCMS inc. [デモ] の新しい記事」を追加しました。', $result->message);
         //作成したBlogPostを確認
         $this->assertEquals('baserCMS inc. [デモ] の新しい記事', $result->blogPost->title);
         $this->assertEquals('記事の概要', $result->blogPost->content);
@@ -167,7 +167,7 @@ class BlogPostsControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('blog post edit', $result->blogPost->title);
-        $this->assertEquals('記事「blog post edit」を更新しました。', $result->message);
+        $this->assertEquals('ブログ記事「blog post edit」を更新しました。', $result->message);
 
         //エラーを発生した場合を確認
         //APIをコル

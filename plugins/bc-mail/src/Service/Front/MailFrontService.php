@@ -171,7 +171,7 @@ class MailFrontService implements MailFrontServiceInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -197,6 +197,14 @@ class MailFrontService implements MailFrontServiceInterface
             // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
             $mailMessage = new MailMessage($postData, ['source' => 'BcMail.MailMessages']);
             $mailMessage->setErrors($message->getErrors());
+
+            // afterMarshal() が新規に設定した _tmp 値も含めて引き継ぐ
+            foreach ($message->toArray() as $key => $value) {
+                if (str_ends_with((string) $key, '_tmp') && $value) {
+                    $mailMessage->set($key, $value);
+                }
+            }
+
             throw new PersistenceFailedException($mailMessage, __d('baser_core', 'エラー : 入力内容を確認して再度送信してください。'));
         }
     }

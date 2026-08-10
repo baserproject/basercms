@@ -132,6 +132,60 @@ let app = createApp({
                     };
                 }
             }
+        },
+
+        /**
+         * マルチチェックボックス系フィールドかどうかを取得
+         *
+         * controlType が multiCheckbox のフィールド（BcCcMultiple 等）、
+         * または BcCcRelated で表示タイプが multiCheckbox の場合に true を返す。
+         *
+         * @returns {boolean}
+         */
+        showControlMultiCheckbox: function () {
+            const setting = this.settings[this.entity.type];
+            if (!setting) return false;
+            if (setting.controlType === 'multiCheckbox') return true;
+            if (this.entity.type === 'BcCcRelated' &&
+                this.entity.meta && this.entity.meta.BcCcRelated &&
+                this.entity.meta.BcCcRelated.display_type === 'multiCheckbox') {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * OR検索チェックボックスの値を取得・設定する
+         *
+         * マルチチェックボックス系フィールドを複数選択して検索する際、
+         * OR検索とAND検索のどちらで扱うかを切り替える。
+         *
+         * @returns {boolean}
+         */
+        orSearch: {
+            get: function () {
+                if(this.entity.meta && this.entity.meta.BcCustomContent !== undefined) {
+                    return !!this.entity.meta.BcCustomContent.or_search;
+                }
+                return false;
+            },
+            set: function(value) {
+                if(this.entity.meta) {
+                    if(this.entity.meta.BcCustomContent !== undefined) {
+                        this.entity.meta.BcCustomContent.or_search = value;
+                    } else {
+                        this.entity.meta.BcCustomContent = {
+                            or_search: value
+                        }
+                    }
+                } else {
+                    this.entity.meta = {
+                        BcCustomContent: {
+                            or_search: value
+                        }
+                    };
+                }
+            }
         }
     },
 
@@ -278,6 +332,11 @@ let app = createApp({
             } else {
                 this.showControlCounter = false;
                 this.entity.counter = false;
+            }
+
+            // OR検索設定（マルチチェックボックス系フィールド以外では非表示のためリセット）
+            if (!this.showControlMultiCheckbox) {
+                this.orSearch = false;
             }
 
             // 正規表現（デフォルト：非表示）

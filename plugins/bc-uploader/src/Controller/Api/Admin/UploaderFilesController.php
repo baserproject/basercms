@@ -40,8 +40,11 @@ class UploaderFilesController extends BcAdminApiController
      */
     public function index(UploaderFilesServiceInterface $service)
     {
+        $queryParams = $this->request->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         $this->set([
-            'uploaderFiles' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'uploaderFiles' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['uploaderFiles']);
     }
@@ -76,7 +79,7 @@ class UploaderFilesController extends BcAdminApiController
             $message = __d('baser_core', "同じ名称のファイルが存在しないため処理に失敗しました。");
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -114,7 +117,7 @@ class UploaderFilesController extends BcAdminApiController
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([
@@ -148,7 +151,7 @@ class UploaderFilesController extends BcAdminApiController
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
 
         $this->set([

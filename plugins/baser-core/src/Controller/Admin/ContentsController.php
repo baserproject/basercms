@@ -169,14 +169,14 @@ class ContentsController extends BcAdminAppController
         $alias = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
-                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit_alias', $id]);
             }
             try {
                 $alias = $service->update($alias, $this->request->getData('content'));
                 $content = $service->get($alias->alias_id);
                 $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
-                    sprintf(__d('baser_core', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
+                    __d('baser_core', '「{0}」のエイリアス「{1}」を編集しました。', $content->title, $alias->title);
                 $this->BcMessage->setSuccess($message);
                 $this->redirect(['action' => 'edit_alias', $id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
@@ -210,7 +210,7 @@ class ContentsController extends BcAdminAppController
         }
         $this->disableAutoRender();
         if ($restored = $service->restore($id)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ゴミ箱「%s」を戻しました。'), $restored->title));
+            $this->BcMessage->setSuccess(__d('baser_core', 'ゴミ箱「{0}」を戻しました。', $restored->title));
             return $this->redirect(['action' => 'index']);
         } else {
             $this->BcMessage->setError(__d('baser_core', 'ゴミ箱から戻す事に失敗しました。'));
@@ -234,9 +234,9 @@ class ContentsController extends BcAdminAppController
             if ($service->deleteRecursive($id)) {
                 $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
                 if(!$content->alias_id) {
-                    $message = $typeName . sprintf(__d('baser_core', '「%s」をゴミ箱に移動しました。'), $content->title);
+                    $message = $typeName . __d('baser_core', '「{0}」をゴミ箱に移動しました。', $content->title);
                 } else {
-                    $message = sprintf(__d('baser_core', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
+                    $message = __d('baser_core', '{0} のエイリアス「{1}」を削除しました。', $typeName, $content->title);
                 }
                 $this->BcMessage->setSuccess($message, true);
                 $this->redirect(['action' => 'index']);

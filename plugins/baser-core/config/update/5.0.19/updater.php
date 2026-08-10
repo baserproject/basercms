@@ -20,6 +20,6 @@ $updateDir = __DIR__;
 
 if(!file_exists(ROOT . DS . 'config' . DS . 'plugins.php')) {
     if(!copy($updateDir . DS . 'config' . DS . 'plugins.php', ROOT . DS . 'config' . DS . 'plugins.php')) {
-        BcUpdateLog::set(__d('baser_core', 'plugins.php に配置に失敗しました。' . $updateDir . DS . 'config' . DS . 'plugins.php をコピーして、手動で' . ROOT . DS . 'config 配下に配置してください。'));
+        BcUpdateLog::set(__d('baser_core', 'plugins.php の配置に失敗しました。{0} をコピーして、手動で {1} 配下に配置してください。', $updateDir . DS . 'config' . DS . 'plugins.php', ROOT . DS . 'config'));
     }
 }

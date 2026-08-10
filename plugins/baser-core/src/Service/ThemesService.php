@@ -138,7 +138,7 @@ class ThemesService implements ThemesServiceInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -149,7 +149,8 @@ class ThemesService implements ThemesServiceInterface
             }
             throw new BcException($message);
         }
-        $name = $postData['file']->getClientFileName();
+        // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
+        $name = basename($postData['file']->getClientFileName());
         $postData['file']->moveTo(TMP . $name);
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {

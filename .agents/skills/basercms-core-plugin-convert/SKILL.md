@@ -1,6 +1,6 @@
 ---
 name: basercms-core-plugin-convert
-description: baserCMS の「通常プラグイン（サードパーティ／単体配布）」を monorepo の「コアプラグイン」に昇格させる手順。「コアプラグインに変更」「コアプラグイン化」「通常プラグインをコアに昇格」「monorepo に取り込む」等のときに参照する。プラグイン名の規約変更（bc- プレフィックス付与・CamelCase→ハイフン区切り）、.git/シンボリックリンク/standalone テスト基盤の除去、ルート phpunit.xml.dist・tests/bootstrap.php・composer.json・.gitignore への登録、baser-core setting.php の corePlugins/defaultInstallCorePlugins、phpdoc.dist.xml、split_monorepo.yml への追加、monorepo-builder merge による依存集約、全体テストでの実行確認、monorepo split 用 read-only リポジトリの確認までを収録。プラグインのバージョン非推奨対応（5.2→5.3）は basercms-plugin-migration スキル、テスト実行手順は basercms-unittest スキルを参照。
+description: baserCMS の「通常プラグイン（サードパーティ／単体配布）」を monorepo の「コアプラグイン」に昇格させる手順。「コアプラグインに変更」「コアプラグイン化」「通常プラグインをコアに昇格」「monorepo に取り込む」等のときに参照する。プラグイン名の規約変更（bc- プレフィックス付与・CamelCase→ハイフン区切り）、.git/シンボリックリンク/standalone テスト基盤の除去、ルート phpunit.xml.dist・tests/bootstrap.php・composer.json・.gitignore への登録、baser-core setting.php の corePlugins/defaultInstallCorePlugins、phpdoc.dist.xml、split_monorepo.yml への追加、monorepo-builder merge による依存集約、全体テストでの実行確認、monorepo split 用 read-only リポジトリの確認までを収録。プラグインのバージョン非推奨対応（5.2→5.3）は basercms-plugin-5x-update スキル、テスト実行手順は basercms-unittest スキルを参照。
 license: MIT
 ---
 
@@ -10,7 +10,7 @@ license: MIT
 参照: `plugins/bc-blog` 等の既存コアプラグインが「正」の構成。
 
 > 前提と役割分担
-> - バージョン移行（5.2→5.3 / PHP8.5）でのコード非推奨対応は `basercms-plugin-migration` スキル。
+> - バージョン移行（5.2→5.3 / PHP8.5）でのコード非推奨対応は `basercms-plugin-5x-update` スキル。
 > - ユニットテストの実行・集計・切り分けは `basercms-unittest` スキル。
 > - 本書は「通常プラグイン構成 → コアプラグイン構成」への**構造変換**に絞る。
 
@@ -87,24 +87,41 @@ baserCMS は `webroot/<plugin_underscored>` → `plugins/<bc-name>/webroot` の�
 
 ## 4. テストを「全体実行」に載せ替える
 
-### 4-1. ルート `phpunit.xml.dist` に testsuite を追加
+### 4-1. ルート `phpunit.xml.dist` に testsuite を追加（⚠️ 配置順が重要）
 （プラグイン側 phpunit.xml.dist は 2. で削除済み。**追加するのはルート側**。）
 ```xml
 <testsuite name="BcMcp">
     <directory>plugins/bc-mcp/tests/TestCase</directory>
 </testsuite>
 ```
+- **⚠️ DB テーブルを持つが `defaultInstallCorePlugins` に入れないプラグインは、`BcInstaller` の testsuite より「前」に置く**。`BcInstaller` の `InstallationsControllerTest::testStep3`（`mode=createDb`）は**実際のインストール処理**で全テーブルを drop し **defaultInstall のプラグインのみ**再作成する。後ろに置くと、自プラグインのテーブルが作り直されないまま自テストが走り全アクション 500 になる（既存の非 default コア=BcContentLink/BcCustomContent 等もすべて BcInstaller より前に並んでいる）。
+  - 例: `... BcSeo` の直後・`BcInstaller` の直前に `BcMcp` を置く。
+  - defaultInstall に入れる方針なら BcInstaller の後でも可（createDb が作り直すため）。
 
-### 4-2. ルート `tests/bootstrap.php` の Migrator にプラグインを追加
-プラグインが DB マイグレーション（`config/Migrations`）を持つ場合、全体 bootstrap の `runMany` に追加しないとテスト用 DB にテーブルが作られず失敗する。
-```php
-(new Migrator())->runMany([
-    ['plugin' => 'BaserCore'],
-    ...
-    ['plugin' => 'BcMcp'],   // 追加
-    ...
-]);
-```
+### 4-2. マイグレーション・プラグインリストへ追加（⚠️ 複数箇所ある）
+プラグインが DB マイグレーション（`config/Migrations`）を持つ場合、**テスト用 DB にテーブルを作る／再構築するプラグインリストすべて**に追加する。1 箇所でも漏れると、全体実行時にそのプラグインのテーブルだけ欠落し `Could not describe columns on <table>`（→ コントローラ初期化失敗で当該プラグインの全アクション 500）になる。**単独 testsuite では通り、全体実行でのみ落ちる**のが特徴（切り分けは `basercms-plugin-5x-update` のテスト基盤節も参照）。
+
+1. **ルート `tests/bootstrap.php` の `Migrator::runMany`**（初期スキーマ構築）
+   ```php
+   (new Migrator())->runMany([
+       ['plugin' => 'BaserCore'],
+       ...
+       ['plugin' => 'BcMcp'],   // 追加
+   ]);
+   ```
+2. **「全テーブル drop → 再マイグレーション」をするテストの $plugins 配列（複数あり）**。これらは `deleteTables()`/`deleteAllTables()` で**全テーブルを drop** した後、ハードコードされたリストで再マイグレーションする。ここに無いとテーブルが復活せず、テスト順で先頭側に位置するため**以降の全テストで欠落したまま**になる（実際に bc-mcp 追加時に `oauth2_clients` がこれで消え、OAuth2 全テストが 500 になった）。**判明している箇所（両方必須）**:
+   - `plugins/baser-core/tests/TestCase/Service/BcDatabaseServiceTest.php` → `test_deleteTablesForMigrations()` の `$plugins`
+   - `plugins/bc-installer/tests/TestCase/Service/Admin/InstallationsAdminServiceTest.php` → `test_deleteAllTables()` の `$plugins`
+   ```php
+   $plugins = [ 'BaserCore', ..., 'BcMail', 'BcMcp', /* 追加 */ 'BcSearchIndex', ... ];
+   ```
+- **抜け漏れ確認（重要）**: この種の再構築リストは複数ファイルに散在する。**必ず grep で全部洗う**:
+   ```bash
+   grep -rn "'BcWidgetArea'," plugins --include="*.php"   # 末尾要素で「コア列挙リスト」を検出
+   ```
+   ヒットした各リストに新プラグインが入っているか確認する（1 つでも漏れると全体実行のみで落ちる）。
+- **確実な検出法**: `BcTestCase::setUp` 冒頭に「対象テーブルの存在を各テストで記録」する一時計測を仕込み、**全 suite を実行**して `OK→MISSING` 転移点を洗い出す（転移直前の OK テストが drop 元）。全 dropper を一度に特定できる。確認後に計測は除去する。
+- 切り分け診断（どのテストでテーブルが消えるか）: `BcTestCase::setUp` 冒頭に一時計測（`ConnectionManager::get('test')->getSchemaCollection()->listTables()` に対象テーブルが在るか各テストで記録）を仕込み、最初に MISSING になる直前の OK テストが drop 元。確認後に必ず除去する。
 
 ### 4-3. プラグイン `composer.json` をコアプラグイン形式へ簡素化
 `require-dev`（baser-core 等）・`scripts`・`config.allow-plugins`・`minimum-stability` は削除。`vendor-dir` を足す。**外部ランタイム依存がある場合は `require` に残す**（後で monorepo-builder merge がルートへ集約する）。
@@ -178,13 +195,27 @@ docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/monorepo-b
 docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/phpunit --testsuite BcMcp"
 ```
 - standalone 専用 bootstrap が用意していた前提（外部プロセス・環境変数・鍵等）が**全体 bootstrap には無い**ため、移行直後は失敗が出やすい。代表例:
-  - **外部プロセス依存**: プロキシ統合テスト等が**実サーバープロセス**を要する場合、standalone では bootstrap が起動していた。全体側では**該当テストの `setUp` で起動**する（起動済みなら再利用）。起動コマンドは `ROOT/bin/cake <command>`（アプリの cake と、コア登録済みのコマンド）を使う。
+  - **外部プロセス依存**: プロキシ統合テスト等が**実サーバープロセス**を要する場合、standalone では bootstrap が起動していた。全体側では**該当テストの先頭で起動**する（起動済みなら再利用）。起動コマンドは `ROOT/bin/cake <command>`（アプリの cake と、コア登録済みのコマンド）を使う。`setUp` 全体ではなく**サーバーが要る個別テストにだけ**ガードを入れる（他テストに起動待ちを波及させない）。
+    **⚠️ 起動判定は「プロセス存在（pidファイル）」だけでは不十分**。プロセスは起きてもポートの bind が間に合わず、プロキシ接続先（例 `127.0.0.1:{port}`）が接続拒否＝500 になる（ローカルは通り CI でのみ落ちる典型）。**実際に接続できるまでポーリングで待つ**こと。
+    **到達できない場合は `markTestSkipped` で隠さず `assertTrue` 等で明示的に失敗させる**（スキップはサーバー起動不具合を握りつぶす）。本方針は `.github/instructions/basercms.instructions.md`「開発・テスト・ビルド」にも記載。
     ```php
-    $manager = new McpServerManger();
-    if (!$manager->isServerRunning()) { $manager->startMcpServer($manager->getServerConfig()); }
+    private function requireMcpServer(): void {
+        $m = new McpServerManger();
+        $cfg = $m->getServerConfig();
+        if (!$m->isServerRunning()) { $m->startMcpServer($cfg); }
+        $host = $cfg['host'] ?? '127.0.0.1'; $port = (int)($cfg['port'] ?? 3000);
+        $deadline = microtime(true) + 15.0; $reachable = false;
+        while (microtime(true) < $deadline) {
+            $c = @fsockopen($host, $port, $e, $s, 1);
+            if ($c) { fclose($c); $reachable = true; break; }
+            usleep(300000);
+        }
+        $this->assertTrue($reachable, "MCP サーバー（{$host}:{$port}）へ接続できませんでした");
+    }
+    // 実サーバーが要るテストの先頭で $this->requireMcpServer();
     ```
   - **マイグレーション未実行**: 4-2 の追加漏れ → テーブル不在で失敗。
-  - **プラグイン未 bootstrap / サブプラグイン未ロード** 等は `basercms-plugin-migration` スキル（T-3〜T-5）参照。
+  - **プラグイン未 bootstrap / サブプラグイン未ロード** 等は `basercms-plugin-5x-update` スキル（T-3〜T-5）参照。
 - 仕上げに全体テストの回帰が無いことも確認する。
 
 ---
@@ -215,7 +246,7 @@ gh repo view baserproject/bc-mcp --json name,url,visibility
 2. [ ] `.git` / `vendor` / `bin` / `composer.lock` / `phpunit.xml.dist` / `tests/bootstrap.php` / `TestApp` / `VERSION.txt` / `CHANGELOG.md` 削除
 3. [ ] ルート `.gitignore`: `!/plugins/<bc-name>` で追跡対象化 ＋ `/webroot/<underscored>` を無視
 4. [ ] ルート `phpunit.xml.dist` に testsuite 追加
-5. [ ] ルート `tests/bootstrap.php` の Migrator に追加（マイグレーションがある場合）
+5. [ ] マイグレーション・リスト全箇所に追加（マイグレーションがある場合）: ルート `tests/bootstrap.php` の `runMany` ＋ `BcDatabaseServiceTest::test_deleteTablesForMigrations` の `$plugins`
 6. [ ] プラグイン `composer.json` をコア形式に簡素化（外部 require は残す）
 7. [ ] `corePlugins` に追加 ／ `defaultInstallCorePlugins` は方針確認
 8. [ ] ルート `composer.json` に集約（merge もしくは手動）＋ `composer update`

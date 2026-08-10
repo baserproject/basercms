@@ -1,11 +1,12 @@
 <?php
 /**
- * CuCustomField : baserCMS Custom Field Text Plugin
- * Copyright (c) Catchup, Inc. <https://catchup.co.jp>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright        Copyright (c) Catchup, Inc.
- * @link             https://catchup.co.jp
- * @license          MIT LICENSE
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 namespace BcCcRelated\View\Helper;
@@ -110,7 +111,7 @@ class BcCcRelatedHelper extends Helper
         $options = [
             ':value' => 'entity.default_value'
         ];
-        return $this->control($link, $options) . '<br>※ 関連データはリアルタイムでのプレビューは未対応です。保存してから確認してください。';
+        return $this->control($link, $options) . '<br>' . __d('baser_core', '※ 関連データはリアルタイムでのプレビューは未対応です。保存してから確認してください。');
     }
 
     /**

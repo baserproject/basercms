@@ -63,9 +63,9 @@ $this->BcBaser->i18nScript([
       <div class="bca-helptext">
           <?php echo __d('baser_core', 'サイトのURLに利用します。空欄に設定した場合、自動的に識別名称と同じものを設定します。<br><br>
           ■ 外部ドメインを利用する場合<br>
-          半角英数、ハイフン（-）・アンダースコア（_）・スラッシュ（/）が利用できます。<br>
+          半角英数、ハイフン（-）・アンダースコア（_）・ドット（.）が利用できます。<br>
           ■ 外部ドメインを利用しない場合<br>
-          半角英数、ハイフン（-）・アンダースコア（_）・ドット（.）が利用できます。
+          半角英数、ハイフン（-）・アンダースコア（_）・スラッシュ（/）が利用できます。
           ') ?>
       </div>
       <?php echo $this->BcAdminForm->error('name') ?>
@@ -211,7 +211,7 @@ $this->BcBaser->i18nScript([
       <td class=" bca-form-table__input">
         <?php echo $this->BcAdminForm->control('domain_type', [
           'type' => 'radio',
-          'options' => [1 => __d('baser', 'サブドメイン'), 2 => __d('baser', '外部ドメイン')],
+          'options' => [1 => __d('baser_core', 'サブドメイン'), 2 => __d('baser_core', '外部ドメイン')],
           'default' => 0
         ]) ?>
         <?php echo $this->BcAdminForm->error('domain_type') ?>

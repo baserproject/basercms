@@ -62,6 +62,7 @@ class CustomContentsTable extends AppTable
         $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
         $validator->allowEmptyString('list_count')
             ->range('list_count', [0, 100], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
+            ->notEmptyString('list_count', '一覧表示件数を入力してください。')
             ->add('list_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',

@@ -53,8 +53,11 @@ class UserGroupsController extends BcAdminAppController
             'direction' => 'asc',
         ]]]);
 
+        $queryParams = $this->getRequest()->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         try {
-            $entities = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+            $entities = $this->paginate($service->getIndex($queryParams));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index']);
         }
@@ -86,7 +89,7 @@ class UserGroupsController extends BcAdminAppController
                 $userGroup = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set('userGroup', $userGroup ?? $service->getNew());
@@ -118,7 +121,7 @@ class UserGroupsController extends BcAdminAppController
                 $userGroup = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set('userGroup', $userGroup);

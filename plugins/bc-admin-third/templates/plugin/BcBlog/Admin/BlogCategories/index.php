@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜カテゴリ一覧'), $blogContent->content->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜カテゴリ一覧', $blogContent->content->title));
 $this->BcAdmin->setHelp('blog_categories_index');
 $this->BcBaser->js('BcBlog.admin/blog_categories/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([

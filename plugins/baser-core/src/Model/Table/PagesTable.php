@@ -15,6 +15,7 @@ use ArrayObject;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -245,7 +246,7 @@ class PagesTable extends AppTable
      * @param string $newTitle
      * @param int $newAuthorId
      * @param int|null $newSiteId
-     * @return EntityInterface|false $result
+     * @return EntityInterface $result
      * @checked
      * @unitTest
      * @noTodo
@@ -277,14 +278,24 @@ class PagesTable extends AppTable
             'title' => $newTitle ?? $oldPage->content->title . '_copy',
             'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
+            'description' => $page->content->description,
+            'eyecatch' => $page->content->eyecatch,
             'layout_template' => $page->content->layout_template ?? ''
         ]);
 
         if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {
             $page->content->parent_id = $this->Contents->copyContentFolderPath($oldPage->content->url, $newSiteId);
         }
-        $newPage = $this->patchEntity($this->newEmptyEntity(), $page->toArray());
-        $newPage = $this->saveOrFail($newPage);
+
+        $this->getConnection()->begin();
+        try {
+            $newPage = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $page->toArray()));
+            $newPage->content = $this->Contents->copyEyecatchFile($newPage->content);
+            $this->getConnection()->commit();
+        } catch (PersistenceFailedException $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
 
         // EVENT Pages.afterCopy
         $this->dispatchLayerEvent('afterCopy', [

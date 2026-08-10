@@ -109,7 +109,7 @@ class PermissionsController extends BcAdminAppController
         if ($this->request->is('post')) {
             try {
                 $permission = $service->create($this->request->withData('user_group_id', $userGroupId)->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', '新規アクセスルール「%s」を追加しました。'), $permission->name));
+                $this->BcMessage->setSuccess(__d('baser_core', '新規アクセスルール「{0}」を追加しました。', $permission->name));
                 if($permissionGroupId) {
                     return $this->redirect(['controller' => 'PermissionGroups', 'action' => 'edit', $userGroupId, $permissionGroupId]);
                 } else {
@@ -147,7 +147,7 @@ class PermissionsController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $permission = $service->update($permission, $this->request->withData('user_group_id', $userGroupId)->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'アクセスルール「%s」を更新しました。'), $permission->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルール「{0}」を更新しました。', $permission->name));
                 if($permissionGroupId) {
                     return $this->redirect(['controller' => 'PermissionGroups', 'action' => 'edit', $userGroupId, $permissionGroupId]);
                 } else {
@@ -181,7 +181,7 @@ class PermissionsController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $service->delete($permissionId);
-            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'アクセスルール「%s」を削除しました。'), $permissionName));
+            $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルール「{0}」を削除しました。', $permissionName));
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
@@ -202,7 +202,7 @@ class PermissionsController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->copy($permissionId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'アクセスルール「%s」を複製しました。'), $permission->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルール「{0}」を複製しました。', $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
             }
             $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
@@ -226,8 +226,7 @@ class PermissionsController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->unpublish($permissionId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'アクセスルール「%s」を無効にしました。'),
-                    $permission->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルール「{0}」を無効にしました。', $permission->name));
             }
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
@@ -249,8 +248,7 @@ class PermissionsController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->publish($permissionId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'アクセスルール「%s」を有効にしました。'),
-                    $permission->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルール「{0}」を有効にしました。', $permission->name));
             }
         }
         return $this->redirect(['action' => 'index', $userGroupId]);

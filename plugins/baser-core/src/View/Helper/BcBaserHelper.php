@@ -1163,6 +1163,9 @@ class BcBaserHelper extends Helper
      */
     public function isHome()
     {
+        if($this->getView()->getName() === 'Error') {
+            return false;
+        }
         $request = $this->_View->getRequest();
         if (empty($request->getAttribute('currentSite'))) {
             return false;

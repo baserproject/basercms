@@ -1,6 +1,7 @@
 ---
 name: php-migration
 description: baserCMS の PHP バージョンアップ（8.2/8.4/8.5 ～）対応の非推奨・破壊的変更パターン集と修正レシピ。「暗黙的nullableの非推奨警告」「Creation of dynamic property ... is deprecated」「fgetcsv の escape 警告」「ReflectionProperty::setValue の非推奨」「(integer)/(boolean) 等の非正規キャスト非推奨」「null を配列オフセットに使う非推奨」「curl_close/imagedestroy 等の自動解放関数非推奨」等、PHP本体起因のアップグレード警告/エラーの調査・修正時に参照する。新しい PHP バージョン対応時は本書にバージョン別追記する。CakePHP本体起因の問題は cakephp-migration スキルを参照。
+license: MIT
 ---
 
 # PHP バージョン移行ガイド（baserCMS）

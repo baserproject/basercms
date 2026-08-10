@@ -13,6 +13,7 @@ namespace BaserCore\Command;
 
 use BaserCore\Utility\BcComposer;
 use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcUtil;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -89,6 +90,17 @@ class ComposerCommand extends Command
             BcComposer::changeMinimumStabilityToDev();
             BcComposer::deleteReplace();
         }
+
+        // 現行バージョンが5.2系以下の場合、依存する CakePHP 5.0系がセキュリティアドバイザリの
+        // 対象になっているため、composer の脆弱パッケージブロックにより新バージョンの
+        // ダウンロード自体が失敗する。既にインストール済みの（まさに置き換えようとしている）
+        // 旧依存が対象なので、ブロックしても意味がなく、更新できずに脆弱なバージョンへ留まる
+        // 逆効果になるため一時的に解除する
+        if (BcUtil::verpoint(BcUtil::getVersion()) < BcUtil::verpoint('5.3.0')) {
+            BcComposer::disableBlockInsecure();
+        }
+
+        BcComposer::relaxFrameworkConstraints();
 
         $result = BcComposer::require('baser-core', $version);
 

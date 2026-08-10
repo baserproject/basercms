@@ -1,12 +1,14 @@
 ---
-name: basercms-plugin-migration
-description: 'baserCMS プラグインを 5.2系 から 5.3系（PHP 8.5 / CakePHP 5.2.x ベース、開発中）へ移行する際の baserCMS 固有の破壊的変更・非推奨・テスト基盤対応のレシピ集。「プラグインを5.3に対応」「baserCMS 5.3 マイグレーション」「PluginCollection::create(): $config null given」「Plugin named X is already loaded（統合テスト）」「BcApp.testAppPluginsToLoad」「plugins.php の null → []」「Class BcCcFile\... not found（サブプラグイン未ロード）」「Cannot set a node''s parent as itself（TreeBehavior + Content フィクスチャ）」「validateUnique(): Argument #2 not passed（vendor の CakePHP 二重ロード）」「MissingTemplateException error500.php でテストの真因がマスクされる」「BcFile コンストラクタ／delete() パス指定の非推奨」等、プラグイン本体・テスト基盤の移行時に参照する。PHP本体起因は php-migration、CakePHP本体起因は cakephp-migration、テスト実行手順は basercms-unittest スキルを参照。新しい baserCMS バージョン対応時は本書にバージョン別追記する。'
+name: basercms-plugin-5x-update
+description: 'baserCMS プラグインを 5.2系 から 5.3系（PHP 8.5 / CakePHP 5.2.x ベース、開発中）へ移行する際の baserCMS 固有の破壊的変更・非推奨・テスト基盤対応のレシピ集。「プラグインを5.3に対応」「baserCMS 5.3 マイグレーション」「PluginCollection::create(): $config null given」「Plugin named X is already loaded（統合テスト）」「BcApp.testAppPluginsToLoad」「plugins.php の null → []」「Class BcCcFile\... not found（サブプラグイン未ロード）」「Cannot set a node''s parent as itself（TreeBehavior + Content フィクスチャ）」「validateUnique(): Argument #2 not passed（vendor の CakePHP 二重ロード）」「MissingTemplateException error500.php でテストの真因がマスクされる」「BcFile コンストラクタ／delete() パス指定の非推奨」等、プラグイン本体・テスト基盤の移行時に参照する。これは同一メジャー内のマイナーアップデート（5.2→5.3）のスキルであり、baserCMS 4→5 のメジャーアップグレード（CakePHP 2→5 の全面書き換え）は basercms-plugin-4-to-5-upgrade を参照。PHP本体起因は php-migration、CakePHP本体起因は cakephp-migration、テスト実行手順は basercms-unittest スキルを参照。新しい baserCMS バージョン対応時は本書にバージョン別追記する。'
 license: MIT
 ---
 
 # baserCMS プラグイン バージョン移行ガイド（5.2 → 5.3）
 
 baserCMS プラグインを 5.2系 から 5.3系へ移行する際に遭遇した baserCMS 固有の問題と修正レシピ集。**バージョン別**に整理して育てる。
+
+> **推奨: 着手前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan の Markdown プレビュー）を整える。提案ベースで、整っていればスキップ。**
 
 > 収録: 5.2 → 5.3。5.3系は **PHP 8.5 / CakePHP 5.2.x** ベース（執筆時点で開発中）。
 > 役割分担:
@@ -149,4 +151,4 @@ $this->assertEquals(date('Y/m') . '/00000001_image_field.png', $result['image_fi
 5. フレームワーク／PHP 起因は `cakephp-migration` / `php-migration` の該当節へ。baserCMS 固有非推奨は B-1、TreeBehavior は C-1、日付依存は D-1。
 6. 修正のたびに `php -l` → `--filter` 単体確認 → 仕上げに全テスト再実行で件数改善と新規回帰を確認。
 
-> メモ: 新しくスキルファイルを `.claude/skills/` に追加・更新した直後は、現在の Claude Code セッションには反映されない（セッション起動時に discover される）。**Claude Code を再起動**すると `/basercms-plugin-migration` として呼べるようになる。
+> メモ: 新しくスキルファイルを `.claude/skills/` に追加・更新した直後は、現在の Claude Code セッションには反映されない（セッション起動時に discover される）。**Claude Code を再起動**すると `/basercms-plugin-5x-update` として呼べるようになる。

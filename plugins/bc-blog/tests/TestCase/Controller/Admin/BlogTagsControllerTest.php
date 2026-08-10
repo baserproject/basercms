@@ -80,7 +80,7 @@ class BlogTagsControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         $this->assertRedirect(['action' => 'index']);
         //メッセージを確認
-        $this->assertFlashMessage('タグ「test add」を追加しました。');
+        $this->assertFlashMessage('ブログタグ「test add」を追加しました。');
 
         //実行失敗場合、
         $data = [
@@ -151,7 +151,7 @@ class BlogTagsControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         $this->assertRedirect(['action' => 'index']);
         //メッセージを確認
-        $this->assertFlashMessage('タグ「updated」を更新しました。');
+        $this->assertFlashMessage('ブログタグ「updated」を更新しました。');
 
         //実行失敗場合
         $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => null]);

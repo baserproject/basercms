@@ -167,7 +167,7 @@ uploaderFilesIndex = {
                                         publish_end: bcI18n.uploaderPublishEnd
                                     };
                                     let message = response.responseJSON.message;
-                                    if (response.responseJSON.errors !== undefined) {
+                                    if (response.responseJSON.errors) {
                                         message += "\n";
                                         Object.keys(response.responseJSON.errors).forEach(function (key) {
                                             Object.keys(response.responseJSON.errors[key]).forEach(function (field) {

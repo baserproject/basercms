@@ -136,9 +136,22 @@ class BlogTagsService implements BlogTagsServiceInterface
      */
     public function createIndexOrder(Query $query, array $params)
     {
-        $order = ["BlogTags.{$params['sort']} {$params['direction']}"];
-        if (!empty($params['order'])) $order = array_merge($order, $params['order']);
-        return $query->orderBy($order);
+        // SQLインジェクション対策: direction は ASC/DESC のみ許容
+        $direction = strtoupper((string)($params['direction'] ?? 'ASC'));
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
+            $direction = 'ASC';
+        }
+        // SQLインジェクション対策: sort は英数字・アンダースコア・ドットのみ許容
+        $sort = (string)($params['sort'] ?? 'name');
+        if (!preg_match('/^[a-zA-Z0-9_.]+$/', $sort)) {
+            $sort = 'name';
+        }
+        if (strpos($sort, '.') === false) {
+            $sort = 'BlogTags.' . $sort;
+        }
+        // 注意: リクエストから渡される生の order 配列は ORDER BY への
+        // SQLインジェクションを許すため、ここでは受け付けない。
+        return $query->orderBy(["{$sort} {$direction}"]);
     }
 
     /**

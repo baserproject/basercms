@@ -154,6 +154,17 @@ class MailMessagesAdminServiceTest extends BcTestCase
         $this->assertEquals(1, $result['messages'][0]['MailMessage']['NO']);
         $this->assertEquals(2, $result['messages'][1]['MailMessage']['NO']);
         $this->assertArrayHasKey('contentName', $result);
+        // 数式インジェクション対策を指定しない場合は有効
+        $this->assertTrue($result['escapeFormula']);
+
+        // 正常系実行：数式インジェクション対策を無効にするケース
+        $request = $this->getRequest()->withQueryParams([
+            'Content' => ContentFactory::get(1),
+            'disable_formula_escape' => '1'
+        ]);
+        $this->loginAdmin($request);
+        $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
+        $this->assertFalse($result['escapeFormula']);
 
         //不要テーブルを削除
         $MailMessagesService->dropTable(1);

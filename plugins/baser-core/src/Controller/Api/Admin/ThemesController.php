@@ -42,7 +42,7 @@ class ThemesController extends BcAdminApiController
         try {
             $themeDetail = $service->get($theme);
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -80,10 +80,10 @@ class ThemesController extends BcAdminApiController
         $theme = null;
         try {
             $theme = $service->add($this->getRequest()->getUploadedFiles());
-            $message = __d('baser_core', 'テーマファイル「' . $theme . '」を追加しました。');
+            $message = __d('baser_core', 'テーマファイル「{0}」を追加しました。', $theme);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -113,7 +113,7 @@ class ThemesController extends BcAdminApiController
             $message = __d('baser_core', 'テーマ「{0}」を削除しました。', $themeDetail->name);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -150,7 +150,7 @@ class ThemesController extends BcAdminApiController
             }
             $themeDetail = $service->get($theme);
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -186,7 +186,7 @@ class ThemesController extends BcAdminApiController
                     $this->BcMessage->setSuccess($message, true, false);
                 }
             } catch (\Throwable $e) {
-                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
                 $this->setResponse($this->response->withStatus(500));
             }
         }

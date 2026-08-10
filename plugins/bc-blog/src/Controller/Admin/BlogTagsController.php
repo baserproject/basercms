@@ -66,8 +66,11 @@ class BlogTagsController extends BlogAdminAppController
                 'direction' => 'asc'
             ],
         ]]);
+        $queryParams = $this->getRequest()->getQueryParams();
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         try {
-            $blogTags = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+            $blogTags = $this->paginate($service->getIndex($queryParams));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index', $blogContentId]);
         }
@@ -103,10 +106,7 @@ class BlogTagsController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $blogTag
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'タグ「%s」を追加しました。'),
-                    $blogTag->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログタグ「{0}」を追加しました。', $blogTag->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();
@@ -149,10 +149,7 @@ class BlogTagsController extends BlogAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $blogTag
                 ]);
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'タグ「%s」を更新しました。'),
-                    $blogTag->name
-                ));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログタグ「{0}」を更新しました。', $blogTag->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();

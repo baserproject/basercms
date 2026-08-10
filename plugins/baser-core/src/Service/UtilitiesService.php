@@ -407,7 +407,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -425,7 +425,8 @@ class UtilitiesService implements UtilitiesServiceInterface
         if(!is_dir($tmpPath)) {
             (new BcFolder($tmpPath))->create();
         }
-        $name = $uploaded['backup']->getClientFileName();
+        // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
+        $name = basename($uploaded['backup']->getClientFileName());
         $uploaded['backup']->moveTo($tmpPath . $name);
         $bcZip = new BcZip();
         if (!$bcZip->extract($tmpPath . $name, $tmpPath)) {

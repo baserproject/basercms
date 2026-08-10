@@ -268,7 +268,7 @@ class PagesService implements PagesServiceInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -293,7 +293,7 @@ class PagesService implements PagesServiceInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -340,7 +340,7 @@ class PagesService implements PagesServiceInterface
             if ($searchKey !== false) {
                 unset($pageTemplates[$searchKey]);
             }
-            $pageTemplates = ['' => sprintf(__d('baser_core', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
+            $pageTemplates = ['' => __d('baser_core', '親フォルダの設定に従う（{0}）', $parentTemplate)] + $pageTemplates;
         }
         return $pageTemplates;
     }

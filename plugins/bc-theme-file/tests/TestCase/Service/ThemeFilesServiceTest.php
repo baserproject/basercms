@@ -144,6 +144,48 @@ class ThemeFilesServiceTest extends BcTestCase
     }
 
     /**
+     * test create - テーマディレクトリ外への書き込みを拒否する（GHSA-2pj4-v76f-wjvx）
+     *
+     * Admin web 経路は POST の fullpath を直接書き込み先に使い getFullpath() を通らないため、
+     * sink(create) で必ずテーマディレクトリ配下を検証し、外部パスは BcException で拒否すること。
+     *
+     * @dataProvider provideOutsideThemeDir
+     */
+    public function test_create_rejectsOutsideThemeDir(string $fullpath): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->create([
+            'fullpath' => $fullpath,
+            'parent' => $fullpath,
+            'base_name' => 'pwned',
+            'ext' => 'php',
+            'contents' => "<?php /* poc */ ?>",
+        ]);
+        // 書き込まれていないことを保証（万一通った場合の後始末も兼ねる）
+        $this->assertFileDoesNotExist($fullpath . 'pwned.php');
+    }
+
+    /**
+     * test delete - テーマディレクトリ外のファイル削除を拒否する（GHSA-2pj4-v76f-wjvx）
+     * @dataProvider provideOutsideThemeDir
+     */
+    public function test_delete_rejectsOutsideThemeDir(string $fullpath): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->ThemeFileService->delete($fullpath . 'dummy.php');
+    }
+
+    public static function provideOutsideThemeDir(): array
+    {
+        return [
+            'tmp直下' => ['/tmp/'],
+            'アプリwebroot' => ['/var/www/html/webroot/'],
+            'config' => ['/var/www/html/config/'],
+        ];
+    }
+
+    /**
      * test update
      */
     public function test_update()
@@ -171,11 +213,11 @@ class ThemeFilesServiceTest extends BcTestCase
         //作成されたファイルを削除
         unlink($fullpath . 'test_update.php');
 
-        //異常系テスト・ファイル名を入力しない
-        $postData['base_name'] = '';
+        //異常系テスト・ファイル名を入力しない（パスは正常なテーマ配下のままフォーム検証で失敗させる）
+        $data['base_name'] = '';
         $this->expectException(BcFormFailedException::class);
         $this->expectExceptionMessage('ファイルの保存に失敗しました。');
-        $this->ThemeFileService->update($postData);
+        $this->ThemeFileService->update($data);
     }
 
     /**
@@ -284,6 +326,30 @@ class ThemeFilesServiceTest extends BcTestCase
 }', file_get_contents($copiedFilePath));
         //作成されたファイルを削除
         unlink($copiedFilePath);
+    }
+
+    /**
+     * test copyToTheme - コピー先のテーマディレクトリ外への書き込みを拒否する（GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h）
+     *
+     * copyToTheme() はコピー先 $themePath を $params['type'] / $params['path'] から組み立て
+     * getFullpath() を通さないため、path にトラバーサルを含めるとテーマ外へ書き込めてしまう。
+     * sink で assertWithinThemeDir が働き BcException で拒否されること。
+     */
+    public function test_copyToTheme_rejectsOutsideThemeDir(): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            // テーマ配置ルート(plugins/)の外へ抜けるトラバーサル
+            'path' => '../../../../../../../../tmp/pwned.css',
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
     }
 
     /**

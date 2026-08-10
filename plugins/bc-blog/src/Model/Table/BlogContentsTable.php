@@ -239,7 +239,6 @@ class BlogContentsTable extends BlogAppTable
         $url = $data->content->url;
         $siteId = $data->content->site_id;
         $name = $data->content->name;
-        $eyeCatch = $data->content->eyecatch;
         unset($data->id);
         unset($data->created);
         unset($data->modified);
@@ -284,20 +283,7 @@ class BlogContentsTable extends BlogAppTable
                 }
             }
 
-            // TODO ucmitz 未実装
-            // >>>
-//            if ($eyeCatch) {
-//                $content = clone $data->content;
-//                $content->eyecatch = $eyeCatch;
-//                $content = $this->Contents->renameToBasenameFields(true);
-//                $result = $this->Content->save($content);
-//                if(!$result) {
-//                    $this->getConnection()->rollback();
-//                    return false;
-//                }
-//                $newBlogContent->content = $result;
-//            }
-            // <<<
+            $newBlogContent->content = $this->Contents->copyEyecatchFile($result->content);
 
             // EVENT BlogContents.afterCopy
             $this->dispatchLayerEvent('afterCopy', [

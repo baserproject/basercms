@@ -304,6 +304,16 @@ class PluginsService implements PluginsServiceInterface
      */
     public function rollbackCore(string $currentVersion, string $php): void
     {
+        // 任意バイナリ実行対策: PHP実行パスを検証する（escapeshellarg はメタ文字対策にはなるが、
+        // 任意の実行ファイルパスの指定までは防げないため）
+        if(!preg_match('/^[a-zA-Z0-9\/\.\-_]+$/', $php)) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
+        }
+        // 任意バイナリ(curl/python 等)の実行を防ぐため、実行ファイル名が PHP バイナリ
+        // (php / php8 / php8.2 等) であることを要求する。
+        if(!preg_match('/^php[0-9.]*$/', basename($php))) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
+        }
         // 元のバージョンに戻す
         $command = escapeshellarg($php) . ' ' . escapeshellarg(ROOT . DS . 'bin' . DS . 'cake.php') . ' composer ' . escapeshellarg($currentVersion) . ' 2>&1';
         exec($command, $out, $code);
@@ -323,6 +333,16 @@ class PluginsService implements PluginsServiceInterface
      */
     public function updateCore($php, $connection = 'default')
     {
+        // 任意バイナリ実行対策: PHP実行パスを検証する（escapeshellarg はメタ文字対策にはなるが、
+        // 任意の実行ファイルパスの指定までは防げないため）
+        if(!preg_match('/^[a-zA-Z0-9\/\.\-_]+$/', $php)) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
+        }
+        // 任意バイナリ(curl/python 等)の実行を防ぐため、実行ファイル名が PHP バイナリ
+        // (php / php8 / php8.2 等) であることを要求する。
+        if(!preg_match('/^php[0-9.]*$/', basename($php))) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
+        }
         $this->updateCoreFiles();
 
         // マイグレーション、アップデートスクリプト実行、バージョン番号更新
@@ -687,7 +707,7 @@ class PluginsService implements PluginsServiceInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
@@ -698,7 +718,8 @@ class PluginsService implements PluginsServiceInterface
             }
             throw new BcException($message);
         }
-        $name = $postData['file']->getClientFileName();
+        // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
+        $name = basename($postData['file']->getClientFileName());
         $postData['file']->moveTo(TMP . $name);
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
@@ -818,7 +839,7 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getCoreUpdate(string $targetVersion, string $php, ?bool $force = false)
     {
-        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $targetVersion)) {
+        if(!preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+|)$/', $targetVersion)) {
             throw new BcException(__d('baser_core', 'バージョン番号が不正です。'));
         }
 
