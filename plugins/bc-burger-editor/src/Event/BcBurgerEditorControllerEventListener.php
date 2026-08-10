@@ -16,7 +16,7 @@ use Cake\Event\EventInterface;
  * @since         5.1.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-class BurgerEditorControllerEventListener extends BcControllerEventListener
+class BcBurgerEditorControllerEventListener extends BcControllerEventListener
 {
 
 	/**

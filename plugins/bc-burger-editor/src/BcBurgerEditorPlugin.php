@@ -19,9 +19,9 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
- * Class Plugin
+ * Class BcBurgerEditorPlugin
  */
-class Plugin extends BcPlugin
+class BcBurgerEditorPlugin extends BcPlugin
 {
 
 	/**

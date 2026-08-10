@@ -82,7 +82,7 @@ class BurgerEditorHelper extends Helper
 
 		// フォルダがない場合はinit処理を実行する
 		if (!file_exists(self::$imageFileBaseDir) || !file_exists(self::$otherFileBaseDir)) {
-			/** @var \BcBurgerEditor\Plugin $plugin */
+			/** @var \BcBurgerEditor\BcBurgerEditorPlugin $plugin */
 			$plugin = Plugin::getCollection()->get('BcBurgerEditor');
 			$plugin->init();
 		}

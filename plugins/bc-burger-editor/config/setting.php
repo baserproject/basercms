@@ -25,6 +25,20 @@ $config = [
 		'fileShare' => true,
 		// 自動的に bge-contentsクラスを付与する
 		'autoWrapper' => true,
+		// autoWrapper で付与するクラス名
+		'wrapperClass' => 'bge-contents',
+		// ブロックに設定された公開日時・非公開日時による出し分けを行う
+		'publishTimer' => false,
+		// プラグイン側のCSSを自動的に読み込む
+		// テーマ側で読み込みを制御したい場合は false を指定する
+		'loadCSS' => [
+			// プラグイン標準のスタイル
+			'bge_style_default' => true,
+			// テーマ、webroot/css、プラグインの順に探索して読み込むスタイル
+			'bge_style' => true,
+			// 画像ポップアップ（colorbox）用のスタイル
+			'colorbox' => true,
+		],
 		// 画像タイプのポップアップ選択設定を初期値onにする
 		'defaultImagePopup' => true,
 		// リサイズしない拡張子指定

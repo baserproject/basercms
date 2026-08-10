@@ -21,7 +21,7 @@ use simple_html_dom;
  * @since         5.1.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-class BurgerEditorViewEventListener extends BcViewEventListener
+class BcBurgerEditorViewEventListener extends BcViewEventListener
 {
 	/**
 	 * 登録イベント
@@ -82,18 +82,20 @@ class BurgerEditorViewEventListener extends BcViewEventListener
 		$themeDirectory = BcUtil::getCurrentTheme();
 
 		if (Configure::read('Bge.loadCSS.bge_style')) {
+			$themePath = ($themeDirectory && Plugin::isLoaded($themeDirectory))
+				? Plugin::path($themeDirectory) . 'webroot' . DS . 'css' . DS . 'bge_style.css'
+				: '';
 			// themeのcss優先
-			if (file_exists(WWW_ROOT . 'theme' . DS . $themeDirectory . DS . 'css' . DS . 'bge_style.css')) {
-				$path = WWW_ROOT . 'theme' . DS . $themeDirectory . DS . 'css' . DS . 'bge_style.css';
-				$userCssList[] = 'bge_style.css' . BurgerEditorUtil::getSuffix($path);;
+			if ($themePath && file_exists($themePath)) {
+				$userCssList[] = $themeDirectory . '.bge_style.css' . BurgerEditorUtil::getSuffix($themePath);
 			// themeになく、webroot/cssにあれば読込
 			} elseif (file_exists(WWW_ROOT . 'css' . DS . 'bge_style.css')) {
 				$path = WWW_ROOT . 'css' . DS . 'bge_style.css';
 				$userCssList[] = 'bge_style.css' . BurgerEditorUtil::getSuffix($path);
 			// themeになく、webroot/cssにもない場合、プラグイン標準のファイルを読み込む
 			} else {
-				$path = WWW_ROOT . 'app' . DS . 'Plugin' . DS . 'BcBurgerEditor' . DS . 'webroot' . DS . 'css' . DS . 'bge_style.css';
-				$userCssList[] = 'BcBurgerEditor.bge_style' . BurgerEditorUtil::getSuffix($path);
+				$path = Plugin::path('BcBurgerEditor') . 'webroot' . DS . 'css' . DS . 'bge_style.css';
+				$userCssList[] = 'BcBurgerEditor.bge_style.css' . BurgerEditorUtil::getSuffix($path);
 			}
 		}
 
