@@ -19,37 +19,37 @@ use Cake\Event\EventInterface;
 class BcBurgerEditorControllerEventListener extends BcControllerEventListener
 {
 
-	/**
-	 * 登録イベント
-	 *
-	 * @var array
-	 */
-	public $events = [
-		'initialize',
-	];
+    /**
+     * 登録イベント
+     *
+     * @var array
+     */
+    public $events = [
+        'initialize',
+    ];
 
-	/**
-	 * initialize
-	 * 利用Helperの追加
-	 *
-	 * @param EventInterface $event
-	 */
-	public function initialize(EventInterface $event)
-	{
-		/** @var Controller $Controller */
-		$Controller = $event->getSubject();
-		if($Controller instanceof ErrorController) return;
-		$Controller->viewBuilder()->addHelper('BcBurgerEditor.BurgerEditor');
-		if(!$this->isAction('BlogPosts.Add')
-			&& !$this->isAction('BlogPosts.Edit')
-			&& !$this->isAction('Pages.Add')
-			&& !$this->isAction('Pages.Edit')
-			&& !$this->isAction('CustomEntries.Add')
-			&& !$this->isAction('CustomEntries.Edit')
-		){
-			return;
-		}
-		$Controller->FormProtection->setConfig('validate', false);
-	}
+    /**
+     * initialize
+     * 利用Helperの追加
+     *
+     * @param EventInterface $event
+     */
+    public function initialize(EventInterface $event)
+    {
+        /** @var Controller $Controller */
+        $Controller = $event->getSubject();
+        if($Controller instanceof ErrorController) return;
+        $Controller->viewBuilder()->addHelper('BcBurgerEditor.BurgerEditor');
+        if(!$this->isAction('BlogPosts.Add')
+            && !$this->isAction('BlogPosts.Edit')
+            && !$this->isAction('Pages.Add')
+            && !$this->isAction('Pages.Edit')
+            && !$this->isAction('CustomEntries.Add')
+            && !$this->isAction('CustomEntries.Edit')
+        ){
+            return;
+        }
+        $Controller->FormProtection->setConfig('validate', false);
+    }
 
 }
