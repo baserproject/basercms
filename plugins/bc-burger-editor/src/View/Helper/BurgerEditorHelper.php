@@ -463,7 +463,10 @@ class BurgerEditorHelper extends Helper
 
         $this->BcBaser->css([
             'admin/ckeditor/editor',
-            'BcBurgerEditor.admin/burger_editor'
+            'BcBurgerEditor.admin/burger_editor',
+            // admin/burger_editor.css は npm パッケージからコピーされ上書きされるため、
+            // baserCMS 側の調整は必ず後続のこのファイルに記述する
+            'BcBurgerEditor.admin/bc_burger_editor'
         ], false);
 
         $this->BcBaser->js([

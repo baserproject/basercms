@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.4.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * 本家 CSS へ反映するまでの暫定スタイル
+ *
+ * admin/burger_editor.css は npm パッケージ @burger-editor/client から
+ * コピーされるファイルであり、yarn install のたびに上書きされるため直接編集できない。
+ * ここに記述した内容は本家（@burger-editor/client）へ取り込むことを前提としており、
+ * 取り込みが完了した項目はこのファイルから削除する。
+ *
+ * 読み込みは BurgerEditorHelper::editor() にて admin/burger_editor.css の後に行う。
+ */
+
+/**
+ * 画像選択エリアの高さを制限してスクロールさせる
+ *
+ * ファイル選択エリア（.file-select-area）は block-size と overflow で高さが
+ * 固定されているが、画像選択エリアには指定が無いため画像の枚数に応じて
+ * ダイアログが縦に伸び続ける。その結果ダイアログが画面からはみ出し、
+ * 「完了」ボタンを押すためにページ全体をスクロールする必要があった。
+ *
+ * ダイアログは高さ指定を持たず（jQuery UI の height: auto）中身の高さで決まり、
+ * 開いた時点で画面中央に配置される。よってこのエリアの高さを画面高に追従させると、
+ * ダイアログ全体が上下に均等に広がり、上端の位置も自動的に調整される。
+ *
+ * 減算値はダイアログ内でこのエリア以外が占める高さ（ヘッダ・入力欄・
+ * ページ送り・ボタン行）の実測値に余白を加えたもの。
+ */
+.image-select-area {
+    block-size: calc(100vh - 540px);
+    min-block-size: 200px;
+    max-block-size: 700px;
+    overflow: auto;
+}

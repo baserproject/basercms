@@ -10,8 +10,8 @@
 	<div class="float-left">
 		<p>
 			<input type="text" name="bge-caption" placeholder="キャプション">
-			<label><input type="checkbox" name="bge-hr" data-bge-value="1">小さく表示する</label>
-			<label><input type="checkbox" name="bge-popup" data-bge-value="1">クリックでポップアップ</label>
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-hr" data-bge-value="1"><span class="bca-checkbox__label bca-checkbox-label">小さく表示する</span></label>
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-popup" data-bge-value="1"><span class="bca-checkbox__label bca-checkbox-label">クリックでポップアップ</span></label>
 		</p>
 		<p>
 			<input type="text" name="bge-alt" placeholder="画像の説明(alt)">
@@ -21,7 +21,7 @@
 			<input type="button" value="検索" data-bge-class="UploadFileSearchButton">
 		</p>
 		<p>
-			<label><input type="checkbox" name="bge-lazy" data-bge-value="1" checked>遅延読み込みと遅延エンコードを行う</label><br />
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-lazy" data-bge-value="1" checked><span class="bca-checkbox__label bca-checkbox-label">遅延読み込みと遅延エンコードを行う</span></label><br />
 			<small>チェックを入れることで表示のパフォーマンスが向上します。</small>
 		</p>
 	</div>

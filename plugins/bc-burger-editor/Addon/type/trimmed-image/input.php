@@ -9,7 +9,7 @@
 	<div class="float-left">
 		<p>
 			<input type="text" name="bge-caption" placeholder="キャプション">
-			<label><input type="checkbox" name="bge-popup" data-bge-value="1">ポップアップ表示</label>
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-popup" data-bge-value="1"><span class="bca-checkbox__label bca-checkbox-label">ポップアップ表示</span></label>
 		</p>
 		<p>
 			<input type="text" name="bge-alt" placeholder="画像の説明(alt)">

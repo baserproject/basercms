@@ -49,7 +49,7 @@ foreach($addonDir as $path) {
     <div id="BgBlockConfigArea" data-title="ブロック設定">
         <?php $bgeConfig = $this->BurgerEditor->getBgeConfig(); ?>
         <?php if (isset($bgeConfig['blockClassOption']['free-setting'])): ?>
-        設定: <select name="free-setting">
+        設定: <select name="free-setting" class="bca-select__select">
             <option value="">指定なし</option>
             <?php foreach($bgeConfig['blockClassOption']['free-setting'] as $class => $name): ?>
             <option value="<?php echo h($class); ?>"><?php echo h($name); ?></option>
@@ -77,14 +77,14 @@ foreach($addonDir as $path) {
         <div data-bge-block-option="margin-bottom">
             <label>
                 下余白:
-                <select data-bge-block-option-select-box></select>
+                <select data-bge-block-option-select-box class="bca-select__select"></select>
             </label>
         </div>
 
         <div>
             <label data-bge-block-option="background-color">
                 背景色:
-                <select data-bge-block-option-select-box></select>
+                <select data-bge-block-option-select-box class="bca-select__select"></select>
             </label>
         </div>
 
@@ -92,20 +92,20 @@ foreach($addonDir as $path) {
             <fieldset>
                 <legend>枠線:</legend>
                 <label data-bge-block-option="border-style">
-                    <select data-bge-block-option-select-box></select>
+                    <select data-bge-block-option-select-box class="bca-select__select"></select>
                 </label>
                 <label data-bge-block-option="border-type">
-                    <select data-bge-block-option-select-box></select>
+                    <select data-bge-block-option-select-box class="bca-select__select"></select>
                 </label>
             </fieldset>
         </div>
 
         <div>
-            <label data-bge-block-option-custom-class>独自class設定: <input type="text" data-bge-block-option-input /></label>
+            <label data-bge-block-option-custom-class>独自class設定: <input type="text" data-bge-block-option-input class="bca-textbox__input" /></label>
         </div>
 
         <div>
-            <label data-bge-block-option-id>ID設定: <code>bge-</code><input type="text" data-bge-block-option-input /></label>
+            <label data-bge-block-option-id>ID設定: <code>bge-</code><input type="text" data-bge-block-option-input class="bca-textbox__input" /></label>
             <p><small>アンカーリンク用のID属性を設定します。重複を防ぐために<code>bge-</code>が自動的に頭に付加されます。</small></p>
         </div>
 
@@ -116,14 +116,14 @@ foreach($addonDir as $path) {
                 <legend>公開期間設定:</legend>
                 <label>
                     <span>開始日時</span>
-                    <input data-bge-block-option-scheduled-publishing="publish-date" size="12" maxlength="10" type="text">
-                    <input data-bge-block-option-scheduled-publishing="publish-time" size="8" maxlength="8" type="text" class="ui-timepicker-input">
+                    <input data-bge-block-option-scheduled-publishing="publish-date" size="12" maxlength="10" type="text" class="bca-textbox__input">
+                    <input data-bge-block-option-scheduled-publishing="publish-time" size="8" maxlength="8" type="text" class="ui-timepicker-input bca-textbox__input">
                 </label>
                 <span>〜</span>
                 <label>
                     <span>終了日時</span>
-                    <input data-bge-block-option-scheduled-publishing="unpublish-date" size="12" maxlength="10" type="text">
-                    <input data-bge-block-option-scheduled-publishing="unpublish-time" size="8" maxlength="8" type="text" class="ui-timepicker-input">
+                    <input data-bge-block-option-scheduled-publishing="unpublish-date" size="12" maxlength="10" type="text" class="bca-textbox__input">
+                    <input data-bge-block-option-scheduled-publishing="unpublish-time" size="8" maxlength="8" type="text" class="ui-timepicker-input bca-textbox__input">
                 </label>
                 <small>時間は設定しない場合「AM0:00」扱いになります。</small>
             </fieldset>
