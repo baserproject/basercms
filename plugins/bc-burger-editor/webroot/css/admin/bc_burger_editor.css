@@ -42,3 +42,16 @@
     max-block-size: 700px;
     overflow: auto;
 }
+
+/**
+ * 横幅比率のチェックボックスを見出しと同じ行に並べる
+ *
+ * 本家 CSS には [data-bge-grid-changer] label { display: block; } があり、
+ * これは label が領域全体を包んでいた頃の指定。
+ * チェックボックスを baserCMS の形（input とラベルを兄弟に並べる）にした結果、
+ * 独立した label となり改行されてしまうため、インラインに戻す。
+ */
+#BgBlockConfigArea [data-bge-grid-changer] label.bca-checkbox {
+    display: inline-block;
+    margin-block-end: 0;
+}

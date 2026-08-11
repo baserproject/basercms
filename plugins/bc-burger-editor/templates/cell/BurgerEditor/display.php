@@ -66,11 +66,12 @@ foreach($addonDir as $path) {
                 </label>
             </div>
             <div>
-                <label>
-                    SP版の横幅比率
-                    <input type="checkbox" name="bge-sp-grid-ratio-enabled">: 有効にする
-                    <input type="range" value="6" min="1" max="11" name="bge-sp-grid-ratio" disabled>
+                SP版の横幅比率:
+                <label class="bca-checkbox">
+                    <input type="checkbox" class="bca-checkbox__input" name="bge-sp-grid-ratio-enabled">
+                    <span class="bca-checkbox__label bca-checkbox-label">有効にする</span>
                 </label>
+                <input type="range" value="6" min="1" max="11" name="bge-sp-grid-ratio" disabled>
             </div>
         </div>
 
