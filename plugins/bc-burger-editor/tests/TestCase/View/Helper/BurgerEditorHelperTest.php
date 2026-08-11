@@ -79,14 +79,12 @@ class BurgerEditorHelperTest extends BcTestCase
         ob_start();
         $this->BurgerEditor->type('image');
         ob_end_clean();
+
         $other = new BurgerEditorHelper(new View());
 
-        ob_start();
-        $other->initArea();
-        $result = ob_get_clean();
-
         // 別インスタンスで読み込んだタイプは引き継がれない
-        $this->assertSame('', $result);
+        $this->assertSame(['image'], $this->getPrivateProperty($this->BurgerEditor, 'useType'));
+        $this->assertSame([], $this->getPrivateProperty($other, 'useType'));
     }
 
     /**
