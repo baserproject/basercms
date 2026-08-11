@@ -42,6 +42,13 @@ class BurgerEditorController extends BcAdminAppController
     protected $imageListPerPage = 10; // 画像リストの1ページあたりの表示件数
 
     /**
+     * BurgerEditorService
+     *
+     * @var BurgerEditorService
+     */
+    protected $BurgerEditorService;
+
+    /**
      * Constructor
      *
      * @param $request

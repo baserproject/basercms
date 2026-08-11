@@ -21,6 +21,13 @@ use BcBurgerEditor\Service\BurgerEditorService;
  */
 class BurgerEditorController extends BcFrontAppController
 {
+
+    /**
+     * BurgerEditorService
+     *
+     * @var BurgerEditorService
+     */
+    protected $BurgerEditorService;
     /**
      * Constructor
      *
