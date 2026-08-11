@@ -109,9 +109,10 @@ class BurgerEditorController extends BcAdminAppController
      */
     public function img_list()
     {
-        $searchWord = empty($_GET["word"]) ? null : $_GET['word']; // 検索ワード
-        $targetPage = empty($_GET["page"]) ? null : $_GET['page']; // ページ番号
-        $selectedFilePath = empty($_GET["selected"]) ? null : $_GET['selected']; // 選択済みファイルパス
+        $query = $this->getRequest()->getQueryParams();
+        $searchWord = empty($query['word'])? null : $query['word']; // 検索ワード
+        $targetPage = empty($query['page'])? null : $query['page']; // ページ番号
+        $selectedFilePath = empty($query['selected'])? null : $query['selected']; // 選択済みファイルパス
         $pageList = $this->getFormatedImageList($searchWord, $targetPage, $selectedFilePath, $this->imageListPerPage);
         $result = ['error' => false, 'data' => $pageList['data'], 'pagination' => $pageList['pagination']];
         return $this->getResponse()
@@ -130,27 +131,29 @@ class BurgerEditorController extends BcAdminAppController
         BurgerEditorHelper::getImageList(); // 一覧情報取得・更新
         $savePath = BurgerEditorHelper::$imageFileBaseDir;
 
+        $uploadedFiles = $this->getRequest()->getUploadedFiles();
+
         $hasError = false;
-        if (!$_FILES) $hasError = 'ファイルがアップロードされていません';
+        if (!$uploadedFiles) $hasError = 'ファイルがアップロードされていません';
         if (!is_writeable($savePath)) $hasError = 'アップロードフォルダに書き込めません';
-        foreach($_FILES as $name => $fileData) {
+        foreach($uploadedFiles as $name => $uploadedFile) {
             if (!$name) {
                 $hasError = 'アップロードに失敗しました';
             } else {
-                if ($fileData["error"] == UPLOAD_ERR_INI_SIZE) {
+                if ($uploadedFile->getError() === UPLOAD_ERR_INI_SIZE) {
                     $hasError = 'ファイル容量が大きすぎます';
                 }
-                $fileExt = BurgerEditorUtil::getExtension($fileData["name"]);
+                $fileExt = BurgerEditorUtil::getExtension($uploadedFile->getClientFilename());
                 if (!in_array(strtolower($fileExt), $this->imgExts)) {
                     $hasError = "画像形式のファイルをアップロードしてください";
                 }
-                if ($fileData["error"] == UPLOAD_ERR_PARTIAL) {
+                if ($uploadedFile->getError() === UPLOAD_ERR_PARTIAL) {
                     $hasError = "ファイルが正しくアップロードされませんでした";
                 }
             }
 
             // 画像データサイズ制限
-            if (!$hasError && $fileData['size'] > $this->imageDataMaxsize) {
+            if (!$hasError && $uploadedFile->getSize() > $this->imageDataMaxsize) {
                 $viewSize = (($this->imageDataMaxsize / 1024) / 1024) . 'MB';
                 $hasError = "データサイズは{$viewSize}以下のファイルをアップロードしてください";
             }
@@ -167,16 +170,16 @@ class BurgerEditorController extends BcAdminAppController
             $uploaddir = BurgerEditorHelper::$imageFileBaseDir;
 
             $saveFiles = [];
-            foreach($_FILES as $name => $fileData) {
+            foreach($uploadedFiles as $name => $uploadedFile) {
                 BurgerEditorHelper::$imageFileMaxId++;
-                $basename = $fileData["name"];
+                $basename = $uploadedFile->getClientFilename();
                 $filename = (BurgerEditorHelper::$imageFileMaxId) . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
                 // 拡張子
                 $baseExt = BurgerEditorUtil::getExtension($basename);
                 if ($baseExt) {
                     $filename .= "." . $baseExt;
                 }
-                move_uploaded_file($fileData["tmp_name"], $uploaddir . $filename);
+                $uploadedFile->moveTo($uploaddir . $filename);
                 //回転
                 $this->BurgerEditorService->rotateImage($uploaddir . $filename);
 
@@ -280,9 +283,10 @@ class BurgerEditorController extends BcAdminAppController
      */
     public function file_list()
     {
-        $searchWord = empty($_GET["word"]) ? null : $_GET['word']; // 検索ワード
-        $targetPage = empty($_GET["page"]) ? null : $_GET['page']; // ページ番号
-        $selectedFilePath = empty($_GET["selected"]) ? null : $_GET['selected']; // 選択済みファイルパス
+        $query = $this->getRequest()->getQueryParams();
+        $searchWord = empty($query['word'])? null : $query['word']; // 検索ワード
+        $targetPage = empty($query['page'])? null : $query['page']; // ページ番号
+        $selectedFilePath = empty($query['selected'])? null : $query['selected']; // 選択済みファイルパス
         $pageList = $this->getFormatedOtherList($searchWord, $targetPage, $selectedFilePath, $this->fileListPerPage);
         $result = ['error' => false, 'data' => $pageList['data'], 'pagination' => $pageList['pagination']];
         return $this->getResponse()
@@ -300,28 +304,30 @@ class BurgerEditorController extends BcAdminAppController
     {
         BurgerEditorHelper::getFileList(); // ファイル一覧取得・データ更新
 
+        $uploadedFiles = $this->getRequest()->getUploadedFiles();
+
         $hasError = false;
-        if (!$_FILES) $hasError = 'ファイルがアップロードされていません';
-        foreach($_FILES as $name => $fileData) {
+        if (!$uploadedFiles) $hasError = 'ファイルがアップロードされていません';
+        foreach($uploadedFiles as $name => $uploadedFile) {
             if (!$name) {
                 $hasError = 'アップロードに失敗しました';
             } else {
-                if ($fileData["error"] == UPLOAD_ERR_INI_SIZE) {
+                if ($uploadedFile->getError() === UPLOAD_ERR_INI_SIZE) {
                     $hasError = 'ファイル容量が大きすぎます';
                 }
                 if (!BcUtil::isAdminUser() || !Configure::read('Bge.allowedAdmin')) {
-                    $fileExt = BurgerEditorUtil::getExtension($fileData['name']);
+                    $fileExt = BurgerEditorUtil::getExtension($uploadedFile->getClientFilename());
                     if (!in_array(strtolower($fileExt), explode(',', Configure::read('Bge.allowedExt')))) {
                         $hasError = '許可されていないファイル形式です';
                     }
                 }
-                if ($fileData["error"] == UPLOAD_ERR_PARTIAL) {
+                if ($uploadedFile->getError() === UPLOAD_ERR_PARTIAL) {
                     $hasError = "ファイルが正しくアップロードされませんでした";
                 }
             }
 
             // ファイルデータサイズ制限
-            if (!$hasError && $fileData['size'] > $this->fileDataMaxSize) {
+            if (!$hasError && $uploadedFile->getSize() > $this->fileDataMaxSize) {
                 $viewSize = (($this->fileDataMaxSize / 1024) / 1024) . 'MB';
                 $hasError = "データサイズは{$viewSize}以下のファイルをアップロードしてください";
             }
@@ -336,15 +342,15 @@ class BurgerEditorController extends BcAdminAppController
 
             // 保存
             $uploaddir = BurgerEditorHelper::$otherFileBaseDir;
-            foreach($_FILES as $name => $fileData) {
+            foreach($uploadedFiles as $name => $uploadedFile) {
                 BurgerEditorHelper::$otherFileMaxId++;
-                $basename = $fileData["name"];
+                $basename = $uploadedFile->getClientFilename();
                 $filename = (BurgerEditorHelper::$otherFileMaxId) . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
                 $ext = BurgerEditorUtil::getExtension($basename);
                 if ($ext) {
                     $filename .= "." . $ext;
                 }
-                move_uploaded_file($fileData["tmp_name"], $uploaddir . $filename);
+                $uploadedFile->moveTo($uploaddir . $filename);
             }
 
             // ファイル読み直し
