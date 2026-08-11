@@ -161,6 +161,46 @@ class BurgerEditorHelperTest extends BcTestCase
     }
 
     /**
+     * test panelArea
+     *
+     * 読み込んだブロックがパネルとして出力される
+     */
+    public function test_panelArea()
+    {
+        ob_start();
+        $this->BurgerEditor->defaultBlock([BurgerEditorUtil::getBlockPath('image2')]);
+        ob_end_clean();
+
+        ob_start();
+        $this->BurgerEditor->panelArea();
+        $result = ob_get_clean();
+
+        $this->assertStringContainsString('bg-block-selection', $result);
+        $this->assertStringContainsString('data-bge-block="image2"', $result);
+        // panel.svg はインラインで埋め込まれる
+        $this->assertStringContainsString('<svg', $result);
+    }
+
+    /**
+     * test panelArea
+     *
+     * 読み込んでいないブロックは出力されない
+     */
+    public function test_panelArea_withoutBlock()
+    {
+        ob_start();
+        $this->BurgerEditor->type('image');
+        ob_end_clean();
+
+        ob_start();
+        $this->BurgerEditor->panelArea();
+        $result = ob_get_clean();
+
+        $this->assertStringContainsString('bg-block-selection', $result);
+        $this->assertStringNotContainsString('data-bge-block=', $result);
+    }
+
+    /**
      * test shouldLoadStyle
      *
      * 初期状態では読み込む

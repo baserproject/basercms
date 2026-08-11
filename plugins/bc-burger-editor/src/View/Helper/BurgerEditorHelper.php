@@ -316,7 +316,7 @@ class BurgerEditorHelper extends Helper
         $this->setSelfValue();
         if (!$this->useType) trigger_error("ブロックの読み込みが完了していません。");
 
-        $addonDir = self::$addonDir;
+        $addonDir = $this->getAddonDir();
         $bgCategory = [];
         $bgCategoryTmp = [];
         foreach($addonDir as $path) {
