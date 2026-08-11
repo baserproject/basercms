@@ -96,17 +96,6 @@ class BurgerEditorHelper extends Helper
     }
 
     /**
-     * 静的ブロックパネルフォルダのパスを取得する
-     *
-     * @return string
-     */
-    private function getStaticPanelDir()
-    {
-        $staticDirName = Inflector::underscore(preg_replace('/Helper$/', '', __CLASS__));
-        return WWW_ROOT . $staticDirName . DS . $staticDirName . DS . 'panel' . DS;
-    }
-
-    /**
      * エディタへ渡す設定を取得する
      *
      * @return array
@@ -309,21 +298,6 @@ class BurgerEditorHelper extends Helper
             echo '<div data-bgb="' . h($blockName) . '" class="bgb-' . h($blockName) . '">';
             include $block . 'index.php';
             echo '</div>' . "\n\n";
-
-            // ブロックのパネル画像の静的ファイルを生成していて、オリジナルより古い場合は削除する
-            if (file_exists($this->getStaticPanelDir() . $blockName . '.svg')) {
-                if (filemtime($this->getStaticPanelDir() . $blockName . '.svg') <
-                    filemtime($block . 'panel.svg')
-                ) {
-                    unlink($this->getStaticPanelDir() . $blockName . '.svg');
-                }
-            } elseif (file_exists($this->getStaticPanelDir() . $blockName . '.png')) {
-                if (filemtime($this->getStaticPanelDir() . $blockName . '.png') <
-                    filemtime($block . 'panel.png')
-                ) {
-                    unlink($this->getStaticPanelDir() . $blockName . '.png');
-                }
-            }
         }
     }
 

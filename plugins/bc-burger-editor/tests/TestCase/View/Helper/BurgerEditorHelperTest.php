@@ -12,6 +12,7 @@
 namespace BcBurgerEditor\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcBurgerEditor\Lib\BurgerEditorUtil;
 use BcBurgerEditor\View\Helper\BurgerEditorHelper;
 use Cake\Routing\Router;
 use Cake\View\View;
@@ -138,6 +139,25 @@ class BurgerEditorHelperTest extends BcTestCase
         $result = ob_get_clean();
 
         $this->assertStringContainsString('Typeimage', $result);
+    }
+
+    /**
+     * test defaultBlock
+     *
+     * ブロックが出力され、利用済みとして記録される
+     */
+    public function test_defaultBlock()
+    {
+        $blockPath = BurgerEditorUtil::getBlockPath('image2');
+
+        ob_start();
+        $this->BurgerEditor->defaultBlock([$blockPath]);
+        $result = ob_get_clean();
+
+        $this->assertStringContainsString('data-bgb="image2"', $result);
+        $this->assertStringContainsString('class="bgb-image2"', $result);
+        // ブロックが読み込んだタイプも記録される
+        $this->assertStringContainsString('data-bgt="image"', $result);
     }
 
     /**
