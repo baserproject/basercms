@@ -25,6 +25,8 @@ jobs:
             split_repository: 'bc-admin-third'
           - local_path: 'bc-blog'
             split_repository: 'bc-blog'
+          - local_path: 'bc-burger-editor'
+            split_repository: 'bc-burger-editor'
           - local_path: 'bc-content-link'
             split_repository: 'bc-content-link'
           - local_path: 'bc-custom-content'

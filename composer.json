@@ -38,6 +38,7 @@
         "baserproject/baser-core": "5.4.x",
         "baserproject/bc-admin-third": "5.4.x",
         "baserproject/bc-blog": "5.4.x",
+        "baserproject/bc-burger-editor": "5.4.x",
         "baserproject/bc-column": "5.4.x",
         "baserproject/bc-content-link": "5.4.x",
         "baserproject/bc-custom-content": "5.4.x",
@@ -67,6 +68,7 @@
             "BaserCore\\": "plugins/baser-core/src",
             "BcAdminThird\\": "plugins/bc-admin-third/src",
             "BcBlog\\": "plugins/bc-blog/src/",
+            "BcBurgerEditor\\": "plugins/bc-burger-editor/src/",
             "BcColumn\\": "plugins/BcColumn/src/",
             "BcContentLink\\": "plugins/bc-content-link/src/",
             "BcCustomContent\\": "plugins/bc-custom-content/src/",
@@ -90,6 +92,7 @@
         "psr-4": {
             "BaserCore\\Test\\": "plugins/baser-core/tests/",
             "BcBlog\\Test\\": "plugins/bc-blog/tests/",
+            "BcBurgerEditor\\Test\\": "plugins/bc-burger-editor/tests/",
             "BcContentLink\\Test\\": "plugins/bc-content-link/tests/",
             "BcCustomContent\\Test\\": "plugins/bc-custom-content/tests/",
             "BcEditorTemplate\\Test\\": "plugins/bc-editor-template/tests/",

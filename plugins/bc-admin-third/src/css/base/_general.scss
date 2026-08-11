@@ -38,3 +38,20 @@ body * {
 [hidden] {
   display: none;
 }
+
+hr {
+  border: none;
+  border-top: 1px solid $color_border;
+}
+
+fieldset {
+  margin: 5px 0;
+  border: 1px solid $color_border;
+}
+
+// トラックやつまみの見た目はブラウザのネイティブ描画に任せ、色のみ揃える。
+// 枠線を付けるには appearance: none で自前描画する必要があるが、
+// その場合「つまみより左を塗る」表現が失われるため採用していない。
+input[type="range"] {
+  accent-color: $color_primary;
+}
