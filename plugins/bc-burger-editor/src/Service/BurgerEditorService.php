@@ -443,8 +443,9 @@ class BurgerEditorService
             default:
                 return false;
         }
-        imagedestroy($srcImage);
-        imagedestroy($rotate);
+        // GdImage はオブジェクトのため参照を外せば GC が解放する。
+        // imagedestroy() は PHP 8.5 で非推奨。
+        unset($srcImage, $rotate);
         return true;
     }
 }
