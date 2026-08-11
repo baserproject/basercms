@@ -22,7 +22,12 @@ class BurgerEditorService
 {
 
     protected $bgEditorBase;
-    protected static $useAddonList = [];
+    /**
+     * 利用したタイプ
+     *
+     * @var array
+     */
+    protected $useAddonList = [];
 
     /**
      * 画像の保存先パス
@@ -349,7 +354,7 @@ class BurgerEditorService
      */
     public function element($name)
     {
-        self::addAddonList($name);
+        $this->addAddonList($name);
         $typePath = BurgerEditorUtil::getTypePath($name);
         if (!$typePath || !file_exists($typePath . 'value.php')) {
             return;
@@ -359,15 +364,25 @@ class BurgerEditorService
         echo '</div>';
     }
 
-    protected static function addAddonList($name)
+    /**
+     * 利用したタイプを記録する
+     *
+     * @param string $name タイプ名
+     * @return void
+     */
+    protected function addAddonList($name)
     {
-        if (!in_array($name, self::$useAddonList)) self::$useAddonList[] = $name;
+        if (!in_array($name, $this->useAddonList)) $this->useAddonList[] = $name;
     }
 
-
-    public static function getAddonList()
+    /**
+     * 利用したタイプの一覧を取得する
+     *
+     * @return array
+     */
+    public function getAddonList()
     {
-        return self::$useAddonList;
+        return $this->useAddonList;
     }
 
     /**

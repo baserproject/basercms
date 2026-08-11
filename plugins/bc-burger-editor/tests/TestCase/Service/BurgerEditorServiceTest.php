@@ -155,7 +155,7 @@ class BurgerEditorServiceTest extends BcTestCase
         $this->BurgerEditorService->element('embed');
         $result = ob_get_clean();
         $this->assertStringContainsString('<div class="valueembed">', $result);
-        $this->assertContains('embed', BurgerEditorService::getAddonList());
+        $this->assertContains('embed', $this->BurgerEditorService->getAddonList());
     }
 
     /**
@@ -182,8 +182,23 @@ class BurgerEditorServiceTest extends BcTestCase
         $this->BurgerEditorService->element('embed');
         $this->BurgerEditorService->element('embed');
         ob_end_clean();
-        $result = BurgerEditorService::getAddonList();
-        $this->assertSame(1, count(array_keys($result, 'embed')));
+        $result = $this->BurgerEditorService->getAddonList();
+        $this->assertSame(['embed'], $result);
+    }
+
+    /**
+     * test getAddonList
+     *
+     * 状態がインスタンスごとに独立している
+     */
+    public function test_getAddonList_isNotShared()
+    {
+        ob_start();
+        $this->BurgerEditorService->element('embed');
+        ob_end_clean();
+
+        $other = new BurgerEditorService();
+        $this->assertSame([], $other->getAddonList());
     }
 
     /**
