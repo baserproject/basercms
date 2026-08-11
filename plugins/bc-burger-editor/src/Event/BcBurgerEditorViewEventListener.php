@@ -37,14 +37,14 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
      * beforeLayout
      *
      * @param EventInterface $event
-     * @return boolean
+     * @return void
      */
-    public function beforeLayout(EventInterface $event)
+    public function beforeLayout(EventInterface $event): void
     {
         /** @var View $View */
         $View = $event->getSubject();
-        if($View->getPlugin() === 'DebugKit') return true;
-        if(!$View->helpers()->has('BurgerEditor')) return true;
+        if($View->getPlugin() === 'DebugKit') return;
+        if(!$View->helpers()->has('BurgerEditor')) return;
         $request = $View->getRequest();
         // GoogleMaps APIの取得
         $googleMapsApiKey = BurgerEditorUtil::getGoogleMapApiKey();
@@ -55,7 +55,7 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
             if (($request->getParam('controller') === 'Pages' && $request->getParam('action') === 'display')
                 || ($request->getParam('plugin') === 'BcBlog' && $request->getParam('action') === 'archives')) {
             } else {
-                return true;
+                return;
             }
         }
 
@@ -66,7 +66,7 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
             'Feed',            // フィード
         ];
         if (in_array($View->getTemplatePath(), $excdlueViewPath)) {
-            return true;
+            return;
         }
 
         $View->loadHelper('BcBurgerEditor.BurgerEditor');
@@ -195,7 +195,7 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
 
         unset($dom);
 
-        return true;
+        return;
 
     }
 
@@ -203,9 +203,9 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
      * afterLayout
      *
      * @param EventInterface $event
-     * @return boolean
+     * @return void
      */
-    public function afterLayout(EventInterface $event)
+    public function afterLayout(EventInterface $event): void
     {
         /** @var View $View */
         $View = $event->getSubject();
@@ -238,6 +238,6 @@ class BcBurgerEditorViewEventListener extends BcViewEventListener
                 $View->assign('content', $output);
             }
         }
-        return true;
+        return;
     }
 }
