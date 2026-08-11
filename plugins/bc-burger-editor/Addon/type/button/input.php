@@ -18,7 +18,7 @@
 	</tr>
 	<tr>
 		<th>リンク</th>
-		<td>:
+		<td>
 			<input type="text" name="bge-link">
 		</td>
 	</tr>
