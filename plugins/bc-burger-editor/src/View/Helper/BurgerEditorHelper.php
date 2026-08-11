@@ -30,16 +30,8 @@ class BurgerEditorHelper extends Helper
 
     public static $configJSON = '';    // bgeconfig.jsonのパス
     public static $addonDir = [];    // Addonフォルダパス
-    public static $imageFileBaseDir = '';    // 画像フォルダパス
-    public static $imageFileBaseURL = '';    // 画像フォルダURL
-    public static $imageFileList = [];    // 画像ファイル一覧
-    public static $otherFileBaseDir = '';    // 画像フォルダパス
-    public static $otherFileBaseURL = '';    // 画像フォルダURL
-    public static $otherFileList = [];    // ファイル一覧
     public static $staticPanelDir = '';        // 静的ブロックパネルフォルダパス
 
-    public static $imageFileMaxId = 0;    // 画像ファイル最大ID
-    public static $otherFileMaxId = 0;    // その他ファイル最大ID
 
     public static $bgeConfig = [];    // ブロッククラス設定オプション
 
@@ -69,42 +61,6 @@ class BurgerEditorHelper extends Helper
 
         self::$configJSON = dirname(dirname(dirname(__FILE__))) . DS . 'bgeconfig.json';
         self::$addonDir = BurgerEditorUtil::getAddonPath();
-        self::$imageFileBaseDir = realpath(WWW_ROOT) . DS . 'files' . DS . 'bgeditor' . DS . 'img' . DS;
-        self::$otherFileBaseDir = realpath(WWW_ROOT) . DS . 'files' . DS . 'bgeditor' . DS . 'other' . DS;
-
-        $baseUrl = Router::url('/');
-        self::$imageFileBaseURL = $baseUrl . 'files/bgeditor/img/';
-        self::$otherFileBaseURL = $baseUrl . 'files/bgeditor/other/';
-
-        // 静的ファイル設置ディレクトリ
-        $staticDirName = Inflector::underscore(preg_replace('/Helper$/', '', __CLASS__));
-        self::$staticPanelDir = WWW_ROOT . $staticDirName . DS . $staticDirName . DS . 'panel' . DS;
-
-        // フォルダがない場合はinit処理を実行する
-        if (!file_exists(self::$imageFileBaseDir) || !file_exists(self::$otherFileBaseDir)) {
-            /** @var \BcBurgerEditor\BcBurgerEditorPlugin $plugin */
-            $plugin = Plugin::getCollection()->get('BcBurgerEditor');
-            $plugin->init();
-        }
-
-        // 設定値により、ユーザ別にファイル場所を設置
-        if (!Configure::read("Bge.fileShare")) {
-            $user = BcUtil::loginUser();
-            $userId = $user['id'];
-            self::$imageFileBaseDir .= $userId . DS;
-            self::$otherFileBaseDir .= $userId . DS;
-            self::$imageFileBaseURL .= $userId . '/';
-            self::$otherFileBaseURL .= $userId . '/';
-            if (!file_exists(self::$imageFileBaseDir)) {
-                mkdir(self::$imageFileBaseDir);
-                chmod(self::$imageFileBaseDir, 0777);
-            }
-            if (!file_exists(self::$otherFileBaseDir)) {
-                mkdir(self::$otherFileBaseDir);
-                chmod(self::$otherFileBaseDir, 0777);
-            }
-        }
-
         // ブロックclass設定ファイル取得
         if (file_exists(self::$addonDir[0] . "block" . DS . 'option.php')) {
             include self::$addonDir[0] . "block" . DS . 'option.php';
@@ -143,69 +99,6 @@ class BurgerEditorHelper extends Helper
 
     }
 
-    public static function getImageList()
-    {
-        $dir = new BcFolder(self::$imageFileBaseDir);
-        $tmpList = [];
-        $files = $dir->find();
-        foreach($files as $file) {
-            if ($file == ".DS_Store") continue;
-            if (preg_match('/(__midium|__small|__org)\.[a-z0-9]+$/i', $file)) {
-                continue;
-            }
-
-            $path = $dir->pwd();
-            if (substr($path, -1) != DS) {
-                $path = $path . DS;
-            }
-            $fileKey = filemtime($path . $file);
-            if (preg_match('/^(\d+)__/', $file, $matches) && isset($matches[1])) {
-                $fileKey = intval($matches[1]) * 100000 + 2000000000;
-            }
-            while(1) {
-                if (!isset($tmpList[$fileKey])) break;
-                $fileKey++;
-            }
-            $tmpList[$fileKey] = $path . $file;
-
-            // ファイルID取得
-            $fileId = self::getFileId($file);
-            if (self::$imageFileMaxId < $fileId) self::$imageFileMaxId = $fileId;
-        }
-        krsort($tmpList);
-        self::$imageFileList = array_values($tmpList);
-        return self::$imageFileList;
-    }
-
-    public static function getFileList()
-    {
-        $dir = new BcFolder(self::$otherFileBaseDir);
-        $tmpList = [];
-        $files = $dir->find();
-        foreach($files as $file) {
-            $path = $dir->pwd();
-            if (substr($path, -1) != DS) {
-                $path = $path . DS;
-            }
-            $fileKey = filemtime($path . $file);
-            while(1) {
-                if (!isset($tmpList[$fileKey])) break;
-                $fileKey++;
-            }
-            $tmpList[$fileKey] = $path . $file;
-
-            // ファイルID取得
-            $fileId = self::getFileId($file);
-            if (self::$otherFileMaxId < $fileId) self::$otherFileMaxId = $fileId;
-        }
-        krsort($tmpList);
-        self::$otherFileList = array_values($tmpList);
-        return self::$otherFileList;
-    }
-
-    /**
-     *
-     */
     public static function getCSSList()
     {
         $cssList = [];
@@ -543,20 +436,6 @@ class BurgerEditorHelper extends Helper
     }
 
     /**
-     * ファイル名からIDを取得する
-     *
-     * @param string $fileName ファイル名
-     * @return mixed (int|null)
-     */
-    static protected function getFileId($fileName)
-    {
-        preg_match("/^(\d+)__/", $fileName, $matches);
-        if (isset($matches[1])) return $matches[1];
-        return null;
-    }
-
-
-    /**
      * 記事に埋め込まれた画像を表示する
      *
      * @param array $post blogpost
@@ -686,51 +565,4 @@ class BurgerEditorHelper extends Helper
         return $this->loadingStyle;
     }
 
-    /**
-     * レスポンス用のファイルリストとページネーションを作成する
-     * @param array $fileList
-     * @param int $targetPage
-     * @param int $selectedFileId
-     * @param int $pageNum
-     *
-     * @return array 該当ページ分のファイルリスト(data)とページネーション情報(pagination)を含む
-     */
-    public static function getFileListWithPagination($fileList, $targetPage, $selectedFileId, $pageNum){
-        $startIndex = 0;
-        $currentPage = 1;
-
-        if(is_null($targetPage) && $selectedFileId){
-            // 選択済み画像ページを表示（初期表示時限定）
-            foreach($fileList as $key => $file){
-                if($file['fileId'] === $selectedFileId){
-                    $currentPage = intdiv((int)$key, $pageNum) + 1;
-                    $startIndex = ($currentPage - 1) * $pageNum;
-                }
-            }
-        }elseif($targetPage >= 1){
-            // 指定ページを表示
-            $startIndex = ($targetPage - 1) * $pageNum;
-            if(count($fileList) <= $startIndex){
-                // ページ数分の要素がない場合は先頭ページを表示
-                $startIndex = 0;
-                $currentPage = 1;
-            }else{
-                $currentPage = $targetPage;
-            }
-        }
-
-        $pageList = array_slice($fileList, $startIndex, $pageNum);
-
-        // 最大ページ数
-        $imagePaginationMaxPage = intdiv(count($fileList)-1, $pageNum) + 1;
-
-        return [
-            'data' => $pageList,
-            'pagination' => [
-                'pageMaxNumber' => $imagePaginationMaxPage,
-                'currentPageNumber' => $currentPage,
-                'selectedFileId' => $selectedFileId,
-            ],
-        ];
-    }
 }

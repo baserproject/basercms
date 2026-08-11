@@ -97,6 +97,7 @@ class BurgerEditorController extends BcAdminAppController
             $this->setRequest($this->getRequest()->withAttribute('requested', true));
         }
         $result = parent::beforeFilter($event);
+        $this->BurgerEditorService->setupSavePath();
         BurgerEditorHelper::setSelfValue();
         $this->set("addonDir", BurgerEditorUtil::getAddonPath());
         return $result;
@@ -128,8 +129,8 @@ class BurgerEditorController extends BcAdminAppController
      */
     public function img_upload()
     {
-        BurgerEditorHelper::getImageList(); // 一覧情報取得・更新
-        $savePath = BurgerEditorHelper::$imageFileBaseDir;
+        $this->BurgerEditorService->getImageList(); // 一覧情報取得・更新
+        $savePath = $this->BurgerEditorService->getImageFileBaseDir();
 
         $uploadedFiles = $this->getRequest()->getUploadedFiles();
 
@@ -167,13 +168,12 @@ class BurgerEditorController extends BcAdminAppController
         } else {
 
             // 保存
-            $uploaddir = BurgerEditorHelper::$imageFileBaseDir;
+            $uploaddir = $this->BurgerEditorService->getImageFileBaseDir();
 
             $saveFiles = [];
             foreach($uploadedFiles as $name => $uploadedFile) {
-                BurgerEditorHelper::$imageFileMaxId++;
                 $basename = $uploadedFile->getClientFilename();
-                $filename = (BurgerEditorHelper::$imageFileMaxId) . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
+                $filename = $this->BurgerEditorService->nextImageFileId() . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
                 // 拡張子
                 $baseExt = BurgerEditorUtil::getExtension($basename);
                 if ($baseExt) {
@@ -260,17 +260,17 @@ class BurgerEditorController extends BcAdminAppController
     {
         $filename = BurgerEditorUtil::mb_basename($this->request->getData('file'));
         $res = 0;
-        if (file_exists(BurgerEditorHelper::$imageFileBaseDir . $filename)) {
-            $res = unlink(BurgerEditorHelper::$imageFileBaseDir . $filename);
+        if (file_exists($this->BurgerEditorService->getImageFileBaseDir() . $filename)) {
+            $res = unlink($this->BurgerEditorService->getImageFileBaseDir() . $filename);
 
             // サイズ別に生成したファイルがあれば削除
             $baseFile = BurgerEditorUtil::getFileNameNoExtension($filename);
             $baseExt = BurgerEditorUtil::getExtension($filename);
-            if (file_exists(BurgerEditorHelper::$imageFileBaseDir . $baseFile . '__org.' . $baseExt)) {
-                unlink(BurgerEditorHelper::$imageFileBaseDir . $baseFile . '__org.' . $baseExt);
+            if (file_exists($this->BurgerEditorService->getImageFileBaseDir() . $baseFile . '__org.' . $baseExt)) {
+                unlink($this->BurgerEditorService->getImageFileBaseDir() . $baseFile . '__org.' . $baseExt);
             }
-            if (file_exists(BurgerEditorHelper::$imageFileBaseDir . $baseFile . '__small.' . $baseExt)) {
-                unlink(BurgerEditorHelper::$imageFileBaseDir . $baseFile . '__small.' . $baseExt);
+            if (file_exists($this->BurgerEditorService->getImageFileBaseDir() . $baseFile . '__small.' . $baseExt)) {
+                unlink($this->BurgerEditorService->getImageFileBaseDir() . $baseFile . '__small.' . $baseExt);
             }
         }
         return $this->getResponse()->withStringBody((string)intval($res));
@@ -302,7 +302,7 @@ class BurgerEditorController extends BcAdminAppController
      */
     public function file_upload()
     {
-        BurgerEditorHelper::getFileList(); // ファイル一覧取得・データ更新
+        $this->BurgerEditorService->getFileList(); // ファイル一覧取得・データ更新
 
         $uploadedFiles = $this->getRequest()->getUploadedFiles();
 
@@ -341,11 +341,10 @@ class BurgerEditorController extends BcAdminAppController
         } else {
 
             // 保存
-            $uploaddir = BurgerEditorHelper::$otherFileBaseDir;
+            $uploaddir = $this->BurgerEditorService->getOtherFileBaseDir();
             foreach($uploadedFiles as $name => $uploadedFile) {
-                BurgerEditorHelper::$otherFileMaxId++;
                 $basename = $uploadedFile->getClientFilename();
-                $filename = (BurgerEditorHelper::$otherFileMaxId) . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
+                $filename = $this->BurgerEditorService->nextOtherFileId() . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
                 $ext = BurgerEditorUtil::getExtension($basename);
                 if ($ext) {
                     $filename .= "." . $ext;
@@ -379,8 +378,8 @@ class BurgerEditorController extends BcAdminAppController
     public function file_delete()
     {
         $filename = BurgerEditorUtil::mb_basename($this->request->getData('file'));
-        if (file_exists(BurgerEditorHelper::$otherFileBaseDir . $filename)) {
-            unlink(BurgerEditorHelper::$otherFileBaseDir . $filename);
+        if (file_exists($this->BurgerEditorService->getOtherFileBaseDir() . $filename)) {
+            unlink($this->BurgerEditorService->getOtherFileBaseDir() . $filename);
         }
         return $this->getResponse()->withStringBody('1');
     }
@@ -421,7 +420,7 @@ class BurgerEditorController extends BcAdminAppController
     protected function getFormatedImageList($searchWord = null, $targetPage = null, $selectedFilePath = null, $pageNum = 10)
     {
         $fileList = [];
-        $imageFileList = BurgerEditorHelper::getImageList();
+        $imageFileList = $this->BurgerEditorService->getImageList();
         $selectedFileId = null;
         foreach($imageFileList as $filePath) {
             $fileId = preg_match("/^(\d+)__/", BurgerEditorUtil::mb_basename($filePath), $maches);
@@ -434,17 +433,17 @@ class BurgerEditorController extends BcAdminAppController
             if ($filename != BurgerEditorUtil::mb_basename($filePath)) {
                 $filename = BurgerEditorUtil::b64d($basename) . "." . $ext;
 
-                if (file_exists(BurgerEditorHelper::$imageFileBaseDir . $fileId . '__' . $basename . '__org.' . $ext)) {
-                    $orgImage = h(BurgerEditorHelper::$imageFileBaseURL . $fileId . '__' . $basename . '__org.' . $ext);
+                if (file_exists($this->BurgerEditorService->getImageFileBaseDir() . $fileId . '__' . $basename . '__org.' . $ext)) {
+                    $orgImage = h($this->BurgerEditorService->getImageFileBaseURL() . $fileId . '__' . $basename . '__org.' . $ext);
                 }
-                if (file_exists(BurgerEditorHelper::$imageFileBaseDir . $fileId . '__' . $basename . '__small.' . $ext)) {
-                    $smallImage = h(BurgerEditorHelper::$imageFileBaseURL . $fileId . '__' . $basename . '__small.' . $ext);
+                if (file_exists($this->BurgerEditorService->getImageFileBaseDir() . $fileId . '__' . $basename . '__small.' . $ext)) {
+                    $smallImage = h($this->BurgerEditorService->getImageFileBaseURL() . $fileId . '__' . $basename . '__small.' . $ext);
                 }
             }
             if (file_exists($filePath)) {
                 if ($searchWord === null || (strpos($fileId, $searchWord) !== false || strpos($filename, $searchWord) !== false)) {
                     $fileList[] = [
-                        'url' => h(BurgerEditorHelper::$imageFileBaseURL . BurgerEditorUtil::mb_basename($filePath)),
+                        'url' => h($this->BurgerEditorService->getImageFileBaseURL() . BurgerEditorUtil::mb_basename($filePath)),
                         'fileId' => $fileId,
                         'name' => mb_convert_encoding($filename, 'UTF-8', 'UTF-8'),  // 文字化けファイルがアップロードされた場合JSONが変換できないためUTF-8として読み込める文字に変換
                         'filetime' => date('Y/m/d H:i', filemtime($filePath)),
@@ -479,7 +478,7 @@ class BurgerEditorController extends BcAdminAppController
         );
 
         // ページ切り出し＆ページネーション作成
-        return BurgerEditorHelper::getFileListWithPagination($fileList, $targetPage, $selectedFileId, $pageNum);
+        return BurgerEditorService::getFileListWithPagination($fileList, $targetPage, $selectedFileId, $pageNum);
     }
 
     /**
@@ -491,7 +490,7 @@ class BurgerEditorController extends BcAdminAppController
     {
         $fileList = [];
         $user = BcUtil::loginUser();
-        $otherFileList = BurgerEditorHelper::getFileList();
+        $otherFileList = $this->BurgerEditorService->getFileList();
         $selectedFileId = null;
         foreach($otherFileList as $filePath) {
             $fileId = preg_match("/^(\d+)__/", BurgerEditorUtil::mb_basename($filePath), $maches);
@@ -503,7 +502,7 @@ class BurgerEditorController extends BcAdminAppController
             }
 
             // ファイルパスのディレクトリを取得する
-            $fileNameAry = str_replace(BurgerEditorHelper::$otherFileBaseDir, '', $filePath);
+            $fileNameAry = str_replace($this->BurgerEditorService->getOtherFileBaseDir(), '', $filePath);
             // 設定値により、ユーザ別にファイル場所を設置している場合
             if (!Configure::read("Bge.fileShare")) {
                 $fileNameAry = $user['id'] . DS . $fileNameAry;
@@ -530,7 +529,7 @@ class BurgerEditorController extends BcAdminAppController
         $fileList = Hash::sort($fileList, '{n}.fileId', 'DESC');
 
         // ページ切り出し＆ページネーション作成
-        return BurgerEditorHelper::getFileListWithPagination($fileList, $targetPage, $selectedFileId, $pageNum);
+        return BurgerEditorService::getFileListWithPagination($fileList, $targetPage, $selectedFileId, $pageNum);
     }
 
 }

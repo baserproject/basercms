@@ -14,7 +14,9 @@ namespace BcBurgerEditor\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBurgerEditor\Lib\BurgerEditorUtil;
-use BcBurgerEditor\View\Helper\BurgerEditorHelper;
+use BcBurgerEditor\Service\BurgerEditorService;
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Plugin;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Laminas\Diactoros\UploadedFile;
@@ -37,6 +39,15 @@ class BurgerEditorControllerTest extends BcTestCase
         // 本プラグインはマイグレーションを持たず tests/bootstrap.php の一覧に含まれないため、
         // ルートを接続するにはリクエストごとに生成される app へ明示的に読み込ませる必要がある
         $this->appPluginsToLoad[] = 'BcBurgerEditor';
+        // プラグインの設定はテストプロセスには読み込まれないため明示的に読み込む
+        // （Bge.fileShare 等が未定義だと保存先の解決結果が実行時と変わる）
+        if (Configure::read('Bge') === null) {
+            if (!in_array('baser', Configure::configured(), true)) {
+                Configure::config('baser', new PhpConfig());
+            }
+            Configure::load('BcBurgerEditor.setting', 'baser');
+        }
+
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin'));
     }
@@ -212,7 +223,7 @@ class BurgerEditorControllerTest extends BcTestCase
         $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
         // 「画像無し」の次にアップロードした画像が並ぶ
         $this->assertSame('テスト画像.png', $result['data'][1]['name']);
-        $this->registerUploadedPaths(BurgerEditorHelper::$imageFileBaseDir, $result['data'][1]['fileId']);
+        $this->registerUploadedPaths($this->getSavePath('img'), $result['data'][1]['fileId']);
     }
 
     /**
@@ -248,7 +259,7 @@ class BurgerEditorControllerTest extends BcTestCase
         $this->assertSame('テスト資料.txt', $result['data'][0]['name']);
 
         // 実ファイルが保存されている
-        $this->registerUploadedPaths(BurgerEditorHelper::$otherFileBaseDir, $result['data'][0]['fileId']);
+        $this->registerUploadedPaths($this->getSavePath('other'), $result['data'][0]['fileId']);
         $this->assertCount(1, $this->uploadedPaths);
     }
 
@@ -260,7 +271,7 @@ class BurgerEditorControllerTest extends BcTestCase
     public function test_file_delete()
     {
         $filename = '9999__' . BurgerEditorUtil::b64e('削除対象') . '.txt';
-        $filePath = BurgerEditorHelper::$otherFileBaseDir . $filename;
+        $filePath = $this->getSavePath('other') . $filename;
         file_put_contents($filePath, 'dummy');
 
         $this->enableCsrfToken();
@@ -278,9 +289,9 @@ class BurgerEditorControllerTest extends BcTestCase
     {
         $base = '9999__' . BurgerEditorUtil::b64e('削除対象');
         $paths = [
-            BurgerEditorHelper::$imageFileBaseDir . $base . '.png',
-            BurgerEditorHelper::$imageFileBaseDir . $base . '__org.png',
-            BurgerEditorHelper::$imageFileBaseDir . $base . '__small.png',
+            $this->getSavePath('img') . $base . '.png',
+            $this->getSavePath('img') . $base . '__org.png',
+            $this->getSavePath('img') . $base . '__small.png',
         ];
         foreach($paths as $path) {
             file_put_contents($path, 'dummy');
@@ -293,6 +304,19 @@ class BurgerEditorControllerTest extends BcTestCase
         foreach($paths as $path) {
             $this->assertFileDoesNotExist($path);
         }
+    }
+
+    /**
+     * 保存先パスを取得する
+     *
+     * @param string $type img|other
+     * @return string
+     */
+    private function getSavePath($type)
+    {
+        $service = new BurgerEditorService();
+        $service->setupSavePath();
+        return $type === 'img'? $service->getImageFileBaseDir() : $service->getOtherFileBaseDir();
     }
 
     /**
