@@ -15,7 +15,6 @@
  */
 
 // Addonの読み込み
-use BcBurgerEditor\View\Helper\BurgerEditorHelper;
 
 $blockList = array();
 foreach($addonDir as $path) {
@@ -48,10 +47,11 @@ foreach($addonDir as $path) {
     <div id="ContentsEditArea" class="bge-type-editor-dialog" data-title="編集"></div>
     <div id="PanelArea" data-title="要素を追加"><?php $this->BurgerEditor->panelArea(); ?></div>
     <div id="BgBlockConfigArea" data-title="ブロック設定">
-        <?php if (isset(BurgerEditorHelper::$bgeConfig['blockClassOption']['free-setting'])): ?>
+        <?php $bgeConfig = $this->BurgerEditor->getBgeConfig(); ?>
+        <?php if (isset($bgeConfig['blockClassOption']['free-setting'])): ?>
         設定: <select name="free-setting">
             <option value="">指定なし</option>
-            <?php foreach(BurgerEditorHelper::$bgeConfig['blockClassOption']['free-setting'] as $class => $name): ?>
+            <?php foreach($bgeConfig['blockClassOption']['free-setting'] as $class => $name): ?>
             <option value="<?php echo h($class); ?>"><?php echo h($name); ?></option>
             <?php endforeach; ?>
         </select>

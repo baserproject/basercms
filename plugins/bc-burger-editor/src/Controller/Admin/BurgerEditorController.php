@@ -16,7 +16,6 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
 use BcBurgerEditor\Lib\BurgerEditorUtil;
 use BcBurgerEditor\Service\BurgerEditorService;
-use BcBurgerEditor\View\Helper\BurgerEditorHelper;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Routing\Router;
@@ -98,7 +97,6 @@ class BurgerEditorController extends BcAdminAppController
         }
         $result = parent::beforeFilter($event);
         $this->BurgerEditorService->setupSavePath();
-        BurgerEditorHelper::setSelfValue();
         $this->set("addonDir", BurgerEditorUtil::getAddonPath());
         return $result;
     }

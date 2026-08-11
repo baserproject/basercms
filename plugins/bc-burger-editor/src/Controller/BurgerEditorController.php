@@ -14,7 +14,6 @@ namespace BcBurgerEditor\Controller;
 use BaserCore\Controller\BcFrontAppController;
 use Cake\Event\EventInterface;
 use BcBurgerEditor\Lib\BurgerEditorUtil;
-use BcBurgerEditor\View\Helper\BurgerEditorHelper;
 use BcBurgerEditor\Service\BurgerEditorService;
 
 /**
@@ -69,7 +68,6 @@ class BurgerEditorController extends BcFrontAppController
         }
         $result = parent::beforeFilter($event);
 
-        BurgerEditorHelper::setSelfValue();
         $this->set("addonDir", BurgerEditorUtil::getAddonPath());
         return $result;
     }

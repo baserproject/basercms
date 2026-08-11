@@ -28,15 +28,34 @@ use Cake\View\View;
 class BurgerEditorHelper extends Helper
 {
 
-    public static $configJSON = '';    // bgeconfig.jsonのパス
-    public static $addonDir = [];    // Addonフォルダパス
-    public static $staticPanelDir = '';        // 静的ブロックパネルフォルダパス
+    /**
+     * ブロッククラス設定オプション・API URL 等、エディタへ渡す設定
+     *
+     * @var array
+     */
+    private $bgeConfig = [];
 
+    /**
+     * 描画中に利用されたタイプ
+     *
+     * @var array
+     */
+    private $useType = [];
 
-    public static $bgeConfig = [];    // ブロッククラス設定オプション
+    /**
+     * 描画中に利用されたブロック
+     *
+     * @var array
+     */
+    private $useBlock = [];
 
-    public static $useType = [];
-    public static $useBlock = [];
+    /**
+     * 設定の初期化が済んでいるか
+     *
+     * @var bool
+     */
+    private $initialized = false;
+
     private $loadingStyle = true;
 
     /**
@@ -52,35 +71,85 @@ class BurgerEditorHelper extends Helper
 
         parent::__construct($View, $settings);
         if (BcUtil::isAdminSystem()) {
-            self::setSelfValue();
+            $this->setSelfValue();
         }
     }
 
-    public static function setSelfValue()
+    /**
+     * bgeconfig.json のパスを取得する
+     *
+     * @return string
+     */
+    private function getConfigJSONPath()
     {
+        return Plugin::path('BcBurgerEditor') . 'bgeconfig.json';
+    }
 
-        self::$configJSON = dirname(dirname(dirname(__FILE__))) . DS . 'bgeconfig.json';
-        self::$addonDir = BurgerEditorUtil::getAddonPath();
+    /**
+     * Addon フォルダのパスを取得する
+     *
+     * @return string[]
+     */
+    private function getAddonDir()
+    {
+        return BurgerEditorUtil::getAddonPath();
+    }
+
+    /**
+     * 静的ブロックパネルフォルダのパスを取得する
+     *
+     * @return string
+     */
+    private function getStaticPanelDir()
+    {
+        $staticDirName = Inflector::underscore(preg_replace('/Helper$/', '', __CLASS__));
+        return WWW_ROOT . $staticDirName . DS . $staticDirName . DS . 'panel' . DS;
+    }
+
+    /**
+     * エディタへ渡す設定を取得する
+     *
+     * @return array
+     */
+    public function getBgeConfig()
+    {
+        $this->setSelfValue();
+        return $this->bgeConfig;
+    }
+
+    /**
+     * エディタへ渡す設定を組み立てる
+     *
+     * 二重実行を避けるため初回のみ処理する
+     *
+     * @return void
+     */
+    public function setSelfValue()
+    {
+        if ($this->initialized) return;
+        $this->initialized = true;
+
+        $addonDir = $this->getAddonDir();
         // ブロックclass設定ファイル取得
-        if (file_exists(self::$addonDir[0] . "block" . DS . 'option.php')) {
-            include self::$addonDir[0] . "block" . DS . 'option.php';
-            self::$bgeConfig['blockClassOption'] = $bgBlockConfig;
+        if (file_exists($addonDir[0] . "block" . DS . 'option.php')) {
+            include $addonDir[0] . "block" . DS . 'option.php';
+            $this->bgeConfig['blockClassOption'] = $bgBlockConfig;
         }
 
         // bgeconfig.jsonの読み込み
-        if (file_exists(self::$configJSON)) {
-            $configJSONString = file_get_contents(self::$configJSON);
+        if (file_exists($this->getConfigJSONPath())) {
+            $configJSONString = file_get_contents($this->getConfigJSONPath());
             $configJSONData = json_decode($configJSONString, TRUE);
-            if (!empty(self::$bgeConfig['blockClassOption'])) {
-                self::$bgeConfig['blockClassOption'] = Hash::merge(self::$bgeConfig['blockClassOption'], $configJSONData["bg-block-config"]);
+            if (!empty($this->bgeConfig['blockClassOption'])) {
+                $this->bgeConfig['blockClassOption'] = Hash::merge($this->bgeConfig['blockClassOption'], $configJSONData["bg-block-config"]);
             }
-            self::$bgeConfig['ckeditorConfig'] = $configJSONData["ckeditor-config"];
+            $this->bgeConfig['ckeditorConfig'] = $configJSONData["ckeditor-config"];
             if (!empty($configJSONData["flag"])) {
-                self::$bgeConfig['flag'] = $configJSONData["flag"];
+                $this->bgeConfig['flag'] = $configJSONData["flag"];
             }
         }
 
-        self::$bgeConfig['api'] = [
+        $this->bgeConfig['api'] = [
             "imgList" => Router::url(['prefix' => 'Admin', 'plugin' => 'BcBurgerEditor', 'controller' => 'BurgerEditor', 'action' => 'img_list']),
             "imgUpload" => Router::url(['prefix' => 'Admin', 'plugin' => 'BcBurgerEditor', 'controller' => 'BurgerEditor', 'action' => 'img_upload']),
             "imgDelete" => Router::url(['prefix' => 'Admin', 'plugin' => 'BcBurgerEditor', 'controller' => 'BurgerEditor', 'action' => 'img_delete']),
@@ -89,13 +158,13 @@ class BurgerEditorHelper extends Helper
             "fileDelete" => Router::url(['prefix' => 'Admin', 'plugin' => 'BcBurgerEditor', 'controller' => 'BurgerEditor', 'action' => 'file_delete']),
         ];
 
-        self::$bgeConfig['utility'] = [
+        $this->bgeConfig['utility'] = [
             "googleMapsApiKey" => BurgerEditorUtil::getGoogleMapApiKey(),
             "cssList" => self::getCSSList(),
         ];
 
-        self::$bgeConfig['cmsVersion'] = self::getVersionOfSystem();
-        self::$bgeConfig['types'] = self::typeVersionList();
+        $this->bgeConfig['cmsVersion'] = self::getVersionOfSystem();
+        $this->bgeConfig['types'] = $this->typeVersionList();
 
     }
 
@@ -164,7 +233,7 @@ class BurgerEditorHelper extends Helper
      *
      * @param String $typeName タイプ名
      */
-    public static function type($typeName)
+    public function type($typeName)
     {
 
         // バージョン設定
@@ -183,7 +252,7 @@ class BurgerEditorHelper extends Helper
         echo '<div data-bgt="' . h($typeName) . '" data-bgt-ver="' . h($version) . '" class="bgt-container bgt-' . h($typeName) . '-container">';
         include $typePath . 'value.php';
         echo '</div>';
-        if (!in_array($typeName, self::$useType)) self::$useType[] = $typeName;
+        if (!in_array($typeName, $this->useType)) $this->useType[] = $typeName;
     }
 
     /**
@@ -191,10 +260,10 @@ class BurgerEditorHelper extends Helper
      *
      * @param String $typeName タイプ名
      */
-    public static function typeVersionList()
+    public function typeVersionList()
     {
 
-        $path = self::$addonDir;
+        $path = $this->getAddonDir();
         $blockList = [];
         foreach($path as $addonDir) {
             if (!is_dir($addonDir . 'type')) {
@@ -215,7 +284,7 @@ class BurgerEditorHelper extends Helper
 
                     if (file_exists($addonDir . 'type' . DS . $typeName . DS . 'value.php')) {
                         ob_start();
-                        self::type($typeName);
+                        $this->type($typeName);
                         $tmpl = ob_get_contents();
                         ob_end_clean();
                     }
@@ -236,23 +305,23 @@ class BurgerEditorHelper extends Helper
     {
         foreach($blockPathList as $block) {
             $blockName = basename($block);
-            if (!in_array($blockName, self::$useBlock)) self::$useBlock[] = $blockName;
+            if (!in_array($blockName, $this->useBlock)) $this->useBlock[] = $blockName;
             echo '<div data-bgb="' . h($blockName) . '" class="bgb-' . h($blockName) . '">';
             include $block . 'index.php';
             echo '</div>' . "\n\n";
 
             // ブロックのパネル画像の静的ファイルを生成していて、オリジナルより古い場合は削除する
-            if (file_exists(self::$staticPanelDir . $blockName . '.svg')) {
-                if (filemtime(self::$staticPanelDir . $blockName . '.svg') <
+            if (file_exists($this->getStaticPanelDir() . $blockName . '.svg')) {
+                if (filemtime($this->getStaticPanelDir() . $blockName . '.svg') <
                     filemtime($block . 'panel.svg')
                 ) {
-                    unlink(self::$staticPanelDir . $blockName . '.svg');
+                    unlink($this->getStaticPanelDir() . $blockName . '.svg');
                 }
-            } elseif (file_exists(self::$staticPanelDir . $blockName . '.png')) {
-                if (filemtime(self::$staticPanelDir . $blockName . '.png') <
+            } elseif (file_exists($this->getStaticPanelDir() . $blockName . '.png')) {
+                if (filemtime($this->getStaticPanelDir() . $blockName . '.png') <
                     filemtime($block . 'panel.png')
                 ) {
-                    unlink(self::$staticPanelDir . $blockName . '.png');
+                    unlink($this->getStaticPanelDir() . $blockName . '.png');
                 }
             }
         }
@@ -260,8 +329,8 @@ class BurgerEditorHelper extends Helper
 
     public function inputArea()
     {
-        if (!self::$useType) trigger_error("ブロックの読み込みが完了していません。");
-        foreach(self::$useType as $type) {
+        if (!$this->useType) trigger_error("ブロックの読み込みが完了していません。");
+        foreach($this->useType as $type) {
             echo '<div class="Type' . h($type) . '">';
             include BurgerEditorUtil::getTypePath($type) . 'input.php';
             echo '</div>' . "\n\n";
@@ -270,7 +339,8 @@ class BurgerEditorHelper extends Helper
 
     public function panelArea()
     {
-        if (!self::$useType) trigger_error("ブロックの読み込みが完了していません。");
+        $this->setSelfValue();
+        if (!$this->useType) trigger_error("ブロックの読み込みが完了していません。");
 
         $addonDir = self::$addonDir;
         $bgCategory = [];
@@ -285,8 +355,8 @@ class BurgerEditorHelper extends Helper
         }
         $bgCategory = $bgCategoryTmp;
 
-        if (file_exists(self::$configJSON)) {
-            $configJSONString = file_get_contents(self::$configJSON);
+        if (file_exists($this->getConfigJSONPath())) {
+            $configJSONString = file_get_contents($this->getConfigJSONPath());
             $configJSONData = json_decode($configJSONString, TRUE);
             $bgCategory = Hash::merge($bgCategory, $configJSONData["bg-category"]);
         }
@@ -304,7 +374,7 @@ class BurgerEditorHelper extends Helper
                 if ($block === null) {
                     continue;
                 }
-                if (in_array($blockName, self::$useBlock)) {
+                if (in_array($blockName, $this->useBlock)) {
                     echo '<li data-bge-block="' . h($blockName) . '">';
                     // svg優先でロード
                     $blockPath = BurgerEditorUtil::getBlockPath($blockName);
@@ -341,9 +411,9 @@ class BurgerEditorHelper extends Helper
      */
     public function initArea()
     {
-        if (!self::$useType) trigger_error("ブロックの読み込みが完了していません。");
+        if (!$this->useType) trigger_error("ブロックの読み込みが完了していません。");
 
-        foreach(self::$useType as $type) {
+        foreach($this->useType as $type) {
             $typeInitPath = BurgerEditorUtil::getTypePath($type) . 'init.php';
             if (file_exists($typeInitPath)) {
                 echo '<div class="Init' . h($type) . '">';
@@ -360,6 +430,7 @@ class BurgerEditorHelper extends Helper
      */
     public function editor($fieldName, $options = [])
     {
+        $this->setSelfValue();
         $inputId = $fieldName;
         $draftId = $options['editorDraftField']?? null;
 
@@ -391,12 +462,12 @@ class BurgerEditorHelper extends Helper
             }
         }
 
-        self::$bgeConfig['utility']['mainFieldId'] = $inputId;
-        self::$bgeConfig['utility']['draftFieldId'] = $draftId;
-        self::$bgeConfig['setting'] = Configure::read('Bge');
+        $this->bgeConfig['utility']['mainFieldId'] = $inputId;
+        $this->bgeConfig['utility']['draftFieldId'] = $draftId;
+        $this->bgeConfig['setting'] = Configure::read('Bge');
 
         $editorHtml .= '<script id="bge-config" type="application/json">';
-        $editorHtml .= json_encode(self::$bgeConfig);
+        $editorHtml .= json_encode($this->bgeConfig);
         $editorHtml .= '</script>';
 
         $editorHtml .= '<div id="ValueArea" class="bge-view-value bge_content bge-contents"></div>';
@@ -408,7 +479,7 @@ class BurgerEditorHelper extends Helper
 
         // load読み込み
         ob_start();
-        foreach(self::$useType as $type) {
+        foreach($this->useType as $type) {
             $typeLoadPath = BurgerEditorUtil::getTypePath($type) . 'load.php';
             if (file_exists($typeLoadPath)) {
                 include $typeLoadPath;
