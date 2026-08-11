@@ -186,6 +186,16 @@ class BurgerEditorUtilTest extends BcTestCase
     }
 
     /**
+     * test mb_basename
+     *
+     * 第2引数を省略しても非推奨警告とならない
+     */
+    public function test_mb_basename_withoutSuffix()
+    {
+        $this->assertSame('日本語ファイル.jpg', BurgerEditorUtil::mb_basename('/var/www/html/日本語ファイル.jpg'));
+    }
+
+    /**
      * test b64e / b64d
      *
      * エンコードした文字列がデコードで元に戻る

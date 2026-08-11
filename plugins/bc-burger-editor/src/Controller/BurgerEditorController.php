@@ -76,11 +76,11 @@ class BurgerEditorController extends BcFrontAppController
 
     /**
      * ファイルダウンロード
+     *
+     * @return \Cake\Http\Response
      */
     public function dl()
     {
-        $this->viewBuilder()->disableAutoLayout();
-        $this->disableAutoRender();
         $params = func_get_args();
         // path階層は2階層まで許可
         if (empty($params) || count($params) > 2) {
@@ -112,11 +112,10 @@ class BurgerEditorController extends BcFrontAppController
         }
 
         // RFC6266 のヘッダエンコードに従いUTF-8で出力 (http://tools.ietf.org/html/rfc6266)
-        header("Content-Disposition: inline; filename*=UTF-8''" . rawurlencode($filename));
-        header("Content-Type: " . $mimeType);
-        header('Content-Length: ' . filesize($filePath));
-        readfile($filePath);
-        exit;
+        return $this->getResponse()
+            ->withFile($filePath, ['download' => false])
+            ->withType($mimeType)
+            ->withHeader('Content-Disposition', "inline; filename*=UTF-8''" . rawurlencode($filename));
     }
 }
 

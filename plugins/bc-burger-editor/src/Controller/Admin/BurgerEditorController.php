@@ -105,7 +105,7 @@ class BurgerEditorController extends BcAdminAppController
     /**
      * アップロード画像一覧取得
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function img_list()
     {
@@ -114,19 +114,16 @@ class BurgerEditorController extends BcAdminAppController
         $selectedFilePath = empty($_GET["selected"]) ? null : $_GET['selected']; // 選択済みファイルパス
         $pageList = $this->getFormatedImageList($searchWord, $targetPage, $selectedFilePath, $this->imageListPerPage);
         $result = ['error' => false, 'data' => $pageList['data'], 'pagination' => $pageList['pagination']];
-        Configure::write('debug', 0);
-        $this->setResponse($this->getResponse()
+        return $this->getResponse()
             ->withType('application/json')
             ->withCharset('UTF-8')
-        );
-        echo json_encode($result);
-        exit();
+            ->withStringBody(json_encode($result));
     }
 
     /**
      * 画像ファイルアップロード
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function img_upload()
     {
@@ -244,20 +241,17 @@ class BurgerEditorController extends BcAdminAppController
             $result = ['error' => $hasError, 'data' => $fileList['data'], 'pagination' => $fileList['pagination']];
         }
 
-        Configure::write('debug', 0);
-        $this->setResponse($this->getResponse()
+        return $this->getResponse()
             ->withType('application/json')
             ->withCharset('UTF-8')
-        );
-        echo json_encode($result);
-        exit();
+            ->withStringBody(json_encode($result));
 
     }
 
     /**
      * アップロードファイル削除
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function img_delete()
     {
@@ -276,14 +270,13 @@ class BurgerEditorController extends BcAdminAppController
                 unlink(BurgerEditorHelper::$imageFileBaseDir . $baseFile . '__small.' . $baseExt);
             }
         }
-        echo intval($res);
-        exit;
+        return $this->getResponse()->withStringBody((string)intval($res));
     }
 
     /**
      * アップロードファイル一覧取得
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function file_list()
     {
@@ -292,19 +285,16 @@ class BurgerEditorController extends BcAdminAppController
         $selectedFilePath = empty($_GET["selected"]) ? null : $_GET['selected']; // 選択済みファイルパス
         $pageList = $this->getFormatedOtherList($searchWord, $targetPage, $selectedFilePath, $this->fileListPerPage);
         $result = ['error' => false, 'data' => $pageList['data'], 'pagination' => $pageList['pagination']];
-        Configure::write('debug', 0);
-        $this->setResponse($this->getResponse()
+        return $this->getResponse()
             ->withType('application/json')
             ->withCharset('UTF-8')
-        );
-        echo json_encode($result);
-        exit();
+            ->withStringBody(json_encode($result));
     }
 
     /**
      * ファイルアップロード
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function file_upload()
     {
@@ -368,20 +358,17 @@ class BurgerEditorController extends BcAdminAppController
             $result = ['error' => $hasError, 'data'=> $fileList['data'], 'pagination' => $fileList['pagination']];
         }
 
-        Configure::write('debug', 0);
-        $this->setResponse($this->getResponse()
+        return $this->getResponse()
             ->withType('application/json')
             ->withCharset('UTF-8')
-        );
-        echo json_encode($result);
-        exit();
+            ->withStringBody(json_encode($result));
 
     }
 
     /**
      * アップロードファイル削除
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function file_delete()
     {
@@ -389,25 +376,18 @@ class BurgerEditorController extends BcAdminAppController
         if (file_exists(BurgerEditorHelper::$otherFileBaseDir . $filename)) {
             unlink(BurgerEditorHelper::$otherFileBaseDir . $filename);
         }
-        echo '1';
-        exit;
+        return $this->getResponse()->withStringBody('1');
     }
 
     /**
      * base64encodeされたファイル名をdecodeして変換
      *
      * @param $encodedFileName
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function get_filename($encodedFileName)
     {
         // no__から始まるファイル名のみ
-        Configure::write('debug', 0);
-        $this->setResponse($this->getResponse()
-            ->withType('application/json')
-            ->withCharset('UTF-8')
-        );
-
         $fileId = preg_match("/^(\d+)__/", $encodedFileName, $maches);
         if (isset($maches[1])) {
             $fileId = (isset($maches[1]))? $maches[1] : '';
@@ -417,12 +397,14 @@ class BurgerEditorController extends BcAdminAppController
                 $ext = "." . BurgerEditorUtil::getExtension($encodedFileName);
             }
             $filename = $fileId . '.' . BurgerEditorUtil::b64d($basename) . $ext;
-            echo json_encode(['filename' => $filename]);
-
         } else {
-            echo json_encode(['filename' => $encodedFileName]);
+            $filename = $encodedFileName;
         }
-        exit;
+
+        return $this->getResponse()
+            ->withType('application/json')
+            ->withCharset('UTF-8')
+            ->withStringBody(json_encode(['filename' => $filename]));
     }
 
     /**

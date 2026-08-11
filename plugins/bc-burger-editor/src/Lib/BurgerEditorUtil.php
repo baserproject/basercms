@@ -146,7 +146,7 @@ class BurgerEditorUtil
     {
         $tmp = preg_split('/[\/\\\\]/', $str);
         $res = end($tmp);
-        if (strlen($suffix)) {
+        if ($suffix !== null && strlen($suffix)) {
             $suffix = preg_quote($suffix);
             $res = preg_replace("/({$suffix})$/u", "", $res);
         }
