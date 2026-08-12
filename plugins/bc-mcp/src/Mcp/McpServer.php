@@ -52,10 +52,24 @@ class McpServer
         }
 
         // サーバー情報ツールを追加
+        // outputSchema を宣言しないと SDK が配列の戻り値を受け付けない
         $this->server->tool(
             name: 'serverInfo',
             description: 'サーバーのバージョンや環境情報を返します',
             callback: [$this, 'serverInfo'],
+            outputSchema: [
+                'type' => 'object',
+                'properties' => [
+                    'php_version' => ['type' => 'string', 'description' => 'PHP のバージョン'],
+                    'basercms_version' => ['type' => 'string', 'description' => 'baserCMS のバージョン'],
+                    'cakephp_version' => ['type' => 'string', 'description' => 'CakePHP のバージョン'],
+                    'server_time' => ['type' => 'string', 'description' => 'サーバーの現在日時'],
+                    'timezone' => ['type' => 'string', 'description' => 'タイムゾーン'],
+                    'mcp_server_version' => ['type' => 'string', 'description' => 'MCP サーバーのバージョン'],
+                    'supported_clients' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => '対応クライアント'],
+                    'available_transports' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => '利用可能なトランスポート'],
+                ]
+            ],
             inputSchema: [
                 'type' => 'object',
                 'properties' => [
