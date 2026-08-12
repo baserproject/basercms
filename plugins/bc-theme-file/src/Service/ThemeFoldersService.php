@@ -108,11 +108,13 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         $themeFiles = [];
         $folders = [];
         foreach($folder->getFolders() as $file) {
+            if (str_starts_with($file, '.')) continue;
             if (in_array($file, $excludeFolderList)) continue;
             $folders[] = $this->get($params['fullpath'] . $file);
         }
         $themeFilesService = $this->getService(ThemeFilesServiceInterface::class);
         foreach($folder->getFiles() as $file) {
+            if (str_starts_with($file, '.')) continue;
             if (in_array($file, $excludeFileList)) continue;
             $themeFiles[] = $themeFilesService->get($params['fullpath'] . $file);
         }
@@ -131,6 +133,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      */
     public function create(array $postData)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): テーマディレクトリ外へのフォルダ作成を防ぐ
+        $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
         $postData['mode'] = 'create';
         $form = new ThemeFolderForm();
         if ($form->validate($postData)) {
@@ -156,6 +160,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      */
     public function update(array $postData)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): テーマディレクトリ外へのフォルダ操作を防ぐ
+        $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
         $postData['mode'] = 'update';
         $form = new ThemeFolderForm();
         if ($form->validate($postData)) {
@@ -181,6 +187,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      */
     public function delete(string $fullpath)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): テーマディレクトリ外のフォルダ削除を防ぐ
+        $this->assertWithinThemeDir($fullpath);
         if (is_dir($fullpath)) {
             $folder = new BcFolder($fullpath);
             return $folder->delete();
@@ -200,6 +208,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      */
     public function copy(string $fullpath)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): コピー元がテーマディレクトリ配下であることを検証
+        $this->assertWithinThemeDir($fullpath);
         $fullpath = preg_replace('/\/$/is', '', $fullpath);
         $newPath = $fullpath . '_copy';
         while(true) {
@@ -297,6 +307,10 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h):
+        // コピー先 $themePath は $params['type'] / $params['path'] から組み立てられ getFullpath() を
+        // 通らないため、コピー先がテーマディレクトリ配下であることを sink で必ず検証する。
+        $this->assertWithinThemeDir($themePath);
         (new BcFolder(dirname($themePath)))->create();
         $folder = new BcFolder($params['fullpath']);
         if ($folder->copy($themePath)) {

@@ -1,6 +1,6 @@
 ---
 name: basercms-core-plugin-convert
-description: baserCMS の「通常プラグイン（サードパーティ／単体配布）」を monorepo の「コアプラグイン」に昇格させる手順。「コアプラグインに変更」「コアプラグイン化」「通常プラグインをコアに昇格」「monorepo に取り込む」等のときに参照する。プラグイン名の規約変更（bc- プレフィックス付与・CamelCase→ハイフン区切り）、.git/シンボリックリンク/standalone テスト基盤の除去、ルート phpunit.xml.dist・tests/bootstrap.php・composer.json・.gitignore への登録、baser-core setting.php の corePlugins/defaultInstallCorePlugins、phpdoc.dist.xml、split_monorepo.yml への追加、monorepo-builder merge による依存集約、全体テストでの実行確認、monorepo split 用 read-only リポジトリの確認までを収録。プラグインのバージョン非推奨対応（5.2→5.3）は basercms-plugin-migration スキル、テスト実行手順は basercms-unittest スキルを参照。
+description: baserCMS の「通常プラグイン（サードパーティ／単体配布）」を monorepo の「コアプラグイン」に昇格させる手順。「コアプラグインに変更」「コアプラグイン化」「通常プラグインをコアに昇格」「monorepo に取り込む」等のときに参照する。プラグイン名の規約変更（bc- プレフィックス付与・CamelCase→ハイフン区切り）、.git/シンボリックリンク/standalone テスト基盤の除去、ルート phpunit.xml.dist・tests/bootstrap.php・composer.json・.gitignore への登録、baser-core setting.php の corePlugins/defaultInstallCorePlugins、phpdoc.dist.xml、split_monorepo.yml への追加、monorepo-builder merge による依存集約、全体テストでの実行確認、monorepo split 用 read-only リポジトリの確認までを収録。プラグインのバージョン非推奨対応（5.2→5.3）は basercms-plugin-5x-update スキル、テスト実行手順は basercms-unittest スキルを参照。
 license: MIT
 ---
 
@@ -10,7 +10,7 @@ license: MIT
 参照: `plugins/bc-blog` 等の既存コアプラグインが「正」の構成。
 
 > 前提と役割分担
-> - バージョン移行（5.2→5.3 / PHP8.5）でのコード非推奨対応は `basercms-plugin-migration` スキル。
+> - バージョン移行（5.2→5.3 / PHP8.5）でのコード非推奨対応は `basercms-plugin-5x-update` スキル。
 > - ユニットテストの実行・集計・切り分けは `basercms-unittest` スキル。
 > - 本書は「通常プラグイン構成 → コアプラグイン構成」への**構造変換**に絞る。
 
@@ -99,7 +99,7 @@ baserCMS は `webroot/<plugin_underscored>` → `plugins/<bc-name>/webroot` の�
   - defaultInstall に入れる方針なら BcInstaller の後でも可（createDb が作り直すため）。
 
 ### 4-2. マイグレーション・プラグインリストへ追加（⚠️ 複数箇所ある）
-プラグインが DB マイグレーション（`config/Migrations`）を持つ場合、**テスト用 DB にテーブルを作る／再構築するプラグインリストすべて**に追加する。1 箇所でも漏れると、全体実行時にそのプラグインのテーブルだけ欠落し `Could not describe columns on <table>`（→ コントローラ初期化失敗で当該プラグインの全アクション 500）になる。**単独 testsuite では通り、全体実行でのみ落ちる**のが特徴（切り分けは `basercms-plugin-migration` のテスト基盤節も参照）。
+プラグインが DB マイグレーション（`config/Migrations`）を持つ場合、**テスト用 DB にテーブルを作る／再構築するプラグインリストすべて**に追加する。1 箇所でも漏れると、全体実行時にそのプラグインのテーブルだけ欠落し `Could not describe columns on <table>`（→ コントローラ初期化失敗で当該プラグインの全アクション 500）になる。**単独 testsuite では通り、全体実行でのみ落ちる**のが特徴（切り分けは `basercms-plugin-5x-update` のテスト基盤節も参照）。
 
 1. **ルート `tests/bootstrap.php` の `Migrator::runMany`**（初期スキーマ構築）
    ```php
@@ -168,10 +168,11 @@ docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/monorepo-b
   - `autoload-dev.psr-4` に `"BcMcp\\Test\\": "plugins/bc-mcp/tests/"`
   - `require` にプラグインの外部依存（`league/oauth2-server` 等、`ext-*` 含む）
   - `replace` に `"baserproject/bc-mcp": "<monorepo版>"`（他コアに合わせる）
-- 反映後、依存取得とオートロード再生成:
+- **外部依存（`require`）を追加した場合のみ**、依存取得のため composer を回す:
   ```bash
   docker compose exec <container> sh -c "cd /var/www/html && composer update <added-packages> --no-interaction"
   ```
+- ⚠️ **`composer dump-autoload` は不要**（クラスを読ませる目的では回さない）。baserCMS はプラグイン機構（`BcPlugin` / CakePHP のプラグインロードが各プラグインの composer.json の psr-4 を解決）でクラスを認識・ロードするため、ルート autoloader の再生成に依存しない。**管理画面でプラグインを有効化**すれば読み込まれる。ルート `composer.json` の `autoload`/`replace` への登録は monorepo 管理・split 用のメタ情報として行う（コミット対象）。外部 `require` を足したときだけ上記の `composer update` で vendor を取得する。
 
 ### 5-4. `phpdoc.dist.xml` に `src` パスを追加
 ```xml
@@ -214,7 +215,7 @@ docker compose exec <container> sh -c "cd /var/www/html && vendor/bin/phpunit --
     // 実サーバーが要るテストの先頭で $this->requireMcpServer();
     ```
   - **マイグレーション未実行**: 4-2 の追加漏れ → テーブル不在で失敗。
-  - **プラグイン未 bootstrap / サブプラグイン未ロード** 等は `basercms-plugin-migration` スキル（T-3〜T-5）参照。
+  - **プラグイン未 bootstrap / サブプラグイン未ロード** 等は `basercms-plugin-5x-update` スキル（T-3〜T-5）参照。
 - 仕上げに全体テストの回帰が無いことも確認する。
 
 ---

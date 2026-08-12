@@ -187,17 +187,21 @@ class BcFolder
             $this->path = $path;
         }
         if (!is_dir($this->path)) return false;
-        $files = $this->getFiles(['full' => true]);
-        foreach($files as $file) {
-            unlink($file);
+        $dir = new \DirectoryIterator($this->path);
+        /** @var \SplFileInfo $fileInfo */
+        foreach($dir as $fileInfo) {
+            if ($fileInfo->isDot()) continue;
+            $target = $fileInfo->getPathname();
+            if ($fileInfo->isLink()) {
+                // シンボリックリンクはリンク先を辿らず、リンク自体を削除する
+                // （rmdir はリンクを削除できず、また再帰するとリンク先の実体を削除してしまうため）
+                unlink($target);
+            } elseif ($fileInfo->isDir()) {
+                (new BcFolder($target))->delete();
+            } else {
+                unlink($target);
+            }
         }
-        $folders = $this->getFolders(['full' => true]);
-        $path = $this->path;
-        foreach($folders as $folder) {
-            $this->path = $folder;
-            $this->delete();
-        }
-        $this->path = $path;
         rmdir($this->path);
         return true;
     }

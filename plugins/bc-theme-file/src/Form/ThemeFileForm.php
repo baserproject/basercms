@@ -121,6 +121,16 @@ class ThemeFileForm extends Form
                     'provider' => 'bc',
                     'message' => __d('baser_core', 'テーマファイル名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
+        // パストラバーサル対策: 拡張子はファイル名へ連結されるため、
+        // ディレクトリ区切り等を含まない半角英数字・ハイフン・アンダースコアのみ許容する。
+        // （未指定の場合があるため空文字は許容する）
+        $validator
+            ->scalar('ext')
+            ->add('ext', [
+                'extAlphaNumericPlus' => [
+                    'rule' => ['custom', '/\A[0-9a-zA-Z_\-]*\z/'],
+                    'message' => __d('baser_core', '拡張子は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+                ]]);
         return $validator;
     }
 

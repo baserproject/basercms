@@ -24,7 +24,7 @@ return [
              */
             'BcCcWysiwyg' => [
                 'category' => __d('baser_core', 'コンテンツ'),
-                'label' => 'Wysiwyg エディタ',
+                'label' => __d('baser_core', 'Wysiwyg エディタ'),
                 'columnType' => 'text',
                 'controlType' => 'text',
                 'preview' => true

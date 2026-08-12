@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Factory\UploaderCategoryFactory;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
@@ -242,5 +243,22 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         // PHP 8.5 で null を clone した際のエラーメッセージが変更された
         $this->assertFlashMessage('データベース処理中にエラーが発生しました。Record not found in table "uploader_categories"');
+    }
+
+    /**
+     * test copy max length error
+     */
+    public function test_copy_max_length_error()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        UploaderCategoryFactory::make(['id' => 1, 'name' => str_repeat('a', 48)])->persist();
+
+        $this->post('/baser/admin/bc-uploader/uploader_categories/copy/1');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage(__d('baser_core', 'カテゴリ名は50文字以内で入力してください。'));
+        $this->assertRedirect('/baser/admin/bc-uploader/uploader_categories/index');
+        $this->assertEquals(1, TableRegistry::getTableLocator()->get('BcUploader.UploaderCategories')->find()->count());
     }
 }

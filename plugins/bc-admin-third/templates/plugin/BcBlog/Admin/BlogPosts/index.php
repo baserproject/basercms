@@ -19,11 +19,8 @@
  */
 $this->BcAdmin->setSearch('blog_posts_index');
 $this->BcAdmin->setHelp('blog_posts_index');
-$this->BcAdmin->setTitle(sprintf(
-  __d('baser_core', '%s｜記事一覧'),
-  strip_tags(
-    $this->request->getAttribute('currentContent')->title
-  )
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜記事一覧',
+  strip_tags($this->request->getAttribute('currentContent')->title)
 ));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $blogContent->id],

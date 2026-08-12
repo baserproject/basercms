@@ -73,7 +73,7 @@ jobs:
                   await github.rest.pulls.requestReviewers(
                     { owner, repo, pull_number: number, reviewers });
                 } catch (e) {
-                  console.log(`Skipping review request due to permissions: ${e.message}`);
+                  console.log(`Failed to request reviewers (status: ${e.status}): ${e.message}`);
                 }
               }
               await setAssignees(MAINTAINERS);

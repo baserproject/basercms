@@ -97,7 +97,7 @@ class SitesController extends BcAdminAppController
                 ]);
 
                 if ($site->theme) $themesService->installThemesPlugins($site->theme);
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を追加しました。'), $site->display_name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'サイト「{0}」を追加しました。', $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
             } catch (PersistenceFailedException $e) {
                 $site = $e->getEntity();
@@ -148,7 +148,7 @@ class SitesController extends BcAdminAppController
                 }
                 <<< */
 
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を更新しました。'), $site->display_name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'サイト「{0}」を更新しました。', $site->display_name));
                 $this->redirect(['action' => 'edit', $id]);
             } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));

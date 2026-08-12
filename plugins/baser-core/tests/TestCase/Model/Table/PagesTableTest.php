@@ -211,6 +211,37 @@ class PagesTableTest extends BcTestCase
     }
 
     /**
+     * コピー時にアイキャッチ画像が新IDでリネームコピーされること
+     *
+     * @return void
+     */
+    public function testCopyEyecatch()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loginAdmin($this->getRequest());
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $savePath = $contentsTable->getSaveDir();
+        $source = $this->Pages->get(2, contain: ['Contents']);
+        touch($savePath . 'test.png');
+        $contentsTable->updateAll(['eyecatch' => 'test.png'], ['id' => $source->content->id]);
+
+        $result = $this->Pages->copy(2, 1, 'hoge1', 10, 1);
+
+        $newFileName = sprintf('%08d', $result->content->id) . '_eyecatch.png';
+        $this->assertEquals($newFileName, $result->content->eyecatch);
+        $this->assertFileExists($savePath . 'test.png');
+        $this->assertFileExists($savePath . $newFileName);
+        $page = $this->Pages->get($result->id, contain: ['Contents']);
+        $this->assertEquals($newFileName, $page->content->eyecatch);
+
+        @unlink($savePath . 'test.png');
+        @unlink($savePath . $newFileName);
+    }
+
+    /**
      * test beforeSave
      * @return void
      */

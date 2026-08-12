@@ -27,14 +27,22 @@ use BaserCore\Model\Table\Exception\CopyFailedException;
  */
 class PermissionsTable extends AppTable
 {
-    // 許可/拒否する対象メソッド
+    /**
+     * 許可/拒否する対象メソッド
+     *
+     * @deprecated 6.0.0 since 5.2.6 多言語化に対応していません。表示用ラベルの取得には PermissionsService::getMethodList() を使用してください。
+     */
     const METHOD_LIST = [
         '*' => '全て',
         'GET' => '表示のみ',
         'POST' => '表示と編集',
     ];
 
-    // 許可/拒否
+    /**
+     * 許可/拒否
+     *
+     * @deprecated 6.0.0 since 5.2.6 多言語化に対応していません。表示用ラベルの取得には PermissionsService::getAuthList() を使用してください。
+     */
     const AUTH_LIST = [
         0 => '拒否',
         1 => '許可',

@@ -156,7 +156,9 @@
     </tr>
     <tr id="RowSource">
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('source', __d('baser_core', '選択リスト')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('source', __d('baser_core', '選択リスト')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
+      </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('source', ['type' => 'textarea', 'cols' => 35, 'rows' => 4]) ?>
         <i class="bca-icon--question-circle bca-help"></i>

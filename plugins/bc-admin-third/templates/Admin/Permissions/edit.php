@@ -23,7 +23,7 @@ use BaserCore\Model\Entity\Permission;
  * @unitTest
  */
 $this->BcAdmin->setHelp('permissions_form');
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール編集'), $userGroupTitle));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜アクセスルール編集', $userGroupTitle));
 ?>
 
 

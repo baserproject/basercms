@@ -17,10 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(
-  __d('baser_core', '%s｜カテゴリ編集'),
-  $blogContent->content->title
-));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜カテゴリ編集', $blogContent->content->title));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $blogContent->id],
   'title' => __d('baser_core', '新規追加'),

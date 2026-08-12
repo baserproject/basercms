@@ -89,6 +89,7 @@ yarn-error.log
 !/plugins/cakephp-soft-delete
 !/plugins/BcColumn
 !/plugins/bc-seo
+!/plugins/bc-burger-editor
 !/plugins/bc-mcp
 /plugins/*/vendor
 /plugins/*/composer.lock
@@ -120,6 +121,7 @@ node_modules
 /webroot/bc_theme_sample
 /webroot/bc_installer
 /webroot/bc_custom_content
+/webroot/bc_burger_editor
 /webroot/bc_mcp
 /webroot/bc_spa_sample
 /webroot/debug_kit
@@ -150,3 +152,5 @@ node_modules
 /.github/instructions/local.instructions.md
 /.serena
 /.claude/settings.local.json
+/.superpowers
+/.phpunit.log

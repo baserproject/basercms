@@ -127,9 +127,12 @@ class BcComposerTest extends BcTestCase
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
-        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
-        $data = str_replace('"cakephp/cakephp": "5.2.*"', '"cakephp/cakephp": "5.0.*"', $data);
+        $data = str_replace('"cakephp/cakephp": "~5.2.0"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "~7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        // CakePHP5.0.10 とは互換性がないため、require-dev のバージョン制約も一旦緩和する
+        $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
+        $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
+        $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
@@ -170,7 +173,7 @@ class BcComposerTest extends BcTestCase
         rename($backupLockPath, $orgLockPath);
         $folder = new BcFolder(ROOT . DS . 'vendor' . DS . 'baserproject');
         $folder->delete();
-        BcComposer::update();
+        BcComposer::install();
     }
 
     /**
@@ -192,8 +195,12 @@ class BcComposerTest extends BcTestCase
         $file = new BcFile($orgPath);
         $data = $file->read();
         $regex = '/("replace": {.+?},)/s';
-        $data = str_replace('"cakephp/cakephp": "5.0.*"', '"cakephp/cakephp": "5.0.10"', $data);
-        $data = str_replace('"firebase/php-jwt": "7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        $data = str_replace('"cakephp/cakephp": "~5.2.0"', '"cakephp/cakephp": "5.0.10"', $data);
+        $data = str_replace('"firebase/php-jwt": "~7.0.2"', '"firebase/php-jwt": "6.1.0"', $data);
+        // CakePHP5.0.10 とは互換性がないため、require-dev のバージョン制約も一旦緩和する
+        $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
+        $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
+        $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
@@ -266,6 +273,14 @@ class BcComposerTest extends BcTestCase
         copy($srcComposerJsonPath, $composerJson);
         copy($srcComposerLockPath, $composerLock);
 
+        // git clone 直後を想定し、baser-core 自身の composer.json (cakephp/cakephp を含む) を配置
+        // ルート composer.json 側の重複pinが relaxFrameworkConstraints() で除去されることを確認するため
+        $pluginBaserCoreDir = TMP_TESTS . 'plugins' . DS . 'baser-core';
+        (new BcFolder($pluginBaserCoreDir))->create();
+        (new BcFile($pluginBaserCoreDir . DS . 'composer.json'))->write(json_encode([
+            'require' => ['php' => '>=8.1', 'cakephp/cakephp' => '5.0.*']
+        ], JSON_PRETTY_PRINT));
+
         // 実行
         BcComposer::setup('', TMP_TESTS);
         BcComposer::disableBlockInsecure();
@@ -274,6 +289,8 @@ class BcComposerTest extends BcTestCase
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core": '));
         $this->assertFalse(strpos($data, '"replace": {'));
+        $jsonData = json_decode($data, true);
+        $this->assertArrayNotHasKey('cakephp/cakephp', $jsonData['require'], 'baser-core と重複する cakephp/cakephp の明示pinは除去されるべき');
         $file = new BcFile($composerLock);
         $data = $file->read();
         $this->assertNotFalse(strpos($data, '"baserproject/baser-core"'));
@@ -281,7 +298,92 @@ class BcComposerTest extends BcTestCase
         // バックアップをリストア
         unlink($composerJson);
         unlink($composerLock);
+        (new BcFolder(TMP_TESTS . 'plugins'))->delete();
         (new BcFolder(TMP_TESTS . 'vendor'))->delete();
+    }
+
+    /**
+     * test relaxFrameworkConstraints
+     * @return void
+     */
+    public function testRelaxFrameworkConstraints()
+    {
+        // ルート composer.json (更新対象) を用意
+        // cakephp/cakephp・cakephp/authentication は baser-core 自身と重複するpin、
+        // baserproject/bc-blog は公式プラグイン、some-vendor/custom-plugin はユーザー独自追加を想定
+        // require-dev も、composer require が --with-all-dependencies でも解決対象にするため同様に検証する
+        $composerJson = TMP_TESTS . 'composer.json';
+        $rootData = [
+            'require' => [
+                'php' => '>=8.1',
+                'ext-json' => '*',
+                'cakephp/cakephp' => '5.0.*',
+                'cakephp/authentication' => '^3.0',
+                'baserproject/bc-blog' => '5.2.8',
+                'some-vendor/custom-plugin' => '^1.0',
+            ],
+            'require-dev' => [
+                'cakephp/debug_kit' => '^5.0.0',
+                'some-vendor/dev-plugin' => '^1.0',
+            ],
+        ];
+        (new BcFile($composerJson))->write(json_encode($rootData, JSON_PRETTY_PRINT));
+
+        // baser-core 自身の composer.json (更新時に vendor にコピーされている想定)
+        $baserCoreDir = TMP_TESTS . 'vendor' . DS . 'baserproject' . DS . 'baser-core';
+        (new BcFolder($baserCoreDir))->create();
+        $baserCoreData = [
+            'require' => [
+                'php' => '>=8.1',
+                'cakephp/cakephp' => '5.2.*',
+                'cakephp/authentication' => '^3.0',
+            ],
+            'require-dev' => [
+                'cakephp/debug_kit' => '^5.2.4',
+            ],
+        ];
+        (new BcFile($baserCoreDir . DS . 'composer.json'))->write(json_encode($baserCoreData, JSON_PRETTY_PRINT));
+
+        BcComposer::setup('', TMP_TESTS);
+        BcComposer::relaxFrameworkConstraints();
+
+        $data = json_decode((new BcFile($composerJson))->read(), true);
+        $this->assertArrayNotHasKey('cakephp/cakephp', $data['require'], 'baser-core と重複する cakephp/cakephp は削除されるべき');
+        $this->assertArrayNotHasKey('cakephp/authentication', $data['require'], 'baser-core と重複する cakephp/authentication は削除されるべき');
+        $this->assertArrayHasKey('php', $data['require'], 'php のプラットフォーム要件は残るべき');
+        $this->assertArrayHasKey('ext-json', $data['require'], 'ext-* のプラットフォーム要件は残るべき');
+        $this->assertArrayHasKey('baserproject/bc-blog', $data['require'], 'baserproject/* の公式プラグインは対象外として残るべき');
+        $this->assertArrayHasKey('some-vendor/custom-plugin', $data['require'], 'baser-core が管理しないユーザー独自パッケージは残るべき');
+        $this->assertArrayNotHasKey('cakephp/debug_kit', $data['require-dev'], 'baser-core と重複する require-dev の cakephp/debug_kit は削除されるべき');
+        $this->assertArrayHasKey('some-vendor/dev-plugin', $data['require-dev'], 'baser-core が管理しないユーザー独自の require-dev パッケージは残るべき');
+
+        // クリーンアップ
+        (new BcFolder(TMP_TESTS . 'vendor'))->delete();
+        unlink($composerJson);
+    }
+
+    /**
+     * test relaxFrameworkConstraints baser-core の composer.json が見つからない場合
+     * @return void
+     */
+    public function testRelaxFrameworkConstraintsWithoutBaserCoreComposerJson()
+    {
+        $composerJson = TMP_TESTS . 'composer.json';
+        $rootData = [
+            'require' => [
+                'php' => '>=8.1',
+                'cakephp/cakephp' => '5.0.*',
+            ],
+        ];
+        (new BcFile($composerJson))->write(json_encode($rootData, JSON_PRETTY_PRINT));
+
+        BcComposer::setup('', TMP_TESTS);
+        BcComposer::relaxFrameworkConstraints();
+
+        $data = json_decode((new BcFile($composerJson))->read(), true);
+        $this->assertArrayHasKey('cakephp/cakephp', $data['require'], 'baser-core の composer.json が見つからない場合は何もしない');
+
+        unlink($composerJson);
     }
 
     /**

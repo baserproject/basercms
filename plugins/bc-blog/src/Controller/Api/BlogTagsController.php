@@ -43,6 +43,8 @@ class BlogTagsController extends BcApiController
         $queryParams = array_merge([
             'contain' => null,
         ], $this->getRequest()->getQueryParams());
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         $this->set([
             'blogTags' => $this->paginate($service->getIndex($queryParams))
         ]);
@@ -73,7 +75,7 @@ class BlogTagsController extends BcApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([

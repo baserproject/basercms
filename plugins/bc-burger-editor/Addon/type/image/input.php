@@ -1,0 +1,33 @@
+<div class="bge-file-uploader">
+	<div class="bge-file-uploader__error" data-bge-class="FileUploadMessenger"></div>
+	<input type="file" name="bge-image-file" data-bge-class="ImageUploader" placeholder="ここにファイルをドラッグアンドドロップ">
+	<input type="hidden" name="bge-path">
+	<input type="hidden" name="bge-empty">
+	<input type="hidden" name="bge-imported">
+</div>
+
+<div class="bge-input">
+	<div class="float-left">
+		<p>
+			<input type="text" name="bge-caption" placeholder="キャプション">
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-hr" data-bge-value="1"><span class="bca-checkbox__label bca-checkbox-label">小さく表示する</span></label>
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-popup" data-bge-value="1"><span class="bca-checkbox__label bca-checkbox-label">クリックでポップアップ</span></label>
+		</p>
+		<p>
+			<input type="text" name="bge-alt" placeholder="画像の説明(alt)">
+		</p>
+		<p>
+			<input type="text" placeholder="絞込検索" data-bge-class="UploadFileSearchForm">
+			<input type="button" value="検索" data-bge-class="UploadFileSearchButton">
+		</p>
+		<p>
+			<label class="bca-checkbox"><input type="checkbox" class="bca-checkbox__input" name="bge-lazy" data-bge-value="1" checked><span class="bca-checkbox__label bca-checkbox-label">遅延読み込みと遅延エンコードを行う</span></label><br />
+			<small>チェックを入れることで表示のパフォーマンスが向上します。</small>
+		</p>
+	</div>
+	<div class="float-right">
+		<input type="button" value="選択画像を削除する" data-bge-class="UploadImageDeleter">
+	</div>
+</div>
+
+<div class="image-select-area" data-bge-class="UploadImageList"></div>

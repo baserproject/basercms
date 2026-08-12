@@ -278,6 +278,7 @@ return [
             'BcThemeFile',
             'BcUploader',
             'BcWidgetArea',
+            'BcBurgerEditor',
         ],
         'defaultInstallCorePlugins' => [
             'BcSearchIndex',
@@ -286,6 +287,7 @@ return [
             'BcThemeConfig',
             'BcWidgetArea',
             'BcUploader',
+            'BcBurgerEditor',
         ],
 
         /**

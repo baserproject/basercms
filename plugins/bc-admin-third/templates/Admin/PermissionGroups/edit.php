@@ -22,7 +22,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルールグループ編集'), $userGroupTitle));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜アクセスルールグループ編集', $userGroupTitle));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => [
     'action' => 'add',

@@ -23,7 +23,7 @@ use BaserCore\View\BcAdminAppView;
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール一覧'), $userGroupTitle));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜アクセスルール一覧', $userGroupTitle));
 $this->BcAdmin->setHelp('permissions_index');
 $this->BcAdmin->setSearch('permissions_index');
 $this->BcBaser->js('admin/permissions/index.bundle', false, [

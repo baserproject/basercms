@@ -304,6 +304,70 @@ class CustomEntriesServiceTest extends BcTestCase
     }
 
     /**
+     * test createIndexConditions マルチチェックボックス系フィールドでOR検索設定が効くこと
+     *
+     * @return void
+     */
+    public function test_createIndexConditions_orSearch()
+    {
+        Configure::write('BcCustomContent.fieldTypes.BcCcMultiple.controlType', 'multiCheckbox');
+
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        // OR検索が有効なマルチチェックボックスフィールド
+        CustomFieldFactory::make([
+            'id' => 100,
+            'name' => 'or_field',
+            'type' => 'BcCcMultiple',
+            'meta' => json_encode(['BcCustomContent' => ['or_search' => true]])
+        ])->persist();
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 100,
+            'name' => 'or_field'
+        ])->persist();
+
+        // OR検索が無効（デフォルト）なマルチチェックボックスフィールド
+        CustomFieldFactory::make([
+            'id' => 101,
+            'name' => 'and_field',
+            'type' => 'BcCcMultiple'
+        ])->persist();
+        CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 101,
+            'name' => 'and_field'
+        ])->persist();
+
+        //OR検索が有効な場合、OR条件になること
+        $query = $CustomEntries->find();
+        $result = $this->CustomEntriesService->createIndexConditions($query, ['or_field' => ['a', 'b']]);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString(' OR ', $whereSql);
+
+        //OR検索が無効（デフォルト）な場合、AND条件のままであること
+        $query = $CustomEntries->find();
+        $result = $this->CustomEntriesService->createIndexConditions($query, ['and_field' => ['a', 'b']]);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringNotContainsString(' OR ', $whereSql);
+        $this->assertStringContainsString(' AND ', $whereSql);
+    }
+
+    /**
      * test getList
      */
     public function test_getList()

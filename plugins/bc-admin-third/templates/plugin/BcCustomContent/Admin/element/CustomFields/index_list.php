@@ -57,12 +57,6 @@ $this->BcListTable->setColumnNumber(8);
       ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
-      <?php echo $this->Paginator->sort('required', [
-        'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '必須'),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '必須')
-      ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-    </th>
-    <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('status', [
         'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '利用状況'),
         'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '利用状況')

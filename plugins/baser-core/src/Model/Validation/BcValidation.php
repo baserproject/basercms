@@ -204,14 +204,11 @@ class BcValidation extends Validation
                     break;
                 case 1:
                     // UPLOAD_ERR_INI_SIZE
-                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、
-                        php.ini の upload_max_filesize ディレクティブの値を超えています。
-                        {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
+                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。 {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
                     return false;
                 case 2:
                     // UPLOAD_ERR_FORM_SIZE
-                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。
-                        {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
+                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。 {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
                     return false;
                 case 3:
                     // UPLOAD_ERR_PARTIAL
@@ -241,11 +238,11 @@ class BcValidation extends Validation
         if (!empty($file['name'])) {
             // サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
             if (!$file['size']) {
-                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
+                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 {0} MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
                 return false;
             }
             if ($file['size'] > $size) {
-                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
+                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 {0} MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
                 return false;
             }
         }

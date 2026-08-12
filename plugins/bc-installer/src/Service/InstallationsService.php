@@ -211,7 +211,7 @@ class InstallationsService implements InstallationsServiceInterface
                 throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。'));
             }
         } catch (\Throwable $e) {
-            throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
+            throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。') . $e->getMessage());
         }
 
         if (!$this->BcDatabase->initSystemData(['theme' => $theme, 'adminTheme' => $adminTheme])) {
@@ -368,7 +368,7 @@ class InstallationsService implements InstallationsServiceInterface
 
         foreach($corePlugins as $corePlugin) {
             if (!$this->installPlugin($corePlugin)) {
-                $this->log(sprintf(__d('baser_core', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
+                $this->log(__d('baser_core', 'コアプラグイン「{0}」のインストールに失敗しました。', $corePlugin));
                 $result = false;
             }
         }

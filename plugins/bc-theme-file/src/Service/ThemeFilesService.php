@@ -109,6 +109,11 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      */
     public function create(array $postData)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx):
+        // Admin web 経路はリクエストの fullpath を直接書き込み先に使い getFullpath() を通らないため、
+        // 実際の書き込み先がテーマディレクトリ配下であることを sink で必ず検証する。
+        $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
+
         $postData['mode'] = 'create';
         $form = new ThemeFileForm();
         if ($form->validate($postData)) {
@@ -134,6 +139,10 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      */
     public function update(array $postData)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): create() と同様、書き込み sink で
+        // テーマディレクトリ配下であることを検証する。
+        $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
+
         $postData['mode'] = 'update';
         $themeFileForm = new ThemeFileForm();
         if ($themeFileForm->validate($postData)) {
@@ -158,6 +167,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      */
     public function delete(string $fullpath)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): テーマディレクトリ外のファイル削除を防ぐ
+        $this->assertWithinThemeDir($fullpath);
         if (file_exists($fullpath)) {
             return unlink($fullpath);
         } else {
@@ -176,6 +187,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      */
     public function copy(string $fullpath)
     {
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): コピー元がテーマディレクトリ配下であることを検証
+        $this->assertWithinThemeDir($fullpath);
         $entity = $this->get($fullpath);
         $newPathBase = $entity->parent . $entity->base_name . '_copy';
         while(true) {
@@ -207,14 +220,19 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): アップロード先がテーマディレクトリ配下であることを検証
+        $this->assertWithinThemeDir($fullpath);
         $Folder = new BcFolder($fullpath);
         $Folder->create();
-        $name = $postData['file']->getClientFilename();
-        $postData['file']->moveTo($fullpath . DS . $name);
+        // アップロードファイル名のトラバーサルも防ぐため basename で正規化し最終書き込み先も検証する
+        $name = basename($postData['file']->getClientFilename());
+        $target = $fullpath . DS . $name;
+        $this->assertWithinThemeDir($target);
+        $postData['file']->moveTo($target);
     }
 
     /**
@@ -250,6 +268,10 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
                 $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['path'];
             }
         }
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h):
+        // コピー先 $themePath は $params['type'] / $params['path'] から組み立てられ getFullpath() を
+        // 通らないため、コピー先がテーマディレクトリ配下であることを sink で必ず検証する。
+        $this->assertWithinThemeDir($themePath);
         $folder = new BcFolder(dirname($themePath));
         $folder->create();
         if (file_exists($params['fullpath']) && copy($params['fullpath'], $themePath)) {

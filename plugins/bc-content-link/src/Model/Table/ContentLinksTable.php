@@ -81,7 +81,7 @@ class ContentLinksTable extends AppTable
      * @param $newTitle
      * @param $newAuthorId
      * @param $newSiteId
-     * @return mixed page Or false
+     * @return mixed page
      * @throws \Throwable
      * @checked
      * @noTodo
@@ -119,7 +119,15 @@ class ContentLinksTable extends AppTable
         unset($entity->created);
         unset($entity->modified);
 
-        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+        $this->getConnection()->begin();
+        try {
+            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+            $entity->content = $this->Contents->copyEyecatchFile($entity->content);
+            $this->getConnection()->commit();
+        } catch (PersistenceFailedException $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
 
         // EVENT ContentLinks.afterCopy
         $this->dispatchLayerEvent('afterCopy', [
