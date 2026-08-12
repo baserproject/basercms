@@ -22,9 +22,9 @@
         "firebase/php-jwt": "~7.0.2",
         "josegonzalez/dotenv": "~4.0.0",
         "league/oauth2-server": "^8.5",
+        "logiscape/mcp-sdk-php": "^2.0",
         "mobiledetect/mobiledetectlib": "~3.74.4",
         "nyholm/psr7": "~1.8.2",
-        "php-mcp/server": "~3.3.0",
         "psr/http-message": "~1.1",
         "robmorgan/phinx": "0.16.10",
         "symfony/psr-http-message-bridge": "~2.3.1"
