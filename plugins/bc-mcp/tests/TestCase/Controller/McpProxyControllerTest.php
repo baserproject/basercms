@@ -13,6 +13,7 @@ namespace BcMcp\Test\TestCase\Controller;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Controller\McpProxyController;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 
 /**
@@ -103,6 +104,74 @@ class McpProxyControllerTest extends BcTestCase
 
         $this->delete('/bc-mcp');
         $this->assertResponseCode(405);
+    }
+
+    /**
+     * test 許可オリジンの判定
+     */
+    public function testIsAllowedOrigin()
+    {
+        Configure::write('BcMcp.allowedOrigins', ['https://claude.ai']);
+        $controller = new McpProxyController(new ServerRequest());
+
+        $this->assertTrue($controller->isAllowedOrigin('https://claude.ai'));
+        $this->assertFalse($controller->isAllowedOrigin('https://evil.example.com'));
+        // 部分一致で通してはならない
+        $this->assertFalse($controller->isAllowedOrigin('https://claude.ai.evil.example.com'));
+    }
+
+    /**
+     * test 設定が空の場合は自サイトのオリジンのみを許可する
+     */
+    public function testIsAllowedOriginFallbackToSiteUrl()
+    {
+        Configure::write('BcMcp.allowedOrigins', []);
+        $controller = new McpProxyController(new ServerRequest());
+
+        $siteUrl = rtrim((string)env('SITE_URL', ''), '/');
+        if ($siteUrl) {
+            $parts = parse_url($siteUrl);
+            $origin = $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port'])? ':' . $parts['port'] : '');
+            $this->assertTrue($controller->isAllowedOrigin($origin));
+        }
+        $this->assertFalse($controller->isAllowedOrigin('https://evil.example.com'));
+    }
+
+    /**
+     * test 許可されないオリジンからのリクエストは 403 になる
+     *
+     * Origin 検証は DNS リバインディング対策であり、認証より前に効かせる。
+     * そのため認証エラーの 401 ではなく 403 が返る
+     */
+    public function testDisallowedOriginReturnsForbidden()
+    {
+        Configure::write('BcMcp.allowedOrigins', ['https://claude.ai']);
+
+        $this->configRequest([
+            'headers' => [
+                'Origin' => 'https://evil.example.com',
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+        $this->post('/bc-mcp', json_encode(['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/list']));
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * test Origin ヘッダが無いリクエストは検証対象外
+     *
+     * サーバー間通信では Origin が送られないため通す（認証で弾かれる）
+     */
+    public function testRequestWithoutOriginIsNotBlocked()
+    {
+        Configure::write('BcMcp.allowedOrigins', ['https://claude.ai']);
+
+        $this->configRequest(['headers' => ['Content-Type' => 'application/json']]);
+        $this->post('/bc-mcp', json_encode(['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/list']));
+
+        // Origin 検証では弾かれず、認証エラーになる
+        $this->assertResponseCode(401);
     }
 
 }

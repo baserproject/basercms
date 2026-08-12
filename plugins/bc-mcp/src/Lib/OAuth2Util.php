@@ -9,6 +9,47 @@ class OAuth2Util
 {
 
     /**
+     * 認可サーバーの issuer 識別子を取得する
+     *
+     * RFC 8414 のメタデータで公開する issuer と、RFC 9207 で認可レスポンスに
+     * 付与する iss は同一の値でなければならないため、導出処理をここに集約する。
+     *
+     * @param \Cake\Http\ServerRequest $request リクエスト
+     * @return string
+     */
+    public static function getIssuer(\Cake\Http\ServerRequest $request): string
+    {
+        $scheme = $request->is('https')? 'https' : 'http';
+        $host = $request->getHeaderLine('Host');
+        if (!$host) {
+            $host = $request->getEnv('HTTP_HOST')?: 'localhost';
+        }
+        return $scheme . '://' . $host . '/bc-mcp';
+    }
+
+    /**
+     * URL に iss クエリを付与する
+     *
+     * RFC 9207。認可レスポンスに issuer を含める事で mix-up 攻撃を防ぐ。
+     * 2026-07-28 のクライアントは iss があれば検証が MUST とされている。
+     *
+     * @param string $url 対象の URL
+     * @param string $issuer issuer 識別子
+     * @return string
+     */
+    public static function addIssuerToUrl(string $url, string $issuer): string
+    {
+        $fragment = '';
+        $hashPos = strpos($url, '#');
+        if ($hashPos !== false) {
+            $fragment = substr($url, $hashPos);
+            $url = substr($url, 0, $hashPos);
+        }
+        $separator = str_contains($url, '?')? '&' : '?';
+        return $url . $separator . 'iss=' . rawurlencode($issuer) . $fragment;
+    }
+
+    /**
      * CakePHPリクエストをPSR-7リクエストに変換
      *
      * @return \Psr\Http\Message\ServerRequestInterface

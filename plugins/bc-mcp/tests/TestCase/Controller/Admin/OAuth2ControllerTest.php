@@ -236,6 +236,13 @@ class OAuth2ControllerTest extends BcTestCase
         // 認可コードを取得
         $queryParams = [];
         parse_str(parse_url($redirectUrl, PHP_URL_QUERY), $queryParams);
+
+        // RFC 9207: 認可レスポンスに iss が含まれ、メタデータの issuer と一致する
+        $this->assertArrayHasKey('iss', $queryParams);
+        $this->get('/.well-known/oauth-authorization-server/bc-mcp');
+        $issuerMetadata = json_decode((string)$this->_response->getBody(), true);
+        $this->assertEquals($issuerMetadata['issuer'], $queryParams['iss']);
+        $this->assertTrue($issuerMetadata['authorization_response_iss_parameter_supported']);
         $this->assertArrayHasKey('code', $queryParams);
         $authCode = $queryParams['code'];
 

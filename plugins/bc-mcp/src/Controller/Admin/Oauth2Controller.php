@@ -157,7 +157,18 @@ class Oauth2Controller extends BcAdminAppController
                     $authRequest->setUser($userEntity);
                     $authRequest->setAuthorizationApproved(true);
 
-                    return $server->completeAuthorizationRequest($authRequest, $this->response);
+                    $authResponse = $server->completeAuthorizationRequest($authRequest, $this->response);
+
+                    // RFC 9207: 認可レスポンスに issuer を含める。
+                    // 2026-07-28 のクライアントは iss があれば検証が MUST。
+                    $location = $authResponse->getHeaderLine('Location');
+                    if ($location !== '') {
+                        $authResponse = $authResponse->withHeader(
+                            'Location',
+                            OAuth2Util::addIssuerToUrl($location, OAuth2Util::getIssuer($this->request))
+                        );
+                    }
+                    return $authResponse;
                 } elseif ($action === 'deny') {
                     // アクセス拒否
                     $params = [
@@ -168,7 +179,11 @@ class Oauth2Controller extends BcAdminAppController
                         $params['state'] = $state;
                     }
 
-                    $redirectUrl = $redirectUri . '?' . http_build_query($params);
+                    // エラー応答も認可レスポンスであるため issuer を付与する（RFC 9207）
+                    $redirectUrl = OAuth2Util::addIssuerToUrl(
+                        $redirectUri . '?' . http_build_query($params),
+                        OAuth2Util::getIssuer($this->request)
+                    );
                     return $this->redirect($redirectUrl);
                 }
             }

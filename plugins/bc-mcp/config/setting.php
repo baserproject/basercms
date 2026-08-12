@@ -52,6 +52,15 @@ return [
     ],
     'BcMcp' => [
         /**
+         * Origin ヘッダの許可リスト
+         *
+         * DNS リバインディング攻撃対策として、ブラウザから送信された Origin を
+         * 検証する。Streamable HTTP の MUST 要件。
+         * 空配列の場合は自サイトのオリジン（SITE_URL）のみを許可する。
+         * Origin ヘッダを持たないリクエスト（サーバー間通信）は検証対象外。
+         */
+        'allowedOrigins' => [],
+        /**
          * 利用可能なMCPサーバー
          */
         'availableServers' => [

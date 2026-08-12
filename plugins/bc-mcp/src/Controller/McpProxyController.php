@@ -9,6 +9,7 @@ use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -47,10 +48,13 @@ class McpProxyController extends AppController
         // OAuth2サービスを初期化
         $this->oauth2Service = new OAuth2Service();
 
-        // CORS設定（統一された設定）
-        $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*');
+        // CORS設定。許可したオリジンのみを返す（ワイルドカードは使わない）
+        $origin = $this->request->getHeaderLine('Origin');
+        if ($origin !== '' && $this->isAllowedOrigin($origin)) {
+            $this->response = $this->response->withHeader('Access-Control-Allow-Origin', $origin);
+        }
         $this->response = $this->response->withHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-        $this->response = $this->response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, MCP-Protocol-Version, Mcp-Method, Mcp-Name');
+        $this->response = $this->response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, MCP-Protocol-Version, Mcp-Method, Mcp-Name, Mcp-Session-Id');
     }
 
     /**
@@ -61,6 +65,15 @@ class McpProxyController extends AppController
         parent::beforeFilter($event);
 
         $method = $this->request->getMethod();
+
+        // Origin 検証はトランスポートレベルの要件であり、認証より前に効かせる。
+        // ブラウザから送信された Origin のみが対象で、サーバー間通信のように
+        // Origin を持たないリクエストは検証しない。
+        $origin = $this->request->getHeaderLine('Origin');
+        if ($origin !== '' && !$this->isAllowedOrigin($origin)) {
+            $event->setResult($this->returnForbiddenOriginResponse());
+            return;
+        }
 
         // OPTIONS は認証不要
         if ($method === 'OPTIONS') {
@@ -132,6 +145,54 @@ class McpProxyController extends AppController
                 'error' => 'invalid_client',
                 'message' => $message
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * Origin が許可されているかを判定する
+     *
+     * Streamable HTTP の MUST 要件。悪意あるサイトが DNS リバインディングにより
+     * ローカルの MCP サーバーを操作するのを防ぐ。
+     *
+     * @param string $origin Origin ヘッダの値
+     * @return bool
+     */
+    public function isAllowedOrigin(string $origin): bool
+    {
+        $allowed = (array)Configure::read('BcMcp.allowedOrigins', []);
+        if (!$allowed) {
+            // 設定が無い場合は自サイトのオリジンのみを許可する
+            $siteUrl = rtrim((string)env('SITE_URL', ''), '/');
+            if ($siteUrl) {
+                $parts = parse_url($siteUrl);
+                if (!empty($parts['scheme']) && !empty($parts['host'])) {
+                    $allowed = [
+                        $parts['scheme'] . '://' . $parts['host']
+                        . (isset($parts['port'])? ':' . $parts['port'] : '')
+                    ];
+                }
+            }
+        }
+        // 部分一致で通さないよう厳密に比較する
+        return in_array($origin, $allowed, true);
+    }
+
+    /**
+     * 許可されない Origin のレスポンスを返す
+     *
+     * @return Response
+     */
+    private function returnForbiddenOriginResponse(): Response
+    {
+        return $this->response
+            ->withStatus(403)
+            ->withHeader('Content-Type', 'application/json')
+            ->withStringBody(json_encode([
+                'jsonrpc' => '2.0',
+                'error' => [
+                    'code' => -32600,
+                    'message' => 'Forbidden: invalid Origin.'
+                ]
+            ], JSON_UNESCAPED_UNICODE));
     }
 
     /**

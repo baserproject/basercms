@@ -325,7 +325,9 @@ class Oauth2Controller extends AppController
 
             $metadata = [
                 // RFC 8414 必須項目
-                'issuer' => $baseUrl . '/bc-mcp',
+                // issuer は認可レスポンスの iss（RFC 9207）と同一でなければならないため、
+                // OAuth2Util の導出処理を共有する
+                'issuer' => OAuth2Util::getIssuer($this->request),
                 'authorization_endpoint' => $baseUrl . '/bc-mcp/oauth2/authorize',
                 'token_endpoint' => $baseUrl . '/bc-mcp/oauth2/token',
                 'registration_endpoint' => $baseUrl . '/bc-mcp/oauth2/register',
@@ -342,6 +344,9 @@ class Oauth2Controller extends AppController
                 // 実装済みエンドポイント
                 'revocation_endpoint' => $baseUrl . '/bc-mcp/oauth2/revoke',
                 'introspection_endpoint' => $baseUrl . '/bc-mcp/oauth2/verify',
+
+                // RFC 9207: 認可レスポンスに iss を含める事をクライアントへ通知する
+                'authorization_response_iss_parameter_supported' => true,
 
                 'client_registration_types_supported' => ['dynamic'],
                 'registration_endpoint_auth_methods_supported' => ['none'],
