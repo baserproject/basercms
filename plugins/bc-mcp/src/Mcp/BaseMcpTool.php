@@ -61,10 +61,10 @@ abstract class BaseMcpTool
      * エラー時の戻り値を作成
      *
      * @param string $message エラーメッセージ
-     * @param \Exception|null $exception 例外オブジェクト（トレース情報用）
+     * @param \Throwable|null $exception 例外オブジェクト（トレース情報用）
      * @return array MCP仕様に準拠したエラーレスポンス
      */
-    protected function createErrorResponse(string $message, ?\Exception $exception = null): array
+    protected function createErrorResponse(string $message, ?\Throwable $exception = null): array
     {
         $response = [
             'content' => $message
@@ -85,7 +85,9 @@ abstract class BaseMcpTool
     {
         try {
             return $callback();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // \Error を捕捉しない場合、MCPサーバー側でトレースが失われ、
+            // 発生箇所を特定できなくなるため、\Throwable にて捕捉する
             return $this->createErrorResponse($e->getMessage(), $e);
         }
     }

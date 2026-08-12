@@ -184,6 +184,34 @@ class BaseMcpToolTest extends BcTestCase
         $array = ['test' => 'value'];
         $this->assertTrue($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$array]));
     }
+
+    /**
+     * test executeWithErrorHandling
+     *
+     * \Exception だけではなく \Error も捕捉し、トレースを返す事を確認する
+     * （MCPサーバー側で丸められると発生箇所を追跡できなくなるため）
+     */
+    public function testExecuteWithErrorHandling()
+    {
+        // \Exception を捕捉できる事を確認
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
+            function() {
+                throw new \Exception('例外が発生しました');
+            }
+        ]);
+        $this->assertEquals('例外が発生しました', $result['content']);
+        $this->assertArrayHasKey('trace', $result);
+
+        // \Error を捕捉できる事を確認
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
+            function() {
+                $request = null;
+                return $request->getParam('prefix');
+            }
+        ]);
+        $this->assertStringContainsString('getParam() on null', $result['content']);
+        $this->assertArrayHasKey('trace', $result);
+    }
 }
 
 /**

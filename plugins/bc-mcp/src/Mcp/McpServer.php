@@ -46,6 +46,7 @@ class McpServer
 
         $builder = $builder
             ->withServerInfo($serverName, $serverVersion)
+            ->withLogger(new McpLogger(LOGS . 'bc_mcp_error.log'))
             ->withCapabilities(new ServerCapabilities(
                 tools: true,
                 resources: false,
@@ -101,6 +102,16 @@ class McpServer
             $resourceInstance = new $resourceClass();
             $builder = $resourceInstance->addResourcesToBuilder($builder);
         }
+    }
+
+    /**
+     * MCPサーバーの実体を取得する
+     *
+     * @return Server
+     */
+    public function getServer(): Server
+    {
+        return $this->server;
     }
 
     /**
