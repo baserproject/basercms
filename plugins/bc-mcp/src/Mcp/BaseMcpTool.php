@@ -22,6 +22,19 @@ abstract class BaseMcpTool
     use BcContainerTrait;
 
     /**
+     * ツールの戻り値のスキーマ
+     *
+     * 各ツールは配列（エンティティを配列化したものや一覧）を返す。SDK は
+     * outputSchema を宣言したツールに限り配列の戻り値を許容し、その値を
+     * structuredContent として返しつつ JSON を TextContent にも載せる
+     * （SEP-2106）。宣言が無いと戻り値は文字列か CallToolResult に限られる。
+     *
+     * 個々のツールの戻り値の構造はエンティティの構成に依存するため、
+     * ここでは型のみを宣言する。
+     */
+    protected const OUTPUT_SCHEMA = ['type' => ['object', 'array']];
+
+    /**
      * 自身が提供するツールをサーバーに登録する
      *
      * @param \Mcp\Server\McpServer $server SDK のサーバー

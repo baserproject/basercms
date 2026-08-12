@@ -39,6 +39,7 @@ class FileUploadTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'sendFileChunk'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'sendFileChunk',
                 description: 'ファイルをチャンク分割して送信します。大きなファイルを小さな部分に分けて段階的にアップロードするために使用します。分割したチャンクは30KB以下にしてください。',
                 inputSchema: [

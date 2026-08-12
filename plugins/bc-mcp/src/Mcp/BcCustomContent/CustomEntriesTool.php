@@ -28,6 +28,7 @@ class CustomEntriesTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'addCustomEntry'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'addCustomEntry',
                 description: 'カスタムエントリーを追加します。カスタムエントリーを追加するには、カスタムテーブルが必要です。事前に作成するか既存のカスタムテーブルIDを指定してください。フロントエンドに表示させるには、カスタムテーブルがカスタムコンテンツと紐づいている必要があります。',
                 inputSchema: [
@@ -53,6 +54,7 @@ class CustomEntriesTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'editCustomEntry'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'editCustomEntry',
                 description: '指定されたIDのカスタムエントリーを編集します',
                 inputSchema: [
@@ -79,6 +81,7 @@ class CustomEntriesTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomEntries'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomEntries',
                 description: 'カスタムエントリーの一覧を取得します',
                 inputSchema: [
@@ -94,6 +97,7 @@ class CustomEntriesTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomEntry'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomEntry',
                 description: '指定されたIDのカスタムエントリーを取得します',
                 inputSchema: [
@@ -107,6 +111,7 @@ class CustomEntriesTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'deleteCustomEntry'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'deleteCustomEntry',
                 description: '指定されたIDのカスタムエントリーを削除します',
                 inputSchema: [

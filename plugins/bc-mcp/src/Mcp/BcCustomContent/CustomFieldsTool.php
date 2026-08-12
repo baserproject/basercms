@@ -65,6 +65,7 @@ class CustomFieldsTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'addCustomField'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'addCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを追加します。',
                 inputSchema: [
@@ -92,6 +93,7 @@ class CustomFieldsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'editCustomField'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'editCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを編集します',
                 inputSchema: [
@@ -120,6 +122,7 @@ class CustomFieldsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomFields'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomFields',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドの一覧を取得します',
                 inputSchema: [
@@ -134,6 +137,7 @@ class CustomFieldsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomField'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して取得します',
                 inputSchema: [
@@ -146,6 +150,7 @@ class CustomFieldsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'deleteCustomField'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'deleteCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して削除します',
                 inputSchema: [

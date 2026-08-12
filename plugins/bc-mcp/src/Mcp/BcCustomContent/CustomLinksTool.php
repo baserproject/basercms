@@ -26,6 +26,7 @@ class CustomLinksTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'addCustomLink'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'addCustomLink',
                 description: 'カスタムリンクを追加します',
                 inputSchema: [
@@ -57,6 +58,7 @@ class CustomLinksTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomLinks'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomLinks',
                 description: 'カスタムリンクの一覧を取得します',
                 inputSchema: [
@@ -73,6 +75,7 @@ class CustomLinksTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomLink'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomLink',
                 description: '指定されたIDのカスタムリンクを取得します',
                 inputSchema: [
@@ -85,6 +88,7 @@ class CustomLinksTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'editCustomLink'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'editCustomLink',
                 description: '指定されたIDのカスタムリンクを編集します',
                 inputSchema: [
@@ -117,6 +121,7 @@ class CustomLinksTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'deleteCustomLink'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'deleteCustomLink',
                 description: '指定されたIDのカスタムリンクを削除します',
                 inputSchema: [

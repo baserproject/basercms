@@ -957,11 +957,21 @@ git commit -m "ツール実行テストをプロセス内実行の新基盤へ�
 **Files:**
 - Modify: `plugins/bc-mcp/src/Controller/McpProxyController.php`
 - Test: `plugins/bc-mcp/tests/TestCase/Controller/McpProxyControllerTest.php`
+- Modify: `plugins/bc-mcp/tests/TestCase/Controller/Admin/OAuth2ControllerTest.php`
 
 **Interfaces:**
 - Consumes: `McpRequestHandler::handle()`（Task 2）、`McpContext`（Task 2）
 - Produces:
   - `McpProxyController::toMcpMessage(array $mcpRequest): \Mcp\Server\Transport\Http\HttpMessage`
+
+**`OAuth2ControllerTest` の常駐サーバー依存の解消（必須）**
+
+`OAuth2ControllerTest` は MCP プロキシ経由の統合テストのために、`McpServerManger::startMcpServer()` で**実際に常駐 MCP サーバー（SSE / `127.0.0.1:3000`）を起動していた**。in-process 化により起動自体が不要になるため、次を削除する。
+
+- `use BcMcp\Mcp\McpServerManger;`
+- サーバーを起動・停止するセットアップ／ティアダウン（`startMcpServer()` / 停止処理 / ポートへの接続待ちループ / `bc_mcp_server.log` の読み出し）
+
+統合テストは常駐サーバーを起動せず `/bc-mcp` を POST するだけでよい（プロキシが同一プロセスで SDK を実行するため）。この修正を行うまで `OAuth2ControllerTest` はエラー1・失敗2の状態になる。
 
 - [ ] **Step 1: リクエスト変換を検証する失敗するテストを書く**
 

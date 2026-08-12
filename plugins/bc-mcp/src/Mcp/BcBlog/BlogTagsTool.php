@@ -26,6 +26,7 @@ class BlogTagsTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'addBlogTag'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'addBlogTag',
                 description: 'ブログタグを追加します',
                 inputSchema: [
@@ -38,6 +39,7 @@ class BlogTagsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getBlogTags'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getBlogTags',
                 description: 'ブログタグの一覧を取得します',
                 inputSchema: [
@@ -51,6 +53,7 @@ class BlogTagsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getBlogTag'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getBlogTag',
                 description: '指定されたIDのブログタグを取得します',
                 inputSchema: [
@@ -63,6 +66,7 @@ class BlogTagsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'editBlogTag'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'editBlogTag',
                 description: '指定されたIDのブログタグを編集します',
                 inputSchema: [
@@ -76,6 +80,7 @@ class BlogTagsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'deleteBlogTag'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'deleteBlogTag',
                 description: '指定されたIDのブログタグを削除します',
                 inputSchema: [

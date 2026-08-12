@@ -14,11 +14,9 @@ namespace BcMcp\Test\TestCase\Mcp;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Test\Scenario\BlogContentScenario;
-use BcMcp\Mcp\McpServer;
+use BcMcp\Mcp\McpContext;
+use BcMcp\Test\TestSuite\McpTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use PhpMcp\Schema\Request\CallToolRequest;
-use PhpMcp\Server\Dispatcher;
-use PhpMcp\Server\Session\SubscriptionManager;
 
 /**
  * McpServerToolCallTest
@@ -30,50 +28,15 @@ class McpServerToolCallTest extends BcTestCase
 {
 
     use ScenarioAwareTrait;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $dispatcher;
-
-    /**
-     * Set up
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $server = (new McpServer())->getServer();
-        $configuration = $server->getConfiguration();
-        $this->dispatcher = new Dispatcher(
-            $configuration,
-            $server->getRegistry(),
-            new SubscriptionManager($configuration->logger)
-        );
-    }
+    use McpTestTrait;
 
     /**
      * Tear down
      */
     public function tearDown(): void
     {
-        unset($this->dispatcher);
+        McpContext::clear();
         parent::tearDown();
-    }
-
-    /**
-     * tools/call を実行する
-     *
-     * @param string $name ツール名
-     * @param array $arguments 引数
-     * @return array [デコード済みの戻り値, エラーかどうか]
-     */
-    private function callTool(string $name, array $arguments): array
-    {
-        $result = $this->dispatcher->handleToolCall(
-            new CallToolRequest('test-' . $name, $name, $arguments)
-        );
-        $text = $result->content[0]->text ?? '';
-        return [json_decode($text, true) ?? $text, $result->isError];
     }
 
     /**
@@ -93,13 +56,15 @@ class McpServerToolCallTest extends BcTestCase
             '/news/' // url
         );
 
-        [$result, $isError] = $this->callTool('addBlogPost', [
+        // 認証済みの操作者はコンテキストから渡す（リクエストボディは改変しない）
+        McpContext::setLoginUserId(1);
+
+        [$result, $isError] = $this->callMcpTool('addBlogPost', [
             'title' => 'BcMcpについて',
             'name' => 'about-bcmcp',
             'status' => 0,
             'content' => '<p>BcMcpは、baserCMSを外部のAIエージェントから直接操作できるようにするMCP（Model Context Protocol）サーバーです。ブログ記事やカテゴリ、タグの管理はもちろん、カスタムテーブル・カスタムコンテンツ・カスタムエントリー・カスタムリンクといったbaserCMSの柔軟な拡張機能まで、AIアシスタント経由で読み書きできます。</p>',
             'detail' => $this->getDetail(),
-            'loginUserId' => 1,
         ]);
 
         // ツール実行時に例外が発生していない事を確認
@@ -109,6 +74,7 @@ class McpServerToolCallTest extends BcTestCase
         $this->assertEquals('BcMcpについて', $result['title']);
         $this->assertEquals('about-bcmcp', $result['name']);
         $this->assertEquals(1, $result['blog_content_id']);
+        // McpContext 経由でログインユーザーが反映されている事を確認
         $this->assertEquals(1, $result['user_id']);
         $this->assertFalse($result['status']);
     }

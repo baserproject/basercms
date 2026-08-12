@@ -26,6 +26,7 @@ class CustomContentsTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'addCustomContent'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'addCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツを追加します。カスタムコンテンツを追加するにはカスタムテーブルのIDが必要です。事前に作成するか既存のカスタムテーブルIDを指定してください。',
                 inputSchema: [
@@ -56,6 +57,7 @@ class CustomContentsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomContents'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomContents',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツの一覧を取得します',
                 inputSchema: [
@@ -69,6 +71,7 @@ class CustomContentsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'getCustomContent'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'getCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツをIDを指定して取得します',
                 inputSchema: [
@@ -81,6 +84,7 @@ class CustomContentsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'editCustomContent'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'editCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツを編集します',
                 inputSchema: [
@@ -112,6 +116,7 @@ class CustomContentsTool extends BaseMcpTool
             )
             ->tool(
                 callback: [$this, 'deleteCustomContent'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'deleteCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツをIDを指定して削除します',
                 inputSchema: [

@@ -47,6 +47,7 @@ class SearchIndexesTool extends BaseMcpTool
         return $server
             ->tool(
                 callback: [$this, 'search'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'search',
                 description: 'クエリ文字列でサイトを検索します。',
                 inputSchema: [
@@ -58,6 +59,7 @@ class SearchIndexesTool extends BaseMcpTool
                 ]
             )->tool(
                 callback: [$this, 'fetch'],
+                outputSchema: self::OUTPUT_SCHEMA,
                 name: 'fetch',
                 description: '識別子を指定してデータを取得します。',
                 inputSchema: [

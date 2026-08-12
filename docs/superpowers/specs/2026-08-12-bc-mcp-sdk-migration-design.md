@@ -86,6 +86,24 @@ public function tool(
 
 SDK にはクラス単位の一括登録機構（`#[Tool]` 属性やクラススキャン）が存在しないため、「各 `*Tool` クラスが自分のツールを登録する」という現在の構造を維持する。
 
+### 3.1.1 `outputSchema` の宣言（必須）
+
+**SDK はツールのコールバックの戻り値を、`string` または `CallToolResult` に限って受け付ける。** bc-mcp の全ツールは配列（エンティティを配列化したものや一覧）を返すため、そのままでは次のエラーになる。
+
+```
+Invalid tool handler result: expected string or CallToolResult, got array
+```
+
+`outputSchema` を宣言したツールに限り、SDK は戻り値を任意の JSON 値として扱い（SEP-2106）、`structuredContent` に載せつつ JSON を `TextContent` にも出力する。**したがって全ツールの登録に `outputSchema` を指定する。**
+
+個々のツールの戻り値の構造はエンティティの構成に依存するため、`BaseMcpTool::OUTPUT_SCHEMA` に型のみを宣言した共通のスキーマを置き、各登録から参照する。
+
+```php
+protected const OUTPUT_SCHEMA = ['type' => ['object', 'array']];
+```
+
+この方式には、`content[0].text` に JSON が載るため**既存のツールテストと従来のクライアントの互換が保たれる**という利点もある（戻り値を文字列化する方式では、配列を期待している既存テストを大量に書き換える必要が生じる）。
+
 ### 3.2 変更対象
 
 | ファイル | 変更方針 |
