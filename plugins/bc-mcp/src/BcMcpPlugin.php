@@ -146,12 +146,8 @@ class BcMcpPlugin extends BcPlugin
                 $routes->setRouteClass(InflectedRoute::class);
 
                 // MCPサーバー管理
+                // 常駐プロセスを廃止したため、起動・停止・再起動・設定のルートは持たない
                 $routes->get('/mcp-server-manager', ['controller' => 'McpServerManager', 'action' => 'index']);
-                $routes->get('/mcp-server-manager/configure', ['controller' => 'McpServerManager', 'action' => 'configure']);
-                $routes->post('/mcp-server-manager/configure', ['controller' => 'McpServerManager', 'action' => 'configure']);
-                $routes->post('/mcp-server-manager/start', ['controller' => 'McpServerManager', 'action' => 'start']);
-                $routes->post('/mcp-server-manager/stop', ['controller' => 'McpServerManager', 'action' => 'stop']);
-                $routes->post('/mcp-server-manager/restart', ['controller' => 'McpServerManager', 'action' => 'restart']);
             });
         });
 

@@ -4,20 +4,19 @@ declare(strict_types=1);
 namespace BcMcp\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
-use BcMcp\Mcp\McpServerManger;
+use BcMcp\Mcp\McpRequestHandler;
+use BcMcp\Mcp\NegotiationLogger;
+use Cake\Routing\Router;
+use Mcp\Server\Transport\Http\HttpMessage;
 
 /**
  * MCPサーバー管理コントローラー
- * 管理画面からMCPサーバーの起動・停止・設定を行う
+ *
+ * 常駐プロセスを持たないため、死活監視や起動・停止ではなく、接続情報・
+ * 提供しているツール・直近の接続状況を表示する。
  */
 class McpServerManagerController extends BcAdminAppController
 {
-
-    /**
-     * McpServerManger
-     * @var McpServerManger
-     */
-    private McpServerManger $mcpServerManager;
 
     /**
      * 初期化
@@ -26,123 +25,62 @@ class McpServerManagerController extends BcAdminAppController
     {
         parent::initialize();
         $this->set('title', 'MCPサーバー管理');
-        $this->mcpServerManager = new McpServerManger();
     }
 
     /**
-     * MCPサーバー管理画面
+     * MCPサーバー情報
      */
     public function index()
     {
-        $status = $this->mcpServerManager->getServerStatus();
-        $config = $this->mcpServerManager->getServerConfig();
+        $baseUrl = rtrim(Router::url('/', true), '/');
 
-        $this->set(compact('status', 'config'));
+        $this->set([
+            'endpointUrl' => $baseUrl . '/bc-mcp',
+            'authorizationServerMetadataUrl' => $baseUrl . '/.well-known/oauth-authorization-server/bc-mcp',
+            'protectedResourceMetadataUrl' => $baseUrl . '/.well-known/oauth-protected-resource/bc-mcp',
+            'protocolVersions' => ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'],
+            'tools' => $this->getRegisteredTools(),
+            'negotiations' => NegotiationLogger::readRecent(10),
+        ]);
     }
 
     /**
-     * MCPサーバー起動
+     * 登録済みツールを取得する
+     *
+     * SDK はツール一覧を取得する API を持たないため、本番と同じ経路で
+     * tools/list を実行して取得する。テンプレートへの手書きをやめる事で、
+     * ツールを追加すれば表示にも反映される。
+     *
+     * @return array ツールの配列（name / description を含む）
      */
-    public function start()
+    public function getRegisteredTools(): array
     {
-        $this->request->allowMethod(['post']);
+        $request = new HttpMessage(json_encode([
+            'jsonrpc' => '2.0',
+            'id' => 'admin-tools-list',
+            'method' => 'tools/list',
+            'params' => [
+                '_meta' => [
+                    'io.modelcontextprotocol/protocolVersion' => '2026-07-28',
+                    'io.modelcontextprotocol/clientInfo' => [
+                        'name' => 'baserCMS Admin',
+                        'version' => '1.0.0',
+                    ],
+                    'io.modelcontextprotocol/clientCapabilities' => [],
+                ],
+            ],
+        ], JSON_UNESCAPED_UNICODE));
+        $request->setMethod('POST');
+        $request->setUri('/bc-mcp');
+        $request->setHeader('Content-Type', 'application/json');
+        $request->setHeader('Accept', 'application/json');
+        $request->setHeader('MCP-Protocol-Version', '2026-07-28');
+        $request->setHeader('Mcp-Method', 'tools/list');
 
-        try {
-            if ($this->mcpServerManager->isServerRunning()) {
-                $this->BcMessage->setError('MCPサーバーは既に起動しています');
-                return $this->redirect(['action' => 'index']);
-            }
+        $response = (new McpRequestHandler())->handle($request);
+        $decoded = json_decode((string)$response->getBody(), true);
 
-            $config = $this->mcpServerManager->getServerConfig();
-            $result = $this->mcpServerManager->startMcpServer($config);
-
-            if ($result['success']) {
-                $this->BcMessage->setSuccess('MCPサーバーを起動しました');
-            } else {
-                $this->BcMessage->setError('MCPサーバーの起動に失敗しました: ' . $result['message']);
-            }
-
-        } catch (\Exception $e) {
-            $this->BcMessage->setError('MCPサーバーの起動中にエラーが発生しました: ' . $e->getMessage());
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * MCPサーバー停止
-     */
-    public function stop()
-    {
-        $this->request->allowMethod(['post']);
-
-        try {
-            $result = $this->mcpServerManager->stopMcpServer();
-
-            if ($result['success']) {
-                $this->BcMessage->setSuccess('MCPサーバーを停止しました');
-            } else {
-                $this->BcMessage->setError('MCPサーバーの停止に失敗しました: ' . $result['message']);
-            }
-
-        } catch (\Exception $e) {
-            $this->BcMessage->setError('MCPサーバーの停止中にエラーが発生しました: ' . $e->getMessage());
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * MCPサーバー再起動
-     */
-    public function restart()
-    {
-        $this->request->allowMethod(['post']);
-
-        try {
-            // 停止
-            if ($this->mcpServerManager->isServerRunning()) {
-                $this->mcpServerManager->stopMcpServer();
-                sleep(2); // 少し待機
-            }
-
-            // 起動
-            $config = $this->mcpServerManager->getServerConfig();
-            $result = $this->mcpServerManager->startMcpServer($config);
-
-            if ($result['success']) {
-                $this->BcMessage->setSuccess('MCPサーバーを再起動しました');
-            } else {
-                $this->BcMessage->setError('MCPサーバーの再起動に失敗しました: ' . $result['message']);
-            }
-
-        } catch (\Exception $e) {
-            $this->BcMessage->setError('MCPサーバーの再起動中にエラーが発生しました: ' . $e->getMessage());
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * 設定画面
-     */
-    public function configure()
-    {
-        if ($this->request->is(['post', 'put'])) {
-            $data = $this->request->getData();
-
-            try {
-                $this->mcpServerManager->saveServerConfig($data);
-                $this->BcMessage->setSuccess('設定を保存しました');
-                return $this->redirect(['action' => 'index']);
-
-            } catch (\Exception $e) {
-                $this->BcMessage->setError('設定の保存に失敗しました: ' . $e->getMessage());
-            }
-        }
-
-        $config = $this->mcpServerManager->getServerConfig();
-        $this->set(compact('config'));
+        return $decoded['result']['tools'] ?? [];
     }
 
 }

@@ -46,14 +46,14 @@ class McpServerCommandTest extends BcTestCase
         $parser = $command->getOptionParser();
 
         $options = $parser->options();
-        $this->assertArrayHasKey('transport', $options);
-        $this->assertArrayHasKey('host', $options);
-        $this->assertArrayHasKey('port', $options);
-        $this->assertArrayHasKey('config', $options);
+        $this->assertArrayHasKey('connection', $options);
+        $this->assertEquals('default', $options['connection']->defaultValue());
 
-        $this->assertEquals('stdio', $options['transport']->defaultValue());
-        $this->assertEquals('127.0.0.1', $options['host']->defaultValue());
-        $this->assertEquals('3000', $options['port']->defaultValue());
+        // HTTP 経由の利用は /bc-mcp エンドポイントが担うため、
+        // トランスポートやポートの選択肢は持たない
+        $this->assertArrayNotHasKey('transport', $options);
+        $this->assertArrayNotHasKey('host', $options);
+        $this->assertArrayNotHasKey('port', $options);
     }
 
     /**
@@ -66,6 +66,6 @@ class McpServerCommandTest extends BcTestCase
         $command = new McpServerCommand();
         $parser = $command->getOptionParser();
 
-        $this->assertStringContainsString('baserCMS MCP サーバーを起動します', $parser->getDescription());
+        $this->assertStringContainsString('baserCMS MCP サーバーを標準入出力で起動します', $parser->getDescription());
     }
 }

@@ -24,26 +24,7 @@ class McpServerCommand extends Command
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser
-            ->setDescription('baserCMS MCP サーバーを起動します')
-            ->addOption('transport', [
-                'short' => 't',
-                'help' => 'トランスポートタイプ (stdio, sse)',
-                'default' => 'stdio'
-            ])
-            ->addOption('host', [
-                'help' => 'SSEモード時のホスト名',
-                'default' => '127.0.0.1'
-            ])
-            ->addOption('port', [
-                'short' => 'p',
-                'help' => 'SSEモード時のポート番号',
-                'default' => '3000'
-            ])
-            ->addOption('config', [
-                'short' => 'c',
-                'help' => '設定ファイルのパス',
-                'default' => null
-            ])
+            ->setDescription('baserCMS MCP サーバーを標準入出力で起動します')
             ->addOption('connection', [
                 'help' => 'サーバーが使用する DB 接続名。default 以外を指定すると default にエイリアスする（主にテストで test 接続を使う用途）。'
                     . 'プラグインのロード自体は bootstrap で環境変数 BC_CONNECTION により切り替わる。',
@@ -64,10 +45,6 @@ class McpServerCommand extends Command
     {
         $io->out('baserCMS MCP サーバーを起動しています...');
 
-        $transport = $args->getOption('transport');
-        $host = $args->getOption('host');
-        $port = (int)$args->getOption('port');
-        $configPath = $args->getOption('config');
         $connection = (string)$args->getOption('connection');
 
         // default 以外の接続が指定された場合は default にエイリアスし、サーバーの全 DB 操作を
@@ -81,29 +58,11 @@ class McpServerCommand extends Command
             // MCPサーバーのインスタンス作成
             $server = new McpServer();
 
-            // 設定ファイルがある場合は読み込み
-            if ($configPath && file_exists($configPath)) {
-                $config = require $configPath;
-                $server->setConfig($config);
-            }
-
-            $io->out("Transport: {$transport}");
-
-            if ($transport === 'stdio') {
-                $io->out('STDIO モードで起動中...');
-                $io->out('クライアントからの接続を待機しています...');
-
-                // STDIOモードで実行
-                $server->runStdio();
-            } elseif ($transport === 'sse') {
-                $io->out("SSE モードで起動中... (http://{$host}:{$port})");
-
-                // SSEモードで実行
-                $server->runSse($host, $port);
-            } else {
-                $io->error("サポートされていないトランスポートタイプ: {$transport}");
-                return self::CODE_ERROR;
-            }
+            // HTTP 経由の利用は /bc-mcp エンドポイントが担う。常駐プロセスを立てず
+            // CakePHP のリクエスト内で処理するため、コマンドは標準入出力のみを提供する。
+            $io->out('STDIO モードで起動中...');
+            $io->out('クライアントからの接続を待機しています...');
+            $server->runStdio();
 
         } catch (\Exception $e) {
             $io->error('MCPサーバーの起動中にエラーが発生しました:');
