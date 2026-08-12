@@ -5,7 +5,6 @@ namespace BcMcp\Mcp\BcBlog;
 
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Service\BlogTagsServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -17,13 +16,16 @@ class BlogTagsTool extends BaseMcpTool
 {
 
     /**
-     * ブログタグ関連のツールを ServerBuilder に追加
+     * ブログタグ関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addBlogTag'],
+        return $server
+            ->tool(
+                callback: [$this, 'addBlogTag'],
                 name: 'addBlogTag',
                 description: 'ブログタグを追加します',
                 inputSchema: [
@@ -34,8 +36,8 @@ class BlogTagsTool extends BaseMcpTool
                     'required' => ['name']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogTags'],
+            ->tool(
+                callback: [$this, 'getBlogTags'],
                 name: 'getBlogTags',
                 description: 'ブログタグの一覧を取得します',
                 inputSchema: [
@@ -47,8 +49,8 @@ class BlogTagsTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogTag'],
+            ->tool(
+                callback: [$this, 'getBlogTag'],
                 name: 'getBlogTag',
                 description: '指定されたIDのブログタグを取得します',
                 inputSchema: [
@@ -59,8 +61,8 @@ class BlogTagsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editBlogTag'],
+            ->tool(
+                callback: [$this, 'editBlogTag'],
                 name: 'editBlogTag',
                 description: '指定されたIDのブログタグを編集します',
                 inputSchema: [
@@ -72,8 +74,8 @@ class BlogTagsTool extends BaseMcpTool
                     'required' => ['id', 'name']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteBlogTag'],
+            ->tool(
+                callback: [$this, 'deleteBlogTag'],
                 name: 'deleteBlogTag',
                 description: '指定されたIDのブログタグを削除します',
                 inputSchema: [

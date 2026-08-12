@@ -219,5 +219,16 @@ class BaseMcpToolTest extends BcTestCase
  */
 class TestBaseMcpTool extends BaseMcpTool
 {
-    // テスト用のため空実装
+
+    /**
+     * ツールは登録しない（共通処理のテストが目的のため）
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
+     */
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
+    {
+        return $server;
+    }
+
 }

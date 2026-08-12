@@ -11,11 +11,7 @@ use Cake\Log\LogTrait;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use BcMcp\Mcp\BaseMcpTool;
-use BcMcp\Schema\Content\ResourceLinkContent;
-use PhpMcp\Server\ServerBuilder;
-use PhpMcp\Schema\Content\TextContent;
-use PhpMcp\Schema\Content\EmbeddedResource;
-use PhpMcp\Schema\Content\TextResourceContents;
+use Mcp\Types\ResourceLinkContent;
 
 /**
  * 検索インデックスツールクラス
@@ -41,13 +37,16 @@ class SearchIndexesTool extends BaseMcpTool
     }
 
     /**
-     * 検索インデックス用のツールを ServerBuilder に追加
+     * 検索インデックス用のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'search'],
+        return $server
+            ->tool(
+                callback: [$this, 'search'],
                 name: 'search',
                 description: 'クエリ文字列でサイトを検索します。',
                 inputSchema: [
@@ -57,8 +56,8 @@ class SearchIndexesTool extends BaseMcpTool
                     ],
                     'required' => ['query']
                 ]
-            )->withTool(
-                handler: [self::class, 'fetch'],
+            )->tool(
+                callback: [$this, 'fetch'],
                 name: 'fetch',
                 description: '識別子を指定してデータを取得します。',
                 inputSchema: [
@@ -117,12 +116,16 @@ class SearchIndexesTool extends BaseMcpTool
 
             $results = [];
             foreach($entities as $entity) {
-                $results[] = ResourceLinkContent::make(
-                    name: (string)$entity->id,
+                $link = new ResourceLinkContent(
                     uri: Router::url($entity->url, true),
-                    title: $entity->title,
+                    name: (string)$entity->id,
                     description: mb_substr($entity->detail, 0, 200, 'UTF-8'),
                 );
+                // title は MCP 仕様の resource_link では任意項目だが SDK の型が
+                // プロパティを持たないため、追加フィールドとして付与する。
+                // Content::jsonSerialize() が extraFields をマージするため出力に含まれる。
+                $link->title = $entity->title;
+                $results[] = $link;
             }
 
             return $this->createSuccessResponse($results);

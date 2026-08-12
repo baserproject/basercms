@@ -7,7 +7,6 @@ use BcBlog\Service\BlogContentsService;
 use Cake\Core\Configure;
 use BcMcp\Mcp\BaseMcpTool;
 use BcBlog\Service\BlogContentsServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 
 /**
  * ブログコンテンツツールクラス
@@ -18,13 +17,16 @@ class BlogContentsTool extends BaseMcpTool
 {
 
     /**
-     * ブログコンテンツ関連のツールを ServerBuilder に追加
+     * ブログコンテンツ関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addBlogContent'],
+        return $server
+            ->tool(
+                callback: [$this, 'addBlogContent'],
                 name: 'addBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、そのブログコンテンツを追加します',
                 inputSchema: [
@@ -60,8 +62,8 @@ class BlogContentsTool extends BaseMcpTool
                     'required' => ['name', 'title']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editBlogContent'],
+            ->tool(
+                callback: [$this, 'editBlogContent'],
                 name: 'editBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを編集します',
                 inputSchema: [
@@ -98,8 +100,8 @@ class BlogContentsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogContents'],
+            ->tool(
+                callback: [$this, 'getBlogContents'],
                 name: 'getBlogContents',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、そのブログコンテンツの一覧を取得します',
                 inputSchema: [
@@ -112,8 +114,8 @@ class BlogContentsTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogContent'],
+            ->tool(
+                callback: [$this, 'getBlogContent'],
                 name: 'getBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを取得します',
                 inputSchema: [
@@ -124,8 +126,8 @@ class BlogContentsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteBlogContent'],
+            ->tool(
+                callback: [$this, 'deleteBlogContent'],
                 name: 'deleteBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを削除します',
                 inputSchema: [

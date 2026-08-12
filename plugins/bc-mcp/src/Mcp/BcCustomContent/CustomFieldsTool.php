@@ -5,7 +5,6 @@ namespace BcMcp\Mcp\BcCustomContent;
 
 use BcCustomContent\Service\CustomFieldsService;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -52,17 +51,20 @@ class CustomFieldsTool extends BaseMcpTool
     ];
 
     /**
-     * カスタムフィールド関連のツールを ServerBuilder に追加
+     * カスタムフィールド関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
         $typeEnums = array_keys(self::TYPES);
         $validationRuleEnums = array_keys(self::VALIDATION_RULES);
         $typeDescriptions = implode('、', array_map(fn($key) => "{$key}（" . self::TYPES[$key] . "）", $typeEnums));
         $validationRuleDescriptions = implode('、', array_map(fn($key) => "{$key}（" . self::VALIDATION_RULES[$key] . "）", $validationRuleEnums));
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addCustomField'],
+        return $server
+            ->tool(
+                callback: [$this, 'addCustomField'],
                 name: 'addCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを追加します。',
                 inputSchema: [
@@ -88,8 +90,8 @@ class CustomFieldsTool extends BaseMcpTool
                     'required' => ['name', 'title', 'type']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editCustomField'],
+            ->tool(
+                callback: [$this, 'editCustomField'],
                 name: 'editCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを編集します',
                 inputSchema: [
@@ -116,8 +118,8 @@ class CustomFieldsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomFields'],
+            ->tool(
+                callback: [$this, 'getCustomFields'],
                 name: 'getCustomFields',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドの一覧を取得します',
                 inputSchema: [
@@ -130,8 +132,8 @@ class CustomFieldsTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomField'],
+            ->tool(
+                callback: [$this, 'getCustomField'],
                 name: 'getCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して取得します',
                 inputSchema: [
@@ -142,8 +144,8 @@ class CustomFieldsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteCustomField'],
+            ->tool(
+                callback: [$this, 'deleteCustomField'],
                 name: 'deleteCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して削除します',
                 inputSchema: [

@@ -3,7 +3,6 @@
 namespace BcMcp\Mcp\BaserCore;
 
 use BcMcp\Mcp\BaseMcpTool;
-use PhpMcp\Server\ServerBuilder;
 
 /**
  * ファイルアップロード用のMCPツール
@@ -30,13 +29,16 @@ class FileUploadTool extends BaseMcpTool
     }
 
     /**
-     * 検索インデックス用のツールを ServerBuilder に追加
+     * 検索インデックス用のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'sendFileChunk'],
+        return $server
+            ->tool(
+                callback: [$this, 'sendFileChunk'],
                 name: 'sendFileChunk',
                 description: 'ファイルをチャンク分割して送信します。大きなファイルを小さな部分に分けて段階的にアップロードするために使用します。分割したチャンクは30KB以下にしてください。',
                 inputSchema: [

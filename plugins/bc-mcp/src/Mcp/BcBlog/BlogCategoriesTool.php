@@ -6,7 +6,6 @@ namespace BcMcp\Mcp\BcBlog;
 use BcBlog\Service\BlogCategoriesService;
 use BcMcp\Mcp\BaseMcpTool;
 use BcBlog\Service\BlogCategoriesServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 
 /**
  * ブログカテゴリツールクラス
@@ -17,13 +16,16 @@ class BlogCategoriesTool extends BaseMcpTool
 {
 
     /**
-     * ブログカテゴリ関連のツールを ServerBuilder に追加
+     * ブログカテゴリ関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addBlogCategory'],
+        return $server
+            ->tool(
+                callback: [$this, 'addBlogCategory'],
                 name: 'addBlogCategory',
                 description: 'ブログカテゴリを追加します',
                 inputSchema: [
@@ -38,8 +40,8 @@ class BlogCategoriesTool extends BaseMcpTool
                     'required' => ['title']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogCategories'],
+            ->tool(
+                callback: [$this, 'getBlogCategories'],
                 name: 'getBlogCategories',
                 description: 'ブログカテゴリの一覧を取得します',
                 inputSchema: [
@@ -53,8 +55,8 @@ class BlogCategoriesTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogCategory'],
+            ->tool(
+                callback: [$this, 'getBlogCategory'],
                 name: 'getBlogCategory',
                 description: '指定されたIDのブログカテゴリを取得します',
                 inputSchema: [
@@ -65,8 +67,8 @@ class BlogCategoriesTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editBlogCategory'],
+            ->tool(
+                callback: [$this, 'editBlogCategory'],
                 name: 'editBlogCategory',
                 description: '指定されたIDのブログカテゴリを編集します',
                 inputSchema: [
@@ -82,8 +84,8 @@ class BlogCategoriesTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteBlogCategory'],
+            ->tool(
+                callback: [$this, 'deleteBlogCategory'],
                 name: 'deleteBlogCategory',
                 description: '指定されたIDのブログカテゴリを削除します',
                 inputSchema: [

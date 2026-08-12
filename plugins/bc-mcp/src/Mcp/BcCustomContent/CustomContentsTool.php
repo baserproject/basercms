@@ -5,7 +5,6 @@ namespace BcMcp\Mcp\BcCustomContent;
 
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -17,13 +16,16 @@ class CustomContentsTool extends BaseMcpTool
 {
 
     /**
-     * カスタムコンテンツ関連のツールを ServerBuilder に追加
+     * カスタムコンテンツ関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addCustomContent'],
+        return $server
+            ->tool(
+                callback: [$this, 'addCustomContent'],
                 name: 'addCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツを追加します。カスタムコンテンツを追加するにはカスタムテーブルのIDが必要です。事前に作成するか既存のカスタムテーブルIDを指定してください。',
                 inputSchema: [
@@ -52,8 +54,8 @@ class CustomContentsTool extends BaseMcpTool
                     'required' => ['name', 'title', 'customTableId']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomContents'],
+            ->tool(
+                callback: [$this, 'getCustomContents'],
                 name: 'getCustomContents',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツの一覧を取得します',
                 inputSchema: [
@@ -65,8 +67,8 @@ class CustomContentsTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomContent'],
+            ->tool(
+                callback: [$this, 'getCustomContent'],
                 name: 'getCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツをIDを指定して取得します',
                 inputSchema: [
@@ -77,8 +79,8 @@ class CustomContentsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editCustomContent'],
+            ->tool(
+                callback: [$this, 'editCustomContent'],
                 name: 'editCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツを編集します',
                 inputSchema: [
@@ -108,8 +110,8 @@ class CustomContentsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteCustomContent'],
+            ->tool(
+                callback: [$this, 'deleteCustomContent'],
                 name: 'deleteCustomContent',
                 description: 'カスタムテーブルと紐づくカスタムコンテンツをIDを指定して削除します',
                 inputSchema: [

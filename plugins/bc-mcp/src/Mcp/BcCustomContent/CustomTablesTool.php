@@ -7,7 +7,6 @@ use BcCustomContent\Service\CustomFieldsService;
 use BcCustomContent\Service\CustomFieldsServiceInterface;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -19,13 +18,16 @@ class CustomTablesTool extends BaseMcpTool
 {
 
     /**
-     * カスタムテーブル関連のツールを ServerBuilder に追加
+     * カスタムテーブル関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addCustomTable'],
+        return $server
+            ->tool(
+                callback: [$this, 'addCustomTable'],
                 name: 'addCustomTable',
                 description: 'カスタムテーブルを追加し、指定されたカスタムフィールドを関連付けます。フィールドを関連付けるためには、事前にカスタムフィールドが作成されている必要があります。',
                 inputSchema: [
@@ -45,8 +47,8 @@ class CustomTablesTool extends BaseMcpTool
                     'required' => ['title']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editCustomTable'],
+            ->tool(
+                callback: [$this, 'editCustomTable'],
                 name: 'editCustomTable',
                 description: '指定されたIDのカスタムテーブルを編集します',
                 inputSchema: [
@@ -67,8 +69,8 @@ class CustomTablesTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomTables'],
+            ->tool(
+                callback: [$this, 'getCustomTables'],
                 name: 'getCustomTables',
                 description: 'カスタムテーブルの一覧を取得します',
                 inputSchema: [
@@ -78,8 +80,8 @@ class CustomTablesTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomTable'],
+            ->tool(
+                callback: [$this, 'getCustomTable'],
                 name: 'getCustomTable',
                 description: '指定されたIDのカスタムテーブルを取得します',
                 inputSchema: [
@@ -90,8 +92,8 @@ class CustomTablesTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteCustomTable'],
+            ->tool(
+                callback: [$this, 'deleteCustomTable'],
                 name: 'deleteCustomTable',
                 description: '指定されたIDのカスタムテーブルを削除します',
                 inputSchema: [

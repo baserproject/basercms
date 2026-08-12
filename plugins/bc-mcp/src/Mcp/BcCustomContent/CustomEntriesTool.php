@@ -7,7 +7,6 @@ use BcCcFile\Utility\BcCcFileUtil;
 use BcCustomContent\Service\CustomEntriesService;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
 use Cake\ORM\TableRegistry;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 use InvalidArgumentException;
 
@@ -19,13 +18,16 @@ use InvalidArgumentException;
 class CustomEntriesTool extends BaseMcpTool
 {
     /**
-     * カスタムエントリー関連のツールを ServerBuilder に追加
+     * カスタムエントリー関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addCustomEntry'],
+        return $server
+            ->tool(
+                callback: [$this, 'addCustomEntry'],
                 name: 'addCustomEntry',
                 description: 'カスタムエントリーを追加します。カスタムエントリーを追加するには、カスタムテーブルが必要です。事前に作成するか既存のカスタムテーブルIDを指定してください。フロントエンドに表示させるには、カスタムテーブルがカスタムコンテンツと紐づいている必要があります。',
                 inputSchema: [
@@ -49,8 +51,8 @@ class CustomEntriesTool extends BaseMcpTool
                     'required' => ['customTableId']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editCustomEntry'],
+            ->tool(
+                callback: [$this, 'editCustomEntry'],
                 name: 'editCustomEntry',
                 description: '指定されたIDのカスタムエントリーを編集します',
                 inputSchema: [
@@ -75,8 +77,8 @@ class CustomEntriesTool extends BaseMcpTool
                     'required' => ['customTableId', 'id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomEntries'],
+            ->tool(
+                callback: [$this, 'getCustomEntries'],
                 name: 'getCustomEntries',
                 description: 'カスタムエントリーの一覧を取得します',
                 inputSchema: [
@@ -90,8 +92,8 @@ class CustomEntriesTool extends BaseMcpTool
                     'required' => ['customTableId']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomEntry'],
+            ->tool(
+                callback: [$this, 'getCustomEntry'],
                 name: 'getCustomEntry',
                 description: '指定されたIDのカスタムエントリーを取得します',
                 inputSchema: [
@@ -103,8 +105,8 @@ class CustomEntriesTool extends BaseMcpTool
                     'required' => ['customTableId', 'id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteCustomEntry'],
+            ->tool(
+                callback: [$this, 'deleteCustomEntry'],
                 name: 'deleteCustomEntry',
                 description: '指定されたIDのカスタムエントリーを削除します',
                 inputSchema: [

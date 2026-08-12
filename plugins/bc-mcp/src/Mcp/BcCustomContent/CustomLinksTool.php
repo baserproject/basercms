@@ -5,7 +5,6 @@ namespace BcMcp\Mcp\BcCustomContent;
 
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -17,13 +16,16 @@ class CustomLinksTool extends BaseMcpTool
 {
 
     /**
-     * カスタムリンク関連のツールを ServerBuilder に追加
+     * カスタムリンク関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'addCustomLink'],
+        return $server
+            ->tool(
+                callback: [$this, 'addCustomLink'],
                 name: 'addCustomLink',
                 description: 'カスタムリンクを追加します',
                 inputSchema: [
@@ -53,8 +55,8 @@ class CustomLinksTool extends BaseMcpTool
                     'required' => ['name', 'title', 'customTableId', 'customFieldId']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomLinks'],
+            ->tool(
+                callback: [$this, 'getCustomLinks'],
                 name: 'getCustomLinks',
                 description: 'カスタムリンクの一覧を取得します',
                 inputSchema: [
@@ -69,8 +71,8 @@ class CustomLinksTool extends BaseMcpTool
                     'required' => ['customTableId']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getCustomLink'],
+            ->tool(
+                callback: [$this, 'getCustomLink'],
                 name: 'getCustomLink',
                 description: '指定されたIDのカスタムリンクを取得します',
                 inputSchema: [
@@ -81,8 +83,8 @@ class CustomLinksTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editCustomLink'],
+            ->tool(
+                callback: [$this, 'editCustomLink'],
                 name: 'editCustomLink',
                 description: '指定されたIDのカスタムリンクを編集します',
                 inputSchema: [
@@ -113,8 +115,8 @@ class CustomLinksTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteCustomLink'],
+            ->tool(
+                callback: [$this, 'deleteCustomLink'],
                 name: 'deleteCustomLink',
                 description: '指定されたIDのカスタムリンクを削除します',
                 inputSchema: [

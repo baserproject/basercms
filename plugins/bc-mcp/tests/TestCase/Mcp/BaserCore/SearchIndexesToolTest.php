@@ -88,7 +88,14 @@ class SearchIndexesToolTest extends BcTestCase
         $result = $this->searchIndexesTool->search("詳細");
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
-        $this->assertInstanceOf('BcMcp\Schema\Content\ResourceLinkContent', $result[0]);
+        $this->assertInstanceOf('Mcp\Types\ResourceLinkContent', $result[0]);
+
+        // title は SDK の型がプロパティを持たないため追加フィールドとして付与している。
+        // JSON 出力に含まれる事を確認する
+        $serialized = $result[0]->jsonSerialize();
+        $this->assertEquals('resource_link', $serialized['type']);
+        $this->assertEquals('テストタイトル2', $serialized['title']);
+        $this->assertEquals('2', $serialized['name']);
     }
 
 }

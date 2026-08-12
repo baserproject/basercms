@@ -25,7 +25,7 @@ use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
-use PhpMcp\Server\ServerBuilder;
+use Mcp\Server\McpServer;
 
 /**
  * BcMcp\Mcp\BcCustomContent\CustomEntriesTool Test Case
@@ -510,20 +510,19 @@ class CustomEntriesToolTest extends BcTestCase
     }
 
     /**
-     * Test addToolsToBuilder method - ServerBuilderへのツール追加テスト
+     * Test registerTools method - サーバーへのツール登録テスト
      *
      * @return void
      */
-    public function testAddToolsToBuilder()
+    public function testRegisterTools()
     {
-        // ServerBuilderがfinalクラスのため、実際のインスタンスを使用
-        $serverBuilder = new ServerBuilder();
+        $server = new McpServer('test');
 
-        $result = $this->CustomEntriesTool->addToolsToBuilder($serverBuilder);
+        $result = $this->CustomEntriesTool->registerTools($server);
 
-        $this->assertInstanceOf(ServerBuilder::class, $result);
-        // ServerBuilderが返されることを確認（チェーンメソッドパターン）
-        $this->assertSame($serverBuilder, $result);
+        // メソッドチェーンのため同じインスタンスが返る
+        // 登録されたツール名の検証は tools/list 経由の McpServerTest が担う
+        $this->assertSame($server, $result);
     }
 
     /**
