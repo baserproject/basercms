@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** bc-mcp の MCP SDK を `logiscape/mcp-sdk-php` v2 へ移植し、Modern（`2026-07-28`）と Legacy（`initialize` 方式）の両世代を同時に提供する Dual-era サーバーにする。あわせて常駐 MCP サーバープロセスを廃止し、CakePHP のリクエスト内で処理を完結させる。
+**Goal:** bc-mcp の MCP SDK を `logiscape/mcp-sdk-php` v2 へ移植し、Modern（`2026-07-28`）と Legacy（`initialize` 方式）の両世代を同時に提供する Dual-era サーバーにする。あわせて常駐 MCP サーバープロセスを廃止し、CakePHP のリクエスト内で処理を完結させる。移植の完了後、固定ページ（Pages）ツールを新規追加する。
 
 **Architecture:** `McpRequestHandler` が SDK の `HttpServerRunner` をプロセス内で実行する単一の入口になる。`McpProxyController` は認証・認可・`Origin` 検証・ロギングと、CakePHP のリクエスト／レスポンスと SDK の `HttpMessage` の相互変換に責務を絞る。プロトコルの世代判定・`server/discover`・必須ヘッダ検証・`resultType` / `ttlMs` / `cacheScope` の付与はすべて SDK が担う。
 
@@ -2348,4 +2348,493 @@ Expected: 例外が発生しないこと。`timeout` による終了は正常。
 ```bash
 git add docs/superpowers/specs/2026-08-12-bc-mcp-sdk-migration-design.md
 git commit -m "MCP 2026-07-28 対応の完了条件を確認して設計書に記録"
+```
+
+---
+
+### Task 13: 固定ページ（Pages）ツールの追加
+
+bc-mcp には固定ページを操作するツールが無いため新規に追加する。SDK 移植の完了後に着手することで、新 SDK の作法で最初から書ける。
+
+**Files:**
+- Create: `plugins/bc-mcp/src/Mcp/BaserCore/PagesTool.php`
+- Modify: `plugins/bc-mcp/src/Mcp/BaserCore/BaserCoreServer.php`
+- Test: `plugins/bc-mcp/tests/TestCase/Mcp/BaserCore/PagesToolTest.php`
+
+**Interfaces:**
+- Consumes: `BaseMcpTool::registerTools()` / `resolveLoginUserId()` / `executeWithErrorHandling()`（Task 3）、`McpTestTrait::callMcpTool()`（Task 2）
+- Produces:
+  - `BcMcp\Mcp\BaserCore\PagesTool::registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer`
+  - `PagesTool::getPages()` / `getPage()` / `addPage()` / `editPage()` / `deletePage()`
+  - `PagesTool::getPermissionUrl($action, $args = [])`（static）
+
+**データ構造の注意点**
+
+固定ページは `pages` と `contents` の複合構造で、名前が紛らわしい。
+
+| 保存先 | 意味 |
+|---|---|
+| `pages.contents` | **ページ本文**（HTML） |
+| `pages.content`（`Contents` アソシエーション） | **コンテンツ情報**（タイトル・URL・公開状態・親フォルダ） |
+
+`PagesService::create()` に渡す構造（`baser-core` の `PagesControllerTest::testAdd()` で確認済み）。
+
+```php
+[
+    'contents' => '<p>本文</p>',
+    'page_template' => '',
+    'content' => [
+        'title' => 'ページタイトル',
+        'name' => 'about',
+        'parent_id' => 1,
+        'site_id' => 1,
+        'plugin' => 'BaserCore',
+        'type' => 'Page',
+        'self_status' => true,
+    ],
+]
+```
+
+`plugin` = `'BaserCore'`、`type` = `'Page'` は固定値であり、**ツール側で自動的に補う**（AI クライアントに指定させない）。
+
+- [ ] **Step 1: 失敗するテストを書く**
+
+Create: `plugins/bc-mcp/tests/TestCase/Mcp/BaserCore/PagesToolTest.php`
+
+```php
+<?php
+declare(strict_types=1);
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+namespace BcMcp\Test\TestCase\Mcp\BaserCore;
+
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BcMcp\Mcp\BaserCore\PagesTool;
+use BcMcp\Mcp\McpContext;
+use BcMcp\Test\TestSuite\McpTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+
+/**
+ * PagesToolTest
+ */
+class PagesToolTest extends BcTestCase
+{
+
+    use ScenarioAwareTrait;
+    use McpTestTrait;
+
+    /**
+     * Tear down
+     */
+    public function tearDown(): void
+    {
+        McpContext::clear();
+        parent::tearDown();
+    }
+
+    /**
+     * test addPage で固定ページが登録できる
+     */
+    public function testAddPage()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        McpContext::setLoginUserId(1);
+
+        [$result, $isError] = $this->callMcpTool('addPage', [
+            'title' => '会社概要',
+            'name' => 'about',
+            'content' => '<p>会社概要のページです。</p>',
+            'status' => 1,
+        ]);
+
+        $this->assertFalse($isError, 'ツールの実行に失敗しました。' . (is_string($result)? $result : json_encode($result, JSON_UNESCAPED_UNICODE)));
+        $this->assertArrayHasKey('id', $result, json_encode($result, JSON_UNESCAPED_UNICODE));
+        // 本文は pages.contents に保存される
+        $this->assertEquals('<p>会社概要のページです。</p>', $result['contents']);
+        // タイトルと URL はコンテンツ情報に保存される
+        $this->assertEquals('会社概要', $result['content']['title']);
+        $this->assertEquals('about', $result['content']['name']);
+        // plugin と type はツール側で補われる
+        $this->assertEquals('BaserCore', $result['content']['plugin']);
+        $this->assertEquals('Page', $result['content']['type']);
+    }
+
+    /**
+     * test editPage で固定ページが編集できる
+     */
+    public function testEditPage()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        McpContext::setLoginUserId(1);
+
+        [$added] = $this->callMcpTool('addPage', [
+            'title' => '編集前',
+            'name' => 'before-edit',
+            'content' => '<p>編集前の本文</p>',
+        ]);
+
+        [$result, $isError] = $this->callMcpTool('editPage', [
+            'id' => $added['id'],
+            'title' => '編集後',
+            'content' => '<p>編集後の本文</p>',
+        ]);
+
+        $this->assertFalse($isError, 'ツールの実行に失敗しました。' . (is_string($result)? $result : json_encode($result, JSON_UNESCAPED_UNICODE)));
+        $this->assertEquals('編集後', $result['content']['title']);
+        $this->assertEquals('<p>編集後の本文</p>', $result['contents']);
+        // 指定しなかった項目は変更されない
+        $this->assertEquals('before-edit', $result['content']['name']);
+    }
+
+    /**
+     * test getPages と getPage で固定ページを取得できる
+     */
+    public function testGetPages()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        McpContext::setLoginUserId(1);
+
+        [$added] = $this->callMcpTool('addPage', [
+            'title' => '取得テスト',
+            'name' => 'get-test',
+            'content' => '<p>取得テストの本文</p>',
+        ]);
+
+        [$list, $listError] = $this->callMcpTool('getPages', ['limit' => 10]);
+        $this->assertFalse($listError, is_string($list)? $list : json_encode($list, JSON_UNESCAPED_UNICODE));
+        $this->assertNotEmpty($list);
+
+        [$single, $singleError] = $this->callMcpTool('getPage', ['id' => $added['id']]);
+        $this->assertFalse($singleError, is_string($single)? $single : json_encode($single, JSON_UNESCAPED_UNICODE));
+        $this->assertEquals('取得テスト', $single['content']['title']);
+    }
+
+    /**
+     * test deletePage で固定ページが削除できる
+     */
+    public function testDeletePage()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        McpContext::setLoginUserId(1);
+
+        [$added] = $this->callMcpTool('addPage', [
+            'title' => '削除対象',
+            'name' => 'to-be-deleted',
+            'content' => '<p>削除対象の本文</p>',
+        ]);
+
+        [$result, $isError] = $this->callMcpTool('deletePage', ['id' => $added['id']]);
+        $this->assertFalse($isError, is_string($result)? $result : json_encode($result, JSON_UNESCAPED_UNICODE));
+
+        [$notFound, $notFoundError] = $this->callMcpTool('getPage', ['id' => $added['id']]);
+        $this->assertTrue($notFoundError, '削除したページが取得できてしまいました。');
+    }
+
+    /**
+     * test 権限チェック用のURL
+     */
+    public function testGetPermissionUrl()
+    {
+        $this->assertEquals(
+            ['POST' => '/baser-core/pages/add.json'],
+            PagesTool::getPermissionUrl('addPage')
+        );
+        $this->assertEquals(
+            ['POST' => '/baser-core/pages/edit/3.json'],
+            PagesTool::getPermissionUrl('editPage', ['id' => 3])
+        );
+        $this->assertEquals(
+            ['GET' => '/baser-core/pages/index.json'],
+            PagesTool::getPermissionUrl('getPages')
+        );
+        // id が無い編集・削除は権限チェックの対象にできない
+        $this->assertFalse(PagesTool::getPermissionUrl('editPage'));
+    }
+
+}
+```
+
+- [ ] **Step 2: テストを実行して失敗を確認する**
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage plugins/bc-mcp/tests/TestCase/Mcp/BaserCore/PagesToolTest.php 2>&1 | tail -20'`
+
+Expected: FAIL（`BcMcp\Mcp\BaserCore\PagesTool` が存在しない）。
+
+- [ ] **Step 3: `PagesTool` を実装する**
+
+Create: `plugins/bc-mcp/src/Mcp/BaserCore/PagesTool.php`
+
+既存の `BlogPostsTool` の構成（`registerTools()` → `getPermissionUrl()` → 各アクションメソッド）を踏襲する。`executeWithErrorHandling()` / `createSuccessResponse()` / `resolveLoginUserId()` は `BaseMcpTool` のものを使う。
+
+`inputSchema` は次のとおり（`loginUserId` は公開しない）。
+
+```php
+    /**
+     * 固定ページ関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
+     */
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
+    {
+        return $server
+            ->tool(
+                name: 'getPages',
+                description: '固定ページの一覧を取得します',
+                callback: [$this, 'getPages'],
+                inputSchema: [
+                    'type' => 'object',
+                    'properties' => [
+                        'keyword' => ['type' => 'string', 'description' => '検索キーワード（本文を対象に検索）'],
+                        'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は全て）'],
+                        'status' => ['type' => 'number', 'description' => '公開ステータス（0: 非公開, 1: 公開）（省略時は全て）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
+                    ]
+                ]
+            )
+            ->tool(
+                name: 'getPage',
+                description: '指定されたIDの固定ページを取得します',
+                callback: [$this, 'getPage'],
+                inputSchema: [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'number', 'description' => '固定ページID（必須）'],
+                    ],
+                    'required' => ['id']
+                ]
+            )
+            ->tool(
+                name: 'addPage',
+                description: '固定ページを追加します',
+                callback: [$this, 'addPage'],
+                inputSchema: [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'description' => 'ページタイトル（必須）'],
+                        'content' => ['type' => 'string', 'description' => 'ページ本文、マークダウン不可、HTML推奨'],
+                        'name' => ['type' => 'string', 'description' => 'URLのスラッグ（省略時は自動採番）'],
+                        'parentId' => ['type' => 'number', 'description' => '親フォルダのコンテンツID（省略時はサイトルート）'],
+                        'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は1）'],
+                        'status' => ['type' => 'number', 'description' => '公開ステータス（0: 非公開, 1: 公開）（省略時は0）'],
+                        'description' => ['type' => 'string', 'description' => 'ページの説明'],
+                        'publishBegin' => ['type' => 'string', 'format' => 'date-time', 'description' => '公開開始日時（省略時はなし）'],
+                        'publishEnd' => ['type' => 'string', 'format' => 'date-time', 'description' => '公開終了日時（省略時はなし）'],
+                        'pageTemplate' => ['type' => 'string', 'description' => 'ページテンプレート名（省略時はデフォルト）'],
+                        'eyeCatch' => ['type' => 'string', 'description' => 'アイキャッチ画像。外部画像URLを直接指定'],
+                    ],
+                    'required' => ['title']
+                ]
+            )
+            ->tool(
+                name: 'editPage',
+                description: '固定ページを編集します',
+                callback: [$this, 'editPage'],
+                inputSchema: [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'number', 'description' => '固定ページID（必須）'],
+                        'title' => ['type' => 'string', 'description' => 'ページタイトル'],
+                        'content' => ['type' => 'string', 'description' => 'ページ本文、マークダウン不可、HTML推奨'],
+                        'name' => ['type' => 'string', 'description' => 'URLのスラッグ'],
+                        'parentId' => ['type' => 'number', 'description' => '親フォルダのコンテンツID'],
+                        'status' => ['type' => 'number', 'description' => '公開ステータス（0: 非公開, 1: 公開）'],
+                        'description' => ['type' => 'string', 'description' => 'ページの説明'],
+                        'publishBegin' => ['type' => 'string', 'format' => 'date-time', 'description' => '公開開始日時'],
+                        'publishEnd' => ['type' => 'string', 'format' => 'date-time', 'description' => '公開終了日時'],
+                        'pageTemplate' => ['type' => 'string', 'description' => 'ページテンプレート名'],
+                        'eyeCatch' => ['type' => 'string', 'description' => 'アイキャッチ画像。外部画像URLを直接指定'],
+                    ],
+                    'required' => ['id']
+                ]
+            )
+            ->tool(
+                name: 'deletePage',
+                description: '固定ページを削除します',
+                callback: [$this, 'deletePage'],
+                inputSchema: [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'number', 'description' => '固定ページID（必須）'],
+                    ],
+                    'required' => ['id']
+                ]
+            );
+    }
+```
+
+`getPermissionUrl()` は次のとおり。
+
+```php
+    /**
+     * 権限チェック用のURLを取得する
+     *
+     * @param string $action アクション名
+     * @param array $args 引数
+     * @return array|false
+     */
+    public static function getPermissionUrl($action, $args = [])
+    {
+        switch ($action) {
+            case 'addPage':
+                return ['POST' => '/baser-core/pages/add.json'];
+            case 'editPage':
+                if (empty($args['id'])) return false;
+                return ['POST' => "/baser-core/pages/edit/{$args['id']}.json"];
+            case 'deletePage':
+                if (empty($args['id'])) return false;
+                return ['POST' => "/baser-core/pages/delete/{$args['id']}.json"];
+            case 'getPages':
+                return ['GET' => '/baser-core/pages/index.json'];
+            case 'getPage':
+                if (empty($args['id'])) return false;
+                return ['GET' => "/baser-core/pages/view/{$args['id']}.json"];
+            default:
+                return false;
+        }
+    }
+```
+
+`addPage()` はフラットな引数を `PagesService::create()` の入れ子構造へ組み立てる。**引数の `$content`（本文）と保存先の `content`（コンテンツ情報）の対応関係をコメントで明示する。**
+
+```php
+    /**
+     * 固定ページを追加する
+     *
+     * 固定ページは pages テーブルと contents テーブルの複合構造である点に注意する。
+     * 引数の $content（ページ本文）は pages.contents へ、タイトルや URL などは
+     * content キー（Contents アソシエーション）へ格納する。
+     *
+     * @param string $title ページタイトル
+     * @param string|null $content ページ本文
+     * @param string|null $name URLのスラッグ
+     * @param int|null $parentId 親フォルダのコンテンツID
+     * @param int|null $siteId サイトID
+     * @param int|null $status 公開ステータス
+     * @param string|null $description 説明
+     * @param string|null $publishBegin 公開開始日時
+     * @param string|null $publishEnd 公開終了日時
+     * @param string|null $pageTemplate ページテンプレート
+     * @param string|null $eyeCatch アイキャッチ画像
+     * @param int|null $loginUserId ログインユーザーID
+     * @return array
+     */
+    public function addPage(
+        string $title,
+        ?string $content = null,
+        ?string $name = null,
+        ?int $parentId = null,
+        ?int $siteId = null,
+        ?int $status = 0,
+        ?string $description = null,
+        ?string $publishBegin = null,
+        ?string $publishEnd = null,
+        ?string $pageTemplate = null,
+        ?string $eyeCatch = null,
+        ?int $loginUserId = null
+    ): array
+    {
+        return $this->executeWithErrorHandling(function() use (
+            $title, $content, $name, $parentId, $siteId, $status,
+            $description, $publishBegin, $publishEnd, $pageTemplate, $eyeCatch, $loginUserId
+        ) {
+            /** @var \BaserCore\Service\PagesService $pagesService */
+            $pagesService = $this->getService(PagesServiceInterface::class);
+
+            $contentData = [
+                'title' => $title,
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'site_id' => $siteId ?? 1,
+                'parent_id' => $parentId ?? $this->getSiteRootContentId($siteId ?? 1),
+                'self_status' => (bool)$status,
+            ];
+            if ($name !== null) $contentData['name'] = $name;
+            if ($description !== null) $contentData['description'] = $description;
+            if ($publishBegin !== null) $contentData['publish_begin'] = $publishBegin;
+            if ($publishEnd !== null) $contentData['publish_end'] = $publishEnd;
+            if ($eyeCatch !== null) $contentData['eyecatch'] = $this->processImageUpload($eyeCatch);
+
+            $postData = [
+                // ページ本文は pages.contents
+                'contents' => $content ?? '',
+                'content' => $contentData,
+            ];
+            if ($pageTemplate !== null) $postData['page_template'] = $pageTemplate;
+
+            $page = $pagesService->create($postData);
+
+            return $this->createSuccessResponse(
+                $page->toArray(),
+                [],
+                '固定ページ「' . $title . '」を追加しました。',
+                $this->resolveLoginUserId($loginUserId)
+            );
+        });
+    }
+```
+
+`getSiteRootContentId()` は親フォルダ未指定時にサイトルートのコンテンツIDを引くためのヘルパ。`ContentsService` または `Contents` テーブルの `site_root` フラグから取得する。取得方法は `baser-core` の `ContentsTable`／`ContentFoldersService` を確認して決める。
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && grep -rn "site_root" plugins/baser-core/src/Model/Table/ContentsTable.php | head -5'`
+
+`editPage()` は `PagesService::get()` で対象を取得し、指定された項目のみを差分で `update()` に渡す。`deletePage()` は `PagesService::delete()` を呼ぶ。`getPages()` は `getIndex()`、`getPage()` は `get()` を使い、いずれも `content` を含めて返す（`contain` の指定が必要か確認する）。
+
+- [ ] **Step 4: `BaserCoreServer` にツールクラスを登録する**
+
+Modify: `plugins/bc-mcp/src/Mcp/BaserCore/BaserCoreServer.php`
+
+`getToolClasses()` の配列に `PagesTool::class` を追加する。
+
+- [ ] **Step 5: 構文チェック**
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && php -l plugins/bc-mcp/src/Mcp/BaserCore/PagesTool.php && php -l plugins/bc-mcp/src/Mcp/BaserCore/BaserCoreServer.php'`
+
+Expected: `No syntax errors detected`。
+
+- [ ] **Step 6: テストを実行して通ることを確認する**
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage plugins/bc-mcp/tests/TestCase/Mcp/BaserCore/PagesToolTest.php 2>&1 | tail -30'`
+
+Expected: PASS（5テスト）。
+
+- [ ] **Step 7: tools/list に固定ページツールが並ぶことを確認する**
+
+Modify: `plugins/bc-mcp/tests/TestCase/Mcp/McpServerTest.php`
+
+`testToolsListContainsAllTools()` に assertion を追加する。
+
+```php
+        // BaserCore（固定ページ）
+        $this->assertContains('getPages', $names);
+        $this->assertContains('getPage', $names);
+        $this->assertContains('addPage', $names);
+        $this->assertContains('editPage', $names);
+        $this->assertContains('deletePage', $names);
+```
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage plugins/bc-mcp/tests/TestCase/Mcp/McpServerTest.php 2>&1 | tail -20'`
+
+Expected: PASS。
+
+- [ ] **Step 8: プラグイン全体のテストを実行する**
+
+Run: `docker exec basercms sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage --testsuite BcMcp 2>&1 | tail -30'`
+
+Expected: PASS。
+
+- [ ] **Step 9: コミット**
+
+```bash
+git add plugins/bc-mcp/src/Mcp/BaserCore/PagesTool.php plugins/bc-mcp/src/Mcp/BaserCore/BaserCoreServer.php plugins/bc-mcp/tests/TestCase/Mcp/BaserCore/PagesToolTest.php plugins/bc-mcp/tests/TestCase/Mcp/McpServerTest.php
+git commit -m "固定ページの取得・作成・編集・削除ツールを追加"
 ```

@@ -19,6 +19,7 @@ MCP 仕様 `2026-07-28`（ステートレスコア）に対応し、**Modern（`
 - MCP SDK を `php-mcp/server` から `logiscape/mcp-sdk-php` v2 へ移植し、Dual-era 対応を得る
 - **常駐 MCP サーバープロセスの廃止（in-process 化）** — 移植先 SDK が listen 型サーバーを提供しないため必然（第11章）
 - SDK では解決しない独立項目の対応 — `Origin` ヘッダ検証、`iss` パラメータ付与、ネゴシエーションのロギング
+- **固定ページ（Pages）ツールの新規追加** — 取得・作成・編集・削除の5ツール（第13章）
 - 上記に対する自動テスト（Modern / Legacy 両世代の疎通を含む）
 
 **含まない**
@@ -281,7 +282,77 @@ PHP 要件は問題ない。SDK は `php: >=8.1` / `ext-curl` / `ext-json` / `ps
 
 したがって in-process 化は機能を落とさず、第2章の表に挙げた運用上の問題を解消する。
 
-## 12. 完了条件
+## 12. 固定ページ（Pages）ツールの追加
+
+bc-mcp には現在、ブログ・カスタムコンテンツ・検索インデックス・ファイルアップロードのツールはあるが、**固定ページを操作するツールが無い**。SDK 移植の完了後に追加する（新 SDK の作法で最初から書けるため、移植との二重作業を避ける）。
+
+### 12.1 データ構造の注意点
+
+固定ページは `pages` テーブルと `contents` テーブルの複合構造であり、**名前が紛らわしい**点に注意する。
+
+| 保存先 | 意味 |
+|---|---|
+| `pages.contents` | **ページ本文**（HTML） |
+| `pages.content`（`Contents` アソシエーション） | **コンテンツ情報**（タイトル・URL・公開状態・親フォルダ） |
+
+`PagesService::create()` に渡す構造は次のとおり（`baser-core` の `PagesControllerTest::testAdd()` で確認済み）。
+
+```php
+[
+    'contents' => '<p>本文</p>',
+    'page_template' => '',
+    'content' => [
+        'title' => 'ページタイトル',
+        'name' => 'about',
+        'parent_id' => 1,
+        'site_id' => 1,
+        'plugin' => 'BaserCore',
+        'type' => 'Page',
+        'self_status' => true,
+    ],
+]
+```
+
+`plugin` は `'BaserCore'`、`type` は `'Page'` の固定値であり、ツール側で自動的に補う（AI クライアントに指定させない）。
+
+### 12.2 提供するツール
+
+`src/Mcp/BaserCore/PagesTool.php` を新規作成し、`BaserCoreServer::getToolClasses()` に登録する。
+
+| ツール | 対応するサービス | 権限チェック用 URL |
+|---|---|---|
+| `getPages` | `PagesService::getIndex()` | `GET /baser-core/pages/index.json` |
+| `getPage` | `PagesService::get()` | `GET /baser-core/pages/view/{id}.json` |
+| `addPage` | `PagesService::create()` | `POST /baser-core/pages/add.json` |
+| `editPage` | `PagesService::update()` | `POST /baser-core/pages/edit/{id}.json` |
+| `deletePage` | `PagesService::delete()` | `POST /baser-core/pages/delete/{id}.json` |
+
+### 12.3 引数設計
+
+既存ツールと同様に、AI クライアントが扱いやすいフラットな引数にし、内部で上記の入れ子構造へ組み立てる。
+
+`addPage` の引数。
+
+| 引数 | 対応先 | 説明 |
+|---|---|---|
+| `title`（必須） | `content.title` | ページタイトル |
+| `content` | `pages.contents` | ページ本文（HTML） |
+| `name` | `content.name` | URL のスラッグ（省略時は baserCMS が自動採番） |
+| `parentId` | `content.parent_id` | 親フォルダのコンテンツID（省略時はサイトルート） |
+| `siteId` | `content.site_id` | サイトID（省略時は 1） |
+| `status` | `content.self_status` | 公開状態（0: 非公開, 1: 公開。省略時は 0） |
+| `description` | `content.description` | 説明 |
+| `publishBegin` / `publishEnd` | `content.publish_begin` / `publish_end` | 公開期間 |
+| `pageTemplate` | `pages.page_template` | ページテンプレート |
+| `eyeCatch` | `content.eyecatch` | アイキャッチ画像（外部画像 URL を直接指定） |
+
+引数名の `content`（本文）と保存先の `content`（コンテンツ情報）が紛らわしいため、**実装時のコメントで対応関係を明示する**。
+
+`editPage` は `id`（必須）＋上記の任意項目。`deletePage` は `id` のみ。`getPages` は `keyword` / `siteId` / `status` / `limit` / `page`。`getPage` は `id`。
+
+**`loginUserId` は `inputSchema` に公開せず、`McpContext` から取得する**（他ツールと同じ方針）。
+
+## 13. 完了条件
 
 - Modern（`2026-07-28`）と Legacy の両世代で `tools/list` → `tools/call` が通ることが自動テストで検証されている
 - 常駐プロセスを起動しなくても `/bc-mcp` が応答する
@@ -291,3 +362,4 @@ PHP 要件は問題ない。SDK は `php: >=8.1` / `ext-curl` / `ext-json` / `ps
 - 認可レスポンスに `iss` が含まれ、メタデータの `issuer` と一致する
 - `vendor/php-mcp` への依存が残っていない
 - `McpServerManger` と管理画面の起動/停止 UI が削除されている
+- 固定ページの取得・作成・編集・削除がツールとして提供され、`tools/list` に並んでいる
