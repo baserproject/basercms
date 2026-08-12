@@ -7,21 +7,25 @@ use BaserCore\Controller\AppController;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
-use Cake\Http\Client;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
-use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
-use BcMcp\Mcp\McpServerManger;
+use BcMcp\Mcp\McpContext;
+use BcMcp\Mcp\McpRequestHandler;
 use BcMcp\Mcp\PermissionManager;
 use BcMcp\OAuth2\Service\OAuth2Service;
+use Mcp\Server\Transport\Http\HttpMessage;
 
 /**
- * MCPサーバーへのプロキシコントローラー
- * SSEクライアントとしてMCPサーバーと通信し、HTTPリクエストをMCPプロトコルに変換
- * OAuth2認証対応
+ * MCPサーバーのリクエスト受け口
+ *
+ * 常駐プロセスを持たず、CakePHP のリクエスト内で SDK を実行する。
+ * 本コントローラーの責務は認証・認可と、CakePHP のリクエスト／レスポンスと
+ * SDK の HttpMessage の相互変換に限られる。プロトコルの世代判定・
+ * server/discover・必須ヘッダ検証・resultType やキャッシュヒントの付与は
+ * すべて SDK が担うため、応答の内容には手を加えない。
  */
 class McpProxyController extends AppController
 {
@@ -32,8 +36,6 @@ class McpProxyController extends AppController
      */
     private OAuth2Service $oauth2Service;
 
-    private McpServerManger $mcpServerManager;
-
     /**
      * 初期化
      */
@@ -43,31 +45,11 @@ class McpProxyController extends AppController
         $this->FormProtection->setConfig('validate', false);
         // OAuth2サービスを初期化
         $this->oauth2Service = new OAuth2Service();
-        $this->mcpServerManager = new McpServerManger();
 
         // CORS設定（統一された設定）
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*');
-        $this->response = $this->response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $this->response = $this->response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, MCP-Protocol-Version');
-    }
-
-    /**
-     * MCPプロトコルバージョンの取得
-     * @return string
-     */
-    private function getProtocolVersion(): string
-    {
-        $protocolVersion = $this->request->getHeaderLine('MCP-Protocol-Version');
-        if (!empty($protocolVersion)) {
-            return $protocolVersion;
-        }
-        $requestBody = (string)$this->request->getBody();
-        $mcpRequest = json_decode($requestBody, true);
-
-        if (isset($mcpRequest['params']['protocolVersion'])) {
-            return $mcpRequest['params']['protocolVersion'];
-        }
-        return '2025-06-18';
+        $this->response = $this->response->withHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        $this->response = $this->response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, MCP-Protocol-Version, Mcp-Method, Mcp-Name');
     }
 
     /**
@@ -81,6 +63,13 @@ class McpProxyController extends AppController
 
         // OPTIONS は認証不要
         if ($method === 'OPTIONS') {
+            return;
+        }
+
+        // 2026-07-28 では GET ストリームとセッションの DELETE が廃止されている。
+        // メソッド自体が許可されないため認証より前に応答する。
+        if (in_array($method, ['GET', 'DELETE'], true)) {
+            $event->setResult($this->returnMethodNotAllowedResponse());
             return;
         }
 
@@ -145,45 +134,39 @@ class McpProxyController extends AppController
     }
 
     /**
-     * MCPサーバーへのプロキシ処理
-     * /mcp へのアクセスを内部MCPサーバーに転送
-     * OPTIONSリクエストも含めて全てここで処理
+     * 許可されないメソッドのレスポンスを返す
+     *
+     * @return Response
+     */
+    private function returnMethodNotAllowedResponse(): Response
+    {
+        return $this->response
+            ->withStatus(405)
+            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('Allow', 'POST, OPTIONS')
+            ->withStringBody(json_encode([
+                'jsonrpc' => '2.0',
+                'error' => [
+                    'code' => -32601,
+                    'message' => 'Method not allowed. Use POST.'
+                ]
+            ], JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * MCP リクエストの受け口
+     *
+     * /bc-mcp へのアクセスを同一プロセス内の MCP サーバーで処理する。
+     * OPTIONS リクエストも含めて全てここで処理する。
      */
     public function index()
     {
-        $protocolVersion = $this->getProtocolVersion();
-        $this->response = $this->response->withHeader('MCP-Protocol-Version', $protocolVersion);
-
         // OPTIONSリクエストの場合はCORSレスポンスを返す
         if ($this->request->getMethod() === 'OPTIONS') {
             return $this->_handleOptionsRequest();
         }
 
-        // POST以外のメソッドは許可しない
-        if ($this->request->getMethod() === 'GET') {
-            return $this->response
-                ->withStatus(200)
-                ->withHeader('Content-Type', 'application/json')
-                ->withStringBody(json_encode([
-                    'jsonrpc' => '2.0',
-                    'name' => 'bc-mcp',
-                    'version' => '1.0.0',
-                    'authenticated' => true
-                ]));
-        }
-
         try {
-            // MCPサーバーの設定を取得
-            $config = $this->mcpServerManager->getServerConfig();
-
-            // MCPサーバーが起動しているかチェック
-            if (!$this->mcpServerManager->isServerRunning()) {
-                throw new ServiceUnavailableException(
-                    'MCPサーバーが起動していません。管理画面からMCPサーバーを起動してください。'
-                );
-            }
-
-            // CakePHPのリクエストオブジェクトからJSONボディを取得
             $requestBody = (string)$this->request->getBody();
 
             if (empty($requestBody)) {
@@ -197,9 +180,12 @@ class McpProxyController extends AppController
                 throw new BadRequestException('Invalid MCP request format');
             }
 
-            $mcpRequest['params']['arguments']['loginUserId'] = $this->request->getAttribute('oauth_user_id');
+            // 認証済みの操作者をコンテキストに設定する。
+            // リクエストボディへ注入しないのは、2026-07-28 でヘッダとボディの
+            // 一致が検証されるため。
+            McpContext::setLoginUserId((int)$this->request->getAttribute('oauth_user_id'));
 
-            if(!$this->checkPermission($mcpRequest)) {
+            if (!$this->checkPermission($mcpRequest)) {
                 return $this->response
                     ->withStatus(403)
                     ->withHeader('Content-Type', 'application/json')
@@ -209,20 +195,18 @@ class McpProxyController extends AppController
                             'code' => 403,
                             'message' => 'Forbidden: You do not have permission to perform this action.'
                         ]
-                    ]));
+                    ], JSON_UNESCAPED_UNICODE));
             }
 
-            // SSEクライアントとしてMCPサーバーに接続してリクエストを処理
-            $response = $this->sendMcpRequest($config, $mcpRequest);
+            $mcpResponse = (new McpRequestHandler())->handle($this->toMcpMessage($mcpRequest));
 
-            $this->response = $this->response
-                ->withHeader('Content-Type', 'application/json')
-                ->withHeader('Access-Control-Allow-Credentials', 'true')
-                ->withStringBody(json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-            if ($this->request->getData('method') === 'notifications/initialized') {
-                $this->response = $this->response->withStatus(202);
+            $response = $this->response
+                ->withStatus($mcpResponse->getStatusCode())
+                ->withStringBody((string)$mcpResponse->getBody());
+            foreach($mcpResponse->getHeaders() as $name => $value) {
+                $response = $response->withHeader($name, $value);
             }
+            return $response;
         } catch (BadRequestException $e) {
             throw $e;
         } catch (ForbiddenException $e) {
@@ -233,9 +217,9 @@ class McpProxyController extends AppController
                     'jsonrpc' => '2.0',
                     'error' => [
                         'code' => 403,
-                        'message' => 'MCPサーバーとの通信に失敗しました: ' . $e->getMessage()
+                        'message' => $e->getMessage()
                     ]
-                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                ], JSON_UNESCAPED_UNICODE));
         } catch (\Exception $e) {
             return $this->response
                 ->withStatus(500)
@@ -244,12 +228,50 @@ class McpProxyController extends AppController
                     'jsonrpc' => '2.0',
                     'error' => [
                         'code' => 500,
-                        'message' => 'MCPサーバーとの通信に失敗しました: ' . $e->getMessage()
+                        'message' => 'MCPリクエストの処理に失敗しました: ' . $e->getMessage()
                     ]
-                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                ], JSON_UNESCAPED_UNICODE));
+        } finally {
+            McpContext::clear();
         }
+    }
 
-        return $this->response;
+    /**
+     * CakePHP のリクエストを SDK の HttpMessage に変換する
+     *
+     * 2026-07-28 では MCP-Protocol-Version / Mcp-Method / Mcp-Name が必須ヘッダで、
+     * SDK がヘッダとボディの一致を検証する。クライアントが送ってきたヘッダを
+     * そのまま引き継ぎ、ボディも改変しない事で整合性を保つ。
+     * Authorization は認証がプロキシで完結しているため渡さない。
+     *
+     * @param array $mcpRequest MCP リクエスト
+     * @return \Mcp\Server\Transport\Http\HttpMessage
+     */
+    public function toMcpMessage(array $mcpRequest): HttpMessage
+    {
+        $message = new HttpMessage(json_encode($mcpRequest, JSON_UNESCAPED_UNICODE));
+        $message->setMethod($this->request->getMethod());
+        $message->setUri('/bc-mcp');
+        $message->setHeader('Content-Type', 'application/json');
+        $message->setHeader('Accept', 'application/json, text/event-stream');
+
+        // Mcp-Session-Id は Legacy 世代（initialize 方式）のクライアントが
+        // セッションを維持するために使う。Modern では廃止されているが、
+        // Dual-era サーバーとして両方に応じるため透過する。
+        $targets = ['MCP-Protocol-Version', 'Mcp-Method', 'Mcp-Name', 'Mcp-Session-Id', 'Last-Event-ID'];
+        foreach($targets as $target) {
+            $value = $this->request->getHeaderLine($target);
+            if ($value !== '') {
+                $message->setHeader($target, $value);
+            }
+        }
+        // x-mcp-header 由来の Mcp-Param-* も引き継ぐ
+        foreach($this->request->getHeaders() as $name => $values) {
+            if (stripos($name, 'Mcp-Param-') === 0) {
+                $message->setHeader($name, implode(', ', $values));
+            }
+        }
+        return $message;
     }
 
     /**
@@ -267,7 +289,7 @@ class McpProxyController extends AppController
 
         /** @var UsersService $usersService */
         $usersService = $this->getService(UsersServiceInterface::class);
-        $user = $usersService->get($mcpRequest['params']['arguments']['loginUserId']);
+        $user = $usersService->get(McpContext::getLoginUserId());
         if(!$user) return false;
         if (BcUtil::isAdminUser($user)) {
             return true;
@@ -277,52 +299,8 @@ class McpProxyController extends AppController
         return $permissionManager->checkPermission(
             $mcpRequest['params']['name'],
             $userGroupsIds,
-            $mcpRequest['params']['arguments']
+            $mcpRequest['params']['arguments'] ?? []
         );
-    }
-
-    /**
-     * StreamableHttpServerTransport用のMCPリクエスト送信
-     * 直接JSONエンドポイントとして通信（SSE初期化不要）
-     */
-    private function sendMcpRequest(array $config, array $mcpRequest): array
-    {
-        // StreamableHttpServerTransportの場合はルートパス（/）を使用
-        $jsonUrl = "http://127.0.0.1:{$config['port']}/";
-
-        try {
-            $client = new Client(['timeout' => 10]);
-            $response = $client->post($jsonUrl, json_encode($mcpRequest), [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
-                ]
-            ]);
-
-            $responseData = json_decode($response->getBody()->getContents(), true);
-
-            if (!$responseData) {
-                return [
-                    "jsonrpc" => "2.0",
-                    "result" => []
-                ];
-            }
-
-            // MCP Inspector対応：プロトコルバージョンとcapabilitiesを調整
-            if (isset($responseData['result']) && isset($mcpRequest['method']) && $mcpRequest['method'] === 'initialize') {
-                // capabilitiesにツールの存在を示す（実際のツールリストはtools/listで取得）
-                $responseData['result']['capabilities'] = [
-                    'tools' => ['listChanged' => true],  // 空オブジェクトでツール機能があることを示す
-                    'resources' => ['listChanged' => true],
-                    'prompts' => ['listChanged' => true]
-                ];
-                $responseData['result']['protocolVersion'] = '2025-06-18';
-            }
-            return $responseData;
-
-        } catch (\Exception $e) {
-            throw new \Exception('MCPサーバーとの通信に失敗しました: ' . $e->getMessage());
-        }
     }
 
     /**

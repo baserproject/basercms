@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Controller\Admin;
 
-use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcMcp\Mcp\McpServerManger;
-use Cake\ORM\TableRegistry;
+use BcMcp\Mcp\McpContext;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -71,82 +69,49 @@ class OAuth2ControllerTest extends BcTestCase
     /**
      * tearDown method
      *
-     * 統合テストで起動した MCP サーバー（SSE 常駐プロセス）を確実に停止する。
-     * 停止しないと CI 上で孤児プロセスがステップの fd を掴んだまま残り、
-     * ジョブが次のステップへ進めず無限待機する（GHA で 8.1 がハングした原因）。
-     *
      * @return void
      */
     public function tearDown(): void
     {
-        $mcpServerManager = new McpServerManger();
-        if ($mcpServerManager->isServerRunning()) {
-            $mcpServerManager->stopMcpServer();
-        }
+        McpContext::clear();
         parent::tearDown();
     }
 
     /**
-     * MCPプロキシ経由の統合テスト用に、実際の MCP サーバー（SSE）を用意する。
-     * 起動していなければ起動し、プロキシが接続する 127.0.0.1:{port} へ実際に到達できるまで待つ。
-     * 到達できない場合はスキップせず明示的に失敗させる（サーバー起動の不具合を隠さない）。
+     * MCP エンドポイントへ Modern（2026-07-28）形式でリクエストを送る
      *
+     * 2026-07-28 では MCP-Protocol-Version / Mcp-Method / Mcp-Name が必須ヘッダで、
+     * リクエストごとの _meta でプロトコルバージョンとクライアント情報を伝える。
+     * 常駐プロセスは不要で、プロキシが同一プロセス内で SDK を実行する。
+     *
+     * @param string $accessToken アクセストークン
+     * @param array $mcpRequest MCP リクエスト
      * @return void
      */
-    private function requireMcpServer(): void
+    private function postMcp(string $accessToken, array $mcpRequest): void
     {
-        // サーバー子プロセスの `bin/cake bc_mcp.server` は default 接続の DB から
-        // 有効プラグイン（plugins テーブル status=true）を読んでロードする。BcMcp は
-        // defaultInstallCorePlugins に含めない方針のため `bin/cake install` では有効化されず、
-        // console に bc_mcp.server コマンドが登録されない（CI で起動失敗→500 の原因）。
-        // そこでテスト内で BcMcp を有効化しておく（既にあればスキップ）。
-        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        if (!$pluginsTable->exists(['name' => 'BcMcp'])) {
-            PluginFactory::make([
-                'name' => 'BcMcp',
-                'title' => 'baserCMS MCP Server',
-                'status' => true,
-                'db_init' => true,
-                'priority' => 100,
-            ])->persist();
+        $mcpRequest['params']['_meta'] = [
+            'io.modelcontextprotocol/protocolVersion' => '2026-07-28',
+            'io.modelcontextprotocol/clientInfo' => [
+                'name' => 'OAuth2IntegrationTest',
+                'version' => '1.0.0',
+            ],
+            'io.modelcontextprotocol/clientCapabilities' => [],
+        ];
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'MCP-Protocol-Version' => '2026-07-28',
+            'Mcp-Method' => $mcpRequest['method'],
+        ];
+        if (isset($mcpRequest['params']['name'])) {
+            $headers['Mcp-Name'] = $mcpRequest['params']['name'];
         }
 
-        $mcpServerManager = new McpServerManger();
-        $config = $mcpServerManager->getServerConfig();
-        // 子プロセス（bin/cake bc_mcp.server）は別プロセスのため、テストが PluginFactory で
-        // 有効化した BcMcp を default 接続では見られない。test 接続（両プロセスで共有）を使わせ、
-        // 子プロセスの bootstrap でも BcMcp がロードされる（=コマンドが登録される）ようにする。
-        $config['connection'] = 'test';
-        if (!$mcpServerManager->isServerRunning()) {
-            $mcpServerManager->startMcpServer($config);
-        }
-        // プロセス存在だけでなく、プロキシが叩く 127.0.0.1:{port} へ実際に接続できるまで待つ。
-        // （プロセス起動直後はポート bind が間に合わず接続拒否 → 500 になることがあるため）
-        $host = $config['host'] ?? '127.0.0.1';
-        $port = (int)($config['port'] ?? 3000);
-        $deadline = microtime(true) + 15.0;
-        $reachable = false;
-        while (microtime(true) < $deadline) {
-            $conn = @fsockopen($host, $port, $errno, $errstr, 1);
-            if ($conn) {
-                fclose($conn);
-                $reachable = true;
-                break;
-            }
-            usleep(300000); // 0.3秒
-        }
-        if (!$reachable) {
-            // 失敗時はサーバーの起動ログを添えて原因を可視化する（CI で bin/cake bc_mcp.server が
-            // 起動できない理由＝コマンド未登録・DB未接続・ポート競合等がここに出る）。
-            $logFile = LOGS . 'bc_mcp_server.log';
-            $serverLog = is_file($logFile) ? (string)file_get_contents($logFile) : '(bc_mcp_server.log が存在しません＝サーバープロセスがログを出す前に失敗した可能性)';
-            $this->fail(sprintf(
-                "MCP サーバー（SSE / %s:%d）へ接続できませんでした。\n===== bc_mcp_server.log（末尾3000字） =====\n%s",
-                $host,
-                $port,
-                mb_substr($serverLog, -3000)
-            ));
-        }
+        $this->configRequest(['headers' => $headers]);
+        $this->post('/bc-mcp', json_encode($mcpRequest, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -211,10 +176,10 @@ class OAuth2ControllerTest extends BcTestCase
 
     public function testIntegration(): void
     {
-        $this->requireMcpServer();
-        // MPCサーバーの接続ポイントにGETリクエストを送信
+        // MCPサーバーの接続ポイントにGETリクエストを送信
+        // 2026-07-28 では GET ストリームが廃止されているため 405 が返る
         $this->get('/bc-mcp');
-        $this->assertResponseCode(401);
+        $this->assertResponseCode(405);
 
         // oauth-protected-resource にリクエストを送信
         $this->get('/.well-known/oauth-protected-resource/bc-mcp');
@@ -307,8 +272,7 @@ class OAuth2ControllerTest extends BcTestCase
             'id' => 'test-tools-list',
             'method' => 'tools/list'
         ];
-        $this->configRequest($requestConfig);
-        $this->post('/bc-mcp', json_encode($mcpRequest));
+        $this->postMcp($accessToken, $mcpRequest);
         $this->assertResponseCode(200);
         $this->assertContentType('application/json');
 
@@ -333,8 +297,7 @@ class OAuth2ControllerTest extends BcTestCase
                 'arguments' => []
             ]
         ];
-        $this->configRequest($requestConfig);
-        $this->post('/bc-mcp', json_encode($blogRequest));
+        $this->postMcp($accessToken, $blogRequest);
         $this->assertResponseCode(200);
 
         $blogResponse = json_decode((string)$this->_response->getBody(), true);
@@ -357,15 +320,6 @@ class OAuth2ControllerTest extends BcTestCase
         $this->assertNotEmpty($newAccessToken);
         $this->assertNotEquals($accessToken, $newAccessToken, 'New access token should be different from the original');
 
-        // 新しいアクセストークンを使用してgetBlogPostツールを実行
-        $newRequestConfig = [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $newAccessToken,
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ]
-        ];
-
         // getBlogPostツールを実行（IDが必要な場合はダミーIDを使用）
         $blogPostRequest = [
             'jsonrpc' => '2.0',
@@ -378,8 +332,8 @@ class OAuth2ControllerTest extends BcTestCase
                 ]
             ]
         ];
-        $this->configRequest($newRequestConfig);
-        $this->post('/bc-mcp', json_encode($blogPostRequest));
+        // リフレッシュで取得した新しいアクセストークンで呼び出す
+        $this->postMcp($newAccessToken, $blogPostRequest);
 
         // レスポンスコードが200または404（データが存在しない場合）であることを確認
         $this->assertTrue(
@@ -402,7 +356,6 @@ class OAuth2ControllerTest extends BcTestCase
      */
     public function testIntegrationWithPKCE(): void
     {
-        $this->requireMcpServer();
         // Step 1: OAuth2メタデータの取得
         $this->get('/.well-known/oauth-authorization-server/bc-mcp');
         $metadata = json_decode((string)$this->_response->getBody(), true);
@@ -517,8 +470,7 @@ class OAuth2ControllerTest extends BcTestCase
             'method' => 'tools/list'
         ];
 
-        $this->configRequest($requestConfig);
-        $this->post('/bc-mcp', json_encode($mcpRequest));
+        $this->postMcp($accessToken, $mcpRequest);
         $this->assertResponseOk();
         $this->assertContentType('application/json');
 
@@ -542,8 +494,7 @@ class OAuth2ControllerTest extends BcTestCase
                 ]
             ];
 
-            $this->configRequest($requestConfig);
-            $this->post('/bc-mcp', json_encode($toolRequest));
+            $this->postMcp($accessToken, $toolRequest);
             // ツールによってはパラメータが必要な場合があるので、200または400を許可
             $this->assertTrue(
                 in_array($this->_response->getStatusCode(), [200, 400]),
