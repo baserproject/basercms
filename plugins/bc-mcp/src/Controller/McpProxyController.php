@@ -14,6 +14,7 @@ use Cake\Http\Response;
 use Cake\Utility\Hash;
 use BcMcp\Mcp\McpContext;
 use BcMcp\Mcp\McpRequestHandler;
+use BcMcp\Mcp\NegotiationLogger;
 use BcMcp\Mcp\PermissionManager;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use Mcp\Server\Transport\Http\HttpMessage;
@@ -179,6 +180,10 @@ class McpProxyController extends AppController
             if (!$mcpRequest || !isset($mcpRequest['jsonrpc']) || $mcpRequest['jsonrpc'] !== '2.0') {
                 throw new BadRequestException('Invalid MCP request format');
             }
+
+            // クライアントの世代とプロトコルバージョンを記録する。
+            // クライアント側が Modern へ移行した事を検知できるようにするため。
+            NegotiationLogger::log($mcpRequest, $this->request->getHeaderLine('MCP-Protocol-Version'));
 
             // 認証済みの操作者をコンテキストに設定する。
             // リクエストボディへ注入しないのは、2026-07-28 でヘッダとボディの

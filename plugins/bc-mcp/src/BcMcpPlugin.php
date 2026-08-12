@@ -10,6 +10,9 @@ use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Console\CommandCollection;
+use Cake\Core\Configure;
+use Cake\Core\PluginApplicationInterface;
+use Cake\Log\Log;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Route\InflectedRoute;
 
@@ -23,6 +26,24 @@ class BcMcpPlugin extends BcPlugin
      * Trait
      */
     use BcContainerTrait;
+
+    /**
+     * Bootstrap
+     *
+     * @param \Cake\Core\PluginApplicationInterface $app アプリケーション
+     * @return void
+     */
+    public function bootstrap(PluginApplicationInterface $app): void
+    {
+        parent::bootstrap($app);
+
+        // プラグインの setting.php は baser-core が Configure::consume('Log') を
+        // 実行した後に読み込まれるため、mcp スコープのロガーが Log へ登録されない。
+        // ここで登録し、MCP のログが logs/mcp.log に記録されるようにする。
+        if (!Log::getConfig('mcp') && Configure::check('Log.mcp')) {
+            Log::setConfig('mcp', Configure::read('Log.mcp'));
+        }
+    }
 
     /**
      * Install
