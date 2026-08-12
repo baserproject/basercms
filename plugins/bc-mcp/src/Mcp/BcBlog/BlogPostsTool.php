@@ -7,7 +7,6 @@ use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
-use PhpMcp\Server\ServerBuilder;
 use BcMcp\Mcp\BaseMcpTool;
 
 /**
@@ -19,16 +18,18 @@ class BlogPostsTool extends BaseMcpTool
 {
 
     /**
-     * ブログ記事関連のツールを ServerBuilder に追加
+     * ブログ記事関連のツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
      */
-    public function addToolsToBuilder(ServerBuilder $builder): ServerBuilder
-
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
-        return $builder
-            ->withTool(
-                handler: [self::class, 'getBlogPosts'],
+        return $server
+            ->tool(
                 name: 'getBlogPosts',
                 description: 'ブログ記事の一覧を取得します',
+                callback: [$this, 'getBlogPosts'],
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -40,10 +41,10 @@ class BlogPostsTool extends BaseMcpTool
                     ]
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'getBlogPost'],
+            ->tool(
                 name: 'getBlogPost',
                 description: '指定されたIDのブログ記事を取得します',
+                callback: [$this, 'getBlogPost'],
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -52,10 +53,10 @@ class BlogPostsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'addBlogPost'],
+            ->tool(
                 name: 'addBlogPost',
                 description: 'ブログ記事を追加します',
+                callback: [$this, 'addBlogPost'],
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -75,10 +76,10 @@ class BlogPostsTool extends BaseMcpTool
                     'required' => ['title', 'detail']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'editBlogPost'],
+            ->tool(
                 name: 'editBlogPost',
                 description: 'ブログ記事を編集します',
+                callback: [$this, 'editBlogPost'],
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -99,10 +100,10 @@ class BlogPostsTool extends BaseMcpTool
                     'required' => ['id']
                 ]
             )
-            ->withTool(
-                handler: [self::class, 'deleteBlogPost'],
+            ->tool(
                 name: 'deleteBlogPost',
                 description: '指定されたIDのブログ記事を削除します',
+                callback: [$this, 'deleteBlogPost'],
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -159,6 +160,8 @@ class BlogPostsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $title,
             $detail,
@@ -253,6 +256,8 @@ class BlogPostsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id,
             $title,
@@ -417,6 +422,8 @@ class BlogPostsTool extends BaseMcpTool
      */
     public function deleteBlogPost(int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($id, $loginUserId) {
             // 必須パラメータのチェック
             if (empty($id)) return $this->createErrorResponse('IDは必須です');

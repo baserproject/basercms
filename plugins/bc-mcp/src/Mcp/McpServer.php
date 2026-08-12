@@ -4,26 +4,26 @@ declare(strict_types=1);
 namespace BcMcp\Mcp;
 
 use BaserCore\Utility\BcUtil;
-use BcMcp\Mcp\BaserCore\BaserCoreServer;
-use PhpMcp\Server\Server;
-use PhpMcp\Server\ServerBuilder;
-use PhpMcp\Schema\ServerCapabilities;
 use Cake\Core\Configure;
-use PhpMcp\Server\Transports\StdioServerTransport;
-use PhpMcp\Server\Transports\StreamableHttpServerTransport;
-use BcMcp\Mcp\BcBlog\BcBlogServer;
-use BcMcp\Mcp\BcCustomContent\BcCustomContentServer;
+use Mcp\Server\McpServer as SdkMcpServer;
 
 /**
  * baserCMS MCP Server
  *
  * baserCMSのデータを外部から操作するためのMCPサーバー
- * 各エンティティサーバーを統合して提供
+ * 各エンティティサーバーを統合して提供する
+ *
+ * プロトコルの世代判定・server/discover・必須ヘッダ検証・resultType や
+ * キャッシュヒントの付与は SDK が担うため、本クラスの責務はツールの登録に絞る。
  */
 class McpServer
 {
 
-    private Server $server;
+    /**
+     * SDK のサーバー
+     * @var \Mcp\Server\McpServer
+     */
+    private SdkMcpServer $server;
 
     /**
      * コンストラクタ
@@ -38,31 +38,24 @@ class McpServer
      */
     private function buildServer(): void
     {
-        $builder = new ServerBuilder();
+        $this->server = new SdkMcpServer(
+            'baserCMS MCP Server',
+            new McpLogger(LOGS . 'bc_mcp_error.log'),
+            '1.0.0'
+        );
 
-        // サーバー名の設定
-        $serverName = 'baserCMS MCP Server';
-        $serverVersion = '1.0.0';
-
-        $builder = $builder
-            ->withServerInfo($serverName, $serverVersion)
-            ->withLogger(new McpLogger(LOGS . 'bc_mcp_error.log'))
-            ->withCapabilities(new ServerCapabilities(
-                tools: true,
-                resources: false,
-                prompts: false
-            ));
-
-        $availableServers = Configure::read('BcMcp.availableServers',);
+        $availableServers = Configure::read('BcMcp.availableServers', []);
         foreach($availableServers as $serverClass) {
-            $this->registerToolsFromServer($serverClass::getToolClasses(), $builder);
+            foreach($serverClass::getToolClasses() as $toolClass) {
+                (new $toolClass())->registerTools($this->server);
+            }
         }
 
         // サーバー情報ツールを追加
-        $builder = $builder->withTool(
-            handler: [self::class, 'serverInfo'],
+        $this->server->tool(
             name: 'serverInfo',
             description: 'サーバーのバージョンや環境情報を返します',
+            callback: [$this, 'serverInfo'],
             inputSchema: [
                 'type' => 'object',
                 'properties' => [
@@ -70,112 +63,49 @@ class McpServer
                 ]
             ]
         );
-
-        $this->server = $builder->build();
-    }
-
-    /**
-     * ツールクラス配列からツールを登録
-     *
-     * @param array<string> $toolClasses ツールクラス名の配列
-     * @param ServerBuilder $builder サーバービルダー
-     * @return void
-     */
-    private function registerToolsFromServer(array $toolClasses, ServerBuilder &$builder): void
-    {
-        foreach($toolClasses as $toolClass) {
-            $toolInstance = new $toolClass();
-            $builder = $toolInstance->addToolsToBuilder($builder);
-        }
-    }
-
-    /**
-     * リソースクラス配列からリソースを登録
-     *
-     * @param array<string> $resourceClasses リソースクラス名の配列
-     * @param ServerBuilder $builder サーバービルダー
-     * @return void
-     */
-    private function registerResourcesFromServer(array $resourceClasses, ServerBuilder &$builder): void
-    {
-        foreach($resourceClasses as $resourceClass) {
-            $resourceInstance = new $resourceClass();
-            $builder = $resourceInstance->addResourcesToBuilder($builder);
-        }
     }
 
     /**
      * MCPサーバーの実体を取得する
      *
-     * @return Server
+     * @return \Mcp\Server\McpServer
      */
-    public function getServer(): Server
+    public function getServer(): SdkMcpServer
     {
         return $this->server;
     }
 
     /**
-     * 標準入力からサーバーを起動
+     * 標準入力からサーバーを起動する
+     *
+     * HTTP 経由の利用は /bc-mcp エンドポイントが担うため、常駐プロセスとしての
+     * 起動は標準入出力のみを提供する。
+     *
+     * @return void
      */
     public function runStdio(): void
     {
-        $transport = new StdioServerTransport();
-        $this->server->listen($transport);
+        $this->server->runStdio();
     }
 
     /**
-     * SSEでサーバーを起動
+     * サーバー情報を取得する
      *
-     * @param string $host ホスト名
-     * @param int $port ポート番号
+     * @param int|null $id ID
+     * @return array
      */
-    public function runSse(string $host, int $port): void
+    public function serverInfo(?int $id = null): array
     {
-        $transport = new StreamableHttpServerTransport(
-            host: $host,
-            port: $port,
-            mcpPath: '',  // 明示的にパスを指定
-            enableJsonResponse: true,
-            stateless: true
-        );
-        $this->server->listen($transport);
+        return [
+            'php_version' => PHP_VERSION,
+            'basercms_version' => BcUtil::getVersion(),
+            'cakephp_version' => Configure::version(),
+            'server_time' => date('Y-m-d H:i:s'),
+            'timezone' => date_default_timezone_get(),
+            'mcp_server_version' => '1.0.0',
+            'supported_clients' => ['ChatGPT', 'Claude', 'Custom MCP Clients'],
+            'available_transports' => ['stdio', 'http'],
+        ];
     }
 
-    /**
-     * サーバー情報を取得
-     */
-    public function serverInfo(array $arguments = []): array
-    {
-        try {
-            $info = [
-                'php_version' => PHP_VERSION,
-                'basercms_version' => BcUtil::getVersion(),
-                'cakephp_version' => Configure::version(),
-                'server_time' => date('Y-m-d H:i:s'),
-                'timezone' => date_default_timezone_get(),
-                'mcp_server_version' => '1.0.0',
-                'supported_clients' => ['ChatGPT', 'Claude', 'Custom MCP Clients'],
-                'available_transports' => ['stdio', 'sse']
-            ];
-
-            return [
-                'isError' => false,
-                'content' => $info
-            ];
-        } catch (\Exception $e) {
-            return [
-                'isError' => true,
-                'content' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ];
-        }
-    }
-
-    /**
-     * 設定を適用
-     */
-    public function setConfig(array $config): void
-    {
-        // 将来的な設定対応のためのメソッド
-    }
 }

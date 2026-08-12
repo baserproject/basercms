@@ -22,6 +22,29 @@ abstract class BaseMcpTool
     use BcContainerTrait;
 
     /**
+     * 自身が提供するツールをサーバーに登録する
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
+     */
+    abstract public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer;
+
+    /**
+     * 操作者のユーザーIDを解決する
+     *
+     * MCP のツールは JSON-RPC の引数しか受け取らないため、認証済みの操作者は
+     * McpContext から取得する。引数で明示された場合はそれを優先する
+     * （stdio 経由の利用など、コンテキストを持たない経路のため）。
+     *
+     * @param int|null $loginUserId 引数で渡されたユーザーID
+     * @return int|null
+     */
+    protected function resolveLoginUserId(?int $loginUserId = null): ?int
+    {
+        return $loginUserId ?? McpContext::getLoginUserId();
+    }
+
+    /**
      * 成功時の戻り値を作成
      *
      * @param mixed $content 戻り値のコンテンツ
