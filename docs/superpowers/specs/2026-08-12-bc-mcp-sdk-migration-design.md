@@ -370,15 +370,17 @@ bc-mcp には現在、ブログ・カスタムコンテンツ・検索インデ�
 
 **`loginUserId` は `inputSchema` に公開せず、`McpContext` から取得する**（他ツールと同じ方針）。
 
+**サイトの指定は必須情報として扱う。** 固定ページは Content が必須で、Content にはサイトの指定が必須である（`ContentsTable` の `site_id` は `notEmptyString`）。したがって「どのサイトに作るのか」は必ず必要な情報であり、ID を決め打ちしない。`siteId` が省略された場合は `SitesTable::getRootMain()` でメインサイトを解決し、解決できなければエラーを返す。`parentId` も同様に、省略時は指定されたサイトのルートを解決する。
+
 ### 12.4 実装で判明した baserCMS の作法（2026-08-12 実測）
 
 固定ページの保存はコンテンツ管理の仕組みと深く絡んでおり、ブログ記事より前提が多い。実装時に判明した点を記録する。
 
 | 事象 | 原因と対処 |
 |---|---|
-| `Record not found in table 'sites'` で保存に失敗する | `afterSave` で `BcSearchIndexManagerBehavior::createSearchIndex()` が走り、現在のサイト情報を参照する。**テストではログイン状態（`loginAdmin()`）が必要**。`baser-core` の `PagesServiceTest` は BcSearchIndex がロードされないため露出しないが、bc-mcp のテスト環境ではロードされる |
+| `Record not found in table 'sites'` で保存に失敗する | **真因はテストDBに残っていた前回実行のデータ**だった。`InitAppScenario` の `SiteFactory` が一意制約に衝突して失敗し、`sites` が空のまま `PagesTable::createSearchIndex()` の `$this->Sites->get($content->site_id)` が走ったため。当初「ログイン状態が必要」と記述したが、**実験（ログインなし・Router のリクエストなしでも成功）により誤りと確認した**。なお固定ページは保存中の Content エンティティから `Sites->get()` を呼ぶ一方、ブログ記事は `blog_content_id` から既存の Content を引くだけで `Sites->get()` を呼ばないため、この経路の問題は固定ページ固有である |
 | `Node '1' was not found in the tree.` | `ContentFactory` で作ったノードは `lft` / `rght` が整合しない。`RootContentScenario` を読んだ後に **`Contents->recover()`** でツリーを再構築する必要がある（`MultiSiteScenario` も同じことをしている） |
-| 追加したページが `getPages` の一覧に出てこない | `PagesService::getIndex()` が `draft` に対して `LIKE '%%'` 条件を無条件で付与するため、**`draft` が NULL の行は一致しない**。保存時に `draft` を空文字にする |
+| 追加したページが `getPages` の一覧に出てこない | `PagesService::createIndexConditions()` が検索値を検査せずキーの存在だけで LIKE 条件を付けており、`getIndex()` の既定値 `draft => null` により常に `draft LIKE '%%'` が付いていた。SQL の `NULL LIKE '%%'` が偽となるため `draft` が NULL の行が必ず除外される。**baser-core 側のバグとして 5.4.x で修正済み**（回帰テストも追加）。bc-mcp 側の回避策（`draft` を空文字で保存）は不要になったため削除した |
 | `deletePage` の挙動 | **解決。** `PagesService::delete()` は**完全削除**であり、`pages` と紐づく `contents` のレコードがいずれも消える（`withDeleted` を付けてもゴミ箱に残らない）。`baser-core` の `PagesServiceTest::testDelete()` が期待する挙動と一致する。当初「ゴミ箱へ移動」と想定したのは誤りだった |
 | テスト間で一意制約に衝突する（`Duplicate entry '1' for key 'users.PRIMARY'`） | **解決。** 真因は**テストDBに前回実行の残骸が溜まっていたこと**であり、fixture 戦略の限界ではなかった。DB を掃除し vendor を `composer.lock` に揃えた環境では発生しない。念のため `setUp()` で `BcTestCase::truncateTable()` を呼び、関係テーブルを明示的に空にしている |
 | エラーが MCP の `isError` にならない | `BaseMcpTool::executeWithErrorHandling()` が例外を捕まえて `createErrorResponse()` の戻り値（`content` キーにメッセージ）として返すため、SDK レベルでは正常な戻り値になる。**移植前からの設計**であり本移植では変更していないが、AI クライアントがエラーを検知しにくいという課題は残る |
