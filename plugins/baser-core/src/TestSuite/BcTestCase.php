@@ -80,12 +80,6 @@ class BcTestCase extends TestCase
     public $BaserCore;
 
     /**
-     * FixtureStrategy にて、TruncateStrategy を利用するかどうか
-     * @var bool
-     */
-    private $fixtureTruncate = false;
-
-    /**
      * イベントレイヤー
      * entryEventToMock() の引数として利用
      * @var string
@@ -94,17 +88,6 @@ class BcTestCase extends TestCase
     const EVENT_LAYER_VIEW = 'View';
     const EVENT_LAYER_MODEL = 'Model';
     const EVENT_LAYER_HELPER = 'Helper';
-
-    /**
-     * FixtureStrategy にて、TruncateStrategy を利用するかどうかを設定
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function setFixtureTruncate(): void
-    {
-        $this->fixtureTruncate = true;
-    }
 
     /**
      * テーブルを空にする
