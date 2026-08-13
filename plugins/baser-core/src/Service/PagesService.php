@@ -245,10 +245,15 @@ class PagesService implements PagesServiceInterface
         }
         $queryList = ['contents', 'draft'];
         foreach ($options as $key => $value) {
-            if (in_array($key, $queryList)) {
-                $conditions["$key LIKE"] = '%' . $value . '%';
-                $query->where(["$key LIKE" => '%' . $value . '%']);
-            }
+            if (!in_array($key, $queryList, true)) continue;
+            // null / false / '' は検索値ではなく「検索しない」「カラムを取得対象から
+            // 除外する」という指示のため、検索条件を付けない。
+            // これらを '%%' として LIKE 検索すると、SQL の `NULL LIKE '%%'` が偽と
+            // なるため、値が NULL のレコードが結果から除外されてしまう。
+            // getIndex() は draft の既定値として null を渡すので、条件を付けると
+            // draft が NULL の固定ページが常に一覧から消える事になる。
+            if ($value === null || $value === false || $value === '') continue;
+            $conditions["$key LIKE"] = '%' . $value . '%';
         }
         return $query->where($conditions);
     }
