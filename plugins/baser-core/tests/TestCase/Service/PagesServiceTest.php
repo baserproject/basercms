@@ -267,7 +267,7 @@ class PagesServiceTest extends BcTestCase
             fn($class) => $class->createIndexConditions($query, [
                 'status' => 'publish',
                 'contents' => 'Nghiem',
-                'draft' => ''
+                'draft' => '下書き'
             ]), null, get_class($this->PagesService)
         )($this->PagesService);
         $this->assertNotNull($result->clause('where'));
@@ -275,6 +275,43 @@ class PagesServiceTest extends BcTestCase
         $this->assertStringContainsString('status =', $sql);
         $this->assertStringContainsString('contents LIKE', $sql);
         $this->assertStringContainsString('draft LIKE', $sql);
+
+        // 検索値が指定されていない場合は検索条件を付けない。
+        // 条件を付けると `NULL LIKE '%%'` が偽となり、値が NULL のレコードが
+        // 結果から除外されてしまう
+        foreach([null, false, ''] as $emptyValue) {
+            $query = $this->Pages->find()->contain('Contents');
+            $result = Closure::bind(
+                fn($class) => $class->createIndexConditions($query, [
+                    'contents' => $emptyValue,
+                    'draft' => $emptyValue
+                ]), null, get_class($this->PagesService)
+            )($this->PagesService);
+            $this->assertEmpty(
+                $result->clause('where'),
+                var_export($emptyValue, true) . ' が指定された場合は検索条件を付けない'
+            );
+        }
+    }
+
+    /**
+     * test getIndex draft が NULL の固定ページも一覧に含まれる
+     *
+     * getIndex() は draft の既定値として null を渡すため、検索条件を付けてしまうと
+     * `NULL LIKE '%%'` が偽となり draft が NULL の固定ページが一覧から消える
+     */
+    public function test_getIndexWithNullDraft()
+    {
+        // シナリオは setUp で読み込まれている
+
+        // draft を NULL にした固定ページを用意する
+        $page = $this->Pages->find()->first();
+        $page->draft = null;
+        $this->Pages->saveOrFail($page);
+
+        $ids = $this->PagesService->getIndex()->all()->extract('id')->toArray();
+
+        $this->assertContains($page->id, $ids, 'draft が NULL の固定ページが一覧に含まれていません。');
     }
 
     /**
