@@ -50,9 +50,6 @@ class PagesToolTest extends BcTestCase
         // ファクトリで作成したノードは lft / rght が整合しないため、
         // TreeBehavior が辿れるようツリーを再構築する
         TableRegistry::getTableLocator()->get('BaserCore.Contents')->recover();
-        // 検索インデックスの生成（BcSearchIndex の afterSave）が
-        // 現在のサイト情報を参照するため、ログイン状態にしておく
-        $this->loginAdmin($this->getRequest('/'));
         McpContext::setLoginUserId(1);
     }
 
@@ -197,6 +194,44 @@ class PagesToolTest extends BcTestCase
             $notFound['content'] ?? '',
             '削除したページが取得できてしまいました。' . json_encode($notFound, JSON_UNESCAPED_UNICODE)
         );
+    }
+
+    /**
+     * test siteId を省略した場合はメインサイトに作成される
+     *
+     * 固定ページは Content が必須で、Content にはサイトの指定が必須である。
+     * 省略時は ID の決め打ちではなくメインサイトを解決する
+     */
+    public function testAddPageResolvesMainSite()
+    {
+        $mainSiteId = TableRegistry::getTableLocator()->get('BaserCore.Sites')->getRootMain()->id;
+
+        [$result, $isError] = $this->callMcpTool('addPage', [
+            'title' => 'サイト解決テスト',
+            'name' => 'main-site-resolution',
+            'content' => '<p>本文</p>',
+        ]);
+
+        $this->assertFalse($isError, is_string($result)? $result : json_encode($result, JSON_UNESCAPED_UNICODE));
+        $this->assertEquals($mainSiteId, $result['content']['site_id']);
+        // 親フォルダはそのサイトのルートになる
+        $this->assertNotEmpty($result['content']['parent_id']);
+    }
+
+    /**
+     * test siteId を明示した場合はそのサイトに作成される
+     */
+    public function testAddPageWithExplicitSiteId()
+    {
+        [$result, $isError] = $this->callMcpTool('addPage', [
+            'title' => 'サイト指定テスト',
+            'name' => 'explicit-site',
+            'content' => '<p>本文</p>',
+            'siteId' => 1,
+        ]);
+
+        $this->assertFalse($isError, is_string($result)? $result : json_encode($result, JSON_UNESCAPED_UNICODE));
+        $this->assertEquals(1, $result['content']['site_id']);
     }
 
     /**

@@ -16,6 +16,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BcMcp\Mcp\BaseMcpTool;
+use Cake\ORM\TableRegistry;
 
 /**
  * 固定ページツールクラス
@@ -80,7 +81,7 @@ class PagesTool extends BaseMcpTool
                         'content' => ['type' => 'string', 'description' => 'ページ本文、マークダウン不可、HTML推奨'],
                         'name' => ['type' => 'string', 'description' => 'URLのスラッグ。URLにおけるページを特定する識別子（省略時は自動採番）'],
                         'parentId' => ['type' => 'number', 'description' => '親フォルダのコンテンツID（省略時はサイトルート）'],
-                        'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は1）'],
+                        'siteId' => ['type' => 'number', 'description' => 'どのサイトに作成するかを指定するサイトID（省略時はメインサイト）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（0: 非公開, 1: 公開）（省略時は0）'],
                         'description' => ['type' => 'string', 'description' => 'ページの説明'],
                         'publishBegin' => ['type' => 'string', 'format' => 'date-time', 'description' => '公開開始日時（省略時はなし）'],
@@ -265,14 +266,32 @@ class PagesTool extends BaseMcpTool
             /** @var PagesService $pagesService */
             $pagesService = $this->getService(PagesServiceInterface::class);
 
-            $siteId = $siteId ?? 1;
+            // 固定ページは Content が必須で、Content にはサイトの指定が必須である。
+            // つまり「どのサイトに作るのか」という情報が必ず必要になるため、
+            // 省略された場合はメインサイトを解決する（ID の決め打ちはしない）。
+            $siteId = $siteId ?? $this->getMainSiteId();
+            if (!$siteId) {
+                return $this->createErrorResponse(
+                    'サイトを特定できませんでした。siteId を指定してください。'
+                );
+            }
+
+            // 固定ページはサイト内のいずれかのフォルダに属する必要がある。
+            // 省略された場合は指定されたサイトのルートに配置する。
+            $parentId = $parentId ?? $this->getSiteRootContentId($siteId);
+            if (!$parentId) {
+                return $this->createErrorResponse(
+                    sprintf('サイトID %s のルートフォルダを特定できませんでした。parentId を指定してください。', $siteId)
+                );
+            }
+
             $contentData = [
                 'title' => $title,
                 // plugin と type は固定値のためツール側で補う
                 'plugin' => 'BaserCore',
                 'type' => 'Page',
                 'site_id' => $siteId,
-                'parent_id' => $parentId ?? $this->getSiteRootContentId($siteId),
+                'parent_id' => $parentId,
                 'self_status' => (bool)$status,
                 'author_id' => $loginUserId,
             ];
@@ -285,9 +304,6 @@ class PagesTool extends BaseMcpTool
             $postData = [
                 // ページ本文は pages.contents に保存する
                 'contents' => $content ?? '',
-                // draft を NULL のままにすると PagesService::getIndex() が付与する
-                // draft の LIKE 条件に一致せず、一覧に出てこなくなる
-                'draft' => '',
                 'content' => $contentData,
             ];
             if ($pageTemplate !== null) $postData['page_template'] = $pageTemplate;
@@ -406,6 +422,22 @@ class PagesTool extends BaseMcpTool
                 $loginUserId
             );
         });
+    }
+
+    /**
+     * メインサイトのIDを取得する
+     *
+     * 固定ページは Content が必須で、Content にはサイトの指定が必須である。
+     * サイトIDが省略された場合の既定値として、ID を決め打ちせずメインサイトを
+     * DB から解決する。
+     *
+     * @return int|null
+     */
+    public function getMainSiteId(): ?int
+    {
+        // getRootMain() は SitesTable が提供する（SitesService には無い）
+        $mainSite = TableRegistry::getTableLocator()->get('BaserCore.Sites')->getRootMain();
+        return $mainSite? $mainSite->id : null;
     }
 
     /**
