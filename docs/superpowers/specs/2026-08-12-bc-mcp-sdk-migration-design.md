@@ -379,10 +379,11 @@ bc-mcp には現在、ブログ・カスタムコンテンツ・検索インデ�
 | `Record not found in table 'sites'` で保存に失敗する | `afterSave` で `BcSearchIndexManagerBehavior::createSearchIndex()` が走り、現在のサイト情報を参照する。**テストではログイン状態（`loginAdmin()`）が必要**。`baser-core` の `PagesServiceTest` は BcSearchIndex がロードされないため露出しないが、bc-mcp のテスト環境ではロードされる |
 | `Node '1' was not found in the tree.` | `ContentFactory` で作ったノードは `lft` / `rght` が整合しない。`RootContentScenario` を読んだ後に **`Contents->recover()`** でツリーを再構築する必要がある（`MultiSiteScenario` も同じことをしている） |
 | 追加したページが `getPages` の一覧に出てこない | `PagesService::getIndex()` が `draft` に対して `LIKE '%%'` 条件を無条件で付与するため、**`draft` が NULL の行は一致しない**。保存時に `draft` を空文字にする |
-| `deletePage` の後もページが取得でき、`deleted_date` も設定されない | **未解決。** `PagesService::delete()` は `Pages->delete()` を呼ぶが、baserCMS のコンテンツ削除がゴミ箱への移動（論理削除）であることとの関係を実挙動から特定できていない。ツールの説明は暫定的に「ゴミ箱へ移動します」としている |
-| テスト間で一意制約に衝突する（`Duplicate entry '1' for key 'users.PRIMARY'`） | **未解決。** 固定ページの保存は `afterSave` で多数のテーブルへ書き込むため、`BcTestCase` の既定の fixture 戦略ではクリーンアップが追いつかない。`BcTestCase::truncateTable()` を setUp で呼ぶと大幅に改善するが完全ではない。なお `BcTestCase::setFixtureTruncate()` は宣言のみで**実際に戦略を切り替えるコードが存在せず機能しない** |
+| `deletePage` の挙動 | **解決。** `PagesService::delete()` は**完全削除**であり、`pages` と紐づく `contents` のレコードがいずれも消える（`withDeleted` を付けてもゴミ箱に残らない）。`baser-core` の `PagesServiceTest::testDelete()` が期待する挙動と一致する。当初「ゴミ箱へ移動」と想定したのは誤りだった |
+| テスト間で一意制約に衝突する（`Duplicate entry '1' for key 'users.PRIMARY'`） | **解決。** 真因は**テストDBに前回実行の残骸が溜まっていたこと**であり、fixture 戦略の限界ではなかった。DB を掃除し vendor を `composer.lock` に揃えた環境では発生しない。念のため `setUp()` で `BcTestCase::truncateTable()` を呼び、関係テーブルを明示的に空にしている |
+| エラーが MCP の `isError` にならない | `BaseMcpTool::executeWithErrorHandling()` が例外を捕まえて `createErrorResponse()` の戻り値（`content` キーにメッセージ）として返すため、SDK レベルでは正常な戻り値になる。**移植前からの設計**であり本移植では変更していないが、AI クライアントがエラーを検知しにくいという課題は残る |
 
-**未解決の2点が残るため、固定ページツールは SDK 移植とは別に仕上げる。** 追加・編集・取得・キーワード検索は動作を確認済み。
+なお `BcTestCase::setFixtureTruncate()` は宣言のみで実際に `FixtureStrategy` を切り替えるコードが存在せず機能していなかった（旧 Fixture から FixtureFactory への移行期間中の残骸）。**5.4.x で削除済み**。
 
 ## 13. 完了条件と達成状況（2026-08-13 確認）
 
@@ -390,13 +391,13 @@ bc-mcp には現在、ブログ・カスタムコンテンツ・検索インデ�
 |---|---|---|
 | Modern（`2026-07-28`）と Legacy の両世代で `tools/list` → `tools/call` が通る | **達成** | `DualEraTest`（6 tests）。Legacy は `initialize` → セッションID → `tools/call` の正規フローを検証 |
 | 常駐プロセスを起動しなくても `/bc-mcp` が応答する | **達成** | `McpProxyControllerTest` / `OAuth2ControllerTest`（統合テストから常駐サーバー起動処理を削除して通過） |
-| 既存の bc-mcp テストがすべて通り、フルスイートに回帰がない | **達成** | bc-mcp: 212 tests / 959 assertions。フルスイート: **4810 tests / 10544 assertions、失敗・エラー 0 件**（Skipped 2 / Incomplete 440 はいずれも移植前から存在する既存の状態） |
+| 既存の bc-mcp テストがすべて通り、フルスイートに回帰がない | **達成** | bc-mcp: 218 tests / 1011 assertions。フルスイート: **4810 tests / 10544 assertions、失敗・エラー 0 件**（CakePHP 5.2.15 環境で検証。Skipped 2 / Incomplete 440 はいずれも移植前から存在する既存の状態） |
 | `logs/mcp.log` から接続クライアントの世代とプロトコルバージョンが判別できる | **達成** | `NegotiationLoggerTest`（8 tests）。実ログでも確認（`era=modern protocolVersion=2026-07-28 client=…`） |
 | 許可外 `Origin` からのリクエストが 403 で拒否される | **達成** | `McpProxyControllerTest` |
 | 認可レスポンスに `iss` が含まれ、メタデータの `issuer` と一致する | **達成** | `OAuth2UtilTest` および `OAuth2ControllerTest`（実際の認可フローで一致を検証） |
 | `vendor/php-mcp` への依存が残っていない | **達成** | `composer.json` / ソース全体の grep で参照ゼロ |
 | `McpServerManger` と管理画面の起動/停止 UI が削除されている | **達成** | ファイル削除・ルート削除。grep で参照ゼロ |
-| 固定ページの取得・作成・編集・削除がツールとして提供される | **未達成** | 追加・編集・取得・キーワード検索は動作確認済みだが、削除の挙動とテスト間のDBクリーンアップが未解決（第12.4節）。SDK 移植とは分けて仕上げる |
+| 固定ページの取得・作成・編集・削除がツールとして提供される | **達成** | `PagesToolTest`（6 tests / 32 assertions）。`tools/list` に5ツールが並ぶ事も `McpServerTest` で検証 |
 
 ### 補足: stdio 起動の確認
 

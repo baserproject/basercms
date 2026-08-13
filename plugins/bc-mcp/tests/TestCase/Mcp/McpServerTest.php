@@ -61,6 +61,12 @@ class McpServerTest extends BcTestCase
         $this->assertContains('addCustomField', $names);
         $this->assertContains('addCustomEntry', $names);
         $this->assertContains('addCustomLink', $names);
+        // BaserCore（固定ページ）
+        $this->assertContains('getPages', $names);
+        $this->assertContains('getPage', $names);
+        $this->assertContains('addPage', $names);
+        $this->assertContains('editPage', $names);
+        $this->assertContains('deletePage', $names);
         // BaserCore
         $this->assertContains('serverInfo', $names);
     }
