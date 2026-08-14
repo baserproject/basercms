@@ -115,8 +115,16 @@ class BcLang extends BcAbstractDetector
         if ($keys) {
             foreach($keys as $key) {
                 [$lang] = explode(';', $key);
-                $lang = preg_replace('/-.*$/', '', $lang);
-                if (!in_array($lang, $langs)) {
+                $lang = preg_replace('/-.*$/', '', trim($lang));
+                // Accept-Language は `*`（任意の言語を意味するワイルドカード）を許容するが、
+                // これをそのまま I18n::setLocale() に渡すと datefmt_create() が
+                // 「$locale "*" is invalid」で失敗し、サイト全体が500になる。
+                // 言語コードとして成立しない値は候補から除外する。
+                if (!preg_match('/\A[A-Za-z]{2,3}\z/', $lang)) {
+                    continue;
+                }
+                $lang = strtolower($lang);
+                if (!in_array($lang, $langs, true)) {
                     $langs[] = $lang;
                 }
             }
