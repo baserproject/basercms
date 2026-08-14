@@ -64,7 +64,18 @@ class BcLangTest extends BcTestCase
             ['en-US,en;q=0.9', 'en'],
             ['zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7', 'zh'],
             ['en-US,en;q=0.8,es-ES;q=0.5,es;q=0.3', 'en'],
-            ['123,456', '123'],
+            // 言語コードとして成立しない値は採用しない。
+            // 特に `*` は Accept-Language が許容するワイルドカードだが、
+            // I18n::setLocale() に渡すと datefmt_create() が失敗しサイト全体が500になる
+            ['*', 'ja'],
+            ['*;q=0.5', 'ja'],
+            ['123,456', 'ja'],
+            ['*,ja;q=0.9', 'ja'],
+            ['*,en;q=0.9', 'en'],
+            // 前後の空白を除いて判定する
+            [' ja , en;q=0.9 ', 'ja'],
+            // 大文字で送られても小文字に正規化する
+            ['EN-US', 'en'],
         ];
     }
 
