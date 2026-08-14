@@ -2127,10 +2127,10 @@ class BcUtil
      */
     public static function isSameOriginAsCurrent()
     {
-        // 【応急パッチ】TRUST_PROXY=true 環境では $_SERVER['HTTPS'] がリバースプロキシ配下で
+        // TRUST_PROXY=true 環境では $_SERVER['HTTPS'] がリバースプロキシ配下で
         // 設定されないため、BcRequestFilterMiddleware が trustProxy 済みで上書きする
-        // $request->is('https') を優先して使う（CakePHPの標準検出名は 'ssl' ではなく 'https'）。
-        // 取得できない場合のみ従来通り $_SERVER を見る。
+        // $request->is('https') を優先して使う。
+        // 取得できない場合のみ $_SERVER を見る。
         $request = Router::getRequest();
         $https = $request
             ? $request->is('https')
