@@ -32,7 +32,7 @@ abstract class BaseMcpTool
      * 個々のツールの戻り値の構造はエンティティの構成に依存するため、
      * ここでは型のみを宣言する。
      */
-    protected const OUTPUT_SCHEMA = ['type' => ['object', 'array']];
+    protected const OUTPUT_SCHEMA = ['type' => 'object'];
 
     /**
      * 自身が提供するツールをサーバーに登録する

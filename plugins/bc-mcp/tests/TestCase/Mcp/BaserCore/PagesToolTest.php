@@ -127,7 +127,11 @@ class PagesToolTest extends BcTestCase
 
         [$list, $listError] = $this->callMcpTool('getPages', ['limit' => 10]);
         $this->assertFalse($listError, is_string($list)? $list : json_encode($list, JSON_UNESCAPED_UNICODE));
-        $this->assertNotEmpty($list);
+        // 他の一覧系ツールと同じ data / pagination 形式で返る
+        $this->assertNotEmpty($list['data']);
+        $this->assertEquals(1, $list['pagination']['page']);
+        $this->assertEquals(10, $list['pagination']['limit']);
+        $this->assertEquals(count($list['data']), $list['pagination']['count']);
 
         [$single, $singleError] = $this->callMcpTool('getPage', ['id' => $added['id']]);
         $this->assertFalse($singleError, is_string($single)? $single : json_encode($single, JSON_UNESCAPED_UNICODE));
@@ -154,8 +158,8 @@ class PagesToolTest extends BcTestCase
         [$list, $isError] = $this->callMcpTool('getPages', ['keyword' => '特別な検索語']);
 
         $this->assertFalse($isError, is_string($list)? $list : json_encode($list, JSON_UNESCAPED_UNICODE));
-        $this->assertCount(1, $list);
-        $this->assertEquals('キーワード対象', $list[0]['content']['title']);
+        $this->assertCount(1, $list['data']);
+        $this->assertEquals('キーワード対象', $list['data'][0]['content']['title']);
     }
 
     /**

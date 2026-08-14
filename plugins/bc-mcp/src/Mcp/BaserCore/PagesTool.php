@@ -198,7 +198,17 @@ class PagesTool extends BaseMcpTool
             foreach($query->all() as $entity) {
                 $pages[] = $entity->toArray();
             }
-            return $this->createSuccessResponse($pages);
+
+            // 他の一覧系ツールと同じ形式（data / pagination）で返す。
+            // 素の配列を返すと outputSchema で宣言している object 型と矛盾する
+            return $this->createSuccessResponse([
+                'data' => $pages,
+                'pagination' => [
+                    'page' => $page,
+                    'limit' => $limit ?? 10,
+                    'count' => count($pages),
+                ]
+            ]);
         });
     }
 
