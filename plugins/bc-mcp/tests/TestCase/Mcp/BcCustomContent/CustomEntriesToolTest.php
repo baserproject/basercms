@@ -358,6 +358,55 @@ class CustomEntriesToolTest extends BcTestCase
     }
 
     /**
+     * Test getCustomEntries method - キーワード絞り込みテスト
+     *
+     * 他の一覧ツールと同じく keyword で指定できる。
+     * 対象はタイトルとスラッグ（CustomEntriesService の title 条件）。
+     *
+     * @return void
+     */
+    public function testGetCustomEntriesWithKeyword()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        $customTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        $this->CustomEntriesTool->addCustomEntry(
+            customTableId: 1,
+            title: '検索対象のエントリー',
+            name: 'keyword_target',
+            status: true,
+            creatorId: 1
+        );
+        $this->CustomEntriesTool->addCustomEntry(
+            customTableId: 1,
+            title: '関係のないエントリー',
+            name: 'keyword_other',
+            status: true,
+            creatorId: 1
+        );
+
+        $result = $this->CustomEntriesTool->getCustomEntries(
+            customTableId: 1,
+            keyword: '検索対象'
+        );
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result['results'], json_encode($result, JSON_UNESCAPED_UNICODE));
+        $this->assertEquals('検索対象のエントリー', $result['results'][0]['title']);
+
+        $dataBaseService->dropTable('custom_entry_1_contact');
+    }
+
+    /**
      * Test getCustomEntry method - IDによる単一取得テスト
      *
      * @return void

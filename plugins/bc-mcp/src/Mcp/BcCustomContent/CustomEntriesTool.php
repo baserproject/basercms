@@ -91,6 +91,7 @@ class CustomEntriesTool extends BaseMcpTool
                     'type' => 'object',
                     'properties' => [
                         'customTableId' => ['type' => 'number', 'description' => 'カスタムテーブルID（必須）'],
+                        'keyword' => ['type' => 'string', 'description' => '検索キーワード（タイトル・スラッグを対象に検索）'],
                         'limit' => ['type' => 'number', 'default' => 20, 'description' => '取得件数（デフォルト: 20）'],
                         'page' => ['type' => 'number', 'default' => 1, 'description' => 'ページ番号（デフォルト: 1）'],
                         'status' => ['type' => 'number', 'description' => 'ステータス（null: 非公開, publish: 公開）']
@@ -388,7 +389,7 @@ class CustomEntriesTool extends BaseMcpTool
      */
     public function getCustomEntries(
         int $customTableId,
-        ?string $title = null,
+        ?string $keyword = null,
         ?int $creatorId = null,
         ?string $published = null,
         ?int $limit = 20,
@@ -396,7 +397,7 @@ class CustomEntriesTool extends BaseMcpTool
         ?string $status = null
     ): array
     {
-        return $this->executeWithErrorHandling(function() use ($customTableId, $title, $creatorId, $published, $limit, $page, $status) {
+        return $this->executeWithErrorHandling(function() use ($customTableId, $keyword, $creatorId, $published, $limit, $page, $status) {
             /** @var CustomEntriesService $customEntriesService */
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
             $customEntriesService->setup($customTableId);
@@ -405,7 +406,8 @@ class CustomEntriesTool extends BaseMcpTool
                 'page' => $page ?? 1
             ];
             if (isset($status)) $conditions['status'] = $status;
-            if (!is_null($title)) $conditions['title'] = $title;
+            // CustomEntriesService の title 条件はタイトルとスラッグの LIKE 検索
+            if (!is_null($keyword)) $conditions['title'] = $keyword;
             if (!is_null($creatorId)) $conditions['creator_id'] = $creatorId;
             if (!is_null($published)) $conditions['published'] = $published;
 
