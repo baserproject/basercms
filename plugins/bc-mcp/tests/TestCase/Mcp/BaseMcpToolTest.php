@@ -224,6 +224,15 @@ class BaseMcpToolTest extends BcTestCase
         // 配列
         $array = ['test' => 'value'];
         $this->assertTrue($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$array]));
+
+        // 拡張子付きの素のファイル名（チャンクアップロードは廃止したため、対応しない）
+        //
+        // processFileUpload() は data: URI と http(s) URL しか受け付けないため、
+        // isFileUploadable() がここで true を返すと、拡張子付きの通常の文字列値
+        // （例: サンプルテキストのファイル名相当の値）がファイルと誤判定され、
+        // その後 processFileUpload() が false を返して静かに失敗する
+        $bareFilename = 'photo.jpg';
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$bareFilename]));
     }
 
     /**

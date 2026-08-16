@@ -131,6 +131,9 @@ abstract class BaseMcpTool
     /**
      * 値がファイルアップロード可能な形式かどうかを判定
      *
+     * ファイルアップロード可能な形式は data: URI と http(s) URL の2方式のみ
+     * （チャンクアップロードは廃止したため、拡張子付きの文字列は対象外）
+     *
      * @param mixed $value 判定対象の値
      * @return bool ファイルアップロード可能な形式の場合true
      */
@@ -147,11 +150,6 @@ abstract class BaseMcpTool
 
         // URLの場合（http/httpsで始まる）
         if (preg_match('/^https?:\/\//', $value)) {
-            return true;
-        }
-
-        // チャンクファイル名の場合（拡張子があるファイル名）
-        if (!empty($value) && preg_match('/\.[a-zA-Z0-9]{2,4}$/', $value)) {
             return true;
         }
 
