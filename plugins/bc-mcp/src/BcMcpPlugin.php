@@ -9,7 +9,6 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
-use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Log\Log;
@@ -64,20 +63,6 @@ class BcMcpPlugin extends BcPlugin
             BcApiUtil::createJwt();
         }
         return true;
-    }
-
-    /**
-     * Add commands for the plugin.
-     *
-     * @param \Cake\Console\CommandCollection $commands The command collection to update.
-     * @return \Cake\Console\CommandCollection
-     */
-    public function console(CommandCollection $commands): CommandCollection
-    {
-        // MCPサーバーコマンドを追加
-        $commands->add('bc_mcp.server', \BcMcp\Command\McpServerCommand::class);
-        $commands = parent::console($commands);
-        return $commands;
     }
 
     /**

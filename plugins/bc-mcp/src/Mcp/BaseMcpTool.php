@@ -47,7 +47,7 @@ abstract class BaseMcpTool
      *
      * MCP のツールは JSON-RPC の引数しか受け取らないため、認証済みの操作者は
      * McpContext から取得する。引数で明示された場合はそれを優先する
-     * （stdio 経由の利用など、コンテキストを持たない経路のため）。
+     * （テストなど、コンテキストを持たない経路のため）。
      *
      * @param int|null $loginUserId 引数で渡されたユーザーID
      * @return int|null

@@ -90,19 +90,6 @@ class McpServer
     }
 
     /**
-     * 標準入力からサーバーを起動する
-     *
-     * HTTP 経由の利用は /bc-mcp エンドポイントが担うため、常駐プロセスとしての
-     * 起動は標準入出力のみを提供する。
-     *
-     * @return void
-     */
-    public function runStdio(): void
-    {
-        $this->server->runStdio();
-    }
-
-    /**
      * サーバー情報を取得する
      *
      * @param int|null $id ID
@@ -118,7 +105,7 @@ class McpServer
             'timezone' => date_default_timezone_get(),
             'mcp_server_version' => '1.0.0',
             'supported_clients' => ['ChatGPT', 'Claude', 'Custom MCP Clients'],
-            'available_transports' => ['stdio', 'http'],
+            'available_transports' => ['http'],
         ];
     }
 

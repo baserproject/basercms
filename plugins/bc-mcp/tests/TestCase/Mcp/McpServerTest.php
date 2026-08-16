@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace BcMcp\Test\TestCase\Mcp;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMcp\Mcp\McpServer;
 use BcMcp\Test\TestSuite\McpTestTrait;
 
 /**
@@ -111,6 +112,18 @@ class McpServerTest extends BcTestCase
                 "ツール {$tool['name']} の inputSchema に loginUserId が公開されています"
             );
         }
+    }
+
+    /**
+     * test serverInfo が提供するトランスポートは HTTP のみ
+     *
+     * 認証と権限を通らない stdio 経路は提供しない
+     */
+    public function testServerInfoReportsHttpOnly()
+    {
+        $result = (new McpServer())->serverInfo();
+
+        $this->assertEquals(['http'], $result['available_transports']);
     }
 
 }
