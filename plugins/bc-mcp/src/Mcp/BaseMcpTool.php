@@ -35,6 +35,56 @@ abstract class BaseMcpTool
     protected const OUTPUT_SCHEMA = ['type' => 'object'];
 
     /**
+     * 読み取り専用ツールの注釈
+     *
+     * クライアントが読み取りと書き込みを区別できるようにする。Claude の
+     * Research はツール呼び出しに都度承認を挟まないため、区別できる情報を
+     * 提供する意味がある。readOnlyHint が true のとき、destructiveHint と
+     * idempotentHint は意味を持たないため宣言しない。
+     */
+    protected const ANNOTATION_READ = [
+        'readOnlyHint' => true,
+        'openWorldHint' => false,
+    ];
+
+    /**
+     * 追加系ツールの注釈
+     *
+     * 追加のみで既存データを壊さない。同じ引数で繰り返すと重複が増えるため
+     * 冪等ではない。
+     */
+    protected const ANNOTATION_CREATE = [
+        'readOnlyHint' => false,
+        'destructiveHint' => false,
+        'idempotentHint' => false,
+        'openWorldHint' => false,
+    ];
+
+    /**
+     * 更新系ツールの注釈
+     *
+     * 既存データを上書きするため破壊的とみなす。同じ引数なら結果は同じ。
+     */
+    protected const ANNOTATION_UPDATE = [
+        'readOnlyHint' => false,
+        'destructiveHint' => true,
+        'idempotentHint' => true,
+        'openWorldHint' => false,
+    ];
+
+    /**
+     * 削除系ツールの注釈
+     *
+     * 削除済みのものを再度削除しても結果は変わらない。
+     */
+    protected const ANNOTATION_DELETE = [
+        'readOnlyHint' => false,
+        'destructiveHint' => true,
+        'idempotentHint' => true,
+        'openWorldHint' => false,
+    ];
+
+    /**
      * 自身が提供するツールをサーバーに登録する
      *
      * @param \Mcp\Server\McpServer $server SDK のサーバー
