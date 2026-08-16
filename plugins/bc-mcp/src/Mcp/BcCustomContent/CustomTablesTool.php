@@ -29,6 +29,7 @@ class CustomTablesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'addCustomTable'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 name: 'addCustomTable',
                 description: 'カスタムテーブルを追加し、指定されたカスタムフィールドを関連付けます。フィールドを関連付けるためには、事前にカスタムフィールドが作成されている必要があります。',
                 inputSchema: [
@@ -51,6 +52,7 @@ class CustomTablesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'editCustomTable'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 name: 'editCustomTable',
                 description: '指定されたIDのカスタムテーブルを編集します',
                 inputSchema: [
@@ -74,6 +76,7 @@ class CustomTablesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getCustomTables'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getCustomTables',
                 description: 'カスタムテーブルの一覧を取得します',
                 inputSchema: [
@@ -86,6 +89,7 @@ class CustomTablesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getCustomTable'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getCustomTable',
                 description: '指定されたIDのカスタムテーブルを取得します',
                 inputSchema: [
@@ -99,6 +103,7 @@ class CustomTablesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'deleteCustomTable'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 name: 'deleteCustomTable',
                 description: '指定されたIDのカスタムテーブルを削除します',
                 inputSchema: [

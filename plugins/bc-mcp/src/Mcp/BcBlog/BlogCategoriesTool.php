@@ -27,6 +27,7 @@ class BlogCategoriesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'addBlogCategory'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 name: 'addBlogCategory',
                 description: 'ブログカテゴリを追加します',
                 inputSchema: [
@@ -44,6 +45,7 @@ class BlogCategoriesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getBlogCategories'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getBlogCategories',
                 description: 'ブログカテゴリの一覧を取得します',
                 inputSchema: [
@@ -60,6 +62,7 @@ class BlogCategoriesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getBlogCategory'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getBlogCategory',
                 description: '指定されたIDのブログカテゴリを取得します',
                 inputSchema: [
@@ -73,6 +76,7 @@ class BlogCategoriesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'editBlogCategory'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 name: 'editBlogCategory',
                 description: '指定されたIDのブログカテゴリを編集します',
                 inputSchema: [
@@ -91,6 +95,7 @@ class BlogCategoriesTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'deleteBlogCategory'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 name: 'deleteBlogCategory',
                 description: '指定されたIDのブログカテゴリを削除します',
                 inputSchema: [

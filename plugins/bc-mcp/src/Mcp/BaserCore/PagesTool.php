@@ -45,6 +45,7 @@ class PagesTool extends BaseMcpTool
                 description: '固定ページの一覧を取得します',
                 callback: [$this, 'getPages'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -61,6 +62,7 @@ class PagesTool extends BaseMcpTool
                 description: '指定されたIDの固定ページを取得します',
                 callback: [$this, 'getPage'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -74,6 +76,7 @@ class PagesTool extends BaseMcpTool
                 description: '固定ページを追加します',
                 callback: [$this, 'addPage'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -97,6 +100,7 @@ class PagesTool extends BaseMcpTool
                 description: '固定ページを編集します',
                 callback: [$this, 'editPage'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -120,6 +124,7 @@ class PagesTool extends BaseMcpTool
                 description: '指定されたIDの固定ページを削除します。ゴミ箱には残らず完全に削除されます',
                 callback: [$this, 'deletePage'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [

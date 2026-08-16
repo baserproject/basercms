@@ -57,6 +57,9 @@ class McpServer
             name: 'serverInfo',
             description: 'サーバーのバージョンや環境情報を返します',
             callback: [$this, 'serverInfo'],
+            // BaseMcpTool を継承していないため定数を参照できない。
+            // ANNOTATION_READ と同じ内容を直接指定する。
+            annotations: ['readOnlyHint' => true, 'openWorldHint' => false],
             outputSchema: [
                 'type' => 'object',
                 'properties' => [

@@ -28,6 +28,7 @@ class BlogContentsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'addBlogContent'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 name: 'addBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、そのブログコンテンツを追加します',
                 inputSchema: [
@@ -66,6 +67,7 @@ class BlogContentsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'editBlogContent'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 name: 'editBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを編集します',
                 inputSchema: [
@@ -105,6 +107,7 @@ class BlogContentsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getBlogContents'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getBlogContents',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、そのブログコンテンツの一覧を取得します',
                 inputSchema: [
@@ -120,6 +123,7 @@ class BlogContentsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getBlogContent'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを取得します',
                 inputSchema: [
@@ -133,6 +137,7 @@ class BlogContentsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'deleteBlogContent'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 name: 'deleteBlogContent',
                 description: 'baserCMSは複数のブログを持つことができます。一つ一つのブログをブログコンテンツと呼び、指定されたIDのブログコンテンツを削除します',
                 inputSchema: [

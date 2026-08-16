@@ -66,6 +66,7 @@ class CustomFieldsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'addCustomField'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 name: 'addCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを追加します。',
                 inputSchema: [
@@ -94,6 +95,7 @@ class CustomFieldsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'editCustomField'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 name: 'editCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドを編集します',
                 inputSchema: [
@@ -123,6 +125,7 @@ class CustomFieldsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getCustomFields'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getCustomFields',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドの一覧を取得します',
                 inputSchema: [
@@ -138,6 +141,7 @@ class CustomFieldsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'getCustomField'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 name: 'getCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して取得します',
                 inputSchema: [
@@ -151,6 +155,7 @@ class CustomFieldsTool extends BaseMcpTool
             ->tool(
                 callback: [$this, 'deleteCustomField'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 name: 'deleteCustomField',
                 description: 'カスタムエントリーの入力欄を定義する、カスタムフィールドをIDを指定して削除します',
                 inputSchema: [

@@ -31,6 +31,7 @@ class BlogPostsTool extends BaseMcpTool
                 description: 'ブログ記事の一覧を取得します',
                 callback: [$this, 'getBlogPosts'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -47,6 +48,7 @@ class BlogPostsTool extends BaseMcpTool
                 description: '指定されたIDのブログ記事を取得します',
                 callback: [$this, 'getBlogPost'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_READ,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -60,6 +62,7 @@ class BlogPostsTool extends BaseMcpTool
                 description: 'ブログ記事を追加します',
                 callback: [$this, 'addBlogPost'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_CREATE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -84,6 +87,7 @@ class BlogPostsTool extends BaseMcpTool
                 description: 'ブログ記事を編集します',
                 callback: [$this, 'editBlogPost'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_UPDATE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
@@ -109,6 +113,7 @@ class BlogPostsTool extends BaseMcpTool
                 description: '指定されたIDのブログ記事を削除します',
                 callback: [$this, 'deleteBlogPost'],
                 outputSchema: self::OUTPUT_SCHEMA,
+                annotations: self::ANNOTATION_DELETE,
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
