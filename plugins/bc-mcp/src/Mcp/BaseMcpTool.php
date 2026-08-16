@@ -161,7 +161,7 @@ abstract class BaseMcpTool
     /**
      * ファイルアップロード処理
      *
-     * @param string $fileData ファイルパス、URL、またはbase64エンコードされたデータ
+     * @param string $fileData 画像の URL、または data: URI 形式の base64 データ
      * @param string $fieldName フィールド名（ログ用）
      * @return array|false アップロード情報の配列、失敗時はfalse
      */
@@ -178,10 +178,6 @@ abstract class BaseMcpTool
                 return $this->processUrlFile($fileData);
             }
 
-            if (!empty($fileData)) {
-                return $this->processChunkFile($fileData);
-            }
-
             throw new \Exception('不正なファイルデータ形式です: ' . $fileData);
 
         } catch (\Exception $e) {
@@ -191,47 +187,6 @@ abstract class BaseMcpTool
             }
             return false;
         }
-    }
-
-    /**
-     * チャンクファイルを処理
-     *
-     * @param string $fileData チャンクファイル名
-     * @return array アップロード情報の配列
-     * @throws \Exception
-     */
-    public function processChunkFile(string $fileData): array
-    {
-        $filePath = TMP . 'mcp_uploads' . DS . $fileData;
-        if (!file_exists($filePath)) {
-            throw new \Exception('チャンクファイルが存在しません');
-        }
-
-        // ファイル情報を取得
-        $fileSize = filesize($filePath);
-        $fileName = basename($fileData);
-
-        // ファイル拡張子を取得
-        $pathInfo = pathinfo($fileName);
-        $extension = strtolower($pathInfo['extension'] ?? '');
-
-        // 許可された拡張子かチェック
-        if (!$this->isAllowedExtension($extension)) {
-            throw new \Exception('サポートされていないファイル形式です: ' . $extension);
-        }
-
-        // MIMEタイプを取得
-        $mimeType = $this->getMimeTypeFromExtension($extension);
-
-        // アップロード情報として返す
-        return [
-            'name' => $fileName,
-            'type' => $mimeType,
-            'tmp_name' => $filePath,
-            'error' => UPLOAD_ERR_OK,
-            'size' => $fileSize,
-            'ext' => $extension
-        ];
     }
 
     /**

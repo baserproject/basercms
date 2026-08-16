@@ -28,11 +28,29 @@ class BaseMcpToolTest extends BcTestCase
     }
 
     /**
+     * テスト内で mcp_uploads ディレクトリに作成したファイルのパス
+     *
+     * 設定した場合のみ tearDown() で確実に削除する
+     */
+    protected ?string $chunkUploadFile = null;
+
+    /**
+     * テスト内で作成した mcp_uploads ディレクトリのパス
+     */
+    protected ?string $chunkUploadDir = null;
+
+    /**
      * Tear down
      */
     public function tearDown(): void
     {
         unset($this->BaseMcpTool);
+        if ($this->chunkUploadFile && file_exists($this->chunkUploadFile)) {
+            unlink($this->chunkUploadFile);
+        }
+        if ($this->chunkUploadDir && is_dir($this->chunkUploadDir) && count(scandir($this->chunkUploadDir)) === 2) {
+            rmdir($this->chunkUploadDir);
+        }
         parent::tearDown();
     }
 
@@ -68,6 +86,29 @@ class BaseMcpToolTest extends BcTestCase
 
         // URLの場合はそのまま返される
         $this->assertArrayHasKey('tmp_name', $result);
+    }
+
+    /**
+     * test processFileUpload rejects a filename pointing at an existing chunk upload file
+     *
+     * チャンクアップロードを廃止したため、TMP/mcp_uploads/ に実在するファイルを
+     * 指しても、それをアップロードとして扱ってはならない。
+     * processChunkFile() が残っている間は配列（アップロード情報）が返り、
+     * このテストは FAIL する。processChunkFile() 削除後は false が返り PASS する。
+     */
+    public function testProcessFileUploadRejectsExistingChunkFile()
+    {
+        $this->chunkUploadDir = TMP . 'mcp_uploads' . DS;
+        if (!is_dir($this->chunkUploadDir)) {
+            mkdir($this->chunkUploadDir, 0755, true);
+        }
+        $filename = 'test_chunk_upload.jpg';
+        $this->chunkUploadFile = $this->chunkUploadDir . $filename;
+        file_put_contents($this->chunkUploadFile, 'dummy image data');
+
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'processFileUpload', [$filename]);
+
+        $this->assertFalse($result);
     }
 
     /**

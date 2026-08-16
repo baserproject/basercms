@@ -665,9 +665,11 @@ class BlogPostsToolTest extends BcTestCase
     }
 
     /**
-     * basercms.png をチャンク分割して送信し、その画像を使ってブログ記事を追加するテスト
+     * data: URI で渡した画像データがアイキャッチになることを確認するテスト
+     *
+     * チャンクアップロードは廃止したため、インラインの data: URI で検証する
      */
-    public function testAddBlogPostWithChunkedImageUpload()
+    public function testAddBlogPostWithInlineEyeCatch()
     {
         // 初期設定とファクトリー設定
         $this->loadFixtureScenario(InitAppScenario::class);
@@ -680,57 +682,24 @@ class BlogPostsToolTest extends BcTestCase
         ])->persist();
         BlogContentFactory::make(['id' => 1000, 'name' => 'news'])->persist();
 
-        // basercms.pngファイルを読み込み
-        $imagePath = WWW_ROOT . 'img' . DS . 'basercms.png';
-        $this->assertTrue(file_exists($imagePath), 'basercms.png が存在しません');
+        // 1x1の小さなPNG画像のbase64データ
+        $pngBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+        $eyeCatch = 'data:image/png;base64,' . $pngBase64;
 
-        $imageContent = file_get_contents($imagePath);
-        $fileId = 'test_blog_image_' . uniqid();
-        $filename = 'basercms_blog.png';
-
-        // FileUploadToolのインスタンスを作成
-        $fileUploadTool = new \BcMcp\Mcp\BaserCore\FileUploadTool();
-
-        // 画像を1024バイトずつのチャンクに分割
-        $chunkSize = 1024;
-        $chunks = str_split($imageContent, $chunkSize);
-        $totalChunks = count($chunks);
-
-        $this->assertGreaterThan(1, $totalChunks, '画像ファイルが小さすぎてチャンク分割できません');
-
-        // 各チャンクを順番に送信（最後のチャンク以外）
-        for($i = 0; $i < $totalChunks - 1; $i++) {
-            $result = $fileUploadTool->sendFileChunk($fileId, $i, $totalChunks, base64_encode($chunks[$i]), $filename);
-
-            $this->assertEquals('chunk_received', $result['status']);
-            $this->assertEquals($i + 1, $result['progress']);
-        }
-
-        // 最後のチャンクを送信
-        $lastIndex = $totalChunks - 1;
-        $result = $fileUploadTool->sendFileChunk($fileId, $lastIndex, $totalChunks, base64_encode($chunks[$lastIndex]), $filename);
-
-        $this->assertEquals('complete', $result['status']);
-
-        // アップロードされたファイルが正しく作成されていることを確認
-        $uploadedFile = TMP . 'mcp_uploads/' . $filename;
-        $this->assertTrue(file_exists($uploadedFile), 'アップロードされたファイルが見つかりません');
-        $this->assertEquals($imageContent, file_get_contents($uploadedFile), 'アップロードされたファイルの内容が一致しません');
-
-        // アップロードしたファイル名を使ってブログ記事を作成
+        // data: URI を使ってブログ記事を作成
         $blogResult = $this->BlogPostsTool->addBlogPost(
-            'チャンク分割画像付きブログ記事',                    // title
-            '<p>チャンク分割でアップロードした画像を使用したテスト記事です。</p>', // detail
+            'インラインアイキャッチ付きブログ記事',              // title
+            '<p>data: URI でアイキャッチを指定したテスト記事です。</p>', // detail
             'news',                                         // blogContent
             null,                                           // name
-            'チャンク分割画像のテスト概要',                     // content
+            'インラインアイキャッチのテスト概要',                // content
             null,                                           // category
             null,                                           // email
             1,                                              // status (公開)
             null,                                           // posted
             null,                                           // publishBegin
             null,                                           // publishEnd
-            $filename,                                      // eyeCatch (アップロードしたファイル名)
+            $eyeCatch,                                      // eyeCatch (data: URI)
             1                                               // loginUserId
         );
 
@@ -746,11 +715,8 @@ class BlogPostsToolTest extends BcTestCase
         $this->assertEquals(IMAGETYPE_PNG, $imageInfo[2], 'アイキャッチ画像がPNG形式ではありません');
 
         // テスト後のクリーンアップ
-        if (file_exists($uploadedFile)) {
-            unlink($uploadedFile);
-        }
         if (file_exists($blogImagePath)) {
-            (new BcFolder())->delete(WWW_ROOT . 'files' . DS . 'blog' . DS . '1');
+            (new BcFolder())->delete(WWW_ROOT . 'files' . DS . 'blog' . DS . '1000');
         }
     }
 

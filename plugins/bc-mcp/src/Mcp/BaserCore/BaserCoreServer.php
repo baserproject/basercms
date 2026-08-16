@@ -20,8 +20,6 @@ class BaserCoreServer
     {
         return [
             PagesTool::class,
-            // SearchIndexesTool::class, // ChatGPTで動作しないため一旦、停止
-            // FileUploadTool::class // AI側のメッセージ制限によりチャンクによるアップロードを実装したが、それでも、現実的でなかったため、一旦、停止
         ];
     }
 
