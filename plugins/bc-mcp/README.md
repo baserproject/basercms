@@ -5,6 +5,7 @@ baserCMS用のMCP（Model Context Protocol）サーバープラグインです�
 
 ## 機能
 
+- 固定ページの作成、取得、編集、削除
 - ブログ関連データの作成、取得、編集、削除
 - カスタムコンテンツ関連データの作成、取得、編集、削除
 - サーバー情報の取得
@@ -42,7 +43,9 @@ chmod 666 config/.env
 baserCMSの管理画面から BcMcp プラグインを有効化してください。
 
 ## MCPサーバーの起動
-事前にメニューの「MCPサーバー管理」よりMCPサーバーを起動します。
+起動操作は不要です。MCPサーバーはbaserCMSのリクエスト内で動作するため、常駐プロセスを立てる必要はありません。
+
+メニューの「MCPサーバー管理」では、接続用のURL・提供しているツールの一覧・直近の接続状況を確認できます。
 
 ## クライアント連携
 
@@ -94,38 +97,152 @@ Claude Pro 以上の契約が必要です。
 
 HTTPトランスポートをサポートする任意のMCPクライアントで使用できます。
 
+## ローカル環境をHTTPSで公開して動作確認する
+
+ClaudeなどのMCPクライアントは、**自己署名証明書のサーバーには接続できません**。
+ローカル開発環境で実クライアントとの連携を確認するには、正式な証明書を持つHTTPSのURLが必要です。
+
+ここでは [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
+を使い、ローカル環境を一時的にインターネットへ公開する手順を示します。独自ドメインもCloudflareアカウントも不要です。
+
+> **注意**: この手順を実行すると、管理画面を含むサイト全体が一時的にインターネットへ公開されます。
+> 動作確認が終わったら必ずトンネルを停止してください。
+
+### 1. cloudflaredのインストール
+
+```bash
+brew install cloudflared
+```
+
+### 2. トンネルの起動
+
+ローカル環境が `https://localhost` で動作している場合：
+
+```bash
+cloudflared tunnel --url https://localhost --no-tls-verify
+```
+
+`--no-tls-verify` は、接続先（ローカル環境）が自己署名証明書のために必要です。
+
+起動すると `https://<ランダムな文字列>.trycloudflare.com` というURLが発行されます。
+このURLは**トンネルを再起動するたびに変わります**。確認が終わるまでトンネルは起動したままにしてください。
+
+### 3. SITE_URLの変更
+
+`config/.env` の `SITE_URL` を、発行されたURLに変更します。
+
+```
+export SITE_URL="https://<発行されたURL>/"
+```
+
+`SITE_URL` はアクセストークン（JWT）の発行者・対象者や、動的クライアント登録のレスポンスに使われるため、
+公開URLと一致していないとクライアント側の検証に失敗します。
+
+あわせて `TRUST_PROXY` が `true` であることを確認してください。トンネル経由のリクエストは
+`X-Forwarded-Proto` でHTTPSを伝えるため、これが有効でないとHTTPと判定されます。
+
+```
+export TRUST_PROXY="true"
+```
+
+変更後はキャッシュをクリアします。
+
+```bash
+bin/cake cache clear_all
+```
+
+### 4. リバースプロキシを使っている場合
+
+`nginx-proxy` などのリバースプロキシでホスト名ごとに振り分けている環境では、
+発行されたURLのホスト名を振り分け対象に追加する必要があります。追加しないと、
+プロキシが転送先を判断できず **503 Service Temporarily Unavailable** になります。
+
+`docker-compose.yml` の該当サービスの `VIRTUAL_HOST` に追記し、そのコンテナを再作成します。
+
+```yaml
+- VIRTUAL_HOST=localhost,<発行されたURLのホスト名>
+```
+
+```bash
+docker compose up -d --no-deps <サービス名>
+```
+
+`LETSENCRYPT_HOST` への追加は不要です。証明書はCloudflare側が用意します。
+
+### 5. 接続の確認
+
+```bash
+# サイトが表示されるか
+curl -o /dev/null -w "%{http_code}\n" https://<発行されたURL>/
+
+# 認可サーバーのメタデータを取得し、issuerが公開URLになっているか
+curl https://<発行されたURL>/.well-known/oauth-authorization-server/bc-mcp
+```
+
+`-k` を付けずに成功すれば、正式な証明書で接続できています。
+
+### 6. クライアントへの登録
+
+`https://<発行されたURL>/bc-mcp` を、各クライアントのMCPサーバーURLとして登録します。
+登録手順は「クライアント連携」の各項目を参照してください。
+
+### 7. 確認後の後片付け
+
+1. 動作確認で作成したコンテンツを削除する
+2. `config/.env` の `SITE_URL` を元に戻し、キャッシュをクリアする
+3. `VIRTUAL_HOST` に追加したホスト名を削除し、コンテナを再作成する
+4. `cloudflared` のプロセスを停止する
+
+### MCP Inspectorでの確認
+
+クライアントに登録する前に、[MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+で確認することもできます。ローカル環境（自己署名証明書）に対して直接実行できます。
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx -y @modelcontextprotocol/inspector
+```
+
+`NODE_TLS_REJECT_UNAUTHORIZED=0` は自己署名証明書を許可するための指定です。
+起動後、表示されるURLをブラウザで開き、次を設定して接続します。
+
+- **Transport Type**: `Streamable HTTP`
+- **URL**: `https://localhost/bc-mcp`
+
+CLIから直接実行することもできます。
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  npx -y @modelcontextprotocol/inspector --cli https://localhost/bc-mcp \
+  --transport http --method tools/list
+```
+
 ## 利用可能なツール
+
+最新の一覧は「MCPサーバー管理」画面で確認できます（実際に登録されているツールを表示するため、
+常に実態と一致します）。
+
+### 固定ページ関連
+
+- `getPages`: 固定ページ一覧を取得
+- `getPage`: 単一の固定ページを取得
+- `addPage`: 固定ページを追加
+- `editPage`: 固定ページを編集
+- `deletePage`: 固定ページを削除
 
 ### ブログ関連
 
-- `getBlogPosts`: ブログ記事一覧を取得
-- `getBlogPost`: 単一のブログ記事を取得
-- `addBlogPost`: ブログ記事を追加
-- `editBlogPost`: ブログ記事を編集
-- `deleteBlogPost`: ブログ記事を削除
+- `getBlogPosts` / `getBlogPost` / `addBlogPost` / `editBlogPost` / `deleteBlogPost`: ブログ記事
+- `getBlogContents` / `getBlogContent` / `addBlogContent` / `editBlogContent` / `deleteBlogContent`: ブログ
+- `getBlogCategories` / `getBlogCategory` / `addBlogCategory` / `editBlogCategory` / `deleteBlogCategory`: ブログカテゴリ
+- `getBlogTags` / `getBlogTag` / `addBlogTag` / `editBlogTag` / `deleteBlogTag`: ブログタグ
 
 ### カスタムコンテンツ関連
 
-- `getCustomContents`: カスタムコンテンツ一覧を取得
-- `getCustomContent`: 単一のカスタムコンテンツを取得
-- `addCustomContent`: カスタムコンテンツを追加
-- `editCustomContent`: カスタムコンテンツを編集
-- `deleteCustomContent`: カスタムコンテンツを削除
-- `getCustomContentEntries`: カスタムコンテンツのエントリー一覧を取得
-- `getCustomContentEntry`: 単一のカスタムエントリーを取得
-- `addCustomEntry`: カスタムエントリーを追加
-- `editCustomEntry`: カスタムエントリーを編集
-- `deleteCustomEntry`: カスタムエントリーを削除
-- `getCustomFields`: カスタムフィールド情報を取得
-- `getCustomField`: 単一のカスタムフィールド情報を取得
-- `addCustomField`: カスタムフィールドを追加
-- `editCustomField`: カスタムフィールドを編集
-- `deleteCustomField`: カスタムフィールドを削除
-- `getCustomTables`: カスタムテーブル情報を取得
-- `getCustomTable`: 単一のカスタムテーブル情報を取得
-- `addCustomTable`: カスタムテーブルを追加
-- `editCustomTable`: カスタムテーブルを編集
-- `deleteCustomTable`: カスタムテーブルを削除
+- `getCustomContents` / `getCustomContent` / `addCustomContent` / `editCustomContent` / `deleteCustomContent`: カスタムコンテンツ
+- `getCustomEntries` / `getCustomEntry` / `addCustomEntry` / `editCustomEntry` / `deleteCustomEntry`: カスタムエントリー
+- `getCustomFields` / `getCustomField` / `addCustomField` / `editCustomField` / `deleteCustomField`: カスタムフィールド
+- `getCustomTables` / `getCustomTable` / `addCustomTable` / `editCustomTable` / `deleteCustomTable`: カスタムテーブル
+- `getCustomLinks` / `getCustomLink` / `addCustomLink` / `editCustomLink` / `deleteCustomLink`: カスタムリンク
 
 ### システム情報
 
@@ -169,29 +286,43 @@ HTTPトランスポートをサポートする任意のMCPクライアントで�
 
 ## 技術的な仕組み
 
-### HTTPプロキシベースの接続
+### プロセス内実行
 
-BcMcpプラグインは以下の仕組みでクラアントと連携します：
+BcMcpプラグインは以下の仕組みでクライアントと連携します：
 
 1. **クライアント** → HTTPリクエスト → **baserCMS(/bc-mcp)**
-2. **MCPProxyController** → JSON-RPC変換 → **内部MCPサーバー**
-3. **内部MCPサーバー** → baserCMS操作 → **レスポンス**
-4. **MCPProxyController** → HTTPレスポンス → **クライアント**
+2. **McpProxyController** → OAuth2認証・権限チェック・Origin検証
+3. **McpRequestHandler** → 同一プロセス内でMCPサーバーを実行 → **各ツール** → baserCMS操作
+4. **McpProxyController** → HTTPレスポンス → **クライアント**
+
+常駐プロセスや内部へのHTTP転送は行いません。リクエストごとにMCPサーバーを組み立てるため、
+ツールや設定の変更が即座に反映されます。
+
+### 対応プロトコルバージョン
+
+`2026-07-28`（ステートレスコア）と、それ以前の `initialize` 方式の世代の双方に対応しています。
+プロトコルの世代判定・`server/discover`・必須ヘッダの検証などはSDKが担います。
 
 ## トラブルシューティング
 
 ### よくある問題
 
-1. **MCPサーバーが起動しない**
+1. **クライアントから接続できない**
    - PHP 8.1以上がインストールされているか確認
    - Composerの依存関係がインストールされているか確認
+   - **自己署名証明書のURLを登録していないか確認**（多くのクライアントは接続を拒否します。
+     「ローカル環境をHTTPSで公開して動作確認する」を参照）
    - ログファイルにエラーメッセージがないか確認
 
-2. **ツールが正常に動作しない**
+2. **403が返る**
+   - クライアントが送る `Origin` ヘッダが許可されていない可能性があります。
+     設定の `BcMcp.allowedOrigins` を確認してください。空の場合は検証を行いません。
+
+3. **ツールが正常に動作しない**
    - baserCMSのデータベースに接続できているか確認
    - 必要なプラグイン（BcBlog、BcCustomContent）が有効になっているか確認
 
-3. **認可画面が表示されない**
+4. **認可画面が表示されない**
     - baserCMSを古いバージョンからアップデートした場合、`/.htaccess` が正しく設定されていない可能性があります。次のように変更をお願いします。
 ```bash
 # 変更前
@@ -203,9 +334,15 @@ RewriteRule ^(\.well-known/.*)$ webroot/$1 [L]
 ### MCPサーバーのログの確認
 
 ```bash
-# MCPサーバーのログを確認
-tail -f tmp/logs/mcp_server.log
+# プロトコルのネゴシエーション状況を確認
+tail -f logs/mcp.log
+
+# MCPサーバー内部のエラーを確認
+tail -f logs/bc_mcp_error.log
 ```
+
+`logs/mcp.log` には、接続ごとのプロトコル世代・クライアント名・呼び出されたメソッドが記録されます。
+「MCPサーバー管理」画面からも直近の内容を確認できます。
 
 ## 開発への貢献
 [CONTRIBUTING.md](.github/CONTRIBUTING.md) をご覧ください。
