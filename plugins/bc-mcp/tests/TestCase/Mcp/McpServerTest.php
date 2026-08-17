@@ -144,6 +144,8 @@ class McpServerTest extends BcTestCase
      * 注釈は接頭辞ごとに手で指定する方針のため、ツールを追加したときの
      * 付け忘れを検出する仕組みが要る。個別ツールごとではなく tools/list を
      * 走査して全数を確認する。
+     *
+     * 付け忘れ・値の取り違えに加え、余分な項目も検出する。
      */
     public function testAllToolsDeclareAnnotations()
     {
@@ -166,10 +168,25 @@ class McpServerTest extends BcTestCase
             $this->assertNotNull($prefix, "ツール {$name} の接頭辞が想定外です。注釈の割り当てを決めてください。");
             $this->assertArrayHasKey('annotations', $tool, "ツール {$name} に注釈がありません");
 
-            foreach(self::EXPECTED[$prefix] as $key => $expected) {
-                $this->assertArrayHasKey($key, $tool['annotations'], "ツール {$name} の注釈に {$key} がありません");
-                $this->assertSame($expected, $tool['annotations'][$key], "ツール {$name} の {$key} が想定と異なります");
-            }
+            // 期待する項目だけを個別に見ると、余分な項目（読み取り専用ツールに
+            // destructiveHint が付いている等）を見逃す。配列全体を比較する。
+            // title は任意項目のため比較から除く。
+            $actual = $tool['annotations'];
+            unset($actual['title']);
+            ksort($actual);
+            $expected = self::EXPECTED[$prefix];
+            ksort($expected);
+
+            $this->assertSame(
+                $expected,
+                $actual,
+                sprintf(
+                    'ツール %s の注釈が想定と異なります。期待: %s / 実際: %s',
+                    $name,
+                    json_encode($expected),
+                    json_encode($actual)
+                )
+            );
         }
     }
 
