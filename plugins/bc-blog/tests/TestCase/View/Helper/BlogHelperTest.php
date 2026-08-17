@@ -1316,7 +1316,16 @@ class BlogHelperTest extends BcTestCase
         );
         BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'release', 'lft' => 1, 'rght' => 4])->persist();
         BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child', 'lft' => 2, 'rght' => 3, 'parent_id' => 1])->persist();
-        BlogPostFactory::make(['id'=> 1, 'blog_content_id' => 1, 'title' => 'title test'])->persist();
+        // posted を省略すると Faker がランダムな日時を入れるため、month 指定の
+        // データセットが1月を引いたときだけ失敗する不安定なテストになっていた。
+        // 他のデータセット（year / day / 年月日指定）の前提を崩さないよう、
+        // 1月と27日を避けた日付で固定する。
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'title' => 'title test',
+            'posted' => '2018-05-15 12:00:00'
+        ])->persist();
         BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog1', 'blog_category_id' => 1, 'posted' => '2016-01-27 12:57:59'])->persist();
         BlogPostFactory::make(['blog_content_id' => 1, 'title' => 'title blog2', 'blog_category_id' => 2, 'posted' => '2017-01-27 12:57:59'])->persist();
         BlogPostFactory::make(['blog_content_id' => 1, 'blog_category_id' => 1, 'posted' => '2017-03-27 12:57:59'])->persist();
