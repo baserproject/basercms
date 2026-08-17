@@ -127,6 +127,27 @@ cloudflared tunnel --url https://localhost --no-tls-verify
 起動すると `https://<ランダムな文字列>.trycloudflare.com` というURLが発行されます。
 このURLは**トンネルを再起動するたびに変わります**。確認が終わるまでトンネルは起動したままにしてください。
 
+Quick Tunnel には次の制約があります。
+
+| 項目 | 内容 |
+|---|---|
+| 同時リクエスト | 200 in-flight まで |
+| SSE（Server-Sent Events） | **非対応** |
+| URL | 再起動のたびに変わる |
+| 用途 | テストと開発のみ（本番非推奨、SLAなし） |
+
+固定のホスト名が必要な場合は Named Tunnel を使います。Cloudflare アカウントと、
+Cloudflare に登録済みのドメインが必要です。
+
+```bash
+cloudflared tunnel login
+cloudflared tunnel create bc-mcp-verify
+cloudflared tunnel route dns bc-mcp-verify mcp-dev.example.com
+```
+
+固定ホスト名にすると、OAuth の動的クライアント登録・`SITE_URL`・コネクタ登録を
+毎回やり直す必要がなくなります。
+
 ### 3. SITE_URLの変更
 
 `config/.env` の `SITE_URL` を、発行されたURLに変更します。
@@ -276,13 +297,20 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 \
 
 ### 制約事項
 - multipart/form-dataに対応しておらず、JSONで送信するため base64エンコード行う必要があり、生成AI側のメッセージ送信のトークン制限に引っかかってしまい処理が中断される
-- 約30KB以下でチャンク分割送信を行うにしても送信回数が多くなりすぎ現実的ではない 
 
 ### 現状の対応方法
-現状としてはSTDIO方式のアップロードツールで、BcMcpが参照可能な領域にアップロードして、そのURLを送信するしかありません。
+アイキャッチなどの画像は、次の2つの方法で指定できます。
+
+- **画像のURL** — ネット上に公開された画像のURLを渡します
+- **`data:` URI** — `data:image/png;base64,...` 形式で直接渡します。小さな画像に限ります
 
 ### 将来的な対応予定
-将来的には、MPCの仕様として multipart/form-data に対応する予定との事ですので、その際にBcMcpも対応する予定です。
+MCP に [File Uploads Working Group](https://modelcontextprotocol.io/community/working-groups/file-uploads)
+が設置され、ホストがファイルピッカーを表示してサーバーへファイルを渡す仕組みが検討されています
+（[SEP-2631](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2631)）。
+
+現状はホスト側にファイルの中身をサーバーへ渡す手段が無いため、ローカルのファイルを
+そのままアップロードすることはできません。規格とホストの対応が揃った段階で BcMcp も対応します。
 
 ## 技術的な仕組み
 
