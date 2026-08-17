@@ -220,6 +220,9 @@ class BlogPostsTool extends BaseMcpTool
                 if ($eyeCatchData !== false && is_array($eyeCatchData)) {
                     // 配列データをCakePHPのUploadedFileオブジェクトに変換
                     $data['eye_catch'] = $this->createUploadedFileFromArray($eyeCatchData);
+                } else {
+                    // アップロード処理自体が失敗した場合はエラーとして扱う
+                    return $this->createErrorResponse('アイキャッチ画像のアップロードに失敗しました');
                 }
             } elseif (!empty($eyeCatch)) {
                 // その他の形式の場合はエラーとして扱う
@@ -314,17 +317,24 @@ class BlogPostsTool extends BaseMcpTool
 
             // アイキャッチ画像の処理
             if ($eyeCatch !== null) {
-                if (!empty($eyeCatch) && $this->isFileUploadable($eyeCatch)) {
+                if ($eyeCatch === '') {
+                    // 空文字列の場合は削除
+                    $data['eye_catch'] = null;
+                } elseif ($this->isFileUploadable($eyeCatch)) {
                     if (!is_array($eyeCatch)) {
                         $eyeCatchData = $this->processFileUpload($eyeCatch, 'eye_catch');
                     }
                     if ($eyeCatchData !== false && is_array($eyeCatchData)) {
                         // 配列データをCakePHPのUploadedFileオブジェクトに変換
                         $data['eye_catch'] = $this->createUploadedFileFromArray($eyeCatchData);
+                    } else {
+                        // アップロード処理自体が失敗した場合はエラーとして扱う
+                        return $this->createErrorResponse('アイキャッチ画像のアップロードに失敗しました');
                     }
                 } else {
-                    // 空文字列の場合は削除
-                    $data['eye_catch'] = null;
+                    // 空文字列でも既知のアップロード可能形式でもない場合はエラーとして扱う
+                    // （既存のアイキャッチを黙って削除しない）
+                    return $this->createErrorResponse('アイキャッチ画像の形式が不正です');
                 }
             }
 

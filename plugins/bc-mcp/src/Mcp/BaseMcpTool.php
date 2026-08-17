@@ -650,7 +650,7 @@ abstract class BaseMcpTool
     /**
      * 画像ファイル専用のアップロード処理
      *
-     * @param string $imageData 画像ファイルパス、URL、またはbase64エンコードされたデータ
+     * @param string $imageData 画像の URL、または data: URI 形式の base64 データ
      * @return array|false アップロード情報の配列、失敗時はfalse
      */
     protected function processImageUpload(string $imageData): array|false

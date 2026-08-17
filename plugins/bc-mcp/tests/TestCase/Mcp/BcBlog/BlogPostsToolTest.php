@@ -665,13 +665,144 @@ class BlogPostsToolTest extends BcTestCase
     }
 
     /**
-     * data: URI で渡した画像データがアイキャッチになることを確認するテスト
+     * eye_catch を明示的に設定したブログ記事（ID:1）を用意する
      *
-     * チャンクアップロードは廃止したため、インラインの data: URI で検証する
+     * BlogPostsAdminServiceScenario と同等の前提データを、eye_catch 付きで
+     * 直接構築する（同シナリオはeye_catchを指定できないため）。
+     *
+     * @param string $eyeCatch 既存のアイキャッチファイル名
      */
-    public function testAddBlogPostWithInlineEyeCatch()
+    private function makeBlogPostWithEyeCatch(string $eyeCatch): void
     {
-        // 初期設定とファクトリー設定
+        ContentFactory::make([
+            'id' => 100,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '1',
+            'rght' => '2',
+            'publish_begin' => '2020-01-27 12:00:00',
+            'publish_end' => '9000-01-27 12:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'status' => true,
+            'eye_catch' => $eyeCatch
+        ])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+    }
+
+    /**
+     * editBlogPost に不正な形式（素のファイル名）の eyeCatch を渡した場合、
+     * 既存のアイキャッチ画像を黙って削除せず、エラー応答を返すことを確認するテスト
+     *
+     * 変更前は isFileUploadable() が拡張子付き文字列も許容していたが、
+     * チャンクアップロード廃止に伴い false を返すようになった結果、
+     * else 分岐（空文字列＝削除）に落ちて既存画像が消えてしまう回帰があった。
+     */
+    public function testEditBlogPostWithInvalidEyeCatchDoesNotDeleteExisting()
+    {
+        $this->makeBlogPostWithEyeCatch('existing.jpg');
+
+        $result = $this->BlogPostsTool->editBlogPost(
+            1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            'photo.jpg' // eyeCatch（素のファイル名。アップロード可能な形式ではない）
+        );
+
+        // エラー応答であることを確認（成功レスポンスにはtitleキーが含まれる）
+        $this->assertArrayHasKey('content', $result);
+        $this->assertArrayNotHasKey('title', $result);
+
+        // 既存のアイキャッチが削除されずに残っていることをDB側で確認
+        $entity = $this->BlogPostsTool->getBlogPost(1);
+        $this->assertEquals('existing.jpg', $entity['eye_catch']);
+    }
+
+    /**
+     * editBlogPost に空文字列の eyeCatch を渡した場合は、
+     * 従来どおりアイキャッチが削除されることを確認するテスト
+     */
+    public function testEditBlogPostWithEmptyEyeCatchRemovesExisting()
+    {
+        $this->makeBlogPostWithEyeCatch('existing.jpg');
+
+        $result = $this->BlogPostsTool->editBlogPost(
+            1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            '' // eyeCatch（空文字列）
+        );
+
+        $this->assertArrayHasKey('title', $result);
+        $this->assertNull($result['eye_catch']);
+    }
+
+    /**
+     * editBlogPost に、形式は正しいがダウンロードに失敗するURLを渡した場合、
+     * 無言で「編集成功」にはならず、エラー応答が返ることを確認するテスト
+     *
+     * processFileUpload() が false を返すケース（到達不能なURL等）で、
+     * $data['eye_catch'] が未設定のまま処理が継続していた回帰の再発防止。
+     */
+    public function testEditBlogPostWithUnreachableEyeCatchUrlReturnsError()
+    {
+        $this->makeBlogPostWithEyeCatch('existing.jpg');
+
+        $result = $this->BlogPostsTool->editBlogPost(
+            1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            'https://example.com/image.jpg' // 到達不能（ダウンロード失敗）なURL
+        );
+
+        $this->assertArrayHasKey('content', $result);
+        $this->assertArrayNotHasKey('title', $result);
+
+        // 既存のアイキャッチも変更されていないことを確認
+        $entity = $this->BlogPostsTool->getBlogPost(1);
+        $this->assertEquals('existing.jpg', $entity['eye_catch']);
+    }
+
+    /**
+     * addBlogPost に、形式は正しいがダウンロードに失敗するURLを渡した場合、
+     * 無言で「登録成功」にはならず、エラー応答が返ることを確認するテスト
+     */
+    public function testAddBlogPostWithUnreachableEyeCatchUrlReturnsError()
+    {
         $this->loadFixtureScenario(InitAppScenario::class);
         ContentFactory::make([
             'name' => 'news',
@@ -682,42 +813,23 @@ class BlogPostsToolTest extends BcTestCase
         ])->persist();
         BlogContentFactory::make(['id' => 1000, 'name' => 'news'])->persist();
 
-        // 1x1の小さなPNG画像のbase64データ
-        $pngBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-        $eyeCatch = 'data:image/png;base64,' . $pngBase64;
-
-        // data: URI を使ってブログ記事を作成
-        $blogResult = $this->BlogPostsTool->addBlogPost(
-            'インラインアイキャッチ付きブログ記事',              // title
-            '<p>data: URI でアイキャッチを指定したテスト記事です。</p>', // detail
-            'news',                                         // blogContent
-            null,                                           // name
-            'インラインアイキャッチのテスト概要',                // content
-            null,                                           // category
-            null,                                           // email
-            1,                                              // status (公開)
-            null,                                           // posted
-            null,                                           // publishBegin
-            null,                                           // publishEnd
-            $eyeCatch,                                      // eyeCatch (data: URI)
-            1                                               // loginUserId
+        $result = $this->BlogPostsTool->addBlogPost(
+            'アイキャッチURLダウンロード失敗テスト',
+            '詳細',
+            'news',
+            null,
+            null,
+            null,
+            null,
+            0,
+            null,
+            null,
+            null,
+            'https://example.com/image.jpg' // 到達不能（ダウンロード失敗）なURL
         );
 
-        $this->assertNotEmpty($blogResult['eye_catch'], 'アイキャッチ画像が設定されていません');
-
-        // アップロードされた画像ファイルが正しい場所に配置されていることを確認
-        $blogImagePath = WWW_ROOT . 'files' . DS . 'blog' . DS . '1000' . DS . 'blog_posts' . DS . $blogResult['eye_catch'];
-        $this->assertTrue(file_exists($blogImagePath), 'ブログ用のアイキャッチ画像ファイルが見つかりません');
-
-        // アイキャッチ画像がPNG形式として有効か確認
-        $imageInfo = getimagesize($blogImagePath);
-        $this->assertNotFalse($imageInfo, 'アイキャッチ画像が有効な画像ではありません');
-        $this->assertEquals(IMAGETYPE_PNG, $imageInfo[2], 'アイキャッチ画像がPNG形式ではありません');
-
-        // テスト後のクリーンアップ
-        if (file_exists($blogImagePath)) {
-            (new BcFolder())->delete(WWW_ROOT . 'files' . DS . 'blog' . DS . '1000');
-        }
+        $this->assertArrayHasKey('content', $result);
+        $this->assertArrayNotHasKey('title', $result);
     }
 
 }

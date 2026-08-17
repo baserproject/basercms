@@ -311,6 +311,11 @@ class CustomEntriesTool extends BaseMcpTool
                 } else {
                     throw new InvalidArgumentException("ファイルアップロードに失敗しました ({$fieldName})");
                 }
+            } elseif (!empty($value) && $this->isFileUploadField($customTableId, $fieldName)) {
+                // BcCcFile型のフィールドに、アップロード可能な形式（data: URI・URL・配列）
+                // ではない値が渡された場合は、実在しないファイル名等がそのままDBへ
+                // 書き込まれてしまうため、明示的にエラーとして扱う
+                throw new InvalidArgumentException("ファイルアップロードに失敗しました ({$fieldName})");
             } else {
                 // 通常の値
                 $processedFields[$fieldName] = $value;

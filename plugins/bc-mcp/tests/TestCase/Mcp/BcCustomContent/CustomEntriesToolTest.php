@@ -231,6 +231,64 @@ class CustomEntriesToolTest extends BcTestCase
     }
 
     /**
+     * Test addCustomEntry method - BcCcFile型フィールドに素のファイル名を渡した場合のエラーテスト
+     *
+     * 変更前は isFileUploadable() が拡張子付き文字列も許容していたため、
+     * ファイルアップロード形式でない値は InvalidArgumentException で明示的に
+     * 弾かれていた。チャンクアップロード廃止後に isFileUploadable() が
+     * false を返すようになった結果、processCustomFields() の else 分岐
+     * （通常の値）に落ちて、存在しないファイル名がそのままDBに書き込まれる
+     * 回帰があった。
+     *
+     * @return void
+     */
+    public function testAddCustomEntryWithPlainFileNameForBcCcFileFieldReturnsError()
+    {
+        CustomFieldFactory::make([
+            'id' => 1,
+            'title' => 'ファイル',
+            'name' => 'image_field',
+            'type' => 'BcCcFile',
+        ])->persist();
+
+        /** @var CustomTablesService $customTablesService */
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $customTableId = 1;
+        $customTable = $customTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact_with_invalid_file',
+            'title' => '不正ファイル名お問い合わせ',
+            'display_field' => 'お問い合わせ'
+        ]);
+        $customTablesService->update($customTable, [
+            'id' => $customTable->id,
+            'custom_links' => [
+                'new-2' => [
+                    'custom_field_id' => 1,
+                    'title' => 'ファイル',
+                    'name' => 'image_field',
+                    'type' => 'BcCcFile',
+                    'status' => true,
+                ]
+            ]
+        ]);
+
+        $result = $this->CustomEntriesTool->addCustomEntry(
+            customTableId: $customTableId,
+            title: '不正ファイル名エントリー',
+            customFields: ['image_field' => 'photo.jpg'] // アップロード可能な形式ではない素のファイル名
+        );
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('content', $result);
+        $this->assertArrayNotHasKey('title', $result);
+
+        // テーブルをクリーンアップ
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $dataBaseService->dropTable('custom_entry_1_contact_with_invalid_file');
+    }
+
+    /**
      * Test addCustomEntry method - カスタムフィールド付きテスト
      *
      * @return void
