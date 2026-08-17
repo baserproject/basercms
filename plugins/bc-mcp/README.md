@@ -139,11 +139,39 @@ Quick Tunnel には次の制約があります。
 固定のホスト名が必要な場合は Named Tunnel を使います。Cloudflare アカウントと、
 Cloudflare に登録済みのドメインが必要です。
 
+まずトンネルを作成し、DNSレコードを登録します。
+
 ```bash
 cloudflared tunnel login
 cloudflared tunnel create bc-mcp-verify
 cloudflared tunnel route dns bc-mcp-verify mcp-dev.example.com
 ```
+
+次に `~/.cloudflared/config.yml` を作成します。`<TUNNEL_ID>` は `create` が出力したIDです。
+
+```yaml
+tunnel: <TUNNEL_ID>
+credentials-file: /Users/<ユーザー名>/.cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  - hostname: mcp-dev.example.com
+    service: https://localhost
+    originRequest:
+      # ローカル環境が自己署名証明書のため
+      noTLSVerify: true
+  - service: http_404
+```
+
+最後の `service: http_404` は、どのルールにも一致しなかった場合の受け皿です。**省略できません。**
+
+トンネルを起動します。
+
+```bash
+cloudflared tunnel run bc-mcp-verify
+```
+
+以降の手順では、発行された `https://<ランダムな文字列>.trycloudflare.com` の代わりに、
+ここで設定した固定ホスト名（例: `https://mcp-dev.example.com`）を使います。
 
 固定ホスト名にすると、OAuth の動的クライアント登録・`SITE_URL`・コネクタ登録を
 毎回やり直す必要がなくなります。
@@ -292,8 +320,11 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 \
 
 
 ## ファイルアップロードについて
-ブログのアイキャッチなどのファイルについて、現在は、ローカルよりアップロードする事はできず、ネット上に公開されたURLからのみ送信可能です。
-これは、現在の、HTTP方式のMCPサーバーの制約によるものです。
+ブログのアイキャッチなどの画像は、ローカルのファイルをそのままアップロードすることはできません。
+公開されたURLを渡すか、`data:` URI として埋め込む必要があります。
+
+これは bc-mcp の制約ではなく、**ホスト（Claude や ChatGPT）がファイルの中身をMCPサーバーへ渡す手段を
+まだ持っていない**ためです。
 
 ### 制約事項
 - multipart/form-dataに対応しておらず、JSONで送信するため base64エンコード行う必要があり、生成AI側のメッセージ送信のトークン制限に引っかかってしまい処理が中断される
