@@ -200,7 +200,10 @@ class CustomEntriesTool extends BaseMcpTool
 
             // カスタムフィールドの値を追加（ファイルアップロード処理を含む）
             if (!empty($customFields)) {
-                $processedFields = $this->processCustomFields($customFields, $customTableId);
+                $processedFields = $this->processCustomFields(
+                    $customFields,
+                    $this->buildFieldTypeMap($customEntriesService)
+                );
                 $data = array_merge($data, $processedFields);
             }
 
@@ -264,7 +267,10 @@ class CustomEntriesTool extends BaseMcpTool
 
             // カスタムフィールドの値を追加（ファイルアップロード処理を含む）
             if (!empty($customFields)) {
-                $processedFields = $this->processCustomFields($customFields, $customTableId);
+                $processedFields = $this->processCustomFields(
+                    $customFields,
+                    $this->buildFieldTypeMap($customEntriesService)
+                );
                 $data = array_merge($data, $processedFields);
             }
 
@@ -290,7 +296,7 @@ class CustomEntriesTool extends BaseMcpTool
      * @param int $customTableId カスタムテーブルID
      * @return array
      */
-    protected function processCustomFields(array $customFields, int $customTableId): array
+    protected function processCustomFields(array $customFields, array $fieldTypes): array
     {
         $processedFields = [];
 
@@ -298,8 +304,13 @@ class CustomEntriesTool extends BaseMcpTool
             if (is_array($value)) {
                 // 配列の場合、json形式またはファイルアップロードの可能性をチェック
                 $processedFields[$fieldName] = $value;
-            } elseif ($this->isFileUpload($value, $customTableId, $fieldName)) {
-                // ファイルアップロードデータの処理（フィールドタイプもチェック）
+                continue;
+            }
+
+            $isFileField = (($fieldTypes[$fieldName] ?? null) === 'BcCcFile');
+
+            if ($isFileField && $this->isFileUploadable($value)) {
+                // ファイルアップロードデータの処理
                 $uploadResult = $this->processFileUpload($value);
                 if ($uploadResult !== false) {
                     // 戻り値が配列の場合はUploadedFileオブジェクトに変換、文字列の場合はそのまま
@@ -311,7 +322,7 @@ class CustomEntriesTool extends BaseMcpTool
                 } else {
                     throw new InvalidArgumentException("ファイルアップロードに失敗しました ({$fieldName})");
                 }
-            } elseif (!empty($value) && $this->isFileUploadField($customTableId, $fieldName)) {
+            } elseif ($isFileField && !empty($value)) {
                 // BcCcFile型のフィールドに、アップロード可能な形式（data: URI・URL・配列）
                 // ではない値が渡された場合は、実在しないファイル名等がそのままDBへ
                 // 書き込まれてしまうため、明示的にエラーとして扱う
@@ -326,67 +337,23 @@ class CustomEntriesTool extends BaseMcpTool
     }
 
     /**
-     * カスタムフィールドのタイプを取得
+     * フィールド名からフィールドタイプを引くマップを作る
      *
-     * @param int $customTableId カスタムテーブルID
-     * @param string $fieldName フィールド名
-     * @return string|null フィールドタイプ（BcCcFileなど）、見つからない場合はnull
-     */
-    protected function getCustomFieldType(int $customTableId, string $fieldName): ?string
-    {
-        try {
-            $customLinksTable = \Cake\ORM\TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks');
-
-            $customLink = $customLinksTable->find()
-                ->contain(['CustomFields'])
-                ->where([
-                    'CustomLinks.custom_table_id' => $customTableId,
-                    'CustomLinks.name' => $fieldName
-                ])
-                ->first();
-
-            if ($customLink && $customLink->custom_field) {
-                return $customLink->custom_field->type;
-            }
-
-            return null;
-        } catch (\Exception $e) {
-            // エラーログを出力
-            error_log('カスタムフィールドタイプの取得に失敗: ' . $e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * カスタムフィールドがファイルアップロードフィールドかどうかを判定
+     * CustomEntriesService::setup() が CustomEntriesTable::setLinks() を通じて
+     * CustomLinks を CustomFields 付きで読み込み済みのため、それを参照する。
+     * フィールドごとに DB を引き直すと N+1 になる。
      *
-     * @param int $customTableId カスタムテーブルID
-     * @param string $fieldName フィールド名
-     * @return bool BcCcFileフィールドの場合true
+     * @param \BcCustomContent\Service\CustomEntriesService $customEntriesService setup() 済みのサービス
+     * @return array<string, string|null> フィールド名 => フィールドタイプ
      */
-    protected function isFileUploadField(int $customTableId, string $fieldName): bool
+    protected function buildFieldTypeMap($customEntriesService): array
     {
-        $fieldType = $this->getCustomFieldType($customTableId, $fieldName);
-        return $fieldType === 'BcCcFile';
-    }
-
-    /**
-     * ファイルアップロードデータかどうかを判定（カスタムエントリー用）
-     *
-     * @param mixed $value 判定対象の値
-     * @param int $customTableId カスタムテーブルID
-     * @param string $fieldName フィールド名
-     * @return bool ファイルアップロードデータの場合true
-     */
-    protected function isFileUpload($value, int $customTableId, string $fieldName): bool
-    {
-        // フィールドタイプがBcCcFileでない場合は対象外
-        if (!$this->isFileUploadField($customTableId, $fieldName)) {
-            return false;
+        $fieldTypes = [];
+        foreach((array)$customEntriesService->CustomEntries->links as $link) {
+            $fieldTypes[$link->name] = $link->custom_field->type ?? null;
         }
 
-        // 値の形式チェック
-        return $this->isFileUploadable($value);
+        return $fieldTypes;
     }
 
     /**

@@ -649,11 +649,19 @@ class CustomEntriesToolTest extends BcTestCase
             'array_field' => ['値1', '値2']
         ];
 
+        // フィールド型のマップ。いずれも BcCcFile ではない
+        $fieldTypes = [
+            'text_field' => 'BcCcText',
+            'number_field' => 'BcCcText',
+            'image_field' => 'BcCcText',
+            'array_field' => 'BcCcText',
+        ];
+
         // リフレクションを使ってプライベートメソッドをテスト
         $reflection = new \ReflectionClass($this->CustomEntriesTool);
         $method = $reflection->getMethod('processCustomFields');
 
-        $result = $method->invoke($this->CustomEntriesTool, $customFields, 1); // customTableId = 1 を追加
+        $result = $method->invoke($this->CustomEntriesTool, $customFields, $fieldTypes);
 
         $this->assertIsArray($result);
         $this->assertEquals('テキスト値', $result['text_field']);
@@ -664,54 +672,58 @@ class CustomEntriesToolTest extends BcTestCase
     }
 
     /**
-     * test getCustomFieldType method
+     * test buildFieldTypeMap method
+     *
+     * フィールド型は CustomEntriesService::setup() が読み込んだ links から引く。
+     * フィールドごとに DB を引き直すと N+1 になるため、読み込み済みのものを
+     * 参照していることを確認する。
      */
-    public function testGetCustomFieldType()
+    public function testBuildFieldTypeMap()
     {
-        $customTableId = 1;
-        $fieldName = 'test_field';
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
 
-        // リフレクションを使ってプライベートメソッドをテスト
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        $customTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+        $customEntriesService->setup(1);
+
         $reflection = new \ReflectionClass($this->CustomEntriesTool);
-        $method = $reflection->getMethod('getCustomFieldType');
+        $method = $reflection->getMethod('buildFieldTypeMap');
+        $result = $method->invoke($this->CustomEntriesTool, $customEntriesService);
 
-        // フィールドタイプが取得できない場合はnullを返す
-        $result = $method->invoke($this->CustomEntriesTool, $customTableId, $fieldName);
-        $this->assertNull($result);
+        $this->assertIsArray($result);
+
+        // links に載っているフィールドはすべてマップに含まれる
+        $this->assertNotEmpty($customEntriesService->CustomEntries->links, 'links が読み込まれていません');
+        foreach($customEntriesService->CustomEntries->links as $link) {
+            $this->assertArrayHasKey($link->name, $result);
+            $this->assertSame($link->custom_field->type ?? null, $result[$link->name]);
+        }
+
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**
-     * test isFileUploadField method
+     * test buildFieldTypeMap method - setup 前は空を返す
+     *
+     * links が未読み込みでも例外にならず、結果として全フィールドが
+     * 「BcCcFile ではない」＝通常の値として扱われる。
      */
-    public function testIsFileUploadField()
+    public function testBuildFieldTypeMapWithoutSetup()
     {
-        $customTableId = 1;
-        $fieldName = 'test_field';
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
 
-        // リフレクションを使ってプライベートメソッドをテスト
         $reflection = new \ReflectionClass($this->CustomEntriesTool);
-        $method = $reflection->getMethod('isFileUploadField');
+        $method = $reflection->getMethod('buildFieldTypeMap');
 
-        // フィールドタイプが取得できない場合はfalseを返す
-        $result = $method->invoke($this->CustomEntriesTool, $customTableId, $fieldName);
-        $this->assertFalse($result);
-    }
-
-    /**
-     * test isFileUpload method
-     */
-    public function testIsFileUpload()
-    {
-        $customTableId = 1;
-        $fieldName = 'test_field';
-        $base64Data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jAuoqQAAAABJRU5ErkJggg==';
-
-        // リフレクションを使ってプライベートメソッドをテスト
-        $reflection = new \ReflectionClass($this->CustomEntriesTool);
-        $method = $reflection->getMethod('isFileUpload');
-
-        // フィールドタイプが取得できない場合、ファイルアップロード形式でもfalseを返す
-        $result = $method->invoke($this->CustomEntriesTool, $base64Data, $customTableId, $fieldName);
-        $this->assertFalse($result);
+        $this->assertSame([], $method->invoke($this->CustomEntriesTool, $customEntriesService));
     }
 }
