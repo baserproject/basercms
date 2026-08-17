@@ -825,11 +825,13 @@ class BlogPostsToolTest extends BcTestCase
             null,
             null,
             null,
-            'https://example.com/image.jpg' // 到達不能（ダウンロード失敗）なURL
+            'https://example.com/image.jpg', // 到達不能（ダウンロード失敗）なURL
+            1
         );
 
         $this->assertArrayHasKey('content', $result);
         $this->assertArrayNotHasKey('title', $result);
+        $this->assertStringContainsString('アイキャッチ画像', $result['content']);
     }
 
 }
