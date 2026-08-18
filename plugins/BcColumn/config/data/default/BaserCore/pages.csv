@@ -1,31 +1,32 @@
-id,contents,draft,page_template,modified,created
-1,"<h2><span class=""main-title1"">ABOUT</span><br />
+﻿"id","contents","draft","page_template","modified","created"
+"1","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><h2><span class=""main-title1"">ABOUT</span><br>
 <span class=""sub-title"">弊社の特徴</span></h2>
 
 <ul class=""clearfix"">
 	<li>
-	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about01.png"" alt="""" /></div>
+	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about01.png"" alt=""""></div>
 
 	<h3 class=""main-color"">ハイクオリティを提供</h3>
 
 	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
 	</li>
 	<li>
-	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about02.png"" alt="""" /></div>
+	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about02.png"" alt=""""></div>
 
 	<h3 class=""main-color"">お客様の要望を叶える</h3>
 
 	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
 	</li>
 	<li>
-	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about03.png"" alt="""" /></div>
+	<div class=""thumbnail""><img src=""/bc_column/img/top/img_about03.png"" alt=""""></div>
 
 	<h3 class=""main-color"">業界NO.1の実績</h3>
 
 	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
 	</li>
-</ul>",,,,
-2,"<div id=""Recipe"">
+</ul></div>
+</div></div>","","","",""
+"2","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><div id=""Recipe"">
 <h2>BCCOLUMNレイアウト変更方法</h2>
 
 <p>baserCMSテーマBCCOLUMNは、レイアウトファイルを選択することで、１カラム・２カラム左サイド・２カラム右サイドを簡単に切り替えることが可能です。</p>
@@ -34,7 +35,7 @@ id,contents,draft,page_template,modified,created
 
 <p>ブログの設定画面　＞　オプションを開く　＞　レイアウトテンプレート名を選択</p>
 
-<p><img alt="""" src=""/bc_column/img/page/img_layout01.png"" /></p>
+<p><img alt="""" src=""/bc_column/img/page/img_layout01.png""></p>
 
 <ul class=""list-square"">
 	<li>1カラム：「default」</li>
@@ -63,7 +64,7 @@ id,contents,draft,page_template,modified,created
 
 <p>カラーピッカーでお好みの色を選択してください</p>
 
-<p><img alt="""" src=""/bc_column/img/page/img_theme01.png"" /></p>
+<p><img alt="""" src=""/bc_column/img/page/img_theme01.png""></p>
 
 <ul class=""list-square"">
 	<li>メイン：フッター部分コンタクト背景・ボタンの色</li>
@@ -76,17 +77,17 @@ id,contents,draft,page_template,modified,created
 
 <p>制作するサイトのロゴをアップしてください</p>
 
-<p><img alt="""" src=""/bc_column/img/page/img_theme02.png"" /></p>
+<p><img alt="""" src=""/bc_column/img/page/img_theme02.png""></p>
 
 <h3>メイン画像の変更方法</h3>
 
 <p>メイン画像は大きめがおすすめです</p>
 
-<p><img alt="""" src=""/bc_column/img/page/img_theme03.png"" /></p>
+<p><img alt="""" src=""/bc_column/img/page/img_theme03.png""></p>
 
 <p>&nbsp;</p>
 
-<p>そして、基本的なパーツレイアウトが揃っているので、簡単にブログや固定ページを追加することができます。<br />
+<p>そして、基本的なパーツレイアウトが揃っているので、簡単にブログや固定ページを追加することができます。<br>
 パーツデザインのページをご参考ください。</p>
 
 <p>&nbsp;</p>
@@ -94,8 +95,9 @@ id,contents,draft,page_template,modified,created
 <h2>コピーライトの変更について</h2>
 
 <p>フッターに記載しているコピーライトについては自由に変更が可能です。</p>
-</div>",,,,
-3,"<h2>見出し２</h2>
+</div></div>
+</div></div>","","","",""
+"3","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><h2>見出し２</h2>
 
 <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
@@ -186,14 +188,15 @@ id,contents,draft,page_template,modified,created
 
 <h4>ボタン小中大</h4>
 
-<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br />
-<a class=""btn btn-midium"" href=""#"">ボタン２</a><br />
+<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br>
+<a class=""btn btn-midium"" href=""#"">ボタン２</a><br>
 <a class=""btn btn-big"" href=""#"">ボタン３</a></p>
 
 <h4>見出し4</h4>
 
-<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>",,,,
-4,"<h2>見出し２</h2>
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
+</div></div>","","","",""
+"4","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><h2>見出し２</h2>
 
 <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
@@ -284,14 +287,15 @@ id,contents,draft,page_template,modified,created
 
 <h4>ボタン小中大</h4>
 
-<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br />
-<a class=""btn btn-midium"" href=""#"">ボタン２</a><br />
+<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br>
+<a class=""btn btn-midium"" href=""#"">ボタン２</a><br>
 <a class=""btn btn-big"" href=""#"">ボタン３</a></p>
 
 <h4>見出し4</h4>
 
-<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>",,,,
-5,"<h2>見出し２</h2>
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
+</div></div>","","","",""
+"5","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><h2>見出し２</h2>
 
 <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
@@ -318,7 +322,7 @@ id,contents,draft,page_template,modified,created
 	</tbody>
 </table>
 
-<h4>class=&quot;table-style&quot;</h4>
+<h4>class=""table-style""</h4>
 
 <table class=""table-style"">
 	<tbody>
@@ -341,7 +345,7 @@ id,contents,draft,page_template,modified,created
 	</tbody>
 </table>
 
-<h4>class=&quot;horizon&quot;</h4>
+<h4>class=""horizon""</h4>
 
 <table class=""horizon"">
 	<thead>
@@ -368,7 +372,7 @@ id,contents,draft,page_template,modified,created
 
 <h3>見出し3</h3>
 
-<h4>◆リスト class=&quot;list-square&quot;</h4>
+<h4>◆リスト class=""list-square""</h4>
 
 <ul class=""list-square"">
 	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
@@ -377,7 +381,7 @@ id,contents,draft,page_template,modified,created
 	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
 </ul>
 
-<h4>●リスト class=&quot;list-circle&quot;</h4>
+<h4>●リスト class=""list-circle""</h4>
 
 <ul class=""list-circle"">
 	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
@@ -386,13 +390,13 @@ id,contents,draft,page_template,modified,created
 	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
 </ul>
 
-<h4>ボタン小 class=&quot;btn btn-small&quot;</h4>
+<h4>ボタン小 class=""btn btn-small""</h4>
 
 <p><a class=""btn btn-small"" href=""#"">ボタン１</a></p>
 
 <p>&nbsp;</p>
 
-<h4>ボタン中 class=&quot;btn btn-midium&quot;</h4>
+<h4>ボタン中 class=""btn btn-midium""</h4>
 
 <p><a class=""btn btn-midium"" href=""#"">ボタン２</a></p>
 
@@ -400,7 +404,7 @@ id,contents,draft,page_template,modified,created
 
 <p>&nbsp;</p>
 
-<h4>ボタン大 class=&quot;btn btn-big&quot;</h4>
+<h4>ボタン大 class=""btn btn-big""</h4>
 
 <p><a class=""btn btn-big"" href=""#"">ボタン３</a></p>
 
@@ -408,23 +412,24 @@ id,contents,draft,page_template,modified,created
 
 <h4>見出し4</h4>
 
-<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>",,,,
-6,"<h2>会社案内</h2>
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
+</div></div>","","","",""
+"6","<div data-bgb=""wysiwyg"" class=""bgb-wysiwyg""><div data-bgt=""ckeditor"" data-bgt-ver=""2.1.0"" class=""bgt-container bgt-ckeditor-container""><div class=""bge-ckeditor"" data-bge=""ckeditor""><h2>会社案内</h2>
 
 <h3>ご挨拶</h3>
 
-<p>サイトによっては、左サイドバーが良かったり右サイドバーが良かったり、またはサイドバーがなくてもよかったりすることがあります。<br />
-このテーマには左右サイドの2カラムと1カラムの3つのレイアウトを選択できるようになっているのでbaserCMSのレイアウト選択機能で、簡単に切り替えることが可能です。<br />
-<br />
-ブログ毎、カテゴリー毎、個別に設定する方法をテーマの中に説明したページを作成しましたのでご参考ください。<br />
-<a href=""http://bccolumn.komomo.biz/concept/index"" target=""_blank"">http://bccolumn.komomo.biz/concept/index</a><br />
-<br />
-デザインは、どんなサイトにも使っていただけるよう、シンプルでカッコいいを目指しています。<br />
-白黒ベースが基本ですが、ポイントカラーを管理画面のテーマ設定から変更できるようにしています。<br />
-<br />
-また、固定ページの追加や、ブログ記事を書くときに使える、classを追加すると表示できるパーツデザインをご用意いたしました。<br />
-<a href=""http://bccolumn.komomo.biz/concept/parts"" target=""_blank"">http://bccolumn.komomo.biz/concept/parts</a><br />
-<br />
+<p>サイトによっては、左サイドバーが良かったり右サイドバーが良かったり、またはサイドバーがなくてもよかったりすることがあります。<br>
+このテーマには左右サイドの2カラムと1カラムの3つのレイアウトを選択できるようになっているのでbaserCMSのレイアウト選択機能で、簡単に切り替えることが可能です。<br>
+<br>
+ブログ毎、カテゴリー毎、個別に設定する方法をテーマの中に説明したページを作成しましたのでご参考ください。<br>
+<a href=""http://bccolumn.komomo.biz/concept/index"" target=""_blank"">http://bccolumn.komomo.biz/concept/index</a><br>
+<br>
+デザインは、どんなサイトにも使っていただけるよう、シンプルでカッコいいを目指しています。<br>
+白黒ベースが基本ですが、ポイントカラーを管理画面のテーマ設定から変更できるようにしています。<br>
+<br>
+また、固定ページの追加や、ブログ記事を書くときに使える、classを追加すると表示できるパーツデザインをご用意いたしました。<br>
+<a href=""http://bccolumn.komomo.biz/concept/parts"" target=""_blank"">http://bccolumn.komomo.biz/concept/parts</a><br>
+<br>
 トップページの実績・NEWS・BLOGの3カ所は、baserCMSのブログ機能を活かして、最新記事を取得するように設計しています。</p>
 
 <h3>会社概要</h3>
@@ -445,9 +450,10 @@ id,contents,draft,page_template,modified,created
 		</tr>
 		<tr>
 			<th>事業内容</th>
-			<td>インターネットサービス業（ダミー）<br />
-			WEBサイト制作事業（ダミー）<br />
+			<td>インターネットサービス業（ダミー）<br>
+			WEBサイト制作事業（ダミー）<br>
 			WEBシステム開発事業（ダミー）</td>
 		</tr>
 	</tbody>
-</table>",,,,
+</table></div>
+</div></div>","","","",""
