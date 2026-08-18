@@ -31,6 +31,10 @@
       <?php echo __d('baser_core', 'SEO設定') ?>
       <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
     </button>
+    <i class="bca-icon--question-circle bca-help"></i>
+    <div class="bca-helptext">
+      <?php echo __d('baser_core', 'SEO設定をフロントページに出力するには、利用中のテーマのレイアウトに <code>&lt;?php $this-&gt;BcBaser-&gt;seoMeta() ?&gt;</code> の記載が必要です。<br>詳しくは <a href="https://baserproject.github.io/5/operation/application/seo" target="_blank" class="outside-link">SEO設定のマニュアル</a> を確認してください。') ?>
+    </div>
   </div>
   <div class="bca-collapse" id="SeoSettingBody" data-bca-state="">
     <table class="form-table bca-form-table section">
