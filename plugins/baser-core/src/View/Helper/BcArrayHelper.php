@@ -43,8 +43,10 @@ class BcArrayHelper extends Helper
     public function first($array, int $key)
     {
         if($array instanceof Query) {
-            // CakePHP 5.2 で ResultSet はクローン不可のため配列化して扱う
-            $array = $array->toArray();
+            // Query を実行すると、反復中の ResultSet を消費してしまい
+            // 呼び出し元の foreach が2件目以降を取得できなくなる。
+            // Query の反復は 0 起点の連番キーとなるため、キーの比較のみで判定する。
+            return $key === 0;
         }
         reset($array);
         $first = key($array);
@@ -68,6 +70,7 @@ class BcArrayHelper extends Helper
     public function last($array, $key)
     {
         if($array instanceof Query) {
+            // count() は件数取得用のクエリを別途発行するため、反復中の ResultSet を消費しない
             $end = $array->count() - 1;
         } else {
             end($array);
