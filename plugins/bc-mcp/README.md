@@ -11,25 +11,6 @@ baserCMS用のMCP（Model Context Protocol）サーバープラグインです�
 - サーバー情報の取得
 - HTTP トランスポートサポート
 
-## 動作要件
-PHP 8.1 以降
-baserCMS 5.1.10 以降
-
-## インストール
-
-### Composerを使用したインストール
-
-```bash
-composer require ecatchup/bc-mcp --with-all-dependencies
-```
-
-### 手動インストール
-
-1. [baserマーケット](https://market.basercms.net) からダウンロード
-2. `plugins/` ディレクトリ配下に配置
-
-※ baserマーケット配布版は、依存しているパッケージを梱包いていますので、コマンドの実行が不要です。
-
 ## 設定
 ### configフォルダの権限設定
 ルート直下の `config` フォルダと `.env` に書き込み権限が必要です。
@@ -40,7 +21,8 @@ chmod 666 config/.env
 ```
 
 ### プラグインの有効化
-baserCMSの管理画面から BcMcp プラグインを有効化してください。
+BcMcp は baserCMS に同梱されているコアプラグインですが、初期状態では無効です。
+baserCMSの管理画面の「システム」→「プラグイン管理」から有効化してください。
 
 ## MCPサーバーの起動
 起動操作は不要です。MCPサーバーはbaserCMSのリクエスト内で動作するため、常駐プロセスを立てる必要はありません。
@@ -367,8 +349,7 @@ BcMcpプラグインは以下の仕組みでクライアントと連携します
 ### よくある問題
 
 1. **クライアントから接続できない**
-   - PHP 8.1以上がインストールされているか確認
-   - Composerの依存関係がインストールされているか確認
+   - プラグイン管理で BcMcp が有効になっているか確認
    - **自己署名証明書のURLを登録していないか確認**（多くのクライアントは接続を拒否します。
      「ローカル環境をHTTPSで公開して動作確認する」を参照）
    - ログファイルにエラーメッセージがないか確認
@@ -404,4 +385,4 @@ tail -f logs/bc_mcp_error.log
 「MCPサーバー管理」画面からも直近の内容を確認できます。
 
 ## 開発への貢献
-[CONTRIBUTING.md](.github/CONTRIBUTING.md) をご覧ください。
+[CONTRIBUTING.md](https://github.com/baserproject/basercms/blob/HEAD/.github/CONTRIBUTING.md) をご覧ください。

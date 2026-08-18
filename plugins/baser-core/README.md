@@ -50,7 +50,7 @@ Get Support
 Contributing
 -------------
 
-- See [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+- See [CONTRIBUTING.md](https://github.com/baserproject/basercms/blob/HEAD/.github/CONTRIBUTING.md)
 
 License
 -------
