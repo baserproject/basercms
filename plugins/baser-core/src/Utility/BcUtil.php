@@ -2127,7 +2127,14 @@ class BcUtil
      */
     public static function isSameOriginAsCurrent()
     {
-        $https = !empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off';
+        // TRUST_PROXY=true 環境では $_SERVER['HTTPS'] がリバースプロキシ配下で
+        // 設定されないため、BcRequestFilterMiddleware が trustProxy 済みで上書きする
+        // $request->is('https') を優先して使う。
+        // 取得できない場合のみ $_SERVER を見る。
+        $request = Router::getRequest();
+        $https = $request
+            ? $request->is('https')
+            : (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off');
         $host = $_SERVER['HTTP_HOST'] ?? '';
         if ($host === '') {
             return false;

@@ -1606,6 +1606,10 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsSameOriginAsCurrent(array $server, bool $expected)
     {
+        // 準備：他のテスト(test_getViewPath等)が残した Router::setRequest() の残留状態が
+        // Router::getRequest() 経由の判定に影響しないよう、リクエストをクリアする
+        Router::reload();
+
         // 準備：判定に使う $_SERVER をクリアしてから流し込む
         foreach (['HTTPS', 'HTTP_HOST', 'HTTP_ORIGIN', 'HTTP_REFERER'] as $key) {
             unset($_SERVER[$key]);
