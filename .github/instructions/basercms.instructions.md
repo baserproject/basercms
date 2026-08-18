@@ -12,6 +12,11 @@ baserCMSの開発についての指示をまとめたものです。
 - プラグインが見つからない場合は `BcUtil::includePluginClass()` を利用。
 - APIテストは `/baser/api/admin/baser-core/users/login.json` で認証→トークン取得→各API呼び出し。
 - CI/CDはGitHub Actions（`test.yml`）で自動化。主要コマンドは `composer install`、`docker compose up`。
+- **外部プロセス（MCPサーバー等）に依存するテストの方針**:
+  - 必要なプロセスは**該当テスト側で起動**し、`setUp` 全体ではなく**それを要する個別テストの先頭**でガードする（他テストに起動待ちを波及させない）。
+  - 起動判定は「プロセスの存在（pidファイル）」だけで済ませない。**プロキシ等が実際に接続する先（例 `127.0.0.1:{port}`）へ到達できるまで待つ**（`fsockopen` 等でポーリング、最大十数秒）。プロセス起動直後はポートの bind が間に合わず接続拒否＝500 になり、CI でのみ失敗する典型。
+  - **到達できない場合は `markTestSkipped` で隠さず、`assertTrue` 等で明示的に失敗させる**。スキップはサーバー起動の不具合を握りつぶし CI を緑にしてしまうため不可。「外部プロセスが動いていること」も統合テストの検証対象とみなす。
+  - 実装例: `plugins/bc-mcp/tests/TestCase/Controller/Admin/OAuth2ControllerTest.php` の `requireMcpServer()`。
 
 ## コーディング規約・パターン
 - クラスに新メソッド追加時は「必ず最後」に追加。
