@@ -15,7 +15,7 @@
 "","admin_theme","","",""
 "","login_credit","1","",""
 "","first_access","","",""
-"","editor","BaserCore.BcCkeditor","",""
+"","editor","BcBurgerEditor.BurgerEditor","",""
 "","editor_styles","#青見出し
 h3 {
 color:Blue;

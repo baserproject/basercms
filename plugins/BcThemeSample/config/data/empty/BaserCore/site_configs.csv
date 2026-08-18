@@ -13,7 +13,7 @@
 "13","admin_theme","BcAdminThird","",""
 "14","login_credit","1","",""
 "15","first_access","","",""
-"16","editor","BaserCore.BcCkeditor","",""
+"16","editor","BcBurgerEditor.BurgerEditor","",""
 "17","editor_styles","#青見出し
 h3 {
 color:Blue;
