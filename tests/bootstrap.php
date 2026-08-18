@@ -108,6 +108,7 @@ include Cake\Core\Plugin::path('BaserCore') . 'config' . DS . 'paths.php';
     ['plugin' => 'BcCustomContent'],
     ['plugin' => 'BcFavorite'],
     ['plugin' => 'BcMail'],
+    ['plugin' => 'BcMcp'],
     ['plugin' => 'BcSearchIndex'],
     ['plugin' => 'BcSeo'],
     ['plugin' => 'BcThemeConfig'],

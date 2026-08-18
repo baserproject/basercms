@@ -90,6 +90,7 @@ yarn-error.log
 !/plugins/BcColumn
 !/plugins/bc-seo
 !/plugins/bc-burger-editor
+!/plugins/bc-mcp
 /plugins/*/vendor
 /plugins/*/composer.lock
 /profile/*
@@ -121,6 +122,7 @@ node_modules
 /webroot/bc_installer
 /webroot/bc_custom_content
 /webroot/bc_burger_editor
+/webroot/bc_mcp
 /webroot/bc_spa_sample
 /webroot/debug_kit
 /webroot/.gitignore

@@ -1,0 +1,284 @@
+<?php
+declare(strict_types=1);
+
+namespace BcMcp\Test\TestCase\Mcp;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcMcp\Mcp\BaseMcpTool;
+
+/**
+ * BaseMcpToolTest
+ */
+class BaseMcpToolTest extends BcTestCase
+{
+    /**
+     * Test subject
+     *
+     * @var TestBaseMcpTool
+     */
+    protected $BaseMcpTool;
+
+    /**
+     * Set up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->BaseMcpTool = new TestBaseMcpTool();
+    }
+
+    /**
+     * テスト内で mcp_uploads ディレクトリに作成したファイルのパス
+     *
+     * 設定した場合のみ tearDown() で確実に削除する
+     */
+    protected ?string $chunkUploadFile = null;
+
+    /**
+     * テスト内で作成した mcp_uploads ディレクトリのパス
+     */
+    protected ?string $chunkUploadDir = null;
+
+    /**
+     * Tear down
+     */
+    public function tearDown(): void
+    {
+        unset($this->BaseMcpTool);
+        if ($this->chunkUploadFile && file_exists($this->chunkUploadFile)) {
+            unlink($this->chunkUploadFile);
+        }
+        if ($this->chunkUploadDir && is_dir($this->chunkUploadDir) && count(scandir($this->chunkUploadDir)) === 2) {
+            rmdir($this->chunkUploadDir);
+        }
+        parent::tearDown();
+    }
+
+    /**
+     * test processFileUpload with base64 data
+     */
+    public function testProcessFileUploadWithBase64()
+    {
+        // 小さなPNG画像のbase64データ（1x1ピクセルの透明PNG）
+        $base64Data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jAuoqQAAAABJRU5ErkJggg==';
+
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'processFileUpload', [$base64Data]);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertEquals('image/png', $result['type']);
+        $this->assertEquals('png', $result['ext']);
+
+        // クリーンアップ
+        if (file_exists($result['tmp_name'])) {
+            unlink($result['tmp_name']);
+        }
+    }
+
+    /**
+     * test processFileUpload with URL
+     */
+    public function testProcessFileUploadWithUrl()
+    {
+        $url = 'https://basercms.net/img/basercms_logo.png';
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'processFileUpload', [$url]);
+
+        // URLの場合はそのまま返される
+        $this->assertArrayHasKey('tmp_name', $result);
+    }
+
+    /**
+     * test processFileUpload rejects a filename pointing at an existing chunk upload file
+     *
+     * チャンクアップロードを廃止したため、TMP/mcp_uploads/ に実在するファイルを
+     * 指しても、それをアップロードとして扱ってはならない。
+     * processChunkFile() が残っている間は配列（アップロード情報）が返り、
+     * このテストは FAIL する。processChunkFile() 削除後は false が返り PASS する。
+     */
+    public function testProcessFileUploadRejectsExistingChunkFile()
+    {
+        $this->chunkUploadDir = TMP . 'mcp_uploads' . DS;
+        if (!is_dir($this->chunkUploadDir)) {
+            mkdir($this->chunkUploadDir, 0755, true);
+        }
+        $filename = 'test_chunk_upload.jpg';
+        $this->chunkUploadFile = $this->chunkUploadDir . $filename;
+        file_put_contents($this->chunkUploadFile, 'dummy image data');
+
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'processFileUpload', [$filename]);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * test getMimeTypeFromExtension
+     */
+    public function testGetMimeTypeFromExtension()
+    {
+        $testCases = [
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'pdf' => 'application/pdf',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'mp3' => 'audio/mpeg',
+            'unknown' => 'application/octet-stream'
+        ];
+
+        foreach($testCases as $extension => $expectedMimeType) {
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'getMimeTypeFromExtension', [$extension]);
+            $this->assertEquals($expectedMimeType, $result, "Extension: {$extension}");
+        }
+    }
+
+    /**
+     * test getExtensionFromMimeType
+     */
+    public function testGetExtensionFromMimeType()
+    {
+        $testCases = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'application/pdf' => 'pdf',
+            'text/plain' => 'txt',
+            'application/unknown' => 'bin'
+        ];
+
+        foreach($testCases as $mimeType => $expectedExtension) {
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'getExtensionFromMimeType', [$mimeType]);
+            $this->assertEquals($expectedExtension, $result, "MIME Type: {$mimeType}");
+        }
+    }
+
+    /**
+     * test isAllowedExtension
+     */
+    public function testIsAllowedExtension()
+    {
+        $allowedExtensions = ['jpg', 'png', 'pdf', 'docx'];
+        $disallowedExtensions = ['exe', 'bat', 'sh'];
+
+        foreach($allowedExtensions as $extension) {
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', [$extension]);
+            $this->assertTrue($result, "Extension should be allowed: {$extension}");
+        }
+
+        foreach($disallowedExtensions as $extension) {
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', [$extension]);
+            $this->assertFalse($result, "Extension should not be allowed: {$extension}");
+        }
+    }
+
+    /**
+     * test processImageUpload
+     */
+    public function testProcessImageUpload()
+    {
+        // 画像のbase64データ
+        $imageBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jAuoqQAAAABJRU5ErkJggg==';
+
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'processImageUpload', [$imageBase64]);
+
+        $this->assertIsArray($result);
+        $this->assertEquals('image/png', $result['type']);
+
+        // クリーンアップ
+        if (file_exists($result['tmp_name'])) {
+            unlink($result['tmp_name']);
+        }
+    }
+
+    /**
+     * test processImageUpload with non-image file should throw exception
+     */
+    public function testProcessImageUploadWithNonImageFile()
+    {
+        // PDFのbase64データ（非画像ファイル）
+        $pdfBase64 = 'data:application/pdf;base64,JVBERi0xLjQK';
+
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processImageUpload', [$pdfBase64]);
+            $this->fail('例外が投げられるべきです');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('画像ファイルではありません', $e->getMessage());
+        }
+    }
+
+    /**
+     * test isFileUploadable method
+     */
+    public function testIsFileUploadable()
+    {
+        // Base64データ
+        $base64Data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jAuoqQAAAABJRU5ErkJggg==';
+        $this->assertTrue($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$base64Data]));
+
+        // URL
+        $url = 'https://example.com/image.jpg';
+        $this->assertTrue($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$url]));
+
+        // 通常の文字列
+        $text = 'ただのテキスト';
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$text]));
+
+        // 配列
+        $array = ['test' => 'value'];
+        $this->assertTrue($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$array]));
+
+        // 拡張子付きの素のファイル名（チャンクアップロードは廃止したため、対応しない）
+        //
+        // processFileUpload() は data: URI と http(s) URL しか受け付けないため、
+        // isFileUploadable() がここで true を返すと、拡張子付きの通常の文字列値
+        // （例: サンプルテキストのファイル名相当の値）がファイルと誤判定され、
+        // その後 processFileUpload() が false を返して静かに失敗する
+        $bareFilename = 'photo.jpg';
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isFileUploadable', [$bareFilename]));
+    }
+
+    /**
+     * test executeWithErrorHandling
+     *
+     * \Exception だけではなく \Error も捕捉し、トレースを返す事を確認する
+     * （MCPサーバー側で丸められると発生箇所を追跡できなくなるため）
+     */
+    public function testExecuteWithErrorHandling()
+    {
+        // \Exception を捕捉できる事を確認
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
+            function() {
+                throw new \Exception('例外が発生しました');
+            }
+        ]);
+        $this->assertEquals('例外が発生しました', $result['content']);
+        $this->assertArrayHasKey('trace', $result);
+
+        // \Error を捕捉できる事を確認
+        $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
+            function() {
+                $request = null;
+                return $request->getParam('prefix');
+            }
+        ]);
+        $this->assertStringContainsString('getParam() on null', $result['content']);
+        $this->assertArrayHasKey('trace', $result);
+    }
+}
+
+/**
+ * テスト用のBaseMcpToolクラス
+ */
+class TestBaseMcpTool extends BaseMcpTool
+{
+
+    /**
+     * ツールは登録しない（共通処理のテストが目的のため）
+     *
+     * @param \Mcp\Server\McpServer $server SDK のサーバー
+     * @return \Mcp\Server\McpServer
+     */
+    public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
+    {
+        return $server;
+    }
+
+}
