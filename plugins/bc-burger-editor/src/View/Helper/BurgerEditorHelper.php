@@ -162,26 +162,55 @@ class BurgerEditorHelper extends Helper
         $cssList = [];
         $webroot = Configure::read('BcEnv.siteUrl');
         // テーマCSSフォルダ内のckeditor.cssを読む このCSSの中にcommon.cssなど必要なCSSをインポートする
-        if (file_exists(WWW_ROOT . 'css' . DS . 'ckeditor.css')) {
+        $themeAssetUrl = self::getThemeAssetUrl();
+        if ($themeAssetUrl && file_exists(self::getThemeAssetPath('ckeditor.css'))) {
+            $cssList[] = $themeAssetUrl . 'ckeditor.css' . BurgerEditorUtil::getSuffix(self::getThemeAssetPath('ckeditor.css'));
+        } elseif (file_exists(WWW_ROOT . 'css' . DS . 'ckeditor.css')) {
             $cssList[] = $webroot . 'css/ckeditor.css';
         }
 
-        // コンテンツが所属しているテーマを判定
-        $theme = self::getThemeByContent();
         // テーマが優先
-        if (file_exists(WWW_ROOT . DS . $theme . DS . 'css' . DS . 'bge_style.css')) {
-            $path = WWW_ROOT . DS . $theme . DS . 'css' . DS . 'bge_style.css';
-            $cssList[] = $webroot . $theme . '/css/bge_style.css' . BurgerEditorUtil::getSuffix($path);
+        $themeStylePath = self::getThemeAssetPath('bge_style.css');
+        if ($themeAssetUrl && $themeStylePath && file_exists($themeStylePath)) {
+            $cssList[] = $themeAssetUrl . 'bge_style.css' . BurgerEditorUtil::getSuffix($themeStylePath);
             // テーマになくてwebroot/cssにあれば
         } elseif (file_exists(WWW_ROOT . 'css' . DS . 'bge_style.css')) {
             $path = WWW_ROOT . 'css' . DS . 'bge_style.css';
             $cssList[] = $webroot . 'css/bge_style.css' . BurgerEditorUtil::getSuffix($path);
             // themeになく、webroot/cssにもない場合、プラグイン標準のファイルを読み込む
         } else {
-            $path = WWW_ROOT . 'app' . DS . 'Plugin' . DS . 'BcBurgerEditor' . DS . 'webroot' . DS . 'css' . DS . 'bge_style.css';
+            $path = Plugin::path('BcBurgerEditor') . 'webroot' . DS . 'css' . DS . 'bge_style.css';
             $cssList[] = '/bc_burger_editor/css/bge_style.css' . BurgerEditorUtil::getSuffix($path);
         }
         return $cssList;
+    }
+
+    /**
+     * コンテンツが所属しているテーマのアセットのパスを取得する
+     *
+     * @param string $file テーマの css フォルダ配下のファイル名
+     * @return string 該当テーマが無い場合は空文字
+     */
+    protected static function getThemeAssetPath($file)
+    {
+        $theme = self::getThemeByContent();
+        if (!$theme || !Plugin::isLoaded($theme)) return '';
+        return Plugin::path($theme) . 'webroot' . DS . 'css' . DS . $file;
+    }
+
+    /**
+     * コンテンツが所属しているテーマのアセットのURLを取得する
+     *
+     * テーマはプラグインとして webroot をシンボリックリンクで公開するため、
+     * アンダースコア区切りの名称がそのままURLとなる
+     *
+     * @return string 該当テーマが無い場合は空文字
+     */
+    protected static function getThemeAssetUrl()
+    {
+        $theme = self::getThemeByContent();
+        if (!$theme || !Plugin::isLoaded($theme)) return '';
+        return '/' . Inflector::underscore($theme) . '/css/';
     }
 
     /**
