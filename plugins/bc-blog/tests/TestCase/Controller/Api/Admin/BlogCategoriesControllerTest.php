@@ -252,4 +252,39 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->assertResponseCode(404);
     }
 
+    /**
+     * test move（並び替え・再親付け）
+     * @return void
+     */
+    public function test_move()
+    {
+        // parent1(1,4) > child1(2,3)、parent2(5,6) の入れ子集合
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'parent2', 'title' => 'P2', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+
+        // 正常系：parent1 を parent2 の後ろへ（末尾）
+        $this->patch('/baser/api/admin/bc-blog/blog_categories/move.json?token=' . $this->accessToken, [
+            'origin' => ['id' => 1, 'parentId' => ''],
+            'target' => ['id' => '', 'parentId' => '']
+        ]);
+        $this->assertResponseOk();
+        $names = $this->getTableLocator()->get('BcBlog.BlogCategories')
+            ->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['parent2', 'parent1', 'child1'], $names);
+
+        // 正常系：child1 を parent2 の子へ再親付け
+        $this->patch('/baser/api/admin/bc-blog/blog_categories/move.json?token=' . $this->accessToken, [
+            'origin' => ['id' => 2, 'parentId' => 1],
+            'target' => ['id' => '', 'parentId' => 3]
+        ]);
+        $this->assertResponseOk();
+        $child1 = $this->getTableLocator()->get('BcBlog.BlogCategories')->get(2);
+        $this->assertEquals(3, $child1->parent_id);
+
+        // 異常系：GET は許可されない
+        $this->get('/baser/api/admin/bc-blog/blog_categories/move.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+    }
+
 }

@@ -67,6 +67,16 @@ $this->BcBaser->js('admin/utilities/index.bundle', false);
     ]) ?>
 </div>
 
+<?php
+if (method_exists($this, 'dispatchLayerEvent')) {
+  // EVENT afterUtilitiesIndex
+  $event = $this->dispatchLayerEvent('afterUtilitiesIndex', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+  if ($event !== false) {
+    echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
+  }
+}
+?>
+
 <?php echo $this->BcAdminForm->secure() ?>
 <div class="section bca-main__section">
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'スペシャルサンクスクレジット') ?></h2>
