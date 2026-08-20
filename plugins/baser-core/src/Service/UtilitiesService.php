@@ -57,7 +57,23 @@ class UtilitiesService implements UtilitiesServiceInterface
     public function verityContentsTree(): bool
     {
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $result = $this->_verify($contentsTable);
+        return $this->verityTree($contentsTable);
+    }
+
+    /**
+     * ツリー構造をチェックする
+     *
+     * 問題がある場合にはログを出力する
+     *
+     * @param Table $table TreeBehavior を利用しているテーブル
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verityTree(Table $table): bool
+    {
+        $result = $this->_verify($table);
         if ($result !== true) {
             foreach($result as $value) {
                 $this->log(implode(', ', $value));
@@ -97,7 +113,6 @@ class UtilitiesService implements UtilitiesServiceInterface
         $left = 'lft';
         $scope = '1 = 1';
         $parent = 'parent_id';
-        $plugin = 'BaserCore';
         if (!$table->find()->applyOptions(['withDeleted'])->where([$scope])->count()) {
             return true;
         }
@@ -129,7 +144,7 @@ class UtilitiesService implements UtilitiesServiceInterface
             $table->associations()->remove('VerifyParent');
         }
         $table->belongsTo('VerifyParent', [
-            'className' => $plugin . '.' . $table->getAlias(),
+            'className' => $table->getRegistryAlias(),
             'propertyName' => 'VerifyParent',
             'foreignKey' => $parent
         ]);

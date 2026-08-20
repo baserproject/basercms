@@ -13,13 +13,14 @@
  * [ADMIN] ブログカテゴリ 一覧
  * @var BcBlog\View\BlogAdminAppView $this
  * @var BcBlog\Model\Entity\BlogContent $blogContent
+ * @var string $template 表示テンプレート（index_list: 表形式 / index_tree: ツリー形式）
  * @checked
  * @noTodo
  * @unitTest
  */
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜カテゴリ一覧', $blogContent->content->title));
 $this->BcAdmin->setHelp('blog_categories_index');
-$this->BcBaser->js('BcBlog.admin/blog_categories/index.bundle', false);
+$this->BcBaser->element('BlogCategories/index_setup', ['blogContent' => $blogContent, 'template' => $template]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $blogContent->id],
   'title' => __d('baser_core', '新規追加'),
@@ -27,6 +28,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
+<div id="AlertMessage" class="message" style="display:none"></div>
+
+<?php $this->BcBaser->element('BlogCategories/index_view_setting') ?>
+
 <div class="bca-data-list">
-  <?php $this->BcBaser->element('BlogCategories/index_list') ?>
+  <?php $this->BcBaser->element('BlogCategories/' . $template) ?>
 </div>

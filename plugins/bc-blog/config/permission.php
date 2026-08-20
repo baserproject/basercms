@@ -28,6 +28,8 @@ return [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/admin/bc-blog/blog_categories/add/*', 'method' => 'POST', 'auth' => true],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/admin/bc-blog/blog_categories/edit/*', 'method' => 'POST', 'auth' => true],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/admin/bc-blog/blog_categories/delete/*', 'method' => 'POST', 'auth' => true],
+                'VerityTree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/admin/bc-blog/blog_categories/verity_tree', 'method' => 'POST', 'auth' => false],
+                'ResetTree' => ['title' => __d('baser_core', 'ツリー構造リセット'), 'url' => '/baser/admin/bc-blog/blog_categories/reset_tree', 'method' => 'POST', 'auth' => false],
             ]
         ],
 
@@ -93,6 +95,7 @@ return [
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-blog/blog_categories/edit/*.json', 'method' => 'POST', 'auth' => true],
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/bc-blog/blog_categories/index/*.json', 'method' => 'GET', 'auth' => true],
                 'List' => ['title' => __d('baser_core', 'リスト取得'), 'url' => '/baser/api/admin/bc-blog/blog_categories/list/*.json', 'method' => 'GET', 'auth' => true],
+                'Move' => ['title' => __d('baser_core', '移動'), 'url' => '/baser/api/admin/bc-blog/blog_categories/move.json', 'method' => 'POST', 'auth' => true],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/bc-blog/blog_categories/view/*.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
