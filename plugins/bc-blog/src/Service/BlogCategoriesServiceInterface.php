@@ -76,12 +76,13 @@ interface BlogCategoriesServiceInterface
      * 新規エンティティ取得
      *
      * @param int $blogContentId
+     * @param int|null $parentId 親カテゴリID（子カテゴリとして追加する場合に指定）
      * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getNew(int $blogContentId): EntityInterface;
+    public function getNew(int $blogContentId, ?int $parentId = null): EntityInterface;
 
     /**
      * 新規作成
@@ -151,4 +152,42 @@ interface BlogCategoriesServiceInterface
      * @unitTest
      */
     public function getList($blogContentId, array $queryParams = []): array;
+
+    /**
+     * カテゴリの配置を移動する（並び替え・再親付け）
+     *
+     * 移動元の親IDは DB 上のエンティティから取得する
+     *
+     * @param array $origin 移動元 ['id' => int]（parentId は後方互換のため受け付けるが利用しない）
+     * @param array $target 移動先 ['id' => int|null, 'parentId' => int|null]
+     * @return EntityInterface|bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function move(array $origin, array $target);
+
+    /**
+     * ブログカテゴリのツリー構造をチェックする
+     *
+     * 問題がある場合にはログを出力する
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verityTree(): bool;
+
+    /**
+     * ブログカテゴリのツリー構造をリセットする
+     *
+     * 全てのカテゴリをルート直下にフラット化し、lft / rght を振り直す。
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetTree(): bool;
 }
