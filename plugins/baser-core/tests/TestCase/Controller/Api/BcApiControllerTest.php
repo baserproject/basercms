@@ -112,6 +112,16 @@ class BcApiControllerTest extends BcTestCase
     }
 
     /**
+     * test restrictNonPublicAccess（amp; プレフィックスによる正規化バイパス対策）
+     */
+    public function test_restrictNonPublicAccess_ampBypass()
+    {
+        $this->expectException(\Cake\Http\Exception\ForbiddenException::class);
+        $controller = new BcApiController($this->getRequest('/baser/api/baser-core/contents/index.json?amp;preview=1'));
+        $this->execPrivateMethod($controller, 'restrictNonPublicAccess');
+    }
+
+    /**
      * test getAccessToken
      */
     public function testGetAccessToken()

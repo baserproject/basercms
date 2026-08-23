@@ -136,6 +136,10 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(403);
         $this->get('/baser/api/bc-blog/blog_posts/view/1.json?preview=1');
         $this->assertResponseCode(403);
+
+        // amp; プレフィックスによる正規化を悪用したバイパスも 403
+        $this->get('/baser/api/bc-blog/blog_posts/index/1.json?amp;preview=1');
+        $this->assertResponseCode(403);
     }
 
 }

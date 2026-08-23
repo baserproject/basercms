@@ -253,6 +253,14 @@ class AppControllerTest extends BcTestCase
         $this->assertArrayNotHasKey('status', $result);
         $this->assertArrayHasKey('keyword', $result);
 
+        // __cleanupQueryParams による正規化を悪用した amp; プレフィックス付きキーも除去される
+        $this->AppController->setRequest($this->getRequest('/news/archives/1?amp;preview=1&amp;status=0&keyword=abc'));
+        $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');
+        $result = $this->AppController->getRequest()->getQueryParams();
+        $this->assertArrayNotHasKey('amp;preview', $result);
+        $this->assertArrayNotHasKey('amp;status', $result);
+        $this->assertArrayHasKey('keyword', $result);
+
         // preview / status が無ければ何もしない
         $this->AppController->setRequest($this->getRequest('/news/archives/1?keyword=abc'));
         $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');

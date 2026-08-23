@@ -215,13 +215,15 @@ class AppController extends BaseController
         $request = $this->getRequest();
         $query = $request->getQueryParams();
         // preview / status が指定されていなければ何もしない（不要な認証判定を避ける）
-        if (!array_key_exists('preview', $query) && !array_key_exists('status', $query)) {
+        // __cleanupQueryParams() による amp; 正規化を悪用したバイパスを防ぐため、
+        // amp; プレフィックス付きのキーも対象にする
+        $targets = array_flip(['preview', 'status', 'amp;preview', 'amp;status']);
+        if (!array_intersect_key($query, $targets)) {
             return;
         }
         // 認証済み（正規のプレビュー機能を含む）はそのまま許可する
         if (BcUtil::loginUser()) return;
-        unset($query['preview'], $query['status']);
-        $this->setRequest($request->withQueryParams($query));
+        $this->setRequest($request->withQueryParams(array_diff_key($query, $targets)));
     }
 
     /**

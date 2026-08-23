@@ -261,6 +261,10 @@ class BlogControllerTest extends BcTestCase
         $this->get('/news/archives/2?preview=1');
         $this->assertResponseCode(404);
 
+        // amp; プレフィックスによる正規化（__cleanupQueryParams）を悪用したバイパスも塞ぐ（404）
+        $this->get('/news/archives/2?amp;preview=1');
+        $this->assertResponseCode(404);
+
         // 未認証で status=0（非公開のみ列挙）を指定しても非公開記事は返らない
         $this->get('/news/archives/date/2023?status=0');
         $vars = $this->_controller->viewBuilder()->getVars();

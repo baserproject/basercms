@@ -78,7 +78,10 @@ class BcApiController extends AppController
      */
     protected function restrictNonPublicAccess(): void
     {
-        if (array_key_exists('preview', $this->getRequest()->getQueryParams())) {
+        // __cleanupQueryParams() による amp; 正規化を悪用したバイパスを防ぐため、
+        // amp; プレフィックス付きのキーも拒否する
+        $query = $this->getRequest()->getQueryParams();
+        if (array_key_exists('preview', $query) || array_key_exists('amp;preview', $query)) {
             throw new ForbiddenException();
         }
     }
