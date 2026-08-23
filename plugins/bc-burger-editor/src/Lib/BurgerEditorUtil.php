@@ -120,6 +120,80 @@ HTACCESS;
     }
 
     /**
+     * エディタが素の HTML で出力する入力要素の name 属性を収集する
+     *
+     * BurgerEditor は編集フォーム内に FormHelper を経由しない input を出力するため、
+     * それらは FormProtection のトークンに含まれないまま送信され「想定外のフィールド」
+     * として検証を落とす。この一覧を unlockedFields として渡すことで、
+     * content[id] 等の hidden フィールドを FormProtection の保護対象に
+     * 残したままエディタを動作させる。
+     *
+     * 収集元は次の2つ。
+     * - テンプレートの走査（サードパーティプラグインが提供する Addon も
+     *   getAddonPath() に含まれるため、外部で追加された name も自動的に対象となる）
+     * - JS が動的に生成するフィールドの固定一覧（走査では検出できないもの）
+     *
+     * 永続キャッシュを持たないのは、Addon 追加時に古い一覧が残ると保存が丸ごと
+     * 失敗する形で問題が出るため。
+     *
+     * @return string[]
+     */
+    public static function getEditorFieldNames()
+    {
+        static $fields = null;
+        if ($fields !== null) {
+            return $fields;
+        }
+
+        $targets = [
+            dirname(dirname(dirname(__FILE__))) . DS . 'templates' . DS . 'cell' . DS . 'BurgerEditor' . DS . 'display.php',
+        ];
+        // テンプレートの種類を列挙すると Addon 側の追加に追従できないため、
+        // Addon 配下の php をすべて走査する
+        foreach(self::getAddonPath() as $addonPath) {
+            $targets = array_merge(
+                $targets,
+                (array)glob($addonPath . 'type' . DS . '*' . DS . '*.php'),
+                (array)glob($addonPath . 'block' . DS . '*' . DS . '*.php'),
+                (array)glob($addonPath . 'block' . DS . '*.php')
+            );
+        }
+
+        // エディタが JS で動的に生成するフィールド
+        // 下書きと本稿を制御するために管理画面の JS がフォームへ挿入するもので、
+        // テンプレートの走査では検出できない。JS 側を変更する際は合わせて更新する。
+        // FormProtection の照合は Hash::flatten によるドット区切りで行われる。
+        $fields = [
+            'data.Page.contents_tmp',
+            'data.BlogPost.detail_tmp',
+        ];
+
+        foreach($targets as $target) {
+            if (!is_file($target)) {
+                continue;
+            }
+            $content = file_get_contents($target);
+            if ($content === false) {
+                continue;
+            }
+            if (!preg_match_all('/\sname\s*=\s*("[^"]*"|\'[^\']*\'|[^\s"\'<>=`]+)/i', $content, $matches)) {
+                continue;
+            }
+            foreach($matches[1] as $name) {
+                $name = trim($name, "\"'");
+                // PHP や JS テンプレートの式を含むものは実際の name が確定しないため除外する
+                if ($name === '' || strpos($name, '<') !== false || strpos($name, '%') !== false) {
+                    continue;
+                }
+                $fields[] = $name;
+            }
+        }
+        $fields = array_values(array_unique($fields));
+
+        return $fields;
+    }
+
+    /**
      * アップロードを常に拒否する拡張子の一覧を取得する
      *
      * Bge.deniedExtension を正規化して返す。アップロード時の判定と
