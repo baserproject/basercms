@@ -18,6 +18,7 @@ use BcBurgerEditor\Service\BurgerEditorService;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Plugin;
+use Cake\Event\EventManager;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Laminas\Diactoros\UploadedFile;
 
@@ -240,6 +241,141 @@ class BurgerEditorControllerTest extends BcTestCase
 
         $result = json_decode((string)$this->_response->getBody(), true);
         $this->assertSame('許可されていないファイル形式です', $result['error']);
+    }
+
+
+    /**
+     * test file_upload
+     *
+     * Bge.allowedAdmin が有効でもサーバーサイドで解釈され得る拡張子は受け付けない
+     *
+     * allowedAdmin は allowedExt 以外の拡張子を許可する設定だが、
+     * Bge.deniedExtension に該当するものはこの設定に関係なく拒否される。
+     *
+     * @dataProvider deniedExtensionDataProvider
+     */
+    public function test_file_upload_withAllowedAdmin_andDeniedExtension($filename)
+    {
+        $this->allowAdminAnyExtension();
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile($filename, 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('許可されていないファイル形式です', $result['error'], "{$filename} が拒否されていません");
+    }
+
+    /**
+     * test file_upload
+     *
+     * Bge.allowedAdmin が有効な場合、拒否対象外の拡張子は allowedExt に無くても許可する
+     *
+     * 拡張子制限の強化によって allowedAdmin 本来の用途が損なわれていないことを確認する。
+     */
+    public function test_file_upload_withAllowedAdmin()
+    {
+        $this->allowAdminAnyExtension();
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('sample.psd', 'application/octet-stream', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
+        $this->registerUploadedPaths($this->getSavePath('other'), $result['data'][0]['fileId']);
+    }
+
+    /**
+     * Bge.allowedAdmin を有効にする
+     *
+     * リクエスト中にプラグインの bootstrap が setting.php を再読込するため、
+     * post の前に Configure::write してもスカラー値は上書きされてしまう。
+     * bootstrap より後に発生するイベントで書き込む必要がある。
+     *
+     * @return void
+     */
+    private function allowAdminAnyExtension()
+    {
+        EventManager::instance()->on('Controller.initialize', function() {
+            Configure::write('Bge.allowedAdmin', true);
+        });
+    }
+
+    /**
+     * test file_upload
+     *
+     * サーバーサイドで解釈され得る拡張子は受け付けない
+     *
+     * @dataProvider deniedExtensionDataProvider
+     */
+    public function test_file_upload_withDeniedExtension($filename)
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile($filename, 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('許可されていないファイル形式です', $result['error'], "{$filename} が拒否されていません");
+    }
+
+    public static function deniedExtensionDataProvider()
+    {
+        return [
+            ['sample.php'],
+            // 大文字混在でも拒否する
+            ['sample.pHp'],
+            ['sample.PHP'],
+            ['sample.phtml'],
+            ['sample.phar'],
+            ['sample.php5'],
+            ['sample.cgi'],
+            ['.htaccess'],
+        ];
+    }
+
+    /**
+     * test file_upload
+     *
+     * Bge.deniedExtension は Bge.allowedExt より優先される
+     *
+     * allowedExt に含まれる拡張子であっても、deniedExtension に指定されていれば
+     * 受け付けない。allowedExt に含まれる txt を deniedExtension に加えることで、
+     * allowedAdmin が無効な場合でも deniedExtension の判定が先に働くことを確認する。
+     */
+    public function test_file_upload_deniedExtensionTakesPrecedence()
+    {
+        // Configure::load は配列を追記するため、この指定はリクエスト中も保持される
+        Configure::write('Bge.deniedExtension', ['txt']);
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('sample.txt', 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('許可されていないファイル形式です', $result['error']);
+    }
+
+    /**
+     * test file_upload
+     *
+     * 複数のドットを含むファイル名でも、保存名の拡張子は末尾の1つだけになる
+     */
+    public function test_file_upload_withMultipleDots()
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('sample.php.txt', 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
+
+        $this->registerUploadedPaths($this->getSavePath('other'), $result['data'][0]['fileId']);
+        $this->assertCount(1, $this->uploadedPaths);
+        $this->assertStringEndsWith('.txt', $this->uploadedPaths[0]);
+        $this->assertStringNotContainsString('.php', basename($this->uploadedPaths[0]));
     }
 
     /**

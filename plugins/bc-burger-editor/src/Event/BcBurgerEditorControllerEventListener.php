@@ -4,6 +4,7 @@ namespace BcBurgerEditor\Event;
 
 use App\Controller\ErrorController;
 use BaserCore\Event\BcControllerEventListener;
+use BcBurgerEditor\Lib\BurgerEditorUtil;
 use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
 
@@ -49,7 +50,9 @@ class BcBurgerEditorControllerEventListener extends BcControllerEventListener
         ){
             return;
         }
-        $Controller->FormProtection->setConfig('validate', false);
+        // BurgerEditor は編集フォーム内に FormHelper を経由しない input を出力するため、
+        // それらのみを検証対象から除外する。validate 自体は有効に保つ。
+        $Controller->FormProtection->setConfig('unlockedFields', BurgerEditorUtil::getEditorFieldNames());
     }
 
 }

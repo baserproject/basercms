@@ -14,6 +14,7 @@ namespace BcBurgerEditor;
 use BaserCore\BcPlugin;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcUtil;
+use BcBurgerEditor\Lib\BurgerEditorUtil;
 use Cake\Database\Driver\Mysql;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
@@ -71,6 +72,9 @@ class BcBurgerEditorPlugin extends BcPlugin
         if (!is_writable($saveOtherPath)) {
             chmod($saveOtherPath, 0777);
         }
+
+        // アップロードディレクトリに .htaccess を設置する
+        BurgerEditorUtil::ensureUploadDirProtection();
 
         // サンプル画像コピー
         $path = $this->getPath();

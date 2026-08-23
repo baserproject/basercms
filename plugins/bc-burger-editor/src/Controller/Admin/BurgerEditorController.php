@@ -135,6 +135,7 @@ class BurgerEditorController extends BcAdminAppController
     public function img_upload()
     {
         $this->BurgerEditorService->getImageList(); // 一覧情報取得・更新
+        BurgerEditorUtil::ensureUploadDirProtection();
         $savePath = $this->BurgerEditorService->getImageFileBaseDir();
 
         $uploadedFiles = $this->getRequest()->getUploadedFiles();
@@ -308,6 +309,7 @@ class BurgerEditorController extends BcAdminAppController
     public function file_upload()
     {
         $this->BurgerEditorService->getFileList(); // ファイル一覧取得・データ更新
+        BurgerEditorUtil::ensureUploadDirProtection();
 
         $uploadedFiles = $this->getRequest()->getUploadedFiles();
 
@@ -320,9 +322,12 @@ class BurgerEditorController extends BcAdminAppController
                 if ($uploadedFile->getError() === UPLOAD_ERR_INI_SIZE) {
                     $hasError = 'ファイル容量が大きすぎます';
                 }
-                if (!BcUtil::isAdminUser() || !Configure::read('Bge.allowedAdmin')) {
-                    $fileExt = BurgerEditorUtil::getExtension($uploadedFile->getClientFilename());
-                    if (!in_array(strtolower($fileExt), explode(',', Configure::read('Bge.allowedExt')))) {
+                $fileExt = strtolower((string)BurgerEditorUtil::getExtension($uploadedFile->getClientFilename()));
+                if (in_array($fileExt, BurgerEditorUtil::getDeniedExts(), true)) {
+                    // Bge.allowedAdmin の値にかかわらず、実行され得る拡張子は常に拒否する
+                    $hasError = '許可されていないファイル形式です';
+                } elseif (!BcUtil::isAdminUser() || !Configure::read('Bge.allowedAdmin')) {
+                    if (!in_array($fileExt, explode(',', Configure::read('Bge.allowedExt')))) {
                         $hasError = '許可されていないファイル形式です';
                     }
                 }
@@ -349,6 +354,9 @@ class BurgerEditorController extends BcAdminAppController
             $uploaddir = $this->BurgerEditorService->getOtherFileBaseDir();
             foreach($uploadedFiles as $name => $uploadedFile) {
                 $basename = $uploadedFile->getClientFilename();
+                // 基底名を base64 化するため、複数のドットを含むファイル名でも
+                // 保存名の拡張子は末尾の1つだけになる。この命名規則を変更する場合は、
+                // Bge.deniedExtension の判定範囲を見直す必要がある。
                 $filename = $this->BurgerEditorService->nextOtherFileId() . "__" . BurgerEditorUtil::b64e(BurgerEditorUtil::getFileNameNoExtension($basename));
                 $ext = BurgerEditorUtil::getExtension($basename);
                 if ($ext) {
