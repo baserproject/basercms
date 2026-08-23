@@ -66,10 +66,23 @@ $config = [
         // Addon を提供するプラグインを配列で指定
         // プラグインの直下に「BurgerAddon」というフォルダに Addon を配置する
         'enableAddonPlugin' => [],
-        // システム管理者によるアップロードでいかなる拡張子も許可する
+        // システム管理者によるアップロードで allowedExt 以外の拡張子も許可する
+        // ただし php, phtml, phar, cgi 等のサーバーサイドで実行され得る拡張子は、
+        // 本設定を true にしても常に拒否される
         'allowedAdmin' => false,
         // システム管理者グループ以外のユーザーがアップロード可能なファイル（拡張子をカンマ区切りで指定する）
         'allowedExt' => 'gif,jpg,jpeg,png,ico,pdf,zip,doc,docx,xls,xlsx,ppt,pptx,txt',
+        // アップロードを常に拒否する拡張子（配列で指定する）
+        // allowedAdmin や allowedExt の設定にかかわらず拒否される。
+        // アップロードディレクトリに設置する .htaccess もこの一覧から生成される。
+        'deniedExtension' => [
+            'php', 'php3', 'php4', 'php5', 'php6', 'php7', 'php8',
+            'phtml', 'phtm', 'pht', 'phps', 'phar',
+            'shtml', 'shtm',
+            'cgi', 'pl', 'py', 'rb', 'sh', 'bash',
+            'jsp', 'jspx', 'asp', 'aspx', 'ashx',
+            'htaccess', 'htpasswd',
+        ],
         // 保存対象のターゲットとなるフィールド
         'targetColumns' => ['content', 'content_draft', 'detail', 'detail_draft']
     ]
