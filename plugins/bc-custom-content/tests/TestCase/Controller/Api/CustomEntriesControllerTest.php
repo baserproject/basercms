@@ -109,6 +109,10 @@ class CustomEntriesControllerTest extends BcTestCase
         // レスポンスを確認
         $this->assertResponseCode(403);
 
+        //preview パラメータは公開APIで拒否される（未認証の非公開データ閲覧対策）
+        $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&preview=1');
+        $this->assertResponseCode(403);
+
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }

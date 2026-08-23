@@ -121,4 +121,21 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(403);
     }
 
+    /**
+     * 公開APIでは preview パラメータを拒否する（未認証の非公開データ閲覧対策）
+     */
+    public function test_preview_forbidden_on_public_api()
+    {
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'blog post', 'status' => true])->persist();
+        ContentFactory::make(['type' => 'BlogContent', 'entity_id' => 1])->persist();
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
+
+        // 一覧・単一とも preview を指定すると 403
+        $this->get('/baser/api/bc-blog/blog_posts/index/1.json?preview=1');
+        $this->assertResponseCode(403);
+        $this->get('/baser/api/bc-blog/blog_posts/view/1.json?preview=1');
+        $this->assertResponseCode(403);
+    }
+
 }

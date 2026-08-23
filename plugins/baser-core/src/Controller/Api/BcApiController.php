@@ -66,6 +66,24 @@ class BcApiController extends AppController
     }
 
     /**
+     * 未認証ユーザーによる非公開データへのアクセスを制限する（API 版）
+     *
+     * 公開APIでは preview は認証済みのプレビュー機能でのみ利用可能なため、
+     * preview パラメータが指定された場合は拒否する。
+     *
+     * @return void
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    protected function restrictNonPublicAccess(): void
+    {
+        if (array_key_exists('preview', $this->getRequest()->getQueryParams())) {
+            throw new ForbiddenException();
+        }
+    }
+
+    /**
      * トークンを取得する
      * @param ResultInterface $result
      * @return array
