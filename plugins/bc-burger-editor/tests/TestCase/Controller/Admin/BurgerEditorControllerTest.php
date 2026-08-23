@@ -242,6 +242,85 @@ class BurgerEditorControllerTest extends BcTestCase
         $this->assertSame('許可されていないファイル形式です', $result['error']);
     }
 
+
+    /**
+     * test file_upload
+     *
+     * サーバーサイドで解釈され得る拡張子は受け付けない
+     *
+     * @dataProvider deniedExtensionDataProvider
+     */
+    public function test_file_upload_withDeniedExtension($filename)
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile($filename, 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('許可されていないファイル形式です', $result['error'], "{$filename} が拒否されていません");
+    }
+
+    public static function deniedExtensionDataProvider()
+    {
+        return [
+            ['sample.php'],
+            // 大文字混在でも拒否する
+            ['sample.pHp'],
+            ['sample.PHP'],
+            ['sample.phtml'],
+            ['sample.phar'],
+            ['sample.php5'],
+            ['sample.cgi'],
+            ['.htaccess'],
+        ];
+    }
+
+    /**
+     * test file_upload
+     *
+     * Bge.deniedExtension は Bge.allowedExt より優先される
+     *
+     * allowedExt に含まれる拡張子であっても、deniedExtension に指定されていれば
+     * 受け付けない。上の test_file_upload_withDeniedExtension は allowedExt に
+     * 無い拡張子を扱うため、どちらの判定で拒否されたか区別できない。
+     * ここでは allowedExt に含まれる txt を deniedExtension に加えることで、
+     * deniedExtension の判定が実際に働いていることを確認する。
+     */
+    public function test_file_upload_deniedExtensionTakesPrecedence()
+    {
+        // Configure::load は配列を追記するため、この指定はリクエスト中も保持される
+        Configure::write('Bge.deniedExtension', ['txt']);
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('sample.txt', 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('許可されていないファイル形式です', $result['error']);
+    }
+
+    /**
+     * test file_upload
+     *
+     * 複数のドットを含むファイル名でも、保存名の拡張子は末尾の1つだけになる
+     */
+    public function test_file_upload_withMultipleDots()
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('sample.php.txt', 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
+
+        $this->registerUploadedPaths($this->getSavePath('other'), $result['data'][0]['fileId']);
+        $this->assertCount(1, $this->uploadedPaths);
+        $this->assertStringEndsWith('.txt', $this->uploadedPaths[0]);
+        $this->assertStringNotContainsString('.php', basename($this->uploadedPaths[0]));
+    }
+
     /**
      * test file_upload / file_delete
      *

@@ -94,6 +94,113 @@ class BurgerEditorUtilTest extends BcTestCase
         $this->assertCount(1, BurgerEditorUtil::getAddonPath());
     }
 
+
+    /**
+     * test getDeniedExts
+     *
+     * 設定した拡張子が小文字化・trim・重複除去されて返る
+     */
+    public function test_getDeniedExts()
+    {
+        Configure::write('Bge.deniedExtension', ['PHP', ' phtml ', 'phar', 'php']);
+        $this->assertSame(['php', 'phtml', 'phar'], BurgerEditorUtil::getDeniedExts());
+    }
+
+    /**
+     * test getDeniedExts
+     *
+     * カンマ区切り文字列でも指定できる
+     */
+    public function test_getDeniedExts_commaSeparated()
+    {
+        Configure::write('Bge.deniedExtension', 'php, phtml ,phar');
+        $this->assertSame(['php', 'phtml', 'phar'], BurgerEditorUtil::getDeniedExts());
+    }
+
+    /**
+     * test getDeniedExts
+     *
+     * 配列でも文字列でもない場合は空配列を返す
+     *
+     * @dataProvider getDeniedExtsInvalidDataProvider
+     */
+    public function test_getDeniedExts_invalid($config)
+    {
+        Configure::write('Bge.deniedExtension', $config);
+        $this->assertSame([], BurgerEditorUtil::getDeniedExts());
+    }
+
+    public static function getDeniedExtsInvalidDataProvider()
+    {
+        return [
+            [null],
+            [''],
+            [[]],
+            [[null, 123, '']],
+        ];
+    }
+
+    /**
+     * test getDeniedExts
+     *
+     * 初期設定では php をはじめとする拡張子が含まれる
+     */
+    public function test_getDeniedExts_default()
+    {
+        $config = include Plugin::path('BcBurgerEditor') . 'config' . DS . 'setting.php';
+        Configure::write('Bge.deniedExtension', $config['Bge']['deniedExtension']);
+        $exts = BurgerEditorUtil::getDeniedExts();
+        foreach(['php', 'phtml', 'phar', 'cgi', 'htaccess'] as $ext) {
+            $this->assertContains($ext, $exts, "{$ext} が初期設定に含まれていません");
+        }
+    }
+
+    /**
+     * test getEditorFieldNames
+     *
+     * Addon のテンプレートから name 属性を収集する
+     */
+    public function test_getEditorFieldNames()
+    {
+        $fields = BurgerEditorUtil::getEditorFieldNames();
+        // エディタのテンプレートが出力する入力要素
+        $this->assertContains('bge-path', $fields);
+        $this->assertContains('bge-alt', $fields);
+        // JS が生成する下書き制御用のフィールド
+        $this->assertContains('data.Page.contents_tmp', $fields);
+        $this->assertContains('data.BlogPost.detail_tmp', $fields);
+    }
+
+    /**
+     * test getEditorFieldNames
+     *
+     * 保存対象のフィールドは含めない
+     *
+     * これらが含まれると FormProtection の保護対象から外れてしまうため、
+     * 収集条件を変更する際は必ず確認する。
+     */
+    public function test_getEditorFieldNames_notContainsModelFields()
+    {
+        $fields = BurgerEditorUtil::getEditorFieldNames();
+        foreach(['content', 'content.id', 'contents', 'draft', '_Token', '_csrfToken'] as $name) {
+            $this->assertNotContains($name, $fields, "{$name} が除外対象に含まれています");
+        }
+    }
+
+    /**
+     * test getEditorFieldNames
+     *
+     * PHP や JS テンプレートの式を含む name は除外する
+     */
+    public function test_getEditorFieldNames_notContainsExpressions()
+    {
+        foreach(BurgerEditorUtil::getEditorFieldNames() as $name) {
+            $this->assertStringNotContainsString('<', $name);
+            $this->assertStringNotContainsString('%', $name);
+            $this->assertNotSame('', $name);
+        }
+    }
+
     /**
      * test getTypePath
      */
