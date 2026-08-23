@@ -240,6 +240,42 @@ class AppControllerTest extends BcTestCase
     }
 
     /**
+     * test restrictNonPublicAccess
+     * 未認証時は preview / status を除去し、認証済み時・パラメータ無し時は変更しないことを検証する
+     */
+    public function test_restrictNonPublicAccess()
+    {
+        // 未認証：preview / status が除去され、他のパラメータは保持される
+        $this->AppController->setRequest($this->getRequest('/news/archives/1?preview=1&status=0&keyword=abc'));
+        $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');
+        $result = $this->AppController->getRequest()->getQueryParams();
+        $this->assertArrayNotHasKey('preview', $result);
+        $this->assertArrayNotHasKey('status', $result);
+        $this->assertArrayHasKey('keyword', $result);
+
+        // __cleanupQueryParams による正規化を悪用した amp; プレフィックス付きキーも除去される
+        $this->AppController->setRequest($this->getRequest('/news/archives/1?amp;preview=1&amp;status=0&keyword=abc'));
+        $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');
+        $result = $this->AppController->getRequest()->getQueryParams();
+        $this->assertArrayNotHasKey('amp;preview', $result);
+        $this->assertArrayNotHasKey('amp;status', $result);
+        $this->assertArrayHasKey('keyword', $result);
+
+        // preview / status が無ければ何もしない
+        $this->AppController->setRequest($this->getRequest('/news/archives/1?keyword=abc'));
+        $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');
+        $this->assertEquals(['keyword' => 'abc'], $this->AppController->getRequest()->getQueryParams());
+
+        // 認証済み：preview / status は保持される
+        $request = $this->loginAdmin($this->getRequest('/news/archives/1?preview=1&status=0'));
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'restrictNonPublicAccess');
+        $result = $this->AppController->getRequest()->getQueryParams();
+        $this->assertArrayHasKey('preview', $result);
+        $this->assertArrayHasKey('status', $result);
+    }
+
+    /**
      * test notFound
      */
     public function test_notFound()
