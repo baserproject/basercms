@@ -17,6 +17,7 @@
         "ezyang/htmlpurifier": "~4.19.0",
         "robmorgan/phinx": "0.16.10",
         "mobiledetect/mobiledetectlib": "~3.74.4",
+        "nikic/php-parser": "~5.8.0",
         "ext-json": "*",
         "baserproject/bc-admin-third": "5.3.x-dev",
         "baserproject/bc-blog": "5.3.x-dev",
