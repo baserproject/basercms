@@ -510,8 +510,12 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
                 break;
             case 'Jwt':
                 $this->setupJwtAuth($service, $authSetting, $prefix);
-                if ($prefix === 'Api/Admin' && BcUtil::isSameReferrerAsCurrent()) {
-                    // セッションを持っている場合もログイン状態とみなす
+                if ($prefix === 'Api/Admin') {
+                    // GHSA-wgvx-x5g3-9v29: なりすまし可能な Referer 一致判定（CWE-290）を撤去し、
+                    // 管理画面 SPA（セッション Cookie で稼働）向けに Session authenticator を常時ロードする。
+                    // ロード順は JWT(先)→Session(後)。JWT ヘッダ付きは JWT が、無ければ Session が
+                    // 認証 provider となる。USE_CORE_ADMIN_API=false 時のアクセス可否は
+                    // BcAdminApiController::beforeFilter() で「provider が SessionAuthenticator か」で判定する。
                     $service->loadAuthenticator('Authentication.Session', [
                         'sessionKey' => $authSetting['sessionKey'],
                     ]);

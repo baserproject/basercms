@@ -169,6 +169,12 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $entity = $this->BlogCategories->getNew(1);
         $this->assertEquals(1, $entity['blog_content_id']);
+        $this->assertNull($entity['parent_id']);
+
+        // 親カテゴリを指定した場合（子カテゴリを追加）
+        $entity = $this->BlogCategories->getNew(1, 2);
+        $this->assertEquals(1, $entity['blog_content_id']);
+        $this->assertEquals(2, $entity['parent_id']);
     }
 
     /**
@@ -386,5 +392,130 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $sql = $resultQuery->sql();
         $this->assertStringContainsString('LIMIT 3', $sql);
         $this->assertStringContainsString('OFFSET 3', $sql); // (page-1) * limit = (2-1) * 3 = 3
+    }
+
+    /**
+     * test move（並び替え・再親付け）
+     */
+    public function test_move()
+    {
+        // parent1(1,4) > child1(2,3)、parent2(5,6) の入れ子集合
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'parent2', 'title' => 'P2', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+
+        // 同一階層の並び替え：parent1 を parent2 の後ろへ（target.id なし＝末尾）
+        $this->BlogCategories->move(
+            ['id' => 1, 'parentId' => null],
+            ['id' => null, 'parentId' => null]
+        );
+        $names = $this->BlogCategories->BlogCategories->find()->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['parent2', 'parent1', 'child1'], $names);
+
+        // 再親付け：child1 を parent2 の子へ移動
+        $this->BlogCategories->move(
+            ['id' => 2, 'parentId' => 1],
+            ['id' => null, 'parentId' => 3]
+        );
+        $child1 = $this->BlogCategories->BlogCategories->get(2);
+        $this->assertEquals(3, $child1->parent_id);
+        $parent2 = $this->BlogCategories->BlogCategories->get(3);
+        $this->assertGreaterThan($parent2->lft, $child1->lft);
+        $this->assertLessThan($parent2->rght, $child1->rght);
+
+        // 移動元の親はリクエストの origin.parentId ではなく DB 上の値から判定されること
+        // parent1 も parent2 の子にして [child1, parent1] とする
+        $this->BlogCategories->move(
+            ['id' => 1, 'parentId' => null],
+            ['id' => null, 'parentId' => 3]
+        );
+        // child1 を同階層の末尾へ移動。origin.parentId には移動前の古い親（1）を渡す
+        $this->BlogCategories->move(
+            ['id' => 2, 'parentId' => 1],
+            ['id' => null, 'parentId' => 3]
+        );
+        $children = $this->BlogCategories->BlogCategories->find()
+            ->where(['parent_id' => 3])->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['parent1', 'child1'], $children);
+    }
+
+    /**
+     * test move 複数ブログでルートカテゴリが交錯している場合（回帰テスト）
+     *
+     * lft/rght は全ブログ横断の単一フォレストのため、他ブログのルートカテゴリが
+     * 間に挟まっていても 1 回の移動で意図した位置に反映されることを確認する
+     */
+    public function test_move_multiBlog()
+    {
+        // ブログ1・ブログ2 へ交互に追加された状態（lft 順で交錯）
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'category-a', 'title' => 'A', 'parent_id' => null, 'lft' => 1, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 2, 'name' => 'category-b', 'title' => 'B', 'parent_id' => null, 'lft' => 3, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'category-c', 'title' => 'C', 'parent_id' => null, 'lft' => 5, 'rght' => 6])->persist();
+
+        // 上方向：C を A の上へ（1 回の移動で反映されること）
+        $this->BlogCategories->move(
+            ['id' => 3, 'parentId' => null],
+            ['id' => 1, 'parentId' => null]
+        );
+        $blog1Names = $this->BlogCategories->BlogCategories->find()
+            ->where(['blog_content_id' => 1])->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-c', 'category-a'], $blog1Names);
+
+        // 下方向：C を末尾へ（target.id なし）
+        $this->BlogCategories->move(
+            ['id' => 3, 'parentId' => null],
+            ['id' => null, 'parentId' => null]
+        );
+        $blog1Names = $this->BlogCategories->BlogCategories->find()
+            ->where(['blog_content_id' => 1])->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-a', 'category-c'], $blog1Names);
+
+        // ブログ2 の並びに影響が無いこと
+        $blog2Names = $this->BlogCategories->BlogCategories->find()
+            ->where(['blog_content_id' => 2])->orderBy(['lft'])->all()->extract('name')->toArray();
+        $this->assertEquals(['category-b'], $blog2Names);
+
+        // 入れ子集合が壊れていないこと（lft < rght、全ノード重複なし）
+        $all = $this->BlogCategories->BlogCategories->find()->orderBy(['lft'])->all();
+        $values = [];
+        foreach ($all as $category) {
+            $this->assertLessThan($category->rght, $category->lft);
+            $values[] = $category->lft;
+            $values[] = $category->rght;
+        }
+        $this->assertEquals(count($values), count(array_unique($values)));
+    }
+
+    /**
+     * test verityTree
+     */
+    public function test_verityTree()
+    {
+        // 正常なツリー
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 3])->persist();
+        $this->assertTrue($this->BlogCategories->verityTree());
+
+        // lft / rght が破損したツリー（重複・rght < lft）
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 1, 'name' => 'broken', 'title' => 'B', 'parent_id' => null, 'lft' => 2, 'rght' => 1])->persist();
+        $this->assertFalse($this->BlogCategories->verityTree());
+    }
+
+    /**
+     * test resetTree
+     */
+    public function test_resetTree()
+    {
+        // lft / rght が破損したツリー
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'parent1', 'title' => 'P1', 'parent_id' => null, 'lft' => 1, 'rght' => 4])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'name' => 'child1', 'title' => 'C1', 'parent_id' => 1, 'lft' => 2, 'rght' => 2])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 2, 'name' => 'category-b', 'title' => 'B', 'parent_id' => null, 'lft' => 2, 'rght' => 1])->persist();
+        $this->assertFalse($this->BlogCategories->verityTree());
+
+        // リセット後は全てルート直下のフラット構造となり、チェックが通る
+        $this->assertTrue($this->BlogCategories->resetTree());
+        $this->assertTrue($this->BlogCategories->verityTree());
+        $roots = $this->BlogCategories->BlogCategories->find()->where(['parent_id IS' => null])->count();
+        $this->assertEquals(3, $roots);
     }
 }

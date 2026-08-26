@@ -613,7 +613,14 @@ EOF;
      */
     public function testGetCoreUpdateAndUpdateCoreFiles()
     {
-        $this->markTestIncomplete('CakePHPのバージョンの問題があるので、baserCMS 5.1.0 をリリースしてから再実装する');
+        // このテストは、monorepo自体(replaceでbaserproject/*を自己解決しており、
+        // vendor/plugins配下のいずれにもbaser-core自身のcomposer.jsonが存在しない)を
+        // ソースにして「cakephp 5.2系pin → cakephp 4.4系を要求する旧baser-core 5.0.15への
+        // ダウングレード」を試みるため、relaxFrameworkConstraints() が対象を検出できず、
+        // 別の要因で失敗する(ComposerCommandTest::testExecuteOnUpdateTmp と同根)。
+        // 実際の配布サイト(replaceを使わずbaser-coreが実インストールされる)を模した形に
+        // 調整してから再実装する
+        $this->markTestIncomplete('monorepo特有のreplace構成により、ダウングレード方向のシナリオ再現には別途テスト環境の調整が必要');
         // composer.json をバックアップ
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.bak.json');
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.bak.lock');
@@ -811,6 +818,41 @@ EOF;
         ob_get_clean();
 
         $this->assertFalse(file_exists($rceFile), 'rollbackCore でOSコマンドインジェクションが発生しました');
+    }
+
+    /**
+     * updateCore は PHP 以外の任意バイナリパスを拒否する（任意バイナリ実行対策）
+     * @dataProvider provideNonPhpBinaryPath
+     */
+    public function test_updateCore_rejectsNonPhpBinary(string $php): void
+    {
+        $pluginsService = $this->getMockBuilder(PluginsService::class)
+            ->onlyMethods(['updateCoreFiles'])
+            ->getMock();
+        // updateCoreFiles が呼ばれる前に検証で弾かれること
+        $pluginsService->expects($this->never())->method('updateCoreFiles');
+        $this->expectException('BaserCore\Error\BcException');
+        $pluginsService->updateCore($php);
+    }
+
+    /**
+     * rollbackCore は PHP 以外の任意バイナリパスを拒否する（任意バイナリ実行対策）
+     * @dataProvider provideNonPhpBinaryPath
+     */
+    public function test_rollbackCore_rejectsNonPhpBinary(string $php): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->Plugins->rollbackCore('5.0.15', $php);
+    }
+
+    public static function provideNonPhpBinaryPath(): array
+    {
+        return [
+            'curlバイナリ' => ['/usr/bin/curl'],
+            'pythonバイナリ' => ['/usr/bin/python3'],
+            'bashバイナリ' => ['bash'],
+            'php偽装ディレクトリ配下の他バイナリ' => ['/usr/bin/php/../sh'],
+        ];
     }
 
     /**

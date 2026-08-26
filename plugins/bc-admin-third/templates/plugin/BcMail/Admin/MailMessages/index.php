@@ -34,6 +34,14 @@ $this->BcAdmin->setHelp('mail_messages_index');
     ]) ?>
     &nbsp;&nbsp;
     <?php echo $this->BcAdminForm->submit(__d('baser_core', 'CSVダウンロード'), ['div' => false, 'class' => 'bca-btn']) ?>
+    &nbsp;&nbsp;
+    <?php echo $this->BcAdminForm->control('disable_formula_escape', [
+      'type' => 'checkbox',
+      'label' => __d('baser_core', '数式対策を無効'),
+      'hiddenField' => false
+    ]) ?>
+    <i class="bca-icon--question-circle bca-help"></i>
+    <div class="bca-helptext"><?php echo __d('baser_core', 'チェックを入れない場合、=, +, -, @ で始まる値の先頭にシングルクォーテーションを付与します。') ?></div>
     <?php echo $this->BcAdminForm->end() ?>
   </div>
 </div>

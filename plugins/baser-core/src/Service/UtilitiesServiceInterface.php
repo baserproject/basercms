@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\Table;
 
 /**
  * UtilitiesServiceInterface
@@ -30,6 +31,19 @@ interface UtilitiesServiceInterface
      * @unitTest
      */
     public function verityContentsTree(): bool;
+
+    /**
+     * ツリー構造をチェックする
+     *
+     * 問題がある場合にはログを出力する
+     *
+     * @param Table $table TreeBehavior を利用しているテーブル
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verityTree(Table $table): bool;
 
     /**
      * コンテンツツリーをリセットし全て同階層にする

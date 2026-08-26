@@ -36,18 +36,31 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
      * ブログカテゴリ一覧用の view 変数取得
      *
      * @param int $blogContentId
+     * @param int|null $listType 表示形式（1: ツリー形式 / 2: 表形式。null は表形式）
      * @return array
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function getViewVarsForIndex(int $blogContentId)
+    public function getViewVarsForIndex(int $blogContentId, ?int $listType = null)
     {
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
-        return [
+        $templates = [1 => 'index_tree', 2 => 'index_list'];
+        $listType = ($listType && isset($templates[$listType])) ? $listType : 2;
+        $vars = [
             'blogContent' => $blogContentsService->get($blogContentId),
-            'blogCategories' => $this->getTreeIndex($blogContentId, [])
+            'template' => $templates[$listType],
         ];
+        if ($listType === 1) {
+            // ツリー形式: 親子ネスト（children）付きで取得
+            $vars['blogCategories'] = $this->getIndex($blogContentId, [], 'threaded')
+                ->orderBy(['BlogCategories.lft'])
+                ->all();
+        } else {
+            // 表形式: 従来どおり階層をインデント表示したフラット配列
+            $vars['blogCategories'] = $this->getTreeIndex($blogContentId, []);
+        }
+        return $vars;
     }
 
     /**

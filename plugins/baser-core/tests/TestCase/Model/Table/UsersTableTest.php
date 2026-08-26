@@ -93,6 +93,37 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
+     * Test beforeMarshal
+     *
+     * real_name_1/real_name_2 は前後の空白のみ除去し、間のスペースは保持すること
+     */
+    public function testBeforeMarshalTrimsRealName()
+    {
+        $user = $this->Users->newEntity([
+            'real_name_1' => " 　山田　太郎 　",
+            'real_name_2' => " 　鈴木　一郎 　",
+        ], ['validate' => false]);
+        $this->assertEquals('山田　太郎', $user->real_name_1);
+        $this->assertEquals('鈴木　一郎', $user->real_name_2);
+    }
+
+    /**
+     * Test beforeMarshal
+     *
+     * real_name_1/real_name_2 がスペースのみの場合、トリムされて空文字になり、
+     * real_name_1 は必須バリデーションでエラーになり、real_name_2 は空文字を許容してエラーにならないこと
+     */
+    public function testBeforeMarshalRealNameOnlySpace()
+    {
+        $user = $this->Users->newEntity([
+            'real_name_1' => '   ',
+            'real_name_2' => '　　　',
+        ]);
+        $this->assertNotEmpty($user->getError('real_name_1'));
+        $this->assertEmpty($user->getError('real_name_2'));
+    }
+
+    /**
      * Test afterMarshal
      */
     public function testAfterMarshal()
@@ -293,6 +324,41 @@ class UsersTableTest extends BcTestCase
         $this->assertTrue(isset($entity->user_groups));
         $this->assertTrue($entity->status);
         $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 3]))->first());
+    }
+
+    /**
+     * test trimSpace
+     *
+     * @param string $value
+     * @param string $expected
+     * @dataProvider trimSpaceDataProvider
+     */
+    public function test_trimSpace(string $value, string $expected)
+    {
+        $this->assertEquals($expected, $this->Users->trimSpace($value));
+    }
+
+    public static function trimSpaceDataProvider()
+    {
+        return [
+            ['山田太郎', '山田太郎'],
+            ['  山田 太郎  ', '山田 太郎'],
+            ['　　山田　太郎　　', '山田　太郎'],
+            [' 　山田　太郎 　', '山田　太郎'],
+            // タブ・改行
+            ["\t\n山田 太郎\r\n", '山田 太郎'],
+            // ノーブレークスペース（U+00A0）
+            ["\xC2\xA0山田 太郎\xC2\xA0", '山田 太郎'],
+            // 空白のみの場合は空文字になる
+            ['   ', ''],
+            ['　　　', ''],
+            ["\xC2\xA0", ''],
+            // 間の空白は保持する
+            ['山田　太郎', '山田　太郎'],
+            ['Elly De La Cruz', 'Elly De La Cruz'],
+            // 空文字はそのまま
+            ['', ''],
+        ];
     }
 
 }

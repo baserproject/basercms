@@ -16,7 +16,9 @@
  * @var array $messages
  * @var int $mailContentId
  * @var string $contentName
+ * @var bool $escapeFormula
  */
 $this->BcCsv->encoding = $encoding;
+$this->BcCsv->escapeFormula = $escapeFormula ?? true;
 $this->BcCsv->addModelDatas('MailMessage', $messages);
 $this->BcCsv->download($contentName);

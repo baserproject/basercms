@@ -76,4 +76,45 @@ class BcThemeFileServiceTest extends BcTestCase
             '相対パスのみ' => ['../../../evil.php'],
         ];
     }
+
+    /**
+     * test getFullpath - $type のトラバーサルを拒否する（GHSA-2pj4-v76f-wjvx）
+     *
+     * $type が許可リスト外（トラバーサルを含む等）の場合、ベースディレクトリの移動を
+     * 許さず BcException で拒否すること。
+     *
+     * @dataProvider provideGetFullpathInvalidType
+     */
+    public function test_getFullpath_invalidType(string $type): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('テンプレートタイプが不正です。');
+        $this->BcThemeFileService->getFullpath('BcThemeSample', '', $type, 'pwned.php');
+    }
+
+    public static function provideGetFullpathInvalidType(): array
+    {
+        return [
+            // 実在ディレクトリへ移動する traversal（realpath が解決し旧チェックを回避していた本丸）
+            'tmpへ移動するtraversal' => ['../../../../../../../../tmp'],
+            'webrootへ移動するtraversal' => ['../../../../webroot'],
+            '許可外の任意文字列' => ['invalid'],
+            '空文字' => [''],
+        ];
+    }
+
+    /**
+     * test getFullpath - 正規の $type は全て通過する（回帰防止）
+     * @dataProvider provideValidType
+     */
+    public function test_getFullpath_validType(string $type): void
+    {
+        $path = $this->BcThemeFileService->getFullpath('BcThemeSample', '', $type, 'sample');
+        $this->assertStringStartsWith('/var/www/html/plugins/', $path);
+    }
+
+    public static function provideValidType(): array
+    {
+        return [['layout'], ['element'], ['email'], ['etc'], ['css'], ['js'], ['img']];
+    }
 }

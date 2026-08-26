@@ -289,6 +289,24 @@ $this->BcAdmin->setHelp('custom_fields_form');
       </td>
     </tr>
 
+    <tr v-show="showControlMultiCheckbox">
+      <th class="col-head bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('meta.BcCustomContent.or_search', __d('baser_core', '検索条件')) ?>
+      </th>
+      <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('meta.BcCustomContent.or_search', [
+          'type' => 'checkbox',
+          'label' => __d('baser_core', '複数選択時にOR検索として扱う'),
+          'v-model' => 'orSearch'
+        ]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
+          <?php echo __d('baser_core', 'チェックすると、このフィールドで複数の値を選択して検索した際、いずれかに一致するデータを検索対象とします（OR検索）。未チェックの場合は、選択した値すべてに一致するデータのみを検索対象とします（AND検索、初期値）。') ?>
+        </div>
+        <?php echo $this->BcAdminForm->error('meta.BcCustomContent.or_search') ?>
+      </td>
+    </tr>
+
     <tr v-show="showRowDefaultValue">
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('default_value', __d('baser_core', '初期値')) ?>

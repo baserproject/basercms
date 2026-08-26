@@ -15,5 +15,6 @@ return [
     'description' => __d('baser_core', 'コンテンツやブログ記事などにSEO用の設定を追加します。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
+    'installMessage' => __d('baser_core', 'インストールしただけでは、SEO設定はフロントページに出力されません。利用中のテーマのレイアウトへのタグの追加が必要です。詳しくは <a href="https://baserproject.github.io/5/operation/application/seo" target="_blank" class="outside-link">SEO設定のマニュアル</a> を確認してください。'),
     'adminLink' => ['plugin' => 'BcSeo', 'controller' => 'SeoConfigs', 'action' => 'update_db'],
 ];
