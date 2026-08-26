@@ -40,6 +40,8 @@ class BlogTagsController extends BcAdminApiController
         $queryParams = array_merge([
             'contain' => null,
         ], $this->getRequest()->getQueryParams());
+        // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
+        unset($queryParams['conditions'], $queryParams['order']);
         $this->set([
             'blogTags' => $this->paginate($service->getIndex($queryParams))
         ]);

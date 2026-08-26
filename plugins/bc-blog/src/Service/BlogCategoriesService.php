@@ -12,6 +12,8 @@
 namespace BcBlog\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\UtilitiesServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Model\Entity\BlogCategory;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use Cake\Datasource\EntityInterface;
@@ -29,6 +31,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BlogCategoriesService implements BlogCategoriesServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * @var BlogCategoriesTable|Table
@@ -232,16 +239,18 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * 新規エンティティ取得
      *
      * @param int $blogContentId
+     * @param int|null $parentId 親カテゴリID（子カテゴリとして追加する場合に指定）
      * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getNew(int $blogContentId): EntityInterface
+    public function getNew(int $blogContentId, ?int $parentId = null): EntityInterface
     {
         return $this->BlogCategories->newEntity([
             'blog_content_id' => $blogContentId,
-            'status' => true
+            'status' => true,
+            'parent_id' => $parentId
         ], [
             'validate' => false,
         ]);
@@ -368,5 +377,92 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         $conditions = [];
         if ($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
         return $query->where($conditions)->toArray();
+    }
+
+    /**
+     * カテゴリの配置を移動する（並び替え・再親付け）
+     *
+     * ツリー上のドラッグ&ドロップに対応する。基本的に target.id の上に移動する前提で、
+     * target.id が空の場合は同じ親の中の一番下に配置する。親が変わる場合は先に parent_id を
+     * 付け替え（TreeBehavior が末尾へ再配置）、その後オフセットで目標位置まで移動する。
+     * 移動元の親IDは DB 上のエンティティから取得するため、origin.parentId は利用しない。
+     *
+     * @param array $origin 移動元 ['id' => int]（parentId は後方互換のため受け付けるが利用しない）
+     * @param array $target 移動先 ['id' => int|null, 'parentId' => int|null]
+     * @return EntityInterface|bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function move(array $origin, array $target)
+    {
+        if (!$this->BlogCategories->exists(['BlogCategories.id' => $origin['id']])) {
+            throw new BcException(__d('baser_core', 'データが存在しません。'));
+        }
+
+        $category = $this->get($origin['id']);
+        $blogContentId = $category->blog_content_id;
+        // 親変更の判定はリクエスト値に依存せず、DB 上の現在の親IDを利用する
+        $originParentId = $category->parent_id? (int)$category->parent_id : null;
+        $targetParentId = $target['parentId']? (int)$target['parentId'] : null;
+        $targetId = $target['id']? (int)$target['id'] : null;
+
+        $targetSort = $this->BlogCategories->getOrderSameParent($targetId, $targetParentId);
+        if ($originParentId !== $targetParentId) {
+            // 親を変更（再親付け）
+            $category = $this->update($category, [
+                'id' => $origin['id'],
+                'name' => $category->name,
+                'title' => $category->title,
+                'parent_id' => $targetParentId,
+                'blog_content_id' => $blogContentId,
+            ]);
+            // 移動先に子が無い、または target 未指定（末尾指定）の場合は末尾配置で終了
+            if (!$targetSort || !$targetId) {
+                return $category;
+            }
+            $currentSort = $this->BlogCategories->getOrderSameParent(null, $targetParentId);
+        } else {
+            $currentSort = $this->BlogCategories->getOrderSameParent($origin['id'], $targetParentId);
+        }
+
+        // 親変更後のオフセットを算出
+        $offset = $targetSort - $currentSort;
+        if ($originParentId === $targetParentId && $targetId && $offset > 0) {
+            $offset--;
+        }
+        return $this->BlogCategories->moveOffset($origin['id'], $offset);
+    }
+
+    /**
+     * ブログカテゴリのツリー構造をチェックする
+     *
+     * 問題がある場合にはログを出力する
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verityTree(): bool
+    {
+        /** @var UtilitiesServiceInterface $utilitiesService */
+        $utilitiesService = $this->getService(UtilitiesServiceInterface::class);
+        return $utilitiesService->verityTree($this->BlogCategories);
+    }
+
+    /**
+     * ブログカテゴリのツリー構造をリセットする
+     *
+     * 全てのカテゴリをルート直下にフラット化し、lft / rght を振り直す。
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetTree(): bool
+    {
+        return $this->BlogCategories->resetTree();
     }
 }

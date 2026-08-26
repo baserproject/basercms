@@ -192,10 +192,7 @@ class UsersService implements UsersServiceInterface
     public function create(array $postData): ?EntityInterface
     {
         $loginUser = BcUtil::loginUser();
-        if(empty($postData['user_groups']['_ids'])) {
-            throw new BcException(__d('baser_core', 'ユーザーグループを指定してください。'));
-        }
-        if(in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
+        if(!empty($postData['user_groups']['_ids']) && in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(BcUtil::isInstalled() && !$loginUser->isAddableToAdminGroup()) {
                 throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
             }
@@ -557,14 +554,14 @@ class UsersService implements UsersServiceInterface
             $user = $this->Users->find('available')->where([
                 'Users.id' => $sessionUser->id
             ])->first();
-            if($user) {
-                $session->write($sessionKey, $user);
-                return true;
-            } else {
-                $session->delete($sessionKey);
-                return false;
-            }
         } catch (Exception $e) {
+            $user = null;
+        }
+        if($user) {
+            $session->write($sessionKey, $user);
+            return true;
+        } else {
+            $session->delete('AuthAgent');
             $session->delete($sessionKey);
             return false;
         }

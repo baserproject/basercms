@@ -28,7 +28,6 @@
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($entity->title) ?></td>
   <td class="bca-table-listup__tbody-td"><?php echo h($entity->getTypeTitle()) ?></td>
-  <td class="bca-table-listup__tbody-td"><?php echo $this->BcText->booleanMark($entity->required) ?></td>
   <td class="bca-table-listup__tbody-td"><?php echo $this->BcText->booleanMark($entity->status) ?></td>
 
   <?php echo $this->BcListTable->dispatchShowRow($entity) ?>

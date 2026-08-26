@@ -111,7 +111,17 @@ class MailMessagesService implements MailMessagesServiceInterface
         ], $queryParams);
         $query = $this->MailMessages->find();
         if ($options['order']) {
-            $query->orderBy("{$options['order']} {$options['direction']}");
+            // SQLインジェクション対策: direction は ASC/DESC のみ許容
+            $direction = strtoupper((string)$options['direction']);
+            if (!in_array($direction, ['ASC', 'DESC'], true)) {
+                $direction = 'DESC';
+            }
+            // SQLインジェクション対策: order(対象カラム)は英数字・アンダースコア・ドットのみ許容
+            $order = (string)$options['order'];
+            if (!preg_match('/^[a-zA-Z0-9_.]+$/', $order)) {
+                $order = 'created';
+            }
+            $query->orderBy("{$order} {$direction}");
             unset($options['order'], $options['direction']);
         }
         if (!empty($options['limit'])) {

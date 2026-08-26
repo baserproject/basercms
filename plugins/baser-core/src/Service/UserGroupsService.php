@@ -81,7 +81,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     {
         return $this->UserGroups->newEntity([
             'auth_prefix' => 'Admin',
-            'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api":{"type":"2"}}'
+            'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api/Admin":{"type":"2"}}'
         ], [
             'validate' => false,
         ]);

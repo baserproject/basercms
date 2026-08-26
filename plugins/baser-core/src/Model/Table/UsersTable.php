@@ -79,6 +79,11 @@ class UsersTable extends AppTable
             (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
+        foreach(['real_name_1', 'real_name_2', 'nickname'] as $field) {
+            if (isset($data[$field]) && is_string($data[$field])) {
+                $data[$field] = $this->trimSpace($data[$field]);
+            }
+        }
     }
 
     /**
@@ -406,6 +411,27 @@ class UsersTable extends AppTable
             ->matching('UserGroups', function($q) use ($prefix) {
                 return $q->where(['UserGroups.auth_prefix LIKE' => '%' . $prefix . '%']);
             })->contain(['UserGroups']);
+    }
+
+    /**
+     * 文字列の先頭と末尾の空白を除去する
+     *
+     * 半角スペース・全角スペース（U+3000）・ノーブレークスペース（U+00A0）と、
+     * タブや改行などの制御文字を対象とする。
+     * 文字列中の空白は氏名の区切りとして意味を持つため除去しない。
+     *
+     * @param string $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function trimSpace(string $value): string
+    {
+        $pattern = '/^[\s\x{3000}\x{00A0}]+|[\s\x{3000}\x{00A0}]+$/u';
+        $trimmed = preg_replace($pattern, '', $value);
+        // 不正な UTF-8 が渡された場合 preg_replace は null を返すため元の値を維持する
+        return ($trimmed === null)? $value : $trimmed;
     }
 
 }

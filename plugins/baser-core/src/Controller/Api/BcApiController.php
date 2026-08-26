@@ -55,8 +55,10 @@ class BcApiController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         // APIが許可されていない場合は弾く
+        // GHSA-wgvx-x5g3-9v29: なりすまし可能な Referer 前方一致判定（CWE-290）に代えて、
+        // Origin ヘッダ優先・scheme+host+port 完全一致の同一オリジン検証で自サイトJSからの利用のみ通す。
         if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if(BcUtil::isCorePlugin($this->getRequest()->getParam('plugin')) && !BcUtil::isSameReferrerAsCurrent()) {
+            if(BcUtil::isCorePlugin($this->getRequest()->getParam('plugin')) && !BcUtil::isSameOriginAsCurrent()) {
                 throw new ForbiddenException(__d('baser_core', 'baser APIは許可されていません。'));
             }
         }

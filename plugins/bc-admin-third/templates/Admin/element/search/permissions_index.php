@@ -32,7 +32,6 @@
 		<?php echo $this->BcAdminForm->label('permission_group_type', __d('baser_core', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
     <?php echo $this->BcAdminForm->control('permission_group_type', [
       'type' => 'radio',
-      'hiddenField' => false,
       'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')
     ]) ?>
   </span>

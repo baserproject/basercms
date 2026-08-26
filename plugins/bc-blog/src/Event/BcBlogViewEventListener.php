@@ -31,8 +31,26 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
      */
     public $events = [
         'beforeRender',
-        'leftOfToolbar'
+        'leftOfToolbar',
+        'afterUtilitiesIndex'
     ];
+
+    /**
+     * afterUtilitiesIndex
+     *
+     * ユーティリティ画面にブログカテゴリのツリー構造チェック・リセットのセクションを追加する
+     *
+     * @param Event $event
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterUtilitiesIndex(Event $event)
+    {
+        if (!BcUtil::isAdminSystem()) return;
+        $view = $event->getSubject();
+        echo $view->element('BcBlog.Utilities/blog_categories_tree');
+    }
 
     /**
      * leftOfToolbar
