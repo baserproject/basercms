@@ -133,6 +133,8 @@ class BcComposerTest extends BcTestCase
         $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
         $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
         $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
+        // CakePHP5.0.10 と共存できる cakephp/bake（3.0.1〜3.1.1）は nikic/php-parser 4系を要求するため緩和する
+        $data = str_replace('"nikic/php-parser": "~5.8.0"', '"nikic/php-parser": "^4.13.2 || ^5.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
@@ -201,6 +203,8 @@ class BcComposerTest extends BcTestCase
         $data = str_replace('"cakephp/bake": "~3.7.1"', '"cakephp/bake": "^3.0.0"', $data);
         $data = str_replace('"cakephp/debug_kit": "~5.2.4"', '"cakephp/debug_kit": "^5.0.0"', $data);
         $data = str_replace('"cakephp/migrations": "~4.9.7"', '"cakephp/migrations": "^4.0.0"', $data);
+        // CakePHP5.0.10 と共存できる cakephp/bake（3.0.1〜3.1.1）は nikic/php-parser 4系を要求するため緩和する
+        $data = str_replace('"nikic/php-parser": "~5.8.0"', '"nikic/php-parser": "^4.13.2 || ^5.0"', $data);
         $data = preg_replace($regex, '', $data);
         $file->write($data);
         BcComposer::setup('php');
