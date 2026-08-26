@@ -79,7 +79,7 @@ class UsersTable extends AppTable
             (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
-        foreach(['real_name_1', 'real_name_2'] as $field) {
+        foreach(['real_name_1', 'real_name_2', 'nickname'] as $field) {
             if (isset($data[$field]) && is_string($data[$field])) {
                 $data[$field] = $this->trimSpace($data[$field]);
             }
@@ -164,14 +164,7 @@ class UsersTable extends AppTable
         $validator
             ->scalar('nickname')
             ->maxLength('nickname', 255, __d('baser_core', 'ニックネームは255文字以内で入力してください。'))
-            ->allowEmptyString('nickname')
-            ->add('nickname', [
-                'noWhitespace' => [
-                    'rule' => function ($value) {
-                        return !preg_match('/[ 　]/u', $value);
-                    },
-                    'message' => __d('baser_core', 'ニックネームに半角・全角スペースは使用できません。')
-                ]]);
+            ->allowEmptyString('nickname');
         $validator
             ->requirePresence('user_groups', 'create', __d('baser_core', 'グループを選択してください。'))
             ->add('user_groups', [

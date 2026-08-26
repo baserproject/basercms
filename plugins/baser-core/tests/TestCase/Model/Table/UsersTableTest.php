@@ -95,32 +95,38 @@ class UsersTableTest extends BcTestCase
     /**
      * Test beforeMarshal
      *
-     * real_name_1/real_name_2 は前後の空白のみ除去し、間のスペースは保持すること
+     * real_name_1/real_name_2/nickname は前後の空白のみ除去し、間のスペースは保持すること
      */
     public function testBeforeMarshalTrimsRealName()
     {
         $user = $this->Users->newEntity([
             'real_name_1' => " 　山田　太郎 　",
             'real_name_2' => " 　鈴木　一郎 　",
+            'nickname' => " 　baserCMS コンテンツ管理者1 　",
         ], ['validate' => false]);
         $this->assertEquals('山田　太郎', $user->real_name_1);
         $this->assertEquals('鈴木　一郎', $user->real_name_2);
+        $this->assertEquals('baserCMS コンテンツ管理者1', $user->nickname);
     }
 
     /**
      * Test beforeMarshal
      *
-     * real_name_1/real_name_2 がスペースのみの場合、トリムされて空文字になり、
-     * real_name_1 は必須バリデーションでエラーになり、real_name_2 は空文字を許容してエラーにならないこと
+     * real_name_1/real_name_2/nickname がスペースのみの場合、トリムされて空文字になり、
+     * real_name_1 は必須バリデーションでエラーになり、real_name_2/nickname は
+     * 空文字を許容してエラーにならないこと
      */
     public function testBeforeMarshalRealNameOnlySpace()
     {
         $user = $this->Users->newEntity([
             'real_name_1' => '   ',
             'real_name_2' => '　　　',
+            'nickname' => '　 　',
         ]);
         $this->assertNotEmpty($user->getError('real_name_1'));
         $this->assertEmpty($user->getError('real_name_2'));
+        $this->assertEmpty($user->getError('nickname'));
+        $this->assertSame('', $user->nickname);
     }
 
     /**
