@@ -50,6 +50,9 @@
         "vierge-noire/cakephp-test-suite-light": "~3.0.0",
         "ext-xdebug": "*"
     },
+    "suggest": {
+        "ext-fileinfo": "Enables validating that an uploaded plugin/theme archive is really a ZIP file before extracting it."
+    },
     "autoload": {
         "psr-4": {
             "BaserCore\\": "src",
