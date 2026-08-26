@@ -3396,7 +3396,11 @@ msgstr "Error occurred when processing. Please contact the Plugin’s developer.
 msgid "サーバに設定されているサイズ制限を超えています。"
 msgstr "The size is exceeding the size restriction of the server."
 
-#: plugins/baser-core/src/Service/PluginsService.php:705
+#: plugins/baser-core/src/Service/PluginsService.php:733
+msgid "ZIPファイルをアップロードしてください。"
+msgstr "Please upload a ZIP file."
+
+#: plugins/baser-core/src/Service/PluginsService.php:738
 #: plugins/baser-core/src/Service/ThemesService.php:156
 #: plugins/baser-core/src/Service/UtilitiesService.php:428
 msgid "アップロードしたZIPファイルの展開に失敗しました。"

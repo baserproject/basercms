@@ -24,6 +24,7 @@
         "league/oauth2-server": "^8.5",
         "logiscape/mcp-sdk-php": "^2.0",
         "mobiledetect/mobiledetectlib": "~3.74.4",
+        "nikic/php-parser": "~5.8.0",
         "nyholm/psr7": "~1.8.2",
         "psr/http-message": "~1.1",
         "robmorgan/phinx": "0.16.10",
@@ -63,6 +64,7 @@
         "baserproject/bc-widget-area": "5.4.x"
     },
     "suggest": {
+        "ext-fileinfo": "Enables validating that an uploaded plugin/theme archive is really a ZIP file before extracting it.",
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
         "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
         "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code.",

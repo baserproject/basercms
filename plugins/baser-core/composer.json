@@ -17,6 +17,7 @@
         "ezyang/htmlpurifier": "~4.19.0",
         "robmorgan/phinx": "0.16.10",
         "mobiledetect/mobiledetectlib": "~3.74.4",
+        "nikic/php-parser": "~5.8.0",
         "ext-json": "*",
         "baserproject/bc-admin-third": "5.4.x-dev",
         "baserproject/bc-blog": "5.4.x-dev",
@@ -48,6 +49,9 @@
         "vierge-noire/cakephp-fixture-factories": "~3.0.2",
         "vierge-noire/cakephp-test-suite-light": "~3.0.0",
         "ext-xdebug": "*"
+    },
+    "suggest": {
+        "ext-fileinfo": "Enables validating that an uploaded plugin/theme archive is really a ZIP file before extracting it."
     },
     "autoload": {
         "psr-4": {
