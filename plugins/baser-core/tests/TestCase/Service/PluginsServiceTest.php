@@ -877,4 +877,39 @@ EOF;
 
         $this->assertFalse(file_exists($rceFile), 'getCoreUpdate でOSコマンドインジェクションが発生しました');
     }
+
+    /**
+     * test add ZIP以外のファイルをアップロードした場合
+     * @return void
+     */
+    public function test_addRejectsNonZipFile()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new BcFolder($zipSrcPath);
+        $folder->create();
+        //架空のプラグイン名を指定して、ZIP以外のファイルを作成
+        $plugin = 'NotZipPlugin';
+        $testFile = $zipSrcPath . $plugin . '.zip';
+        file_put_contents($testFile, 'This is not a zip file.');
+        $size = filesize($testFile);
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $files = new UploadedFile(
+            $testFile,
+            $size,
+            UPLOAD_ERR_OK,
+            $plugin . '.zip',
+            'text/plain'
+        );
+
+        $this->expectException("BaserCore\Error\BcException");
+        $this->expectExceptionMessage("ZIPファイルをアップロードしてください。");
+        try {
+            $this->Plugins->add(["file" => $files]);
+        } finally {
+            // アップロードされた一時ファイルが削除されていること
+            $this->assertFileDoesNotExist(TMP . $plugin . '.zip');
+            $folder->delete();
+        }
+    }
 }

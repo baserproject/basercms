@@ -721,9 +721,28 @@ class PluginsService implements PluginsServiceInterface
         // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
         $name = basename($postData['file']->getClientFileName());
         $postData['file']->moveTo(TMP . $name);
-        $zip = new BcZip();
-        if (!$zip->extract(TMP . $name, TMP)) {
-            throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
+        try {
+            // アップロードされたファイルが ZIP であるかを内容から判定する
+            // ext-fileinfo が無効な環境では判定をスキップし、展開時のエラーに委ねる
+            if (class_exists('finfo')) {
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $mimeType = $finfo->file(TMP . $name);
+                // finfo はファイルの内容から判定するため通常は application/zip を返す
+                // application/x-zip-compressed は一部環境の libmagic に対する保険
+                if (!in_array($mimeType, ['application/zip', 'application/x-zip-compressed'], true)) {
+                    throw new BcException(__d('baser_core', 'ZIPファイルをアップロードしてください。'));
+                }
+            }
+            $zip = new BcZip();
+            if (!$zip->extract(TMP . $name, TMP)) {
+                throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
+            }
+        } catch (BcException $e) {
+            // 展開できなかったテンポラリファイルを残さない
+            if (file_exists(TMP . $name)) {
+                unlink(TMP . $name);
+            }
+            throw $e;
         }
         $srcDirName = $zip->topArchiveName;
         $dstName = $srcName = Inflector::camelize($srcDirName);
