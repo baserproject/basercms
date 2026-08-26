@@ -95,7 +95,7 @@ class UsersTableTest extends BcTestCase
     /**
      * Test beforeMarshal
      *
-     * real_name_1/real_name_2 は前後の半角・全角スペースのみ除去し、間のスペースは保持すること
+     * real_name_1/real_name_2 は前後の空白のみ除去し、間のスペースは保持すること
      */
     public function testBeforeMarshalTrimsRealName()
     {
@@ -324,6 +324,41 @@ class UsersTableTest extends BcTestCase
         $this->assertTrue(isset($entity->user_groups));
         $this->assertTrue($entity->status);
         $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 3]))->first());
+    }
+
+    /**
+     * test trimSpace
+     *
+     * @param string $value
+     * @param string $expected
+     * @dataProvider trimSpaceDataProvider
+     */
+    public function test_trimSpace(string $value, string $expected)
+    {
+        $this->assertEquals($expected, $this->Users->trimSpace($value));
+    }
+
+    public static function trimSpaceDataProvider()
+    {
+        return [
+            ['山田太郎', '山田太郎'],
+            ['  山田 太郎  ', '山田 太郎'],
+            ['　　山田　太郎　　', '山田　太郎'],
+            [' 　山田　太郎 　', '山田　太郎'],
+            // タブ・改行
+            ["\t\n山田 太郎\r\n", '山田 太郎'],
+            // ノーブレークスペース（U+00A0）
+            ["\xC2\xA0山田 太郎\xC2\xA0", '山田 太郎'],
+            // 空白のみの場合は空文字になる
+            ['   ', ''],
+            ['　　　', ''],
+            ["\xC2\xA0", ''],
+            // 間の空白は保持する
+            ['山田　太郎', '山田　太郎'],
+            ['Elly De La Cruz', 'Elly De La Cruz'],
+            // 空文字はそのまま
+            ['', ''],
+        ];
     }
 
 }
