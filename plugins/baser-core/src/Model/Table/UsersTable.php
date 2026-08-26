@@ -79,7 +79,7 @@ class UsersTable extends AppTable
             (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
-        foreach(['real_name_1', 'real_name_2'] as $field) {
+        foreach(['real_name_1', 'real_name_2', 'nickname'] as $field) {
             if (isset($data[$field]) && is_string($data[$field])) {
                 $data[$field] = $this->trimSpace($data[$field]);
             }
