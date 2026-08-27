@@ -67,6 +67,18 @@ class RedirectUriRegistrationValidatorTest extends TestCase
     }
 
     /**
+     * トップレベルが配列でない場合は拒否する（TypeError による 500 化の回帰テスト）
+     *
+     * @return void
+     */
+    public function testValidateRejectsNonArray(): void
+    {
+        $validator = new RedirectUriRegistrationValidator();
+        $this->expectException(InvalidArgumentException::class);
+        $validator->validate('not-an-array');
+    }
+
+    /**
      * 上限を超える件数は拒否する
      *
      * @return void

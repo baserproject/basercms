@@ -263,6 +263,82 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
     }
 
     /**
+     * redirect_uris がトップレベルで配列でない場合は 400 になる（TypeError による 500 の退行防止）
+     *
+     * @return void
+     */
+    public function testRegisterWithNonArrayRedirectUrisReturnsBadRequest(): void
+    {
+        $requestData = [
+            'client_name' => 'Non Array Redirect Uris Client',
+            'redirect_uris' => 'not-an-array',
+            'grant_types' => ['authorization_code']
+        ];
+
+        $this->configRequest([
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        $this->post('/bc-mcp/oauth2/register', json_encode($requestData));
+        $this->assertResponseCode(400);
+        $this->assertContentType('application/json');
+
+        $response = json_decode((string)$this->_response->getBody(), true);
+        $this->assertEquals('invalid_client_metadata', $response['error']);
+    }
+
+    /**
+     * 更新（PUT）でも redirect_uris がトップレベルで配列でない場合は 400 になる
+     *
+     * @return void
+     */
+    public function testUpdateWithNonArrayRedirectUrisReturnsBadRequest(): void
+    {
+        // First register a valid client
+        $requestData = [
+            'client_name' => 'Test Update Guard Client',
+            'redirect_uris' => ['https://example.com/callback'],
+            'grant_types' => ['authorization_code']
+        ];
+
+        $this->configRequest([
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        $this->post('/bc-mcp/oauth2/register', json_encode($requestData));
+        $this->assertResponseCode(201);
+
+        $registrationResponse = json_decode((string)$this->_response->getBody(), true);
+        $clientId = $registrationResponse['client_id'];
+        $registrationToken = $registrationResponse['registration_access_token'];
+
+        $updateData = [
+            'redirect_uris' => 'not-an-array',
+        ];
+
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . $registrationToken,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        $this->put('/bc-mcp/oauth2/register/' . $clientId, json_encode($updateData));
+        $this->assertResponseCode(400);
+        $this->assertContentType('application/json');
+
+        $response = json_decode((string)$this->_response->getBody(), true);
+        $this->assertEquals('invalid_client_metadata', $response['error']);
+    }
+
+    /**
      * Test unsupported grant type
      *
      * @return void

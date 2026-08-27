@@ -33,12 +33,21 @@ class RedirectUriRegistrationValidator
     /**
      * redirect_uri の配列を検証する
      *
-     * @param array $redirectUris redirect_uri の配列
+     * 「登録を受け付けてよいか」の判定はこのクラスの責務のため、配列以外が
+     * 渡された場合（JSON の redirect_uris が文字列や数値だった場合など）の
+     * 型チェックもここで完結させる。呼び出し側の型ヒントを array にすると
+     * TypeError（Exception を継承しないため呼び出し元の catch (Exception) で
+     * 捕捉できず 500 になる）を招くため、引数は mixed で受けて内部で判定する。
+     *
+     * @param mixed $redirectUris redirect_uri の配列（を想定する値）
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function validate(array $redirectUris): void
+    public function validate($redirectUris): void
     {
+        if (!is_array($redirectUris)) {
+            throw new InvalidArgumentException('redirect_uris must be an array');
+        }
         if (!$redirectUris) {
             throw new InvalidArgumentException('redirect_uris is required');
         }
