@@ -37,11 +37,13 @@ class OAuth2ClientRegistrationService
     /**
      * サポートされるグラントタイプ
      *
+     * MCP はユーザーの同意を前提とするため、ユーザー不在でトークンを
+     * 発行できる client_credentials は受け付けない。
+     *
      * @var array
      */
     private array $supportedGrantTypes = [
         'authorization_code',
-        'client_credentials',
         'refresh_token'
     ];
 

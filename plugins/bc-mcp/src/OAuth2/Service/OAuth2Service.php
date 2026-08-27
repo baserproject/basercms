@@ -8,7 +8,6 @@ use BcMcp\OAuth2\Repository\OAuth2AccessTokenRepository;
 use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
 use BcMcp\OAuth2\Repository\OAuth2ScopeRepository;
 use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\CryptKey;
 
@@ -110,12 +109,6 @@ class OAuth2Service
             $scopeRepository,
             $privateKey,
             $encryptionKey
-        );
-
-        $clientCredentialsGrant = new ClientCredentialsGrant();
-        $server->enableGrantType(
-            $clientCredentialsGrant,
-            new \DateInterval('PT1H')
         );
 
         $authCodeGrant = new \BcMcp\OAuth2\Grant\AuthCodeGrant(

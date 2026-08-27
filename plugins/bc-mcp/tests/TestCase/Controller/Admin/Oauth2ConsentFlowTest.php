@@ -435,6 +435,51 @@ class Oauth2ConsentFlowTest extends BcTestCase
     }
 
     /**
+     * client_credentials は登録もトークン発行も拒否される
+     *
+     * @return void
+     */
+    public function testClientCredentialsIsRejected(): void
+    {
+        // 登録時に拒否される
+        $this->post('/bc-mcp/oauth2/register', [
+            'client_name' => 'Machine Client',
+            'redirect_uris' => [self::REDIRECT_URI],
+            'grant_types' => ['client_credentials'],
+            'token_endpoint_auth_method' => 'none',
+        ]);
+        $this->assertResponseCode(400);
+
+        // 正規に登録したクライアントでも client_credentials は使えない
+        $client = $this->registerClient();
+        $this->post('/bc-mcp/oauth2/token', [
+            'grant_type' => 'client_credentials',
+            'client_id' => $client['client_id'],
+            'scope' => 'mcp:read',
+        ]);
+        $this->assertResponseCode(400);
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertEquals('unsupported_grant_type', $body['error']);
+    }
+
+    /**
+     * PKCE は S256 のみを受け付ける
+     *
+     * @return void
+     */
+    public function testPlainCodeChallengeMethodIsRejected(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id'], [
+            'code_challenge_method' => 'plain',
+        ]));
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
      * 暗号化キー未設定なら OAuth2 / MCP エンドポイントは 503 になる
      *
      * @return void

@@ -25,6 +25,30 @@ use Psr\Http\Message\ServerRequestInterface;
 class AuthCodeGrant extends LeagueAuthCodeGrant
 {
     /**
+     * 認可リクエストを検証する
+     *
+     * league は code_challenge_method の指定が無い場合に plain として扱うが、
+     * 認可サーバーメタデータでは S256 のみを宣言している。宣言と実態を
+     * 一致させるため、S256 以外を拒否する。
+     *
+     * @param ServerRequestInterface $request
+     * @return \League\OAuth2\Server\RequestTypes\AuthorizationRequest
+     * @throws OAuthServerException
+     */
+    public function validateAuthorizationRequest(ServerRequestInterface $request)
+    {
+        $queryParams = $request->getQueryParams();
+        if (isset($queryParams['code_challenge'])
+            && ($queryParams['code_challenge_method'] ?? 'plain') !== 'S256') {
+            throw OAuthServerException::invalidRequest(
+                'code_challenge_method',
+                'Code challenge method must be S256'
+            );
+        }
+        return parent::validateAuthorizationRequest($request);
+    }
+
+    /**
      * Validate redirectUri from the request.
      *
      * @param string $redirectUri

@@ -68,25 +68,15 @@ class OAuth2Util
             }
         }
 
-        // client_credentials認証のためにAuthorizationヘッダーを処理
+        // ボディに載ったパラメータをそのまま引き継ぐ
         $postData = [];
         if ($request->is('post')) {
             $postData = $request->getData();
-
-            // POSTデータにclient_idとclient_secretがある場合、Basic認証ヘッダーに変換
-            if (isset($postData['client_id']) && isset($postData['client_secret'])) {
-                $credentials = base64_encode($postData['client_id'] . ':' . $postData['client_secret']);
-                $headers['Authorization'] = ['Basic ' . $credentials];
-
-                // client_secretをPOSTデータから除去（OAuth2ライブラリがAuthorizationヘッダーから取得するため）
-                unset($postData['client_secret']);
-            }
         }
 
         // ボディコンテンツを取得
         $body = Stream::create('');
         if ($request->is('post')) {
-            // client_secretが除去された後のPOSTデータを使用
             if (!empty($postData)) {
                 $bodyContent = http_build_query($postData);
                 $body = Stream::create($bodyContent);

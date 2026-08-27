@@ -32,7 +32,7 @@ class OAuth2ServiceTest extends TestCase
                 'name' => 'Test Client',
                 'secret' => null,
                 'redirect_uris' => ['http://localhost'],
-                'grants' => ['client_credentials'],
+                'grants' => ['authorization_code', 'refresh_token'],
                 'scopes' => ['read', 'write']
             ]
         ]);

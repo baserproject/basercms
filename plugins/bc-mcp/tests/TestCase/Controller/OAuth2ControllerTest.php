@@ -7,6 +7,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcMcp\Test\Factory\Oauth2ClientFactory;
 
@@ -35,7 +36,7 @@ class OAuth2ControllerTest extends BcTestCase
                 'name' => 'MCP Server Client',
                 'secret' => 'mcp-secret-key',
                 'redirect_uris' => ['http://localhost'],
-                'grants' => ['client_credentials'],
+                'grants' => ['authorization_code', 'refresh_token'],
                 'scopes' => ['mcp:read', 'mcp:write']
             ]
         ]);
@@ -54,6 +55,21 @@ class OAuth2ControllerTest extends BcTestCase
         if (!file_exists($privateKeyPath) || !file_exists($publicKeyPath)) {
             $this->generateTestKeys($privateKeyPath, $publicKeyPath);
         }
+    }
+
+    /**
+     * 直近の GET で発行された consent_id を取得する
+     *
+     * Server::run() 後の Session::read() はデータを消してしまうため、
+     * $_SESSION を直接参照する（CakePHP 本体の SessionEquals/SessionHasKey
+     * 制約と同様の作法）。
+     *
+     * @return string
+     */
+    private function lastConsentId(): string
+    {
+        $pending = (array)Hash::get($_SESSION, 'BcMcp.authRequests', []);
+        return (string)array_key_last($pending);
     }
 
     /**
@@ -84,20 +100,30 @@ class OAuth2ControllerTest extends BcTestCase
      */
     public function testTokenEndpointWithValidCredentials(): void
     {
-        Oauth2ClientFactory::make([
-            'is_confidential' => true
-        ])->persist();
+        // ファクトリの既定はパブリッククライアント（is_confidential = false）
+        Oauth2ClientFactory::make()->persist();
         $this->loadFixtureScenario(InitAppScenario::class);
 
+        $codeVerifier = 'bc-mcp-test-code-verifier-0123456789012345678901234567';
+        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+
         $this->loginAdmin($this->getRequest());
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query([
-                'grant_type' => 'authorization_code',
+        // 同意画面を開いて認可リクエストをセッションへ保持させる
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
                 'client_id' => 'mcp-client',
-                'client_secret' => 'mcp-secret-key',
                 'response_type' => 'code',
                 'redirect_uri' => 'http://localhost',
                 'scope' => 'mcp:read mcp:write',
-            ]), ['action' => 'approve']);
+                'code_challenge' => $codeChallenge,
+                'code_challenge_method' => 'S256',
+            ]));
+        $this->assertResponseOk();
+
+        $consentId = $this->lastConsentId();
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve', 'consent_id' => $consentId]);
+
         $redirectUrl = $this->_response->getHeaderLine('Location');
         $queryParams = [];
         parse_str(parse_url($redirectUrl, PHP_URL_QUERY), $queryParams);
@@ -108,8 +134,7 @@ class OAuth2ControllerTest extends BcTestCase
             'grant_type' => 'authorization_code',
             'client_id' => 'mcp-client',
             'redirect_uri' => 'http://localhost',
-            'client_secret' => 'mcp-secret-key',
-            'scope' => 'mcp:read mcp:write',
+            'code_verifier' => $codeVerifier,
             'code' => $authCode
         ]);
 
@@ -171,8 +196,9 @@ class OAuth2ControllerTest extends BcTestCase
             'client_name' => 'Test Client',
             'client_uri' => 'http://localhost',
             'redirect_uris' => ['http://localhost/callback'],
-            'grant_types' => ['client_credentials'],
+            'grant_types' => ['authorization_code'],
             'response_types' => ['code'],
+            'token_endpoint_auth_method' => 'none',
             'scope' => 'mcp:read mcp:write'
         ]);
 
@@ -181,7 +207,7 @@ class OAuth2ControllerTest extends BcTestCase
 
         $response = json_decode((string)$this->_response->getBody(), true);
         $this->assertArrayHasKey('client_id', $response);
-        $this->assertArrayHasKey('client_secret', $response);
+        $this->assertArrayNotHasKey('client_secret', $response);
     }
 
     /**
@@ -210,20 +236,30 @@ class OAuth2ControllerTest extends BcTestCase
      */
     public function testVerifyWithValidToken(): void
     {
-        Oauth2ClientFactory::make([
-            'is_confidential' => true
-        ])->persist();
+        // ファクトリの既定はパブリッククライアント（is_confidential = false）
+        Oauth2ClientFactory::make()->persist();
         $this->loadFixtureScenario(InitAppScenario::class);
 
+        $codeVerifier = 'bc-mcp-test-code-verifier-0123456789012345678901234567';
+        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+
         $this->loginAdmin($this->getRequest());
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query([
-                'grant_type' => 'authorization_code',
+        // 同意画面を開いて認可リクエストをセッションへ保持させる
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
                 'client_id' => 'mcp-client',
-                'client_secret' => 'mcp-secret-key',
                 'response_type' => 'code',
                 'redirect_uri' => 'http://localhost',
                 'scope' => 'mcp:read mcp:write',
-            ]), ['action' => 'approve']);
+                'code_challenge' => $codeChallenge,
+                'code_challenge_method' => 'S256',
+            ]));
+        $this->assertResponseOk();
+
+        $consentId = $this->lastConsentId();
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve', 'consent_id' => $consentId]);
+
         $redirectUrl = $this->_response->getHeaderLine('Location');
         $queryParams = [];
         parse_str(parse_url($redirectUrl, PHP_URL_QUERY), $queryParams);
@@ -234,8 +270,7 @@ class OAuth2ControllerTest extends BcTestCase
             'grant_type' => 'authorization_code',
             'client_id' => 'mcp-client',
             'redirect_uri' => 'http://localhost',
-            'client_secret' => 'mcp-secret-key',
-            'scope' => 'mcp:read mcp:write',
+            'code_verifier' => $codeVerifier,
             'code' => $authCode
         ]);
 
