@@ -338,7 +338,16 @@ class Oauth2ConsentFlowTest extends BcTestCase
     public function testConcurrentAuthorizeGetDoesNotSwapPendingConsent(): void
     {
         $legitimate = $this->registerClient();
-        $attacker = $this->registerClient(['client_name' => 'Attacker Client']);
+        // 攻撃者クライアントは正規クライアントとは別の redirect_uri で登録する。
+        // 同じ URI のままだと、実装が単一キー上書き（＝すり替え可能）に退行して
+        // 攻撃者クライアント向けの認可コードが発行されてしまっても、リダイレクト
+        // 先の URI 自体は変わらないため assertStringStartsWith だけでは退行を
+        // 検出できない。別 URI にすることで、すり替わりが起きれば攻撃者の URI
+        // へ飛ぶという形で確実に検出できるようにする。
+        $attacker = $this->registerClient([
+            'client_name' => 'Attacker Client',
+            'redirect_uris' => ['https://attacker.example.com/callback'],
+        ]);
         $this->loginAdmin($this->getRequest());
 
         // タブ1: 正規のクライアントで同意画面を開く
@@ -348,8 +357,12 @@ class Oauth2ConsentFlowTest extends BcTestCase
 
         // タブ2扱い: 同じセッションのまま、別クライアントで同意画面を開き直す
         // (攻撃者がトップレベル遷移で踏ませる GET を模す)
+        // authorizeQuery() は既定で self::REDIRECT_URI を使うため、攻撃者
+        // クライアントの登録済み redirect_uri に合わせて上書きする。
         $this->session($_SESSION);
-        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($attacker['client_id']));
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($attacker['client_id'], [
+            'redirect_uri' => 'https://attacker.example.com/callback',
+        ]));
         $this->assertResponseOk();
 
         // タブ1に残っていた consent_id は、依然として正規クライアントの
@@ -364,6 +377,7 @@ class Oauth2ConsentFlowTest extends BcTestCase
         $this->assertResponseCode(302);
         $location = $this->_response->getHeaderLine('Location');
         $this->assertStringStartsWith(self::REDIRECT_URI, $location);
+        $this->assertStringNotContainsString('attacker.example.com', $location);
     }
 
     /**
