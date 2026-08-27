@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BcMcp\OAuth2\Service;
 
+use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Repository\OAuth2AccessTokenRepository;
 use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
 use BcMcp\OAuth2\Repository\OAuth2ScopeRepository;
@@ -31,11 +32,33 @@ class OAuth2Service
 
     /**
      * コンストラクタ
+     *
+     * 暗号化キーが未設定のまま動かすと、認可コードとリフレッシュトークンの
+     * 機密性が失われるため、この時点で停止させる。
      */
     public function __construct()
     {
+        $this->assertEncryptionKey();
         if (!file_exists(CONFIG . 'oauth2_public.key')) {
             $this->generateKeyPair();
+        }
+    }
+
+    /**
+     * 暗号化キーが設定されている事を確認する
+     *
+     * 形式や長さは検証しない。install 時に base64_encode(random_bytes(32)) が
+     * 書かれる前提であり、形式チェックは誤検知の害のほうが大きい。
+     *
+     * @return void
+     * @throws \BcMcp\OAuth2\Exception\OAuth2ConfigurationException
+     */
+    private function assertEncryptionKey(): void
+    {
+        if (!env('OAUTH2_ENC_KEY')) {
+            throw new OAuth2ConfigurationException(
+                'OAUTH2_ENC_KEY が設定されていないため MCP サーバーを起動できません。config/.env に設定してください。'
+            );
         }
     }
 
@@ -165,7 +188,7 @@ class OAuth2Service
      */
     private function getEncryptionKey(): string
     {
-        return env('OAUTH2_ENC_KEY', 'j6eyb4oPtNL0R8i9uU8PlQJ2WY1f8yRk5AVXb7OJd3s');
+        return (string)env('OAUTH2_ENC_KEY');
     }
 
     /**

@@ -433,4 +433,30 @@ class Oauth2ConsentFlowTest extends BcTestCase
         $this->assertResponseCode(400);
         $this->assertResponseNotContains('code=');
     }
+
+    /**
+     * 暗号化キー未設定なら OAuth2 / MCP エンドポイントは 503 になる
+     *
+     * @return void
+     */
+    public function testEndpointsReturnServiceUnavailableWhenEncryptionKeyIsMissing(): void
+    {
+        $original = env('OAUTH2_ENC_KEY');
+        putenv('OAUTH2_ENC_KEY');
+        unset($_ENV['OAUTH2_ENC_KEY'], $_SERVER['OAUTH2_ENC_KEY']);
+        try {
+            $this->post('/bc-mcp/oauth2/token', ['grant_type' => 'authorization_code']);
+            $this->assertResponseCode(503);
+
+            $this->post('/bc-mcp', json_encode(['jsonrpc' => '2.0', 'method' => 'tools/list']));
+            $this->assertResponseCode(503);
+            $body = json_decode((string)$this->_response->getBody(), true);
+            $this->assertEquals(-32603, $body['error']['code']);
+        } finally {
+            if ($original !== null) {
+                putenv('OAUTH2_ENC_KEY=' . $original);
+                $_ENV['OAUTH2_ENC_KEY'] = $original;
+            }
+        }
+    }
 }

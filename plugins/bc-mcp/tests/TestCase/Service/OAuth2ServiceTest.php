@@ -77,4 +77,25 @@ class OAuth2ServiceTest extends TestCase
         $result = $this->oauth2Service->validateAccessToken('invalid-token');
         $this->assertNull($result);
     }
+
+    /**
+     * 暗号化キーが未設定なら例外を投げる
+     *
+     * @return void
+     */
+    public function testConstructThrowsWhenEncryptionKeyIsMissing(): void
+    {
+        $original = env('OAUTH2_ENC_KEY');
+        putenv('OAUTH2_ENC_KEY');
+        unset($_ENV['OAUTH2_ENC_KEY'], $_SERVER['OAUTH2_ENC_KEY']);
+        try {
+            $this->expectException(\BcMcp\OAuth2\Exception\OAuth2ConfigurationException::class);
+            new \BcMcp\OAuth2\Service\OAuth2Service();
+        } finally {
+            if ($original !== null) {
+                putenv('OAUTH2_ENC_KEY=' . $original);
+                $_ENV['OAUTH2_ENC_KEY'] = $original;
+            }
+        }
+    }
 }

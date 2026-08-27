@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace BcMcp\Controller;
 
 use BaserCore\Controller\AppController;
+use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use BcMcp\OAuth2\Service\OAuth2ClientRegistrationService;
 use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BcMcp\Lib\OAuth2Util;
 use Nyholm\Psr7\Response as Psr7Response;
@@ -23,16 +25,23 @@ class Oauth2Controller extends AppController
     /**
      * OAuth2サービス
      *
-     * @var OAuth2Service
+     * @var OAuth2Service|null
      */
-    private OAuth2Service $oauth2Service;
+    private ?OAuth2Service $oauth2Service = null;
 
     /**
      * OAuth2クライアント登録サービス
      *
-     * @var OAuth2ClientRegistrationService
+     * @var OAuth2ClientRegistrationService|null
      */
-    private OAuth2ClientRegistrationService $clientRegistrationService;
+    private ?OAuth2ClientRegistrationService $clientRegistrationService = null;
+
+    /**
+     * OAuth2 の設定不備
+     *
+     * @var OAuth2ConfigurationException|null
+     */
+    private ?OAuth2ConfigurationException $oauth2ConfigError = null;
 
     /**
      * 初期化
@@ -43,16 +52,40 @@ class Oauth2Controller extends AppController
     {
         parent::initialize();
         $this->FormProtection->setConfig('validate', false);
-        $this->oauth2Service = new OAuth2Service();
-
-        // クライアント登録サービスを初期化
-        $clientRepository = new OAuth2ClientRepository();
-        $this->clientRegistrationService = new OAuth2ClientRegistrationService($clientRepository);
+        try {
+            $this->oauth2Service = new OAuth2Service();
+            $clientRepository = new OAuth2ClientRepository();
+            $this->clientRegistrationService = new OAuth2ClientRegistrationService($clientRepository);
+        } catch (OAuth2ConfigurationException $e) {
+            // 設定不備は beforeFilter で 503 として返す
+            $this->oauth2ConfigError = $e;
+        }
 
         // CORS設定
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*');
         $this->response = $this->response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         $this->response = $this->response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, MCP-Protocol-Version');
+    }
+
+    /**
+     * リクエスト処理前に設定不備を確認する
+     *
+     * @param \Cake\Event\EventInterface $event イベント
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+        if ($event->getResult()) return;
+        if (!$this->oauth2ConfigError) return;
+
+        $event->setResult($this->response
+            ->withStatus(503)
+            ->withType('application/json')
+            ->withStringBody(json_encode([
+                'error' => 'server_error',
+                'error_description' => $this->oauth2ConfigError->getMessage(),
+            ])));
     }
 
     /**

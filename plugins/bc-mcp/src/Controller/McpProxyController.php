@@ -17,6 +17,7 @@ use BcMcp\Mcp\McpContext;
 use BcMcp\Mcp\McpRequestHandler;
 use BcMcp\Mcp\NegotiationLogger;
 use BcMcp\Mcp\PermissionManager;
+use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use Mcp\Server\Transport\Http\HttpMessage;
 
@@ -34,9 +35,16 @@ class McpProxyController extends AppController
     /**
      * OAuth2サービス
      *
-     * @var OAuth2Service
+     * @var OAuth2Service|null
      */
-    private OAuth2Service $oauth2Service;
+    private ?OAuth2Service $oauth2Service = null;
+
+    /**
+     * OAuth2 の設定不備
+     *
+     * @var OAuth2ConfigurationException|null
+     */
+    private ?OAuth2ConfigurationException $oauth2ConfigError = null;
 
     /**
      * 初期化
@@ -46,7 +54,12 @@ class McpProxyController extends AppController
         parent::initialize();
         $this->FormProtection->setConfig('validate', false);
         // OAuth2サービスを初期化
-        $this->oauth2Service = new OAuth2Service();
+        try {
+            $this->oauth2Service = new OAuth2Service();
+        } catch (OAuth2ConfigurationException $e) {
+            // 設定不備は beforeFilter で 503 として返す
+            $this->oauth2ConfigError = $e;
+        }
 
         // CORS設定。許可したオリジンのみを返す（ワイルドカードは使わない）
         $origin = $this->request->getHeaderLine('Origin');
@@ -63,6 +76,21 @@ class McpProxyController extends AppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
+
+        // 暗号化キー未設定などの設定不備は、認証より前に 503 として返す
+        if ($this->oauth2ConfigError) {
+            $event->setResult($this->response
+                ->withStatus(503)
+                ->withHeader('Content-Type', 'application/json')
+                ->withStringBody(json_encode([
+                    'jsonrpc' => '2.0',
+                    'error' => [
+                        'code' => -32603,
+                        'message' => $this->oauth2ConfigError->getMessage(),
+                    ]
+                ], JSON_UNESCAPED_UNICODE)));
+            return;
+        }
 
         $method = $this->request->getMethod();
 
