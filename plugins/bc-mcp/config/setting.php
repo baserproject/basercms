@@ -25,12 +25,19 @@ return [
         ],
         /**
          * CSRFチェックをスキップするURL
+         *
+         * Cookie を使わないエンドポイントのみを列挙する。ワイルドカードで
+         * /bc-mcp/oauth2/* を一括指定すると、管理画面セッションで動作する
+         * 同意エンドポイント（authorize）まで無防備になるため、authorize は
+         * 意図的に含めない。
          */
         'skipCsrfUrl' => [
             'Mcp' => '/bc-mcp',
-            // RFC 7591 動的クライアント登録プロトコル（ワイルドカードパターン使用）
-            'OAuth2All' => '/bc-mcp/oauth2/*',
-            'OAuth2AdminAll' => '/baser/admin/bc-mcp/oauth2/*'
+            'OAuth2Token' => '/bc-mcp/oauth2/token',
+            'OAuth2Register' => '/bc-mcp/oauth2/register',
+            'OAuth2RegisterClient' => '/bc-mcp/oauth2/register/*',
+            'OAuth2Verify' => '/bc-mcp/oauth2/verify',
+            'OAuth2ClientInfo' => '/bc-mcp/oauth2/client-info',
         ]
     ],
     'BcPermission' => [
