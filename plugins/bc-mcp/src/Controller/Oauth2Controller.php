@@ -8,6 +8,7 @@ use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use BcMcp\OAuth2\Service\OAuth2ClientRegistrationService;
 use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
+use BcMcp\Service\RegistrationRateLimiter;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BcMcp\Lib\OAuth2Util;
@@ -421,6 +422,18 @@ class Oauth2Controller extends AppController
                 ]));
         }
 
+        $rateLimiter = new RegistrationRateLimiter();
+        $clientIp = (string)$this->request->clientIp();
+        if ($rateLimiter->isExceeded($clientIp)) {
+            return $this->response
+                ->withStatus(429)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_request',
+                    'error_description' => 'Too many client registrations. Please try again later.'
+                ]));
+        }
+
         try {
             // JSONリクエストデータを取得
             $requestData = [];
@@ -452,6 +465,9 @@ class Oauth2Controller extends AppController
 
             // クライアントを登録
             $client = $this->clientRegistrationService->registerClient($requestData, $baseUrl);
+
+            // 登録が成功した場合のみカウントする
+            $rateLimiter->hit($clientIp);
 
             // RFC7591準拠のレスポンスを返す
             return $this->response

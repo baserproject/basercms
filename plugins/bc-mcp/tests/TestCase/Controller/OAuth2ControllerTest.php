@@ -6,9 +6,11 @@ namespace BcMcp\Test\TestCase\Controller;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use BcMcp\Service\RegistrationRateLimiter;
 use BcMcp\Test\Factory\Oauth2ClientFactory;
 
 /**
@@ -54,6 +56,11 @@ class OAuth2ControllerTest extends BcTestCase
 
         if (!file_exists($privateKeyPath) || !file_exists($publicKeyPath)) {
             $this->generateTestKeys($privateKeyPath, $publicKeyPath);
+        }
+
+        // レート制限の枠がテスト間で持ち越されないようにする
+        if (Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
         }
     }
 

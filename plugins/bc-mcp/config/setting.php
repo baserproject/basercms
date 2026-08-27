@@ -57,6 +57,14 @@ return [
             'levels' => ['info', 'error']
         ]
     ],
+    'Cache' => [
+        'bc_mcp_registration' => [
+            'className' => \Cake\Cache\Engine\FileEngine::class,
+            'duration' => '+1 hours',
+            'path' => CACHE . 'bc_mcp' . DS,
+            'prefix' => 'bc_mcp_registration_',
+        ]
+    ],
     'BcMcp' => [
         /**
          * Origin ヘッダの許可リスト
@@ -74,6 +82,16 @@ return [
             'BaserCore' => \BcMcp\Mcp\BaserCore\BaserCoreServer::class,
             'BcBlog' => \BcMcp\Mcp\BcBlog\BcBlogServer::class,
             'BcCustomContent' => \BcMcp\Mcp\BcCustomContent\BcCustomContentServer::class,
-        ]
+        ],
+        /**
+         * 動的クライアント登録の制限
+         *
+         * maxPerHour: 同一IPから1時間に登録できる件数
+         * unusedClientRetentionDays: 一度も認可に使われないクライアントの保持日数
+         */
+        'registration' => [
+            'maxPerHour' => 10,
+            'unusedClientRetentionDays' => 30,
+        ],
     ]
 ];

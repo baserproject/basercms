@@ -5,6 +5,8 @@ namespace BcMcp\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcMcp\Service\RegistrationRateLimiter;
+use Cake\Cache\Cache;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -42,6 +44,10 @@ class Oauth2ConsentFlowTest extends BcTestCase
         $_ENV['UNIT_TEST'] = true;
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->ensureOAuth2Keys();
+        // レート制限の枠がテスト間で持ち越されないようにする
+        if (Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
+        }
     }
 
     /**

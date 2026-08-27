@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Controller;
 
+use BcMcp\Service\RegistrationRateLimiter;
+use Cake\Cache\Cache;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -33,6 +35,11 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
                 'Content-Type' => 'application/json'
             ]
         ]);
+
+        // レート制限の枠がテスト間で持ち越されないようにする
+        if (Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
+        }
     }
 
     /**

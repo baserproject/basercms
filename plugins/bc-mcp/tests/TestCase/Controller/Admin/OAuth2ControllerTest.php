@@ -6,6 +6,8 @@ namespace BcMcp\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Mcp\McpContext;
+use BcMcp\Service\RegistrationRateLimiter;
+use Cake\Cache\Cache;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -65,6 +67,11 @@ class OAuth2ControllerTest extends BcTestCase
                 'HTTPS' => 'off'
             ]
         ]);
+
+        // レート制限の枠がテスト間で持ち越されないようにする
+        if (Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
+        }
     }
 
     /**

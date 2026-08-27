@@ -9,6 +9,8 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcMcp\Service\RegistrationRateLimiter;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Log\Log;
@@ -41,6 +43,16 @@ class BcMcpPlugin extends BcPlugin
         // ここで登録し、MCP のログが logs/mcp.log に記録されるようにする。
         if (!Log::getConfig('mcp') && Configure::check('Log.mcp')) {
             Log::setConfig('mcp', Configure::read('Log.mcp'));
+        }
+
+        // setting.php の Cache 設定は baser-core の読み込み順の都合で
+        // Cache へ登録されないため、ここで登録する
+        if (!Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)
+            && Configure::check('Cache.' . RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::setConfig(
+                RegistrationRateLimiter::CACHE_CONFIG,
+                Configure::read('Cache.' . RegistrationRateLimiter::CACHE_CONFIG)
+            );
         }
     }
 
