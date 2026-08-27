@@ -254,7 +254,14 @@ class OAuth2ClientRegistrationService
             $update['scopes'] = $this->parseScopes($requestData['scope']);
         }
         if (array_key_exists('token_endpoint_auth_method', $requestData)) {
-            $update['is_confidential'] = ($requestData['token_endpoint_auth_method'] !== 'none');
+            // validateRegistrationRequest() が 'none' 以外を拒否するため、
+            // このプラグインはパブリッククライアントのみに一本化されている
+            // という前提を置く。将来 supportedAuthMethods に 'none' 以外を
+            // 追加する場合、ここを元の判定式に戻すと機密クライアントが
+            // 作成可能になり、league が isConfidential() を見て PKCE を
+            // 要求しなくなる（AuthCodeGrant::validateAuthorizationRequest）。
+            // 対応するときは PKCE 必須の担保を別途見直すこと。
+            $update['is_confidential'] = false;
         }
 
         if ($update) {

@@ -76,6 +76,7 @@ class McpProxyController extends AppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
+        if ($event->getResult()) return;
 
         // 暗号化キー未設定などの設定不備は、認証より前に 503 として返す
         if ($this->oauth2ConfigError) {

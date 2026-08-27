@@ -11,6 +11,7 @@ use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
 use BcMcp\Service\RegistrationRateLimiter;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
+use Cake\Log\Log;
 use BcMcp\Lib\OAuth2Util;
 use Nyholm\Psr7\Response as Psr7Response;
 use Exception;
@@ -442,7 +443,9 @@ class Oauth2Controller extends AppController
                     ]));
             }
         } catch (Exception $exception) {
-            // 判定不能時は fail-open とし、そのまま登録処理へ進む
+            // 判定不能時は fail-open とし、そのまま登録処理へ進む。
+            // ただし無言のままだとレート制限が壊れたまま気付けないため警告を残す
+            Log::write('warning', 'レート制限の判定に失敗しました: ' . $exception->getMessage(), ['scope' => ['mcp']]);
         }
 
         try {
@@ -483,7 +486,9 @@ class Oauth2Controller extends AppController
             try {
                 $rateLimiter->hit($clientIp);
             } catch (Exception $exception) {
-                // カウント失敗は無視し、登録成功のレスポンスを優先する
+                // カウント失敗は無視し、登録成功のレスポンスを優先するが、
+                // レート制限が無言のまま効かなくなるのを避けるため警告を残す
+                Log::write('warning', 'レート制限のカウントに失敗しました: ' . $exception->getMessage(), ['scope' => ['mcp']]);
             }
 
             // RFC7591準拠のレスポンスを返す

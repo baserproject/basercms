@@ -585,4 +585,60 @@ class Oauth2ConsentFlowTest extends BcTestCase
             }
         }
     }
+
+    /**
+     * 暗号化キー未設定でも、管理画面にログイン済みなら authorize は 503 になる
+     *
+     * Admin/Oauth2Controller は BcAdminAppController の認証チェックが先に働くため、
+     * ログイン済みであれば認証では止まらず、設定不備による 503 まで到達することを固定する。
+     *
+     * @return void
+     */
+    public function testAuthorizeReturnsServiceUnavailableWhenLoggedInAndEncryptionKeyIsMissing(): void
+    {
+        $this->loginAdmin($this->getRequest());
+
+        $original = env('OAUTH2_ENC_KEY');
+        putenv('OAUTH2_ENC_KEY');
+        unset($_ENV['OAUTH2_ENC_KEY'], $_SERVER['OAUTH2_ENC_KEY']);
+        try {
+            $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery('dummy-client-id'));
+            $this->assertResponseCode(503);
+        } finally {
+            if ($original !== null) {
+                putenv('OAUTH2_ENC_KEY=' . $original);
+                $_ENV['OAUTH2_ENC_KEY'] = $original;
+            }
+        }
+    }
+
+    /**
+     * 暗号化キー未設定かつ未ログインの場合も authorize は 503 になる
+     *
+     * 事前の想定では「未ログインなら認証チェックが優先されログイン画面へ
+     * リダイレクトされる（503にはならない）」はずだったが、実際には
+     * Admin/Oauth2Controller::authorize() 内のログインチェック（未ログイン時に
+     * ログイン画面へリダイレクトする処理）は beforeFilter() より後、
+     * すなわちアクション本体の中でのみ実行される。beforeFilter() の
+     * 設定不備チェックはログイン状態を問わず先に走るため、未ログインでも
+     * ログイン済みでも暗号化キー未設定時は同じく 503 になる。
+     * この事実を固定するテストとして、想定と異なる挙動をそのまま記録する。
+     *
+     * @return void
+     */
+    public function testAuthorizeReturnsServiceUnavailableWhenNotLoggedInAndEncryptionKeyIsMissing(): void
+    {
+        $original = env('OAUTH2_ENC_KEY');
+        putenv('OAUTH2_ENC_KEY');
+        unset($_ENV['OAUTH2_ENC_KEY'], $_SERVER['OAUTH2_ENC_KEY']);
+        try {
+            $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery('dummy-client-id'));
+            $this->assertResponseCode(503);
+        } finally {
+            if ($original !== null) {
+                putenv('OAUTH2_ENC_KEY=' . $original);
+                $_ENV['OAUTH2_ENC_KEY'] = $original;
+            }
+        }
+    }
 }
