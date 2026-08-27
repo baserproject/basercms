@@ -95,9 +95,13 @@ MCP クライアント（Claude / ChatGPT）は DCR を前提に接続してく�
 - `/bc-mcp/oauth2/verify`
 - `/bc-mcp/oauth2/client-info`
 
-`/bc-mcp/oauth2/authorize` は列挙から外し、`CsrfProtectionMiddleware` の対象へ戻す。併せて
-`Admin\Oauth2Controller::initialize()` の `FormProtection->setConfig('validate', false)` を削除する。
-同意画面は自前レンダのフォームであり、トークンは素直に載る。
+`/bc-mcp/oauth2/authorize` は列挙から外し、`CsrfProtectionMiddleware` の対象へ戻す。同意画面は自前
+レンダのフォームであり、CSRF トークンは素直に載る。
+
+`FormProtection` の `validate` は無効のままとする。後述のとおり POST はボディを一切読まない設計に
+なるため、`FormProtection` が担うフィールド改竄検証は意味を持たない。有効化すると名前付き submit
+ボタン（`action`）を `unlockedFields` に登録する必要が生じ、テストとの `_Token` の整合も要求されて
+壊れやすくなるだけである。CSRF 対策は `CsrfProtectionMiddleware` に一本化する。
 
 **GET（同意画面の表示）。** 認証チェックの後、現在は POST 時にしか呼んでいない
 `AuthorizationServer::validateAuthorizationRequest()` をこの時点で実行する。`client_id` /
@@ -156,12 +160,26 @@ RFC 9207 の `iss` 付与は現行どおり維持する。
 クライアントに一本化し、`token_endpoint_auth_method` は `none` のみを受け付ける。無認証 DCR で
 誰でも「機密クライアント」を作れる状態自体を無くす意味も持つ。
 
+同じ食い違いが PKCE の方式にもある。メタデータは `code_challenge_methods_supported: ['S256']` と
+宣言しているが、league は `code_challenge_method` が省略された場合に `plain` として扱う。
+`BcMcp\OAuth2\Grant\AuthCodeGrant` で `S256` 以外を拒否し、宣言と実態を一致させる。
+
+なお、パブリッククライアントに一本化すると league は認可リクエストに `code_challenge` を必須で
+要求するようになる（`requireCodeChallengeForPublicClients`）。これは意図した強化であり、既存
+テストは PKCE パラメータを伴う形へ書き換える。
+
 **`redirect_uris` の検証。** authorization_code に一本化する以上、登録時に必須とする。現状は
 `FILTER_VALIDATE_URL` を通すだけなので、次を追加する。
 
-- スキームは `https`、加えて RFC 8252 のループバック（`http://127.0.0.1` / `http://[::1]`）のみ許可
+- スキームは `https`。`http` はループバックホスト（`127.0.0.1` / `[::1]` / `localhost`）のみ許可
 - フラグメント付きは拒否（RFC 6749）
 - 登録できる件数の上限は 5 件
+
+`localhost` は RFC 8252 が IP リテラルを推奨しているため厳密には非推奨だが、ローカル環境の
+baserCMS は http で動くため、実機での接続確認ができなくなる不利益のほうが大きい。リダイレクト先が
+利用者の端末内に限られる点でリスクは小さいと判断して許容する。なお league の
+`RedirectUriValidator` がポート差を無視するのは `127.0.0.1` / `[::1]` のみであり、`localhost` は
+認可時に完全一致（ポート含む）が要求される。
 
 **存在しないスコープを消す。** `supportedScopes` の `admin` は `OAuth2ScopeRepository` に実体が無く、
 登録は通るのに機能しない。削除する。
@@ -184,7 +202,11 @@ RFC 9207 の `iss` 付与は現行どおり維持する。
 | `OAUTH2_ENC_KEY` 未設定時の管理画面 | 警告が表示される |
 | `client_credentials` を含む登録要求 | 400 |
 | `client_credentials` でのトークン要求 | 拒否される |
-| `http://example.com` など不正スキームの `redirect_uri` 登録 | 400 |
+| `code_challenge` を伴わない認可リクエスト | 400 |
+| `code_challenge_method=plain` の認可リクエスト | 400 |
+| `http://example.com` など非ループバックの http `redirect_uri` 登録 | 400 |
+| `http://localhost/callback` の登録 | 成功する |
+| フラグメント付き `redirect_uri` の登録 | 400 |
 | `redirect_uris` を省略した登録 | 400 |
 
 ### 既存テストの改修
