@@ -11,6 +11,15 @@
         <ini name="apc.enable_cli" value="1"/>
         <!-- .env の有無に依存せずテストを日本語ロケールで実行する（検証メッセージ等の i18n 不一致を防ぐ） -->
         <env name="APP_DEFAULT_LOCALE" value="ja_JP"/>
+        <!--
+            テスト専用の OAuth2 暗号化キー。
+            BcMcp は defaultInstallCorePlugins に含まれず BcMcpPlugin::install() が
+            走らないため .env に OAUTH2_ENC_KEY が書かれないが、tests/bootstrap.php は
+            テスト用に BcMcp をロードするため、鍵が無いと OAuth2 のテストが実行できない。
+            force を付けていないので、.env に鍵がある環境ではそちらが優先される。
+            本番では OAuth2Service が未設定を検知して OAuth2/MCP を 503 で停止する。
+        -->
+        <env name="OAUTH2_ENC_KEY" value="dGVzdC1vbmx5LWtleS1mb3ItcGhwdW5pdC0zMmJ5dGVz"/>
     </php>
 
     <testsuites>
