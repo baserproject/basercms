@@ -9,6 +9,7 @@ use BcMcp\OAuth2\Entity\User;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use Cake\Http\Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
 
 /**
  * Admin OAuth2 Controller
@@ -83,56 +84,11 @@ class Oauth2Controller extends BcAdminAppController
                 ]
             ]);
         }
-
-        // POSTリクエストの場合は認可処理（この段階の実装は次のタスクで置き換える）
+        // POSTリクエストの場合は、クエリもボディも読まずセッションの認可
+        // リクエストのみで処理を完結させる(同意画面と実際の発行内容の
+        // すり替えを防ぐため)
         if ($this->request->is('post')) {
-            $redirectUri = $this->request->getQuery('redirect_uri');
-            $state = $this->request->getQuery('state');
-            $action = $this->request->getData('action');
-
-            if ($action === 'approve') {
-                $server = $this->oauth2Service->getAuthorizationServer();
-
-                // PSR-7リクエストを作成（クエリパラメータとPOSTデータの両方を含む）
-                $psrRequest = OAuth2Util::createPsr7Request($this->request);
-
-                // 認可リクエストを検証（PKCEパラメータも含む）
-                $authRequest = $server->validateAuthorizationRequest($psrRequest);
-
-                $userEntity = new User();
-                $userEntity->setIdentifier($user->getIdentifier());
-                $authRequest->setUser($userEntity);
-                $authRequest->setAuthorizationApproved(true);
-
-                $authResponse = $server->completeAuthorizationRequest($authRequest, $this->response);
-
-                // RFC 9207: 認可レスポンスに issuer を含める。
-                // 2026-07-28 のクライアントは iss があれば検証が MUST。
-                $location = $authResponse->getHeaderLine('Location');
-                if ($location !== '') {
-                    $authResponse = $authResponse->withHeader(
-                        'Location',
-                        OAuth2Util::addIssuerToUrl($location, OAuth2Util::getIssuer($this->request))
-                    );
-                }
-                return $authResponse;
-            } elseif ($action === 'deny') {
-                // アクセス拒否
-                $params = [
-                    'error' => 'access_denied',
-                    'error_description' => 'The user denied the request'
-                ];
-                if ($state) {
-                    $params['state'] = $state;
-                }
-
-                // エラー応答も認可レスポンスであるため issuer を付与する（RFC 9207）
-                $redirectUrl = OAuth2Util::addIssuerToUrl(
-                    $redirectUri . '?' . http_build_query($params),
-                    OAuth2Util::getIssuer($this->request)
-                );
-                return $this->redirect($redirectUrl);
-            }
+            return $this->completeAuthorization();
         }
 
         try {
@@ -163,5 +119,57 @@ class Oauth2Controller extends BcAdminAppController
         ]);
 
         return $this->render('authorize');
+    }
+
+    /**
+     * 認可を完了させる
+     *
+     * クエリもボディも読まず、GET 時に検証してセッションへ保持した認可
+     * リクエストのみを使う。これにより同意画面で見せた権限と、実際に
+     * 発行される権限がすり替わる余地を無くす。
+     *
+     * @return \Cake\Http\Response|\Psr\Http\Message\ResponseInterface
+     */
+    private function completeAuthorization()
+    {
+        $session = $this->request->getSession();
+        $authRequest = $session->read(self::SESSION_AUTH_REQUEST);
+        // 認可コードの二重発行を防ぐため、読み出したら必ず破棄する
+        $session->delete(self::SESSION_AUTH_REQUEST);
+
+        if (!$authRequest instanceof AuthorizationRequest) {
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_request',
+                    'error_description' => 'Authorization request not found. Please start over.',
+                ]));
+        }
+
+        $userEntity = new User();
+        $userEntity->setIdentifier($this->Authentication->getIdentity()->getIdentifier());
+        $authRequest->setUser($userEntity);
+        $authRequest->setAuthorizationApproved($this->request->getData('action') === 'approve');
+
+        try {
+            $authResponse = $this->oauth2Service->getAuthorizationServer()
+                ->completeAuthorizationRequest($authRequest, $this->response);
+        } catch (OAuthServerException $e) {
+            // 拒否時は league が access_denied のリダイレクトを生成する
+            $authResponse = $e->generateHttpResponse($this->response);
+        }
+
+        // RFC 9207: 認可レスポンスに issuer を含める。
+        // 2026-07-28 のクライアントは iss があれば検証が MUST。
+        $location = $authResponse->getHeaderLine('Location');
+        if ($location !== '') {
+            $authResponse = $authResponse->withHeader(
+                'Location',
+                OAuth2Util::addIssuerToUrl($location, OAuth2Util::getIssuer($this->request))
+            );
+        }
+
+        return $authResponse;
     }
 }

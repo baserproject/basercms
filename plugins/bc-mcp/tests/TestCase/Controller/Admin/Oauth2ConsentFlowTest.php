@@ -210,4 +210,84 @@ class Oauth2ConsentFlowTest extends BcTestCase
 
         $this->assertResponseCode(400);
     }
+
+    /**
+     * セッションに認可リクエストが無い POST は 400 になる
+     *
+     * @return void
+     */
+    public function testApproveWithoutSessionRequestReturnsBadRequest(): void
+    {
+        $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+        $this->enableCsrfToken();
+
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve']);
+
+        $this->assertResponseCode(400);
+        $this->assertResponseNotContains('code=');
+    }
+
+    /**
+     * POST に混ぜた別のクライアント・リダイレクト先は無視される
+     *
+     * @return void
+     */
+    public function testApproveIgnoresParametersInPostRequest(): void
+    {
+        $legitimate = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        // 正規のクライアントで同意画面を開く
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($legitimate['client_id']));
+        $this->assertResponseOk();
+
+        // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
+        // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+
+        // 攻撃者のリダイレクト先をクエリとボディの両方に混ぜる
+        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query([
+            'client_id' => 'client_attacker',
+            'redirect_uri' => 'https://attacker.example.com/callback',
+        ]), [
+            'action' => 'approve',
+            'client_id' => 'client_attacker',
+            'redirect_uri' => 'https://attacker.example.com/callback',
+        ]);
+
+        $this->assertResponseCode(302);
+        $location = $this->_response->getHeaderLine('Location');
+        $this->assertStringStartsWith(self::REDIRECT_URI, $location);
+        $this->assertStringNotContainsString('attacker.example.com', $location);
+    }
+
+    /**
+     * 拒否した場合は access_denied で戻る
+     *
+     * @return void
+     */
+    public function testDenyRedirectsWithAccessDenied(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id'], [
+            'state' => 'test-state',
+        ]));
+        $this->assertResponseOk();
+
+        // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
+        // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'deny']);
+
+        $this->assertResponseCode(302);
+        $location = $this->_response->getHeaderLine('Location');
+        $this->assertStringContainsString('error=access_denied', $location);
+        $this->assertStringContainsString('state=test-state', $location);
+        $this->assertStringContainsString('iss=', $location);
+    }
 }

@@ -191,6 +191,9 @@ class OAuth2ControllerTest extends BcTestCase
         $metadata = json_decode((string)$this->_response->getBody(), true);
         $registrationEndpoint = $metadata['registration_endpoint'];
 
+        $codeVerifier = 'bc-mcp-test-code-verifier-0123456789012345678901234567';
+        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+
         // クライアント登録エンドポイントにPOSTリクエストを送信
         $this->post($registrationEndpoint, [
             'client_name' => 'Test Client',
@@ -198,6 +201,7 @@ class OAuth2ControllerTest extends BcTestCase
             'redirect_uris' => ['http://localhost/callback'],
             'grant_types' => ['authorization_code', 'refresh_token'],
             'response_types' => ['code'],
+            'token_endpoint_auth_method' => 'none',
             'scope' => 'mcp:read mcp:write'
         ]);
         $metadata = json_decode((string)$this->_response->getBody(), true);
@@ -207,29 +211,30 @@ class OAuth2ControllerTest extends BcTestCase
         // 認可リクエスト
         $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
                 'client_id' => $metadata['client_id'],
-                'client_secret' => $metadata['client_secret'],
                 'response_type' => 'code',
-                'redirect_uri' => $metadata['redirect_uris'][0]
+                'redirect_uri' => $metadata['redirect_uris'][0],
+                'code_challenge' => $codeChallenge,
+                'code_challenge_method' => 'S256',
             ]));
         $this->assertResponseCode(302);
 
         $this->loginAdmin($this->getRequest());
         $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
                 'client_id' => $metadata['client_id'],
-                'client_secret' => $metadata['client_secret'],
                 'response_type' => 'code',
-                'redirect_uri' => $metadata['redirect_uris'][0]
+                'redirect_uri' => $metadata['redirect_uris'][0],
+                'code_challenge' => $codeChallenge,
+                'code_challenge_method' => 'S256',
             ]));
         $this->assertResponseCode(200);
 
         // 認可承認
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query([
-                'grant_type' => 'authorization_code',
-                'client_id' => $metadata['client_id'],
-                'client_secret' => $metadata['client_secret'],
-                'response_type' => 'code',
-                'redirect_uri' => $metadata['redirect_uris'][0]
-            ]), ['action' => 'approve']);
+        // 同意 POST は CSRF 保護下にあり、認可リクエストはセッションから取得される
+        // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
+        // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve']);
         $this->assertResponseCode(302);
         $redirectUrl = $this->_response->getHeaderLine('Location');
         $this->assertStringContainsString('code=', $redirectUrl);
@@ -252,7 +257,7 @@ class OAuth2ControllerTest extends BcTestCase
             'code' => $authCode,
             'redirect_uri' => $metadata['redirect_uris'][0],
             'client_id' => $metadata['client_id'],
-            'client_secret' => $metadata['client_secret'],
+            'code_verifier' => $codeVerifier,
             'scope' => 'read write'
         ]);
         $this->assertResponseCode(200);
@@ -312,11 +317,11 @@ class OAuth2ControllerTest extends BcTestCase
         $this->assertArrayHasKey('result', $blogResponse);
 
         // リフレッシュトークンを使用して新しいアクセストークンを取得
+        // PKCE を使う公開クライアント(token_endpoint_auth_method: none)のため client_secret は送らない
         $this->post('/bc-mcp/oauth2/token', [
             'grant_type' => 'refresh_token',
             'refresh_token' => $refreshToken,
             'client_id' => $metadata['client_id'],
-            'client_secret' => $metadata['client_secret']
         ]);
         $this->assertResponseCode(200);
         $newTokenData = json_decode((string)$this->_response->getBody(), true);
@@ -414,10 +419,12 @@ class OAuth2ControllerTest extends BcTestCase
         $this->assertResponseOk(); // 認可画面が表示される
 
         // Step 5: 認可承認（PKCEパラメータが保存される）
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query($authParams), [
-            'action' => 'approve',
-            'scope' => 'mcp:read mcp:write'
-        ]);
+        // 同意 POST は CSRF 保護下にあり、認可リクエストはセッションから取得される
+        // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
+        // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve']);
         $this->assertResponseCode(302);
 
         // リダイレクトURLから認可コードを取得
@@ -580,9 +587,13 @@ class OAuth2ControllerTest extends BcTestCase
             'code_challenge_method' => 'S256'
         ];
 
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query($authParams), [
-            'action' => 'approve'
-        ]);
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query($authParams));
+        $this->assertResponseOk();
+
+        // 同意 POST は CSRF 保護下にあり、認可リクエストはセッションから取得される
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve']);
 
         $redirectUrl = $this->_response->getHeaderLine('Location');
         $queryParams = [];
@@ -612,9 +623,13 @@ class OAuth2ControllerTest extends BcTestCase
             'code_challenge_method' => 'S256'
         ];
 
-        $this->post('/bc-mcp/oauth2/authorize?' . http_build_query($authParams2), [
-            'action' => 'approve'
-        ]);
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query($authParams2));
+        $this->assertResponseOk();
+
+        // 同意 POST は CSRF 保護下にあり、認可リクエストはセッションから取得される
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve']);
 
         $redirectUrl2 = $this->_response->getHeaderLine('Location');
         $queryParams2 = [];
