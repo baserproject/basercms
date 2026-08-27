@@ -5,6 +5,7 @@ namespace BcMcp\Test\TestCase\Controller;
 
 use BcMcp\Service\RegistrationRateLimiter;
 use Cake\Cache\Cache;
+use Cake\Cache\Engine\FileEngine;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -36,10 +37,18 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
             ]
         ]);
 
-        // レート制限の枠がテスト間で持ち越されないようにする
-        if (Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
-            Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
+        // レート制限の枠がテスト間で持ち越されないようにする。アプリの
+        // ブートストラップ前に RegistrationRateLimiter を直接使うテストもあるため、
+        // 未登録の場合はここで登録しておく（RegistrationRateLimiterTest と同じ設定）
+        if (!Cache::getConfig(RegistrationRateLimiter::CACHE_CONFIG)) {
+            Cache::setConfig(RegistrationRateLimiter::CACHE_CONFIG, [
+                'className' => FileEngine::class,
+                'duration' => '+1 hours',
+                'path' => CACHE . 'bc_mcp' . DS,
+                'prefix' => 'bc_mcp_registration_',
+            ]);
         }
+        Cache::clear(RegistrationRateLimiter::CACHE_CONFIG);
     }
 
     /**
@@ -413,6 +422,125 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
 
         $response = json_decode((string)$this->_response->getBody(), true);
         $this->assertEquals('invalid_token', $response['error']);
+    }
+
+    /**
+     * 上限に達していない状態では通常どおり 201 が返る
+     *
+     * @return void
+     */
+    public function testRegisterReturnsCreatedWhenUnderLimit(): void
+    {
+        $requestData = [
+            'client_name' => 'Under Limit Client',
+            'redirect_uris' => ['https://example.com/callback'],
+            'grant_types' => ['authorization_code']
+        ];
+
+        $this->configRequest([
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        $this->post('/bc-mcp/oauth2/register', json_encode($requestData));
+        $this->assertResponseCode(201);
+    }
+
+    /**
+     * 上限を超えた登録リクエストは 429 になる
+     *
+     * setting.php の BcMcp.registration.maxPerHour はリクエストのたびに
+     * プラグイン設定が再読込されて上書きされてしまうため、テスト内で
+     * Configure::write() しても複数リクエストをまたいで維持できない。
+     * そのため既定値（10件/時）を前提に、RegistrationRateLimiter を直接
+     * 使って上限に達するまでカウントを進めてから検証する。
+     *
+     * @return void
+     */
+    public function testRegisterReturnsTooManyRequestsWhenLimitExceeded(): void
+    {
+        $clientIp = '203.0.113.10';
+        $this->configRequest([
+            'environment' => ['REMOTE_ADDR' => $clientIp],
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        // 既定の上限（10件/時）まで直接カウントを進めておく
+        $rateLimiter = new RegistrationRateLimiter();
+        for ($i = 0; $i < 10; $i++) {
+            $rateLimiter->hit($clientIp);
+        }
+
+        $requestData = [
+            'client_name' => 'Rate Limited Client',
+            'redirect_uris' => ['https://example.com/callback'],
+            'grant_types' => ['authorization_code']
+        ];
+
+        // 上限に達しているため 429 になる
+        $this->post('/bc-mcp/oauth2/register', json_encode($requestData));
+        $this->assertResponseCode(429);
+        $this->assertContentType('application/json');
+
+        $response = json_decode((string)$this->_response->getBody(), true);
+        $this->assertEquals('invalid_request', $response['error']);
+    }
+
+    /**
+     * バリデーションエラーで 400 になった試行はレート制限のカウントに含まれない
+     *
+     * 既定の上限（10件/時）の1つ手前までカウントを進めておき、400 の試行を
+     * 挟んでも正当なリクエストが通ることを確認する（400 の試行がカウントされて
+     * いれば、この時点で上限に達し 429 になってしまうはず）。
+     *
+     * @return void
+     */
+    public function testInvalidRegistrationDoesNotCountTowardRateLimit(): void
+    {
+        $clientIp = '203.0.113.11';
+        $this->configRequest([
+            'environment' => ['REMOTE_ADDR' => $clientIp],
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        // 既定の上限（10件/時）の1つ手前までカウントを進めておく
+        $rateLimiter = new RegistrationRateLimiter();
+        for ($i = 0; $i < 9; $i++) {
+            $rateLimiter->hit($clientIp);
+        }
+
+        // 不正なメタデータで 400 を発生させる（redirect_uris が不正な URI）
+        $invalidRequestData = [
+            'client_name' => 'Invalid Client',
+            'redirect_uris' => ['invalid-uri'],
+            'grant_types' => ['authorization_code']
+        ];
+        $this->post('/bc-mcp/oauth2/register', json_encode($invalidRequestData));
+        $this->assertResponseCode(400);
+
+        // 400 の試行はカウントされないため、まだ1件分の枠が残っており通る
+        $validRequestData = [
+            'client_name' => 'Valid Client After Invalid Attempt',
+            'redirect_uris' => ['https://example.com/callback'],
+            'grant_types' => ['authorization_code']
+        ];
+        $this->configRequest([
+            'environment' => ['REMOTE_ADDR' => $clientIp],
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        $this->post('/bc-mcp/oauth2/register', json_encode($validRequestData));
+        $this->assertResponseCode(201);
     }
 
 }

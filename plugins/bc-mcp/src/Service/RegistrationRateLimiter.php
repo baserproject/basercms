@@ -14,6 +14,10 @@ use Cake\Core\Configure;
  *
  * 枠はキャッシュの有効期限（1時間）で切れる。登録のたびに書き直すため、
  * 実際には「最後の登録から1時間」で枠がリセットされる。
+ *
+ * 呼び出し側が渡すクライアント IP は、TRUST_PROXY（config/bootstrap.php 参照）が
+ * 有効な場合 X-Forwarded-For ヘッダに依存する。前段プロキシが当該ヘッダを
+ * 適切に上書きしない構成では、送信元がヘッダを偽装してこの制限を回避できる。
  */
 class RegistrationRateLimiter
 {

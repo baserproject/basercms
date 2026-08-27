@@ -423,15 +423,26 @@ class Oauth2Controller extends AppController
         }
 
         $rateLimiter = new RegistrationRateLimiter();
+        // クライアント IP は TRUST_PROXY が有効な場合 X-Forwarded-For に依存する
+        // （config/bootstrap.php 参照）ため、前段プロキシが当該ヘッダを
+        // 適切に上書きしている構成であることが前提となる
         $clientIp = (string)$this->request->clientIp();
-        if ($rateLimiter->isExceeded($clientIp)) {
-            return $this->response
-                ->withStatus(429)
-                ->withType('application/json')
-                ->withStringBody(json_encode([
-                    'error' => 'invalid_request',
-                    'error_description' => 'Too many client registrations. Please try again later.'
-                ]));
+        try {
+            // レート制限はキャッシュに依存する付随的な多層防御であり、
+            // 認可の安全性そのものを担う機構ではない。キャッシュ設定が
+            // 未登録・書き込み不可等で判定に失敗しても、本来の登録機能を
+            // 壊さないよう fail-open（制限をかけずに処理を継続）とする
+            if ($rateLimiter->isExceeded($clientIp)) {
+                return $this->response
+                    ->withStatus(429)
+                    ->withType('application/json')
+                    ->withStringBody(json_encode([
+                        'error' => 'invalid_request',
+                        'error_description' => 'Too many client registrations. Please try again later.'
+                    ]));
+            }
+        } catch (Exception $exception) {
+            // 判定不能時は fail-open とし、そのまま登録処理へ進む
         }
 
         try {
@@ -466,8 +477,14 @@ class Oauth2Controller extends AppController
             // クライアントを登録
             $client = $this->clientRegistrationService->registerClient($requestData, $baseUrl);
 
-            // 登録が成功した場合のみカウントする
-            $rateLimiter->hit($clientIp);
+            // 登録が成功した場合のみカウントする。カウントの失敗（キャッシュ
+            // 書き込み不可等）で登録自体を失敗扱いにしないよう、ここで例外を
+            // 握りつぶす（DB には既にクライアントが作成済みのため）
+            try {
+                $rateLimiter->hit($clientIp);
+            } catch (Exception $exception) {
+                // カウント失敗は無視し、登録成功のレスポンスを優先する
+            }
 
             // RFC7591準拠のレスポンスを返す
             return $this->response
