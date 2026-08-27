@@ -356,8 +356,11 @@ return [];
             '/baser-core/users/login.json',
             '/baser-core/users/refresh_token.json',
             '/bc-mcp',
-            '/bc-mcp/oauth2/*',
-            '/baser/admin/bc-mcp/oauth2/*'
+            '/bc-mcp/oauth2/token',
+            '/bc-mcp/oauth2/register',
+            '/bc-mcp/oauth2/register/*',
+            '/bc-mcp/oauth2/verify',
+            '/bc-mcp/oauth2/client-info'
         ], $rs);
     }
 }
