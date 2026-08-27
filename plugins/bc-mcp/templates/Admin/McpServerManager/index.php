@@ -12,9 +12,21 @@
  * @var array $protocolVersions
  * @var array $tools
  * @var array $negotiations
+ * @var bool $encryptionKeyMissing
  */
 ?>
 
+
+<?php if ($encryptionKeyMissing): ?>
+  <div class="bca-panel-box">
+    <div class="bca-panel-box__body">
+      <p class="bca-alert bca-alert--error">
+        暗号化キー（OAUTH2_ENC_KEY）が設定されていないため、MCP サーバーは停止しています。
+        <code>config/.env</code> に <code>OAUTH2_ENC_KEY</code> を設定してください。
+      </p>
+    </div>
+  </div>
+<?php endif; ?>
 
 <!-- 接続情報 -->
 <div class="bca-panel-box">

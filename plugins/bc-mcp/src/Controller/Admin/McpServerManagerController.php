@@ -41,6 +41,9 @@ class McpServerManagerController extends BcAdminAppController
             'protocolVersions' => ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'],
             'tools' => $this->getRegisteredTools(),
             'negotiations' => NegotiationLogger::readRecent(10),
+            // 暗号化キーが無いと OAuth2/MCP は 503 で停止するため、
+            // 管理画面で気付けるようにする
+            'encryptionKeyMissing' => !env('OAUTH2_ENC_KEY'),
         ]);
     }
 

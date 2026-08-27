@@ -56,7 +56,12 @@ class BcMcpPlugin extends BcPlugin
         /* @var SiteConfigsService $siteConfigsService */
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $oauth2EncKey = base64_encode(random_bytes(32));
-        $siteConfigsService->putEnv('OAUTH2_ENC_KEY', $oauth2EncKey);
+        // 暗号化キーを書けないまま完了させると、OAuth2 が停止した状態で
+        // インストール済みに見えてしまうため、失敗として扱う
+        if (!$siteConfigsService->putEnv('OAUTH2_ENC_KEY', $oauth2EncKey)) {
+            $this->log('OAUTH2_ENC_KEY を config/.env に書き込めませんでした。書き込み権限を確認してください。');
+            return false;
+        }
         $siteConfigsService->putEnv('USE_CORE_API', "true");
         $siteConfigsService->putEnv('USE_CORE_ADMIN_API', "true");
         if (!file_exists(CONFIG . 'jwt.pem')) {

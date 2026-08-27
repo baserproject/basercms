@@ -70,4 +70,29 @@ class McpServerManagerControllerTest extends BcTestCase
         $this->assertResponseNotContains('mcp_server_manager/stop');
     }
 
+    /**
+     * 暗号化キー未設定なら管理画面に警告が出る
+     *
+     * @return void
+     */
+    public function testIndexShowsWarningWhenEncryptionKeyIsMissing(): void
+    {
+        $original = env('OAUTH2_ENC_KEY');
+        putenv('OAUTH2_ENC_KEY');
+        unset($_ENV['OAUTH2_ENC_KEY'], $_SERVER['OAUTH2_ENC_KEY']);
+        try {
+            $this->loadFixtureScenario(InitAppScenario::class);
+            $this->loginAdmin($this->getRequest());
+            $this->get('/baser/admin/bc-mcp/mcp-server-manager');
+            $this->assertResponseOk();
+            $this->assertResponseContains('OAUTH2_ENC_KEY');
+            $this->assertResponseContains('停止しています');
+        } finally {
+            if ($original !== null) {
+                putenv('OAUTH2_ENC_KEY=' . $original);
+                $_ENV['OAUTH2_ENC_KEY'] = $original;
+            }
+        }
+    }
+
 }
