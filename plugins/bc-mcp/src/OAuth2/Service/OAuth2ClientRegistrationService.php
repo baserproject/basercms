@@ -5,6 +5,7 @@ namespace BcMcp\OAuth2\Service;
 
 use BcMcp\Model\Entity\Oauth2Client;
 use BcMcp\OAuth2\Repository\OAuth2ClientRepository;
+use BcMcp\OAuth2\Validator\RedirectUriRegistrationValidator;
 use Exception;
 use Cake\ORM\TableRegistry;
 
@@ -59,23 +60,26 @@ class OAuth2ClientRegistrationService
     /**
      * サポートされるトークンエンドポイント認証方法
      *
+     * 動的クライアント登録が無認証で開いているため、誰でも機密クライアントを
+     * 作れる状態を避け、PKCE 必須のパブリッククライアントに一本化する。
+     * 認可サーバーメタデータの宣言（none のみ）とも一致させる。
+     *
      * @var array
      */
     private array $supportedAuthMethods = [
-        'client_secret_basic',
-        'client_secret_post',
         'none'
     ];
 
     /**
      * サポートされるスコープ
      *
+     * OAuth2ScopeRepository に実体があるものだけを列挙する。
+     *
      * @var array
      */
     private array $supportedScopes = [
         'mcp:read',
-        'mcp:write',
-        'admin'
+        'mcp:write'
     ];
 
     /**
@@ -101,15 +105,11 @@ class OAuth2ClientRegistrationService
         // リクエストデータの検証
         $this->validateRegistrationRequest($requestData);
 
-        // クライアントIDとシークレットを生成
+        // クライアントIDを生成
         $clientId = $this->generateClientId();
+        // パブリッククライアントに一本化するため、シークレットは発行しない
         $clientSecret = null;
-        $tokenEndpointAuthMethod = $requestData['token_endpoint_auth_method'] ?? 'client_secret_basic';
-
-        // 機密クライアントの場合はシークレットを生成
-        if ($tokenEndpointAuthMethod !== 'none') {
-            $clientSecret = $this->generateClientSecret();
-        }
+        $tokenEndpointAuthMethod = 'none';
 
         // 現在時刻を取得
         $issuedAt = time();
@@ -127,7 +127,7 @@ class OAuth2ClientRegistrationService
             'redirect_uris' => $requestData['redirect_uris'] ?? [],
             'grants' => $requestData['grant_types'] ?? ['authorization_code'],
             'scopes' => $this->parseScopes($requestData['scope'] ?? ''),
-            'is_confidential' => $tokenEndpointAuthMethod !== 'none',
+            'is_confidential' => false,
             'registration_access_token' => $registrationAccessToken,
         ];
 
@@ -149,9 +149,6 @@ class OAuth2ClientRegistrationService
         $saved->set('client_id_issued_at', $issuedAt);
         $saved->set('client_secret_expires_at', $secretExpiresAt);
         $saved->set('registration_access_token', $registrationAccessToken);
-        if ($clientSecret) {
-            $saved->set('client_secret', $clientSecret);
-        }
         if (isset($requestData['contacts'])) {
             $saved->set('contacts', $requestData['contacts']);
         }
@@ -238,7 +235,10 @@ class OAuth2ClientRegistrationService
             return null;
         }
 
-        $this->validateRegistrationRequest($requestData);
+        // 部分更新でも redirect_uris の必須検証が働くよう、既存値とマージして検証する
+        $this->validateRegistrationRequest($requestData + [
+            'redirect_uris' => $client->redirect_uris,
+        ]);
 
         $update = [];
         if (array_key_exists('client_name', $requestData)) {
@@ -294,16 +294,8 @@ class OAuth2ClientRegistrationService
      */
     private function validateRegistrationRequest(array $requestData): void
     {
-        if (isset($requestData['redirect_uris'])) {
-            if (!is_array($requestData['redirect_uris'])) {
-                throw new Exception('redirect_uris must be an array');
-            }
-            foreach($requestData['redirect_uris'] as $uri) {
-                if (!filter_var($uri, FILTER_VALIDATE_URL)) {
-                    throw new Exception('Invalid redirect_uri: ' . $uri);
-                }
-            }
-        }
+        // redirect_uris は authorization_code に必須であり、登録時に検証する
+        (new RedirectUriRegistrationValidator())->validate($requestData['redirect_uris'] ?? []);
 
         if (isset($requestData['grant_types'])) {
             if (!is_array($requestData['grant_types'])) {
@@ -364,16 +356,6 @@ class OAuth2ClientRegistrationService
     private function generateClientId(): string
     {
         return 'client_' . bin2hex(random_bytes(16));
-    }
-
-    /**
-     * クライアントシークレットを生成
-     * @return string
-     * @throws \Random\RandomException
-     */
-    private function generateClientSecret(): string
-    {
-        return bin2hex(random_bytes(32));
     }
 
     /**

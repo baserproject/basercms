@@ -54,7 +54,7 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
             'redirect_uris' => ['https://example.com/callback'],
             'grant_types' => ['authorization_code'],
             'scope' => 'mcp:read mcp:write',
-            'token_endpoint_auth_method' => 'client_secret_basic',
+            'token_endpoint_auth_method' => 'none',
             'contacts' => ['admin@example.com']
         ];
 
@@ -66,7 +66,7 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
         $this->assertEquals(['https://example.com/callback'], $client->getRedirectUri());
         $this->assertEquals(['authorization_code'], $client->getGrants());
         $this->assertEquals(['mcp:read', 'mcp:write'], $client->getScopes());
-        $this->assertEquals('client_secret_basic', $client->getTokenEndpointAuthMethod());
+        $this->assertEquals('none', $client->getTokenEndpointAuthMethod());
         $this->assertEquals(['admin@example.com'], $client->getContacts());
         $this->assertNotNull($client->getRegistrationAccessToken());
         $this->assertNotNull($client->getRegistrationClientUri());
@@ -230,7 +230,7 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
             'redirect_uris' => ['https://example.com/callback'],
             'grant_types' => ['authorization_code', 'refresh_token'],
             'scope' => 'mcp:read mcp:write',
-            'token_endpoint_auth_method' => 'client_secret_post',
+            'token_endpoint_auth_method' => 'none',
             'contacts' => ['admin@example.com', 'support@example.com'],
             'client_uri' => 'https://example.com',
             'logo_uri' => 'https://example.com/logo.png',
@@ -245,7 +245,7 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
 
         // Check required fields
         $this->assertArrayHasKey('client_id', $response);
-        $this->assertArrayHasKey('client_secret', $response);
+        $this->assertArrayNotHasKey('client_secret', $response);
         $this->assertArrayHasKey('registration_access_token', $response);
         $this->assertArrayHasKey('registration_client_uri', $response);
         $this->assertArrayHasKey('client_id_issued_at', $response);
@@ -255,7 +255,7 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
         $this->assertEquals(['https://example.com/callback'], $response['redirect_uris']);
         $this->assertEquals(['authorization_code', 'refresh_token'], $response['grant_types']);
         $this->assertEquals('mcp:read mcp:write', $response['scope']);
-        $this->assertEquals('client_secret_post', $response['token_endpoint_auth_method']);
+        $this->assertEquals('none', $response['token_endpoint_auth_method']);
         $this->assertEquals(['admin@example.com', 'support@example.com'], $response['contacts']);
         $this->assertEquals('https://example.com', $response['client_uri']);
         $this->assertEquals('https://example.com/logo.png', $response['logo_uri']);

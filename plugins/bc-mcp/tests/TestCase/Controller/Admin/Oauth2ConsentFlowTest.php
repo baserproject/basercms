@@ -510,6 +510,51 @@ class Oauth2ConsentFlowTest extends BcTestCase
     }
 
     /**
+     * 登録メタデータの厳格化
+     *
+     * @return void
+     */
+    public function testRegistrationRejectsInvalidMetadata(): void
+    {
+        // 非ループバックの http は拒否
+        $this->post('/bc-mcp/oauth2/register', [
+            'client_name' => 'Insecure Client',
+            'redirect_uris' => ['http://example.com/callback'],
+        ]);
+        $this->assertResponseCode(400);
+
+        // redirect_uris 省略は拒否
+        $this->post('/bc-mcp/oauth2/register', ['client_name' => 'No Redirect Client']);
+        $this->assertResponseCode(400);
+
+        // 機密クライアントは拒否
+        $this->post('/bc-mcp/oauth2/register', [
+            'client_name' => 'Confidential Client',
+            'redirect_uris' => [self::REDIRECT_URI],
+            'token_endpoint_auth_method' => 'client_secret_basic',
+        ]);
+        $this->assertResponseCode(400);
+
+        // 存在しない admin スコープは拒否
+        $this->post('/bc-mcp/oauth2/register', [
+            'client_name' => 'Admin Scope Client',
+            'redirect_uris' => [self::REDIRECT_URI],
+            'scope' => 'admin',
+        ]);
+        $this->assertResponseCode(400);
+
+        // localhost は許容し、シークレットは発行されない
+        $this->post('/bc-mcp/oauth2/register', [
+            'client_name' => 'Local Client',
+            'redirect_uris' => ['http://localhost/callback'],
+        ]);
+        $this->assertResponseCode(201);
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertArrayNotHasKey('client_secret', $body);
+        $this->assertEquals('none', $body['token_endpoint_auth_method']);
+    }
+
+    /**
      * 暗号化キー未設定なら OAuth2 / MCP エンドポイントは 503 になる
      *
      * @return void

@@ -47,7 +47,7 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
             'redirect_uris' => ['https://example.com/callback'],
             'grant_types' => ['authorization_code', 'refresh_token'],
             'scope' => 'mcp:read mcp:write',
-            'token_endpoint_auth_method' => 'client_secret_basic',
+            'token_endpoint_auth_method' => 'none',
             'contacts' => ['admin@example.com'],
             'client_uri' => 'https://example.com',
             'logo_uri' => 'https://example.com/logo.png'
@@ -71,7 +71,7 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
 
         // Check required RFC7591 fields
         $this->assertArrayHasKey('client_id', $response);
-        $this->assertArrayHasKey('client_secret', $response);
+        $this->assertArrayNotHasKey('client_secret', $response);
         $this->assertArrayHasKey('registration_access_token', $response);
         $this->assertArrayHasKey('registration_client_uri', $response);
         $this->assertArrayHasKey('client_id_issued_at', $response);
@@ -81,7 +81,7 @@ class OAuth2ControllerDynamicClientRegistrationTest extends TestCase
         $this->assertEquals(['https://example.com/callback'], $response['redirect_uris']);
         $this->assertEquals(['authorization_code', 'refresh_token'], $response['grant_types']);
         $this->assertEquals('mcp:read mcp:write', $response['scope']);
-        $this->assertEquals('client_secret_basic', $response['token_endpoint_auth_method']);
+        $this->assertEquals('none', $response['token_endpoint_auth_method']);
         $this->assertEquals(['admin@example.com'], $response['contacts']);
         $this->assertEquals('https://example.com', $response['client_uri']);
         $this->assertEquals('https://example.com/logo.png', $response['logo_uri']);
