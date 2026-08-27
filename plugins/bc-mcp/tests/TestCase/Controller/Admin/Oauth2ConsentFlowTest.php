@@ -6,6 +6,7 @@ namespace BcMcp\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\Utility\Hash;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -141,6 +142,72 @@ class Oauth2ConsentFlowTest extends BcTestCase
     {
         // grant_type が無いため OAuth2 のエラーになるが、CSRF で 403 にはならない
         $this->post('/bc-mcp/oauth2/token', []);
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * GET で認可リクエストが検証されセッションに保持される
+     *
+     * @return void
+     */
+    public function testGetStoresValidatedAuthorizationRequest(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id']));
+
+        $this->assertResponseOk();
+        $this->assertResponseContains('Consent Flow Test Client');
+        // スコープは識別子ではなく説明文で見せる
+        $this->assertResponseContains('データの読み取り');
+
+        // Server::run() がリクエストの最後にセッションを close() するため、
+        // Session::read() で再度アクセスすると再startされてデータが消える。
+        // CakePHP 本体の SessionEquals/SessionHasKey 制約と同様に $_SESSION を直接参照する。
+        $authRequest = Hash::get($_SESSION, 'BcMcp.authRequest');
+        $this->assertInstanceOf(
+            \League\OAuth2\Server\RequestTypes\AuthorizationRequest::class,
+            $authRequest
+        );
+        $this->assertEquals($client['client_id'], $authRequest->getClient()->getIdentifier());
+    }
+
+    /**
+     * 不正な redirect_uri の GET は同意画面を出さない
+     *
+     * @return void
+     */
+    public function testGetWithInvalidRedirectUriDoesNotRenderConsent(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id'], [
+            'redirect_uri' => 'https://attacker.example.com/callback',
+        ]));
+
+        $this->assertResponseCode(400);
+        // Server::run() 後の Session::read() はデータを消してしまうため $_SESSION を直接参照する。
+        $this->assertNull(Hash::get($_SESSION, 'BcMcp.authRequest'));
+    }
+
+    /**
+     * code_challenge の無い認可リクエストは拒否される
+     *
+     * @return void
+     */
+    public function testGetWithoutCodeChallengeIsRejected(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
+            'client_id' => $client['client_id'],
+            'response_type' => 'code',
+            'redirect_uri' => self::REDIRECT_URI,
+        ]));
+
         $this->assertResponseCode(400);
     }
 }
