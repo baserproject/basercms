@@ -477,6 +477,36 @@ class Oauth2ConsentFlowTest extends BcTestCase
         ]));
 
         $this->assertResponseCode(400);
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertStringContainsString('Code challenge method must be S256', $body['error_description']);
+    }
+
+    /**
+     * code_challenge はあるが code_challenge_method を省略した認可リクエストは拒否される
+     *
+     * league は code_challenge_method の指定が無い場合に plain として扱うが、認可サーバー
+     * メタデータでは S256 のみを宣言しているため、この省略ケースこそが両者の食い違いの実体。
+     * authorizeQuery() は既定値との配列和でクエリを組み立てるため override で
+     * code_challenge_method を消せない。そのためここでは直接クエリを組み立てる。
+     *
+     * @return void
+     */
+    public function testOmittedCodeChallengeMethodIsRejected(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . http_build_query([
+            'client_id' => $client['client_id'],
+            'response_type' => 'code',
+            'redirect_uri' => self::REDIRECT_URI,
+            'scope' => 'mcp:read mcp:write',
+            'code_challenge' => $this->codeChallenge(),
+        ]));
+
+        $this->assertResponseCode(400);
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertStringContainsString('Code challenge method must be S256', $body['error_description']);
     }
 
     /**

@@ -148,12 +148,18 @@ class Oauth2Controller extends BcAdminAppController
             // client_id / redirect_uri / response_type / PKCE の不備は league が
             // 判定する。リダイレクト先が信頼できない段階のため、クライアントへ
             // リダイレクトせずその場でエラーを返す。
+            // getMessage() は invalid_request 系で共通の定型文になるため、
+            // 具体的な原因（hint）が有れば error_description に付記する。
+            $description = $e->getMessage();
+            if ($e->getHint()) {
+                $description .= ' ' . $e->getHint();
+            }
             return $this->response
                 ->withStatus(400)
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => $e->getErrorType(),
-                    'error_description' => $e->getMessage(),
+                    'error_description' => $description,
                 ]));
         }
 
