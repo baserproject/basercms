@@ -116,6 +116,31 @@ class Oauth2ConsentFlowTest extends BcTestCase
     }
 
     /**
+     * セッションに保持されている認可リクエストのマップを取得する
+     *
+     * Server::run() 後の Session::read() はデータを消してしまうため、
+     * $_SESSION を直接参照する（CakePHP 本体の SessionEquals/SessionHasKey
+     * 制約と同様の作法）。
+     *
+     * @return array<string, mixed>
+     */
+    private function pendingAuthRequests(): array
+    {
+        return (array)Hash::get($_SESSION, 'BcMcp.authRequests', []);
+    }
+
+    /**
+     * 直近の GET で発行された consent_id を取得する
+     *
+     * @return string
+     */
+    private function lastConsentId(): string
+    {
+        $pending = $this->pendingAuthRequests();
+        return (string)array_key_last($pending);
+    }
+
+    /**
      * CSRF トークンの無い同意 POST は拒否される
      *
      * @return void
@@ -162,10 +187,15 @@ class Oauth2ConsentFlowTest extends BcTestCase
         // スコープは識別子ではなく説明文で見せる
         $this->assertResponseContains('データの読み取り');
 
-        // Server::run() がリクエストの最後にセッションを close() するため、
-        // Session::read() で再度アクセスすると再startされてデータが消える。
-        // CakePHP 本体の SessionEquals/SessionHasKey 制約と同様に $_SESSION を直接参照する。
-        $authRequest = Hash::get($_SESSION, 'BcMcp.authRequest');
+        // 発行された consent_id をキーに、認可リクエストが1件だけ保持されている
+        $pending = $this->pendingAuthRequests();
+        $this->assertCount(1, $pending);
+        $consentId = $this->lastConsentId();
+        $this->assertNotSame('', $consentId);
+        // フォームの hidden にも同じ consent_id が埋め込まれている
+        $this->assertResponseContains('value="' . $consentId . '"');
+
+        $authRequest = $pending[$consentId];
         $this->assertInstanceOf(
             \League\OAuth2\Server\RequestTypes\AuthorizationRequest::class,
             $authRequest
@@ -188,8 +218,7 @@ class Oauth2ConsentFlowTest extends BcTestCase
         ]));
 
         $this->assertResponseCode(400);
-        // Server::run() 後の Session::read() はデータを消してしまうため $_SESSION を直接参照する。
-        $this->assertNull(Hash::get($_SESSION, 'BcMcp.authRequest'));
+        $this->assertSame([], $this->pendingAuthRequests());
     }
 
     /**
@@ -241,18 +270,22 @@ class Oauth2ConsentFlowTest extends BcTestCase
         // 正規のクライアントで同意画面を開く
         $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($legitimate['client_id']));
         $this->assertResponseOk();
+        $consentId = $this->lastConsentId();
 
         // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
         // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
         $this->session($_SESSION);
         $this->enableCsrfToken();
 
-        // 攻撃者のリダイレクト先をクエリとボディの両方に混ぜる
+        // 攻撃者のリダイレクト先をクエリとボディの両方に混ぜる。consent_id は
+        // 正規の同意画面のものを使う（consent_id 以外はフォームの値として
+        // 読まれないことを確認するのが本テストの目的）
         $this->post('/bc-mcp/oauth2/authorize?' . http_build_query([
             'client_id' => 'client_attacker',
             'redirect_uri' => 'https://attacker.example.com/callback',
         ]), [
             'action' => 'approve',
+            'consent_id' => $consentId,
             'client_id' => 'client_attacker',
             'redirect_uri' => 'https://attacker.example.com/callback',
         ]);
@@ -277,17 +310,113 @@ class Oauth2ConsentFlowTest extends BcTestCase
             'state' => 'test-state',
         ]));
         $this->assertResponseOk();
+        $consentId = $this->lastConsentId();
 
         // IntegrationTestTrait は次のリクエストのセッションを都度作り直すため、
         // GET でセッションに書き込んだ認可リクエストを $_SESSION から引き継ぐ。
         $this->session($_SESSION);
         $this->enableCsrfToken();
-        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'deny']);
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'deny', 'consent_id' => $consentId]);
 
         $this->assertResponseCode(302);
         $location = $this->_response->getHeaderLine('Location');
         $this->assertStringContainsString('error=access_denied', $location);
         $this->assertStringContainsString('state=test-state', $location);
         $this->assertStringContainsString('iss=', $location);
+    }
+
+    /**
+     * 別タブで開いた同意画面の consent_id では、先に開いた画面の認可を発行できない
+     *
+     * 「セッション上の認可リクエストが GET のたびに無条件で上書きされる」経路を
+     * 塞いだことの回帰テスト。consent_id ごとに認可リクエストを区別できるため、
+     * 別クライアントで GET し直しても、先に開いた同意画面の consent_id は
+     * 先に開いた画面のクライアント向けのままであることを確認する。
+     *
+     * @return void
+     */
+    public function testConcurrentAuthorizeGetDoesNotSwapPendingConsent(): void
+    {
+        $legitimate = $this->registerClient();
+        $attacker = $this->registerClient(['client_name' => 'Attacker Client']);
+        $this->loginAdmin($this->getRequest());
+
+        // タブ1: 正規のクライアントで同意画面を開く
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($legitimate['client_id']));
+        $this->assertResponseOk();
+        $legitimateConsentId = $this->lastConsentId();
+
+        // タブ2扱い: 同じセッションのまま、別クライアントで同意画面を開き直す
+        // (攻撃者がトップレベル遷移で踏ませる GET を模す)
+        $this->session($_SESSION);
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($attacker['client_id']));
+        $this->assertResponseOk();
+
+        // タブ1に残っていた consent_id は、依然として正規クライアントの
+        // 認可リクエストを指したまま消費できる（別クライアントに差し替わらない）
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', [
+            'action' => 'approve',
+            'consent_id' => $legitimateConsentId,
+        ]);
+
+        $this->assertResponseCode(302);
+        $location = $this->_response->getHeaderLine('Location');
+        $this->assertStringStartsWith(self::REDIRECT_URI, $location);
+    }
+
+    /**
+     * consent_id が無い、または一致しない POST は 400 になる
+     *
+     * @return void
+     */
+    public function testApproveWithUnknownConsentIdReturnsBadRequest(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id']));
+        $this->assertResponseOk();
+
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        // 存在しない consent_id を指定する
+        $this->post('/bc-mcp/oauth2/authorize', [
+            'action' => 'approve',
+            'consent_id' => 'unknown-consent-id',
+        ]);
+
+        $this->assertResponseCode(400);
+        $this->assertResponseNotContains('code=');
+    }
+
+    /**
+     * 同じ認可リクエストで承認 POST を2回投げると、2回目は 400 になる（ワンショット破棄の回帰テスト）
+     *
+     * @return void
+     */
+    public function testApproveTwiceWithSameConsentIdFailsOnSecondAttempt(): void
+    {
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest());
+
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id']));
+        $this->assertResponseOk();
+        $consentId = $this->lastConsentId();
+
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve', 'consent_id' => $consentId]);
+        $this->assertResponseCode(302);
+        $firstLocation = $this->_response->getHeaderLine('Location');
+        $this->assertStringContainsString('code=', $firstLocation);
+
+        // 同じ consent_id で再度 POST しても、既に消費済みのため認可コードは発行されない
+        $this->session($_SESSION);
+        $this->enableCsrfToken();
+        $this->post('/bc-mcp/oauth2/authorize', ['action' => 'approve', 'consent_id' => $consentId]);
+        $this->assertResponseCode(400);
+        $this->assertResponseNotContains('code=');
     }
 }

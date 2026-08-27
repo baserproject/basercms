@@ -3,12 +3,15 @@
  * OAuth2 認可画面テンプレート
  *
  * 表示内容は GET 時に検証してセッションへ保持した認可リクエスト由来。
- * POST ではフォームの値を読まないため、hidden 入力は持たない。
+ * POST では認可の内容(スコープ・リダイレクト先等)をフォームの値として
+ * 読まないため、hidden 入力は「どのセッション内認可リクエストを使うか」
+ * を指す consent_id のみを持つ。
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \League\OAuth2\Server\Entities\ClientEntityInterface $client
  * @var \League\OAuth2\Server\Entities\ScopeEntityInterface[] $scopes
  * @var \BaserCore\Model\Entity\User $user
+ * @var string $consentId
  */
 $this->BcBaser->setTitle('BcMcp アプリケーション認可');
 ?>
@@ -44,6 +47,7 @@ $this->BcBaser->setTitle('BcMcp アプリケーション認可');
       </div>
 
       <?= $this->BcAdminForm->create(null, ['type' => 'post']) ?>
+      <?= $this->BcAdminForm->hidden('consent_id', ['value' => $consentId]) ?>
 
       <div class="submit section bca-actions">
         <div class="bca-actions__main">

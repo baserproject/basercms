@@ -55,8 +55,22 @@ class Oauth2Controller extends BcAdminAppController
 
     /**
      * 認可リクエストを保持するセッションキー
+     *
+     * 同時に開かれた複数の同意画面(別タブでの GET など)を区別できるよう、
+     * 単一の値ではなく consent_id => AuthorizationRequest のマップとして保持する。
+     * これにより「タブ1で開いた同意画面のまま、セッション上の認可リクエストだけが
+     * 別クライアントのものにすり替わる」経路を防ぐ。
      */
-    public const SESSION_AUTH_REQUEST = 'BcMcp.authRequest';
+    public const SESSION_AUTH_REQUESTS = 'BcMcp.authRequests';
+
+    /**
+     * セッションに保持する認可リクエストの最大件数
+     *
+     * 同意画面を開いたまま放置される（GET だけして POST しない）ケースが
+     * 積み重なってもセッションが際限なく肥大化しないよう、上限を超えた
+     * 分は古いものから破棄する。
+     */
+    private const MAX_PENDING_AUTH_REQUESTS = 5;
 
     /**
      * 認可エンドポイント
@@ -109,13 +123,25 @@ class Oauth2Controller extends BcAdminAppController
         }
 
         // 同意画面に見せた内容と、実際に発行される権限を一致させるため、
-        // 検証済みの認可リクエストをセッションへ保持する。
-        $this->request->getSession()->write(self::SESSION_AUTH_REQUEST, $authRequest);
+        // 検証済みの認可リクエストをセッションへ保持する。GET のたびに
+        // 単一キーを上書きすると、別タブ・並行タブでの GET によって
+        // 表示中の同意画面と紐づく認可リクエストがすり替わってしまうため、
+        // 推測不可能な consent_id を発行してマップに追加する形で保持する。
+        $session = $this->request->getSession();
+        $pending = (array)$session->read(self::SESSION_AUTH_REQUESTS);
+        $consentId = bin2hex(random_bytes(16));
+        $pending[$consentId] = $authRequest;
+        // 上限を超えたら古いものから破棄する
+        if (count($pending) > self::MAX_PENDING_AUTH_REQUESTS) {
+            $pending = array_slice($pending, -self::MAX_PENDING_AUTH_REQUESTS, null, true);
+        }
+        $session->write(self::SESSION_AUTH_REQUESTS, $pending);
 
         $this->set([
             'client' => $authRequest->getClient(),
             'scopes' => $authRequest->getScopes(),
             'user' => $user,
+            'consentId' => $consentId,
         ]);
 
         return $this->render('authorize');
@@ -124,8 +150,10 @@ class Oauth2Controller extends BcAdminAppController
     /**
      * 認可を完了させる
      *
-     * クエリもボディも読まず、GET 時に検証してセッションへ保持した認可
-     * リクエストのみを使う。これにより同意画面で見せた権限と、実際に
+     * クエリもボディも認可の内容としては読まず、GET 時に検証してセッションへ
+     * 保持した認可リクエストのみを使う。ボディから読むのは、どの同意画面の
+     * ものかを指す consent_id のみで、スコープやリダイレクト先といった認可の
+     * 内容は一切含まれない。これにより同意画面で見せた権限と、実際に
      * 発行される権限がすり替わる余地を無くす。
      *
      * @return \Cake\Http\Response|\Psr\Http\Message\ResponseInterface
@@ -133,9 +161,13 @@ class Oauth2Controller extends BcAdminAppController
     private function completeAuthorization()
     {
         $session = $this->request->getSession();
-        $authRequest = $session->read(self::SESSION_AUTH_REQUEST);
-        // 認可コードの二重発行を防ぐため、読み出したら必ず破棄する
-        $session->delete(self::SESSION_AUTH_REQUEST);
+        $pending = (array)$session->read(self::SESSION_AUTH_REQUESTS);
+        $consentId = (string)$this->request->getData('consent_id');
+        $authRequest = $pending[$consentId] ?? null;
+        // 認可コードの二重発行や、他の同意画面の認可リクエストの流用を防ぐため、
+        // 消費した consent_id は結果によらず必ずセッションから破棄する。
+        unset($pending[$consentId]);
+        $session->write(self::SESSION_AUTH_REQUESTS, $pending);
 
         if (!$authRequest instanceof AuthorizationRequest) {
             return $this->response
