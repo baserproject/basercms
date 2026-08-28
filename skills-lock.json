@@ -5,97 +5,103 @@
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-core-plugin-convert/SKILL.md",
-      "computedHash": "e97b1bea0b3d1b8395526d579fb7c3296b8e4f19dba1462571350af0ac49e43e"
+      "computedHash": "332c05625392afedb5dec4d0ce2beb728dd0d0456620cdbfbad0f1995ea7978d"
     },
     "basercms-plugin-4-to-5-upgrade": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-plugin-4-to-5-upgrade/SKILL.md",
-      "computedHash": "3b3ca789190d46f6c041a79f9301db16eaf6caa562b08114baf30040a38a79b1"
+      "computedHash": "09d1072cd7cbeff7e4ea2f3d5a32013657858f1ca7e1d32283dc4f8115f48789"
     },
     "basercms-plugin-5x-update": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-plugin-5x-update/SKILL.md",
-      "computedHash": "878b2c071f35a18765ae29f7f28eb1d8795c860d51b1ca4815fbd42e0f9a911f"
+      "computedHash": "e413492413efbdbec9e6dc6044cb78eb2b9d1430bf131960530540da3dfb7dec"
     },
     "basercms-plugin-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-plugin-migration/SKILL.md",
-      "computedHash": "fa9ff410d013eb8232cc203cbdb7a111ee497345e83fb7a252e5cd1256d448a8"
+      "computedHash": "7dc245f1ad70a6a11bc0619dc7d3f4beff0f82b782b32d0a9a504608e4adb60b"
+    },
+    "basercms-release-note": {
+      "source": "baserproject/baser-skills",
+      "sourceType": "github",
+      "skillPath": "skills/basercms-release-note/SKILL.md",
+      "computedHash": "68a04cb5ecb8d4bbc2e5d5a210e8022866725d51f5ff0158efeebbac99b7532a"
     },
     "basercms-security-advisory": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-security-advisory/SKILL.md",
-      "computedHash": "270675aa67bb65b54205886e70b72f66f71adb2cfa2fbe21a90406bd5c687207"
+      "computedHash": "f4a4e0d2debe110edf6da8eed4e09e716cfcbd461eb4eadcf16358dab76407af"
     },
     "basercms-theme-4-to-5-upgrade": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-theme-4-to-5-upgrade/SKILL.md",
-      "computedHash": "37a9dc4ea939d268a3033fea4892c0f4a1b452c1497a3845002e6431bae9976e"
+      "computedHash": "6d1b9465eaee31dff0b20781d13ae542aa73ad47c666130acdfb307a61c13f77"
     },
     "basercms-unittest": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms-unittest/SKILL.md",
-      "computedHash": "d185219247d515c72ceb86b84d7f2c75c71ca243b3b3ac8c40fd37d719f7affc"
+      "computedHash": "b74764e6007d4b0eaa544e528b0f7171baee343b3e96b715cf4d51f1a3eaf87e"
     },
     "basercms4-development": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms4-development/SKILL.md",
-      "computedHash": "c647d7cd856e3e9df6ebb4c13eaba72bd91b091b5bbd8b3745d8bd22a8ceb319"
+      "computedHash": "8f16eb310d8d99cc706bf7970e7f4c61e608c175f696c7a1b53ffa83827766ff"
     },
     "basercms4-to-5-upgrade": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms4-to-5-upgrade/SKILL.md",
-      "computedHash": "df5961f8708a3bb612b8b008b8b12c7b818120b9c509db26d547de0d4e995f73"
+      "computedHash": "a009baee4eaca47fd3db0fa3f39b75fddc209dc26ff5b6df84670c77df570baa"
     },
     "basercms5-claude-workflow-setup": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms5-claude-workflow-setup/SKILL.md",
-      "computedHash": "b2debc8937da4b381d5b23ff56c0aa0484f70a2e28562a06b36de9ad75203194"
+      "computedHash": "fb8eedead9e5148a026906eb37094646454f8c6d42704fd0f2421b26ed1dbd6d"
     },
     "basercms5-custom-content-development": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms5-custom-content-development/SKILL.md",
-      "computedHash": "7ea4e0a29a68b692fe8727239cf5356e1dc7337f98ede34e1e41b84ef02130b4"
+      "computedHash": "789496a26651ea06a84f4ed9e7bd19a7e71f7416735cbccbc747b4098537eb2d"
     },
     "basercms5-development": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms5-development/SKILL.md",
-      "computedHash": "26c9d83729496f0b91299e01558783a8ca4cea6492da16c4b0e86ef5da9c96c7"
+      "computedHash": "58c192a88aa387c9bafd19b961e1c3e8b671ced2537e0ce6ebdf13547b359d8f"
     },
     "basercms5-plugin-development": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms5-plugin-development/SKILL.md",
-      "computedHash": "3ac2614067ad54e6b4bd18e3ff648884c8a9dd0c4decebc720d7474091cdce62"
+      "computedHash": "d0e1aaa128f42c486dc4035f19e4a1d84df6aa3624145b1a891a27844a82e196"
     },
     "basercms5-theme-development": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/basercms5-theme-development/SKILL.md",
-      "computedHash": "7b2cc616f87f6eeeb82289b1eb8902f859c99d352957dc7caec3f524bda1cf07"
+      "computedHash": "65d10992ee5ea6d6570688533e3413a9a8ecfed45159d69484549831d04dd3d7"
     },
     "cakephp-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/cakephp-migration/SKILL.md",
-      "computedHash": "10b43e50a02c5d60aad13c04f887d8a28e294ff3356dd0a8274adbc02b9d6045"
+      "computedHash": "1e3caa75bb917ba79668fd352b3814a2690382e81919f04dee120feb40758d5b"
     },
     "php-migration": {
       "source": "baserproject/baser-skills",
       "sourceType": "github",
       "skillPath": "skills/php-migration/SKILL.md",
-      "computedHash": "9f71021b038a9445e81d1da27689ac1a519e7ffe5ed59cdd4c197d6774a59624"
+      "computedHash": "36e92b3f7c99d1e5a1b8c27e17155088fedc8f1ca4ff81c925a8668eb419dcd5"
     },
     "plan-builder": {
       "source": "ecatchup/catchup-skills",

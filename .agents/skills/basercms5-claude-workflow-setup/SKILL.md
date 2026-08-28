@@ -86,6 +86,14 @@ spec（設計書）や plan（実装計画）など**レビュー目的の Markd
 - **スキルからは有効化できない**: Auto mode は Claude Code の CLI 機能。本スキルは「ここで切り替えると効率的」と案内するだけで、切替はユーザーが行う。
 - 整理済みなら、設計合意後の反復実装（横断書き換え・テスト・台帳更新等）は Auto mode で効率よく回る。
 
+## ユーザーへブラウザ動作確認を依頼する際は対象URLを明示する（常時ON）
+- サブエージェントがサンドボックス制約でブラウザ確認できなかった場合や、実装完了後にユーザー自身の目視確認を依頼する場合は、**確認してほしいページのURLを必ず明示する**（`/recruit/採用情報/` のようなパスの言及だけで済ませない）。ローカル開発環境のドメイン（例 `https://<project>.localhost/...`）まで含め、実際にクリック/コピーしてアクセスできる形で提示する。
+- URLはMarkdownリンク付きで提示する。
+- 理由: パスだけの言及だと、ユーザーが都度URLを組み立て直す手間が生じる。動作確認依頼は「何を」だけでなく「どこで」をワンアクションで開始できる形にする。
+- **★baserCMS5の管理画面URLは、渡す前に必ず疎通確認する（推測で渡さない）**。実例（同一セッションで2回発生）: (a) 別プラグインのURLパターンから類推した`plugin-a/plugin_bs/index`が404（正しくは対象プラグインのadminNavigation設定に基づく別のダッシュ区切り）、(b) BcBlogの記事編集URLが`/edit/{postId}`ではなく`/edit/{blogContentId}/{postId}`が正しい形式（コントローラの`beforeFilter`がpass.0をblogContentIdとして要求するため）で、`/edit/{postId}`だと「コンテンツデータが見つかりません」というBcExceptionになる。
+  - 確認手順: ①`docker exec <container> sh -c 'cd <v5> && bin/cake routes 2>&1 | grep -i <plugin名またはcontroller名>'`で実際のルートパターン（plugin/prefix/controller/action）を確認、②未ログイン状態で`curl -sk -o /dev/null -w '%{http_code}'`を打ち、**302（ログインへのリダイレクト）なら経路として正しい**、404ならルート自体が誤り、500系ならアプリ側の例外（curlの段階でここまで検知できることもある）。
+  - このひと手間で「不具合と思ったらURL指定ミスだった」という往復を防げる（basercms-theme-4-to-5-upgrade F-23の「本番実測」姿勢と同じく、推測より実測を優先する）。
+
 ## 関連スキル
 - 設計: `superpowers:brainstorming` / 計画: `superpowers:writing-plans`
 - パーミッション整理: `permissions-audit`

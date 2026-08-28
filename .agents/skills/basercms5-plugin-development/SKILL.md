@@ -29,6 +29,8 @@ baserCMS 5系（CakePHP 5ベース）で**プラグインを新規開発・改�
   ];
   ```
 - **adminNavigation（管理メニュー）**は setting.php に登録する。`'plugin'`・`'controller'` は**いずれも CamelCase** で書く（`'controller' => 'SampleArticles'`）。snake_case で書くと**全管理画面が404になる**（メニュー描画時のURL解決に失敗するため対象画面以外も巻き込む）。
+- **管理画面URLの `{controller}` セグメントは実際にはプラグイン名をダッシュ区切り（kebab-case）にしたもの**（例: `BlogTagGroup` → `/baser/admin/blog-tag-group/{controller}/...`）。他プラグインのURLパターンから類推せず、`bin/cake routes | grep <PluginName>`（大文字小文字を落として検索）で実際のルートを確認してから使う。
+- **BcBlog（`bc-blog`）の管理画面「記事編集」URLは `edit/{blogContentId}/{id}` の2引数が必須**（`Admin\BlogPostsController::beforeFilter()` が `$this->request->getParam('pass.0')` を**ブログコンテンツID**として要求し、無いと `BcException: コンテンツデータが見つかりません。` になる）。記事IDだけの `edit/{id}` ではアクセスできない。他プラグインが特定ブログ記事の編集画面へリンクを張る場合（例: 追加フィールドプラグインの編集導線）は、`edit($blogContentId, $id)` のシグネチャ通り両方を渡す。
 - **有効化**は管理画面のプラグイン管理から行うか、`plugins` テーブルへ直接 INSERT（`status=1`）する。DBで有効化されたプラグインは自動で読み込まれるため、composer への登録や `composer dump-autoload` は不要。
 - サードパーティ製ライブラリ（例 `phpoffice/phpspreadsheet`）は `composer require` で導入する。雛形アセット（Excel テンプレート等）は `templates/Admin/Excel/...` に置き、`\Cake\Core\Plugin::templatePath('Sample') . 'Admin' . DS . 'Excel' . DS . ...` で参照する（`templatePath()` は末尾スラッシュ付き）。
 
@@ -156,6 +158,7 @@ baserCMS 5系（CakePHP 5ベース）で**プラグインを新規開発・改�
 
 リスナーは `src/Event/` に置く。**プラグインの BcPlugin が自動 attach する**ため、リスナーが壊れているとイベント発火で即 Fatal になる点に注意して書く。
 
+- **自動 attach の実体・ファイル名の厳密な規則**: `BaserCore\Utility\BcEvent::registerPluginEvent()`（`BaserCorePlugin` から有効化済み全プラグインに対して呼ばれる）が、`src/Event/{Plugin名}{Controller|Model|View|Helper|Mailer}EventListener.php` という**ファイル名と完全一致するクラス**だけを自動生成・`EventManager::instance()->on()` で登録する。例えば `<Plugin>` プラグインでヘッダーを差し替えるビューイベントリスナーなら、ファイル名は必ず `src/Event/<Plugin>ViewEventListener.php`、クラス名も `<Plugin>ViewEventListener` にする（名前が1文字でもズレると静かに登録されず、イベントが一切発火しない）。
 - **基底クラス**: モデル系は `BcModelEventListener`、コントローラ系は `BcControllerEventListener`、ビュー系は `BcViewEventListener`、ヘルパ系は `BcHelperEventListener` を継承する。
 - **イベント名の命名規則**: `public $events = [...]` に登録する。
   - 自プラグインのモデルイベント: `'SampleArticles.afterSave'`（**Table 名の複数形**）。
