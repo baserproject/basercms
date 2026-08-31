@@ -11,7 +11,11 @@ baserCMS のユニットテストは Docker コンテナ上で実行する。実
 ## 実行環境
 
 - 実行は `docker compose`（`<プロジェクトのdocker-compose.yml配置パス>`）。
-- **PHPコンテナ名: `basercms`**、baserCMS 配置先: **`/var/www/html`**。
+- **★[最重要] PHPコンテナ名は実行環境によって異なる場合がある。決め打ちせず、実行前に必ず確認する。** baserCMS 配置先は **`/var/www/html`**（これは共通）。確認手順は次の順:
+  1. `.github/instructions/local.instructions.md` があればその記載に従う（ローカル環境。例: `basercms`）。
+  2. 無ければ、クラウドセッション（Claude Code on the web）の可能性がある。環境変数 `CLAUDE_CODE_REMOTE_SESSION_ID` があればクラウドで、PHPコンテナは **`bc-php`** / DBコンテナは **`bc-db`**（`.github/instructions/cloud.instructions.md` 参照）。この場合は先に `docker/bin/cloud-status.sh` で起動完了を待つ。
+  3. いずれの場合も最後に `docker ps` で実際の稼働コンテナ名を突き合わせる（後述「事前確認: コンテナの稼働」／末尾の「コンテナ名は決め打ちしない」も参照）。
+- 以降のコマンド例では PHP コンテナ名を `basercms` と書いているが、**上記で特定した実際のコンテナ名に読み替えること**。
 - テスト設定: `phpunit.xml.dist`。`<testsuites>` にプラグインごとの testsuite が定義（BaserCore / BcBlog / BcCustomContent / BcMail / BcThemeFile …）。
 - DB はローカル環境依存（過去に `bc-db` ホスト無しの失敗があったが、現在は `<db-host>` コンテナを利用。この種の接続失敗は環境要因でスルー可）。
 - **実行前に必ずコンテナの稼働を確認する**。PHP コンテナ・DB コンテナが停止（`Exited`）していると `docker exec` が失敗する。`docker ps` で確認し、落ちていれば `docker start <container> <db-container>`、DB は mysqld が接続を受け付けるまで待つ（詳細は後述「事前確認: コンテナの稼働」）。

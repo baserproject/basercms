@@ -46,6 +46,16 @@ baserCMS のカスタムコンテンツ機能に特化した開発指示書で�
 ローカル環境での特有のユニットテスト実行の方法などを記載しています。
 基本的に .gitignore にて、コミット対象外になっており、存在しない場合があります。
 
+### [cloud.instructions.md](./.github/instructions/cloud.instructions.md)
+**クラウド実行環境（Claude Code on the web）の設定**
+
+クラウドセッション上で開発する際の特記事項を記載しています。セットアップ手順の全体像は
+[docs/cloud/README.md](./docs/cloud/README.md) を参照してください。
+
+- **実行環境の判定**: 環境変数 `CLAUDE_CODE_REMOTE_SESSION_ID` の有無
+- **作業開始前の確認**: `docker/bin/cloud-status.sh` で起動完了を待つ
+- **コンテナ名**: 実行環境によって **PHP コンテナ名が異なる場合がある**（クラウドは `bc-php`、ローカルは `local.instructions.md` の記載に従う）。いずれの場合も実行前に `docker ps` で実際に確認すること
+
 ## 使用方法
 
 1. プロジェクトの種類に応じて、該当する指示書を参照してください
@@ -53,6 +63,7 @@ baserCMS のカスタムコンテンツ機能に特化した開発指示書で�
 3. baserCMS 開発では `basercms.instructions.md` を主要ガイドラインとして使用
 4. カスタムコンテンツ開発時は `basercms-custom-content.instructions.md` を追加参照
 5. ローカル環境でのテスト実行時などは `local.instructions.md` の設定を確認
+6. クラウドセッション（Claude Code on the web）での作業時は `cloud.instructions.md` を確認
 
 ## シェルコマンド実行時の注意
 
