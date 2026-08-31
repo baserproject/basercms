@@ -34,9 +34,15 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
    | 項目 | 値 |
    |---|---|
    | Name | `basercms` など任意 |
-   | Network access | **Trusted のまま**（Docker Hub・packagist.org・GitHub はすべて既定で許可済み。Custom 指定は不要） |
+   | Network access | **Custom** にして、Allowed domains に `*.docker.com` を1行追加する。あわせて **「Also include default list of common package managers」に必ずチェックを入れる**（外すと packagist.org 等が落ちる） |
    | Environment variables | **設定不要**（DBは compose 内の root/root、GitHub は proxy が認証する） |
    | Setup script | [`docs/cloud/setup-script.sh`](./setup-script.sh) の中身をそのまま貼り付ける |
+
+> **`*.docker.com` の追加は必須。** 既定の Trusted 許可リストには `registry-1.docker.io` や
+> `production.cloudflare.docker.com` は入っていますが、Docker Hub がイメージ本体（blob）の配信を
+> CloudFront 側（`production.cloudfront.docker.com`）にリダイレクトすると許可リストから外れ、
+> `403 Forbidden` で pull が全滅します。配信先 CDN は切り替わるため、ホスト単体ではなく
+> `*.docker.com` で許可しておくこと。
 
 > **Setup script が5分に収まらない場合**は、`dpage/pgadmin4` と `phpmyadmin` の `docker pull` 行を削ってください。
 > `docker compose up` の時に遅延 pull されるだけで、動作は変わりません。
@@ -129,7 +135,8 @@ claude --teleport <session-id>
 
 | 症状 | 対処 |
 |---|---|
-| `cloud-status.sh` が `FAILED` を返す | `tmp/cloud-up.log` を確認する。イメージ pull 失敗ならネットワークアクセスレベルが Trusted か確認 |
+| `cloud-status.sh` が `FAILED` を返す | `tmp/cloud-up.log` を確認する |
+| Setup script やイメージ pull が `403 Forbidden`（`production.cloudfront.docker.com` 等） | 環境の Network access が **Custom + `*.docker.com`**（かつ既定リストのチェックあり）になっているか確認する。手順2を参照 |
 | `cloud-status.sh` が `TIMEOUT` を返す | `app-install` に時間がかかっている可能性がある。`TIMEOUT=1800 docker/bin/cloud-status.sh` で待ち直す |
 | `cloud-status.sh` が `LOCAL` を返す | クラウドセッションではない。ローカルの手順は `.github/instructions/local.instructions.md` を参照 |
 | 起動をやり直したい | `rm -f tmp/cloud-up.done tmp/cloud-up.failed && CLOUD_FORCE=1 docker/bin/cloud-up.sh` |

@@ -62,6 +62,8 @@ curl -I http://localhost/
 
 - Xdebug は `cloud-up.sh` が `XDEBUG_MODE: "off"` に書き換えるため無効です（デバッガの接続先が無いため）。
 - VM のリソースは 4 vCPU / 16GB RAM / 30GB disk です。
-- ネットワークは既定の **Trusted** で、Docker Hub・packagist.org・GitHub に到達できます。
+- ネットワークは **Custom**（`*.docker.com` を追加＋既定リストを含める）で運用します。既定の Trusted のままだと
+  Docker Hub の blob 配信先が `production.cloudfront.docker.com` にリダイレクトされたときに `403 Forbidden` となり、
+  イメージの pull が全滅します。
 - `docker/docker-compose.yml` / `docker/.env` / `config/.env` / `vendor/` は `.gitignore` 対象のため、
   clone 直後には存在しません。`cloud-up.sh` が生成・インストールします。
