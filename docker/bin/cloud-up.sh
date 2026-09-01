@@ -30,10 +30,51 @@ fi
 mkdir -p "$TMP_DIR"
 
 # 多重起動の防止（既に別プロセスが動いていれば何もしない）
-if ! mkdir "$LOCK_FILE" 2>/dev/null; then
-    exit 0
-fi
-trap 'rmdir "$LOCK_FILE" 2>/dev/null' EXIT
+#
+# ロックは mkdir の原子性で取るが、VM が実行中に強制停止されると trap が走らず
+# ロックディレクトリが残る。それを放置すると以降 cloud-up.sh が永久に即終了し、
+# 起動処理が二度と走らなくなる。保持プロセスの生存を確認し、死んでいれば奪う。
+STALE_LOCK_TAKEN=0
+
+current_boot_id() {
+    cat /proc/sys/kernel/random/boot_id 2>/dev/null
+}
+
+write_lock_owner() {
+    echo "$$" >"${LOCK_FILE}/pid" 2>/dev/null
+    current_boot_id >"${LOCK_FILE}/boot_id" 2>/dev/null
+}
+
+# ロックを保持しているプロセスが今も生きているか
+lock_holder_is_alive() {
+    lock_boot_id="$(cat "${LOCK_FILE}/boot_id" 2>/dev/null)"
+    now_boot_id="$(current_boot_id)"
+    # 別ブートで作られたロックは無条件に stale（PID の使い回しで誤判定しないため）
+    if [ -n "$now_boot_id" ] && [ "$lock_boot_id" != "$now_boot_id" ]; then
+        return 1
+    fi
+    lock_pid="$(cat "${LOCK_FILE}/pid" 2>/dev/null)"
+    [ -n "$lock_pid" ] || return 1
+    kill -0 "$lock_pid" 2>/dev/null
+}
+
+acquire_lock() {
+    if mkdir "$LOCK_FILE" 2>/dev/null; then
+        write_lock_owner
+        return 0
+    fi
+    if lock_holder_is_alive; then
+        return 1
+    fi
+    rm -rf "$LOCK_FILE"
+    mkdir "$LOCK_FILE" 2>/dev/null || return 1
+    write_lock_owner
+    STALE_LOCK_TAKEN=1
+    return 0
+}
+
+acquire_lock || exit 0
+trap 'rm -rf "$LOCK_FILE" 2>/dev/null' EXIT
 
 exec >>"$LOG_FILE" 2>&1
 
@@ -49,19 +90,50 @@ fail() {
 
 rm -f "$DONE_FILE" "$FAILED_FILE"
 log "===== cloud-up start ====="
+[ "$STALE_LOCK_TAKEN" -eq 1 ] && log "Removed a stale lock left by a previous run."
 
 #
 # 1. Docker デーモンの起動
 #
-if ! docker info >/dev/null 2>&1; then
-    log "Starting dockerd."
-    service docker start >/dev/null 2>&1 || dockerd >/tmp/dockerd.log 2>&1 &
+# VM 再起動をまたぐと /run/docker/containerd/containerd.pid が残る。
+# 再起動後は同じ PID が別プロセスに再利用されていることがあり、その場合 dockerd は
+#   failed to start containerd: ... process with PID N is still running
+# で起動を拒否する（実際に踏んだ）。
+# dockerd も containerd も動いていないときに限り、残骸を掃除する。
+cleanup_stale_docker_pids() {
+    pgrep -x dockerd >/dev/null 2>&1 && return 0
+    pgrep -x containerd >/dev/null 2>&1 && return 0
+    rm -f /run/docker/containerd/containerd.pid \
+          /var/run/docker/containerd/containerd.pid \
+          /run/docker.pid \
+          /var/run/docker.pid 2>/dev/null
+    return 0
+}
+
+wait_for_dockerd() {
     for _ in $(seq 1 60); do
-        docker info >/dev/null 2>&1 && break
+        docker info >/dev/null 2>&1 && return 0
         sleep 1
     done
+    return 1
+}
+
+if ! docker info >/dev/null 2>&1; then
+    log "Starting dockerd."
+    cleanup_stale_docker_pids
+    service docker start >/dev/null 2>&1 || dockerd >>/tmp/dockerd.log 2>&1 &
+    wait_for_dockerd
 fi
-docker info >/dev/null 2>&1 || fail "dockerd is not available."
+
+# 1回目が残骸で弾かれることがあるため、掃除してもう一度だけ試す
+if ! docker info >/dev/null 2>&1; then
+    log "dockerd did not start. Cleaning up stale state and retrying."
+    cleanup_stale_docker_pids
+    dockerd >>/tmp/dockerd.log 2>&1 &
+    wait_for_dockerd
+fi
+
+docker info >/dev/null 2>&1 || fail "dockerd is not available. See /tmp/dockerd.log."
 log "dockerd is ready."
 
 #
@@ -134,6 +206,18 @@ else
     docker exec bc-php sh -c 'cd /var/www/html && composer run-script --timeout=3000 app-install' || fail "app-install failed."
     log "app-install finished."
 fi
+
+#
+# 7. tmp/logs の所有者を www-data に揃える
+#    docker exec は root で走るため、root で bin/cake や composer を叩くと
+#    tmp/cache 配下に root 所有のキャッシュファイルが残る。Web からのアクセスは
+#    www-data で動くため、そのファイルを上書きできず
+#    「_bc_env_ cache was unable to write 'enable_plugins'」で 500 になる。
+#    起動のたびに揃え直しておく。
+#
+log "Fixing ownership of tmp and logs."
+docker exec bc-php sh -c 'chown -R www-data:www-data /var/www/html/tmp/cache /var/www/html/logs' \
+    || log "WARNING: Failed to fix ownership. The site may return 500."
 
 touch "$DONE_FILE"
 log "===== cloud-up done ====="
