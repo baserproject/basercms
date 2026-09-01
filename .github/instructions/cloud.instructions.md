@@ -58,12 +58,23 @@ SessionStart フックが発火していてもいなくても、VM が再起動�
 `cloud-status.sh` の出力末尾に `--- git / PR ---` として、`remote` / `branch` / `gh` の
 状態が出ます。**作業を始める前にここを見ること。**
 
-`WARNING` が出ている環境からは **push も PR 作成もできません**。
-その場合は次のように扱ってください。
+`WARNING` が出ていても、**環境の作り直しは不要です。このセッションのまま復旧できます。**
 
-- 実装とユニットテストは通常どおり進めてよい
-- ただし **VM は揮発するため、コミットしただけでは成果物が失われる**
-- 作業の最後に、必ずパッチとして書き出してユーザーへ渡すこと
+1. `git remote add origin git@github.com:baserproject/basercms.git`
+2. push が `access denied by the git proxy` の 403 になったら、`add_repo` ツールで
+   リポジトリをセッションに追加する（`owner: baserproject` / `repo: basercms` /
+   `access: push`）。追加後は `git push -u origin <ブランチ名>` が通る
+3. PR は `gh pr create` が GraphQL で 403 になるため、**REST で作る**
+
+   ```bash
+   gh api repos/baserproject/basercms/pulls --method POST --input /tmp/pr.json
+   ```
+
+`gh auth status` が `GH_TOKEN is invalid` を返すのは正常です。認証は proxy が注入します。
+詳細は [`docs/cloud/README.md`](../../docs/cloud/README.md) の「PR まで作れる環境にする」を参照。
+
+どうしても復旧できない場合のみ、**VM は揮発するため**成果物をパッチとして書き出し、
+`SendUserFile` でユーザーへ渡してください。
 
 ```bash
 git checkout -b <ブランチ名>
@@ -71,10 +82,6 @@ git add -A
 git commit -m "<メッセージ>"
 git format-patch -1 -o /tmp/patch
 ```
-
-書き出したパッチは `SendUserFile` でユーザーに渡します。
-環境自体の直し方は [`docs/cloud/README.md`](../../docs/cloud/README.md) の
-「PR まで作れる環境にする」を参照してください。
 
 **`cloud-status.sh` が確実な入口です。** SessionStart フックは `$CLAUDE_PROJECT_DIR` の解決が
 環境によって変わり、起動していないことがあります（作業ディレクトリが `/workspace` で

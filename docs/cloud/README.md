@@ -25,7 +25,7 @@ baserCMS の開発を、ローカルPCではなくクラウドVM上の Claude Co
 ターミナルで `/web-setup` を実行して `gh` のトークンを同期するか、
 claude.ai のオンボーディングで Claude GitHub App を認可します。
 
-> **ここを飛ばすと、セッション内で push も PR 作成もできません。**
+> **ここを飛ばすと、セッション開始直後は push も PR 作成もできません。**
 > GitHub に接続されていない環境では、clone に remote が付かず認証情報も入らないため、
 > `git remote` が空・detached HEAD・`gh` 未認証という状態になります。
 > 実装とテストはできてしまうので、**PR を作る段になって初めて詰まります**。
@@ -145,14 +145,16 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
 
 「判断はローカル、実行はクラウド」を成立させるには、セッション内で
 実装 → ユニットテスト → **PR 作成**まで完結できる必要があります。
-そのために必要なのは次の3つです。いずれもリポジトリ側のスクリプトでは用意できず、
-**環境の作り方で決まります**。
+そのために必要なのは次の3つです。
 
-| 必要なもの | どこで入るか |
-|---|---|
-| `origin`（push 先） | 環境作成時に GitHub リポジトリを接続する |
-| push 認証 | 手順1の GitHub 連携（Claude GitHub App の認可 / `/web-setup`） |
-| `gh` コマンド | 標準環境には同梱。無ければ Setup script が導入する |
+| 必要なもの | どこで入るか | 後から足せるか |
+|---|---|---|
+| `origin`（push 先） | 環境作成時に GitHub リポジトリを接続する | **足せる**（`git remote add`） |
+| push 認証 | 手順1の GitHub 連携（Claude GitHub App の認可 / `/web-setup`） | **足せる**（`add_repo` ツール） |
+| `gh` コマンド | 標準環境には同梱。無ければ Setup script が導入する | **足せる**（`apt-get install gh`） |
+
+揃っていない環境に当たっても、**セッションを作り直さずその場で復旧できます**。
+手順は「[繋がっていなかった場合](#繋がっていなかった場合環境の作り直しは不要)」を参照。
 
 ### 接続できているかの確認
 
@@ -169,17 +171,65 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
 `remote: なし` / `branch: なし（detached HEAD）` / `gh: 未インストール` のいずれかが出て
 `WARNING` が表示された場合、その環境からは push も PR 作成もできません。
 
-### 繋がっていなかった場合
+### 繋がっていなかった場合（環境の作り直しは不要）
 
-環境が GitHub リポジトリに接続されていません。**環境を作り直してください。**
-既存環境の設定変更では remote は後付けされません。
+**そのセッションのまま復旧できます。** 環境を作り直す必要はありません。
 
-1. 手順1の GitHub 連携を済ませる
-2. 環境を作成し直し、**対象リポジトリ（`baserproject/basercms`）を接続する**
-3. 新しいセッションで `docker/bin/cloud-status.sh` を実行し、上記の表示になることを確認する
+#### 1. remote を追加する
 
-作り直すまでの間も、開発とユニットテストは通常どおり行えます。
+```bash
+git remote add origin git@github.com:baserproject/basercms.git
+```
+
+SSH 形式で書いても、agent proxy の設定で HTTPS に書き換えられます。
+
+#### 2. リポジトリをセッションの許可対象に加える
+
+この時点で push すると、次のように 403 で弾かれます。
+
+```
+remote: access denied by the git proxy: baserproject/basercms is not in
+        this session's authorized repository set, so the proxy will not
+        inject a credential for it. To fix, add the repository to the
+        session's sources.
+```
+
+**エラーが指しているとおり、リポジトリをセッションのソースに追加すれば通ります。**
+Claude Code のセッションからは `add_repo` ツール（`owner: baserproject` /
+`repo: basercms` / `access: push`）で追加します。
+追加後は `git push -u origin <ブランチ名>` がそのまま成功します。
+
+> 既にフルクローンが手元にある場合、`add_repo` の案内に従って別途クローンし直す必要は
+> ありません。クレデンシャルの注入対象になるだけなので、既存のクローンから push できます。
+
+#### 3. PR は REST API で作る
+
+`gh pr create` は **GraphQL を使うため 403 になります**。
+
+```
+HTTP 403: This GraphQL query (RepositoryInfo, sent by gh pr create ...)
+is not enabled for this session — only the pinned set of PR-review
+operations is served. Use REST via `gh api repos/{owner}/{repo}/...` instead.
+```
+
+REST なら通るので、`gh api` で作成します。本文に日本語や記号が入るため、
+JSON ファイルにして `--input` で渡すのが確実です。
+
+```bash
+gh api repos/baserproject/basercms/pulls \
+  --method POST --input /tmp/pr.json
+```
+
+`/tmp/pr.json` は `{"title": "...", "head": "<ブランチ名>", "base": "5.4.x", "body": "..."}` の形式です。
+
+> `gh auth status` は `GH_TOKEN is invalid` と出ますが、これは正常です。
+> git の認証は proxy が注入しており、`gh api` も proxy 経由で通ります。
+> `cloud-status.sh` の `gh: 未認証` 表示もこれを拾っているだけで、PR は作れます。
+
+#### どうしても復旧できない場合
+
 成果物は次のようにパッチとして書き出し、手元のクローンへ持っていってください。
+VM は揮発するため、コミットしただけでは失われます。
 
 ```bash
 git checkout -b <ブランチ名>
@@ -252,8 +302,11 @@ claude --teleport <session-id>
 | コンテナ内の HTTPS が `SSL certificate problem: self-signed certificate in certificate chain` | クラウドの通信は agent proxy 経由のため、その CA をコンテナが信頼している必要がある。`cloud-up.sh` が `/root/.ccr/ca-bundle.crt` を `bc-php` に導入する。ログに `No agent proxy CA found` が出ていれば CA のパスが変わっている可能性があるので確認する |
 | `composer` が 300 秒で打ち切られる | `cloud-up.sh` は `composer run-script --timeout=3000` で実行している。手動で叩くときも `--timeout` を付ける |
 | `cloud-status.sh` が `TIMEOUT` を返す | `app-install` に時間がかかっている可能性がある。`TIMEOUT=1800 docker/bin/cloud-status.sh` で待ち直す |
-| `cloud-status.sh` の `--- git / PR ---` に `WARNING` が出る | 環境が GitHub リポジトリに接続されていない。push も PR 作成もできない。「[PR まで作れる環境にする](#pr-まで作れる環境にする)」を参照 |
-| `git push` で `'origin' does not appear to be a git repository` | 同上。remote が設定されていない。環境の作り直しが必要 |
+| `cloud-status.sh` の `--- git / PR ---` に `WARNING` が出る | 環境が GitHub リポジトリに接続されていない。**環境の作り直しは不要**で、その場で復旧できる。「[繋がっていなかった場合](#繋がっていなかった場合環境の作り直しは不要)」を参照 |
+| `git push` で `'origin' does not appear to be a git repository` | remote が未設定。`git remote add origin git@github.com:baserproject/basercms.git` で追加する |
+| `git push` が `access denied by the git proxy: ... not in this session's authorized repository set` | proxy がクレデンシャルを注入していない。`add_repo` ツールでリポジトリをセッションに追加すれば通る |
+| `gh pr create` が `HTTP 403: This GraphQL query ... is not enabled for this session` | GraphQL が塞がれている。`gh api repos/{owner}/{repo}/pulls --method POST --input <json>` の REST で作る |
+| `gh auth status` が `The token in GH_TOKEN is invalid` | 正常。git も `gh api` も proxy が認証を注入するため、この表示のままで push も PR 作成もできる |
 | `gh: command not found` | Setup script が古い。更新後の `docs/cloud/setup-script.sh` を環境設定へ貼り直して環境を再作成する |
 | `cloud-status.sh` が `LOCAL` を返す | クラウドセッションではない。ローカルの手順は `.github/instructions/local.instructions.md` を参照 |
 | 起動をやり直したい | `rm -f tmp/cloud-up.done tmp/cloud-up.failed && CLOUD_FORCE=1 docker/bin/cloud-up.sh` |

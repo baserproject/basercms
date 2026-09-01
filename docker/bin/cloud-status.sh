@@ -79,10 +79,12 @@ show_git_status() {
     echo "--- git / PR ---"
     remote_name="$(git -C "$ROOT_DIR" remote 2>/dev/null | head -1)"
     branch_name="$(git -C "$ROOT_DIR" branch --show-current 2>/dev/null)"
+    remote_url=""
     git_warn=0
 
     if [ -n "$remote_name" ]; then
-        echo "  remote: $(git -C "$ROOT_DIR" remote get-url "$remote_name" 2>/dev/null)"
+        remote_url="$(git -C "$ROOT_DIR" remote get-url "$remote_name" 2>/dev/null)"
+        echo "  remote: ${remote_url}"
     else
         echo "  remote: なし"
         git_warn=1
@@ -95,11 +97,15 @@ show_git_status() {
         git_warn=1
     fi
 
+    # gh auth status はトークンが無効でも終了コード 0 を返すため判定に使えない。
+    # 実際に PR を作れるかは REST API へ到達できるかで決まるので、そちらを見る。
+    # 認証は agent proxy が注入するため、GH_TOKEN が無効表示でも到達できる。
     if command -v gh >/dev/null 2>&1; then
-        if timeout 10 gh auth status >/dev/null 2>&1; then
-            echo "  gh:     認証済み"
+        gh_repo="$(echo "$remote_url" | sed -e 's#^.*github\.com[:/]##' -e 's#\.git$##')"
+        if [ -n "$gh_repo" ] && timeout 20 gh api "repos/${gh_repo}" --jq .full_name >/dev/null 2>&1; then
+            echo "  gh:     GitHub API へ到達可（PR 作成可）"
         else
-            echo "  gh:     未認証"
+            echo "  gh:     GitHub API へ到達不可"
             git_warn=1
         fi
     else
@@ -109,11 +115,10 @@ show_git_status() {
 
     if [ "$git_warn" -eq 1 ]; then
         echo
-        echo "  WARNING: この環境からは push / PR 作成ができません。"
-        echo "    環境が GitHub リポジトリに接続されていない可能性があります。"
-        echo "    対処は docs/cloud/README.md の「PR まで作れる環境にする」を参照。"
-        echo "    開発とテストは可能ですが、VM は揮発するため成果物は"
-        echo "    パッチ（git format-patch）として書き出して手元へ渡すこと。"
+        echo "  WARNING: 現状のままでは push / PR 作成ができません。"
+        echo "    ただし環境の作り直しは不要で、このセッションのまま復旧できます。"
+        echo "    remote 追加 → add_repo ツールで許可 → PR は gh api の REST で作成。"
+        echo "    手順は docs/cloud/README.md の「PR まで作れる環境にする」を参照。"
     fi
 }
 
