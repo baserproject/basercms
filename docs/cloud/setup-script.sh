@@ -47,11 +47,23 @@ wait $pull_pids
 # 最初から入っていることが多いため、無いときだけ入れる。
 # 失敗してもセッション起動を止めないよう、握りつぶして先へ進む。
 #
+# 【重要】`apt-get update && apt-get install` と繋いではいけない。
+# このイメージには deadsnakes / ondrej-php の PPA が入っており、
+# ppa.launchpadcontent.net がネットワークの許可リストに無いため 403 で失敗する。
+# 環境によってはこれが警告ではなくエラー扱いになり、apt-get update が非ゼロ終了して
+# gh のインストールまで巻き添えで落ちる（実際にこれで gh が入っていなかった）。
+# gh は Ubuntu 本体（noble-updates/universe）にあり、そちらのリストが取れていれば
+# 入るので、update の終了コードで install をゲートしない。
+#
+# なお `-o Dir::Etc::sourceparts=/dev/null` で PPA を避けるのは誤り。
+# Ubuntu noble ではメインアーカイブも /etc/apt/sources.list.d/ubuntu.sources に
+# あり（/etc/apt/sources.list はコメントのみ）、本体ごと無効化されて
+# 「Unable to locate package gh」になる。
 if ! command -v gh >/dev/null 2>&1; then
     (
-        apt-get update -qq \
-            && apt-get install -y -qq --no-install-recommends gh
-    ) >/tmp/gh-install.log 2>&1 || true
+        apt-get update -qq || true
+        apt-get install -y -qq --no-install-recommends gh || true
+    ) >/tmp/gh-install.log 2>&1
     command -v gh >/dev/null 2>&1 \
         && echo "gh installed." \
         || echo "WARNING: failed to install gh. See /tmp/gh-install.log."
