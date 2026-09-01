@@ -9,7 +9,7 @@ baserCMS の開発を、ローカルPCではなくクラウドVM上の Claude Co
 
 | 段階 | 実行されるもの | 内容 |
 |---|---|---|
-| 環境の初回セットアップ | `docs/cloud/setup-script.sh`（**claude.ai の環境設定に貼る**） | dockerd 起動と Docker イメージの事前 pull。結果は環境キャッシュに保存され、2回目以降はスキップされる |
+| 環境のセットアップ | `docs/cloud/setup-script.sh`（**claude.ai の環境設定に貼る**） | dockerd 起動、Docker イメージの事前 pull、`gh` の導入、SessionStart フックの設置。**セッション開始のたびに、リポジトリのクローンと Claude Code の起動より前に実行される**（pull 済みイメージは環境キャッシュに載るため2回目以降は速い） |
 | セッション開始のたび | `docker/bin/cloud-up.sh`（`.claude/settings.json` の SessionStart フックからバックグラウンド起動） | compose ファイル生成 → `docker compose up -d` → MySQL 待機 → `composer run-script app-install` |
 | 作業開始前の確認 | `docker/bin/cloud-status.sh` | 起動完了を待って状態を表示する |
 
@@ -88,6 +88,13 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
 
 > **Setup script が5分に収まらない場合**は、`dpage/pgadmin4` と `phpmyadmin` の `docker pull` 行を削ってください。
 > `docker compose up` の時に遅延 pull されるだけで、動作は変わりません。
+
+> **Setup script の中で引数なしの `wait` を書かないこと。**
+> dockerd はバックグラウンドで起動したまま常駐させるため、引数なしの `wait` は
+> その終了しないジョブを待ち続けて**永久に返りません**。実際にこれで Setup script が
+> ハングし、**リポジトリのクローンも以降の処理も一切行われず `/workspace` が空のまま
+> セッションが始まる**という状態になりました。並列実行を待つ必要があるときは、
+> ジョブ ID を集めて `wait $pids` のように対象を限定してください。
 
 ### 3. SessionStart フックの置き場所に注意する
 

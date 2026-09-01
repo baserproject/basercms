@@ -14,18 +14,31 @@
 # 載るため、2回目以降のセッション起動が大幅に短縮されます。
 #
 
-service docker start || dockerd >/tmp/dockerd.log 2>&1 &
+# dockerd はこのあとも常駐させる必要があるため、バックグラウンドで起動する。
+# `&` は `service docker start || dockerd ...` の || リスト全体に掛かるので、
+# service 側が失敗すると dockerd がこのシェルのジョブとして残り続ける。
+service docker start >/dev/null 2>&1 || dockerd >/tmp/dockerd.log 2>&1 &
 for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 1; done
 
 # 5分制限に収めるため並列で pull する。
 # 失敗しても docker compose up の時に遅延 pull されるので致命的ではない。
-docker pull baserproject/basercms:php8.5 || true &
-docker pull mysql:8.0 || true &
-docker pull sj26/mailcatcher:latest || true &
-docker pull phpmyadmin || true &
-docker pull postgres:15.2 || true &
-docker pull dpage/pgadmin4:7.8 || true &
-wait
+#
+# 【重要】引数なしの `wait` を書いてはいけない。
+# 引数なしの `wait` は上の dockerd のジョブも待ってしまい、dockerd は終了しないため
+# 永久に返らない。実際にこれでセットアップスクリプトがハングし、リポジトリの
+# クローンもこの下の処理も一切行われない状態になった。
+# pull のジョブ ID だけを明示的に待つこと。
+pull_pids=""
+for image in baserproject/basercms:php8.5 \
+             mysql:8.0 \
+             sj26/mailcatcher:latest \
+             phpmyadmin \
+             postgres:15.2 \
+             dpage/pgadmin4:7.8; do
+    docker pull "$image" >/dev/null 2>&1 &
+    pull_pids="${pull_pids} $!"
+done
+wait $pull_pids
 
 #
 # gh（GitHub CLI）の導入
