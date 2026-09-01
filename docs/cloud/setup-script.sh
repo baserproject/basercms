@@ -14,11 +14,18 @@
 # 載るため、2回目以降のセッション起動が大幅に短縮されます。
 #
 
+# 各段階の経過秒を出す。Setup script が遅いときに、どこが支配的かを
+# 環境のセットアップログから切り分けられるようにするため。
+SETUP_STARTED_AT=$(date +%s)
+step() { echo "[+$(( $(date +%s) - SETUP_STARTED_AT ))s] $*"; }
+
 # dockerd はこのあとも常駐させる必要があるため、バックグラウンドで起動する。
 # `&` は `service docker start || dockerd ...` の || リスト全体に掛かるので、
 # service 側が失敗すると dockerd がこのシェルのジョブとして残り続ける。
+step "starting dockerd"
 service docker start >/dev/null 2>&1 || dockerd >/tmp/dockerd.log 2>&1 &
 for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 1; done
+step "dockerd ready"
 
 # 5分制限に収めるため並列で pull する。
 # 失敗しても docker compose up の時に遅延 pull されるので致命的ではない。
@@ -28,17 +35,19 @@ for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 1; done
 # 永久に返らない。実際にこれでセットアップスクリプトがハングし、リポジトリの
 # クローンもこの下の処理も一切行われない状態になった。
 # pull のジョブ ID だけを明示的に待つこと。
+# pull するのはクラウドで実際に起動するイメージだけにする。
+# 起動するサービスは cloud-up.sh の CLOUD_SERVICES と一致させること。
+# phpMyAdmin / PostgreSQL / pgAdmin は起動しないため pull もしない（計 2.1GB 削減）。
+step "pulling images"
 pull_pids=""
 for image in baserproject/basercms:php8.5 \
              mysql:8.0 \
-             sj26/mailcatcher:latest \
-             phpmyadmin \
-             postgres:15.2 \
-             dpage/pgadmin4:7.8; do
+             sj26/mailcatcher:latest; do
     docker pull "$image" >/dev/null 2>&1 &
     pull_pids="${pull_pids} $!"
 done
 wait $pull_pids
+step "images pulled"
 
 #
 # gh（GitHub CLI）の導入
@@ -60,6 +69,7 @@ wait $pull_pids
 # あり（/etc/apt/sources.list はコメントのみ）、本体ごと無効化されて
 # 「Unable to locate package gh」になる。
 if ! command -v gh >/dev/null 2>&1; then
+    step "installing gh"
     (
         apt-get update -qq || true
         apt-get install -y -qq --no-install-recommends gh || true
@@ -67,6 +77,7 @@ if ! command -v gh >/dev/null 2>&1; then
     command -v gh >/dev/null 2>&1 \
         && echo "gh installed." \
         || echo "WARNING: failed to install gh. See /tmp/gh-install.log."
+    step "gh done"
 fi
 
 #
@@ -102,4 +113,5 @@ if [ ! -e /workspace/.claude/settings.json ]; then
 CLAUDE_SETTINGS_JSON
 fi
 
+step "setup script finished"
 exit 0
