@@ -18,15 +18,21 @@ Claude Code on the web（クラウドセッション）で作業する場合の�
 | PHP コンテナ名 | `bc-php` |
 | DB コンテナ名 | `bc-db`（MySQL 8.0） |
 | baserCMS の配置先 | `/var/www/html` |
-| その他のコンテナ | `bc-smtp`（mailcatcher） / `bc-pma`（phpMyAdmin） |
+| その他のコンテナ | `bc-smtp`（mailcatcher） |
 | DB 接続情報 | host `bc-db` / user `root` / password `root` / database `basercms` |
 
-> **クラウドでは `bc-pg`（PostgreSQL）と `bc-pga`（pgAdmin）を起動しない。**
-> PostgreSQL はユニットテストで使われておらず、pgAdmin はその管理画面なので出番がない。
-> さらに pgAdmin はバインドする `docker/pgadmin` を compose が root 所有で作るため、
-> uid 5050 のコンテナが書き込めず起動直後に落ちる。`docker-compose.yml.default` は
-> ローカル・CI と共通のまま、`cloud-up.sh` が起動するサービスを明示して外している。
-> クラウドで PostgreSQL を触る必要が出たら、`cloud-up.sh` の `CLOUD_SERVICES` を見直すこと。
+> **クラウドでは `bc-db` / `bc-php` / `bc-smtp` の3つだけを起動する。**
+> `bc-pg`（PostgreSQL）・`bc-pga`（pgAdmin）・`bc-pma`（phpMyAdmin）は起動しない。
+> PostgreSQL はユニットテストで使われておらず、GUI 管理ツールはクラウドVMのポートに
+> 外から到達できないため人が画面を開けない。DB の中身は次のほうが速く確実。
+>
+> ```bash
+> docker exec bc-db mysql -uroot -proot basercms -e "SELECT ..."
+> ```
+>
+> `docker-compose.yml.default` はローカル・CI と共通のまま、`cloud-up.sh` が起動する
+> サービスを明示して外している。必要になったら `CLOUD_SERVICES` と、
+> `docs/cloud/setup-script.sh` が pull するイメージの一覧を**両方**見直すこと。
 
 > **コンテナ名は環境によって異なる**。ローカルでは `local.instructions.md` の記載（例: `basercms`）に従う。
 > クラウドでは `bc-php`。いずれの場合も、実行前に `docker ps` で実際の稼働コンテナを確認すること。

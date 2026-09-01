@@ -22,8 +22,9 @@ LOCK_FILE="${TMP_DIR}/cloud-up.lock"
 DONE_FILE="${TMP_DIR}/cloud-up.done"
 FAILED_FILE="${TMP_DIR}/cloud-up.failed"
 
-# クラウドで起動する compose サービス（bc-pg / bc-pga は起動しない。理由は手順3を参照）
-CLOUD_SERVICES="bc-db bc-php bc-smtp bc-pma"
+# クラウドで起動する compose サービス（GUI 管理ツールと PostgreSQL は起動しない。理由は手順3）
+# setup-script.sh が pull するイメージの一覧と一致させること。
+CLOUD_SERVICES="bc-db bc-php bc-smtp"
 
 # クラウドセッション以外では何もしない
 if [ -z "${CLAUDE_CODE_REMOTE_SESSION_ID:-}" ] && [ "${CLOUD_FORCE:-0}" != "1" ]; then
@@ -158,11 +159,15 @@ fi
 
 #
 # 3. コンテナの起動
-#    クラウドでは bc-pg / bc-pga（PostgreSQL と pgAdmin）を起動しない。
+#    クラウドでは bc-pg / bc-pga（PostgreSQL・pgAdmin）と bc-pma（phpMyAdmin）を
+#    起動しない。
 #    - PostgreSQL はユニットテストで使われていない（実参照は config/app.php のコメントのみ）
 #    - pgAdmin はその管理画面なので、あわせて出番がない
 #    - pgAdmin は ./pgadmin をバインドするが、クラウドでは compose が root:root 0755 で
 #      作るため uid 5050 のコンテナが書き込めず、起動直後に Exited(1) で落ちる
+#    - phpMyAdmin はクラウドVMのポートに外から到達できないため、人が画面を開けない。
+#      DB の中身は次のほうが速く確実で、GUI を経由する意味がない:
+#        docker exec bc-db mysql -uroot -proot basercms -e "SELECT ..."
 #    起動するサービスを明示することで、docker-compose.yml.default はローカル・CI と
 #    共通のまま変えずに済む。
 log "docker compose up -d (${CLOUD_SERVICES})"

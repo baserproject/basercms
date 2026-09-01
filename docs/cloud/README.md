@@ -16,7 +16,10 @@ baserCMS の開発を、ローカルPCではなくクラウドVM上の Claude Co
 `docker/docker-compose.yml` は `.gitignore` 対象でクラウドVMには存在しないため、
 `cloud-up.sh` が `docker-compose.yml.default` からコピーして生成します
 （GitHub Actions の `.github/workflows/test.yml` と同じ手順）。
-起動されるサービスはローカルと同一のフルスタック（bc-db / bc-php / bc-smtp / bc-pma / bc-pg / bc-pga）です。
+クラウドで起動するのは `bc-db` / `bc-php` / `bc-smtp` の3つだけです。
+GUI 管理ツール（phpMyAdmin / pgAdmin）はクラウドVMのポートに外から到達できず開けないため、
+PostgreSQL はユニットテストで使われていないため、いずれも起動しません
+（`cloud-up.sh` の `CLOUD_SERVICES` で制御）。ローカルはフルスタックのままです。
 
 ## セットアップ手順
 
@@ -86,8 +89,11 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
 
 #### 共通の注意
 
-> **Setup script が5分に収まらない場合**は、`dpage/pgadmin4` と `phpmyadmin` の `docker pull` 行を削ってください。
-> `docker compose up` の時に遅延 pull されるだけで、動作は変わりません。
+> **pull するのはクラウドで実際に起動するイメージだけにすること。**
+> 起動しないイメージを pull しても、5分の制限を圧迫してディスクを食うだけです。
+> `docker/bin/cloud-up.sh` の `CLOUD_SERVICES` と一覧を一致させてください。
+> 現在は `baserproject/basercms` / `mysql` / `sj26/mailcatcher` の3つだけです
+> （phpMyAdmin・PostgreSQL・pgAdmin を外して 2.1GB 削減）。
 
 > **Setup script の中で引数なしの `wait` を書かないこと。**
 > dockerd はバックグラウンドで起動したまま常駐させるため、引数なしの `wait` は
