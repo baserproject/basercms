@@ -9,7 +9,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "nohup bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$PWD\" /workspace/repo; do [ -n \"$d\" ] && [ -f \"$d/docker/bin/cloud-up.sh\" ] && exec bash \"$d/docker/bin/cloud-up.sh\"; done' >>/tmp/cloud-up-hook.log 2>&1 &"
+            "command": "nohup bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$PWD\" /workspace/*; do [ -n \"$d\" ] && [ -f \"$d/docker/bin/cloud-up.sh\" ] && { echo \"[$(date +%FT%T)] SessionStart hook fired. root=$d\"; exec bash \"$d/docker/bin/cloud-up.sh\"; }; done' >>/tmp/cloud-up-hook.log 2>&1 &"
           }
         ]
       }

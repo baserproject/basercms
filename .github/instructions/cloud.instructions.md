@@ -26,16 +26,55 @@ Claude Code on the web（クラウドセッション）で作業する場合の�
 
 ## 作業開始前の確認
 
-セッション開始時に `.claude/settings.json` の SessionStart フックが `docker/bin/cloud-up.sh` を
-**バックグラウンドで**起動しており、`docker compose up` と `composer run-script app-install` が
-進行中の場合があります。**作業を始める前に必ず次を実行して完了を待つこと。**
+**作業を始める前に必ず次を実行して完了を待つこと。**
 
 ```bash
 docker/bin/cloud-status.sh
 ```
 
 `READY` が出るまでは、テストもコマンド実行も失敗します。
-`FAILED` / `TIMEOUT` の場合は `tmp/cloud-up.log` を確認してください。
+
+このスクリプトは状態を表示するだけでなく、**未起動なら `cloud-up.sh` を起動して復旧まで面倒を見ます**。
+SessionStart フックが発火していてもいなくても、VM が再起動してコンテナが消えていても、
+これ一本で `READY` まで持っていけます（多重起動は `cloud-up.sh` 側のロックで防がれます）。
+
+出力の意味は次のとおりです。
+
+| 出力 | 意味 |
+|---|---|
+| `READY` | dockerd と `bc-php` / `bc-db` の**稼働を実際に確認済み**。作業を開始してよい |
+| `STALE` | 完了マークは残っていたが実体が消えていた（VM 再起動）。破棄して起動し直す |
+| `STARTING` | 未起動だったので `cloud-up.sh` を起動した。完了まで待つ |
+| `FAILED` | 起動に失敗している。`tmp/cloud-up.log` を確認する。再試行は `rm -f tmp/cloud-up.failed` してから |
+| `TIMEOUT` | 既定 900 秒で完了しなかった。`TIMEOUT=1800 docker/bin/cloud-status.sh` で待ち直す |
+
+> **`tmp/cloud-up.done` の有無だけで起動を判断しないこと。** このマークはディスクに残るが、
+> dockerd とコンテナは VM 再起動で消える。マークだけを見ると「起動済み」と誤判定し、
+> 直後の `docker exec bc-php ...` が原因不明のエラーになる。
+> 必ず `cloud-status.sh`（実体の生存を確認する）を経由すること。
+
+## push / PR 作成の可否を最初に確認する
+
+`cloud-status.sh` の出力末尾に `--- git / PR ---` として、`remote` / `branch` / `gh` の
+状態が出ます。**作業を始める前にここを見ること。**
+
+`WARNING` が出ている環境からは **push も PR 作成もできません**。
+その場合は次のように扱ってください。
+
+- 実装とユニットテストは通常どおり進めてよい
+- ただし **VM は揮発するため、コミットしただけでは成果物が失われる**
+- 作業の最後に、必ずパッチとして書き出してユーザーへ渡すこと
+
+```bash
+git checkout -b <ブランチ名>
+git add -A
+git commit -m "<メッセージ>"
+git format-patch -1 -o /tmp/patch
+```
+
+書き出したパッチは `SendUserFile` でユーザーに渡します。
+環境自体の直し方は [`docs/cloud/README.md`](../../docs/cloud/README.md) の
+「PR まで作れる環境にする」を参照してください。
 
 **`cloud-status.sh` が確実な入口です。** SessionStart フックは `$CLAUDE_PROJECT_DIR` の解決が
 環境によって変わり、起動していないことがあります（作業ディレクトリが `/workspace` で
@@ -65,8 +104,17 @@ docker exec bc-php sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage p
 ## 画面の確認
 
 ```bash
-curl -I http://localhost/
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost/
 ```
+
+> **`docker exec` は root で走る。** root で `bin/cake` や `composer` を叩くと `tmp/cache` 配下に
+> root 所有のキャッシュファイルが残り、www-data で動く Web 側がそれを上書きできず
+> `_bc_env_ cache was unable to write 'enable_plugins'` で **500 になる**。
+> 500 が出たら次で復旧する（`cloud-up.sh` も起動のたびに同じことをしている）。
+>
+> ```bash
+> docker exec bc-php sh -c 'chown -R www-data:www-data /var/www/html/tmp/cache /var/www/html/logs'
+> ```
 
 クラウドVMにはブラウザのGUIはありませんが、`curl` によるレスポンス確認と、
 管理画面のHTMLを取得しての検証は可能です。
@@ -80,3 +128,8 @@ curl -I http://localhost/
   イメージの pull が全滅します。
 - `docker/docker-compose.yml` / `docker/.env` / `config/.env` / `vendor/` は `.gitignore` 対象のため、
   clone 直後には存在しません。`cloud-up.sh` が生成・インストールします。
+- SessionStart フックは **プロジェクトルート（`/workspace`）側の `.claude/settings.json`** で登録されます。
+  リポジトリ同梱の `.claude/settings.json` は、クローン先が `/workspace/repo` のように
+  プロジェクトルートの配下になるため**読み込まれません**。プロジェクトルート側への設置は
+  環境の Setup script（`docs/cloud/setup-script.sh`）が行います。
+  フックが発火したかどうかは `/tmp/cloud-up-hook.log` の有無で判別できます。
