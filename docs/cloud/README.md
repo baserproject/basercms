@@ -158,7 +158,7 @@ claude.ai のオンボーディングで Claude GitHub App を認可します。
 |---|---|---|
 | `origin`（push 先） | 環境作成時に GitHub リポジトリを接続する | **足せる**（`git remote add`） |
 | push 認証 | 手順1の GitHub 連携（Claude GitHub App の認可 / `/web-setup`） | **足せる**（`add_repo` ツール） |
-| `gh` コマンド | 標準環境には同梱。無ければ Setup script が導入する | **足せる**（`apt-get install gh`） |
+| `gh` コマンド | 標準環境には同梱。無ければ Setup script が導入する | **足せる**（`apt-get install gh`。`apt-get update` と `&&` で繋がないこと） |
 
 揃っていない環境に当たっても、**セッションを作り直さずその場で復旧できます**。
 手順は「[繋がっていなかった場合](#繋がっていなかった場合環境の作り直しは不要)」を参照。
@@ -314,7 +314,7 @@ claude --teleport <session-id>
 | `git push` が `access denied by the git proxy: ... not in this session's authorized repository set` | proxy がクレデンシャルを注入していない。`add_repo` ツールでリポジトリをセッションに追加すれば通る |
 | `gh pr create` が `HTTP 403: This GraphQL query ... is not enabled for this session` | GraphQL が塞がれている。`gh api repos/{owner}/{repo}/pulls --method POST --input <json>` の REST で作る |
 | `gh auth status` が `The token in GH_TOKEN is invalid` | 正常。git も `gh api` も proxy が認証を注入するため、この表示のままで push も PR 作成もできる |
-| `gh: command not found` | Setup script が古い。更新後の `docs/cloud/setup-script.sh` を環境設定へ貼り直して環境を再作成する |
+| `gh: command not found` | Setup script が古い。更新後の `docs/cloud/setup-script.sh` を環境設定へ貼り直す。手元で入れるなら `apt-get update -qq \|\| true` のあとに `apt-get install -y -qq --no-install-recommends gh`（`&&` で繋ぐと PPA の 403 で巻き添えになる） |
 | `cloud-status.sh` が `LOCAL` を返す | クラウドセッションではない。ローカルの手順は `.github/instructions/local.instructions.md` を参照 |
 | 起動をやり直したい | `rm -f tmp/cloud-up.done tmp/cloud-up.failed && CLOUD_FORCE=1 docker/bin/cloud-up.sh` |
 

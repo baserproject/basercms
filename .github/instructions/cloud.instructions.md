@@ -87,8 +87,20 @@ READY でも、`bc-php` / `bc-db` 以外のコンテナが落ちている場合�
 3. `gh: 未インストール` と出ていたら入れる（Ubuntu の universe にあるので数十秒）
 
    ```bash
-   apt-get update -qq && apt-get install -y -qq --no-install-recommends gh
+   apt-get update -qq || true
+   apt-get install -y -qq --no-install-recommends gh
    ```
+
+   > **`&&` で繋がないこと。** このイメージには deadsnakes / ondrej-php の PPA が入って
+   > おり、`ppa.launchpadcontent.net` が許可リストに無いため `apt-get update` が 403 で
+   > 失敗する。環境によっては警告ではなくエラー扱いになって非ゼロ終了するため、
+   > `&&` で繋ぐと `gh` のインストールまで巻き添えで落ちる。
+   > `gh` は Ubuntu 本体（`noble-updates/universe`）にあるので、PPA が落ちても入る。
+   >
+   > `-o Dir::Etc::sourceparts=/dev/null` で PPA を避けるのは**誤り**。noble では
+   > メインアーカイブも `/etc/apt/sources.list.d/ubuntu.sources` にあるため
+   > （`/etc/apt/sources.list` はコメントのみ）、本体ごと無効化されて
+   > `Unable to locate package gh` になる。
 
 4. PR は `gh pr create` が GraphQL で 403 になるため、**REST で作る**
 
