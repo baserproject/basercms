@@ -49,6 +49,13 @@ docker exec bc-php sh -c 'cd /var/www/html && composer run-script test'
 docker exec bc-php sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage plugins/baser-core/tests/TestCase/Model/Table/PagesTableTest.php 2>&1 | tail -20'
 ```
 
+> **`vendor/bin/phpunit` を直接叩く場合は、事前に一度 `bin/cake setup test` が必要。**
+> `composer run-script test` はこれを内部で実行するが、phpunit を直接呼ぶと未実行のまま弾かれる。
+>
+> ```bash
+> docker exec bc-php sh -c 'cd /var/www/html && bin/cake setup test'
+> ```
+
 ## 画面の確認
 
 ```bash

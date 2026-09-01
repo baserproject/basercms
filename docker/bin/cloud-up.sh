@@ -103,14 +103,35 @@ done
 log "MySQL is ready."
 
 #
-# 5. baserCMS のインストール
+# 5. コンテナへの CA 証明書の導入
+#    クラウドセッションの通信は agent proxy を経由するため、その CA を信頼しないと
+#    コンテナ内からの HTTPS が全て
+#    「SSL certificate problem: self-signed certificate in certificate chain」で失敗し、
+#    composer の dist ダウンロードが軒並みエラーになる。
+#    コンテナは毎セッション作り直されるため、毎回適用する。
+#
+CA_BUNDLE="/root/.ccr/ca-bundle.crt"
+if [ -e "$CA_BUNDLE" ]; then
+    log "Installing agent proxy CA into bc-php."
+    docker cp "$CA_BUNDLE" bc-php:/usr/local/share/ca-certificates/ccr-proxy.crt \
+        && docker exec bc-php sh -c 'update-ca-certificates' >/dev/null 2>&1 \
+        && log "CA is installed." \
+        || log "WARNING: Failed to install CA. HTTPS from the container may fail."
+else
+    log "No agent proxy CA found at ${CA_BUNDLE}. Skip."
+fi
+
+#
+# 6. baserCMS のインストール
 #    config/install.php が生成済みならインストール済みとみなす。
+#    composer の既定のプロセスタイムアウト（300秒）ではダウンロードが打ち切られるため
+#    --timeout で延長する。
 #
 if [ -e "${ROOT_DIR}/config/install.php" ]; then
     log "baserCMS is already installed. Skip app-install."
 else
     log "Running composer run-script app-install. (this takes a few minutes)"
-    docker exec bc-php sh -c 'cd /var/www/html && composer run-script app-install' || fail "app-install failed."
+    docker exec bc-php sh -c 'cd /var/www/html && composer run-script --timeout=3000 app-install' || fail "app-install failed."
     log "app-install finished."
 fi
 

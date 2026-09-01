@@ -137,6 +137,8 @@ claude --teleport <session-id>
 |---|---|
 | `cloud-status.sh` が `FAILED` を返す | `tmp/cloud-up.log` を確認する |
 | Setup script やイメージ pull が `403 Forbidden`（`production.cloudfront.docker.com` 等） | 環境の Network access が **Custom + `*.docker.com`**（かつ既定リストのチェックあり）になっているか確認する。手順2を参照 |
+| コンテナ内の HTTPS が `SSL certificate problem: self-signed certificate in certificate chain` | クラウドの通信は agent proxy 経由のため、その CA をコンテナが信頼している必要がある。`cloud-up.sh` が `/root/.ccr/ca-bundle.crt` を `bc-php` に導入する。ログに `No agent proxy CA found` が出ていれば CA のパスが変わっている可能性があるので確認する |
+| `composer` が 300 秒で打ち切られる | `cloud-up.sh` は `composer run-script --timeout=3000` で実行している。手動で叩くときも `--timeout` を付ける |
 | `cloud-status.sh` が `TIMEOUT` を返す | `app-install` に時間がかかっている可能性がある。`TIMEOUT=1800 docker/bin/cloud-status.sh` で待ち直す |
 | `cloud-status.sh` が `LOCAL` を返す | クラウドセッションではない。ローカルの手順は `.github/instructions/local.instructions.md` を参照 |
 | 起動をやり直したい | `rm -f tmp/cloud-up.done tmp/cloud-up.failed && CLOUD_FORCE=1 docker/bin/cloud-up.sh` |
