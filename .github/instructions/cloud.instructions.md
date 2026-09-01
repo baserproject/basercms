@@ -37,6 +37,12 @@ docker/bin/cloud-status.sh
 `READY` が出るまでは、テストもコマンド実行も失敗します。
 `FAILED` / `TIMEOUT` の場合は `tmp/cloud-up.log` を確認してください。
 
+**`cloud-status.sh` が確実な入口です。** SessionStart フックは `$CLAUDE_PROJECT_DIR` の解決が
+環境によって変わり、起動していないことがあります（作業ディレクトリが `/workspace` で
+リポジトリが `/workspace/repo` にクローンされるケース等）。その場合 `cloud-status.sh` は
+`NOT STARTED` を表示して自分で `cloud-up.sh` を起動するので、**フックが動いたかどうかを
+気にする必要はありません**。フックは先回りして起動しておくための最適化に過ぎません。
+
 ## ユニットテスト
 
 コンテナ名以外はローカルと同じです（詳細は `basercms-unittest` スキル）。

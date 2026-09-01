@@ -17,6 +17,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DOCKER_DIR="${ROOT_DIR}/docker"
 TMP_DIR="${ROOT_DIR}/tmp"
 LOG_FILE="${TMP_DIR}/cloud-up.log"
+LOCK_FILE="${TMP_DIR}/cloud-up.lock"
 DONE_FILE="${TMP_DIR}/cloud-up.done"
 FAILED_FILE="${TMP_DIR}/cloud-up.failed"
 TIMEOUT="${TIMEOUT:-900}"
@@ -41,6 +42,19 @@ show_detail() {
 if [ -z "${CLAUDE_CODE_REMOTE_SESSION_ID:-}" ] && [ "${CLOUD_FORCE:-0}" != "1" ]; then
     echo "LOCAL: クラウドセッションではありません。ローカルの実行環境は .github/instructions/local.instructions.md を参照してください。"
     exit 0
+fi
+
+#
+# cloud-up.sh が一度も走っていない場合はここから起動する。
+# SessionStart フックは $CLAUDE_PROJECT_DIR の解決が環境によって変わるため、
+# 起動していないことがある。フックは「先回りして始めておく」ための最適化に過ぎず、
+# 確実な入口はこのスクリプトとする。
+#
+if [ ! -e "$DONE_FILE" ] && [ ! -e "$FAILED_FILE" ] \
+   && [ ! -e "$LOG_FILE" ] && [ ! -e "$LOCK_FILE" ]; then
+    echo "NOT STARTED: cloud-up.sh がまだ実行されていません。ここから起動します。"
+    nohup bash "${ROOT_DIR}/docker/bin/cloud-up.sh" >/dev/null 2>&1 &
+    sleep 3
 fi
 
 WAITED=0
