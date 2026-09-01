@@ -64,11 +64,20 @@ SessionStart フックが発火していてもいなくても、VM が再起動�
 2. push が `access denied by the git proxy` の 403 になったら、`add_repo` ツールで
    リポジトリをセッションに追加する（`owner: baserproject` / `repo: basercms` /
    `access: push`）。追加後は `git push -u origin <ブランチ名>` が通る
-3. PR は `gh pr create` が GraphQL で 403 になるため、**REST で作る**
+3. `gh: 未インストール` と出ていたら入れる（Ubuntu の universe にあるので数十秒）
+
+   ```bash
+   apt-get update -qq && apt-get install -y -qq --no-install-recommends gh
+   ```
+
+4. PR は `gh pr create` が GraphQL で 403 になるため、**REST で作る**
 
    ```bash
    gh api repos/baserproject/basercms/pulls --method POST --input /tmp/pr.json
    ```
+
+   `/tmp/pr.json` は `{"title": "...", "head": "<ブランチ名>", "base": "5.4.x", "body": "..."}`。
+   本文に日本語や記号が入るため、コマンドラインで渡さず JSON ファイルにすること。
 
 `gh auth status` が `GH_TOKEN is invalid` を返すのは正常です。認証は proxy が注入します。
 詳細は [`docs/cloud/README.md`](../../docs/cloud/README.md) の「PR まで作れる環境にする」を参照。
@@ -83,11 +92,13 @@ git commit -m "<メッセージ>"
 git format-patch -1 -o /tmp/patch
 ```
 
-**`cloud-status.sh` が確実な入口です。** SessionStart フックは `$CLAUDE_PROJECT_DIR` の解決が
-環境によって変わり、起動していないことがあります（作業ディレクトリが `/workspace` で
-リポジトリが `/workspace/repo` にクローンされるケース等）。その場合 `cloud-status.sh` は
-`NOT STARTED` を表示して自分で `cloud-up.sh` を起動するので、**フックが動いたかどうかを
-気にする必要はありません**。フックは先回りして起動しておくための最適化に過ぎません。
+**`cloud-status.sh` が確実な入口です。** SessionStart フックはプロジェクトルート側の
+`/workspace/.claude/settings.json` から登録されるため、環境によっては登録されておらず
+発火しません（リポジトリ同梱の `.claude/settings.json` は、クローン先が
+`/workspace/repo` のようにプロジェクトルートの配下になると読み込まれません）。
+その場合 `cloud-status.sh` は `STARTING` を表示して自分で `cloud-up.sh` を起動するので、
+**フックが動いたかどうかを気にする必要はありません**。
+フックは先回りして起動しておくための最適化に過ぎません。
 
 ## ユニットテスト
 
