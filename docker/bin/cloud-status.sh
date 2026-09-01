@@ -35,19 +35,40 @@ REQUIRED_CONTAINERS="bc-php bc-db"
 
 show_detail() {
     echo
-    echo "--- docker compose ps ---"
+    # -a を付けないと停止したコンテナが出ず、落ちたことに気づけない。
+    echo "--- docker compose ps -a ---"
     if [ -e "${DOCKER_DIR}/docker-compose.yml" ]; then
-        (cd "$DOCKER_DIR" && docker compose ps) 2>&1
+        (cd "$DOCKER_DIR" && docker compose ps -a) 2>&1
     else
         echo "docker/docker-compose.yml がまだありません。"
     fi
     echo
-    echo "--- tail -30 tmp/cloud-up.log ---"
+    # 直近の起動分だけを出す。ログはセッションを跨いで追記されるため、
+    # 固定行数で切ると前回分と混ざって切り分けの邪魔になる。
+    echo "--- tmp/cloud-up.log（直近の起動分） ---"
     if [ -e "$LOG_FILE" ]; then
-        tail -30 "$LOG_FILE"
+        awk '/===== cloud-up start =====/ { buf = "" } { buf = buf $0 "\n" } END { printf "%s", buf }' "$LOG_FILE" \
+            | tail -40
     else
         echo "tmp/cloud-up.log はまだありません。"
     fi
+}
+
+# 起動したはずなのに落ちているコンテナを拾う。
+# READY の判定は bc-php / bc-db だけを見るため、それ以外が死んでいても READY になる。
+# 判定は変えずに、気づけるように warning だけ出す。
+show_exited_containers() {
+    [ -e "${DOCKER_DIR}/docker-compose.yml" ] || return 0
+    docker info >/dev/null 2>&1 || return 0
+
+    exited="$( (cd "$DOCKER_DIR" && docker compose ps -a --status exited --format '{{.Name}} ({{.Status}})') 2>/dev/null )"
+    [ -n "$exited" ] || return 0
+
+    echo
+    echo "  WARNING: 起動していないコンテナがあります。"
+    echo "$exited" | sed 's/^/    /'
+    echo "    baserCMS 本体（bc-php / bc-db）は動いているため READY ですが、"
+    echo "    上記が必要な作業をする場合は docker logs <コンテナ名> で原因を確認してください。"
 }
 
 # dockerd と必須コンテナが実際に動いているか。完了マークの裏取りに使う。
@@ -80,21 +101,24 @@ show_git_status() {
     remote_name="$(git -C "$ROOT_DIR" remote 2>/dev/null | head -1)"
     branch_name="$(git -C "$ROOT_DIR" branch --show-current 2>/dev/null)"
     remote_url=""
-    git_warn=0
+    # push できるか / PR を作れるかは別の条件で決まるため、フラグを分けて持つ。
+    # ひとまとめにすると「gh が無いだけ」でも「push できません」と誤報する。
+    push_ng=0
+    pr_ng=0
 
     if [ -n "$remote_name" ]; then
         remote_url="$(git -C "$ROOT_DIR" remote get-url "$remote_name" 2>/dev/null)"
         echo "  remote: ${remote_url}"
     else
         echo "  remote: なし"
-        git_warn=1
+        push_ng=1
     fi
 
     if [ -n "$branch_name" ]; then
         echo "  branch: ${branch_name}"
     else
         echo "  branch: なし（detached HEAD）"
-        git_warn=1
+        push_ng=1
     fi
 
     # gh auth status はトークンが無効でも終了コード 0 を返すため判定に使えない。
@@ -106,26 +130,55 @@ show_git_status() {
             echo "  gh:     GitHub API へ到達可（PR 作成可）"
         else
             echo "  gh:     GitHub API へ到達不可"
-            git_warn=1
+            pr_ng=1
         fi
     else
         echo "  gh:     未インストール"
-        git_warn=1
+        pr_ng=1
     fi
 
-    if [ "$git_warn" -eq 1 ]; then
+    if [ "$push_ng" -eq 1 ]; then
         echo
-        echo "  WARNING: 現状のままでは push / PR 作成ができません。"
-        echo "    ただし環境の作り直しは不要で、このセッションのまま復旧できます。"
-        echo "    remote 追加 → add_repo ツールで許可 → PR は gh api の REST で作成。"
+        echo "  WARNING: 現状のままでは push できません（PR 作成も不可）。"
+        echo "    環境の作り直しは不要で、このセッションのまま復旧できます。"
+        if [ -z "$remote_name" ]; then
+            echo "    - remote を追加する:"
+            echo "        git remote add origin git@github.com:baserproject/basercms.git"
+            echo "    - push が 'access denied by the git proxy' になったら、"
+            echo "      add_repo ツールでリポジトリをセッションに追加する"
+        fi
+        if [ -z "$branch_name" ]; then
+            echo "    - detached HEAD のため、push する前にブランチを切る:"
+            echo "        git checkout -b <ブランチ名>"
+        fi
         echo "    手順は docs/cloud/README.md の「PR まで作れる環境にする」を参照。"
+    elif [ "$pr_ng" -eq 1 ]; then
+        echo
+        echo "  NOTE: push は可能ですが、PR 作成はこのままではできません。"
+        if ! command -v gh >/dev/null 2>&1; then
+            echo "    gh を入れれば解消します:"
+            echo "      apt-get update -qq && apt-get install -y -qq --no-install-recommends gh"
+        else
+            echo "    gh は入っていますが GitHub API へ到達できません。"
+            echo "    add_repo ツールでリポジトリをセッションに追加すると通ることがあります。"
+        fi
+        echo "    PR は gh pr create ではなく gh api の REST で作ります（GraphQL は 403）。"
     fi
 }
 
 print_ready() {
     echo "READY: baserCMS は起動済みです。"
     echo "  PHP コンテナ: bc-php / DB コンテナ: bc-db / 配置先: /var/www/html"
-    echo "  ユニットテスト: docker exec bc-php sh -c 'cd /var/www/html && composer run-script test'"
+    echo "  ユニットテスト（全件）: docker exec bc-php sh -c 'cd /var/www/html && composer run-script test'"
+    echo "  ユニットテスト（ファイル単位）: docker exec bc-php sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage <パス>'"
+    echo "  （bin/cake setup test は cloud-up.sh が実行済みのため、phpunit を直接叩けます）"
+}
+
+# 出力は40行を超えるため、判定行が先頭にしか無いと `| tail` で流れて拾えなくなる。
+# head でも tail でも判定できるよう、末尾にも1行のサマリを出す。
+print_result() {
+    echo
+    echo "RESULT: $1"
 }
 
 if [ -z "${CLAUDE_CODE_REMOTE_SESSION_ID:-}" ] && [ "${CLOUD_FORCE:-0}" != "1" ]; then
@@ -145,7 +198,9 @@ fi
 if [ -e "$DONE_FILE" ] && is_alive; then
     print_ready
     show_detail
+    show_exited_containers
     show_git_status
+    print_result "READY"
     exit 0
 fi
 
@@ -164,6 +219,7 @@ if [ -e "$FAILED_FILE" ]; then
     echo "FAILED: baserCMS の起動に失敗しています。tmp/cloud-up.log を確認してください。"
     echo "  再試行する場合: rm -f tmp/cloud-up.failed && docker/bin/cloud-status.sh"
     show_detail
+    print_result "FAILED"
     exit 1
 fi
 
@@ -178,6 +234,7 @@ while :; do
     if [ -e "$FAILED_FILE" ]; then
         echo "FAILED: baserCMS の起動に失敗しました。tmp/cloud-up.log を確認してください。"
         show_detail
+        print_result "FAILED"
         exit 1
     fi
     if [ -e "$DONE_FILE" ] && is_alive; then
@@ -186,6 +243,7 @@ while :; do
     if [ "$WAITED" -ge "$TIMEOUT" ]; then
         echo "TIMEOUT: ${TIMEOUT} 秒待ちましたが起動が完了しませんでした。"
         show_detail
+        print_result "TIMEOUT"
         exit 1
     fi
     sleep 5
@@ -194,5 +252,7 @@ done
 
 print_ready
 show_detail
+show_exited_containers
 show_git_status
+print_result "READY"
 exit 0

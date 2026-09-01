@@ -22,6 +22,9 @@ LOCK_FILE="${TMP_DIR}/cloud-up.lock"
 DONE_FILE="${TMP_DIR}/cloud-up.done"
 FAILED_FILE="${TMP_DIR}/cloud-up.failed"
 
+# クラウドで起動する compose サービス（bc-pg / bc-pga は起動しない。理由は手順3を参照）
+CLOUD_SERVICES="bc-db bc-php bc-smtp bc-pma"
+
 # クラウドセッション以外では何もしない
 if [ -z "${CLAUDE_CODE_REMOTE_SESSION_ID:-}" ] && [ "${CLOUD_FORCE:-0}" != "1" ]; then
     exit 0
@@ -155,9 +158,15 @@ fi
 
 #
 # 3. コンテナの起動
-#
-log "docker compose up -d"
-(cd "$DOCKER_DIR" && docker compose up -d) || fail "docker compose up failed."
+#    クラウドでは bc-pg / bc-pga（PostgreSQL と pgAdmin）を起動しない。
+#    - PostgreSQL はユニットテストで使われていない（実参照は config/app.php のコメントのみ）
+#    - pgAdmin はその管理画面なので、あわせて出番がない
+#    - pgAdmin は ./pgadmin をバインドするが、クラウドでは compose が root:root 0755 で
+#      作るため uid 5050 のコンテナが書き込めず、起動直後に Exited(1) で落ちる
+#    起動するサービスを明示することで、docker-compose.yml.default はローカル・CI と
+#    共通のまま変えずに済む。
+log "docker compose up -d (${CLOUD_SERVICES})"
+(cd "$DOCKER_DIR" && docker compose up -d $CLOUD_SERVICES) || fail "docker compose up failed."
 
 #
 # 4. MySQL の待機
@@ -208,7 +217,20 @@ else
 fi
 
 #
-# 7. tmp/logs の所有者を www-data に揃える
+# 7. ユニットテストの準備
+#    composer run-script test は内部で bin/cake setup test を実行するが、
+#    ファイル単位で流すときは vendor/bin/phpunit を直接呼ぶのが普通で、その場合
+#    未実行だと弾かれる。READY と言われたのにまだ準備が終わっていない状態を
+#    残さないため、ここで済ませておく（数秒）。
+#    失敗しても起動全体を落とす必要はないので WARNING に留める。
+#
+log "Running bin/cake setup test."
+docker exec bc-php sh -c 'cd /var/www/html && bin/cake setup test' >/dev/null 2>&1 \
+    && log "setup test finished." \
+    || log "WARNING: setup test failed. Run it manually before vendor/bin/phpunit."
+
+#
+# 8. tmp/logs の所有者を www-data に揃える
 #    docker exec は root で走るため、root で bin/cake や composer を叩くと
 #    tmp/cache 配下に root 所有のキャッシュファイルが残る。Web からのアクセスは
 #    www-data で動くため、そのファイルを上書きできず

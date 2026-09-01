@@ -18,15 +18,27 @@ Claude Code on the web（クラウドセッション）で作業する場合の�
 | PHP コンテナ名 | `bc-php` |
 | DB コンテナ名 | `bc-db`（MySQL 8.0） |
 | baserCMS の配置先 | `/var/www/html` |
-| その他のコンテナ | `bc-smtp`（mailcatcher） / `bc-pma`（phpMyAdmin） / `bc-pg`（PostgreSQL） / `bc-pga`（pgAdmin） |
+| その他のコンテナ | `bc-smtp`（mailcatcher） / `bc-pma`（phpMyAdmin） |
 | DB 接続情報 | host `bc-db` / user `root` / password `root` / database `basercms` |
+
+> **クラウドでは `bc-pg`（PostgreSQL）と `bc-pga`（pgAdmin）を起動しない。**
+> PostgreSQL はユニットテストで使われておらず、pgAdmin はその管理画面なので出番がない。
+> さらに pgAdmin はバインドする `docker/pgadmin` を compose が root 所有で作るため、
+> uid 5050 のコンテナが書き込めず起動直後に落ちる。`docker-compose.yml.default` は
+> ローカル・CI と共通のまま、`cloud-up.sh` が起動するサービスを明示して外している。
+> クラウドで PostgreSQL を触る必要が出たら、`cloud-up.sh` の `CLOUD_SERVICES` を見直すこと。
 
 > **コンテナ名は環境によって異なる**。ローカルでは `local.instructions.md` の記載（例: `basercms`）に従う。
 > クラウドでは `bc-php`。いずれの場合も、実行前に `docker ps` で実際の稼働コンテナを確認すること。
 
 ## 作業開始前の確認
 
-**作業を始める前に必ず次を実行して完了を待つこと。**
+**セッション開始時と、アイドル再開後の両方で、必ず次を実行して完了を待つこと。**
+
+> **「作業開始前」だけでは足りない。** アイドルで環境が再起動されると
+> SessionStart フックが発火しないことがある（matcher は `startup|resume` だが、
+> 同一 VM が継続する再開では発火しない実測あり）。会話が続いていても、
+> 「セッションを再開しました」の通知を見たら必ずもう一度実行すること。
 
 ```bash
 docker/bin/cloud-status.sh
@@ -47,6 +59,14 @@ SessionStart フックが発火していてもいなくても、VM が再起動�
 | `STARTING` | 未起動だったので `cloud-up.sh` を起動した。完了まで待つ |
 | `FAILED` | 起動に失敗している。`tmp/cloud-up.log` を確認する。再試行は `rm -f tmp/cloud-up.failed` してから |
 | `TIMEOUT` | 既定 900 秒で完了しなかった。`TIMEOUT=1800 docker/bin/cloud-status.sh` で待ち直す |
+
+出力は40行を超えるため、`| tail` で切ると先頭の判定行が流れる。**末尾にも `RESULT: READY` の
+ように1行のサマリが出る**ので、`head` でも `tail` でもそこを見れば判定できる。
+終了コードでも判定できる（READY は 0、FAILED / TIMEOUT は 1）。
+
+READY でも、`bc-php` / `bc-db` 以外のコンテナが落ちている場合は
+`WARNING: 起動していないコンテナがあります。` が併記される。baserCMS 本体は動いているので
+作業は進められるが、そのコンテナが要る作業をするなら `docker logs <名前>` で原因を見ること。
 
 > **`tmp/cloud-up.done` の有無だけで起動を判断しないこと。** このマークはディスクに残るが、
 > dockerd とコンテナは VM 再起動で消える。マークだけを見ると「起動済み」と誤判定し、
@@ -112,8 +132,10 @@ docker exec bc-php sh -c 'cd /var/www/html && composer run-script test'
 docker exec bc-php sh -c 'cd /var/www/html && vendor/bin/phpunit --no-coverage plugins/baser-core/tests/TestCase/Model/Table/PagesTableTest.php 2>&1 | tail -20'
 ```
 
-> **`vendor/bin/phpunit` を直接叩く場合は、事前に一度 `bin/cake setup test` が必要。**
-> `composer run-script test` はこれを内部で実行するが、phpunit を直接呼ぶと未実行のまま弾かれる。
+> **`bin/cake setup test` は `cloud-up.sh` が起動時に実行済みのため、
+> `vendor/bin/phpunit` をそのまま直接叩ける。**
+> 何らかの理由で弾かれた場合（`cloud-up.sh` のログに `WARNING: setup test failed.` が
+> 出ているときなど）は、手で実行してから再試行する。
 >
 > ```bash
 > docker exec bc-php sh -c 'cd /var/www/html && bin/cake setup test'
