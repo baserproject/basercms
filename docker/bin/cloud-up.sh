@@ -125,7 +125,11 @@ wait_for_dockerd() {
 if ! docker info >/dev/null 2>&1; then
     log "Starting dockerd."
     cleanup_stale_docker_pids
-    service docker start >/dev/null 2>&1 || dockerd >>/tmp/dockerd.log 2>&1 &
+    # `&` は `||` リスト全体に掛かり、bash が fork するサブシェルは呼び出し元の
+    # stdio を継承したまま dockerd を wait し続ける。呼び出し元が出力を読んで
+    # いると EOF が来なくなるため、波括弧で囲んで stdio を切り離す。
+    # 詳細は docs/cloud/setup-script.sh の同箇所のコメントを参照。
+    { service docker start >/dev/null 2>&1 || dockerd >>/tmp/dockerd.log 2>&1; } </dev/null >/dev/null 2>&1 &
     wait_for_dockerd
 fi
 

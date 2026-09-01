@@ -20,10 +20,19 @@ SETUP_STARTED_AT=$(date +%s)
 step() { echo "[+$(( $(date +%s) - SETUP_STARTED_AT ))s] $*"; }
 
 # dockerd はこのあとも常駐させる必要があるため、バックグラウンドで起動する。
-# `&` は `service docker start || dockerd ...` の || リスト全体に掛かるので、
-# service 側が失敗すると dockerd がこのシェルのジョブとして残り続ける。
+#
+# 【重要】`{ ... } </dev/null >/dev/null 2>&1 &` の形を崩してはいけない。
+# `&` は `service docker start || dockerd ...` の || リスト全体に掛かるため、
+# bash はリスト用のサブシェルを fork する。このサブシェルは Setup script の
+# 標準出力（環境側がセットアップログとして読むパイプ）を継承したまま dockerd を
+# wait し続ける。リダイレクトを内側の dockerd だけに書くと、リダイレクトは孫の
+# dockerd にしか効かず、サブシェルはパイプを握ったまま残る。すると exit 0 した
+# 後もパイプが閉じないため、環境側はセットアップの完了を検知できない。
+# 実際にこれで「[+43s] setup script finished」まで正常に出力して終了したのに、
+# 5分のタイムアウトまで待たされ、セッションの起動が失敗した。
+# 波括弧でリスト全体を囲み、その stdio を親から切り離すこと。
 step "starting dockerd"
-service docker start >/dev/null 2>&1 || dockerd >/tmp/dockerd.log 2>&1 &
+{ service docker start >/dev/null 2>&1 || dockerd >/tmp/dockerd.log 2>&1; } </dev/null >/dev/null 2>&1 &
 for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 1; done
 step "dockerd ready"
 
