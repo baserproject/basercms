@@ -211,6 +211,21 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
+     * test update
+     *
+     * 「手動アップデート手順」は、baserCMSコアのアップデート画面の場合のみ表示する
+     */
+    public function test_update_manualUpdateGuide(): void
+    {
+        // テスト環境は plugins/baser-core が存在するため開発版として判定される
+        $this->assertTrue(BcUtil::isDevelopmentVersion());
+        PluginFactory::make(['name' => 'BcPluginSample', 'version' => '0.0.1'])->persist();
+        $this->get('/baser/admin/baser-core/plugins/update/BcPluginSample');
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('手動アップデート手順');
+    }
+
+    /**
      * test update core
      */
     public function testUpdateCore(): void
