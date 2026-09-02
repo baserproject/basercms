@@ -130,14 +130,22 @@ class UploaderHelperTest extends BcTestCase
     /**
      * ファイルの公開状態を取得する
      * test isPublish
-     * @param $publishBegin
-     * @param $publishEnd
-     * @param $expected
+     *
+     * 公開期間は「現在からの相対指定」で受け取り、テスト実行時点で日時へ変換する。
+     * データプロバイダで日時を確定させると、変換から実行までの経過時間により
+     * 結果が変わってしまうため。
+     *
+     * @param string|null $publishBegin 公開開始日時の相対指定
+     * @param string|null $publishEnd 公開終了日時の相対指定
+     * @param bool $expected 期待値
      * @dataProvider isPublishDataProvider
      */
     public function testIsPublish($publishBegin, $publishEnd, $expected)
     {
-        $uploaderFile = UploaderFileFactory::make(['publish_begin' => $publishBegin, 'publish_end' => $publishEnd])->getEntity();
+        $uploaderFile = UploaderFileFactory::make([
+            'publish_begin' => $this->createDateTime($publishBegin),
+            'publish_end' => $this->createDateTime($publishEnd)
+        ])->getEntity();
         $rs = $this->UploaderHelper->isPublish($uploaderFile);
         $this->assertEquals($expected, $rs);
     }
@@ -145,13 +153,37 @@ class UploaderHelperTest extends BcTestCase
     public static function isPublishDataProvider()
     {
         return [
+            // 公開期間の指定がない場合は公開
             [null, null, true],
-            [new FrozenTime('+1 day'), null, false],
-            [null, new FrozenTime('-1 day'), false],
-            [new FrozenTime('-1 day'), new FrozenTime('+1 day'), true],
-            [new FrozenTime('+1 day'), new FrozenTime('+2 day'), false],
-            [new FrozenTime('now'), new FrozenTime('now'), false]
+            // 公開開始日時前の場合は非公開
+            ['+1 day', null, false],
+            // 公開終了日時を過ぎている場合は非公開
+            [null, '-1 day', false],
+            // 公開期間内の場合は公開
+            ['-1 day', '+1 day', true],
+            // 公開開始日時前の場合は非公開
+            ['+1 day', '+2 days', false],
+            // 公開終了日時が現在日時の場合は非公開
+            ['now', 'now', false]
         ];
+    }
+
+    /**
+     * 現在からの相対指定を日時に変換する
+     *
+     * tests/bootstrap.php の Chronos::setTestNow() により Chronos の現在日時は
+     * テスト起動時点で固定される。そのため `new FrozenTime('+1 day')` のような
+     * 相対指定は起動時点を基準に解釈され、実時間とはズレる。
+     * 判定対象の UploaderHelper::isPublish() は date() による実時間で比較する
+     * ため、ここでは実時間を基準に日時を生成する。
+     *
+     * @param string|null $modifier strtotime() が解釈できる相対指定
+     * @return FrozenTime|null
+     */
+    private function createDateTime(?string $modifier): ?FrozenTime
+    {
+        if ($modifier === null) return null;
+        return new FrozenTime(date('Y-m-d H:i:s', strtotime($modifier)));
     }
 
     /**

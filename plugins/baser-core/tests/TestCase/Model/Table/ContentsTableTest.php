@@ -841,18 +841,59 @@ class ContentsTableTest extends BcTestCase
 
     public static function isPublishDataProvider()
     {
+        // 公開期間に現在日時からの相対日時を指定するケースは、データプロバイダで
+        // 日時を確定させるとテスト実行までの経過時間により結果が変わってしまうため、
+        // testIsPublishWithPublishPeriod() に分離している。
         return [
             [true, '', '', true],
             [false, '', '', false],
             [true, '0000-00-00 00:00:00', '', true],
             [true, '0000-00-00 00:00:01', '', true],
-            [true, date('Y-m-d H:i:s', strtotime("+1 hour")), '', false],
-            [true, FrozenTime::now()->addHours(1), '', false],
             [true, '', '0000-00-00 00:00:00', true],
             [true, '', '0000-00-00 00:00:01', false],
-            [true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
-            [true, '', FrozenTime::now()->addHours(1), true],
         ];
+    }
+
+    /**
+     * データが公開済みかどうかチェックする（公開期間を指定した場合）
+     *
+     * 日時はテスト実行時点で生成し、データプロバイダには持たせない。
+     */
+    public function testIsPublishWithPublishPeriod()
+    {
+        // 公開開始日時が未来の場合は非公開
+        $this->assertFalse($this->Contents->isPublish(true, $this->createDateTime('+1 hour'), ''));
+        $this->assertFalse($this->Contents->isPublish(true, new FrozenTime($this->createDateTime('+1 hour')), ''));
+        // 公開開始日時が過去の場合は公開
+        $this->assertTrue($this->Contents->isPublish(true, $this->createDateTime('-1 hour'), ''));
+        $this->assertTrue($this->Contents->isPublish(true, new FrozenTime($this->createDateTime('-1 hour')), ''));
+        // 公開終了日時が未来の場合は公開
+        $this->assertTrue($this->Contents->isPublish(true, '', $this->createDateTime('+1 hour')));
+        $this->assertTrue($this->Contents->isPublish(true, '', new FrozenTime($this->createDateTime('+1 hour'))));
+        // 公開終了日時が過去の場合は非公開
+        $this->assertFalse($this->Contents->isPublish(true, '', $this->createDateTime('-1 hour')));
+        $this->assertFalse($this->Contents->isPublish(true, '', new FrozenTime($this->createDateTime('-1 hour'))));
+        // 公開期間内の場合は公開
+        $this->assertTrue($this->Contents->isPublish(true, $this->createDateTime('-1 hour'), $this->createDateTime('+1 hour')));
+        // 公開期間が終了している場合は非公開
+        $this->assertFalse($this->Contents->isPublish(true, $this->createDateTime('-2 hours'), $this->createDateTime('-1 hour')));
+    }
+
+    /**
+     * 現在からの相対指定を日時文字列に変換する
+     *
+     * tests/bootstrap.php の Chronos::setTestNow() により FrozenTime の現在日時は
+     * テスト起動時点で固定される。一方、判定対象の ContentsTable::isPublish() は
+     * date() による実時間で比較するため、FrozenTime::now() を基準にすると
+     * テストスイートの実行が長引いた際に両者がズレて不安定になる。
+     * そのため、実時間を基準に日時を生成する。
+     *
+     * @param string $modifier strtotime() が解釈できる相対指定
+     * @return string
+     */
+    private function createDateTime(string $modifier): string
+    {
+        return date('Y-m-d H:i:s', strtotime($modifier));
     }
 
     /**
