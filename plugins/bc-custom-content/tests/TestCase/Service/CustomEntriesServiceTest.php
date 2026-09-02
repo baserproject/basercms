@@ -257,6 +257,19 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->getIndex(['order' => 'name', 'direction' => 'desc'])->all()->toArray();
         $this->assertEquals('プログラマー 3', $result[0]->name);
 
+        //pageパラメータを入れる
+        $params = ['limit' => 2, 'order' => 'id', 'direction' => 'asc'];
+        $page1 = $this->CustomEntriesService->getIndex($params + ['page' => 1])->all()->toArray();
+        $page2 = $this->CustomEntriesService->getIndex($params + ['page' => 2])->all()->toArray();
+        //全3件を2件ずつに分割して取得できる
+        $this->assertCount(2, $page1);
+        $this->assertCount(1, $page2);
+        //2ページ目には1ページ目と異なるデータが返る
+        $this->assertNotContains($page2[0]->id, [$page1[0]->id, $page1[1]->id]);
+
+        //limitがない場合、pageパラメータは無視する
+        $result = $this->CustomEntriesService->getIndex(['page' => 2])->all();
+        $this->assertCount(3, $result);
     }
 
     /**
