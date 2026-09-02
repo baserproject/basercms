@@ -36,7 +36,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false, [
 
 
 <div class="bca-plugin-update">
-  <?php if ($isDevelopmentVersion): ?>
+  <?php if ($isCore && $isDevelopmentVersion): ?>
     <div class="bca-panel-box">
       <h2 class="bca-main__heading" data-bca-heading-size="lg">
         <?php echo __d('baser_core', '手動アップデート手順') ?>
