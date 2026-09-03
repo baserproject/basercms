@@ -9,12 +9,14 @@ on:
   push:
     branches:
       - 'master'
+  # ドキュメント生成のみを確認したい場合に手動実行できるようにする
+  workflow_dispatch:
 
 jobs:
   test:
     name: PhpDocumentor
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -23,13 +25,13 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run compose
         run: |
           cd docker
           cp docker-compose.yml.default docker-compose.yml
-          sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml
+          sed -i -e "s|basercms:php[0-9.]*|basercms:php${{ matrix.php-version }}|g" docker-compose.yml
           sed -i -e "s/XDEBUG_MODE: \"debug\"/XDEBUG_MODE: \"off\"/g" docker-compose.yml
           docker compose up -d
 
