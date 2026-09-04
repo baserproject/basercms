@@ -24,7 +24,7 @@
         "josegonzalez/dotenv": "~4.0.0",
         "league/oauth2-server": "^8.5",
         "logiscape/mcp-sdk-php": "^2.0",
-        "mobiledetect/mobiledetectlib": "~3.74.4",
+        "mobiledetect/mobiledetectlib": "^4.8.03",
         "nikic/php-parser": "~5.8.0",
         "nyholm/psr7": "^1.8",
         "psr/http-message": "~1.1",

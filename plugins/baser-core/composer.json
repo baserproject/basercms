@@ -15,7 +15,7 @@
         "firebase/php-jwt": "~7.0.2",
         "ezyang/htmlpurifier": "~4.19.0",
         "robmorgan/phinx": "0.16.10",
-        "mobiledetect/mobiledetectlib": "~3.74.4",
+        "mobiledetect/mobiledetectlib": "^4.8.03",
         "nikic/php-parser": "~5.8.0",
         "cakephp/debug_kit": "~5.2.4",
         "ext-json": "*",
