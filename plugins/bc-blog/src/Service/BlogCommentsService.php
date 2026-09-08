@@ -97,6 +97,14 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         }
         if ($options['status'] === 'publish') {
             $query->where($this->BlogComments->BlogContents->Contents->getConditionAllowPublish());
+            // コメント自体が公開（承認済み）であることも条件に含める（get() と対称）
+            $query->where(['BlogComments.status' => true]);
+            // 未認証で到達する公開一覧では、投稿者の個人情報（email）を返さない
+            $fields = array_values(array_filter(
+                $this->BlogComments->getSchema()->columns(),
+                fn($column) => $column !== 'email'
+            ));
+            $query->select($fields, true);
         }
 
         return $query;

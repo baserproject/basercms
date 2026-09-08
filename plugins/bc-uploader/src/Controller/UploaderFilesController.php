@@ -55,8 +55,27 @@ class UploaderFilesController extends BcFrontAppController
         }
 
         if ($display) {
+            // パストラバーサル対策:
+            // ルートパラメータ経由で `../` を含むファイル名が渡され、公開制限ディレクトリの
+            // 外部のファイルが配信される問題を防ぐ。
+            // basename() でディレクトリ要素を除去した上で、realpath() により実体が
+            // 公開制限ディレクトリ配下に収まっていることを検証する。
+            // realpath() が false を返す場合は検証をスキップせず、必ず notFound とする。
+            $filename = basename($filename);
+            $baseDir = realpath(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited');
+            if ($baseDir === false) {
+                $this->notFound();
+                return;
+            }
+            $baseDir = rtrim($baseDir, DS) . DS;
+            $filePath = realpath($baseDir . $filename);
+            if ($filePath === false || !is_file($filePath) || !str_starts_with($filePath, $baseDir)) {
+                $this->notFound();
+                return;
+            }
+
             $info = pathinfo($filename);
-            $ext = $info['extension'];
+            $ext = $info['extension'] ?? '';
             $contentsMaping = [
                 "gif" => "image/gif",
                 "jpg" => "image/jpeg",
@@ -109,11 +128,12 @@ class UploaderFilesController extends BcFrontAppController
             $this->setResponse(
                 $this->getResponse()
                     ->withHeader('Content-Type', $contentType)
-                    ->withBody(new Stream(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename))
+                    ->withBody(new Stream($filePath))
             );
             $this->disableAutoRender();
         } else {
             $this->notFound();
+            return;
         }
     }
 

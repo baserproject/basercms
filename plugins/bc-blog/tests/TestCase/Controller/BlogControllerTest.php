@@ -417,4 +417,50 @@ class BlogControllerTest extends BcTestCase
         $this->assertNotNull(ob_get_clean());
     }
 
+
+    /**
+     * test archives / tags - 未認証の nested contain によるSQLインジェクションが中和される
+     * (GHSA-ch8f-q957-r9xm)
+     *
+     * 公開フロントルートで contain[BlogTags][conditions][] に生SQLを注入しても、
+     * ORM内部構造キーが除去されるため注入が効かず、通常どおり公開記事一覧が
+     * 返る（500やDBエラーにならない）ことを検証する。
+     *
+     * @return void
+     */
+    public function test_front_routes_neutralize_contain_injection()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogTagFactory::make(['id' => 1, 'name' => 'tag1', 'created' => '2022-08-10 18:57:47', 'modified' => null])->persist();
+        ContentFactory::make(['id' => 1, 'url' => '/news/', 'site_id' => 1, 'status' => true,
+            'tag_use' => true, 'entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent',
+            'lft' => 1, 'rght' => 2, 'publish_begin' => '2020-01-27 12:00:00',
+            'layout_template' => 'default', 'publish_end' => '9000-01-27 12:00:00'])->persist();
+        BlogContentFactory::make(['id' => 1, 'tag_use' => true, 'list_direction' => 'DESC', 'template' => 'default'])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 1, 'name' => 'release',
+            'title' => 'PR', 'status' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'no' => 1,
+            'user_id' => 1, 'name' => 'public-post', 'title' => 'PUBLIC-POST',
+            'posted' => '2023-01-11 12:57:59', 'status' => true])->persist();
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+
+        // 注入が WHERE 句に到達すると未知の識別子で SQL エラー(1054)となり 500 になる payload。
+        // ORM構造キーが除去されれば無視され、通常どおり 200 で描画される。
+        $inject = 'contain[BlogTags][conditions][]=' . rawurlencode('bc_sqli_probe_zzz = 1');
+
+        // archives type=tag
+        $this->get('/news/archives/tag/tag1?' . $inject);
+        $this->assertResponseOk();
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertArrayHasKey('posts', $vars);
+
+        // archives type=category
+        $this->get('/news/archives/category/release?' . $inject);
+        $this->assertResponseOk();
+
+        // tags アクション
+        $this->get('/bc-blog/blog/tags/tag1?' . $inject);
+        $this->assertResponseOk();
+    }
+
 }

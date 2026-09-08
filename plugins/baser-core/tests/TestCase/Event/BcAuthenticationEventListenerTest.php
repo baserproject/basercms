@@ -149,7 +149,7 @@ class BcAuthenticationEventListenerTest extends BcTestCase
 
         // 認証コード送信
 
-        // - 失敗
+        // - 失敗（総当たり対策で有効なコードが無効化される）
         $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json',
             ['code' => '1234']);
         $this->loginAdmin($request);
@@ -160,13 +160,26 @@ class BcAuthenticationEventListenerTest extends BcTestCase
             $this->assertEquals('認証コードが間違っているか有効期限切れです。', $e->getMessage());
         }
 
+        // 無効化されたため、クールダウン経過後に再送信して新しいコードを取得する
+        \Cake\I18n\FrozenTime::setTestNow(\Cake\I18n\FrozenTime::now()->addSeconds(61));
+        $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json',
+            ['send_code' => '1']);
+        $this->loginAdmin($request);
+        try {
+            $this->BcAuthenticationEventListener->afterIdentify($event);
+        } catch (HttpException $e) {
+            // 再送信成功
+        }
+
         // - 成功
         $twoFactorAuthentication = $this->TwoFactorAuthentications->find()
+            ->where(['is_verified' => 0])
             ->orderDesc('modified')
             ->first();
         $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json',
             ['code' => $twoFactorAuthentication->code]);
         $this->loginAdmin($request);
         $this->assertNull($this->BcAuthenticationEventListener->afterIdentify($event));
+        \Cake\I18n\FrozenTime::setTestNow();
     }
 }

@@ -365,16 +365,22 @@ class UsersControllerTest extends BcTestCase
         $this->assertMailSentTo('testuser1@example.com');
         $this->assertMailContainsText('認証コード');
 
-        // コード入力画面: 認証コード検証 失敗
+        // コード入力画面: 認証コード検証 失敗（総当たり対策で有効なコードが無効化される）
         $this->post('/baser/admin/baser-core/users/login_code', ['code' => 1234]);
         $this->assertResponseOk();
 
+        // 失敗でコードが無効化されるため、クールダウン経過後に再送信して新しいコードを取得する
+        \Cake\I18n\FrozenTime::setTestNow(\Cake\I18n\FrozenTime::now()->addSeconds(61));
+        $this->post('/baser/admin/baser-core/users/login_code', ['resend' => 1]);
+
         // コード入力画面: 認証コード検証 成功
         $twoFactorAuthentication = $this->TwoFactorAuthentications->find()
+            ->where(['is_verified' => 0])
             ->orderDesc('modified')
             ->first();
         $this->post('/baser/admin/baser-core/users/login_code', ['code' => $twoFactorAuthentication->code]);
         $this->assertRedirect('/baser/admin');
+        \Cake\I18n\FrozenTime::setTestNow();
     }
 
     /**
