@@ -483,7 +483,17 @@ class BlogHelper extends Helper
     )
     {
         if ($cut) {
-            $out = str_replace(["\r\n", "\r", "\n"], '', $post->content . $post->detail);
+            // $cut を指定した場合も $moreText と use_content を尊重する。
+            // ここで content と detail を無条件に連結すると、
+            // 「詳細を表示しない」指定の一覧で本文まで抜粋に出てしまう。
+            $source = '';
+            if ($this->currentBlogContent->use_content ?? true) {
+                $source .= $post->content;
+            }
+            if ($moreText) {
+                $source .= $post->detail;
+            }
+            $out = str_replace(["\r\n", "\r", "\n"], '', $source);
             $out = html_entity_decode($out, ENT_QUOTES, 'UTF-8');
             if ($lastText && mb_strlen(strip_tags($out)) > $cut) {
                 $out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8') . strip_tags($lastText);
