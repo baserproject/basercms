@@ -61,5 +61,6 @@ origin/base が進んだら各 PR ブランチへ base をマージし、push �
 | run-tests.sh | `[--filter X]` | ローカル全テスト（basercms-unittest 連携） |
 
 ## 9. 既存スキル連携
+- **連絡・記録・公開物は本スキルの範囲外**: 報告者への返信コメント、GHSA の受理／深刻度／影響・修正版／credits／重複クローズなどメタ情報の更新、CVE 申請状況、JPCERT/JVN との往復、ベンダステートメント、公式サイトの脆弱性情報ページ原稿、管理表／課題／チャットへの記録、リリース当日チェックは、脆弱性ハンドリング（調整・広報）側の手順で扱う。本スキルは「コードの検証・修正・フォーク/PR・ローカル検証」に集中し、結論（該当／非該当、ブランチ名、PR URL、テスト結果）を返す。
 - テスト実行: `basercms-unittest`
 - 移行起因の競合・非推奨: `cakephp-migration` / `php-migration` / `basercms-plugin-migration`
