@@ -210,15 +210,16 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * プラグインを指定してアクセスルールを構築する
      *
      * @param string $plugin
+     * @param bool $allowAllWithoutDefinition 権限定義（config/permission.php）が無い場合にフルアクセスを作るかどうか
      * @noTodo
      * @unitTest
      * @checked
      */
-    public function buildByPlugin(string $plugin)
+    public function buildByPlugin(string $plugin, bool $allowAllWithoutDefinition = false)
     {
         $userGroups = $this->UserGroups->find()->where(['id <>' => Configure::read('BcApp.adminGroupId')])->all();
         foreach($userGroups as $userGroup) {
-            $this->build($userGroup->id, $plugin);
+            $this->build($userGroup->id, $plugin, $allowAllWithoutDefinition);
         }
     }
 
@@ -307,24 +308,29 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param string $plugin
+     * @param bool $allowAllWithoutDefinition 権限定義（config/permission.php）が無い場合にフルアクセスを作るかどうか
      * @return bool
      * @noTodo
      * @unitTest
      * @checked
      */
-    public function build(int $userGroupId, string $plugin)
+    public function build(int $userGroupId, string $plugin, bool $allowAllWithoutDefinition = false)
     {
-        $pluginPath = BcUtil::getPluginPath($plugin);
-        if (file_exists($pluginPath . 'config' . DS . 'permission.php')) {
+        if (!BcUtil::getPluginPath($plugin)) return false;
+        if ($this->hasPermissionDefinition($plugin)) {
             try {
                 Configure::load($plugin . '.permission', 'baser');
             } catch (BcException $e) {
                 return false;
             }
         } else {
+            // 権限定義のないプラグインは、インストール時に「全てのユーザーで利用」を
+            // 明示的に選んだ場合だけフルアクセスを作る。それ以外は管理ユーザーのみ利用とする
+            if (!$allowAllWithoutDefinition) return true;
             foreach(Configure::read('BcPrefixAuth') as $key => $prefix) {
                 $this->buildAllowAllMethodByPlugin($userGroupId, $plugin, $key, $prefix['name']);
             }
+            return true;
         }
 
         $permissionsService = $this->getService(PermissionsServiceInterface::class);
@@ -371,6 +377,22 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 
         Configure::delete('permission');
         return $result;
+    }
+
+    /**
+     * プラグインが権限定義（config/permission.php）を持っているかどうか
+     *
+     * @param string $plugin
+     * @return bool
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
+    public function hasPermissionDefinition(string $plugin): bool
+    {
+        $pluginPath = BcUtil::getPluginPath($plugin);
+        if (!$pluginPath) return false;
+        return file_exists($pluginPath . 'config' . DS . 'permission.php');
     }
 
     /**

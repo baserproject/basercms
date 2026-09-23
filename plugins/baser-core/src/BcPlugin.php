@@ -140,10 +140,12 @@ class BcPlugin extends BasePlugin
             }
 
             // アクセスルールを作成
+            // permission=true はインストール画面・Web API で「全てのユーザーで利用」を明示的に選んだ場合。
+            // 権限定義のないプラグインにもフルアクセスを作る
             if($permission) {
                 /** @var PermissionGroupsService $permissionGroupsService */
                 $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
-                $permissionGroupsService->buildByPlugin($pluginName);
+                $permissionGroupsService->buildByPlugin($pluginName, true);
             }
 
             BcUtil::clearAllCache();

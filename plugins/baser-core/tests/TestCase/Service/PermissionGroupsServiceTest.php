@@ -25,6 +25,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Test\Factory\PermissionGroupFactory;
 use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -152,6 +153,70 @@ class PermissionGroupsServiceTest extends BcTestCase
         $this->assertEquals('/baser/admin/bc-seo/*', $permissions[0]->url);
         $this->assertEquals('*', $permissions[0]->method);
         $this->assertTrue($this->Permissions->isAuthorized(1, '/baser/admin/bc-seo/seo_configs/update_db', 'POST', $permissions));
+    }
+
+    /**
+     * test hasPermissionDefinition
+     */
+    public function testHasPermissionDefinition()
+    {
+        $this->assertTrue($this->PermissionGroups->hasPermissionDefinition('BaserCore'));
+        $this->assertTrue($this->PermissionGroups->hasPermissionDefinition('BcBlog'));
+        $this->assertFalse($this->PermissionGroups->hasPermissionDefinition('BcPluginSample'));
+        $this->assertFalse($this->PermissionGroups->hasPermissionDefinition('Nghiem'));
+    }
+
+    /**
+     * test build - 権限定義のないプラグインは、明示しない限りルールを作らない
+     */
+    public function testBuild_withoutDefinition()
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $countBefore = PermissionFactory::find()->where(['user_group_id' => 2])->count();
+
+        // 既定：作らない（成功扱い）
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcPluginSample'));
+        $this->assertEquals($countBefore, PermissionFactory::find()->where(['user_group_id' => 2])->count());
+
+        // 明示：フルアクセスを作る
+        $this->PermissionGroups->build(2, 'BcPluginSample', true);
+        $created = PermissionFactory::find()->where([
+            'user_group_id' => 2,
+            'url' => '/baser/admin/bc-plugin-sample/*'
+        ])->first();
+        $this->assertNotNull($created);
+        $this->assertEquals('*', $created->method);
+    }
+
+    /**
+     * test buildByPlugin - 権限定義のないプラグイン
+     */
+    public function testBuildByPlugin_withoutDefinition()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $query = fn() => PermissionFactory::find()->where(['url LIKE' => '/baser/%/bc-plugin-sample/*']);
+
+        $this->PermissionGroups->buildByPlugin('BcPluginSample');
+        $this->assertEquals(0, $query()->count());
+
+        $this->PermissionGroups->buildByPlugin('BcPluginSample', true);
+        $this->assertGreaterThan(0, $query()->count());
+    }
+
+    /**
+     * test rebuildByUserGroup - 権限定義のない有効プラグインにルールを作らない
+     */
+    public function testRebuildByUserGroup_withoutDefinition()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        PluginFactory::make(['name' => 'BcPluginSample', 'status' => true, 'priority' => 99])->persist();
+        $this->PermissionGroups->rebuildByUserGroup(2);
+        $this->assertEquals(0, PermissionFactory::find()->where([
+            'user_group_id' => 2,
+            'url LIKE' => '/baser/%/bc-plugin-sample/*'
+        ])->count());
     }
 
     /**

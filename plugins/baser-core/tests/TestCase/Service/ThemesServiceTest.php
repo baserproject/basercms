@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\PermissionGroupsServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
@@ -21,6 +23,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
+use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
@@ -68,6 +71,33 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test installThemesPlugins - テーマ付属プラグインは権限定義のとおりにだけルールを作る
+     */
+    public function testInstallThemesPlugins()
+    {
+        $theme = 'BcFront';
+        $pluginName = 'BcThemeBundledSample';
+        $themePluginsPath = BcUtil::getPluginPath($theme) . 'plugins' . DS;
+        (new BcFolder($themePluginsPath . $pluginName))->create();
+        $pathsBackup = Configure::read('App.paths.plugins');
+
+        $pluginsService = $this->createMock(PluginsServiceInterface::class);
+        $pluginsService->expects($this->once())->method('install')->with($pluginName, false)->willReturn(true);
+        $permissionGroupsService = $this->createMock(PermissionGroupsServiceInterface::class);
+        $permissionGroupsService->expects($this->once())->method('buildByPlugin')->with($pluginName, false);
+        $container = BcContainer::get();
+        $container->extend(PluginsServiceInterface::class)->setConcrete($pluginsService);
+        $container->extend(PermissionGroupsServiceInterface::class)->setConcrete($permissionGroupsService);
+
+        try {
+            $this->ThemesService->installThemesPlugins($theme);
+        } finally {
+            (new BcFolder($themePluginsPath))->delete();
+            Configure::write('App.paths.plugins', $pathsBackup);
+        }
     }
 
     /**
