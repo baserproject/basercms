@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Service\PluginsService;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcUtil;
@@ -40,10 +41,13 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
     {
         /** @var \BaserCore\Model\Entity\Plugin $plugin */
         $installStatusMessage = $this->getInstallStatusMessage($plugin->name);
+        /** @var PermissionGroupsServiceInterface $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         return [
             'plugin' => $plugin,
             'installStatusMessage' => $installStatusMessage,
             'installMessage' => (!$installStatusMessage)? $plugin->installMessage : '',
+            'hasPermissionDefinition' => $permissionGroupsService->hasPermissionDefinition($plugin->name),
         ];
     }
 
