@@ -111,6 +111,50 @@ class PermissionGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * test build - BcCustomContent の権限定義（運営者はエントリーまで、構造の変更は不可）
+     */
+    public function testBuild_BcCustomContentDefinition()
+    {
+        $this->loadPlugins(['BcCustomContent']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcCustomContent'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->orderBy(['id'])->all()->toArray();
+
+        $cases = [
+            ['/baser/admin/bc-custom-content/custom_entries/index/1', 'GET', true],
+            ['/baser/admin/bc-custom-content/custom_entries/edit/1/1', 'POST', true],
+            ['/baser/admin/bc-custom-content/custom_contents/edit/1', 'POST', true],
+            ['/baser/admin/bc-custom-content/custom_tables/edit/1', 'POST', false],
+            ['/baser/admin/bc-custom-content/custom_fields/edit/1', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_entries/edit/1.json', 'POST', true],
+            ['/baser/api/admin/bc-custom-content/custom_fields/index.json', 'GET', true],
+            ['/baser/api/admin/bc-custom-content/custom_fields/edit/1.json', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_tables/add.json', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_links/get_parent_list/1.json', 'GET', false],
+        ];
+        foreach($cases as [$url, $method, $expected]) {
+            $this->assertSame($expected, $this->Permissions->isAuthorized(1, $url, $method, $permissions), $method . ' ' . $url);
+        }
+    }
+
+    /**
+     * test build - BcSeo の権限定義（フルアクセス 1 本）
+     */
+    public function testBuild_BcSeoDefinition()
+    {
+        $this->loadPlugins(['BcSeo']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcSeo'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->all()->toArray();
+        $this->assertCount(1, $permissions);
+        $this->assertEquals('/baser/admin/bc-seo/*', $permissions[0]->url);
+        $this->assertEquals('*', $permissions[0]->method);
+        $this->assertTrue($this->Permissions->isAuthorized(1, '/baser/admin/bc-seo/seo_configs/update_db', 'POST', $permissions));
+    }
+
+    /**
      * test BuildByUserGroup
      */
     public function testBuildByUserGroup()
