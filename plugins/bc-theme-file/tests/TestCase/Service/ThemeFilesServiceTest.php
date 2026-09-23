@@ -229,12 +229,81 @@ class ThemeFilesServiceTest extends BcTestCase
             ]);
             $this->fail('例外が発生しませんでした。');
         } catch (\Exception $e) {
-            // assertWithinThemeDir（BcException）かフォーム検証（BcFormFailedException）のどちらかで止まればよい
-            $this->assertTrue($e instanceof BcException || $e instanceof BcFormFailedException);
+            // update() は base_name から算出した rename 先を assertWithinThemeDir で検証するのが
+            // フォーム検証（alphaNumericPlus）より先に実行されるため、必ず BcException で止まる
+            $this->assertInstanceOf(BcException::class, $e);
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
         } finally {
             if (is_file($parent . 'q7g3_rename.php')) unlink($parent . 'q7g3_rename.php');
         }
         $this->assertFileDoesNotExist(TMP . 'q7g3_renamed.php');
+    }
+
+    /**
+     * test update - base_name のみで見ると、alphaNumericPlus バリデーションを通過する入力からは
+     * ../ トラバーサルを構成できないため、assertWithinThemeDir 単体で拒否される入力は存在しないことを確認する
+     * （GHSA-q7g3-qwrc-mp89 M-5）
+     *
+     * alphaNumericPlus は [a-zA-Z0-9\-_]+ のみを許容し、'.' や '/' を含められないため、
+     * dirname($fullpath) . DS . base_name（+ ext）で組み立てられる newPath は
+     * fullpath 自体がテーマディレクトリ配下である限り、必ずテーマディレクトリ配下に収まる。
+     * そのため「フォーム検証は通るが assertWithinThemeDir だけが拒否する」ケースは作れない。
+     * 本テストはその事実を、alphaNumericPlus を通過する base_name で正常に更新できることをもって示す。
+     */
+    public function test_update_baseNameCannotBypassFormValidationToReachTraversal(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_safe_rename.php'))->create();
+        try {
+            // alphaNumericPlus を通過する（英数字・ハイフン・アンダースコアのみ）が、
+            // 見た目上はトラバーサルを狙ったような base_name
+            $rs = $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_safe_rename.php',
+                'parent' => $parent,
+                'base_name' => 'dotdotslash-tmp-q7g3',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->assertEquals($parent . 'dotdotslash-tmp-q7g3.php', $rs->getData('fullpath'));
+            $this->assertFileExists($parent . 'dotdotslash-tmp-q7g3.php');
+        } finally {
+            if (is_file($parent . 'q7g3_safe_rename.php')) unlink($parent . 'q7g3_safe_rename.php');
+            if (is_file($parent . 'dotdotslash-tmp-q7g3.php')) unlink($parent . 'dotdotslash-tmp-q7g3.php');
+        }
+    }
+
+    /**
+     * test update - 二重URLエンコードされた ../ 相当の文字列を base_name に与えても
+     * テーマディレクトリ外への rename はできない（GHSA-q7g3-qwrc-mp89 M-5）
+     *
+     * update() 自身が base_name に rawurldecode() を1回かけるため、'%252e' は '%2e' に
+     * なった時点で newPath に組み込まれる。assertWithinThemeDir はさらにもう1回
+     * rawurldecode() をかけて検査するため、この newPath は最終的に '../' として解決され、
+     * トラバーサルとして検知・拒否される（= 実際には「トラバーサル扱いされない」のではなく
+     * 「二重デコードの結果としてトラバーサルとして検知され、拒否される」という結果になる）。
+     */
+    public function test_update_doubleEncodedIsNotTraversal(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_double.php'))->create();
+        $outside = TMP . 'q7g3_double_pwned.php';
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_double.php',
+                'parent' => $parent,
+                'base_name' => '%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252ftmp%252fq7g3_double_pwned',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(BcException::class, $e);
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        } finally {
+            if (is_file($parent . 'q7g3_double.php')) unlink($parent . 'q7g3_double.php');
+        }
+        // テーマ外は当然、テーマ内にも二重デコードされたファイルは作成されていないこと
+        $this->assertFileDoesNotExist($outside);
     }
 
     /**

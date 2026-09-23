@@ -204,6 +204,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
             }
             $newPathBase .= '_copy';
         }
+        // パストラバーサル対策(GHSA-q7g3-qwrc-mp89): コピー先も念のためテーマディレクトリ配下であることを検証（多層防御）
+        $this->assertWithinThemeDir($newEntity->fullpath);
         $result = copy(rawurldecode($fullpath), $newEntity->fullpath);
         if ($result) {
             chmod($newEntity->fullpath, 0666);
