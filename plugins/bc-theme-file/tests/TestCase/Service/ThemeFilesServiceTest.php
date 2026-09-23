@@ -12,6 +12,7 @@
 namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
@@ -141,6 +142,111 @@ class ThemeFilesServiceTest extends BcTestCase
         $this->expectException(BcFormFailedException::class);
         $this->expectExceptionMessage('ファイルの作成に失敗しました。');
         $this->ThemeFileService->create($postData);
+    }
+
+    /**
+     * test create - テーマディレクトリ外への書き込みを拒否する（GHSA-2pj4-v76f-wjvx）
+     *
+     * Admin web 経路は POST の fullpath を直接書き込み先に使い getFullpath() を通らないため、
+     * sink(create) で必ずテーマディレクトリ配下を検証し、外部パスは BcException で拒否すること。
+     *
+     * @dataProvider provideOutsideThemeDir
+     */
+    public function test_create_rejectsOutsideThemeDir(string $fullpath): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->create([
+            'fullpath' => $fullpath,
+            'parent' => $fullpath,
+            'base_name' => 'pwned',
+            'ext' => 'php',
+            'contents' => "<?php /* poc */ ?>",
+        ]);
+        // 書き込まれていないことを保証（万一通った場合の後始末も兼ねる）
+        $this->assertFileDoesNotExist($fullpath . 'pwned.php');
+    }
+
+    /**
+     * test delete - テーマディレクトリ外のファイル削除を拒否する（GHSA-2pj4-v76f-wjvx）
+     * @dataProvider provideOutsideThemeDir
+     */
+    public function test_delete_rejectsOutsideThemeDir(string $fullpath): void
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->ThemeFileService->delete($fullpath . 'dummy.php');
+    }
+
+    public static function provideOutsideThemeDir(): array
+    {
+        return [
+            'tmp直下' => ['/tmp/'],
+            'アプリwebroot' => ['/var/www/html/webroot/'],
+            'config' => ['/var/www/html/config/'],
+        ];
+    }
+
+    /**
+     * test update - URL エンコードした ../ でテーマディレクトリ外を更新できない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_update_rejectsEncodedTraversal(): void
+    {
+        $victim = TMP . 'q7g3_victim.php';
+        (new BcFile($victim))->write('original');
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_victim.php',
+                'parent' => $parent,
+                'base_name' => 'q7g3_victim',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (BcException $e) {
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        } finally {
+            $contents = file_get_contents($victim);
+            unlink($victim);
+        }
+        $this->assertEquals('original', $contents);
+    }
+
+    /**
+     * test update - 名前変更先（base_name）でテーマディレクトリ外へ出られない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_update_rejectsTraversalInBaseName(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_rename.php'))->create();
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_rename.php',
+                'parent' => $parent,
+                'base_name' => '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_renamed',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (\Exception $e) {
+            // assertWithinThemeDir（BcException）かフォーム検証（BcFormFailedException）のどちらかで止まればよい
+            $this->assertTrue($e instanceof BcException || $e instanceof BcFormFailedException);
+        } finally {
+            if (is_file($parent . 'q7g3_rename.php')) unlink($parent . 'q7g3_rename.php');
+        }
+        $this->assertFileDoesNotExist(TMP . 'q7g3_renamed.php');
+    }
+
+    /**
+     * test copy - URL エンコードした ../ でテーマディレクトリ外のファイルを複製できない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_copy_rejectsEncodedTraversal(): void
+    {
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copy(
+            BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/' . '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fconfig%2fapp_local.php'
+        );
     }
 
     /**

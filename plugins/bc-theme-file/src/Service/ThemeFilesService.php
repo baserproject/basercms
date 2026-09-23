@@ -142,6 +142,12 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): create() と同様、書き込み sink で
         // テーマディレクトリ配下であることを検証する。
         $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
+        // 名前変更の行き先（ThemeFileForm::_execute の $newPath と同じ組み立て）も検査する（GHSA-q7g3-qwrc-mp89）
+        if (isset($postData['base_name']) && is_string($postData['base_name']) && $postData['base_name'] !== '') {
+            $newPath = dirname((string)$postData['fullpath']) . DS . rawurldecode($postData['base_name']);
+            if (!empty($postData['ext'])) $newPath .= '.' . $postData['ext'];
+            $this->assertWithinThemeDir($newPath);
+        }
 
         $postData['mode'] = 'update';
         $themeFileForm = new ThemeFileForm();

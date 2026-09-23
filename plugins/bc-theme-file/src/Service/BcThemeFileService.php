@@ -126,6 +126,9 @@ class BcThemeFileService implements BcThemeFileServiceInterface
      * 「テーマ配置ルート(App::path('plugins'))配下」であることを必ず検証する。
      * 配下でなければ BcException を投げる。
      *
+     * 書き込み処理（ThemeFileForm::_execute / copy）は rawurldecode() を 1 回かけた値を使うため、
+     * 生の値に加えて 1 回デコードした値も検査する（GHSA-q7g3-qwrc-mp89）
+     *
      * @param string $path 検証対象のパス（ファイル or ディレクトリ）
      * @return void
      * @throws BcException
@@ -133,6 +136,24 @@ class BcThemeFileService implements BcThemeFileServiceInterface
      * @noTodo
      */
     protected function assertWithinThemeDir(string $path): void
+    {
+        // 書き込み処理（ThemeFileForm::_execute / copy）は rawurldecode() を 1 回かけた値を使うため、
+        // 生の値に加えて 1 回デコードした値も検査する（GHSA-q7g3-qwrc-mp89）
+        $paths = array_unique([$path, rawurldecode($path)]);
+        foreach ($paths as $target) {
+            if (!$this->isWithinThemeDir($target)) {
+                throw new BcException(__d('baser_core', 'パスにテーマディレクトリ外への参照が含まれています。'));
+            }
+        }
+    }
+
+    /**
+     * パスがテーマ配置ルート配下かどうか
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isWithinThemeDir(string $path): bool
     {
         // 実在すれば realpath、未作成なら正規化で .. を解決する
         $resolved = realpath($path);
@@ -148,9 +169,9 @@ class BcThemeFileService implements BcThemeFileServiceInterface
             }
             $realRoot = rtrim($realRoot, DS) . DS;
             if (str_starts_with($resolved, $realRoot)) {
-                return;
+                return true;
             }
         }
-        throw new BcException(__d('baser_core', 'パスにテーマディレクトリ外への参照が含まれています。'));
+        return false;
     }
 }
