@@ -153,6 +153,36 @@ class CustomFieldsTableTest extends BcTestCase
     }
 
     /**
+     * test validationDefault - 許可する拡張子に実行系拡張子を指定できない（GHSA-8jrp-4h7c-m679）
+     * @dataProvider deniedFileExtProvider
+     */
+    public function test_validationDefault_deniedFileExt(string $fileExt, bool $hasError)
+    {
+        $request = $this->getRequest('/')->withData('validate', ['FILE_EXT']);
+        Router::setRequest($request);
+        $validator = $this->CustomFieldsTable->getValidator('default');
+        $errors = $validator->validate([
+            'meta' => json_encode(['BcCustomContent' => ['file_ext' => $fileExt]])
+        ]);
+        if ($hasError) {
+            $this->assertEquals('実行可能なファイルの拡張子は指定できません。', $errors['meta']['checkDeniedFileExt']);
+        } else {
+            $this->assertArrayNotHasKey('checkDeniedFileExt', $errors['meta'] ?? []);
+        }
+    }
+
+    public static function deniedFileExtProvider(): array
+    {
+        return [
+            ['php', true],
+            ['PHP', true],
+            ['jpg,phtml', true],
+            ['jpg,pdf', false],
+            ['', false],
+        ];
+    }
+
+    /**
      * test beforeMarshal
      */
     public function test_beforeMarshal()

@@ -500,6 +500,25 @@ class CustomEntriesTableTest extends BcTestCase
     }
 
     /**
+     * test setValidateFileExt - 既存データの許可拡張子に php があっても拒否する（GHSA-8jrp-4h7c-m679）
+     */
+    public function test_setValidateFileExt_denied()
+    {
+        $validator = $this->CustomEntriesTable->getValidator('default');
+        $link = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make(['type' => 'BcCcFile'])->getEntity();
+        $customField->meta = ['BcCustomContent' => ['file_ext' => 'php,png']];
+        $link->custom_field = $customField;
+        $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $link);
+        $this->assertEquals(['png'], $rs['test']->rule('fileExt')->get('pass')[0]);
+
+        // 許可拡張子がすべて拒否対象なら既定値に戻す
+        $link->custom_field->meta = ['BcCustomContent' => ['file_ext' => 'php']];
+        $rs = $this->CustomEntriesTable->setValidateFileExt($validator, $link);
+        $this->assertEquals(['gif', 'jpg', 'jpeg', 'png', 'pdf'], $rs['test']->rule('fileExt')->get('pass')[0]);
+    }
+
+    /**
      * test setValidateEmailConfirm
      */
     public function test_setValidateEmailConfirm()
