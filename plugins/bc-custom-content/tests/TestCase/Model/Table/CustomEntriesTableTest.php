@@ -519,6 +519,43 @@ class CustomEntriesTableTest extends BcTestCase
     }
 
     /**
+     * test setupValidate - BcCcFile のフィールド設定（レガシーデータ）で file_ext に php が
+     * 含まれていても、実際のアップロード検証で payload.php は拒否し、image.png は許可すること
+     * （GHSA-8jrp-4h7c-m679 M-5）
+     */
+    public function test_setupValidate_deniesExecutableExtensionFromLegacyFileExt()
+    {
+        // 準備：レガシーデータを想定し、file_ext に実行可能な php を含む許可リストを設定
+        CustomFieldFactory::make([
+            'id' => 1,
+            'type' => 'BcCcFile',
+            'meta' => '{"BcCustomContent":{"file_ext":"php,png"}}',
+        ])->persist();
+        CustomLinkFactory::make(['id' => 1, 'name' => 'test', 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+
+        // payload.php: file_ext に php が含まれていても、常に拒否する拡張子として弾かれること
+        $this->CustomEntriesTable->setupValidate([
+            'test' => new UploadedFile('payload.php', 10, UPLOAD_ERR_OK, 'payload.php', 'application/x-httpd-php')
+        ]);
+        $validator = $this->CustomEntriesTable->getValidator('customEntry');
+        $errors = $validator->validate([
+            'test' => new UploadedFile('payload.php', 10, UPLOAD_ERR_OK, 'payload.php', 'application/x-httpd-php'),
+        ]);
+        $this->assertArrayHasKey('fileExt', $errors['test']);
+
+        // image.png: 許可拡張子として通過すること
+        $this->CustomEntriesTable->setupValidate([
+            'test' => new UploadedFile('image.png', 10, UPLOAD_ERR_OK, 'image.png', 'image/png')
+        ]);
+        $validator = $this->CustomEntriesTable->getValidator('customEntry');
+        $errors = $validator->validate([
+            'test' => new UploadedFile('image.png', 10, UPLOAD_ERR_OK, 'image.png', 'image/png'),
+        ]);
+        $this->assertArrayNotHasKey('test', $errors);
+    }
+
+    /**
      * test setValidateEmailConfirm
      */
     public function test_setValidateEmailConfirm()
