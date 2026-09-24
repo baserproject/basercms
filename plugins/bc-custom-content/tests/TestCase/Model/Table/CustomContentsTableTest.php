@@ -105,6 +105,25 @@ class CustomContentsTableTest extends BcTestCase
     }
 
     /**
+     * 説明文にスクリプトを含む場合は保存を弾く（格納型XSS対策・JPCERT#26271410）
+     * create（default）と update（withTable）の両経路で効くことを検証する
+     */
+    public function test_validationDescriptionContainsScript()
+    {
+        $script = '<script>alert(1)</script>';
+
+        // create 経路（validationDefault）
+        $validator = $this->CustomContentsTable->getValidator('default');
+        $errors = $validator->validate(['description' => $script]);
+        $this->assertArrayHasKey('containsScript', $errors['description']);
+
+        // update 経路（validationWithTable）
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate(['description' => $script, 'list_count' => '10']);
+        $this->assertArrayHasKey('containsScript', $errors['description']);
+    }
+
+    /**
      * test createSearchIndex
      */
     public function test_createSearchIndex()

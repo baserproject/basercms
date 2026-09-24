@@ -57,9 +57,35 @@ class CustomContentsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function validationWithTable(Validator $validator): Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
+        // 説明文はHTMLを許容するが、スクリプトの入力は許可しない（格納型XSS対策）
+        $validator
+            ->scalar('description')
+            ->allowEmptyString('description')
+            ->add('description', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '説明文でスクリプトの入力は許可されていません。')
+                ]
+            ]);
+        return $validator;
+    }
+
+    /**
+     * カスタムテーブルと紐づく場合のバリデーションを設定する
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validationWithTable(Validator $validator): Validator
+    {
+        $this->validationDefault($validator);
         $validator->allowEmptyString('list_count')
             ->range('list_count', [0, 100], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
             ->notEmptyString('list_count', '一覧表示件数を入力してください。')
