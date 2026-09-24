@@ -92,26 +92,30 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->loadFixtureScenario(BlogCommentsScenario::class,);
 
 
-        // クエリはトークンの以外で何も設定しない場合、全てのコメントを取得する
+        // フロント公開APIは status=publish 固定のため、承認済み（status=true）の2件のみ返す
         $this->get('/baser/api/bc-blog/blog_comments/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        // コメント一覧は全て3件が返す
-        $this->assertCount(3, $result->blogComments);
+        // 公開コメント2件が返す（id=3 は status=false のため除外）
+        $this->assertCount(2, $result->blogComments);
 
         // クエリを設定し(limit = 4)、該当の結果が返す
         $this->get('/baser/api/bc-blog/blog_comments/index.json?limit=4&token=' . $this->accessToken);
         $result = json_decode((string)$this->_response->getBody());
-        // コメント一覧は3件が返す
-        $this->assertCount(3, $result->blogComments);
+        // 公開コメント2件が返す
+        $this->assertCount(2, $result->blogComments);
 
-        //ログインしていない状態ではステータス＝trueしか取得できない
+        //ログインしていない状態ではステータス＝trueのコメントしか取得できない（承認待ちコメントは除外）
         PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->get('/baser/api/bc-blog/blog_comments/index.json');
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        // コメント一覧は全て３件が返す
-        $this->assertCount(3, $result->blogComments);
+        // 公開（status=true）のコメント2件のみ返す（id=3 は status=false のため除外）
+        $this->assertCount(2, $result->blogComments);
+        // 未認証の公開一覧では投稿者のメールアドレスを返さない
+        foreach ($result->blogComments as $comment) {
+            $this->assertObjectNotHasProperty('email', $comment);
+        }
 
         //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
         $this->get('/baser/api/bc-blog/blog_comments/index.json?status=unpublish');
