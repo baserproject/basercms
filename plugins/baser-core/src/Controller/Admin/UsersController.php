@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Service\Admin\UsersAdminServiceInterface;
+use BaserCore\Error\BcException;
 use BaserCore\Service\TwoFactorAuthenticationsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
@@ -152,8 +153,12 @@ class UsersController extends BcAdminAppController
         if ($this->request->is('post')) {
             // 認証コード再送信
             if ($this->request->getData('resend')) {
-                $twoFactorAuthenticationsService->send($userId, $userEmail);
-                $this->BcMessage->setInfo(__d('baser_core', '認証コードを送信しました。'));
+                try {
+                    $twoFactorAuthenticationsService->send($userId, $userEmail, true);
+                    $this->BcMessage->setInfo(__d('baser_core', '認証コードを送信しました。'));
+                } catch (BcException $e) {
+                    $this->BcMessage->setError($e->getMessage());
+                }
                 return $this->render();
             }
 

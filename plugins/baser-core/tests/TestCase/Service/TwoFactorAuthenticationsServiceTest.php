@@ -127,6 +127,49 @@ class TwoFactorAuthenticationsServiceTest extends BcTestCase
     }
 
     /**
+     * 認証コードの再送信はクールダウン中は拒否する（総当たり対策）
+     */
+    public function test_send_cooldown()
+    {
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->setValue('email', 'from@example.com');
+
+        // クールダウンを強制して初回送信
+        $this->TwoFactorAuthenticationsService->send(1, 'test@example.com', true);
+        // 直後の再送信はクールダウンで例外
+        $this->expectException(\BaserCore\Error\BcException::class);
+        $this->TwoFactorAuthenticationsService->send(1, 'test@example.com', true);
+    }
+
+    /**
+     * 初回のクールダウンを強制しない送信では例外は発生しない（初回コード送信の想定）
+     */
+    public function test_send_withoutCooldownEnforcement()
+    {
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->setValue('email', 'from@example.com');
+
+        $this->TwoFactorAuthenticationsService->send(1, 'test@example.com');
+        // クールダウンを強制しなければ連続送信できる
+        $this->TwoFactorAuthenticationsService->send(1, 'test@example.com');
+        $this->assertEquals(1, $this->TwoFactorAuthentications->find()->where(['user_id' => 1])->count());
+    }
+
+    /**
+     * 認証コード検証に失敗すると、そのユーザーの有効なコードを無効化する（総当たり対策）
+     */
+    public function test_verify_invalidatesCodeOnFailure()
+    {
+        $this->TwoFactorAuthentications->save($this->TwoFactorAuthentications->newEntity([
+            'user_id' => 1, 'code' => '123456', 'is_verified' => 0,
+        ]));
+        // 間違ったコードで検証すると false
+        $this->assertFalse($this->TwoFactorAuthenticationsService->verify(1, '000000'));
+        // 失敗後は正しいコードでも通らない（無効化されている）
+        $this->assertFalse($this->TwoFactorAuthenticationsService->verify(1, '123456'));
+    }
+
+    /**
      * Test verify
      *
      * @dataProvider getTestVerifyProvider
