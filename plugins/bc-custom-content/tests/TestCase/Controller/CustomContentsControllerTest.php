@@ -125,6 +125,47 @@ class CustomContentsControllerTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
+
+    /**
+     * test index - 未認証の nested contain によるSQLインジェクションが中和される
+     * (GHSA-2ghw-gwvv-mv56)
+     *
+     * 公開カスタムコンテンツページで contain[CustomTables][conditions][] に生SQLを
+     * 注入しても、ORM内部構造キーが除去されるため注入が効かず、通常どおり 200 で
+     * 描画される（注入が JOIN ON 句に到達すれば SQL エラーで 500 になる）ことを検証する。
+     *
+     * @return void
+     */
+    public function test_index_neutralize_contain_injection()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+
+        // 注入が JOIN ON 句に到達すると未知の識別子で SQL エラー(1054)となり 500 になる payload。
+        // ORM構造キーが除去されれば無視され、通常どおり 200 で描画される。
+        $inject = 'contain[CustomTables][conditions][]=' . rawurlencode('bc_sqli_probe_zzz = 1');
+        $this->get('/test/?' . $inject);
+        $this->assertResponseCode(200);
+
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
     /**
      * test view
      */

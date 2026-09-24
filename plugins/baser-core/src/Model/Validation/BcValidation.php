@@ -485,65 +485,215 @@ class BcValidation extends Validation
      */
     public static function containsScript($value)
     {
-        if (!$value) return true;
-        $events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
-            'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
-            'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange', 'onerror'];
+        $value = (string)$value;
+        if ($value === '') return true;
+        // 管理者、または管理者以外のPHP等を許可する設定の場合は無条件で許可
         if (BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
             return true;
         }
 
-        $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-
-        if (preg_match('/(<\?=|<\?php|<script)/i', $value)) {
-            return false;
-        }
-        if (preg_match('/<[^>]+?(' . implode('|', $events) . ')\s*=[^<>]*?>/i', $value)) {
-            return false;
-        }
-        if (preg_match('/(href|action|formaction|src|codebase|data)\s*=\s*[^>]*?j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i', $value)) {
+        // PHPタグ・生のscriptタグはDOM解析では検出しづらいため、文字列で先に検査する
+        if (preg_match('/<\?(php|=|\s|$)|<script/i', $value)) {
             return false;
         }
 
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('Core.CollectErrors', true); // エラー取得
-        $config->set('Cache.DefinitionImpl', null); // キャッシュ無効
-        $config->set('HTML.DefinitionID', 'basercms-containsScript');
-        $config->set('HTML.SafeIframe', true); // iframe許可
-        $config->set('URI.SafeIframeRegexp', '%^(https?:)?//%');
-
-        if ($def = $config->maybeGetRawHTMLDefinition()) {
-            $def->addElement('form', 'Block', 'Flow', 'Common', [
-                'action' => 'URI',
-            ]);
-            $def->addElement('video', 'Block', 'Flow', 'Common', [
-                'src' => 'URI',
-            ]);
-            $def->addElement('source', 'Block', 'Empty', 'Common', [
-                'src' => 'URI',
-            ]);
-            $def->addElement('audio', 'Block', 'Flow', 'Common', [
-                'src' => 'URI',
-            ]);
+        // (A) URI系属性値に、実体参照などで難読化された危険スキームが含まれていないか
+        if (self::containsDangerousUriScheme($value)) {
+            return false;
         }
 
-        $purifier = new \HTMLPurifier($config);
-        $purifier->purify($value);
-        $purifierErrors = $purifier->context->get('ErrorCollector');
-        foreach ($purifierErrors->getRaw() as $error) {
-            [$line, $severity, $message] = $error;
-            if ($severity !== E_ERROR) {
-                continue;
-            }
-            if (preg_match('/\b(script|meta|src|srcdoc|href|action)\b.* removed/i', $message)) {
-                return false;
-            }
-            if (preg_match('/\bon\w+.* removed/i', $message)) {
-                return false;
-            }
+        // (B) HTMLPurifier で浄化した結果、許可外の要素・属性・スキームが除去されていないか
+        //     （エラーメッセージではなく、浄化前後の構造差分で判定する）
+        if (self::purifyRemovesUnsafeStructure($value)) {
+            return false;
         }
 
         return true;
+    }
+
+    /**
+     * containsScript 用の HTMLPurifier 設定を構築する
+     *
+     * 許可する要素・属性・CSSプロパティは setting.php の BcApp.containsScript から読み込む。
+     *
+     * @return \HTMLPurifier_Config
+     * @noTodo
+     * @checked
+     */
+    protected static function getContainsScriptPurifierConfig(): \HTMLPurifier_Config
+    {
+        $settings = (array)Configure::read('BcApp.containsScript');
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Core.CollectErrors', false);
+        $config->set('Cache.DefinitionImpl', null);
+        $config->set('HTML.DefinitionID', 'basercms-containsScript');
+        $config->set('HTML.DefinitionRev', 2);
+        $config->set('HTML.SafeIframe', true);
+        $config->set('URI.SafeIframeRegexp', $settings['safeIframeRegexp'] ?? '%^(https?:)?//%');
+        $config->set('Attr.EnableID', !empty($settings['enableId']));
+        if (!empty($settings['allowedFrameTargets'])) {
+            $config->set('Attr.AllowedFrameTargets', $settings['allowedFrameTargets']);
+        }
+        if (!empty($settings['allowedRel'])) {
+            $config->set('Attr.AllowedRel', $settings['allowedRel']);
+        }
+        if (!empty($settings['allowedCssProperties'])) {
+            $config->set('CSS.AllowedProperties', $settings['allowedCssProperties']);
+        }
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            foreach (($settings['allowedElements'] ?? []) as $name => $params) {
+                $params = array_values((array)$params) + ['Block', 'Flow', 'Common', []];
+                $def->addElement($name, $params[0], $params[1], $params[2], $params[3]);
+            }
+            foreach (($settings['allowedAttributes'] ?? []) as $key => $attrType) {
+                if (strpos((string)$key, '.') === false) continue;
+                [$tag, $attr] = explode('.', $key, 2);
+                $def->addAttribute($tag, $attr, $attrType);
+            }
+        }
+        return $config;
+    }
+
+    /**
+     * HTML断片を DOMDocument に読み込む
+     *
+     * @param string $html
+     * @return \DOMDocument|null
+     * @noTodo
+     * @checked
+     */
+    protected static function loadHtmlFragment(string $html): ?\DOMDocument
+    {
+        $doc = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $loaded = $doc->loadHTML(
+            '<?xml encoding="UTF-8"><body>' . $html . '</body>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        return $loaded ? $doc : null;
+    }
+
+    /**
+     * 属性値を実体参照・数値文字参照・制御文字まで踏み込んでデコード・正規化する
+     *
+     * html_entity_decode に ENT_HTML5 を付与し &colon; &Tab; &NewLine; などの
+     * HTML5名前付き参照に対応させ、さらにセミコロン無しの数値文字参照もデコードする。
+     *
+     * @param string $value
+     * @return string
+     * @noTodo
+     * @checked
+     */
+    protected static function normalizeAttrValueForSchemeCheck(string $value): string
+    {
+        $value = preg_replace_callback('/&#x([0-9a-f]+);?/i', fn($m) => (string)mb_chr(hexdec($m[1]), 'UTF-8'), $value);
+        $value = preg_replace_callback('/&#(\d+);?/', fn($m) => (string)mb_chr((int)$m[1], 'UTF-8'), $value);
+        $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return preg_replace('/[\s\x00-\x20\x7f]+/u', '', $value);
+    }
+
+    /**
+     * URI系属性値に危険なスキームが含まれるか（実体参照による難読化を含めて検査する）
+     *
+     * @param string $html
+     * @return bool
+     * @noTodo
+     * @checked
+     */
+    protected static function containsDangerousUriScheme(string $html): bool
+    {
+        $settings = (array)Configure::read('BcApp.containsScript');
+        $uriAttributes = $settings['uriAttributes'] ?? ['href', 'src', 'action', 'formaction', 'codebase', 'data', 'xlink:href', 'poster', 'background', 'dynsrc', 'lowsrc', 'cite'];
+        $schemes = $settings['dangerousSchemes'] ?? ['javascript', 'vbscript', 'livescript', 'mocha', 'data'];
+        $doc = self::loadHtmlFragment($html);
+        if (!$doc) return false;
+        foreach ($doc->getElementsByTagName('*') as $el) {
+            if (!$el->hasAttributes()) continue;
+            foreach ($el->attributes as $attr) {
+                if (!in_array(strtolower($attr->name), $uriAttributes, true)) continue;
+                $decoded = self::normalizeAttrValueForSchemeCheck($attr->value);
+                foreach ($schemes as $scheme) {
+                    if (preg_match('/^' . preg_quote($scheme, '/') . ':/i', $decoded)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * HTMLから要素名・属性名・URIスキームの集合を抽出する
+     *
+     * @param string $html
+     * @return array
+     * @noTodo
+     * @checked
+     */
+    protected static function extractHtmlStructureSets(string $html): array
+    {
+        $elements = $attributes = $schemes = [];
+        $doc = self::loadHtmlFragment($html);
+        if (!$doc) return compact('elements', 'attributes', 'schemes');
+        $uriAttributes = Configure::read('BcApp.containsScript.uriAttributes')
+            ?? ['href', 'src', 'action', 'formaction', 'codebase', 'data', 'xlink:href', 'poster', 'background', 'dynsrc', 'lowsrc', 'cite'];
+        foreach ($doc->getElementsByTagName('*') as $node) {
+            $elements[strtolower($node->nodeName)] = true;
+            if (!$node->hasAttributes()) continue;
+            foreach ($node->attributes as $attr) {
+                $name = strtolower($attr->name);
+                $attributes[$name] = true;
+                if (in_array($name, $uriAttributes, true)
+                    && preg_match('/^\s*([a-z0-9.+\-]+)\s*:/i', $attr->value, $m)) {
+                    $schemes[strtolower($m[1])] = true;
+                }
+            }
+        }
+        return compact('elements', 'attributes', 'schemes');
+    }
+
+    /**
+     * HTMLPurifier で浄化した結果、許可外の危険な要素・属性・スキームが除去されたか
+     *
+     * 浄化前後の「要素名・属性名・URIスキーム」の集合を比較し、除去されたものがあれば
+     * 危険または不正なHTMLとみなす。属性の除去は safeRemovedAttributePrefixes（data-* 等）を除外する。
+     *
+     * @param string $html
+     * @return bool
+     * @noTodo
+     * @checked
+     */
+    protected static function purifyRemovesUnsafeStructure(string $html): bool
+    {
+        $config = self::getContainsScriptPurifierConfig();
+        $purifier = new \HTMLPurifier($config);
+        $clean = $purifier->purify($html);
+
+        $raw = self::extractHtmlStructureSets($html);
+        $cleaned = self::extractHtmlStructureSets($clean);
+
+        // 要素が除去された
+        if (array_diff_key($raw['elements'], $cleaned['elements'])) {
+            return true;
+        }
+        // 属性が除去された（安全リストのプレフィックスに一致するものは除く）
+        $safePrefixes = Configure::read('BcApp.containsScript.safeRemovedAttributePrefixes') ?? ['data-'];
+        foreach (array_diff_key($raw['attributes'], $cleaned['attributes']) as $name => $_) {
+            $isSafe = false;
+            foreach ($safePrefixes as $prefix) {
+                if (str_starts_with($name, $prefix)) {
+                    $isSafe = true;
+                    break;
+                }
+            }
+            if (!$isSafe) return true;
+        }
+        // URIスキームが除去・無害化された
+        if (array_diff_key($raw['schemes'], $cleaned['schemes'])) {
+            return true;
+        }
+        return false;
     }
 
     /**

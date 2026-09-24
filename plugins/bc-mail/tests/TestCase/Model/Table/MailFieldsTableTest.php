@@ -131,6 +131,32 @@ class MailFieldsTableTest extends BcTestCase
         $this->assertEquals('グループ入力チェックは255文字以内で入力してください。', current($errors['group_valid']));
     }
 
+    /**
+     * HTMLを許容する付加文字列フィールドでも、スクリプトの入力は弾く
+     * （フロント入力画面での stored XSS 対策・JPCERT#14353754）
+     */
+    public function test_validationDefaultContainsScript()
+    {
+        $validator = $this->MailFieldsTable->getValidator('default');
+        $script = '<script>alert(1)</script>';
+        $errors = $validator->validate([
+            'name' => 'name',
+            'field_name' => 'field_name',
+            'mail_content_id' => 999,
+            'type' => 'text',
+            'head' => $script,
+            'attention' => $script,
+            'before_attachment' => $script,
+            'after_attachment' => $script,
+            'description' => $script,
+        ]);
+        $this->assertArrayHasKey('containsScript', $errors['head']);
+        $this->assertArrayHasKey('containsScript', $errors['attention']);
+        $this->assertArrayHasKey('containsScript', $errors['before_attachment']);
+        $this->assertArrayHasKey('containsScript', $errors['after_attachment']);
+        $this->assertArrayHasKey('containsScript', $errors['description']);
+    }
+
     public function test_validationDefaultHankakuCheck()
     {
         $validator = $this->MailFieldsTable->getValidator('default');
