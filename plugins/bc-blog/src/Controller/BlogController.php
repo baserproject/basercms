@@ -189,7 +189,7 @@ class BlogController extends BlogFrontAppController
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
                         'draft' => false
-                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
+                    ], $blogPostsService->removeOrmStructure($this->getRequest()->getQueryParams()))), ['limit' => $blogContent->list_count]),
                     $category,
                     $this->getRequest(),
                     $blogContent,
@@ -206,7 +206,7 @@ class BlogController extends BlogFrontAppController
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
                         'draft' => false
-                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
+                    ], $blogPostsService->removeOrmStructure($this->getRequest()->getQueryParams()))), ['limit' => $blogContent->list_count]),
                     $userId,
                     $blogContent
                 ));
@@ -221,7 +221,7 @@ class BlogController extends BlogFrontAppController
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
                         'draft' => false
-                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
+                    ], $blogPostsService->removeOrmStructure($this->getRequest()->getQueryParams()))), ['limit' => $blogContent->list_count]),
                     $tag,
                     $blogContent
                 ));
@@ -245,7 +245,7 @@ class BlogController extends BlogFrontAppController
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction,
                         'draft' => false
-                    ], $this->getRequest()->getQueryParams())), ['limit' => $blogContent->list_count]),
+                    ], $blogPostsService->removeOrmStructure($this->getRequest()->getQueryParams()))), ['limit' => $blogContent->list_count]),
                     $year,
                     $month,
                     $day,
@@ -283,7 +283,8 @@ class BlogController extends BlogFrontAppController
         $this->setViewConditions([], [
             'default' => ['query' => ['limit' => 10]]
         ]);
-        $params = array_merge($this->request->getQueryParams(), ['status' => 'publish']);
+        // SQLインジェクション対策(GHSA-ch8f-q957-r9xm): リクエストの ORM 内部構造キーを除去する
+        $params = array_merge($service->removeOrmStructure($this->request->getQueryParams()), ['status' => 'publish']);
         try {
             $entities = $this->paginate($service->getIndex(array_merge(['tag' => $name], $params)));
         } catch (NotFoundException $e) {
