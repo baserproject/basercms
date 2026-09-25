@@ -235,6 +235,62 @@ return [
         'allowedPhpOtherThanAdmins' => false,
 
         /**
+         * スクリプト混入チェック（BcValidation::containsScript）の許可設定
+         *
+         * 管理者以外が本文などに入力するHTMLについて、許可する要素・属性・CSSプロパティ・
+         * URIスキームをホワイトリストで定義する。ここで許可されない要素・属性・スキームや、
+         * 実体参照などで難読化されたスクリプトは、保存時にバリデーションエラーで拒否される。
+         * 許可された無害なHTML（figure/style/data-* など）はそのまま保存される。
+         */
+        'containsScript' => [
+            // HTMLPurifier に追加で許可させる要素（name => [type, contents, attrCollection, attributes]）
+            'allowedElements' => [
+                'figure' => ['Block', 'Flow', 'Common', []],
+                'figcaption' => ['Block', 'Flow', 'Common', []],
+                'details' => ['Block', 'Flow', 'Common', ['open' => 'Bool']],
+                'summary' => ['Block', 'Flow', 'Common', []],
+                'form' => ['Block', 'Flow', 'Common', ['action' => 'URI']],
+                'video' => ['Block', 'Flow', 'Common', ['src' => 'URI', 'controls' => 'Bool', 'width' => 'Text', 'height' => 'Text', 'poster' => 'URI']],
+                'audio' => ['Block', 'Flow', 'Common', ['src' => 'URI', 'controls' => 'Bool']],
+                'source' => ['Block', 'Empty', 'Common', ['src' => 'URI', 'type' => 'Text']],
+                'object' => ['Block', 'Flow', 'Common', ['data' => 'URI', 'type' => 'Text', 'width' => 'Text', 'height' => 'Text']],
+            ],
+            // 追加で許可させる属性（'tag.attr' => 'HTMLPurifierの属性型'）
+            'allowedAttributes' => [
+                'img.srcset' => 'Text',
+                'img.sizes' => 'Text',
+                'iframe.allowfullscreen' => 'Bool',
+            ],
+            // id属性を許可するか（アンカーリンク等で利用）
+            'enableId' => true,
+            // a要素の target 属性で許可する値
+            'allowedFrameTargets' => ['_blank', '_self', '_parent', '_top'],
+            // a要素の rel 属性で許可する値
+            'allowedRel' => ['nofollow', 'noopener', 'noreferrer'],
+            // style属性で許可するCSSプロパティ（クリックジャッキング等に悪用される position/opacity/z-index 等は許可しない）
+            'allowedCssProperties' => [
+                'color', 'background-color', 'background', 'text-align', 'text-decoration',
+                'text-indent', 'font-weight', 'font-style', 'font-size', 'font-family',
+                'line-height', 'letter-spacing', 'width', 'height', 'max-width', 'min-width',
+                'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+                'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+                'border', 'border-color', 'border-width', 'border-style',
+                'vertical-align', 'white-space', 'list-style', 'list-style-type',
+            ],
+            // SafeIframe で許可する src オリジン
+            'safeIframeRegexp' => '%^(https?:)?//%',
+            // 危険スキームを検査するURI系属性
+            'uriAttributes' => [
+                'href', 'src', 'action', 'formaction', 'codebase', 'data',
+                'xlink:href', 'poster', 'background', 'dynsrc', 'lowsrc', 'cite',
+            ],
+            // 危険とみなすURIスキーム
+            'dangerousSchemes' => ['javascript', 'vbscript', 'livescript', 'mocha', 'data'],
+            // purify で除去されても拒否理由としない属性（プレフィックス一致・data-* は無害として許容）
+            'safeRemovedAttributePrefixes' => ['data-'],
+        ],
+
+        /**
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
          */

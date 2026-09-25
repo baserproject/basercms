@@ -69,7 +69,7 @@ class CustomContentController extends BcFrontAppController
         $this->set($service->getViewVarsForIndex(
             $customContent,
             $this->paginate(
-                $service->getCustomEntries($customContent, $this->getRequest()->getQueryParams()),
+                $service->getCustomEntries($customContent, $service->removeOrmStructure($this->getRequest()->getQueryParams())),
                 ['limit' => $customContent->list_count]
             )
         ));
@@ -154,7 +154,7 @@ class CustomContentController extends BcFrontAppController
         $this->set($service->getViewVarsForArchives(
             $customContent,
             $this->paginate(
-                $service->getCustomEntries($customContent, array_merge($this->getRequest()->getQueryParams(), [
+                $service->getCustomEntries($customContent, array_merge($service->removeOrmStructure($this->getRequest()->getQueryParams()), [
                     $field => $value
                 ])),
                 ['limit' => $customContent->list_count]
@@ -185,7 +185,7 @@ class CustomContentController extends BcFrontAppController
         $this->set($service->getViewVarsForYear(
             $customContent,
             $this->paginate(
-                $service->getCustomEntries($customContent, array_merge($this->getRequest()->getQueryParams(), [
+                $service->getCustomEntries($customContent, array_merge($service->removeOrmStructure($this->getRequest()->getQueryParams()), [
                     'publishedYear' => $year,
                 ])),
                 ['limit' => $customContent->list_count]

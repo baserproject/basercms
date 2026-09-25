@@ -75,7 +75,11 @@ class BcAuthenticationEventListener implements EventListenerInterface
                 }
                 throw new UnauthorizedException(__d('baser_core', '認証コードが間違っているか有効期限切れです。'));
             } else if ($request->getData('send_code')) {
-                $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email);
+                try {
+                    $twoFactorAuthenticationsService->send($loginUser->id, $loginUser->email, true);
+                } catch (BcException $e) {
+                    throw new HttpException($e->getMessage(), 429);
+                }
                 throw new HttpException(__d('baser_core', 'メールで受信した認証コードをcodeキーの値として送信してください。'), 200);
             } else {
                 throw new UnauthorizedException(__d('baser_core', 'send_codeキーを付与すると認証コードをメールで送信します。'));

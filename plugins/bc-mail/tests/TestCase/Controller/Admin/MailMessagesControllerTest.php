@@ -234,6 +234,26 @@ class MailMessagesControllerTest extends BcTestCase
     }
 
     /**
+     * 添付ファイル配信で保存ディレクトリ外へのパストラバーサルを防ぐ
+     */
+    public function test_attachment_pathTraversal()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        MailContentFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['name' => 'name_test', 'plugin' => 'BcMail', 'type' => 'MailContent', 'entity_id' => 1])->persist();
+
+        // 保存ディレクトリ外（config 配下等）へのトラバーサルは 404 になる
+        $this->get('/baser/admin/bc-mail/mail_messages/attachment/1/' . rawurlencode('../../../../../config/install.php'));
+        $this->assertResponseCode(404);
+
+        $MailMessagesService->dropTable(1);
+    }
+
+    /**
      * test download_csv
      */
     public function testDownloadCsv()

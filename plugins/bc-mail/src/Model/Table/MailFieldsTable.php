@@ -92,16 +92,40 @@ class MailFieldsTable extends MailAppTable
             ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
         $validator
             ->scalar('head')
-            ->maxLength('head', 255, __d('baser_core', '項目見出しは255文字以内で入力してください。'));
+            ->maxLength('head', 255, __d('baser_core', '項目見出しは255文字以内で入力してください。'))
+            ->add('head', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '項目見出しでスクリプトの入力は許可されていません。')
+                ]]);
         $validator
             ->scalar('attention')
-            ->maxLength('attention', 255, __d('baser_core', '注意書きは255文字以内で入力してください。'));
+            ->maxLength('attention', 255, __d('baser_core', '注意書きは255文字以内で入力してください。'))
+            ->add('attention', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '注意書きでスクリプトの入力は許可されていません。')
+                ]]);
         $validator
             ->scalar('before_attachment')
-            ->maxLength('before_attachment', 255, __d('baser_core', '前見出しは255文字以内で入力してください。'));
+            ->maxLength('before_attachment', 255, __d('baser_core', '前見出しは255文字以内で入力してください。'))
+            ->add('before_attachment', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '前見出しでスクリプトの入力は許可されていません。')
+                ]]);
         $validator
             ->scalar('after_attachment')
-            ->maxLength('after_attachment', 255, __d('baser_core', '後見出しは255文字以内で入力してください。'));
+            ->maxLength('after_attachment', 255, __d('baser_core', '後見出しは255文字以内で入力してください。'))
+            ->add('after_attachment', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '後見出しでスクリプトの入力は許可されていません。')
+                ]]);
         $validator
             ->scalar('source')
             ->add('source', [
@@ -121,7 +145,13 @@ class MailFieldsTable extends MailAppTable
             ->maxLength('default_value', 255, __d('baser_core', '初期値は255文字以内で入力してください。'));
         $validator
             ->scalar('description')
-            ->maxLength('description', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
+            ->maxLength('description', 255, __d('baser_core', '説明文は255文字以内で入力してください。'))
+            ->add('description', [
+                'containsScript' => [
+                    'rule' => ['containsScript'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '説明文でスクリプトの入力は許可されていません。')
+                ]]);
         $validator
             ->scalar('group_field')
             ->maxLength('group_field', 255, __d('baser_core', 'グループ名は255文字以内で入力してください。'))
