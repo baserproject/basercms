@@ -27,13 +27,13 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
   <?php $url = $this->BcBaser->getUri($this->Uploader->getFileUrl($uploaderFile->name)) ?>
   <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
-	  <a href="<?php echo $url ?>"
+	  <a href="<?php echo h($url) ?>"
        class="bca-text-url"
        target="_blank"
        data-toggle="tooltip"
        data-placement="top"
        title="" data-original-title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
-	  <i class="bca-icon--globe"></i><?php echo $url ?></a>
+	  <i class="bca-icon--globe"></i><?php echo h($url) ?></a>
   </span>
   </div>
 <?php endif ?>
