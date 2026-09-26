@@ -90,6 +90,14 @@ class ThemeFilesController extends BcAdminAppController
                 'edit',
                 'add_folder',
                 'edit_folder',
+                // 書き込みを伴うアクションも制限する（API 側と同じ）
+                'delete',
+                'delete_folder',
+                'copy',
+                'copy_folder',
+                'upload',
+                'copy_to_theme',
+                'copy_folder_to_theme',
             ];
             // デフォルトテーマのindexはアクセス可能
             if ($this->isDefaultTheme()) {

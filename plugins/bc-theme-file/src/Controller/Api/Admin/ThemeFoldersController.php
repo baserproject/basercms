@@ -11,6 +11,9 @@
 
 namespace BcThemeFile\Controller\Api\Admin;
 
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Event\EventInterface;
+use Cake\Core\Configure;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
@@ -25,6 +28,32 @@ use BaserCore\Annotation\Checked;
  */
 class ThemeFoldersController extends BcAdminApiController
 {
+
+    /**
+     * Before Filter
+     *
+     * テーマ編集機能が制限されている（BcThemeFile.allowedThemeEdit=false）場合は、
+     * 管理画面と同様に API からの書き込み系アクションも拒否する。
+     * 管理画面だけを制限しても、API 経由でテーマの PHP ファイルを書き込めれば制限の意味がない。
+     *
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        $result = parent::beforeFilter($event);
+        if ($event->getResult()) return $result;
+        if (Configure::read('BcThemeFile.allowedThemeEdit') === false) {
+            $denyList = ['add', 'edit', 'delete', 'copy', 'copy_to_theme', 'batch'];
+            if (in_array($this->getRequest()->getParam('action'), $denyList)) {
+                throw new ForbiddenException(__d('baser_core', 'テーマ編集機能は無効化されています。'));
+            }
+        }
+        return $result;
+    }
 
     /**
      * テーマフォルダのバッチ処理
