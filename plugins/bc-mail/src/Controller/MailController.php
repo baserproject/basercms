@@ -278,11 +278,12 @@ class MailController extends MailFrontAppController
 
         // メッセージ保存
         try {
-            // 画像認証
+            // 画像認証（送信完了時は回答を消費し、同一セッションでのリプレイを防ぐ）
             if ($mailContent->auth_captcha && !$bcCaptchaService->check(
                 $this->getRequest(),
-                $this->getRequest()->getData('captcha_id'),
-                $this->getRequest()->getData('auth_captcha')
+                (string)$this->getRequest()->getData('captcha_id'),
+                (string)$this->getRequest()->getData('auth_captcha'),
+                true
             )) {
                 $mailMessage = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
                 $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
