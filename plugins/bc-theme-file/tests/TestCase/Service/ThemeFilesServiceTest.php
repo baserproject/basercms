@@ -462,6 +462,86 @@ class ThemeFilesServiceTest extends BcTestCase
     }
 
     /**
+     * test copyToTheme - コピー先のテーマディレクトリ外への書き込みを拒否する（GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h）
+     *
+     * copyToTheme() はコピー先 $themePath を $params['type'] / $params['path'] から組み立て
+     * getFullpath() を通さないため、path にトラバーサルを含めるとテーマ外へ書き込めてしまう。
+     * sink で assertWithinThemeDir が働き BcException で拒否されること。
+     */
+    public function test_copyToTheme_rejectsOutsideThemeDir(): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            // テーマ配置ルート(plugins/)の外へ抜けるトラバーサル
+            'path' => '../../../../../../../../tmp/pwned.css',
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
+    }
+
+    /**
+     * test copyToTheme - カレントテーマ以外（他テーマ・コアプラグイン）への書き込みを拒否する
+     *
+     * 以前の境界は plugins/ 全体だったため、path に `..` を含めるとカレントテーマ以外の
+     * プラグイン配下（コアプラグイン等）へ書き込めた。コピー先はカレントテーマ配下に限定する。
+     * @dataProvider provideCopyToThemeOutsideCurrentTheme
+     */
+    public function test_copyToTheme_rejectsOutsideCurrentTheme(string $path): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            'path' => $path,
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
+    }
+
+    public static function provideCopyToThemeOutsideCurrentTheme(): array
+    {
+        return [
+            'コアプラグイン配下' => ['../../../baser-core/webroot/pwned.css'],
+            '他テーマ配下' => ['../../../bc-front/webroot/css/pwned.css'],
+        ];
+    }
+
+    /**
+     * test copyToTheme - コピー元がコピー元テーマ／プラグインのディレクトリ外の場合は拒否する
+     *
+     * Admin web 経路では parseArgs() が URL の path を `..` を除去せず fullpath に組み立てるため、
+     * コピー元にサーバ上の任意ファイルを指定でき、カレントテーマの webroot 配下へコピーして
+     * 公開 URL から取得できた（任意ファイル読み出し）。Service の sink でもコピー元を検証する。
+     */
+    public function test_copyToTheme_rejectsOutsideSourceDir(): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            'path' => 'leaked.css',
+            // コピー元が bc-front/webroot/css/ の外
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/../../../../config/app.php',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
+        $this->assertFileDoesNotExist('/var/www/html/plugins/BcColumn/webroot/css/leaked.css');
+    }
+
+    /**
      * test getImg
      */
     public function test_getImg()
