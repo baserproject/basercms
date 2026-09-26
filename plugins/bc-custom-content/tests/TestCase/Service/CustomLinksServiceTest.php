@@ -390,6 +390,15 @@ class CustomLinksServiceTest extends BcTestCase
         //存在しないフィールド名を指定した場合、空の配列を返す
         $result = $this->CustomLinksService->findByName('test', ['contain' => ['CustomFields']]);
         $this->assertEquals([], $result);
+
+        // status を指定しても name の条件が維持されること（別のフィールド定義を返さない）
+        $result = $this->CustomLinksService->findByName('test', ['status' => 1]);
+        $this->assertEquals([], $result);
+        $result = $this->CustomLinksService->findByName('feature', ['status' => 1]);
+        $this->assertEquals('feature', $result['name']);
+        // custom_table_id でスコープできること
+        $result = $this->CustomLinksService->findByName('feature', ['custom_table_id' => 999]);
+        $this->assertEquals([], $result);
     }
 
     /**
