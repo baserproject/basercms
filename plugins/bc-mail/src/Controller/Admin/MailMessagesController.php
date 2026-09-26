@@ -173,12 +173,20 @@ class MailMessagesController extends MailAdminAppController
         $file = implode('/', $args);
         $service->MailMessages->setup($mailContentId);
         $settings = $service->MailMessages->getBehavior('BcUpload')->getSettings();
+        // パストラバーサル対策:
+        // realpath() が false を返す場合は検証をスキップせず、必ず notFound とする。
+        // $file は複数階層を含み得るため basename() は使わず、realpath() により実体が
+        // 保存ディレクトリ配下（末尾区切りで判定）に収まっていることを検証する。
         $basePath = realpath(WWW_ROOT . 'files' . DS . $settings['saveDir']);
-        $filePath = realpath($basePath . DS . $file);
-
-        // basePath配下でない場合は表示しない
-        if (strpos($filePath, $basePath) !== 0) {
+        if ($basePath === false) {
             $this->notFound();
+            return;
+        }
+        $basePath = rtrim($basePath, DS) . DS;
+        $filePath = realpath($basePath . $file);
+        if ($filePath === false || !is_file($filePath) || !str_starts_with($filePath, $basePath)) {
+            $this->notFound();
+            return;
         }
 
         $ext = BcUtil::decodeContent(null, $file);

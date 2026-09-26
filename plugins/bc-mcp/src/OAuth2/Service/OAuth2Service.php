@@ -159,7 +159,10 @@ class OAuth2Service
         if (!file_exists($keyPath)) {
             $this->generateKeyPair();
         }
-        return new CryptKey($keyPath, null, false);
+        // 既存環境で 0644 等のまま残っている秘密鍵も、読み込み時に所有者のみ読める権限へ是正する。
+        // その上で league 側のパーミッション検査を有効にし、是正できなかった場合は通知が出るようにする。
+        $this->restrictPrivateKeyPermissions($keyPath);
+        return new CryptKey($keyPath, null, true);
     }
 
     /**
@@ -206,8 +209,34 @@ class OAuth2Service
         $pubKey = openssl_pkey_get_details($res);
         $publicKey = $pubKey['key'];
 
-        file_put_contents($privateKeyPath, $privKey);
+        // 秘密鍵はアクセストークンの署名鍵であり、同一ホストの他アカウントに読まれると
+        // トークンの user_id / scope を書き換えて再署名できてしまう。
+        // 作成の瞬間から他者に読まれないよう、umask を絞った状態で書き出し、その後も明示的に 0600 を設定する。
+        $oldUmask = umask(0077);
+        try {
+            file_put_contents($privateKeyPath, $privKey);
+        } finally {
+            umask($oldUmask);
+        }
+        $this->restrictPrivateKeyPermissions($privateKeyPath);
         file_put_contents($publicKeyPath, $publicKey);
+    }
+
+    /**
+     * 秘密鍵ファイルの権限を所有者のみ読み書き可（0600）に制限する
+     *
+     * @param string $privateKeyPath
+     * @return void
+     */
+    private function restrictPrivateKeyPermissions(string $privateKeyPath): void
+    {
+        if (!is_file($privateKeyPath)) {
+            return;
+        }
+        if ((fileperms($privateKeyPath) & 0777) !== 0600) {
+            @chmod($privateKeyPath, 0600);
+            clearstatcache(true, $privateKeyPath);
+        }
     }
 
     /**

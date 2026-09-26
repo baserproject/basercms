@@ -36,13 +36,18 @@ class BlogTagsController extends BcApiController
     {
         $this->request->allowMethod(['get']);
 
+        // SQLインジェクション対策(GHSA-636g-rgj6-542v):
+        // ガードはリクエスト値の代入後に実施する。代入前だと $queryParams が未定義で
+        // isset() が常に false となり、リクエストの contain（ORM内部構造）が素通りして
+        // contain[...][fields] 経由で任意 SQL が SELECT 句へ注入される。
+        $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
             'contain' => null,
-        ], $this->getRequest()->getQueryParams());
+        ], $queryParams);
         // SQLインジェクション対策: ORM内部構造である conditions/order をリクエストから受け付けない
         unset($queryParams['conditions'], $queryParams['order']);
         $this->set([
@@ -64,6 +69,8 @@ class BlogTagsController extends BcApiController
     {
         $this->request->allowMethod(['get']);
 
+        // SQLインジェクション対策(GHSA-636g-rgj6-542v): index() と同様、代入後にガードする。
+        $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }

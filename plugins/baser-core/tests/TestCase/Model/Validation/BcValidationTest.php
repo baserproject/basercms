@@ -544,6 +544,29 @@ class BcValidationTest extends BcTestCase
             ['<object data="javascript:alert(1)">', false],
             ['<button formaction="javascript:alert(1)">click</button>', false],
             ['<object data="https://example.com/movie.mp4" type="video/mp4"></object>', true],
+
+            // --- JVN#76990966 対策: 難読化されたスクリプトを拒否する ---
+            // パターン1: HTML5実体参照でjavascript:スキームを難読化
+            ['<a href="java&Tab;script:alert(origin)">test</a>', false],
+            ['<a href="javascript&colon;alert(origin)">x</a>', false],
+            ['<a href="javas&NewLine;cript:alert(origin)">x</a>', false],
+            // パターン2: コメント偽装・セミコロン無し数値文字参照
+            ["&lt;!--\n<svg id=\">\" onload=alert(origin)></svg>\n--&gt;", false],
+            ['<a href="j&#x61vascript:alert(origin)">x</a>', false],
+            ['<a href="j&#97vascript:alert(origin)">x</a>', false],
+            // パターン3: 構文的に未完結なタグ（結合攻撃の前半を拒否）
+            ["<input type=hidden value='", false],
+            // パターン4: ブラックリスト外の属性/要素
+            ['<object data=# codebase=java&Tab;script:alert(origin)//></object>', false],
+
+            // --- 無害なリッチHTMLは保存を許可する（誤検知しない） ---
+            ['<figure><img src="/a.png" alt=""><figcaption>キャプション</figcaption></figure>', true],
+            ['<details open><summary>概要</summary>詳細</details>', true],
+            ['<p style="color:red;text-align:center">装飾テキスト</p>', true],
+            ['<span data-id="1" data-role="note">データ属性</span>', true],
+            ['<table class="tbl"><tr><td>セル</td></tr></table>', true],
+            ['<a href="mailto:info@example.com">メール</a>', true],
+            ['<a href="/news/archives/1">次の記事</a>', true],
         ];
     }
 

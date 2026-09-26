@@ -15,6 +15,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Error\BcException;
+use BaserCore\Service\BcQueryParameterTrait;
 use BaserCore\Service\Front\BcFrontContentsService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
@@ -44,6 +45,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * Trait
      */
     use BcContainerTrait;
+    use BcQueryParameterTrait;
 
     /**
      * カスタムエントリーサービス

@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\BcQueryParameterTrait;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogPost;
@@ -46,6 +47,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * Trait
      */
     use BcContainerTrait;
+    use BcQueryParameterTrait;
 
     /**
      * BlogPostsTable
