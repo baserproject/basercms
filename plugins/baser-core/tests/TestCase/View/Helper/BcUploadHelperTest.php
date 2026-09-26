@@ -233,6 +233,20 @@ class BcUploadHelperTest extends BcTestCase
     }
 
     /**
+     * test fileLink - 一時ファイル名（_tmp）が figcaption へ無エスケープ出力されないこと（自己 XSS 対策）
+     */
+    public function testFileLinkEscapesFigcaption()
+    {
+        $data = [
+            'eyecatch' => 'original_image.jpg',
+            'eyecatch_tmp' => '<img src=x onerror=alert(1)>.jpg',
+        ];
+        $result = $this->BcUpload->fileLink('eyecatch', new Content($data));
+        $this->assertStringNotContainsString('<img src=x', $result);
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;.jpg', $result);
+    }
+
+    /**
      * test uploadImage auto-detects _tmp value
      * {field}_tmpがエンティティにセットされていれば、tmp=trueを明示しなくてもtmpパスで画像URLが生成される
      */
