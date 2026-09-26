@@ -508,4 +508,38 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue($result);
     }
 
+
+    /**
+     * test assertThemeName / delete / copy / createDownloadToTmp - テーマ名のパストラバーサルを拒否する
+     *
+     * `..` 等をテーマ名として渡すと、plugins/ の親ディレクトリが削除・複製・ダウンロードの対象になった。
+     * @dataProvider invalidThemeNameDataProvider
+     */
+    public function test_rejectsInvalidThemeName($theme)
+    {
+        foreach(['delete', 'copy', 'createDownloadToTmp'] as $method) {
+            try {
+                $this->ThemesService->{$method}($theme);
+                $this->fail($method . '(' . $theme . ') が拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertEquals('テーマ名が不正です。', $e->getMessage(), $method);
+            }
+        }
+        // 対象ディレクトリが存在すること（削除されていないこと）
+        $this->assertDirectoryExists(ROOT . DS . 'config');
+        $this->assertDirectoryExists(BASER_PLUGINS . 'baser-core');
+    }
+
+    public static function invalidThemeNameDataProvider()
+    {
+        return [
+            ['..'],
+            ['../config'],
+            ['..' . DS . '..'],
+            ['.'],
+            [''],
+            ['BcFront/../../config'],
+            ['..json'],
+        ];
+    }
 }

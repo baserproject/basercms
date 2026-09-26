@@ -998,6 +998,14 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetPluginDir()
     {
+        // パストラバーサル対策: プラグイン名として不正な文字列は実在するディレクトリでも false
+        $this->assertFalse(BcUtil::getPluginDir('..'));
+        $this->assertFalse(BcUtil::getPluginDir('../config'));
+        $this->assertFalse(BcUtil::getPluginDir('.'));
+        $this->assertFalse(BcUtil::getPluginDir('bc-blog/../baser-core'));
+        $this->assertFalse(BcUtil::getPluginPath('..'));
+        $this->assertFalse(BcUtil::getPluginPath('../config'));
+
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
         $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample'));
