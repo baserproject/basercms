@@ -510,7 +510,30 @@ class BcDatabaseServiceTest extends BcTestCase
             ['test', '"test"'],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
+            // 数式として解釈され得る値にはシングルクォートを前置する
+            ['=cmd|calc', '"\'=cmd|calc"'],
+            ['+1', '"\'+1"'],
+            ['-1', '"\'-1"'],
+            ['@test', '"\'@test"'],
         ];
+    }
+
+    /**
+     * test loadCsvToArray - 数式対策のシングルクォートが復元時に取り除かれること
+     */
+    public function test_csvFormulaRoundTrip()
+    {
+        $csvFolder = TMP . 'csv' . DS;
+        if (!is_dir($csvFolder)) (new BcFolder($csvFolder))->create();
+        $path = $csvFolder . 'formula.csv';
+        file_put_contents($path, "\"title\",\"detail\"\n\"'=cmd|calc\",\"'-1\"\n\"'abc\",\"'\"\n");
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'UTF-8');
+        $this->assertEquals('=cmd|calc', $rs[0]['title']);
+        $this->assertEquals('-1', $rs[0]['detail']);
+        // 数式の先頭文字が続かないシングルクォートはそのまま
+        $this->assertEquals("'abc", $rs[1]['title']);
+        $this->assertEquals("'", $rs[1]['detail']);
+        unlink($path);
     }
 
     /**

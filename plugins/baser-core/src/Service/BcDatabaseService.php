@@ -737,6 +737,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if($value === '') {
                     $values[$head[$key]] = null;
                 } else {
+                    // 書き出し時に数式対策で前置したシングルクォートを取り除く
+                    if (strlen($value) >= 2 && $value[0] === "'" && self::isFormulaInjectionTarget(substr($value, 1))) {
+                        $value = substr($value, 1);
+                    }
                     $values[$head[$key]] = $value;
                 }
             }
@@ -871,8 +875,28 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $value = trim(trim($value), "\'");
         $value = str_replace("\\'", "'", $value);
         $value = str_replace('{CM}', ',', $value);
+        // 表計算ソフトで開いた際に数式として解釈されないよう、数式の先頭文字で始まる値には
+        // シングルクォートを前置する（loadCsvToArray() で取り除くため復元時の値は変わらない）
+        if (self::isFormulaInjectionTarget($value)) {
+            $value = "'" . $value;
+        }
         $value = '"' . $value . '"';
         return $value;
+    }
+
+    /**
+     * 表計算ソフトで数式として解釈され得る値かどうか判定する
+     *
+     * @param string $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isFormulaInjectionTarget(string $value): bool
+    {
+        if ($value === '') return false;
+        return in_array($value[0], ['=', '+', '-', '@', "\t", "\r"], true);
     }
 
     /**
