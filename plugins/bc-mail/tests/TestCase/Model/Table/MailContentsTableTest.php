@@ -498,4 +498,20 @@ class MailContentsTableTest extends BcTestCase
         @unlink($savePath . $newFileName);
     }
 
+
+    /**
+     * test validationDefault - テンプレート名は妥当な文字のみ、リダイレクト URL は URL として妥当な文字のみ許可する
+     */
+    public function testValidationTemplatesAndRedirectUrl()
+    {
+        $validator = $this->MailContent->getValidator('default');
+        $errors = $validator->validate(['form_template' => 'default', 'mail_template' => 'mail_default', 'redirect_url' => '/thanks/']);
+        $this->assertArrayNotHasKey('form_template', $errors);
+        $this->assertArrayNotHasKey('mail_template', $errors);
+        $this->assertArrayNotHasKey('redirect_url', $errors);
+        $errors = $validator->validate(['form_template' => '../../config', 'mail_template' => 'a/../b', 'redirect_url' => '/thanks/" onmouseover="alert(1)']);
+        $this->assertArrayHasKey('regex', $errors['form_template']);
+        $this->assertArrayHasKey('regex', $errors['mail_template']);
+        $this->assertArrayHasKey('regex', $errors['redirect_url']);
+    }
 }
