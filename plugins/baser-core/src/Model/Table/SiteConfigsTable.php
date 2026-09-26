@@ -87,7 +87,9 @@ class SiteConfigsTable extends AppTable
             ]]);
         $validator
             ->scalar('site_url')
-            ->regex('site_url', '/^(http|https):/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
+            // 先頭一致のみだと改行・空白・引用符を含む値を保存でき、.env の書き出しでサイト全体が
+            // 起動不能になるため、URL として妥当な文字のみで構成されていることを検証する
+            ->regex('site_url', '/^https?:\/\/[^\s"\'<>\\\\]+\z/', __d('baser_core', 'WebサイトURLはURLの形式を入力してください。'))
             ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
         $validator
             ->allowEmptyString('password_reset_days')
