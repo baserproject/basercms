@@ -1796,19 +1796,28 @@ class BcBaserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function mark($search, $text, $name = 'strong', $attributes = [], $escape = false)
+    public function mark($search, $text, $name = 'strong', $attributes = [], $escape = true)
     {
         if (!is_array($search)) {
             $search = [$search];
         }
+        // 既定でテキストと検索語をエスケープする。検索結果ページでは $text がコンテンツのタイトル・
+        // 本文（編集者が入力）、$search が検索語（閲覧者が入力）であり、どちらも無エスケープで
+        // 出力すると格納型・反射型 XSS になる。タグ自体は生成後の文字列なのでエスケープしない
+        if ($escape) {
+            $text = h((string) $text);
+        }
         $options = [
-            'escape' => $escape
+            'escape' => false
         ];
         if (!empty($attributes)) {
             $options = array_merge($options, $attributes);
         }
         foreach($search as $value) {
-            $text = str_replace($value, $this->BcHtml->tag($name, $value, $options), (string) $text);
+            $value = (string) $value;
+            if ($value === '') continue;
+            $needle = $escape ? h($value) : $value;
+            $text = str_replace($needle, $this->BcHtml->tag($name, $needle, $options), (string) $text);
         }
         return $text;
     }
