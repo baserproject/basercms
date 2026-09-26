@@ -98,7 +98,7 @@ $editable = $this->BcContents->isEditable($content);
 	    data-toggle="tooltip"
       data-placement="top"
       title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
-      <i class="bca-icon--globe"></i><?php echo rawurldecode($fullUrl) ?>
+      <i class="bca-icon--globe"></i><?php echo h(rawurldecode($fullUrl)) ?>
     </a>
 	  <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
@@ -122,7 +122,15 @@ $editable = $this->BcContents->isEditable($content);
           <?php echo $this->BcAdminForm->control("content.parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
         <?php if (!$content->site_root && !$related): ?>
-          <?php echo rawurldecode($this->BcAdminForm->control("content.name", ['type' => 'text', 'size' => 20, 'autofocus' => true])) ?>
+          <?php
+          // 出力した HTML 全体を rawurldecode() すると、デコードされた記号で属性から脱出できるため、
+          // デコードした値を value として渡し、ヘルパ側でエスケープさせる（格納型 XSS 対策）
+          echo $this->BcAdminForm->control("content.name", [
+            'type' => 'text',
+            'size' => 20,
+            'autofocus' => true,
+            'value' => rawurldecode((string)$this->BcAdminForm->getSourceValue("content.name"))
+          ]) ?>
           <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$content->site_root): ?>
