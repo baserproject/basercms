@@ -134,7 +134,8 @@ class UploaderHelper extends Helper
     {
         $fileUrl = $this->getFileUrl($uploaderFile->name);
         // HtmlヘルパではスマートURLオフの場合に正常なURLが取得できないので、直接記述
-        return '<a href="' . $fileUrl . '" target="_blank">' . $linkText . '</a>';
+        // URL はファイル名由来のため属性値としてエスケープする
+        return '<a href="' . h($fileUrl) . '" target="_blank">' . $linkText . '</a>';
     }
 
     /**
