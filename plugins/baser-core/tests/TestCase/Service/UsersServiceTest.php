@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\SuspendedUsersScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -200,19 +202,22 @@ class UsersServiceTest extends BcTestCase
         $request = $this->loginAdmin($this->getRequest('/'), 2);
         Router::setRequest($request);
         $user = $this->Users->get(2);
+        $adminEmail = $this->Users->get(1)->email;
 
-        // 行形式で管理者グループを指定
+        // 行形式で管理者グループを指定しても、スーパーユーザー以外はグループを変更できない
+        $this->Users->update($user, ['name' => 'operator', 'user_groups' => [['id' => Configure::read('BcApp.adminGroupId')]]]);
+        $this->assertEquals([2], array_map(fn($g) => $g->id, $this->Users->get(2)->user_groups));
+
+        // login_user_id を管理者の ID に偽装しても同様
+        $this->Users->update($this->Users->get(2), ['name' => 'operator', 'login_user_id' => '1', 'id' => '1', 'user_groups' => ['_ids' => [Configure::read('BcApp.adminGroupId')]]]);
+        $this->assertEquals([2], array_map(fn($g) => $g->id, $this->Users->get(2)->user_groups));
+        // 管理者（id=1）のデータも変更されていない
+        $this->assertEquals($adminEmail, $this->Users->get(1)->email);
+
+        // スーパーユーザー以外が行形式で管理者グループを付与しようとした場合の正規化（create 経路）も拒否される
         try {
-            $this->Users->update($user, ['name' => 'operator', 'user_groups' => [['id' => Configure::read('BcApp.adminGroupId')]]]);
+            $this->Users->create(['name' => 'newuser', 'email' => 'new@example.com', 'real_name_1' => 'n', 'password_1' => 'Testtest1234', 'password_2' => 'Testtest1234', 'user_groups' => [['id' => Configure::read('BcApp.adminGroupId')]]]);
             $this->fail('行形式の user_groups で管理者グループを付与できてしまいます');
-        } catch (\BaserCore\Error\BcException $e) {
-            $this->assertEquals('特権エラーが発生しました。', $e->getMessage());
-        }
-
-        // login_user_id を管理者の ID に偽装
-        try {
-            $this->Users->update($user, ['name' => 'operator', 'login_user_id' => '1', 'id' => '1', 'user_groups' => ['_ids' => [Configure::read('BcApp.adminGroupId')]]]);
-            $this->fail('login_user_id の偽装で管理者グループを付与できてしまいます');
         } catch (\BaserCore\Error\BcException $e) {
             $this->assertEquals('特権エラーが発生しました。', $e->getMessage());
         }
@@ -220,6 +225,24 @@ class UsersServiceTest extends BcTestCase
         // 変更されていないこと
         $user = $this->Users->get(2);
         $this->assertEquals([2], array_map(fn($g) => $g->id, $user->user_groups));
+    }
+
+    /**
+     * test update - スーパーユーザー以外は他ユーザーの所属グループを変更できないこと
+     */
+    public function test_update_nonSuperCannotChangeGroups()
+    {
+        UserGroupFactory::make(['id' => 10, 'name' => 'group10', 'title' => 'group10', 'auth_prefix' => 'Admin'])->persist();
+        UserFactory::make(['id' => 10, 'name' => 'user10', 'email' => 'user10@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 10, 'user_group_id' => 10])->persist();
+        // 非スーパーユーザー（id=2）でログインし、他ユーザー（id=10）のグループを変更しようとする
+        $request = $this->loginAdmin($this->getRequest('/'), 2);
+        Router::setRequest($request);
+        $user = $this->Users->get(10);
+        $this->Users->update($user, ['name' => 'user10updated', 'user_groups' => ['_ids' => [2]]]);
+        $user = $this->Users->get(10);
+        $this->assertEquals('user10updated', $user->name);
+        $this->assertEquals([10], array_map(fn($g) => $g->id, $user->user_groups));
     }
 
     /**
