@@ -804,11 +804,19 @@ class BcUtilTest extends BcTestCase
                 \'type\' => \'Theme\'
             ];
         ');
+        // プラグイン名として妥当でないディレクトリの config.php は読み込まれないこと
+        $hiddenPath = ROOT . DS . 'plugins' . DS . '.hidden_theme';
+        $hiddenFolder = new BcFolder($hiddenPath);
+        $hiddenFolder->create();
+        (new BcFile($hiddenPath . DS . 'config.php'))->write('<?php return [\'type\' => \'Theme\'];');
         $themes = BcUtil::getAllThemeList();
         $this->assertTrue(in_array('BcFront', $themes));
         $this->assertTrue(in_array('BcAdminThird', $themes));
         $this->assertTrue(in_array('TestTheme', $themes));
+        $this->assertFalse(in_array('HiddenTheme', $themes));
+        $this->assertFalse(in_array('.hidden_theme', $themes));
         $folder->delete();
+        $hiddenFolder->delete();
     }
 
     /**

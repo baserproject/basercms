@@ -921,7 +921,10 @@ class BcUtil
                 continue;
             }
             foreach($folders as $name) {
-                $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
+                // プラグイン名として妥当でないディレクトリ（. 始まり等）の config.php は読み込まない
+                $pluginPath = BcUtil::getPluginPath($name);
+                if (!$pluginPath) continue;
+                $appConfigPath = $pluginPath . 'config.php';
                 if ($name === '_notes' || !file_exists($appConfigPath)) {
                     continue;
                 }
