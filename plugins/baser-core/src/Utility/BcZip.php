@@ -162,8 +162,9 @@ class BcZip
         $command = $unzipCommand . ' -o ' . $this->_escapePath($source) . ' -d ' . $this->_escapePath($target);
         exec($command . ' 2>&1', $return2);
         // unzip コマンドはシンボリックリンクを復元するため、展開先外を指すリンクが作られると
-        // 後続のコピー処理でリンク先の実体が展開先へ複製される。リンクを含む場合は削除して失敗にする
-        if ($this->_removeSymlinks($target)) {
+        // 後続のコピー処理でリンク先の実体が展開先へ複製される。
+        // アーカイブのエントリにリンクが含まれる場合は削除して失敗にする
+        if ($this->_removeSymlinks($target, $entries)) {
             $this->error = __d('baser_core', 'Symbolic links are not allowed in zip archive.');
             return false;
         }
@@ -185,25 +186,27 @@ class BcZip
     }
 
     /**
-     * 指定ディレクトリ配下のシンボリックリンクを削除する
+     * 展開したアーカイブのエントリのうちシンボリックリンクとして復元されたものを削除する
      *
-     * @param string $dir
+     * 展開先（TMP や vendor）に元から存在するリンクには影響しないよう、
+     * アーカイブのエントリに対応するパスのみを対象とする
+     *
+     * @param string $target 展開先
+     * @param array $entries アーカイブのエントリ一覧
      * @return bool リンクが存在した場合 true
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function _removeSymlinks(string $dir): bool
+    protected function _removeSymlinks(string $target, array $entries): bool
     {
-        if (!is_dir($dir)) return false;
         $found = false;
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($iterator as $item) {
-            if ($item->isLink()) {
-                unlink($item->getPathname());
+        foreach ($entries as $entry) {
+            $entry = trim((string)$entry);
+            if ($entry === '') continue;
+            $path = rtrim($target, "/\\") . DS . ltrim(str_replace('/', DS, $entry), DS);
+            if (is_link($path)) {
+                unlink($path);
                 $found = true;
             }
         }
