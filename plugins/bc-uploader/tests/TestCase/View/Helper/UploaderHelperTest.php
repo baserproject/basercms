@@ -102,6 +102,11 @@ class UploaderHelperTest extends BcTestCase
 
         $rs = $this->UploaderHelper->download($uploaderFile);
         $this->assertEquals('<a href="/files/uploads/test.jpg" target="_blank">≫ ダウンロード</a>', $rs);
+
+        // ファイル名に含まれる記号が属性値としてエスケープされること
+        $uploaderFile->name = 'a"onmouseover="alert(1).jpg';
+        $rs = $this->UploaderHelper->download($uploaderFile);
+        $this->assertStringContainsString('href="/files/uploads/a&quot;onmouseover=&quot;alert(1).jpg"', $rs);
     }
 
     /**
