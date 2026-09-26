@@ -50,6 +50,9 @@ trait BcQueryParameterTrait
             'select',
             'group',
             'having',
+            // order は文字列のまま orderBy() に渡すサービスがあり、SQL の ORDER BY 句へ
+            // 直接注入される。並び替えは sort / direction で受け付ける
+            'order',
         ];
         return array_diff_key($queryParams, array_flip($reserved));
     }

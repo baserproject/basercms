@@ -20,6 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
 use BaserCore\Service\AppServiceInterface;
+use BaserCore\Service\BcQueryParameterTrait;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -51,6 +52,7 @@ class AppController extends BaseController
      */
     use BcEventDispatcherTrait;
     use BcContainerTrait;
+    use BcQueryParameterTrait;
 
     /**
      * AppController constructor.
@@ -142,6 +144,12 @@ class AppController extends BaseController
         $response = parent::beforeFilter($event);
         if ($response) return $response;
 
+        // `amp;` 付きキーの正規化を先に行い、その結果に対して ORM 内部構造キーを除去する
+        // （正規化後に除去しないと amp;contain[...] で除去を迂回できる）
+        $this->__cleanupQueryParams();
+        // SQLインジェクション対策: リクエスト由来の ORM 内部構造キーを除去する
+        $this->removeOrmStructureFromRequest();
+
         // index.php をつけたURLの場合、base の値が正常でなくなり、
         // 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
         if (preg_match('/\/index\.php\//', $this->getRequest()->getAttribute('base'))) {
@@ -152,8 +160,6 @@ class AppController extends BaseController
 
         $response = $this->redirectIfIsRequireMaintenance();
         if ($response) return $response;
-
-        $this->__cleanupQueryParams();
 
         // インストーラー、アップデーターの場合はテーマを設定して終了
         // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
@@ -296,6 +302,38 @@ class AppController extends BaseController
      * @noTodo
      * @unitTest
      */
+    /**
+     * リクエストのクエリパラメータから ORM 内部構造キーを除去する
+     *
+     * 管理画面・Admin API の多くのアクションは、リクエストのクエリパラメータを
+     * そのまま Service の getIndex() / get() に渡し、Service 側で
+     * `array_merge([既定の contain], $queryParams)` としてリクエスト値を優先させている。
+     * このため `contain[Assoc][conditions][]` / `contain[Assoc][fields][]` /
+     * `finder` / `order` 等を付与すると、EagerLoader を経由して任意の SQL が
+     * WHERE / SELECT / ORDER BY 句へ注入される（GHSA-ch8f-q957-r9xm、
+     * GHSA-2ghw-gwvv-mv56 と同じ経路の管理画面・Admin API 側）。
+     *
+     * 各アクションに個別のガードを置くのではなく、全コントローラの共通基底である
+     * ここで一括して除去する。
+     *
+     * 公開 API（プレフィックス Api）は GHSA-636g-rgj6-542v 以降、各コントローラが
+     * contain の指定を 403 で明示的に拒否する方針のため対象外とする。
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function removeOrmStructureFromRequest(): void
+    {
+        if (BcUtil::getRequestPrefix($this->getRequest()) === 'Api') return;
+        $query = $this->getRequest()->getQueryParams();
+        $cleaned = $this->removeOrmStructure($query);
+        if ($cleaned !== $query) {
+            $this->setRequest($this->getRequest()->withQueryParams($cleaned));
+        }
+    }
+
     private function __cleanupQueryParams(): void
     {
         $query = $this->request->getQueryParams();
