@@ -871,6 +871,29 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     }
 
     /**
+     * 前後エントリー取得の並び替えに使うフィールド名を安全な値に限定する
+     *
+     * list_order はカスタムコンテンツの設定値だが、管理画面・管理 API・MCP から任意の文字列を
+     * 保存できるため、そのまま WHERE 句のキーや ORDER BY に連結すると SQL インジェクションになる。
+     * 識別子として妥当（英小文字・数字・アンダースコア）かつテーブルに実在するフィールドのみ許可し、
+     * それ以外は既定の published にフォールバックする。
+     *
+     * @param string|null $orderField
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getSafeOrderField(?string $orderField): string
+    {
+        if (empty($orderField)) return 'published';
+        if (!preg_match('/^[a-z0-9_]+$/', $orderField) || !$this->CustomEntries->hasField($orderField)) {
+            return 'published';
+        }
+        return $orderField;
+    }
+
+    /**
      * 指定したCustomEntryの前のエントリーを取得する
      *
      * @param CustomEntry $entry
@@ -884,7 +907,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // CustomContentのlist_order, list_directionを取得
         $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
-        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderField = $this->getSafeOrderField($customContent->list_order ?? null);
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
         // orderBy用配列生成
         $orderBy = [$orderField => 'ASC', 'id' => 'ASC'];
@@ -930,7 +953,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // CustomContentのlist_order, list_directionを取得
         $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
-        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderField = $this->getSafeOrderField($customContent->list_order ?? null);
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
         // orderBy用配列生成
         $orderBy = [$orderField => 'DESC', 'id' => 'DESC'];

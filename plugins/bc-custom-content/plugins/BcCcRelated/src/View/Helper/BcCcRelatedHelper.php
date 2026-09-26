@@ -186,6 +186,9 @@ class BcCcRelatedHelper extends Helper
 
         $customEntriesTable = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
         $customEntriesTable->setup($customTableId);
+        // display_field / filter_name は設定値だが任意の文字列を保存できるため、
+        // SELECT 句・WHERE 句のキーへ連結する前に識別子として妥当かつ実在するフィールドに限定する
+        if (!$this->isSafeFieldName($customEntriesTable, $displayField)) return [];
         $query = $customEntriesTable->find()
             ->select([
                 'CustomEntries.id',
@@ -195,7 +198,7 @@ class BcCcRelatedHelper extends Helper
         $filterName = $customField->meta['BcCcRelated']['filter_name']?? null;
         $filterValue = $customField->meta['BcCcRelated']['filter_value']?? null;
 
-        if($filterName && $filterValue) {
+        if($filterName && $filterValue && $this->isSafeFieldName($customEntriesTable, $filterName)) {
             $query->where(['CustomEntries.' . $filterName => $filterValue]);
         }
         $customEntries = $query->all()->toArray();
@@ -203,6 +206,23 @@ class BcCcRelatedHelper extends Helper
         $entryTitles = Hash::combine($customEntries, '{n}.id', '{n}.' . $displayField);
 
         return $entryTitles;
+    }
+
+
+    /**
+     * フィールド名が識別子として妥当で、テーブルに実在するか判定する
+     *
+     * @param \Cake\ORM\Table $table
+     * @param mixed $fieldName
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isSafeFieldName($table, $fieldName): bool
+    {
+        if (!is_string($fieldName) || !preg_match('/^[a-z0-9_]+$/', $fieldName)) return false;
+        return $table->hasField($fieldName);
     }
 
 }

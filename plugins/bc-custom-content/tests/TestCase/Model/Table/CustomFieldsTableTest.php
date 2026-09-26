@@ -243,4 +243,30 @@ class CustomFieldsTableTest extends BcTestCase
         $this->assertArrayNotHasKey('validate', $result);
     }
 
+
+    /**
+     * test validationDefault - 関連データの絞り込みフィールド名（meta.BcCcRelated.filter_name）
+     *
+     * WHERE 句のキーに使われるため、識別子として不正な値は保存を弾く（SQL インジェクション対策）
+     */
+    public function test_validationBcCcRelatedFilterName()
+    {
+        $request = $this->getRequest('/')->withData('validate', '');
+        Router::setRequest($request);
+        $validator = $this->CustomFieldsTable->getValidator('default');
+
+        $errors = $validator->validate(['meta' => '{"BcCcRelated":{"filter_name":"category_id","filter_value":"1"}}']);
+        $this->assertArrayNotHasKey('meta', $errors);
+        $errors = $validator->validate(['meta' => '{"BcCcRelated":{"filter_name":"","filter_value":""}}']);
+        $this->assertArrayNotHasKey('meta', $errors);
+
+        $errors = $validator->validate(['meta' => '{"BcCcRelated":{"filter_name":"id` = 1 OR 1=1 -- ","filter_value":"1"}}']);
+        $this->assertEquals('絞り込みフィールド名は半角小文字英数字とアンダースコアのみで入力してください。', $errors['meta']['checkBcCcRelatedFilterName']);
+
+        // afterMarshal でフィールド単位のエラーに振り分けられる
+        $customField = $this->CustomFieldsTable->newEntity(['meta' => ['BcCcRelated' => ['filter_name' => 'Title Name', 'filter_value' => '1']]]);
+        $result = $this->CustomFieldsTable->dispatchEvent('Model.afterMarshal', ['entity' => $customField, 'data' => new \ArrayObject(), 'options' => new \ArrayObject()]);
+        $errors = $result->getData('entity')->getErrors();
+        $this->assertArrayHasKey('checkBcCcRelatedFilterName', $errors['meta.BcCcRelated.filter_name']);
+    }
 }

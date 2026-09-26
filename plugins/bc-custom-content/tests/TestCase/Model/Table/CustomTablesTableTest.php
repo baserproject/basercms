@@ -108,4 +108,18 @@ class CustomTablesTableTest extends BcTestCase
 
 
 
+
+    /**
+     * test validationDefault - display_field は識別子として妥当な値のみ許可する
+     */
+    public function test_validationDisplayField()
+    {
+        $validator = $this->CustomTablesTable->getValidator('default');
+        $errors = $validator->validate(['name' => 'test', 'title' => 'test', 'display_field' => 'title']);
+        $this->assertArrayNotHasKey('display_field', $errors);
+        $errors = $validator->validate(['name' => 'test', 'title' => 'test', 'display_field' => '']);
+        $this->assertArrayNotHasKey('display_field', $errors);
+        $errors = $validator->validate(['name' => 'test', 'title' => 'test', 'display_field' => 'title, (SELECT password FROM users LIMIT 1) AS x']);
+        $this->assertArrayHasKey('regex', $errors['display_field']);
+    }
 }
