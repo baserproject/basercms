@@ -91,4 +91,34 @@ class ContentLinksControllerTest extends BcTestCase
         $rs = $this->_controller->viewBuilder()->getVars()['contentLink']->toArray();
         $this->assertEquals('/test-new', $rs['url']);
     }
+
+    /**
+     * test view - リンク先 URL が JavaScript の文字列リテラルから脱出しないこと（格納型 XSS 対策）
+     */
+    public function test_view_escapesUrl(): void
+    {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
+        // バリデーションを経ずに不正な URL が保存された状態を再現
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test"; alert(1); //</script><script>alert(2)</script>'])->persist();
+        ContentFactory::make([
+            'id' => 6,
+            'name' => 'index',
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'entity_id' => 1,
+            'url' => '/index',
+            'site_id' => 1,
+            'title' => 'test new link',
+            'lft' => 1,
+            'rght' => 2,
+            'status' => true,
+        ])->persist();
+
+        $this->get('/bc-content-link/content_links/view');
+        $this->assertResponseSuccess();
+        $body = (string)$this->_response->getBody();
+        $this->assertStringNotContainsString('alert(2)</script>', $body);
+        $this->assertStringNotContainsString('window.location.href = "/test";', $body);
+        $this->assertStringContainsString('window.location.href = "/test\\u0022; alert(1); //\\u003C/script\\u003E', $body);
+    }
 }
