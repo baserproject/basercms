@@ -147,6 +147,14 @@ class CustomFieldsTable extends AppTable
                     'provider' => 'table',
                     'message' => __d('baser_core', '実行可能なファイルの拡張子は指定できません。')
                 ],
+            ])
+            // 関連データの絞り込みフィールド名は WHERE 句のキーに使われるため識別子として妥当な値に限定する
+            ->add('meta', [
+                'checkBcCcRelatedFilterName' => [
+                    'rule' => ['checkWithJson', 'BcCcRelated.filter_name', "/^[a-z0-9_]+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '絞り込みフィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
+                ],
             ]);
         return $validator;
     }
@@ -215,6 +223,9 @@ class CustomFieldsTable extends AppTable
         }
         if (isset($metaErrors['checkBcCcWysiwygWith'])) {
             $entity->setError('meta.BcCcWysiwyg.width', ['checkBcCcWysiwygWith' => $metaErrors['checkBcCcWysiwygWith']]);
+        }
+        if (isset($metaErrors['checkBcCcRelatedFilterName'])) {
+            $entity->setError('meta.BcCcRelated.filter_name', ['checkBcCcRelatedFilterName' => $metaErrors['checkBcCcRelatedFilterName']]);
         }
         if (isset($metaErrors['checkBcCcWysiwygHeight'])) {
             $entity->setError('meta.BcCcWysiwyg.height', ['checkBcCcWysiwygHeight' => $metaErrors['checkBcCcWysiwygHeight']]);
