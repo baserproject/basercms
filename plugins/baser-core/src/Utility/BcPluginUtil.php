@@ -30,7 +30,9 @@ class BcPluginUtil
      */
     public static function getPluginConfig(string $name): array
     {
-        $path = BcUtil::getPluginPath($name) . 'config.php';
+        // プラグイン名として妥当でない名前（.. や . 始まり等）は config.php を読み込まない
+        $pluginPath = BcUtil::getPluginPath($name);
+        $path = ($pluginPath)? $pluginPath . 'config.php' : '';
         $config = [
             'type' => [],
             'title' => '',
@@ -40,7 +42,7 @@ class BcPluginUtil
             'adminLink' => '',
             'installMessage' => '',
         ];
-        if (file_exists($path)) {
+        if ($path && file_exists($path)) {
         	$config = array_merge($config, include $path);
         	if(!is_array($config['type'])) {
         	    if(strpos($config['type'], ',') !== false) {
