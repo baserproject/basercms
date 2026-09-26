@@ -190,6 +190,48 @@ class BcFileUploaderTest extends BcTestCase
     /**
      * リクエストされたデータを処理しやすいようにセットアップする
      */
+    /**
+     * test isValidFileName
+     * @dataProvider isValidFileNameDataProvider
+     */
+    public function testIsValidFileName($fileName, $expected)
+    {
+        $this->assertEquals($expected, BcFileUploader::isValidFileName($fileName));
+    }
+
+    public static function isValidFileNameDataProvider()
+    {
+        return [
+            ['template1.jpg', true],
+            ['日本語 ファイル名.png', true],
+            ['00000001_eyecatch__1.jpg', true],
+            ['../../config/app.php', false],
+            ['dir/file.jpg', false],
+            ['dir\\file.jpg', false],
+            ['a.jpg" onerror="alert(1)', false],
+            ["a.jpg' onerror='alert(1)", false],
+            ['<script>.jpg', false],
+            ["a\x00.jpg", false],
+        ];
+    }
+
+    /**
+     * test setupRequestData - アップロード対象フィールドに不正な文字列が送信された場合は保存しない
+     *
+     * 任意文字列を保存できると、表示時に href 等の属性から脱出する格納型 XSS に悪用される
+     */
+    public function testSetupRequestData_rejectsInvalidFileNameString()
+    {
+        $data = new ArrayObject(['eyecatch' => 'template1.jpg" onerror="alert(1)']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('', $data['eyecatch']);
+
+        // 妥当なファイル名（既存値）はそのまま
+        $data = new ArrayObject(['eyecatch' => 'template1.jpg']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('template1.jpg', $data['eyecatch']);
+    }
+
     public function testSetupRequestData()
     {
         //テストファイルを作成
