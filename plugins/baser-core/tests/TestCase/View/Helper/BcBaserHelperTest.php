@@ -1572,6 +1572,10 @@ class BcBaserHelperTest extends BcTestCase
             ['大切', 'とても大切です', 'b', [], false, 'とても<b>大切</b>です'],
             ['大切', 'とても大切です', 'b', ['class' => 'truth'], false, 'とても<b class="truth">大切</b>です'],
             ['<<大切>>', 'とても<<大切>>です', 'b', [], true, 'とても<b>&lt;&lt;大切&gt;&gt;</b>です'],
+            // 既定（escape=true）でテキストと検索語がエスケープされる（格納型・反射型 XSS 対策）
+            ['大切', 'とても<script>alert(1)</script>大切です', 'strong', [], true, 'とても&lt;script&gt;alert(1)&lt;/script&gt;<strong>大切</strong>です'],
+            ['<img src=x onerror=alert(1)>', 'テキスト<img src=x onerror=alert(1)>', 'strong', [], true, 'テキスト<strong>&lt;img src=x onerror=alert(1)&gt;</strong>'],
+            ['', 'テキスト<b>', 'strong', [], true, 'テキスト&lt;b&gt;'],
         ];
     }
 
