@@ -487,7 +487,9 @@ class BcBaserHelper extends Helper
 
         if (!$enabled || !$this->isLinkEnabled($srcUrl)) {
             if ($forceTitle) {
-                return "<span>$title</span>";
+                // escape / escapeTitle の指定に従いタイトルをエスケープする
+                $escapeTitle = $options['escapeTitle'] ?? $options['escape'];
+                return '<span>' . ($escapeTitle? h((string)$title) : $title) . '</span>';
             } else {
                 return '';
             }
@@ -1606,7 +1608,9 @@ class BcBaserHelper extends Helper
         $out = [];
         if (!$onSchema) {
             foreach($crumbs as $crumb) {
-                $options = ['escape' => false];
+                // タイトルは addCrumb() 側でエスケープ済みの値を受け付けるためそのまま出力し、
+                // href 等の属性はエスケープする
+                $options = ['escape' => true, 'escapeTitle' => false];
                 if (!empty($crumb['options'])) {
                     $options = array_merge($options, $crumb['options']);
                 }
@@ -1707,7 +1711,9 @@ class BcBaserHelper extends Helper
         } else {
             $protocol = 'https';
         }
-        return $protocol . '://' . Configure::read('BcEnv.host') . $this->getUrl($url, false);
+        // ホスト名は Host ヘッダ由来のため、ホスト名として妥当な文字のみに限定する
+        $host = preg_replace('/[^A-Za-z0-9.\-:\[\]]/', '', (string)Configure::read('BcEnv.host'));
+        return $protocol . '://' . $host . $this->getUrl($url, false);
     }
 
     /**

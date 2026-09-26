@@ -271,4 +271,15 @@ class BcAdminFormHelperTest extends BcTestCase
         $class = 'bca-submit-token';
         $this->assertTextContains('class="' . $class . '"', $result);
     }
+
+    /**
+     * test postLink - forceTitle 時にタイトルがエスケープされること
+     */
+    public function testPostLinkForceTitleEscape(): void
+    {
+        $result = $this->BcAdminForm->postLink('<b>test</b>', '/', ['enabled' => false, 'forceTitle' => true]);
+        $this->assertEquals('<span>&lt;b&gt;test&lt;/b&gt;</span>', $result);
+        $result = $this->BcAdminForm->postLink('<b>test</b>', '/', ['enabled' => false, 'forceTitle' => true, 'escapeTitle' => false]);
+        $this->assertEquals('<span><b>test</b></span>', $result);
+    }
 }
