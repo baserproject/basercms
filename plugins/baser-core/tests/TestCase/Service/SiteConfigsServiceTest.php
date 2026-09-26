@@ -133,6 +133,21 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
             ->toEnv(true)
             ->toServer(true);
         $this->assertEquals('BASERCMS', filter_var(env('BASERCMS')));
+
+        // 改行・制御文字を含む値は書き込まない（.env の破壊防止）
+        $before = file_get_contents($path);
+        foreach(["https://example.com\nexport EVIL=1", "a\rb", "a\x00b"] as $evil) {
+            try {
+                $this->SiteConfigs->putEnv('SITE_URL', $evil);
+                $this->fail('制御文字を含む値が拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertEquals('設定値に改行や制御文字を含めることはできません。', $e->getMessage());
+            }
+        }
+        $this->assertEquals($before, file_get_contents($path));
+        // 引用符・シェル特殊文字は除去される
+        $this->SiteConfigs->putEnv('BASERCMS', 'a"b;c$d`e\\f');
+        $this->assertStringContainsString('export BASERCMS="abcdef"', file_get_contents($path));
         unlink($path);
         rename($path . '.bak', $path);
     }

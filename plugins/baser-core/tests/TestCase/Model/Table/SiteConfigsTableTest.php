@@ -124,6 +124,17 @@ class SiteConfigsTableTest extends BcTestCase
             'site_url' => '/hoge',
         ]);
         $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['site_url']));
+
+        // 改行・空白・引用符を含む値は拒否（.env の破壊防止）
+        foreach(["https://example.com/\nexport EVIL=1", "https://example.com/ a", 'https://example.com/"', "https://example.com/\n"] as $url) {
+            $errors = $validator->validate(['site_url' => $url]);
+            $this->assertEquals('WebサイトURLはURLの形式を入力してください。', current($errors['site_url']), $url);
+        }
+        // 正常
+        foreach(['https://example.com/', 'http://localhost:8080/sub/', 'https://example.com/path?a=1&b=2'] as $url) {
+            $errors = $validator->validate(['site_url' => $url]);
+            $this->assertArrayNotHasKey('site_url', $errors, $url);
+        }
     }
 
     /**
