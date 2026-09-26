@@ -173,7 +173,8 @@ $this->BcBaser->js([
 
           <?php if ($this->BcToolbar->isAvailableClearCache()): ?>
             <li>
-              <?php $this->BcBaser->link(
+              <?php // 状態を変更する操作のため POST で送信する（CSRF 対策）
+              echo $this->BcForm->postLink(
                 __d('baser_core', 'キャッシュクリア'),
                 ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'clear_cache'],
                 ['confirm' => __d('baser_core', 'キャッシュクリアします。いいですか？')]
