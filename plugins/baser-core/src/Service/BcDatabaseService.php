@@ -453,11 +453,24 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
 
         $table = basename($options['path'], '.csv');
+        // CSV のファイル名をそのままテーブル名として使うため、テーブル名として妥当で
+        // 実在するテーブルのみ読み込む
+        $connection = $this->getDatasource($options['dbConfigKeyName']);
+        if (!preg_match('/^[a-z0-9_]+$/i', $table)) {
+            $this->log(__d('baser_core', 'テーブル名として妥当でないため CSV を読み込みませんでした。: {0}', $table));
+            return false;
+        }
+        $prefix = $connection->config()['prefix'] ?? '';
+        $existingTables = $connection->getSchemaCollection()->listTables();
+        if (!in_array($table, $existingTables, true) && !in_array($prefix . $table, $existingTables, true)) {
+            $this->log(__d('baser_core', 'テーブルが存在しないため CSV を読み込みませんでした。: {0}', $table));
+            return false;
+        }
         $locator = TableRegistry::getTableLocator();
         $locator->setFallbackClassName(AppTable::class);
         $appTable = $locator->get(Inflector::camelize($table), ['allowFallbackClass' => true]);
         $currentConnection = $appTable->getConnection();
-        $appTable->setConnection($this->getDatasource($options['dbConfigKeyName']));
+        $appTable->setConnection($connection);
         $appTable->setTable($table);
         $schema = $appTable->getSchema();
 
