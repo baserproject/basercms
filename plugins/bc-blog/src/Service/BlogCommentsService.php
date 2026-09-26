@@ -176,6 +176,16 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         $blogContent = $this->getBlogContent($blogContentId);
         if(!$blogContent->comment_use) throw new BcException(__d('baser_core', 'コメント機能は無効になっています。'));
 
+        // 記事がブログコンテンツに属し、公開中であることを検証する。
+        // 検証しないと、承認不要のブログの ID を指定して承認必須のブログの記事へ公開状態の
+        // コメントを付けたり、非公開記事へコメントを付けたりできる
+        $blogPostsTable = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
+        $blogPost = $blogPostsTable->find()
+            ->where(['BlogPosts.id' => $blogPostId, 'BlogPosts.blog_content_id' => $blogContentId])
+            ->first();
+        if (!$blogPost) throw new BcException(__d('baser_core', '記事が見つかりません。'));
+        if (!$blogPostsTable->allowPublish($blogPost)) throw new BcException(__d('baser_core', '公開されていない記事にはコメントできません。'));
+
         // 画像認証を行う
 //        if ($blogContent->auth_captcha) {
 //            if (!$this->BcCaptcha->check($postData['auth_captcha'], $postData['captcha_id'])) {
