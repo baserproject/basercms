@@ -655,4 +655,18 @@ class BlogContentsTableTest extends BcTestCase
             'checkEyeCatchSize' => 'アイキャッチ画像のサイズが不正です。',
         ], $checkEyeCatchSizeRequest->getErrors()['eye_catch_size_thumb_width']);
     }
+
+    /**
+     * test validationDefault - template はディレクトリのパスに連結されるため妥当な文字のみ許可する
+     */
+    public function testValidationTemplate()
+    {
+        $validator = $this->BlogContentsTable->getValidator('default');
+        $errors = $validator->validate(['template' => 'default']);
+        $this->assertArrayNotHasKey('template', $errors);
+        $errors = $validator->validate(['template' => '../../config']);
+        $this->assertArrayHasKey('regex', $errors['template']);
+        $errors = $validator->validate(['template' => 'a/b']);
+        $this->assertArrayHasKey('regex', $errors['template']);
+    }
 }
