@@ -182,7 +182,9 @@ class BcAdminFormHelper extends BcFormHelper
         $checkUrl = preg_replace('/^' . preg_quote($this->getView()->getRequest()->getAttribute('base'), '/') . '\//', '/', $checkUrl);
         if (!$options['enabled'] || !$this->BcBaser->isLinkEnabled($checkUrl)) {
             if ($options['forceTitle']) {
-                return "<span>$title</span>";
+                // escape / escapeTitle の指定に従いタイトルをエスケープする
+                $escapeTitle = $options['escapeTitle'] ?? ($options['escape'] ?? true);
+                return '<span>' . ($escapeTitle? h($title) : $title) . '</span>';
             } else {
                 return '';
             }
