@@ -143,6 +143,17 @@ class MailMessagesService implements MailMessagesServiceInterface
      */
     public function create(EntityInterface $mailContent, $postData)
     {
+        // 投稿者が指定できない項目（ID・受信日時）はリクエストから除外する
+        unset($postData['id'], $postData['created'], $postData['modified']);
+        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+        $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContent->id, 'MailFields.use_field' => true])->all();
+        // ファイル項目に文字列（ファイル名）が直接送信された場合は受け付けない。
+        // 受け付けると保存済みの他の投稿の添付ファイル名を指定して管理者宛メールに添付させられる
+        foreach($mailFields as $mailField) {
+            if ($mailField->type === 'file' && isset($postData[$mailField->field_name]) && is_string($postData[$mailField->field_name])) {
+                $postData[$mailField->field_name] = '';
+            }
+        }
         $entity = $this->MailMessages->newEntity($postData);
         foreach ($postData as $postKey => $postValue) {
             if (is_array($postValue)) {
@@ -150,8 +161,6 @@ class MailMessagesService implements MailMessagesServiceInterface
             }
         }
         if (!$entity->getErrors()) {
-            $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
-            $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContent->id, 'MailFields.use_field' => true])->all();
             $this->MailMessages->convertToDb($mailFields, $entity);
             return $this->MailMessages->saveOrFail($entity);
         }
