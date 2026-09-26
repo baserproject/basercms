@@ -75,7 +75,7 @@ class BcComposer
             $dir .= '/';
         }
         self::$currentDir = $dir;
-        self::$cd = "cd " . $dir . ';';
+        self::$cd = "cd " . escapeshellarg($dir) . ';';
         self::$composerDir = ROOT . DS . 'composer' . DS;
         self::$export = "export HOME=" . self::$composerDir . ";";
         self::$php = ($php)?: 'php';

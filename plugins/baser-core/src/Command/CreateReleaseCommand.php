@@ -18,6 +18,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use BaserCore\Error\BcException;
 use Cake\Core\Configure;
 use Composer\Package\Archiver\ZipArchiver;
 use BaserCore\Annotation\UnitTest;
@@ -118,10 +119,15 @@ class CreateReleaseCommand extends Command
      */
     public function clonePackage(string $packagePath, string $branch)
     {
+        // ブランチ名はシェルコマンドに連結するため、git の参照名として妥当な文字に限定する
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9._\/-]*$/', $branch) || strpos($branch, '..') !== false) {
+            throw new BcException(__d('baser_core', 'ブランチ名が不正です。'));
+        }
         $tmp = TMP;
         $repository = Configure::read('BcApp.repositoryUrl');
-        exec("cd {$tmp}; git clone {$repository} basercms");
-        exec("cd {$packagePath}; git checkout {$branch}");
+        // git は進捗・メッセージを標準エラーへ出力するため、2>&1 で exec に捕捉させて画面・ログへの漏れを防ぐ
+        exec("cd " . escapeshellarg($tmp) . "; git clone " . escapeshellarg($repository) . " basercms 2>&1");
+        exec("cd " . escapeshellarg($packagePath) . "; git checkout " . escapeshellarg($branch) . " 2>&1");
     }
 
     /**

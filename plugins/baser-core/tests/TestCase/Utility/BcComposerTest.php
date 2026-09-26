@@ -44,14 +44,14 @@ class BcComposerTest extends BcTestCase
     public function testSetup()
     {
         BcComposer::setup();
-        $this->assertEquals('cd /var/www/html/;', BcComposer::$cd);
+        $this->assertEquals("cd '/var/www/html/';", BcComposer::$cd);
         $this->assertEquals('/var/www/html/composer/', BcComposer::$composerDir);
         $this->assertEquals('export HOME=/var/www/html/composer/;', BcComposer::$export);
         $this->assertEquals('php', BcComposer::$php);
 
         // 環境を変更
         BcComposer::setup('/usr/local/bin/php', '/var/www/html/tmp/update');
-        $this->assertEquals('cd /var/www/html/tmp/update/;', BcComposer::$cd);
+        $this->assertEquals("cd '/var/www/html/tmp/update/';", BcComposer::$cd);
         $this->assertEquals('/usr/local/bin/php', BcComposer::$php);
     }
 
