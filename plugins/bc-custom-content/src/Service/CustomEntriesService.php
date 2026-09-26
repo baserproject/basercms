@@ -255,8 +255,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         if ($params['status'] === 'publish') {
             $conditions = $this->CustomEntries->getConditionAllowPublish();
             $query->contain(['CustomTables' => ['CustomContents' => ['Contents']]]);
-            $fields = $this->CustomEntries->getSchema()->columns();
-            $query->select($fields);
+            // 以前はここで全カラムを select し直していたため、createSelect() で use_api=false の
+            // フィールドを除外していても公開 API の応答に含まれてしまっていた。
+            // select は createSelect() の結果（または既定の全カラム）に任せる
             $conditions = array_merge_recursive(
                 $conditions,
                 $this->CustomEntries->CustomTables->CustomContents->Contents->getConditionAllowPublish()
