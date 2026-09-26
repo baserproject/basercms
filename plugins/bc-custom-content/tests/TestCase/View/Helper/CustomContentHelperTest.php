@@ -84,6 +84,12 @@ class CustomContentHelperTest extends BcTestCase
         $rs = $this->CustomContentHelper->getTitle();
         //戻り値を確認
         $this->assertEquals('サービスタイトル', $rs);
+
+        // タイトルはエスケープされる（格納型 XSS 対策）
+        $customContent->content->title = 'title<script>alert(1)</script>';
+        $view = new View($this->getRequest()->withAttribute('currentContent', $customContent->content));
+        $this->CustomContentHelper = new CustomContentHelper($view);
+        $this->assertEquals('title&lt;script&gt;alert(1)&lt;/script&gt;', $this->CustomContentHelper->getTitle());
     }
 
     /**
