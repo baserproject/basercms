@@ -32,6 +32,6 @@ interface BcCaptchaServiceInterface
      * @param string $value フォームから送信された文字列
      * @return bool
      */
-    public function check(ServerRequest $request, string $token, string $value): bool;
+    public function check(ServerRequest $request, string $token, string $value, bool $consume = false): bool;
 
 }

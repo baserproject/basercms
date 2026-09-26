@@ -52,11 +52,17 @@ class BcCaptchaService implements BcCaptchaServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function check(ServerRequest $request, string $token, string $value): bool
+    public function check(ServerRequest $request, string $token, string $value, bool $consume = false): bool
     {
         require_once BASER_VENDORS . 'kcaptcha/kcaptcha_config.php';
         $key = 'captcha.' . $token;
-        return ($value === $request->getSession()->read($key));
+        $expected = $request->getSession()->read($key);
+        $result = ($value !== '' && is_string($expected) && $value === $expected);
+        // 送信完了時（$consume=true）は回答をセッションから削除し、同じ回答の再利用（リプレイ）を防ぐ
+        if ($result && $consume) {
+            $request->getSession()->delete($key);
+        }
+        return $result;
     }
 
 }
