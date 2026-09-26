@@ -782,6 +782,15 @@ class UserActionsFqnSchema extends \\BaserCore\\Database\\Schema\\BcSchema
             'クラスが2つ存在（2つ目に危険なコードを隠す）' => [
                 "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}\nclass Payload {\n    public function __construct() { system('id'); }\n}"
             ],
+            'プロパティフック（PHP 8.4）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table { get { system('id'); return 'malicious'; } }\n}"
+            ],
+            'プロパティフック（set）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious' { set { system('id'); } }\n}"
+            ],
+            'トレイトの利用' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    use \\SomeTrait;\n    public \$table = 'malicious';\n}"
+            ],
             'パースエラーとなる不正なPHP' => [
                 "<?php\nclass {{{ invalid"
             ],
