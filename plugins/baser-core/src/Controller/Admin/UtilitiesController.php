@@ -48,6 +48,8 @@ class UtilitiesController extends BcAdminAppController
      */
     public function clear_cache()
     {
+        // 状態を変更する操作のため GET では実行させない（CSRF 対策）
+        $this->request->allowMethod(['post', 'put']);
         $this->_checkReferer();
         BcUtil::clearAllCache();
         $this->BcMessage->setInfo(__d('baser_core', 'サーバーキャッシュを削除しました。'));
