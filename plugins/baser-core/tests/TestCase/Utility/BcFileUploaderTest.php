@@ -237,7 +237,7 @@ class BcFileUploaderTest extends BcTestCase
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
         (new BcFolder($filePath))->create();
-        $testFile = $filePath . 'uploadTestFile.html';
+        $testFile = $filePath . 'uploadTestFile.png';
         (new BcFile($testFile))->create();
 
         // upload=falseの場合のテスト
@@ -259,7 +259,7 @@ class BcFileUploaderTest extends BcTestCase
                 $testFile,
                 0,
                 UPLOAD_ERR_OK,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             )
         ]);
@@ -267,13 +267,27 @@ class BcFileUploaderTest extends BcTestCase
         $uploaded = $this->BcFileUploader->getUploadingFiles($uploadedData['_bc_upload_id']);
         $this->assertTrue($uploaded['eyecatch']['uploadable']);
         $this->assertEquals("png", $uploaded['eyecatch']['ext']);
+        // ファイル名の拡張子が画像でない場合は Content-Type が画像でもアップロード不可
+        $data = new ArrayObject([
+            'eyecatch' => new UploadedFile(
+                $testFile,
+                0,
+                UPLOAD_ERR_OK,
+                'uploadTestFile.html',
+                "image/png",
+            )
+        ]);
+        $uploadedData = $this->BcFileUploader->setupRequestData($data);
+        $uploaded = $this->BcFileUploader->getUploadingFiles($uploadedData['_bc_upload_id']);
+        $this->assertFalse($uploaded['eyecatch']['uploadable']);
+        $this->assertEquals("html", $uploaded['eyecatch']['ext']);
         //  新しいデータが送信されず、既存データを引き継ぐ場合
         $data = new ArrayObject([
             'eyecatch' => new UploadedFile(
                 $testFile,
                 0,
                 UPLOAD_ERR_NO_FILE,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             ),
             'eyecatch_' => 'test.png',
@@ -296,14 +310,14 @@ class BcFileUploaderTest extends BcTestCase
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
         (new BcFolder($filePath))->create();
-        $testFile = $filePath . 'uploadTestFile.html';
+        $testFile = $filePath . 'uploadTestFile.png';
         (new BcFile($testFile))->create();
         $data = [
             'eyecatch' => new UploadedFile(
                 $testFile,
                 10,
                 UPLOAD_ERR_OK,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             )
         ];

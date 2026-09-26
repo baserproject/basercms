@@ -203,6 +203,27 @@ class BcFileUploader
     }
 
     /**
+     * アップロードされたファイルの拡張子を取得する
+     *
+     * ファイル名に拡張子が含まれる場合はそれを正とし（小文字に統一）、
+     * 拡張子が無い場合のみクライアントが申告した Content-Type から導出する。
+     * Content-Type を優先すると、拡張子と異なる種類のファイルとして扱われてしまう
+     *
+     * @param string|null $type Content-Type
+     * @param string|null $fileName ファイル名
+     * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getExtFromUpload(?string $type, ?string $fileName): string|false
+    {
+        $ext = ($fileName)? BcUtil::getExtension($fileName) : false;
+        if ($ext) return strtolower($ext);
+        return BcUtil::decodeContent($type, $fileName);
+    }
+
+    /**
      * リクエストされたデータを処理しやすいようにセットアップする
      * $data は参照渡し
      * @param array|ArrayObject $data
@@ -231,7 +252,7 @@ class BcFileUploader
                     'type' => $uploadFile->getClientMediaType(),
                     'error' => $uploadFile->getError(),
                     'tmp_name' => ($uploadFile->getError() === UPLOAD_ERR_OK)? $uploadFile->getStream()->getMetadata('uri') : '',
-                    'ext' => BcUtil::decodeContent($uploadFile->getClientMediaType(), $uploadFile->getClientFilename())
+                    'ext' => self::getExtFromUpload($uploadFile->getClientMediaType(), $uploadFile->getClientFilename())
                 ];
                 $file['uploadable'] = $this->isUploadable($setting['type'], $uploadFile->getClientMediaType(), $file);
                 if (isset($file['error']) && (int)$file['error'] === UPLOAD_ERR_NO_FILE) {
@@ -321,7 +342,7 @@ class BcFileUploader
             } elseif ($fileType !== 'all') {
                 $targets = [$fileType];
             }
-            if ($targets && !in_array(BcUtil::decodeContent($contentType, $file['name']), $targets)) {
+            if ($targets && !in_array(self::getExtFromUpload($contentType, $file['name']), $targets)) {
                 $uploadable = false;
             } else {
                 $uploadable = true;
@@ -560,7 +581,7 @@ class BcFileUploader
         $uploadInfo['size'] = $fileSize;
         $uploadInfo['type'] = $fileType;
         $uploadInfo['uploadable'] = true;
-        $uploadInfo['ext'] = BcUtil::decodeContent($fileType, $fileName);
+        $uploadInfo['ext'] = self::getExtFromUpload($fileType, $fileName);
         $uploadedFile[$fieldName] = $uploadInfo;
 
         // 一時ファイルを一度に複数扱う場合に1ファイルしかアップロードされない問題への対応
