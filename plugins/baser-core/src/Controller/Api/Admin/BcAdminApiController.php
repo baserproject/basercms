@@ -59,6 +59,12 @@ class BcAdminApiController extends BcApiController
     public function beforeFilter(EventInterface $event)
     {
         if (in_array($this->getRequest()->getParam('action'), $this->Authentication->getUnauthenticatedActions())) {
+            // 管理画面 API が無効な場合は、認証不要のアクション（ログイン・JWKS 等）も公開しない。
+            // 公開すると USE_CORE_ADMIN_API=false でも API ログインが到達可能になり、
+            // 試行回数制限の無い認証オラクルとして利用できてしまう
+            if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
+                throw new ForbiddenException(__d('baser_core', 'baser Admin APIは許可されていません。'));
+            }
             return;
         }
 
