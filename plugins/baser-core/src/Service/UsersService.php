@@ -192,6 +192,7 @@ class UsersService implements UsersServiceInterface
     public function create(array $postData): ?EntityInterface
     {
         $loginUser = BcUtil::loginUser();
+        $postData = $this->normalizeUserGroups($postData);
         if(empty($postData['user_groups']['_ids'])) {
             throw new BcException(__d('baser_core', 'ユーザーグループを指定してください。'));
         }
@@ -218,22 +219,62 @@ class UsersService implements UsersServiceInterface
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
-        if(empty($postData['login_user_id'])) {
-            $loginUser = BcUtil::loginUser();
-            if(!empty($loginUser['id'])) {
-                $postData['login_user_id'] = (string) $loginUser['id'];
-            }
+        // ログインユーザー ID と編集対象の ID は、リクエスト値ではなくサーバ側の値で固定する。
+        // リクエストの login_user_id を信用すると、willChangeSelfGroup の判定を偽装できる
+        $loginUser = BcUtil::loginUser();
+        if(!empty($loginUser['id'])) {
+            $postData['login_user_id'] = (string) $loginUser['id'];
+        } else {
+            unset($postData['login_user_id']);
         }
+        $postData['id'] = (string) $target->id;
+        $postData = $this->normalizeUserGroups($postData);
         if(!empty($postData['user_groups']['_ids']) && in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
-            if(!$loginUser->isAddableToAdminGroup()) {
+            if(!$loginUser || !$loginUser->isAddableToAdminGroup()) {
                 throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
             }
         }
-        if(!$loginUser->isEditableUser($target)) {
+        if(!$loginUser || !$loginUser->isEditableUser($target)) {
             throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
         }
         $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->saveOrFail($user);
+    }
+
+    /**
+     * 送信データの user_groups を `_ids`（整数の配列）形式に正規化する
+     *
+     * 管理者グループの付与チェックや自身のグループ変更チェックは `_ids` 形式を前提としているため、
+     * `user_groups[0][id]` のような行形式で送信されるとチェックを迂回して紐付けを書き換えられる。
+     * どの形式で送信されても `_ids` 形式に揃えてからチェックを行う。
+     *
+     * @param array $postData
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function normalizeUserGroups(array $postData): array
+    {
+        if (!array_key_exists('user_groups', $postData)) return $postData;
+        $ids = [];
+        $groups = $postData['user_groups'];
+        if (is_array($groups)) {
+            if (array_key_exists('_ids', $groups)) {
+                $ids = is_array($groups['_ids']) ? $groups['_ids'] : [];
+            } else {
+                foreach($groups as $group) {
+                    if (is_array($group) && isset($group['id'])) {
+                        $ids[] = $group['id'];
+                    } elseif (is_scalar($group)) {
+                        $ids[] = $group;
+                    }
+                }
+            }
+        }
+        $ids = array_values(array_unique(array_map('intval', array_filter($ids, fn($v) => is_numeric($v)))));
+        $postData['user_groups'] = ['_ids' => $ids];
+        return $postData;
     }
 
     /**
