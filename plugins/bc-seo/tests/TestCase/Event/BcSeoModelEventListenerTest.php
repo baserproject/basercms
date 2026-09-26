@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcSeo\Event\BcSeoModelEventListener;
+use BcSeo\Test\Factory\SeoMetaFactory;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
@@ -73,6 +74,39 @@ class BcSeoModelEventListenerTest extends BcTestCase
         $options = $event->getData('options');
         // associated確認
         $this->assertContains('SeoMetas', $options['associated']);
+    }
+
+    /**
+     * testBeforeMarshal - seo_meta の紐付け先（table_alias / table_id / entity_id / id）がサーバ側の値で固定されること
+     *
+     * リクエスト値をそのまま保存すると、いずれかのコンテンツの編集権限で他のテーブル・他のエンティティの
+     * SEO メタを改ざんできる（マスアサインメント）。
+     */
+    public function testBeforeMarshal_sanitizesSeoMetaBinding()
+    {
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'status' => true])->persist();
+        // 他エンティティ（記事 id=2）と自エンティティ（記事 id=1）の SEO メタ
+        SeoMetaFactory::make(['id' => 10, 'table_alias' => 'BlogPosts', 'table_id' => 0, 'entity_id' => 2, 'title' => 'other'])->persist();
+        SeoMetaFactory::make(['id' => 11, 'table_alias' => 'BlogPosts', 'table_id' => 0, 'entity_id' => 1, 'title' => 'mine'])->persist();
+        $this->loginAdmin($this->getRequest('/baser/admin/bc-blog/blog_posts/edit/1/1'));
+        $blogPostsTable = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
+        $listener = new BcSeoModelEventListener();
+
+        // 他エンティティの SEO メタを指定 → 自エンティティの SEO メタ（id=11）に固定される
+        $data = new ArrayObject(['id' => 1, 'seo_meta' => ['id' => 10, 'table_alias' => 'Contents', 'table_id' => 5, 'entity_id' => 2, 'title' => 'hijack']]);
+        $listener->beforeMarshal(new Event('beforeMarshal', $blogPostsTable, ['options' => []]), $data);
+        $this->assertEquals(['id' => 11, 'table_alias' => 'BlogPosts', 'table_id' => 0, 'title' => 'hijack'], $data['seo_meta']);
+
+        // 自エンティティに SEO メタが無い場合は id を持たない（新規作成）
+        $data = new ArrayObject(['id' => 3, 'seo_meta' => ['id' => 10, 'table_alias' => 'Contents', 'entity_id' => 2, 'title' => 'new']]);
+        $listener->beforeMarshal(new Event('beforeMarshal', $blogPostsTable, ['options' => []]), $data);
+        $this->assertEquals(['table_alias' => 'BlogPosts', 'table_id' => 0, 'title' => 'new'], $data['seo_meta']);
+
+        // 新規作成（親 id 無し）
+        $data = new ArrayObject(['seo_meta' => ['id' => 10, 'entity_id' => 2, 'title' => 'create']]);
+        $listener->beforeMarshal(new Event('beforeMarshal', $blogPostsTable, ['options' => []]), $data);
+        $this->assertEquals(['table_alias' => 'BlogPosts', 'table_id' => 0, 'title' => 'create'], $data['seo_meta']);
     }
 
     /**
