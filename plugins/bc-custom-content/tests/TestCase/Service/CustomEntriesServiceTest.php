@@ -81,6 +81,21 @@ class CustomEntriesServiceTest extends BcTestCase
     }
 
     /**
+     * test sanitizePostData - ツリー構造の内部値・ID・作成日時はリクエストから変更できないこと
+     */
+    public function test_sanitizePostData()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        $result = $this->CustomEntriesService->sanitizePostData([
+            'id' => 99, 'lft' => 1, 'rght' => 2, 'level' => 3, 'created' => '2000-01-01', 'modified' => '2000-01-01',
+            'title' => 'title', 'creator_id' => 5,
+        ], true);
+        // 管理者は creator_id を指定できる
+        $this->assertEquals(['title' => 'title', 'creator_id' => 5], $result);
+    }
+
+    /**
      * test getSafeOrderField
      */
     public function test_getSafeOrderField()
@@ -645,7 +660,8 @@ class CustomEntriesServiceTest extends BcTestCase
             'status' => 1,
         ];
         $result = $this->CustomEntriesService->create($postData);
-        $this->assertEquals(99, $result->id);
+        // id はリクエストから指定できない（自動採番される）
+        $this->assertNotEquals(99, $result->id);
         $this->assertEquals('title99', $result->title);
         //異常系実行
         $postData = [
