@@ -124,7 +124,7 @@ class CustomLinksControllerTest extends BcTestCase
             'type' => 'recruit',
             'name' => 'recruit',
             'title' => '求人情報',
-            'display_field' => '求人情報'
+            'display_field' => 'title'
         ]);
         //Postデータを用意
         $data = [

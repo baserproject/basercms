@@ -231,7 +231,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $rs = $this->CustomContentHelper->getFieldTitle($customContentsService->get(1), 'recruit_category');
@@ -333,7 +333,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //$fieldNameが存在した場合、
@@ -368,7 +368,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //$fieldNameが存在した場合、
@@ -448,7 +448,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         CustomLinkFactory::make([
@@ -497,7 +497,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         CustomLinkFactory::make([
@@ -540,7 +540,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //getLink()メソッドを使ってcacheLinksをセット
