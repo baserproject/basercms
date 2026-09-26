@@ -140,7 +140,7 @@ class ThemesControllerTest extends BcTestCase
         $this->post('/baser/api/admin/baser-core/themes/delete/BcPluginSampleCopy.json?token=' . $this->accessToken);
         $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。 に書込み権限がありません。', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。テーマが見つかりません。', $result->message);
     }
 
     /**
