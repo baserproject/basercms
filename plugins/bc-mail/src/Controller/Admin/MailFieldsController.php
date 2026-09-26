@@ -146,6 +146,8 @@ class MailFieldsController extends MailAdminAppController
                 $this->setRequest($this->getRequest()->withParsedBody($data));
             }
             try {
+                // 所属フォームは URL の mailContentId で固定する（他フォームのフィールド・受信テーブルの操作防止）
+                $this->setRequest($this->getRequest()->withData('mail_content_id', $mailContentId));
                 $entity = $service->create($this->getRequest()->getData());
                 // EVENT MailFields.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
@@ -184,6 +186,8 @@ class MailFieldsController extends MailAdminAppController
     public function edit(MailFieldsAdminServiceInterface $service, int $mailContentId, int $id)
     {
         $entity = $service->get($id);
+        $this->assertMailContent($entity, $mailContentId);
+        $this->setRequest($this->getRequest()->withData('mail_content_id', $mailContentId));
         if($this->getRequest()->is(['post', 'put'])) {
             // EVENT MailFields.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
@@ -234,6 +238,7 @@ class MailFieldsController extends MailAdminAppController
         $this->request->allowMethod(['post', 'delete']);
         try {
             $entity = $service->get($id);
+            $this->assertMailContent($entity, $mailContentId);
             if($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を削除しました。', $entity->name));
             } else {
@@ -258,7 +263,10 @@ class MailFieldsController extends MailAdminAppController
      */
     public function copy(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
+        // 状態を変更する操作のため GET では実行させない（CSRF 対策）
+        $this->request->allowMethod(['post', 'put']);
         try {
+            $this->assertMailContent($service->get($id), $mailContentId);
             if($service->copy($mailContentId, $id)) {
                 $entity = $service->get($id);
                 $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」をコピーしました。', $entity->name));
@@ -318,4 +326,21 @@ class MailFieldsController extends MailAdminAppController
         return $this->redirect(['action' => 'index', $mailContentId]);
     }
 
+
+    /**
+     * メールフィールドが URL で指定されたメールフォームに属していることを検証する
+     *
+     * @param \Cake\Datasource\EntityInterface $mailField
+     * @param int|string $mailContentId
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function assertMailContent($mailField, $mailContentId): void
+    {
+        if ((int)$mailField->mail_content_id !== (int)$mailContentId) {
+            $this->notFound();
+        }
+    }
 }
