@@ -95,4 +95,31 @@ class BcMailerTest extends BcTestCase
         $this->assertNotNull($this->BcMailer->getMessage());
     }
 
+
+    /**
+     * test isValidAdditionalParameters
+     *
+     * mail() の追加パラメータは sendmail のコマンドラインへ渡されるため、
+     * エンベロープ送信者の指定（-f メールアドレス）以外は許可しない
+     * @dataProvider isValidAdditionalParametersDataProvider
+     */
+    public function testIsValidAdditionalParameters($params, $expected)
+    {
+        $this->assertEquals($expected, BcMailer::isValidAdditionalParameters($params));
+    }
+
+    public static function isValidAdditionalParametersDataProvider()
+    {
+        return [
+            ['-f admin@example.com', true],
+            ['-fadmin@example.com', true],
+            [' -f admin@example.com ', true],
+            ['-f admin@example.com -X /var/www/html/webroot/shell.php', false],
+            ['-X /tmp/log', false],
+            ['-C /etc/passwd', false],
+            ['-f admin@example.com;id', false],
+            ['admin@example.com', false],
+            ['', false],
+        ];
+    }
 }

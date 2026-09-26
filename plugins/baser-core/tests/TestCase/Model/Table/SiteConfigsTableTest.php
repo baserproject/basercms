@@ -138,6 +138,20 @@ class SiteConfigsTableTest extends BcTestCase
     }
 
     /**
+     * test validationKeyValue - mail_additional_parameters は「-f メールアドレス」のみ許可する
+     */
+    public function testvalidationKeyValueMailAdditionalParameters()
+    {
+        $validator = $this->SiteConfigs->getValidator('keyValue');
+        $errors = $validator->validate(['mail_additional_parameters' => '-f admin@example.com']);
+        $this->assertArrayNotHasKey('mail_additional_parameters', $errors);
+        $errors = $validator->validate(['mail_additional_parameters' => '']);
+        $this->assertArrayNotHasKey('mail_additional_parameters', $errors);
+        $errors = $validator->validate(['mail_additional_parameters' => '-X /var/www/html/webroot/shell.php']);
+        $this->assertEquals('メール送信の追加パラメータは「-f メールアドレス」の形式で入力してください。', current($errors['mail_additional_parameters']));
+    }
+
+    /**
      * コントロールソースを取得する
      *
      * @param string $field フィールド名
