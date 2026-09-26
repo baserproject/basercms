@@ -40,6 +40,19 @@ origin/base が進んだら各 PR ブランチへ base をマージし、push �
 - `order() → orderBy()`（CakePHP 5.2 改名）
 - パス検証 `realpath() === false` バイパス修正 × `$fullPath` 検証 の併合
 
+## 6b. リリース後の取り込み確認とブランチ整理
+アドバイザリ fork の PR を GitHub 上でマージすると、base ブランチには **「Merge commit from fork」という 1 コミット（squash）** として入る。`security/<GHSA-ID>` ブランチ自体は base の祖先にならないため、`git merge-base --is-ancestor` や `git branch --merged` では「未マージ」に見える。取り込み確認は**内容差分**で行う。
+1. 対象ブランチが変更したファイル一覧を取り、そのファイルだけを base と比較する（差分ゼロなら取り込み済み）:
+   ```
+   base=$(git merge-base security/<GHSA-ID> origin/5.4.x)
+   files=$(git diff --name-only $base security/<GHSA-ID>)
+   git diff --name-only origin/5.4.x security/<GHSA-ID> -- ${=files}   # zsh。bash は $files
+   ```
+   差分が残るファイルは `git log <branch>..origin/5.4.x -- <file>` で「取り込み後に別コミットで触られた」だけかを確認する。
+2. 取り込み済みと確認できた `security/*` は `git branch -D` で削除する（削除は承認を得てから。10/22 など次回リリース分・顧客向けパッチ（`consolidated-5.2.x`）・未取り込み分は残す）。
+3. **同じファイルを触る複数のアドバイザリ**（例 BlogTags API の v9g2 と 636g）は、先にマージした方の fork コミットに後の修正が同梱されていることがある。後の PR をマージしても差分ゼロなら、そのリリースで既に塞がっている。
+4. 5.3.x → 5.4.x の系列マージでは VERSION.txt 1 行目・composer.json・composer.lock が必ず競合する。**バージョン値は上位系列（ours）を採用**し、VERSION.txt には下位系列のリリースブロックだけを 5.4.x のブロックの下に追加する。
+
 ## 7. 落とし穴レシピ
 - **Copilot/GHA 不可**: アドバイザリ fork では使えない。ローカル検証が正。
 - **push 反映待ち**: 新規 fork 直後は `remote rejected (failure)`。終了コードでリトライ（`->` 等の文字列で成功誤検知しない）。
@@ -48,6 +61,10 @@ origin/base が進んだら各 PR ブランチへ base をマージし、push �
 - **非該当の見極め**: framework デフォルト保護で再現しないものは却下。報告時点のブランチ状態まで遡って確認。
 - **フルスイートのフレイキー**: `CreateReleaseCommandTest`（実 composer 実行）は単体では緑。環境要因を切り分ける。
 - **認可境界**: `permission.php` の Api/Admin と Admin の `auth` 整合は、管理画面 SPA（ビルド済み JS まで）の依存を確認してから変更。
+- **古い系列を後からリリースするとき monorepo-builder が止まる**: `ReleaseGuard` は「ローカルタグのうち committer date が最新のもの」より大きいバージョンしか通さない（系列別の比較は無い）。5.4.0 の後に 5.3.1 を出すなら、リリース作業用クローンで `git tag -d 5.4.0` してから `vendor/bin/monorepo-builder release 5.3.1` を実行し、終わったら `git fetch origin --tags` で戻す。リモートのタグには影響しない。
+- **prepare release が未追跡ファイルを巻き込む**: monorepo-builder の release は作業ツリーの未追跡ファイルもコミットする。下位系列（5.3.x）の `.gitignore` に上位系列だけのプラグイン（`webroot/bc_burger_editor`・`webroot/bc_mcp` のシンボリックリンク）が無いと、そのままタグに入る。リリース前に `git status --short` が空であることを確認し、系列ごとの `.gitignore` を揃える。混入したら `git rm --cached` と `.gitignore` 追記で直す。
+- **Packagist の反映は Web 表示より遅れる**: split ワークフロー成功後、packagist.org のページに新バージョンが出ていても、Composer が読む `repo.packagist.org/p2/<vendor>/<pkg>.json` への反映は数分遅れる。`Root composer.json requires ... does not match the constraint` はこの遅れが原因なことが多い。`composer show --all <pkg>` で `versions` を確認し、数分待って再実行。キャッシュ削除はホストではなく**アップデートを実行しているコンテナ内**で行う。
+- **誤ってタグを出したときの取り下げ**: 本体だけでなく split 先の全リポジトリ（`split_monorepo.yml` の一覧）から `gh api --method DELETE /repos/baserproject/<repo>/git/refs/tags/<ver>` で消す。Packagist は再クロールで「No longer found in upstream」となり自動で消える。5.x ブランチに残ったリリースコミット（VERSION.txt 1 行目・composer.json）は `X.Y.Z-dev` に戻すコミットを別途入れる。
 
 ## 8. 補助スクリプト一覧
 | スクリプト | 引数 | 役割 |
