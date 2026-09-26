@@ -662,6 +662,28 @@ class BcUtilTest extends BcTestCase
         $serialized = serialize('hoge');
         $result = BcUtil::unserialize($serialized);
         $this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
+
+        // 配列
+        $serialized = BcUtil::serialize(['a' => 1, 'b' => ['c' => 'd']]);
+        $this->assertEquals(['a' => 1, 'b' => ['c' => 'd']], BcUtil::unserialize($serialized));
+    }
+
+    /**
+     * test unserialize - オブジェクトを復元しないこと（PHP オブジェクトインジェクション対策）
+     *
+     * 保存される値は配列・スカラーのみのため、シリアライズ文字列にオブジェクトが含まれていても
+     * __PHP_Incomplete_Class として扱い、クラスのインスタンスを生成しない。
+     */
+    public function testUnserialize_doesNotRestoreObjects()
+    {
+        $payload = 'O:8:"stdClass":1:{s:1:"a";s:1:"b";}';
+        $result = BcUtil::unserialize(base64_encode($payload));
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result);
+        $result = BcUtil::unserialize($payload);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result);
+        // 配列の中のオブジェクトも同様
+        $result = BcUtil::unserialize(base64_encode('a:1:{i:0;O:8:"stdClass":0:{}}'));
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result[0]);
     }
 
     /**

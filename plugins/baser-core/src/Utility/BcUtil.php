@@ -740,10 +740,12 @@ class BcUtil
     public static function unserialize($value)
     {
         $_value = $value;
-        $value = @unserialize(base64_decode($value));
+        // PHP オブジェクトインジェクション対策: 復元するのは配列・スカラーのみとし、
+        // オブジェクトは復元しない（保存される値はいずれも配列・スカラーのみ）
+        $value = @unserialize(base64_decode((string)$value), ['allowed_classes' => false]);
         // 下位互換のため、しばらくの間、失敗した場合の再変換を行う v.3.0.2
         if ($value === false) {
-            $value = @unserialize($_value);
+            $value = @unserialize((string)$_value, ['allowed_classes' => false]);
             if ($value === false) {
                 return '';
             }
