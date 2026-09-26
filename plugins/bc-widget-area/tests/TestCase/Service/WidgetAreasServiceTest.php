@@ -278,6 +278,7 @@ class WidgetAreasServiceTest extends BcTestCase
             'element に traversal' => ['element' => '../../../../config/app'],
             'element に不正文字' => ['element' => 'text; DROP'],
             'plugin に traversal' => ['element' => 'text', 'plugin' => '../../config'],
+            'id に不正文字' => ['element' => 'text', 'id' => '2"><script>alert(1)</script>'],
         ];
         foreach($cases as $label => $widget) {
             try {
@@ -286,6 +287,13 @@ class WidgetAreasServiceTest extends BcTestCase
             } catch (\BaserCore\Error\BcException $e) {
                 $this->assertNotEmpty($e->getMessage(), $label);
             }
+        }
+        // 最上位キーに不正な文字
+        try {
+            $this->WidgetAreasService->updateWidget(1, ['Widget2"><script>' => ['id' => '2', 'name' => 'test', 'sort' => 1, 'status' => 1, 'element' => 'text']]);
+            $this->fail('不正なキーが拒否されていません');
+        } catch (\BaserCore\Error\BcException $e) {
+            $this->assertEquals('ウィジェットのキーが不正です。', $e->getMessage());
         }
         // 正常なテンプレート名は保存できる
         $this->WidgetAreasService->updateWidget(1, ['Widget2' => ['id' => '2', 'name' => 'test', 'sort' => 1, 'status' => 1, 'element' => 'local_navi', 'plugin' => 'BaserCore']]);
