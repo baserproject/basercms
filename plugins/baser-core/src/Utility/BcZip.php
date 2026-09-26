@@ -110,9 +110,12 @@ class BcZip
             return false;
         }
         if ($this->Zip->extractTo($target)) {
-            $archivePath = $this->Zip->getNameIndex(0);
-            $archivePathAry = explode('/', $archivePath);
-            $this->topArchiveName = $archivePathAry[0];
+            $topArchiveName = $this->_getTopArchiveName((string)$this->Zip->getNameIndex(0));
+            if ($topArchiveName === false) {
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $this->Zip->getNameIndex(0));
+                return false;
+            }
+            $this->topArchiveName = $topArchiveName;
             return true;
         }
         return false;
@@ -161,8 +164,12 @@ class BcZip
         if (!empty($return2[2])) {
             $path = str_replace('  inflating: ' . $target, '', $return2[2]);
             $path = preg_replace('/^\//', '', $path);
-            $pathAry = explode(DS, $path);
-            $this->topArchiveName = $pathAry[0];
+            $topArchiveName = $this->_getTopArchiveName($path);
+            if ($topArchiveName === false) {
+                $this->error = __d('baser_core', 'Invalid zip entry path: {0}', $path);
+                return false;
+            }
+            $this->topArchiveName = $topArchiveName;
             return true;
         } else {
             exec($unzipCommand . ' 2>&1', $errs);
@@ -278,6 +285,32 @@ class BcZip
             $targetPath = $parentPath . '/' . basename($trimmedTarget);
         }
         return rtrim(str_replace('\\', '/', $targetPath), '/');
+    }
+
+    /**
+     * エントリ名から最上位のディレクトリ名（展開後のトップフォルダ名）を求める
+     *
+     * `./Foo/bar` のようなエントリ名を生のまま分割すると最上位が `.` になり、呼び出し元が
+     * 展開先の親ディレクトリ全体（tmp/ 等）を移動・削除してしまう。正規化したパスの先頭要素を返し、
+     * 空・`.`・`..` など妥当でない場合は false を返す。
+     *
+     * @param string $entry
+     * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _getTopArchiveName(string $entry): string|false
+    {
+        $normalized = $this->_normalizeRelativePath(trim($entry));
+        if ($normalized === null || $normalized === '') {
+            return false;
+        }
+        $top = explode('/', $normalized)[0];
+        if ($top === '' || $top === '.' || $top === '..' || !preg_match('/^[^\/\\\\\x00]+$/', $top)) {
+            return false;
+        }
+        return $top;
     }
 
     /**
