@@ -266,6 +266,34 @@ class WidgetAreasServiceTest extends BcTestCase
     }
 
     /**
+     * test updateWidget - element / plugin にテンプレート名として不正な値を保存できないこと
+     *
+     * element はテンプレートの読み込みパスに使われるため、`..` を含む値を保存させると
+     * テンプレート外の PHP ファイルを読み込ませることができる。
+     */
+    public function test_updateWidget_rejectsInvalidElement()
+    {
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        $cases = [
+            'element に traversal' => ['element' => '../../../../config/app'],
+            'element に不正文字' => ['element' => 'text; DROP'],
+            'plugin に traversal' => ['element' => 'text', 'plugin' => '../../config'],
+        ];
+        foreach($cases as $label => $widget) {
+            try {
+                $this->WidgetAreasService->updateWidget(1, ['Widget2' => array_merge(['id' => '2', 'name' => 'test', 'sort' => 1, 'status' => 1], $widget)]);
+                $this->fail($label . ' が拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertNotEmpty($e->getMessage(), $label);
+            }
+        }
+        // 正常なテンプレート名は保存できる
+        $this->WidgetAreasService->updateWidget(1, ['Widget2' => ['id' => '2', 'name' => 'test', 'sort' => 1, 'status' => 1, 'element' => 'local_navi', 'plugin' => 'BaserCore']]);
+        $rs = $this->WidgetAreasService->get(1);
+        $this->assertEquals('local_navi', $rs->widgets_array[0]['Widget2']['element']);
+    }
+
+    /**
      * test updateSort
      */
     public function test_updateSort()

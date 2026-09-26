@@ -252,7 +252,11 @@ class AppView extends View
         $name .= $this->_ext;
         foreach ($this->getElementPaths($plugin) as $path) {
             if (is_file($path . $name)) {
-                return $path . $name;
+                // パストラバーサル対策:
+                // element 名は DB 由来（ウィジェットの element、固定ページの page_template 等）の値が
+                // 渡ることがあるため、CakePHP 本体と同様に解決したパスがテンプレートパス配下で
+                // あることを検証する（`..` でテンプレート外の PHP を読み込ませない）
+                return $this->_checkFilePath($path . $name, $plugin);
             }
         }
 

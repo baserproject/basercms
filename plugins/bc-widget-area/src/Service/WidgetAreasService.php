@@ -188,6 +188,16 @@ class WidgetAreasService implements WidgetAreasServiceInterface
     public function updateWidget(int $widgetAreaId, array $postData)
     {
         $dataKey = key($postData);
+        // element / plugin はテンプレートの読み込みパスに使われるため、テンプレート名として
+        // 妥当な文字列のみ許可する（`..` によるテンプレート外の PHP の読み込み防止）
+        $element = $postData[$dataKey]['element'] ?? null;
+        $plugin = $postData[$dataKey]['plugin'] ?? null;
+        if ($element !== null && $element !== '' && (!is_string($element) || !preg_match('/^[a-zA-Z0-9_\-\/]+$/', $element) || str_contains($element, '..'))) {
+            throw new BcException(__d('baser_core', 'ウィジェットのテンプレート名が不正です。'));
+        }
+        if ($plugin !== null && $plugin !== '' && (!is_string($plugin) || !preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin))) {
+            throw new BcException(__d('baser_core', 'ウィジェットのプラグイン名が不正です。'));
+        }
         /** @var WidgetArea $widgetArea */
         $widgetArea = $this->WidgetAreas->get($widgetAreaId);
         $widgets = $widgetArea->widgets_array;
