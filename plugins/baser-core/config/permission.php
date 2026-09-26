@@ -169,7 +169,8 @@ return [
                 'Credit' => ['title' => __d('baser_core', 'クレジット'), 'url' => '/baser/admin/baser-core/utilities/credit', 'method' => 'GET', 'auth' => true],
                 'Info' => ['title' => __d('baser_core', '環境情報'), 'url' => '/baser/admin/baser-core/utilities/info', 'method' => 'GET', 'auth' => false],
                 'LogMaintenance' => ['title' => __d('baser_core', 'ログメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/log_maintenance/*', 'method' => 'POST', 'auth' => false],
-                'Phpinfo' => ['title' => __d('baser_core', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => true],
+                // phpinfo は環境変数・サーバ情報を全件表示するため、既定では許可しない
+                'Phpinfo' => ['title' => __d('baser_core', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => false],
                 'ResetContentsTree' => ['title' => __d('baser_core', 'ツリー構造リセット', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/reset_contents_tree', 'method' => 'POST', 'auth' => false],
                 'VerityContents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/admin/baser-core/utilities/verity_contents_tree', 'method' => 'POST', 'auth' => false],
             ]
