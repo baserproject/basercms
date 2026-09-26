@@ -412,11 +412,16 @@ class BcZipTest extends BcTestCase
         $zip->addFromString('theme/normal.txt', 'ok');
         $zip->close();
 
+        // 展開先に元から存在するリンクは影響を受けないこと
+        symlink(ROOT . DS . 'config', $targetPath . 'existing_link');
+
         $result = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [$sourceZip, $targetPath]);
 
         $this->assertFalse($result);
         $this->assertFalse(is_link($targetPath . 'theme' . DS . 'link'));
         $this->assertFileDoesNotExist($targetPath . 'theme' . DS . 'link');
+        $this->assertTrue(is_link($targetPath . 'existing_link'));
+        unlink($targetPath . 'existing_link');
 
         (new BcFolder($zipSrcPath))->delete();
         (new BcFolder($targetPath))->delete();
