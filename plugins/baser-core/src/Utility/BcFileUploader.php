@@ -186,6 +186,23 @@ class BcFileUploader
     }
 
     /**
+     * 保存済みファイル名として妥当な文字列か判定する
+     *
+     * ディレクトリ区切り（/ \\）、引用符、山括弧、制御文字、`..` を含む値は不正とみなす。
+     *
+     * @param string $fileName
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isValidFileName(string $fileName): bool
+    {
+        if (str_contains($fileName, '..')) return false;
+        return !preg_match('/[\/\\\\<>"\'\x00-\x1f\x7f]/', $fileName);
+    }
+
+    /**
      * リクエストされたデータを処理しやすいようにセットアップする
      * $data は参照渡し
      * @param array|ArrayObject $data
@@ -199,6 +216,13 @@ class BcFileUploader
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
             $file = [];
+            // アップロード対象フィールドに文字列（既存のファイル名）が直接送信された場合は、
+            // ファイル名として妥当でない値（ディレクトリ区切り・引用符・タグ・制御文字を含む値）を
+            // 保存させない。任意文字列を保存できると、表示時に属性から脱出する格納型 XSS や
+            // パストラバーサルに悪用される
+            if (isset($data[$name]) && is_string($data[$name]) && $data[$name] !== '' && !self::isValidFileName($data[$name])) {
+                $data[$name] = '';
+            }
             if (!empty($data[$name]) && (is_array($data[$name]) || $data[$name] instanceof \Laminas\Diactoros\UploadedFile)) {
                 $uploadFile = $data[$name];
                 $file = [

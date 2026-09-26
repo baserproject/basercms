@@ -496,7 +496,10 @@ class BcUploadHelper  extends Helper
                 break;
             default :
                 if ($link && !($noimage == $fileName)) {
-                    $linkOptions['escape'] = false;
+                    // 画像タグ（タイトル部分）のみ非エスケープとし、href と属性はエスケープする。
+                    // escape=false だと保存されたファイル名に含まれる記号で href 属性から脱出できる（格納型 XSS）
+                    $linkOptions['escape'] = true;
+                    $linkOptions['escapeTitle'] = false;
                     $out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, array_merge($options, $linkOptions));
                 } else {
                     $out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));

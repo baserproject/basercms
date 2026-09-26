@@ -150,6 +150,19 @@ class BcUploadHelperTest extends BcTestCase
     }
 
     /**
+     * test uploadImage - 保存されたファイル名に記号が含まれていても href 属性から脱出できないこと（格納型 XSS 対策）
+     */
+    public function testUploadImage_escapesHref()
+    {
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'a.jpg"><script>alert(1)</script>']));
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringNotContainsString('a.jpg"><', $result);
+        $this->assertStringContainsString('href="/files/contents/a.jpg&quot;&gt;&lt;script&gt;', $result);
+        // 画像タグ自体はエスケープされずに出力される
+        $this->assertMatchesRegularExpression('/^<a href="[^"]*"[^>]*><img src="[^"]*"[^>]*><\/a>/', $result);
+    }
+
+    /**
      * testGBcUploadSetting
      *
      * @return void
