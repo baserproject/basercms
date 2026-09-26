@@ -97,7 +97,7 @@ class CustomTablesServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //テスト対象メソッドをコール
         $rs = $this->CustomTablesService->get(1);
@@ -105,7 +105,7 @@ class CustomTablesServiceTest extends BcTestCase
         $this->assertEquals('contact', $rs->type);
         $this->assertEquals('contact', $rs->name);
         $this->assertEquals('お問い合わせタイトル', $rs->title);
-        $this->assertEquals('お問い合わせ', $rs->display_field);
+        $this->assertEquals('title', $rs->display_field);
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_contact');
 
@@ -245,7 +245,7 @@ class CustomTablesServiceTest extends BcTestCase
             'name' => 'test_1',
             'title' => '求人情報 1',
             'type' => '1',
-            'display_field' => 'title 1',
+            'display_field' => 'title',
             'has_child' => 0
         ]);
         $customTable->create([
@@ -253,7 +253,7 @@ class CustomTablesServiceTest extends BcTestCase
             'name' => 'test_2',
             'title' => '求人情報 2',
             'type' => '1',
-            'display_field' => 'title 2',
+            'display_field' => 'title',
             'has_child' => 0
         ]);
 
@@ -277,7 +277,7 @@ class CustomTablesServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         //対象メソッドをコール
         $rs = $this->CustomTablesService->create($data);
@@ -315,7 +315,7 @@ class CustomTablesServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         CustomFieldFactory::make([
             'id' => 1,
@@ -379,7 +379,7 @@ class CustomTablesServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $this->loadFixtureScenario(CustomContentsScenario::class);
         //削除する前にカスタムテーブルをカスタムコンテンツに紐づいてきる
@@ -418,13 +418,13 @@ class CustomTablesServiceTest extends BcTestCase
             'type' => 1,
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $this->CustomTablesService->create([
             'type' => 2,
             'name' => 'recruit',
             'title' => '求人',
-            'display_field' => '求人'
+            'display_field' => 'title'
         ]);
         //カスタムテーブルのリストメソッドを呼ぶ
         $rs = $this->CustomTablesService->getList([]);

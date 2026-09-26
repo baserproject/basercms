@@ -124,7 +124,7 @@ class CustomLinksServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $rs = $this->CustomLinksService->getIndex(1, ['status' => 'publish'])->toArray();
@@ -151,7 +151,7 @@ class CustomLinksServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //サービスメソッドを呼ぶ
         $result = $this->CustomLinksService->get(1);
@@ -239,7 +239,7 @@ class CustomLinksServiceTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //postDataを用意
