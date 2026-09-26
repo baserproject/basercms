@@ -313,6 +313,14 @@ class BcDatabaseServiceTest extends BcTestCase
         // createdが空の時に本日の日付が入っている事を確認
         $row2 = PageFactory::get(2);
         $this->assertEquals($row2->created->format('Y-m-d H:i'), date('Y-m-d H:i'));
+
+        // 存在しないテーブル名・妥当でないテーブル名の CSV は読み込まないこと
+        file_put_contents($csvFolder . 'not_exists_table.csv', "id,name\n1,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'not_exists_table.csv', 'encoding' => 'UTF-8']));
+        file_put_contents($csvFolder . 'pages;drop.csv', "id,contents\n3,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'pages;drop.csv', 'encoding' => 'UTF-8']));
+        unlink($csvFolder . 'not_exists_table.csv');
+        unlink($csvFolder . 'pages;drop.csv');
     }
 
     /**
