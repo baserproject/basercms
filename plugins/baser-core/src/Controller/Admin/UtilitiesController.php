@@ -102,6 +102,10 @@ class UtilitiesController extends BcAdminAppController
      */
     public function phpinfo()
     {
+        // phpinfo は .env の内容を含む環境変数・サーバ情報を全件表示するため、システム管理者に限定する
+        if (!BcUtil::isAdminUser()) {
+            $this->notFound();
+        }
         $this->_checkReferer();
         $this->autoRender = false;
         phpinfo();
