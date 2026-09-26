@@ -324,6 +324,37 @@ class CustomEntriesServiceTest extends BcTestCase
     }
 
     /**
+     * test createIndexConditions - status=publish 指定時に select を全カラムで上書きしないこと
+     *
+     * 以前は全カラムを select し直していたため、createSelect() で use_api=false のフィールドを
+     * 除外していても公開 API の応答に含まれてしまっていた。
+     */
+    public function test_createIndexConditions_keepsSelect()
+    {
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $query = $this->CustomEntriesService->CustomEntries->find()->select(['CustomEntries.id', 'CustomEntries.name']);
+        $query = $this->CustomEntriesService->createIndexConditions($query, ['status' => 'publish']);
+        $this->assertEquals(['CustomEntries.id', 'CustomEntries.name'], array_values($query->clause('select')));
+        // 実行できること（select 指定が contain と両立すること）
+        foreach($query->all() as $entry) {
+            $this->assertFalse($entry->has('title'));
+        }
+    }
+
+    /**
      * test createIndexConditions
      */
     public function test_createIndexConditions()
