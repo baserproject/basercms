@@ -502,9 +502,38 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function create(array $postData)
     {
+        $postData = $this->sanitizePostData($postData, true);
         $postData = $this->autoConvert($postData);
         $entity = $this->CustomEntries->patchEntity($this->CustomEntries->newEmptyEntity(), $postData);
         return $this->CustomEntries->saveOrFail($entity);
+    }
+
+    /**
+     * 保存データから投稿者が指定できない項目を除外する
+     *
+     * ツリー構造の内部値・作成日時・ID はリクエストから変更させない。
+     * 作成者（creator_id）の変更は管理画面ではシステム管理者に限定されているため、
+     * それ以外のユーザーでは新規作成時はログインユーザー、更新時は現在値を維持する。
+     *
+     * @param array $postData
+     * @param bool $isNew
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function sanitizePostData(array $postData, bool $isNew): array
+    {
+        unset($postData['id'], $postData['lft'], $postData['rght'], $postData['level'], $postData['created'], $postData['modified']);
+        $loginUser = BcUtil::loginUser();
+        if ($loginUser && !BcUtil::isAdminUser($loginUser)) {
+            if ($isNew) {
+                $postData['creator_id'] = $loginUser->id;
+            } else {
+                unset($postData['creator_id']);
+            }
+        }
+        return $postData;
     }
 
     /**
@@ -519,6 +548,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
+        $postData = $this->sanitizePostData($postData, false);
+        unset($postData['custom_table_id']);
         $postData = $this->autoConvert($postData);
         $entity = $this->CustomEntries->patchEntity($entity, $postData);
         return $this->CustomEntries->saveOrFail($entity);
