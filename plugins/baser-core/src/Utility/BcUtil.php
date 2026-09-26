@@ -1102,6 +1102,11 @@ class BcUtil
     public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
         if (!$pluginName) $pluginName = 'BaserCore';
+        // パストラバーサル対策: プラグイン名として妥当な文字列以外（`..`、`/`、先頭が `.` 等）は
+        // ディレクトリが実在しても有効なプラグインとして扱わない。
+        // 以前は is_dir($path . '..') が true になるため '..' が有効なプラグインディレクトリとして返り、
+        // テーマ削除・複製・ダウンロードで plugins/ の親ディレクトリ全体が対象になった
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\-]*$/', $pluginName)) return false;
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
         if($isUpdateTmp) {
             $paths = [TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS];
