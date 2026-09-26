@@ -120,6 +120,8 @@ class MailContentsTable extends MailAppTable
         $validator
             ->scalar('form_template')
             ->maxLength('form_template', 20, __d('baser_core', 'フォームテンプレート名は20文字以内で入力してください。'))
+            // テンプレート名はディレクトリのパスに連結されるため、`..` 等を含まない文字に限定する
+            ->regex('form_template', '/^[a-zA-Z0-9_\\-]+$/', __d('baser_core', 'メールフォームテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。'))
             ->add('form_template', [
                 'halfText' => [
                     'rule' => 'halfText',
@@ -131,6 +133,8 @@ class MailContentsTable extends MailAppTable
         $validator
             ->scalar('mail_template')
             ->maxLength('mail_template', 20, __d('baser_core', '送信メールテンプレート名は20文字以内で入力してください。'))
+            // テンプレート名はディレクトリのパスに連結されるため、`..` 等を含まない文字に限定する
+            ->regex('mail_template', '/^[a-zA-Z0-9_\\-]+$/', __d('baser_core', '送信メールテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。'))
             ->add('mail_template', [
                 'halfText' => [
                     'rule' => 'halfText',
@@ -142,7 +146,8 @@ class MailContentsTable extends MailAppTable
         $validator
             ->allowEmptyString('redirect_url')
             ->scalar('redirect_url')
-            ->regex('redirect_url', '/^http|^\/.*/', __d('baser_core', 'リダイレクトURLはURLの形式を入力してください。'))
+            // 先頭一致のみだと引用符・空白を含む値を保存できるため、URL として妥当な文字に限定する
+            ->regex('redirect_url', '/^(https?:\/\/[^\s"\'<>\\\\]+|\/[^\s"\'<>\\\\]*)$/i', __d('baser_core', 'リダイレクトURLはURLの形式を入力してください。'))
             ->maxLength('redirect_url', 255, __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。'));
 
         // description
