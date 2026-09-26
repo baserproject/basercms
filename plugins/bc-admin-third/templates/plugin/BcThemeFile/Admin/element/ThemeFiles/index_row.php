@@ -53,11 +53,11 @@ array_push($params, $themeFile->name);
         $this->BcBaser->getImg(array_merge(['action' => 'img_thumb', 100, 100, $theme, $plugin, $type], $params), ['alt' => $themeFile->name]),
         array_merge(['action' => 'img', $theme, $plugin, $type], explode('/', $path), [$themeFile->name]), [
           'rel' => 'colorbox',
-          'title' => $themeFile->name,
+          'title' => h($themeFile->name),
           'style' => 'display:block;padding:5px;important;float:left;background-color:#FFFFFF',
           'escape' => false
       ]) ?>&nbsp;
-      <?php echo $themeFile->name ?>
+      <?php echo h($themeFile->name) ?>
     <?php elseif ($themeFile->type === 'folder'): ?>
       <?php $this->BcBaser->link(
         '<i class="bca-icon--folder" data-bca-icon-size="md"></i>' . h($themeFile->name),
