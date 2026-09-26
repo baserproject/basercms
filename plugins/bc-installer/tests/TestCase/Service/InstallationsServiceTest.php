@@ -11,6 +11,7 @@
 
 namespace BcInstaller\Test\TestCase\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
@@ -167,6 +168,30 @@ class InstallationsServiceTest extends BcTestCase
             ['mysql', 'mydatabase', 'mydatabase'],
             ['sqlite', '', ''],
             ['', 'mydatabase', 'mydatabase'],
+            ['sqlite', $path . 'mydatabase.db', $path . 'mydatabase.db'],
+        ];
+    }
+
+    /**
+     * test getRealDbName - SQLite の DB 名に任意のパスや記号を指定できないこと
+     * @param string $dbName
+     * @dataProvider getRealDbNameInvalidDataProvider
+     */
+    public function testGetRealDbNameInvalid($dbName)
+    {
+        $this->expectException(BcException::class);
+        $this->Installations->getRealDbName('sqlite', $dbName);
+    }
+
+    public static function getRealDbNameInvalidDataProvider()
+    {
+        return [
+            ['/var/www/html/webroot/shell.php'],
+            [ROOT . DS . 'db' . DS . 'sqlite' . DS . '..' . DS . 'shell.php'],
+            [ROOT . DS . 'db' . DS . 'sqlite' . DS . 'shell.php'],
+            ['../../webroot/shell'],
+            ['my database'],
+            ['name.php'],
         ];
     }
 
