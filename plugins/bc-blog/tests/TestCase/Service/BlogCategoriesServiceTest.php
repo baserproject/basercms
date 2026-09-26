@@ -196,17 +196,19 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testUpdate()
     {
-        BlogCategoryFactory::make(['id' => 59, 'name' => 'testName'])->persist();
-        $updateData = ['name' => 'testNameUpdated', 'blog_content_id' => 1];
+        BlogCategoryFactory::make(['id' => 59, 'name' => 'testName', 'blog_content_id' => 1])->persist();
+        // 所属ブログ（blog_content_id）はリクエストから変更できない（他ブログへの移動防止）
+        $updateData = ['name' => 'testNameUpdated', 'blog_content_id' => 2, 'lft' => 999, 'rght' => 1000];
         $blogCategory = BlogCategoryFactory::get(59);
         $result = $this->BlogCategories->update($blogCategory, $updateData);
         // 戻り値を確認
         $this->assertEquals($updateData['name'], $result['name']);
-        $this->assertEquals($updateData['blog_content_id'], $result['blog_content_id']);
+        $this->assertEquals(1, $result['blog_content_id']);
         // データの変更を確認
         $blogCategory = BlogCategoryFactory::get(59);
         $this->assertEquals($updateData['name'], $blogCategory['name']);
-        $this->assertEquals($updateData['blog_content_id'], $blogCategory['blog_content_id']);
+        $this->assertEquals(1, $blogCategory['blog_content_id']);
+        $this->assertNotEquals(999, $blogCategory['lft']);
     }
 
     /**
