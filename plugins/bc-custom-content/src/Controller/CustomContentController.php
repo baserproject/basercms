@@ -109,7 +109,8 @@ class CustomContentController extends BcFrontAppController
         } catch (RecordNotFoundException) {
             $this->notFound();
         } catch (\Throwable $e) {
-            $this->BcMessage->setError($e->getMessage());
+            // 例外メッセージは内部情報を含むため利用者には表示せず、ログに記録する
+            $this->log($e->getMessage());
             $this->notFound();
         }
 
@@ -143,7 +144,8 @@ class CustomContentController extends BcFrontAppController
 
         // フィールドが対象のカスタムフィールドかチェック
         $customLink = $customLinksService->findByName($field, [
-            'contain' => ['CustomFields']
+            'contain' => ['CustomFields'],
+            'custom_table_id' => $customContent->custom_table_id
         ]);
         if(!Configure::read("BcCustomContent.fieldTypes.{$customLink['custom_field']['type']}.hasArchives")) {
             $this->log(__d('baser_core', '指定されたフィールドはアーカイブ対象に設定されていません。'));
