@@ -312,6 +312,9 @@ class UsersTableTest extends BcTestCase
         UsersUserGroupFactory::make(['user_id' => 11, 'user_group_id' => 11])->persist();
         $this->getRequest('/baser/admin');
         $this->assertNotNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 11]))->first());
+        // プレフィックスが無い場合（フロント）はエラーにならず auth_prefix で絞り込まない
+        $this->getRequest('/');
+        $this->assertNotNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 10]))->first());
     }
 
 }
