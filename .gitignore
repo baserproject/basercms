@@ -150,3 +150,5 @@ node_modules
 /.claude/settings.local.json
 /.superpowers
 /.phpunit.log
+/webroot/bc_burger_editor
+/webroot/bc_mcp
