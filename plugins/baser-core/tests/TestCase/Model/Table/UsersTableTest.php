@@ -11,6 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
@@ -293,6 +296,22 @@ class UsersTableTest extends BcTestCase
         $this->assertTrue(isset($entity->user_groups));
         $this->assertTrue($entity->status);
         $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 3]))->first());
+
+        // auth_prefix が Api/Admin のみのグループのユーザーは、管理画面（Admin）のログインで取得されない
+        // （部分一致で 'Admin' が 'Api/Admin' に一致していた問題の回帰テスト）
+        UserGroupFactory::make(['id' => 10, 'name' => 'api_only', 'title' => 'API', 'auth_prefix' => 'Api/Admin'])->persist();
+        UserFactory::make(['id' => 10, 'name' => 'apiuser', 'email' => 'api@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 10, 'user_group_id' => 10])->persist();
+        $this->getRequest('/baser/admin');
+        $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 10]))->first());
+        $this->getRequest('/baser/api/admin/baser-core/users/login.json');
+        $this->assertNotNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 10]))->first());
+        // カンマ区切りで Admin を含むグループは取得される
+        UserGroupFactory::make(['id' => 11, 'name' => 'both', 'title' => 'both', 'auth_prefix' => 'Api/Admin,Admin'])->persist();
+        UserFactory::make(['id' => 11, 'name' => 'bothuser', 'email' => 'both@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 11, 'user_group_id' => 11])->persist();
+        $this->getRequest('/baser/admin');
+        $this->assertNotNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 11]))->first());
     }
 
 }
