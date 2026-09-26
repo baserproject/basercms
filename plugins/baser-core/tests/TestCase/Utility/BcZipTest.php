@@ -131,6 +131,56 @@ class BcZipTest extends BcTestCase
     }
 
     /**
+     * test _getTopArchiveName
+     * @dataProvider getTopArchiveNameDataProvider
+     */
+    public function test_getTopArchiveName($entry, $expected)
+    {
+        $this->assertSame($expected, $this->execPrivateMethod($this->BcZip, '_getTopArchiveName', [$entry]));
+    }
+
+    public static function getTopArchiveNameDataProvider()
+    {
+        return [
+            ['testfolder/testfile.txt', 'testfolder'],
+            ['testfolder/', 'testfolder'],
+            // `./` で始まるエントリでも `.` ではなく実際のトップフォルダ名になる
+            ['./testfolder/testfile.txt', 'testfolder'],
+            ['././testfolder', 'testfolder'],
+            // 妥当でないエントリ
+            ['./', false],
+            ['.', false],
+            ['', false],
+            ['../evil/file.txt', false],
+        ];
+    }
+
+    /**
+     * test ExtractByPhpLib - `./` で始まるエントリの ZIP でも topArchiveName が `.` にならないこと
+     *
+     * `.` になると呼び出し元が展開先の親ディレクトリ全体（tmp/）を移動・削除してしまう
+     */
+    public function testExtractByPhpLibDotSlashEntry()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'test_dot.zip';
+        $targetPath = TMP . 'extracted_dot' . DS;
+        if (!file_exists($zipSrcPath)) mkdir($zipSrcPath, 0777, true);
+        if (!file_exists($targetPath)) mkdir($targetPath, 0777, true);
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('./testfolder/testfile.txt', 'dot');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+        $this->assertTrue($result);
+        $this->assertEquals('testfolder', $this->BcZip->topArchiveName);
+
+        (new BcFolder($zipSrcPath))->delete();
+        (new BcFolder($targetPath))->delete();
+    }
+
+    /**
      * test ExtractByPhpLibReturnsFalse
      */
     public function testExtractByPhpLibReturnsFalse()
