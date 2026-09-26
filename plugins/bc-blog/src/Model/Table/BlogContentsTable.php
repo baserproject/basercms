@@ -79,6 +79,8 @@ class BlogContentsTable extends BlogAppTable
         $validator->scalar('template')
             ->maxLength('template', 20, __d('baser_core', 'コンテンツテンプレート名は半角で入力してください。'))
             ->notEmptyString('template', __d('baser_core', 'コンテンツテンプレート名を入力してください。'))
+            // テンプレート名はディレクトリのパスに連結されるため、`..` 等を含まない文字に限定する
+            ->regex('template', '/^[a-zA-Z0-9_\-]+$/', __d('baser_core', 'コンテンツテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。'))
             ->add('template', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',

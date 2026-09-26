@@ -181,6 +181,10 @@ class BlogContentsControllerTest extends BcTestCase
         $rs = $this->execPrivateMethod($controller, 'redirectEditBlog', ['BcColumn']);
         $this->assertEquals('https://localhost/baser/admin/bc-theme-file/theme_files/edit/BcFront/BcBlog/etc/Blog/BcColumn/index.php', $rs->getHeader('Location')[0]);
         $this->assertEquals(302, $rs->getStatusCode());
+
+        // テンプレート名に `..` 等を含む場合は 404（ディレクトリのパスに連結されるため）
+        $this->expectException('Cake\\Http\\Exception\\NotFoundException');
+        $this->execPrivateMethod($controller, 'redirectEditBlog', ['../../config']);
     }
 
 }
