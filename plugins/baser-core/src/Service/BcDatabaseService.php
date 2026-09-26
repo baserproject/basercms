@@ -1217,6 +1217,21 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if (!empty($stmt->getMethods())) {
                     return false;
                 }
+                // クラス本体はプロパティ宣言・定数のみ許可し、プロパティフック（PHP 8.4）を
+                // 持つプロパティは拒否する。get フックに任意コードを書くと、BcSchema の
+                // コンストラクタが $this->table 等を読み出した時点で実行される
+                foreach ((array)$stmt->stmts as $classStmt) {
+                    if ($classStmt instanceof Node\Stmt\Nop) continue;
+                    if ($classStmt instanceof Node\Stmt\ClassConst) continue;
+                    if ($classStmt instanceof Node\Stmt\Property) {
+                        if (!empty($classStmt->hooks)) {
+                            return false;
+                        }
+                        continue;
+                    }
+                    // トレイト利用・列挙ケース・メソッド等、上記以外は不許可
+                    return false;
+                }
                 $validClassCount++;
                 continue;
             }

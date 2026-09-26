@@ -681,6 +681,97 @@ class UserActionsSchema extends BcSchema
     }
 
     /**
+     * Test isValidSchemaFile rejects malicious top-level code
+     *
+     * GHSA-cg65-f2m7-9fqj: isValidSchemaFile() はクラス定義の中身しか検証しておらず、
+     * クラス定義外に置かれた任意のPHP文が require_once 実行時に無条件で実行されてしまう
+     * バイパスが存在した。トップレベル文のホワイトリスト検証により拒否されることを確認する。
+     *
+     * @dataProvider maliciousSchemaFileDataProvider
+     */
+    public function test_isValidSchemaFile_rejectsMaliciousTopLevelCode($phpCode)
+    {
+        $path = TMP . 'schema' . DS;
+        $fileName = 'MaliciousSchema.php';
+        $schemaFile = new BcFile($path . $fileName, true);
+        $schemaFile->write($phpCode);
+
+        $result = $this->execPrivateMethod($this->BcDatabaseService, 'isValidSchemaFile', [$path . $fileName]);
+        $this->assertFalse($result);
+
+        $schemaFile->delete();
+    }
+
+    public static function maliciousSchemaFileDataProvider()
+    {
+        return [
+            'トップレベルに任意コード実行文が混入' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nsystem('id');\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'クラス定義の前に式文が混入' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\n(function(){ return 1; })();\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'BcSchema と無関係なクラスのみ' => [
+                "<?php\nclass MaliciousSchema {\n    public function __construct() { system('id'); }\n}"
+            ],
+            'drop メソッドをオーバーライド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function drop() { system('id'); }\n}"
+            ],
+            'create メソッドをオーバーライド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function create() { system('id'); }\n}"
+            ],
+            // GHSA-5hvm-279m-gg7r: drop/create 以外のメソッドでも require 後のインスタンス化で実行され得るため拒否する
+            'BcSchema 継承クラスにコンストラクタ' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function __construct() { system('id'); }\n}"
+            ],
+            'BcSchema 継承クラスに任意メソッド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function foo() { system('id'); }\n}"
+            ],
+            'declare ブロック内に任意コード' => [
+                "<?php\ndeclare(ticks=1) {\n    system('id');\n}\nclass MaliciousSchema extends \\BaserCore\\Database\\Schema\\BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'クラスが2つ存在（2つ目に危険なコードを隠す）' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}\nclass Payload {\n    public function __construct() { system('id'); }\n}"
+            ],
+            'プロパティフック（PHP 8.4）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table { get { system('id'); return 'malicious'; } }\n}"
+            ],
+            'プロパティフック（set）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious' { set { system('id'); } }\n}"
+            ],
+            'トレイトの利用' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    use \\SomeTrait;\n    public \$table = 'malicious';\n}"
+            ],
+            'パースエラーとなる不正なPHP' => [
+                "<?php\nclass {{{ invalid"
+            ],
+        ];
+    }
+
+    /**
+     * Test loadSchema rejects malicious top-level code
+     *
+     * isValidSchemaFile() のバイパスにより悪意あるスキーマファイルが require_once されないことを、
+     * loadSchema() 経由の例外到達で確認する（system() 等の実行有無を直接検証するのではなく、
+     * require_once に到達しないことを到達可否で確認する設計）。
+     */
+    public function test_loadSchema_rejectsMaliciousTopLevelCode()
+    {
+        $path = TMP . 'schema' . DS;
+        $fileName = 'MaliciousLoadSchema.php';
+        $schemaFile = new BcFile($path . $fileName, true);
+        $schemaFile->write("<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nsystem('id');\nclass MaliciousLoadSchema extends BcSchema {\n    public \$table = 'malicious_load';\n}");
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('/無効なスキーマファイル/');
+        try {
+            $this->BcDatabaseService->loadSchema(['type' => 'create', 'path' => $path, 'file' => $fileName]);
+        } finally {
+            $schemaFile->delete();
+        }
+    }
+
+    /**
      * Test getDatasourceName
      * @param $value
      * @param $expected
