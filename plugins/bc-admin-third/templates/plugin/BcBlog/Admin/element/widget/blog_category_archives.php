@@ -23,7 +23,7 @@ $description = __d('baser_core', 'カテゴリ一覧を表示します。');
 
 <script type="text/javascript">
   $(function () {
-    var key = "<?php echo $key ?>";
+    var key = <?php echo json_encode((string)$key, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     $("#" + key + "ByYear").click(function () {
       if ($("#" + key + "ByYear").prop('checked')) {
         $("#" + key + "Depth").val(1);
@@ -59,7 +59,7 @@ $description = __d('baser_core', 'カテゴリ一覧を表示します。');
   'label' => __d('baser_core', '年別に表示する')
 ]) ?>
 <br>
-<p id="Span<?php echo $key ?>Depth"><?php echo $this->BcAdminForm->label($key . '.depth', __d('baser_core', '深さ')) ?>&nbsp;
+<p id="Span<?php echo h($key) ?>Depth"><?php echo $this->BcAdminForm->label($key . '.depth', __d('baser_core', '深さ')) ?>&nbsp;
   <?php echo $this->BcAdminForm->control($key . '.depth', ['type' => 'text', 'size' => 6, 'default' => 1]) ?>
   &nbsp;<?php echo __d('baser_core', '階層') ?></p>
 <?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser_core', 'ブログ')) ?>&nbsp;

@@ -183,7 +183,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
             <div
               class="ui-widget-content sortable widget setting <?php echo h($widget[$key]['element']) ?><?php echo $enabled ?>"
-              id="Setting<?php echo $widget[$key]['id'] ?>">
+              id="Setting<?php echo h($widget[$key]['id']) ?>">
               <div class="clearfix">
                 <div class="widget-name display-none"><?php echo h($widget[$key]['element']) ?></div>
                 <div class="del"><?php echo __d('baser_core', '削除') ?></div>
@@ -191,10 +191,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
                 <div class="head"><?php echo h($widget[$key]['name']) ?></div>
               </div>
               <div class="content" style="text-align:right">
-                <p><small><?php echo $widget[$key]['type'] ?></small></p>
+                <p><small><?php echo h($widget[$key]['type']) ?></small></p>
                 <?php echo $this->BcAdminForm->create(null, [
                   'class' => 'form',
-                  'id' => 'WidgetUpdateWidgetForm' . $widget[$key]['id']
+                  'id' => 'WidgetUpdateWidgetForm' . h($widget[$key]['id'])
                 ]) ?>
                 <?php echo $this->BcAdminForm->control($key . '.id', ['type' => 'hidden', 'class' => 'id']) ?>
                 <?php echo $this->BcAdminForm->control($key . '.type', ['type' => 'hidden']) ?>
