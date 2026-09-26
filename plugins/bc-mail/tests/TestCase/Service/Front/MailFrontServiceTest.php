@@ -584,18 +584,83 @@ class MailFrontServiceTest extends BcTestCase
             'name_1' => 'Nghiem2',
             'name_2' => 'Nghiem3',
             'sex' => 'Nghiem4',
-            'email_1' => 'Nghiem',
+            'email_1' => 'nghiem@example.com',
         ];
         $mailMessage = $MailMessagesService->create($mailContent, $postData);
 
         // normal case
         $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
-        $this->assertEquals('Nghiem', $result);
+        $this->assertEquals('nghiem@example.com', $result);
 
         // abnormal case
         $mailMessage = $MailMessagesService->get(1);
         $result = $this->MailFrontService->getUserMail($mailFields, $mailMessage);
         $this->assertEquals('', $result);
+    }
+
+    /**
+     * test getUserMail - タイプ「Eメール」以外の値・複数宛先を採用しないこと（GHSA-w47c-4g8m-gjv9 関連）
+     *
+     * 自動返信メールの宛先は投稿者入力に由来するため、
+     * - タイプ「Eメール」の項目の値のみ採用する（email / email_1 へのフォールバックは行わない）
+     * - カンマ区切りの複数アドレス、改行を含む値は採用しない（第三者へのメール中継防止）
+     * - 正しいメールアドレス形式でない値は採用しない
+     */
+    public function test_getUserMail_rejectsMultipleAndFallback()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        // MailFieldsScenario には type=email の項目も email / email_1 という項目も無い
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        foreach($mailFields as $mailField) {
+            $this->assertNotEquals('email', $mailField->type);
+            $this->assertNotContains($mailField->field_name, ['email', 'email_1']);
+        }
+
+        // 未定義の email / email_1 が POST されてもフォールバックしない
+        $mailMessage = new MailMessage(['name_1' => 'test', 'email' => 'attacker@example.com', 'email_1' => 'attacker2@example.com']);
+        $this->assertEquals('', $this->MailFrontService->getUserMail($mailFields, $mailMessage));
+
+        // タイプ「テキスト」の email 項目が定義されていても採用しない
+        MailFieldsFactory::make([
+            'id' => 98,
+            'mail_content_id' => 1,
+            'name' => 'email',
+            'field_name' => 'email',
+            'type' => 'text',
+            'use_field' => 1,
+        ])->persist();
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+        $mailMessage = new MailMessage(['email' => 'user@example.com']);
+        $this->assertEquals('', $this->MailFrontService->getUserMail($mailFields, $mailMessage));
+
+        // type=email の項目を追加
+        MailFieldsFactory::make([
+            'id' => 99,
+            'mail_content_id' => 1,
+            'name' => 'email',
+            'field_name' => 'user_email',
+            'type' => 'email',
+            'use_field' => 1,
+        ])->persist();
+        $mailFields = $MailFieldsService->getIndex(1)->all();
+
+        // 単一の正しいアドレスは採用する（前後の空白は除去）
+        $mailMessage = new MailMessage(['user_email' => ' user@example.com ']);
+        $this->assertEquals('user@example.com', $this->MailFrontService->getUserMail($mailFields, $mailMessage));
+
+        // 複数アドレス・改行・不正な形式は採用しない
+        foreach([
+            'user@example.com,other@example.com',
+            'user@example.com, other@example.com',
+            "user@example.com\nBcc: other@example.com",
+            'not-an-email',
+        ] as $value) {
+            $mailMessage = new MailMessage(['user_email' => $value]);
+            $this->assertEquals('', $this->MailFrontService->getUserMail($mailFields, $mailMessage), $value);
+        }
     }
 
     /**
