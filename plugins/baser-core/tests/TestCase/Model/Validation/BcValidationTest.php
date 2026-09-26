@@ -285,6 +285,7 @@ class BcValidationTest extends BcTestCase
                 ],
                 true
             ],
+            // Content-Type が許可対象でもファイル名の拡張子が許可対象外なら拒否する
             [
                 [
                     'name' => 'test.gif',
@@ -293,6 +294,53 @@ class BcValidationTest extends BcTestCase
                     'error' => UPLOAD_ERR_OK,
                     'tmp_name' => 'test',
                     'ext' => 'gif'
+                ],
+                false
+            ],
+            // 二重拡張子はファイル名末尾の拡張子で判定する
+            [
+                [
+                    'name' => 'shell.php.x',
+                    'size' => 1,
+                    'type' => 'image/png',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
+            ],
+            [
+                [
+                    'name' => 'shell.png.php',
+                    'size' => 1,
+                    'type' => 'image/png',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
+            ],
+            // 大文字の拡張子は許可する
+            [
+                [
+                    'name' => 'test.JPG',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
+                true
+            ],
+            // 拡張子が無い場合は Content-Type から判定する
+            [
+                [
+                    'name' => 'test',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
                 ],
                 true
             ],
