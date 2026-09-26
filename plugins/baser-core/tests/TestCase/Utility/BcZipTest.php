@@ -395,6 +395,34 @@ class BcZipTest extends BcTestCase
     }
 
     /**
+     * test _extractByCommand - シンボリックリンクを含む ZIP を拒否すること
+     */
+    public function testExtractByCommandRejectsSymlink()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'symlink_cmd.zip';
+        $targetPath = TMP . 'extracted_symlink' . DS;
+        if (!file_exists($zipSrcPath)) mkdir($zipSrcPath, 0777, true);
+        if (!file_exists($targetPath)) mkdir($targetPath, 0777, true);
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('theme/link', '../../../config');
+        $zip->setExternalAttributesName('theme/link', \ZipArchive::OPSYS_UNIX, (0120777 << 16));
+        $zip->addFromString('theme/normal.txt', 'ok');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFalse(is_link($targetPath . 'theme' . DS . 'link'));
+        $this->assertFileDoesNotExist($targetPath . 'theme' . DS . 'link');
+
+        (new BcFolder($zipSrcPath))->delete();
+        (new BcFolder($targetPath))->delete();
+    }
+
+    /**
      * test ExtractByCommandRejectsZipSlip
      */
     public function testExtractByCommandRejectsZipSlip()

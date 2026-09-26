@@ -161,6 +161,12 @@ class BcZip
         $target = rtrim($target, "/\\");
         $command = $unzipCommand . ' -o ' . $this->_escapePath($source) . ' -d ' . $this->_escapePath($target);
         exec($command . ' 2>&1', $return2);
+        // unzip コマンドはシンボリックリンクを復元するため、展開先外を指すリンクが作られると
+        // 後続のコピー処理でリンク先の実体が展開先へ複製される。リンクを含む場合は削除して失敗にする
+        if ($this->_removeSymlinks($target)) {
+            $this->error = __d('baser_core', 'Symbolic links are not allowed in zip archive.');
+            return false;
+        }
         if (!empty($return2[2])) {
             $path = str_replace('  inflating: ' . $target, '', $return2[2]);
             $path = preg_replace('/^\//', '', $path);
@@ -176,6 +182,32 @@ class BcZip
             $this->error = $errs;
             return false;
         }
+    }
+
+    /**
+     * 指定ディレクトリ配下のシンボリックリンクを削除する
+     *
+     * @param string $dir
+     * @return bool リンクが存在した場合 true
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _removeSymlinks(string $dir): bool
+    {
+        if (!is_dir($dir)) return false;
+        $found = false;
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($iterator as $item) {
+            if ($item->isLink()) {
+                unlink($item->getPathname());
+                $found = true;
+            }
+        }
+        return $found;
     }
 
     /**
