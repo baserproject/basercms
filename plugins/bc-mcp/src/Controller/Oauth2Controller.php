@@ -182,14 +182,14 @@ class Oauth2Controller extends AppController
 
             return $cakeResponse;
         } catch (\Exception $exception) {
-            // 一般的なエラーレスポンス
+            // 一般的なエラーレスポンス（例外の内容は応答に含めずログへ記録する）
+            Log::write('error', 'OAuth2 token endpoint error: ' . $exception->getMessage(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'An unexpected error occurred.',
-                    'message' => $exception->getMessage()
+                    'error_description' => 'An unexpected error occurred.'
                 ]));
         }
     }
@@ -237,13 +237,13 @@ class Oauth2Controller extends AppController
                 ]));
 
         } catch (\Exception $exception) {
+            Log::write('error', 'OAuth2 verify endpoint error: ' . $exception->getMessage(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'An unexpected error occurred.',
-                    'message' => $exception->getMessage()
+                    'error_description' => 'An unexpected error occurred.'
                 ]));
         }
     }
@@ -336,8 +336,7 @@ class Oauth2Controller extends AppController
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'Failed to generate protected resource metadata.',
-                    'debug_message' => $exception->getMessage()
+                    'error_description' => 'Failed to generate protected resource metadata.'
                 ]));
         }
     }
@@ -399,8 +398,7 @@ class Oauth2Controller extends AppController
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'Failed to generate authorization server metadata.',
-                    'debug_message' => $exception->getMessage()
+                    'error_description' => 'Failed to generate authorization server metadata.'
                 ]));
         }
     }

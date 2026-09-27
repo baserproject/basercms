@@ -324,6 +324,8 @@ class McpProxyController extends AppController
                     ]
                 ], JSON_UNESCAPED_UNICODE));
         } catch (\Exception $e) {
+            // 例外の内容（DB のエラー等の内部情報）は応答に含めず、ログに記録する
+            Log::write('error', 'MCPリクエストの処理に失敗しました: ' . $e->getMessage() . "\n" . $e->getTraceAsString(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withHeader('Content-Type', 'application/json')
@@ -331,7 +333,7 @@ class McpProxyController extends AppController
                     'jsonrpc' => '2.0',
                     'error' => [
                         'code' => 500,
-                        'message' => 'MCPリクエストの処理に失敗しました: ' . $e->getMessage()
+                        'message' => 'MCPリクエストの処理に失敗しました。'
                     ]
                 ], JSON_UNESCAPED_UNICODE));
         } finally {

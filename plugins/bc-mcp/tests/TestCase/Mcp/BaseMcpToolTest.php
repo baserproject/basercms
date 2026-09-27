@@ -483,7 +483,8 @@ class BaseMcpToolTest extends BcTestCase
             }
         ]);
         $this->assertEquals('例外が発生しました', $result['content']);
-        $this->assertArrayHasKey('trace', $result);
+        // スタックトレースはクライアントへ返さない（ログにのみ記録する）
+        $this->assertArrayNotHasKey('trace', $result);
 
         // \Error を捕捉できる事を確認
         $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
@@ -492,8 +493,10 @@ class BaseMcpToolTest extends BcTestCase
                 return $request->getParam('prefix');
             }
         ]);
-        $this->assertStringContainsString('getParam() on null', $result['content']);
-        $this->assertArrayHasKey('trace', $result);
+        // PHP 内部のエラーは内部情報を含むため定型文に丸め、トレースも返さない
+        $this->assertStringNotContainsString('getParam() on null', $result['content']);
+        $this->assertStringContainsString('ツールの実行中にエラーが発生しました', $result['content']);
+        $this->assertArrayNotHasKey('trace', $result);
     }
 }
 

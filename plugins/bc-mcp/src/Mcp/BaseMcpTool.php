@@ -211,13 +211,19 @@ abstract class BaseMcpTool
      */
     protected function createErrorResponse(string $message, ?\Throwable $exception = null): array
     {
-        $response = [
+        if ($exception) {
+            // スタックトレースはクライアントへ返さずログに記録する。
+            // DB や PHP 内部の例外は内部情報（テーブル名・パス等）を含むため、メッセージも定型文に丸める
+            \Cake\Log\Log::write('error', $message . "\n" . $exception->getTraceAsString(), ['scope' => ['mcp']]);
+            if ($exception instanceof \Error
+                || $exception instanceof \PDOException
+                || $exception instanceof \Cake\Database\Exception\DatabaseException) {
+                $message = 'ツールの実行中にエラーが発生しました。詳細はサーバーのログを確認してください。';
+            }
+        }
+        return [
             'content' => $message
         ];
-        if ($exception) {
-            $response['trace'] = $exception->getTraceAsString();
-        }
-        return $response;
     }
 
     /**
