@@ -128,15 +128,23 @@ const bcBlog = {
             bcBlog.loadAuthCaptcha();
             $("#BlogCommentAuthCaptcha").val('');
         }
+        // サーバーの応答は HTML として描画せず、エスケープしてから表示する
         let message = bcI18n.alertMessageError;
-        if(result.responseText) {
-            response = JSON.parse(result.responseText);
+        let response = {};
+        if(result && result.responseText) {
+            try {
+                response = JSON.parse(result.responseText) || {};
+            } catch (e) {
+                response = {};
+            }
         }
-        message += '<br>' + response.message;
+        if(response.message) {
+            message += '<br>' + $.bcUtil.escapeHtml(response.message);
+        }
         if(response.errors) {
             Object.keys(response.errors).forEach(function(k) {
                 Object.keys(response.errors[k]).forEach(function(f){
-                    message += '<br>' + response.errors[k][f];
+                    message += '<br>' + $.bcUtil.escapeHtml(response.errors[k][f]);
                 });
             });
         }
