@@ -324,8 +324,25 @@ abstract class BaseMcpTool
             throw new \Exception('base64デコードに失敗しました');
         }
 
+        // 申告された MIME タイプは信用せず、内容から判定できる場合はそれを優先する。
+        // 内容がテキストなのに画像等の MIME タイプが申告された場合（HTML を画像として
+        // 保存させる等）は不一致として拒否する
+        $actualMimeType = $this->detectMimeTypeFromContent($decodedData);
+        if ($actualMimeType === 'text/plain') {
+            if (!in_array($mimeType, ['text/plain', 'text/csv'], true)) {
+                throw new \Exception('サポートされていないファイル形式です: ' . $mimeType);
+            }
+        } elseif ($actualMimeType !== 'application/octet-stream') {
+            $mimeType = $actualMimeType;
+        }
+
         // ファイル拡張子を取得
         $extension = $this->getExtensionFromMimeType($mimeType);
+
+        // ファイル形式のチェック（URL 取り込みと同じ許可リストを適用する）
+        if (!$this->isAllowedExtension($extension)) {
+            throw new \Exception('サポートされていないファイル形式です: ' . $extension);
+        }
 
         // 一意のファイル名を生成
         $fileName = 'upload_' . uniqid() . '.' . $extension;
@@ -845,9 +862,10 @@ abstract class BaseMcpTool
     protected function isAllowedExtension(string $extension): bool
     {
         // デフォルトで許可する拡張子（baserCMSの設定を参考）
+        // SVG はスクリプトを埋め込めるため、MCP 経由のアップロードでは受け付けない
         $allowedExtensions = [
             // 画像
-            'gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'bmp', 'ico',
+            'gif', 'jpg', 'jpeg', 'png', 'webp', 'bmp', 'ico',
             // ドキュメント
             'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv',
             // アーカイブ
@@ -871,7 +889,7 @@ abstract class BaseMcpTool
 
         // 配列の場合は画像ファイルかチェック
         if (is_array($result)) {
-            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'];
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'ico'];
             if (!in_array($result['ext'], $imageExtensions)) {
                 throw new \Exception('画像ファイルではありません: ' . $result['ext']);
             }
