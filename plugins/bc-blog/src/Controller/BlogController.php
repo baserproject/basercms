@@ -330,6 +330,10 @@ class BlogController extends BlogFrontAppController
                 ]));
             }
             $entity = $service->add($postData['blog_content_id'], $postData['blog_post_id'], $postData);
+            // 保存に成功した時点で画像認証の回答を破棄し、同一セッションでの回答の再利用（リプレイ）を防ぐ
+            if ($blogContent->auth_captcha) {
+                $bcCaptchaService->consume($this->getRequest(), (string)$this->getRequest()->getData('captcha_id'));
+            }
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $message = __d('baser_core', '入力エラーです。内容を見直してください。');

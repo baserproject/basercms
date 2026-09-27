@@ -65,24 +65,19 @@ class BcCaptchaServiceTest extends BcTestCase
     }
 
     /**
-     * test check - $consume=true で回答が消費され、同一セッションでの再利用（リプレイ）ができないこと
+     * test consume - 回答が破棄され、同一セッションでの再利用（リプレイ）ができないこと
      */
-    public function test_check_consume()
+    public function test_consume()
     {
         $request = $this->getRequest('/');
         $request->getSession()->write('captcha.token1', 'abcd');
 
-        // 消費しない場合は繰り返し検証できる
+        // 破棄するまでは繰り返し検証できる（確認画面→送信）
         $this->assertTrue($this->BcCaptchaService->check($request, 'token1', 'abcd'));
         $this->assertTrue($this->BcCaptchaService->check($request, 'token1', 'abcd'));
-        // 消費する場合は成功後にセッションから削除される
-        $this->assertTrue($this->BcCaptchaService->check($request, 'token1', 'abcd', true));
+        // 破棄後は同じ回答が使えない
+        $this->BcCaptchaService->consume($request, 'token1');
         $this->assertNull($request->getSession()->read('captcha.token1'));
-        $this->assertFalse($this->BcCaptchaService->check($request, 'token1', 'abcd', true));
-        // 不一致・空の回答は消費されない
-        $request->getSession()->write('captcha.token2', 'abcd');
-        $this->assertFalse($this->BcCaptchaService->check($request, 'token2', 'wrong', true));
-        $this->assertFalse($this->BcCaptchaService->check($request, 'token2', '', true));
-        $this->assertEquals('abcd', $request->getSession()->read('captcha.token2'));
+        $this->assertFalse($this->BcCaptchaService->check($request, 'token1', 'abcd'));
     }
 }
