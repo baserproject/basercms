@@ -366,6 +366,10 @@ class BlogPostsTool extends BaseMcpTool
         if (!empty($email)) {
             $conditions = ['email' => $email];
             $user = $usersService->getIndex($conditions)->first();
+            // 操作者以外を投稿者に指定できるのはシステム管理者のみ
+            if ($user && $loginUserId && $user->id !== $loginUserId && !$this->isAdminLoginUser($loginUserId)) {
+                throw new \Exception('投稿者に他のユーザーを指定できるのはシステム管理者のみです');
+            }
         } elseif ($loginUserId) {
             $user = $usersService->get($loginUserId);
         }

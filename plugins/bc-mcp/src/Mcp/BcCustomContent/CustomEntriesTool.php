@@ -175,6 +175,8 @@ class CustomEntriesTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $customTableId, $title, $parentId, $name, $creatorId, $status,
             $publishBegin, $publishEnd, $published, $customFields, $loginUserId
@@ -191,7 +193,7 @@ class CustomEntriesTool extends BaseMcpTool
                 'title' => $title,
                 'parentId' => $parentId ?? null,
                 'name' => $name ?? '',
-                'creator_id' => $creatorId ?? 1,
+                'creator_id' => $this->resolveActorId($creatorId, $loginUserId),
                 'status' => $status ?? false,
                 'publish_begin' => $publishBegin ?? null,
                 'publish_end' => $publishEnd ?? null,
@@ -240,6 +242,8 @@ class CustomEntriesTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id, $customTableId, $title, $parentId, $name, $creatorId, $status,
             $publishBegin, $publishEnd, $published, $customFields, $loginUserId
@@ -259,7 +263,7 @@ class CustomEntriesTool extends BaseMcpTool
             if ($title !== null) $data['title'] = $title;
             if ($parentId !== null) $data['parent_id'] = $parentId;
             if ($name !== null) $data['name'] = $name;
-            if ($creatorId !== null) $data['creator_id'] = $creatorId;
+            if ($creatorId !== null) $data['creator_id'] = $this->resolveActorId($creatorId, $loginUserId);
             if ($status !== null) $data['status'] = $status;
             if ($publishBegin !== null) $data['publish_begin'] = $publishBegin;
             if ($publishEnd !== null) $data['publish_end'] = $publishEnd;
@@ -420,6 +424,8 @@ class CustomEntriesTool extends BaseMcpTool
      */
     public function deleteCustomEntry(int $customTableId, int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($customTableId, $id, $loginUserId) {
             /** @var CustomEntriesService $customEntriesService */
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);

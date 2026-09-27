@@ -3,14 +3,22 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Mcp;
 
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Mcp\BaseMcpTool;
+use BcMcp\Mcp\McpContext;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaseMcpToolTest
  */
 class BaseMcpToolTest extends BcTestCase
 {
+
+    use ScenarioAwareTrait;
     /**
      * Test subject
      *
@@ -344,6 +352,89 @@ class BaseMcpToolTest extends BcTestCase
             foreach(glob($docRoot . '*') as $file) unlink($file);
             rmdir($docRoot);
         }
+    }
+
+    /**
+     * test resolveLoginUserId - コンテキストが設定されている場合は引数より優先されること
+     */
+    public function testResolveLoginUserIdPrefersContext()
+    {
+        McpContext::clear();
+        $this->assertSame(7, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [7]));
+        McpContext::setLoginUserId(2);
+        try {
+            // 引数（クライアントが送信できる値）で操作者を詐称できない
+            $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [1]));
+            $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [null]));
+        } finally {
+            McpContext::clear();
+        }
+    }
+
+    /**
+     * test resolveActorId - 操作者以外を作成者に指定できるのはシステム管理者のみであること
+     */
+    public function testResolveActorId()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserGroupFactory::make(['id' => 2, 'name' => 'operators', 'title' => 'operators', 'auth_prefix' => 'Admin,Api/Admin'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+
+        // 未指定・自分自身は操作者
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [null, 2]));
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [2, 2]));
+        // システム管理者は他のユーザーを指定できる
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [2, 1]));
+        // コンテキストが無い（操作者不明）場合は指定値
+        $this->assertSame(1, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [1, null]));
+        // 一般ユーザーは他のユーザーを指定できない
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('システム管理者のみ');
+        $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [1, 2]);
+    }
+
+    /**
+     * test clampLimit
+     */
+    public function testClampLimit()
+    {
+        $this->assertSame(20, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [null, 20]));
+        $this->assertSame(20, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [0, 20]));
+        $this->assertSame(5, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [5, 20]));
+        $this->assertSame(100, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [100000, 20]));
+        $this->assertSame(50, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [100000, 20, 50]));
+    }
+
+    /**
+     * test processBase64File - 許可されていない形式（HTML / SVG 等）を拒否すること
+     */
+    public function testProcessBase64FileRejectsDisallowedType()
+    {
+        $html = 'data:text/html;base64,' . base64_encode('<script>alert(1)</script>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$html]);
+            $this->fail('HTML が拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        // 申告 MIME が画像でも中身が HTML なら拒否する
+        $fake = 'data:image/png;base64,' . base64_encode('<html><script>alert(1)</script></html>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$fake]);
+            $this->fail('偽装した MIME タイプが拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        $svg = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$svg]);
+            $this->fail('SVG が拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', ['svg']));
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', ['html']));
     }
 
     /**

@@ -187,6 +187,8 @@ class CustomContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $name, $title, $customTableId, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $widgetArea, $listCount,
@@ -215,7 +217,7 @@ class CustomContentsTool extends BaseMcpTool
                     'description' => $description ?? '',
                     'site_id' => $siteId,
                     'parent_id' => $parentId,
-                    'author_id' => $authorId ?? $loginUserId ?? 1,
+                    'author_id' => $this->resolveActorId($authorId, $loginUserId),
                     'layout_template' => $layoutTemplate ?? '',
                     'exclude_search' => $excludeSearch,
                     'self_status' => $status ?? false,
@@ -268,6 +270,8 @@ class CustomContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id, $name, $title, $customTableId, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $widgetArea, $listCount,
@@ -287,7 +291,7 @@ class CustomContentsTool extends BaseMcpTool
             if ($siteId !== null) $data['content']['site_id'] = $siteId;
             if ($parentId !== null) $data['content']['parent_id'] = $parentId;
             if ($description !== null) $data['content']['description'] = $description;
-            if ($authorId !== null) $data['content']['author_id'] = $authorId;
+            if ($authorId !== null) $data['content']['author_id'] = $this->resolveActorId((int)$authorId, $loginUserId);
             if ($layoutTemplate !== null) $data['content']['layout_template'] = $layoutTemplate;
             if ($status !== null) $data['content']['self_status'] = $status;
             if ($publishBegin !== null) $data['content']['publish_begin'] = $publishBegin;
@@ -370,6 +374,8 @@ class CustomContentsTool extends BaseMcpTool
      */
     public function deleteCustomContent(int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($id, $loginUserId) {
             /** @var CustomContentsService $customContentsService */
             $customContentsService = $this->getService(CustomContentsServiceInterface::class);

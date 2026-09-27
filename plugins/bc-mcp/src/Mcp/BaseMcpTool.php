@@ -96,15 +96,72 @@ abstract class BaseMcpTool
      * 操作者のユーザーIDを解決する
      *
      * MCP のツールは JSON-RPC の引数しか受け取らないため、認証済みの操作者は
-     * McpContext から取得する。引数で明示された場合はそれを優先する
-     * （テストなど、コンテキストを持たない経路のため）。
+     * McpContext から取得する。コンテキストが設定されている場合は常にそれを使い、
+     * 引数の値は無視する（SDK は inputSchema に無いキーも名前一致でコールバック引数へ
+     * 束縛するため、引数を優先するとクライアントが操作者を詐称できてしまう）。
+     * 引数はコンテキストを持たない経路（テスト等）のためにのみ使う。
      *
      * @param int|null $loginUserId 引数で渡されたユーザーID
      * @return int|null
      */
     protected function resolveLoginUserId(?int $loginUserId = null): ?int
     {
-        return $loginUserId ?? McpContext::getLoginUserId();
+        return McpContext::getLoginUserId() ?? $loginUserId;
+    }
+
+    /**
+     * 作成者・投稿者として保存するユーザーIDを解決する
+     *
+     * 操作者以外を作成者に指定できるのはシステム管理者のみ。
+     * それ以外のユーザーが別のユーザーを指定した場合は例外とする。
+     *
+     * @param int|null $requestedUserId 引数で指定されたユーザーID
+     * @param int|null $loginUserId 操作者のユーザーID
+     * @return int|null
+     * @throws \Exception
+     */
+    protected function resolveActorId(?int $requestedUserId, ?int $loginUserId): ?int
+    {
+        if ($requestedUserId === null || $requestedUserId === $loginUserId) {
+            return $loginUserId ?? $requestedUserId;
+        }
+        if ($loginUserId === null) {
+            return $requestedUserId;
+        }
+        if (!$this->isAdminLoginUser($loginUserId)) {
+            throw new \Exception('作成者に他のユーザーを指定できるのはシステム管理者のみです');
+        }
+        return $requestedUserId;
+    }
+
+    /**
+     * 操作者がシステム管理者かどうかを判定する
+     *
+     * @param int|null $loginUserId
+     * @return bool
+     */
+    protected function isAdminLoginUser(?int $loginUserId): bool
+    {
+        if (!$loginUserId) return false;
+        $user = TableRegistry::getTableLocator()->get('BaserCore.Users')
+            ->find()->where(['Users.id' => $loginUserId])->contain(['UserGroups'])->first();
+        return $user? BcUtil::isAdminUser($user) : false;
+    }
+
+    /**
+     * 一覧取得の件数を上限内に収める
+     *
+     * limit に上限が無いと全件を取得してメモリを消費させることができるため、上限でクランプする
+     *
+     * @param int|null $limit
+     * @param int $default 省略時の件数
+     * @param int $max 上限
+     * @return int
+     */
+    protected function clampLimit(?int $limit, int $default = 20, int $max = 100): int
+    {
+        if ($limit === null || $limit < 1) return $default;
+        return min($limit, $max);
     }
 
     /**
@@ -131,6 +188,8 @@ abstract class BaseMcpTool
     protected function saveDblog($userId, $message)
     {
         try {
+            // 操作ログの操作者は認証済みのコンテキストを優先し、引数で詐称できないようにする
+            $userId = McpContext::getLoginUserId() ?? $userId;
             $data = [
                 'message' => $message,
                 'controller' => 'McpProxy',
