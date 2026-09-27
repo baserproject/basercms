@@ -404,7 +404,8 @@ class BlogPostsTool extends BaseMcpTool
             if (!empty($blogContentId)) $conditions['blog_content_id'] = $blogContentId;
             if (!empty($keyword)) $conditions['keyword'] = $keyword;
             if ($status) $conditions['status'] = $status;
-            $conditions['limit'] = $limit ?? 10;
+            $limit = $this->clampLimit($limit, 10);
+            $conditions['limit'] = $limit;
             $conditions['page'] = $page ?? 1;
 
             $results = $blogPostsService->getIndex($conditions)->toArray();
@@ -413,7 +414,7 @@ class BlogPostsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? 10,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

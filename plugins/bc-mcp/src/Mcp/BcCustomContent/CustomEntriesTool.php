@@ -384,7 +384,7 @@ class CustomEntriesTool extends BaseMcpTool
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
             $customEntriesService->setup($customTableId);
             $conditions = [
-                'limit' => $limit ?? 20,
+                'limit' => $this->clampLimit($limit, 20),
                 'page' => $page ?? 1
             ];
             if (isset($status)) $conditions['status'] = $status;

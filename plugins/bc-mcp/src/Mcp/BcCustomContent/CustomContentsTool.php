@@ -333,9 +333,10 @@ class CustomContentsTool extends BaseMcpTool
         return $this->executeWithErrorHandling(function() use ($status, $limit, $page) {
             $customContentsService = $this->getService(CustomContentsServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = [];
             if (isset($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             $results = $customContentsService->getIndex($conditions)->toArray();
@@ -344,7 +345,7 @@ class CustomContentsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

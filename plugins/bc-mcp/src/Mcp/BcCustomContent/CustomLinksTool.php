@@ -253,10 +253,11 @@ class CustomLinksTool extends BaseMcpTool
             /** @var CustomLinksService $customLinksService */
             $customLinksService = $this->getService(CustomLinksServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = ['finder' => 'all'];
             if (!empty($name)) $conditions['name'] = $name;
             if (isset($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             // CustomLinksService::getIndex() は custom_table_id を最初の引数として期待している
@@ -266,7 +267,7 @@ class CustomLinksTool extends BaseMcpTool
                 'results' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

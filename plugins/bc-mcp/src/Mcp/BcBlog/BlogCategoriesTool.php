@@ -209,10 +209,11 @@ class BlogCategoriesTool extends BaseMcpTool
             /** @var BlogCategoriesService $blogCategoriesService */
             $blogCategoriesService = $this->getService(BlogCategoriesServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = [];
             if (!empty($title)) $conditions['title'] = $title;
             if (!empty($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             //
@@ -226,7 +227,7 @@ class BlogCategoriesTool extends BaseMcpTool
             return $this->createSuccessResponse($results, [
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results),
                     'total' => $totalCount
                 ]

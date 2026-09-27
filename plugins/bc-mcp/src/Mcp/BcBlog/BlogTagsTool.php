@@ -163,9 +163,10 @@ class BlogTagsTool extends BaseMcpTool
             /** @var BlogTagsService $blogTagsService */
             $blogTagsService = $this->getService(BlogTagsServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 10);
             $conditions = [];
             if (!empty($name)) $conditions['name'] = $name;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
             $results = $blogTagsService->getIndex($conditions)->toArray();
 
@@ -173,7 +174,7 @@ class BlogTagsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

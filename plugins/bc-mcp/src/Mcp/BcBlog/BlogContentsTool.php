@@ -389,10 +389,11 @@ class BlogContentsTool extends BaseMcpTool
             /** @var BlogContentsService $blogContentsService */
             $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = [];
             if (!empty($title)) $conditions['title'] = $title;
             if (!empty($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             $results = $blogContentsService->getIndex($conditions)->toArray();
@@ -401,7 +402,7 @@ class BlogContentsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);
