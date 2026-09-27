@@ -51,11 +51,37 @@ class NegotiationLogger
 
         return [
             'era' => $isModern? 'modern' : 'legacy',
-            'protocolVersion' => (string)$protocolVersion,
-            'clientName' => (string)($clientInfo['name'] ?? ''),
-            'clientVersion' => (string)($clientInfo['version'] ?? ''),
-            'method' => (string)($mcpRequest['method'] ?? ''),
+            'protocolVersion' => self::sanitize($protocolVersion, true),
+            'clientName' => self::sanitize($clientInfo['name'] ?? '', true),
+            'clientVersion' => self::sanitize($clientInfo['version'] ?? '', true),
+            'method' => self::sanitize($mcpRequest['method'] ?? ''),
         ];
+    }
+
+    /**
+     * ログに記録する値を正規化する
+     *
+     * クライアントが送信する値をそのまま記録すると、改行を含めて偽の記録行を作り
+     * 管理画面の「直近の接続状況」を偽装できるため、制御文字を除去し長さを制限する
+     *
+     * @param mixed $value
+     * @param bool $stripDelimiters 記録形式の区切り文字（空白・スラッシュ）も置き換えるか
+     * @return string
+     */
+    public static function sanitize($value, bool $stripDelimiters = false): string
+    {
+        if (is_array($value) || is_object($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+        $value = (string)$value;
+        $value = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $value) ?? '';
+        $value = trim($value);
+        if ($stripDelimiters) {
+            $value = str_replace(['/', ' '], ['_', '_'], $value);
+        } else {
+            $value = str_replace(' ', '_', $value);
+        }
+        return mb_substr($value, 0, 100);
     }
 
     /**
