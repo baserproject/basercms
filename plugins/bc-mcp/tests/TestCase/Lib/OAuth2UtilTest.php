@@ -28,6 +28,46 @@ class OAuth2UtilTest extends BcTestCase
      */
     public function testGetIssuer()
     {
+        // SITE_URL が設定されている場合は Host ヘッダに関わらず SITE_URL から導出する
+        $request = new ServerRequest([
+            'environment' => [
+                'HTTP_HOST' => 'evil.example.com',
+                'HTTPS' => 'on',
+                'HTTP_X_FORWARDED_PROTO' => 'https',
+            ],
+        ]);
+        $siteUrl = rtrim((string)env('SITE_URL', ''), '/');
+        $this->assertNotEmpty($siteUrl);
+        $this->assertEquals($siteUrl . '/bc-mcp', OAuth2Util::getIssuer($request));
+        $this->assertEquals($siteUrl, OAuth2Util::getBaseUrl($request));
+
+        // SITE_URL が無い場合のみリクエストから導出する
+        $this->withoutSiteUrl(function() {
+            $this->assertHostBasedIssuer();
+        });
+    }
+
+    /**
+     * SITE_URL を一時的に外して処理を実行する
+     */
+    private function withoutSiteUrl(callable $callback): void
+    {
+        $original = env('SITE_URL');
+        putenv('SITE_URL');
+        unset($_ENV['SITE_URL'], $_SERVER['SITE_URL']);
+        try {
+            $callback();
+        } finally {
+            if ($original !== null && $original !== false) {
+                putenv('SITE_URL=' . $original);
+                $_ENV['SITE_URL'] = $original;
+                $_SERVER['SITE_URL'] = $original;
+            }
+        }
+    }
+
+    private function assertHostBasedIssuer(): void
+    {
         // baserCMS は TRUST_PROXY が有効な場合 https 検出器を静的に差し替え、
         // HTTPS ではなく X-Forwarded 系を参照する。どちらの環境でも https と
         // 判定されるよう両方を渡す
@@ -47,15 +87,17 @@ class OAuth2UtilTest extends BcTestCase
      */
     public function testGetIssuerWithHttp()
     {
-        $request = new ServerRequest([
-            'environment' => [
-                'HTTP_HOST' => 'localhost:8080',
-                'HTTPS' => 'off',
-                'HTTP_X_FORWARDED_PROTO' => 'http',
-            ],
-        ]);
+        $this->withoutSiteUrl(function() {
+            $request = new ServerRequest([
+                'environment' => [
+                    'HTTP_HOST' => 'localhost:8080',
+                    'HTTPS' => 'off',
+                    'HTTP_X_FORWARDED_PROTO' => 'http',
+                ],
+            ]);
 
-        $this->assertEquals('http://localhost:8080/bc-mcp', OAuth2Util::getIssuer($request));
+            $this->assertEquals('http://localhost:8080/bc-mcp', OAuth2Util::getIssuer($request));
+        });
     }
 
     /**

@@ -308,13 +308,8 @@ class Oauth2Controller extends AppController
     public function protectedResourceMetadata(): Response
     {
         try {
-            // 現在のリクエストからベースURLを動的に取得
-            $scheme = $this->request->is('https')? 'https' : 'http';
-            $host = $this->request->getHeaderLine('Host');
-            if (!$host) {
-                $host = $this->request->getEnv('HTTP_HOST')?: 'localhost';
-            }
-            $baseUrl = $scheme . '://' . $host;
+            // ベース URL は Host ヘッダではなく SITE_URL から導出する（issuer と同じ導出）
+            $baseUrl = OAuth2Util::getBaseUrl($this->request);
 
             $metadata = [
                 'resource' => $baseUrl . '/bc-mcp',
@@ -349,13 +344,8 @@ class Oauth2Controller extends AppController
     public function authorizationServerMetadata(): Response
     {
         try {
-            // 現在のリクエストからベースURLを動的に取得
-            $scheme = $this->request->is('https')? 'https' : 'http';
-            $host = $this->request->getHeaderLine('Host');
-            if (!$host) {
-                $host = $this->request->getEnv('HTTP_HOST')?: 'localhost';
-            }
-            $baseUrl = $scheme . '://' . $host;
+            // ベース URL は Host ヘッダではなく SITE_URL から導出する（issuer と同じ導出）
+            $baseUrl = OAuth2Util::getBaseUrl($this->request);
 
             $metadata = [
                 // RFC 8414 必須項目
