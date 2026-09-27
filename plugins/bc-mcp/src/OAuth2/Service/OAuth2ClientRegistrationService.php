@@ -195,7 +195,8 @@ class OAuth2ClientRegistrationService
         if ($storedToken === null) {
             $storedToken = self::$registrationTokenMap[$clientId] ?? null;
         }
-        if ($storedToken !== $registrationAccessToken) {
+        // 秘密情報の比較は定数時間で行う
+        if (!is_string($storedToken) || !hash_equals($storedToken, $registrationAccessToken)) {
             return null;
         }
 
@@ -231,7 +232,8 @@ class OAuth2ClientRegistrationService
         if ($storedToken === null) {
             $storedToken = self::$registrationTokenMap[$clientId] ?? null;
         }
-        if ($storedToken !== $registrationAccessToken) {
+        // 秘密情報の比較は定数時間で行う
+        if (!is_string($storedToken) || !hash_equals($storedToken, $registrationAccessToken)) {
             return null;
         }
 
