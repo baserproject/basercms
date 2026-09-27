@@ -305,6 +305,12 @@ class CustomEntriesTool extends BaseMcpTool
         $processedFields = [];
 
         foreach($customFields as $fieldName => $value) {
+            // 対象テーブルに定義されたフィールド以外は受け付けない。
+            // 任意のキーを通すと id / custom_table_id / lft / rght / level 等の内部カラムを
+            // 上書きでき、他テーブルのエントリーとして保存したりツリー構造を壊したりできる
+            if (!array_key_exists($fieldName, $fieldTypes)) {
+                continue;
+            }
             if (is_array($value)) {
                 // 配列の場合、json形式またはファイルアップロードの可能性をチェック
                 $processedFields[$fieldName] = $value;
