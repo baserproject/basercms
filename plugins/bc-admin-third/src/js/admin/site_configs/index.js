@@ -35,11 +35,9 @@ $(function () {
                     $("#ResultCheckSendmail").html(bcI18n.infoMessage1);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    var errorMessage = '';
-                    if (XMLHttpRequest.responseJSON.message) {
-                        errorMessage = XMLHttpRequest.responseJSON.message;
-                    } else {
-                        errorMessage = errorThrown;
+                    var errorMessage = $.bcUtil.getResponseMessage(XMLHttpRequest);
+                    if (!errorMessage) {
+                        errorMessage = $.bcUtil.escapeHtml(errorThrown);
                     }
                     $("#ResultCheckSendmail").html(bcI18n.alertMessage1 + errorMessage);
                 },

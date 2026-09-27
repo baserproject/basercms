@@ -91,10 +91,10 @@
                             if (XMLHttpRequest.status === 404) {
                                 errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
                             } else {
-                                if (XMLHttpRequest.responseText && XMLHttpRequest.responseText !== 'null') {
-                                    errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
+                                if ($.bcUtil.getResponseMessage(XMLHttpRequest)) {
+                                    errorMessage = '<br>' + $.bcUtil.getResponseMessage(XMLHttpRequest);
                                 } else {
-                                    errorMessage = '<br>' + errorThrown;
+                                    errorMessage = '<br>' + $.bcUtil.escapeHtml(errorThrown);
                                 }
                             }
                             form.remove();
