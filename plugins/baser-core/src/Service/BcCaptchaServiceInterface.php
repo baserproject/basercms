@@ -32,6 +32,17 @@ interface BcCaptchaServiceInterface
      * @param string $value フォームから送信された文字列
      * @return bool
      */
-    public function check(ServerRequest $request, string $token, string $value, bool $consume = false): bool;
+    public function check(ServerRequest $request, string $token, string $value): bool;
+
+    /**
+     * 認証の回答をセッションから破棄する
+     *
+     * 送信完了後に呼び出し、同一セッションでの回答の再利用（リプレイ）を防ぐ
+     *
+     * @param ServerRequest $request
+     * @param string $token
+     * @return void
+     */
+    public function consume(ServerRequest $request, string $token): void;
 
 }
