@@ -493,6 +493,16 @@ class Oauth2Controller extends AppController
                     'error' => 'invalid_client_metadata',
                     'error_description' => $exception->getMessage()
                 ]));
+        } catch (\Throwable $throwable) {
+            // 型エラー等の内部例外は内容を応答に含めず、定型文で返す
+            Log::write('error', 'OAuth2 client registration error: ' . $throwable->getMessage(), ['scope' => ['mcp']]);
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_client_metadata',
+                    'error_description' => 'Invalid client metadata.'
+                ]));
         }
     }
 
@@ -612,6 +622,16 @@ class Oauth2Controller extends AppController
                 ->withStringBody(json_encode([
                     'error' => 'invalid_client_metadata',
                     'error_description' => $exception->getMessage()
+                ]));
+        } catch (\Throwable $throwable) {
+            // 型エラー等の内部例外は内容を応答に含めず、定型文で返す
+            Log::write('error', 'OAuth2 client registration error: ' . $throwable->getMessage(), ['scope' => ['mcp']]);
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_client_metadata',
+                    'error_description' => 'Invalid client metadata.'
                 ]));
         }
     }

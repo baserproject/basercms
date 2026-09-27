@@ -303,6 +303,33 @@ class OAuth2ClientRegistrationService
      */
     private function validateRegistrationRequest(array $requestData): void
     {
+        // 文字列を要求する項目の型と長さを検証する（配列等が渡されると TypeError で 500 になる）
+        foreach(['client_name', 'scope', 'software_id', 'software_version', 'client_uri', 'logo_uri', 'tos_uri', 'policy_uri'] as $key) {
+            if (!isset($requestData[$key])) continue;
+            if (!is_string($requestData[$key])) {
+                throw new Exception($key . ' must be a string');
+            }
+            if (mb_strlen($requestData[$key]) > 255) {
+                throw new Exception($key . ' is too long');
+            }
+        }
+        if (isset($requestData['client_name']) && mb_strlen($requestData['client_name']) > 100) {
+            throw new Exception('client_name must be 100 characters or less');
+        }
+        if (isset($requestData['contacts'])) {
+            if (!is_array($requestData['contacts'])) {
+                throw new Exception('contacts must be an array');
+            }
+            foreach($requestData['contacts'] as $contact) {
+                if (!is_string($contact) || mb_strlen($contact) > 255) {
+                    throw new Exception('contacts must be an array of strings');
+                }
+            }
+        }
+        if (isset($requestData['redirect_uris']) && !is_array($requestData['redirect_uris'])) {
+            throw new Exception('redirect_uris must be an array');
+        }
+
         // redirect_uris は authorization_code に必須であり、登録時に検証する
         (new RedirectUriRegistrationValidator())->validate($requestData['redirect_uris'] ?? []);
 
