@@ -82,7 +82,8 @@ class McpRequestHandler
     {
         $path = TMP . 'bc_mcp_sessions';
         if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+            // セッションの内容を他のユーザーに読まれないよう、所有者と同一グループのみに限定する
+            mkdir($path, 0750, true);
         }
         return $path;
     }

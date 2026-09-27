@@ -361,12 +361,15 @@ class McpProxyController extends AppController
         // Mcp-Session-Id は Legacy 世代（initialize 方式）のクライアントが
         // セッションを維持するために使う。Modern では廃止されているが、
         // Dual-era サーバーとして両方に応じるため透過する。
+        // SDK はセッション ID をそのままファイル名に連結するため、識別子として妥当な値以外は受け付けない
         $targets = ['MCP-Protocol-Version', 'Mcp-Method', 'Mcp-Name', 'Mcp-Session-Id', 'Last-Event-ID'];
         foreach($targets as $target) {
             $value = $this->request->getHeaderLine($target);
-            if ($value !== '') {
-                $message->setHeader($target, $value);
+            if ($value === '') continue;
+            if (in_array($target, ['Mcp-Session-Id', 'Last-Event-ID'], true) && !preg_match('/^[A-Za-z0-9_-]{1,128}$/', $value)) {
+                throw new BadRequestException('Invalid ' . $target . ' header');
             }
+            $message->setHeader($target, $value);
         }
         // x-mcp-header 由来の Mcp-Param-* も引き継ぐ
         foreach($this->request->getHeaders() as $name => $values) {
