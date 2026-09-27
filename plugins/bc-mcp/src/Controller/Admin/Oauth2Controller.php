@@ -133,6 +133,18 @@ class Oauth2Controller extends BcAdminAppController
                 ]
             ]);
         }
+        // 管理 API（Api/Admin）の利用が許可されていないユーザーグループでは、
+        // MCP 経由で管理 API 相当の操作ができてしまうため同意させない
+        if (!$this->hasApiAdminPrefix($user)) {
+            return $this->response
+                ->withStatus(403)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'access_denied',
+                    'error_description' => 'The user is not allowed to use the admin API.',
+                ]));
+        }
+
         // POSTリクエストの場合は、クエリもボディも読まずセッションの認可
         // リクエストのみで処理を完結させる(同意画面と実際の発行内容の
         // すり替えを防ぐため)
@@ -186,6 +198,25 @@ class Oauth2Controller extends BcAdminAppController
         ]);
 
         return $this->render('authorize');
+    }
+
+    /**
+     * ユーザーのグループに管理 API（Api/Admin）の認証プレフィックスが含まれるか判定する
+     *
+     * @param mixed $identity 認証済みのユーザー
+     * @return bool
+     */
+    public function hasApiAdminPrefix($identity): bool
+    {
+        $user = $identity;
+        if (!method_exists($user, 'getAuthPrefixes')) {
+            $id = $identity->id ?? ($identity['id'] ?? null);
+            if (!$id) return false;
+            $user = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Users')
+                ->find()->where(['Users.id' => $id])->contain(['UserGroups'])->first();
+            if (!$user) return false;
+        }
+        return in_array('Api/Admin', $user->getAuthPrefixes(), true);
     }
 
     /**
