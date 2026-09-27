@@ -144,6 +144,11 @@ class McpProxyController extends AppController
             return $this->returnUnauthorizedResponse('Invalid or expired access token');
         }
 
+        // 無効化・削除されたユーザーのトークンは有効期限内でも受け付けない
+        if (!OAuth2UserRepository::isActiveUser($tokenData['user_id'])) {
+            return $this->returnUnauthorizedResponse('Invalid or expired access token');
+        }
+
         // トークン情報をリクエストに保存
         $this->request = $this->request
             ->withAttribute('oauth_client_id', $tokenData['client_id'])
