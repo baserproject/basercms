@@ -283,17 +283,12 @@ class BcValidation extends Validation
         // 実際のファイル名の拡張子と異なる種類のファイルが許可されてしまう
         $ext = BcFileUploader::getExtFromUpload($type, $fileName);
         $exts = array_map(fn($value) => strtolower(trim((string)$value)), $exts);
-        if ($ext === false || !in_array(strtolower($ext), $exts, true)) {
-            return false;
+        // 以前は image/jpeg を jpg として判定していたため、jpg を許可している場合は
+        // JPEG の別の拡張子も許可する
+        if (in_array('jpg', $exts, true)) {
+            $exts = array_merge($exts, ['jpeg', 'jpe', 'jfif']);
         }
-        // Content-Type が既知の種類を示す場合は、その拡張子も許可対象であることを求める
-        if ($type) {
-            $mimeExt = BcUtil::decodeContent($type);
-            if ($mimeExt && !in_array(strtolower($mimeExt), $exts, true)) {
-                return false;
-            }
-        }
-        return true;
+        return $ext !== false && in_array(strtolower($ext), $exts, true);
     }
 
     /**

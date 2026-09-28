@@ -260,6 +260,24 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
+    /**
+     * test fileExt - 許可リストとファイル名の拡張子が一致すれば、Content-Type の種類に関係なく許可する
+     */
+    public function testFileExt_allowedByFileNameExt()
+    {
+        $file = fn($name, $type) => ['name' => $name, 'size' => 1, 'type' => $type, 'error' => UPLOAD_ERR_OK, 'tmp_name' => 'test'];
+        // jpg を許可している場合は JPEG の別の拡張子も許可する
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'jpg,png'));
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jfif', 'image/jpeg'), 'jpg,png'));
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'jpeg,png'));
+        // Content-Type から導出される拡張子が許可リストに無くても、ファイル名の拡張子で判定する
+        $this->assertTrue($this->BcValidation->fileExt($file('figure.eps', 'application/postscript'), 'eps'));
+        $this->assertTrue($this->BcValidation->fileExt($file('data.csv', 'text/plain'), 'csv'));
+        // ファイル名の拡張子が許可リストに無ければ拒否する
+        $this->assertFalse($this->BcValidation->fileExt($file('evil.html', 'image/png'), 'jpg,png'));
+        $this->assertFalse($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'png'));
+    }
+
     public static function fileExtDataProvider()
     {
         return [
@@ -344,6 +362,7 @@ class BcValidationTest extends BcTestCase
                 ],
                 true
             ],
+            // 拡張子はファイル名で判定するため、Content-Type が異なっても許可リストにあれば許可する
             [
                 [
                     'name' => 'test.png',
@@ -353,7 +372,7 @@ class BcValidationTest extends BcTestCase
                     'tmp_name' => 'test',
                     'ext' => 'png'
                 ],
-                false
+                true
             ]
         ];
     }
