@@ -230,8 +230,6 @@ class BcFolder
             }
             while($file = readdir($dir_handle)) {
                 if ($file != "." && $file != "..") {
-                    // シンボリックリンクはリンク先の実体を複製してしまうためコピー対象外とする
-                    if (is_link($source . "/" . $file)) continue;
                     if (is_dir($source . "/" . $file)) {
                         $this->path = $source . DS . $file;
                         self::copy($dest . DS . $file);
