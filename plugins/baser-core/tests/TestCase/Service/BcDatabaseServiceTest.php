@@ -520,8 +520,11 @@ class BcDatabaseServiceTest extends BcTestCase
             ['test\\testCM', '"test\testCM"'],
             // 数式として解釈され得る値にはシングルクォートを前置する
             ['=cmd|calc', '"\'=cmd|calc"'],
-            ['+1', '"\'+1"'],
-            ['-1', '"\'-1"'],
+            ['-abc', '"\'-abc"'],
+            // 数値のみの値は数式として解釈されないため前置しない
+            ['+1', '"+1"'],
+            ['-1', '"-1"'],
+            ['-1.5', '"-1.5"'],
             ['@test', '"\'@test"'],
         ];
     }
@@ -534,10 +537,13 @@ class BcDatabaseServiceTest extends BcTestCase
         $csvFolder = TMP . 'csv' . DS;
         if (!is_dir($csvFolder)) (new BcFolder($csvFolder))->create();
         $path = $csvFolder . 'formula.csv';
-        file_put_contents($path, "\"title\",\"detail\"\n\"'=cmd|calc\",\"'-1\"\n\"'abc\",\"'\"\n");
+        file_put_contents($path, "\"title\",\"detail\"\n\"'=cmd|calc\",\"'-abc\"\n\"'abc\",\"'\"\n\"'-1\",\"-1\"\n");
         $rs = $this->BcDatabaseService->loadCsvToArray($path, 'UTF-8');
         $this->assertEquals('=cmd|calc', $rs[0]['title']);
-        $this->assertEquals('-1', $rs[0]['detail']);
+        $this->assertEquals('-abc', $rs[0]['detail']);
+        // 数値のみの値には前置しないため、シングルクォートは取り除かない
+        $this->assertEquals("'-1", $rs[2]['title']);
+        $this->assertEquals('-1', $rs[2]['detail']);
         // 数式の先頭文字が続かないシングルクォートはそのまま
         $this->assertEquals("'abc", $rs[1]['title']);
         $this->assertEquals("'", $rs[1]['detail']);
