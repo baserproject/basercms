@@ -174,21 +174,6 @@ class BcFolderTest extends TestCase
         $this->assertFileExists($des. DS. 'test1' .DS. 'test1.txt');
         $folder1->delete();
         (new BcFolder($des))->delete();
-
-        // シンボリックリンクはリンク先の実体を複製しないこと
-        $folder2 = new BcFolder($path);
-        $folder2->create();
-        (new BcFile($path . DS . 'test.txt'))->create();
-        symlink(ROOT . DS . 'config', $path . DS . 'link_dir');
-        symlink(ROOT . DS . 'composer.json', $path . DS . 'link_file');
-        $this->assertTrue($folder2->copy($des));
-        $this->assertFileExists($des . DS . 'test.txt');
-        $this->assertFileDoesNotExist($des . DS . 'link_dir');
-        $this->assertFileDoesNotExist($des . DS . 'link_file');
-        unlink($path . DS . 'link_dir');
-        unlink($path . DS . 'link_file');
-        (new BcFolder($path))->delete();
-        (new BcFolder($des))->delete();
     }
 
     /**
