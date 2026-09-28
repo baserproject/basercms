@@ -173,7 +173,11 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         }
 
         // CSRFトークンの場合は高速化のためここで処理を終了
-        if (!empty($_SERVER['REQUEST_URI']) && preg_match('/\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
+        // BcRequestFilterMiddleware::isRequestView() と同じく、トークン取得の GET リクエストに限定する
+        // （この時点ではベースパスが確定しないため末尾で判定する）
+        if (!empty($_SERVER['REQUEST_URI'])
+            && ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET'
+            && preg_match('/\/baser-core\/bc_form\/get_token\?requestview=false$/', $_SERVER['REQUEST_URI'])) {
             return;
         }
 
