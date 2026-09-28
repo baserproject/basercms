@@ -909,6 +909,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     public static function isFormulaInjectionTarget(string $value): bool
     {
         if ($value === '') return false;
+        // 数値のみの値（負の数など）は数式として解釈されないため対象外とする。
+        // 数値の列にシングルクォートが付くと、以前のバージョンでの復元時に不正な値になる
+        if (preg_match('/^[+-]?\d+(\.\d+)?$/', $value)) return false;
         return in_array($value[0], ['=', '+', '-', '@', "\t", "\r"], true);
     }
 
