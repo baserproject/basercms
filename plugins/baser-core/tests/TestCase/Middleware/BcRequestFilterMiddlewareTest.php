@@ -254,8 +254,18 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
         $url = '/?requestview=true';
         $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
-        $url = '/?requestview=false';
+        $url = '/baser-core/bc_form/get_token?requestview=false';
         $this->assertFalse($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
+
+        // トークン取得以外の URL、GET 以外のメソッドでは requestview=false を無視する
+        $url = '/?requestview=false';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
+        $url = '/baser/admin/baser-core/users/index?requestview=false&x=1';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
+        $url = '/baser/api/admin/baser-core/users/add.json?requestview=false';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url, [], 'POST')));
+        $url = '/baser-core/bc_form/get_token?requestview=false';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url, [], 'POST')));
     }
 
     /**
