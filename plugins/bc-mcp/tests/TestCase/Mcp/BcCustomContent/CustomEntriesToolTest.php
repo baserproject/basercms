@@ -253,7 +253,8 @@ class CustomEntriesToolTest extends BcTestCase
             customTableId: $customTableId,
             title: $title,
             customFields: $customFields,
-            status: true
+            status: true,
+            creatorId: 1
         );
 
         $this->assertIsArray($result);
