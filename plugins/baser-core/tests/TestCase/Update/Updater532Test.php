@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Update;
 
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUpdateLog;
 use Cake\Core\Plugin;
 
 /**
@@ -20,6 +21,16 @@ use Cake\Core\Plugin;
  */
 class Updater532Test extends BcTestCase
 {
+
+    /**
+     * tearDown
+     */
+    public function tearDown(): void
+    {
+        // アップデーターが記録したログを後続のテストに残さない
+        BcUpdateLog::clear();
+        parent::tearDown();
+    }
 
     /**
      * キャッシュクリアのアクセスルールの method が GET から POST に書き換わること
