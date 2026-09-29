@@ -309,7 +309,7 @@ class BlogPostsTool extends BaseMcpTool
             if ($name !== null) $data['name'] = $name;
             if ($content !== null) $data['content'] = $content;
             if ($category !== null) $data['blog_category_id'] = $this->getBlogCategoryId($category, $data['blog_content_id'] ?? $entity->blog_content_id);
-            if ($email !== null) $data['user_id'] = $this->getAuthorId($email);
+            if ($email !== null) $data['user_id'] = $this->getAuthorId($email, $loginUserId);
             if ($status !== null) $data['status'] = $status;
             if ($posted !== null) $data['posted'] = $posted;
             if ($publishBegin !== null) $data['publish_begin'] = $publishBegin;
