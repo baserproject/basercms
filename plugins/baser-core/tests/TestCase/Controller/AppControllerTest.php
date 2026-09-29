@@ -110,7 +110,7 @@ class AppControllerTest extends BcTestCase
         $this->assertEquals($expectCache, $this->AppController->getResponse()->getHeader('Cache-Control')[0]);
 
         // requestview が false の場合は、ログインしていてもノーキャッシュヘッダーを付けない
-        $this->AppController->setRequest($this->getRequest('/?requestview=false'));
+        $this->AppController->setRequest($this->getRequest('/baser-core/bc_form/get_token?requestview=false'));
         $this->AppController->setResponse(new Response());
         $this->AppController->beforeFilter(new Event('beforeFilter'));
         $this->assertEmpty($this->AppController->getResponse()->getHeader('Cache-Control'));
