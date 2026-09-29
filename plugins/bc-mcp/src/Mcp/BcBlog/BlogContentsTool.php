@@ -39,7 +39,7 @@ class BlogContentsTool extends BaseMcpTool
                         'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は1）'],
                         'parentId' => ['type' => 'number', 'description' => '親ID（省略時は1）'],
                         'description' => ['type' => 'string', 'description' => '説明文'],
-                        'authorId' => ['type' => 'number', 'default' => 1, 'description' => '作成者ID'],
+                        'authorId' => ['type' => 'number', 'description' => '作成者ID（省略時はログインユーザーID）'],
                         'layoutTemplate' => ['type' => 'string', 'description' => 'レイアウトテンプレート名（初期値: default）'],
                         'status' => ['type' => 'number', 'description' => '公開状態（0: 非公開状態, 1: 公開状態）、（省略時は0）'],
                         'publishBegin' => ['type' => 'string', 'description' => '公開開始日時（YYYY-MM-DD HH:MM:SS形式）'],
@@ -79,7 +79,7 @@ class BlogContentsTool extends BaseMcpTool
                         'siteId' => ['type' => 'number', 'description' => 'サイトID'],
                         'parentId' => ['type' => 'number', 'description' => '親ID'],
                         'description' => ['type' => 'string', 'description' => '説明文'],
-                        'authorId' => ['type' => 'number', 'default' => 1, 'description' => '作成者ID'],
+                        'authorId' => ['type' => 'number', 'description' => '作成者ID'],
                         'layoutTemplate' => ['type' => 'string', 'description' => 'レイアウトテンプレート名'],
                         'status' => ['type' => 'number', 'description' => '公開状態（0: 非公開状態, 1: 公開状態）'],
                         'publishBegin' => ['type' => 'string', 'description' => '公開開始日時（YYYY-MM-DD HH:MM:SS形式）'],
@@ -210,6 +210,8 @@ class BlogContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $name, $title, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $listCount,
@@ -229,7 +231,7 @@ class BlogContentsTool extends BaseMcpTool
                 'site_id' => $siteId,
                 'parent_id' => $parentId,
                 'description' => $description ?? '',
-                'author_id' => $authorId ?? ($loginUserId ?? 1), // 作成者ID、指定がなければデフォルトユーザー
+                'author_id' => $this->resolveActorId($authorId, $loginUserId),
                 'layout_template' => $layoutTemplate ?? '',
                 'self_status' => (bool)$status,
                 'publish_begin' => $publishBegin,
@@ -311,6 +313,8 @@ class BlogContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id, $name, $title, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $listCount,
@@ -350,7 +354,7 @@ class BlogContentsTool extends BaseMcpTool
             if ($siteId !== null) $contentData['site_id'] = $siteId;
             if ($parentId !== null) $contentData['parent_id'] = $parentId;
             if ($description !== null) $contentData['description'] = $description;
-            if ($authorId !== null) $contentData['author_id'] = $authorId;
+            if ($authorId !== null) $contentData['author_id'] = $this->resolveActorId((int)$authorId, $loginUserId);
             if ($layoutTemplate !== null) $contentData['layout_template'] = $layoutTemplate;
             if ($status !== null) $contentData['self_status'] = (bool)$status;
             if ($publishBegin !== null) $contentData['publish_begin'] = $publishBegin;
@@ -434,6 +438,8 @@ class BlogContentsTool extends BaseMcpTool
      */
     public function deleteBlogContent(int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($id, $loginUserId) {
             if (empty($id)) return $this->createErrorResponse('IDは必須です');
             /** @var BlogContentsService $blogContentsService */
