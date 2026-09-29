@@ -742,10 +742,12 @@ class BcUtil
     public static function unserialize($value)
     {
         $_value = $value;
-        $value = @unserialize(base64_decode($value));
+        // PHP オブジェクトインジェクション対策: 復元するのは配列・スカラーのみとし、
+        // オブジェクトは復元しない（保存される値はいずれも配列・スカラーのみ）
+        $value = @unserialize(base64_decode((string)$value), ['allowed_classes' => false]);
         // 下位互換のため、しばらくの間、失敗した場合の再変換を行う v.3.0.2
         if ($value === false) {
-            $value = @unserialize($_value);
+            $value = @unserialize((string)$_value, ['allowed_classes' => false]);
             if ($value === false) {
                 return '';
             }
@@ -921,7 +923,10 @@ class BcUtil
                 continue;
             }
             foreach($folders as $name) {
-                $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
+                // プラグイン名として妥当でないディレクトリ（. 始まり等）の config.php は読み込まない
+                $pluginPath = BcUtil::getPluginPath($name);
+                if (!$pluginPath) continue;
+                $appConfigPath = $pluginPath . 'config.php';
                 if ($name === '_notes' || !file_exists($appConfigPath)) {
                     continue;
                 }
@@ -1100,6 +1105,11 @@ class BcUtil
     public static function getPluginDir(string $pluginName, bool $isUpdateTmp = false): string|false
     {
         if (!$pluginName) $pluginName = 'BaserCore';
+        // パストラバーサル対策: プラグイン名として妥当な文字列以外（`..`、`/`、先頭が `.` 等）は
+        // ディレクトリが実在しても有効なプラグインとして扱わない。
+        // 以前は is_dir($path . '..') が true になるため '..' が有効なプラグインディレクトリとして返り、
+        // テーマ削除・複製・ダウンロードで plugins/ の親ディレクトリ全体が対象になった
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\-]*$/', $pluginName)) return false;
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
         if($isUpdateTmp) {
             $paths = [TMP . 'update' . DS . 'vendor' . DS . 'baserproject' . DS];

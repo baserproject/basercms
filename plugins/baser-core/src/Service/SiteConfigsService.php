@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Utility\BcContainerTrait;
@@ -175,8 +176,14 @@ class SiteConfigsService implements SiteConfigsServiceInterface
      */
     public function putEnv($key, $value): bool
     {
-        $key = str_replace([';', '"'], '', $key);
-        $value = str_replace([';', '"'], '', $value);
+        // .env は「export KEY=\"VALUE\"」の1行形式で書き出すため、改行・制御文字を含む値を
+        // 書き込むと次回のパースで失敗しサイト全体が起動不能になる（設定ファイルインジェクション）。
+        // 改行・制御文字を含む場合は書き込まない
+        if (preg_match('/[\x00-\x1f\x7f]/', (string)$key . (string)$value)) {
+            throw new BcException(__d('baser_core', '設定値に改行や制御文字を含めることはできません。'));
+        }
+        $key = str_replace([';', '"', '\\', '$', '`'], '', $key);
+        $value = str_replace([';', '"', '\\', '$', '`'], '', $value);
         if (!$this->isWritableEnv()) {
             return false;
         }

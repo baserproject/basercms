@@ -14,6 +14,8 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\PasswordRequestsService;
 use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Test\Factory\PasswordRequestFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -109,6 +111,42 @@ class PasswordRequestsServiceTest extends BcTestCase
             'password' => 'Testtest1234'
         ]);
         $this->assertSession(1, 'AuthAdmin.id');
+    }
+
+    /**
+     * test updatePassword - パスワード以外の項目（所属グループ・メールアドレス等）を更新できないこと
+     *
+     * パスワード再発行は未認証で到達できるため、送信データに user_groups や email を含めても
+     * 反映されず、パスワードだけが更新されることを確認する。
+     */
+    public function testUpdatePassword_ignoresOtherFields()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserGroupFactory::make(['id' => 2, 'name' => 'operators', 'title' => 'operators', 'auth_prefix' => 'Admin'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        PasswordRequestFactory::make(['id' => 4, 'user_id' => 2, 'request_key' => 'testkey2'])->persist();
+
+        $passwordRequest = $this->service->get(4);
+        $result = $this->service->updatePassword($passwordRequest, [
+            'password_1' => 'Testtest1234',
+            'password_2' => 'Testtest1234',
+            'id' => 1,
+            'email' => 'attacker@example.com',
+            'name' => 'attacker',
+            'status' => false,
+            'user_groups' => ['_ids' => [1]],
+        ]);
+        $this->assertNotEmpty($result);
+
+        $user = $this->getTableLocator()->get('BaserCore.Users')->get(2, contain: ['UserGroups']);
+        $this->assertEquals('operator@example.com', $user->email);
+        $this->assertEquals('operator', $user->name);
+        $this->assertTrue((bool)$user->status);
+        $this->assertEquals([2], array_map(fn($g) => $g->id, $user->user_groups));
+        // 管理者（id=1）は変更されていない
+        $admin = $this->getTableLocator()->get('BaserCore.Users')->get(1);
+        $this->assertEquals('admin@example.com', $admin->email);
     }
 
     /**

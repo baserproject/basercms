@@ -628,6 +628,25 @@ class BlogPostsServiceTest extends BcTestCase
     }
 
     /**
+     * test update - 所属ブログ・記事番号はリクエストから変更できないこと
+     *
+     * 変更を許すと、特定ブログの記事管理のみ許可されたユーザーが記事を他ブログへ移動できる
+     */
+    public function test_update_ignoresBlogContentId()
+    {
+        $entity = $this->BlogPostsService->create([
+            'title' => 'post', 'user_id' => 1, 'blog_content_id' => 1, 'posted' => '2022-12-01 00:00:00',
+        ]);
+        $updated = $this->BlogPostsService->update($entity, [
+            'id' => 999, 'title' => 'updated', 'blog_content_id' => 2, 'no' => 999,
+        ]);
+        $this->assertEquals('updated', $updated->title);
+        $this->assertEquals(1, $updated->blog_content_id);
+        $this->assertEquals($entity->no, $updated->no);
+        $this->assertEquals($entity->id, $updated->id);
+    }
+
+    /**
      * 新規登録
      * BlogPostsService::create
      */

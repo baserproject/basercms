@@ -223,13 +223,29 @@ class CustomTablesService implements CustomTablesServiceInterface
                 }
             }
 
+            // 対象テーブルの ID はリクエストから変更させない
+            $postData['id'] = $entity->id;
             if(empty($postData['custom_links'])) {
                 $postData['custom_links'] = [];
             } else {
                 $no = $this->CustomTables->CustomLinks->getMax('no', [
                     'CustomLinks.custom_table_id' => $postData['id']
                 ]);
+                // 関連フィールド（custom_links）の id は当該テーブルに属するもののみ受け付ける。
+                // 他テーブルの id を指定すると、そのフィールド定義を奪取して紐付けを書き換えられる
+                $ownLinkIds = $this->CustomTables->CustomLinks->find()
+                    ->select(['id'])
+                    ->where(['CustomLinks.custom_table_id' => $entity->id])
+                    ->all()->extract('id')->toList();
                 foreach($postData['custom_links'] as $key => $customLink) {
+                    if (!is_array($customLink)) {
+                        unset($postData['custom_links'][$key]);
+                        continue;
+                    }
+                    if (isset($customLink['id']) && !in_array((int)$customLink['id'], $ownLinkIds, true)) {
+                        unset($postData['custom_links'][$key]['id']);
+                    }
+                    $postData['custom_links'][$key]['custom_table_id'] = $entity->id;
                     if(empty($customLink['no'])) {
                         $postData['custom_links'][$key]['no'] = ++$no;
                     }

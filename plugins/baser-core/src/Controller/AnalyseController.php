@@ -11,6 +11,9 @@
 
 namespace BaserCore\Controller;
 
+use Cake\Http\Exception\NotFoundException;
+use Cake\Event\EventInterface;
+use Cake\Core\Configure;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
 use Cake\View\JsonView;
@@ -52,6 +55,28 @@ class AnalyseController extends AppController
     public function viewClasses(): array
     {
         return [JsonView::class];
+    }
+
+    /**
+     * Before Filter
+     *
+     * 本コントローラは全ソースのパス・クラス・メソッド・開発メモをリフレクションで収集して
+     * JSON で返す開発用の機能であり、フロントのルーティングから未認証で到達できる。
+     * デバッグモードが無効な環境（本番）では公開しない。
+     *
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        $result = parent::beforeFilter($event);
+        if (!Configure::read('debug')) {
+            throw new NotFoundException(__d('baser_core', '見つかりませんでした。'));
+        }
+        return $result;
     }
 
     /**

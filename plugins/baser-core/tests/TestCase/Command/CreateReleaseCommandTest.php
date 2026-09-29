@@ -2,6 +2,7 @@
 
 namespace BaserCore\Test\TestCase\Command;
 
+use BaserCore\Error\BcException;
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Command\Command;
@@ -168,6 +169,15 @@ class CreateReleaseCommandTest extends BcTestCase
 
         //clean up
         (new BcFolder($pluginsPath))->delete();
+    }
+
+    /**
+     * test clonePackage - 不正なブランチ名を拒否すること
+     */
+    public function testClonePackageInvalidBranch()
+    {
+        $this->expectException(BcException::class);
+        $this->CreateReleaseCommand->clonePackage('/var/www/html/tmp/basercms/', 'master; touch /tmp/pwned');
     }
 
     /**

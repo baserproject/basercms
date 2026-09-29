@@ -322,14 +322,14 @@ let app = createApp({
                         $.bcUtil.hideLoader();
                         const errors = error.response.data.errors;
                         if (error.response.status === 400) {
-                            $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
+                            $('.modal-content #MessageBox .alert-message').text(error.response.data.message);
                             Object.keys(errors).forEach(function (name) {
                                 Object.keys(errors[name]).forEach(function (detail) {
                                     $('.error-' + name).append(errors[name][detail]).show();
                                 });
                             });
                         } else if (error.response.status === 500) {
-                            $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
+                            $('.modal-content #MessageBox .alert-message').text(error.response.data.message);
                         } else {
                             $('.modal-content #MessageBox .alert-message').html('予期せぬエラーが発生しました。システム管理者に連絡してください。');
                         }

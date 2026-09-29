@@ -260,8 +260,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         if ($params['status'] === 'publish') {
             $conditions = $this->CustomEntries->getConditionAllowPublish();
             $query->contain(['CustomTables' => ['CustomContents' => ['Contents']]]);
-            $fields = $this->CustomEntries->getSchema()->columns();
-            $query->select($fields);
+            // 以前はここで全カラムを select し直していたため、createSelect() で use_api=false の
+            // フィールドを除外していても公開 API の応答に含まれてしまっていた。
+            // select は createSelect() の結果（または既定の全カラム）に任せる
             $conditions = array_merge_recursive(
                 $conditions,
                 $this->CustomEntries->CustomTables->CustomContents->Contents->getConditionAllowPublish()
@@ -506,9 +507,38 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function create(array $postData)
     {
+        $postData = $this->sanitizePostData($postData, true);
         $postData = $this->autoConvert($postData);
         $entity = $this->CustomEntries->patchEntity($this->CustomEntries->newEmptyEntity(), $postData);
         return $this->CustomEntries->saveOrFail($entity);
+    }
+
+    /**
+     * 保存データから投稿者が指定できない項目を除外する
+     *
+     * ツリー構造の内部値・作成日時・ID はリクエストから変更させない。
+     * 作成者（creator_id）の変更は管理画面ではシステム管理者に限定されているため、
+     * それ以外のユーザーでは新規作成時はログインユーザー、更新時は現在値を維持する。
+     *
+     * @param array $postData
+     * @param bool $isNew
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function sanitizePostData(array $postData, bool $isNew): array
+    {
+        unset($postData['id'], $postData['lft'], $postData['rght'], $postData['level'], $postData['created'], $postData['modified']);
+        $loginUser = BcUtil::loginUser();
+        if ($loginUser && !BcUtil::isAdminUser($loginUser)) {
+            if ($isNew) {
+                $postData['creator_id'] = $loginUser->id;
+            } else {
+                unset($postData['creator_id']);
+            }
+        }
+        return $postData;
     }
 
     /**
@@ -523,6 +553,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
+        $postData = $this->sanitizePostData($postData, false);
+        unset($postData['custom_table_id']);
         $postData = $this->autoConvert($postData);
         $entity = $this->CustomEntries->patchEntity($entity, $postData);
         return $this->CustomEntries->saveOrFail($entity);
@@ -876,6 +908,29 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     }
 
     /**
+     * 前後エントリー取得の並び替えに使うフィールド名を安全な値に限定する
+     *
+     * list_order はカスタムコンテンツの設定値だが、管理画面・管理 API・MCP から任意の文字列を
+     * 保存できるため、そのまま WHERE 句のキーや ORDER BY に連結すると SQL インジェクションになる。
+     * 識別子として妥当（英小文字・数字・アンダースコア）かつテーブルに実在するフィールドのみ許可し、
+     * それ以外は既定の published にフォールバックする。
+     *
+     * @param string|null $orderField
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getSafeOrderField(?string $orderField): string
+    {
+        if (empty($orderField)) return 'published';
+        if (!preg_match('/^[a-z0-9_]+$/', $orderField) || !$this->CustomEntries->hasField($orderField)) {
+            return 'published';
+        }
+        return $orderField;
+    }
+
+    /**
      * 指定したCustomEntryの前のエントリーを取得する
      *
      * @param CustomEntry $entry
@@ -889,7 +944,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // CustomContentのlist_order, list_directionを取得
         $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
-        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderField = $this->getSafeOrderField($customContent->list_order ?? null);
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
         // orderBy用配列生成
         $orderBy = [$orderField => 'ASC', 'id' => 'ASC'];
@@ -935,7 +990,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // CustomContentのlist_order, list_directionを取得
         $customTable = $this->CustomTables->get($entry->custom_table_id, contain: ['CustomContents']);
         $customContent = $customTable->custom_content;
-        $orderField = !empty($customContent->list_order) ? $customContent->list_order : 'published';
+        $orderField = $this->getSafeOrderField($customContent->list_order ?? null);
         $orderDirection = !empty($customContent->list_direction) ? strtoupper($customContent->list_direction) : 'DESC';
         // orderBy用配列生成
         $orderBy = [$orderField => 'DESC', 'id' => 'DESC'];

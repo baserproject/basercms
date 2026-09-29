@@ -678,7 +678,11 @@ class BcFreezeHelper extends BcFormHelper
             // 値なし
         } else {
 
+            // 選択肢のラベルは管理者が定義した値のためそのまま出力し、
+            // 送信された値をそのまま表示する場合はエスケープする
+            $escape = true;
             if ($options) {
+                $escape = false;
                 if (!$value && !empty($options[0])) {
                     $value = $options[0];
                 } else {
@@ -692,6 +696,9 @@ class BcFreezeHelper extends BcFormHelper
                 $value = $value[$detail];
             }
 
+            if ($escape) {
+                $value = is_array($value)? '' : h((string)$value);
+            }
             $out = parent::hidden($fieldName, $attributes) . $value;
         }
 

@@ -23,6 +23,7 @@
 
 <?php if ($contentLink->url): ?>
 <?php $this->BcBaser->scriptStart(['block' => true]); ?>
-window.location.href = "<?php echo $contentLink->url ?>";
+<?php // リンク先 URL は JavaScript の文字列リテラルとして出力するため json_encode() でリテラル化する（格納型 XSS 対策） ?>
+window.location.href = <?php echo json_encode((string)$contentLink->url, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES) ?>;
 <?php $this->BcBaser->scriptEnd(); ?>
 <?php endif ?>

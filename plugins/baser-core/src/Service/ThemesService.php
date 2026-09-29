@@ -394,6 +394,27 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
+     * テーマ名として妥当な文字列か検証する
+     *
+     * パストラバーサル対策: `..` や `/` を含む名前を BcUtil::getPluginPath() に渡すと、
+     * plugins/ の親ディレクトリ等が対象になり、削除・複製・ダウンロードで任意ディレクトリを
+     * 操作できてしまう。英数字で始まり英数字・アンダースコア・ハイフンのみで構成された名前に限定する。
+     *
+     * @param string $theme
+     * @return void
+     * @throws BcException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function assertThemeName(string $theme): void
+    {
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\-]*$/', $theme)) {
+            throw new BcException(__d('baser_core', 'テーマ名が不正です。'));
+        }
+    }
+
+    /**
      * コピーする
      *
      * @checked
@@ -402,6 +423,7 @@ class ThemesService implements ThemesServiceInterface
      */
     public function copy(string $theme): bool
     {
+        $this->assertThemeName($theme);
         if (!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
 
         if (in_array($theme, Configure::read('BcApp.core'))) $theme = Inflector::dasherize($theme);
@@ -452,7 +474,9 @@ class ThemesService implements ThemesServiceInterface
      */
     public function delete(string $theme): bool
     {
+        $this->assertThemeName($theme);
         $path = BcUtil::getPluginPath($theme);
+        if (!$path) throw new BcException(__d('baser_core', 'テーマが見つかりません。'));
         if (!is_writable($path)) throw new BcException($path . ' に書込み権限がありません。');
         $folder = new BcFolder($path);
         if (!$folder->delete()) {
@@ -485,12 +509,15 @@ class ThemesService implements ThemesServiceInterface
      */
     public function createDownloadToTmp(string $theme): string
     {
+        $this->assertThemeName($theme);
+        $path = BcUtil::getPluginPath($theme);
+        if (!$path) throw new BcException(__d('baser_core', 'テーマが見つかりません。'));
         $tmpDir = TMP . 'theme' . DS;
         if (!is_dir($tmpDir)) {
             $folder = new BcFolder($tmpDir);
             $folder->create();
         }
-        $folder = new BcFolder(BcUtil::getPluginPath($theme));
+        $folder = new BcFolder($path);
         $folder->copy($tmpDir . $theme);
         return $tmpDir;
     }

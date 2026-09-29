@@ -225,6 +225,10 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     /**
      * baserCMSの基本処理を必要とするかどうか
      *
+     * requestview=false は CSRF トークン取得（GET /baser-core/bc_form/get_token）を高速化するためのもので、
+     * 基本処理（認可チェック等）を省略する。任意の URL で省略できると認可チェックの迂回につながるため、
+     * トークン取得の GET リクエストに限定する。
+     *
      * @param ServerRequestInterface $request
      * @return bool
      * @checked
@@ -233,7 +237,8 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      */
     public function isRequestView(ServerRequestInterface $request)
     {
-        return !($request->getQuery('requestview') && $request->getQuery('requestview') === "false");
+        if ($request->getQuery('requestview') !== 'false') return true;
+        return !($request->getMethod() === 'GET' && $request->getUri()->getPath() === '/baser-core/bc_form/get_token');
     }
 
 }

@@ -186,6 +186,44 @@ class BcFileUploader
     }
 
     /**
+     * 保存済みファイル名として妥当な文字列か判定する
+     *
+     * ディレクトリ区切り（/ \\）、引用符、山括弧、制御文字、`..` を含む値は不正とみなす。
+     *
+     * @param string $fileName
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isValidFileName(string $fileName): bool
+    {
+        if (str_contains($fileName, '..')) return false;
+        return !preg_match('/[\/\\\\<>"\'\x00-\x1f\x7f]/', $fileName);
+    }
+
+    /**
+     * アップロードされたファイルの拡張子を取得する
+     *
+     * ファイル名に拡張子が含まれる場合はそれを正とし（小文字に統一）、
+     * 拡張子が無い場合のみクライアントが申告した Content-Type から導出する。
+     * Content-Type を優先すると、拡張子と異なる種類のファイルとして扱われてしまう
+     *
+     * @param string|null $type Content-Type
+     * @param string|null $fileName ファイル名
+     * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getExtFromUpload(?string $type, ?string $fileName): string|false
+    {
+        $ext = ($fileName)? BcUtil::getExtension($fileName) : false;
+        if ($ext) return strtolower($ext);
+        return BcUtil::decodeContent($type, $fileName);
+    }
+
+    /**
      * リクエストされたデータを処理しやすいようにセットアップする
      * $data は参照渡し
      * @param array|ArrayObject $data
@@ -199,6 +237,13 @@ class BcFileUploader
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
             $file = [];
+            // アップロード対象フィールドに文字列（既存のファイル名）が直接送信された場合は、
+            // ファイル名として妥当でない値（ディレクトリ区切り・引用符・タグ・制御文字を含む値）を
+            // 保存させない。任意文字列を保存できると、表示時に属性から脱出する格納型 XSS や
+            // パストラバーサルに悪用される
+            if (isset($data[$name]) && is_string($data[$name]) && $data[$name] !== '' && !self::isValidFileName($data[$name])) {
+                $data[$name] = '';
+            }
             if (!empty($data[$name]) && (is_array($data[$name]) || $data[$name] instanceof \Laminas\Diactoros\UploadedFile)) {
                 $uploadFile = $data[$name];
                 $file = [
@@ -207,7 +252,7 @@ class BcFileUploader
                     'type' => $uploadFile->getClientMediaType(),
                     'error' => $uploadFile->getError(),
                     'tmp_name' => ($uploadFile->getError() === UPLOAD_ERR_OK)? $uploadFile->getStream()->getMetadata('uri') : '',
-                    'ext' => BcUtil::decodeContent($uploadFile->getClientMediaType(), $uploadFile->getClientFilename())
+                    'ext' => self::getExtFromUpload($uploadFile->getClientMediaType(), $uploadFile->getClientFilename())
                 ];
                 $file['uploadable'] = $this->isUploadable($setting['type'], $uploadFile->getClientMediaType(), $file);
                 if (isset($file['error']) && (int)$file['error'] === UPLOAD_ERR_NO_FILE) {
@@ -297,7 +342,7 @@ class BcFileUploader
             } elseif ($fileType !== 'all') {
                 $targets = [$fileType];
             }
-            if ($targets && !in_array(BcUtil::decodeContent($contentType, $file['name']), $targets)) {
+            if ($targets && !in_array(self::getExtFromUpload($contentType, $file['name']), $targets)) {
                 $uploadable = false;
             } else {
                 $uploadable = true;
@@ -536,7 +581,7 @@ class BcFileUploader
         $uploadInfo['size'] = $fileSize;
         $uploadInfo['type'] = $fileType;
         $uploadInfo['uploadable'] = true;
-        $uploadInfo['ext'] = BcUtil::decodeContent($fileType, $fileName);
+        $uploadInfo['ext'] = self::getExtFromUpload($fileType, $fileName);
         $uploadedFile[$fieldName] = $uploadInfo;
 
         // 一時ファイルを一度に複数扱う場合に1ファイルしかアップロードされない問題への対応

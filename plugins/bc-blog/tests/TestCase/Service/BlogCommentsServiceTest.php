@@ -265,6 +265,33 @@ class BlogCommentsServiceTest extends BcTestCase
      * add
      * @return void
      */
+    /**
+     * test add - 記事の所属ブログ・公開状態を検証すること
+     *
+     * blog_content_id と blog_post_id の整合性を検証しないと、承認不要のブログの ID を指定して
+     * 承認必須のブログの記事へ公開状態のコメントを付けたり、非公開記事へコメントを付けたりできる。
+     */
+    public function testAdd_rejectsMismatchedOrUnpublishedPost()
+    {
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'news1', '/news/');
+        // 別ブログ（id=2）の記事
+        BlogPostFactory::make(['id' => 10, 'blog_content_id' => 2, 'status' => true])->persist();
+        // 同じブログの非公開記事
+        BlogPostFactory::make(['id' => 11, 'blog_content_id' => 1, 'status' => false])->persist();
+        // 同じブログの公開期限切れ記事
+        BlogPostFactory::make(['id' => 12, 'blog_content_id' => 1, 'status' => true, 'publish_end' => '2000-01-01 00:00:00'])->persist();
+
+        foreach([10 => '記事が見つかりません。', 11 => '公開されていない記事にはコメントできません。', 12 => '公開されていない記事にはコメントできません。'] as $postId => $message) {
+            try {
+                $this->BlogCommentsService->add(1, $postId, ['name' => 'baserCMS']);
+                $this->fail('記事 ' . $postId . ' へのコメントが拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertEquals($message, $e->getMessage());
+            }
+        }
+        $this->assertEquals(0, BlogCommentFactory::count());
+    }
+
     public function testAdd()
     {
         //data test

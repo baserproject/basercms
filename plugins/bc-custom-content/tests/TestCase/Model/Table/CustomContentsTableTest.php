@@ -105,6 +105,32 @@ class CustomContentsTableTest extends BcTestCase
     }
 
     /**
+     * test validationDefault - list_order / list_direction
+     *
+     * 前後エントリー取得の WHERE 句・ORDER BY にそのまま使われるため、識別子として不正な値・
+     * ASC / DESC 以外の方向は保存を弾く（SQL インジェクション対策）
+     */
+    public function test_validationListOrderAndDirection()
+    {
+        $validator = $this->CustomContentsTable->getValidator('default');
+        // 正常値
+        $errors = $validator->validate(['list_order' => 'published', 'list_direction' => 'DESC']);
+        $this->assertArrayNotHasKey('list_order', $errors);
+        $this->assertArrayNotHasKey('list_direction', $errors);
+        $errors = $validator->validate(['list_order' => '', 'list_direction' => '']);
+        $this->assertArrayNotHasKey('list_order', $errors);
+        $this->assertArrayNotHasKey('list_direction', $errors);
+        // 不正値
+        $errors = $validator->validate(['list_order' => 'published` > 0 OR 1=1 -- ', 'list_direction' => 'DESC; DROP TABLE users']);
+        $this->assertArrayHasKey('regex', $errors['list_order']);
+        $this->assertArrayHasKey('inList', $errors['list_direction']);
+        // withTable 経路でも効く
+        $validator = $this->CustomContentsTable->getValidator('withTable');
+        $errors = $validator->validate(['list_count' => 10, 'list_order' => 'Published Title']);
+        $this->assertArrayHasKey('regex', $errors['list_order']);
+    }
+
+    /**
      * 説明文にスクリプトを含む場合は保存を弾く（格納型XSS対策・JPCERT#26271410）
      * create（default）と update（withTable）の両経路で効くことを検証する
      */

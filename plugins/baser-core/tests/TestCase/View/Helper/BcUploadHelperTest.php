@@ -150,6 +150,19 @@ class BcUploadHelperTest extends BcTestCase
     }
 
     /**
+     * test uploadImage - 保存されたファイル名に記号が含まれていても href 属性から脱出できないこと（格納型 XSS 対策）
+     */
+    public function testUploadImage_escapesHref()
+    {
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'a.jpg"><script>alert(1)</script>']));
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringNotContainsString('a.jpg"><', $result);
+        $this->assertStringContainsString('href="/files/contents/a.jpg&quot;&gt;&lt;script&gt;', $result);
+        // 画像タグ自体はエスケープされずに出力される
+        $this->assertMatchesRegularExpression('/^<a href="[^"]*"[^>]*><img src="[^"]*"[^>]*><\/a>/', $result);
+    }
+
+    /**
      * testGBcUploadSetting
      *
      * @return void
@@ -217,6 +230,20 @@ class BcUploadHelperTest extends BcTestCase
         $this->assertStringContainsString('/baser-core/uploads/tmp/', $result, '_tmp値がある場合は/baser-core/uploads/tmp/パスを使うべきです');
         $this->assertStringContainsString($expectedKey, $result, 'セッションキーが正しく変換されていません');
         $this->assertStringContainsString('rel="colorbox"', $result, 'tmp画像でもcolorboxリンクが付与されるべきです');
+    }
+
+    /**
+     * test fileLink - 一時ファイル名（_tmp）が figcaption へ無エスケープ出力されないこと（自己 XSS 対策）
+     */
+    public function testFileLinkEscapesFigcaption()
+    {
+        $data = [
+            'eyecatch' => 'original_image.jpg',
+            'eyecatch_tmp' => '<img src=x onerror=alert(1)>.jpg',
+        ];
+        $result = $this->BcUpload->fileLink('eyecatch', new Content($data));
+        $this->assertStringNotContainsString('<img src=x', $result);
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;.jpg', $result);
     }
 
     /**

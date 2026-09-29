@@ -165,11 +165,12 @@ return [
             'type' => 'Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/index', 'method' => 'GET', 'auth' => false],
-                'ClearCache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/admin/baser-core/utilities/clear_cache', 'method' => 'GET', 'auth' => true],
+                'ClearCache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/admin/baser-core/utilities/clear_cache', 'method' => 'POST', 'auth' => true],
                 'Credit' => ['title' => __d('baser_core', 'クレジット'), 'url' => '/baser/admin/baser-core/utilities/credit', 'method' => 'GET', 'auth' => true],
                 'Info' => ['title' => __d('baser_core', '環境情報'), 'url' => '/baser/admin/baser-core/utilities/info', 'method' => 'GET', 'auth' => false],
                 'LogMaintenance' => ['title' => __d('baser_core', 'ログメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/log_maintenance/*', 'method' => 'POST', 'auth' => false],
-                'Phpinfo' => ['title' => __d('baser_core', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => true],
+                // phpinfo は環境変数・サーバ情報を全件表示するため、既定では許可しない
+                'Phpinfo' => ['title' => __d('baser_core', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => false],
                 'ResetContentsTree' => ['title' => __d('baser_core', 'ツリー構造リセット', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/reset_contents_tree', 'method' => 'POST', 'auth' => false],
                 'VerityContents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/admin/baser-core/utilities/verity_contents_tree', 'method' => 'POST', 'auth' => false],
             ]
@@ -222,7 +223,8 @@ return [
             'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/dblogs/index.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/dblogs/add.json', 'method' => 'POST', 'auth' => true],
+                // 任意のログ挿入（監査ログの汚染）を防ぐため、既定では許可しない
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/dblogs/add.json', 'method' => 'POST', 'auth' => false],
                 'DeleteAll' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/dblogs/delete_all.json', 'method' => 'POST', 'auth' => false]
             ]
         ],
@@ -349,7 +351,7 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/admin/baser-core/utilities/clear_cache.json', 'method' => 'GET', 'auth' => true],
+                'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/admin/baser-core/utilities/clear_cache.json', 'method' => 'POST', 'auth' => true],
                 'delete_log' => ['title' => __d('baser_core', 'ログ削除'), 'url' => '/baser/api/admin/baser-core/utilities/delete_log.json', 'method' => 'POST', 'auth' => false],
                 'download_log' => ['title' => __d('baser_core', 'ログダウンロード'), 'url' => '/baser/api/admin/baser-core/utilities/download_log.json', 'method' => 'GET', 'auth' => false],
                 'reset_contents_tree' => ['title' => __d('baser_core', 'ツリー構造リセット'), 'url' => '/baser/api/admin/baser-core/utilities/reset_contents_tree.json', 'method' => 'POST', 'auth' => false],

@@ -366,12 +366,15 @@ class CustomLinksService implements CustomLinksServiceInterface
     {
         $options = array_merge([
             'status' => null,
-            'contain' => null
+            'contain' => null,
+            'custom_table_id' => null
         ], $queryParams);
         $conditions = [
             'CustomLinks.name' => $name
         ];
-        if(!is_null($options['status'])) $conditions = ['CustomLinks.status' => $options['status']];
+        // status 指定時に name 条件が上書きされ別のフィールド定義を返していた問題を修正
+        if(!is_null($options['status'])) $conditions['CustomLinks.status'] = $options['status'];
+        if(!is_null($options['custom_table_id'])) $conditions['CustomLinks.custom_table_id'] = (int)$options['custom_table_id'];
         $query = $this->CustomLinks->find()->where($conditions);
         if(!is_null($options['contain'])) {
             $query->contain($options['contain']);

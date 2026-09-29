@@ -84,6 +84,12 @@ class CustomContentHelperTest extends BcTestCase
         $rs = $this->CustomContentHelper->getTitle();
         //戻り値を確認
         $this->assertEquals('サービスタイトル', $rs);
+
+        // タイトルはエスケープされる（格納型 XSS 対策）
+        $customContent->content->title = 'title<script>alert(1)</script>';
+        $view = new View($this->getRequest()->withAttribute('currentContent', $customContent->content));
+        $this->CustomContentHelper = new CustomContentHelper($view);
+        $this->assertEquals('title&lt;script&gt;alert(1)&lt;/script&gt;', $this->CustomContentHelper->getTitle());
     }
 
     /**
@@ -225,7 +231,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $rs = $this->CustomContentHelper->getFieldTitle($customContentsService->get(1), 'recruit_category');
@@ -327,7 +333,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //$fieldNameが存在した場合、
@@ -362,7 +368,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //$fieldNameが存在した場合、
@@ -442,7 +448,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         CustomLinkFactory::make([
@@ -491,7 +497,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         CustomLinkFactory::make([
@@ -534,7 +540,7 @@ class CustomContentHelperTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //getLink()メソッドを使ってcacheLinksをセット

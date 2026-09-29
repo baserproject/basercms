@@ -313,6 +313,14 @@ class BcDatabaseServiceTest extends BcTestCase
         // createdが空の時に本日の日付が入っている事を確認
         $row2 = PageFactory::get(2);
         $this->assertEquals($row2->created->format('Y-m-d H:i'), date('Y-m-d H:i'));
+
+        // 存在しないテーブル名・妥当でないテーブル名の CSV は読み込まないこと
+        file_put_contents($csvFolder . 'not_exists_table.csv', "id,name\n1,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'not_exists_table.csv', 'encoding' => 'UTF-8']));
+        file_put_contents($csvFolder . 'pages;drop.csv', "id,contents\n3,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'pages;drop.csv', 'encoding' => 'UTF-8']));
+        unlink($csvFolder . 'not_exists_table.csv');
+        unlink($csvFolder . 'pages;drop.csv');
     }
 
     /**
@@ -510,7 +518,36 @@ class BcDatabaseServiceTest extends BcTestCase
             ['test', '"test"'],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
+            // 数式として解釈され得る値にはシングルクォートを前置する
+            ['=cmd|calc', '"\'=cmd|calc"'],
+            ['-abc', '"\'-abc"'],
+            // 数値のみの値は数式として解釈されないため前置しない
+            ['+1', '"+1"'],
+            ['-1', '"-1"'],
+            ['-1.5', '"-1.5"'],
+            ['@test', '"\'@test"'],
         ];
+    }
+
+    /**
+     * test loadCsvToArray - 数式対策のシングルクォートが復元時に取り除かれること
+     */
+    public function test_csvFormulaRoundTrip()
+    {
+        $csvFolder = TMP . 'csv' . DS;
+        if (!is_dir($csvFolder)) (new BcFolder($csvFolder))->create();
+        $path = $csvFolder . 'formula.csv';
+        file_put_contents($path, "\"title\",\"detail\"\n\"'=cmd|calc\",\"'-abc\"\n\"'abc\",\"'\"\n\"'-1\",\"-1\"\n");
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'UTF-8');
+        $this->assertEquals('=cmd|calc', $rs[0]['title']);
+        $this->assertEquals('-abc', $rs[0]['detail']);
+        // 数値のみの値には前置しないため、シングルクォートは取り除かない
+        $this->assertEquals("'-1", $rs[2]['title']);
+        $this->assertEquals('-1', $rs[2]['detail']);
+        // 数式の先頭文字が続かないシングルクォートはそのまま
+        $this->assertEquals("'abc", $rs[1]['title']);
+        $this->assertEquals("'", $rs[1]['detail']);
+        unlink($path);
     }
 
     /**
@@ -781,6 +818,15 @@ class UserActionsFqnSchema extends \\BaserCore\\Database\\Schema\\BcSchema
             ],
             'クラスが2つ存在（2つ目に危険なコードを隠す）' => [
                 "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}\nclass Payload {\n    public function __construct() { system('id'); }\n}"
+            ],
+            'プロパティフック（PHP 8.4）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table { get { system('id'); return 'malicious'; } }\n}"
+            ],
+            'プロパティフック（set）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious' { set { system('id'); } }\n}"
+            ],
+            'トレイトの利用' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    use \\SomeTrait;\n    public \$table = 'malicious';\n}"
             ],
             'パースエラーとなる不正なPHP' => [
                 "<?php\nclass {{{ invalid"

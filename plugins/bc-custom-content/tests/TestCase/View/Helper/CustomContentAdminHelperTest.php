@@ -300,6 +300,10 @@ class CustomContentAdminHelperTest extends BcTestCase
         $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
         //check result return
         $this->assertEquals('<a href="/baser/admin/baser-core/dashboard/edit/1/1">Webエンジニア・Webプログラマー</a>', $rs);
+        // タイトルはリンクにする場合もエスケープされる（格納型 XSS 対策）
+        $customEntry->title = 'title<script>alert(1)</script>';
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        $this->assertEquals('<a href="/baser/admin/baser-core/dashboard/edit/1/1">title&lt;script&gt;alert(1)&lt;/script&gt;</a>', $rs);
         /**
          * case has_child is false
          * and customTable with display_field is not title

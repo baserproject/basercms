@@ -75,7 +75,8 @@ class CustomContentHelper extends CustomContentAppHelper
      */
     public function getTitle()
     {
-        return $this->_View->getRequest()->getAttribute('currentContent')->title;
+        // コンテンツのタイトルは編集者が入力した値のため、エスケープして返す（格納型 XSS 対策）
+        return h((string)$this->_View->getRequest()->getAttribute('currentContent')->title);
     }
 
     /**

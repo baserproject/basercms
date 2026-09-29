@@ -32,6 +32,8 @@ class UtilitiesController extends BcAdminApiController
      */
     public function clear_cache()
     {
+        // 状態を変更する操作のため GET では実行させない（CSRF 対策）
+        $this->request->allowMethod(['post', 'put']);
         BcUtil::clearAllCache();
 
         $this->set([

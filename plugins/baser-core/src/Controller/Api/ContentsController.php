@@ -76,7 +76,8 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
+        // withTrash（ゴミ箱のコンテンツを含める）も公開 API では受け付けない
+        if (isset($queryParams['status']) || isset($queryParams['contain']) || isset($queryParams['withTrash'])) {
             throw new ForbiddenException();
         }
 
