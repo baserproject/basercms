@@ -52,7 +52,7 @@ class PagesTool extends BaseMcpTool
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード（ページ本文を対象に検索）'],
                         'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は全て）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（1: 公開のみ）（省略時は全て）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]

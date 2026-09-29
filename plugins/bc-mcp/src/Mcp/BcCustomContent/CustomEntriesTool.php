@@ -92,7 +92,7 @@ class CustomEntriesTool extends BaseMcpTool
                     'properties' => [
                         'customTableId' => ['type' => 'number', 'description' => 'カスタムテーブルID（必須）'],
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード（タイトル・スラッグを対象に検索）'],
-                        'limit' => ['type' => 'number', 'default' => 20, 'description' => '取得件数（デフォルト: 20）'],
+                        'limit' => ['type' => 'number', 'default' => 20, 'description' => '取得件数（デフォルト: 20、最大100件）'],
                         'page' => ['type' => 'number', 'default' => 1, 'description' => 'ページ番号（デフォルト: 1）'],
                         'status' => ['type' => 'number', 'description' => 'ステータス（null: 非公開, publish: 公開）']
                     ],

@@ -38,7 +38,7 @@ class BlogPostsTool extends BaseMcpTool
                         'blogContentId' => ['type' => 'number', 'description' => 'ブログコンテンツID（省略時はデフォルト）'],
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（null: 全て, publish: 公開）（省略時は全て）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]

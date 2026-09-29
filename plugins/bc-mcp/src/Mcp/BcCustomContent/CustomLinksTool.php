@@ -69,7 +69,7 @@ class CustomLinksTool extends BaseMcpTool
                         'customTableId' => ['type' => 'number', 'description' => 'カスタムテーブルID（必須）'],
                         'name' => ['type' => 'string', 'description' => 'カスタムリンク名'],
                         'status' => ['type' => 'number', 'description' => 'ステータス（null: 無効, publish: 有効）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は制限なし）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は100件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ],
                     'required' => ['customTableId']

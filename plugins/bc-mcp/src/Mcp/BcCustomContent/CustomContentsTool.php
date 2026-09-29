@@ -65,7 +65,7 @@ class CustomContentsTool extends BaseMcpTool
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は制限なし）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は100件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（null: 非公開, publish: 公開）']
                     ]

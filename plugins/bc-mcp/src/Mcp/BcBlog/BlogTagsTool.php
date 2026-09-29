@@ -48,7 +48,7 @@ class BlogTagsTool extends BaseMcpTool
                     'type' => 'object',
                     'properties' => [
                         'name' => ['type' => 'string', 'description' => 'タグ名での検索'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]
