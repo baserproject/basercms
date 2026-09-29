@@ -347,7 +347,9 @@ class BlogController extends BlogFrontAppController
                 'message' => $message
             ]));
         } catch (Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            // 例外の内容（テーブル名等の内部情報）は未認証の利用者に返さず、ログに記録する
+            $this->log($e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             return $this->response->withStatus(500)->withStringBody(json_encode([
                 'message' => $message
             ]));
