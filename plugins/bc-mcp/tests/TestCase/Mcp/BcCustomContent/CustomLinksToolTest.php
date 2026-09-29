@@ -173,7 +173,7 @@ class CustomLinksToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $databaseService->addColumn('custom_entry_1_contact', 'test_link', 'text');
         $result = $this->CustomLinksTool->deleteCustomLink(1);

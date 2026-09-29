@@ -88,7 +88,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -137,7 +137,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_files',
             'title' => 'ファイル付きお問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -173,7 +173,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_mass',
             'title' => 'お問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -230,7 +230,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_image_url',
             'title' => '画像URL付きお問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTablesService->update($customTable, [
             'id' => $customTable->id,
@@ -297,7 +297,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_invalid_file',
             'title' => '不正ファイル名お問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTablesService->update($customTable, [
             'id' => $customTable->id,
@@ -351,7 +351,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -473,7 +473,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $this->CustomEntriesTool->addCustomEntry(
@@ -728,7 +728,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
