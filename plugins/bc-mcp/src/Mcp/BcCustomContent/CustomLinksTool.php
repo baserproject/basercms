@@ -69,7 +69,7 @@ class CustomLinksTool extends BaseMcpTool
                         'customTableId' => ['type' => 'number', 'description' => 'カスタムテーブルID（必須）'],
                         'name' => ['type' => 'string', 'description' => 'カスタムリンク名'],
                         'status' => ['type' => 'number', 'description' => 'ステータス（null: 無効, publish: 有効）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は制限なし）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は100件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ],
                     'required' => ['customTableId']
@@ -253,10 +253,11 @@ class CustomLinksTool extends BaseMcpTool
             /** @var CustomLinksService $customLinksService */
             $customLinksService = $this->getService(CustomLinksServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = ['finder' => 'all'];
             if (!empty($name)) $conditions['name'] = $name;
             if (isset($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             // CustomLinksService::getIndex() は custom_table_id を最初の引数として期待している
@@ -266,7 +267,7 @@ class CustomLinksTool extends BaseMcpTool
                 'results' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

@@ -207,6 +207,39 @@ class BurgerEditorControllerTest extends BcTestCase
     /**
      * test img_upload
      *
+     * 拡張子が画像でも中身が画像でないファイルはエラーを返す
+     */
+    public function test_img_upload_withFakeImageContent()
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('fake.gif', 'image/gif', '<html><script>alert(1)</script></html>')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/img_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('画像形式のファイルをアップロードしてください', $result['error']);
+    }
+
+    /**
+     * test img_upload
+     *
+     * 拡張子と中身の画像形式が一致しないファイルはエラーを返す
+     */
+    public function test_img_upload_withMismatchedImageContent()
+    {
+        $this->enableCsrfToken();
+        $png = file_get_contents(Plugin::path('BcBurgerEditor') . 'webroot' . DS . 'img' . DS . 'bg-sample.png');
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('mismatch.gif', 'image/gif', $png)]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/img_upload');
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertSame('画像形式のファイルをアップロードしてください', $result['error']);
+    }
+
+    /**
+     * test img_upload
+     *
      * 画像が保存され、一覧に反映される
      */
     public function test_img_upload()

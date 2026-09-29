@@ -12,12 +12,15 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Mcp\BcBlog;
 
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcMcp\Mcp\BcBlog\BlogContentsTool;
+use BcMcp\Mcp\McpContext;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\ORM\TableRegistry;
 
@@ -78,6 +81,32 @@ class BlogContentsToolTest extends BcTestCase
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey('id', $result);
+    }
+
+    /**
+     * test addBlogContent - 作成者は操作者となり、システム管理者以外は他のユーザーを作成者に指定できないこと
+     */
+    public function testAddBlogContentAuthorIsLoginUser()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        McpContext::setLoginUserId(2);
+        try {
+            // 作成者を省略した場合は操作者が作成者になる
+            $result = $this->BlogContentsTool->addBlogContent('test-blog', 'テストブログ', 1, 1);
+            $this->assertArrayHasKey('id', $result);
+            $content = TableRegistry::getTableLocator()->get('BaserCore.Contents')->find()
+                ->where(['type' => 'BlogContent', 'entity_id' => $result['id']])->first();
+            $this->assertEquals(2, $content->author_id);
+
+            // システム管理者以外は他のユーザーを作成者に指定できない
+            $result = $this->BlogContentsTool->addBlogContent('test-blog2', 'テストブログ2', 1, 1, null, 1);
+            $this->assertArrayNotHasKey('id', $result);
+        } finally {
+            McpContext::clear();
+        }
     }
 
     /**

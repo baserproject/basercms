@@ -3,14 +3,22 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Mcp;
 
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Mcp\BaseMcpTool;
+use BcMcp\Mcp\McpContext;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BaseMcpToolTest
  */
 class BaseMcpToolTest extends BcTestCase
 {
+
+    use ScenarioAwareTrait;
     /**
      * Test subject
      *
@@ -205,6 +213,231 @@ class BaseMcpToolTest extends BcTestCase
     }
 
     /**
+     * test isPublicIp - 内部ネットワーク等の非公開アドレスを拒否すること
+     * @dataProvider isPublicIpDataProvider
+     */
+    public function testIsPublicIp(string $ip, bool $expected)
+    {
+        $this->assertSame($expected, $this->execPrivateMethod($this->BaseMcpTool, 'isPublicIp', [$ip]));
+    }
+
+    public static function isPublicIpDataProvider(): array
+    {
+        return [
+            ['93.184.216.34', true],
+            ['8.8.8.8', true],
+            ['2606:4700::1111', true],
+            ['127.0.0.1', false],
+            ['127.1.2.3', false],
+            ['10.0.0.5', false],
+            ['172.16.0.1', false],
+            ['192.168.1.1', false],
+            ['169.254.169.254', false],
+            ['100.64.0.1', false],
+            ['0.0.0.0', false],
+            ['224.0.0.1', false],
+            ['255.255.255.255', false],
+            ['::1', false],
+            ['fe80::1', false],
+            ['fc00::1', false],
+            ['fd12::1', false],
+            ['ff02::1', false],
+            ['::ffff:127.0.0.1', false],
+            ['::ffff:10.0.0.1', false],
+            ['64:ff9b::7f00:1', false],
+        ];
+    }
+
+    /**
+     * test resolvePublicIp - localhost や IP リテラルの内部アドレスは解決しないこと
+     */
+    public function testResolvePublicIp()
+    {
+        $this->assertNull($this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['localhost']));
+        $this->assertNull($this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['foo.localhost']));
+        $this->assertNull($this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['127.0.0.1']));
+        $this->assertNull($this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['[::1]']));
+        $this->assertNull($this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['169.254.169.254']));
+        $this->assertSame('93.184.216.34', $this->execPrivateMethod($this->BaseMcpTool, 'resolvePublicIp', ['93.184.216.34']));
+    }
+
+    /**
+     * test processUrlFile - 内部ネットワークの URL を拒否すること（SSRF 対策）
+     * @dataProvider ssrfUrlDataProvider
+     */
+    public function testProcessUrlFileRejectsInternalUrl(string $url)
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('URLからファイルをダウンロードできませんでした');
+        $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$url]);
+    }
+
+    public static function ssrfUrlDataProvider(): array
+    {
+        return [
+            ['http://127.0.0.1/image.png'],
+            ['http://localhost:8080/image.png'],
+            ['http://169.254.169.254/latest/meta-data/'],
+            ['http://10.0.0.1/image.png'],
+            ['http://[::1]/image.png'],
+            ['http://user:pass@93.184.216.34/image.png'],
+        ];
+    }
+
+    /**
+     * test processUrlFile - ローカルのテストサーバーで取得・リダイレクト・エラー応答を確認する
+     */
+    public function testProcessUrlFileWithLocalServer()
+    {
+        $docRoot = TMP . 'mcp_url_test' . DS;
+        if (!is_dir($docRoot)) mkdir($docRoot, 0777, true);
+        file_put_contents($docRoot . 'image.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jAuoqQAAAABJRU5ErkJggg=='));
+        file_put_contents($docRoot . 'redirect.php', '<?php header("Location: /image.png", true, 302);');
+        file_put_contents($docRoot . 'redirect_internal.php', '<?php header("Location: http://169.254.169.254/latest/meta-data/", true, 302);');
+        file_put_contents($docRoot . 'loop.php', '<?php header("Location: /loop.php", true, 302);');
+        file_put_contents($docRoot . 'error.php', '<?php http_response_code(500); echo "error";');
+        $port = 18089;
+        $process = proc_open(
+            ['php', '-S', '127.0.0.1:' . $port, '-t', $docRoot],
+            [0 => ['pipe', 'r'], 1 => ['file', '/dev/null', 'w'], 2 => ['file', '/dev/null', 'w']],
+            $pipes
+        );
+        $this->assertIsResource($process);
+        // サーバーの起動を待つ
+        for ($i = 0; $i < 50; $i++) {
+            $socket = @fsockopen('127.0.0.1', $port, $errno, $errstr, 0.2);
+            if ($socket) { fclose($socket); break; }
+            usleep(100000);
+        }
+        TestBaseMcpTool::$allowLoopbackForTest = true;
+        try {
+            $base = 'http://127.0.0.1:' . $port;
+            // 直接取得
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$base . '/image.png']);
+            $this->assertEquals('png', $result['ext']);
+            $this->assertEquals('image/png', $result['type']);
+            $this->assertFileExists($result['tmp_name']);
+            unlink($result['tmp_name']);
+            // リダイレクト先を検証したうえで追従する
+            $result = $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$base . '/redirect.php']);
+            $this->assertEquals('png', $result['ext']);
+            unlink($result['tmp_name']);
+            // 内部アドレスへのリダイレクトは拒否する
+            try {
+                $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$base . '/redirect_internal.php']);
+                $this->fail('内部アドレスへのリダイレクトが拒否されていません');
+            } catch (\Exception $e) {
+                $this->assertEquals('URLからファイルをダウンロードできませんでした', $e->getMessage());
+            }
+            // リダイレクト回数の上限
+            try {
+                $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$base . '/loop.php']);
+                $this->fail('リダイレクトの上限が効いていません');
+            } catch (\Exception $e) {
+                $this->assertEquals('URLからファイルをダウンロードできませんでした', $e->getMessage());
+            }
+            // エラー応答（404 / 500）は失敗として扱う
+            foreach(['/notfound.png', '/error.php'] as $path) {
+                try {
+                    $this->execPrivateMethod($this->BaseMcpTool, 'processUrlFile', [$base . $path]);
+                    $this->fail('エラー応答が失敗として扱われていません: ' . $path);
+                } catch (\Exception $e) {
+                    $this->assertEquals('URLからファイルをダウンロードできませんでした', $e->getMessage());
+                }
+            }
+        } finally {
+            TestBaseMcpTool::$allowLoopbackForTest = false;
+            proc_terminate($process);
+            proc_close($process);
+            foreach(glob($docRoot . '*') as $file) unlink($file);
+            rmdir($docRoot);
+        }
+    }
+
+    /**
+     * test resolveLoginUserId - コンテキストが設定されている場合は引数より優先されること
+     */
+    public function testResolveLoginUserIdPrefersContext()
+    {
+        McpContext::clear();
+        $this->assertSame(7, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [7]));
+        McpContext::setLoginUserId(2);
+        try {
+            // 引数（クライアントが送信できる値）で操作者を詐称できない
+            $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [1]));
+            $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveLoginUserId', [null]));
+        } finally {
+            McpContext::clear();
+        }
+    }
+
+    /**
+     * test resolveActorId - 操作者以外を作成者に指定できるのはシステム管理者のみであること
+     */
+    public function testResolveActorId()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserGroupFactory::make(['id' => 2, 'name' => 'operators', 'title' => 'operators', 'auth_prefix' => 'Admin,Api/Admin'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+
+        // 未指定・自分自身は操作者
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [null, 2]));
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [2, 2]));
+        // システム管理者は他のユーザーを指定できる
+        $this->assertSame(2, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [2, 1]));
+        // コンテキストが無い（操作者不明）場合は指定値
+        $this->assertSame(1, $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [1, null]));
+        // 一般ユーザーは他のユーザーを指定できない
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('システム管理者のみ');
+        $this->execPrivateMethod($this->BaseMcpTool, 'resolveActorId', [1, 2]);
+    }
+
+    /**
+     * test clampLimit
+     */
+    public function testClampLimit()
+    {
+        $this->assertSame(20, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [null, 20]));
+        $this->assertSame(20, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [0, 20]));
+        $this->assertSame(5, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [5, 20]));
+        $this->assertSame(100, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [100000, 20]));
+        $this->assertSame(50, $this->execPrivateMethod($this->BaseMcpTool, 'clampLimit', [100000, 20, 50]));
+    }
+
+    /**
+     * test processBase64File - 許可されていない形式（HTML / SVG 等）を拒否すること
+     */
+    public function testProcessBase64FileRejectsDisallowedType()
+    {
+        $html = 'data:text/html;base64,' . base64_encode('<script>alert(1)</script>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$html]);
+            $this->fail('HTML が拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        // 申告 MIME が画像でも中身が HTML なら拒否する
+        $fake = 'data:image/png;base64,' . base64_encode('<html><script>alert(1)</script></html>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$fake]);
+            $this->fail('偽装した MIME タイプが拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        $svg = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+        try {
+            $this->execPrivateMethod($this->BaseMcpTool, 'processBase64File', [$svg]);
+            $this->fail('SVG が拒否されていません');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('サポートされていないファイル形式です', $e->getMessage());
+        }
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', ['svg']));
+        $this->assertFalse($this->execPrivateMethod($this->BaseMcpTool, 'isAllowedExtension', ['html']));
+    }
+
+    /**
      * test isFileUploadable method
      */
     public function testIsFileUploadable()
@@ -250,7 +483,8 @@ class BaseMcpToolTest extends BcTestCase
             }
         ]);
         $this->assertEquals('例外が発生しました', $result['content']);
-        $this->assertArrayHasKey('trace', $result);
+        // スタックトレースはクライアントへ返さない（ログにのみ記録する）
+        $this->assertArrayNotHasKey('trace', $result);
 
         // \Error を捕捉できる事を確認
         $result = $this->execPrivateMethod($this->BaseMcpTool, 'executeWithErrorHandling', [
@@ -259,8 +493,10 @@ class BaseMcpToolTest extends BcTestCase
                 return $request->getParam('prefix');
             }
         ]);
-        $this->assertStringContainsString('getParam() on null', $result['content']);
-        $this->assertArrayHasKey('trace', $result);
+        // PHP 内部のエラーは内部情報を含むため定型文に丸め、トレースも返さない
+        $this->assertStringNotContainsString('getParam() on null', $result['content']);
+        $this->assertStringContainsString('ツールの実行中にエラーが発生しました', $result['content']);
+        $this->assertArrayNotHasKey('trace', $result);
     }
 }
 
@@ -279,6 +515,17 @@ class TestBaseMcpTool extends BaseMcpTool
     public function registerTools(\Mcp\Server\McpServer $server): \Mcp\Server\McpServer
     {
         return $server;
+    }
+
+    /**
+     * テスト用: ローカルのテストサーバー（127.0.0.1）への接続のみ許可する
+     */
+    public static bool $allowLoopbackForTest = false;
+
+    protected function isPublicIp(string $ip): bool
+    {
+        if (self::$allowLoopbackForTest && $ip === '127.0.0.1') return true;
+        return parent::isPublicIp($ip);
     }
 
 }

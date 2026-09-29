@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace BcMcp\Test\TestCase\Mcp\BcBlog;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFolder;
@@ -23,6 +25,7 @@ use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\BlogPostsAdminServiceScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use BcMcp\Mcp\BcBlog\BlogPostsTool;
+use BcMcp\Mcp\McpContext;
 
 /**
  * BlogPostsToolTest
@@ -395,6 +398,25 @@ class BlogPostsToolTest extends BcTestCase
         $this->assertArrayHasKey('title', $result);
         $this->assertEquals('更新されたタイトル', $result['title']);
         $this->assertEquals('更新された詳細', $result['detail']);
+    }
+
+    /**
+     * test editBlogPost - システム管理者以外は他のユーザーを投稿者に変更できないこと
+     */
+    public function testEditBlogPostCannotChangeAuthorToOtherUser()
+    {
+        $this->loadFixtureScenario(BlogPostsAdminServiceScenario::class);
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        UserFactory::make(['id' => 3, 'name' => 'other', 'email' => 'other@example.com', 'status' => true])->persist();
+        McpContext::setLoginUserId(2);
+        try {
+            $result = $this->BlogPostsTool->editBlogPost(1, email: 'other@example.com');
+            $this->assertArrayNotHasKey('id', $result);
+            $this->assertNotEquals(3, BlogPostFactory::get(1)->user_id);
+        } finally {
+            McpContext::clear();
+        }
     }
 
     /**

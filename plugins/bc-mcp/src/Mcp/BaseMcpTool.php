@@ -96,15 +96,72 @@ abstract class BaseMcpTool
      * 操作者のユーザーIDを解決する
      *
      * MCP のツールは JSON-RPC の引数しか受け取らないため、認証済みの操作者は
-     * McpContext から取得する。引数で明示された場合はそれを優先する
-     * （テストなど、コンテキストを持たない経路のため）。
+     * McpContext から取得する。コンテキストが設定されている場合は常にそれを使い、
+     * 引数の値は無視する（SDK は inputSchema に無いキーも名前一致でコールバック引数へ
+     * 束縛するため、引数を優先するとクライアントが操作者を詐称できてしまう）。
+     * 引数はコンテキストを持たない経路（テスト等）のためにのみ使う。
      *
      * @param int|null $loginUserId 引数で渡されたユーザーID
      * @return int|null
      */
     protected function resolveLoginUserId(?int $loginUserId = null): ?int
     {
-        return $loginUserId ?? McpContext::getLoginUserId();
+        return McpContext::getLoginUserId() ?? $loginUserId;
+    }
+
+    /**
+     * 作成者・投稿者として保存するユーザーIDを解決する
+     *
+     * 操作者以外を作成者に指定できるのはシステム管理者のみ。
+     * それ以外のユーザーが別のユーザーを指定した場合は例外とする。
+     *
+     * @param int|null $requestedUserId 引数で指定されたユーザーID
+     * @param int|null $loginUserId 操作者のユーザーID
+     * @return int|null
+     * @throws \Exception
+     */
+    protected function resolveActorId(?int $requestedUserId, ?int $loginUserId): ?int
+    {
+        if ($requestedUserId === null || $requestedUserId === $loginUserId) {
+            return $loginUserId ?? $requestedUserId;
+        }
+        if ($loginUserId === null) {
+            return $requestedUserId;
+        }
+        if (!$this->isAdminLoginUser($loginUserId)) {
+            throw new \Exception('作成者に他のユーザーを指定できるのはシステム管理者のみです');
+        }
+        return $requestedUserId;
+    }
+
+    /**
+     * 操作者がシステム管理者かどうかを判定する
+     *
+     * @param int|null $loginUserId
+     * @return bool
+     */
+    protected function isAdminLoginUser(?int $loginUserId): bool
+    {
+        if (!$loginUserId) return false;
+        $user = TableRegistry::getTableLocator()->get('BaserCore.Users')
+            ->find()->where(['Users.id' => $loginUserId])->contain(['UserGroups'])->first();
+        return $user? BcUtil::isAdminUser($user) : false;
+    }
+
+    /**
+     * 一覧取得の件数を上限内に収める
+     *
+     * limit に上限が無いと全件を取得してメモリを消費させることができるため、上限でクランプする
+     *
+     * @param int|null $limit
+     * @param int $default 省略時の件数
+     * @param int $max 上限
+     * @return int
+     */
+    protected function clampLimit(?int $limit, int $default = 20, int $max = 100): int
+    {
+        if ($limit === null || $limit < 1) return $default;
+        return min($limit, $max);
     }
 
     /**
@@ -131,6 +188,8 @@ abstract class BaseMcpTool
     protected function saveDblog($userId, $message)
     {
         try {
+            // 操作ログの操作者は認証済みのコンテキストを優先し、引数で詐称できないようにする
+            $userId = McpContext::getLoginUserId() ?? $userId;
             $data = [
                 'message' => $message,
                 'controller' => 'McpProxy',
@@ -152,13 +211,19 @@ abstract class BaseMcpTool
      */
     protected function createErrorResponse(string $message, ?\Throwable $exception = null): array
     {
-        $response = [
+        if ($exception) {
+            // スタックトレースはクライアントへ返さずログに記録する。
+            // DB や PHP 内部の例外は内部情報（テーブル名・パス等）を含むため、メッセージも定型文に丸める
+            \Cake\Log\Log::write('error', $message . "\n" . $exception->getTraceAsString(), ['scope' => ['mcp']]);
+            if ($exception instanceof \Error
+                || $exception instanceof \PDOException
+                || $exception instanceof \Cake\Database\Exception\DatabaseException) {
+                $message = 'ツールの実行中にエラーが発生しました。詳細はサーバーのログを確認してください。';
+            }
+        }
+        return [
             'content' => $message
         ];
-        if ($exception) {
-            $response['trace'] = $exception->getTraceAsString();
-        }
-        return $response;
     }
 
     /**
@@ -265,8 +330,25 @@ abstract class BaseMcpTool
             throw new \Exception('base64デコードに失敗しました');
         }
 
+        // 申告された MIME タイプは信用せず、内容から判定できる場合はそれを優先する。
+        // 内容がテキストなのに画像等の MIME タイプが申告された場合（HTML を画像として
+        // 保存させる等）は不一致として拒否する
+        $actualMimeType = $this->detectMimeTypeFromContent($decodedData);
+        if ($actualMimeType === 'text/plain') {
+            if (!in_array($mimeType, ['text/plain', 'text/csv'], true)) {
+                throw new \Exception('サポートされていないファイル形式です: ' . $mimeType);
+            }
+        } elseif ($actualMimeType !== 'application/octet-stream') {
+            $mimeType = $actualMimeType;
+        }
+
         // ファイル拡張子を取得
         $extension = $this->getExtensionFromMimeType($mimeType);
+
+        // ファイル形式のチェック（URL 取り込みと同じ許可リストを適用する）
+        if (!$this->isAllowedExtension($extension)) {
+            throw new \Exception('サポートされていないファイル形式です: ' . $extension);
+        }
 
         // 一意のファイル名を生成
         $fileName = 'upload_' . uniqid() . '.' . $extension;
@@ -307,28 +389,8 @@ abstract class BaseMcpTool
             throw new \Exception('HTTPまたはHTTPSのURLのみサポートされています: ' . $url);
         }
 
-        // ユーザーエージェントを設定してファイルをダウンロード
-        $option = [
-            'http' => [
-                'method' => 'GET',
-                'header' => "User-Agent: baserCMS-MCP-Client/1.0\r\n",
-                'timeout' => 30,
-                'follow_location' => true,
-                'max_redirects' => 3
-            ]
-        ];
-        if (BcUtil::isTest()) {
-            $option['ssl'] = [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ];
-        }
-        $context = stream_context_create($option);
-        $fileData = @file_get_contents($url, false, $context);
-
-        if ($fileData === false) {
-            throw new \Exception('URLからファイルをダウンロードできませんでした: ' . $url);
-        }
+        // 取得元の URL を検証したうえでダウンロードする（SSRF 対策）
+        [$fileData, $http_response_header] = $this->fetchUrl($url);
 
         // ファイルサイズをチェック（10MBまで）
         $fileSize = strlen($fileData);
@@ -338,19 +400,14 @@ abstract class BaseMcpTool
 
         // レスポンスヘッダーからContent-Typeを取得
         $headerMimeType = 'application/octet-stream';
-        if(function_exists('http_get_last_response_headers')) {
-            $http_response_header = http_get_last_response_headers();
-        }
-        if (isset($http_response_header)) {
-            foreach($http_response_header as $header) {
-                if (stripos($header, 'content-type:') === 0) {
-                    $headerMimeType = trim(substr($header, 13));
-                    // パラメータを除去（例: "image/jpeg; charset=utf-8" -> "image/jpeg"）
-                    if (strpos($headerMimeType, ';') !== false) {
-                        $headerMimeType = trim(explode(';', $headerMimeType)[0]);
-                    }
-                    break;
+        foreach($http_response_header as $header) {
+            if (stripos($header, 'content-type:') === 0) {
+                $headerMimeType = trim(substr($header, 13));
+                // パラメータを除去（例: "image/jpeg; charset=utf-8" -> "image/jpeg"）
+                if (strpos($headerMimeType, ';') !== false) {
+                    $headerMimeType = trim(explode(';', $headerMimeType)[0]);
                 }
+                break;
             }
         }
 
@@ -405,6 +462,184 @@ abstract class BaseMcpTool
             'size' => $fileSize,
             'ext' => $extension
         ];
+    }
+
+    /**
+     * URL からファイルを取得する（SSRF 対策付き）
+     *
+     * MCP クライアントが指定した URL をサーバーが取得するため、宛先を検証しないと
+     * ループバック・プライベートネットワーク・クラウドのメタデータサービス等の
+     * 内部リソースへ到達させられ、取得内容が公開ディレクトリへ保存されてしまう。
+     *
+     * - ホスト名を解決した IP アドレスが公開アドレスであることを確認する
+     * - 検証した IP へ直接接続し、Host ヘッダと SNI に元のホスト名を使う
+     *   （検証後に DNS の応答が変わる DNS リバインディングを防ぐ）
+     * - リダイレクトは自動追従せず、リダイレクト先も同じ検証を通す
+     * - 取得サイズに上限を設ける
+     *
+     * @param string $url
+     * @return array [取得したデータ, レスポンスヘッダの配列]
+     * @throws \Exception
+     */
+    protected function fetchUrl(string $url): array
+    {
+        $maxRedirects = 3;
+        $maxSize = 10 * 1024 * 1024;
+        // 内部の到達状況（接続の成否・ステータス）を推測させないため、失敗時のメッセージは統一する
+        $failureMessage = 'URLからファイルをダウンロードできませんでした';
+
+        for ($i = 0; $i <= $maxRedirects; $i++) {
+            $parts = parse_url($url);
+            if (!$parts || empty($parts['host']) || !in_array($parts['scheme'] ?? '', ['http', 'https'], true)
+                || isset($parts['user']) || isset($parts['pass'])) {
+                throw new \Exception($failureMessage);
+            }
+            $host = $parts['host'];
+            $ip = $this->resolvePublicIp($host);
+            if ($ip === null) {
+                throw new \Exception($failureMessage);
+            }
+            $scheme = $parts['scheme'];
+            $port = $parts['port'] ?? ($scheme === 'https'? 443 : 80);
+            $ipHost = (strpos($ip, ':') !== false)? '[' . $ip . ']' : $ip;
+            $requestUrl = $scheme . '://' . $ipHost . ':' . $port
+                . ($parts['path'] ?? '/')
+                . (isset($parts['query'])? '?' . $parts['query'] : '');
+            $hostHeader = $host . (isset($parts['port'])? ':' . $parts['port'] : '');
+
+            $option = [
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "User-Agent: baserCMS-MCP-Client/1.0\r\nHost: {$hostHeader}\r\n",
+                    'timeout' => 30,
+                    'follow_location' => 0,
+                    'ignore_errors' => true,
+                ],
+                'ssl' => [
+                    'peer_name' => $host,
+                    'SNI_enabled' => true,
+                    'verify_peer' => !BcUtil::isTest(),
+                    'verify_peer_name' => !BcUtil::isTest(),
+                ]
+            ];
+            $context = stream_context_create($option);
+            $fileData = @file_get_contents($requestUrl, false, $context, 0, $maxSize + 1);
+            $headers = function_exists('http_get_last_response_headers')?
+                (http_get_last_response_headers() ?? []) : ($http_response_header ?? []);
+            if ($fileData === false || !$headers) {
+                throw new \Exception($failureMessage);
+            }
+            $status = 0;
+            if (preg_match('/^HTTP\/\S+\s+(\d{3})/', (string)$headers[0], $matches)) {
+                $status = (int)$matches[1];
+            }
+            if (in_array($status, [301, 302, 303, 307, 308], true)) {
+                $location = null;
+                foreach($headers as $header) {
+                    if (stripos($header, 'location:') === 0) {
+                        $location = trim(substr($header, 9));
+                        break;
+                    }
+                }
+                if ($location === null) {
+                    throw new \Exception($failureMessage);
+                }
+                // 相対 URL は元の URL を基準に解決する
+                if (!preg_match('/^https?:\/\//i', $location)) {
+                    $base = $scheme . '://' . $hostHeader;
+                    if (str_starts_with($location, '/')) {
+                        $location = $base . $location;
+                    } else {
+                        $dir = rtrim(dirname($parts['path'] ?? '/'), '/');
+                        $location = $base . $dir . '/' . $location;
+                    }
+                }
+                $url = $location;
+                continue;
+            }
+            if ($status < 200 || $status >= 300) {
+                throw new \Exception($failureMessage);
+            }
+            if (strlen($fileData) > $maxSize) {
+                throw new \Exception('ファイルサイズが大きすぎます（10MB以下にしてください）');
+            }
+            return [$fileData, $headers];
+        }
+        throw new \Exception($failureMessage);
+    }
+
+    /**
+     * ホスト名を解決し、公開アドレスの場合のみ IP アドレスを返す
+     *
+     * 解決結果に 1 つでも非公開アドレスが含まれる場合は null を返す。
+     *
+     * @param string $host
+     * @return string|null
+     */
+    protected function resolvePublicIp(string $host): ?string
+    {
+        $host = trim($host, '[]');
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return $this->isPublicIp($host)? $host : null;
+        }
+        if (strcasecmp($host, 'localhost') === 0 || str_ends_with(strtolower($host), '.localhost')) {
+            return null;
+        }
+        $ips = [];
+        $records = @dns_get_record($host, DNS_A | DNS_AAAA);
+        if (is_array($records)) {
+            foreach($records as $record) {
+                if (!empty($record['ip'])) $ips[] = $record['ip'];
+                if (!empty($record['ipv6'])) $ips[] = $record['ipv6'];
+            }
+        }
+        if (!$ips) {
+            $ip = gethostbyname($host);
+            if ($ip !== $host) $ips[] = $ip;
+        }
+        if (!$ips) return null;
+        foreach($ips as $ip) {
+            if (!$this->isPublicIp($ip)) return null;
+        }
+        return $ips[0];
+    }
+
+    /**
+     * 公開アドレスかどうかを判定する
+     *
+     * プライベート・ループバック・リンクローカル（クラウドのメタデータサービス 169.254.169.254 を含む）・
+     * 予約済み・マルチキャスト・共有アドレス空間（100.64.0.0/10）を拒否する。
+     *
+     * @param string $ip
+     * @return bool
+     */
+    protected function isPublicIp(string $ip): bool
+    {
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return false;
+        }
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $long = ip2long($ip);
+            // 100.64.0.0/10（共有アドレス空間）、224.0.0.0/4（マルチキャスト）、255.255.255.255
+            if (($long & 0xFFC00000) === 0x64400000) return false;
+            if (($long & 0xF0000000) === 0xE0000000) return false;
+            if ($long === 0xFFFFFFFF) return false;
+            return true;
+        }
+        $packed = inet_pton($ip);
+        if ($packed === false) return false;
+        $first = ord($packed[0]);
+        // ff00::/8（マルチキャスト）
+        if ($first === 0xFF) return false;
+        // ::ffff:0:0/96（IPv4 射影）は IPv4 側の判定に委ねる
+        if (substr($packed, 0, 12) === "\0\0\0\0\0\0\0\0\0\0\xff\xff") {
+            return $this->isPublicIp(inet_ntop(substr($packed, 12)));
+        }
+        // 64:ff9b::/96（NAT64）も IPv4 側の判定に委ねる
+        if (substr($packed, 0, 12) === "\x00\x64\xff\x9b\0\0\0\0\0\0\0\0") {
+            return $this->isPublicIp(inet_ntop(substr($packed, 12)));
+        }
+        return true;
     }
 
     /**
@@ -633,9 +868,10 @@ abstract class BaseMcpTool
     protected function isAllowedExtension(string $extension): bool
     {
         // デフォルトで許可する拡張子（baserCMSの設定を参考）
+        // SVG はスクリプトを埋め込めるため、MCP 経由のアップロードでは受け付けない
         $allowedExtensions = [
             // 画像
-            'gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'bmp', 'ico',
+            'gif', 'jpg', 'jpeg', 'png', 'webp', 'bmp', 'ico',
             // ドキュメント
             'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv',
             // アーカイブ
@@ -659,7 +895,7 @@ abstract class BaseMcpTool
 
         // 配列の場合は画像ファイルかチェック
         if (is_array($result)) {
-            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'];
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'ico'];
             if (!in_array($result['ext'], $imageExtensions)) {
                 throw new \Exception('画像ファイルではありません: ' . $result['ext']);
             }

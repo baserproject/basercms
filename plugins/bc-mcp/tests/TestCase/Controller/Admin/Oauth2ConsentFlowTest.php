@@ -151,6 +151,22 @@ class Oauth2ConsentFlowTest extends BcTestCase
      *
      * @return void
      */
+    /**
+     * test 管理 API（Api/Admin）が許可されていないグループのユーザーは同意画面へ進めない
+     */
+    public function testAuthorizeRejectsUserWithoutApiAdminPrefix(): void
+    {
+        \BaserCore\Test\Factory\UserGroupFactory::make(['id' => 2, 'name' => 'admin_only', 'title' => 'admin only', 'auth_prefix' => 'Admin'])->persist();
+        \BaserCore\Test\Factory\UserFactory::make(['id' => 2, 'name' => 'adminonly', 'email' => 'adminonly@example.com', 'status' => true])->persist();
+        \BaserCore\Test\Factory\UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        $client = $this->registerClient();
+        $this->loginAdmin($this->getRequest(), 2);
+        $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id']));
+        $this->assertResponseCode(403);
+        // 管理画面のエラー画面で理由を表示する（JSON ではなく HTML）
+        $this->assertResponseContains('管理 API（Api/Admin）の利用が許可されている必要があります');
+    }
+
     public function testApproveWithoutCsrfTokenIsRejected(): void
     {
         $client = $this->registerClient();

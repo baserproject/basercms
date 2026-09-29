@@ -101,7 +101,16 @@ class OAuth2RefreshTokenRepository implements RefreshTokenRepositoryInterface
             if ($refreshToken->expires_at < $now) {
                 return true;
             }
-            return $refreshToken->revoked;
+            if ($refreshToken->revoked) {
+                return true;
+            }
+            // 無効化・削除されたユーザーのリフレッシュトークンは受け付けない
+            $accessToken = TableRegistry::getTableLocator()->get('BcMcp.Oauth2AccessTokens')
+                ->find()->select(['user_id'])->where(['token_id' => $refreshToken->access_token_id])->first();
+            if (!$accessToken || !OAuth2UserRepository::isActiveUser($accessToken->user_id)) {
+                return true;
+            }
+            return false;
         }
 
         return true; // 見つからない場合は無効扱い

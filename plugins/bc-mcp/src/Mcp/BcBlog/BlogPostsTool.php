@@ -38,7 +38,7 @@ class BlogPostsTool extends BaseMcpTool
                         'blogContentId' => ['type' => 'number', 'description' => 'ブログコンテンツID（省略時はデフォルト）'],
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（null: 全て, publish: 公開）（省略時は全て）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]
@@ -309,7 +309,7 @@ class BlogPostsTool extends BaseMcpTool
             if ($name !== null) $data['name'] = $name;
             if ($content !== null) $data['content'] = $content;
             if ($category !== null) $data['blog_category_id'] = $this->getBlogCategoryId($category, $data['blog_content_id'] ?? $entity->blog_content_id);
-            if ($email !== null) $data['user_id'] = $this->getAuthorId($email);
+            if ($email !== null) $data['user_id'] = $this->getAuthorId($email, $loginUserId);
             if ($status !== null) $data['status'] = $status;
             if ($posted !== null) $data['posted'] = $posted;
             if ($publishBegin !== null) $data['publish_begin'] = $publishBegin;
@@ -366,6 +366,10 @@ class BlogPostsTool extends BaseMcpTool
         if (!empty($email)) {
             $conditions = ['email' => $email];
             $user = $usersService->getIndex($conditions)->first();
+            // 操作者以外を投稿者に指定できるのはシステム管理者のみ
+            if ($user && $loginUserId && $user->id !== $loginUserId && !$this->isAdminLoginUser($loginUserId)) {
+                throw new \Exception('投稿者に他のユーザーを指定できるのはシステム管理者のみです');
+            }
         } elseif ($loginUserId) {
             $user = $usersService->get($loginUserId);
         }
@@ -400,7 +404,8 @@ class BlogPostsTool extends BaseMcpTool
             if (!empty($blogContentId)) $conditions['blog_content_id'] = $blogContentId;
             if (!empty($keyword)) $conditions['keyword'] = $keyword;
             if ($status) $conditions['status'] = $status;
-            $conditions['limit'] = $limit ?? 10;
+            $limit = $this->clampLimit($limit, 10);
+            $conditions['limit'] = $limit;
             $conditions['page'] = $page ?? 1;
 
             $results = $blogPostsService->getIndex($conditions)->toArray();
@@ -409,7 +414,7 @@ class BlogPostsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? 10,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);

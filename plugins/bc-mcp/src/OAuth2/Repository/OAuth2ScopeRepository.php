@@ -64,8 +64,29 @@ class OAuth2ScopeRepository implements ScopeRepositoryInterface
         $userIdentifier = null
     ): array
     {
-        // クライアントが要求したスコープをそのまま返す
-        return $scopes;
+        // スコープを要求しないクライアントには従来通り全てのスコープを与える
+        // （スコープの検証を追加したことで、スコープを要求しない既存クライアントが
+        // 全てのツールを実行できなくなるのを防ぐ）
+        if (!$scopes) {
+            foreach(array_keys($this->scopes) as $identifier) {
+                $scopes[] = new Scope($identifier, $this->scopes[$identifier]);
+            }
+        }
+
+        // クライアント登録時に許可されたスコープの範囲に限定する。
+        // 要求スコープをそのまま返すと、read のみで登録したクライアントが write を取得できてしまう
+        $client = \Cake\ORM\TableRegistry::getTableLocator()->get('BcMcp.Oauth2Clients')
+            ->findByClientId((string)$clientEntity->getIdentifier());
+        $registered = ($client && is_array($client->scopes))? $client->scopes : [];
+        // 既知のスコープ識別子のみを制限の対象にする（旧形式の登録値は無視する）
+        $allowed = array_values(array_intersect($registered, array_keys($this->scopes)));
+        if (!$allowed) {
+            // 登録スコープが無いクライアントは制限しない（従来互換）
+            return $scopes;
+        }
+        return array_values(array_filter($scopes, function(ScopeEntityInterface $scope) use ($allowed) {
+            return in_array($scope->getIdentifier(), $allowed, true);
+        }));
     }
 
 }

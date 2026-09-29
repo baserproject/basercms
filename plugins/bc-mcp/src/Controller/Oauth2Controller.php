@@ -182,14 +182,14 @@ class Oauth2Controller extends AppController
 
             return $cakeResponse;
         } catch (\Exception $exception) {
-            // 一般的なエラーレスポンス
+            // 一般的なエラーレスポンス（例外の内容は応答に含めずログへ記録する）
+            Log::write('error', 'OAuth2 token endpoint error: ' . $exception->getMessage(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'An unexpected error occurred.',
-                    'message' => $exception->getMessage()
+                    'error_description' => 'An unexpected error occurred.'
                 ]));
         }
     }
@@ -237,13 +237,13 @@ class Oauth2Controller extends AppController
                 ]));
 
         } catch (\Exception $exception) {
+            Log::write('error', 'OAuth2 verify endpoint error: ' . $exception->getMessage(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'An unexpected error occurred.',
-                    'message' => $exception->getMessage()
+                    'error_description' => 'An unexpected error occurred.'
                 ]));
         }
     }
@@ -308,13 +308,8 @@ class Oauth2Controller extends AppController
     public function protectedResourceMetadata(): Response
     {
         try {
-            // 現在のリクエストからベースURLを動的に取得
-            $scheme = $this->request->is('https')? 'https' : 'http';
-            $host = $this->request->getHeaderLine('Host');
-            if (!$host) {
-                $host = $this->request->getEnv('HTTP_HOST')?: 'localhost';
-            }
-            $baseUrl = $scheme . '://' . $host;
+            // ベース URL は Host ヘッダではなく SITE_URL から導出する（issuer と同じ導出）
+            $baseUrl = OAuth2Util::getBaseUrl($this->request);
 
             $metadata = [
                 'resource' => $baseUrl . '/bc-mcp',
@@ -336,8 +331,7 @@ class Oauth2Controller extends AppController
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'Failed to generate protected resource metadata.',
-                    'debug_message' => $exception->getMessage()
+                    'error_description' => 'Failed to generate protected resource metadata.'
                 ]));
         }
     }
@@ -350,13 +344,8 @@ class Oauth2Controller extends AppController
     public function authorizationServerMetadata(): Response
     {
         try {
-            // 現在のリクエストからベースURLを動的に取得
-            $scheme = $this->request->is('https')? 'https' : 'http';
-            $host = $this->request->getHeaderLine('Host');
-            if (!$host) {
-                $host = $this->request->getEnv('HTTP_HOST')?: 'localhost';
-            }
-            $baseUrl = $scheme . '://' . $host;
+            // ベース URL は Host ヘッダではなく SITE_URL から導出する（issuer と同じ導出）
+            $baseUrl = OAuth2Util::getBaseUrl($this->request);
 
             $metadata = [
                 // RFC 8414 必須項目
@@ -399,8 +388,7 @@ class Oauth2Controller extends AppController
                 ->withType('application/json')
                 ->withStringBody(json_encode([
                     'error' => 'server_error',
-                    'error_description' => 'Failed to generate authorization server metadata.',
-                    'debug_message' => $exception->getMessage()
+                    'error_description' => 'Failed to generate authorization server metadata.'
                 ]));
         }
     }
@@ -504,6 +492,16 @@ class Oauth2Controller extends AppController
                 ->withStringBody(json_encode([
                     'error' => 'invalid_client_metadata',
                     'error_description' => $exception->getMessage()
+                ]));
+        } catch (\Throwable $throwable) {
+            // 型エラー等の内部例外は内容を応答に含めず、定型文で返す
+            Log::write('error', 'OAuth2 client registration error: ' . $throwable->getMessage(), ['scope' => ['mcp']]);
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_client_metadata',
+                    'error_description' => 'Invalid client metadata.'
                 ]));
         }
     }
@@ -624,6 +622,16 @@ class Oauth2Controller extends AppController
                 ->withStringBody(json_encode([
                     'error' => 'invalid_client_metadata',
                     'error_description' => $exception->getMessage()
+                ]));
+        } catch (\Throwable $throwable) {
+            // 型エラー等の内部例外は内容を応答に含めず、定型文で返す
+            Log::write('error', 'OAuth2 client registration error: ' . $throwable->getMessage(), ['scope' => ['mcp']]);
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'error' => 'invalid_client_metadata',
+                    'error_description' => 'Invalid client metadata.'
                 ]));
         }
     }

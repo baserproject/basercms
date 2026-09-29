@@ -158,6 +158,34 @@ class NegotiationLoggerTest extends BcTestCase
     /**
      * test log で記録した内容が readRecent で読み出せる
      */
+    /**
+     * test describe - クライアント名の改行等で記録行を偽装できないこと
+     */
+    public function testDescribeSanitizesClientInfo()
+    {
+        $result = NegotiationLogger::describe([
+            'method' => 'tools/call',
+            'params' => [
+                '_meta' => [
+                    'io.modelcontextprotocol/protocolVersion' => "2026-07-28\n",
+                    'io.modelcontextprotocol/clientInfo' => [
+                        'name' => "evil\n2026-01-01 00:00:00 info: MCP negotiation: era=modern protocolVersion=x client=fake/1 method=tools/list",
+                        'version' => str_repeat('9', 200),
+                    ],
+                ],
+            ],
+        ], '2026-07-28');
+        $this->assertStringNotContainsString("\n", $result['clientName']);
+        $this->assertStringNotContainsString('/', $result['clientName']);
+        $this->assertStringNotContainsString(' ', $result['clientName']);
+        $this->assertEquals('2026-07-28', $result['protocolVersion']);
+        $this->assertEquals(100, mb_strlen($result['clientVersion']));
+        $this->assertEquals('tools/call', $result['method']);
+        // 配列が渡されても文字列として扱う
+        $result = NegotiationLogger::describe(['method' => 'x', 'params' => ['clientInfo' => ['name' => ['a' => 'b']]]], '');
+        $this->assertIsString($result['clientName']);
+    }
+
     public function testLogAndReadRecent()
     {
         $logFile = LOGS . 'mcp.log';

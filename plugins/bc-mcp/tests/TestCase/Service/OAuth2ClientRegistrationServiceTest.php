@@ -43,6 +43,35 @@ class OAuth2ClientRegistrationServiceTest extends TestCase
     }
 
     /**
+     * test registerClient - メタデータの型・長さが検証されること
+     * @dataProvider invalidMetadataDataProvider
+     */
+    public function testRegisterClientRejectsInvalidMetadata(array $override): void
+    {
+        $this->expectException(\Exception::class);
+        $this->service->registerClient($override + [
+            'client_name' => 'Test Client',
+            'redirect_uris' => ['https://example.com/callback'],
+            'grant_types' => ['authorization_code'],
+            'scope' => 'mcp:read',
+        ], 'https://localhost');
+    }
+
+    public static function invalidMetadataDataProvider(): array
+    {
+        return [
+            [['client_name' => ['array']]],
+            [['client_name' => str_repeat('a', 101)]],
+            [['scope' => ['mcp:read']]],
+            [['scope' => 123]],
+            [['redirect_uris' => 'https://example.com/callback']],
+            [['contacts' => 'admin@example.com']],
+            [['contacts' => [['nested']]]],
+            [['software_id' => ['x']]],
+        ];
+    }
+
+    /**
      * Test registerClient method
      *
      * @return void
