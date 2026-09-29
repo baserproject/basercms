@@ -9,6 +9,7 @@ use BcMcp\OAuth2\Entity\User;
 use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
@@ -136,13 +137,7 @@ class Oauth2Controller extends BcAdminAppController
         // 管理 API（Api/Admin）の利用が許可されていないユーザーグループでは、
         // MCP 経由で管理 API 相当の操作ができてしまうため同意させない
         if (!$this->hasApiAdminPrefix($user)) {
-            return $this->response
-                ->withStatus(403)
-                ->withType('application/json')
-                ->withStringBody(json_encode([
-                    'error' => 'access_denied',
-                    'error_description' => 'The user is not allowed to use the admin API.',
-                ]));
+            throw new ForbiddenException(__d('baser_core', 'MCP を利用するには、ユーザーグループで管理 API（Api/Admin）の利用が許可されている必要があります。'));
         }
 
         // POSTリクエストの場合は、クエリもボディも読まずセッションの認可

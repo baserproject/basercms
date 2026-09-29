@@ -163,7 +163,8 @@ class Oauth2ConsentFlowTest extends BcTestCase
         $this->loginAdmin($this->getRequest(), 2);
         $this->get('/bc-mcp/oauth2/authorize?' . $this->authorizeQuery($client['client_id']));
         $this->assertResponseCode(403);
-        $this->assertStringContainsString('access_denied', (string)$this->_response->getBody());
+        // 管理画面のエラー画面で理由を表示する（JSON ではなく HTML）
+        $this->assertResponseContains('管理 API（Api/Admin）の利用が許可されている必要があります');
     }
 
     public function testApproveWithoutCsrfTokenIsRejected(): void
