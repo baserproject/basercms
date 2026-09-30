@@ -953,6 +953,7 @@ class UserActionsSchema extends BcSchema
             'BcFavorite',
             'BcMail',
             'BcSearchIndex',
+            'BcSeo',
             'BcThemeConfig',
             'BcThemeFile',
             'BcUploader',
