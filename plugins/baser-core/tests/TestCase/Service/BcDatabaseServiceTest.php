@@ -1026,6 +1026,7 @@ class UserActionsFqnSchema extends \\BaserCore\\Database\\Schema\\BcSchema
             'BcFavorite',
             'BcMail',
             'BcSearchIndex',
+            'BcSeo',
             'BcThemeConfig',
             'BcThemeFile',
             'BcUploader',
