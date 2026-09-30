@@ -5,12 +5,12 @@
  *
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
- * @since         5.3.2
+ * @since         5.2.11
  * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
- * 5.3.2 アップデーター
+ * 5.2.11 アップデーター
  *
  * キャッシュクリアを POST のみ受け付けるように変更したため（CSRF 対策）、
  * 既存のアクセスルールで method が GET になっているキャッシュクリアのルールを POST に書き換える。

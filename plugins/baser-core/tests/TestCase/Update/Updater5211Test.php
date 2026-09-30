@@ -5,7 +5,7 @@
  *
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
- * @since         5.3.2
+ * @since         5.2.11
  * @license       https://basercms.net/license/index.html MIT License
  */
 
@@ -17,9 +17,9 @@ use BaserCore\Utility\BcUpdateLog;
 use Cake\Core\Plugin;
 
 /**
- * 5.3.2 アップデーターのテスト
+ * 5.2.11 アップデーターのテスト
  */
-class Updater532Test extends BcTestCase
+class Updater5211Test extends BcTestCase
 {
 
     /**
@@ -43,7 +43,7 @@ class Updater532Test extends BcTestCase
         PermissionFactory::make(['id' => 3, 'user_group_id' => 2, 'url' => '/baser/admin/baser-core/utilities/credit', 'method' => 'GET', 'auth' => true])->persist();
         PermissionFactory::make(['id' => 4, 'user_group_id' => 3, 'url' => '/baser/admin/baser-core/utilities/clear_cache', 'method' => '*', 'auth' => true])->persist();
 
-        include Plugin::path('BaserCore') . 'config' . DS . 'update' . DS . '5.3.2' . DS . 'updater.php';
+        include Plugin::path('BaserCore') . 'config' . DS . 'update' . DS . '5.2.11' . DS . 'updater.php';
 
         $permissions = $this->getTableLocator()->get('BaserCore.Permissions');
         $this->assertEquals('POST', $permissions->get(1)->method);
@@ -52,7 +52,7 @@ class Updater532Test extends BcTestCase
         $this->assertEquals('*', $permissions->get(4)->method);
 
         // 再実行しても変わらない
-        include Plugin::path('BaserCore') . 'config' . DS . 'update' . DS . '5.3.2' . DS . 'updater.php';
+        include Plugin::path('BaserCore') . 'config' . DS . 'update' . DS . '5.2.11' . DS . 'updater.php';
         $this->assertEquals('POST', $permissions->get(1)->method);
     }
 
