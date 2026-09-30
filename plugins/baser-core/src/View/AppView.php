@@ -252,11 +252,44 @@ class AppView extends View
                 // element 名は DB 由来（ウィジェットの element、固定ページの page_template 等）の値が
                 // 渡ることがあるため、CakePHP 本体と同様に解決したパスがテンプレートパス配下で
                 // あることを検証する（`..` でテンプレート外の PHP を読み込ませない）
-                return $this->_checkFilePath($path . $name, $plugin);
+                return $this->checkElementFilePath($path . $name, $plugin);
             }
         }
 
         return false;
+    }
+
+    /**
+     * element のファイルパスが、いずれかのテンプレートパス配下にあるか検証する
+     *
+     * CakePHP 5.0 の View::_checkFilePath() は第2引数に基準パスを 1 つだけ受け取るため、
+     * CakePHP 5.2 以降と同様に、プラグインのテンプレートパス全体を基準として検証する。
+     * `BcBlog.../Blog/default/posts` のようにテンプレートパス内に収まる `..` は許可する。
+     *
+     * @param string $file 検証するファイルパス
+     * @param string|null $plugin プラグイン名
+     * @return string 解決後のファイルパス
+     * @throws \InvalidArgumentException テンプレートパス外を指す場合
+     * @checked
+     * @noTodo
+     */
+    protected function checkElementFilePath(string $file, ?string $plugin): string
+    {
+        if (!str_contains($file, '..')) {
+            return $file;
+        }
+        $absolute = realpath($file);
+        if ($absolute !== false) {
+            foreach ($this->_paths($plugin) as $path) {
+                if (str_starts_with($absolute, $path)) {
+                    return $absolute;
+                }
+            }
+        }
+        throw new \InvalidArgumentException(sprintf(
+            'Cannot use `%s` as a template, it is not within any view template path.',
+            $file
+        ));
     }
 
 }
