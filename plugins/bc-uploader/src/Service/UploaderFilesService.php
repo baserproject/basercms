@@ -280,7 +280,10 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      */
     public function isEditable(array $postData)
     {
-        if(!$this->uploaderConfigsService->get()->use_permission) return true;
+        // アップローダー設定が未登録の場合は get() が null を返すため null 安全に判定する。
+        // 設定なし、または use_permission が無効なら権限制限なし（編集可）。
+        $config = $this->uploaderConfigsService->get();
+        if(!$config || !$config->use_permission) return true;
         if(!isset($postData['user_id'])) return false;
         $user = BcUtil::loginUser();
         if(!$user) return false;
