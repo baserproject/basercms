@@ -1769,7 +1769,10 @@ class BcBaserHelper extends Helper
                 if(!isset($methods[$method][1])) continue;
                 $helper = $methods[$method][0];
                 $target = $methods[$method][1];
-                if(method_exists($pluginBaser->{$helper}, $target)) {
+                // is_callable は実メソッドだけでなく __call で委譲されるメソッド（例: TextHelper::truncate →
+                // Cake\Utility\Text::truncate）も true を返す。CakePHP アップデートで実メソッドが
+                // マジックメソッド化しても呼び出せるよう method_exists ではなく is_callable で判定する。
+                if(is_callable([$pluginBaser->{$helper}, $target])) {
                     return call_user_func_array([$pluginBaser->{$helper}, $target], $params);
                 }
             }
