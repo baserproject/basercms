@@ -106,6 +106,27 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * test update - SMTP パスワードは API レスポンス等の配列・JSON に含めず、保存はできること
+     */
+    public function testUpdateSmtpPasswordIsHiddenButSaved()
+    {
+        $this->SiteConfigs->update([
+            'smtp_user' => 'user@example.com',
+            'smtp_password' => 'secret-password'
+        ]);
+        $this->assertEquals('secret-password', $this->SiteConfigs->getValue('smtp_password'));
+        $this->assertEquals('user@example.com', $this->SiteConfigs->getValue('smtp_user'));
+        $siteConfig = $this->SiteConfigs->get();
+        $this->assertArrayNotHasKey('smtp_password', $siteConfig->toArray());
+        $this->assertStringNotContainsString('secret-password', json_encode($siteConfig));
+        $this->assertArrayHasKey('smtp_user', $siteConfig->toArray());
+
+        // パスワードを送らずに他の項目を更新しても、保存済みのパスワードは消えない
+        $this->SiteConfigs->update(['admin_theme' => 'admin_second']);
+        $this->assertEquals('secret-password', $this->SiteConfigs->getValue('smtp_password'));
+    }
+
+    /**
      * test isWritableEnv
      */
     public function testIsWritableEnv(): void
