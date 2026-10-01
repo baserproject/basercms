@@ -228,10 +228,13 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testTrash_return()
     {
-        $this->get('/baser/admin/baser-core/contents/trash_return/');
-        $this->assertResponseCode(404);
+        $this->enableCsrfToken();
         $id = $this->ContentsService->getTrashIndex()->first()->id;
+        // CSRF対策: GET では実行されない（405 Method Not Allowed）
         $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
+        $this->assertResponseCode(405);
+        // POST で復元される
+        $this->post("/baser/admin/baser-core/contents/trash_return/{$id}");
         $this->assertRedirect('/baser/admin/baser-core/contents/index');
         $this->assertResponseSuccess();
         $this->assertNotEmpty($this->ContentsService->get($id));

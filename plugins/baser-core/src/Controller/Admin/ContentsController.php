@@ -205,6 +205,8 @@ class ContentsController extends BcAdminAppController
      */
     public function trash_return(ContentsServiceInterface $service, $id)
     {
+        // CSRF対策: 状態を変更する処理のため POST のみ許可する（GET によるCSRFを防ぐ）
+        $this->request->allowMethod(['post']);
         if (empty($id)) {
             $this->ajaxError(500, __d('baser_core', '無効な処理です。'));
         }

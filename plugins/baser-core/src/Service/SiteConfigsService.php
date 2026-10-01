@@ -138,7 +138,11 @@ class SiteConfigsService implements SiteConfigsServiceInterface
             if (isset($siteConfig->site_url)) $this->putEnv('SITE_URL', $siteConfig->site_url);
         }
 
+        // toArray() は hidden の項目（smtp_password）を含まないため、保存対象には hidden の項目も加える
         $siteConfigArray = $siteConfig->toArray();
+        foreach($siteConfig->getHidden() as $field) {
+            if ($siteConfig->has($field)) $siteConfigArray[$field] = $siteConfig->get($field);
+        }
         unset($siteConfigArray['mode'],
             $siteConfigArray['site_url'],
             $siteConfigArray['dummy-site_url'],

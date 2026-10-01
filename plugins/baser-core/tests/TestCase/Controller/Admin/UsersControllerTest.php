@@ -296,6 +296,31 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Test edit_password 外部URLへのオープンリダイレクトを拒否する（M-4 回帰テスト）
+     */
+    public function testEdit_password_preventsOpenRedirect()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['password_1' => 'Testtest1234', 'password_2' => 'Testtest1234'];
+        // スキーム付き外部URLは拒否し、edit_password へ戻る
+        $this->post('/baser/admin/baser-core/users/edit_password?redirect=' . rawurlencode('https://evil.example.com'), $data);
+        $this->assertRedirect('/baser/admin/baser-core/users/edit_password');
+    }
+
+    /**
+     * Test edit_password 同一サイト内の絶対パスへのリダイレクトは許可する（M-4 回帰テスト）
+     */
+    public function testEdit_password_allowsLocalRedirect()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['password_1' => 'Testtest1234', 'password_2' => 'Testtest1234'];
+        $this->post('/baser/admin/baser-core/users/edit_password?redirect=/baser/admin/baser-core/contents/', $data);
+        $this->assertRedirect('/baser/admin/baser-core/contents/');
+    }
+
+    /**
      * Test delete method
      *
      * @return void

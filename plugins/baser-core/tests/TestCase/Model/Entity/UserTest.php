@@ -69,6 +69,18 @@ class UserTest extends BcTestCase
     }
 
     /**
+     * password / password_modified が JSON/配列出力で隠蔽されること（情報漏えい対策）
+     */
+    public function testHiddenFields()
+    {
+        $array = $this->User->toArray();
+        $this->assertArrayNotHasKey('password', $array);
+        $this->assertArrayNotHasKey('password_modified', $array);
+        // プロパティアクセスでは従来どおり取得できる（内部処理に影響しない）
+        $this->assertNotNull($this->User->password_modified);
+    }
+
+    /**
      * test isEditableUser
      */
     public function testIsEditableUser()

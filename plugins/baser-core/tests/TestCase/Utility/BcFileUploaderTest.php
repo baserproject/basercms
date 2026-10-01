@@ -1315,6 +1315,36 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertTrue($this->BcFileUploader->isUploadable('all', 'image/jpg', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
         $this->assertFalse($this->BcFileUploader->isUploadable('zip', '', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
         $this->assertTrue($this->BcFileUploader->isUploadable(['zip', 'jpg'], '', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
+        // 実行系拡張子は設定（all 等）に関わらず拒否される（RCE対策）
+        $this->assertFalse($this->BcFileUploader->isUploadable('all', '', ['name' => 'shell.php', 'tmp_name' => 'shell.php', 'error' => 0]));
+        $this->assertFalse($this->BcFileUploader->isUploadable(['php'], '', ['name' => 'shell.php', 'tmp_name' => 'shell.php', 'error' => 0]));
+        // 多重拡張子も拒否される
+        $this->assertFalse($this->BcFileUploader->isUploadable('all', '', ['name' => 'shell.php.jpg', 'tmp_name' => 'shell.php.jpg', 'error' => 0]));
+    }
+
+    /**
+     * test isDeniedFile 実行系拡張子の禁止判定
+     * @dataProvider isDeniedFileDataProvider
+     */
+    public function testIsDeniedFile($fileName, $expected)
+    {
+        $this->assertEquals($expected, $this->BcFileUploader->isDeniedFile($fileName));
+    }
+
+    public static function isDeniedFileDataProvider(): array
+    {
+        return [
+            ['shell.php', true],
+            ['shell.PHP', true],
+            ['shell.phtml', true],
+            ['shell.phar', true],
+            ['shell.cgi', true],
+            ['shell.php.jpg', true],   // 多重拡張子
+            ['archive.tar.gz', false],
+            ['photo.jpg', false],
+            ['document.pdf', false],
+            ['', false],
+        ];
     }
 
     /**
