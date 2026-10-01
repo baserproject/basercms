@@ -375,7 +375,7 @@ class MailFieldsTable extends MailAppTable
      */
     public function formatSource($source)
     {
-        $source = str_replace('|', "\n", $source);
+        $source = str_replace('|', "\n", (string) $source);
         $values = explode("\n", $source);
         $sourceList = [];
         foreach($values as $value) {
