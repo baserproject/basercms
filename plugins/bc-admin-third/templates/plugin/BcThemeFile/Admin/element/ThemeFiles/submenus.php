@@ -36,13 +36,16 @@ if ($isDefaultTheme) {
   $plugins = [0 => ['name' => $theme, 'title' => $theme]];
   $plugins = array_merge($plugins, \BaserCore\Utility\BcUtil::getEnablePlugins());
 }
+if(!$plugin) {
+  $plugin = $theme;
+}
 $this->BcBaser->js('BcThemeFile.admin/theme_files/submenus.bundle', false);
 $this->BcBaser->css('BcThemeFile.admin/style', false);
 ?>
 
 
 <div class="bca-main__submenu" id="ThemeFilesMenu">
-  <?php foreach($plugins as $k => $pluginVal): ?>
+  <?php foreach($plugins as $pluginVal): ?>
     <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($theme, $pluginVal['name'], '', 'front') &&
               !\BaserCore\Utility\BcUtil::getExistsWebrootDir($theme, $pluginVal['name'], '', 'front')) continue; ?>
 
@@ -53,7 +56,7 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
               $activeClass = '';
             }
            ?>
-    <h2 class="bca-main__submenu-title <?php echo $activeClass ?>" data-id="<?php echo ($k -1) ?>">
+    <h2 class="bca-main__submenu-title <?php echo $activeClass ?>">
       <?php echo $pluginVal['title'] ?>
     </h2>
     <ul class="bca-main__submenu-list clearfix">
