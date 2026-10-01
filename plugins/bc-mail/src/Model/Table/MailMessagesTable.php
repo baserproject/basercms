@@ -262,7 +262,7 @@ class MailMessagesTable extends MailAppTable
             if ($mailField->valid_ex && !empty($mailField->use_field)) {
                 $valids = explode(',', (string) $mailField->valid_ex);
                 foreach($valids as $valid) {
-                    $options = preg_split('/(?<!\\\)\|/', $mailField->options);
+                    $options = preg_split('/(?<!\\\)\|/', (string) $mailField->options);
                     /**
                      * 引数のペアから連想配列を構築する
                      *

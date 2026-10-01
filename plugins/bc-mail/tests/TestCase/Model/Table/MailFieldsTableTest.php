@@ -389,6 +389,8 @@ class MailFieldsTableTest extends BcTestCase
             ["１|２ ３|４|５", "１\n２ ３\n４\n５"],
             ["\r１|\r２|３|４|５", "１\n２\n３\n４\n５"],
             ["１\n２\n３\n４\n５", "１\n２\n３\n４\n５"],
+            // 選択リスト未入力（null）でも非推奨警告を出さずに空文字を返す
+            [null, ""],
             ["１|\n２|３|４|５", "１\n\n２\n３\n４\n５"]
         ];
     }
