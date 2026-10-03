@@ -226,4 +226,41 @@ class BcThemeFileService implements BcThemeFileServiceInterface
         }
         return false;
     }
+
+    /**
+     * 読み出し対象のパスがプラグイン配置ルート（App::path('plugins')）配下に収まっているか検証する
+     *
+     * パストラバーサル対策(GHSA-rqr8-gmx5-xvrr):
+     * 読み出し処理（ThemeFilesService::get() / ThemeFoldersService::get()）でも境界を検証し、
+     * config/ などテーマ・プラグイン外のファイルを読み出せないようにする。
+     * 管理画面ではテーマに加えてプラグイン自体のテンプレートも参照するため、
+     * 書き込み用の assertWithinThemeDir() より広いプラグイン配置ルートを境界とする。
+     * 配下でなければ BcException を投げる。
+     *
+     * @param string $path 検証対象のパス（ファイル or ディレクトリ）
+     * @return void
+     * @throws BcException
+     * @checked
+     * @noTodo
+     */
+    protected function assertWithinPluginsDir(string $path): void
+    {
+        $resolved = realpath($path);
+        if ($resolved === false) {
+            $resolved = $this->normalizePath($path);
+        }
+        $resolved = rtrim($resolved, DS) . DS;
+
+        foreach (App::path('plugins') as $root) {
+            $realRoot = realpath($root);
+            if ($realRoot === false) {
+                $realRoot = $this->normalizePath($root);
+            }
+            $realRoot = rtrim($realRoot, DS) . DS;
+            if (str_starts_with($resolved, $realRoot)) {
+                return;
+            }
+        }
+        throw new BcException(__d('baser_core', 'パスにテーマディレクトリ外への参照が含まれています。'));
+    }
 }

@@ -285,6 +285,21 @@ class ThemeFilesControllerTest extends BcTestCase
     }
 
     /**
+     * test view / edit - テーマ外のファイルを読み出さない（GHSA-rqr8-gmx5-xvrr）
+     */
+    public function test_view_rejectsTraversal()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        foreach(['view', 'edit'] as $action) {
+            $this->get('/baser/admin/bc-theme-file/theme_files/' . $action . '/BcThemeSample/layout/../../../../config/app.php');
+            $this->assertNotEquals(200, $this->_response->getStatusCode());
+            // config/app.php の内容（テキストエリアではエスケープされて出力される）が含まれないこと
+            $this->assertResponseNotContains(h("'defaultLocale'"));
+        }
+    }
+
+    /**
      * test copy
      */
     public function test_copy()

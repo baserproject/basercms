@@ -81,6 +81,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      */
     public function get(string $file)
     {
+        // パストラバーサル対策(GHSA-rqr8-gmx5-xvrr): 読み出しでも境界を検証する
+        $this->assertWithinPluginsDir($file);
         return new ThemeFile(['fullpath' => $file]);
     }
 
