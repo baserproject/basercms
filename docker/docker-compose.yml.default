@@ -21,11 +21,10 @@ services:
     volumes:
       - ../:/var/www/html:delegated
       - ./php/php.ini:/usr/local/etc/php/conf.d/99-custom.ini
-      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/zz-xdebug.ini
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       XDEBUG_MODE: "debug"
-      # Xdebug はトリガー時のみ起動する（php/xdebug.ini）。常時起動に戻す場合はコメントを外す
+      # Xdebug はイメージ側の設定でトリガー時のみ起動する。常時起動に戻す場合はコメントを外す
       # XDEBUG_SESSION: "1"
       COMPOSER_ALLOW_SUPERUSER: 1
     ports:
