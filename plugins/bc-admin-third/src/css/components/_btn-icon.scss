@@ -9,7 +9,10 @@
 
   // デフォルトボタン
   display: inline-block;
-  width: 1em;
+  // アイコンフォントは字形ごとに送り幅が違うため、幅を固定しないと
+  // 公開（publish）と非公開（unpublish）で後続のアイコンの位置がずれる。
+  // Font Awesome の fa-fw と同じ考え方で、字形によらず一定の幅を占めるようにする。
+  min-width: 1em;
   font-size: 1.8rem;
   line-height: 1;
   cursor: pointer;
@@ -24,6 +27,12 @@
 
   @mixin bca-btn-icon-common {
 
+  }
+
+  &::before {
+    display: inline-block;
+    width: 1.25em;
+    text-align: center;
   }
 
   // 公開
