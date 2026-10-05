@@ -420,6 +420,11 @@ class UtilitiesService implements UtilitiesServiceInterface
             'encoding' => 'UTF-8'
         ], $postData);
 
+        // コマンドラインなど、アップロードを伴わない経路向けにパス指定を受け付ける
+        if (!empty($postData['path'])) {
+            return $this->restoreDbFromPath($postData['path'], $postData['encoding']);
+        }
+
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
@@ -443,26 +448,50 @@ class UtilitiesService implements UtilitiesServiceInterface
         // パストラバーサル対策: クライアント提供のファイル名から basename() でディレクトリ要素を除去する
         $name = basename($uploaded['backup']->getClientFileName());
         $uploaded['backup']->moveTo($tmpPath . $name);
-        $bcZip = new BcZip();
-        if (!$bcZip->extract($tmpPath . $name, $tmpPath)) {
-            throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
-        }
-        unlink($tmpPath . $name);
+        return $this->restoreDbFromPath($tmpPath . $name, $postData['encoding']);
+    }
 
-        $result = true;
-        try {
-            /* @var \BaserCore\Service\BcDatabaseService $dbService */
-            $this->_loadBackup($tmpPath, $postData['encoding']);
-        } catch (\Throwable $e) {
-            throw $e;
+    /**
+     * バックアップZIPのパスを指定してデータベースをリストアする
+     *
+     * アップロードを伴わないため、コマンドラインからも利用できる。
+     *
+     * @param string $path バックアップZIPのパス
+     * @param string $encoding
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function restoreDbFromPath(string $path, string $encoding = 'UTF-8'): bool
+    {
+        set_time_limit(0);
+
+        if (!is_file($path)) {
+            throw new BcException(__d('baser_core', 'バックアップファイルが見つかりません。'));
         }
+
+        $tmpPath = TMP . 'schema' . DS;
+        if(!is_dir($tmpPath)) {
+            (new BcFolder($tmpPath))->create();
+        }
+
+        $bcZip = new BcZip();
+        if (!$bcZip->extract($path, $tmpPath)) {
+            throw new BcException(__d('baser_core', 'ZIPファイルの展開に失敗しました。'));
+        }
+        // 展開元が一時ディレクトリ内にある場合（アップロード経由）のみ削除する
+        if (dirname($path) . DS === $tmpPath) {
+            unlink($path);
+        }
+
+        $this->_loadBackup($tmpPath, $encoding);
 
         $dbService = $this->getService(BcDatabaseServiceInterface::class);
         $dbService->updateSequence();
 
         $this->resetTmpSchemaFolder();
         BcUtil::clearAllCache();
-        return $result;
+        return true;
     }
 
     /**

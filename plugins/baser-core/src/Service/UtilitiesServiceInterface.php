@@ -116,4 +116,13 @@ interface UtilitiesServiceInterface
      */
     public function restoreDb(array $postData, array $uploaded): bool;
 
+    /**
+     * バックアップZIPのパスを指定してデータベースをリストアする
+     *
+     * @param string $path
+     * @param string $encoding
+     * @return bool
+     */
+    public function restoreDbFromPath(string $path, string $encoding = 'UTF-8'): bool;
+
 }
