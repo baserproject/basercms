@@ -11,7 +11,9 @@
 
 namespace BcSearchIndex;
 use BaserCore\BcPlugin;
+use BcSearchIndex\Command\ReconstructCommand;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
+use Cake\Console\CommandCollection;
 use Cake\Core\ContainerInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -33,6 +35,21 @@ class BcSearchIndexPlugin extends BcPlugin
     public function services(ContainerInterface $container): void
     {
         $container->addServiceProvider(new BcSearchIndexServiceProvider());
+    }
+
+    /**
+     * コマンドを登録する
+     *
+     * @param CommandCollection $commands
+     * @return CommandCollection
+     * @checked
+     * @noTodo
+     */
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        $commands = parent::console($commands);
+        $commands->add('search_index reconstruct', ReconstructCommand::class);
+        return $commands;
     }
 
 }
