@@ -887,4 +887,31 @@ class BcValidation extends Validation
         return isset($parsedUrl['path']) && preg_match('/^\/[a-zA-Z0-9\-_\/]*$/', $parsedUrl['path']);
     }
 
+    /**
+     * 登録済みのショートコードを含まないことを確認する
+     *
+     * ショートコードはフロントの表示時にページ全体で展開されるため、
+     * 訪問者の入力値に含まれると任意のショートコードを実行されてしまう
+     *
+     * @param mixed $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function notContainsShortCode($value): bool
+    {
+        if (!is_string($value) || $value === '') return true;
+        $shortCodes = Configure::read('BcShortCode');
+        if (!$shortCodes || !is_array($shortCodes)) return true;
+        foreach($shortCodes as $values) {
+            foreach((array)$values as $shortCode) {
+                if (preg_match('/\[' . preg_quote($shortCode, '/') . '(\s|\])/', $value)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

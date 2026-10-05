@@ -774,4 +774,26 @@ class BcValidationTest extends BcTestCase
         ];
     }
 
+    /**
+     * test notContainsShortCode
+     * @dataProvider notContainsShortCodeDataProvider
+     */
+    public function test_notContainsShortCode($value, $expect)
+    {
+        $this->assertEquals($expect, $this->BcValidation->notContainsShortCode($value));
+    }
+
+    public static function notContainsShortCodeDataProvider()
+    {
+        return [
+            ['', true],
+            [null, true],
+            ['普通のコメントです。[注] も書けます。', true],
+            ['[BcBaser.getSitemapList]', true],
+            ['[BcBaser.getSitemap]', false],
+            ['前置き [BcBaser.getGoogleMaps apiKey|k] 後ろ', false],
+            ["[Mail.getForm\n1]", false],
+        ];
+    }
+
 }

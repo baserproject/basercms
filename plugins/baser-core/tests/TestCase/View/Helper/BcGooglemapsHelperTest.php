@@ -11,9 +11,12 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcFrontAppView;
 use BaserCore\View\Helper\BcGoogleMapsHelper;
 use BaserCore\View\Helper\BcTextHelper;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * text helper library.
@@ -23,6 +26,8 @@ use BaserCore\View\Helper\BcTextHelper;
  */
 class BcGooglemapsHelperTest extends BcTestCase
 {
+
+    use ScenarioAwareTrait;
 
     /**
      * set up
@@ -75,6 +80,37 @@ class BcGooglemapsHelperTest extends BcTestCase
 //			$this->assertMatchesRegularExpression('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
 //		}
 
+    }
+
+    /**
+     * 読み込むスクリプトは Google Maps API に限定する
+     */
+    public function testLoad_restrictApiBaseUrl()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/')
+            ->withAttribute('currentSite', $this->getTableLocator()->get('BaserCore.Sites')->get(1));
+        $view = new BcFrontAppView($request);
+        $view->setTheme('BcFront');
+        $helper = new BcGoogleMapsHelper($view);
+        $options = [
+            'title' => 'test',
+            'address' => 'test',
+            'latitude' => '1',
+            'longitude' => '1',
+            'apiKey' => 'k&callback=x',
+        ];
+
+        // Google 以外の URL は既定の URL に置き換える
+        $helper->load($options + ['apiBaseUrl' => '//example.com/test.js?']);
+        $script = $view->fetch('script');
+        $this->assertStringNotContainsString('example.com', $script);
+        $this->assertStringContainsString('https://maps.google.com/maps/api/js?key=k%26callback%3Dx', $script);
+
+        // Google Maps API の URL はそのまま利用できる
+        $view->assign('script', '');
+        $helper->load($options + ['apiBaseUrl' => 'https://maps.googleapis.com/maps/api/js']);
+        $this->assertStringContainsString('https://maps.googleapis.com/maps/api/js?key=', $view->fetch('script'));
     }
 
 //	public static function loadDataProvider()
