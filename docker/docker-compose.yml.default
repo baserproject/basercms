@@ -21,7 +21,7 @@ services:
     volumes:
       - ../:/var/www/html:delegated
       - ./php/php.ini:/usr/local/etc/php/conf.d/99-custom.ini
-      - ./php/opcache.ini:/usr/local/etc/php/conf.d/99-opcache.ini
+      - ./php/opcache.ini:/usr/local/etc/php/conf.d/zz-opcache.ini
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       XDEBUG_MODE: "debug"
