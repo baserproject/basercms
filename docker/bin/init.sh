@@ -6,6 +6,15 @@
 
 echo "[$(date +"%Y/%m/%d %H:%M:%S")] Init Container start."
 
+# OPcache
+# 設定値は docker/php/opcache.ini（conf.d/99-opcache.ini にマウント）で指定している。
+# 拡張自体はイメージによって組み込み済み（php8.5 等）と .so 提供（php8.1〜8.4 等）があるため、
+# 未ロードのときだけ docker-php-ext-enable で有効化する（毎回の起動時に確認する）。
+if ! php -m | grep -q "Zend OPcache"; then
+    echo "[$(date +"%Y/%m/%d %H:%M:%S")] Enable OPcache."
+    docker-php-ext-enable opcache
+fi
+
 if [ ! -e '/var/www/html/docker_inited' ]; then
 
     # init baserCMS
