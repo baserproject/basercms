@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\BaseMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreateOauth2Clients extends BaseMigration
+class CreateOauth2Clients extends BcMigration
 {
     /**
      * Change Method.
