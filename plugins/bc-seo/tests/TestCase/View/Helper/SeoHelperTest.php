@@ -18,6 +18,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcSeo\Test\Factory\SeoMetaFactory;
 use BcSeo\View\Helper\SeoHelper;
+use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -40,13 +41,51 @@ class SeoHelperTest extends BcTestCase
 
     /**
      * testInitialize
+     *
+     * canonicalUrl に false を入れるとコアのカノニカル出力が止まるため、変更しない
      */
     public function testInitialize()
     {
         $view = new View();
         $seoHelper = new SeoHelper($view);
         $seoHelper->initialize([]);
-        $this->assertFalse($view->get('canonicalUrl'));
+        $this->assertNull($view->get('canonicalUrl'));
+    }
+
+    /**
+     * testBeforeRender
+     */
+    public function testBeforeRender()
+    {
+        // カノニカル URL の設定があれば canonicalUrl に渡す
+        $view = new View($this->getRequest('/'));
+        $seoHelper = $this->getMockBuilder(SeoHelper::class)
+            ->setConstructorArgs([$view])
+            ->onlyMethods(['getMeta'])
+            ->getMock();
+        $seoHelper->method('getMeta')->willReturn(['canonical_url' => ['value' => 'https://example.com/canonical']]);
+        $seoHelper->beforeRender(new Event('View.beforeRender', $view), '');
+        $this->assertEquals('https://example.com/canonical', $view->get('canonicalUrl'));
+
+        // 設定が無ければ変更しない
+        $view = new View($this->getRequest('/'));
+        $seoHelper = $this->getMockBuilder(SeoHelper::class)
+            ->setConstructorArgs([$view])
+            ->onlyMethods(['getMeta'])
+            ->getMock();
+        $seoHelper->method('getMeta')->willReturn(['canonical_url' => ['value' => '']]);
+        $seoHelper->beforeRender(new Event('View.beforeRender', $view), '');
+        $this->assertNull($view->get('canonicalUrl'));
+
+        // 管理画面では何もしない
+        $view = new View($this->getRequest('/baser/admin'));
+        $seoHelper = $this->getMockBuilder(SeoHelper::class)
+            ->setConstructorArgs([$view])
+            ->onlyMethods(['getMeta'])
+            ->getMock();
+        $seoHelper->expects($this->never())->method('getMeta');
+        $seoHelper->beforeRender(new Event('View.beforeRender', $view), '');
+        $this->assertNull($view->get('canonicalUrl'));
     }
 
     /**
