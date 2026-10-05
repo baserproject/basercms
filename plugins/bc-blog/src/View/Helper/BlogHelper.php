@@ -705,6 +705,11 @@ class BlogHelper extends Helper
         $categoryPath = $blogCategoriesTable->find('path', for: $blogCategoryId);
         $blogContentId = $blogCategory->blog_content_id;
         $this->setContent($blogContentId);
+        // 記事が見つからないページなど、コンテンツを特定できない場合は
+        // currentContent が null のままになる。URL を組み立てられないので何も返さない。
+        if (!$this->currentContent) {
+            return '';
+        }
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->findByUrl($this->currentContent->url);
         $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->use_subdomain), false);
