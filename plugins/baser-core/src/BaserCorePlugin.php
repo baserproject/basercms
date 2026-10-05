@@ -103,7 +103,8 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
          * コンソール判定
          * BcUtil::isConsole で利用
          */
-        $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
+        // 'cli-server'（PHP ビルトインサーバー）は Web リクエストなのでコンソール扱いにしない
+        $_ENV['IS_CONSOLE'] = (php_sapi_name() === 'cli');
 
         /**
          * 言語設定

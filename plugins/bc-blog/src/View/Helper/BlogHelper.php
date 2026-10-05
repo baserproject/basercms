@@ -97,6 +97,13 @@ class BlogHelper extends Helper
     public $content = null;
 
     /**
+     * isSameSiteBlogContent の判定結果のリクエスト内キャッシュ
+     *
+     * @var array<string, bool>
+     */
+    private array $isSameSiteBlogContentCache = [];
+
+    /**
      * コンストラクタ
      *
      * @param View $View Viewオブジェクト
@@ -2006,6 +2013,26 @@ class BlogHelper extends Helper
      * @unitTest
      */
     public function isSameSiteBlogContent($blogContentId)
+    {
+        // 記事リンク・カテゴリリンクの生成のたびに呼ばれるため、判定結果をリクエスト内で保持する
+        // 判定は currentContent（エイリアス）にも依存するのでキーに含める
+        $cacheKey = $blogContentId . '|' . ($this->currentContent->alias_id ?? '');
+        if (!array_key_exists($cacheKey, $this->isSameSiteBlogContentCache)) {
+            $this->isSameSiteBlogContentCache[$cacheKey] = $this->checkSameSiteBlogContent($blogContentId);
+        }
+        return $this->isSameSiteBlogContentCache[$cacheKey];
+    }
+
+    /**
+     * 指定したブログコンテンツIDが、現在のサイトと同じかどうか判定する（キャッシュを使わない実体）
+     *
+     * @param int $blogContentId ブログコンテンツID
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function checkSameSiteBlogContent($blogContentId): bool
     {
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $content = $contentsTable->find()->where([

@@ -589,6 +589,30 @@ class BcContentsHelperTest extends BcTestCase
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
+    /**
+     * 同じコンテンツ ID に対する isParentId は 2 回目以降 DB に問い合わせない
+     * （グローバルメニューでメニュー項目ごとに呼ばれるため）
+     */
+    public function testIsParentIdDoesNotQueryAgainForSameId()
+    {
+        $logger = new class extends \Psr\Log\AbstractLogger {
+            public array $logs = [];
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->logs[] = (string)$message;
+            }
+        };
+        $driver = $this->getTableLocator()->get('BaserCore.Contents')->getConnection()->getDriver();
+        $driver->setLogger($logger);
+        $this->assertTrue($this->BcContents->isParentId(5, 1));
+        $queriesAfterFirst = count($logger->logs);
+        $this->assertFalse($this->BcContents->isParentId(5, 2));
+        $this->assertTrue($this->BcContents->isParentId(5, 1));
+        $driver->disableQueryLogging();
+        $this->assertGreaterThan(0, $queriesAfterFirst);
+        $this->assertCount($queriesAfterFirst, $logger->logs, '同じ ID の 2 回目以降でクエリが発行されています');
+    }
+
     public static function isParentIdDataProvider()
     {
         return [

@@ -1612,6 +1612,30 @@ class BlogHelperTest extends BcTestCase
     }
 
     /**
+     * 同じブログコンテンツ ID に対する isSameSiteBlogContent は 2 回目以降 DB に問い合わせない
+     * （記事リンク・カテゴリリンクの生成のたびに呼ばれるため）
+     */
+    public function testIsSameSiteBlogContentDoesNotQueryAgainForSameId()
+    {
+        $logger = new class extends \Psr\Log\AbstractLogger {
+            public array $logs = [];
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->logs[] = (string)$message;
+            }
+        };
+        $driver = $this->getTableLocator()->get('BaserCore.Contents')->getConnection()->getDriver();
+        $driver->setLogger($logger);
+        $first = $this->Blog->isSameSiteBlogContent(1);
+        $queriesAfterFirst = count($logger->logs);
+        $second = $this->Blog->isSameSiteBlogContent(1);
+        $driver->disableQueryLogging();
+        $this->assertSame($first, $second);
+        $this->assertGreaterThan(0, $queriesAfterFirst);
+        $this->assertCount($queriesAfterFirst, $logger->logs, '同じ ID の 2 回目でクエリが発行されています');
+    }
+
+    /**
      * getCategoryByName
      * @dataProvider getCategoryByNameDataprovider
      */

@@ -313,19 +313,28 @@ class ThemeFilesServiceTest extends BcTestCase
             'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
             'assets' => true
         ];
-        //対象メソッドをコール
-        $rs = $this->ThemeFileService->copyToTheme($param);
-        //戻る値を確認
-        $this->assertEquals($rs, '/plugins/BcColumn/webroot/css/bge_style.css');
+        // コピー先には BcColumn 本体の bge_style.css が存在するため、上書き前に退避し、テスト後に必ず戻す
         $copiedFilePath = '/var/www/html/plugins/BcColumn/webroot/css/bge_style.css';
-        //実際にファイルが作成されいてるか確認すること
-        $this->assertTrue(file_exists($copiedFilePath));
-        //ファイルの中身を確認
-        $this->assertTextContains('.cke_editable {
+        $backupPath = $copiedFilePath . '.bak';
+        $existed = file_exists($copiedFilePath);
+        if ($existed) copy($copiedFilePath, $backupPath);
+        try {
+            //対象メソッドをコール
+            $rs = $this->ThemeFileService->copyToTheme($param);
+            //戻る値を確認
+            $this->assertEquals($rs, '/plugins/BcColumn/webroot/css/bge_style.css');
+            //実際にファイルが作成されいてるか確認すること
+            $this->assertTrue(file_exists($copiedFilePath));
+            //ファイルの中身を確認
+            $this->assertTextContains('.cke_editable {
   padding: 15px;
 }', file_get_contents($copiedFilePath));
-        //作成されたファイルを削除
-        unlink($copiedFilePath);
+        } finally {
+            //作成されたファイルを削除し、元からあったファイルは戻す
+            if (file_exists($copiedFilePath)) unlink($copiedFilePath);
+            if ($existed) rename($backupPath, $copiedFilePath);
+        }
+        $this->assertSame($existed, file_exists($copiedFilePath), 'テスト前後で bge_style.css の有無が変わっています');
     }
 
     /**

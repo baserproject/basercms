@@ -67,6 +67,23 @@ class SitesTable extends AppTable
     private $changedAlias = false;
 
     /**
+     * findByUrl のリクエスト内キャッシュ
+     *
+     * URL 生成などから 1 リクエストで何十回も同じ URL で呼ばれるため、
+     * 結果をインスタンス内に保持する。サイトの保存・削除時に破棄する。
+     *
+     * @var array<string, EntityInterface|null>
+     */
+    private array $findByUrlCache = [];
+
+    /**
+     * getRootMain のリクエスト内キャッシュ
+     *
+     * @var EntityInterface|null|false false は未取得
+     */
+    private $rootMainCache = false;
+
+    /**
      * Initialize
      *
      * @param array $config テーブル設定
@@ -280,7 +297,50 @@ class SitesTable extends AppTable
      */
     public function getRootMain($options = [])
     {
-        return $this->find()->where(['main_site_id IS' => null])->first();
+        if ($this->rootMainCache !== false) {
+            return $this->rootMainCache;
+        }
+        $site = $this->find()->where(['main_site_id IS' => null])->first();
+        // 見つからない場合（インストール直後やテストでデータ投入前）はキャッシュしない
+        if ($site) {
+            $this->rootMainCache = $site;
+        }
+        return $site;
+    }
+
+    /**
+     * findByUrl / getRootMain のリクエスト内キャッシュを破棄する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function clearFindByUrlCache(): void
+    {
+        $this->findByUrlCache = [];
+        $this->rootMainCache = false;
+    }
+
+    /**
+     * 削除時にリクエスト内キャッシュを破棄する
+     *
+     * @param EntityInterface $entity
+     * @param array $options
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(EntityInterface $entity, array $options = []): bool
+    {
+        // findByUrl / getRootMain のリクエスト内キャッシュを破棄する
+        // - 削除前: afterDelete 内（サブサイトのコンテンツ付け替え等）で findByUrl が呼ばれても古い値を返さないようにする
+        // - 削除後: afterDelete の処理中に再キャッシュされた削除前の値を残さないようにする
+        $this->clearFindByUrlCache();
+        $result = parent::delete($entity, $options);
+        $this->clearFindByUrlCache();
+        return $result;
     }
 
     /**
@@ -452,6 +512,30 @@ class SitesTable extends AppTable
      * @unitTest
      */
     public function findByUrl(string $url): ?EntityInterface
+    {
+        // 判定に使うドメイン情報もキーに含める（リクエスト内で BcEnv.host が変わるテスト等への配慮）
+        $cacheKey = $url . '|' . BcUtil::getCurrentDomain() . '|' . BcUtil::getMainDomain() . '|' . BcUtil::getSubDomain();
+        if (array_key_exists($cacheKey, $this->findByUrlCache)) {
+            return $this->findByUrlCache[$cacheKey];
+        }
+        $site = $this->findByUrlWithoutCache($url);
+        // 見つからない場合（データ投入前など）はキャッシュしない
+        if ($site) {
+            $this->findByUrlCache[$cacheKey] = $site;
+        }
+        return $site;
+    }
+
+    /**
+     * URLよりサイトを取得する（キャッシュを使わない実体）
+     *
+     * @param string $url
+     * @return Site|EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function findByUrlWithoutCache(string $url): ?EntityInterface
     {
         if (!$url) {
             $url = '/';
@@ -790,7 +874,13 @@ class SitesTable extends AppTable
         EntityInterface $entity,
         array $options = []
     ): EntityInterface|false {
+        // findByUrl / getRootMain のリクエスト内キャッシュを破棄する
+        // （afterSave はイベントマネージャーから外されることがあるため、ここで行う）
+        // - 保存前: afterSave 内（saveSiteRoot 等）で findByUrl が呼ばれても古い値を返さないようにする
+        // - 保存後: beforeSave / afterSave の処理中に再キャッシュされた保存前の値を残さないようにする
+        $this->clearFindByUrlCache();
         $success = parent::save($entity, $options);
+        $this->clearFindByUrlCache();
         $request = Router::getRequest();
         if($success && $request) {
             $session = Router::getRequest()->getSession();

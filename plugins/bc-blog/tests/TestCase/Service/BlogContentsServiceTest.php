@@ -82,6 +82,59 @@ class BlogContentsServiceTest extends BcTestCase
     }
 
     /**
+     * 同じ ID・同じオプションの get は同一リクエスト内で DB に問い合わせ直さない
+     * （ブログの各ウィジェットが同じブログを繰り返し取得するため）
+     */
+    public function test_getIsMemoizedWithinRequest()
+    {
+        BlogContentFactory::make(['id' => 60, 'description' => 'test get'])->persist();
+        ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'entity_id' => 60, 'title' => 'title test get', 'site_id' => 60])->persist();
+        SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
+        $logger = $this->attachQueryLogger();
+        $first = $this->BlogContentsService->get(60);
+        $queriesAfterFirst = count($logger->logs);
+        $second = $this->BlogContentsService->get(60);
+        $this->detachQueryLogger();
+        $this->assertGreaterThan(0, $queriesAfterFirst);
+        $this->assertSame($first->id, $second->id);
+        $this->assertCount($queriesAfterFirst, $logger->logs, '2回目の get でクエリが発行されています');
+    }
+
+    /**
+     * 更新するとメモ化した get の結果が破棄される
+     */
+    public function test_getMemoIsClearedOnUpdate()
+    {
+        BlogContentFactory::make(['id' => 60, 'description' => 'before'])->persist();
+        ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'entity_id' => 60, 'title' => 'title', 'site_id' => 60])->persist();
+        SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
+        $blogContent = $this->BlogContentsService->get(60);
+        $this->BlogContentsService->update($blogContent, ['description' => 'after']);
+        $this->assertSame('after', $this->BlogContentsService->get(60)->description);
+    }
+
+    /**
+     * クエリログを収集するロガーを接続する
+     */
+    private function attachQueryLogger(): object
+    {
+        $logger = new class extends \Psr\Log\AbstractLogger {
+            public array $logs = [];
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->logs[] = (string)$message;
+            }
+        };
+        $this->getTableLocator()->get('BcBlog.BlogContents')->getConnection()->getDriver()->setLogger($logger);
+        return $logger;
+    }
+
+    private function detachQueryLogger(): void
+    {
+        $this->getTableLocator()->get('BcBlog.BlogContents')->getConnection()->getDriver()->disableQueryLogging();
+    }
+
+    /**
      * test getIndex
      */
     public function test_getIndex()
