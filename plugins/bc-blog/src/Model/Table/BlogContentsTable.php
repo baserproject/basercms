@@ -181,6 +181,33 @@ class BlogContentsTable extends BlogAppTable
     }
 
     /**
+     * 配下のブログ記事の検索インデックスを作り直す
+     *
+     * ブログ記事は Contents で管理されないため、
+     * ContentsService::saveSearchIndex() の children では辿れない。
+     * そのままだとブログを非公開にしても記事の検索インデックスが追従せず、
+     * サイト内検索やサイトマップに出続ける（サイトマップには 404 になる URL が載る）。
+     *
+     * @param EntityInterface $entity BlogContent
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function saveChildrenSearchIndex(EntityInterface $entity): void
+    {
+        if (!Plugin::isLoaded('BcSearchIndex')) return;
+        $blogPosts = $this->BlogPosts->find()
+            ->where(['BlogPosts.blog_content_id' => $entity->id])
+            ->all();
+        foreach($blogPosts as $blogPost) {
+            $searchIndex = $this->BlogPosts->createSearchIndex($blogPost);
+            if ($searchIndex) {
+                $this->BlogPosts->saveSearchIndex($searchIndex);
+            }
+        }
+    }
+
+    /**
      * 関連するブログ記事の検索インデックスを作成する
      *
      * @param EntityInterface $entity

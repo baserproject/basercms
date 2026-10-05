@@ -1065,6 +1065,12 @@ class ContentsService implements ContentsServiceInterface
             if(!$tables[$content->type]->save($entity)) {
                 $this->Contents->getConnection()->rollback();
             }
+            // コンテンツに紐づく子データが独自に検索インデックスを持つ場合に備えた拡張点。
+            // ブログ記事のように Contents で管理されない子データは children では辿れないため、
+            // テーブル側に任せる。
+            if (method_exists($tables[$content->type], 'saveChildrenSearchIndex')) {
+                $tables[$content->type]->saveChildrenSearchIndex($entity);
+            }
         }
         $this->Contents->getConnection()->commit();
     }
