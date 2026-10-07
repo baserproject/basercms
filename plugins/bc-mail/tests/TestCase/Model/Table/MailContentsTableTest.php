@@ -124,8 +124,8 @@ class MailContentsTableTest extends BcTestCase
             'ssl_on' => ''
         ]);
 
-        $this->assertEquals('メールフォームテンプレート名は半角のみで入力してください。', current($errors['form_template']));
-        $this->assertEquals('送信メールテンプレートは半角のみで入力してください。', current($errors['mail_template']));
+        $this->assertEquals('メールフォームテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。', current($errors['mail_template']));
     }
 
     public function testInputTypeErrors()
@@ -423,8 +423,8 @@ class MailContentsTableTest extends BcTestCase
 
         //halfText
         $errors = $validator->validate(['form_template' => 'カタカナ', 'mail_template' => 'カタカナ']);
-        $this->assertEquals('メールフォームテンプレート名は半角のみで入力してください。', current($errors['form_template']));
-        $this->assertEquals('送信メールテンプレートは半角のみで入力してください。', current($errors['mail_template']));
+        $this->assertEquals('メールフォームテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。', current($errors['form_template']));
+        $this->assertEquals('送信メールテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。', current($errors['mail_template']));
 
         //redirect_urlのURL形式ではない
         $errors = $validator->validate(['redirect_url' => 'abc']);

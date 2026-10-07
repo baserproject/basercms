@@ -607,6 +607,7 @@ class BlogContentsTableTest extends BcTestCase
             ]
         ]);
         $this->assertSame([
+            'regex' => 'コンテンツテンプレート名は半角英数字、アンダースコア、ハイフンのみで入力してください。',
             'halfText' => 'コンテンツテンプレート名は半角で入力してください。',
         ], $templateHalfTextRequest->getErrors()['template']);
 
