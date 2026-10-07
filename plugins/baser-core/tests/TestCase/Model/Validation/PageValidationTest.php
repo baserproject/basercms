@@ -69,6 +69,9 @@ class PageValidationTest extends BcTestCase
         return [
             [''],
             ['<?php $this->BcBaser->setTitle(\'test\');'],
+            // 本文が大きい場合でも exec() がシェルの引数長の上限（Linuxの場合 MAX_ARG_STRLEN、
+            // 通常128KiB）で fork に失敗し、構文エラーと誤判定しないことを確認する
+            [str_repeat('a', 200000)],
         ];
     }
 
