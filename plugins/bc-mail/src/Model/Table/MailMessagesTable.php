@@ -24,6 +24,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Validation\Validator;
+use Psr\Http\Message\UploadedFileInterface;
 use Cake\View\View;
 
 /**
@@ -214,6 +215,30 @@ class MailMessagesTable extends MailAppTable
     }
 
     /**
+     * 送信されたファイルのアップロードエラーコードを取得する
+     *
+     * CakePHP 5 ではアップロードされたファイルは UploadedFileInterface の
+     * オブジェクトとしてリクエストデータに入るため、$_FILES 時代の配列として
+     * 添字でアクセスすると Error になる。
+     * 配列で渡ってくる場合にも備えて、どちらの形でも受け取れるようにしている。
+     *
+     * @param mixed $file リクエストデータ中のファイル項目の値
+     * @return int|null アップロードエラーコード。判定できない場合は null
+     * @checked
+     * @noTodo
+     */
+    protected function getUploadError(mixed $file): ?int
+    {
+        if ($file instanceof UploadedFileInterface) {
+            return $file->getError();
+        }
+        if (is_array($file) && isset($file['error'])) {
+            return (int)$file['error'];
+        }
+        return null;
+    }
+
+    /**
      * バリデーションをを個別に設定する
      *
      * @return void
@@ -292,8 +317,8 @@ class MailMessagesTable extends MailAppTable
                         case 'VALID_MAX_FILE_SIZE':
                             if (
                                 !empty($options['maxFileSize']) &&
-                                (isset($postData[$mailField->field_name]['error']) &&
-                                    $postData[$mailField->field_name]['error'] !== UPLOAD_ERR_NO_FILE)
+                                $this->getUploadError($postData[$mailField->field_name] ?? null) !== null &&
+                                $this->getUploadError($postData[$mailField->field_name] ?? null) !== UPLOAD_ERR_NO_FILE
                             ) {
                                 $validator->add($mailField->field_name, [
                                     'fileCheck' => [
