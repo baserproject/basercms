@@ -24,7 +24,8 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       XDEBUG_MODE: "debug"
-      XDEBUG_SESSION: "1"
+      # Xdebug はイメージ側の設定でトリガー時のみ起動する。常時起動に戻す場合はコメントを外す
+      # XDEBUG_SESSION: "1"
       COMPOSER_ALLOW_SUPERUSER: 1
     ports:
       - "80:80"
