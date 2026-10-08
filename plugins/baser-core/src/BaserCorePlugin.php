@@ -18,6 +18,7 @@ use Authentication\Authenticator\SessionAuthenticator;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Command\ComposerCommand;
 use BaserCore\Command\CreateJwtCommand;
+use BaserCore\Command\RestoreDbCommand;
 use BaserCore\Command\CreateReleaseCommand;
 use BaserCore\Command\SetupInstallCommand;
 use BaserCore\Command\SetupTestCommand;
@@ -845,6 +846,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
         $commands->add('create release', CreateReleaseCommand::class);
         $commands->add('setup install', SetupInstallCommand::class);
         $commands->add('create jwt', CreateJwtCommand::class);
+        $commands->add('bc_utility restore_db', RestoreDbCommand::class);
         return $commands;
     }
 
