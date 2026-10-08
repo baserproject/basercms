@@ -45,6 +45,16 @@ class BlogContentsService implements BlogContentsServiceInterface
     public BlogContentsTable|Table $BlogContents;
 
     /**
+     * get() のリクエスト内キャッシュ
+     *
+     * ブログの各ウィジェットやヘルパが同じブログコンテンツを繰り返し取得するため、
+     * ID とオプションをキーに結果を保持する。更新・作成・コピー・削除時に破棄する。
+     *
+     * @var array<string, EntityInterface>
+     */
+    private array $getCache = [];
+
+    /**
      * Construct
      *
      * @checked
@@ -149,6 +159,40 @@ class BlogContentsService implements BlogContentsServiceInterface
             'contain' => ['Contents' => ['Sites']]
         ], $options);
 
+        $cacheKey = $id . '|' . json_encode($options);
+        if (array_key_exists($cacheKey, $this->getCache)) {
+            return $this->getCache[$cacheKey];
+        }
+        $result = $this->getWithoutCache($id, $options);
+        $this->getCache[$cacheKey] = $result;
+        return $result;
+    }
+
+    /**
+     * get() のリクエスト内キャッシュを破棄する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function clearGetCache(): void
+    {
+        $this->getCache = [];
+    }
+
+    /**
+     * ブログコンテンツを取得する（キャッシュを使わない実体）
+     *
+     * @param int $id
+     * @param array $options
+     * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function getWithoutCache(int $id, array $options): EntityInterface|null
+    {
         $conditions = ['BlogContents.id' => $id];
         if ($options['status'] === 'publish') {
             $conditions = array_merge($conditions, $this->BlogContents->Contents->getConditionAllowPublish());
@@ -221,6 +265,7 @@ class BlogContentsService implements BlogContentsServiceInterface
         $blogContent = $this->BlogContents->patchEntity($target, $postData);
         /* @var \BcBlog\Model\Entity\BlogContent $blogContent */
         $blogContent = $this->BlogContents->deconstructEyeCatchSize($blogContent);
+        $this->clearGetCache();
         return $this->BlogContents->saveOrFail($blogContent);
     }
 
@@ -241,6 +286,7 @@ class BlogContentsService implements BlogContentsServiceInterface
         $blogContent = $this->BlogContents->patchEntity($blogContent, $postData, $options);
         /* @var \BcBlog\Model\Entity\BlogContent $blogContent */
         $blogContent = $this->BlogContents->deconstructEyeCatchSize($blogContent);
+        $this->clearGetCache();
         return $this->BlogContents->saveOrFail($blogContent);
     }
 
@@ -255,6 +301,7 @@ class BlogContentsService implements BlogContentsServiceInterface
      */
     public function copy($postData)
     {
+        $this->clearGetCache();
         return $this->BlogContents->copy(
             $postData['entity_id'] ?? null,
             $postData['parent_id'] ?? null,
@@ -276,6 +323,7 @@ class BlogContentsService implements BlogContentsServiceInterface
     public function delete(int $id): bool
     {
         $blogContent = $this->get($id, ['contain' => []]);
+        $this->clearGetCache();
         return $this->BlogContents->delete($blogContent);
     }
 

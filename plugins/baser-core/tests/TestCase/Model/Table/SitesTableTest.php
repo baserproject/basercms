@@ -265,6 +265,77 @@ class SitesTableTest extends BcTestCase
     }
 
     /**
+     * findByUrl は同一リクエスト内で同じ URL なら DB に問い合わせ直さない
+     */
+    public function testFindByUrlIsMemoizedWithinRequest()
+    {
+        $this->getRequest('/');
+        $logger = $this->attachQueryLogger();
+        $first = $this->Sites->findByUrl('/test/a');
+        $queriesAfterFirst = count($logger->logs);
+        $second = $this->Sites->findByUrl('/test/a');
+        $this->detachQueryLogger();
+        $this->assertGreaterThan(0, $queriesAfterFirst);
+        $this->assertSame($first->id, $second->id);
+        $this->assertCount($queriesAfterFirst, $logger->logs, '2回目の findByUrl でクエリが発行されています');
+    }
+
+    /**
+     * getRootMain は同一リクエスト内で DB に問い合わせ直さない
+     */
+    public function testGetRootMainIsMemoizedWithinRequest()
+    {
+        $logger = $this->attachQueryLogger();
+        $this->Sites->getRootMain();
+        $queriesAfterFirst = count($logger->logs);
+        $this->Sites->getRootMain();
+        $this->detachQueryLogger();
+        $this->assertSame(1, $queriesAfterFirst);
+        $this->assertCount(1, $logger->logs, '2回目の getRootMain でクエリが発行されています');
+    }
+
+    /**
+     * サイトを保存するとメモ化した findByUrl / getRootMain の結果が破棄される
+     */
+    public function testFindByUrlMemoIsClearedOnSave()
+    {
+        $this->loadFixtureScenario(ContentFoldersScenario::class);
+        $this->getRequest('/');
+        $this->assertSame(1, $this->Sites->findByUrl('/memo/test')->id);
+        $this->Sites->getRootMain();
+        $logger = $this->attachQueryLogger();
+        $site = $this->Sites->get(2);
+        $site->title = 'changed';
+        $this->Sites->save($site);
+        $before = count($logger->logs);
+        $this->Sites->findByUrl('/memo/test');
+        $this->Sites->getRootMain();
+        $this->detachQueryLogger();
+        $this->assertGreaterThan($before, count($logger->logs), '保存後にメモが破棄されていません');
+    }
+
+    /**
+     * クエリログを収集するロガーを接続する
+     */
+    private function attachQueryLogger(): object
+    {
+        $logger = new class extends \Psr\Log\AbstractLogger {
+            public array $logs = [];
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->logs[] = (string)$message;
+            }
+        };
+        $this->Sites->getConnection()->getDriver()->setLogger($logger);
+        return $logger;
+    }
+
+    private function detachQueryLogger(): void
+    {
+        $this->Sites->getConnection()->getDriver()->disableQueryLogging();
+    }
+
+    /**
      * test getMainByUrl
      */
     public function testGetMainByUrl()
