@@ -13,7 +13,6 @@ namespace BaserCore\Model\Validation;
 
 use BaserCore\Utility\BcFile;
 use Cake\Core\Configure;
-use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -51,18 +50,16 @@ class PageValidation extends Validation
             return true;
         }
 
-        if (BcUtil::isWindows()) {
-            $tmpName = tempnam(TMP, "syntax");
-            $tmp = new BcFile($tmpName);
-            $tmp->write($check);
-            $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
-            exec($command, $output, $exit);
-            $tmp->delete();
-        } else {
-            $format = 'echo %s | php -l 2>&1';
-            $command = sprintf($format, escapeshellarg($check));
-            exec($command, $output, $exit);
-        }
+        // 本文をシェルコマンドの引数として直接渡すと、OSのコマンドライン引数長の上限
+        // （Linuxの場合 MAX_ARG_STRLEN、通常128KiB）を超える本文で exec() が
+        // プロセスを fork できず失敗し、構文エラーと誤判定してしまう。
+        // そのため OS を問わず一時ファイルに書き出してから php -l で検証する。
+        $tmpName = tempnam(TMP, "syntax");
+        $tmp = new BcFile($tmpName);
+        $tmp->write($check);
+        $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
+        exec($command, $output, $exit);
+        $tmp->delete();
 
         if ($exit === 0) {
             return true;
