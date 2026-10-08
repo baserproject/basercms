@@ -49,6 +49,16 @@ class CustomEntriesService implements CustomEntriesServiceInterface
 {
 
     /**
+     * createTable() が作成する共通列（Phinx が追加する id を含む）。
+     * 同名のカスタム項目を削除しても、エントリーテーブルの共通列は削除しない。
+     */
+    private const SHARED_COLUMNS = [
+        'id', 'custom_table_id', 'name', 'title', 'parent_id', 'lft', 'rght',
+        'level', 'status', 'publish_begin', 'publish_end', 'published',
+        'creator_id', 'modified', 'created',
+    ];
+
+    /**
      * Trait
      */
     use BcContainerTrait;
@@ -589,6 +599,9 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function removeField(int $tableId, string $fieldName)
     {
+        if (in_array($fieldName, self::SHARED_COLUMNS, true)) {
+            return true;
+        }
         $table = $this->CustomEntries->getTableName($tableId);
         return $this->BcDatabaseService->removeColumn($table, $fieldName);
     }
