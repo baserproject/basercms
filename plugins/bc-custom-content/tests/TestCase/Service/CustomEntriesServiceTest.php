@@ -746,10 +746,18 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $this->loadFixtureScenario(CustomFieldsScenario::class);
 
-        //正常系実行
-        $result = $this->CustomEntriesService->removeField(1, 'name');
+        // 追加したカスタム列だけを削除し、共通列は残す
+        $tableName = 'custom_entry_1_recruit_categories';
+        $this->CustomEntriesService->addField(1, 'extra_field', 'text');
+        $result = $this->CustomEntriesService->removeField(1, 'extra_field');
         $this->assertTrue($result);
-        $this->assertFalse($this->BcDatabaseService->columnExists('custom_entry_1_recruit_categories', 'name'));
+        $this->assertFalse($this->BcDatabaseService->columnExists($tableName, 'extra_field'));
+        foreach (['id', 'custom_table_id', 'name', 'title', 'parent_id', 'lft', 'rght',
+            'level', 'status', 'publish_begin', 'publish_end', 'published',
+            'creator_id', 'modified', 'created'] as $column) {
+            $this->assertTrue($this->CustomEntriesService->removeField(1, $column));
+            $this->assertTrue($this->BcDatabaseService->columnExists($tableName, $column));
+        }
         //異常系実行
         $this->expectExceptionMessage("The specified column doesn't exist: test");
         $result = $this->CustomEntriesService->renameField(1, 'test', 'test1');
