@@ -172,7 +172,7 @@ class BurgerEditorService
         $tmpList = [];
         $files = $dir->find();
         foreach($files as $file) {
-            if ($file == ".DS_Store") continue;
+            if (in_array($file, ['.DS_Store', '.htaccess'], true)) continue;
             if (preg_match('/(__midium|__small|__org)\.[a-z0-9]+$/i', $file)) {
                 continue;
             }
@@ -212,6 +212,7 @@ class BurgerEditorService
         $tmpList = [];
         $files = $dir->find();
         foreach($files as $file) {
+            if (in_array($file, ['.DS_Store', '.htaccess'], true)) continue;
             $path = $dir->pwd();
             if (substr($path, -1) != DS) {
                 $path = $path . DS;
