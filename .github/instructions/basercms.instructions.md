@@ -17,6 +17,11 @@ baserCMSの開発についての指示をまとめたものです。
   - 起動判定は「プロセスの存在（pidファイル）」だけで済ませない。**プロキシ等が実際に接続する先（例 `127.0.0.1:{port}`）へ到達できるまで待つ**（`fsockopen` 等でポーリング、最大十数秒）。プロセス起動直後はポートの bind が間に合わず接続拒否＝500 になり、CI でのみ失敗する典型。
   - **到達できない場合は `markTestSkipped` で隠さず、`assertTrue` 等で明示的に失敗させる**。スキップはサーバー起動の不具合を握りつぶし CI を緑にしてしまうため不可。「外部プロセスが動いていること」も統合テストの検証対象とみなす。
   - 実装例: `plugins/bc-mcp/tests/TestCase/Controller/Admin/OAuth2ControllerTest.php` の `requireMcpServer()`。
+- **git worktree を使うときの注意**:
+  - Docker の PHP コンテナがマウントしているのはメインの作業ツリー（`docker/docker-compose.yml.default` の `../:/var/www/html`）だけ。worktree 側ではユニットテストを実行できない（コードの編集・読解・コミット・push まで）。
+  - 想定する使い方は「メインで時間のかかるテストを実行している間に、別の改修を worktree で進める」。
+  - worktree の改修をテストするときは、worktree でコミット → `git worktree remove <path>`（未コミットの変更があれば Git が拒否する）→ メインで `git checkout <改修ブランチ>` → 系列（5.3.x / 5.4.x 等）が変わるなら コンテナ内で `composer install` → テスト実行。
+  - 同じブランチはメインと worktree で同時にチェックアウトできない。メインで実行中のテストが使っているブランチは worktree 側で開かない。
 
 ## コーディング規約・パターン
 - クラスに新メソッド追加時は「必ず最後」に追加。
