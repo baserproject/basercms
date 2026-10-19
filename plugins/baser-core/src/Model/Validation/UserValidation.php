@@ -49,40 +49,22 @@ class UserValidation extends Validation
         /* @var User $loginUser */
         $loginUser = $users->find()->contain('UserGroups')->where(['Users.id' => $loginUserId])->first();
 
-        // 自身の変更ではない（id 未送信の場合は自身の変更として扱い、迂回させない）
-        if(isset($context['data']['id']) && (string)$context['data']['id'] !== $loginUserId) {
+        // 自身の変更ではない
+        if($context['data']['id'] !== $loginUserId) {
             return true;
         }
 
-        // `_ids` 形式以外（行形式等）で送信された場合も判定できるよう ID の配列に揃える
-        $postGroupId = [];
-        if (is_array($userGroup)) {
-            if (array_key_exists('_ids', $userGroup)) {
-                $postGroupId = is_array($userGroup['_ids']) ? $userGroup['_ids'] : [];
-            } else {
-                foreach($userGroup as $group) {
-                    if (is_array($group) && isset($group['id'])) {
-                        $postGroupId[] = $group['id'];
-                    } elseif (is_scalar($group)) {
-                        $postGroupId[] = $group;
-                    }
-                }
-            }
-        }
-        $postGroupId = array_values(array_map('intval', array_filter($postGroupId, fn($v) => is_numeric($v))));
-
         // スーパーユーザーはシステム管理グループが含まれていれば自身のユーザーグループも変更可能
         if($loginUser->isSuper()) {
-            if(in_array(Configure::read('BcApp.adminGroupId'), $postGroupId)) {
+            if(in_array(Configure::read('BcApp.adminGroupId'), $userGroup['_ids'])) {
                 return true;
             }
             return false;
         }
 
         // 自身のユーザーグループを変更しているかどうか
-        $loginGroupId = array_map('intval', Hash::extract($loginUser->user_groups, '{n}.id'));
-        sort($loginGroupId);
-        sort($postGroupId);
+        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
+        $postGroupId = array_map('intval', $userGroup['_ids']);
         return ($loginGroupId === $postGroupId);
     }
 
