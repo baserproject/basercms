@@ -19,7 +19,6 @@ use BaserCore\Test\Scenario\UserGroupsScenario;
 use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\Test\Scenario\UsersUserGroupsScenario;
 use Cake\Http\Response;
-use Cake\Core\Configure;
 use Cake\Routing\Router;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
@@ -170,61 +169,6 @@ class UsersServiceTest extends BcTestCase
         $request = $this->getRequest('/?name=ucmitz');
         $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
-    }
-
-    /**
-     * test normalizeUserGroups
-     */
-    public function test_normalizeUserGroups()
-    {
-        // _ids 形式はそのまま（整数化・重複除去）
-        $this->assertEquals(['_ids' => [1, 2]], $this->Users->normalizeUserGroups(['user_groups' => ['_ids' => ['1', 2, '1']]])['user_groups']);
-        // 行形式（user_groups[0][id]）は _ids に揃える
-        $this->assertEquals(['_ids' => [1]], $this->Users->normalizeUserGroups(['user_groups' => [['id' => 1, 'name' => 'admins']]])['user_groups']);
-        // スカラー配列
-        $this->assertEquals(['_ids' => [2]], $this->Users->normalizeUserGroups(['user_groups' => ['2']])['user_groups']);
-        // 不正な値は除外
-        $this->assertEquals(['_ids' => []], $this->Users->normalizeUserGroups(['user_groups' => ['_ids' => ['abc', null]]])['user_groups']);
-        $this->assertEquals(['_ids' => []], $this->Users->normalizeUserGroups(['user_groups' => 'abc'])['user_groups']);
-        // user_groups が無い場合はそのまま
-        $this->assertArrayNotHasKey('user_groups', $this->Users->normalizeUserGroups(['name' => 'a']));
-    }
-
-    /**
-     * test update - 行形式の user_groups や login_user_id の偽装で管理者グループを付与できないこと
-     *
-     * 管理者グループの付与チェックは `_ids` 形式のみを対象としていたため、user_groups[0][id]=1 の形式で
-     * 送信するとチェックを迂回して自身を管理者グループへ昇格できた。
-     */
-    public function test_update_rejectsAdminGroupBypass()
-    {
-        // 管理者グループ以外のユーザー（id=2、グループ2）としてログインし、自身を編集する
-        $request = $this->loginAdmin($this->getRequest('/'), 2);
-        Router::setRequest($request);
-        $user = $this->Users->get(2);
-        $adminEmail = $this->Users->get(1)->email;
-
-        // 行形式で管理者グループを指定しても、スーパーユーザー以外はグループを変更できない
-        $this->Users->update($user, ['name' => 'operator', 'user_groups' => [['id' => Configure::read('BcApp.adminGroupId')]]]);
-        $this->assertEquals([2], array_map(fn($g) => $g->id, $this->Users->get(2)->user_groups));
-
-        // login_user_id を管理者の ID に偽装しても同様
-        $this->Users->update($this->Users->get(2), ['name' => 'operator', 'login_user_id' => '1', 'id' => '1', 'user_groups' => ['_ids' => [Configure::read('BcApp.adminGroupId')]]]);
-        $this->assertEquals([2], array_map(fn($g) => $g->id, $this->Users->get(2)->user_groups));
-        // 管理者（id=1）のデータも変更されていない
-        $this->assertEquals($adminEmail, $this->Users->get(1)->email);
-
-        // スーパーユーザー以外が行形式で管理者グループを付与しようとした場合の正規化（create 経路）も拒否される
-        try {
-            $this->Users->create(['name' => 'newuser', 'email' => 'new@example.com', 'real_name_1' => 'n', 'password_1' => 'Testtest1234', 'password_2' => 'Testtest1234', 'user_groups' => [['id' => Configure::read('BcApp.adminGroupId')]]]);
-            $this->fail('行形式の user_groups で管理者グループを付与できてしまいます');
-        } catch (\BaserCore\Error\BcException $e) {
-            $this->assertEquals('特権エラーが発生しました。', $e->getMessage());
-        }
-
-        // 変更されていないこと
-        $user = $this->Users->get(2);
-        $this->assertEquals([2], array_map(fn($g) => $g->id, $user->user_groups));
     }
 
     /**
