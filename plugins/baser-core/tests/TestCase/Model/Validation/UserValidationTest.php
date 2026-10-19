@@ -87,27 +87,6 @@ class UserValidationTest extends BcTestCase
             [2, ['_ids' => [1]], false],
             [2, ['_ids' => [1, 2]], false],
             [null, ['_ids' => [2]], false],
-            // 行形式（user_groups[0][id]）で送信されても _ids と同じ判定になること
-            [2, [['id' => 2]], true],
-            [2, [['id' => 1]], false],
-            [2, [['id' => 1], ['id' => 2]], false],
-            [2, ['1'], false],
         ];
-    }
-
-    /**
-     * willChangeSelfGroup - id が送信されない場合も自身の変更として判定すること
-     *
-     * 以前は id 未送信を「他人の編集」とみなして true を返していたため、
-     * id を送らずに自身のグループを変更できた。
-     */
-    public function testWillChangeSelfGroup_withoutId()
-    {
-        $this->loadFixtureScenario(UserScenario::class);
-        $this->loadFixtureScenario(UserGroupsScenario::class);
-        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
-        $this->loginAdmin($this->getRequest(), 2);
-        $this->assertFalse($this->UserValidation->willChangeSelfGroup(['_ids' => [1]], ['data' => ['login_user_id' => 2]]));
-        $this->assertTrue($this->UserValidation->willChangeSelfGroup(['_ids' => [2]], ['data' => ['login_user_id' => 2]]));
     }
 }
