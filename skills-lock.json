@@ -102,12 +102,6 @@
       "sourceType": "github",
       "skillPath": "skills/php-migration/SKILL.md",
       "computedHash": "36e92b3f7c99d1e5a1b8c27e17155088fedc8f1ca4ff81c925a8668eb419dcd5"
-    },
-    "plan-builder": {
-      "source": "ecatchup/catchup-skills",
-      "sourceType": "github",
-      "skillPath": "skills/plan-builder/SKILL.md",
-      "computedHash": "2c0128761a113d42f726518c9045e1434d3644b8142459877b35317963e6784c"
     }
   }
 }
