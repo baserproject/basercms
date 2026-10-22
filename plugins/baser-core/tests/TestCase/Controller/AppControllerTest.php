@@ -240,6 +240,54 @@ class AppControllerTest extends BcTestCase
     }
 
     /**
+     * test removeOrmStructureFromRequest
+     *
+     * 管理画面・Admin API のリクエストから ORM 内部構造キー（contain / conditions /
+     * fields / finder / order 等）が除去され、通常の検索・ページングキーは保持される
+     * ことを確認する。公開 API（Api プレフィックス）は各コントローラが 403 で拒否する
+     * 方針のため除去対象外であることも確認する。
+     */
+    public function test_removeOrmStructureFromRequest()
+    {
+        // 管理画面: contain / finder / order は除去、limit / sort / direction / name は保持
+        $this->AppController->setRequest($this->getRequest(
+            '/baser/admin/baser-core/users/index?contain[UserGroups][conditions][0]=1%3D1&finder=all&order=id&limit=10&sort=id&direction=asc&name=foo'
+        ));
+        $this->execPrivateMethod($this->AppController, 'removeOrmStructureFromRequest');
+        $this->assertSame(
+            ['limit' => '10', 'sort' => 'id', 'direction' => 'asc', 'name' => 'foo'],
+            $this->AppController->getRequest()->getQueryParams()
+        );
+
+        // Admin API: 同様に除去される
+        $this->AppController->setRequest($this->getRequest(
+            '/baser/api/admin/baser-core/dblogs/index.json?contain[Users][fields][0]=password&user_id=1'
+        ));
+        $this->execPrivateMethod($this->AppController, 'removeOrmStructureFromRequest');
+        $this->assertSame(['user_id' => '1'], $this->AppController->getRequest()->getQueryParams());
+
+        // 公開 API: 各コントローラが 403 を返すため、ここでは除去しない
+        $this->AppController->setRequest($this->getRequest(
+            '/baser/api/baser-core/contents/index.json?contain[Sites]=1'
+        ));
+        $this->execPrivateMethod($this->AppController, 'removeOrmStructureFromRequest');
+        $this->assertSame(['contain' => ['Sites' => '1']], $this->AppController->getRequest()->getQueryParams());
+    }
+
+    /**
+     * test beforeFilter - ORM 内部構造キーの除去（amp; 付きキーの正規化後に除去されること）
+     */
+    public function test_beforeFilter_removeOrmStructure()
+    {
+        $this->AppController->setRequest($this->getRequest(
+            '/baser/admin/baser-core/users/index?a=1&amp;contain[UserGroups][conditions][0]=1%3D1&conditions[0]=1%3D1'
+        ));
+        $this->loginAdmin($this->AppController->getRequest());
+        $this->AppController->beforeFilter(new Event('beforeFilter'));
+        $this->assertSame(['a' => '1'], $this->AppController->getRequest()->getQueryParams());
+    }
+
+    /**
      * test notFound
      */
     public function test_notFound()
