@@ -514,4 +514,33 @@ class PermissionGroupsServiceTest extends BcTestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * test build - BcMcp の権限定義（MCP サーバー情報画面は管理者のみ）
+     */
+    public function testBuild_BcMcpDefinition()
+    {
+        $this->loadPlugins(['BcMcp']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcMcp'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->all()->toArray();
+        $this->assertFalse($this->Permissions->isAuthorized(1, '/baser/admin/bc-mcp/mcp-server-manager', 'GET', $permissions));
+        $this->assertFalse($this->Permissions->isAuthorized(1, '/baser/admin/bc-mcp/mcp_server_manager/index', 'GET', $permissions));
+    }
+
+    /**
+     * test build - BcBurgerEditor の権限定義（フルアクセス 1 本）
+     */
+    public function testBuild_BcBurgerEditorDefinition()
+    {
+        $this->loadPlugins(['BcBurgerEditor']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcBurgerEditor'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->all()->toArray();
+        $this->assertCount(1, $permissions);
+        $this->assertEquals('/baser/admin/bc-burger-editor/*', $permissions[0]->url);
+        $this->assertTrue($this->Permissions->isAuthorized(1, '/baser/admin/bc-burger-editor/burger_editor/img_list', 'GET', $permissions));
+    }
+
 }
