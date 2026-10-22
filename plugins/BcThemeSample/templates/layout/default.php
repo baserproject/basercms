@@ -29,8 +29,12 @@ if ($this->BcBaser->isJapaneseLocale()) {
 	<?php $this->BcBaser->charset() ?>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 	<?php $this->BcBaser->title() ?>
+	<?php if ($this->BcBaser->isPluginLoaded('BcSeo')): ?>
+	<?php $this->BcBaser->seoMeta() ?>
+	<?php else: ?>
 	<?php $this->BcBaser->metaDescription() ?>
 	<?php $this->BcBaser->metaKeywords() ?>
+	<?php endif ?>
 	<?php $this->BcBaser->icon() ?>
 	<?php $this->BcBaser->css([
 		'style',
