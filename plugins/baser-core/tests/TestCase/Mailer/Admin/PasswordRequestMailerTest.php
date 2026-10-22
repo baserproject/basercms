@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Mailer\Admin;
 
+use Cake\Core\Configure;
 use BaserCore\Mailer\Admin\PasswordRequestMailer;
 use BaserCore\Test\Factory\PasswordRequestFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
@@ -68,6 +69,18 @@ class PasswordRequestMailerTest extends BcTestCase
         );
         //正常テスト　メールが無事に送信できる
         $this->PasswordRequestMailer->resetPassword(UserFactory::get(1), PasswordRequestFactory::get(1));
+        $url = $this->PasswordRequestMailer->viewBuilder()->getVar('url');
+        $this->assertStringStartsWith(rtrim(Configure::read('BcEnv.siteUrl'), '/') . '/baser/admin/baser-core/password_requests/apply/', $url);
+
+        // Host ヘッダを細工したリクエストでも、設定済みのサイト URL で生成される（Host ヘッダインジェクション対策）
+        Router::setRequest(
+            $this->getRequest('https://attacker.example/baser/admin/baser-core/password_requests/entry')
+                ->withParam('prefix', 'Admin')->withParam('controller', 'PasswordRequests')->withParam('plugin', 'BaserCore')
+        );
+        $this->PasswordRequestMailer->resetPassword(UserFactory::get(1), PasswordRequestFactory::get(1));
+        $url = $this->PasswordRequestMailer->viewBuilder()->getVar('url');
+        $this->assertStringNotContainsString('attacker.example', $url);
+        $this->assertStringStartsWith(rtrim(Configure::read('BcEnv.siteUrl'), '/') . '/baser/admin/baser-core/password_requests/apply/', $url);
 
         //正常テスト　エラーを出る
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');

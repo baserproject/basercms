@@ -12,8 +12,12 @@ $base = $attributes['base'];
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=yes">
 		<?php $this->BcBaser->title() ?>
+		<?php if ($this->BcBaser->isPluginLoaded('BcSeo')): ?>
+		<?php $this->BcBaser->seoMeta() ?>
+		<?php else: ?>
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
+		<?php endif ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>

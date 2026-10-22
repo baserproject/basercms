@@ -94,7 +94,10 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             'SearchIndexes.id'
         ]);
         if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+            // 数値でない limit は無視する（型不一致による 500 の防止）
+            if (is_numeric($queryParams['limit']) && (int)$queryParams['limit'] > 0) {
+                $query->limit((int)$queryParams['limit']);
+            }
             unset($queryParams['limit']);
         }
         if (!empty($queryParams)) {
@@ -174,16 +177,26 @@ class SearchIndexesService implements SearchIndexesServiceInterface
         if (!is_null($options['model'])) $conditions['SearchIndexes.model'] = $options['model'];
         if (!is_null($options['priority'])) $conditions['SearchIndexes.priority'] = $options['priority'];
         if (!is_null($options['folder_id'])) {
+            // 存在しないフォルダ ID・数値でない値では 500 にせず、該当なしとして扱う
             $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-            $content = $contentsTable->find()->select(['lft', 'rght'])->where(['Contents.id' => $options['folder_id']])->first();
-            $conditions['SearchIndexes.rght <'] = $content->rght;
-            $conditions['SearchIndexes.lft >'] = $content->lft;
+            $content = null;
+            if (is_numeric($options['folder_id'])) {
+                $content = $contentsTable->find()->select(['lft', 'rght'])->where(['Contents.id' => (int)$options['folder_id']])->first();
+            }
+            if ($content) {
+                $conditions['SearchIndexes.rght <'] = $content->rght;
+                $conditions['SearchIndexes.lft >'] = $content->lft;
+            } else {
+                $conditions['SearchIndexes.id'] = 0;
+            }
         }
-        if (!is_null($options['keyword'])) {
+        if (!is_null($options['keyword']) && is_string($options['keyword'])) {
+            // 結合演算子はリクエストから直接 where() のキーになるため and / or 以外は and に固定する
+            $op = (is_string($options['op']) && in_array(strtolower($options['op']), ['and', 'or'], true)) ? strtolower($options['op']) : 'and';
             $query = $this->parseQuery($options['keyword']);
             foreach($query as $key => $value) {
-                $conditions[$options['op']][$key]['or'][] = ['SearchIndexes.title LIKE' => "%{$value}%"];
-                $conditions[$options['op']][$key]['or'][] = ['SearchIndexes.detail LIKE' => "%{$value}%"];
+                $conditions[$op][$key]['or'][] = ['SearchIndexes.title LIKE' => "%{$value}%"];
+                $conditions[$op][$key]['or'][] = ['SearchIndexes.detail LIKE' => "%{$value}%"];
             }
         }
 

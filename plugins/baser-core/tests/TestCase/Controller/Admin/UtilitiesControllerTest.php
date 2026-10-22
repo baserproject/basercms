@@ -11,6 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Controller\Admin\UtilitiesController;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\SitesService;
@@ -128,8 +131,13 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function testClear_cache(): void
     {
-
+        // 状態を変更する操作のため GET では実行できない（CSRF 対策）
         $this->get('/baser/admin/baser-core/utilities/clear_cache');
+        $this->assertResponseCode(405);
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/baser/admin/baser-core/utilities/clear_cache');
         $this->assertResponseCode(302);
     }
 
@@ -345,5 +353,22 @@ class UtilitiesControllerTest extends BcTestCase
         ]);
         // restore の成功メッセージを確認
         $this->assertFlashMessage('データの復元が完了しました。');
+    }
+
+    /**
+     * test phpinfo - システム管理者以外は 404 になること
+     *
+     * phpinfo は .env の内容を含む環境変数・サーバ情報を全件表示するため、システム管理者に限定する
+     */
+    public function test_phpinfo_deniedForNonAdmin()
+    {
+        UserGroupFactory::make(['id' => 2, 'name' => 'operators', 'title' => 'operators', 'auth_prefix' => 'Admin'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'operator', 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        $this->loginAdmin($this->getRequest('/baser/admin/baser-core/utilities/phpinfo'), 2);
+        $this->get('/baser/admin/baser-core/utilities/phpinfo');
+        // アクセスルール（既定で不許可）によりリダイレクトされるか、コントローラの判定で 404 になる
+        $this->assertContains($this->_response->getStatusCode(), [302, 404]);
+        $this->assertStringNotContainsString('PHP Version', (string)$this->_response->getBody());
     }
 }

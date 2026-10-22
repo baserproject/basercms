@@ -349,6 +349,8 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
             ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
             ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
+            ['<b>設定</b>', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>&lt;b&gt;設定&lt;/b&gt;</span>'],    // 強制タイトル（エスケープ）
+            ['<b>設定</b>', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true, 'escapeTitle' => false], '<span><b>設定</b></span>'],    // 強制タイトル（エスケープなし）
             ['full', ['/test'], ['full' => true], '<a href="https://localhost/test">full</a>'], // フルパス
         ];
     }
@@ -1470,6 +1472,12 @@ class BcBaserHelperTest extends BcTestCase
         ob_start();
         $this->BcBaser->crumbs();
         $this->assertEquals('<a href="/company/">会社案内</a>', ob_get_clean());
+
+        // href は属性としてエスケープされること
+        $this->BcBaser->addCrumb('検索', '/search?a=1&b="x"');
+        ob_start();
+        $this->BcBaser->crumbs();
+        $this->assertEquals('<a href="/company/">会社案内</a>&raquo;<a href="/search?a=1&amp;b=&quot;x&quot;">検索</a>', ob_get_clean());
     }
 
     /**
@@ -1526,6 +1534,8 @@ class BcBaserHelperTest extends BcTestCase
             ['/about', true, 'test', '', 'http://test/about'],
             ['/about', false, 'localhost', '', 'http://localhost/about'],
             ['/about', false, 'localhost', 'on', 'https://localhost/about'],
+            ['/about', false, 'localhost:8080', '', 'http://localhost:8080/about'],
+            ['/about', false, 'localhost"><script>alert(1)</script>', '', 'http://localhostscriptalert1script/about'],
         ];
     }
 
@@ -1570,6 +1580,10 @@ class BcBaserHelperTest extends BcTestCase
             ['大切', 'とても大切です', 'b', [], false, 'とても<b>大切</b>です'],
             ['大切', 'とても大切です', 'b', ['class' => 'truth'], false, 'とても<b class="truth">大切</b>です'],
             ['<<大切>>', 'とても<<大切>>です', 'b', [], true, 'とても<b>&lt;&lt;大切&gt;&gt;</b>です'],
+            // 既定（escape=true）でテキストと検索語がエスケープされる（格納型・反射型 XSS 対策）
+            ['大切', 'とても<script>alert(1)</script>大切です', 'strong', [], true, 'とても&lt;script&gt;alert(1)&lt;/script&gt;<strong>大切</strong>です'],
+            ['<img src=x onerror=alert(1)>', 'テキスト<img src=x onerror=alert(1)>', 'strong', [], true, 'テキスト<strong>&lt;img src=x onerror=alert(1)&gt;</strong>'],
+            ['', 'テキスト<b>', 'strong', [], true, 'テキスト&lt;b&gt;'],
         ];
     }
 

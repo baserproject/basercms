@@ -93,7 +93,58 @@ import Cookies from 'js-cookie'
         },
 
         /**
+         * HTML の特殊文字をエスケープする
+         *
+         * サーバーの応答（例外メッセージ等）を画面に流し込む前に必ず通す
+         *
+         * @param value
+         * @returns {string}
+         */
+        escapeHtml: function (value) {
+            if (value === undefined || value === null) {
+                return '';
+            }
+            return String(value).replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        },
+
+        /**
+         * 応答の JSON からメッセージを取り出す（エスケープ済み）
+         *
+         * responseText を直接連結すると、サーバーが返した HTML（エラーページ等）が
+         * そのまま画面に描画されるため、message のみを取り出してエスケープする
+         *
+         * @param XMLHttpRequest
+         * @returns {string}
+         */
+        getResponseMessage: function (XMLHttpRequest) {
+            if (XMLHttpRequest === undefined || XMLHttpRequest === null) {
+                return '';
+            }
+            var message = '';
+            if (XMLHttpRequest.responseJSON && XMLHttpRequest.responseJSON.message) {
+                message = XMLHttpRequest.responseJSON.message;
+            } else if (XMLHttpRequest.responseText) {
+                try {
+                    var json = JSON.parse(XMLHttpRequest.responseText);
+                    if (json && json.message) {
+                        message = json.message;
+                    }
+                } catch (e) {
+                    // JSON 以外（HTML のエラーページ等）は画面に出さない
+                }
+            }
+            return $.bcUtil.escapeHtml(message);
+        },
+
+        /**
          * アラートメッセージを表示
+         *
+         * message は HTML として描画されるため、サーバーの応答等の信頼できない値は
+         * escapeHtml() / getResponseMessage() でエスケープしてから渡すこと
          *
          * @param message
          */
@@ -112,11 +163,7 @@ import Cookies from 'js-cookie'
          * @param message
          */
         showNoticeMessage: function (message) {
-            message = message.replace(/&/g, '&amp;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+            message = $.bcUtil.escapeHtml(message);
             $.bcUtil.hideMessage();
             $("#BcSystemMessage")
                 .removeClass('notice-messge alert-message')
@@ -249,15 +296,14 @@ import Cookies from 'js-cookie'
         showAjaxError: function (message, XMLHttpRequest, errorThrown) {
             var errorMessage = '';
             if (XMLHttpRequest !== undefined && XMLHttpRequest.status) {
-                errorMessage = '<br>(' + XMLHttpRequest.status + ') ';
+                errorMessage = '<br>(' + parseInt(XMLHttpRequest.status, 10) + ') ';
             }
-            if(XMLHttpRequest !== undefined && XMLHttpRequest.responseJSON){
-                errorMessage += XMLHttpRequest.responseJSON.message;
-            }
-            if (XMLHttpRequest !== undefined && XMLHttpRequest.responseText) {
-                errorMessage += '<br>' + XMLHttpRequest.responseText;
-            } else if (errorThrown !== undefined) {
-                errorMessage += '<br>' + errorThrown;
+            // サーバーの応答はエスケープし、responseText（HTML のエラーページ等）は連結しない
+            var responseMessage = $.bcUtil.getResponseMessage(XMLHttpRequest);
+            if (responseMessage) {
+                errorMessage += responseMessage;
+            } else if (errorThrown !== undefined && errorThrown) {
+                errorMessage += '<br>' + $.bcUtil.escapeHtml(errorThrown);
             }
             $.bcUtil.showAlertMessage(message + errorMessage);
         },
@@ -267,14 +313,15 @@ import Cookies from 'js-cookie'
          * @param response
          */
         showApiError: function (response) {
-            let message = response.responseJSON.message;
-            let errors = response.responseJSON.errors;
+            let json = (response && response.responseJSON)? response.responseJSON : {};
+            let message = $.bcUtil.escapeHtml(json.message);
+            let errors = json.errors;
             if (errors !== undefined && errors) {
                 message += "<br>";
                 Object.keys(errors).forEach(function (key) {
                     message += "<ul>"
                     Object.keys(errors[key]).forEach(function (index) {
-                        message += "<li>" + errors[key][index] + "</li>";
+                        message += "<li>" + $.bcUtil.escapeHtml(errors[key][index]) + "</li>";
                     });
                     message += "</ul>"
                 });

@@ -184,6 +184,34 @@ class MailMessagesServiceTest extends BcTestCase
         $result = $MailMessagesService->get(2);
         $this->assertEquals(2, $result->id);
 
+        // 投稿者が指定できない項目（受信日時・ID）は無視される
+        $result = $MailMessagesService->create($mailContent, ['id' => 99, 'name_1' => 'value 3', 'created' => '2000-01-01 00:00:00', 'modified' => '2000-01-01 00:00:00']);
+        $this->assertNotEquals(99, $result->id);
+        $this->assertNotEquals('2000', $result->created->format('Y'));
+        $this->assertNotEquals('2000', $result->modified->format('Y'));
+    }
+
+    /**
+     * test create - ファイル項目に文字列（ファイル名）が直接送信された場合は保存しないこと
+     *
+     * 受け付けると、保存済みの他の投稿の添付ファイル名を指定して管理者宛メールに添付させられる
+     */
+    public function testCreate_ignoresStringForFileField()
+    {
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        MailFieldsFactory::make([
+            'id' => 50, 'mail_content_id' => 1, 'name' => 'file', 'field_name' => 'file_1', 'type' => 'file', 'use_field' => 1, 'no' => 50,
+        ])->persist();
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $BcDatabaseService->addColumn('mail_message_1', 'file_1', 'text');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailContentsService = $this->getService(MailContentsServiceInterface::class);
+        $MailMessagesService->setup(1);
+        $mailContent = $MailContentsService->get(1);
+        $result = $MailMessagesService->create($mailContent, ['name_1' => 'value', 'file_1' => '2026/09/00000001.pdf']);
+        $this->assertEmpty($result->file_1);
+        $BcDatabaseService->removeColumn('mail_message_1', 'file_1');
     }
 
     /**

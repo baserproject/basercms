@@ -239,4 +239,21 @@ class ContentFoldersTableTest extends BcTestCase
         @unlink($savePath . 'test.png');
         @unlink($savePath . $newFileName);
     }
+
+    /**
+     * test validationDefault - folder_template / page_template はテンプレート名として妥当な値のみ許可する
+     */
+    public function testValidationTemplates(): void
+    {
+        $validator = $this->ContentFolders->getValidator('default');
+        $errors = $validator->validate(['folder_template' => 'default', 'page_template' => 'default']);
+        $this->assertArrayNotHasKey('folder_template', $errors);
+        $this->assertArrayNotHasKey('page_template', $errors);
+        $errors = $validator->validate(['folder_template' => 'baserCMSサンプル', 'page_template' => 'サービスページ']);
+        $this->assertArrayNotHasKey('folder_template', $errors);
+        $this->assertArrayNotHasKey('page_template', $errors);
+        $errors = $validator->validate(['folder_template' => '../../config/app', 'page_template' => 'a\\..\\b']);
+        $this->assertArrayHasKey('regex', $errors['folder_template']);
+        $this->assertArrayHasKey('regex', $errors['page_template']);
+    }
 }

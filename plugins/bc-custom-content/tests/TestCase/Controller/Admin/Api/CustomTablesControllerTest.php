@@ -77,13 +77,13 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTable->create([
             'type' => 'recruit',
             'name' => 'recruit',
             'title' => '求人',
-            'display_field' => '求人'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $this->get('/baser/api/admin/bc-custom-content/custom_tables/index.json?token=' . $this->accessToken);
@@ -111,7 +111,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $this->get('/baser/api/admin/bc-custom-content/custom_tables/view/1.json?token=' . $this->accessToken);
@@ -142,7 +142,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         //APIを呼ぶ
         $this->post('/baser/api/admin/bc-custom-content/custom_tables/add.json?token=' . $this->accessToken, $data);
@@ -192,7 +192,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         $customTable->create($data);
 
@@ -240,7 +240,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //APIを呼ぶ
@@ -277,13 +277,13 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTable->create([
             'type' => 'recruit',
             'name' => 'recruit',
             'title' => '求人',
-            'display_field' => '求人'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $this->get('/baser/api/admin/bc-custom-content/custom_tables/list.json?token=' . $this->accessToken);

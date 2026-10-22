@@ -43,7 +43,7 @@ $this->BcAdmin->setTitle(__d('baser_core',
       /* 項目名 */
       if ($groupField != $field->group_field || (!$groupField && !$field->group_field)) {
         echo '<tr>';
-        echo '<th class="col-head bca-form-table__label">' . $field->head . '</th>';
+        echo '<th class="col-head bca-form-table__label">' . h($field->head) . '</th>';
         echo '<td class="col-input bca-form-table__input">';
       }
       if (!empty($mailMessage->{$field->field_name})) {

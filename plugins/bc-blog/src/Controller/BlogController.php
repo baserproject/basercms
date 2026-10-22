@@ -330,6 +330,10 @@ class BlogController extends BlogFrontAppController
                 ]));
             }
             $entity = $service->add($postData['blog_content_id'], $postData['blog_post_id'], $postData);
+            // 保存に成功した時点で画像認証の回答を破棄し、同一セッションでの回答の再利用（リプレイ）を防ぐ
+            if ($blogContent->auth_captcha) {
+                $bcCaptchaService->consume($this->getRequest(), (string)$this->getRequest()->getData('captcha_id'));
+            }
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $message = __d('baser_core', '入力エラーです。内容を見直してください。');
@@ -343,7 +347,9 @@ class BlogController extends BlogFrontAppController
                 'message' => $message
             ]));
         } catch (Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            // 例外の内容（テーブル名等の内部情報）は未認証の利用者に返さず、ログに記録する
+            $this->log($e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             return $this->response->withStatus(500)->withStringBody(json_encode([
                 'message' => $message
             ]));

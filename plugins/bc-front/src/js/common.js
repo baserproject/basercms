@@ -9,5 +9,5 @@
  */
 
 
-import "bc-admin-third/src/js/admin/_lib/jquery.bcUtil.js";
-import "bc-admin-third/src/js/admin/_lib/jquery.bcToken.js";
+import "bc-admin-third/src/js/admin/common/lib/jquery.bcUtil.js";
+import "bc-admin-third/src/js/admin/common/lib/jquery.bcToken.js";

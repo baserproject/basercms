@@ -11,6 +11,10 @@
 
 namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 
+use BcThemeFile\Controller\Api\Admin\ThemeFoldersController;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Event\Event;
+use Cake\Core\Configure;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
@@ -283,5 +287,35 @@ class ThemeFoldersControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertNotNull($result->entity);
+    }
+
+    /**
+     * テーマ編集機能が無効化されている場合、API からの書き込み系アクションが拒否されること
+     *
+     * 設定はリクエスト処理中にプラグインの setting.php から再読み込みされるため、
+     * 統合テストではなくコントローラの beforeFilter を直接検証する。
+     */
+    public function test_beforeFilter_deniedWhenThemeEditDisabled()
+    {
+        Configure::write('BcThemeFile.allowedThemeEdit', false);
+        try {
+            foreach(['add', 'edit', 'delete', 'copy', 'copy_to_theme', 'batch'] as $action) {
+                $request = $this->loginAdmin($this->getRequest('/baser/api/admin/bc-theme-file/theme_folders/' . $action . '.json'));
+                $controller = new ThemeFoldersController($request);
+                try {
+                    $controller->beforeFilter(new Event('beforeFilter'));
+                    $this->fail($action . ' が拒否されていません');
+                } catch (ForbiddenException $e) {
+                    $this->assertEquals('テーマ編集機能は無効化されています。', $e->getMessage(), $action);
+                }
+            }
+            // 読み取り系は許可
+            $request = $this->loginAdmin($this->getRequest('/baser/api/admin/bc-theme-file/theme_folders/view.json'));
+            $controller = new ThemeFoldersController($request);
+            $controller->beforeFilter(new Event('beforeFilter'));
+            $this->assertTrue(true);
+        } finally {
+            Configure::write('BcThemeFile.allowedThemeEdit', true);
+        }
     }
 }

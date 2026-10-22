@@ -66,7 +66,9 @@ class ContentLinksTable extends AppTable
         $validator
             ->scalar('url')
             ->notEmptyString('url', __d('baser_core', 'リンク先URLを入力してください。'), 'update')
-            ->regex('url', '/^http|^\/.*/', __d('baser_core', 'リンク先URLはURLの形式を入力してください。'))
+            // 先頭一致のみの検証だと引用符・空白・制御文字を含む値を保存でき、フロントの
+            // リダイレクト用スクリプトで文字列リテラルから脱出できるため、URL として妥当な文字に限定する
+            ->regex('url', '/^(https?:\/\/[^\s"\'<>\\\\]+|\/[^\s"\'<>\\\\]*)$/i', __d('baser_core', 'リンク先URLはURLの形式を入力してください。'))
             ->maxLength('url', 255, __d('baser_core', 'リンク先URLは255文字以内で入力してください。'));
 
         return $validator;

@@ -47,7 +47,8 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 <?php if ($searchIndexes->count() > 0): ?>
 	<?php foreach ($searchIndexes as $searchIndex): ?>
 	<div class="bs-search-result__item">
-		<h3 class="bs-search-result__item-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $searchIndex->title), $searchIndex->url, ['escape' => false]) ?></h3>
+		<?php // mark() はタイトル・本文・検索語をエスケープしたうえで検索語を強調するため、リンクのタイトルのみ非エスケープとする ?>
+		<h3 class="bs-search-result__item-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $searchIndex->title), $searchIndex->url, ['escapeTitle' => false]) ?></h3>
 		<p class="bs-search-result__item-body"><?php echo $this->BcBaser->mark($query, $this->BcBaser->truncateText($searchIndex->detail, 100)) ?></p>
 		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link($this->BcBaser->getFullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
 	</div>

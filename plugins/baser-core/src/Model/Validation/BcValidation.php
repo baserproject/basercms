@@ -18,6 +18,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
+use BaserCore\Utility\BcFileUploader;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;
@@ -277,19 +278,17 @@ class BcValidation extends Validation
         }
         if (empty($fileName)) return true;
 
-        // FILES形式のチェック
-        if ($type) {
-            $ext = BcUtil::decodeContent($type, $fileName);
-            if (!in_array($ext, $exts)) {
-                return false;
-            }
-        } else {
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if (!in_array($ext, $exts)) {
-                return false;
-            }
+        // 拡張子はファイル名の末尾の拡張子を正とする。
+        // クライアントが申告する Content-Type から拡張子を導出すると、
+        // 実際のファイル名の拡張子と異なる種類のファイルが許可されてしまう
+        $ext = BcFileUploader::getExtFromUpload($type, $fileName);
+        $exts = array_map(fn($value) => strtolower(trim((string)$value)), $exts);
+        // 以前は image/jpeg を jpg として判定していたため、jpg を許可している場合は
+        // JPEG の別の拡張子も許可する
+        if (in_array('jpg', $exts, true)) {
+            $exts = array_merge($exts, ['jpeg', 'jpe', 'jfif']);
         }
-        return true;
+        return $ext !== false && in_array(strtolower($ext), $exts, true);
     }
 
     /**

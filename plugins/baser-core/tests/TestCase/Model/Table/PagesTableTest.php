@@ -84,7 +84,7 @@ class PagesTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id','contents', 'draft'], $fields);
+        $this->assertEquals(['id','contents', 'draft', 'page_template'], $fields);
 
         $errors = $validator->validate([
             'draft' => '<?php echo $test; ?>'
@@ -271,5 +271,21 @@ class PagesTableTest extends BcTestCase
         $this->Pages->searchIndexSaving = true;
         $this->Pages->beforeSave($event, $data, $object);
         $this->assertTrue($this->Pages->isExcluded());
+    }
+
+    /**
+     * test validationDefault - page_template はテンプレート名として妥当な値のみ許可する
+     */
+    public function testValidationPageTemplate()
+    {
+        $validator = $this->Pages->getValidator('default');
+        $errors = $validator->validate(['page_template' => 'default']);
+        $this->assertArrayNotHasKey('page_template', $errors);
+        $errors = $validator->validate(['page_template' => 'サービスページ']);
+        $this->assertArrayNotHasKey('page_template', $errors);
+        $errors = $validator->validate(['page_template' => '']);
+        $this->assertArrayNotHasKey('page_template', $errors);
+        $errors = $validator->validate(['page_template' => '../../../../config/app']);
+        $this->assertArrayHasKey('regex', $errors['page_template']);
     }
 }

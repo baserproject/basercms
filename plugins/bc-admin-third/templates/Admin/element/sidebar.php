@@ -71,11 +71,11 @@ use BaserCore\View\BcAdminAppView;
     </div>
 
     <div v-if="availableVersions" class="bca-nav__sub-title bca-nav__update">
-      <a href="<?php echo $this->BcBaser->getUri([
+      <a href="<?php echo h($this->BcBaser->getUri([
         'plugin' => 'BaserCore',
         'controller' => 'Plugins',
         'action' => 'update'
-      ]) ?>" class="bca-nav__sub-title-label bca-icon--update">
+      ])) ?>" class="bca-nav__sub-title-label bca-icon--update">
         <span>更新</span>
         <i class="bca-nav__update-badge">{{ availableVersions }}</i>
       </a>

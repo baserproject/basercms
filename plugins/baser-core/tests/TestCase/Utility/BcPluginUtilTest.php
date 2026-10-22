@@ -28,24 +28,59 @@ class BcPluginUtilTest extends BcTestCase
     public function testGetPluginConfig($pluginName, $configContent, $expected)
     {
         //create config file
-        $configPath = BcUtil::getPluginPath($pluginName) . 'config.php';
-        if ($configContent !== null) {
-            file_put_contents($configPath, $configContent);
-        }
+        $this->createPluginConfig($pluginName, $configContent);
 
         $result = BcPluginUtil::getPluginConfig($pluginName);
 
         $this->assertEquals($expected, $result);
 
         //clean up
-        if ($configContent !== null) {
-            unlink($configPath);
-        }
+        $this->deletePluginConfig($pluginName, $configContent);
+    }
+
+    /**
+     * テスト用にプラグインディレクトリと config.php を作成する
+     *
+     * プラグイン名として妥当でない名前（.. 等）はディレクトリを作成しない
+     */
+    private function createPluginConfig(string $pluginName, ?string $configContent): void
+    {
+        if ($configContent === null) return;
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\-]*$/', $pluginName)) return;
+        $path = ROOT . DS . 'plugins' . DS . $pluginName;
+        if (!is_dir($path)) mkdir($path, 0777, true);
+        file_put_contents($path . DS . 'config.php', $configContent);
+    }
+
+    /**
+     * テスト用に作成したプラグインディレクトリを削除する
+     */
+    private function deletePluginConfig(string $pluginName, ?string $configContent): void
+    {
+        if ($configContent === null) return;
+        if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\-]*$/', $pluginName)) return;
+        $path = ROOT . DS . 'plugins' . DS . $pluginName;
+        if (file_exists($path . DS . 'config.php')) unlink($path . DS . 'config.php');
+        if (is_dir($path)) rmdir($path);
     }
 
     public static function getPluginConfigDataProvider()
     {
         return [
+            // プラグイン名として妥当でない名前は config.php を読み込まない
+            [
+                '..',
+                '<?php return [\'type\' => \'Plugin\', \'title\' => \'Evil\'];',
+                [
+                    'type' => [],
+                    'title' => '',
+                    'description' => '',
+                    'author' => '',
+                    'url' => '',
+                    'adminLink' => '',
+                    'installMessage' => '',
+                ]
+            ],
             [
                 'non_existent_plugin',
                 null,
@@ -100,19 +135,14 @@ class BcPluginUtilTest extends BcTestCase
     public function testIsPlugin($pluginName, $configContent, $expectedResult)
     {
         //create config file
-        $configPath = BcUtil::getPluginPath($pluginName) . 'config.php';
-        if ($configContent !== null) {
-            file_put_contents($configPath, $configContent);
-        }
+        $this->createPluginConfig($pluginName, $configContent);
 
         $result = BcPluginUtil::isPlugin($pluginName);
 
         $this->assertEquals($expectedResult, $result);
 
         // Clean up
-        if ($configContent !== null) {
-            unlink($configPath);
-        }
+        $this->deletePluginConfig($pluginName, $configContent);
     }
 
     public static function isPluginDataProvider()
@@ -135,18 +165,13 @@ class BcPluginUtilTest extends BcTestCase
     public function testIsTheme($pluginName, $configContent, $expected)
     {
         //Create config file
-        $configPath = BcUtil::getPluginPath($pluginName) . 'config.php';
-        if ($configContent !== null) {
-            file_put_contents($configPath, $configContent);
-        }
+        $this->createPluginConfig($pluginName, $configContent);
 
         $result = BcPluginUtil::isTheme($pluginName);
         $this->assertEquals($expected, $result);
 
         //clean up
-        if (file_exists($configPath)) {
-            unlink($configPath);
-        }
+        $this->deletePluginConfig($pluginName, $configContent);
     }
     public static function isThemeDataProvider()
     {

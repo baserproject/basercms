@@ -100,8 +100,11 @@ class FavoritesService implements FavoritesServiceInterface
      */
     public function create(array $postData)
     {
+        // 所有者はログインユーザーに固定する（他ユーザーへのなりすまし登録防止）
+        $loginUser = BcUtil::loginUser();
+        if ($loginUser) $postData['user_id'] = $loginUser->id;
         $favorite = $this->Favorites->newEmptyEntity();
-        $favorite->sort = $this->Favorites->getMax('sort', ['user_id' => $postData['user_id']]) + 1;
+        $favorite->sort = $this->Favorites->getMax('sort', ['user_id' => $postData['user_id'] ?? null]) + 1;
         $favorite = $this->Favorites->patchEntity($favorite, $postData);
         return $this->Favorites->saveOrFail($favorite);
     }
@@ -118,6 +121,8 @@ class FavoritesService implements FavoritesServiceInterface
      */
     public function update(EntityInterface $target, array $postData)
     {
+        // 所有者はリクエストから変更させない
+        unset($postData['id'], $postData['user_id']);
         $favorite = $this->Favorites->patchEntity($target, $postData);
         return $this->Favorites->saveOrFail($favorite);
     }

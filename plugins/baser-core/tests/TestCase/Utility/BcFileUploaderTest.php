@@ -190,12 +190,54 @@ class BcFileUploaderTest extends BcTestCase
     /**
      * リクエストされたデータを処理しやすいようにセットアップする
      */
+    /**
+     * test isValidFileName
+     * @dataProvider isValidFileNameDataProvider
+     */
+    public function testIsValidFileName($fileName, $expected)
+    {
+        $this->assertEquals($expected, BcFileUploader::isValidFileName($fileName));
+    }
+
+    public static function isValidFileNameDataProvider()
+    {
+        return [
+            ['template1.jpg', true],
+            ['日本語 ファイル名.png', true],
+            ['00000001_eyecatch__1.jpg', true],
+            ['../../config/app.php', false],
+            ['dir/file.jpg', false],
+            ['dir\\file.jpg', false],
+            ['a.jpg" onerror="alert(1)', false],
+            ["a.jpg' onerror='alert(1)", false],
+            ['<script>.jpg', false],
+            ["a\x00.jpg", false],
+        ];
+    }
+
+    /**
+     * test setupRequestData - アップロード対象フィールドに不正な文字列が送信された場合は保存しない
+     *
+     * 任意文字列を保存できると、表示時に href 等の属性から脱出する格納型 XSS に悪用される
+     */
+    public function testSetupRequestData_rejectsInvalidFileNameString()
+    {
+        $data = new ArrayObject(['eyecatch' => 'template1.jpg" onerror="alert(1)']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('', $data['eyecatch']);
+
+        // 妥当なファイル名（既存値）はそのまま
+        $data = new ArrayObject(['eyecatch' => 'template1.jpg']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('template1.jpg', $data['eyecatch']);
+    }
+
     public function testSetupRequestData()
     {
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
         (new BcFolder($filePath))->create();
-        $testFile = $filePath . 'uploadTestFile.html';
+        $testFile = $filePath . 'uploadTestFile.png';
         (new BcFile($testFile))->create();
 
         // upload=falseの場合のテスト
@@ -217,7 +259,7 @@ class BcFileUploaderTest extends BcTestCase
                 $testFile,
                 0,
                 UPLOAD_ERR_OK,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             )
         ]);
@@ -225,13 +267,27 @@ class BcFileUploaderTest extends BcTestCase
         $uploaded = $this->BcFileUploader->getUploadingFiles($uploadedData['_bc_upload_id']);
         $this->assertTrue($uploaded['eyecatch']['uploadable']);
         $this->assertEquals("png", $uploaded['eyecatch']['ext']);
+        // ファイル名の拡張子が画像でない場合は Content-Type が画像でもアップロード不可
+        $data = new ArrayObject([
+            'eyecatch' => new UploadedFile(
+                $testFile,
+                0,
+                UPLOAD_ERR_OK,
+                'uploadTestFile.html',
+                "image/png",
+            )
+        ]);
+        $uploadedData = $this->BcFileUploader->setupRequestData($data);
+        $uploaded = $this->BcFileUploader->getUploadingFiles($uploadedData['_bc_upload_id']);
+        $this->assertFalse($uploaded['eyecatch']['uploadable']);
+        $this->assertEquals("html", $uploaded['eyecatch']['ext']);
         //  新しいデータが送信されず、既存データを引き継ぐ場合
         $data = new ArrayObject([
             'eyecatch' => new UploadedFile(
                 $testFile,
                 0,
                 UPLOAD_ERR_NO_FILE,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             ),
             'eyecatch_' => 'test.png',
@@ -254,14 +310,14 @@ class BcFileUploaderTest extends BcTestCase
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
         (new BcFolder($filePath))->create();
-        $testFile = $filePath . 'uploadTestFile.html';
+        $testFile = $filePath . 'uploadTestFile.png';
         (new BcFile($testFile))->create();
         $data = [
             'eyecatch' => new UploadedFile(
                 $testFile,
                 10,
                 UPLOAD_ERR_OK,
-                'uploadTestFile.html',
+                'uploadTestFile.png',
                 "image/png",
             )
         ];
@@ -1259,6 +1315,36 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertTrue($this->BcFileUploader->isUploadable('all', 'image/jpg', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
         $this->assertFalse($this->BcFileUploader->isUploadable('zip', '', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
         $this->assertTrue($this->BcFileUploader->isUploadable(['zip', 'jpg'], '', ['name' => 'test.jpg', 'tmp_name' => 'test.jpg', 'error' => 0]));
+        // 実行系拡張子は設定（all 等）に関わらず拒否される（RCE対策）
+        $this->assertFalse($this->BcFileUploader->isUploadable('all', '', ['name' => 'shell.php', 'tmp_name' => 'shell.php', 'error' => 0]));
+        $this->assertFalse($this->BcFileUploader->isUploadable(['php'], '', ['name' => 'shell.php', 'tmp_name' => 'shell.php', 'error' => 0]));
+        // 多重拡張子も拒否される
+        $this->assertFalse($this->BcFileUploader->isUploadable('all', '', ['name' => 'shell.php.jpg', 'tmp_name' => 'shell.php.jpg', 'error' => 0]));
+    }
+
+    /**
+     * test isDeniedFile 実行系拡張子の禁止判定
+     * @dataProvider isDeniedFileDataProvider
+     */
+    public function testIsDeniedFile($fileName, $expected)
+    {
+        $this->assertEquals($expected, $this->BcFileUploader->isDeniedFile($fileName));
+    }
+
+    public static function isDeniedFileDataProvider(): array
+    {
+        return [
+            ['shell.php', true],
+            ['shell.PHP', true],
+            ['shell.phtml', true],
+            ['shell.phar', true],
+            ['shell.cgi', true],
+            ['shell.php.jpg', true],   // 多重拡張子
+            ['archive.tar.gz', false],
+            ['photo.jpg', false],
+            ['document.pdf', false],
+            ['', false],
+        ];
     }
 
     /**

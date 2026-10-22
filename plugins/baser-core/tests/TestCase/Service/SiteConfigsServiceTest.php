@@ -106,6 +106,27 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * test update - SMTP パスワードは API レスポンス等の配列・JSON に含めず、保存はできること
+     */
+    public function testUpdateSmtpPasswordIsHiddenButSaved()
+    {
+        $this->SiteConfigs->update([
+            'smtp_user' => 'user@example.com',
+            'smtp_password' => 'secret-password'
+        ]);
+        $this->assertEquals('secret-password', $this->SiteConfigs->getValue('smtp_password'));
+        $this->assertEquals('user@example.com', $this->SiteConfigs->getValue('smtp_user'));
+        $siteConfig = $this->SiteConfigs->get();
+        $this->assertArrayNotHasKey('smtp_password', $siteConfig->toArray());
+        $this->assertStringNotContainsString('secret-password', json_encode($siteConfig));
+        $this->assertArrayHasKey('smtp_user', $siteConfig->toArray());
+
+        // パスワードを送らずに他の項目を更新しても、保存済みのパスワードは消えない
+        $this->SiteConfigs->update(['admin_theme' => 'admin_second']);
+        $this->assertEquals('secret-password', $this->SiteConfigs->getValue('smtp_password'));
+    }
+
+    /**
      * test isWritableEnv
      */
     public function testIsWritableEnv(): void
@@ -133,6 +154,21 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
             ->toEnv(true)
             ->toServer(true);
         $this->assertEquals('BASERCMS', filter_var(env('BASERCMS')));
+
+        // 改行・制御文字を含む値は書き込まない（.env の破壊防止）
+        $before = file_get_contents($path);
+        foreach(["https://example.com\nexport EVIL=1", "a\rb", "a\x00b"] as $evil) {
+            try {
+                $this->SiteConfigs->putEnv('SITE_URL', $evil);
+                $this->fail('制御文字を含む値が拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertEquals('設定値に改行や制御文字を含めることはできません。', $e->getMessage());
+            }
+        }
+        $this->assertEquals($before, file_get_contents($path));
+        // 引用符・シェル特殊文字は除去される
+        $this->SiteConfigs->putEnv('BASERCMS', 'a"b;c$d`e\\f');
+        $this->assertStringContainsString('export BASERCMS="abcdef"', file_get_contents($path));
         unlink($path);
         rename($path . '.bak', $path);
     }
