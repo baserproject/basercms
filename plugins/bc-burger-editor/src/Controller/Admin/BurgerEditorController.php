@@ -128,6 +128,31 @@ class BurgerEditorController extends BcAdminAppController
     }
 
     /**
+     * アップロードされたファイルの中身が拡張子に対応する画像形式かどうかを判定する
+     *
+     * @param \Psr\Http\Message\UploadedFileInterface $uploadedFile
+     * @param string $fileExt 拡張子
+     * @return bool
+     */
+    protected function isValidImageContent($uploadedFile, string $fileExt): bool
+    {
+        $path = $uploadedFile->getStream()->getMetadata('uri');
+        if (!$path || !is_file($path)) return false;
+        $info = @getimagesize($path);
+        if (!$info || empty($info[2])) return false;
+        $expected = [
+            'gif' => [IMAGETYPE_GIF],
+            'jpg' => [IMAGETYPE_JPEG],
+            'jpeg' => [IMAGETYPE_JPEG],
+            'jpe' => [IMAGETYPE_JPEG],
+            'jfif' => [IMAGETYPE_JPEG],
+            'png' => [IMAGETYPE_PNG],
+        ];
+        $types = $expected[strtolower($fileExt)] ?? [];
+        return in_array($info[2], $types, true);
+    }
+
+    /**
      * 画像ファイルアップロード
      *
      * @return \Cake\Http\Response
@@ -152,6 +177,11 @@ class BurgerEditorController extends BcAdminAppController
                 }
                 $fileExt = BurgerEditorUtil::getExtension($uploadedFile->getClientFilename());
                 if (!in_array(strtolower($fileExt), $this->imgExts)) {
+                    $hasError = "画像形式のファイルをアップロードしてください";
+                } elseif ($uploadedFile->getError() === UPLOAD_ERR_OK && !$this->isValidImageContent($uploadedFile, $fileExt)) {
+                    // 拡張子だけでなくファイルの中身が画像であることを確認する。
+                    // GIF は再エンコードせずそのまま公開ディレクトリへ保存するため、
+                    // 中身が HTML 等のファイルを画像として配置できてしまう
                     $hasError = "画像形式のファイルをアップロードしてください";
                 }
                 if ($uploadedFile->getError() === UPLOAD_ERR_PARTIAL) {

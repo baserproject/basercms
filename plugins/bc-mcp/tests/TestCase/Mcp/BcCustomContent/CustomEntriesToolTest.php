@@ -88,7 +88,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -137,7 +137,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_files',
             'title' => 'ファイル付きお問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -159,6 +159,44 @@ class CustomEntriesToolTest extends BcTestCase
 
         // テーブルをクリーンアップ
         $dataBaseService->dropTable('custom_entry_1_contact_with_files');
+    }
+
+    /**
+     * Test addCustomEntry - customFields に定義外のキー（内部カラム）を指定しても無視されること
+     */
+    public function testAddCustomEntryIgnoresUndeclaredCustomFields()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customTablesService->create([
+            'type' => 'contact',
+            'name' => 'contact_mass',
+            'title' => 'お問い合わせ',
+            'display_field' => 'title'
+        ]);
+
+        $result = $this->CustomEntriesTool->addCustomEntry(
+            customTableId: 1,
+            title: 'マスアサインメント',
+            creatorId: 1,
+            customFields: [
+                'id' => 999,
+                'custom_table_id' => 99,
+                'lft' => 1,
+                'rght' => 2,
+                'level' => 5,
+                'feature' => 'テキスト値'
+            ]
+        );
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('id', $result, json_encode($result, JSON_UNESCAPED_UNICODE));
+        $this->assertNotEquals(999, $result['id']);
+        $this->assertEquals(1, $result['custom_table_id']);
+        $this->assertEquals('テキスト値', $result['feature']);
+
+        $dataBaseService->dropTable('custom_entry_1_contact_mass');
     }
 
     /**
@@ -192,7 +230,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_image_url',
             'title' => '画像URL付きお問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTablesService->update($customTable, [
             'id' => $customTable->id,
@@ -215,7 +253,8 @@ class CustomEntriesToolTest extends BcTestCase
             customTableId: $customTableId,
             title: $title,
             customFields: $customFields,
-            status: true
+            status: true,
+            creatorId: 1
         );
 
         $this->assertIsArray($result);
@@ -258,7 +297,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact_with_invalid_file',
             'title' => '不正ファイル名お問い合わせ',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         $customTablesService->update($customTable, [
             'id' => $customTable->id,
@@ -312,7 +351,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $result = $this->CustomEntriesTool->addCustomEntry(
@@ -434,7 +473,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $this->CustomEntriesTool->addCustomEntry(
@@ -689,7 +728,7 @@ class CustomEntriesToolTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);

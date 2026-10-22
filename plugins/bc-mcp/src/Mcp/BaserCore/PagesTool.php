@@ -52,7 +52,7 @@ class PagesTool extends BaseMcpTool
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード（ページ本文を対象に検索）'],
                         'siteId' => ['type' => 'number', 'description' => 'サイトID（省略時は全て）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（1: 公開のみ）（省略時は全て）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は10件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]
@@ -185,7 +185,8 @@ class PagesTool extends BaseMcpTool
             /** @var PagesService $pagesService */
             $pagesService = $this->getService(PagesServiceInterface::class);
 
-            $params = ['limit' => $limit ?? 10];
+            $limit = $this->clampLimit($limit, 10);
+            $params = ['limit' => $limit];
             // getIndex は contents（ページ本文）に対する LIKE 検索に対応する
             if ($keyword !== null) $params['contents'] = $keyword;
             if ($status === 1) $params['status'] = 'publish';
@@ -196,7 +197,7 @@ class PagesTool extends BaseMcpTool
             }
             $page = $page ?? 1;
             if ($page > 1) {
-                $query->offset(($page - 1) * ($limit ?? 10));
+                $query->offset(($page - 1) * $limit);
             }
 
             $pages = [];
@@ -210,7 +211,7 @@ class PagesTool extends BaseMcpTool
                 'data' => $pages,
                 'pagination' => [
                     'page' => $page,
-                    'limit' => $limit ?? 10,
+                    'limit' => $limit,
                     'count' => count($pages),
                 ]
             ]);

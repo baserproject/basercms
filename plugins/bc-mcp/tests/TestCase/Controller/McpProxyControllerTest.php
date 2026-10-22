@@ -11,16 +11,25 @@ declare(strict_types=1);
 
 namespace BcMcp\Test\TestCase\Controller;
 
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMcp\Controller\McpProxyController;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * McpProxyControllerTest
  */
 class McpProxyControllerTest extends BcTestCase
 {
+
+    use ScenarioAwareTrait;
 
     /**
      * test toMcpMessage が MCP の必須ヘッダを引き継ぐ
@@ -49,6 +58,79 @@ class McpProxyControllerTest extends BcTestCase
         // 認証はプロキシで完結しているため SDK へ渡さない
         $this->assertNull($message->getHeader('Authorization'));
         $this->assertEquals('POST', $message->getMethod());
+    }
+
+    /**
+     * test toMcpMessage は識別子として妥当でない Mcp-Session-Id を拒否する
+     *
+     * SDK はセッション ID をそのままファイル名に連結するため、パストラバーサルに悪用できる
+     */
+    public function testToMcpMessageRejectsInvalidSessionId()
+    {
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+                'HTTP_MCP_SESSION_ID' => '../../config/app_local',
+            ],
+        ]);
+        $controller = new McpProxyController($request);
+        $this->expectException(BadRequestException::class);
+        $controller->toMcpMessage(['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/list']);
+    }
+
+    /**
+     * test toMcpMessage は妥当な Mcp-Session-Id を引き継ぐ
+     */
+    public function testToMcpMessageAcceptsValidSessionId()
+    {
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+                'HTTP_MCP_SESSION_ID' => 'abc-DEF_123',
+            ],
+        ]);
+        $controller = new McpProxyController($request);
+        $message = $controller->toMcpMessage(['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/list']);
+        $this->assertEquals('abc-DEF_123', $message->getHeader('Mcp-Session-Id'));
+    }
+
+    /**
+     * test hasRequiredScope - 読み取り専用でないツールには mcp:write が必要
+     */
+    public function testHasRequiredScope()
+    {
+        $controller = new McpProxyController(new ServerRequest());
+        $this->assertTrue($controller->hasRequiredScope('GET', ['mcp:read']));
+        $this->assertTrue($controller->hasRequiredScope('GET', ['mcp:write']));
+        $this->assertFalse($controller->hasRequiredScope('GET', []));
+        $this->assertFalse($controller->hasRequiredScope('POST', ['mcp:read']));
+        $this->assertTrue($controller->hasRequiredScope('POST', ['mcp:read', 'mcp:write']));
+        $this->assertFalse($controller->hasRequiredScope('POST', []));
+        // JWT の claim は空白区切りの文字列
+        $this->assertTrue($controller->hasRequiredScope('POST', 'mcp:read mcp:write'));
+        $this->assertFalse($controller->hasRequiredScope('POST', 'mcp:read'));
+        $this->assertFalse($controller->hasRequiredScope('GET', ''));
+        $this->assertFalse($controller->hasRequiredScope('GET', null));
+    }
+
+    /**
+     * test hasApiAdminPrefix - グループの auth_prefix に Api/Admin が必要
+     */
+    public function testHasApiAdminPrefix()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        UserGroupFactory::make(['id' => 2, 'name' => 'admin_only', 'title' => 'admin only', 'auth_prefix' => 'Admin'])->persist();
+        UserFactory::make(['id' => 2, 'name' => 'adminonly', 'email' => 'adminonly@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        UserGroupFactory::make(['id' => 3, 'name' => 'api_ok', 'title' => 'api ok', 'auth_prefix' => 'Admin,Api/Admin'])->persist();
+        UserFactory::make(['id' => 3, 'name' => 'apiok', 'email' => 'apiok@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 3])->persist();
+
+        $controller = new McpProxyController(new ServerRequest());
+        $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        $this->assertTrue($controller->hasApiAdminPrefix($users->get(1, contain: ['UserGroups'])));
+        $this->assertFalse($controller->hasApiAdminPrefix($users->get(2, contain: ['UserGroups'])));
+        $this->assertTrue($controller->hasApiAdminPrefix($users->get(3, contain: ['UserGroups'])));
     }
 
     /**

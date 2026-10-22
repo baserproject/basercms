@@ -19,12 +19,32 @@ class OAuth2Util
      */
     public static function getIssuer(\Cake\Http\ServerRequest $request): string
     {
+        return self::getBaseUrl($request) . '/bc-mcp';
+    }
+
+    /**
+     * 認可サーバーのベース URL を取得する
+     *
+     * Host ヘッダから組み立てると、Host を固定していないサーバーで細工した Host により
+     * メタデータのエンドポイントや issuer を差し替えられ、JWT の iss（SITE_URL 由来）とも
+     * 一致しなくなる。SITE_URL が設定されている場合はそれを使い、無い場合のみ
+     * リクエストから導出する。
+     *
+     * @param \Cake\Http\ServerRequest $request リクエスト
+     * @return string 末尾スラッシュ無しのベース URL
+     */
+    public static function getBaseUrl(\Cake\Http\ServerRequest $request): string
+    {
+        $siteUrl = rtrim((string)env('SITE_URL', ''), '/');
+        if ($siteUrl !== '' && preg_match('/^https?:\/\//i', $siteUrl)) {
+            return $siteUrl;
+        }
         $scheme = $request->is('https')? 'https' : 'http';
         $host = $request->getHeaderLine('Host');
         if (!$host) {
             $host = $request->getEnv('HTTP_HOST')?: 'localhost';
         }
-        return $scheme . '://' . $host . '/bc-mcp';
+        return $scheme . '://' . $host;
     }
 
     /**

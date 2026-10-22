@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace BcMcp\Controller;
 
 use BaserCore\Controller\AppController;
+use BaserCore\Model\Entity\User;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
+use BcMcp\OAuth2\Repository\OAuth2UserRepository;
+use Cake\Log\Log;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Core\Configure;
@@ -138,6 +141,11 @@ class McpProxyController extends AppController
         $tokenData = $this->oauth2Service->validateAccessToken($token);
 
         if (!$tokenData) {
+            return $this->returnUnauthorizedResponse('Invalid or expired access token');
+        }
+
+        // 無効化・削除されたユーザーのトークンは有効期限内でも受け付けない
+        if (!OAuth2UserRepository::isActiveUser($tokenData['user_id'])) {
             return $this->returnUnauthorizedResponse('Invalid or expired access token');
         }
 
@@ -316,6 +324,8 @@ class McpProxyController extends AppController
                     ]
                 ], JSON_UNESCAPED_UNICODE));
         } catch (\Exception $e) {
+            // 例外の内容（DB のエラー等の内部情報）は応答に含めず、ログに記録する
+            Log::write('error', 'MCPリクエストの処理に失敗しました: ' . $e->getMessage() . "\n" . $e->getTraceAsString(), ['scope' => ['mcp']]);
             return $this->response
                 ->withStatus(500)
                 ->withHeader('Content-Type', 'application/json')
@@ -323,7 +333,7 @@ class McpProxyController extends AppController
                     'jsonrpc' => '2.0',
                     'error' => [
                         'code' => 500,
-                        'message' => 'MCPリクエストの処理に失敗しました: ' . $e->getMessage()
+                        'message' => 'MCPリクエストの処理に失敗しました。'
                     ]
                 ], JSON_UNESCAPED_UNICODE));
         } finally {
@@ -353,12 +363,15 @@ class McpProxyController extends AppController
         // Mcp-Session-Id は Legacy 世代（initialize 方式）のクライアントが
         // セッションを維持するために使う。Modern では廃止されているが、
         // Dual-era サーバーとして両方に応じるため透過する。
+        // SDK はセッション ID をそのままファイル名に連結するため、識別子として妥当な値以外は受け付けない
         $targets = ['MCP-Protocol-Version', 'Mcp-Method', 'Mcp-Name', 'Mcp-Session-Id', 'Last-Event-ID'];
         foreach($targets as $target) {
             $value = $this->request->getHeaderLine($target);
-            if ($value !== '') {
-                $message->setHeader($target, $value);
+            if ($value === '') continue;
+            if (in_array($target, ['Mcp-Session-Id', 'Last-Event-ID'], true) && !preg_match('/^[A-Za-z0-9_-]{1,128}$/', $value)) {
+                throw new BadRequestException('Invalid ' . $target . ' header');
             }
+            $message->setHeader($target, $value);
         }
         // x-mcp-header 由来の Mcp-Param-* も引き継ぐ
         foreach($this->request->getHeaders() as $name => $values) {
@@ -386,16 +399,68 @@ class McpProxyController extends AppController
         $usersService = $this->getService(UsersServiceInterface::class);
         $user = $usersService->get(McpContext::getLoginUserId());
         if(!$user) return false;
+
+        // 管理 API（Api/Admin）の利用が許可されていないユーザーグループでは操作できない
+        if (!$this->hasApiAdminPrefix($user)) return false;
+
+        // トークンのスコープを確認する。読み取り専用でないツールは mcp:write が必要
+        $permissionManager = new PermissionManager();
+        $toolName = $mcpRequest['params']['name'] ?? '';
+        $arguments = $mcpRequest['params']['arguments'] ?? [];
+        $permissionUrl = $permissionManager->getPermissionUrl($toolName, $arguments);
+        if (!$permissionUrl) return false;
+        $method = (string)key($permissionUrl);
+        if (!$this->hasRequiredScope($method, $this->request->getAttribute('oauth_scopes', []))) {
+            return false;
+        }
+
         if (BcUtil::isAdminUser($user)) {
             return true;
         }
         $userGroupsIds = Hash::extract($user->toArray()['user_groups'], '{n}.id');
-        $permissionManager = new PermissionManager();
         return $permissionManager->checkPermission(
-            $mcpRequest['params']['name'],
+            $toolName,
             $userGroupsIds,
-            $mcpRequest['params']['arguments'] ?? []
+            $arguments
         );
+    }
+
+    /**
+     * ユーザーのグループに管理 API（Api/Admin）の認証プレフィックスが含まれるか判定する
+     *
+     * 管理画面（Admin）のみ許可されたグループのユーザーが、管理画面のセッションで
+     * 認可を行い MCP 経由で管理 API 相当の操作を行えないようにする
+     *
+     * @param User|\Cake\Datasource\EntityInterface $user
+     * @return bool
+     */
+    public function hasApiAdminPrefix($user): bool
+    {
+        if (!method_exists($user, 'getAuthPrefixes')) return false;
+        return in_array('Api/Admin', $user->getAuthPrefixes(), true);
+    }
+
+    /**
+     * ツールの実行に必要なスコープをトークンが持っているか判定する
+     *
+     * 読み取り（GET）は mcp:read または mcp:write、それ以外（追加・更新・削除）は mcp:write が必要。
+     * 同意時に読み取りのみ許可したトークンで書き込み系のツールを実行できないようにする
+     *
+     * @param string $method 権限 URL のメソッド（GET / POST 等）
+     * @param array $scopes トークンのスコープ
+     * @return bool
+     */
+    public function hasRequiredScope(string $method, array|string|null $scopes): bool
+    {
+        // JWT の scopes claim は空白区切りの文字列のため配列に正規化する
+        if (is_string($scopes)) {
+            $scopes = preg_split('/\s+/', trim($scopes), -1, PREG_SPLIT_NO_EMPTY);
+        }
+        $scopes = (array)$scopes;
+        if (strtoupper($method) === 'GET') {
+            return in_array('mcp:read', $scopes, true) || in_array('mcp:write', $scopes, true);
+        }
+        return in_array('mcp:write', $scopes, true);
     }
 
     /**

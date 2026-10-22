@@ -54,7 +54,7 @@ class BlogCategoriesTool extends BaseMcpTool
                         'blogContentId' => ['type' => 'number', 'description' => 'ブログコンテンツID（省略時はデフォルト）'],
                         'title' => ['type' => 'string', 'description' => 'タイトル（部分一致）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（null: 全て, publish: 公開）'],
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は制限なし）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は100件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                     ]
                 ]
@@ -209,10 +209,11 @@ class BlogCategoriesTool extends BaseMcpTool
             /** @var BlogCategoriesService $blogCategoriesService */
             $blogCategoriesService = $this->getService(BlogCategoriesServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = [];
             if (!empty($title)) $conditions['title'] = $title;
             if (!empty($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             //
@@ -226,7 +227,7 @@ class BlogCategoriesTool extends BaseMcpTool
             return $this->createSuccessResponse($results, [
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results),
                     'total' => $totalCount
                 ]
@@ -303,29 +304,18 @@ class BlogCategoriesTool extends BaseMcpTool
             if ($parentId !== null) $data['parent_id'] = $parentId;
             if ($status !== null) $data['status'] = $status;
 
-            // nameを更新する場合、バリデーションエラーを避けるために
-            // 現在のblog_content_idを明示的に含める
-            if (isset($data['name']) && !isset($data['blog_content_id'])) {
-                $data['blog_content_id'] = $entity->blog_content_id;
-            }
-
-            // バリデーションコンテキストを設定
-            $options = [];
-            if (isset($data['name'])) $options['validate'] = false; // 重複チェックのバリデーションを一時的に無効化
-
-            // バリデーションを無効化した場合は手動で重複チェックを実行
-            if (isset($data['name']) && isset($options['validate']) && $options['validate'] === false) {
-                // 同じblog_content_id内での重複をチェック
-                $existingCategory = $blogCategoriesService->getIndex($entity->blog_content_id, [
-                    'name' => $data['name']
-                ])->first();
-
-                if ($existingCategory && $existingCategory->id !== $id) {
-                    return $this->createErrorResponse('指定されたカテゴリ名は既に使用されています');
+            // name を更新する場合、重複チェック（duplicateBlogCategory）が自身を除外して
+            // blog_content_id 内で判定できるよう、id と現在の blog_content_id を明示的に含める。
+            // 以前はバリデーション全体を無効化して保存していたため、カテゴリ名の形式や
+            // タイトルの必須チェック等も行われずに保存できてしまっていた
+            if (isset($data['name'])) {
+                $data['id'] = $entity->id;
+                if (!isset($data['blog_content_id'])) {
+                    $data['blog_content_id'] = $entity->blog_content_id;
                 }
             }
 
-            $result = $blogCategoriesService->update($entity, $data, $options);
+            $result = $blogCategoriesService->update($entity, $data);
 
             if ($result) {
                 return $this->createSuccessResponse(

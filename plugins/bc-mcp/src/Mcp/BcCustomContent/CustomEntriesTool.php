@@ -92,7 +92,7 @@ class CustomEntriesTool extends BaseMcpTool
                     'properties' => [
                         'customTableId' => ['type' => 'number', 'description' => 'カスタムテーブルID（必須）'],
                         'keyword' => ['type' => 'string', 'description' => '検索キーワード（タイトル・スラッグを対象に検索）'],
-                        'limit' => ['type' => 'number', 'default' => 20, 'description' => '取得件数（デフォルト: 20）'],
+                        'limit' => ['type' => 'number', 'default' => 20, 'description' => '取得件数（デフォルト: 20、最大100件）'],
                         'page' => ['type' => 'number', 'default' => 1, 'description' => 'ページ番号（デフォルト: 1）'],
                         'status' => ['type' => 'number', 'description' => 'ステータス（null: 非公開, publish: 公開）']
                     ],
@@ -175,6 +175,8 @@ class CustomEntriesTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $customTableId, $title, $parentId, $name, $creatorId, $status,
             $publishBegin, $publishEnd, $published, $customFields, $loginUserId
@@ -191,7 +193,7 @@ class CustomEntriesTool extends BaseMcpTool
                 'title' => $title,
                 'parentId' => $parentId ?? null,
                 'name' => $name ?? '',
-                'creator_id' => $creatorId ?? 1,
+                'creator_id' => $this->resolveActorId($creatorId, $loginUserId),
                 'status' => $status ?? false,
                 'publish_begin' => $publishBegin ?? null,
                 'publish_end' => $publishEnd ?? null,
@@ -240,6 +242,8 @@ class CustomEntriesTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id, $customTableId, $title, $parentId, $name, $creatorId, $status,
             $publishBegin, $publishEnd, $published, $customFields, $loginUserId
@@ -259,7 +263,7 @@ class CustomEntriesTool extends BaseMcpTool
             if ($title !== null) $data['title'] = $title;
             if ($parentId !== null) $data['parent_id'] = $parentId;
             if ($name !== null) $data['name'] = $name;
-            if ($creatorId !== null) $data['creator_id'] = $creatorId;
+            if ($creatorId !== null) $data['creator_id'] = $this->resolveActorId($creatorId, $loginUserId);
             if ($status !== null) $data['status'] = $status;
             if ($publishBegin !== null) $data['publish_begin'] = $publishBegin;
             if ($publishEnd !== null) $data['publish_end'] = $publishEnd;
@@ -301,6 +305,12 @@ class CustomEntriesTool extends BaseMcpTool
         $processedFields = [];
 
         foreach($customFields as $fieldName => $value) {
+            // 対象テーブルに定義されたフィールド以外は受け付けない。
+            // 任意のキーを通すと id / custom_table_id / lft / rght / level 等の内部カラムを
+            // 上書きでき、他テーブルのエントリーとして保存したりツリー構造を壊したりできる
+            if (!array_key_exists($fieldName, $fieldTypes)) {
+                continue;
+            }
             if (is_array($value)) {
                 // 配列の場合、json形式またはファイルアップロードの可能性をチェック
                 $processedFields[$fieldName] = $value;
@@ -374,7 +384,7 @@ class CustomEntriesTool extends BaseMcpTool
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
             $customEntriesService->setup($customTableId);
             $conditions = [
-                'limit' => $limit ?? 20,
+                'limit' => $this->clampLimit($limit, 20),
                 'page' => $page ?? 1
             ];
             if (isset($status)) $conditions['status'] = $status;
@@ -420,6 +430,8 @@ class CustomEntriesTool extends BaseMcpTool
      */
     public function deleteCustomEntry(int $customTableId, int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($customTableId, $id, $loginUserId) {
             /** @var CustomEntriesService $customEntriesService */
             $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);

@@ -12,17 +12,42 @@
 /**
  * 5.4.2 アップデーター
  *
- * config/install.php の各データソース設定に `cacheMetadata => true` を追記する。
+ * 1. キャッシュクリアを POST のみ受け付けるように変更したため（CSRF 対策）、
+ *    既存のアクセスルールで method が GET になっているキャッシュクリアのルールを POST に書き換える。
+ *    GET のままだと、POST のリクエストが拒否され、管理者以外のユーザーがキャッシュクリアを利用できなくなる。
+ *    5.4.0 / 5.4.1 から更新する場合は 5.3.2 アップデーターが実行されないため、同じ処理を行う（再実行しても影響はない）。
  *
- * この設定が無いと CakePHP はテーブル構造（カラム・インデックス等）をキャッシュせず、
- * 利用するテーブルごとに毎リクエスト DESCRIBE 相当のクエリが発生する（1 画面で 50 本前後）。
- * 5.4.2 以降のインストーラは生成時に出力するが、アップデートで導入済みのサイトは
- * install.php が書き換わらないため、ここで追記する。
+ * 2. config/install.php の各データソース設定に `cacheMetadata => true` を追記する。
+ *    この設定が無いと CakePHP はテーブル構造（カラム・インデックス等）をキャッシュせず、
+ *    利用するテーブルごとに毎リクエスト DESCRIBE 相当のクエリが発生する（1 画面で 50 本前後）。
+ *    5.4.2 以降のインストーラは生成時に出力するが、アップデートで導入済みのサイトは
+ *    install.php が書き換わらないため、ここで追記する。
+ *    テストから対象ファイルを差し替えられるよう、$installFile が定義済みの場合はそれを使う。
  *
- * テストから対象ファイルを差し替えられるよう、$installFile が定義済みの場合はそれを使う。
+ * 2. は途中で終了する（return）ことがあるため、1. を先に実行する。
  */
 use BaserCore\Utility\BcUpdateLog;
+use Cake\ORM\TableRegistry;
 
+// 1. キャッシュクリアのアクセスルールを POST に書き換える
+$clearCacheUrls = [
+    '/baser/admin/baser-core/utilities/clear_cache',
+    '/baser/api/admin/baser-core/utilities/clear_cache.json',
+];
+
+try {
+    $permissionCount = TableRegistry::getTableLocator()->get('BaserCore.Permissions')->updateAll(
+        ['method' => 'POST'],
+        ['url IN' => $clearCacheUrls, 'method' => 'GET']
+    );
+    if ($permissionCount) {
+        BcUpdateLog::set(__d('baser_core', 'キャッシュクリアのアクセスルール {0} 件のメソッドを POST に変更しました。', $permissionCount));
+    }
+} catch (\Throwable $e) {
+    BcUpdateLog::set(__d('baser_core', 'キャッシュクリアのアクセスルールの書き換えに失敗しました。アクセスルール管理にて、キャッシュクリアのルールのメソッドを POST に変更してください。') . ' ' . $e->getMessage());
+}
+
+// 2. config/install.php に cacheMetadata を追記する
 $installFile = $installFile ?? ROOT . DS . 'config' . DS . 'install.php';
 
 if (!file_exists($installFile)) {

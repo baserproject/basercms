@@ -296,7 +296,8 @@ class BlogCategoriesToolTest extends BcTestCase
 
         // ページネーション情報の確認
         $this->assertEquals(1, $result['pagination']['page']);
-        $this->assertNull($result['pagination']['limit']);
+        // limit 省略時は上限（100 件）が適用される
+        $this->assertEquals(100, $result['pagination']['limit']);
         $this->assertEquals(5, $result['pagination']['count']);
         $this->assertEquals(5, $result['pagination']['total']); // 総件数
     }

@@ -98,7 +98,8 @@ class OAuth2ClientRepository implements ClientRepositoryInterface
 
         // 機密クライアントの場合、シークレットキーを検証
         if ($clientData->is_confidential) {
-            return !empty($clientSecret) && $clientSecret === $clientData->client_secret;
+            return !empty($clientSecret) && is_string($clientData->client_secret)
+                && hash_equals($clientData->client_secret, (string)$clientSecret);
         }
 
         // パブリッククライアントの場合は、シークレットが空であることを確認

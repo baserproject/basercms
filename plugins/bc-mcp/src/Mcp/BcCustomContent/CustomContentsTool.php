@@ -39,7 +39,7 @@ class CustomContentsTool extends BaseMcpTool
                         'siteId' => ['type' => 'number', 'default' => 1, 'description' => 'サイトID（初期値: 1）'],
                         'parentId' => ['type' => 'number', 'default' => 1, 'description' => '親フォルダID（初期値: 1）'],
                         'description' => ['type' => 'string', 'description' => '説明文'],
-                        'authorId' => ['type' => 'number', 'default' => 1, 'description' => '作成者ID'],
+                        'authorId' => ['type' => 'number', 'description' => '作成者ID（省略時はログインユーザーID）'],
                         'layoutTemplate' => ['type' => 'string', 'description' => 'レイアウトテンプレート名（初期値: default）'],
                         'status' => ['type' => 'number', 'description' => '公開状態（0: 非公開状態, 1: 公開状態）'],
                         'publishBegin' => ['type' => 'string', 'description' => '公開開始日時（YYYY-MM-DD HH:MM:SS形式）'],
@@ -65,7 +65,7 @@ class CustomContentsTool extends BaseMcpTool
                 inputSchema: [
                     'type' => 'object',
                     'properties' => [
-                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は制限なし）'],
+                        'limit' => ['type' => 'number', 'description' => '取得件数（省略時は100件、最大100件）'],
                         'page' => ['type' => 'number', 'description' => 'ページ番号（省略時は1ページ目）'],
                         'status' => ['type' => 'number', 'description' => '公開ステータス（null: 非公開, publish: 公開）']
                     ]
@@ -101,7 +101,7 @@ class CustomContentsTool extends BaseMcpTool
                         'siteId' => ['type' => 'number', 'default' => 1, 'description' => 'サイトID'],
                         'parentId' => ['type' => 'number', 'default' => 1, 'description' => '親フォルダID'],
                         'description' => ['type' => 'string', 'description' => '説明文'],
-                        'authorId' => ['type' => 'number', 'default' => 1, 'description' => '作成者ID'],
+                        'authorId' => ['type' => 'number', 'description' => '作成者ID'],
                         'layoutTemplate' => ['type' => 'string', 'description' => 'レイアウトテンプレート名'],
                         'status' => ['type' => 'number', 'description' => '公開状態（0: 非公開状態, 1: 公開状態）'],
                         'publishBegin' => ['type' => 'string', 'description' => '公開開始日時（YYYY-MM-DD HH:MM:SS形式）'],
@@ -187,6 +187,8 @@ class CustomContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $name, $title, $customTableId, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $widgetArea, $listCount,
@@ -215,7 +217,7 @@ class CustomContentsTool extends BaseMcpTool
                     'description' => $description ?? '',
                     'site_id' => $siteId,
                     'parent_id' => $parentId,
-                    'author_id' => $authorId ?? $loginUserId ?? 1,
+                    'author_id' => $this->resolveActorId($authorId, $loginUserId),
                     'layout_template' => $layoutTemplate ?? '',
                     'exclude_search' => $excludeSearch,
                     'self_status' => $status ?? false,
@@ -268,6 +270,8 @@ class CustomContentsTool extends BaseMcpTool
         ?int $loginUserId = null
     ): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use (
             $id, $name, $title, $customTableId, $siteId, $parentId, $description, $authorId, $layoutTemplate, $status,
             $publishBegin, $publishEnd, $excludeSearch, $excludeMenu, $blankLink, $template, $widgetArea, $listCount,
@@ -287,7 +291,7 @@ class CustomContentsTool extends BaseMcpTool
             if ($siteId !== null) $data['content']['site_id'] = $siteId;
             if ($parentId !== null) $data['content']['parent_id'] = $parentId;
             if ($description !== null) $data['content']['description'] = $description;
-            if ($authorId !== null) $data['content']['author_id'] = $authorId;
+            if ($authorId !== null) $data['content']['author_id'] = $this->resolveActorId((int)$authorId, $loginUserId);
             if ($layoutTemplate !== null) $data['content']['layout_template'] = $layoutTemplate;
             if ($status !== null) $data['content']['self_status'] = $status;
             if ($publishBegin !== null) $data['content']['publish_begin'] = $publishBegin;
@@ -329,9 +333,10 @@ class CustomContentsTool extends BaseMcpTool
         return $this->executeWithErrorHandling(function() use ($status, $limit, $page) {
             $customContentsService = $this->getService(CustomContentsServiceInterface::class);
 
+            $limit = $this->clampLimit($limit, 100);
             $conditions = [];
             if (isset($status)) $conditions['status'] = $status;
-            if (!empty($limit)) $conditions['limit'] = $limit;
+            $conditions['limit'] = $limit;
             if (!empty($page)) $conditions['page'] = $page;
 
             $results = $customContentsService->getIndex($conditions)->toArray();
@@ -340,7 +345,7 @@ class CustomContentsTool extends BaseMcpTool
                 'data' => $results,
                 'pagination' => [
                     'page' => $page ?? 1,
-                    'limit' => $limit ?? null,
+                    'limit' => $limit,
                     'count' => count($results)
                 ]
             ]);
@@ -370,6 +375,8 @@ class CustomContentsTool extends BaseMcpTool
      */
     public function deleteCustomContent(int $id, ?int $loginUserId = null): array
     {
+        // 認証済みの操作者はリクエストのコンテキストから解決する
+        $loginUserId = $this->resolveLoginUserId($loginUserId);
         return $this->executeWithErrorHandling(function() use ($id, $loginUserId) {
             /** @var CustomContentsService $customContentsService */
             $customContentsService = $this->getService(CustomContentsServiceInterface::class);

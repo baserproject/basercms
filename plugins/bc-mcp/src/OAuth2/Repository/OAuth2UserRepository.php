@@ -41,4 +41,42 @@ class OAuth2UserRepository implements UserRepositoryInterface
         return null;
     }
 
+    /**
+     * トークンに紐づくユーザーが有効（存在し、無効化されていない）かどうかを判定する
+     *
+     * 無効化・削除されたユーザーのアクセストークン・リフレッシュトークンを
+     * 有効期限内でも受け付けないために使う
+     *
+     * @param int|string|null $userId
+     * @return bool
+     */
+    public static function isActiveUser($userId): bool
+    {
+        if (!$userId || !is_numeric($userId)) return false;
+        $user = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Users')
+            ->find()->select(['id', 'status'])->where(['Users.id' => (int)$userId])->first();
+        return $user? (bool)$user->status : false;
+    }
+
+    /**
+     * 指定ユーザーのアクセストークン・リフレッシュトークンをすべて失効させる
+     *
+     * @param int|string $userId
+     * @return void
+     */
+    public static function revokeTokensByUserId($userId): void
+    {
+        if (!$userId) return;
+        $locator = \Cake\ORM\TableRegistry::getTableLocator();
+        $accessTokens = $locator->get('BcMcp.Oauth2AccessTokens');
+        $refreshTokens = $locator->get('BcMcp.Oauth2RefreshTokens');
+        $tokenIds = $accessTokens->find()
+            ->select(['token_id'])
+            ->where(['user_id' => (string)$userId])
+            ->all()->extract('token_id')->toList();
+        if (!$tokenIds) return;
+        $accessTokens->updateAll(['revoked' => true], ['token_id IN' => $tokenIds]);
+        $refreshTokens->updateAll(['revoked' => true], ['access_token_id IN' => $tokenIds]);
+    }
+
 }

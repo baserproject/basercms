@@ -9,6 +9,7 @@ use BcMcp\OAuth2\Entity\User;
 use BcMcp\OAuth2\Exception\OAuth2ConfigurationException;
 use BcMcp\OAuth2\Service\OAuth2Service;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
@@ -133,6 +134,12 @@ class Oauth2Controller extends BcAdminAppController
                 ]
             ]);
         }
+        // 管理 API（Api/Admin）の利用が許可されていないユーザーグループでは、
+        // MCP 経由で管理 API 相当の操作ができてしまうため同意させない
+        if (!$this->hasApiAdminPrefix($user)) {
+            throw new ForbiddenException(__d('baser_core', 'MCP を利用するには、ユーザーグループで管理 API（Api/Admin）の利用が許可されている必要があります。'));
+        }
+
         // POSTリクエストの場合は、クエリもボディも読まずセッションの認可
         // リクエストのみで処理を完結させる(同意画面と実際の発行内容の
         // すり替えを防ぐため)
@@ -186,6 +193,25 @@ class Oauth2Controller extends BcAdminAppController
         ]);
 
         return $this->render('authorize');
+    }
+
+    /**
+     * ユーザーのグループに管理 API（Api/Admin）の認証プレフィックスが含まれるか判定する
+     *
+     * @param mixed $identity 認証済みのユーザー
+     * @return bool
+     */
+    public function hasApiAdminPrefix($identity): bool
+    {
+        $user = $identity;
+        if (!method_exists($user, 'getAuthPrefixes')) {
+            $id = $identity->id ?? ($identity['id'] ?? null);
+            if (!$id) return false;
+            $user = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Users')
+                ->find()->where(['Users.id' => $id])->contain(['UserGroups'])->first();
+            if (!$user) return false;
+        }
+        return in_array('Api/Admin', $user->getAuthPrefixes(), true);
     }
 
     /**
