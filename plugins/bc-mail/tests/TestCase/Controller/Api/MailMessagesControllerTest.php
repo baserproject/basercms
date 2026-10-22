@@ -14,12 +14,14 @@ namespace BcMail\Test\TestCase\Controller\Api;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Factory\MailFieldsFactory;
+use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -32,6 +34,7 @@ class MailMessagesControllerTest extends BcTestCase
     use ScenarioAwareTrait;
     use IntegrationTestTrait;
     use BcContainerTrait;
+    use EmailTrait;
 
     /**
      * set up
@@ -102,6 +105,101 @@ class MailMessagesControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $this->post('/baser/api/bc-mail/mail_messages/add/1.json', ['name_1' => 'Test']);
         $this->assertResponseCode(403);
+
+        $MailMessagesService->dropTable(1);
+    }
+
+    /**
+     * test add - 画像認証が有効なフォームは画像認証の文字列が一致しないと受け付けない
+     */
+    public function test_add_authCaptcha(): void
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'admin@example.com'])->persist();
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
+        ContentFolderFactory::make(['id' => 1])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BaserCore',
+            'type' => 'ContentFolder',
+            'url' => '/',
+            'site_id' => 1,
+            'entity_id' => 1,
+            'parent_id' => null,
+            'rght' => 6,
+            'lft' => 1,
+            'status' => true,
+        ])->persist();
+        MailContentFactory::make([
+            'id' => 1,
+            'sender_name' => 'test',
+            'subject_user' => 'subject',
+            'subject_admin' => 'subject',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'auth_captcha' => 1,
+            'save_info' => 1,
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ',
+            'entity_id' => 1,
+            'parent_id' => 1,
+            'rght' => 3,
+            'lft' => 2,
+            'status' => true,
+        ])->persist();
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'field_name' => 'name_1',
+            'name' => '名前',
+            'type' => 'text',
+            'use_field' => 1,
+            'valid' => 0,
+            'no_send' => 0,
+            'sort' => 1,
+        ])->persist();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        $this->configRequest(['headers' => ['Origin' => 'http://localhost']]);
+
+        // 画像認証の値を送らない場合は受け付けない
+        $this->enableCsrfToken();
+        $this->post('/baser/api/bc-mail/mail_messages/add/1.json', ['name_1' => 'Test']);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('画像の文字が間違っています。再度入力してください。', $result->errors->auth_captcha->captcha);
+        $this->assertNoMailSent();
+
+        // 画像認証の文字列が一致しない場合は受け付けない
+        $this->enableCsrfToken();
+        $this->session(['captcha.token1' => 'abcde']);
+        $this->post('/baser/api/bc-mail/mail_messages/add/1.json', [
+            'name_1' => 'Test',
+            'captcha_id' => 'token1',
+            'auth_captcha' => 'wrong',
+        ]);
+        $this->assertResponseCode(400);
+        $this->assertNoMailSent();
+
+        $MailMessagesService->setup(1);
+        $this->assertEquals(0, $MailMessagesService->MailMessages->find()->count());
+
+        // 画像認証の文字列が一致する場合は受け付ける
+        $this->enableCsrfToken();
+        $this->session(['captcha.token1' => 'abcde']);
+        $this->post('/baser/api/bc-mail/mail_messages/add/1.json', [
+            'name_1' => 'Test',
+            'captcha_id' => 'token1',
+            'auth_captcha' => 'abcde',
+        ]);
+        $this->assertResponseOk();
+        $this->assertMailSentTo('admin@example.com');
+        $this->assertEquals(1, $MailMessagesService->MailMessages->find()->count());
 
         $MailMessagesService->dropTable(1);
     }

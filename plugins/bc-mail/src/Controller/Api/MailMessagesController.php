@@ -12,6 +12,7 @@
 namespace BcMail\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Service\BcCaptchaServiceInterface;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
@@ -50,6 +51,7 @@ class MailMessagesController extends BcApiController
      *
      * @param MailMessagesService $service
      * @param MailContentsServiceInterface $mailContentsService
+     * @param BcCaptchaServiceInterface $bcCaptchaService
      * @param int $mailContentId
      * @checked
      * @noTodo
@@ -59,6 +61,7 @@ class MailMessagesController extends BcApiController
         MailFrontServiceInterface $mailFrontService,
         MailMessagesServiceInterface $service,
         MailContentsServiceInterface $mailContentsService,
+        BcCaptchaServiceInterface $bcCaptchaService,
         int $mailContentId
     )
     {
@@ -69,6 +72,16 @@ class MailMessagesController extends BcApiController
             $mailContent = $mailContentsService->get($mailContentId);
             if (!$mailFrontService->isAccepting($mailContent)) {
                 throw new ForbiddenException(__d('baser_core', 'このメールフォームは現在受け付けていません。'));
+            }
+            // 画像認証
+            if ($mailContent->auth_captcha && !$bcCaptchaService->check(
+                $this->getRequest(),
+                (string)$this->getRequest()->getData('captcha_id'),
+                (string)$this->getRequest()->getData('auth_captcha')
+            )) {
+                $mailMessage = $service->MailMessages->newEntity($this->getRequest()->getData());
+                $mailMessage->setError('auth_captcha', ['captcha' => __d('baser_core', '画像の文字が間違っています。再度入力してください。')]);
+                throw new PersistenceFailedException($mailMessage, __d('baser_core', '入力エラーです。内容を見直してください。'));
             }
             $mailMessage = $service->create($mailContent, $this->request->getData());
             //メールを送信
