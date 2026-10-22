@@ -1,0 +1,21 @@
+#!/bin/bash
+# Start MariaDB and Apache in the background.
+# The scanner container has no init system and no network, so services are
+# started on demand with this script.
+set -e
+mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld
+if ! mariadb-admin --silent ping 2>/dev/null; then
+    (mariadbd-safe --user=mysql >/var/log/mysqld.log 2>&1 &)
+    for i in $(seq 1 60); do
+        mariadb-admin --silent ping 2>/dev/null && break
+        sleep 1
+    done
+    mariadb-admin --silent ping
+fi
+if ! pgrep -x apache2 >/dev/null; then
+    rm -f /var/run/apache2/apache2.pid
+    (apache2-foreground >/var/log/apache2/foreground.log 2>&1 &)
+    sleep 1
+fi
+echo "baserCMS is running at http://localhost/"
+echo "Admin: http://localhost/baser/admin/  (foo@example.com / baserCMS1234)"

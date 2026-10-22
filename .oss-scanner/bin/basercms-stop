@@ -1,0 +1,4 @@
+#!/bin/bash
+# Stop MariaDB and Apache started by basercms-start.
+mariadb-admin shutdown 2>/dev/null || true
+apache2ctl -k graceful-stop 2>/dev/null || pkill apache2 || true
