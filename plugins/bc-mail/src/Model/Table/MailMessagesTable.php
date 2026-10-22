@@ -287,7 +287,7 @@ class MailMessagesTable extends MailAppTable
             if ($mailField->valid_ex && !empty($mailField->use_field)) {
                 $valids = explode(',', (string) $mailField->valid_ex);
                 foreach($valids as $valid) {
-                    $options = preg_split('/(?<!\\\)\|/', $mailField->options);
+                    $options = preg_split('/(?<!\\\)\|/', (string) $mailField->options);
                     /**
                      * 引数のペアから連想配列を構築する
                      *
@@ -431,6 +431,12 @@ class MailMessagesTable extends MailAppTable
                             }
                     }
                 }
+            }
+
+            // タイプ「Eメール」の欄は、入力チェックの設定に関係なく Eメール形式を検証する
+            // （自動返信の宛先に使われるため、複数のアドレスなどを受け付けない）
+            if ($mailField->type === 'email' && !$validator->field($mailField->field_name)->rule('email')) {
+                $validator->email($mailField->field_name, false, __d('baser_core', 'Eメール形式で入力してください。'));
             }
         }
 

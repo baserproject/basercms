@@ -12,6 +12,7 @@
 namespace BcFavorite\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use BcFavorite\Test\Factory\FavoriteFactory;
 use BcFavorite\Test\Scenario\FavoritesScenario;
 use Cake\Http\Session;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -72,6 +73,32 @@ class FavoritesControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('新着情報管理', $result->favorite->name);
+    }
+
+    /**
+     * test view / edit / delete - 他ユーザーのお気に入りは操作できないこと（IDOR 対策）
+     */
+    public function test_rejectsOtherUsersFavorite(): void
+    {
+        $this->loadFixtureScenario(FavoritesScenario::class);
+        FavoriteFactory::make(['id' => 99, 'user_id' => 2, 'name' => 'other', 'url' => '/baser/admin/', 'sort' => 1])->persist();
+
+        $this->get('/baser/api/admin/bc-favorite/favorites/view/99.json?token=' . $this->accessToken);
+        $this->assertResponseCode(403);
+
+        $this->post('/baser/api/admin/bc-favorite/favorites/edit/99.json?token=' . $this->accessToken, ['name' => 'hijack']);
+        $this->assertResponseCode(403);
+        $this->assertEquals('other', FavoriteFactory::get(99)['name']);
+
+        $this->post('/baser/api/admin/bc-favorite/favorites/delete/99.json?token=' . $this->accessToken);
+        $this->assertResponseCode(403);
+        $this->assertNotNull(FavoriteFactory::get(99));
+
+        // 他ユーザーになりすました登録はログインユーザーの所有になる
+        $this->post('/baser/api/admin/bc-favorite/favorites/add.json?token=' . $this->accessToken, ['user_id' => 2, 'name' => 'mine', 'url' => '/baser/admin/']);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, $result->favorite->user_id);
     }
 
     /**

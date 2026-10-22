@@ -32,4 +32,16 @@ class SiteConfig extends EntityAlias
         'id' => false
     ];
 
+    /**
+     * Hidden
+     *
+     * SMTP パスワードを API レスポンス（toArray() / JSON）に含めない。
+     * プロパティの直接参照（BcMailer の SMTP 設定）や管理画面のフォームには影響しない。
+     *
+     * @var array
+     */
+    protected array $_hidden = [
+        'smtp_password',
+    ];
+
 }

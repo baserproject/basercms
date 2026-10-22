@@ -82,7 +82,7 @@ class CustomLinksControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $this->get('/baser/api/bc-custom-content/custom_links/index.json?custom_table_id=1&token=' . $this->accessToken);
@@ -112,7 +112,7 @@ class CustomLinksControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
         //APIを呼ぶ
         $this->get('/baser/api/bc-custom-content/custom_links/view/1.json?token=' . $this->accessToken);

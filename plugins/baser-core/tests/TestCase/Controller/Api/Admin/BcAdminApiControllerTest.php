@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use Cake\Event\Event;
 use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Test\Factory\UserFactory;
@@ -146,5 +147,31 @@ class BcAdminApiControllerTest extends BcTestCase
 
         $controller = new BcAdminApiController($this->loginAdmin($request, 2));
         $this->assertFalse($controller->isAvailableUser());
+    }
+
+    /**
+     * test beforeFilter - 管理画面 API が無効な場合は認証不要のアクション（ログイン等）も 403 になること
+     *
+     * 公開すると USE_CORE_ADMIN_API=false でも API ログインが到達可能になり、
+     * 試行回数制限の無い認証オラクルとして利用できてしまう
+     */
+    public function testBeforeFilter_deniesUnauthenticatedActionsWhenApiDisabled()
+    {
+        $original = env('USE_CORE_ADMIN_API');
+        putenv('USE_CORE_ADMIN_API=false');
+        $_ENV['USE_CORE_ADMIN_API'] = 'false';
+        $_SERVER['USE_CORE_ADMIN_API'] = 'false';
+        try {
+            $request = $this->getRequest('/baser/api/admin/baser-core/users/login.json')
+                ->withParam('action', 'login');
+            $controller = new BcAdminApiController($request);
+            $controller->Authentication->allowUnauthenticated(['login']);
+            $this->expectException('Cake\\Http\\Exception\\ForbiddenException');
+            $controller->beforeFilter(new Event('beforeFilter'));
+        } finally {
+            putenv('USE_CORE_ADMIN_API=' . $original);
+            $_ENV['USE_CORE_ADMIN_API'] = $original;
+            $_SERVER['USE_CORE_ADMIN_API'] = $original;
+        }
     }
 }

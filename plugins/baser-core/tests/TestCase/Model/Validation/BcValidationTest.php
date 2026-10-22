@@ -260,6 +260,24 @@ class BcValidationTest extends BcTestCase
         $this->assertEquals($expect, $result);
     }
 
+    /**
+     * test fileExt - 許可リストとファイル名の拡張子が一致すれば、Content-Type の種類に関係なく許可する
+     */
+    public function testFileExt_allowedByFileNameExt()
+    {
+        $file = fn($name, $type) => ['name' => $name, 'size' => 1, 'type' => $type, 'error' => UPLOAD_ERR_OK, 'tmp_name' => 'test'];
+        // jpg を許可している場合は JPEG の別の拡張子も許可する
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'jpg,png'));
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jfif', 'image/jpeg'), 'jpg,png'));
+        $this->assertTrue($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'jpeg,png'));
+        // Content-Type から導出される拡張子が許可リストに無くても、ファイル名の拡張子で判定する
+        $this->assertTrue($this->BcValidation->fileExt($file('figure.eps', 'application/postscript'), 'eps'));
+        $this->assertTrue($this->BcValidation->fileExt($file('data.csv', 'text/plain'), 'csv'));
+        // ファイル名の拡張子が許可リストに無ければ拒否する
+        $this->assertFalse($this->BcValidation->fileExt($file('evil.html', 'image/png'), 'jpg,png'));
+        $this->assertFalse($this->BcValidation->fileExt($file('photo.jpeg', 'image/jpeg'), 'png'));
+    }
+
     public static function fileExtDataProvider()
     {
         return [
@@ -285,6 +303,7 @@ class BcValidationTest extends BcTestCase
                 ],
                 true
             ],
+            // Content-Type が許可対象でもファイル名の拡張子が許可対象外なら拒否する
             [
                 [
                     'name' => 'test.gif',
@@ -294,8 +313,56 @@ class BcValidationTest extends BcTestCase
                     'tmp_name' => 'test',
                     'ext' => 'gif'
                 ],
+                false
+            ],
+            // 二重拡張子はファイル名末尾の拡張子で判定する
+            [
+                [
+                    'name' => 'shell.php.x',
+                    'size' => 1,
+                    'type' => 'image/png',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
+            ],
+            [
+                [
+                    'name' => 'shell.png.php',
+                    'size' => 1,
+                    'type' => 'image/png',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'png'
+                ],
+                false
+            ],
+            // 大文字の拡張子は許可する
+            [
+                [
+                    'name' => 'test.JPG',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
                 true
             ],
+            // 拡張子が無い場合は Content-Type から判定する
+            [
+                [
+                    'name' => 'test',
+                    'size' => 1,
+                    'type' => 'image/jpeg',
+                    'error' => UPLOAD_ERR_OK,
+                    'tmp_name' => 'test',
+                    'ext' => 'jpg'
+                ],
+                true
+            ],
+            // 拡張子はファイル名で判定するため、Content-Type が異なっても許可リストにあれば許可する
             [
                 [
                     'name' => 'test.png',
@@ -305,7 +372,7 @@ class BcValidationTest extends BcTestCase
                     'tmp_name' => 'test',
                     'ext' => 'png'
                 ],
-                false
+                true
             ]
         ];
     }
@@ -771,6 +838,28 @@ class BcValidationTest extends BcTestCase
             ['admin', true],
             ['accessible', false],
             ['before', false],
+        ];
+    }
+
+    /**
+     * test notContainsShortCode
+     * @dataProvider notContainsShortCodeDataProvider
+     */
+    public function test_notContainsShortCode($value, $expect)
+    {
+        $this->assertEquals($expect, $this->BcValidation->notContainsShortCode($value));
+    }
+
+    public static function notContainsShortCodeDataProvider()
+    {
+        return [
+            ['', true],
+            [null, true],
+            ['普通のコメントです。[注] も書けます。', true],
+            ['[BcBaser.getSitemapList]', true],
+            ['[BcBaser.getSitemap]', false],
+            ['前置き [BcBaser.getGoogleMaps apiKey|k] 後ろ', false],
+            ["[Mail.getForm\n1]", false],
         ];
     }
 

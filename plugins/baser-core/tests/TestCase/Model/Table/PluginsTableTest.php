@@ -91,6 +91,9 @@ class PluginsTableTest extends BcTestCase
         $this->loadFixtureScenario(PluginsScenario::class);
         $plugin = $this->Plugins->getPluginConfig('BaserCore');
         $this->assertEquals('BaserCore', $plugin->name);
+        // インストール画面の初期値は「管理ユーザーのみ利用」
+        $this->assertEquals(0, $plugin->permission);
+        $this->assertEquals(0, $this->Plugins->getPluginConfig('BcPluginSample')->permission);
     }
 
     /**

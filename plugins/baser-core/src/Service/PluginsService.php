@@ -865,6 +865,12 @@ class PluginsService implements PluginsServiceInterface
         if(!preg_match('/^[a-zA-Z0-9\/\.\-_]+$/', $php)) {
             throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
         }
+        // updateCore() / rollbackCore() と同様に、実行ファイル名が php（バージョン付き含む）で
+        // あることを検証する。文字種の検証だけでは、許可された文字で構成された任意の
+        // 実行ファイル（例: /usr/bin/curl）を第1トークンとして起動できてしまう
+        if(!preg_match('/^php[0-9.]*$/', basename($php))) {
+            throw new BcException(__d('baser_core', 'PHP実行パスが不正です。'));
+        }
 
         if (function_exists('ini_set')) {
             ini_set('max_execution_time', 0);

@@ -12,6 +12,7 @@
 namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
@@ -91,6 +92,16 @@ class ThemeFilesServiceTest extends BcTestCase
         $this->assertEquals('php', $rs['ext']);
         $this->assertEquals('text', $rs['type']);
         $this->assertEquals(null, $rs['path']);
+    }
+
+    /**
+     * test get - プラグイン配置ルート外のファイルは読み出さない（GHSA-rqr8-gmx5-xvrr）
+     */
+    public function test_get_rejectsOutsidePluginsDir()
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->get('/var/www/html/plugins/BcThemeSample/templates/layout/../../../../config/app.php');
     }
 
     /**
@@ -183,6 +194,138 @@ class ThemeFilesServiceTest extends BcTestCase
             'アプリwebroot' => ['/var/www/html/webroot/'],
             'config' => ['/var/www/html/config/'],
         ];
+    }
+
+    /**
+     * test update - URL エンコードした ../ でテーマディレクトリ外を更新できない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_update_rejectsEncodedTraversal(): void
+    {
+        $victim = TMP . 'q7g3_victim.php';
+        (new BcFile($victim))->write('original');
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_victim.php',
+                'parent' => $parent,
+                'base_name' => 'q7g3_victim',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (BcException $e) {
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        } finally {
+            $contents = file_get_contents($victim);
+            unlink($victim);
+        }
+        $this->assertEquals('original', $contents);
+    }
+
+    /**
+     * test update - 名前変更先（base_name）でテーマディレクトリ外へ出られない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_update_rejectsTraversalInBaseName(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_rename.php'))->create();
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_rename.php',
+                'parent' => $parent,
+                'base_name' => '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_renamed',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (\Exception $e) {
+            // update() は base_name から算出した rename 先を assertWithinThemeDir で検証するのが
+            // フォーム検証（alphaNumericPlus）より先に実行されるため、必ず BcException で止まる
+            $this->assertInstanceOf(BcException::class, $e);
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        } finally {
+            if (is_file($parent . 'q7g3_rename.php')) unlink($parent . 'q7g3_rename.php');
+        }
+        $this->assertFileDoesNotExist(TMP . 'q7g3_renamed.php');
+    }
+
+    /**
+     * test update - base_name のみで見ると、alphaNumericPlus バリデーションを通過する入力からは
+     * ../ トラバーサルを構成できないため、assertWithinThemeDir 単体で拒否される入力は存在しないことを確認する
+     * （GHSA-q7g3-qwrc-mp89 M-5）
+     *
+     * alphaNumericPlus は [a-zA-Z0-9\-_]+ のみを許容し、'.' や '/' を含められないため、
+     * dirname($fullpath) . DS . base_name（+ ext）で組み立てられる newPath は
+     * fullpath 自体がテーマディレクトリ配下である限り、必ずテーマディレクトリ配下に収まる。
+     * そのため「フォーム検証は通るが assertWithinThemeDir だけが拒否する」ケースは作れない。
+     * 本テストはその事実を、alphaNumericPlus を通過する base_name で正常に更新できることをもって示す。
+     */
+    public function test_update_baseNameCannotBypassFormValidationToReachTraversal(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_safe_rename.php'))->create();
+        try {
+            // alphaNumericPlus を通過する（英数字・ハイフン・アンダースコアのみ）が、
+            // 見た目上はトラバーサルを狙ったような base_name
+            $rs = $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_safe_rename.php',
+                'parent' => $parent,
+                'base_name' => 'dotdotslash-tmp-q7g3',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->assertEquals($parent . 'dotdotslash-tmp-q7g3.php', $rs->getData('fullpath'));
+            $this->assertFileExists($parent . 'dotdotslash-tmp-q7g3.php');
+        } finally {
+            if (is_file($parent . 'q7g3_safe_rename.php')) unlink($parent . 'q7g3_safe_rename.php');
+            if (is_file($parent . 'dotdotslash-tmp-q7g3.php')) unlink($parent . 'dotdotslash-tmp-q7g3.php');
+        }
+    }
+
+    /**
+     * test update - 二重URLエンコードされた ../ 相当の文字列を base_name に与えても
+     * テーマディレクトリ外への rename はできない（GHSA-q7g3-qwrc-mp89 M-5）
+     *
+     * update() 自身が base_name に rawurldecode() を1回かけるため、'%252e' は '%2e' に
+     * なった時点で newPath に組み込まれる。assertWithinThemeDir はさらにもう1回
+     * rawurldecode() をかけて検査するため、この newPath は最終的に '../' として解決され、
+     * トラバーサルとして検知・拒否される（= 実際には「トラバーサル扱いされない」のではなく
+     * 「二重デコードの結果としてトラバーサルとして検知され、拒否される」という結果になる）。
+     */
+    public function test_update_doubleEncodedIsNotTraversal(): void
+    {
+        $parent = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFile($parent . 'q7g3_double.php'))->create();
+        $outside = TMP . 'q7g3_double_pwned.php';
+        try {
+            $this->ThemeFileService->update([
+                'fullpath' => $parent . 'q7g3_double.php',
+                'parent' => $parent,
+                'base_name' => '%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252ftmp%252fq7g3_double_pwned',
+                'ext' => 'php',
+                'contents' => 'changed',
+            ]);
+            $this->fail('例外が発生しませんでした。');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(BcException::class, $e);
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        } finally {
+            if (is_file($parent . 'q7g3_double.php')) unlink($parent . 'q7g3_double.php');
+        }
+        // テーマ外は当然、テーマ内にも二重デコードされたファイルは作成されていないこと
+        $this->assertFileDoesNotExist($outside);
+    }
+
+    /**
+     * test copy - URL エンコードした ../ でテーマディレクトリ外のファイルを複製できない（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_copy_rejectsEncodedTraversal(): void
+    {
+        $this->expectException(BcException::class);
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copy(
+            BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/' . '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fconfig%2fapp_local.php'
+        );
     }
 
     /**
@@ -359,6 +502,62 @@ class ThemeFilesServiceTest extends BcTestCase
         $this->expectException('BaserCore\Error\BcException');
         $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
         $this->ThemeFileService->copyToTheme($param);
+    }
+
+    /**
+     * test copyToTheme - カレントテーマ以外（他テーマ・コアプラグイン）への書き込みを拒否する
+     *
+     * 以前の境界は plugins/ 全体だったため、path に `..` を含めるとカレントテーマ以外の
+     * プラグイン配下（コアプラグイン等）へ書き込めた。コピー先はカレントテーマ配下に限定する。
+     * @dataProvider provideCopyToThemeOutsideCurrentTheme
+     */
+    public function test_copyToTheme_rejectsOutsideCurrentTheme(string $path): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            'path' => $path,
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/bge_style.css',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
+    }
+
+    public static function provideCopyToThemeOutsideCurrentTheme(): array
+    {
+        return [
+            'コアプラグイン配下' => ['../../../baser-core/webroot/pwned.css'],
+            '他テーマ配下' => ['../../../bc-front/webroot/css/pwned.css'],
+        ];
+    }
+
+    /**
+     * test copyToTheme - コピー元がコピー元テーマ／プラグインのディレクトリ外の場合は拒否する
+     *
+     * Admin web 経路では parseArgs() が URL の path を `..` を除去せず fullpath に組み立てるため、
+     * コピー元にサーバ上の任意ファイルを指定でき、カレントテーマの webroot 配下へコピーして
+     * 公開 URL から取得できた（任意ファイル読み出し）。Service の sink でもコピー元を検証する。
+     */
+    public function test_copyToTheme_rejectsOutsideSourceDir(): void
+    {
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcColumn'])->persist();
+        $param = [
+            'plugin' => 'BaserCore',
+            'theme' => 'BcFront',
+            'type' => 'css',
+            'path' => 'leaked.css',
+            // コピー元が bc-front/webroot/css/ の外
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/css/../../../../config/app.php',
+            'assets' => true,
+        ];
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->copyToTheme($param);
+        $this->assertFileDoesNotExist('/var/www/html/plugins/BcColumn/webroot/css/leaked.css');
     }
 
     /**

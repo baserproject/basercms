@@ -126,17 +126,25 @@ const bcBlog = {
     postError(result) {
         if(bcBlog.authCaptcha) {
             bcBlog.loadAuthCaptcha();
-            $("#BlogCommentAuthCaptcha").val('');
+            $("#auth-captcha").val('');
         }
+        // サーバーの応答は HTML として描画せず、エスケープしてから表示する
         let message = bcI18n.alertMessageError;
-        if(result.responseText) {
-            response = JSON.parse(result.responseText);
+        let response = {};
+        if(result && result.responseText) {
+            try {
+                response = JSON.parse(result.responseText) || {};
+            } catch (e) {
+                response = {};
+            }
         }
-        message += '<br>' + response.message;
+        if(response.message) {
+            message += '<br>' + $.bcUtil.escapeHtml(response.message);
+        }
         if(response.errors) {
             Object.keys(response.errors).forEach(function(k) {
                 Object.keys(response.errors[k]).forEach(function(f){
-                    message += '<br>' + response.errors[k][f];
+                    message += '<br>' + $.bcUtil.escapeHtml(response.errors[k][f]);
                 });
             });
         }
@@ -178,11 +186,14 @@ const bcBlog = {
             const $captchaLoader = $("#CaptchaLoader");
             $authCaptchaImage.hide();
             $captchaLoader.show();
-            $authCaptchaImage.on('load', function () {
+            // 呼び出しのたびにハンドラが重複しないよう one を使う
+            $authCaptchaImage.one('load', function () {
                 $captchaLoader.hide();
                 $authCaptchaImage.fadeIn(1000);
             });
-            $authCaptchaImage.attr('src', bcBlog.authCaptchaImageBaseUrl + '/' + bcBlog.captchaId);
+            // 画像認証の回答は投稿に成功するとサーバー側で破棄されるため、
+            // キャッシュを使わず毎回新しい画像（新しい回答）を取得する
+            $authCaptchaImage.attr('src', bcBlog.authCaptchaImageBaseUrl + '/' + bcBlog.captchaId + '?t=' + Date.now());
         }
     }
 

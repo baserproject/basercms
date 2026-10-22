@@ -48,6 +48,8 @@ class UtilitiesController extends BcAdminAppController
      */
     public function clear_cache()
     {
+        // 状態を変更する操作のため GET では実行させない（CSRF 対策）
+        $this->request->allowMethod(['post', 'put']);
         $this->_checkReferer();
         BcUtil::clearAllCache();
         $this->BcMessage->setInfo(__d('baser_core', 'サーバーキャッシュを削除しました。'));
@@ -102,6 +104,10 @@ class UtilitiesController extends BcAdminAppController
      */
     public function phpinfo()
     {
+        // phpinfo は .env の内容を含む環境変数・サーバ情報を全件表示するため、システム管理者に限定する
+        if (!BcUtil::isAdminUser()) {
+            $this->notFound();
+        }
         $this->_checkReferer();
         $this->autoRender = false;
         phpinfo();

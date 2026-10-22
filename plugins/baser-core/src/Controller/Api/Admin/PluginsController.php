@@ -86,7 +86,7 @@ class PluginsController extends BcAdminApiController
             $plugin = $service->getByName($name);
             if ($service->install(
                 $name,
-                $this->request->getData('permission') ?? true,
+                $this->request->getData('permission') ?? false,
                 $this->request->getData('connection') ?? 'default'
             )) {
                 $message = __d('baser_core', 'プラグイン「{0}」をインストールしました。', $name);

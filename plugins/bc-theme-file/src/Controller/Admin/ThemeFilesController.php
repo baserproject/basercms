@@ -90,6 +90,14 @@ class ThemeFilesController extends BcAdminAppController
                 'edit',
                 'add_folder',
                 'edit_folder',
+                // 書き込みを伴うアクションも制限する（API 側と同じ）
+                'delete',
+                'delete_folder',
+                'copy',
+                'copy_folder',
+                'upload',
+                'copy_to_theme',
+                'copy_folder_to_theme',
             ];
             // デフォルトテーマのindexはアクセス可能
             if ($this->isDefaultTheme()) {
@@ -690,9 +698,19 @@ class ThemeFilesController extends BcAdminAppController
         }
 
         if ($data['type'] !== 'etc') {
-            $data['fullpath'] = $viewPath . $data['type'] . DS . $data['path'];
+            $baseDir = $viewPath . $data['type'] . DS;
         } else {
-            $data['fullpath'] = $viewPath . $data['path'];
+            $baseDir = $viewPath;
+        }
+        $data['fullpath'] = $baseDir . $data['path'];
+
+        // パストラバーサル対策:
+        // Admin web 経路は API 経路と異なり getFullpath() の境界チェックを通らず、
+        // URL から組み立てた fullpath をそのまま各アクション（img / img_thumb の読み出し、
+        // copy_to_theme / copy_folder_to_theme のコピー元 等）に渡す。
+        // path に `..` を含めるとテーマ外の任意ファイルを読み出せるため、ここで必ず境界を検証する。
+        if (!BcThemeFileUtil::isWithinDir($data['fullpath'], $baseDir)) {
+            $this->notFound();
         }
 
         if ($data['path'] && is_dir($data['fullpath']) && !preg_match('/\/$/', $data['fullpath'])) {

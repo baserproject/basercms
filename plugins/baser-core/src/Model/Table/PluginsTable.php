@@ -121,7 +121,7 @@ class PluginsTable extends AppTable
             $this->patchEntity($pluginRecord, [
                 'update' => false,
                 'core' => $core,
-                'permission' => 1,
+                'permission' => 0,
                 'registered' => true,
                 'screenshot' => $hasScreenshot
             ]);
@@ -139,7 +139,7 @@ class PluginsTable extends AppTable
                 'status' => false,
                 'update' => false,
                 'core' => $core,
-                'permission' => 1,
+                'permission' => 0,
                 'registered' => false,
                 'db_init' => false,
                 'screenshot' => $hasScreenshot

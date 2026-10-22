@@ -11,6 +11,10 @@
 
 namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 
+use BcThemeFile\Controller\Api\Admin\ThemeFilesController;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Event\Event;
+use Cake\Core\Configure;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
@@ -143,6 +147,28 @@ class ThemeFilesControllerTest extends BcTestCase
         //作成されたファイルを削除
         unlink($fullpath . 'base_name_2.php');
         unlink($fullpath . 'Admin/default_changed.php');
+    }
+
+    /**
+     * test edit - URL エンコードした ../ を含む path を拒否する（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_edit_rejectsEncodedTraversal()
+    {
+        $victim = TMP . 'q7g3_api_victim.php';
+        (new BcFile($victim))->write('original');
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_api_victim.php',
+            'base_name' => 'q7g3_api_victim',
+            'contents' => 'changed',
+            'ext' => 'php',
+            'plugin' => 'BaserCore'
+        ]);
+        $this->assertResponseCode(500);
+        $contents = file_get_contents($victim);
+        unlink($victim);
+        $this->assertEquals('original', $contents);
     }
 
     /**
@@ -347,5 +373,35 @@ class ThemeFilesControllerTest extends BcTestCase
         //テストファイルとフォルダを削除
         (new BcFolder($filePath))->delete();
         (new BcFolder($fullpath . 'new_folder'))->delete();
+    }
+
+    /**
+     * テーマ編集機能が無効化されている場合、API からの書き込み系アクションが拒否されること
+     *
+     * 設定はリクエスト処理中にプラグインの setting.php から再読み込みされるため、
+     * 統合テストではなくコントローラの beforeFilter を直接検証する。
+     */
+    public function test_beforeFilter_deniedWhenThemeEditDisabled()
+    {
+        Configure::write('BcThemeFile.allowedThemeEdit', false);
+        try {
+            foreach(['add', 'edit', 'delete', 'copy', 'copy_to_theme', 'upload'] as $action) {
+                $request = $this->loginAdmin($this->getRequest('/baser/api/admin/bc-theme-file/theme_files/' . $action . '.json'));
+                $controller = new ThemeFilesController($request);
+                try {
+                    $controller->beforeFilter(new Event('beforeFilter'));
+                    $this->fail($action . ' が拒否されていません');
+                } catch (ForbiddenException $e) {
+                    $this->assertEquals('テーマ編集機能は無効化されています。', $e->getMessage(), $action);
+                }
+            }
+            // 読み取り系は許可
+            $request = $this->loginAdmin($this->getRequest('/baser/api/admin/bc-theme-file/theme_files/view.json'));
+            $controller = new ThemeFilesController($request);
+            $controller->beforeFilter(new Event('beforeFilter'));
+            $this->assertTrue(true);
+        } finally {
+            Configure::write('BcThemeFile.allowedThemeEdit', true);
+        }
     }
 }

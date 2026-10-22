@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\UsersUserGroupFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\SuspendedUsersScenario;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -167,6 +169,24 @@ class UsersServiceTest extends BcTestCase
         $request = $this->getRequest('/?name=ucmitz');
         $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
+    }
+
+    /**
+     * test update - スーパーユーザー以外は他ユーザーの所属グループを変更できないこと
+     */
+    public function test_update_nonSuperCannotChangeGroups()
+    {
+        UserGroupFactory::make(['id' => 10, 'name' => 'group10', 'title' => 'group10', 'auth_prefix' => 'Admin'])->persist();
+        UserFactory::make(['id' => 10, 'name' => 'user10', 'email' => 'user10@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 10, 'user_group_id' => 10])->persist();
+        // 非スーパーユーザー（id=2）でログインし、他ユーザー（id=10）のグループを変更しようとする
+        $request = $this->loginAdmin($this->getRequest('/'), 2);
+        Router::setRequest($request);
+        $user = $this->Users->get(10);
+        $this->Users->update($user, ['name' => 'user10updated', 'user_groups' => ['_ids' => [2]]]);
+        $user = $this->Users->get(10);
+        $this->assertEquals('user10updated', $user->name);
+        $this->assertEquals([10], array_map(fn($g) => $g->id, $user->user_groups));
     }
 
     /**

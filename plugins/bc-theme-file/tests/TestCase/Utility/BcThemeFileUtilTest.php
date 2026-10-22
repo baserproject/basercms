@@ -71,4 +71,46 @@ class BcThemeFileUtilTest extends BcTestCase
             ['other', false],
         ];
     }
+
+    /**
+     * test normalizePath
+     * @dataProvider normalizePathProvider
+     */
+    public function test_normalizePath($path, $expected)
+    {
+        $this->assertEquals($expected, BcThemeFileUtil::normalizePath($path));
+    }
+
+    public static function normalizePathProvider()
+    {
+        return [
+            ['/var/www/html/plugins/BcColumn/webroot/css/style.css', '/var/www/html/plugins/BcColumn/webroot/css/style.css'],
+            ['/var/www/html/plugins/BcColumn/webroot/css/../../../bc-front/webroot/css/style.css', '/var/www/html/plugins/bc-front/webroot/css/style.css'],
+            ['/var/www/html/plugins/BcColumn//webroot/./css/', '/var/www/html/plugins/BcColumn/webroot/css'],
+            ['/../../etc/passwd', '/etc/passwd'],
+        ];
+    }
+
+    /**
+     * test isWithinDir
+     * @dataProvider isWithinDirProvider
+     */
+    public function test_isWithinDir($path, $baseDir, $expected)
+    {
+        $this->assertEquals($expected, BcThemeFileUtil::isWithinDir($path, $baseDir));
+    }
+
+    public static function isWithinDirProvider()
+    {
+        $base = '/var/www/html/plugins/BcColumn/webroot/img/';
+        return [
+            '配下の実在ファイル' => [$base . 'logo.png', $base, true],
+            '配下の未作成ファイル' => [$base . 'new_dir/new.png', $base, true],
+            '基準ディレクトリ自身' => [$base, $base, true],
+            '基準ディレクトリ自身（末尾スラッシュ無し）' => [rtrim($base, '/'), $base, true],
+            '別テーマへの traversal（実在）' => [$base . '../../../bc-front/webroot/img/logo.png', $base, false],
+            'config への traversal（未作成）' => [$base . '../../../../config/pwned.png', $base, false],
+            '前方一致だけ同じ別ディレクトリ' => ['/var/www/html/plugins/BcColumn/webroot/img_evil/x.png', $base, false],
+        ];
+    }
 }

@@ -108,7 +108,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/add', $data);
@@ -134,7 +134,7 @@ class CustomTablesControllerTest extends BcTestCase
             'name' => 'test_1',
             'title' => '求人情報 1',
             'type' => '1',
-            'display_field' => 'title 1',
+            'display_field' => 'title',
             'has_child' => 0
         ]);
         $customTable->create([
@@ -142,7 +142,7 @@ class CustomTablesControllerTest extends BcTestCase
             'name' => 'test_2',
             'title' => '求人情報 2',
             'type' => '1',
-            'display_field' => 'title 2',
+            'display_field' => 'title',
             'has_child' => 0
         ]);
 
@@ -170,7 +170,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/add', $data);
@@ -206,7 +206,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-custom-content/custom_tables/add', $data);
@@ -232,7 +232,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         $customTable->create($data);
         //Postデータを生成
@@ -271,7 +271,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         $customTable->create($data);
         //イベントをコル
@@ -309,7 +309,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         $customTable->create($data);
         //イベントをコル
@@ -348,7 +348,7 @@ class CustomTablesControllerTest extends BcTestCase
             'type' => 'contact',
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ];
         $customTable->create($data);
         //対象URLをコル

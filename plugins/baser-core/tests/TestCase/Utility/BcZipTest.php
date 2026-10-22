@@ -131,6 +131,56 @@ class BcZipTest extends BcTestCase
     }
 
     /**
+     * test _getTopArchiveName
+     * @dataProvider getTopArchiveNameDataProvider
+     */
+    public function test_getTopArchiveName($entry, $expected)
+    {
+        $this->assertSame($expected, $this->execPrivateMethod($this->BcZip, '_getTopArchiveName', [$entry]));
+    }
+
+    public static function getTopArchiveNameDataProvider()
+    {
+        return [
+            ['testfolder/testfile.txt', 'testfolder'],
+            ['testfolder/', 'testfolder'],
+            // `./` で始まるエントリでも `.` ではなく実際のトップフォルダ名になる
+            ['./testfolder/testfile.txt', 'testfolder'],
+            ['././testfolder', 'testfolder'],
+            // 妥当でないエントリ
+            ['./', false],
+            ['.', false],
+            ['', false],
+            ['../evil/file.txt', false],
+        ];
+    }
+
+    /**
+     * test ExtractByPhpLib - `./` で始まるエントリの ZIP でも topArchiveName が `.` にならないこと
+     *
+     * `.` になると呼び出し元が展開先の親ディレクトリ全体（tmp/）を移動・削除してしまう
+     */
+    public function testExtractByPhpLibDotSlashEntry()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'test_dot.zip';
+        $targetPath = TMP . 'extracted_dot' . DS;
+        if (!file_exists($zipSrcPath)) mkdir($zipSrcPath, 0777, true);
+        if (!file_exists($targetPath)) mkdir($targetPath, 0777, true);
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('./testfolder/testfile.txt', 'dot');
+        $zip->close();
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByPhpLib', [$sourceZip, $targetPath]);
+        $this->assertTrue($result);
+        $this->assertEquals('testfolder', $this->BcZip->topArchiveName);
+
+        (new BcFolder($zipSrcPath))->delete();
+        (new BcFolder($targetPath))->delete();
+    }
+
+    /**
      * test ExtractByPhpLibReturnsFalse
      */
     public function testExtractByPhpLibReturnsFalse()
@@ -342,6 +392,39 @@ class BcZipTest extends BcTestCase
         $rs = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [TMP_TESTS . 'test_extract.zip', TMP_TESTS]);
         //戻り値を確認
         $this->assertFalse($rs);
+    }
+
+    /**
+     * test _extractByCommand - シンボリックリンクを含む ZIP を拒否すること
+     */
+    public function testExtractByCommandRejectsSymlink()
+    {
+        $zipSrcPath = TMP . 'zip' . DS;
+        $sourceZip = $zipSrcPath . 'symlink_cmd.zip';
+        $targetPath = TMP . 'extracted_symlink' . DS;
+        if (!file_exists($zipSrcPath)) mkdir($zipSrcPath, 0777, true);
+        if (!file_exists($targetPath)) mkdir($targetPath, 0777, true);
+
+        $zip = new \ZipArchive();
+        $zip->open($sourceZip, \ZipArchive::CREATE);
+        $zip->addFromString('theme/link', '../../../config');
+        $zip->setExternalAttributesName('theme/link', \ZipArchive::OPSYS_UNIX, (0120777 << 16));
+        $zip->addFromString('theme/normal.txt', 'ok');
+        $zip->close();
+
+        // 展開先に元から存在するリンクは影響を受けないこと
+        symlink(ROOT . DS . 'config', $targetPath . 'existing_link');
+
+        $result = $this->execPrivateMethod($this->BcZip, '_extractByCommand', [$sourceZip, $targetPath]);
+
+        $this->assertFalse($result);
+        $this->assertFalse(is_link($targetPath . 'theme' . DS . 'link'));
+        $this->assertFileDoesNotExist($targetPath . 'theme' . DS . 'link');
+        $this->assertTrue(is_link($targetPath . 'existing_link'));
+        unlink($targetPath . 'existing_link');
+
+        (new BcFolder($zipSrcPath))->delete();
+        (new BcFolder($targetPath))->delete();
     }
 
     /**

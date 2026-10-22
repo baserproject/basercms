@@ -142,6 +142,15 @@ return [
             'session.gc_divisor' => 100,
             'session.gc_probability' => 1,
             /**
+             * CSRF対策: セッションCookieをクロスサイト送信させない（管理画面APIのCSRF緩和）。
+             * Lax のためトップレベルGET遷移では送信され、通常の管理画面利用には影響しない。
+             */
+            'session.cookie_samesite' => 'Lax',
+            /**
+             * セッションCookieへのJavaScriptアクセスを禁止する（盗用対策）
+             */
+            'session.cookie_httponly' => 1,
+            /**
              * クッキーの有効期限（秒）
              * デフォルト：1年間
              */

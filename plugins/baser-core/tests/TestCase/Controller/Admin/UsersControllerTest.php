@@ -122,6 +122,32 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Test index - contain / order 経由の SQL インジェクションが無効化されること
+     *
+     * 管理画面の一覧はリクエストのクエリパラメータをそのまま Service の getIndex() に
+     * 渡し、Service が `array_merge([既定の contain], $queryParams)` でリクエスト値を
+     * 優先させるため、contain[UserGroups][conditions][] 等で任意の SQL が注入できた。
+     * AppController::beforeFilter で ORM 内部構造キーが除去され、不正な SQL が
+     * 実行されず（500 にならず）一覧が正常に表示されることを確認する。
+     *
+     * @return void
+     */
+    public function test_index_reject_contain_injection()
+    {
+        // 注入が有効なら構文エラーで SQL が失敗し 500 になる payload
+        $payload = rawurlencode('1=1 AND (SELECT * FROM');
+        $this->get('/baser/admin/baser-core/users/index?contain%5BUserGroups%5D%5Bconditions%5D%5B0%5D=' . $payload);
+        $this->assertResponseOk();
+
+        $this->get('/baser/admin/baser-core/users/index?order=' . $payload);
+        $this->assertResponseOk();
+
+        // amp; 付きキーの正規化を経由しても除去される
+        $this->get('/baser/admin/baser-core/users/index?a=1&amp;contain%5BUserGroups%5D%5Bconditions%5D%5B0%5D=' . $payload);
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test index pagination
      *
      * @return void
@@ -293,6 +319,31 @@ class UsersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $user = $users->get(1);
         $this->assertNotEquals($beforePassword, $user->password);
+    }
+
+    /**
+     * Test edit_password 外部URLへのオープンリダイレクトを拒否する（M-4 回帰テスト）
+     */
+    public function testEdit_password_preventsOpenRedirect()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['password_1' => 'Testtest1234', 'password_2' => 'Testtest1234'];
+        // スキーム付き外部URLは拒否し、edit_password へ戻る
+        $this->post('/baser/admin/baser-core/users/edit_password?redirect=' . rawurlencode('https://evil.example.com'), $data);
+        $this->assertRedirect('/baser/admin/baser-core/users/edit_password');
+    }
+
+    /**
+     * Test edit_password 同一サイト内の絶対パスへのリダイレクトは許可する（M-4 回帰テスト）
+     */
+    public function testEdit_password_allowsLocalRedirect()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['password_1' => 'Testtest1234', 'password_2' => 'Testtest1234'];
+        $this->post('/baser/admin/baser-core/users/edit_password?redirect=/baser/admin/baser-core/contents/', $data);
+        $this->assertRedirect('/baser/admin/baser-core/contents/');
     }
 
     /**

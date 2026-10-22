@@ -42,13 +42,27 @@ class PasswordRequestMailer extends BcAdminMailer
         $agoInStr = '+' . Configure::read('BcApp.passwordRequestAllowTime') . ' min';
         $timelimit = date('Y/m/d H:i', strtotime($agoInStr, $createtime));
         $current = Router::getRequest();
-        $url = Router::url([
+        $urlArray = [
             'plugin' => 'BaserCore',
             'prefix' => $current->getParam('prefix'),
             'controller' => 'password_requests',
             'action' => 'apply',
             $passwordRequestData['request_key'],
-        ],true);
+        ];
+        // リセット URL のホストはリクエストの Host ヘッダではなく、設定済みのサイト URL（SITE_URL）から
+        // 生成する。Host ヘッダ由来だと、細工した Host を付けた再発行リクエストで攻撃者のドメインへ
+        // 誘導する URL がメールに記載され、リセットトークンを窃取される（Host ヘッダインジェクション）
+        $siteUrl = (string)Configure::read('BcEnv.siteUrl');
+        if ($siteUrl && preg_match('/^https?:\/\//', $siteUrl)) {
+            $path = Router::url($urlArray);
+            $base = (string)$current->getAttribute('base');
+            if ($base && str_starts_with($path, $base)) {
+                $path = substr($path, strlen($base));
+            }
+            $url = rtrim($siteUrl, '/') . '/' . ltrim($path, '/');
+        } else {
+            $url = Router::url($urlArray, true);
+        }
 
         $this->setTo($user->email)
             ->setSubject($subject)

@@ -662,6 +662,28 @@ class BcUtilTest extends BcTestCase
         $serialized = serialize('hoge');
         $result = BcUtil::unserialize($serialized);
         $this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
+
+        // 配列
+        $serialized = BcUtil::serialize(['a' => 1, 'b' => ['c' => 'd']]);
+        $this->assertEquals(['a' => 1, 'b' => ['c' => 'd']], BcUtil::unserialize($serialized));
+    }
+
+    /**
+     * test unserialize - オブジェクトを復元しないこと（PHP オブジェクトインジェクション対策）
+     *
+     * 保存される値は配列・スカラーのみのため、シリアライズ文字列にオブジェクトが含まれていても
+     * __PHP_Incomplete_Class として扱い、クラスのインスタンスを生成しない。
+     */
+    public function testUnserialize_doesNotRestoreObjects()
+    {
+        $payload = 'O:8:"stdClass":1:{s:1:"a";s:1:"b";}';
+        $result = BcUtil::unserialize(base64_encode($payload));
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result);
+        $result = BcUtil::unserialize($payload);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result);
+        // 配列の中のオブジェクトも同様
+        $result = BcUtil::unserialize(base64_encode('a:1:{i:0;O:8:"stdClass":0:{}}'));
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $result[0]);
     }
 
     /**
@@ -782,11 +804,19 @@ class BcUtilTest extends BcTestCase
                 \'type\' => \'Theme\'
             ];
         ');
+        // プラグイン名として妥当でないディレクトリの config.php は読み込まれないこと
+        $hiddenPath = ROOT . DS . 'plugins' . DS . '.hidden_theme';
+        $hiddenFolder = new BcFolder($hiddenPath);
+        $hiddenFolder->create();
+        (new BcFile($hiddenPath . DS . 'config.php'))->write('<?php return [\'type\' => \'Theme\'];');
         $themes = BcUtil::getAllThemeList();
         $this->assertTrue(in_array('BcFront', $themes));
         $this->assertTrue(in_array('BcAdminThird', $themes));
         $this->assertTrue(in_array('TestTheme', $themes));
+        $this->assertFalse(in_array('HiddenTheme', $themes));
+        $this->assertFalse(in_array('.hidden_theme', $themes));
         $folder->delete();
+        $hiddenFolder->delete();
     }
 
     /**
@@ -976,6 +1006,14 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetPluginDir()
     {
+        // パストラバーサル対策: プラグイン名として不正な文字列は実在するディレクトリでも false
+        $this->assertFalse(BcUtil::getPluginDir('..'));
+        $this->assertFalse(BcUtil::getPluginDir('../config'));
+        $this->assertFalse(BcUtil::getPluginDir('.'));
+        $this->assertFalse(BcUtil::getPluginDir('bc-blog/../baser-core'));
+        $this->assertFalse(BcUtil::getPluginPath('..'));
+        $this->assertFalse(BcUtil::getPluginPath('../config'));
+
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
         $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample'));

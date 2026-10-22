@@ -86,6 +86,36 @@ class DblogsControllerTest extends BcTestCase
     }
 
     /**
+     * test index - contain 経由の SQL インジェクションが無効化されること
+     *
+     * Admin API の一覧もリクエストのクエリパラメータをそのまま Service に渡すため、
+     * contain[Users][fields][] で SELECT 句へ、contain[Users][conditions][] で WHERE 句へ
+     * 任意の SQL が注入できた。AppController::beforeFilter で除去され、注入した
+     * 副問い合わせの結果が応答に含まれず、既定の contain で正常応答することを確認する。
+     *
+     * @return void
+     */
+    public function test_index_reject_contain_injection()
+    {
+        $leak = rawurlencode("(SELECT CONCAT(email,':',password) FROM users LIMIT 1)");
+        $this->get('/baser/api/admin/baser-core/dblogs/index/1.json?token=' . $this->accessToken
+            . '&contain%5BUsers%5D%5Bfields%5D%5B0%5D=Users.id'
+            . '&contain%5BUsers%5D%5Bfields%5D%5Bleak%5D=' . $leak);
+        $this->assertResponseSuccess();
+        $body = (string)$this->_response->getBody();
+        $this->assertStringNotContainsString('"leak"', $body);
+        $result = json_decode($body);
+        $dblogs = (new DblogsService())->getIndex();
+        $this->assertEquals($dblogs->count(), count($result->Dblogs));
+
+        // 構文エラーになる payload でも 500 にならない（注入されていない）
+        $payload = rawurlencode('1=1 AND (SELECT * FROM');
+        $this->get('/baser/api/admin/baser-core/dblogs/index/1.json?token=' . $this->accessToken
+            . '&contain%5BUsers%5D%5Bconditions%5D%5B0%5D=' . $payload);
+        $this->assertResponseSuccess();
+    }
+
+    /**
      * test add
      * @return void
      */

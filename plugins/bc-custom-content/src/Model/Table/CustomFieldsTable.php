@@ -16,6 +16,7 @@ use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
@@ -141,8 +142,39 @@ class CustomFieldsTable extends AppTable
                     'provider' => 'bc',
                     'message' => __d('baser_core', '拡張子を次の形式のようにカンマ（,）区切りで入力します。「jpg,pdf」')
                 ],
+                'checkDeniedFileExt' => [
+                    'rule' => 'checkDeniedFileExt',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', '実行可能なファイルの拡張子は指定できません。')
+                ],
+            ])
+            // 関連データの絞り込みフィールド名は WHERE 句のキーに使われるため識別子として妥当な値に限定する
+            ->add('meta', [
+                'checkBcCcRelatedFilterName' => [
+                    'rule' => ['checkWithJson', 'BcCcRelated.filter_name', "/^[a-z0-9_]+$/"],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '絞り込みフィールド名は半角小文字英数字とアンダースコアのみで入力してください。')
+                ],
             ]);
         return $validator;
+    }
+
+    /**
+     * 許可する拡張子に、常に拒否する拡張子が含まれていないか検証する
+     *
+     * @param mixed $value meta（JSON 文字列または配列）
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function checkDeniedFileExt($value): bool
+    {
+        $meta = is_string($value)? json_decode($value, true) : $value;
+        $fileExt = $meta['BcCustomContent']['file_ext'] ?? '';
+        if (!is_string($fileExt) || $fileExt === '') return true;
+        $exts = array_filter(array_map(fn($ext) => strtolower(trim($ext)), explode(',', $fileExt)), 'strlen');
+        return !array_intersect($exts, CustomContentUtil::getDeniedFileExts());
     }
 
     /**
@@ -183,11 +215,17 @@ class CustomFieldsTable extends AppTable
         if (isset($metaErrors['checkFileExtWithJson'])) {
             $entity->setError('meta.BcCustomContent.file_ext', ['checkFileExtWithJson' => $metaErrors['checkFileExtWithJson']]);
         }
+        if (isset($metaErrors['checkDeniedFileExt'])) {
+            $entity->setError('meta.BcCustomContent.file_ext', ['checkDeniedFileExt' => $metaErrors['checkDeniedFileExt']]);
+        }
         if (isset($metaErrors['checkMaxFileSizeWithJson'])) {
             $entity->setError('meta.BcCustomContent.max_file_size', ['checkMaxFileSizeWithJson' => $metaErrors['checkMaxFileSizeWithJson']]);
         }
         if (isset($metaErrors['checkBcCcWysiwygWith'])) {
             $entity->setError('meta.BcCcWysiwyg.width', ['checkBcCcWysiwygWith' => $metaErrors['checkBcCcWysiwygWith']]);
+        }
+        if (isset($metaErrors['checkBcCcRelatedFilterName'])) {
+            $entity->setError('meta.BcCcRelated.filter_name', ['checkBcCcRelatedFilterName' => $metaErrors['checkBcCcRelatedFilterName']]);
         }
         if (isset($metaErrors['checkBcCcWysiwygHeight'])) {
             $entity->setError('meta.BcCcWysiwyg.height', ['checkBcCcWysiwygHeight' => $metaErrors['checkBcCcWysiwygHeight']]);

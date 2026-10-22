@@ -98,7 +98,7 @@ if ($content->self_status) {
     <?php if ($isPublish): ?>
       <?php $this->BcBaser->link(rawurldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
     <?php else: ?>
-      <?= rawurldecode($fullUrl); ?><br>
+      <?= h(rawurldecode($fullUrl)); ?><br>
     <?php endif; ?>
     <?= h($content->title) ?>
   </td>

@@ -487,7 +487,9 @@ class BcBaserHelper extends Helper
 
         if (!$enabled || !$this->isLinkEnabled($srcUrl)) {
             if ($forceTitle) {
-                return "<span>$title</span>";
+                // escape / escapeTitle の指定に従いタイトルをエスケープする
+                $escapeTitle = $options['escapeTitle'] ?? $options['escape'];
+                return '<span>' . ($escapeTitle? h((string)$title) : $title) . '</span>';
             } else {
                 return '';
             }
@@ -1606,7 +1608,9 @@ class BcBaserHelper extends Helper
         $out = [];
         if (!$onSchema) {
             foreach($crumbs as $crumb) {
-                $options = ['escape' => false];
+                // タイトルは addCrumb() 側でエスケープ済みの値を受け付けるためそのまま出力し、
+                // href 等の属性はエスケープする
+                $options = ['escape' => true, 'escapeTitle' => false];
                 if (!empty($crumb['options'])) {
                     $options = array_merge($options, $crumb['options']);
                 }
@@ -1707,7 +1711,9 @@ class BcBaserHelper extends Helper
         } else {
             $protocol = 'https';
         }
-        return $protocol . '://' . Configure::read('BcEnv.host') . $this->getUrl($url, false);
+        // ホスト名は Host ヘッダ由来のため、ホスト名として妥当な文字のみに限定する
+        $host = preg_replace('/[^A-Za-z0-9.\-:\[\]]/', '', (string)Configure::read('BcEnv.host'));
+        return $protocol . '://' . $host . $this->getUrl($url, false);
     }
 
     /**
@@ -1799,19 +1805,28 @@ class BcBaserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function mark($search, $text, $name = 'strong', $attributes = [], $escape = false)
+    public function mark($search, $text, $name = 'strong', $attributes = [], $escape = true)
     {
         if (!is_array($search)) {
             $search = [$search];
         }
+        // 既定でテキストと検索語をエスケープする。検索結果ページでは $text がコンテンツのタイトル・
+        // 本文（編集者が入力）、$search が検索語（閲覧者が入力）であり、どちらも無エスケープで
+        // 出力すると格納型・反射型 XSS になる。タグ自体は生成後の文字列なのでエスケープしない
+        if ($escape) {
+            $text = h((string) $text);
+        }
         $options = [
-            'escape' => $escape
+            'escape' => false
         ];
         if (!empty($attributes)) {
             $options = array_merge($options, $attributes);
         }
         foreach($search as $value) {
-            $text = str_replace($value, $this->BcHtml->tag($name, $value, $options), (string) $text);
+            $value = (string) $value;
+            if ($value === '') continue;
+            $needle = $escape ? h($value) : $value;
+            $text = str_replace($needle, $this->BcHtml->tag($name, $needle, $options), (string) $text);
         }
         return $text;
     }

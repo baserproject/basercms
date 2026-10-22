@@ -63,4 +63,21 @@ class BcCaptchaServiceTest extends BcTestCase
             ['some_value', '', false]
         ];
     }
+
+    /**
+     * test consume - 回答が破棄され、同一セッションでの再利用（リプレイ）ができないこと
+     */
+    public function test_consume()
+    {
+        $request = $this->getRequest('/');
+        $request->getSession()->write('captcha.token1', 'abcd');
+
+        // 破棄するまでは繰り返し検証できる（確認画面→送信）
+        $this->assertTrue($this->BcCaptchaService->check($request, 'token1', 'abcd'));
+        $this->assertTrue($this->BcCaptchaService->check($request, 'token1', 'abcd'));
+        // 破棄後は同じ回答が使えない
+        $this->BcCaptchaService->consume($request, 'token1');
+        $this->assertNull($request->getSession()->read('captcha.token1'));
+        $this->assertFalse($this->BcCaptchaService->check($request, 'token1', 'abcd'));
+    }
 }

@@ -33,6 +33,7 @@ use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Cake\Validation\Validation;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -299,19 +300,21 @@ class MailFrontService implements MailFrontServiceInterface
      */
     public function getUserMail(iterable $mailFields, EntityInterface $mailMessage): string
     {
+        // 自動返信の宛先は、タイプ「Eメール」の項目の値のみとする（GHSA-w47c-4g8m-gjv9 関連）。
+        // 以前は互換のため email / email_1 の値にもフォールバックしていたが、タイプ「Eメール」以外の項目は
+        // 形式チェックがかからず、またフォームに定義の無い POST 値も採用されるため、
+        // 投稿者が任意の宛先へ自動返信メールを送らせることができた。
         $userMail = '';
         foreach($mailFields as $mailField) {
+            if ($mailField->type !== 'email') continue;
             if (empty($mailMessage->{$mailField->field_name})) continue;
-            $value = $mailMessage->{$mailField->field_name};
-            if ($mailField->type === 'email' && $value) $userMail = $value;
+            $userMail = $mailMessage->{$mailField->field_name};
         }
-        // 前バージョンとの互換性のため type が email じゃない場合にも取得できるようにしておく
-        if (!$userMail) {
-            if (!empty($mailMessage->email)) {
-                $userMail = $mailMessage->email;
-            } elseif (!empty($mailMessage->email_1)) {
-                $userMail = $mailMessage->email_1;
-            }
+        // 自動返信の宛先は単一の正しいメールアドレスに限定する。
+        // カンマ区切りの複数アドレスや改行を含む値は、第三者へのメール中継に悪用されるため採用しない。
+        $userMail = trim((string)$userMail);
+        if (!Validation::email($userMail)) {
+            return '';
         }
         return $userMail;
     }

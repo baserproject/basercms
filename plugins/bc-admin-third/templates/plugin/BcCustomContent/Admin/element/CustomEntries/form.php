@@ -110,7 +110,7 @@ if (!$customTable->isContentTable()) {
             'options' => $creators
           ]) ?>
         <?php else: ?>
-          &nbsp;&nbsp;<?php echo $creators[$entity->creator_id] ?>
+          &nbsp;&nbsp;<?php echo h($creators[$entity->creator_id] ?? '') ?>
           <?php echo $this->BcAdminForm->hidden('creator_id', ['type' => 'hidden']) ?>
         <?php endif ?>
         <?php echo $this->BcAdminForm->error('published') ?>

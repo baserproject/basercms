@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\LoginStoresScenario;
 use BaserCore\Test\Scenario\PermissionsScenario;
@@ -134,6 +135,25 @@ class PluginsControllerTest extends BcTestCase
             ["UnKnown", 500, "データベース処理中にエラーが発生しました。Plugin `UnKnown` could not be found."],
             ["BcTest", 500, "データベース処理中にエラーが発生しました。プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
         ];
+    }
+
+    /**
+     * test install - permission 未指定なら管理者以外のグループにルールを作らない
+     */
+    public function testInstall_withoutPermission()
+    {
+        // setUp() で PermissionsScenario 読み込み済みのため、ここでの追加読み込みは行わない
+        // （PermissionGroupsScenario は同じ Permission ID を使うため、重複キーで衝突する）
+        $countBefore = PermissionFactory::find()->where(['user_group_id <>' => 1])->count();
+        $this->post('/baser/api/admin/baser-core/plugins/install/BcUploader.json?token=' . $this->accessToken, [
+            'connection' => 'test',
+            'name' => 'BcUploader',
+            'title' => 'BcUploader',
+            'status' => '0',
+            'version' => '1.0.0',
+        ]);
+        $this->assertResponseCode(200);
+        $this->assertEquals($countBefore, PermissionFactory::find()->where(['user_group_id <>' => 1])->count());
     }
 
     /**

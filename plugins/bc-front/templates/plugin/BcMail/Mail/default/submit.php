@@ -24,7 +24,7 @@
 use Cake\Core\Configure;
 
 if (Configure::read('debug') == 0 && $mailContent->redirect_url) {
-  $this->BcBaser->meta(['http-equiv' => 'Refresh'], null, ['content' => '5;url=' . $mailContent->redirect_url, 'block' => true]);
+  $this->BcBaser->meta(['http-equiv' => 'Refresh'], null, ['content' => '5;url=' . h($mailContent->redirect_url), 'block' => true]);
 }
 ?>
 
@@ -42,6 +42,6 @@ if (Configure::read('debug') == 0 && $mailContent->redirect_url) {
   <?php endif ?>
   <?php if (!$this->BcBaser->isDebug() && $mailContent->redirect_url): ?>
     <p>※<?php echo __d('baser_core', '{0} 秒後にトップページへ自動的に移動します。', 5) ?></p>
-    <p><a href="<?php echo $mailContent->redirect_url; ?>"><?php echo __d('baser_core', '移動しない場合はコチラをクリックしてください。') ?></a></p>
+    <p><a href="<?php echo h($mailContent->redirect_url); ?>"><?php echo __d('baser_core', '移動しない場合はコチラをクリックしてください。') ?></a></p>
   <?php endif; ?>
 </div>

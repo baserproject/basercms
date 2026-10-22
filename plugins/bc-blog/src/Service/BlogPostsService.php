@@ -576,6 +576,9 @@ class BlogPostsService implements BlogPostsServiceInterface
                 ini_get('post_max_size')
             ));
         }
+        // 所属ブログ・記事番号はリクエストから変更させない。
+        // 変更を許すと、特定ブログの記事管理のみ許可されたユーザーが記事を他ブログへ移動できる
+        unset($postData['id'], $postData['blog_content_id'], $postData['no']);
         $blogPost = $this->BlogPosts->patchEntity($post, $postData);
         return $this->BlogPosts->saveOrFail($blogPost);
     }

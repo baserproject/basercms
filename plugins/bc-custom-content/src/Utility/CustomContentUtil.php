@@ -41,4 +41,53 @@ class CustomContentUtil
         }
     }
 
+    /**
+     * アップロードを常に拒否する拡張子の一覧を取得する
+     *
+     * @return array 小文字の拡張子
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getDeniedFileExts(): array
+    {
+        $config = Configure::read('BcCustomContent.deniedExtension');
+        if (is_string($config)) {
+            $config = explode(',', $config);
+        }
+        if (!is_array($config)) {
+            return [];
+        }
+        $exts = [];
+        foreach($config as $ext) {
+            if (!is_string($ext)) continue;
+            $ext = strtolower(trim($ext));
+            if ($ext === '') continue;
+            $exts[] = $ext;
+        }
+        return $exts;
+    }
+
+    /**
+     * 拡張子の一覧から、常に拒否する拡張子を取り除く
+     *
+     * @param array $exts
+     * @return array 小文字の拡張子
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function filterDeniedFileExts(array $exts): array
+    {
+        $denied = self::getDeniedFileExts();
+        $result = [];
+        foreach($exts as $ext) {
+            if (!is_string($ext)) continue;
+            $ext = strtolower(trim($ext));
+            if ($ext === '' || in_array($ext, $denied, true)) continue;
+            $result[] = $ext;
+        }
+        return $result;
+    }
+
 }

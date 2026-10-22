@@ -93,13 +93,43 @@ class WidgetArea extends \Cake\ORM\Entity
     {
         if (is_array($value)) {
             if($value) {
-                return BcUtil::serialize($value);
+                return BcUtil::serialize(self::stripObjects($value));
             } else {
                 return null;
             }
+        } elseif (is_string($value) && $value !== '') {
+            // シリアライズ済み文字列を受け取った場合は、配列として復元できるものだけを
+            // オブジェクトを除去したうえで再シリアライズして保存する。
+            // 任意のシリアライズ文字列をそのまま保存させると、復元時のオブジェクトインジェクションに悪用される
+            $decoded = BcUtil::unserialize($value);
+            if (is_array($decoded) && $decoded) {
+                return BcUtil::serialize(self::stripObjects($decoded));
+            }
+            return null;
         } else {
-            return $value;
+            return null;
         }
+    }
+
+    /**
+     * 配列からオブジェクトを再帰的に除去する
+     *
+     * @param array $value
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function stripObjects(array $value): array
+    {
+        foreach($value as $key => $item) {
+            if (is_array($item)) {
+                $value[$key] = self::stripObjects($item);
+            } elseif (is_object($item)) {
+                unset($value[$key]);
+            }
+        }
+        return $value;
     }
 
     /**

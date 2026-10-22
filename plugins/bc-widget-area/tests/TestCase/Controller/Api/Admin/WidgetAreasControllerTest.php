@@ -14,6 +14,7 @@ namespace BcWidgetArea\Test\TestCase\Controller\Api\Admin;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
 use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -163,8 +164,8 @@ class WidgetAreasControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         //メッセージを確認
         $this->assertEquals('ウィジェットエリア「edited」を更新しました。', $result->message);
-        //ウィジェットエリアの変化のを確認
-        $expected = serialize([
+        //ウィジェットエリアの変化のを確認（オブジェクト除去のため再シリアライズされる）
+        $expected = BcUtil::serialize([
             [
                 1 => 'edit 1',
                 2 => 'edit 2'

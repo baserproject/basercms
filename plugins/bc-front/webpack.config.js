@@ -15,6 +15,11 @@ const webpack = require('webpack');
 let entries = {};
 
 glob.sync("./src/**/*.js").map(function (file) {
+    // glob のバージョンにより先頭の ./ が付かないため、判定前に正規化する
+    // （付かない場合はエントリが一つも登録されず、バンドルが更新されない）
+    if (file.indexOf('./') !== 0) {
+        file = './' + file;
+    }
     if (!file.search('./src/js/', '')) {
         if (!file.replace('./src/js/', '').match(/^_/)) {
             entries[file.replace('./src/', '').split('.').shift()] = file;

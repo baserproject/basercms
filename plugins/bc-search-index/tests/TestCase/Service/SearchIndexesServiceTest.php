@@ -223,6 +223,20 @@ class SearchIndexesServiceTest extends BcTestCase
             // 空配列の結果テスト
             [false, [], []],
             [false, ['priority_123' => 1], []],
+            // op: and / or 以外は and に固定される（where() のキーへ到達させない）
+            [false, ['keyword' => 'test', 'op' => 'evil'], [
+                'SearchIndexes.site_id' => 1,
+                'and' => [0 => ['or' => [0 => ['SearchIndexes.title LIKE' => '%test%'], 1 => ['SearchIndexes.detail LIKE' => '%test%']]]]
+            ]],
+            [false, ['keyword' => 'test', 'op' => 'or'], [
+                'SearchIndexes.site_id' => 1,
+                'or' => [0 => ['or' => [0 => ['SearchIndexes.title LIKE' => '%test%'], 1 => ['SearchIndexes.detail LIKE' => '%test%']]]]
+            ]],
+            // q が配列の場合は無視される
+            [false, ['q' => ['a', 'b']], ['SearchIndexes.site_id' => 1]],
+            // 存在しないフォルダ ID・数値でない値は該当なし
+            [false, ['f' => 999999], ['SearchIndexes.site_id' => 1, 'SearchIndexes.id' => 0]],
+            [false, ['f' => 'abc'], ['SearchIndexes.site_id' => 1, 'SearchIndexes.id' => 0]],
             // keyword(q): 検索キーワード
             [false, ['keyword' => 'test'], [
                 'SearchIndexes.site_id' => 1,

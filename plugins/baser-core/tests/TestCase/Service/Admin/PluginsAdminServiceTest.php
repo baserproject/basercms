@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Log\Log;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Psr\Log\LogLevel;
 
@@ -68,6 +69,12 @@ class PluginsAdminServiceTest extends BcTestCase
         $vars = $this->PluginsAdmin->getViewVarsForInstall($this->PluginsAdmin->get(1));
         $this->assertTrue(isset($vars['plugin']));
         $this->assertTrue(isset($vars['installStatusMessage']));
+        $this->assertArrayHasKey('hasPermissionDefinition', $vars);
+        $this->assertTrue($this->PluginsAdmin->getViewVarsForInstall($this->PluginsAdmin->get(1))['hasPermissionDefinition']);
+        $sample = $this->PluginsAdmin->getViewVarsForInstall(
+            TableRegistry::getTableLocator()->get('BaserCore.Plugins')->getPluginConfig('BcPluginSample')
+        );
+        $this->assertFalse($sample['hasPermissionDefinition']);
     }
 
     /**

@@ -183,6 +183,68 @@ class MailMessagesTableTest extends BcTestCase
     }
 
     /**
+     * test setupValidate
+     * タイプ「Eメール」の欄は、入力チェックの設定に関係なく Eメール形式を検証する
+     */
+    public function test_setupValidate_emailType()
+    {
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'field_name' => 'email_1',
+            'type' => 'email',
+            'valid' => 0,
+            'valid_ex' => '',
+            'use_field' => 1,
+        ])->persist();
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'field_name' => 'name_1',
+            'type' => 'text',
+            'valid' => 0,
+            'valid_ex' => '',
+            'use_field' => 1,
+        ])->persist();
+        $this->MailMessage->setMailFields(1);
+        $this->execPrivateMethod($this->MailMessage, 'setupValidate', [[]]);
+        $validator = $this->MailMessage->getValidator('MailMessages');
+
+        // 複数のアドレスはエラー
+        $errors = $validator->validate(['email_1' => 'a@example.com,b@example.net']);
+        $this->assertEquals('Eメール形式で入力してください。', $errors['email_1']['email']);
+        // Eメール形式でない値はエラー
+        $errors = $validator->validate(['email_1' => 'test']);
+        $this->assertArrayHasKey('email_1', $errors);
+        // Eメール形式の値・空はエラーにならない
+        $this->assertEmpty($validator->validate(['email_1' => 'a@example.com']));
+        $this->assertEmpty($validator->validate(['email_1' => '']));
+        // タイプ「Eメール」以外の欄は対象外
+        $this->assertEmpty($validator->validate(['name_1' => 'a@example.com,b@example.net']));
+    }
+
+    /**
+     * test setupValidate
+     * 入力チェックで VALID_EMAIL を指定している場合もこれまでどおり検証する
+     */
+    public function test_setupValidate_emailTypeWithValidEmail()
+    {
+        MailFieldsFactory::make([
+            'mail_content_id' => 1,
+            'field_name' => 'email_1',
+            'type' => 'email',
+            'valid' => 0,
+            'valid_ex' => 'VALID_EMAIL',
+            'use_field' => 1,
+        ])->persist();
+        $this->MailMessage->setMailFields(1);
+        $this->execPrivateMethod($this->MailMessage, 'setupValidate', [[]]);
+        $validator = $this->MailMessage->getValidator('MailMessages');
+
+        $errors = $validator->validate(['email_1' => 'a@example.com,b@example.net']);
+        $this->assertEquals('Eメール形式で入力してください。', $errors['email_1']['email']);
+        $this->assertEmpty($validator->validate(['email_1' => 'a@example.com']));
+    }
+
+    /**
      * バリデート処理
      */
     public function testBeforeValidate()

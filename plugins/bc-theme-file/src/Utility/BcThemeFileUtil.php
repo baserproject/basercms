@@ -48,4 +48,56 @@ class BcThemeFileUtil
         }
     }
 
+    /**
+     * パスを正規化する
+     *
+     * 実在しないパスでも `..` / `.` / 重複区切りを解決した絶対パスを返す。
+     * realpath() が false を返す（未作成のパス）場合の境界チェックに用いる。
+     *
+     * @param string $path
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function normalizePath(string $path): string
+    {
+        $parts = [];
+        foreach (explode(DS, str_replace(['/', '\\'], DS, $path)) as $part) {
+            if ($part === '..') {
+                array_pop($parts);
+            } elseif ($part !== '' && $part !== '.') {
+                $parts[] = $part;
+            }
+        }
+        return DS . implode(DS, $parts);
+    }
+
+    /**
+     * パスが基準ディレクトリ配下に収まっているかを判定する
+     *
+     * パストラバーサル対策の共通判定。実在すれば realpath()、未作成なら normalizePath() で
+     * `..` を解決したうえで、基準ディレクトリを前方一致で比較する。
+     * 基準ディレクトリ自身（$path === $baseDir）は配下とみなす。
+     *
+     * @param string $path 検証対象のパス
+     * @param string $baseDir 基準ディレクトリ
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isWithinDir(string $path, string $baseDir): bool
+    {
+        $resolved = realpath($path);
+        if ($resolved === false) {
+            $resolved = self::normalizePath($path);
+        }
+        $resolvedBase = realpath($baseDir);
+        if ($resolvedBase === false) {
+            $resolvedBase = self::normalizePath($baseDir);
+        }
+        return str_starts_with(rtrim($resolved, DS) . DS, rtrim($resolvedBase, DS) . DS);
+    }
+
 }

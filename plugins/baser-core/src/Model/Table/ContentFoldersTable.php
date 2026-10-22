@@ -81,6 +81,15 @@ class ContentFoldersTable extends AppTable
             ->integer('id')
             ->allowEmptyString('id', null, 'create')
             ->add('id', 'valid', ['rule' => 'numeric', 'message' => __d('baser_core', 'IDに不正な値が利用されています。')]);
+        // folder_template / page_template はテンプレートの読み込みパスに使われるため、ディレクトリを遡る「..」等を含む値は許可しない
+        $validator
+            ->scalar('folder_template')
+            ->allowEmptyString('folder_template')
+            ->regex('folder_template', '/^(?!.*\.\.)[^\\\x00]+$/u', __d('baser_core', 'フォルダテンプレート名に「..」やバックスラッシュは使用できません。'));
+        $validator
+            ->scalar('page_template')
+            ->allowEmptyString('page_template')
+            ->regex('page_template', '/^(?!.*\.\.)[^\\\x00]+$/u', __d('baser_core', 'ページテンプレート名に「..」やバックスラッシュは使用できません。'));
         return $validator;
     }
 

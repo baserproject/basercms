@@ -107,6 +107,20 @@ class BlogCommentsTableTest extends BcTestCase
     }
 
     /**
+     * ショートコードを含むコメントは受け付けない
+     */
+    public function test_validationDefaultShortCode()
+    {
+        $validator = $this->BlogCommentsTable->getValidator('default');
+        $errors = $validator->validate([
+            'name' => '[BcBaser.getSitemap]',
+            'message' => 'コメント [BcBaser.getGoogleMaps apiKey|k]'
+        ]);
+        $this->assertEquals('お名前にショートコードは利用できません。', current($errors['name']));
+        $this->assertEquals('コメントにショートコードは利用できません。', current($errors['message']));
+    }
+
+    /**
      * 初期値を取得する
      */
     public function testGetDefaultValue()
