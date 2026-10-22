@@ -30,7 +30,7 @@ tools/check basercms          # スキャナと同じ手順でビルドし、ネ
 
 ```bash
 basercms-start
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost/
+curl -sk -o /dev/null -w '%{http_code}\n' https://localhost/
 basercms-test --testsuite BcSeo
 ```
 

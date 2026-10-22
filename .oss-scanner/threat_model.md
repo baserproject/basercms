@@ -75,18 +75,18 @@ Low priority: `tests/`, `docker/`, `docs/`, `.github/`, `plugins/BcPluginSample`
 
 ## 4. How to exercise it
 
-The image has a complete installation at `/var/www/html` (`/src` is a symlink to it) with MariaDB and Apache.
+The image has a complete installation at `/var/www/html` (`/src` is a symlink to it) with MariaDB and Apache. Apache serves HTTP and HTTPS (self-signed) because `SITE_URL` is `https://localhost/`.
 
 ```bash
 basercms-start                 # start MariaDB + Apache (nothing runs by default)
-curl -s http://localhost/      # public site
+curl -sk https://localhost/    # public site (self-signed certificate; http://localhost/ also works)
 basercms-test                  # full PHPUnit suite (slow, ~thousands of tests)
 basercms-test --testsuite BcMail   # one plugin
 basercms-test --filter UsersControllerTest
 basercms-stop
 ```
 
-- Admin UI: `http://localhost/baser/admin/`, login `foo@example.com` /
+- Admin UI: `https://localhost/baser/admin/`, login `foo@example.com` /
   `baserCMS1234` (system administrator, group `admins`).
 - Create a less-privileged user: admin UI → ユーザー管理, assign group
   `operators` (サイト運営) to test permission boundaries, or insert a user via

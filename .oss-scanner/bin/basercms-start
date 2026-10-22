@@ -17,5 +17,5 @@ if ! pgrep -x apache2 >/dev/null; then
     (apache2-foreground >/var/log/apache2/foreground.log 2>&1 &)
     sleep 1
 fi
-echo "baserCMS is running at http://localhost/"
-echo "Admin: http://localhost/baser/admin/  (foo@example.com / baserCMS1234)"
+echo "baserCMS is running at https://localhost/ (self-signed; use curl -k) and http://localhost/"
+echo "Admin: https://localhost/baser/admin/  (foo@example.com / baserCMS1234)"
