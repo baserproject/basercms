@@ -297,10 +297,14 @@ class ThemesService implements ThemesServiceInterface
         }
         /* @var PluginsService $pluginsService */
         $pluginsService = $this->getService(PluginsServiceInterface::class);
+        /* @var PermissionGroupsService $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         $plugins = BcUtil::getThemesPlugins($theme);
         // テーマ梱包のプラグインをインストール
+        // 利用者が選択していないため、権限定義のないプラグインにはフルアクセスを作らない（管理ユーザーのみ利用）
         foreach($plugins as $plugin) {
-            $pluginsService->install($plugin);
+            $pluginsService->install($plugin, false);
+            $permissionGroupsService->buildByPlugin($plugin, false);
         }
     }
 

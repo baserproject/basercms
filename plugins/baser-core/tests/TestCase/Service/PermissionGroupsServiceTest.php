@@ -25,6 +25,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Test\Factory\PermissionGroupFactory;
 use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -108,6 +109,114 @@ class PermissionGroupsServiceTest extends BcTestCase
 
         $result = $this->PermissionGroups->build(1, 'Nghiem');
         $this->assertFalse($result);
+    }
+
+    /**
+     * test build - BcCustomContent の権限定義（運営者はエントリーまで、構造の変更は不可）
+     */
+    public function testBuild_BcCustomContentDefinition()
+    {
+        $this->loadPlugins(['BcCustomContent']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcCustomContent'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->orderBy(['id'])->all()->toArray();
+
+        $cases = [
+            ['/baser/admin/bc-custom-content/custom_entries/index/1', 'GET', true],
+            ['/baser/admin/bc-custom-content/custom_entries/edit/1/1', 'POST', true],
+            ['/baser/admin/bc-custom-content/custom_contents/edit/1', 'POST', true],
+            ['/baser/admin/bc-custom-content/custom_tables/edit/1', 'POST', false],
+            ['/baser/admin/bc-custom-content/custom_fields/edit/1', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_entries/edit/1.json', 'POST', true],
+            ['/baser/api/admin/bc-custom-content/custom_fields/index.json', 'GET', true],
+            ['/baser/api/admin/bc-custom-content/custom_fields/edit/1.json', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_tables/add.json', 'POST', false],
+            ['/baser/api/admin/bc-custom-content/custom_links/get_parent_list/1.json', 'GET', false],
+        ];
+        foreach($cases as [$url, $method, $expected]) {
+            $this->assertSame($expected, $this->Permissions->isAuthorized(1, $url, $method, $permissions), $method . ' ' . $url);
+        }
+    }
+
+    /**
+     * test build - BcSeo の権限定義（フルアクセス 1 本）
+     */
+    public function testBuild_BcSeoDefinition()
+    {
+        $this->loadPlugins(['BcSeo']);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->truncateTable('permissions');
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcSeo'));
+        $permissions = PermissionFactory::find()->where(['user_group_id' => 2])->all()->toArray();
+        $this->assertCount(1, $permissions);
+        $this->assertEquals('/baser/admin/bc-seo/*', $permissions[0]->url);
+        $this->assertEquals('*', $permissions[0]->method);
+        $this->assertTrue($this->Permissions->isAuthorized(1, '/baser/admin/bc-seo/seo_configs/update_db', 'POST', $permissions));
+    }
+
+    /**
+     * test hasPermissionDefinition
+     */
+    public function testHasPermissionDefinition()
+    {
+        $this->assertTrue($this->PermissionGroups->hasPermissionDefinition('BaserCore'));
+        $this->assertTrue($this->PermissionGroups->hasPermissionDefinition('BcBlog'));
+        $this->assertFalse($this->PermissionGroups->hasPermissionDefinition('BcPluginSample'));
+        $this->assertFalse($this->PermissionGroups->hasPermissionDefinition('Nghiem'));
+    }
+
+    /**
+     * test build - 権限定義のないプラグインは、明示しない限りルールを作らない
+     */
+    public function testBuild_withoutDefinition()
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $countBefore = PermissionFactory::find()->where(['user_group_id' => 2])->count();
+
+        // 既定：作らない（成功扱い）
+        $this->assertTrue($this->PermissionGroups->build(2, 'BcPluginSample'));
+        $this->assertEquals($countBefore, PermissionFactory::find()->where(['user_group_id' => 2])->count());
+
+        // 明示：フルアクセスを作る
+        $this->PermissionGroups->build(2, 'BcPluginSample', true);
+        $created = PermissionFactory::find()->where([
+            'user_group_id' => 2,
+            'url' => '/baser/admin/bc-plugin-sample/*'
+        ])->first();
+        $this->assertNotNull($created);
+        $this->assertEquals('*', $created->method);
+    }
+
+    /**
+     * test buildByPlugin - 権限定義のないプラグイン
+     */
+    public function testBuildByPlugin_withoutDefinition()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $query = fn() => PermissionFactory::find()->where(['url LIKE' => '/baser/%/bc-plugin-sample/*']);
+
+        $this->PermissionGroups->buildByPlugin('BcPluginSample');
+        $this->assertEquals(0, $query()->count());
+
+        $this->PermissionGroups->buildByPlugin('BcPluginSample', true);
+        $this->assertGreaterThan(0, $query()->count());
+    }
+
+    /**
+     * test rebuildByUserGroup - 権限定義のない有効プラグインにルールを作らない
+     */
+    public function testRebuildByUserGroup_withoutDefinition()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        PluginFactory::make(['name' => 'BcPluginSample', 'status' => true, 'priority' => 99])->persist();
+        $this->PermissionGroups->rebuildByUserGroup(2);
+        $this->assertEquals(0, PermissionFactory::find()->where([
+            'user_group_id' => 2,
+            'url LIKE' => '/baser/%/bc-plugin-sample/*'
+        ])->count());
     }
 
     /**

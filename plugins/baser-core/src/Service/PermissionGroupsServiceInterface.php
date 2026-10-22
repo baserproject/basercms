@@ -82,11 +82,12 @@ interface PermissionGroupsServiceInterface
      * プラグインを指定してアクセスルールを構築する
      *
      * @param string $plugin
+     * @param bool $allowAllWithoutDefinition 権限定義（config/permission.php）が無い場合にフルアクセスを作るかどうか
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function buildByPlugin(string $plugin);
+    public function buildByPlugin(string $plugin, bool $allowAllWithoutDefinition = false);
 
     /**
      * ユーザーグループを指定してアクセスグループを構築する
@@ -143,12 +144,24 @@ interface PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param string $plugin
+     * @param bool $allowAllWithoutDefinition 権限定義（config/permission.php）が無い場合にフルアクセスを作るかどうか
      * @return bool
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function build(int $userGroupId, string $plugin);
+    public function build(int $userGroupId, string $plugin, bool $allowAllWithoutDefinition = false);
+
+    /**
+     * プラグインが権限定義（config/permission.php）を持っているかどうか
+     *
+     * @param string $plugin
+     * @return bool
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public function hasPermissionDefinition(string $plugin): bool;
 
     /**
      * 指定したプラグインについて全てを許可するアクセスルールを構築する

@@ -16,6 +16,7 @@
  * @var \BaserCore\Model\Entity\Plugin $plugin
  * @var string $installStatusMessage インストールができない場合のメッセージ
  * @var string $installMessage プラグインのインストールに関するメッセージ
+ * @var bool $hasPermissionDefinition 権限定義を持っているかどうか
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser_core', 'プラグインのデータを初期化します。よろしいですか？'),
@@ -58,6 +59,13 @@ $this->BcAdmin->setHelp('plugins_install');
       'type' => 'radio',
       'options' => ['1' => __d('baser_core', '全てのユーザーで利用'), '0' => __d('baser_core', '管理ユーザーのみ利用')]
     ]) ?>
+    <p id="PermissionAllWarning" class="bca-notice" style="display:none">
+      <?php if ($hasPermissionDefinition): ?>
+        <?php echo __d('baser_core', '管理者以外のユーザーグループにも、このプラグインの権限定義に従ってアクセスルールが作られます。') ?>
+      <?php else: ?>
+        <?php echo __d('baser_core', 'このプラグインには権限定義がないため、管理者以外のユーザーグループにも、このプラグインの全機能へのアクセスが許可されます。') ?>
+      <?php endif ?>
+    </p>
   </section>
 
   <div>

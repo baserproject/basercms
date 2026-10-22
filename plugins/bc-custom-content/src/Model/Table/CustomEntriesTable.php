@@ -340,9 +340,12 @@ class CustomEntriesTable extends AppTable
             return $validator;
         }
 
-        $fileExt = ['gif', 'jpg', 'jpeg', 'png', 'pdf'];
+        $defaultFileExt = ['gif', 'jpg', 'jpeg', 'png', 'pdf'];
+        $fileExt = $defaultFileExt;
         if (!empty($link->custom_field->meta['BcCustomContent']['file_ext'])) {
-            $fileExt = explode(',', $link->custom_field->meta['BcCustomContent']['file_ext']);
+            // 常に拒否する拡張子は、許可リストに含まれていても取り除く（GHSA-8jrp-4h7c-m679）
+            $fileExt = CustomContentUtil::filterDeniedFileExts(explode(',', $link->custom_field->meta['BcCustomContent']['file_ext']));
+            if (!$fileExt) $fileExt = $defaultFileExt;
         }
 
         // CakePHP 5.2 では同名バリデーションルールの再追加が例外となるため、再設定できるよう既存を削除してから追加する

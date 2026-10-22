@@ -94,6 +94,18 @@ return [
     ],
     'BcCustomContent' => [
         /**
+         * アップロードを常に拒否する拡張子
+         * カスタムフィールドの「許可する拡張子」に指定しても、この一覧の拡張子は受け付けない
+         */
+        'deniedExtension' => [
+            'php', 'php3', 'php4', 'php5', 'php6', 'php7', 'php8',
+            'phtml', 'phtm', 'pht', 'phps', 'phar',
+            'shtml', 'shtm',
+            'cgi', 'pl', 'py', 'rb', 'sh', 'bash',
+            'jsp', 'jspx', 'asp', 'aspx', 'ashx',
+            'htaccess', 'htpasswd',
+        ],
+        /**
          * フィールドグループ
          */
         'fieldCategories' => [
