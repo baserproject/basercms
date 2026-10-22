@@ -142,6 +142,12 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         // パストラバーサル対策(GHSA-2pj4-v76f-wjvx): create() と同様、書き込み sink で
         // テーマディレクトリ配下であることを検証する。
         $this->assertWithinThemeDir((string)($postData['fullpath'] ?? ''));
+        // 名前変更の行き先（ThemeFileForm::_execute の $newPath と同じ組み立て）も検査する（GHSA-q7g3-qwrc-mp89）
+        if (isset($postData['base_name']) && is_string($postData['base_name']) && $postData['base_name'] !== '') {
+            $newPath = dirname((string)$postData['fullpath']) . DS . rawurldecode($postData['base_name']);
+            if (!empty($postData['ext'])) $newPath .= '.' . $postData['ext'];
+            $this->assertWithinThemeDir($newPath);
+        }
 
         $postData['mode'] = 'update';
         $themeFileForm = new ThemeFileForm();
@@ -198,6 +204,8 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
             }
             $newPathBase .= '_copy';
         }
+        // パストラバーサル対策(GHSA-q7g3-qwrc-mp89): コピー先も念のためテーマディレクトリ配下であることを検証（多層防御）
+        $this->assertWithinThemeDir($newEntity->fullpath);
         $result = copy(rawurldecode($fullpath), $newEntity->fullpath);
         if ($result) {
             chmod($newEntity->fullpath, 0666);
@@ -270,8 +278,11 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         }
         // パストラバーサル対策(GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h):
         // コピー先 $themePath は $params['type'] / $params['path'] から組み立てられ getFullpath() を
-        // 通らないため、コピー先がテーマディレクトリ配下であることを sink で必ず検証する。
-        $this->assertWithinThemeDir($themePath);
+        // 通らないため、コピー先がカレントテーマのディレクトリ配下であることを sink で必ず検証する。
+        $this->assertWithinThemeDir($themePath, $theme);
+        // コピー元 $params['fullpath'] も、コピー元のテーマ／プラグインの当該タイプのディレクトリ配下で
+        // あることを検証する（Admin web 経路の parseArgs でも検証するが、Service 単体でも守る）。
+        $this->assertWithinSourceDir($params);
         $folder = new BcFolder(dirname($themePath));
         $folder->create();
         if (file_exists($params['fullpath']) && copy($params['fullpath'], $themePath)) {

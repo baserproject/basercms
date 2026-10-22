@@ -78,6 +78,53 @@ class BcThemeFileServiceTest extends BcTestCase
     }
 
     /**
+     * test getBaseDir
+     */
+    public function test_getBaseDir()
+    {
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/layout/', $this->BcThemeFileService->getBaseDir('BcThemeSample', '', 'layout'));
+        $this->assertEquals('/var/www/html/plugins/BcThemeSample/templates/', $this->BcThemeFileService->getBaseDir('BcThemeSample', '', 'etc'));
+        $this->assertEquals('/var/www/html/plugins/bc-front/webroot/img/', $this->BcThemeFileService->getBaseDir('BcFront', 'BaserCore', 'img'));
+        $this->assertEquals('/var/www/html/plugins/bc-front/webroot/css/', $this->BcThemeFileService->getBaseDir('BcFront', '', 'css'));
+    }
+
+    /**
+     * test assertWithinThemeDir
+     *
+     * 書き込み先の境界がテーマディレクトリに限定されること。
+     * 以前は plugins/ 全体を許可していたため、fullpath に `..` を含めるとコアプラグイン配下へ
+     * 書き込めた。テーマ以外のプラグイン配下、およびテーマ指定時は他テーマ配下を拒否する。
+     */
+    public function test_assertWithinThemeDir()
+    {
+        // テーマ配下は許可（例外が出ない）
+        $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/plugins/BcColumn/templates/layout/default.php']);
+        $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/plugins/BcColumn/templates/layout/new.php', 'BcColumn']);
+        // 未作成のテーマ内パスも許可
+        $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/plugins/BcColumn/templates/layout/new_dir/new.php', 'BcColumn']);
+
+        // コアプラグイン配下は拒否
+        try {
+            $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/plugins/BcColumn/templates/../../baser-core/templates/pwned.php']);
+            $this->fail('コアプラグイン配下への参照が拒否されていません');
+        } catch (\BaserCore\Error\BcException $e) {
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        }
+
+        // テーマを指定した場合、他テーマ配下は拒否
+        try {
+            $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/plugins/bc-front/templates/layout/default.php', 'BcColumn']);
+            $this->fail('他テーマ配下への参照が拒否されていません');
+        } catch (\BaserCore\Error\BcException $e) {
+            $this->assertEquals('パスにテーマディレクトリ外への参照が含まれています。', $e->getMessage());
+        }
+
+        // plugins/ の外は拒否
+        $this->expectException('BaserCore\Error\BcException');
+        $this->execPrivateMethod($this->BcThemeFileService, 'assertWithinThemeDir', ['/var/www/html/config/app.php']);
+    }
+
+    /**
      * test getFullpath - $type のトラバーサルを拒否する（GHSA-2pj4-v76f-wjvx）
      *
      * $type が許可リスト外（トラバーサルを含む等）の場合、ベースディレクトリの移動を

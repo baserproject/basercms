@@ -146,6 +146,28 @@ class ThemeFilesControllerTest extends BcTestCase
     }
 
     /**
+     * test edit - URL エンコードした ../ を含む path を拒否する（GHSA-q7g3-qwrc-mp89）
+     */
+    public function test_edit_rejectsEncodedTraversal()
+    {
+        $victim = TMP . 'q7g3_api_victim.php';
+        (new BcFile($victim))->write('original');
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2ftmp%2fq7g3_api_victim.php',
+            'base_name' => 'q7g3_api_victim',
+            'contents' => 'changed',
+            'ext' => 'php',
+            'plugin' => 'BaserCore'
+        ]);
+        $this->assertResponseCode(500);
+        $contents = file_get_contents($victim);
+        unlink($victim);
+        $this->assertEquals('original', $contents);
+    }
+
+    /**
      * [API] テーマファイル ファイル削除
      */
     public function test_delete()

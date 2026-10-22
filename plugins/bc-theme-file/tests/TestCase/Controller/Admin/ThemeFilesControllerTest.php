@@ -588,6 +588,58 @@ class ThemeFilesControllerTest extends BcTestCase
     }
 
     /**
+     * test img_thumb - path に `..` を含めてテーマ外の画像を読み出せないこと
+     *
+     * Admin web 経路の parseArgs() は URL から組み立てた fullpath を境界チェックせずに
+     * getImgThumb() へ渡すため、テーマ外（他テーマ・サーバ上の任意の画像）を読み出せた。
+     * 404 で拒否されることを確認する。
+     */
+    public function test_img_thumb_rejectsTraversal()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // BcColumn/webroot/img/ から他テーマ bc-front/webroot/img/logo.png（実在）へのトラバーサル
+        $this->get('/baser/admin/bc-theme-file/theme_files/img_thumb/BcColumn/img/../../../bc-front/webroot/img/logo.png');
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * test copy_to_theme - コピー元に `..` を含めてテーマ外のファイルをコピーできないこと
+     *
+     * コピー元がテーマ外の場合、カレントテーマの webroot 配下へコピーされ公開 URL から
+     * 取得できてしまう（任意ファイル読み出し）。404 で拒否され、コピーされないことを確認する。
+     */
+    public function test_copy_to_theme_rejectsTraversalSource()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/bc-theme-file/theme_files/copy_to_theme/BcFront/css/../../../../config/app.php');
+        $this->assertResponseCode(404);
+        $this->assertFileDoesNotExist(BASER_PLUGINS . 'bc-front/webroot/css/app.php');
+        $this->assertFileDoesNotExist(BASER_PLUGINS . 'bc-front/webroot/app.php');
+    }
+
+    /**
+     * test parseArgs - `..` によるテーマ外参照を拒否する
+     * @dataProvider parseArgsTraversalDataProvider
+     */
+    public function test_parseArgs_rejectsTraversal($args)
+    {
+        $this->expectException('Cake\Http\Exception\NotFoundException');
+        $this->execPrivateMethod($this->ThemeFilesController, 'parseArgs', [$args]);
+    }
+
+    public static function parseArgsTraversalDataProvider()
+    {
+        return [
+            'layout から config へ' => [['BcThemeSample', 'layout', '..', '..', '..', '..', 'config', 'app.php']],
+            'img から他テーマへ' => [['BcColumn', 'img', '..', '..', '..', 'bc-front', 'webroot', 'img', 'logo.png']],
+            'etc から plugins 外へ' => [['BcThemeSample', 'etc', '..', '..', '..', 'config', 'app.php']],
+            'URL エンコードされた ..' => [['BcThemeSample', 'layout', '%2e%2e', '%2e%2e', '%2e%2e', '%2e%2e', 'config', 'app.php']],
+        ];
+    }
+
+    /**
      * test parseArgs
      * @dataProvider parseArgsDataProvider
      */
