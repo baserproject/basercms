@@ -1,0 +1,9 @@
+#!/bin/bash
+# Run the PHPUnit suite. Extra arguments are passed to phpunit, e.g.
+#   basercms-test --testsuite BaserCore
+#   basercms-test --filter UsersControllerTest
+set -e
+basercms-start >/dev/null
+cd /var/www/html
+bin/cake setup test
+exec vendor/bin/phpunit --colors=always "$@"
