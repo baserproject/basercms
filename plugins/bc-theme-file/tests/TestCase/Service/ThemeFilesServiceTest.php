@@ -95,6 +95,16 @@ class ThemeFilesServiceTest extends BcTestCase
     }
 
     /**
+     * test get - プラグイン配置ルート外のファイルは読み出さない（GHSA-rqr8-gmx5-xvrr）
+     */
+    public function test_get_rejectsOutsidePluginsDir()
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFileService->get('/var/www/html/plugins/BcThemeSample/templates/layout/../../../../config/app.php');
+    }
+
+    /**
      * test getForm
      */
     public function test_getForm()
