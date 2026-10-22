@@ -304,6 +304,11 @@ class CustomContentAdminHelperTest extends BcTestCase
         $customEntry->title = 'title<script>alert(1)</script>';
         $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
         $this->assertEquals('<a href="/baser/admin/baser-core/dashboard/edit/1/1">title&lt;script&gt;alert(1)&lt;/script&gt;</a>', $rs);
+        // ツリー構造の階層はタイトルの外にインデントとして付与され、二重にエスケープされない
+        $customEntry->depth = 2;
+        $rs = $this->CustomContentAdminHelper->getEntryIndexTitle($customTable, $customEntry);
+        $this->assertEquals('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└<a href="/baser/admin/baser-core/dashboard/edit/1/1">title&lt;script&gt;alert(1)&lt;/script&gt;</a>', $rs);
+        $customEntry->depth = 0;
         /**
          * case has_child is false
          * and customTable with display_field is not title
