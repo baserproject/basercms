@@ -54,7 +54,7 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
             }
            ?>
     <h2 class="bca-main__submenu-title <?php echo $activeClass ?>" data-id="<?php echo ($k -1) ?>">
-      <?php echo $pluginVal['title'] ?>
+      <?php echo h($pluginVal['title']) ?>
     </h2>
     <ul class="bca-main__submenu-list clearfix">
       <?php foreach($types as $key => $type): ?>

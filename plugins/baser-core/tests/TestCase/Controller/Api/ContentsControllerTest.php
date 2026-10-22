@@ -113,6 +113,15 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     /**
      * test get_prev
      */
+    /**
+     * test index - withTrash はゴミ箱のコンテンツを含めるためのパラメータであり、公開 API では受け付けない
+     */
+    public function testIndex_rejectsWithTrash(): void
+    {
+        $this->get('/baser/api/baser-core/contents/index.json?withTrash=1&token=' . $this->accessToken);
+        $this->assertResponseCode(403);
+    }
+
     public function test_get_prev()
     {
         //正常系実行

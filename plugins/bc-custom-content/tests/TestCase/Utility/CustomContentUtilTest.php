@@ -33,4 +33,29 @@ class CustomContentUtilTest extends BcTestCase
         $rs = CustomContentUtil::getPluginSetting('testPlugin');
         $this->assertEquals(['testSetting' => 'testValue'], $rs);
     }
+
+    /**
+     * test getDeniedFileExts
+     */
+    public function test_getDeniedFileExts()
+    {
+        $this->assertContains('php', CustomContentUtil::getDeniedFileExts());
+        $this->assertContains('phtml', CustomContentUtil::getDeniedFileExts());
+
+        $backup = Configure::read('BcCustomContent.deniedExtension');
+        Configure::write('BcCustomContent.deniedExtension', ' PHP , cgi ,');
+        $this->assertEquals(['php', 'cgi'], CustomContentUtil::getDeniedFileExts());
+        Configure::write('BcCustomContent.deniedExtension', null);
+        $this->assertEquals([], CustomContentUtil::getDeniedFileExts());
+        Configure::write('BcCustomContent.deniedExtension', $backup);
+    }
+
+    /**
+     * test filterDeniedFileExts
+     */
+    public function test_filterDeniedFileExts()
+    {
+        $this->assertEquals(['jpg', 'png'], CustomContentUtil::filterDeniedFileExts(['jpg', 'PHP', ' png ', 'phtml', '']));
+        $this->assertEquals([], CustomContentUtil::filterDeniedFileExts(['php']));
+    }
 }

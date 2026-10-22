@@ -120,6 +120,10 @@ class BlogContentsController extends BlogAdminAppController
      */
     protected function redirectEditBlog(string $template): ResponseInterface
     {
+        // テンプレート名はディレクトリのパスに連結されるため、妥当な名前以外は受け付けない
+        if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $template)) {
+            $this->notFound();
+        }
         $path = 'Blog' . DS . $template;
         $theme = BcUtil::getCurrentTheme();
         $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcBlog' . DS . $path;

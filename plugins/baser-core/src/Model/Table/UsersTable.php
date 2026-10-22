@@ -398,7 +398,17 @@ class UsersTable extends AppTable
                 'Users.status' => true
             ])
             ->matching('UserGroups', function($q) use ($prefix) {
-                return $q->where(['UserGroups.auth_prefix LIKE' => '%' . $prefix . '%']);
+                // プレフィックスが無い場合（フロント等）は従来通り auth_prefix で絞り込まない
+                if (!$prefix) return $q;
+                // auth_prefix はカンマ区切りの一覧のため、部分一致（LIKE '%Admin%'）ではなく
+                // 要素としての完全一致で判定する。部分一致だと 'Admin' が 'Api/Admin' にも一致し、
+                // 管理 API 専用グループのユーザーが管理画面にログインできてしまう
+                return $q->where(['OR' => [
+                    ['UserGroups.auth_prefix' => $prefix],
+                    ['UserGroups.auth_prefix LIKE' => $prefix . ',%'],
+                    ['UserGroups.auth_prefix LIKE' => '%,' . $prefix],
+                    ['UserGroups.auth_prefix LIKE' => '%,' . $prefix . ',%'],
+                ]]);
             })->contain(['UserGroups']);
     }
 

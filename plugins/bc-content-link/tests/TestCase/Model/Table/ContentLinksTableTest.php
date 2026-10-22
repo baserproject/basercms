@@ -118,6 +118,14 @@ class ContentLinksTableTest extends BcTestCase
         ]);
         //戻り値を確認
         $this->assertCount(0, $errors);
+        $errors = $validator->validate(['url' => '/path/to/page?a=1&b=2#hash']);
+        $this->assertCount(0, $errors);
+
+        // 引用符・空白・タグ文字を含む値は拒否する（JS 文字列リテラルからの脱出防止）
+        foreach(['/test"; alert(1); //', "/test'; alert(1); //", '/test</script><script>alert(1)</script>', 'https://example.com/ a', 'javascript:alert(1)', 'http"://x'] as $url) {
+            $errors = $validator->validate(['url' => $url]);
+            $this->assertEquals('リンク先URLはURLの形式を入力してください。', current($errors['url']), $url);
+        }
     }
 
     /**

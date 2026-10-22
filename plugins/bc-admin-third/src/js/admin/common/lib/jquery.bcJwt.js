@@ -20,7 +20,7 @@
          * Init
          */
         init: function() {
-            let refreshToken = localStorage.getItem('refreshToken');
+            let refreshToken = sessionStorage.getItem('refreshToken');
             if(refreshToken && refreshToken !== 'null') {
                 this.getToken(refreshToken)
             }
@@ -78,7 +78,7 @@
                 }
             }.bind(this)).fail(function(error){
                 if (error.status === 401) {
-                    localStorage.setItem('refreshToken', '')
+                    sessionStorage.setItem('refreshToken', '')
                 }
             })
         },
@@ -90,7 +90,7 @@
          */
         setToken: function (accessToken, refreshToken) {
             this.accessToken = accessToken
-            localStorage.setItem('refreshToken', refreshToken);
+            sessionStorage.setItem('refreshToken', refreshToken);
         },
 
         /**
@@ -104,7 +104,7 @@
          * Remove Token
          */
         removeToken: function () {
-            localStorage.setItem('refreshToken', null);
+            sessionStorage.setItem('refreshToken', null);
             this.accessToken = null
         }
 

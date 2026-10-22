@@ -174,6 +174,8 @@ class BlogPostsController extends BlogAdminAppController
                 $this->setRequest($this->getRequest()->withParsedBody($data));
             }
             try {
+                // 所属ブログは URL の blogContentId で固定する（他ブログへの登録防止）
+                $this->setRequest($this->getRequest()->withData('blog_content_id', $blogContentId));
                 $post = $service->create($this->request->getData());
                 $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を追加しました。', $post->title));
                 // EVENT BlogPosts.afterAdd
@@ -219,6 +221,7 @@ class BlogPostsController extends BlogAdminAppController
     public function edit(BlogPostsAdminServiceInterface $service, int $blogContentId, int $id)
     {
         $post = $service->get($id);
+        $this->assertBlogContent($post, $blogContentId);
         if ($this->request->is(['post', 'put'])) {
             // EVENT BlogPosts.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
@@ -281,6 +284,7 @@ class BlogPostsController extends BlogAdminAppController
 
         try {
             $blogPost = $service->get($id);
+            $this->assertBlogContent($blogPost, $blogContentId);
             if ($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
             }
@@ -305,6 +309,7 @@ class BlogPostsController extends BlogAdminAppController
     public function unpublish(BlogPostsServiceInterface $service, $blogContentId, $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->assertBlogContent($service->get($id), $blogContentId);
             /* @var BlogPostsService $service */
             $result = $service->unpublish($id);
             if ($result) {
@@ -330,6 +335,7 @@ class BlogPostsController extends BlogAdminAppController
     public function publish(BlogPostsServiceInterface $service, $blogContentId, $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->assertBlogContent($service->get($id), $blogContentId);
             try {
                 /* @var BlogPostsService $service */
                 $result = $service->publish($id);
@@ -358,6 +364,7 @@ class BlogPostsController extends BlogAdminAppController
     public function copy(BlogPostsServiceInterface $service, $blogContentId, $id = null)
     {
         $post = $service->get($id);
+        $this->assertBlogContent($post, $blogContentId);
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $service->copy($id);
@@ -369,5 +376,25 @@ class BlogPostsController extends BlogAdminAppController
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);
+    }
+
+    /**
+     * 記事が URL で指定されたブログに属していることを検証する
+     *
+     * 管理画面のアクセスルールはブログ単位（URL の blogContentId）で設定できるため、
+     * 他ブログの記事 ID を指定して編集・削除・公開・複製できないようにする
+     *
+     * @param \Cake\Datasource\EntityInterface $post
+     * @param int|string $blogContentId
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function assertBlogContent($post, $blogContentId): void
+    {
+        if ((int)$post->blog_content_id !== (int)$blogContentId) {
+            $this->notFound();
+        }
     }
 }

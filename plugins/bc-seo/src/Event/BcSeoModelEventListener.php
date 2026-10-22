@@ -167,11 +167,54 @@ class BcSeoModelEventListener extends BcModelEventListener
             ) {
                 $data['seo_meta'] = $requestData['seo_meta'];
             }
+            $this->sanitizeSeoMetaData($table, $data);
             $eventData = $event->getData();
             $options = $eventData['options'];
             $options['associated'][] = 'SeoMetas';
             $event->setData('options', $options);
         }
+    }
+
+    /**
+     * リクエストの seo_meta の紐付け先をサーバ側の値で固定する
+     *
+     * フォームは table_alias / table_id / entity_id / id を hidden で送信するが、これらを
+     * リクエスト値のまま保存すると、いずれかのコンテンツの編集権限で他のテーブル・他の
+     * エンティティの SEO メタを改ざんできる（マスアサインメント）。
+     * 紐付け先は編集中のテーブル・エンティティから決定し、id は当該エンティティに既に
+     * 紐付いている SEO メタのものに限定する。
+     *
+     * @param \Cake\ORM\Table $table
+     * @param ArrayObject $data
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function sanitizeSeoMetaData($table, ArrayObject $data): void
+    {
+        if (empty($data['seo_meta']) || !is_array($data['seo_meta'])) return;
+        $seoMeta = $data['seo_meta'];
+        $alias = $table->getAlias();
+        $tableId = ($alias === 'CustomEntries') ? (int)($table->tableId ?? 0) : 0;
+        $seoMeta['table_alias'] = $alias;
+        $seoMeta['table_id'] = $tableId;
+        // entity_id は hasOne の保存時に親エンティティの ID が設定される
+        unset($seoMeta['entity_id']);
+        $existingId = null;
+        if (!empty($data['id'])) {
+            $existing = TableRegistry::getTableLocator()->get('BcSeo.SeoMetas')->find()
+                ->select(['id'])
+                ->where(['SeoMetas.table_alias' => $alias, 'SeoMetas.table_id' => $tableId, 'SeoMetas.entity_id' => (int)$data['id']])
+                ->first();
+            if ($existing) $existingId = $existing->id;
+        }
+        if ($existingId) {
+            $seoMeta['id'] = $existingId;
+        } else {
+            unset($seoMeta['id']);
+        }
+        $data['seo_meta'] = $seoMeta;
     }
 
     /**

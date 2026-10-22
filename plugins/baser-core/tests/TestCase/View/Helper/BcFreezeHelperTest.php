@@ -527,6 +527,8 @@ class BcFreezeHelperTest extends BcTestCase
             ['baser.freezed', ['1' => 'BaserCMS1', '2' => 'BaserCMS2', '3' => 'BaserCMS3',], ['value' => [1, 2, 3], 'multiple' => 'checkbox'], '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'],
             ['baser.freezed', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="baser\[freezed\]" class="" value="1">BaserCMS1'],
             ['baser.freezed.hoge', ['1' => 'BaserCMS1'], ['value' => 1], '<input type="hidden" name="baser\[freezed\]\[hoge\]" class="" value="1">BaserCMS1'],
+            // 送信値をそのまま表示する場合はエスケープされること
+            ['baser.freezed', [], ['value' => '<script>alert(1)</script>'], 'value="&lt;script&gt;alert\(1\)&lt;\/script&gt;">&lt;script&gt;alert\(1\)&lt;\/script&gt;$'],
         ];
     }
 

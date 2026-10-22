@@ -109,6 +109,11 @@ class CustomTablesTable extends AppTable
             ->scalar('title')
             ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
+        // display_field は SELECT 句のフィールド名として使われるため識別子として妥当な値に限定する
+        $validator
+            ->scalar('display_field')
+            ->allowEmptyString('display_field')
+            ->regex('display_field', '/^[a-z0-9_]+$/', __d('baser_core', '表示対象フィールドは半角英数小文字とアンダースコアのみで入力してください。'));
 
         return $validator;
     }

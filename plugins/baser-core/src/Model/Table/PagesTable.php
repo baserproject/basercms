@@ -155,6 +155,12 @@ class PagesTable extends AppTable
             ]
         ]);
 
+        // page_template はテンプレートの読み込みパスに使われるため、ディレクトリを遡る「..」等を含む値は許可しない
+        $validator
+        ->scalar('page_template')
+        ->allowEmptyString('page_template')
+        ->regex('page_template', '/^(?!.*\.\.)[^\\\x00]+$/u', __d('baser_core', 'ページテンプレート名に「..」やバックスラッシュは使用できません。'));
+
         return $validator;
     }
 

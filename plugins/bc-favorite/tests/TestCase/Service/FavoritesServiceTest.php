@@ -149,6 +149,26 @@ class FavoritesServiceTest extends BcTestCase
     }
 
     /**
+     * test create / update - 所有者（user_id）はログインユーザーに固定され、リクエストから変更できないこと
+     */
+    public function testCreateAndUpdate_forceOwner(): void
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        // 他ユーザー（id=2）を指定してもログインユーザー（id=1）の所有になる
+        $result = $this->FavoritesService->create([
+            'user_id' => '2',
+            'name' => 'test',
+            'url' => '/baser/admin/test/index/1',
+        ]);
+        $this->assertEquals(1, $result->user_id);
+        // 更新でも所有者は変わらない
+        $result = $this->FavoritesService->update($result, ['user_id' => '2', 'name' => 'updated']);
+        $this->assertEquals(1, $result->user_id);
+        $this->assertEquals('updated', $result->name);
+    }
+
+    /**
      * Test delete
      */
     public function testDelete()

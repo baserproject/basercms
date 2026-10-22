@@ -281,6 +281,41 @@ class UploadFilesServiceTest extends BcTestCase
     }
 
     /**
+     * test update - 他レコードのファイル名・不正なファイル名への変更、所有者の変更を拒否すること
+     *
+     * 任意の name を保存できると、beforeSave のリネームや削除時の unlink で他ユーザーの
+     * 実ファイルを操作できる。
+     */
+    public function test_update_rejectsHijack()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        $entity = $this->UploaderFilesService->get(1);
+        $other = $this->UploaderFilesService->get(2);
+        $originalUserId = $entity->user_id;
+
+        // 他レコードのファイル名
+        try {
+            $this->UploaderFilesService->update($entity, ['name' => $other->name]);
+            $this->fail('他レコードのファイル名への変更が拒否されていません');
+        } catch (\BaserCore\Error\BcException $e) {
+            $this->assertEquals('同じ名前のファイルが既に存在します。', $e->getMessage());
+        }
+        // 不正なファイル名
+        foreach(['../../config/app.php', 'dir/file.jpg', 'a.jpg" onerror="alert(1)'] as $name) {
+            try {
+                $this->UploaderFilesService->update($entity, ['name' => $name]);
+                $this->fail($name . ' が拒否されていません');
+            } catch (\BaserCore\Error\BcException $e) {
+                $this->assertEquals('ファイル名が不正です。', $e->getMessage());
+            }
+        }
+        // 所有者はリクエストから変更できない
+        $entity = $this->UploaderFilesService->update($this->UploaderFilesService->get(1), ['user_id' => 99, 'alt' => 'alt']);
+        $this->assertEquals($originalUserId, $entity->user_id);
+    }
+
+    /**
      * 異常系実行
      */
 //    public function test_update_error()

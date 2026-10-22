@@ -204,7 +204,7 @@ class CustomContentsServiceTest extends BcTestCase
             'type' => 1,
             'name' => 'contact',
             'title' => 'お問い合わせタイトル',
-            'display_field' => 'お問い合わせ'
+            'display_field' => 'title'
         ]);
 
         //$field = custom_table_id  コンテンツタイプのみ取得

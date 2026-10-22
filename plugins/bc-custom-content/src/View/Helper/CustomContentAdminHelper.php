@@ -314,14 +314,14 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      */
     public function getEntryIndexTitle(CustomTable $table, CustomEntry $entry)
     {
+        // タイトルは編集者が入力したテキストのため、リンクにする場合もエスケープする（格納型 XSS 対策）
         if ($table->has_child || $entry->custom_table->display_field === 'title') {
             return $this->BcBaser->getLink(
-                $entry->title,
-                ['action' => 'edit', $table->id, $entry->id],
-                ['escape' => false]
+                (string)$entry->title,
+                ['action' => 'edit', $table->id, $entry->id]
             );
         } else {
-            return h($entry->title);
+            return h((string)$entry->title);
         }
     }
 

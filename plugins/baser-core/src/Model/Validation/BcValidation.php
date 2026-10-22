@@ -18,6 +18,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
+use BaserCore\Utility\BcFileUploader;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;
@@ -277,19 +278,17 @@ class BcValidation extends Validation
         }
         if (empty($fileName)) return true;
 
-        // FILES形式のチェック
-        if ($type) {
-            $ext = BcUtil::decodeContent($type, $fileName);
-            if (!in_array($ext, $exts)) {
-                return false;
-            }
-        } else {
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if (!in_array($ext, $exts)) {
-                return false;
-            }
+        // 拡張子はファイル名の末尾の拡張子を正とする。
+        // クライアントが申告する Content-Type から拡張子を導出すると、
+        // 実際のファイル名の拡張子と異なる種類のファイルが許可されてしまう
+        $ext = BcFileUploader::getExtFromUpload($type, $fileName);
+        $exts = array_map(fn($value) => strtolower(trim((string)$value)), $exts);
+        // 以前は image/jpeg を jpg として判定していたため、jpg を許可している場合は
+        // JPEG の別の拡張子も許可する
+        if (in_array('jpg', $exts, true)) {
+            $exts = array_merge($exts, ['jpeg', 'jpe', 'jfif']);
         }
-        return true;
+        return $ext !== false && in_array(strtolower($ext), $exts, true);
     }
 
     /**
@@ -885,6 +884,33 @@ class BcValidation extends Validation
 
         // `path` の存在を確認し、スラッシュから始まっているかをチェック
         return isset($parsedUrl['path']) && preg_match('/^\/[a-zA-Z0-9\-_\/]*$/', $parsedUrl['path']);
+    }
+
+    /**
+     * 登録済みのショートコードを含まないことを確認する
+     *
+     * ショートコードはフロントの表示時にページ全体で展開されるため、
+     * 訪問者の入力値に含まれると任意のショートコードを実行されてしまう
+     *
+     * @param mixed $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function notContainsShortCode($value): bool
+    {
+        if (!is_string($value) || $value === '') return true;
+        $shortCodes = Configure::read('BcShortCode');
+        if (!$shortCodes || !is_array($shortCodes)) return true;
+        foreach($shortCodes as $values) {
+            foreach((array)$values as $shortCode) {
+                if (preg_match('/\[' . preg_quote($shortCode, '/') . '(\s|\])/', $value)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

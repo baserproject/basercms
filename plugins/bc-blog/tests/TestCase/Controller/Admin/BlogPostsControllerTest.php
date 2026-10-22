@@ -221,6 +221,38 @@ class BlogPostsControllerTest extends BcTestCase
     }
 
     /**
+     * test edit / delete / publish / unpublish / copy - URL のブログに属さない記事は 404 になること
+     *
+     * 管理画面のアクセスルールはブログ単位（URL の blogContentId）で設定できるため、
+     * 他ブログの記事 ID を指定して操作できてはならない
+     */
+    public function test_rejectsPostOfOtherBlogContent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        $this->loadFixtureScenario(BlogContentScenario::class, 2, 1, null, 'test2', '/test2');
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'title' => 'post1'])->persist();
+
+        // 記事1はブログ1のものだが、URL でブログ2を指定
+        $this->post('/baser/admin/bc-blog/blog_posts/edit/2/1', ['title' => 'hijack']);
+        $this->assertResponseCode(404);
+        $this->assertEquals('post1', BlogPostFactory::get(1)['title']);
+
+        $this->post('/baser/admin/bc-blog/blog_posts/delete/2/1');
+        $this->assertResponseCode(404);
+        $this->assertNotNull(BlogPostFactory::get(1));
+
+        $this->post('/baser/admin/bc-blog/blog_posts/publish/2/1');
+        $this->assertResponseCode(404);
+        $this->post('/baser/admin/bc-blog/blog_posts/unpublish/2/1');
+        $this->assertResponseCode(404);
+        $this->post('/baser/admin/bc-blog/blog_posts/copy/2/1');
+        $this->assertResponseCode(404);
+        $this->assertEquals(1, BlogPostFactory::count());
+    }
+
+    /**
      * testEditWarnsWhenAnotherUserIsEditing
      */
     public function testEditWarnsWhenAnotherUserIsEditing()

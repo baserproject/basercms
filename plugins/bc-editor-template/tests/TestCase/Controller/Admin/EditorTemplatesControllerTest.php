@@ -253,4 +253,31 @@ class EditorTemplatesControllerTest extends BcTestCase
         $helpers = $this->_controller->viewBuilder()->getHelpers();
         $this->assertEquals('BaserCore.BcArray', $helpers['BcArray']['className']);
     }
+
+    /**
+     * test js - テンプレートの名前・説明・HTML が JavaScript の文字列リテラルから脱出しないこと（格納型 XSS 対策）
+     *
+     * この JS は全ての WYSIWYG 編集画面で読み込まれるため、リテラルから脱出できると
+     * 管理者を含む全管理ユーザーのブラウザで任意のスクリプトが実行される。
+     */
+    public function testJs_escapesTemplateValues()
+    {
+        EditorTemplateFactory::make([
+            'id' => 1,
+            'name' => "name'); alert(1); //",
+            'description' => "desc'); alert(2); //",
+            'html' => "<p class=\"x\">html</p>'); alert(3); //</script><script>alert(4)</script>",
+        ])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/bc-editor-template/editor_templates/js');
+        $this->assertResponseCode(200);
+        $body = (string)$this->_response->getBody();
+        $this->assertStringNotContainsString("'); alert(", $body);
+        $this->assertStringNotContainsString('</script>', $body);
+        $this->assertStringContainsString('title:"name\\u0027); alert(1); //"', $body);
+        $this->assertStringContainsString('description:"desc\\u0027); alert(2); //"', $body);
+        // html は内容を変更せず、リテラル化のみ行う
+        $this->assertStringContainsString('html:"\\u003Cp class=\\u0022x\\u0022\\u003Ehtml\\u003C/p\\u003E\\u0027); alert(3); //\\u003C/script\\u003E', $body);
+    }
 }

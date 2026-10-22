@@ -11,6 +11,7 @@
 
 namespace BaserCore\Mailer;
 
+use Cake\Log\Log;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -96,10 +97,17 @@ class BcMailer extends Mailer
         } else {
             $type = 'default';
             if ($siteConfig->mail_additional_parameters) {
-                $config = TransportFactory::getConfig($type);
-                TransportFactory::drop($type);
-                $config['additionalParameters'] = $siteConfig->mail_additional_parameters;
-                TransportFactory::setConfig($type, $config);
+                // mail() の追加パラメータは sendmail のコマンドラインへ渡されるため、
+                // エンベロープ送信者の指定（-f メールアドレス）以外は受け付けない。
+                // 任意の値を許すと -X / -C 等のオプションで任意パスへの書き込みに悪用される
+                if (self::isValidAdditionalParameters($siteConfig->mail_additional_parameters)) {
+                    $config = TransportFactory::getConfig($type);
+                    TransportFactory::drop($type);
+                    $config['additionalParameters'] = $siteConfig->mail_additional_parameters;
+                    TransportFactory::setConfig($type, $config);
+                } else {
+                    Log::error(__d('baser_core', 'メール送信の追加パラメータが不正なため無視しました。-f メールアドレス の形式で指定してください。'));
+                }
             }
         }
         $this->setTransport($type);
@@ -134,4 +142,20 @@ class BcMailer extends Mailer
         return parent::deliver($content);
     }
 
+
+    /**
+     * mail() の追加パラメータとして妥当か判定する
+     *
+     * エンベロープ送信者の指定「-f メールアドレス」（-f と アドレスの間の空白は任意）のみ許可する。
+     *
+     * @param string $params
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isValidAdditionalParameters(string $params): bool
+    {
+        return (bool)preg_match('/\A-f ?[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\z/', trim($params));
+    }
 }

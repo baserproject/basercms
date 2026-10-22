@@ -281,8 +281,8 @@ class MailController extends MailFrontAppController
             // 画像認証
             if ($mailContent->auth_captcha && !$bcCaptchaService->check(
                 $this->getRequest(),
-                $this->getRequest()->getData('captcha_id'),
-                $this->getRequest()->getData('auth_captcha')
+                (string)$this->getRequest()->getData('captcha_id'),
+                (string)$this->getRequest()->getData('auth_captcha')
             )) {
                 $mailMessage = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
                 $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
@@ -291,6 +291,11 @@ class MailController extends MailFrontAppController
 
             $mailMessagesService->setup($mailContent->id);
             $entity = $mailMessagesService->create($mailContent, $this->getRequest()->getData());
+            // 保存に成功した時点で画像認証の回答を破棄し、同一セッションでの回答の再利用（リプレイ）を防ぐ。
+            // 保存に失敗した場合は破棄せず、利用者が再入力せずにやり直せるようにする
+            if ($mailContent->auth_captcha) {
+                $bcCaptchaService->consume($this->getRequest(), (string)$this->getRequest()->getData('captcha_id'));
+            }
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $entity->auth_captcha = '';

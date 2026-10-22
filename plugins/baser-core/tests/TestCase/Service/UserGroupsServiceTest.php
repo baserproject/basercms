@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Service\UserGroupsService;
+use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\UserGroupsScenario;
@@ -141,6 +143,24 @@ class UserGroupsServiceTest extends BcTestCase
             // auth_prefixが複数ある場合
             [['test1', 'test2'], 'test1,test2'],
         ];
+    }
+
+    /**
+     * test create - 権限定義のない有効プラグインのルールを作らない
+     */
+    public function testCreate_withoutDefinitionPlugin()
+    {
+        PluginFactory::make(['name' => 'BcPluginSample', 'status' => true, 'priority' => 99])->persist();
+        $group = $this->UserGroups->create([
+            'name' => 'operator_test',
+            'title' => '運営者テスト',
+            'use_move_contents' => '1',
+            'auth_prefix' => ['Admin']
+        ]);
+        $this->assertEquals(0, PermissionFactory::find()->where([
+            'user_group_id' => $group->id,
+            'url LIKE' => '/baser/%/bc-plugin-sample/*'
+        ])->count());
     }
 
     /**

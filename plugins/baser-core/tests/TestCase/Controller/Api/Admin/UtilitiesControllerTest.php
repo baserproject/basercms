@@ -94,6 +94,10 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function test_clear_cache()
     {
+        // 状態を変更する操作のため GET では実行できない（CSRF 対策）
+        $this->get('/baser/api/admin/baser-core/utilities/clear_cache.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
         $this->post('/baser/api/admin/baser-core/utilities/clear_cache.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());

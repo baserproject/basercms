@@ -78,8 +78,8 @@ return [
             'plugin' => 'BcUploader',
             'type' => 'Api/Admin',
             'items' => [
-                'view' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/bc-uploader/uploader_categories/view.json', 'method' => 'GET', 'auth' => true],
-                'edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-uploader/uploader_categories/edit.json', 'method' => 'POST', 'auth' => false],
+                'view' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/bc-uploader/uploader_configs/view.json', 'method' => 'GET', 'auth' => true],
+                'edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-uploader/uploader_configs/edit.json', 'method' => 'POST', 'auth' => false],
             ]
         ],
 

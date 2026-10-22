@@ -102,7 +102,10 @@ class UploadFilesAdminServiceTest extends BcTestCase
         $limitPath = '/var/www/html/webroot/files/uploads/limited';
         if (file_exists($limitPath . DS . '.htaccess'))
             unlink($limitPath . DS . '.htaccess');
-        rmdir($limitPath);
+        // フォルダが空のときのみ削除（dev環境でアップロード済みファイルが残っている場合の警告を避ける）
+        if (is_dir($limitPath) && count(scandir($limitPath)) <= 2) {
+            rmdir($limitPath);
+        }
         //対象メソッドをコール
         $rs = $this->execPrivateMethod($this->UploaderFilesAdminService, 'checkInstall', []);
         //戻る値を確認

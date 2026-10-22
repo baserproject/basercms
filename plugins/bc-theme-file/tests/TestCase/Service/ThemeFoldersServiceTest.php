@@ -71,6 +71,16 @@ class ThemeFoldersServiceTest extends BcTestCase
     }
 
     /**
+     * test get - プラグイン配置ルート外のフォルダは読み出さない（GHSA-rqr8-gmx5-xvrr）
+     */
+    public function test_get_rejectsOutsidePluginsDir()
+    {
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('パスにテーマディレクトリ外への参照が含まれています。');
+        $this->ThemeFoldersService->get('/var/www/html/plugins/bc-front/webroot/../../../config');
+    }
+
+    /**
      * test getIndex
      */
     public function test_getIndex()

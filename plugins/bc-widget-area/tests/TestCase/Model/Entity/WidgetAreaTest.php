@@ -3,6 +3,7 @@
 namespace BcWidgetArea\Test\TestCase\Model\Entity;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcWidgetArea\Model\Entity\WidgetArea;
 
 class WidgetAreaTest extends BcTestCase
@@ -71,9 +72,17 @@ class WidgetAreaTest extends BcTestCase
         $this->assertEquals('YToxOntzOjQ6InRlc3QiO2E6Mjp7czo0OiJzb3J0IjtpOjE7czo0OiJuYW1lIjtzOjQ6InRlc3QiO319',
             $setWidgets);
 
-        //case is not array
+        //case is not array: 配列として復元できない文字列は受け付けない
         $setWidgets = $this->execPrivateMethod($widgetArea, '_setWidgets', ['test']);
-        $this->assertEquals('test', $setWidgets);
+        $this->assertNull($setWidgets);
+        //case is serialized array string: 配列として復元できる文字列は再シリアライズして保存する
+        $serialized = BcUtil::serialize(['test' => ['sort' => 1, 'name' => 'test']]);
+        $this->assertEquals($serialized, $this->execPrivateMethod($widgetArea, '_setWidgets', [$serialized]));
+        //case is serialized object: オブジェクトは保存しない（オブジェクトインジェクション対策）
+        $setWidgets = $this->execPrivateMethod($widgetArea, '_setWidgets', [base64_encode('O:8:"stdClass":0:{}')]);
+        $this->assertNull($setWidgets);
+        $setWidgets = $this->execPrivateMethod($widgetArea, '_setWidgets', [base64_encode('a:2:{s:4:"test";a:1:{s:4:"sort";i:1;}s:3:"obj";O:8:"stdClass":0:{}}')]);
+        $this->assertEquals(BcUtil::serialize(['test' => ['sort' => 1]]), $setWidgets);
 
         //case is array but value is empty
         $setWidgets = $this->execPrivateMethod($widgetArea, '_setWidgets', [[]]);

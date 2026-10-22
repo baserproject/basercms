@@ -188,6 +188,24 @@ class WidgetAreasService implements WidgetAreasServiceInterface
     public function updateWidget(int $widgetAreaId, array $postData)
     {
         $dataKey = key($postData);
+        // ウィジェットのキー（Widget1 等）と id は編集画面で HTML の id 属性や JS へ出力されるため、
+        // 英数字・アンダースコアのみ／数値のみに限定する（格納型 XSS 対策）
+        if (!is_string($dataKey) || !preg_match('/^[A-Za-z0-9_]+$/', $dataKey) || !is_array($postData[$dataKey])) {
+            throw new BcException(__d('baser_core', 'ウィジェットのキーが不正です。'));
+        }
+        if (isset($postData[$dataKey]['id']) && !preg_match('/^[0-9]+$/', (string)$postData[$dataKey]['id'])) {
+            throw new BcException(__d('baser_core', 'ウィジェットの ID が不正です。'));
+        }
+        // element / plugin はテンプレートの読み込みパスに使われるため、テンプレート名として
+        // 妥当な文字列のみ許可する（`..` によるテンプレート外の PHP の読み込み防止）
+        $element = $postData[$dataKey]['element'] ?? null;
+        $plugin = $postData[$dataKey]['plugin'] ?? null;
+        if ($element !== null && $element !== '' && (!is_string($element) || !preg_match('/^[a-zA-Z0-9_\-\/]+$/', $element) || str_contains($element, '..'))) {
+            throw new BcException(__d('baser_core', 'ウィジェットのテンプレート名が不正です。'));
+        }
+        if ($plugin !== null && $plugin !== '' && (!is_string($plugin) || !preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin))) {
+            throw new BcException(__d('baser_core', 'ウィジェットのプラグイン名が不正です。'));
+        }
         /** @var WidgetArea $widgetArea */
         $widgetArea = $this->WidgetAreas->get($widgetAreaId);
         $widgets = $widgetArea->widgets_array;

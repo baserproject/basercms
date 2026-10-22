@@ -313,6 +313,14 @@ class BcDatabaseServiceTest extends BcTestCase
         // createdが空の時に本日の日付が入っている事を確認
         $row2 = PageFactory::get(2);
         $this->assertEquals($row2->created->format('Y-m-d H:i'), date('Y-m-d H:i'));
+
+        // 存在しないテーブル名・妥当でないテーブル名の CSV は読み込まないこと
+        file_put_contents($csvFolder . 'not_exists_table.csv', "id,name\n1,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'not_exists_table.csv', 'encoding' => 'UTF-8']));
+        file_put_contents($csvFolder . 'pages;drop.csv', "id,contents\n3,test\n");
+        $this->assertFalse($this->BcDatabaseService->loadCsv(['path' => $csvFolder . 'pages;drop.csv', 'encoding' => 'UTF-8']));
+        unlink($csvFolder . 'not_exists_table.csv');
+        unlink($csvFolder . 'pages;drop.csv');
     }
 
     /**
@@ -510,7 +518,36 @@ class BcDatabaseServiceTest extends BcTestCase
             ['test', '"test"'],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
+            // 数式として解釈され得る値にはシングルクォートを前置する
+            ['=cmd|calc', '"\'=cmd|calc"'],
+            ['-abc', '"\'-abc"'],
+            // 数値のみの値は数式として解釈されないため前置しない
+            ['+1', '"+1"'],
+            ['-1', '"-1"'],
+            ['-1.5', '"-1.5"'],
+            ['@test', '"\'@test"'],
         ];
+    }
+
+    /**
+     * test loadCsvToArray - 数式対策のシングルクォートが復元時に取り除かれること
+     */
+    public function test_csvFormulaRoundTrip()
+    {
+        $csvFolder = TMP . 'csv' . DS;
+        if (!is_dir($csvFolder)) (new BcFolder($csvFolder))->create();
+        $path = $csvFolder . 'formula.csv';
+        file_put_contents($path, "\"title\",\"detail\"\n\"'=cmd|calc\",\"'-abc\"\n\"'abc\",\"'\"\n\"'-1\",\"-1\"\n");
+        $rs = $this->BcDatabaseService->loadCsvToArray($path, 'UTF-8');
+        $this->assertEquals('=cmd|calc', $rs[0]['title']);
+        $this->assertEquals('-abc', $rs[0]['detail']);
+        // 数値のみの値には前置しないため、シングルクォートは取り除かない
+        $this->assertEquals("'-1", $rs[2]['title']);
+        $this->assertEquals('-1', $rs[2]['detail']);
+        // 数式の先頭文字が続かないシングルクォートはそのまま
+        $this->assertEquals("'abc", $rs[1]['title']);
+        $this->assertEquals("'", $rs[1]['detail']);
+        unlink($path);
     }
 
     /**
@@ -681,6 +718,97 @@ class UserActionsSchema extends BcSchema
     }
 
     /**
+     * Test isValidSchemaFile rejects malicious top-level code
+     *
+     * GHSA-cg65-f2m7-9fqj: isValidSchemaFile() はクラス定義の中身しか検証しておらず、
+     * クラス定義外に置かれた任意のPHP文が require_once 実行時に無条件で実行されてしまう
+     * バイパスが存在した。トップレベル文のホワイトリスト検証により拒否されることを確認する。
+     *
+     * @dataProvider maliciousSchemaFileDataProvider
+     */
+    public function test_isValidSchemaFile_rejectsMaliciousTopLevelCode($phpCode)
+    {
+        $path = TMP . 'schema' . DS;
+        $fileName = 'MaliciousSchema.php';
+        $schemaFile = new BcFile($path . $fileName, true);
+        $schemaFile->write($phpCode);
+
+        $result = $this->execPrivateMethod($this->BcDatabaseService, 'isValidSchemaFile', [$path . $fileName]);
+        $this->assertFalse($result);
+
+        $schemaFile->delete();
+    }
+
+    public static function maliciousSchemaFileDataProvider()
+    {
+        return [
+            'トップレベルに任意コード実行文が混入' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nsystem('id');\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'クラス定義の前に式文が混入' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\n(function(){ return 1; })();\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'BcSchema と無関係なクラスのみ' => [
+                "<?php\nclass MaliciousSchema {\n    public function __construct() { system('id'); }\n}"
+            ],
+            'drop メソッドをオーバーライド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function drop() { system('id'); }\n}"
+            ],
+            'create メソッドをオーバーライド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function create() { system('id'); }\n}"
+            ],
+            // GHSA-5hvm-279m-gg7r: drop/create 以外のメソッドでも require 後のインスタンス化で実行され得るため拒否する
+            'BcSchema 継承クラスにコンストラクタ' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function __construct() { system('id'); }\n}"
+            ],
+            'BcSchema 継承クラスに任意メソッド' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n    public function foo() { system('id'); }\n}"
+            ],
+            'declare ブロック内に任意コード' => [
+                "<?php\ndeclare(ticks=1) {\n    system('id');\n}\nclass MaliciousSchema extends \\BaserCore\\Database\\Schema\\BcSchema {\n    public \$table = 'malicious';\n}"
+            ],
+            'クラスが2つ存在（2つ目に危険なコードを隠す）' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious';\n}\nclass Payload {\n    public function __construct() { system('id'); }\n}"
+            ],
+            'プロパティフック（PHP 8.4）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table { get { system('id'); return 'malicious'; } }\n}"
+            ],
+            'プロパティフック（set）に任意コード' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    public \$table = 'malicious' { set { system('id'); } }\n}"
+            ],
+            'トレイトの利用' => [
+                "<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nclass MaliciousSchema extends BcSchema {\n    use \\SomeTrait;\n    public \$table = 'malicious';\n}"
+            ],
+            'パースエラーとなる不正なPHP' => [
+                "<?php\nclass {{{ invalid"
+            ],
+        ];
+    }
+
+    /**
+     * Test loadSchema rejects malicious top-level code
+     *
+     * isValidSchemaFile() のバイパスにより悪意あるスキーマファイルが require_once されないことを、
+     * loadSchema() 経由の例外到達で確認する（system() 等の実行有無を直接検証するのではなく、
+     * require_once に到達しないことを到達可否で確認する設計）。
+     */
+    public function test_loadSchema_rejectsMaliciousTopLevelCode()
+    {
+        $path = TMP . 'schema' . DS;
+        $fileName = 'MaliciousLoadSchema.php';
+        $schemaFile = new BcFile($path . $fileName, true);
+        $schemaFile->write("<?php\nuse BaserCore\\Database\\Schema\\BcSchema;\nsystem('id');\nclass MaliciousLoadSchema extends BcSchema {\n    public \$table = 'malicious_load';\n}");
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('/無効なスキーマファイル/');
+        try {
+            $this->BcDatabaseService->loadSchema(['type' => 'create', 'path' => $path, 'file' => $fileName]);
+        } finally {
+            $schemaFile->delete();
+        }
+    }
+
+    /**
      * Test getDatasourceName
      * @param $value
      * @param $expected
@@ -825,6 +953,7 @@ class UserActionsSchema extends BcSchema
             'BcFavorite',
             'BcMail',
             'BcSearchIndex',
+            'BcSeo',
             'BcThemeConfig',
             'BcThemeFile',
             'BcUploader',

@@ -81,6 +81,85 @@ class CustomEntriesServiceTest extends BcTestCase
     }
 
     /**
+     * test sanitizePostData - ツリー構造の内部値・ID・作成日時はリクエストから変更できないこと
+     */
+    public function test_sanitizePostData()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest());
+        $result = $this->CustomEntriesService->sanitizePostData([
+            'id' => 99, 'lft' => 1, 'rght' => 2, 'level' => 3, 'created' => '2000-01-01', 'modified' => '2000-01-01',
+            'title' => 'title', 'creator_id' => 5,
+        ], true);
+        // 管理者は creator_id を指定できる
+        $this->assertEquals(['title' => 'title', 'creator_id' => 5], $result);
+    }
+
+    /**
+     * test getSafeOrderField
+     */
+    public function test_getSafeOrderField()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $customTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField(null));
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField(''));
+        $this->assertEquals('id', $this->CustomEntriesService->getSafeOrderField('id'));
+        $this->assertEquals('created', $this->CustomEntriesService->getSafeOrderField('created'));
+        // 識別子として不正な値・実在しないフィールドは published にフォールバック
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField('published; DROP TABLE users'));
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField('id` = 1 OR 1=1 -- '));
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField('not_exists_field'));
+        $this->assertEquals('published', $this->CustomEntriesService->getSafeOrderField('Published'));
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getPrevEntry / getNextEntry - list_order に不正な値が保存されていても SQL に連結されないこと
+     */
+    public function test_getPrevEntry_withInvalidListOrder()
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTablesService = $this->getService(CustomTablesServiceInterface::class);
+        $customTablesService->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        // バリデーションを経ずに不正な list_order を保存した状態を再現
+        $this->getTableLocator()->get('BcCustomContent.CustomContents')->updateAll(
+            ['list_order' => 'published` > 0 OR 1=1 -- ', 'list_direction' => 'DESC'],
+            ['custom_table_id' => 1]
+        );
+
+        $entry1 = $this->CustomEntriesService->get(1);
+        $entry2 = $this->CustomEntriesService->get(2);
+        // 既定の published 順で取得され、SQL エラーにならない
+        $prev = $this->CustomEntriesService->getPrevEntry($entry1);
+        $this->assertEquals($entry2->id, $prev->id);
+        $next = $this->CustomEntriesService->getNextEntry($entry2);
+        $this->assertEquals($entry1->id, $next->id);
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * test getNextEntry
      */
     public function test_getNextEntry()
@@ -257,6 +336,37 @@ class CustomEntriesServiceTest extends BcTestCase
         $result = $this->CustomEntriesService->getIndex(['order' => 'name', 'direction' => 'desc'])->all()->toArray();
         $this->assertEquals('プログラマー 3', $result[0]->name);
 
+    }
+
+    /**
+     * test createIndexConditions - status=publish 指定時に select を全カラムで上書きしないこと
+     *
+     * 以前は全カラムを select し直していたため、createSelect() で use_api=false のフィールドを
+     * 除外していても公開 API の応答に含まれてしまっていた。
+     */
+    public function test_createIndexConditions_keepsSelect()
+    {
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        $query = $this->CustomEntriesService->CustomEntries->find()->select(['CustomEntries.id', 'CustomEntries.name']);
+        $query = $this->CustomEntriesService->createIndexConditions($query, ['status' => 'publish']);
+        $this->assertEquals(['CustomEntries.id', 'CustomEntries.name'], array_values($query->clause('select')));
+        // 実行できること（select 指定が contain と両立すること）
+        foreach($query->all() as $entry) {
+            $this->assertFalse($entry->has('title'));
+        }
     }
 
     /**
@@ -550,7 +660,8 @@ class CustomEntriesServiceTest extends BcTestCase
             'status' => 1,
         ];
         $result = $this->CustomEntriesService->create($postData);
-        $this->assertEquals(99, $result->id);
+        // id はリクエストから指定できない（自動採番される）
+        $this->assertNotEquals(99, $result->id);
         $this->assertEquals('title99', $result->title);
         //異常系実行
         $postData = [

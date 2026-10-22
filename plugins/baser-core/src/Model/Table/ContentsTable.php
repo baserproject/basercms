@@ -528,11 +528,17 @@ class ContentsTable extends AppTable
      */
     protected function urlEncode($value)
     {
-        // すでにエンコードされてる場合はそのまま返す
-        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
-            $value = $this->textFormatting($value);
+        // 以前は「%XX%XX を含む値はエンコード済み」とみなして記号除去を省略していたが、
+        // 二重に URL エンコードした値を送ると記号除去を迂回でき、表示時にデコードされて
+        // 属性から脱出する格納型 XSS に悪用できた。エンコード済みかどうかに関係なく
+        // 完全にデコードしてから記号を除去し、改めてエンコードする
+        $value = (string)$value;
+        for ($i = 0; $i < 5; $i++) {
+            $decoded = rawurldecode($value);
+            if ($decoded === $value) break;
+            $value = $decoded;
         }
-        return rawurlencode($value);
+        return rawurlencode($this->textFormatting($value));
     }
 
     /**

@@ -71,6 +71,16 @@ class CustomContentsTable extends AppTable
                     'message' => __d('baser_core', '説明文でスクリプトの入力は許可されていません。')
                 ]
             ]);
+        // list_order / list_direction は前後エントリー取得の WHERE 句・ORDER BY にそのまま使われるため、
+        // 識別子として妥当な値・ASC / DESC 以外は保存させない（SQL インジェクション対策）
+        $validator
+            ->scalar('list_order')
+            ->allowEmptyString('list_order')
+            ->regex('list_order', '/^[a-z0-9_]+$/', __d('baser_core', '一覧の並び順は半角英数小文字とアンダースコアのみで入力してください。'));
+        $validator
+            ->scalar('list_direction')
+            ->allowEmptyString('list_direction')
+            ->inList('list_direction', ['ASC', 'DESC', 'asc', 'desc'], __d('baser_core', '一覧の並び方向は ASC または DESC を指定してください。'));
         return $validator;
     }
 

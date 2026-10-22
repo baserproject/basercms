@@ -147,10 +147,20 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
             $user = $usersTable->find()
                 ->where(['Users.id' => $passwordRequest->user_id])
                 ->first();
+            // パスワード再発行は未認証で到達できるため、更新対象をパスワード項目に限定する。
+            // 送信データを丸ごと patchEntity に渡すと、user_groups（belongsToMany）や
+            // email / status 等も一緒に更新され、管理者グループへの昇格に悪用できる。
             $user = $usersTable->patchEntity(
                 $user,
-                $postData,
-                ['validate' => 'passwordUpdate']
+                [
+                    'password_1' => $postData['password_1'] ?? null,
+                    'password_2' => $postData['password_2'] ?? null,
+                ],
+                [
+                    'validate' => 'passwordUpdate',
+                    'fields' => ['password', 'password_1', 'password_2'],
+                    'associated' => [],
+                ]
             );
             $result = $usersTable->saveOrFail($user);
             $passwordRequest->used = 1;

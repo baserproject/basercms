@@ -132,10 +132,10 @@ $(function () {
                     var errorMessage = '';
                     if (XMLHttpRequest.status === 404) {
                         errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
-                    } else if (XMLHttpRequest.responseText) {
-                        errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
+                    } else if ($.bcUtil.getResponseMessage(XMLHttpRequest)) {
+                        errorMessage = '<br>' + $.bcUtil.getResponseMessage(XMLHttpRequest);
                     } else {
-                        errorMessage = '<br>' + errorThrown;
+                        errorMessage = '<br>' + $.bcUtil.escapeHtml(errorThrown);
                     }
                     $.bcUtil.showAlertMessage(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage);
                     location.reload();
@@ -225,8 +225,8 @@ $(function () {
                 },
                 error: function (XMLHttpRequest) {
                     var errorMessage = '';
-                    if (XMLHttpRequest.responseText) {
-                        errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
+                    if ($.bcUtil.getResponseMessage(XMLHttpRequest)) {
+                        errorMessage = '<br>' + $.bcUtil.getResponseMessage(XMLHttpRequest);
                     }
                     $.bcUtil.showAlertMessage(bcI18n.blogCategoryDeleteFailed + errorMessage);
                 },

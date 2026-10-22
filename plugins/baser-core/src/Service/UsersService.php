@@ -224,6 +224,12 @@ class UsersService implements UsersServiceInterface
                 $postData['login_user_id'] = (string) $loginUser['id'];
             }
         }
+        // 所属グループの変更はスーパーユーザーのみ可能（管理画面の isUserGroupEditable と同じ基準）。
+        // スーパーユーザー以外は送信された user_groups を無視し、対象の現在値を維持する
+        $loginUser = BcUtil::loginUser();
+        if ($loginUser && !$loginUser->isSuper()) {
+            unset($postData['user_groups']);
+        }
         if(!empty($postData['user_groups']['_ids']) && in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(!$loginUser->isAddableToAdminGroup()) {
                 throw new BcException(__d('baser_core', '特権エラーが発生しました。'));

@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcFileUploader;
 use BaserCore\Utility\BcUtil;
 use BcUploader\Model\Entity\UploaderFile;
 use BcUploader\Model\Table\UploaderFilesTable;
@@ -214,6 +215,9 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if (!isset($postData['file'])){
             throw new BcException(__d('baser_core', 'ファイルが存在しません。'));
         }
+        // 所有者はログインユーザーに固定する
+        $loginUser = BcUtil::loginUser();
+        if ($loginUser) $postData['user_id'] = $loginUser->id;
         /** @var UploadedFile $file */
         $file = $postData['file'];
         $fileError = $file->getError();
@@ -266,6 +270,24 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         if (!empty($postData['publish_end'])) {
             $postData['publish_end'] = new \Cake\I18n\DateTime($postData['publish_end']);
         }
+        // 文字列で送信された name（ファイル名の変更）は、ファイル名として妥当で、かつ他のレコードで
+        // 使われていないものに限定する。任意の name を保存できると、beforeSave のリネームや削除時の
+        // unlink で他ユーザーの実ファイルを操作できる。所有者（user_id）もリクエストから変更させない
+        if (isset($postData['name']) && !($postData['name'] instanceof UploadedFile)) {
+            $name = (string)$postData['name'];
+            if ($name !== (string)$entity->name) {
+                if (!BcFileUploader::isValidFileName($name)) {
+                    throw new BcException(__d('baser_core', 'ファイル名が不正です。'));
+                }
+                $exists = $this->UploaderFiles->find()
+                    ->where(['UploaderFiles.name' => $name, 'UploaderFiles.id <>' => $entity->id])
+                    ->count();
+                if ($exists) {
+                    throw new BcException(__d('baser_core', '同じ名前のファイルが既に存在します。'));
+                }
+            }
+        }
+        unset($postData['user_id']);
         $entity = $this->UploaderFiles->patchEntity($entity, $postData);
         return $this->UploaderFiles->saveOrFail($entity);
     }

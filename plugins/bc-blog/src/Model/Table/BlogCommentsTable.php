@@ -39,7 +39,14 @@ class BlogCommentsTable extends BlogAppTable
         $validator
             ->scalar('name')
             ->notEmptyString('name', __d('baser_core', 'お名前を入力してください。'))
-            ->maxLength('name', 50, __d('baser_core', 'お名前は50文字以内で入力してください。'));
+            ->maxLength('name', 50, __d('baser_core', 'お名前は50文字以内で入力してください。'))
+            ->add('name', [
+                'notContainsShortCode' => [
+                    'rule' => ['notContainsShortCode'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'お名前にショートコードは利用できません。')
+                ]
+            ]);
         $validator
             ->scalar('email')
             ->allowEmptyString('email')
@@ -52,7 +59,14 @@ class BlogCommentsTable extends BlogAppTable
             ->maxLength('url', 255, __d('baser_core', 'URLは255文字以内で入力してください。'));
         $validator
             ->scalar('message')
-            ->notEmptyString('message', __d('baser_core', 'コメントを入力してください。'));
+            ->notEmptyString('message', __d('baser_core', 'コメントを入力してください。'))
+            ->add('message', [
+                'notContainsShortCode' => [
+                    'rule' => ['notContainsShortCode'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'コメントにショートコードは利用できません。')
+                ]
+            ]);
         return $validator;
     }
 

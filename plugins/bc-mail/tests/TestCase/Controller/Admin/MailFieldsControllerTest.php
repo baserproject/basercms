@@ -287,6 +287,50 @@ class MailFieldsControllerTest extends BcTestCase
     }
 
     /**
+     * test edit / delete / copy - URL のメールフォームに属さないフィールドは操作できないこと、copy は GET で実行できないこと
+     */
+    public function testAdmin_rejectsOtherMailContentAndGetCopy()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $MailMessagesService->createTable(1);
+        $BcDatabaseService->addColumn('mail_message_1', 'name_1', 'text');
+        $MailMessagesService->createTable(2);
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+
+        // フィールド1はフォーム1のものだが、URL でフォーム2を指定
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/2/1', ['name' => 'hijack', 'field_name' => 'name_1', 'type' => 'text', 'mail_content_id' => 2]);
+        $this->assertContains($this->_response->getStatusCode(), [302, 404]);
+        $this->assertNotEquals('hijack', MailFieldsFactory::get(1)['name']);
+        $this->assertEquals(1, MailFieldsFactory::get(1)['mail_content_id']);
+
+        $this->post('/baser/admin/bc-mail/mail_fields/delete/2/1');
+        $this->assertContains($this->_response->getStatusCode(), [302, 404]);
+        $this->assertNotNull(MailFieldsFactory::get(1));
+
+        $count = MailFieldsFactory::count();
+        $this->post('/baser/admin/bc-mail/mail_fields/copy/2/1');
+        $this->assertContains($this->_response->getStatusCode(), [302, 404]);
+        $this->assertEquals($count, MailFieldsFactory::count());
+
+        // copy は GET で実行できない（CSRF 対策）
+        $this->get('/baser/admin/bc-mail/mail_fields/copy/1/1');
+        $this->assertResponseCode(405);
+        $this->assertEquals($count, MailFieldsFactory::count());
+
+        // add は URL のフォームに固定される
+        $this->post('/baser/admin/bc-mail/mail_fields/add/1', ['name' => 'added', 'field_name' => 'added_1', 'type' => 'text', 'mail_content_id' => 2, 'no' => 10]);
+        $added = MailFieldsFactory::find()->where(['field_name' => 'added_1'])->first();
+        if ($added) $this->assertEquals(1, $added->mail_content_id);
+
+        $MailMessagesService->dropTable(1);
+        $MailMessagesService->dropTable(2);
+    }
+
+    /**
      * 並び替えを更新する [AJAX]
      */
     public function testAdmin_ajax_update_sort()

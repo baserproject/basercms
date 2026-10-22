@@ -51,7 +51,26 @@ class BcCaptchaService implements BcCaptchaServiceInterface
     {
         require_once BASER_VENDORS . 'kcaptcha/kcaptcha_config.php';
         $key = 'captcha.' . $token;
-        return ($value === $request->getSession()->read($key));
+        $expected = $request->getSession()->read($key);
+        return ($value !== '' && is_string($expected) && $value === $expected);
+    }
+
+    /**
+     * 認証の回答をセッションから破棄する
+     *
+     * 送信完了後に呼び出し、同じ回答の再利用（リプレイ）を防ぐ。
+     * 保存に失敗した場合は呼び出さず、利用者が再入力せずにやり直せるようにする
+     *
+     * @param ServerRequest $request
+     * @param string $token
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function consume(ServerRequest $request, string $token): void
+    {
+        $request->getSession()->delete('captcha.' . $token);
     }
 
 }

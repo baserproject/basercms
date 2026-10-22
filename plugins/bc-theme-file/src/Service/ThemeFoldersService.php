@@ -61,6 +61,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
      */
     public function get(string $file)
     {
+        // パストラバーサル対策(GHSA-rqr8-gmx5-xvrr): 読み出しでも境界を検証する
+        $this->assertWithinPluginsDir($file);
         return new ThemeFolder([
             'fullpath' => $file,
             'type' => 'folder'
@@ -307,6 +309,13 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
+        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h):
+        // コピー先 $themePath は $params['type'] / $params['path'] から組み立てられ getFullpath() を
+        // 通らないため、コピー先がカレントテーマのディレクトリ配下であることを sink で必ず検証する。
+        $this->assertWithinThemeDir($themePath, $theme);
+        // コピー元 $params['fullpath'] も、コピー元のテーマ／プラグインの当該タイプのディレクトリ配下で
+        // あることを検証する
+        $this->assertWithinSourceDir($params);
         (new BcFolder(dirname($themePath)))->create();
         $folder = new BcFolder($params['fullpath']);
         if ($folder->copy($themePath)) {

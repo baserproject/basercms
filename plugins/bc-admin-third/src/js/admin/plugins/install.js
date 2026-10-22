@@ -21,5 +21,11 @@ $(function () {
     $("#BtnSave").click(function () {
         $.bcUtil.showLoader();
     });
+    // 「全てのユーザーで利用」を選んだときだけ警告を表示する
+    var togglePermissionWarning = function () {
+        $("#PermissionAllWarning").toggle($('input[name="permission"]:checked').val() === '1');
+    };
+    $('input[name="permission"]').change(togglePermissionWarning);
+    togglePermissionWarning();
 });
 

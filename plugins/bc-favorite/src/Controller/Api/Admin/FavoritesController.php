@@ -11,6 +11,7 @@
 
 namespace BcFavorite\Controller\Api\Admin;
 
+use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Utility\BcUtil;
 use BcFavorite\Service\FavoritesServiceInterface;
@@ -40,6 +41,11 @@ class FavoritesController extends BcAdminApiController
         $favorite = $message = null;
         try {
             $favorite = $service->get($id);
+            $this->assertOwner($favorite);
+        } catch (ForbiddenException $e) {
+            $favorite = null;
+            $this->setResponse($this->response->withStatus(403));
+            $message = $e->getMessage();
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -114,9 +120,15 @@ class FavoritesController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $favorite = $errors = null;
         try {
-            $favorite = $service->update($service->get($id), $this->request->getData());
+            $favorite = $service->get($id);
+            $this->assertOwner($favorite);
+            $favorite = $service->update($favorite, $this->request->getData());
             $message = __d('baser_core', 'お気に入り「{0}」を更新しました。', $favorite->name);
             $this->BcMessage->setSuccess($message, true, false);
+        } catch (ForbiddenException $e) {
+            $favorite = null;
+            $this->setResponse($this->response->withStatus(403));
+            $message = $e->getMessage();
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -150,10 +162,15 @@ class FavoritesController extends BcAdminApiController
         $favorite = $errors = $message = null;
         try {
             $favorite = $service->get($id);
+            $this->assertOwner($favorite);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'お気に入り: {0} を削除しました。', $favorite->name);
                 $this->BcMessage->setSuccess($message, true, false);
             }
+        } catch (ForbiddenException $e) {
+            $favorite = null;
+            $this->setResponse($this->response->withStatus(403));
+            $message = $e->getMessage();
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -255,4 +272,24 @@ class FavoritesController extends BcAdminApiController
         $this->viewBuilder()->setOption('serialize', ['result', 'message']);
     }
 
+
+    /**
+     * お気に入りがログインユーザーのものであることを検証する
+     *
+     * お気に入りは利用者ごとの個人データであり、他ユーザーのものを閲覧・変更・削除できてはならない
+     *
+     * @param \Cake\Datasource\EntityInterface $favorite
+     * @return void
+     * @throws ForbiddenException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function assertOwner($favorite): void
+    {
+        $loginUser = BcUtil::loginUser();
+        if (!$loginUser || (int)$favorite->user_id !== (int)$loginUser->id) {
+            throw new ForbiddenException(__d('baser_core', '他のユーザーのお気に入りは操作できません。'));
+        }
+    }
 }

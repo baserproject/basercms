@@ -58,6 +58,10 @@ class BcQueryParameterTraitTest extends BcTestCase
             'contain を除去' => [['contain' => ['BlogTags'], 'limit' => 10], ['limit' => 10]],
             'conditions を除去' => [['conditions' => ['1=1'], 'page' => 2], ['page' => 2]],
             'fields を除去' => [['fields' => ['id'], 'name' => 'a'], ['name' => 'a']],
+            'order を除去（sort / direction は保持）' => [
+                ['order' => 'id; DROP TABLE users', 'sort' => 'id', 'direction' => 'asc'],
+                ['sort' => 'id', 'direction' => 'asc']
+            ],
             '複数の予約キーを除去' => [
                 ['contain' => 1, 'conditions' => 1, 'fields' => 1, 'finder' => 1,
                     'joinType' => 1, 'strategy' => 1, 'matching' => 1, 'notMatching' => 1,

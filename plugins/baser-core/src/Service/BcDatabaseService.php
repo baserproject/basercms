@@ -453,11 +453,24 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
 
         $table = basename($options['path'], '.csv');
+        // CSV のファイル名をそのままテーブル名として使うため、テーブル名として妥当で
+        // 実在するテーブルのみ読み込む
+        $connection = $this->getDatasource($options['dbConfigKeyName']);
+        if (!preg_match('/^[a-z0-9_]+$/i', $table)) {
+            $this->log(__d('baser_core', 'テーブル名として妥当でないため CSV を読み込みませんでした。: {0}', $table));
+            return false;
+        }
+        $prefix = $connection->config()['prefix'] ?? '';
+        $existingTables = $connection->getSchemaCollection()->listTables();
+        if (!in_array($table, $existingTables, true) && !in_array($prefix . $table, $existingTables, true)) {
+            $this->log(__d('baser_core', 'テーブルが存在しないため CSV を読み込みませんでした。: {0}', $table));
+            return false;
+        }
         $locator = TableRegistry::getTableLocator();
         $locator->setFallbackClassName(AppTable::class);
         $appTable = $locator->get(Inflector::camelize($table), ['allowFallbackClass' => true]);
         $currentConnection = $appTable->getConnection();
-        $appTable->setConnection($this->getDatasource($options['dbConfigKeyName']));
+        $appTable->setConnection($connection);
         $appTable->setTable($table);
         $schema = $appTable->getSchema();
 
@@ -738,6 +751,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if($value === '') {
                     $values[$head[$key]] = null;
                 } else {
+                    // 書き出し時に数式対策で前置したシングルクォートを取り除く
+                    if (strlen($value) >= 2 && $value[0] === "'" && self::isFormulaInjectionTarget(substr($value, 1))) {
+                        $value = substr($value, 1);
+                    }
                     $values[$head[$key]] = $value;
                 }
             }
@@ -872,8 +889,31 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $value = trim(trim($value), "\'");
         $value = str_replace("\\'", "'", $value);
         $value = str_replace('{CM}', ',', $value);
+        // 表計算ソフトで開いた際に数式として解釈されないよう、数式の先頭文字で始まる値には
+        // シングルクォートを前置する（loadCsvToArray() で取り除くため復元時の値は変わらない）
+        if (self::isFormulaInjectionTarget($value)) {
+            $value = "'" . $value;
+        }
         $value = '"' . $value . '"';
         return $value;
+    }
+
+    /**
+     * 表計算ソフトで数式として解釈され得る値かどうか判定する
+     *
+     * @param string $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isFormulaInjectionTarget(string $value): bool
+    {
+        if ($value === '') return false;
+        // 数値のみの値（負の数など）は数式として解釈されないため対象外とする。
+        // 数値の列にシングルクォートが付くと、以前のバージョンでの復元時に不正な値になる
+        if (preg_match('/^[+-]?\d+(\.\d+)?$/', $value)) return false;
+        return in_array($value[0], ['=', '+', '-', '@', "\t", "\r"], true);
     }
 
     /**
@@ -1215,6 +1255,21 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 // メソッドを一切持たないこと（コンストラクタや drop/create 等で
                 // 任意コードが実行されるのを防ぐ）
                 if (!empty($stmt->getMethods())) {
+                    return false;
+                }
+                // クラス本体はプロパティ宣言・定数のみ許可し、プロパティフック（PHP 8.4）を
+                // 持つプロパティは拒否する。get フックに任意コードを書くと、BcSchema の
+                // コンストラクタが $this->table 等を読み出した時点で実行される
+                foreach ((array)$stmt->stmts as $classStmt) {
+                    if ($classStmt instanceof Node\Stmt\Nop) continue;
+                    if ($classStmt instanceof Node\Stmt\ClassConst) continue;
+                    if ($classStmt instanceof Node\Stmt\Property) {
+                        if (!empty($classStmt->hooks)) {
+                            return false;
+                        }
+                        continue;
+                    }
+                    // トレイト利用・列挙ケース・メソッド等、上記以外は不許可
                     return false;
                 }
                 $validClassCount++;

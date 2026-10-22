@@ -290,6 +290,10 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
+        // 所属ブログ・ツリー構造の内部値はリクエストから変更させない
+        // （blog_content_id はバリデーションで参照するため、対象の値で固定する）
+        unset($postData['id'], $postData['lft'], $postData['rght']);
+        $postData['blog_content_id'] = $target->blog_content_id;
         $blogCategory = $this->BlogCategories->patchEntity($target, $postData);
         return $this->BlogCategories->saveOrFail($blogCategory);
     }
