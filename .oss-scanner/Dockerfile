@@ -62,9 +62,9 @@ RUN chmod +x /usr/local/bin/basercms-* \
  && bin/cake setup install \
  && bin/cake install https://localhost foo@example.com baserCMS1234 basercms --host 127.0.0.1 --username basercms --password basercms \
  && basercms-test --testsuite BcSeo \
+ && bin/cake cache clear_all \
  && basercms-stop \
  && chown -R www-data:www-data /var/www/html \
- && bin/cake cache clear_all \
  && rm -rf /root/.composer/cache /root/.cache/composer
 
 CMD ["bash"]
