@@ -315,13 +315,15 @@ class CustomContentAdminHelper extends CustomContentAppHelper
     public function getEntryIndexTitle(CustomTable $table, CustomEntry $entry)
     {
         // タイトルは編集者が入力したテキストのため、リンクにする場合もエスケープする（格納型 XSS 対策）
+        // ツリー構造の階層を示すインデントは固定の HTML としてタイトルの外に付与する
+        $indent = !empty($entry->depth)? str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', (int)$entry->depth) . '└' : '';
         if ($table->has_child || $entry->custom_table->display_field === 'title') {
-            return $this->BcBaser->getLink(
+            return $indent . $this->BcBaser->getLink(
                 (string)$entry->title,
                 ['action' => 'edit', $table->id, $entry->id]
             );
         } else {
-            return h((string)$entry->title);
+            return $indent . h((string)$entry->title);
         }
     }
 

@@ -219,11 +219,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                 $entities[] = $entity;
                 continue;
             }
-            $entity->title = sprintf(
-                "%s└%s",
-                str_replace('_', '&nbsp;&nbsp;&nbsp;&nbsp;', $matches[1]),
-                $entity->title
-            );
+            // インデントは表示側（CustomContentAdminHelper::getEntryIndexTitle()）で depth から付与する。
+            // タイトルに HTML を埋め込むと、タイトルをエスケープした際にインデントが文字として表示されるため
             $entity->depth = strlen($matches[1]);
             $entities[] = $entity;
         }
@@ -522,12 +519,13 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      *
      * @param array $postData
      * @param bool $isNew
+     * @param int|null $currentCreatorId 更新時の現在の作成者 ID
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function sanitizePostData(array $postData, bool $isNew): array
+    public function sanitizePostData(array $postData, bool $isNew, ?int $currentCreatorId = null): array
     {
         unset($postData['id'], $postData['lft'], $postData['rght'], $postData['level'], $postData['created'], $postData['modified']);
         $loginUser = BcUtil::loginUser();
@@ -535,7 +533,8 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             if ($isNew) {
                 $postData['creator_id'] = $loginUser->id;
             } else {
-                unset($postData['creator_id']);
+                // 作成者は必須項目（requirePresence）のため、キーを消さずに現在値で上書きする
+                $postData['creator_id'] = $currentCreatorId;
             }
         }
         return $postData;
@@ -553,7 +552,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function update(EntityInterface $entity, array $postData)
     {
-        $postData = $this->sanitizePostData($postData, false);
+        $postData = $this->sanitizePostData($postData, false, $entity->creator_id);
         unset($postData['custom_table_id']);
         $postData = $this->autoConvert($postData);
         $entity = $this->CustomEntries->patchEntity($entity, $postData);
