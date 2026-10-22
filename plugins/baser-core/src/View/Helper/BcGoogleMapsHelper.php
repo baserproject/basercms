@@ -81,7 +81,12 @@ class BcGoogleMapsHelper extends Helper
             }
             if($location) $options = array_merge($options, $location);
         }
-        $options['apiUrl'] = $options['apiBaseUrl'] . '?key=' . $options['apiKey'];
+        // 読み込むスクリプトは Google Maps API に限定する
+        // ショートコードの引数から任意の URL を読み込ませないため
+        if (!preg_match('/\Ahttps:\/\/maps\.(google|googleapis)\.com\//', (string)$options['apiBaseUrl'])) {
+            $options['apiBaseUrl'] = 'https://maps.google.com/maps/api/js';
+        }
+        $options['apiUrl'] = $options['apiBaseUrl'] . '?key=' . rawurlencode((string)$options['apiKey']);
         $options['markerText'] = $this->getMarker($options['title'], $options['address']);
 
         return $this->BcBaser->getElement('google_maps', $options);
