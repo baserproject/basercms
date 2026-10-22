@@ -20,6 +20,7 @@ use Cake\Database\ValueBinder;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Service\BcDatabaseService;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Test\Scenario\InitAppScenario;
@@ -93,6 +94,16 @@ class CustomEntriesServiceTest extends BcTestCase
         ], true);
         // 管理者は creator_id を指定できる
         $this->assertEquals(['title' => 'title', 'creator_id' => 5], $result);
+        // 管理者以外は、新規作成時はログインユーザー、更新時は現在の作成者で上書きされる（キーは消さない）
+        UserFactory::make(['id' => 2, 'email' => 'operator@example.com', 'status' => true])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 2])->persist();
+        $this->loginAdmin($this->getRequest(), 2);
+        $result = $this->CustomEntriesService->sanitizePostData(['title' => 'title', 'creator_id' => 5], true);
+        $this->assertEquals(['title' => 'title', 'creator_id' => 2], $result);
+        $result = $this->CustomEntriesService->sanitizePostData(['title' => 'title', 'creator_id' => 5], false, 1);
+        $this->assertEquals(['title' => 'title', 'creator_id' => 1], $result);
+        $result = $this->CustomEntriesService->sanitizePostData(['title' => 'title'], false, 1);
+        $this->assertEquals(['title' => 'title', 'creator_id' => 1], $result);
     }
 
     /**
