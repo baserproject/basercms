@@ -14,7 +14,9 @@ if ! mariadb-admin --silent ping 2>/dev/null; then
 fi
 if ! pgrep -x apache2 >/dev/null; then
     rm -f /var/run/apache2/apache2.pid
-    (apache2-foreground >/var/log/apache2/foreground.log 2>&1 &)
+    # setsid: Apache (prefork) sends SIGTERM to its whole process group on
+    # stop/graceful-stop, which would also kill the caller of basercms-stop.
+    (setsid apache2-foreground >/var/log/apache2/foreground.log 2>&1 &)
     sleep 1
 fi
 echo "baserCMS is running at https://localhost/ (self-signed; use curl -k) and http://localhost/"

@@ -1,4 +1,19 @@
 #!/bin/bash
 # Stop MariaDB and Apache started by basercms-start.
-mariadb-admin shutdown 2>/dev/null || true
-apache2ctl -k graceful-stop 2>/dev/null || pkill apache2 || true
+# Only signals the processes recorded in their pid files; never kills by name.
+if mariadb-admin --silent ping 2>/dev/null; then
+    mariadb-admin shutdown 2>/dev/null || true
+    for i in $(seq 1 60); do
+        mariadb-admin --silent ping 2>/dev/null || break
+        sleep 1
+    done
+fi
+PIDFILE=/var/run/apache2/apache2.pid
+if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+    apache2ctl -k graceful-stop 2>/dev/null || kill -WINCH "$(cat "$PIDFILE")" 2>/dev/null || true
+    for i in $(seq 1 30); do
+        kill -0 "$(cat "$PIDFILE" 2>/dev/null)" 2>/dev/null || break
+        sleep 1
+    done
+fi
+exit 0
