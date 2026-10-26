@@ -69,9 +69,11 @@ class PasswordRequestsController extends BcAdminAppController
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             $isError = true;
         } catch (\Throwable $e) {
-            $message = $e->getMessage();
-            if($message === 'Could not send email: unknown') {
+            $this->log($e->getMessage());
+            if($e->getMessage() === 'Could not send email: unknown') {
                 $message = __d('baser_core', 'メールが送信できません。管理者に連絡してください。');
+            } else {
+                $message = __d('baser_core', '処理中にエラーが発生しました。');
             }
             $isError = true;
         }

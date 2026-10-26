@@ -59,7 +59,8 @@ class BlogCategoriesController extends BcApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $this->log($e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -98,7 +99,8 @@ class BlogCategoriesController extends BcApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $this->log($e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -140,7 +142,8 @@ class BlogCategoriesController extends BcApiController
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $this->log($e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([

@@ -77,7 +77,8 @@ class PasswordRequestsController extends BcAdminAppController
             $this->BcMessage->setError($e->getMessage());
             return $this->redirect(['action' => 'entry']);
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser_core', '処理中にエラーが発生しました。') . $e->getMessage());
+            $this->log($e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', '処理中にエラーが発生しました。'));
             return $this->redirect(['action' => 'entry']);
         }
         $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
