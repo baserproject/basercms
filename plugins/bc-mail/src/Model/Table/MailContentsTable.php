@@ -77,7 +77,7 @@ class MailContentsTable extends MailAppTable
         $this->setPrimaryKey('id');
         $this->hasMany('MailFields', [
             'className' => 'BcMail.MailFields',
-            'order' => 'sort',
+            'sort' => ['MailFields.sort' => 'ASC'],
             'foreignKey' => 'mail_content_id',
             'dependent' => true
         ]);
