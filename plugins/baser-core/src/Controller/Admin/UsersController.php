@@ -25,7 +25,6 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\ORM\Exception\PersistenceFailedException;
-use Cake\Routing\Router;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -129,7 +128,7 @@ class UsersController extends BcAdminAppController
      */
     public function login_code(UsersServiceInterface $usersService, TwoFactorAuthenticationsServiceInterface $twoFactorAuthenticationsService)
     {
-        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+        $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
 
         $session = $this->request->getSession();
 
