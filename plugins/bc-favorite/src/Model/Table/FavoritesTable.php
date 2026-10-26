@@ -72,6 +72,11 @@ class FavoritesTable extends AppTable
             ->notEmptyString('name', __d('baser_core', 'タイトルは必須です。'));
         $validator
             ->scalar('url')
+            ->add('url', 'isInternalPath', [
+                'rule' => ['isInternalPath'],
+                'provider' => 'favorite',
+                'message' => __d('baser_core', 'URLはサイト内のパス（/ から始まるもの）を入力してください。'),
+                'last' => true])
             ->add('url', 'isPermitted', [
                 'rule' => ['isPermitted'],
                 'provider' => 'favorite',
