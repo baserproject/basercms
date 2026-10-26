@@ -83,4 +83,35 @@ class FavoriteValidationTest extends BcTestCase
             [false, null, '/baser/admin/users/index', false],
         ];
     }
+
+    /**
+     * test isInternalPath
+     *
+     * @return void
+     * @dataProvider isInternalPathDataProvider
+     */
+    public function testIsInternalPath($url, $expected): void
+    {
+        $this->assertSame($expected, $this->FavoriteValidation->isInternalPath($url));
+    }
+
+    public static function isInternalPathDataProvider()
+    {
+        return [
+            ['/', true],
+            ['/baser/admin/baser-core/users/index', true],
+            ['/baser/admin/baser-core/contents/index?site_id=1', true],
+            ["javascript:alert('test')", false],
+            ["JavaScript:alert('test')", false],
+            ['https://example.com/', false],
+            ['//example.com/', false],
+            ['/\\example.com/', false],
+            ["/\t/example.com/", false],
+            // 2文字目以降の空白は、取り除かれてもサイト内のパスのまま
+            ["/baser/admin\n", true],
+            ['baser/admin', false],
+            ['', false],
+            [null, false],
+        ];
+    }
 }

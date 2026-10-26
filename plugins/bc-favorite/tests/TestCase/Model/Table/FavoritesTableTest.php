@@ -104,6 +104,11 @@ class FavoritesTableTest extends BcTestCase
                 ['name' => 'hoge', 'url' => '/baser/admin/favorites/add'],
                 []
             ],
+            // サイト内のパス以外は登録させない（判定の詳細は FavoriteValidationTest::testIsInternalPath）
+            [
+                ['name' => 'hoge', 'url' => "javascript:alert('test')"],
+                ['url' => ['isInternalPath' => 'URLはサイト内のパス（/ から始まるもの）を入力してください。']]
+            ],
         ];
     }
 

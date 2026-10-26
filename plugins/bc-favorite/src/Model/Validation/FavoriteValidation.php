@@ -33,6 +33,27 @@ class FavoriteValidation extends Validation
     use BcContainerTrait;
 
     /**
+     * サイト内のパスかチェックする
+     *
+     * お気に入りの URL はそのままリンクとして出力されるため、サイト内のパス以外を許可しない
+     *
+     * @param string $url
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function isInternalPath($url)
+    {
+        // `javascript:` などのスキーム付きの URL や、相対パスを許可しない
+        if (!is_string($url) || !str_starts_with($url, '/')) return false;
+        // 2文字目が `/`・`\` だと、ブラウザが他のホストへのリンクとして扱う。
+        // 空白はブラウザが取り除くため、`/<タブ>/example.com` も `//example.com` になる
+        $second = substr($url, 1, 1);
+        return !in_array($second, ['/', '\\'], true) && !preg_match('/\s/', $second);
+    }
+
+    /**
      * アクセス権があるかチェックする
      *
      * 管理者グループは全て true を返却
