@@ -347,6 +347,22 @@ class CustomContentAdminHelperTest extends BcTestCase
         //check result return
         $this->assertEquals('', $rs);
 
+        // case field type has supplementary help, no description
+        $customLink = CustomLinkFactory::make(['description' => ''])->getEntity();
+        $customLink->custom_field = CustomFieldFactory::make(['type' => 'BcCcGoogleMap'])->getEntity();
+        $helpText = $this->CustomContentAdminHelper->BcCcGoogleMap->helpText($customLink);
+        $this->assertNotEmpty($helpText);
+        $rs = $this->CustomContentAdminHelper->description($customLink);
+        $this->assertEquals(1, substr_count($rs, 'bca-help"'));
+        $this->assertStringContainsString('<div class="bca-helptext">' . $helpText . '</div>', $rs);
+        // case field type has supplementary help and description
+        $customLink->description = 'test description';
+        $rs = $this->CustomContentAdminHelper->description($customLink);
+        $this->assertEquals('<i class="bca-icon--question-circle bca-help"></i><div class="bca-helptext">test description<br><br>' . $helpText . '</div>', $rs);
+        // case field type without supplementary help
+        $customLink = CustomLinkFactory::make(['description' => ''])->getEntity();
+        $customLink->custom_field = CustomFieldFactory::make(['type' => 'BcCcText'])->getEntity();
+        $this->assertEquals('', $this->CustomContentAdminHelper->description($customLink));
     }
 
     /*

@@ -19,6 +19,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcCcGoogleMap\Utility\BcCcGoogleMapUtil;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomLink;
 use BcCustomContent\Model\Entity\CustomTable;
@@ -286,6 +287,7 @@ class CustomEntriesTable extends AppTable
             $validator = $this->setValidateEmailConfirm($validator, $link);
             $validator = $this->setValidateMaxFileSize($validator, $link, $postData);
             $validator = $this->setValidateFileExt($validator, $link);
+            $validator = $this->setValidateGoogleMap($validator, $link);
         }
 
         $this->setValidator('customEntry', $validator);
@@ -412,6 +414,28 @@ class CustomEntriesTable extends AppTable
                 $field->regex_error_message?: __d('baser_core', '形式が無効です。')
             );
         }
+        return $validator;
+    }
+
+    /**
+     * Googleマップの座標チェックをセットする
+     *
+     * @param Validator $validator
+     * @param CustomLink $link
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setValidateGoogleMap(Validator $validator, CustomLink $link): Validator
+    {
+        if ($link->custom_field->type !== 'BcCcGoogleMap' || !class_exists(BcCcGoogleMapUtil::class)) {
+            return $validator;
+        }
+        $validator->add($link->name, 'googleMap', [
+            'rule' => fn($value) => $value === null || $value === '' || BcCcGoogleMapUtil::parse((string) $value) !== null,
+            'message' => __d('baser_core', '座標が含まれていません')
+        ]);
         return $validator;
     }
 
