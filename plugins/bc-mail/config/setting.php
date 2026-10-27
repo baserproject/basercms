@@ -88,6 +88,11 @@ return [
         ]
     ],
     'BcMail' => [
+        /**
+         * メールフォームを新しく作るときの「データベースに保存する」の初期値
+         * 個人情報などの送信内容をシステム内に残さない場合は false にする
+         */
+        'defaultSaveInfo' => true,
         'autoComplete' => [
             ['name' => 'none', 'title' => '指定しない'],
             ['name' => 'off', 'title' => '無効'],

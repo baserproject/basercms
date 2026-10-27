@@ -18,6 +18,7 @@ use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -92,6 +93,28 @@ class MailContentsServiceTest extends BcTestCase
         $this->assertEquals(true, $result->save_info);
         $this->assertEquals(false, $result->validate);
         $this->assertEquals(false, $result->ssl_on);
+    }
+
+    /**
+     * test getNew
+     * 「データベースに保存する」の初期値を BcMail.defaultSaveInfo で変えられること
+     */
+    public function test_getNewDefaultSaveInfo()
+    {
+        $defaultSaveInfo = Configure::read('BcMail.defaultSaveInfo');
+        try {
+            Configure::write('BcMail.defaultSaveInfo', false);
+            $this->assertFalse($this->MailContentsService->getNew()->save_info);
+
+            Configure::write('BcMail.defaultSaveInfo', true);
+            $this->assertTrue($this->MailContentsService->getNew()->save_info);
+
+            // 設定が無い場合は従来どおり保存する
+            Configure::delete('BcMail.defaultSaveInfo');
+            $this->assertTrue($this->MailContentsService->getNew()->save_info);
+        } finally {
+            Configure::write('BcMail.defaultSaveInfo', $defaultSaveInfo);
+        }
     }
 
     /**
