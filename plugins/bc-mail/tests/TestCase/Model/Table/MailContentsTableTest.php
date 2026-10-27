@@ -15,6 +15,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Model\Table\MailContentsTable;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -393,6 +395,23 @@ class MailContentsTableTest extends BcTestCase
     public function testFindAccepting()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * メールフィールドが並び順（sort）どおりに取得される
+     */
+    public function testMailFieldsSort()
+    {
+        MailContentFactory::make(['id' => 1])->persist();
+        MailFieldsFactory::make(['id' => 1, 'mail_content_id' => 1, 'field_name' => 'field_1', 'sort' => 3])->persist();
+        MailFieldsFactory::make(['id' => 2, 'mail_content_id' => 1, 'field_name' => 'field_2', 'sort' => 1])->persist();
+        MailFieldsFactory::make(['id' => 3, 'mail_content_id' => 1, 'field_name' => 'field_3', 'sort' => 2])->persist();
+
+        $mailContent = $this->MailContent->get(1, contain: ['MailFields']);
+        $this->assertEquals(
+            ['field_2', 'field_3', 'field_1'],
+            array_map(fn($field) => $field->field_name, $mailContent->mail_fields)
+        );
     }
 
     /**

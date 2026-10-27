@@ -59,7 +59,7 @@ class MailFieldsScenario implements FixtureScenarioInterface
             'not_empty' => 1,
             'use_field' => 1,
             'no_send' => 0,
-            'sort' => '15',
+            'sort' => 1,
             'created' => '2015-01-27 12:56:54',
             'modified' => null
         ])->persist();
