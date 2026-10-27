@@ -175,6 +175,17 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->post("/baser/api/admin/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertNotEmpty($this->ContentsService->get($id));
+        // 元のフォルダが分からない場合は、サイト直下に戻した旨を知らせる
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertStringContainsString('サイト直下に非公開の状態で戻しました', $result->message);
+
+        // 元のフォルダが存在する場合は、元のフォルダに戻す
+        $this->ContentsService->delete(11);
+        $this->post("/baser/api/admin/baser-core/contents/trash_return/11.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertStringNotContainsString('サイト直下', $result->message);
+        $this->assertEquals(6, $this->ContentsService->get(11)->parent_id);
     }
 
     /**

@@ -259,9 +259,15 @@ class ContentsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $restored = null;
         try {
+            $trash = $service->getTrash($id);
             if ($restored = $service->restore($id)) {
-                $message = __d('baser_core', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
-                $this->BcMessage->setSuccess($message, true, false);
+                if ($restored->parent_id === $trash->trashed_parent_id) {
+                    $message = __d('baser_core', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
+                    $this->BcMessage->setSuccess($message, true, false);
+                } else {
+                    $message = __d('baser_core', 'ゴミ箱: {0} を元に戻しましたが、元のフォルダが存在しないため、サイト直下に非公開の状態で戻しました。', $restored->title);
+                    $this->BcMessage->setWarning($message, true, false);
+                }
             } else {
                 $message = __d('baser_core', 'ゴミ箱の復元に失敗しました');
             }

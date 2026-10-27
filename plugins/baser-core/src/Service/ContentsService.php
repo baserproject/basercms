@@ -465,6 +465,9 @@ class ContentsService implements ContentsServiceInterface
             $this->deleteSearchIndex($id);
             $this->Contents->deleteRelateSubSiteContent($content);
             $this->Contents->deleteAlias($content);
+            // ゴミ箱から戻す際に元の位置と公開状態に戻せるよう保持しておく
+            $content->trashed_parent_id = $content->parent_id;
+            $content->trashed_self_status = $content->self_status;
             // 最上位に移動して保存
             $content->parent_id = null;
             $content->url = '';
@@ -570,6 +573,9 @@ class ContentsService implements ContentsServiceInterface
     /**
      * 論理削除されたコンテンツを復元する
      *
+     * ゴミ箱に入れる前の親フォルダが存在する場合は、その配下に元の公開状態で戻す。
+     * 存在しない場合は、サイト直下に非公開の状態で戻す。
+     *
      * @param int $id
      * @return EntityInterface|array|null $trash
      * @checked
@@ -594,12 +600,29 @@ class ContentsService implements ContentsServiceInterface
             // lft / rght が null の場合、新規登録の場合でないと正常な値が割り振られないため、
             // 重複しない値を割り振ってから、parent_id を元に、level / left / rght をTreeBehavior に更新してもらう。
             $max = $this->Contents->getMax('rght');
-            $siteRoot = $this->getSiteRoot($content->site_id);
+            $parent = null;
+            if ($content->trashed_parent_id) {
+                $parent = $this->Contents->find()->where([
+                    'Contents.id' => $content->trashed_parent_id,
+                    'Contents.site_id' => $content->site_id,
+                    'Contents.type' => 'ContentFolder'
+                ])->first();
+            }
+            if ($parent) {
+                $parentId = $parent->id;
+                $selfStatus = (bool)$content->trashed_self_status;
+            } else {
+                $parentId = $this->getSiteRoot($content->site_id)->id;
+                $selfStatus = false;
+            }
             $result = $this->update($content, [
                 'id' => $content->id,
                 'name' => $content->name,
                 'level' => null,
-                'parent_id' => $siteRoot->id,
+                'parent_id' => $parentId,
+                'self_status' => $selfStatus,
+                'trashed_parent_id' => null,
+                'trashed_self_status' => null,
                 'lft' => $max + 1,
                 'rght' => $max + 2
             ]);
@@ -622,10 +645,22 @@ class ContentsService implements ContentsServiceInterface
     public function restoreAll(array $queryParams = []): int
     {
         $count = 0;
-        $trash = $this->getTrashIndex($queryParams);
-        foreach($trash as $entity) {
-            if ($this->Contents->restore($entity)) {
-                $count++;
+        $pending = [];
+        foreach($this->getTrashIndex($queryParams) as $entity) {
+            $pending[$entity->id] = $entity;
+        }
+        // 元の親フォルダもゴミ箱にある場合は、親フォルダを先に戻してから配下に戻す
+        while($pending) {
+            $targets = array_filter($pending, function($entity) use ($pending) {
+                return !$entity->trashed_parent_id || !isset($pending[$entity->trashed_parent_id]);
+            });
+            // 循環している場合でも全件処理されるようにする
+            if (!$targets) $targets = $pending;
+            foreach($targets as $id => $entity) {
+                unset($pending[$id]);
+                if ($this->restore($id)) {
+                    $count++;
+                }
             }
         }
         return $count;

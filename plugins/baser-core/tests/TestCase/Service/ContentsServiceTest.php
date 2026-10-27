@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\MailContentsScenario;
+use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
@@ -354,6 +355,50 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * testRestore 元のフォルダに戻す
+     *
+     * @return void
+     */
+    public function testRestoreToOriginalFolder()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->ContentsService->delete(11);
+        $trash = $this->ContentsService->getTrash(11);
+        $this->assertEquals(6, $trash->trashed_parent_id);
+        $this->assertTrue($trash->trashed_self_status);
+
+        $restored = $this->ContentsService->restore(11);
+        $this->assertEquals(6, $restored->parent_id);
+        $this->assertEquals('/service/service1', $restored->url);
+        $this->assertTrue($restored->self_status);
+        $this->assertTrue($restored->status);
+        $this->assertNull($restored->trashed_parent_id);
+        $this->assertNull($restored->trashed_self_status);
+    }
+
+    /**
+     * testRestore 元のフォルダが存在しない場合はサイト直下に非公開で戻す
+     *
+     * @return void
+     */
+    public function testRestoreWhenOriginalFolderNotExists()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        $this->ContentsService->delete(11);
+        $this->ContentsService->deleteRecursive(6);
+
+        $restored = $this->ContentsService->restore(11);
+        $this->assertEquals(1, $restored->parent_id);
+        $this->assertEquals('/service1', $restored->url);
+        $this->assertFalse($restored->self_status);
+        $this->assertFalse($restored->status);
+    }
+
+    /**
      * testRestoreAll
      *
      * @return void
@@ -365,6 +410,39 @@ class ContentsServiceTest extends BcTestCase
         ContentFactory::make(['type' => "ContentFolder", 'deleted_date' => '2021-09-03 13:10:08', 'parent_id' => 1, 'lft' => 4, 'rght' => 5])->persist();
         $this->assertEquals(2, $this->ContentsService->restoreAll(['type' => "ContentFolder"]));
         $this->assertTrue($this->ContentsService->getTrashIndex(['type' => "ContentFolder"])->all()->isEmpty());
+    }
+
+    /**
+     * testRestoreAll フォルダごとゴミ箱に入れた場合は、元の階層構造に戻す
+     *
+     * @return void
+     */
+    public function testRestoreAllToOriginalFolder()
+    {
+        $this->loadFixtureScenario(SitesScenario::class);
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $this->loadFixtureScenario(PagesScenario::class);
+        // シナリオで元からゴミ箱にあるデータは対象外とする
+        $this->ContentsService->hardDeleteAll(new \DateTime());
+        $this->ContentsService->deleteRecursive(6);
+
+        $this->ContentsService->restoreAll();
+        $this->assertTrue($this->ContentsService->getTrashIndex()->all()->isEmpty());
+        $folder = $this->ContentsService->get(6);
+        $this->assertEquals(1, $folder->parent_id);
+        $this->assertEquals('/service/', $folder->url);
+        $this->assertTrue($folder->status);
+        foreach([11 => '/service/service1', 12 => '/service/service2', 13 => '/service/service3'] as $id => $url) {
+            $content = $this->ContentsService->get($id);
+            $this->assertEquals(6, $content->parent_id);
+            $this->assertEquals($url, $content->url);
+            $this->assertTrue($content->status);
+        }
+        // ツリー構造が崩れていないこと
+        $this->assertEquals(
+            [11, 12, 13],
+            $this->ContentsService->getChildren(6)->all()->extract('id')->toList()
+        );
     }
 
     /**
