@@ -489,6 +489,32 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test _loadDefaultDataPattern
+     * 初期データの検索インデックスが読み込まれること
+     * @dataProvider loadDefaultDataPatternSearchIndexesDataProvider
+     */
+    public function test_loadDefaultDataPatternSearchIndexes($theme, $pattern)
+    {
+        $path = BcUtil::getDefaultDataPath($theme, $pattern) . DS . 'BcSearchIndex' . DS . 'search_indexes.csv';
+        $this->assertFileExists($path);
+        $records = $this->BcDatabaseService->loadCsvToArray($path);
+        $this->assertNotEmpty($records);
+
+        $this->execPrivateMethod($this->BcDatabaseService, '_loadDefaultDataPattern', [$pattern, $theme, 'BcSearchIndex']);
+        $this->assertEquals(count($records), SearchIndexesFactory::count());
+        $this->BcDatabaseService->resetTables('BcSearchIndex');
+    }
+
+    public static function loadDefaultDataPatternSearchIndexesDataProvider()
+    {
+        return [
+            ['BcFront', 'default'],
+            ['BcThemeSample', 'default'],
+            ['BcThemeSample', 'empty'],
+        ];
+    }
+
+    /**
      * test getAppTableList
      */
     public function test_getAppTableList()
