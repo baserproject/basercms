@@ -422,7 +422,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         try {
             $pluginClass = Plugin::getCollection()->get($plugin);
             if(method_exists($pluginClass, 'updateDefaultData')) {
-                $pluginClass->updateDefaultData(['connection' => $dbConfigKeyName]);
+                $pluginClass->updateDefaultData();
             }
         } catch (\Throwable) {}
         return $result;
