@@ -228,7 +228,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
     /**
      * 説明文を表示する
      *
-     * ヘルプ用のツールチップで表示する
+     * ヘルプ用のツールチップで表示する。フィールドタイプのヘルパーが helpText() を持つ場合は、補足ヘルプを説明文の後ろに連結する
      *
      * @param CustomLink $link
      * @return string
@@ -238,13 +238,22 @@ class CustomContentAdminHelper extends CustomContentAppHelper
      */
     public function description(CustomLink $link)
     {
+        $parts = [];
         if ($link->description) {
-            return '<i class="bca-icon--question-circle bca-help"></i>' .
-                '<div class="bca-helptext">' .
-                preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $link->description) .
-                '</div>';
+            $parts[] = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $link->description);
         }
-        return '';
+        $type = $link->custom_field?->type;
+        if ($type && isset($this->{$type}) && method_exists($this->{$type}, 'helpText')) {
+            $helpText = $this->{$type}->helpText($link);
+            if ($helpText) {
+                $parts[] = $helpText;
+            }
+        }
+        if (!$parts) {
+            return '';
+        }
+        return '<i class="bca-icon--question-circle bca-help"></i>' .
+            '<div class="bca-helptext">' . implode('<br><br>', $parts) . '</div>';
     }
 
     /**

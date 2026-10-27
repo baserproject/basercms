@@ -22,6 +22,7 @@ use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Service\CustomEntriesService;
+use Cake\Validation\Validator;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
@@ -556,6 +557,25 @@ class CustomEntriesTableTest extends BcTestCase
     }
 
     /**
+     * test setupValidate - BcCcGoogleMap のフィールドに座標チェックが設定されること
+     */
+    public function test_setupValidate_googleMap()
+    {
+        CustomFieldFactory::make(['id' => 1, 'type' => 'BcCcGoogleMap'])->persist();
+        CustomLinkFactory::make(['id' => 1, 'name' => 'map', 'custom_table_id' => 1, 'custom_field_id' => 1])->persist();
+        $this->CustomEntriesTable->setLinks(1);
+
+        $this->CustomEntriesTable->setupValidate(['map' => 'https://maps.app.goo.gl/x']);
+        $validator = $this->CustomEntriesTable->getValidator('customEntry');
+
+        $errors = $validator->validate(['map' => 'https://maps.app.goo.gl/x', 'creator_id' => 1]);
+        $this->assertEquals('座標が含まれていません', $errors['map']['googleMap']);
+
+        $errors = $validator->validate(['map' => '35.681236,139.767125', 'creator_id' => 1]);
+        $this->assertArrayNotHasKey('map', $errors);
+    }
+
+    /**
      * test setValidateEmailConfirm
      */
     public function test_setValidateEmailConfirm()
@@ -664,6 +684,36 @@ class CustomEntriesTableTest extends BcTestCase
             'test' => '半角で入力@gmail.com'
         ]);
         $this->assertEquals('半角で入力してください。', current($errors['test']));
+    }
+
+    /**
+     * test setValidateGoogleMap
+     */
+    public function test_setValidateGoogleMap()
+    {
+        $link = CustomLinkFactory::make(['name' => 'test'])->getEntity();
+        $customField = CustomFieldFactory::make()->getEntity();
+        $link->custom_field = $customField;
+
+        // BcCcGoogleMap 以外はルールを追加しない
+        $customField->type = 'BcCcText';
+        $validator = $this->CustomEntriesTable->setValidateGoogleMap(new Validator(), $link);
+        $this->assertFalse($validator->field('test')->has('googleMap'));
+
+        // BcCcGoogleMap はルールを追加する
+        $customField->type = 'BcCcGoogleMap';
+        $validator = $this->CustomEntriesTable->setValidateGoogleMap(new Validator(), $link);
+        $this->assertTrue($validator->field('test')->has('googleMap'));
+
+        // 座標を含まない値
+        $this->assertEquals(
+            ['test' => ['googleMap' => '座標が含まれていません']],
+            $validator->validate(['test' => 'https://maps.app.goo.gl/x'])
+        );
+        // 座標だけの値
+        $this->assertEquals([], $validator->validate(['test' => '35.68,139.76']));
+        // 空の値
+        $this->assertEquals([], $validator->validate(['test' => '']));
     }
 
     /**
