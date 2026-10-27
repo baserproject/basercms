@@ -1619,8 +1619,8 @@ msgstr "This fixed page is currently being edited by \"{0}\"."
 #: plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:63
 #: plugins/baser-core/src/Controller/PasswordRequestsController.php:83
 msgid ""
-"パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを"
-"送信いたしました。"
+"パスワードのリセットを受け付けました。該当するメールアドレスが登録されている場合は、"
+"変更用のURLを送信しました。"
 msgstr ""
 "Password reset has been accepted. If the corresponding e-mail address "
 "exists, we have sent you the URL to change it."

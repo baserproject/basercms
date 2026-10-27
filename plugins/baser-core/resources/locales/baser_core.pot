@@ -1579,7 +1579,7 @@ msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:63
 #: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:83
-msgid "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。"
+msgid "パスワードのリセットを受け付けました。該当するメールアドレスが登録されている場合は、変更用のURLを送信しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:74
