@@ -70,9 +70,8 @@ class PasswordRequestsController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
                 return;
             }
-        } catch (RecordNotFoundException $e) {
-            $this->BcMessage->setError($e->getMessage());
-            return $this->redirect(['action' => 'entry']);
+        } catch (RecordNotFoundException) {
+            // メールアドレスが登録済みかを判別されないよう、登録済みの場合と同じメッセージを表示する
         } catch (PersistenceFailedException $e) {
             $this->BcMessage->setError($e->getMessage());
             return $this->redirect(['action' => 'entry']);
@@ -81,7 +80,7 @@ class PasswordRequestsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser_core', '処理中にエラーが発生しました。'));
             return $this->redirect(['action' => 'entry']);
         }
-        $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
+        $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受け付けました。該当するメールアドレスが登録されている場合は、変更用のURLを送信しました。'));
         $this->redirect(['action' => 'entry']);
     }
 
