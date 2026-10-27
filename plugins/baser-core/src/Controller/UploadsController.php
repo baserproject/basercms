@@ -12,6 +12,7 @@
 namespace BaserCore\Controller;
 
 use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
@@ -83,7 +84,7 @@ class UploadsController extends AppController
         } else {
             if (!is_dir(TMP . 'uploads')) {
                 mkdir(TMP . 'uploads');
-                chmod(TMP . 'uploads', 0777);
+                chmod(TMP . 'uploads', BcFolder::getFolderPermission());
             }
 
             $path = TMP . 'uploads' . DS . $name;

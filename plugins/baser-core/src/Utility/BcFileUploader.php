@@ -531,7 +531,7 @@ class BcFileUploader
 
         $this->rotateImage($file['tmp_name']);
         if (copy($file['tmp_name'], $filePath)) {
-            chmod($filePath, 0666);
+            chmod($filePath, BcFolder::getFilePermission());
             return $fileName;
         } else {
             return false;
@@ -821,7 +821,7 @@ class BcFileUploader
             $ret = copy($source, $distination);
         }
         if ($ret) {
-            chmod($distination, 0666);
+            chmod($distination, BcFolder::getFilePermission());
         }
         return $ret;
     }
