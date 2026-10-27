@@ -46,7 +46,7 @@ class PermissionGroupsController extends BcAdminAppController
             $userGroupId = $service->getAvailableMinUserGroupId();
             if(!$userGroupId) {
                 $this->BcMessage->setWarning(__d('baser_core', 'アクセスルールを設定できるユーザーグループがありません。'));
-                return $this->redirect('/baser/admin');
+                return $this->redirect(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index']);
             }
         }
 

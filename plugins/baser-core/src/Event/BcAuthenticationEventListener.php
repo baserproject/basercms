@@ -100,7 +100,12 @@ class BcAuthenticationEventListener implements EventListenerInterface
             'saved' => $request->getData('saved'),
             'date' => date('Y-m-d H:i:s'),
         ]);
-        $url = Router::url('/baser/admin/baser-core/users/login_code', true);
+        $url = Router::url([
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Users',
+            'action' => 'login_code'
+        ], true);
         $redirect = $request->getQuery('redirect');
         if ($redirect) {
             $url .= '?redirect=' . urlencode($redirect);
