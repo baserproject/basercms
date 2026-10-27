@@ -303,7 +303,8 @@ class MailController extends MailFrontAppController
             $this->set($service->getViewVarsForConfirm($mailContent, $entity));
             return $this->render($service->getConfirmTemplate($mailContent));
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
+            $this->log($e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'));
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
@@ -323,7 +324,8 @@ class MailController extends MailFrontAppController
             $service->sendMail($mailContent, $entity, $sendEmailOptions);
             $this->getRequest()->getSession()->delete('BcMail.valid');
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
+            $this->log($e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'));
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/');
         }
 
