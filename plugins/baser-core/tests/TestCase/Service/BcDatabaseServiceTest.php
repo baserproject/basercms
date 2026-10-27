@@ -31,6 +31,7 @@ use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
@@ -486,6 +487,45 @@ class BcDatabaseServiceTest extends BcTestCase
             }
             $this->BcDatabaseService->resetTables($plugin);
         }
+    }
+
+    /**
+     * test _loadDefaultDataPattern
+     * 別の接続に読み込んだとき、default の接続のデータの日付を書き換えないこと
+     */
+    public function test_loadDefaultDataPatternWithOtherConnection()
+    {
+        $createdDate = '2020-01-01 00:00:00';
+        // 日付の更新は保存の検証を通るものだけが対象になるため、検証を通るデータにする
+        ContentFactory::make([
+            'id' => 100,
+            'parent_id' => 1,
+            'site_id' => 1,
+            'name' => 'test',
+            'title' => 'test',
+            'plugin' => 'BaserCore',
+            'type' => 'Page',
+            'created_date' => $createdDate,
+        ])->persist();
+
+        // テーブルの無い別の接続
+        // （ユニットテストではテーブル名のプレフィックスが接続によらず test の接続のものになるため、別の DB にする）
+        ConnectionManager::setConfig('test_other', [
+            'className' => Connection::class,
+            'driver' => Sqlite::class,
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        TableRegistry::getTableLocator()->clear();
+        try {
+            $this->execPrivateMethod($this->BcDatabaseService, '_loadDefaultDataPattern', ['default', 'BcFront', 'BaserCore', [], 'test_other']);
+        } finally {
+            TableRegistry::getTableLocator()->clear();
+            ConnectionManager::drop('test_other');
+        }
+
+        $content = ContentFactory::get(100);
+        $this->assertEquals($createdDate, $content->created_date->format('Y-m-d H:i:s'));
     }
 
     /**
