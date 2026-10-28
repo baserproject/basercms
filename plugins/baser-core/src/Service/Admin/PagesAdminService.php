@@ -61,6 +61,10 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
 		$theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'))];
 		$siteService = $this->getService(SitesServiceInterface::class);
 		$site = $siteService->findById($page->content->site_id)->first();
+		// テーマが「メインサイトに従う」の場合はメインサイトのテーマを利用する
+		if (!empty($site) && !$site->theme && $site->main_site_id) {
+			$site = $siteService->findById($site->main_site_id)->first();
+		}
 		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
 		}
@@ -99,6 +103,10 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
 		$theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'))];
 		$siteService = $this->getService(SitesServiceInterface::class);
 		$site = $siteService->findById($page->content->site_id)->first();
+		// テーマが「メインサイトに従う」の場合はメインサイトのテーマを利用する
+		if (!empty($site) && !$site->theme && $site->main_site_id) {
+			$site = $siteService->findById($site->main_site_id)->first();
+		}
 		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
 		}
