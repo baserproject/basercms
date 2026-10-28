@@ -27,14 +27,15 @@
                 <i class="bca-icon--chevron-down bca-nav-favorite-title-icon"></i>
             </button>
         </h2>
+        <!-- jQuery UI Sortable を割り当てるため、ul は作り直さず li のみ切り替える -->
         <ul
-            v-if="favorites.length"
+            ref="favoriteList"
             :style="'display:' + favoriteBoxOpened"
             class="favorite-menu-list bca-nav-favorite-list bca-collapse"
             id="favoriteBody"
         >
-            <li v-for="(favorite, i) in favorites"
-                :key="i" :id="'FavoriteRow' + favorite.id"
+            <li v-for="favorite in favorites"
+                :key="favorite.id" :id="'FavoriteRow' + favorite.id"
                 :data-id="favorite.id"
                 class="bca-nav-favorite-list-item"
                 @mousedown="changeSelected(favorite)"
@@ -43,13 +44,7 @@
                     <span class="bca-nav-favorite-list-item-label">{{ favorite.name }}</span>
                 </a>
             </li>
-        </ul>
-
-        <ul :style="'display:' + favoriteBoxOpened"
-            v-else class="favorite-menu-list bca-nav-favorite-list bca-collapse"
-            id="favoriteBody"
-        >
-            <li class="no-data"><small>{{ i18nNoData }}</small></li>
+            <li v-if="!favorites.length" class="no-data"><small>{{ i18nNoData }}</small></li>
         </ul>
 
         <div id="FavoriteDialog" class="ui-widget">
@@ -161,7 +156,73 @@ export default {
                 },
                 callback: this.contextMenuClickHandler
             });
+            // 並び替え
+            this.initSortable();
+        },
 
+        /**
+         * 並び替えを初期化
+         */
+        initSortable: function () {
+            $(this.$refs.favoriteList).sortable({
+                items: '> li:not(.no-data)',
+                scroll: true,
+                opacity: 0.80,
+                zIndex: 55,
+                containment: 'body',
+                tolerance: 'pointer',
+                distance: 5,
+                cursor: 'pointer',
+                placeholder: 'ui-widget-content placeholder',
+                revert: 100,
+                start: this.sortStartHandler,
+                stop: this.sortStopHandler
+            });
+        },
+
+        /**
+         * 並び替え開始時イベント
+         * @param event
+         * @param ui
+         */
+        sortStartHandler: function (event, ui) {
+            ui.placeholder.css('height', ui.item.height());
+            ui.item.data('startIndex', ui.item.index());
+        },
+
+        /**
+         * 並び替え終了時イベント
+         *
+         * jQuery UI による DOM の移動は取り消し、Vue のデータを並び替えて再描画させる
+         * @param event
+         * @param ui
+         */
+        sortStopHandler: function (event, ui) {
+            const startIndex = ui.item.data('startIndex');
+            const offset = ui.item.index() - startIndex;
+            $(this.$refs.favoriteList).sortable('cancel');
+            if (!offset) return;
+
+            const moved = this.favorites.splice(startIndex, 1)[0];
+            this.favorites.splice(startIndex + offset, 0, moved);
+
+            let t = this;
+            $.bcToken.check(function () {
+                $("#Waiting").show();
+                return axios.post($.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/change_sort.json", {
+                    id: moved.id,
+                    offset: offset
+                }, {
+                    headers: {
+                        "X-CSRF-Token": $.bcToken.key,
+                    }
+                }).catch(function () {
+                    alert(bcI18n.alertServerError);
+                    t.refresh();
+                }).finally(function () {
+                    $("#Waiting").hide();
+                });
+            }, {hideLoader: false});
         },
 
         /**
