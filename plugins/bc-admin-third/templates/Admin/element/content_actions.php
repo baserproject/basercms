@@ -33,7 +33,8 @@ if ($isAlias) {
       <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'), [
         'class' => 'bca-btn bca-actions__item',
         'data-bca-btn-type' => 'preview',
-        'id' => 'BtnPreview'
+        'id' => 'BtnPreview',
+        'type' => 'button'
       ]) ?>
     <?php endif ?>
     <?php echo $currentAction ?>
