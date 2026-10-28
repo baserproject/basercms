@@ -461,7 +461,7 @@ class AppControllerTest extends BcTestCase
     public function testAjaxError($errorNo, $message, $expectedOutput)
     {
         ob_start();
-        $this->AppController->ajaxError($errorNo, $message);
+        $this->execPrivateMethod($this->AppController, 'ajaxError', [$errorNo, $message]);
         $output = ob_get_clean();
 
         $response = $this->AppController->getResponse();
@@ -476,7 +476,8 @@ class AppControllerTest extends BcTestCase
             [400, 'This is an error message.', "This is an error message."],
             [404, ['Error 1', 'Error 2'], "Error 1<br>Error 2"],
             [500, [['Error 1a', 'Error 1b'], 'Error 2'], "Error 1a<br />Error 1b<br>Error 2"],
-            [500, '', '']
+            [500, '', ''],
+            [500, ['<img src=x onerror=alert(1)>', ['<b>a</b>']], "&lt;img src=x onerror=alert(1)&gt;<br>&lt;b&gt;a&lt;/b&gt;"]
         ];
     }
 
