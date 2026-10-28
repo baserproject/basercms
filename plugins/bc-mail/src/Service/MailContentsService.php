@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Table\MailContentsTable;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
@@ -71,7 +72,7 @@ class MailContentsService implements MailContentsServiceInterface
             'mail_template' => 'mail_default',
             'use_description' => true,
             'ssl_on' => false,
-            'save_info' => true
+            'save_info' => (bool)(Configure::read('BcMail.defaultSaveInfo') ?? true)
         ], [
             'validate' => false,
         ]);
