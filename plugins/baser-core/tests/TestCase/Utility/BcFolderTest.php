@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
+use Cake\Core\Configure;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -297,5 +298,87 @@ class BcFolderTest extends TestCase
 
         // Clean up
         (new BcFolder($testPath))->delete();
+    }
+
+    /**
+     * test getFolderPermission / getFilePermission
+     */
+    public function test_getPermission()
+    {
+        $folderPermission = Configure::read('BcApp.folderPermission');
+        $filePermission = Configure::read('BcApp.filePermission');
+        try {
+            // 設定が無い場合は従来どおり
+            Configure::delete('BcApp.folderPermission');
+            Configure::delete('BcApp.filePermission');
+            $this->assertEquals(0777, BcFolder::getFolderPermission());
+            $this->assertEquals(0666, BcFolder::getFilePermission());
+            // 設定がある場合はその値
+            Configure::write('BcApp.folderPermission', 0750);
+            Configure::write('BcApp.filePermission', 0640);
+            $this->assertEquals(0750, BcFolder::getFolderPermission());
+            $this->assertEquals(0640, BcFolder::getFilePermission());
+        } finally {
+            Configure::write('BcApp.folderPermission', $folderPermission);
+            Configure::write('BcApp.filePermission', $filePermission);
+        }
+    }
+
+    /**
+     * test create
+     * 権限を省略したときは BcApp.folderPermission、指定したときはその権限で作る
+     */
+    public function testCreatePermission()
+    {
+        $folderPermission = Configure::read('BcApp.folderPermission');
+        $path = TMP_TESTS . 'test';
+        try {
+            Configure::write('BcApp.folderPermission', 0750);
+            (new BcFolder($path . DS . 'default'))->create();
+            $this->assertEquals(0750, fileperms($path . DS . 'default') & 0777);
+            $this->assertEquals(0750, fileperms($path) & 0777);
+
+            (new BcFolder($path . DS . 'specified'))->create(0700);
+            $this->assertEquals(0700, fileperms($path . DS . 'specified') & 0777);
+        } finally {
+            Configure::write('BcApp.folderPermission', $folderPermission);
+            (new BcFolder($path))->delete();
+        }
+    }
+
+    /**
+     * test copy
+     * 権限を省略したときはフォルダは BcApp.folderPermission、ファイルは BcApp.filePermission、指定したときはその権限にする
+     */
+    public function test_copyPermission()
+    {
+        $folderPermission = Configure::read('BcApp.folderPermission');
+        $filePermission = Configure::read('BcApp.filePermission');
+        $path = TMP_TESTS . 'test';
+        $des = TMP_TESTS . 'test_des';
+        $des2 = TMP_TESTS . 'test_des2';
+        try {
+            (new BcFolder($path . DS . 'test1'))->create();
+            (new BcFile($path . DS . 'test.txt'))->create();
+            (new BcFile($path . DS . 'test1' . DS . 'test1.txt'))->create();
+            Configure::write('BcApp.folderPermission', 0750);
+            Configure::write('BcApp.filePermission', 0640);
+
+            $this->assertTrue((new BcFolder($path))->copy($des));
+            $this->assertEquals(0750, fileperms($des) & 0777);
+            $this->assertEquals(0750, fileperms($des . DS . 'test1') & 0777);
+            $this->assertEquals(0640, fileperms($des . DS . 'test.txt') & 0777);
+            $this->assertEquals(0640, fileperms($des . DS . 'test1' . DS . 'test1.txt') & 0777);
+
+            $this->assertTrue((new BcFolder($path))->copy($des2, 0700));
+            $this->assertEquals(0700, fileperms($des2) & 0777);
+            $this->assertEquals(0700, fileperms($des2 . DS . 'test.txt') & 0777);
+        } finally {
+            Configure::write('BcApp.folderPermission', $folderPermission);
+            Configure::write('BcApp.filePermission', $filePermission);
+            (new BcFolder($path))->delete();
+            (new BcFolder($des))->delete();
+            (new BcFolder($des2))->delete();
+        }
     }
 }

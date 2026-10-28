@@ -883,7 +883,7 @@ class PluginsService implements PluginsServiceInterface
         if (is_dir(TMP . 'update')) {
             (new BcFolder(TMP . 'update'))->delete();
         }
-        mkdir(TMP . 'update', 0777);
+        mkdir(TMP . 'update', BcFolder::getFolderPermission());
         if (!is_dir(TMP . 'update' . DS . 'vendor')) {
             $folder = new BcFolder(ROOT . DS . 'vendor');
             $folder->copy(TMP . 'update' . DS . 'vendor');
