@@ -257,8 +257,13 @@ class AppTable extends Table
      */
     public function getMax(string $field, array $conditions = []): int
     {
-        $max = $this->find()->where($conditions)->all()->max($field);
-        return $max->{$field} ?? 0;
+        $query = $this->find();
+        $max = $query
+            ->select(['max_value' => $query->func()->max($this->aliasField($field))])
+            ->where($conditions)
+            ->disableHydration()
+            ->first();
+        return (int)($max['max_value'] ?? 0);
     }
 
     /**
