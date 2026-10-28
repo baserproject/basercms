@@ -331,6 +331,39 @@ class BlogCommentsServiceTest extends BcTestCase
     }
 
     /**
+     * test add
+     * 関連テーブルのデータを送っても、ブログ記事は作成・更新されない
+     */
+    public function testAddIgnoresAssociatedData()
+    {
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
+        $data = [
+            'name' => 'baserCMS',
+            'message' => 'test',
+            'blog_post' => [
+                'blog_content_id' => 1,
+                'title' => 'injected',
+                'user_id' => 1,
+                'status' => true,
+                'posted' => '2024-01-01 00:00:00',
+            ],
+        ];
+        $result = $this->BlogCommentsService->add(1, 1, $data);
+
+        $this->assertEquals(1, $result->blog_post_id);
+        $this->assertEquals(1, BlogPostFactory::count());
+        $this->assertNotEquals('injected', BlogPostFactory::get(1)->title);
+    }
+
+    /**
      * test sendCommentToAdmin
      */
     public function testSendCommentToAdmin()
