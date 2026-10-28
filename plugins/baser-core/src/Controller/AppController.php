@@ -618,7 +618,7 @@ class AppController extends BaseController
      * @noTodo
      * @unitTest
      */
-    public function ajaxError(int $errorNo = 500, $message = '')
+    protected function ajaxError(int $errorNo = 500, $message = '')
     {
         $this->response = $this->getResponse()->withStatus($errorNo);
         if (!$message) return;
@@ -626,9 +626,9 @@ class AppController extends BaseController
         $aryMessage = [];
         foreach($message as $value) {
             if (is_array($value)) {
-                $aryMessage[] = implode('<br />', $value);
+                $aryMessage[] = implode('<br />', array_map('h', $value));
             } else {
-                $aryMessage[] = $value;
+                $aryMessage[] = h($value);
             }
         }
         echo implode('<br>', $aryMessage);
