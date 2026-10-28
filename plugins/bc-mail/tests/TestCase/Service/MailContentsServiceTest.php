@@ -76,6 +76,13 @@ class MailContentsServiceTest extends BcTestCase
         $this->assertCount(1, $rs);
         $this->assertEquals('description test', $rs[0]->description);
         $this->assertEquals('お問い合わせ', $rs[0]->content->title);
+        $this->assertNotContains('sender_1', $rs[0]->getHidden());
+
+        // 公開データとして取得する場合は、通知先と BCC のメールアドレスを返さない
+        $rs = $this->MailContentsService->getIndex(['status' => 'publish'])->toArray();
+        $this->assertCount(1, $rs);
+        $this->assertContains('sender_1', $rs[0]->getHidden());
+        $this->assertContains('sender_2', $rs[0]->getHidden());
     }
 
     /**

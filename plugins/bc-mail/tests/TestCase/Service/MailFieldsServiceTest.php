@@ -77,6 +77,13 @@ class MailFieldsServiceTest extends BcTestCase
         $this->loadFixtureScenario(MailContentsScenario::class);
         $result = $this->MailFieldsService->get(1);
         $this->assertEquals(1, $result->id);
+        $this->assertNotContains('sender_1', $result->mail_content->getHidden());
+
+        // 公開データとして取得する場合は、関連するメールコンテンツの通知先と BCC のメールアドレスを返さない
+        $result = $this->MailFieldsService->get(1, ['status' => 'publish']);
+        $this->assertContains('sender_1', $result->mail_content->getHidden());
+        $this->assertContains('sender_2', $result->mail_content->getHidden());
+
         $this->expectException(RecordNotFoundException::class);
         $result = $this->MailFieldsService->get(99);
     }
