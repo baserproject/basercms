@@ -162,15 +162,17 @@ class SeoHelper extends Helper
                         'CustomLinks.custom_table_id' => $customContent->custom_table_id,
                         'CustomLinks.name' => $field,
                     ])->first();
-                    // フィールドと、その詳しい設定が見つかった場合のみ
+                // フィールドと、その詳しい設定が見つかった場合のみ
                 if ($customLink && $customLink->custom_field) {
                     $customField = $customLink->custom_field;
                     // フィールド設定から関連先のカスタムテーブルIDを取得（取得できない場合は 0）
                     $relatedTableId = (int)($customField->meta['BcCcRelated']['custom_table_id'] ?? 0);
                     // 関連データのフィールドで、関連先テーブルが設定されている場合のみ
                     if ($customField->type === 'BcCcRelated' && $relatedTableId) {
-                        // 関連先エントリーのSEO設定を最後に積み、自身の設定として最優先にする
-                        $metaValueLayers[] = $this->getMetaValues('CustomEntries', $relatedTableId, (int)$value);
+                        // 関連先エントリーのSEO設定を取得する
+                        $metaValueLayers = [$this->getMetaValues('CustomEntries', $relatedTableId, (int)$value)];
+                        // 親側のSEO設定は全て削除する
+                        $contentValues = [];
                     }
                 }
             }
