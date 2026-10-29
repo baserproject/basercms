@@ -146,6 +146,38 @@ class SeoHelper extends Helper
             }
         }
 
+        // カスタムコンテンツのアーカイブ（関連データのカテゴリ）
+        // 関連先エントリーのSEO設定で上書きする
+        if ($controller === 'CustomContent' && $action === 'archives') {
+            // URLから、フィールド名と関連先エントリーのIDに分ける
+            [$field, $value] = $this->getView()->getRequest()->getParam('pass');
+            // フィールドを探す対象のカスタムテーブルを特定するため、カスタムコンテンツの情報を取り出す
+            $customContent = $this->getView()->get('customContent');
+            // フィールド名が存在する、エントリーのIDが数字、カスタムコンテンツの情報がある場合
+            if ($field && ctype_digit((string)$value) && $customContent) {
+                // カスタムコンテンツが使っているカスタムテーブルのフィールド一覧から、フィールド名が一致するものを、詳しい設定（種類・関連先）と合わせて1件取得
+                $customLink = TableRegistry::getTableLocator()->get('BcCustomContent.CustomLinks')->find()
+                    ->contain(['CustomFields'])
+                    ->where([
+                        'CustomLinks.custom_table_id' => $customContent->custom_table_id,
+                        'CustomLinks.name' => $field,
+                    ])->first();
+                // フィールドと、その詳しい設定が見つかった場合のみ
+                if ($customLink && $customLink->custom_field) {
+                    $customField = $customLink->custom_field;
+                    // フィールド設定から関連先のカスタムテーブルIDを取得（取得できない場合は 0）
+                    $relatedTableId = (int)($customField->meta['BcCcRelated']['custom_table_id'] ?? 0);
+                    // 関連データのフィールドで、関連先テーブルが設定されている場合のみ
+                    if ($customField->type === 'BcCcRelated' && $relatedTableId) {
+                        // 関連先エントリーのSEO設定を取得する
+                        $metaValueLayers = [$this->getMetaValues('CustomEntries', $relatedTableId, (int)$value)];
+                        // 親側のSEO設定は全て削除する
+                        $contentValues = [];
+                    }
+                }
+            }
+        }
+
         // 複数の要素の設定をマージ
         $self = array_pop($metaValueLayers);
         $metaValues = [];
