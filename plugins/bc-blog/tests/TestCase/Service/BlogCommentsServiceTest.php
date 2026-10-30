@@ -20,6 +20,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -115,6 +116,17 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->assertEquals(1, $comment->id);
         // BlogPostsのデータが含まれるテスト
         $this->assertEquals(1, $comment->blog_post->id);
+
+        // 公開データとして取得する場合は、投稿者のメールアドレスと記事の草稿を返さない
+        $comment = $this->BlogCommentsService->get(1, ['status' => 'publish']);
+        $this->assertContains('email', $comment->getHidden());
+        $this->assertContains('content_draft', $comment->blog_post->getHidden());
+        $this->assertContains('detail_draft', $comment->blog_post->getHidden());
+
+        // 非公開の記事に付いたコメントは公開データとして取得できない
+        $this->getTableLocator()->get('BcBlog.BlogPosts')->updateAll(['status' => false], ['id' => 1]);
+        $this->expectException(RecordNotFoundException::class);
+        $this->BlogCommentsService->get(1, ['status' => 'publish']);
     }
 
     /**

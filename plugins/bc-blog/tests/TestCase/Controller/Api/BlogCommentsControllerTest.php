@@ -146,6 +146,10 @@ class BlogCommentsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(1, $result->blogComment->id);
         $this->assertEquals('ホームページの開設おめでとうございます。（ダミー）', $result->blogComment->message);
+        // 投稿者のメールアドレスと記事の草稿を返さない
+        $this->assertObjectNotHasProperty('email', $result->blogComment);
+        $this->assertObjectNotHasProperty('content_draft', $result->blogComment->blog_post);
+        $this->assertObjectNotHasProperty('detail_draft', $result->blogComment->blog_post);
     }
 
 }

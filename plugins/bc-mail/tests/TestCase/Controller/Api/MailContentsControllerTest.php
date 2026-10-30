@@ -66,6 +66,9 @@ class MailContentsControllerTest extends BcTestCase
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertCount(1, $result->mailContents);
+        // 通知先と BCC のメールアドレスを返さない
+        $this->assertObjectNotHasProperty('sender_1', $result->mailContents[0]);
+        $this->assertObjectNotHasProperty('sender_2', $result->mailContents[0]);
 
         //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
         $this->get('/baser/api/bc-mail/mail_contents/index.json?status=unpublish');

@@ -86,6 +86,9 @@ class MailFieldsControllerTest extends BcTestCase
         $this->assertEquals('性', $result->mailField->name);
         $this->assertEquals('text', $result->mailField->type);
         $this->assertEquals('お名前', $result->mailField->head);
+        // 関連するメールコンテンツの通知先と BCC のメールアドレスを返さない
+        $this->assertObjectNotHasProperty('sender_1', $result->mailField->mail_content);
+        $this->assertObjectNotHasProperty('sender_2', $result->mailField->mail_content);
     }
 
 }

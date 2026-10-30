@@ -218,6 +218,13 @@ class MailContentsService implements MailContentsServiceInterface
         }
 
         if (!is_null($options['limit'])) $query->limit($options['limit']);
+        if ($options['status'] === 'publish') {
+            // 公開データでは、通知先と BCC のメールアドレスを返さない（プロパティとしては参照できる）
+            $query->formatResults(fn($results) => $results->map(function ($mailContent) {
+                $mailContent->setHidden(['sender_1', 'sender_2'], true);
+                return $mailContent;
+            }));
+        }
         return $query->where($conditions);
     }
 
