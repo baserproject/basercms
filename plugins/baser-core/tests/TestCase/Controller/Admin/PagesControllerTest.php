@@ -17,6 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PagesScenario;
 use BaserCore\Test\Scenario\PluginsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Utility\BcEditSession;
@@ -210,6 +211,25 @@ class PagesControllerTest extends BcTestCase
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
         $this->assertEquals('testEdit', $this->PagesService->get($id)->page_template);
         $this->assertEquals('pageTestUpdate', $this->PagesService->get($id)->content->name);
+    }
+
+    /**
+     * 編集画面の「その他情報」に出すプラグイン名はエスケープして表示する
+     */
+    public function testEditEscapesContentPlugin()
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $page = $this->PagesService->get(16);
+        $this->getTableLocator()->get('BaserCore.Contents')->updateAll(
+            ['plugin' => 'BaserCore<b>x</b>'],
+            ['id' => $page->content->id]
+        );
+        SiteConfigFactory::make(['name' => 'editor', 'value' => 'BaserCore.BcCkeditor'])->persist();
+        BcEditSession::clear('page', $page->id);
+        $this->get('/baser/admin/baser-core/pages/edit/' . $page->id);
+        $this->assertResponseOk();
+        $this->assertResponseContains('BaserCore&lt;b&gt;x&lt;/b&gt;');
+        $this->assertResponseNotContains('BaserCore<b>x</b>');
     }
 
     /**

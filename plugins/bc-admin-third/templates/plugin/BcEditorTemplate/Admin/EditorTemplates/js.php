@@ -34,11 +34,11 @@ templates:[
 <?php if ($templates): ?>
   <?php foreach($templates as $key => $template): ?>
     {
-    title:<?php echo json_encode((string)$template->name, $jsFlags) ?>,
+    title:<?php echo json_encode(h((string)$template->name), $jsFlags) ?>,
     <?php if ($template->image && file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template->image)): ?>
-      image:<?php echo json_encode((string)$template->image, $jsFlags) ?>,
+      image:<?php echo json_encode(h((string)$template->image), $jsFlags) ?>,
     <?php endif ?>
-    description:<?php echo json_encode(preg_replace("/(\n|\r)/", "", nl2br((string)$template->description)), $jsFlags) ?>,
+    description:<?php echo json_encode(preg_replace("/(\n|\r)/", "", nl2br(h((string)$template->description))), $jsFlags) ?>,
     html:<?php echo json_encode(preg_replace('/(\n|\r)/', '', (string)$template->html), $jsFlags) ?>
     }<?php if (!$this->BcArray->last($templates, $key)): ?>, <?php endif ?>
   <?php endforeach ?>

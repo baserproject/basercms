@@ -488,7 +488,7 @@ class BurgerEditorController extends BcAdminAppController
                     $fileList[] = [
                         'url' => h($this->BurgerEditorService->getImageFileBaseURL() . BurgerEditorUtil::mb_basename($filePath)),
                         'fileId' => $fileId,
-                        'name' => mb_convert_encoding($filename, 'UTF-8', 'UTF-8'),  // 文字化けファイルがアップロードされた場合JSONが変換できないためUTF-8として読み込める文字に変換
+                        'name' => h(mb_convert_encoding($filename, 'UTF-8', 'UTF-8')),  // 文字化けファイルがアップロードされた場合JSONが変換できないためUTF-8として読み込める文字に変換
                         'filetime' => date('Y/m/d H:i', filemtime($filePath)),
                         'size' => filesize($filePath),
                         'original' => $orgImage,
@@ -557,7 +557,7 @@ class BurgerEditorController extends BcAdminAppController
                     $fileList[] = [
                         'url' => h(Router::url($urlAry)),
                         'fileId' => $fileId,
-                        'name' => mb_convert_encoding($filename, 'UTF-8', 'UTF-8'), // 文字化けファイルがアップロードされた場合JSONが変換できないためUTF-8として読み込める文字に変換
+                        'name' => h(mb_convert_encoding($filename, 'UTF-8', 'UTF-8')), // 文字化けファイルがアップロードされた場合JSONが変換できないためUTF-8として読み込める文字に変換
                         'filetime' => date('Y/m/d H:i', filemtime($filePath)),
                         'size' => filesize($filePath)
                     ];

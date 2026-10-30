@@ -165,7 +165,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
     <td class="col-input bca-form-table__input">
 			<span id="UploaderFileUserName<?php echo $listId ?>">
 			<?php if (!$popup): ?>
-        <?php echo $this->BcText->arrayValue($uploaderFile->user_id, $users) ?>
+        <?php echo h($this->BcText->arrayValue($uploaderFile->user_id, $users)) ?>
       <?Php endif ?>
 			</span>
       <?php echo $this->BcAdminForm->control('user_id', [
