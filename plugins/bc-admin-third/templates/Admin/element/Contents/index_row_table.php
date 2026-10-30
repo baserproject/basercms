@@ -223,7 +223,7 @@ if ($content->self_status) {
     <!-- コピーのみ使うフォーム -->
     <form>
       <input type="hidden" name="id" value="<?= $content->id ?>">
-      <input type="hidden" name="type" value="<?= $content->type ?>">
+      <input type="hidden" name="type" value="<?= h($content->type) ?>">
       <input type="hidden" name="entity_id" value="<?= $content->entity_id ?>">
       <input type="hidden" name="parent_id" value="<?= $content->parent_id ?>">
       <input type="hidden" name="site_id" value="<?= $content->site_id ?>">

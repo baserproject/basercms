@@ -99,12 +99,14 @@ class BcCcMultipleHelper extends Helper
 		$selector = $this->textToArray($link->custom_field->source);
 		$checked = [];
 		if (!empty($fieldValue)) {
-			if (is_array($fieldValue)) {
-				foreach($fieldValue as $check) {
-					$checked[] = $this->arrayValue($check, $selector);
-				}
-			} else {
-				$checked[] = $fieldValue;
+			// タイプ変更前の値などで文字列が保存されている場合も、選択肢のキーとして扱う
+			if (!is_array($fieldValue)) $fieldValue = [$fieldValue];
+			foreach($fieldValue as $check) {
+				if (!is_scalar($check)) continue;
+				$label = $this->arrayValue($check, $selector);
+				// 選択肢にない値は表示しない
+				if ($label === '') continue;
+				$checked[] = $label;
 			}
 		}
 		return implode($options['separator'], $checked);

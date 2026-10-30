@@ -317,6 +317,97 @@ class CustomContentHelperTest extends BcTestCase
     }
 
     /**
+     * test getFieldValue
+     *
+     * 関連データの表示名は、デフォルトでエスケープされる
+     */
+    public function test_getFieldValue_escapesRelatedDisplayField()
+    {
+        Configure::write('BcCustomContent.fieldTypes.BcCcRelated', ['category' => '選択', 'label' => '関連データ', 'columnType' => 'string', 'controlType' => 'select', 'preview' => true, 'loop' => true]);
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContentsService = $this->getService(CustomContentsServiceInterface::class);
+
+        $customTable->create(['id' => 1, 'type' => 'recruit_category', 'name' => 'recruit_categories', 'display_field' => 'name']);
+        CustomContentFactory::make(['id' => 1, 'custom_table_id' => 1])->persist();
+        ContentFactory::make(['id' => 100, 'plugin' => 'BcCustomContent', 'type' => 'CustomContent', 'site_id' => 1, 'entity_id' => 1])->persist();
+        CustomFieldFactory::make(['id' => 1, 'name' => 'recruit_category', 'type' => 'BcCcRelated', 'meta' => '{"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""}}'])->persist();
+        CustomEntryFactory::make(['id' => 1, 'custom_table_id' => 1, 'name' => '<b>プログラマー</b>'])->persist();
+        CustomEntryFactory::make(['id' => 2, 'custom_table_id' => 1, 'name' => '<i>デザイナー</i>'])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'recruit_category',
+            'display_front' => true
+        ])->persist();
+
+        $customContent = $customContentsService->get(1);
+        $view = new View($this->getRequest('/')->withAttribute('currentContent', $customContent->content));
+        $this->CustomContentHelper = new CustomContentHelper($view);
+
+        // 単一
+        $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => 1], 'recruit_category');
+        $this->assertEquals('&lt;b&gt;プログラマー&lt;/b&gt;', $rs);
+        // 複数
+        $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => [1, 2]], 'recruit_category');
+        $this->assertEquals('&lt;b&gt;プログラマー&lt;/b&gt; / &lt;i&gt;デザイナー&lt;/i&gt;', $rs);
+        // escape=false でタグを保持
+        $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => 1], 'recruit_category', ['escape' => false]);
+        $this->assertEquals('<b>プログラマー</b>', $rs);
+
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
+     * test getFieldValue
+     *
+     * マルチチェックボックスは選択肢のラベルを返し、選択肢にない値は表示しない
+     * @param mixed $fieldValue
+     * @param string $expect
+     * @dataProvider getFieldValueMultipleDataProvider
+     */
+    public function test_getFieldValue_multiple($fieldValue, $expect)
+    {
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customContentsService = $this->getService(CustomContentsServiceInterface::class);
+
+        $customTable->create(['id' => 1, 'type' => 'recruit_category', 'name' => 'recruit_categories', 'display_field' => 'name']);
+        CustomContentFactory::make(['id' => 1, 'custom_table_id' => 1])->persist();
+        ContentFactory::make(['id' => 100, 'plugin' => 'BcCustomContent', 'type' => 'CustomContent', 'site_id' => 1, 'entity_id' => 1])->persist();
+        CustomFieldFactory::make(['id' => 1, 'name' => 'recruit_category', 'type' => 'BcCcMultiple', 'source' => "東京:1\n大阪:2\n福岡:3"])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'recruit_category',
+            'display_front' => true
+        ])->persist();
+
+        $customContent = $customContentsService->get(1);
+        $view = new View($this->getRequest('/')->withAttribute('currentContent', $customContent->content));
+        $this->CustomContentHelper = new CustomContentHelper($view);
+
+        $rs = $this->CustomContentHelper->getFieldValue(['custom_table_id' => 1, 'recruit_category' => $fieldValue], 'recruit_category');
+        $this->assertSame($expect, $rs);
+
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    public static function getFieldValueMultipleDataProvider()
+    {
+        return [
+            [['1', '3'], '東京 / 福岡'], // 配列はラベルに変換する
+            ['2', '大阪'], // 文字列も選択肢のキーとして扱う
+            [['1', '9', '3'], '東京 / 福岡'], // 選択肢にない値は表示しない
+            ['<img src=x onerror=alert(1)>', ''], // 選択肢にない文字列は表示しない
+            [['1', ['2']], '東京'], // 入れ子の配列は無視する
+            ['', ''],
+        ];
+    }
+
+    /**
      * test getLink
      */
     public function test_getLink()
