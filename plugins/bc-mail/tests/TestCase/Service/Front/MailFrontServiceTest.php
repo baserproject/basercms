@@ -349,6 +349,10 @@ class MailFrontServiceTest extends BcTestCase
         ];
         $result = $this->execPrivateMethod($this->MailFrontService, '_checkDirectoryRraversal', [1, $postData]);
         $this->assertTrue($result);
+
+        // 使う項目が 0 件のフォームは、検証するファイルが無いため通す
+        $result = $this->execPrivateMethod($this->MailFrontService, '_checkDirectoryRraversal', [999, ['name_1' => '1']]);
+        $this->assertTrue($result);
     }
 
     /**
