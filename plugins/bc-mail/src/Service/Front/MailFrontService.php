@@ -431,11 +431,17 @@ class MailFrontService implements MailFrontServiceInterface
     private function _checkDirectoryRraversal(int $mailContentId, array $postData)
     {
         $mailFields = $this->getMailFields($mailContentId);
+        // ファイル項目が無い場合（使う項目が 0 件のフォームを含む）は、検証するファイルが無いため通す
+        $hasFileField = false;
+        foreach($mailFields as $mailField) {
+            if ($mailField->type === 'file') {
+                $hasFileField = true;
+                break;
+            }
+        }
+        if (!$hasFileField) return true;
         $mailMessagesTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-        if (
-            !$mailFields
-            || empty($mailMessagesTable->getBehavior('BcUpload')->getSettings())
-        ) {
+        if (empty($mailMessagesTable->getBehavior('BcUpload')->getSettings())) {
             return false;
         }
         foreach($mailFields as $mailField) {
