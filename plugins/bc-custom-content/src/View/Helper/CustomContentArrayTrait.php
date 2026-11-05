@@ -70,7 +70,14 @@ trait CustomContentArrayTrait
         // 分割（結果は配列に入る）
         // 文字によっては文字化けを起こして正しく配列に変換されない
         // preg系は、UTF8文字列を扱う場合はu修飾子が必要
-        $str = preg_split('/[\s,]+/u', $str);
+        if (preg_match('/\R/u', $str)) {
+            // 改行を含む場合は改行だけで分割し、空白を含む選択肢（例: B to B）を扱えるようにする
+            // 改行コードの違い（\r\n・\n・\r）は \R で吸収する
+            $str = array_values(array_filter(array_map('trim', preg_split('/\R/u', $str)), fn($v) => $v !== ''));
+        } else {
+            // 1 行の場合は、従来どおり空白とカンマでも分割する
+            $str = preg_split('/[\s,]+/u', $str);
+        }
         // 区切り文字を利用して、キーと値を指定する場合の処理
         $keyValueArray = [];
         foreach($str as $key => $value) {
