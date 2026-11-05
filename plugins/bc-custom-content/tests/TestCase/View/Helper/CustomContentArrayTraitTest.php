@@ -71,5 +71,17 @@ class CustomContentArrayTraitTest extends BcTestCase
          */
         $str = "item:item1";
         $this->assertEquals(['item1' => 'item'], $this->textToArray($str));
+        /**
+         * 改行を含む場合は改行だけで分割し、空白を含む選択肢を扱える
+         */
+        $str = "B to B\r\nB to C\n\n 東京 本社 \n";
+        $this->assertEquals(['B to B' => 'B to B', 'B to C' => 'B to C', '東京 本社' => '東京 本社'],
+            $this->textToArray($str));
+        /**
+         * 1 行の場合は従来どおり空白とカンマでも分割する
+         */
+        $str = "value1,value2 value3";
+        $this->assertEquals(['value1' => 'value1', 'value2' => 'value2', 'value3' => 'value3'],
+            $this->textToArray($str));
     }
 }
