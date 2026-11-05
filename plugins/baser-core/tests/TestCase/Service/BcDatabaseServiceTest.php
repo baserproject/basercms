@@ -541,6 +541,46 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test getCreatedTableNames
+     */
+    public function test_getCreatedTableNames()
+    {
+        $path = TMP . 'created_table_names_test' . DS;
+        (new BcFolder($path))->create();
+
+        // ファイル名が Create<テーブル名> の形
+        file_put_contents($path . '20250812000001_CreateOauth2Clients.php', "<?php\n\$this->table('oauth2_clients')->create();\n");
+        $this->assertEquals(['oauth2_clients'], $this->BcDatabaseService->getCreatedTableNames($path . '20250812000001_CreateOauth2Clients.php'));
+
+        // ファイル名からテーブル名が分からないマイグレーション
+        file_put_contents($path . '20241029072441_Initial.php', "<?php\n\$this->table('seo_metas')->addColumn('a', 'string')->create();\n\$this->table('seo_metas')->drop()->save();\n");
+        $this->assertEquals(['seo_metas'], $this->BcDatabaseService->getCreatedTableNames($path . '20241029072441_Initial.php'));
+
+        // 作成と既存のテーブルの変更が同じファイルにある場合は、作成するテーブルだけを対象にする
+        file_put_contents($path . '20261105000001_Initial.php', "<?php\n\$this->table('contents')->addColumn('a', 'string')->update();\n\$table = \$this->table('sample_items');\n\$table->addColumn('name', 'string');\n\$table->create();\n");
+        $this->assertEquals(['sample_items'], $this->BcDatabaseService->getCreatedTableNames($path . '20261105000001_Initial.php'));
+
+        // テーブルを作成しないマイグレーションは対象外
+        file_put_contents($path . '20210814053607_AlterUrlOnContents.php', "<?php\n\$this->table('contents')->changeColumn('url', 'text')->update();\n");
+        $this->assertEquals([], $this->BcDatabaseService->getCreatedTableNames($path . '20210814053607_AlterUrlOnContents.php'));
+
+        (new BcFolder($path))->delete();
+    }
+
+    /**
+     * test getAppTableList - ファイル名が Create<テーブル名> の形でないマイグレーションのテーブルも含む
+     */
+    public function test_getAppTableList_includesTablesFromMigrationSource()
+    {
+        $this->BcDatabaseService->clearAppTableList();
+        $result = $this->BcDatabaseService->getAppTableList();
+        $this->assertContains('two_factor_authentications', $result['BaserCore']);
+        $this->assertContains('plugins', $result['BaserCore']);
+        $this->assertArrayHasKey('BcSeo', $result);
+        $this->assertContains('seo_metas', $result['BcSeo']);
+    }
+
+    /**
      * test _convertFieldToCsv
      * @param $value
      * @param $expected
@@ -556,6 +596,12 @@ class BcDatabaseServiceTest extends BcTestCase
     {
         return [
             ['test', '"test"'],
+            // 0 は空にせず "0" として書き出す（復元時に NULL にならないように）
+            [0, '"0"'],
+            ['0', '"0"'],
+            [null, ''],
+            ['', ''],
+            [false, ''],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
             // 数式として解釈され得る値にはシングルクォートを前置する
