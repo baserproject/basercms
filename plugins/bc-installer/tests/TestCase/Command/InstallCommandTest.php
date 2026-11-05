@@ -93,4 +93,33 @@ class InstallCommandTest extends BcTestCase
         $this->assertEquals('BcSample.default', $options['data']->defaultValue());
     }
 
+    /**
+     * test createEnvFile
+     */
+    public function test_createEnvFile()
+    {
+        // 本物の config/.env に触れないよう、一時フォルダで確かめる
+        $configPath = TMP . 'install_command_env_test' . DS;
+        if (!is_dir($configPath)) mkdir($configPath, 0777, true);
+        @unlink($configPath . '.env');
+        @unlink($configPath . '.env.example');
+
+        // .env.example が無い場合は作成できない
+        $this->assertFalse($this->InstallCommand->createEnvFile($configPath));
+
+        // .env が無い場合は .env.example から作成する
+        file_put_contents($configPath . '.env.example', 'export INSTALL_MODE="true"');
+        $this->assertTrue($this->InstallCommand->createEnvFile($configPath));
+        $this->assertEquals('export INSTALL_MODE="true"', file_get_contents($configPath . '.env'));
+
+        // 既に .env がある場合は上書きしない
+        file_put_contents($configPath . '.env', 'export INSTALL_MODE="false"');
+        $this->assertTrue($this->InstallCommand->createEnvFile($configPath));
+        $this->assertEquals('export INSTALL_MODE="false"', file_get_contents($configPath . '.env'));
+
+        unlink($configPath . '.env');
+        unlink($configPath . '.env.example');
+        rmdir($configPath);
+    }
+
 }
