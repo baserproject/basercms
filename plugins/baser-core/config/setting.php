@@ -379,10 +379,15 @@ return [
             '.gitattributes',
             '.gitignore',
             'monorepo-builder.php',
-            'phpdoc.dist.xml'.
+            'phpdoc.dist.xml',
             'phpstan.neon',
             'phpunit.xml.dist',
-            'phpdoc.dist.xml'
+            // AI エージェント向けの開発用ファイル
+            '.claude',
+            '.agents',
+            'CLAUDE.md',
+            'AGENTS.md',
+            'skills-lock.json'
         ],
 
         /**
