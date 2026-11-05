@@ -356,6 +356,11 @@ class CustomEntriesServiceTest extends BcTestCase
         $this->assertCount(1, $page2);
         //2ページ目には1ページ目と異なるデータが返る
         $this->assertNotContains($page2[0]->id, [$page1[0]->id, $page1[1]->id]);
+        //正の整数でない page は無視して 1 ページ目を返す
+        foreach(['abc', '-1', 0, '1.5'] as $invalidPage) {
+            $result = $this->CustomEntriesService->getIndex($params + ['page' => $invalidPage])->all()->toArray();
+            $this->assertEquals(array_column($page1, 'id'), array_column($result, 'id'));
+        }
 
         //limitがない場合、pageパラメータは無視する
         $result = $this->CustomEntriesService->getIndex(['page' => 2])->all();
