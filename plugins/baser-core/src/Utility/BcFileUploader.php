@@ -226,6 +226,29 @@ class BcFileUploader
     }
 
     /**
+     * 保存済みの値（保存先からの相対パス）として妥当な文字列か判定する
+     *
+     * subdirDateFormat が設定されている場合、保存済みの値は「2026/11/ファイル名」のように
+     * サブディレクトリを含むため、`/` で区切った各要素をファイル名として判定する。
+     * 空の要素（先頭の `/` や `//`）と `.` の要素は不正とみなす。
+     * subdirDateFormat が無い場合は isValidFileName() と同じ判定を行う。
+     *
+     * @param string $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isValidStoredFileName(string $value): bool
+    {
+        if (empty($this->settings['subdirDateFormat'])) return self::isValidFileName($value);
+        foreach(explode('/', $value) as $part) {
+            if ($part === '' || $part === '.' || !self::isValidFileName($part)) return false;
+        }
+        return true;
+    }
+
+    /**
      * アップロードされたファイルの拡張子を取得する
      *
      * ファイル名に拡張子が含まれる場合はそれを正とし（小文字に統一）、
@@ -264,7 +287,8 @@ class BcFileUploader
             // ファイル名として妥当でない値（ディレクトリ区切り・引用符・タグ・制御文字を含む値）を
             // 保存させない。任意文字列を保存できると、表示時に属性から脱出する格納型 XSS や
             // パストラバーサルに悪用される
-            if (isset($data[$name]) && is_string($data[$name]) && $data[$name] !== '' && !self::isValidFileName($data[$name])) {
+            // subdirDateFormat が設定されている場合は、サブディレクトリを含む保存済みの値を許可する
+            if (isset($data[$name]) && is_string($data[$name]) && $data[$name] !== '' && !$this->isValidStoredFileName($data[$name])) {
                 $data[$name] = '';
             }
             if (!empty($data[$name]) && (is_array($data[$name]) || $data[$name] instanceof \Laminas\Diactoros\UploadedFile)) {
