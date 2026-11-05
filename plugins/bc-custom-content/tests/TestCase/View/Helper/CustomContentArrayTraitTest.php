@@ -77,6 +77,9 @@ class CustomContentArrayTraitTest extends BcTestCase
         $str = "B to B\r\nB to C\n\n 東京 本社 \n";
         $this->assertEquals(['B to B' => 'B to B', 'B to C' => 'B to C', '東京 本社' => '東京 本社'],
             $this->textToArray($str));
+        // 改行が \r だけの場合も改行で分割する
+        $str = "B to B\rB to C";
+        $this->assertEquals(['B to B' => 'B to B', 'B to C' => 'B to C'], $this->textToArray($str));
         /**
          * 1 行の場合は従来どおり空白とカンマでも分割する
          */
