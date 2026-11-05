@@ -502,6 +502,56 @@ class CustomEntriesServiceTest extends BcTestCase
     }
 
     /**
+     * test createIndexConditions - セレクトボックス・テキストの項目に配列を渡した場合
+     */
+    public function test_createIndexConditions_arrayValue()
+    {
+        Configure::write('BcCustomContent.fieldTypes.BcCcSelect.controlType', 'select');
+        Configure::write('BcCustomContent.fieldTypes.BcCcText.controlType', 'text');
+
+        //準備
+        $CustomEntries = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $this->CustomEntriesService->setup(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+
+        CustomFieldFactory::make(['id' => 100, 'name' => 'select_field', 'type' => 'BcCcSelect'])->persist();
+        CustomLinkFactory::make(['custom_table_id' => 1, 'custom_field_id' => 100, 'name' => 'select_field'])->persist();
+        CustomFieldFactory::make(['id' => 101, 'name' => 'text_field', 'type' => 'BcCcText'])->persist();
+        CustomLinkFactory::make(['custom_table_id' => 1, 'custom_field_id' => 101, 'name' => 'text_field'])->persist();
+
+        //配列の場合は IN 条件になること
+        $query = $CustomEntries->find();
+        $result = $this->CustomEntriesService->createIndexConditions($query, ['select_field' => ['a', 'b']]);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('select_field IN', $whereSql);
+
+        //単一の値の場合は一致条件のままであること
+        $query = $CustomEntries->find();
+        $result = $this->CustomEntriesService->createIndexConditions($query, ['select_field' => 'a']);
+        $whereSql = $result->clause('where')->sql(new ValueBinder());
+        $this->assertStringContainsString('select_field =', $whereSql);
+
+        //空の配列とテキストの項目への配列は検索条件にしないこと
+        $query = $CustomEntries->find();
+        $result = $this->CustomEntriesService->createIndexConditions($query, ['select_field' => [], 'text_field' => ['a']]);
+        $where = $result->clause('where');
+        $whereSql = $where ? $where->sql(new ValueBinder()) : '';
+        $this->assertStringNotContainsString('select_field', $whereSql);
+        $this->assertStringNotContainsString('text_field', $whereSql);
+    }
+
+    /**
      * test getList
      */
     public function test_getList()
