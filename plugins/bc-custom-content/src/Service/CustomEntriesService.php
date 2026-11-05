@@ -190,6 +190,10 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             $query->orderBy($this->createOrder($options['order'], $options['direction']));
         }
 
+        // 正の整数でない page（?page=abc、?page=-1 など）は無視して 1 ページ目を表示する
+        if (!empty($options['page'])) {
+            $options['page'] = filter_var($options['page'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: null;
+        }
         if (!empty($options['limit'])) {
             if (!empty($options['page'])) {
                 $query->page($options['page'], $options['limit']);
