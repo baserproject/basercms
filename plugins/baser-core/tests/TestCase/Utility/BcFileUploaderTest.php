@@ -232,6 +232,54 @@ class BcFileUploaderTest extends BcTestCase
         $this->assertSame('template1.jpg', $data['eyecatch']);
     }
 
+    /**
+     * test isValidStoredFileName
+     * @dataProvider isValidStoredFileNameDataProvider
+     */
+    public function testIsValidStoredFileName($subdirDateFormat, $value, $expected)
+    {
+        $this->BcFileUploader->settings['subdirDateFormat'] = $subdirDateFormat;
+        $this->assertSame($expected, $this->BcFileUploader->isValidStoredFileName($value));
+    }
+
+    public static function isValidStoredFileNameDataProvider()
+    {
+        return [
+            // subdirDateFormat が無い場合はファイル名だけを許可する
+            ['', 'template1.jpg', true],
+            ['', '2026/11/00000001_eye_catch.jpg', false],
+            // subdirDateFormat がある場合はサブディレクトリを含む値を許可する
+            ['Y/m/', '2026/11/00000001_eye_catch.jpg', true],
+            ['Y/m/', 'template1.jpg', true],
+            // 脱出・属性の脱出につながる値は拒否する
+            ['Y/m/', '2026/../a.jpg', false],
+            ['Y/m/', '../../config/app.php', false],
+            ['Y/m/', '/etc/a.jpg', false],
+            ['Y/m/', '2026//a.jpg', false],
+            ['Y/m/', '2026/./a.jpg', false],
+            ['Y/m/', '2026/11/', false],
+            ['Y/m/', '2026\\11\\a.jpg', false],
+            ['Y/m/', '2026/11/a.jpg" onerror="alert(1)', false],
+            ['Y/m/', '2026/11/<script>.jpg', false],
+            ['Y/m/', "2026/11/a\x00.jpg", false],
+        ];
+    }
+
+    /**
+     * test setupRequestData - subdirDateFormat が設定されている場合はサブディレクトリを含む既存値を残す
+     */
+    public function testSetupRequestData_keepsSubdirFileName()
+    {
+        $this->BcFileUploader->settings['subdirDateFormat'] = 'Y/m/';
+        $data = new ArrayObject(['eyecatch' => '2026/11/00000001_eyecatch.jpg']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('2026/11/00000001_eyecatch.jpg', $data['eyecatch']);
+
+        $data = new ArrayObject(['eyecatch' => '2026/../00000001_eyecatch.jpg']);
+        $data = $this->BcFileUploader->setupRequestData($data);
+        $this->assertSame('', $data['eyecatch']);
+    }
+
     public function testSetupRequestData()
     {
         //テストファイルを作成
