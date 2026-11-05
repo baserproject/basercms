@@ -128,15 +128,39 @@ class InstallCommand extends Command
             $io->err(__d('baser_core', 'baserCMSのインストールを行うには、.env の　INSTALL_MODE を true に設定する必要があります。'));
             return;
         }
+        // 画面のインストーラーと同じく、.env が無ければ .env.example から作成する
+        // .env が無いと、インストール後に INSTALL_MODE などを書き込めない
+        if (!$this->createEnvFile()) {
+            $io->err(__d('baser_core', '.env ファイルを作成できませんでした。config/.env.example を config/.env としてコピーしてから実行してください。'));
+            return;
+        }
         if (!$this->install($args, $io, $dbConfig)) {
             $io->err(__d('baser_core', 'baserCMSのインストールに失敗しました。ログファイルを確認してください。'));
         }
 
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
-        $siteConfigsService->putEnv('INSTALL_MODE', 'false');
+        if (!$siteConfigsService->putEnv('INSTALL_MODE', 'false')) {
+            $io->warning(__d('baser_core', '.env の INSTALL_MODE を false に変更できませんでした。手動で変更してください。'));
+        }
 
         BcUtil::clearAllCache();
         $io->out(__d('baser_core', 'baserCMSのインストールが完了しました。'));
+    }
+
+    /**
+     * .env ファイルが無ければ .env.example から作成する
+     *
+     * @param string $configPath config ディレクトリのパス
+     * @return bool .env が存在する状態になれば true
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function createEnvFile(string $configPath = CONFIG): bool
+    {
+        if (file_exists($configPath . '.env')) return true;
+        if (!file_exists($configPath . '.env.example')) return false;
+        return copy($configPath . '.env.example', $configPath . '.env');
     }
 
     /**
