@@ -257,8 +257,18 @@ class CustomContentsControllerTest extends BcTestCase
         $this->assertNotNull($vars['customEntries']);
 
         //存在しないフィールド名を指定した場合、警告を出さずに 404 になること
-        $this->get('/test/archives/no_such_field/1');
+        $warnings = [];
+        set_error_handler(function($errno, $errstr) use (&$warnings) {
+            $warnings[] = $errstr;
+            return true;
+        }, E_WARNING | E_NOTICE);
+        try {
+            $this->get('/test/archives/no_such_field/1');
+        } finally {
+            restore_error_handler();
+        }
         $this->assertResponseCode(404);
+        $this->assertSame([], $warnings);
 
         //存在しないURLを指定した場合、
         $this->get('/test-false/archives/category/プログラマー');
