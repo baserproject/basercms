@@ -37,7 +37,6 @@ echo $this->Rss->items($posts->toArray(), function($entity) {
     'category' => $entity->blog_category->title ?? null,
     'description' => $blogHelper->removeCtrlChars($entity->content . $entity->detail),
     'pubDate' => $entity->posted,
-    'enclosure' => $eyeCatch,
-    'convertEntities' => false
+    'enclosure' => $eyeCatch
   ];
 });
