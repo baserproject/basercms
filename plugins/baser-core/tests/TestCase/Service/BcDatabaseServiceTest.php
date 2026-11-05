@@ -541,6 +541,43 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test getCreatedTableNames
+     */
+    public function test_getCreatedTableNames()
+    {
+        $path = TMP . 'created_table_names_test' . DS;
+        (new BcFolder($path))->create();
+
+        // ファイル名が Create<テーブル名> の形
+        file_put_contents($path . '20250812000001_CreateOauth2Clients.php', "<?php\n\$this->table('oauth2_clients')->create();\n");
+        $this->assertEquals(['oauth2_clients'], $this->BcDatabaseService->getCreatedTableNames($path . '20250812000001_CreateOauth2Clients.php'));
+
+        // ファイル名からテーブル名が分からないマイグレーション
+        file_put_contents($path . '20241029072441_Initial.php', "<?php\n\$this->table('seo_metas')->addColumn('a', 'string')->create();\n\$this->table('seo_metas')->drop()->save();\n");
+        $this->assertEquals(['seo_metas'], $this->BcDatabaseService->getCreatedTableNames($path . '20241029072441_Initial.php'));
+
+        // テーブルを作成しないマイグレーションは対象外
+        file_put_contents($path . '20210814053607_AlterUrlOnContents.php', "<?php\n\$this->table('contents')->changeColumn('url', 'text')->update();\n");
+        $this->assertEquals([], $this->BcDatabaseService->getCreatedTableNames($path . '20210814053607_AlterUrlOnContents.php'));
+
+        (new BcFolder($path))->delete();
+    }
+
+    /**
+     * test getAppTableList - ファイル名が Create<テーブル名> の形でないマイグレーションのテーブルも含む
+     */
+    public function test_getAppTableList_includesTablesFromMigrationSource()
+    {
+        $this->BcDatabaseService->clearAppTableList();
+        $result = $this->BcDatabaseService->getAppTableList();
+        $this->assertContains('two_factor_authentications', $result['BaserCore']);
+        $this->assertContains('plugins', $result['BaserCore']);
+        if (isset($result['BcSeo'])) {
+            $this->assertContains('seo_metas', $result['BcSeo']);
+        }
+    }
+
+    /**
      * test _convertFieldToCsv
      * @param $value
      * @param $expected

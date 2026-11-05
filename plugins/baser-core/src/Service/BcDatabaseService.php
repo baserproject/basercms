@@ -1010,9 +1010,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $files = $folder->getFiles();
             if (empty($files)) continue;
             foreach($files as $file) {
-                if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
-                $tableName = Inflector::tableize($matches[1]);
-                $checkNames[$value][] = $prefix . $tableName;
+                foreach($this->getCreatedTableNames($path . DS . $file) as $tableName) {
+                    $checkNames[$value][] = $prefix . $tableName;
+                }
             }
         }
 
@@ -1040,6 +1040,32 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         } else {
             return $list;
         }
+    }
+
+    /**
+     * マイグレーションファイルで作成するテーブル名を取得する
+     *
+     * ファイル名が `Create<テーブル名>` の形のものに加え、`Initial` などファイル名から
+     * テーブル名が分からないマイグレーションでも作成されるテーブルを拾うため、
+     * テーブルを作成（`->create()`）しているファイルでは、`table('テーブル名')` の指定も対象とする
+     *
+     * @param string $file マイグレーションファイルのパス
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCreatedTableNames(string $file): array
+    {
+        $tableNames = [];
+        if (preg_match('/Create([a-zA-Z0-9]+)\./', basename($file), $matches)) {
+            $tableNames[] = Inflector::tableize($matches[1]);
+        }
+        $source = is_file($file)? (string)file_get_contents($file) : '';
+        if (str_contains($source, '->create()') && preg_match_all('/->table\(\s*[\'"]([a-zA-Z0-9_]+)[\'"]/', $source, $matches)) {
+            $tableNames = array_merge($tableNames, $matches[1]);
+        }
+        return array_values(array_unique($tableNames));
     }
 
     /**
