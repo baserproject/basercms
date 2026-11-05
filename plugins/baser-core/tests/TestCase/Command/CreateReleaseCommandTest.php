@@ -94,6 +94,33 @@ class CreateReleaseCommandTest extends BcTestCase
     }
 
     /**
+     * Test excludeReleasePackage setting
+     *
+     * 開発用のファイルが除外リストに含まれ、各要素が連結されずに独立していることを確認する
+     */
+    public function test_excludeReleasePackageSetting()
+    {
+        $setting = require ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'config' . DS . 'setting.php';
+        $excludeFiles = $setting['BcApp']['excludeReleasePackage'];
+        foreach([
+            '.git',
+            '.github',
+            'tests',
+            'phpdoc.dist.xml',
+            'phpstan.neon',
+            'phpunit.xml.dist',
+            '.claude',
+            '.agents',
+            'CLAUDE.md',
+            'AGENTS.md',
+            'skills-lock.json'
+        ] as $file) {
+            $this->assertContains($file, $excludeFiles);
+        }
+        $this->assertSame(count($excludeFiles), count(array_unique($excludeFiles)));
+    }
+
+    /**
      * Test deleteExcludeFiles
      *
      */
