@@ -5,6 +5,8 @@
 # /docker/init.sh に記載している sleep の秒数プラス 10秒を目安として設定する
 # push トリガーは開発ブランチ（5.3.x / 5.4.x などの *.x）に限定し、
 # トピックブランチは pull_request 側のみで実行することで二重実行を防ぐ
+# 同じブランチ・同じプルリクエストで新しい実行が始まったら、途中の実行は取り消す
+# （続けてマージしたときは最後のマージの分だけを実行する）
 #
 
 name: Test
@@ -16,6 +18,10 @@ on:
     branches:
       - '*.x'
   pull_request:
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
