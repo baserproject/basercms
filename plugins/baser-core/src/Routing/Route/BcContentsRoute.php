@@ -328,12 +328,11 @@ class BcContentsRoute extends Route
             }
             foreach($params as $key => $param) {
                 if ($key === '?') {
-                    foreach($param as $query => $value) {
-                        if ($query == 'page' && !$value) {
-                            $value = 1;
-                        }
-                        $queryParams[] = $query . '=' . $value;
+                    if (!is_array($param)) continue;
+                    if (array_key_exists('page', $param) && !$param['page']) {
+                        $param['page'] = 1;
                     }
+                    $queryParams = $param;
                 } elseif (!is_array($param) && !is_object($param)) {
                     $pass[] = $param;
                 }
@@ -343,7 +342,8 @@ class BcContentsRoute extends Route
             $strUrl .= '/' . implode('/', $pass);
         }
         if ($queryParams) {
-            $strUrl .= '?' . implode('&', $queryParams);
+            // 配列の値（複数選択の絞り込みなど）と記号を含む値を正しく扱うため http_build_query で組み立てる
+            $strUrl .= '?' . http_build_query($queryParams);
         }
         if ($type === 'ContentFolder') {
             $strUrl .= '/';
