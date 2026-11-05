@@ -147,7 +147,11 @@ class CustomContentController extends BcFrontAppController
             'contain' => ['CustomFields'],
             'custom_table_id' => $customContent->custom_table_id
         ]);
-        if(!Configure::read("BcCustomContent.fieldTypes.{$customLink['custom_field']['type']}.hasArchives")) {
+        // findByName() は該当が無いと空の配列を返す
+        if(
+            empty($customLink['custom_field']['type'])
+            || !Configure::read("BcCustomContent.fieldTypes.{$customLink['custom_field']['type']}.hasArchives")
+        ) {
             $this->log(__d('baser_core', '指定されたフィールドはアーカイブ対象に設定されていません。'));
             $this->notFound();
         }
