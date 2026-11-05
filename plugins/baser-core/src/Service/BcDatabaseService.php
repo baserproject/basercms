@@ -1049,7 +1049,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * ファイル名が `Create<テーブル名>` の形のものに加え、`Initial` などファイル名から
      * テーブル名が分からないマイグレーションでも作成されるテーブルを拾うため、
-     * テーブルを作成（`->create()`）しているファイルでは、`table('テーブル名')` の指定も対象とする
+     * `table('テーブル名')` の指定のうち、次の `table()` までに `->create()` があるものも対象とする
+     * （同じファイルで既存のテーブルを変更していても、そのテーブルは対象にしない）
      *
      * @param string $file マイグレーションファイルのパス
      * @return array
@@ -1064,8 +1065,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $tableNames[] = Inflector::tableize($matches[1]);
         }
         $source = is_file($file)? (string)file_get_contents($file) : '';
-        if (str_contains($source, '->create()') && preg_match_all('/->table\(\s*[\'"]([a-zA-Z0-9_]+)[\'"]/', $source, $matches)) {
-            $tableNames = array_merge($tableNames, $matches[1]);
+        $segments = preg_split('/(?=->table\()/', $source);
+        foreach($segments as $segment) {
+            if (!preg_match('/^->table\(\s*[\'"]([a-zA-Z0-9_]+)[\'"]/', $segment, $matches)) continue;
+            if (str_contains($segment, '->create()')) $tableNames[] = $matches[1];
         }
         return array_values(array_unique($tableNames));
     }
