@@ -593,6 +593,12 @@ class BcDatabaseServiceTest extends BcTestCase
     {
         return [
             ['test', '"test"'],
+            // 0 は空にせず "0" として書き出す（復元時に NULL にならないように）
+            [0, '"0"'],
+            ['0', '"0"'],
+            [null, ''],
+            ['', ''],
+            [false, ''],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
             // 数式として解釈され得る値にはシングルクォートを前置する

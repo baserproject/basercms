@@ -883,7 +883,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
-        if (!$value) return '';
+        // 0 を空にすると、復元時に NULL として読み込まれ、NOT NULL の列（seo_metas.table_id など）で失敗するため、
+        // 空として扱うのは null・空文字・false だけにする
+        if ($value === null || $value === '' || $value === false) return '';
         if ($dc) $value = str_replace('"', '""', $value);
         $value = trim(trim($value), "\'");
         $value = str_replace("\\'", "'", $value);
