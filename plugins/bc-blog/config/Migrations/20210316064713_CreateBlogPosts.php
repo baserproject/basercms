@@ -39,12 +39,12 @@ class CreateBlogPosts extends BcMigration
             ])
             ->addColumn('content', 'text', [
                 'default' => null,
-                'limit' => 4294967295,
+                'limit' => \Migrations\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true,
             ])
             ->addColumn('detail', 'text', [
                 'default' => null,
-                'limit' => 4294967295,
+                'limit' => \Migrations\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true,
             ])
             ->addColumn('blog_category_id', 'integer', [
@@ -69,12 +69,12 @@ class CreateBlogPosts extends BcMigration
             ])
             ->addColumn('content_draft', 'text', [
                 'default' => null,
-                'limit' => 4294967295,
+                'limit' => \Migrations\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true,
             ])
             ->addColumn('detail_draft', 'text', [
                 'default' => null,
-                'limit' => 4294967295,
+                'limit' => \Migrations\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true,
             ])
             ->addColumn('publish_begin', 'datetime', [

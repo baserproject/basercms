@@ -19,7 +19,7 @@ class CreatePages extends BcMigration
          ])
             ->addColumn('contents', 'text', [
                 'default' => null,
-                'limit' => 4294967295,
+                'limit' => \Migrations\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true,
             ])
             ->addColumn('draft', 'text', [
