@@ -20,7 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * SearchIndicesController
+ * SearchIndexesController
  */
 class SearchIndexesController extends BcAdminApiController
 {
