@@ -103,7 +103,7 @@ if ($content->self_status) {
     <?= h($content->title) ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
-    <?= $this->BcText->booleanMark($content->status); ?>
+    <?= $this->BcText->booleanMark($this->BcContents->isAllowPublish($content)); ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
     <?= h($this->BcText->arrayValue($content->author_id, $authorList)); ?>
@@ -223,7 +223,7 @@ if ($content->self_status) {
     <!-- コピーのみ使うフォーム -->
     <form>
       <input type="hidden" name="id" value="<?= $content->id ?>">
-      <input type="hidden" name="type" value="<?= $content->type ?>">
+      <input type="hidden" name="type" value="<?= h($content->type) ?>">
       <input type="hidden" name="entity_id" value="<?= $content->entity_id ?>">
       <input type="hidden" name="parent_id" value="<?= $content->parent_id ?>">
       <input type="hidden" name="site_id" value="<?= $content->site_id ?>">

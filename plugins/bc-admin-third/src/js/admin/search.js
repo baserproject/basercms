@@ -41,7 +41,7 @@ const bcSearchBox = {
         // クリアボタン
         $('#BtnSearchClear').click(function () {
             $('#Search input[type="text"], #Search input[type="date"], #Search input[type="tel"], #Search input[type="email"]').val('');
-            $('#Search input[type="radio"], #Search input[type="checkbox"]').removeAttr('checked');
+            $('#Search input[type="radio"], #Search input[type="checkbox"]').prop('checked', false);
             $('#Search select').val('');
             return false;
         });

@@ -28,6 +28,12 @@ use Cake\Log\Engine\FileLog;
  * @note(value="テーマ管理とユーティリティを実装してからメニューを表示する")
  */
 $baserCorePrefix = filter_var(env('BASER_CORE_PREFIX', 'baser'));
+// 空にすると管理画面のパスを正しく組み立てられず、ログイン画面が自分自身へ転送され続けるため設定できない
+if ($baserCorePrefix === '') {
+    throw new \Cake\Core\Exception\CakeException(
+        'BASER_CORE_PREFIX に空の値は設定できません。config/.env の BASER_CORE_PREFIX に値を設定するか、行を削除してください。'
+    );
+}
 $adminPrefix = filter_var(env('ADMIN_PREFIX', 'admin'));
 
 return [
@@ -373,10 +379,15 @@ return [
             '.gitattributes',
             '.gitignore',
             'monorepo-builder.php',
-            'phpdoc.dist.xml'.
+            'phpdoc.dist.xml',
             'phpstan.neon',
             'phpunit.xml.dist',
-            'phpdoc.dist.xml'
+            // AI エージェント向けの開発用ファイル
+            '.claude',
+            '.agents',
+            'CLAUDE.md',
+            'AGENTS.md',
+            'skills-lock.json'
         ],
 
         /**

@@ -97,6 +97,8 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         }
         if ($options['status'] === 'publish') {
             $query->where($this->BlogComments->BlogContents->Contents->getConditionAllowPublish());
+            // 非公開・公開期間外の記事に付いたコメントは返さない
+            $query->where($this->BlogComments->BlogPosts->getConditionAllowPublish());
             // コメント自体が公開（承認済み）であることも条件に含める（get() と対称）
             $query->where(['BlogComments.status' => true]);
             // 未認証で到達する公開一覧では、投稿者の個人情報（email）を返さない
@@ -129,13 +131,20 @@ class BlogCommentsService implements BlogCommentsServiceInterface
         $conditions = [];
         if ($queryParams['status'] === 'publish') {
             $conditions = $this->BlogComments->BlogContents->Contents->getConditionAllowPublish();
+            $conditions = array_merge($conditions, $this->BlogComments->BlogPosts->getConditionAllowPublish());
             $conditions = array_merge($conditions, ['BlogComments.status' => true]);
         }
 
-        return $this->BlogComments->get($id,
+        $entity = $this->BlogComments->get($id,
             contain: ['BlogPosts' => ['BlogContents' => ['Contents']]],
             conditions: $conditions
         );
+        if ($queryParams['status'] === 'publish') {
+            // 公開データとして出力しない項目（投稿者のメールアドレスと、記事の草稿）
+            $entity->setHidden(['email'], true);
+            $entity->blog_post->setHidden(['content_draft', 'detail_draft'], true);
+        }
+        return $entity;
     }
 
     /**

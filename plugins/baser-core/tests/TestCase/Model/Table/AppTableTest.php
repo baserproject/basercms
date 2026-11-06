@@ -155,6 +155,9 @@ class AppTableTest extends BcTestCase
         $Permission = new TablePermissionsTable();
         $max = $Permission->getMax('no', []);
         $this->assertEquals(1, $max);
+        // 該当レコードがない場合は 0 を返す
+        $max = $Permission->getMax('no', ['user_group_id' => 9999]);
+        $this->assertSame(0, $max);
     }
 
     /**

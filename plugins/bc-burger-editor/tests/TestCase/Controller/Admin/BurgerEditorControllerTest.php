@@ -433,6 +433,44 @@ class BurgerEditorControllerTest extends BcTestCase
     }
 
     /**
+     * test file_upload
+     *
+     * 一覧のファイル名は HTML エスケープして返す（一覧ダイアログで HTML として描画されるため）
+     */
+    public function test_file_upload_escapesFileName()
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile('<b onclick=x>資料.txt', 'text/plain', 'dummy')]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/file_upload');
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
+        $this->assertSame('&lt;b onclick=x&gt;資料.txt', $result['data'][0]['name']);
+        $this->registerUploadedPaths($this->getSavePath('other'), $result['data'][0]['fileId']);
+    }
+
+    /**
+     * test img_upload
+     *
+     * 一覧のファイル名は HTML エスケープして返す（一覧ダイアログで HTML として描画されるため）
+     */
+    public function test_img_upload_escapesFileName()
+    {
+        $this->enableCsrfToken();
+        $this->configRequest(['files' => ['file' => $this->createUploadedFile(
+            '<b onclick=x>画像.png',
+            'image/png',
+            file_get_contents(Plugin::path('BcBurgerEditor') . 'webroot' . DS . 'img' . DS . 'bg-sample.png')
+        )]]);
+        $this->post('/baser/admin/bc-burger-editor/burger_editor/img_upload');
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertFalse($result['error'], is_string($result['error'])? $result['error'] : '');
+        $this->assertSame('&lt;b onclick=x&gt;画像.png', $result['data'][1]['name']);
+        $this->registerUploadedPaths($this->getSavePath('img'), $result['data'][1]['fileId']);
+    }
+
+    /**
      * test file_delete
      *
      * 保存済みファイルが削除される

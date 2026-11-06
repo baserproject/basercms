@@ -40,8 +40,15 @@ class BlogComment extends Entity
      * @var array
      */
     protected array $_accessible = [
-        '*' => true,
-        'id' => false
+        '*' => false,
+        'blog_content_id' => true,
+        'blog_post_id' => true,
+        'no' => true,
+        'status' => true,
+        'name' => true,
+        'email' => true,
+        'url' => true,
+        'message' => true
     ];
 
 }

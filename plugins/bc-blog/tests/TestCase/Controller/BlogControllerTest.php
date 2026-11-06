@@ -139,6 +139,42 @@ class BlogControllerTest extends BcTestCase
     }
 
     /**
+     * test index - RSS の item に RSS に無い要素（convertEntities）を出力しない
+     */
+    public function test_index_rss()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/news/',
+            'name' => 'news',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'lft' => '1',
+            'rght' => '2',
+            'layout_template' => 'default',
+        ])->persist();
+        BlogContentFactory::make(['id' => 1, 'list_direction' => 'DESC', 'template' => 'default'])->persist();
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'user_id' => 1,
+            'name' => 'post1',
+            'title' => 'post1',
+            'posted' => '2023-01-11 12:57:59',
+            'status' => true])->persist();
+
+        $this->get('/news/index.rss');
+        $this->assertResponseOk();
+        $this->assertResponseContains('<item>');
+        $this->assertResponseNotContains('convertEntities');
+    }
+
+    /**
      * test archives
      */
     public function test_archives()

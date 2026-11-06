@@ -422,7 +422,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         try {
             $pluginClass = Plugin::getCollection()->get($plugin);
             if(method_exists($pluginClass, 'updateDefaultData')) {
-                $pluginClass->updateDefaultData();
+                $pluginClass->updateDefaultData(['connection' => $dbConfigKeyName]);
             }
         } catch (\Throwable) {}
         return $result;
@@ -883,7 +883,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
-        if (!$value) return '';
+        // 0 を空にすると、復元時に NULL として読み込まれ、NOT NULL の列（seo_metas.table_id など）で失敗するため、
+        // 空として扱うのは null・空文字・false だけにする
+        if ($value === null || $value === '' || $value === false) return '';
         if ($dc) $value = str_replace('"', '""', $value);
         $value = trim(trim($value), "\'");
         $value = str_replace("\\'", "'", $value);
@@ -1010,9 +1012,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $files = $folder->getFiles();
             if (empty($files)) continue;
             foreach($files as $file) {
-                if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
-                $tableName = Inflector::tableize($matches[1]);
-                $checkNames[$value][] = $prefix . $tableName;
+                foreach($this->getCreatedTableNames($path . DS . $file) as $tableName) {
+                    $checkNames[$value][] = $prefix . $tableName;
+                }
             }
         }
 
@@ -1040,6 +1042,35 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         } else {
             return $list;
         }
+    }
+
+    /**
+     * マイグレーションファイルで作成するテーブル名を取得する
+     *
+     * ファイル名が `Create<テーブル名>` の形のものに加え、`Initial` などファイル名から
+     * テーブル名が分からないマイグレーションでも作成されるテーブルを拾うため、
+     * `table('テーブル名')` の指定のうち、次の `table()` までに `->create()` があるものも対象とする
+     * （同じファイルで既存のテーブルを変更していても、そのテーブルは対象にしない）
+     *
+     * @param string $file マイグレーションファイルのパス
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCreatedTableNames(string $file): array
+    {
+        $tableNames = [];
+        if (preg_match('/Create([a-zA-Z0-9]+)\./', basename($file), $matches)) {
+            $tableNames[] = Inflector::tableize($matches[1]);
+        }
+        $source = is_file($file)? (string)file_get_contents($file) : '';
+        $segments = preg_split('/(?=->table\()/', $source);
+        foreach($segments as $segment) {
+            if (!preg_match('/^->table\(\s*[\'"]([a-zA-Z0-9_]+)[\'"]/', $segment, $matches)) continue;
+            if (str_contains($segment, '->create()')) $tableNames[] = $matches[1];
+        }
+        return array_values(array_unique($tableNames));
     }
 
     /**

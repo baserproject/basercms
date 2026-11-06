@@ -31,6 +31,7 @@ use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
@@ -490,6 +491,45 @@ class BcDatabaseServiceTest extends BcTestCase
 
     /**
      * test _loadDefaultDataPattern
+     * 別の接続に読み込んだとき、default の接続のデータの日付を書き換えないこと
+     */
+    public function test_loadDefaultDataPatternWithOtherConnection()
+    {
+        $createdDate = '2020-01-01 00:00:00';
+        // 日付の更新は保存の検証を通るものだけが対象になるため、検証を通るデータにする
+        ContentFactory::make([
+            'id' => 100,
+            'parent_id' => 1,
+            'site_id' => 1,
+            'name' => 'test',
+            'title' => 'test',
+            'plugin' => 'BaserCore',
+            'type' => 'Page',
+            'created_date' => $createdDate,
+        ])->persist();
+
+        // テーブルの無い別の接続
+        // （ユニットテストではテーブル名のプレフィックスが接続によらず test の接続のものになるため、別の DB にする）
+        ConnectionManager::setConfig('test_other', [
+            'className' => Connection::class,
+            'driver' => Sqlite::class,
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        TableRegistry::getTableLocator()->clear();
+        try {
+            $this->execPrivateMethod($this->BcDatabaseService, '_loadDefaultDataPattern', ['default', 'BcFront', 'BaserCore', [], 'test_other']);
+        } finally {
+            TableRegistry::getTableLocator()->clear();
+            ConnectionManager::drop('test_other');
+        }
+
+        $content = ContentFactory::get(100);
+        $this->assertEquals($createdDate, $content->created_date->format('Y-m-d H:i:s'));
+    }
+
+    /**
+     * test _loadDefaultDataPattern
      * 初期データの検索インデックスが読み込まれること
      * @dataProvider loadDefaultDataPatternSearchIndexesDataProvider
      */
@@ -527,6 +567,46 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test getCreatedTableNames
+     */
+    public function test_getCreatedTableNames()
+    {
+        $path = TMP . 'created_table_names_test' . DS;
+        (new BcFolder($path))->create();
+
+        // ファイル名が Create<テーブル名> の形
+        file_put_contents($path . '20250812000001_CreateOauth2Clients.php', "<?php\n\$this->table('oauth2_clients')->create();\n");
+        $this->assertEquals(['oauth2_clients'], $this->BcDatabaseService->getCreatedTableNames($path . '20250812000001_CreateOauth2Clients.php'));
+
+        // ファイル名からテーブル名が分からないマイグレーション
+        file_put_contents($path . '20241029072441_Initial.php', "<?php\n\$this->table('seo_metas')->addColumn('a', 'string')->create();\n\$this->table('seo_metas')->drop()->save();\n");
+        $this->assertEquals(['seo_metas'], $this->BcDatabaseService->getCreatedTableNames($path . '20241029072441_Initial.php'));
+
+        // 作成と既存のテーブルの変更が同じファイルにある場合は、作成するテーブルだけを対象にする
+        file_put_contents($path . '20261105000001_Initial.php', "<?php\n\$this->table('contents')->addColumn('a', 'string')->update();\n\$table = \$this->table('sample_items');\n\$table->addColumn('name', 'string');\n\$table->create();\n");
+        $this->assertEquals(['sample_items'], $this->BcDatabaseService->getCreatedTableNames($path . '20261105000001_Initial.php'));
+
+        // テーブルを作成しないマイグレーションは対象外
+        file_put_contents($path . '20210814053607_AlterUrlOnContents.php', "<?php\n\$this->table('contents')->changeColumn('url', 'text')->update();\n");
+        $this->assertEquals([], $this->BcDatabaseService->getCreatedTableNames($path . '20210814053607_AlterUrlOnContents.php'));
+
+        (new BcFolder($path))->delete();
+    }
+
+    /**
+     * test getAppTableList - ファイル名が Create<テーブル名> の形でないマイグレーションのテーブルも含む
+     */
+    public function test_getAppTableList_includesTablesFromMigrationSource()
+    {
+        $this->BcDatabaseService->clearAppTableList();
+        $result = $this->BcDatabaseService->getAppTableList();
+        $this->assertContains('two_factor_authentications', $result['BaserCore']);
+        $this->assertContains('plugins', $result['BaserCore']);
+        $this->assertArrayHasKey('BcSeo', $result);
+        $this->assertContains('seo_metas', $result['BcSeo']);
+    }
+
+    /**
      * test _convertFieldToCsv
      * @param $value
      * @param $expected
@@ -542,6 +622,12 @@ class BcDatabaseServiceTest extends BcTestCase
     {
         return [
             ['test', '"test"'],
+            // 0 は空にせず "0" として書き出す（復元時に NULL にならないように）
+            [0, '"0"'],
+            ['0', '"0"'],
+            [null, ''],
+            ['', ''],
+            [false, ''],
             ['test{CM}testCM', '"test,testCM"'],
             ['test\\testCM', '"test\testCM"'],
             // 数式として解釈され得る値にはシングルクォートを前置する

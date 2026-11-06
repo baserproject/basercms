@@ -20,6 +20,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\EmailTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -115,6 +116,17 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->assertEquals(1, $comment->id);
         // BlogPostsのデータが含まれるテスト
         $this->assertEquals(1, $comment->blog_post->id);
+
+        // 公開データとして取得する場合は、投稿者のメールアドレスと記事の草稿を返さない
+        $comment = $this->BlogCommentsService->get(1, ['status' => 'publish']);
+        $this->assertContains('email', $comment->getHidden());
+        $this->assertContains('content_draft', $comment->blog_post->getHidden());
+        $this->assertContains('detail_draft', $comment->blog_post->getHidden());
+
+        // 非公開の記事に付いたコメントは公開データとして取得できない
+        $this->getTableLocator()->get('BcBlog.BlogPosts')->updateAll(['status' => false], ['id' => 1]);
+        $this->expectException(RecordNotFoundException::class);
+        $this->BlogCommentsService->get(1, ['status' => 'publish']);
     }
 
     /**
@@ -328,6 +340,39 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
         $this->expectExceptionMessage("関連するコンテンツがありません");
         $this->BlogCommentsService->add(1, 1, []);
+    }
+
+    /**
+     * test add
+     * 関連テーブルのデータを送っても、ブログ記事は作成・更新されない
+     */
+    public function testAddIgnoresAssociatedData()
+    {
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
+        $data = [
+            'name' => 'baserCMS',
+            'message' => 'test',
+            'blog_post' => [
+                'blog_content_id' => 1,
+                'title' => 'injected',
+                'user_id' => 1,
+                'status' => true,
+                'posted' => '2024-01-01 00:00:00',
+            ],
+        ];
+        $result = $this->BlogCommentsService->add(1, 1, $data);
+
+        $this->assertEquals(1, $result->blog_post_id);
+        $this->assertEquals(1, BlogPostFactory::count());
+        $this->assertNotEquals('injected', BlogPostFactory::get(1)->title);
     }
 
     /**

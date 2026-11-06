@@ -71,6 +71,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'),
       [
         'id' => 'BtnPreview',
+        'type' => 'button',
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'preview',

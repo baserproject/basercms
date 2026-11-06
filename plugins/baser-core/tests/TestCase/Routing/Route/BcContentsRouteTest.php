@@ -98,6 +98,10 @@ class BcContentsRouteTest extends BcTestCase
             ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1], '/news/'],
             ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 2], '/news/archives/2'],
             ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, '?' => ['page' => 2], 2], '/news/archives/2?page=2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1, '?' => ['page' => 0]], '/news/index?page=1'],
+            // 配列の値と記号を含む値
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1, '?' => ['tag' => ['a', 'b'], 'page' => 2]], '/news/index?tag%5B0%5D=a&tag%5B1%5D=b&page=2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1, '?' => ['q' => 'a&b #c']], '/news/index?q=a%26b+%23c'],
             ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'category', 'release'], '/news/archives/category/release'],
         ];
     }

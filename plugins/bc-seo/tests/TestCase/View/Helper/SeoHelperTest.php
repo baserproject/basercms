@@ -16,6 +16,9 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcCustomContent\Test\Factory\CustomContentFactory;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
+use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcSeo\Test\Factory\SeoMetaFactory;
 use BcSeo\View\Helper\SeoHelper;
 use Cake\Event\Event;
@@ -179,5 +182,141 @@ class SeoHelperTest extends BcTestCase
         $this->assertEquals('blogPost description', $meta['description']['value']);
         $this->assertEquals('site keywords', $meta['keywords']['value']);
         $this->assertEquals('blogContent og_type', $meta['og_type']['value']);
+    }
+
+    /**
+     * testGetMetaCustomContentArchives
+     *
+     * 関連データのアーカイブでは、関連先エントリーで設定した項目のみ出力し、親の設定は引き継がない
+     */
+    public function testGetMetaCustomContentArchives()
+    {
+        $this->createCustomContentArchivesData();
+        SeoMetaFactory::make([
+            'table_alias' => 'CustomEntries',
+            'table_id' => 2,
+            'entity_id' => 7,
+            'description' => 'category description',
+        ])->persist();
+
+        $seoHelper = new SeoHelper($this->getCustomContentArchivesView('recruit_category', '7'));
+        $meta = $seoHelper->getMeta();
+        $this->assertEquals('category description', $meta['description']['value']);
+        // 関連先エントリーで未設定の項目は、サイト・コンテンツの設定も出力しない
+        $this->assertArrayNotHasKey('keywords', $meta);
+        $this->assertArrayNotHasKey('og_description', $meta);
+        $this->assertArrayNotHasKey('og_image', $meta);
+    }
+
+    /**
+     * testGetMetaCustomContentArchivesWithoutSeoMeta
+     *
+     * 関連先エントリーにSEO設定がない場合は何も出力しない
+     */
+    public function testGetMetaCustomContentArchivesWithoutSeoMeta()
+    {
+        $this->createCustomContentArchivesData();
+
+        $seoHelper = new SeoHelper($this->getCustomContentArchivesView('recruit_category', '7'));
+        $this->assertEquals([], $seoHelper->getMeta());
+    }
+
+    /**
+     * testGetMetaCustomContentArchivesNotRelatedField
+     *
+     * 関連データ以外のフィールドのアーカイブでは、従来どおりサイト・コンテンツの設定を出力する
+     */
+    public function testGetMetaCustomContentArchivesNotRelatedField()
+    {
+        $this->createCustomContentArchivesData();
+
+        $seoHelper = new SeoHelper($this->getCustomContentArchivesView('employment_status', '1'));
+        $meta = $seoHelper->getMeta();
+        $this->assertEquals('content description', $meta['description']['value']);
+        $this->assertEquals('site keywords', $meta['keywords']['value']);
+        $this->assertEquals('content og_description', $meta['og_description']['value']);
+    }
+
+    /**
+     * カスタムコンテンツのアーカイブ用のデータを作成する
+     *
+     * - カスタムコンテンツ（コンテンツID: 1）は、カスタムテーブル1 を利用
+     * - カスタムテーブル1 の recruit_category は、カスタムテーブル2 を関連先とする関連データ
+     * - カスタムテーブル1 の employment_status は、ラジオボタン
+     * - サイト・コンテンツにSEO設定あり
+     */
+    private function createCustomContentArchivesData(): void
+    {
+        ContentFactory::make([
+            'id' => 1,
+            'site_id' => 1,
+            'url' => '/test/',
+            'plugin' => 'BcCustomContent',
+            'type' => 'CustomContent',
+            'entity_id' => 1,
+        ])->persist();
+        CustomContentFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'type' => 'BcCcRelated',
+            'meta' => '{"BcCcRelated":{"custom_table_id":"2","filter_name":"","filter_value":""}}',
+        ])->persist();
+        CustomFieldFactory::make([
+            'id' => 2,
+            'name' => 'employment_status',
+            'type' => 'BcCcRadio',
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 1,
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'recruit_category',
+        ])->persist();
+        CustomLinkFactory::make([
+            'id' => 2,
+            'custom_table_id' => 1,
+            'custom_field_id' => 2,
+            'name' => 'employment_status',
+        ])->persist();
+
+        SeoMetaFactory::make([
+            'table_alias' => 'Sites',
+            'entity_id' => 1,
+            'description' => 'site description',
+            'keywords' => 'site keywords',
+        ])->persist();
+        SeoMetaFactory::make([
+            'table_alias' => 'Contents',
+            'entity_id' => 1,
+            'description' => 'content description',
+            'og_description' => 'content og_description',
+        ])->persist();
+    }
+
+    /**
+     * カスタムコンテンツのアーカイブを表示する View を取得する
+     *
+     * @param string $field フィールド名
+     * @param string $value 値
+     */
+    private function getCustomContentArchivesView(string $field, string $value): View
+    {
+        $content = TableRegistry::getTableLocator()->get('BaserCore.Contents')->get(1, contain: ['Sites']);
+        $customContent = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents')->get(1);
+
+        $request = $this->getRequest("/test/archives/{$field}/{$value}");
+        $request = $request->withAttribute('route', new BcContentsRoute('/test/', []));
+        $request = $request->withAttribute('currentContent', $content);
+        $request = $request->withParam('plugin', 'BcCustomContent');
+        $request = $request->withParam('controller', 'CustomContent');
+        $request = $request->withParam('action', 'archives');
+        $request = $request->withParam('pass', [$field, $value]);
+        $view = new View($request);
+        $view->set('customContent', $customContent);
+        return $view;
     }
 }

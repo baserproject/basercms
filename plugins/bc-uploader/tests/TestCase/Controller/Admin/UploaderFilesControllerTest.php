@@ -148,6 +148,22 @@ class UploaderFilesControllerTest extends BcTestCase
     }
 
     /**
+     * test edit
+     *
+     * 編集画面の登録者名はエスケープして表示する
+     */
+    public function test_edit_escapesUserName()
+    {
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        $this->getTableLocator()->get('BaserCore.Users')->updateAll(['nickname' => '<b>ニックネーム</b>'], ['id' => 1]);
+
+        $this->get('/baser/admin/bc-uploader/uploader_files/edit/1');
+        $this->assertResponseOk();
+        $this->assertResponseContains('&lt;b&gt;ニックネーム&lt;/b&gt;');
+        $this->assertResponseNotContains('<b>ニックネーム</b>');
+    }
+
+    /**
      * test delete
      */
     public function test_delete()

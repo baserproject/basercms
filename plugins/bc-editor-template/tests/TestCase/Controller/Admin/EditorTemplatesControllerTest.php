@@ -275,9 +275,34 @@ class EditorTemplatesControllerTest extends BcTestCase
         $body = (string)$this->_response->getBody();
         $this->assertStringNotContainsString("'); alert(", $body);
         $this->assertStringNotContainsString('</script>', $body);
-        $this->assertStringContainsString('title:"name\\u0027); alert(1); //"', $body);
-        $this->assertStringContainsString('description:"desc\\u0027); alert(2); //"', $body);
+        // 名前・説明は CKEditor が HTML として描画するため、HTML エスケープしてからリテラル化する
+        $this->assertStringContainsString('title:"name\\u0026#039;); alert(1); //"', $body);
+        $this->assertStringContainsString('description:"desc\\u0026#039;); alert(2); //"', $body);
         // html は内容を変更せず、リテラル化のみ行う
         $this->assertStringContainsString('html:"\\u003Cp class=\\u0022x\\u0022\\u003Ehtml\\u003C/p\\u003E\\u0027); alert(3); //\\u003C/script\\u003E', $body);
+    }
+
+    /**
+     * test js - テンプレートの名前・説明に含まれる HTML タグがエスケープされること（格納型 XSS 対策）
+     *
+     * CKEditor のテンプレートダイアログは名前・説明を HTML として描画するため、
+     * 一般ユーザーが登録したタグが管理者の画面で実行されないようにする。
+     */
+    public function testJs_escapesTemplateHtml()
+    {
+        EditorTemplateFactory::make([
+            'id' => 1,
+            'name' => '<img src=x onerror=alert(1)>',
+            'description' => "<img src=x onerror=alert(2)>\n2行目",
+            'html' => '<p>html</p>',
+        ])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/bc-editor-template/editor_templates/js');
+        $this->assertResponseCode(200);
+        $body = (string)$this->_response->getBody();
+        $this->assertStringContainsString('title:"\\u0026lt;img src=x onerror=alert(1)\\u0026gt;"', $body);
+        // 説明はエスケープした後に改行を <br> に変換する
+        $this->assertStringContainsString('description:"\\u0026lt;img src=x onerror=alert(2)\\u0026gt;\\u003Cbr /\\u003E2行目"', $body);
     }
 }

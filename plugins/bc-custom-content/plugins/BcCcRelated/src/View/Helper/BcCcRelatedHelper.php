@@ -139,6 +139,7 @@ class BcCcRelatedHelper extends Helper
         $options = array_merge([
             'getRelatedBody' => false,
             'separator' => ' / ',
+            'escape' => true,
         ], $options);
 
         if (!$fieldValue) return '';
@@ -154,6 +155,9 @@ class BcCcRelatedHelper extends Helper
             if ($options['getRelatedBody']) {
                 return $entries;
             }
+            if ($options['escape']) {
+                $entries = array_map(fn($entry) => h($entry), $entries);
+            }
             return implode($options['separator'], $entries);
         }else{
             $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
@@ -162,7 +166,8 @@ class BcCcRelatedHelper extends Helper
         if ($options['getRelatedBody'])
             return $entry;
 
-        return $entry->{$entry->custom_table->display_field};
+        $value = $entry->{$entry->custom_table->display_field};
+        return $options['escape'] ? h($value) : $value;
     }
 
     public function getFieldItemList(Int $contentId, string $fieldName)

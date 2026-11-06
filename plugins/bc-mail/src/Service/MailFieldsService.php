@@ -82,10 +82,15 @@ class MailFieldsService implements MailFieldsServiceInterface
             $conditions['use_field'] = true;
         }
 
-        return $this->MailFields->get($id,
+        $entity = $this->MailFields->get($id,
             contain: ['MailContents' => ['Contents']],
             conditions: $conditions
         );
+        if ($queryParams['status'] === 'publish') {
+            // 公開データでは、関連するメールコンテンツの通知先と BCC のメールアドレスを返さない
+            $entity->mail_content->setHidden(['sender_1', 'sender_2'], true);
+        }
+        return $entity;
     }
 
     /**
