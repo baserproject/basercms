@@ -14,6 +14,7 @@ namespace BaserCore\Utility;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Core\Configure;
 use Cake\Log\LogTrait;
 use Exception;
 use FilesystemIterator;
@@ -87,19 +88,22 @@ class BcFolder
 
     /**
      * ディレクトリを作成する
-     * @param int $path
+     * @param int|string|null $mask 権限。省略時は BcApp.folderPermission
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(int|string $mask = 0777)
+    public function create(int|string|null $mask = null)
     {
         if(is_string($mask)) {
             // @deprecated 6.0.0 since 5.1.0 後方互換用
             $this->log(__d('baser_core', 'BcFile::create() では、第一引数にパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
             $this->path = $mask;
-            $mask = 0777;
+            $mask = null;
+        }
+        if ($mask === null) {
+            $mask = self::getFolderPermission();
         }
         $path = $this->path;
         $parent = dirname($path);
@@ -212,21 +216,24 @@ class BcFolder
      * @noTodo
      * @unitTest
      */
-    public function copy($dest, $mode = 0777): bool
+    public function copy($dest, $mode = null): bool
     {
         if(is_array($mode) && !empty($mode['from'])) {
             // @deprecated 6.0.0 since 5.1.0 後方互換用
             $this->log(__d('baser_core', 'BcFile::copy() では、第二引数の from キーにパスを指定するのは非推奨です。パスの指定はコンストラクタで行ってください。この要件はバージョン 6.0.0 で必須となります。'));
             $this->path = $mode['from'];
-            $mode = 0777;
+            $mode = null;
         }
+        // 権限を指定しない場合、フォルダは BcApp.folderPermission、ファイルは BcApp.filePermission
+        $folderMode = $mode ?? self::getFolderPermission();
+        $fileMode = $mode ?? self::getFilePermission();
         $source = $this->path;
         if (!is_dir($source)) return false;
         if (is_dir($source)) {
             $dir_handle = opendir($source);
             if (!file_exists($dest)) {
                 (new BcFolder($dest))->create();
-                chmod($dest, $mode);
+                chmod($dest, $folderMode);
             }
             while($file = readdir($dir_handle)) {
                 if ($file != "." && $file != "..") {
@@ -235,16 +242,66 @@ class BcFolder
                         self::copy($dest . DS . $file);
                     } else {
                         copy($source . "/" . $file, $dest . "/" . $file);
-                        chmod($dest . "/" . $file, $mode);
+                        chmod($dest . "/" . $file, $fileMode);
                     }
                 }
             }
             closedir($dir_handle);
         } else {
             copy($source, $dest);
-            chmod($dest, $mode);
+            chmod($dest, $fileMode);
         }
         return true;
+    }
+
+    /**
+     * baserCMS が作るフォルダの権限を取得する
+     *
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getFolderPermission(): int
+    {
+        return self::toPermission(Configure::read('BcApp.folderPermission'), 0777);
+    }
+
+    /**
+     * baserCMS が作るファイルの権限を取得する
+     *
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getFilePermission(): int
+    {
+        return self::toPermission(Configure::read('BcApp.filePermission'), 0666);
+    }
+
+    /**
+     * 設定値を権限の数値にする
+     *
+     * 文字列（'0755' 等）は 8 進数として解釈する。
+     * 整数はそのまま使うため、設定ファイルでは 8 進数のリテラル（0755 等）で書く。
+     *
+     * @param mixed $value 設定値
+     * @param int $default 設定が無い場合の権限
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private static function toPermission(mixed $value, int $default): int
+    {
+        if ($value === null || $value === '') {
+            return $default;
+        }
+        if (is_string($value)) {
+            return octdec($value);
+        }
+        return (int)$value;
     }
 
     /**

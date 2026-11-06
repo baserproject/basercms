@@ -14,6 +14,7 @@ namespace BaserCore\Vendor;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcFolder;
 use Cake\Core\Configure;
 
 /**
@@ -156,7 +157,7 @@ class Imageresizer
         // PHP 8.5 で imagedestroy() は非推奨。参照を外して解放する
         unset($newImage);
         if ($savePath) {
-            chmod($savePath, 0666);
+            chmod($savePath, BcFolder::getFilePermission());
         }
         return true;
     }
