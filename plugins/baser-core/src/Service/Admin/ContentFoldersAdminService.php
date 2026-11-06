@@ -14,6 +14,7 @@ namespace BaserCore\Service\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcException;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
@@ -44,14 +45,19 @@ class ContentFoldersAdminService extends ContentFoldersService implements Conten
     public function getViewVarsForEdit(EntityInterface $contentFolder): array
     {
         $theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-')];
-        $siteService = $this->getService(SitesServiceInterface::class);
-        $site = $siteService->findById($contentFolder->content->site_id)->first();
-        // テーマが「メインサイトに従う」の場合はメインサイトのテーマを利用する
-        if (!empty($site) && !$site->theme && $site->main_site_id) {
-            $site = $siteService->findById($site->main_site_id)->first();
+        $site = $this->getService(SitesServiceInterface::class)
+            ->findById($contentFolder->content->site_id)
+            ->first();
+        // テーマが「メインサイトに従う」の場合は親サイトをたどって適用テーマを利用する
+        $appliedTheme = null;
+        if (!empty($site)) {
+            try {
+                $appliedTheme = $site->getAppliedTheme();
+            } catch (BcException) {
+            }
         }
-        if (!empty($site) && $site->theme) {
-            $theme[] = $site->theme;
+        if ($appliedTheme) {
+            $theme[] = $appliedTheme;
         }
         return [
             'contentFolder' => $contentFolder,

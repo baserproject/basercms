@@ -80,9 +80,10 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
 
     /**
      * test getViewVarsForEdit
-     * サブサイトのテーマが「メインサイトに従う」の場合、メインサイトのテーマの固定ページテンプレートを取得する
+     * サブサイトのテーマが「メインサイトに従う」の場合、親サイトをたどって適用されているテーマの固定ページテンプレートを取得する
+     * @dataProvider getViewVarsForEditFollowMainSiteThemeDataProvider
      */
-    public function test_getViewVarsForEdit_followMainSiteTheme()
+    public function test_getViewVarsForEdit_followMainSiteTheme($siteId)
     {
         $this->loadPlugins(['BcThemeSample']);
         $templatePath = Plugin::templatePath('BcThemeSample') . 'Pages' . DS;
@@ -93,13 +94,15 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $templateFile->write('test');
 
         SiteFactory::make()->main()->setField('theme', 'BcThemeSample')->persist();
+        // サブサイト（メインサイトに従う）と、その配下のサブサイト（親のサブサイトに従う）
         SiteFactory::make(['id' => 2, 'theme' => '', 'main_site_id' => 1])->persist();
+        SiteFactory::make(['id' => 3, 'theme' => '', 'main_site_id' => 2])->persist();
         PageFactory::make(['id' => 100, 'content' => 'test'])->persist();
         ContentFactory::make([
             'id' => 100,
             'plugin' => 'BaserCore',
             'type' => 'Page',
-            'site_id' => 2,
+            'site_id' => $siteId,
             'parent_id' => 3,
             'lft' => 100,
             'rght' => 101,
@@ -111,6 +114,14 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         if ($folderCreated) $folder->delete();
 
         $this->assertArrayHasKey('test_follow_main', $rs['pageTemplateList']);
+    }
+
+    public static function getViewVarsForEditFollowMainSiteThemeDataProvider()
+    {
+        return [
+            'メインサイトに従うサブサイト' => [2],
+            '親のサブサイトもテーマが空のサブサイト' => [3],
+        ];
     }
 
     /**
