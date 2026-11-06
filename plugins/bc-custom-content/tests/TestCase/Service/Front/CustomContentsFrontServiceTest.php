@@ -193,9 +193,9 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //スラッグで取得できる
         $this->assertEquals(2, $this->CustomContentFrontService->getRelatedEntryId(1, 'プログラマー 2'));
-        //スラッグがない場合はタイトルで取得できる
-        $this->assertEquals(1, $this->CustomContentFrontService->getRelatedEntryId(1, 'Webエンジニア・Webプログラマー'));
-        //スラッグとタイトルが重複する場合はスラッグを優先する
+        //タイトルでは取得できない
+        $this->assertNull($this->CustomContentFrontService->getRelatedEntryId(1, 'Webエンジニア・Webプログラマー'));
+        //スラッグとタイトルが重複する場合はスラッグで一致したものを返す
         $this->assertEquals(4, $this->CustomContentFrontService->getRelatedEntryId(1, 'engineer'));
         //該当がない場合は null を返す
         $this->assertNull($this->CustomContentFrontService->getRelatedEntryId(1, '存在しない'));

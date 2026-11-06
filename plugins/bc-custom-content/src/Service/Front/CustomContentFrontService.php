@@ -115,9 +115,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
-     * 関連データのスラッグ、またはタイトルから関連先エントリーのIDを取得する
-     *
-     * スラッグを優先し、該当がない場合はタイトルで検索する
+     * 関連データのスラッグから関連先エントリーのIDを取得する
      *
      * @param int $relatedTableId 関連先のカスタムテーブルID
      * @param string $value
@@ -132,12 +130,10 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         try {
             // 関連先のカスタムテーブルに切り替える
             $this->EntriesService->setup($relatedTableId);
-            $entriesTable = $this->EntriesService->CustomEntries;
-            // スラッグで検索し、該当がなければタイトルで検索する
-            $entry = $entriesTable->find()->where(['CustomEntries.name' => $value])->first();
-            if (!$entry) {
-                $entry = $entriesTable->find()->where(['CustomEntries.title' => $value])->first();
-            }
+            // スラッグで検索する
+            $entry = $this->EntriesService->CustomEntries->find()
+                ->where(['CustomEntries.name' => $value])
+                ->first();
         } finally {
             // 例外が発生した場合も、元のカスタムテーブルに戻す
             if ($currentTableId) {

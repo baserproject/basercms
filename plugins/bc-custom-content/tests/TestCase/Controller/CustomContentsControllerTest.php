@@ -249,7 +249,7 @@ class CustomContentsControllerTest extends BcTestCase
         $customEntriesService->addFields(1, [$customLink]);
 
         //対象URLをコル
-        $this->get('/test/archives/category/プログラマー');
+        $this->get('/test/archives/category/' . rawurlencode('プログラマー 2'));
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertResponseCode(200);
         $this->assertEquals('サービスタイトル', $vars['title']);
@@ -285,7 +285,7 @@ class CustomContentsControllerTest extends BcTestCase
 
     /**
      * test archives
-     * 関連データをスラッグ・タイトルで指定した場合
+     * 関連データをスラッグで指定した場合
      */
     public function testArchivesByRelatedName()
     {
@@ -324,20 +324,18 @@ class CustomContentsControllerTest extends BcTestCase
         $this->assertResponseCode(200);
         $this->assertEquals('2', $this->_controller->viewBuilder()->getVar('archivesName'));
 
-        //スラッグがない場合、タイトルで指定してもIDに変換される
+        //タイトルで指定した場合は 404 になる
         $this->get('/test/archives/category/' . rawurlencode('Webエンジニア・Webプログラマー'));
-        $this->assertResponseCode(200);
-        $this->assertEquals('1', $this->_controller->viewBuilder()->getVar('archivesName'));
+        $this->assertResponseCode(404);
 
         //IDで指定した場合は従来どおり
         $this->get('/test/archives/category/3');
         $this->assertResponseCode(200);
         $this->assertEquals('3', $this->_controller->viewBuilder()->getVar('archivesName'));
 
-        //該当がない場合は、指定した値のまま絞り込む
+        //該当がない場合は 404 になる
         $this->get('/test/archives/category/' . rawurlencode('存在しない'));
-        $this->assertResponseCode(200);
-        $this->assertEquals('存在しない', $this->_controller->viewBuilder()->getVar('archivesName'));
+        $this->assertResponseCode(404);
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');

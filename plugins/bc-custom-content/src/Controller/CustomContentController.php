@@ -164,8 +164,10 @@ class CustomContentController extends BcFrontAppController
             $relatedTableId = $customLink['custom_field']['meta']['BcCcRelated']['custom_table_id'] ?? null;
             //　関連データのIDと紐づく、エントリーのIDを取得する
             $relatedEntryId = $relatedTableId? $service->getRelatedEntryId((int)$relatedTableId, $value) : null;
-            // 該当がない場合は従来どおり、指定された値のまま絞り込む
-            if ($relatedEntryId) $value = (string)$relatedEntryId;
+            if (!$relatedEntryId) {
+                $this->notFound();
+            }
+            $value = (string)$relatedEntryId;
         }
         $this->set($service->getViewVarsForArchives(
             $customContent,
