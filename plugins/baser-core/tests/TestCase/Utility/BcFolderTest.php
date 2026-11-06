@@ -318,6 +318,16 @@ class BcFolderTest extends TestCase
             Configure::write('BcApp.filePermission', 0640);
             $this->assertEquals(0750, BcFolder::getFolderPermission());
             $this->assertEquals(0640, BcFolder::getFilePermission());
+            // 文字列は 8 進数として解釈する
+            Configure::write('BcApp.folderPermission', '0755');
+            Configure::write('BcApp.filePermission', '644');
+            $this->assertEquals(0755, BcFolder::getFolderPermission());
+            $this->assertEquals(0644, BcFolder::getFilePermission());
+            Configure::write('BcApp.folderPermission', '02770');
+            $this->assertEquals(02770, BcFolder::getFolderPermission());
+            // 空文字は設定が無いものとして扱う
+            Configure::write('BcApp.folderPermission', '');
+            $this->assertEquals(0777, BcFolder::getFolderPermission());
         } finally {
             Configure::write('BcApp.folderPermission', $folderPermission);
             Configure::write('BcApp.filePermission', $filePermission);

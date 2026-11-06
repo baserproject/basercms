@@ -264,7 +264,7 @@ class BcFolder
      */
     public static function getFolderPermission(): int
     {
-        return (int)(Configure::read('BcApp.folderPermission') ?? 0777);
+        return self::toPermission(Configure::read('BcApp.folderPermission'), 0777);
     }
 
     /**
@@ -277,7 +277,31 @@ class BcFolder
      */
     public static function getFilePermission(): int
     {
-        return (int)(Configure::read('BcApp.filePermission') ?? 0666);
+        return self::toPermission(Configure::read('BcApp.filePermission'), 0666);
+    }
+
+    /**
+     * 設定値を権限の数値にする
+     *
+     * 文字列（'0755' 等）は 8 進数として解釈する。
+     * 整数はそのまま使うため、設定ファイルでは 8 進数のリテラル（0755 等）で書く。
+     *
+     * @param mixed $value 設定値
+     * @param int $default 設定が無い場合の権限
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private static function toPermission(mixed $value, int $default): int
+    {
+        if ($value === null || $value === '') {
+            return $default;
+        }
+        if (is_string($value)) {
+            return octdec($value);
+        }
+        return (int)$value;
     }
 
     /**
