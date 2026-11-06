@@ -115,6 +115,35 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     }
 
     /**
+     * 関連データのスラッグから関連先エントリーのIDを取得する
+     *
+     * @param int $relatedTableId 関連先のカスタムテーブルID
+     * @param string $value
+     * @return int|null
+     * @checked
+     * @noTodo
+     */
+    public function getRelatedEntryId(int $relatedTableId, string $value): ?int
+    {
+        // 検索後に元へ戻すため、現在のカスタムテーブルIDを保持する
+        $currentTableId = $this->EntriesService->CustomEntries->tableId;
+        try {
+            // 関連先のカスタムテーブルに切り替える
+            $this->EntriesService->setup($relatedTableId);
+            // スラッグで検索する
+            $entry = $this->EntriesService->CustomEntries->find()
+                ->where(['CustomEntries.name' => $value])
+                ->first();
+        } finally {
+            // 例外が発生した場合も、元のカスタムテーブルに戻す
+            if ($currentTableId) {
+                $this->EntriesService->setup($currentTableId);
+            }
+        }
+        return $entry?->id;
+    }
+
+    /**
      * 一覧用の View 変数を取得する
      *
      * @param EntityInterface $customContent
