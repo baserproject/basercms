@@ -14,6 +14,7 @@ namespace BaserCore\Service\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcException;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
@@ -47,8 +48,16 @@ class ContentFoldersAdminService extends ContentFoldersService implements Conten
         $site = $this->getService(SitesServiceInterface::class)
             ->findById($contentFolder->content->site_id)
             ->first();
-        if (!empty($site) && $site->theme) {
-            $theme[] = $site->theme;
+        // テーマが「メインサイトに従う」の場合は親サイトをたどって適用テーマを利用する
+        $appliedTheme = null;
+        if (!empty($site)) {
+            try {
+                $appliedTheme = $site->getAppliedTheme();
+            } catch (BcException) {
+            }
+        }
+        if ($appliedTheme) {
+            $theme[] = $appliedTheme;
         }
         return [
             'contentFolder' => $contentFolder,

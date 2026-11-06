@@ -11,6 +11,8 @@
 
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -61,8 +63,10 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
 		$theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'))];
 		$siteService = $this->getService(SitesServiceInterface::class);
 		$site = $siteService->findById($page->content->site_id)->first();
-		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
-			$theme[] = $site->theme;
+		// テーマが「メインサイトに従う」の場合は親サイトをたどって適用テーマを利用する
+		$appliedTheme = $site? $this->getAppliedTheme($site) : null;
+		if ($appliedTheme && $appliedTheme != $theme[0]) {
+			$theme[] = $appliedTheme;
 		}
 		return [
             'page' => $page,
@@ -99,8 +103,10 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
 		$theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'))];
 		$siteService = $this->getService(SitesServiceInterface::class);
 		$site = $siteService->findById($page->content->site_id)->first();
-		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
-			$theme[] = $site->theme;
+		// テーマが「メインサイトに従う」の場合は親サイトをたどって適用テーマを利用する
+		$appliedTheme = $site? $this->getAppliedTheme($site) : null;
+		if ($appliedTheme && $appliedTheme != $theme[0]) {
+			$theme[] = $appliedTheme;
 		}
 		return [
             'page' => $page,
@@ -110,5 +116,25 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
             'editorEnterBr' => BcSiteConfig::get('editor_enter_br')
 		];
     }
+
+	/**
+	 * サイトに適用されているテーマを取得する
+	 *
+	 * 自身に設定されていない場合は親サイトをたどって取得する。見つからない場合は null
+	 *
+	 * @param Site $site
+	 * @return string|null
+	 * @checked
+	 * @noTodo
+	 * @unitTest
+	 */
+	protected function getAppliedTheme(Site $site): ?string
+	{
+		try {
+			return $site->getAppliedTheme();
+		} catch (BcException) {
+			return null;
+		}
+	}
 
 }

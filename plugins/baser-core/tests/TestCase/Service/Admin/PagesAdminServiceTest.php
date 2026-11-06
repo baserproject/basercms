@@ -14,6 +14,10 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 use BaserCore\Service\Admin\PagesAdminService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
+use Cake\Core\Plugin;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -72,6 +76,52 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertArrayHasKey('editor', $rs);
         $this->assertArrayHasKey('editorOptions', $rs);
         $this->assertArrayHasKey('editorEnterBr', $rs);
+    }
+
+    /**
+     * test getViewVarsForEdit
+     * サブサイトのテーマが「メインサイトに従う」の場合、親サイトをたどって適用されているテーマの固定ページテンプレートを取得する
+     * @dataProvider getViewVarsForEditFollowMainSiteThemeDataProvider
+     */
+    public function test_getViewVarsForEdit_followMainSiteTheme($siteId)
+    {
+        $this->loadPlugins(['BcThemeSample']);
+        $templatePath = Plugin::templatePath('BcThemeSample') . 'Pages' . DS;
+        $folder = new BcFolder($templatePath);
+        $folderCreated = !is_dir($templatePath);
+        $folder->create();
+        $templateFile = new BcFile($templatePath . 'test_follow_main.php');
+        $templateFile->write('test');
+
+        SiteFactory::make()->main()->setField('theme', 'BcThemeSample')->persist();
+        // サブサイト（メインサイトに従う）と、その配下のサブサイト（親のサブサイトに従う）
+        SiteFactory::make(['id' => 2, 'theme' => '', 'main_site_id' => 1])->persist();
+        SiteFactory::make(['id' => 3, 'theme' => '', 'main_site_id' => 2])->persist();
+        PageFactory::make(['id' => 100, 'content' => 'test'])->persist();
+        ContentFactory::make([
+            'id' => 100,
+            'plugin' => 'BaserCore',
+            'type' => 'Page',
+            'site_id' => $siteId,
+            'parent_id' => 3,
+            'lft' => 100,
+            'rght' => 101,
+            'entity_id' => 100,
+            'status' => true
+        ])->persist();
+        $rs = $this->PagesAdminService->getViewVarsForEdit($this->PagesAdminService->get(100));
+        $templateFile->delete();
+        if ($folderCreated) $folder->delete();
+
+        $this->assertArrayHasKey('test_follow_main', $rs['pageTemplateList']);
+    }
+
+    public static function getViewVarsForEditFollowMainSiteThemeDataProvider()
+    {
+        return [
+            'メインサイトに従うサブサイト' => [2],
+            '親のサブサイトもテーマが空のサブサイト' => [3],
+        ];
     }
 
     /**
