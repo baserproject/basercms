@@ -284,6 +284,66 @@ class CustomContentsControllerTest extends BcTestCase
     }
 
     /**
+     * test archives
+     * 関連データをスラッグ・タイトルで指定した場合
+     */
+    public function testArchivesByRelatedName()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データーを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
+
+        $customLink = CustomLinkFactory::make([
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'name' => 'category',
+        ])->persist();
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59',
+            'has_child' => 0
+        ]);
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $customEntriesService->addFields(1, [$customLink]);
+
+        //スラッグで指定した場合、関連データのIDに変換される
+        $this->get('/test/archives/category/' . rawurlencode('プログラマー 2'));
+        $this->assertResponseCode(200);
+        $this->assertEquals('2', $this->_controller->viewBuilder()->getVar('archivesName'));
+
+        //スラッグがない場合、タイトルで指定してもIDに変換される
+        $this->get('/test/archives/category/' . rawurlencode('Webエンジニア・Webプログラマー'));
+        $this->assertResponseCode(200);
+        $this->assertEquals('1', $this->_controller->viewBuilder()->getVar('archivesName'));
+
+        //IDで指定した場合は従来どおり
+        $this->get('/test/archives/category/3');
+        $this->assertResponseCode(200);
+        $this->assertEquals('3', $this->_controller->viewBuilder()->getVar('archivesName'));
+
+        //該当がない場合は、指定した値のまま絞り込む
+        $this->get('/test/archives/category/' . rawurlencode('存在しない'));
+        $this->assertResponseCode(200);
+        $this->assertEquals('存在しない', $this->_controller->viewBuilder()->getVar('archivesName'));
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+    }
+
+    /**
      * test year
      */
     public function testYear()

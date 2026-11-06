@@ -42,5 +42,6 @@ class BcCustomContentBaserHelperTest extends BcTestCase
         $this->assertEquals(['CustomContent', 'isDisplayField'], $methods['isDisplayCustomField']);
         $this->assertEquals(['CustomContent', 'getFieldTitle'], $methods['getCustomFieldTitle']);
         $this->assertEquals(['CustomContent', 'getFieldValue'], $methods['getCustomFieldValue']);
+        $this->assertEquals(['CustomContent', 'getRelatedArchivesUrl'], $methods['getCustomRelatedArchivesUrl']);
     }
 }

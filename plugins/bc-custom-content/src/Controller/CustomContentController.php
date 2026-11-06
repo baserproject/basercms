@@ -157,6 +157,16 @@ class CustomContentController extends BcFrontAppController
         }
 
         $value = urldecode($value);
+
+        // フィールドの型が関連データかつ、値が数字ではない場合、関連データのIDを取得する
+        if ($customLink['custom_field']['type'] === 'BcCcRelated' && !ctype_digit($value)) {
+            // 関連データテーブルのIDを取得する
+            $relatedTableId = $customLink['custom_field']['meta']['BcCcRelated']['custom_table_id'] ?? null;
+            //　関連データのIDと紐づく、エントリーのIDを取得する
+            $relatedEntryId = $relatedTableId? $service->getRelatedEntryId((int)$relatedTableId, $value) : null;
+            // 該当がない場合は従来どおり、指定された値のまま絞り込む
+            if ($relatedEntryId) $value = (string)$relatedEntryId;
+        }
         $this->set($service->getViewVarsForArchives(
             $customContent,
             $this->paginate(
