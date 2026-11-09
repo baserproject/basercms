@@ -634,6 +634,44 @@ class BcValidationTest extends BcTestCase
             ['<table class="tbl"><tr><td>セル</td></tr></table>', true],
             ['<a href="mailto:info@example.com">メール</a>', true],
             ['<a href="/news/archives/1">次の記事</a>', true],
+
+            // --- HTML5 / WAI-ARIA の無害な記述は保存を許可する（#4633） ---
+            ['<section><header><h2>見出し</h2></header><article><p>本文</p></article><footer>補足</footer></section><nav>ナビ</nav><aside>補足</aside><main>メイン</main>', true],
+            ['<picture><source srcset="/a.webp 1x, /a@2x.webp 2x" media="(min-width:600px)" type="image/webp"><img src="/a.jpg" alt=""></picture>', true],
+            ['<p><time datetime="2026-11-09">11月9日</time><mark>強調</mark></p>', true],
+            ['<img src="/a.jpg" alt="" fetchpriority="high" loading="lazy" decoding="async">', true],
+            ['<video src="/a.mp4" controls autoplay muted loop playsinline preload="none"></video><audio src="/a.mp3" controls preload="metadata"></audio>', true],
+            ['<p><del datetime="2026-11-09">旧</del><ins datetime="2026-11-09">新</ins></p>', true],
+            ['<div role="note" aria-label="注記">注記</div><a href="/" aria-current="page">トップ</a>', true],
+            ['<a href="https://example.com/" rel="sponsored">広告</a>', true],
+            // YouTube の埋め込みコード
+            ['<iframe width="560" height="315" src="https://www.youtube.com/embed/xxxx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>', true],
+            // Google マップの埋め込みコード
+            ['<iframe src="https://www.google.com/maps/embed?pb=xxxx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>', true],
+            // BurgerEditor の画像・画像リンク・トリミング画像・ダウンロードブロックの出力
+            ['<div data-bgt="image" data-bgt-ver="2.24.0" class="bgt-container bgt-image-container"><div class="bgt-image" data-bge-popup="1" data-bge-empty="0" data-bge-hr="" data-bge="popup:data-bge-popup, empty:data-bge-empty, hr:data-bge-hr"><a class="bgt-image__link" href="/files/bgeditor/a.png" data-bge="path:href"><figure class="bgt-link__box"><div class="bgt-box__image-container"><img src="/files/bgeditor/a.png" data-bge="path:src, srcset:srcset, alt:alt, width:width, height:height, loading:loading, decoding:decoding" srcset="/files/bgeditor/a.png, /files/bgeditor/a__org.png 2x" alt="" width="800" height="600" loading="lazy" decoding="async"></div><figcaption class="bgt-box__caption" data-bge="caption"></figcaption></figure></a></div></div>', true],
+            ['<a class="bgt-image-link__link" href="https://example.com/" target="_blank" rel="noopener noreferrer"><img src="/files/bgeditor/a.png" srcset="" alt="" width="auto" height="auto" loading="eager" decoding="auto"></a>', true],
+            ['<div class="bgt-box__image" data-bge="path:style(background-image), alt" style="background-image: url(/files/bgeditor/%E7%94%BB%E5%83%8F.png)">代替テキスト</div>', true],
+            ['<a class="bgt-download-file__link" href="/files/bgeditor/a.pdf" target="_blank" data-bge="path:href, download:download" download="資料.pdf"><i class="bgt-link__icon bgt-link__icon--before" role="presentation"></i><span class="bgt-link__name" data-bge="name">資料</span></a>', true],
+            // CKEditor の表・画像回り込み
+            ['<table style="width:100%;border-collapse:collapse" border="1"><tr><td style="width:50%;padding:5px;border-bottom:1px solid #ccc">セル</td></tr></table>', true],
+            ['<img src="/a.png" alt="" style="float:right;margin:10px;width:300px;height:200px">', true],
+
+            // --- HTML5 の記述でも危険なものは拒否する ---
+            ['<section onclick="alert(origin)">a</section>', false],
+            ['<video src="/a.mp4" onplay="alert(origin)"></video>', false],
+            ['<a href="/" aria-label="x" onmouseover="alert(origin)">a</a>', false],
+            ['<div style="background-image:url(javascript:alert(origin))">a</div>', false],
+            ['<picture><source srcset="/a.webp 1x, javascript:alert(origin) 2x"><img src="/a.jpg" alt=""></picture>', false],
+            ['<img src="/a.jpg" alt="" srcset="jav&#x61;script:alert(origin)">', false],
+            // iframe の allow で、カメラ・マイク等の権限を埋め込み先に渡す
+            ['<iframe src="https://example.com/" allow="camera; microphone"></iframe>', false],
+            ['<iframe src="https://example.com/" allow="autoplay; geolocation"></iframe>', false],
+            // 閲覧中ページの URL をそのまま埋め込み先に渡す
+            ['<iframe src="https://example.com/" referrerpolicy="unsafe-url"></iframe>', false],
+            // 許可外の CSS プロパティは、許可されたプロパティと併記しても拒否する（全面オーバーレイ等）
+            ['<a href="https://example.com/" style="color:red;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999">x</a>', false],
+            ['<a href="/" style="color:red;opacity:0">x</a>', false],
         ];
     }
 

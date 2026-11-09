@@ -501,6 +501,11 @@ class BcValidation extends Validation
             return false;
         }
 
+        // iframe の allow 属性で、許可していない機能（カメラ・マイク等）を求めていないか
+        if (self::containsDisallowedIframePermission($value)) {
+            return false;
+        }
+
         // (B) HTMLPurifier で浄化した結果、許可外の要素・属性・スキームが除去されていないか
         //     （エラーメッセージではなく、浄化前後の構造差分で判定する）
         if (self::purifyRemovesUnsafeStructure($value)) {
@@ -526,7 +531,7 @@ class BcValidation extends Validation
         $config->set('Core.CollectErrors', false);
         $config->set('Cache.DefinitionImpl', null);
         $config->set('HTML.DefinitionID', 'basercms-containsScript');
-        $config->set('HTML.DefinitionRev', 2);
+        $config->set('HTML.DefinitionRev', 3);
         $config->set('HTML.SafeIframe', true);
         $config->set('URI.SafeIframeRegexp', $settings['safeIframeRegexp'] ?? '%^(https?:)?//%');
         $config->set('Attr.EnableID', !empty($settings['enableId']));
@@ -610,13 +615,55 @@ class BcValidation extends Validation
         foreach ($doc->getElementsByTagName('*') as $el) {
             if (!$el->hasAttributes()) continue;
             foreach ($el->attributes as $attr) {
-                if (!in_array(strtolower($attr->name), $uriAttributes, true)) continue;
-                $decoded = self::normalizeAttrValueForSchemeCheck($attr->value);
-                foreach ($schemes as $scheme) {
-                    if (preg_match('/^' . preg_quote($scheme, '/') . ':/i', $decoded)) {
-                        return true;
+                $name = strtolower($attr->name);
+                if ($name === 'srcset') {
+                    // srcset は「URL 記述子, URL 記述子」の並びのため、各候補の URL を検査する
+                    $values = array_map(
+                        fn($candidate) => preg_split('/\s+/', trim($candidate))[0],
+                        explode(',', html_entity_decode($attr->value, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+                    );
+                } elseif (in_array($name, $uriAttributes, true)) {
+                    $values = [$attr->value];
+                } else {
+                    continue;
+                }
+                foreach ($values as $value) {
+                    $decoded = self::normalizeAttrValueForSchemeCheck($value);
+                    foreach ($schemes as $scheme) {
+                        if (preg_match('/^' . preg_quote($scheme, '/') . ':/i', $decoded)) {
+                            return true;
+                        }
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * iframe の allow 属性に、許可していない機能が含まれるか
+     *
+     * allow 属性は埋め込み先にカメラ・マイク・位置情報などの権限を委ねるもので、
+     * ブラウザの許可ダイアログにはサイト自身の名前が表示される。
+     * setting.php の BcApp.containsScript.allowedIframePermissions にない機能を指定していれば true を返す。
+     *
+     * @param string $html
+     * @return bool
+     * @noTodo
+     * @checked
+     */
+    protected static function containsDisallowedIframePermission(string $html): bool
+    {
+        if (stripos($html, 'allow') === false) return false;
+        $allowed = array_map('strtolower', (array)Configure::read('BcApp.containsScript.allowedIframePermissions'));
+        $doc = self::loadHtmlFragment($html);
+        if (!$doc) return false;
+        foreach ($doc->getElementsByTagName('iframe') as $iframe) {
+            if (!$iframe->hasAttribute('allow')) continue;
+            foreach (explode(';', $iframe->getAttribute('allow')) as $directive) {
+                $feature = strtolower((string)(preg_split('/\s+/', trim($directive))[0] ?? ''));
+                if ($feature === '') continue;
+                if (!in_array($feature, $allowed, true)) return true;
             }
         }
         return false;
@@ -632,9 +679,9 @@ class BcValidation extends Validation
      */
     protected static function extractHtmlStructureSets(string $html): array
     {
-        $elements = $attributes = $schemes = [];
+        $elements = $attributes = $schemes = $cssProperties = [];
         $doc = self::loadHtmlFragment($html);
-        if (!$doc) return compact('elements', 'attributes', 'schemes');
+        if (!$doc) return compact('elements', 'attributes', 'schemes', 'cssProperties');
         $uriAttributes = Configure::read('BcApp.containsScript.uriAttributes')
             ?? ['href', 'src', 'action', 'formaction', 'codebase', 'data', 'xlink:href', 'poster', 'background', 'dynsrc', 'lowsrc', 'cite'];
         foreach ($doc->getElementsByTagName('*') as $node) {
@@ -647,15 +694,23 @@ class BcValidation extends Validation
                     && preg_match('/^\s*([a-z0-9.+\-]+)\s*:/i', $attr->value, $m)) {
                     $schemes[strtolower($m[1])] = true;
                 }
+                if ($name === 'style') {
+                    // url(...) の中の ; で区切らないよう、括弧の外の ; で宣言を分ける
+                    foreach (preg_split('/;(?![^(]*\))/', $attr->value) as $declaration) {
+                        if (preg_match('/^\s*([a-z-]+)\s*:/i', $declaration, $m)) {
+                            $cssProperties[strtolower($m[1])] = true;
+                        }
+                    }
+                }
             }
         }
-        return compact('elements', 'attributes', 'schemes');
+        return compact('elements', 'attributes', 'schemes', 'cssProperties');
     }
 
     /**
      * HTMLPurifier で浄化した結果、許可外の危険な要素・属性・スキームが除去されたか
      *
-     * 浄化前後の「要素名・属性名・URIスキーム」の集合を比較し、除去されたものがあれば
+     * 浄化前後の「要素名・属性名・URIスキーム・CSSプロパティ名」の集合を比較し、除去されたものがあれば
      * 危険または不正なHTMLとみなす。属性の除去は safeRemovedAttributePrefixes（data-* 等）を除外する。
      *
      * @param string $html
@@ -690,6 +745,10 @@ class BcValidation extends Validation
         }
         // URIスキームが除去・無害化された
         if (array_diff_key($raw['schemes'], $cleaned['schemes'])) {
+            return true;
+        }
+        // 許可外のCSSプロパティが除去された（style 属性自体が残っていても拒否する）
+        if (array_diff_key($raw['cssProperties'], $cleaned['cssProperties'])) {
             return true;
         }
         return false;
