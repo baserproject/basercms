@@ -26,7 +26,6 @@ use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomField;
 use BaserCore\Service\ContentsServiceInterface;
 use BcCustomContent\Model\Entity\CustomContent;
-use BcCustomContent\Service\CustomContentsServiceInterface;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use BcCustomContent\Service\CustomEntriesServiceInterface;
@@ -455,30 +454,6 @@ class CustomContentHelper extends CustomContentAppHelper
         }
         return $values;
 
-    }
-
-    /**
-     * 関連データのアーカイブURLを取得する
-     *
-     * 関連先エントリーのスラッグを優先し、未設定の場合はタイトルをURLに利用する
-     *
-     * @param CustomContent|int $customContent カスタムコンテンツ、またはそのID
-     * @param string $fieldName 関連データのフィールド名
-     * @param CustomEntry|EntityInterface $relatedEntry 関連先のエントリー
-     * @return string
-     * @checked
-     * @noTodo
-     */
-    public function getRelatedArchivesUrl(CustomContent|int $customContent, string $fieldName, CustomEntry|EntityInterface $relatedEntry): string
-    {
-        // IDで指定された場合は、カスタムコンテンツを取得する
-        if (is_int($customContent)) {
-            $customContent = $this->getService(CustomContentsServiceInterface::class)->get($customContent);
-        }
-        // URLに利用する値（スラッグがなければタイトル）
-        $value = $relatedEntry->name ?: $relatedEntry->title;
-        // 例：/guide/article/ + archives/ + guide_category + / + エンコードしたカテゴリ名
-        return $customContent->content->url . 'archives/' . $fieldName . '/' . rawurlencode($value);
     }
 
     /**

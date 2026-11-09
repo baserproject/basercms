@@ -23,7 +23,6 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Service\Front\CustomContentFrontService;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
-use BcCustomContent\Test\Factory\CustomEntryFactory;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Factory\CustomLinkFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
@@ -154,57 +153,6 @@ class CustomContentsFrontServiceTest extends BcTestCase
 
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
-    }
-
-    /**
-     * test getRelatedEntryId
-     */
-    public function test_getRelatedEntryId()
-    {
-        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
-        $customTable = $this->getService(CustomTablesServiceInterface::class);
-        $customEntriesService = $this->getService(CustomEntriesServiceInterface::class);
-
-        //関連先のカスタムテーブルと、切り替え前のカスタムテーブルを生成
-        $customTable->create([
-            'id' => 1,
-            'name' => 'recruit_categories',
-            'title' => '求人情報',
-            'type' => '1',
-            'display_field' => 'title',
-            'has_child' => 0
-        ]);
-        $customTable->create([
-            'id' => 2,
-            'name' => 'recruit',
-            'title' => '求人',
-            'type' => '1',
-            'display_field' => 'title',
-            'has_child' => 0
-        ]);
-
-        //フィクチャーからデーターを生成
-        $this->loadFixtureScenario(CustomEntriesScenario::class);
-        //スラッグとタイトルが重複するエントリー
-        CustomEntryFactory::make(['id' => 4, 'custom_table_id' => 1, 'name' => 'engineer', 'title' => 'エンジニア'])->persist();
-        CustomEntryFactory::make(['id' => 5, 'custom_table_id' => 1, 'name' => '', 'title' => 'engineer'])->persist();
-
-        $customEntriesService->setup(2);
-
-        //スラッグで取得できる
-        $this->assertEquals(2, $this->CustomContentFrontService->getRelatedEntryId(1, 'プログラマー 2'));
-        //タイトルでは取得できない
-        $this->assertNull($this->CustomContentFrontService->getRelatedEntryId(1, 'Webエンジニア・Webプログラマー'));
-        //スラッグとタイトルが重複する場合はスラッグで一致したものを返す
-        $this->assertEquals(4, $this->CustomContentFrontService->getRelatedEntryId(1, 'engineer'));
-        //該当がない場合は null を返す
-        $this->assertNull($this->CustomContentFrontService->getRelatedEntryId(1, '存在しない'));
-        //切り替え前のカスタムテーブルに戻っている
-        $this->assertEquals(2, $customEntriesService->CustomEntries->tableId);
-
-        //不要なテーブルを削除
-        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
-        $dataBaseService->dropTable('custom_entry_2_recruit');
     }
 
     /**

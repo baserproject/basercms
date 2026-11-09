@@ -745,29 +745,6 @@ class CustomContentHelperTest extends BcTestCase
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
-    /**
-     * test getRelatedArchivesUrl
-     */
-    public function testGetRelatedArchivesUrl()
-    {
-        // 準備
-        $this->loadFixtureScenario(CustomContentsScenario::class);
-        $customContent = $this->getService(CustomContentsServiceInterface::class)->get(1);
-
-        // スラッグがある場合はスラッグを利用する
-        $entry = new CustomEntry(['name' => 'engineer', 'title' => 'エンジニア']);
-        $result = $this->CustomContentHelper->getRelatedArchivesUrl($customContent, 'category', $entry);
-        $this->assertEquals('/test/archives/category/engineer', $result);
-
-        // スラッグがない場合はタイトルをエンコードして利用する
-        $entry = new CustomEntry(['name' => '', 'title' => 'Webエンジニア・Webプログラマー']);
-        $result = $this->CustomContentHelper->getRelatedArchivesUrl($customContent, 'category', $entry);
-        $this->assertEquals('/test/archives/category/' . rawurlencode('Webエンジニア・Webプログラマー'), $result);
-
-        // カスタムコンテンツをIDで指定した場合
-        $result = $this->CustomContentHelper->getRelatedArchivesUrl(1, 'category', $entry);
-        $this->assertEquals('/test/archives/category/' . rawurlencode('Webエンジニア・Webプログラマー'), $result);
-    }
      /**
      * test getGetYearList
      */
