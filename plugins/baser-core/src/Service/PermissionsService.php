@@ -63,6 +63,19 @@ class PermissionsService implements PermissionsServiceInterface
     private $defaultDenies = [];
 
     /**
+     * 判定の控え（PermissionsTable のインスタンスごと）
+     *
+     * PermissionsTable は対象のアクセスルールをインスタンスの中に控えている（getTargetPermissions()）。
+     * 判定の控えも同じインスタンスに結びつけ、テーブルを作り直したら（リクエストやテストが変われば）一緒に捨てる。
+     * サービスはコンテナから取り出すたびに作られるので、控えはサービスの外に持つ。
+     *  - regexUrl: ルールの URL → 組み立てた正規表現
+     *  - checkResult: 判定の結果（URL・ユーザーグループ・メソッド・ログインユーザーごと）
+     *  - userGroup: 判定の中で読み込んだユーザーグループ（ID ごと）
+     * @var \WeakMap<object, \ArrayObject>|null
+     */
+    private static ?\WeakMap $cacheStore = null;
+
+    /**
      * PermissionsService constructor.
      *
      * @checked
@@ -171,6 +184,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function create(array $postData): EntityInterface
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
@@ -190,6 +205,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $permission = $this->Permissions->patchEntity($target, $data);
         return $this->Permissions->saveOrFail($permission);
     }
@@ -205,6 +222,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function publish($id): bool
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $permission = $this->get($id);
         $permission->status = true;
         return ($this->Permissions->save($permission)) ? true: false;
@@ -221,6 +240,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function unpublish($id): bool
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $permission = $this->get($id);
         $permission->status = false;
         return ($this->Permissions->save($permission)) ? true: false;
@@ -237,6 +258,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function copy(int $permissionId)
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $permission = $this->get($permissionId);
         $permission->id = null;
         $permission->no = null;
@@ -264,6 +287,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function delete(int $id): bool
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $Permission = $this->get($id);
         return $this->Permissions->delete($Permission);
     }
@@ -350,7 +375,30 @@ class PermissionsService implements PermissionsServiceInterface
         if (in_array(Configure::read('BcApp.adminGroupId'), $userGroupId)) return true;
         if ($this->checkDefaultDeny($url)) return false;
         if ($this->checkDefaultAllow($url)) return true;
+        // 公開側の認証が無効なら、管理画面・管理 API でない URL は必ず許可になる（checkGroup()）。
+        // URL の解析（Router::parseRequest()）は公開側の URL だと DB を多く引くので、解析せずに返す
+        if ($this->isFrontUrlWithoutAuth($url)) return true;
 
+        $key = implode("\n", [$url, implode(',', $userGroupId), $method, (string)(BcUtil::loginUser()?->id ?? '')]);
+        $cache = $this->getCache();
+        if (!array_key_exists($key, $cache['checkResult'])) {
+            $result = $cache['checkResult'];
+            $result[$key] = $this->checkPermissionGroups($url, $userGroupId, $method);
+            $cache['checkResult'] = $result;
+        }
+        return $cache['checkResult'][$key];
+    }
+
+    /**
+     * ユーザーグループごとのアクセスルールで判定する
+     *
+     * @param string $url
+     * @param array $userGroupId
+     * @param string $method
+     * @return bool
+     */
+    private function checkPermissionGroups(string $url, array $userGroupId, string $method): bool
+    {
         $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
 
         $permissionGroupList = $this->Permissions->getTargetPermissions($userGroupId);
@@ -358,7 +406,13 @@ class PermissionsService implements PermissionsServiceInterface
             foreach($permissionGroupList as $userGroupId => $permissionGroup) {
                 $userGroup = null;
                 if($userGroupId) {
-                    $userGroup = $userGroupsService->get($userGroupId);
+                    $cache = $this->getCache();
+                    if (!isset($cache['userGroup'][$userGroupId])) {
+                        $userGroups = $cache['userGroup'];
+                        $userGroups[$userGroupId] = $userGroupsService->get($userGroupId);
+                        $cache['userGroup'] = $userGroups;
+                    }
+                    $userGroup = $cache['userGroup'][$userGroupId];
                 }
                 if ($this->checkGroup($url, $permissionGroup, $userGroup, $method)) {
                     return true;
@@ -370,6 +424,64 @@ class PermissionsService implements PermissionsServiceInterface
             }
         }
         return false;
+    }
+
+    /**
+     * 公開側の認証が無効で、管理画面・管理 API の URL ではないか
+     *
+     * このとき checkGroup() は、プレフィックスが Front になり必ず許可を返す。
+     * ほかのドメインの URL は解析しないで許可になるので、ここでは false を返して従来どおりに扱う。
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isFrontUrlWithoutAuth(string $url): bool
+    {
+        if (!Configure::read('BcPrefixAuth.Front.disabled')) return false;
+        $path = $url;
+        if (preg_match('/^(https?:\/\/[^\/]+?\/)(.*)$/', $url, $matches)) {
+            if ($matches[1] !== Configure::read('BcEnv.siteUrl')) return false;
+            $path = '/' . $matches[2];
+        }
+        [$path] = explode('?', $path);
+        $baserCorePrefix = '/' . BcUtil::getBaserCorePrefix();
+        $adminPrefix = $baserCorePrefix . (Configure::read('BcPrefixAuth.Admin.alias') ?: '/' . BcUtil::getAdminPrefix());
+        $apiAdminPrefix = $baserCorePrefix . (Configure::read('BcPrefixAuth.Api/Admin.alias') ?: '/' . Configure::read('BcApp.apiPrefix') . '/admin');
+        foreach([$adminPrefix, $apiAdminPrefix] as $prefix) {
+            $prefix = preg_replace('/\/+/', '/', $prefix);
+            if ($path === $prefix || str_starts_with($path, $prefix . '/') || str_starts_with($path, $prefix . '.')) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 判定の控えを取り出す
+     *
+     * @return \ArrayObject{regexUrl: array, checkResult: array, userGroup: array}
+     */
+    private function getCache(): \ArrayObject
+    {
+        self::$cacheStore ??= new \WeakMap();
+        if (!isset(self::$cacheStore[$this->Permissions])) {
+            self::$cacheStore[$this->Permissions] = new \ArrayObject(['regexUrl' => [], 'checkResult' => [], 'userGroup' => []]);
+        }
+        return self::$cacheStore[$this->Permissions];
+    }
+
+    /**
+     * 判定の控えを捨てる
+     *
+     * アクセスルールを書き換えたときに呼ぶ。書き換える前の判定の結果を、控えから返さないため。
+     *
+     * @return void
+     */
+    public function clearCache(): void
+    {
+        if (self::$cacheStore && isset(self::$cacheStore[$this->Permissions])) {
+            unset(self::$cacheStore[$this->Permissions]);
+        }
     }
 
     /**
@@ -547,6 +659,35 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function convertRegexUrl(string $url)
     {
+        // 組み立ては管理画面・API のプレフィックスの設定によるので、設定も控えの目印に含める。
+        // {loginUserId} はログインユーザーで置き換わるので、ユーザーごとに控える
+        $key = implode("\n", [
+            $url,
+            BcUtil::getBaserCorePrefix(),
+            BcUtil::getAdminPrefix(),
+            (string)Configure::read('BcApp.apiPrefix'),
+            (string)Configure::read('BcPrefixAuth.Admin.alias'),
+            (string)Configure::read('BcPrefixAuth.Api/Admin.alias'),
+        ]);
+        if(strpos($url, '{loginUserId}') !== false) {
+            $key .= "\n" . (string)(BcUtil::loginUser()?->id ?? '');
+        }
+        $cache = $this->getCache();
+        if (!array_key_exists($key, $cache['regexUrl'])) {
+            $regexUrl = $cache['regexUrl'];
+            $regexUrl[$key] = $this->buildRegexUrl($url);
+            $cache['regexUrl'] = $regexUrl;
+        }
+        return $cache['regexUrl'][$key];
+    }
+
+    /**
+     * URLを正規表現用の文字列に組み立てる
+     * @param string $url
+     * @return string
+     */
+    private function buildRegexUrl(string $url): string
+    {
         if(strpos($url, '{loginUserId}') !== false) {
             $user = BcUtil::loginUser();
             if($user) {
@@ -588,6 +729,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function addCheck(string $url, bool $auth)
     {
+        $this->clearCache();
         $pattern = $this->convertRegexUrl($url);
         if ($auth) {
             $this->defaultAllows[] = $pattern;
@@ -610,6 +752,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         $offset = intval($offset);
         if ($offset === 0) {
             return true;
@@ -662,6 +806,8 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function batch($method, array $ids): bool
     {
+        // アクセスルールを書き換えるので、判定の控えを捨てる
+        $this->clearCache();
         if (!$ids) return true;
         $db = $this->Permissions->getConnection();
         $db->begin();
