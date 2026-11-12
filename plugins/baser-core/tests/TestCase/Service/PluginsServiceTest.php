@@ -509,6 +509,39 @@ EOF;
         unlink($rssPath);
     }
 
+    /**
+     * test getAvailableCoreVersionInfo
+     * 取得に失敗したら控え、一定時間は再取得しない
+     * @return void
+     */
+    public function test_getAvailableCoreVersionInfoRetryAfterFailure()
+    {
+        $rssPath = WWW_ROOT . 'baser-core.rss';
+        SiteConfigFactory::make(['name' => 'use_update_notice', 'value' => true])->persist();
+        Cache::delete('coreReleaseInfo', '_bc_update_');
+        Cache::delete('coreReleaseInfo.failed', '_bc_update_');
+
+        // RSS でないものが返ると失敗として控え、空を返す
+        file_put_contents($rssPath, '<html><body>Service Unavailable');
+        Configure::write('BcApp.coreReleaseUrl', $rssPath);
+        $this->assertEquals([], $this->Plugins->getAvailableCoreVersionInfo());
+        $this->assertNotEmpty(Cache::read('coreReleaseInfo.failed', '_bc_update_'));
+
+        // 控えがある間は、取得できる状態になっても再取得しない
+        $this->createReleaseRss(['5.0.2', '5.0.1', '5.0.0']);
+        $this->assertEquals([], $this->Plugins->getAvailableCoreVersionInfo());
+
+        // 一定時間が過ぎたら再取得し、控えを消す
+        Cache::write('coreReleaseInfo.failed', time() - PluginsService::CORE_RELEASE_FAILURE_RETRY_INTERVAL, '_bc_update_');
+        $versionInfo = $this->Plugins->getAvailableCoreVersionInfo();
+        $this->assertEquals('5.0.2', $versionInfo['latest']);
+        $this->assertNull(Cache::read('coreReleaseInfo.failed', '_bc_update_'));
+
+        // 初期化
+        unlink($rssPath);
+        Cache::delete('coreReleaseInfo', '_bc_update_');
+    }
+
     public static function getAvailableCoreVersionInfoDataProvider()
     {
         return [

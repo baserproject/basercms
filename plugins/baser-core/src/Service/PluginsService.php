@@ -24,7 +24,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Client;
-use Cake\Http\Client\Exception\NetworkException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -48,6 +47,16 @@ use InvalidArgumentException;
  */
 class PluginsService implements PluginsServiceInterface
 {
+
+    /**
+     * コアのリリース情報の取得に失敗した後、再取得を試みるまでの秒数
+     */
+    public const CORE_RELEASE_FAILURE_RETRY_INTERVAL = 600;
+
+    /**
+     * コアのリリース情報の取得に使う HTTP クライアントのタイムアウト（秒）
+     */
+    public const CORE_RELEASE_CLIENT_TIMEOUT = 5;
 
     /**
      * Trait
@@ -790,19 +799,29 @@ class PluginsService implements PluginsServiceInterface
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
         if (!$coreReleaseInfo || empty($coreReleaseInfo['latest'])) {
-            $releaseUrl = Configure::read('BcApp.coreReleaseUrl');
-            $http = new Client();
-            try {
-                $response = $http->get($releaseUrl);
-                $body = $response->getStringBody();
-            } catch (InvalidArgumentException $e) {
-                // ユニットテストの場合にhttpでアクセスできないので、ファイルから直接読み込む
-                $file = new BcFile($releaseUrl);
-                $body = $file->read();
-            } catch (NetworkException) {
+            // 直近で取得に失敗している場合は、一定時間は再取得せず空を返す
+            // （外部に出られない環境で、管理画面を開くたびにサイドバーから呼ばれて待たされるのを防ぐ）
+            $failedAt = Cache::read('coreReleaseInfo.failed', '_bc_update_');
+            if ($failedAt && (time() - (int)$failedAt) < self::CORE_RELEASE_FAILURE_RETRY_INTERVAL) {
                 return [];
             }
-            $xml = Xml::build($body);
+            $releaseUrl = Configure::read('BcApp.coreReleaseUrl');
+            $http = new Client(['redirect' => true, 'timeout' => self::CORE_RELEASE_CLIENT_TIMEOUT]);
+            try {
+                try {
+                    $response = $http->get($releaseUrl);
+                    $body = $response->getStringBody();
+                } catch (InvalidArgumentException $e) {
+                    // ユニットテストの場合にhttpでアクセスできないので、ファイルから直接読み込む
+                    $file = new BcFile($releaseUrl);
+                    $body = $file->read();
+                }
+                $xml = Xml::build($body);
+            } catch (\Throwable) {
+                Cache::write('coreReleaseInfo.failed', time(), '_bc_update_');
+                return [];
+            }
+            Cache::delete('coreReleaseInfo.failed', '_bc_update_');
             $latest = null;
             $versions = [];
             $currentVersion = BcUtil::getVersion();
