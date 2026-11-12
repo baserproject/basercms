@@ -13,6 +13,7 @@ namespace BcMail\Test\TestCase\Service\Front;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
@@ -738,6 +739,38 @@ class MailFrontServiceTest extends BcTestCase
     /**
      * test sendMail
      */
+    /**
+     * test getMailMessageMailer
+     *
+     * 公開API から送るとリクエストのサイトがメインサイトになるため、
+     * メールフォームのサイトのテーマでメールを組み立てること
+     */
+    public function test_getMailMessageMailer()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'basertest@example.com'])->persist();
+        SiteFactory::make(['id' => 2, 'name' => 'sub', 'alias' => 'sub', 'theme' => 'BcPluginSample', 'status' => true])->persist();
+        MailContentFactory::make(['id' => 99, 'form_template' => 'default', 'mail_template' => 'mail_default'])->persist();
+        ContentFactory::make([
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/sub/form/',
+            'site_id' => 2,
+            'entity_id' => 99,
+            'status' => true,
+        ])->persist();
+        $mailContent = $this->getService(MailContentsServiceInterface::class)->get(99);
+
+        $mailer = $this->execPrivateMethod($this->MailFrontService, 'getMailMessageMailer', [$mailContent]);
+        $this->assertEquals('BcPluginSample', $mailer->viewBuilder()->getTheme());
+        $this->assertEquals('BaserCore.BcFrontEmail', $mailer->viewBuilder()->getClassName());
+
+        // メールフォームのサイトにテーマが無いときは、リクエストのサイトのテーマのまま
+        $mailContent->content->site->theme = '';
+        $mailer = $this->execPrivateMethod($this->MailFrontService, 'getMailMessageMailer', [$mailContent]);
+        $this->assertNotEquals('BcPluginSample', $mailer->viewBuilder()->getTheme());
+    }
+
     public function test_sendMail()
     {
         // prepare
