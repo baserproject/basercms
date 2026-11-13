@@ -406,7 +406,9 @@ class BcCkeditorHelper extends Helper
                 $themeEditorCsses[$key] = $themeEditorCss['url'];
             }
         }
-        return $themeEditorCsses;
+        // 途中の要素を消すと添字が飛び、JSON にしたときに配列ではなくオブジェクトになって、
+        // JS 側（jquery.bcCkeditor.js の themeEditorCsses.map）で止まるため、添字を詰め直す
+        return array_values($themeEditorCsses);
     }
 
     /**

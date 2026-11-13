@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Model\Entity\Site;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcCkeditorHelper;
@@ -225,7 +226,20 @@ class BcCkeditorHelperTest extends BcTestCase
      */
     public function testGetThemeEditorCsses()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーマが無いサイトでは空
+        $request = $this->getRequest('/baser/admin')->withAttribute('currentSite', new Site(['theme' => null, 'alias' => null]));
+        $helper = new BcCkeditorHelper(new BcAdminAppView($request));
+        $this->assertSame([], $helper->getThemeEditorCsses());
+
+        // 別名のあるサイトで、テーマに別名用の editor.css が無く、テーマ直下の css/editor.css だけある場合（BcFront）
+        // 別名用の候補を除いたあとも、添字が 0 から詰まった配列で返り、JSON にしても配列になること
+        $request = $this->getRequest('/baser/admin')->withAttribute('currentSite', new Site(['theme' => 'BcFront', 'alias' => 'en']));
+        $helper = new BcCkeditorHelper(new BcAdminAppView($request));
+        $result = $helper->getThemeEditorCsses();
+        $this->assertCount(1, $result);
+        $this->assertTrue(array_is_list($result));
+        $this->assertStringEndsWith('css/editor.css', $result[0]);
+        $this->assertStringStartsWith('[', json_encode($result));
     }
 
     /**
