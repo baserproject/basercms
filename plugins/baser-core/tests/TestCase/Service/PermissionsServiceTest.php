@@ -311,6 +311,83 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * 判定の結果を控え、アクセスルールを書き換えたら控えを捨てる
+     * （ルールそのものは PermissionsTable がリクエストの間控えているので、ここでは判定の控えが捨てられることを見る）
+     */
+    public function testCheckCache()
+    {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadFixtureScenario(UsersUserGroupsScenario::class);
+        $this->loadFixtureScenario(UserScenario::class);
+        $this->loadPlugins(['BcBlog']);
+        $url = '/baser/admin/bc-blog/blog_posts/edit/100';
+        // 2回判定しても結果は同じ
+        $this->assertFalse($this->PermissionsService->check($url, [2]));
+        $this->assertFalse($this->PermissionsService->check($url, [2]));
+        $this->assertNotEmpty($this->getStaticCache('checkResult'));
+
+        // アクセスルールを足すと、判定の控えを捨てる
+        $this->PermissionsService->create([
+            'user_group_id' => 2,
+            'permission_group_id' => 1,
+            'name' => 'ブログ記事の編集',
+            'url' => '/baser/admin/bc-blog/blog_posts/edit/*',
+            'auth' => true,
+            'method' => '*',
+            'status' => true,
+        ]);
+        $this->assertEmpty($this->getStaticCache('checkResult'));
+        $this->assertEmpty($this->getStaticCache('regexUrl'));
+    }
+
+    /**
+     * 公開側の認証が無効なとき、公開側の URL は解析せずに許可する（結果も控えない）
+     */
+    public function testCheckFrontUrl()
+    {
+        $this->loadFixtureScenario(UserGroupsScenario::class);
+        $this->loadPlugins(['BcBlog']);
+        Configure::write('BcPrefixAuth.Front.disabled', true);
+        $this->assertTrue($this->PermissionsService->check('/news/archives/1', [2]));
+        $this->assertTrue($this->PermissionsService->check(Configure::read('BcEnv.siteUrl') . 'about', [2]));
+        $this->assertEmpty($this->getStaticCache('checkResult'));
+        // addCheck() の拒否に当たるものは拒否
+        $this->PermissionsService->addCheck('/fuga', false);
+        $this->assertFalse($this->PermissionsService->check('/fuga', [2]));
+        // 管理画面の URL は今までどおりルールで判定する
+        $this->assertFalse($this->PermissionsService->check('/baser/admin/bc-blog/blog_posts/edit/100', [2]));
+    }
+
+    /**
+     * 組み立てた正規表現を控え、{loginUserId} を含む URL はログインユーザーごとに控える
+     */
+    public function testConvertRegexUrlCache()
+    {
+        $this->loadFixtureScenario(UserScenario::class);
+        $pattern = $this->PermissionsService->convertRegexUrl('/baser/admin/baser-core/users/index');
+        $count = count($this->getStaticCache('regexUrl'));
+        $this->assertSame($pattern, $this->PermissionsService->convertRegexUrl('/baser/admin/baser-core/users/index'));
+        $this->assertCount($count, $this->getStaticCache('regexUrl'));
+
+        $url = '/baser/admin/baser-core/users/edit/{loginUserId}';
+        $this->loginAdmin($this->getRequest(), 1);
+        $this->assertMatchesRegularExpression($this->PermissionsService->convertRegexUrl($url), '/baser/admin/baser-core/users/edit/1');
+        $this->loginAdmin($this->getRequest(), 2);
+        $this->assertMatchesRegularExpression($this->PermissionsService->convertRegexUrl($url), '/baser/admin/baser-core/users/edit/2');
+        $this->assertDoesNotMatchRegularExpression($this->PermissionsService->convertRegexUrl($url), '/baser/admin/baser-core/users/edit/1');
+    }
+
+    /**
+     * PermissionsService の判定の控えを読む
+     */
+    private function getStaticCache(string $name): array
+    {
+        $store = (new \ReflectionProperty(PermissionsService::class, 'cacheStore'))->getValue();
+        if (!$store || !isset($store[$this->PermissionsService->Permissions])) return [];
+        return $store[$this->PermissionsService->Permissions][$name];
+    }
+
     public static function checkDataProvider()
     {
         return [
