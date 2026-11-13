@@ -259,24 +259,62 @@ return [
                 'details' => ['Block', 'Flow', 'Common', ['open' => 'Bool']],
                 'summary' => ['Block', 'Flow', 'Common', []],
                 'form' => ['Block', 'Flow', 'Common', ['action' => 'URI']],
-                'video' => ['Block', 'Flow', 'Common', ['src' => 'URI', 'controls' => 'Bool', 'width' => 'Text', 'height' => 'Text', 'poster' => 'URI']],
-                'audio' => ['Block', 'Flow', 'Common', ['src' => 'URI', 'controls' => 'Bool']],
-                'source' => ['Block', 'Empty', 'Common', ['src' => 'URI', 'type' => 'Text']],
+                'video' => ['Block', 'Flow', 'Common', [
+                    'src' => 'URI', 'controls' => 'Bool', 'width' => 'Text', 'height' => 'Text', 'poster' => 'URI',
+                    'autoplay' => 'Bool', 'muted' => 'Bool', 'loop' => 'Bool', 'playsinline' => 'Bool', 'preload' => 'Enum#auto,metadata,none',
+                ]],
+                'audio' => ['Block', 'Flow', 'Common', [
+                    'src' => 'URI', 'controls' => 'Bool',
+                    'autoplay' => 'Bool', 'muted' => 'Bool', 'loop' => 'Bool', 'preload' => 'Enum#auto,metadata,none',
+                ]],
+                'source' => ['Block', 'Empty', 'Common', ['src' => 'URI', 'type' => 'Text', 'srcset' => 'Text', 'sizes' => 'Text', 'media' => 'Text']],
                 'object' => ['Block', 'Flow', 'Common', ['data' => 'URI', 'type' => 'Text', 'width' => 'Text', 'height' => 'Text']],
+                // HTML5 のセクション要素
+                'section' => ['Block', 'Flow', 'Common', []],
+                'article' => ['Block', 'Flow', 'Common', []],
+                'nav' => ['Block', 'Flow', 'Common', []],
+                'aside' => ['Block', 'Flow', 'Common', []],
+                'header' => ['Block', 'Flow', 'Common', []],
+                'footer' => ['Block', 'Flow', 'Common', []],
+                'main' => ['Block', 'Flow', 'Common', []],
+                'picture' => ['Inline', 'Flow', 'Common', []],
+                'time' => ['Inline', 'Inline', 'Common', ['datetime' => 'Text']],
+                'mark' => ['Inline', 'Inline', 'Common', []],
             ],
             // 追加で許可させる属性（'tag.attr' => 'HTMLPurifierの属性型'）
             'allowedAttributes' => [
                 'img.srcset' => 'Text',
                 'img.sizes' => 'Text',
+                'img.fetchpriority' => 'Enum#high,low,auto',
+                'img.loading' => 'Enum#lazy,eager',
+                'img.decoding' => 'Enum#sync,async,auto',
+                // BurgerEditor は画像が無いときなどに width="auto" を出力するため、ピクセル値以外も許可する
+                'img.width' => 'Text',
+                'img.height' => 'Text',
                 'iframe.allowfullscreen' => 'Bool',
+                'iframe.loading' => 'Enum#lazy,eager',
+                // unsafe-url は閲覧中ページの URL をそのまま埋め込み先に渡すため許可しない
+                'iframe.referrerpolicy' => 'Enum#no-referrer,no-referrer-when-downgrade,origin,origin-when-cross-origin,same-origin,strict-origin,strict-origin-when-cross-origin',
+                // 値に指定できる機能は allowedIframePermissions で制限する
+                'iframe.allow' => 'Text',
+                'del.datetime' => 'Text',
+                'ins.datetime' => 'Text',
+                'a.download' => 'Text',
+            ],
+            // iframe の allow 属性で許可する機能（YouTube の埋め込みコードが使うもの）
+            // camera / microphone / geolocation 等を許可すると、埋め込んだ外部ページがサイト自身の名前で権限を求められるため含めない
+            'allowedIframePermissions' => [
+                'accelerometer', 'autoplay', 'clipboard-write', 'encrypted-media',
+                'gyroscope', 'picture-in-picture', 'web-share', 'fullscreen',
             ],
             // id属性を許可するか（アンカーリンク等で利用）
             'enableId' => true,
             // a要素の target 属性で許可する値
             'allowedFrameTargets' => ['_blank', '_self', '_parent', '_top'],
             // a要素の rel 属性で許可する値
-            'allowedRel' => ['nofollow', 'noopener', 'noreferrer'],
+            'allowedRel' => ['nofollow', 'noopener', 'noreferrer', 'sponsored', 'ugc', 'external'],
             // style属性で許可するCSSプロパティ（クリックジャッキング等に悪用される position/opacity/z-index 等は許可しない）
+            // ここにないプロパティが1つでも含まれる style は拒否する
             'allowedCssProperties' => [
                 'color', 'background-color', 'background', 'text-align', 'text-decoration',
                 'text-indent', 'font-weight', 'font-style', 'font-size', 'font-family',
@@ -284,7 +322,10 @@ return [
                 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
                 'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
                 'border', 'border-color', 'border-width', 'border-style',
+                'border-top', 'border-right', 'border-bottom', 'border-left',
+                'border-collapse', 'border-spacing',
                 'vertical-align', 'white-space', 'list-style', 'list-style-type',
+                'background-image', 'float', 'clear',
             ],
             // SafeIframe で許可する src オリジン
             'safeIframeRegexp' => '%^(https?:)?//%',
@@ -295,8 +336,8 @@ return [
             ],
             // 危険とみなすURIスキーム
             'dangerousSchemes' => ['javascript', 'vbscript', 'livescript', 'mocha', 'data'],
-            // purify で除去されても拒否理由としない属性（プレフィックス一致・data-* は無害として許容）
-            'safeRemovedAttributePrefixes' => ['data-'],
+            // purify で除去されても拒否理由としない属性（プレフィックス一致・data-* / aria-* / role は無害として許容）
+            'safeRemovedAttributePrefixes' => ['data-', 'aria-', 'role'],
         ],
 
         /**
