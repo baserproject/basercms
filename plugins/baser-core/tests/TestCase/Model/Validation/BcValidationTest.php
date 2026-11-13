@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Validation\BcValidation;
@@ -861,6 +862,45 @@ class BcValidationTest extends BcTestCase
             ['前置き [BcBaser.getGoogleMaps apiKey|k] 後ろ', false],
             ["[Mail.getForm\n1]", false],
         ];
+    }
+
+    /**
+     * test containsScript - extractors で取り出したHTMLも検査すること
+     */
+    public function test_containsScript_extractors()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $extractors = Configure::read('BcApp.containsScript.extractors');
+        Configure::write('BcApp.containsScript.extractors', [self::class . '::extractForTest']);
+        try {
+            // 管理者以外：取り出したHTMLにスクリプトがあれば拒否する
+            $this->assertFalse(BcValidation::containsScript('<p>EXTRACT_SCRIPT</p>'));
+            // 管理者以外：extractor が false を返したら拒否する
+            $this->assertFalse(BcValidation::containsScript('<p>EXTRACT_REJECT</p>'));
+            // 管理者以外：取り出したHTMLが無害なら許可する
+            $this->assertTrue(BcValidation::containsScript('<p>EXTRACT_SAFE</p>'));
+            $this->assertTrue(BcValidation::containsScript('<p>plain</p>'));
+
+            // 管理者：取り出したHTMLにスクリプトがあっても許可する
+            Router::setRequest($this->loginAdmin($this->getRequest()));
+            $this->assertTrue(BcValidation::containsScript('<p>EXTRACT_SCRIPT</p>'));
+        } finally {
+            Configure::write('BcApp.containsScript.extractors', $extractors);
+        }
+    }
+
+    /**
+     * test_containsScript_extractors 用の extractor
+     *
+     * @param string $html
+     * @return array|false
+     */
+    public static function extractForTest(string $html): array|false
+    {
+        if (str_contains($html, 'EXTRACT_REJECT')) return false;
+        if (str_contains($html, 'EXTRACT_SCRIPT')) return ['<img src="x" onerror="alert(1)">'];
+        if (str_contains($html, 'EXTRACT_SAFE')) return ['<p><strong>safe</strong></p>'];
+        return [];
     }
 
 }

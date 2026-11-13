@@ -491,6 +491,17 @@ class BcValidation extends Validation
             return true;
         }
 
+        // 表示時に別の形式から復元されるHTML（BurgerEditor の埋め込みブロックなど）を取り出して検査する
+        // extractor は取り出したHTMLの配列を返す。安全に取り出せない場合は false を返し、その値を拒否する
+        foreach ((array)Configure::read('BcApp.containsScript.extractors') as $extractor) {
+            if (!is_callable($extractor)) continue;
+            $fragments = call_user_func($extractor, $value);
+            if ($fragments === false) return false;
+            foreach ((array)$fragments as $fragment) {
+                if (!self::containsScript($fragment)) return false;
+            }
+        }
+
         // PHPタグ・生のscriptタグはDOM解析では検出しづらいため、文字列で先に検査する
         if (preg_match('/<\?(php|=|\s|$)|<script/i', $value)) {
             return false;
