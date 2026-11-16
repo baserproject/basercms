@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use BaserCore\Database\Migration\BcMigration;
 
-class Initial extends BcMigration
+class InitialBcSeo extends BcMigration
 {
     /**
      * Up Method.
