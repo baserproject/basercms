@@ -690,7 +690,10 @@ class ContentsTable extends AppTable
                     if (is_null($relatedParentId)) {
                         $relatedParentId = $this->copyContentFolderPath($url, $site->id);
                     }
-                    $content->parent_id = $relatedParentId;
+                    // 親フォルダを決められない場合は、親の無いノードになりツリー構造が壊れるため、今の場所に残す
+                    if ($relatedParentId !== false) {
+                        $content->parent_id = $relatedParentId;
+                    }
                 } else {
                     $content->name = $relatedContentName;
                 }
@@ -722,8 +725,29 @@ class ContentsTable extends AppTable
                 if (is_null($relatedParentId)) {
                     $relatedParentId = $this->copyContentFolderPath($url, $site->id);
                 }
+                // 親フォルダを決められない場合は、親の無いノードになりツリー構造が壊れるため、エイリアスを作らない
+                if ($relatedParentId === false) {
+                    continue;
+                }
                 $content->parent_id = $relatedParentId;
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
+            }
+            // 作成・名前の変更・移動で、同じ場所に同名の別のコンテンツと並ぶ場合は、このサイトのコンテンツを作成・更新しない
+            // 同じ URL のコンテンツは上の検索で見つかるため、新規作成で並ぶのは URL の末尾の / だけが違うフォルダとページ
+            // 名前などを戻して保存すると、main_site_content_id が URL から計算し直されて切れ、重なりの解消後も連携されなくなるため保存しない
+            if ($content->isDirty('name') || $content->isDirty('parent_id')) {
+                // プラグインが検索に別のテーブルを結合することがあるため、列名にテーブル名を付ける
+                $conditions = [
+                    $this->aliasField('site_id') => $content->site_id,
+                    $this->aliasField('parent_id') => $content->parent_id,
+                    $this->aliasField('name') => $content->name,
+                ];
+                if (!$content->isNew()) {
+                    $conditions[$this->aliasField('id') . ' <>'] = $content->id;
+                }
+                if ($this->exists($conditions)) {
+                    continue;
+                }
             }
             $this->offEvent('Model.afterSave');
             $savedContent = $this->save($content);
@@ -775,14 +799,18 @@ class ContentsTable extends AppTable
             if ($currentContentFolder->site_root) {
                 continue;
             }
+            // findByUrl() は公開中のコンテンツしか探さず、非公開のフォルダを見落として同名のフォルダを作るため、
+            // 同じ場所にある同名のページ（URL の末尾に / が無い）とフォルダ（/ がある）を、URL だけでまとめて探す
             $url .= $currentContentFolder->name;
-            if ($this->findByUrl($url)) {
+            $sameNameIds = $this->find('list', keyField: 'url', valueField: 'id')
+                ->where([$this->aliasField('site_id') => $targetSiteId, $this->aliasField('url') . ' IN' => [$url, $url . '/']])
+                ->toArray();
+            if (isset($sameNameIds[$url])) {
                 return false;
             }
             $url .= '/';
-            $targetContentFolder = $this->findByUrl($url);
-            if ($targetContentFolder) {
-                $parentId = $targetContentFolder->id;
+            if (isset($sameNameIds[$url])) {
+                $parentId = $sameNameIds[$url];
             } else {
                 $contentFolder = $contentFoldersTable->patchEntity($contentFoldersTable->newEmptyEntity(), [
                     'content' => [
