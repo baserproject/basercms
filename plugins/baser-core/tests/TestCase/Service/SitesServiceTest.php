@@ -11,13 +11,20 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SitesService;
+use BaserCore\Service\UtilitiesService;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\ContentFoldersScenario;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\UserScenario;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
@@ -208,6 +215,62 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(5, $users->all()->count());
         $this->expectException("BaserCore\Error\BcException");
         $this->Sites->delete(1);
+    }
+
+    /**
+     * Test delete
+     *
+     * 入れ子のフォルダを持つサイトを削除しても、コンテンツのツリー構造が壊れないこと
+     */
+    public function testDelete_keepsContentsTree()
+    {
+        // ツリー構造を検証するため、シナリオのデータは使わずに作り直す
+        foreach (['sites', 'contents', 'content_folders'] as $table) {
+            self::truncateTable($table);
+        }
+        SiteFactory::make()->main()->persist();
+        ContentFactory::make(['plugin' => 'BaserCore', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2, 'level' => 0])
+            ->treeNode(1, 1, null, '', '/', 1, true)->persist();
+        ContentFolderFactory::make(['id' => 1])->persist();
+        Router::setRequest($this->loginAdmin($this->getRequest('/baser/admin')));
+
+        $site = $this->Sites->create([
+            'name' => 'english',
+            'display_name' => '英語サイト',
+            'title' => '英語サイト',
+            'alias' => 'en',
+            'main_site_id' => 1,
+            'use_subdomain' => 0,
+        ]);
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        $siteRootId = $contentsService->getSiteRoot($site->id)->id;
+        $contentFoldersService = $this->getService(ContentFoldersServiceInterface::class);
+        $createFolder = function(string $name, int $parentId) use ($contentFoldersService, $site) {
+            return $contentFoldersService->create([
+                'folder_template' => '',
+                'content' => [
+                    'name' => $name,
+                    'title' => $name,
+                    'parent_id' => $parentId,
+                    'plugin' => 'BaserCore',
+                    'type' => 'ContentFolder',
+                    'site_id' => $site->id,
+                    'self_status' => true,
+                    'created_date' => '2026-01-01 00:00:00',
+                ],
+            ])->content->id;
+        };
+        $parentId = $createFolder('parent', $siteRootId);
+        $childId = $createFolder('child', $parentId);
+
+        $this->Sites->delete($site->id);
+
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        // 配下のフォルダはゴミ箱に入っている
+        foreach ([$parentId, $childId] as $id) {
+            $this->assertNotNull($contentsService->getTrash($id)->deleted_date);
+        }
     }
 
 

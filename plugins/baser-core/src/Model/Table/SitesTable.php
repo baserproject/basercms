@@ -446,8 +446,10 @@ class SitesTable extends AppTable
             }
             BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveEventListener);
 
+            // 親から先にゴミ箱に入れると、子が親の lft / rght の範囲内に残ったまま
+            // ゴミ箱に入り、ツリー構造が壊れるため、子孫から先に処理する
             $children = $contentService->getChildren($content->id);
-            foreach($children as $child) {
+            foreach (array_reverse($children->toArray()) as $child) {
                 $contentService->delete($child->id);
             }
         }
