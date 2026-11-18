@@ -5,7 +5,7 @@
  *
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
+ * @since         5.4.3
  * @license       https://basercms.net/license/index.html MIT License
  */
 
@@ -34,13 +34,13 @@ class BcCcBurgerEditorHelper extends Helper
     /**
      * control
      *
-     * @param string $fieldName
+     * @param CustomLink $link
      * @param array $options
      * @return string
      */
-    public function control($field, array $options = []): string
+    public function control(CustomLink $link, array $options = []): string
     {
-        $useDraft = !empty($field->custom_field->meta['BcCcBurgerEditor']['editor_use_draft']);
+        $useDraft = !empty($link->custom_field->meta['BcCcBurgerEditor']['editor_use_draft']);
         $editorOptions = [
             'type' => 'editor',
             'editor' => "BcBurgerEditor.BurgerEditor",
@@ -51,9 +51,9 @@ class BcCcBurgerEditorHelper extends Helper
         ];
         // 下書きを利用する場合のみ、下書き保存用フィールド（{フィールド名}_draft）を渡す
         if ($useDraft) {
-            $editorOptions['editorDraftField'] = $field->name . '_draft';
+            $editorOptions['editorDraftField'] = $link->name . '_draft';
         }
-        return $this->BcAdminForm->editor($field->name, $editorOptions);
+        return $this->BcAdminForm->editor($link->name, $editorOptions);
     }
 
     /**
