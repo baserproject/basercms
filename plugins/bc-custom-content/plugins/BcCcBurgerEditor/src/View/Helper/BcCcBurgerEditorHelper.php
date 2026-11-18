@@ -28,7 +28,7 @@ class BcCcBurgerEditorHelper extends Helper
      */
 
     protected array $helpers = [
-        'BaserCore.BcAdminForm'
+        'BaserCore.BcAdminForm' => ['templates' => 'BaserCore.bc_form']
     ];
 
     /**
@@ -38,23 +38,50 @@ class BcCcBurgerEditorHelper extends Helper
      * @param array $options
      * @return string
      */
-    public function control($field, array $options): string
+    public function control($field, array $options = []): string
     {
-        if(!empty($options['preview'])) return '';
-        return $this->BcAdminForm->editor($field->name, [
+        $useDraft = !empty($field->custom_field->meta['BcCcBurgerEditor']['editor_use_draft']);
+        $editorOptions = [
             'type' => 'editor',
             'editor' => "BcBurgerEditor.BurgerEditor",
-            'editorUseDraft' => $field->custom_field->meta['BcCcBurgerEditor']['editor_use_draft'],
-            'editorDraftField' => $field->name . '_draft',
+            'editorUseDraft' => $useDraft,
             'editorWidth' => 'auto',
             'editorHeight' => '480px',
             'editorEnterBr' => 0,
-        ]);
+        ];
+        // 下書きを利用する場合のみ、下書き保存用フィールド（{フィールド名}_draft）を渡す
+        if ($useDraft) {
+            $editorOptions['editorDraftField'] = $field->name . '_draft';
+        }
+        return $this->BcAdminForm->editor($field->name, $editorOptions);
     }
 
-    public function get($fieldValue, CustomLink $link, array $options = []): string
+    /**
+     * Search Control
+     *
+     * @param CustomLink $link
+     * @param array $options
+     * @return string
+     */
+    public function searchControl(CustomLink $link, array $options = []): string
     {
-        return $fieldValue;
+        $options = array_merge([
+            'type' => 'text'
+        ], $options);
+        return $this->BcAdminForm->control($link->name, $options);
+    }
+
+    /**
+     * Get
+     *
+     * @param mixed $fieldValue
+     * @param CustomLink $link
+     * @param array $options
+     * @return string
+     */
+    public function get($fieldValue, CustomLink $link, array $options = [])
+    {
+        return (string)$fieldValue;
     }
 
 }

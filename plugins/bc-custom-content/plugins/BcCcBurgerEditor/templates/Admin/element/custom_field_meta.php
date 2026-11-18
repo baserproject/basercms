@@ -27,7 +27,12 @@
     ]]) ?>
     <i class="bca-icon--question-circle bca-help"></i>　
     <div class="bca-helptext">
-      <?php echo __d('baser_core', '下書きを利用する場合は、別途、下書き保存用のフィールドとして現在のフィールド名の後ろに「_draft」を付与したフィールドを作成します。') ?>
+      <?php echo __d('baser_core', '下書きを利用する場合は、別途、下書き保存用のフィールドを次の手順で作成してください。') ?>
+      <ol>
+        <li><?php echo __d('baser_core', 'フィールド名を現在のフィールド名の後ろに「_draft」を付与した名称、フィールドタイプを「テキストエリア」として、新しいフィールドを作成します。') ?></li>
+        <li><?php echo __d('baser_core', 'テーブル編集画面で、作成した下書き用フィールドをテーブルに登録します。') ?></li>
+        <li><?php echo __d('baser_core', '一度保存した後、下書き用フィールドの詳細編集ボタンを押し、利用状況「利用する」のチェックを外します。') ?></li>
+      </ol>
     </div>
     <?php echo $this->BcAdminForm->error('meta.BcCcBurgerEditor.editor_use_draft') ?>
   </td>

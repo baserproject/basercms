@@ -1,6 +1,14 @@
-# BcCustomContent plugin for baserCMS
+# BcCcBurgerEditor plugin for baserCMS
+
+カスタムコンテンツのフィールドタイプに「BurgerEditor」を追加するプラグインです。
 
 ## Installation
+
+カスタムコンテンツプラグイン（BcCustomContent）に同梱されており、カスタムコンテンツプラグインが有効であれば自動的に読み込まれます。個別のインストール作業は不要です。
+
+利用にあたっては、BurgerEditor プラグイン（BcBurgerEditor）を有効にしておく必要があります。
+
+フィールドの作成時に、フィールドタイプ「BurgerEditor」を選択して利用します。
 
 ## 下書き利用時の注意点
 下書きを利用する場合、管理画面で以下の手順を行う必要があります
