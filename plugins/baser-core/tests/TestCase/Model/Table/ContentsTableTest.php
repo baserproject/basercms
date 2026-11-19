@@ -13,7 +13,16 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\PagesService;
+use BaserCore\Service\SitesService;
+use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\ContentsScenario;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SitesScenario;
@@ -21,6 +30,7 @@ use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use ReflectionClass;
 use Cake\I18n\FrozenTime;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
@@ -439,6 +449,310 @@ class ContentsTableTest extends BcTestCase
 
         $this->assertNotNull($relatedContent);
         $this->assertNotEmpty($relatedContent->url);
+    }
+
+    /**
+     * メインサイトで作成したコンテンツの連携先を決められない場合、
+     * そのサブサイトにはエイリアスやフォルダを作らず、ツリー構造も壊さない
+     *
+     * 連携先のサブサイトの同じ場所に、フォルダと同名のページなどがあると、
+     * copyContentFolderPath() が false を返す。そのページが非公開でも同じ
+     */
+    public function testUpdateRelateSubSiteContent_skipsCreatingWhenParentFolderCannotBeCopied()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // サブサイトのルートに、非公開のページ /s/foo を作る
+        $pageId = $this->createContentInNewRequest('Page', 'foo', $siteRootId, $siteId, false);
+        // メインサイトにフォルダ /foo/ と、その中のページ /foo/bar を作る
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'foo', 1, 1);
+        $mainPageId = $this->createContentInNewRequest('Page', 'bar', $folderId, 1);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        // サブサイトのルートには、もとからあるページ foo だけが残る
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $siteRootId, 'name' => 'foo'])->all();
+        $this->assertEquals([$pageId], $sameNames->extract('id')->toList());
+        $this->assertTrue($contentsTable->find()->where(['site_id' => $siteId, 'alias_id' => $mainPageId])->all()->isEmpty());
+    }
+
+    /**
+     * メインサイトの非公開のフォルダの中にページを作成したとき、
+     * 連携先のサブサイトにある非公開のフォルダの中にエイリアスを作り、同名のフォルダを作らない
+     */
+    public function testUpdateRelateSubSiteContent_createsAliasInUnpublishedFolder()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // メインサイトに非公開のフォルダ /foo/ を作ると、サブサイトにも非公開の /s/foo/ ができる
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'foo', 1, 1, false);
+        $this->newRequest();
+        $subFolder = $this->getTableLocator()->get('BaserCore.Contents')->find()
+            ->where(['site_id' => $siteId, 'main_site_content_id' => $folderId])
+            ->firstOrFail();
+        $this->assertFalse($subFolder->self_status);
+        // メインサイトの /foo/ の中に、ページ /foo/bar を作る
+        $pageId = $this->createContentInNewRequest('Page', 'bar', $folderId, 1);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $siteRootId, 'name' => 'foo'])->all();
+        $this->assertEquals([$subFolder->id], $sameNames->extract('id')->toList());
+        $alias = $contentsTable->find()->where(['site_id' => $siteId, 'alias_id' => $pageId])->firstOrFail();
+        $this->assertEquals($subFolder->id, $alias->parent_id);
+    }
+
+    /**
+     * メインサイトでフォルダを作成したとき、連携先のサブサイトの同じ場所に同名のページなどがある場合、
+     * 同名のフォルダが並ばないよう、そのサブサイトにはフォルダを作らない
+     */
+    public function testUpdateRelateSubSiteContent_skipsCreatingFolderWhenSameNameExists()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // サブサイトのルートに、公開中のページ /s/foo を作る
+        $pageId = $this->createContentInNewRequest('Page', 'foo', $siteRootId, $siteId);
+        // メインサイトにフォルダ /foo/ を作る
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'foo', 1, 1);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        // サブサイトのルートには、もとからあるページ foo だけが残る
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $siteRootId, 'name' => 'foo'])->all();
+        $this->assertEquals([$pageId], $sameNames->extract('id')->toList());
+        $this->assertTrue($contentsTable->find()->where(['site_id' => $siteId, 'main_site_content_id' => $folderId])->all()->isEmpty());
+    }
+
+    /**
+     * メインサイトでページを作成したとき、連携先のサブサイトの同じ場所に同名のフォルダがある場合、
+     * 同名のコンテンツが並ばないよう、そのサブサイトにはエイリアスを作らない
+     */
+    public function testUpdateRelateSubSiteContent_skipsCreatingAliasWhenSameNameFolderExists()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // サブサイトのルートに、フォルダ /s/bar/ を作る
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'bar', $siteRootId, $siteId);
+        // メインサイトのルートに、ページ /bar を作る
+        $pageId = $this->createContentInNewRequest('Page', 'bar', 1, 1);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        // サブサイトのルートには、もとからあるフォルダ bar だけが残る
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $siteRootId, 'name' => 'bar'])->all();
+        $this->assertEquals([$folderId], $sameNames->extract('id')->toList());
+        $this->assertTrue($contentsTable->find()->where(['site_id' => $siteId, 'alias_id' => $pageId])->all()->isEmpty());
+    }
+
+    /**
+     * メインサイトでコンテンツの名前を変えたとき、連携先のサブサイトの同じ場所に同名のコンテンツがある場合、
+     * 同名のコンテンツが並ばないよう、そのサブサイトのエイリアスは更新しない
+     *
+     * 重なりが解消すれば、次の更新で連携される
+     */
+    public function testUpdateRelateSubSiteContent_skipsUpdatingAliasWhenSameNameExists()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // サブサイトのルートにフォルダ /s/baz/ を、メインサイトのルートにページ /bar を作ると、エイリアス /s/bar ができる
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'baz', $siteRootId, $siteId);
+        $pageId = $this->createContentInNewRequest('Page', 'bar', 1, 1);
+        $this->newRequest();
+        $alias = $this->getTableLocator()->get('BaserCore.Contents')->find()
+            ->where(['site_id' => $siteId, 'alias_id' => $pageId])
+            ->firstOrFail();
+
+        // メインサイトの /bar の名前を baz に、タイトルを baz2 に変える
+        $this->updateContentInNewRequest($pageId, ['name' => 'baz', 'title' => 'baz2']);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        $this->assertEquals('/baz', $contentsTable->get($pageId)->url);
+        // サブサイトのルートには、もとからあるフォルダ baz だけが残る
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $siteRootId, 'name' => 'baz'])->all();
+        $this->assertEquals([$folderId], $sameNames->extract('id')->toList());
+        // エイリアスは更新されず、メインサイトとの結び付きも残る
+        $skippedAlias = $contentsTable->get($alias->id);
+        $this->assertEquals('/s/bar', $skippedAlias->url);
+        $this->assertEquals('bar', $skippedAlias->title);
+        $this->assertEquals($pageId, $skippedAlias->main_site_content_id);
+
+        // サブサイトのフォルダ /s/baz/ をゴミ箱に入れてから、メインサイトの /baz のタイトルを変えると、エイリアスも連携される
+        $this->newRequest();
+        (new ContentsService())->deleteRecursive($folderId);
+        $this->updateContentInNewRequest($pageId, ['title' => 'baz3']);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        $updatedAlias = $contentsTable->get($alias->id);
+        $this->assertEquals('/s/baz', $updatedAlias->url);
+        $this->assertEquals('baz3', $updatedAlias->title);
+    }
+
+    /**
+     * メインサイトのコンテンツの場所が変わり、連携先のサブサイトの移動先に同名のコンテンツがある場合、
+     * 同名のコンテンツが並ばないよう、そのサブサイトのエイリアスは更新しない
+     *
+     * 通常の移動では isMovable() が先に断るため、サブサイト側の移動が行われなかった場合を再現する
+     */
+    public function testUpdateRelateSubSiteContent_skipsMovingAliasWhenSameNameExists()
+    {
+        [$siteId] = $this->setUpRelatedSubSiteWithTrash();
+        // メインサイトにフォルダ /foo/ とページ /bar を作ると、サブサイトに /s/foo/ とエイリアス /s/bar ができる
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'foo', 1, 1);
+        $pageId = $this->createContentInNewRequest('Page', 'bar', 1, 1);
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $subFolder = $contentsTable->find()->where(['site_id' => $siteId, 'main_site_content_id' => $folderId])->firstOrFail();
+        $alias = $contentsTable->find()->where(['site_id' => $siteId, 'alias_id' => $pageId])->firstOrFail();
+        // サブサイトの /s/foo/ の中に、サブサイト独自のページ /s/foo/bar を作る
+        $subPageId = $this->createContentInNewRequest('Page', 'bar', $subFolder->id, $siteId);
+
+        // サブサイト側の連携を止めたまま、メインサイトの /bar を /foo/ へ移す
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $contentsTable->updatingRelated = false;
+        $page = $contentsTable->get($pageId);
+        $page->parent_id = $folderId;
+        $contentsTable->save($page);
+        // その後、メインサイトの /foo/bar のタイトルを変える
+        $this->updateContentInNewRequest($pageId, ['title' => 'bar2']);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        $this->assertEquals('/foo/bar', $contentsTable->get($pageId)->url);
+        // サブサイトの /s/foo/ には、もとからあるページ bar だけが残る
+        $sameNames = $contentsTable->find()->where(['site_id' => $siteId, 'parent_id' => $subFolder->id, 'name' => 'bar'])->all();
+        $this->assertEquals([$subPageId], $sameNames->extract('id')->toList());
+        // エイリアスは更新されない
+        $skippedAlias = $contentsTable->get($alias->id);
+        $this->assertEquals('/s/bar', $skippedAlias->url);
+        $this->assertEquals('bar', $skippedAlias->title);
+    }
+
+    /**
+     * メインサイトのコンテンツを更新したとき、既存のエイリアスの連携先を決められない場合、
+     * エイリアスを今の場所に残したまま、タイトルや公開状態は連携する
+     */
+    public function testUpdateRelateSubSiteContent_keepsAliasParentWhenParentFolderCannotBeCopied()
+    {
+        [$siteId, $siteRootId] = $this->setUpRelatedSubSiteWithTrash();
+        // メインサイトにフォルダ /foo/ と、その中のページ /foo/bar を作ると、サブサイトに /s/foo/bar のエイリアスができる
+        $folderId = $this->createContentInNewRequest('ContentFolder', 'foo', 1, 1);
+        $pageId = $this->createContentInNewRequest('Page', 'bar', $folderId, 1);
+        $this->newRequest();
+        $alias = $this->getTableLocator()->get('BaserCore.Contents')->find()
+            ->where(['site_id' => $siteId, 'alias_id' => $pageId])
+            ->firstOrFail();
+        // その後、サブサイトのルートに公開中のページ /s/foo がある状態にする
+        // 管理画面から作ると、同じ場所の /s/foo/ フォルダと重ならないよう foo_2 に変わるため、名前と URL を直接書き換える
+        // ほかの操作で衝突を作っても、エイリアスとメインサイトの結び付き（main_site_content_id）が保存のたびに
+        // URL から計算し直されて切れ、新規作成側の分岐に入る。更新側の分岐は、データの不整合があるときにしか通らない
+        $conflictId = $this->createContentInNewRequest('Page', 'foo', $siteRootId, $siteId);
+        $this->newRequest();
+        $this->getTableLocator()->get('BaserCore.Contents')->updateAll(['name' => 'foo', 'url' => '/s/foo'], ['id' => $conflictId]);
+
+        // メインサイトの /foo/bar のタイトルと公開状態を変える
+        $this->newRequest();
+        $contentsService = new ContentsService();
+        $contentsService->update($contentsService->get($pageId), ['title' => 'bar2', 'self_status' => false]);
+
+        $this->newRequest();
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->assertTrue((new UtilitiesService())->verityTree($contentsTable));
+        $updatedAlias = $contentsTable->get($alias->id);
+        $this->assertEquals($alias->parent_id, $updatedAlias->parent_id);
+        $this->assertEquals('bar2', $updatedAlias->title);
+        $this->assertFalse($updatedAlias->self_status);
+    }
+
+    /**
+     * ゴミ箱にコンテンツがある状態で、メインサイトと連携するサブサイト（エイリアス s）を用意する
+     *
+     * ツリー構造を検証するため、シナリオのデータは使わずに作り直す
+     * TreeBehavior は論理削除を除いて lft / rght の最大値を求めるため、ゴミ箱があると、
+     * 親の無いノードとゴミ箱の lft / rght が重なり、ツリー構造の破損を検知できる
+     *
+     * @return array [サブサイトの ID, サブサイトのルートコンテンツの ID]
+     */
+    private function setUpRelatedSubSiteWithTrash(): array
+    {
+        foreach (['sites', 'contents', 'content_folders', 'pages'] as $table) {
+            self::truncateTable($table);
+        }
+        SiteFactory::make()->main()->persist();
+        UserFactory::make()->admin()->persist();
+        SiteConfigFactory::make(['name' => 'contents_sort_last_modified', 'value' => ''])->persist();
+        ContentFactory::make(['plugin' => 'BaserCore', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2, 'level' => 0])
+            ->treeNode(1, 1, null, '', '/', 1, true)->persist();
+        ContentFolderFactory::make(['id' => 1])->persist();
+
+        $trashedId = $this->createContentInNewRequest('Page', 'trashed', 1, 1);
+        $this->newRequest();
+        (new ContentsService())->delete($trashedId);
+
+        $this->newRequest();
+        $site = (new SitesService())->create([
+            'name' => 'sub',
+            'display_name' => 'sub',
+            'title' => 'sub',
+            'alias' => 's',
+            'main_site_id' => 1,
+            'relate_main_site' => true,
+            'status' => true,
+            'use_subdomain' => 0,
+        ]);
+        $this->newRequest();
+        return [$site->id, (new ContentsService())->getSiteRoot($site->id)->id];
+    }
+
+    /**
+     * 管理画面では1操作ごとにリクエストが分かれるため、テーブルとイベントを作り直す
+     */
+    private function newRequest(): void
+    {
+        $this->getTableLocator()->clear();
+        Router::setRequest($this->loginAdmin($this->getRequest('/baser/admin')));
+    }
+
+    /**
+     * 新しいリクエストで、ページまたはフォルダを作成する
+     *
+     * @param bool $status 公開状態（既定は公開）
+     * @return int 作成したコンテンツの ID
+     */
+    private function createContentInNewRequest(string $type, string $name, int $parentId, int $siteId, bool $status = true): int
+    {
+        $this->newRequest();
+        $content = [
+            'name' => $name,
+            'title' => $name,
+            'parent_id' => $parentId,
+            'plugin' => 'BaserCore',
+            'type' => $type,
+            'site_id' => $siteId,
+            'self_status' => $status,
+            'created_date' => '2026-01-01 00:00:00',
+        ];
+        if ($type === 'Page') {
+            return (new PagesService())->create(['contents' => '', 'content' => $content])->content->id;
+        }
+        return (new ContentFoldersService())->create(['folder_template' => '', 'content' => $content])->content->id;
+    }
+
+    /**
+     * 新しいリクエストで、編集画面と同じく全項目を送ってコンテンツを更新する
+     */
+    private function updateContentInNewRequest(int $id, array $changes): void
+    {
+        $this->newRequest();
+        $contentsService = new ContentsService();
+        $content = $contentsService->get($id);
+        $postData = array_merge($content->toArray(), $changes);
+        unset($postData['site']);
+        $contentsService->update($content, $postData);
     }
 
     /**
