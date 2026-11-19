@@ -21,6 +21,7 @@ use BcMail\Service\Admin\MailMessagesAdminServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\NotFoundException;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -62,6 +63,9 @@ class MailMessagesController extends MailAdminAppController
         if ($event->getResult()) return;
         $mailContentId = $this->request->getParam('pass.0');
         if (!$mailContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
+        // 数字以外の ID は int 型の引数に渡せず TypeError になるため、存在しないページとして扱う
+        if (!ctype_digit((string)$mailContentId)) throw new NotFoundException(__d('baser_core', 'コンテンツデータが見つかりません。'));
+        $mailContentId = (int)$mailContentId;
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $request = $contentsService->setCurrentToRequest(

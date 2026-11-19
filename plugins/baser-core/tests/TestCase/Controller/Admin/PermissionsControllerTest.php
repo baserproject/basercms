@@ -85,6 +85,9 @@ class PermissionsControllerTest extends BcTestCase
         PermissionGroupFactory::make(['id' => 1])->persist();
         $this->get('/baser/admin/baser-core/permissions/index/1');
         $this->assertResponseOk();
+        // 数字以外の ID は 404
+        $this->get('/baser/admin/baser-core/permissions/index/1abc');
+        $this->assertResponseCode(404);
     }
 
     /**

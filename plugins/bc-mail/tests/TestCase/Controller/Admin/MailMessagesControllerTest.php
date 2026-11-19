@@ -19,6 +19,7 @@ use BcMail\Controller\Admin\MailMessagesController;
 use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
 use Cake\Event\Event;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -61,6 +62,19 @@ class MailMessagesControllerTest extends BcTestCase
     {
         $this->assertNotEmpty($this->MailMessagesController->BcAdminContents);
 
+    }
+
+    /**
+     * beforeFilter
+     */
+    public function testBeforeFilter_non_numeric_id()
+    {
+        //数字以外の ID を指定した場合。
+        $this->expectException(NotFoundException::class);
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_messages/index/1abc');
+        $request = $this->loginAdmin($request);
+        $controller = new MailMessagesController($request);
+        $controller->beforeFilter(new Event('filter'));
     }
 
     /**

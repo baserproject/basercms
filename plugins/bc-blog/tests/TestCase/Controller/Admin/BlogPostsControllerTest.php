@@ -24,6 +24,7 @@ use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Event\Event;
+use Cake\Http\Exception\NotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -103,6 +104,21 @@ class BlogPostsControllerTest extends BcTestCase
         $this->expectExceptionMessage('コンテンツデータが見つかりません。');
         $this->expectException('BaserCore\Error\BcException');
         $request = $this->getRequest('/baser/admin/bc-blog/blog_posts/index/1111');
+        $request = $this->loginAdmin($request);
+        $blogPosts = new BlogPostsController($request);
+
+        $event = new Event('filter');
+        $blogPosts->beforeFilter($event);
+    }
+
+    /**
+     * test beforeFilter
+     */
+    public function testBeforeFilter_non_numeric_id()
+    {
+        //数字以外の ID を指定した場合。
+        $this->expectException(NotFoundException::class);
+        $request = $this->getRequest('/baser/admin/bc-blog/blog_posts/index/1abc');
         $request = $this->loginAdmin($request);
         $blogPosts = new BlogPostsController($request);
 

@@ -78,6 +78,9 @@ class BlogPostsController extends BlogAdminAppController
 
         $blogContentId = $this->request->getParam('pass.0');
         if (!$blogContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
+        // 数字以外の ID は int 型の引数に渡せず TypeError になるため、存在しないページとして扱う
+        if (!ctype_digit((string)$blogContentId)) throw new NotFoundException(__d('baser_core', 'コンテンツデータが見つかりません。'));
+        $blogContentId = (int)$blogContentId;
 
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);

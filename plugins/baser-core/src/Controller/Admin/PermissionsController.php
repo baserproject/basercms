@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\Admin\PermissionsAdminServiceInterface;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\NotFoundException;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -72,6 +73,10 @@ class PermissionsController extends BcAdminAppController
 	    PermissionsAdminServiceInterface $service,
 	    $userGroupId = ''
 	) {
+        // 数字以外の ID は int 型の引数に渡せず TypeError になるため、存在しないページとして扱う
+        if (!ctype_digit((string)$userGroupId)) throw new NotFoundException();
+        $userGroupId = (int)$userGroupId;
+
         $this->request = $this->request->withQueryParams(array_merge(
             $this->getRequest()->getQueryParams(),
             ['user_group_id' => $userGroupId]
