@@ -11,6 +11,7 @@
 
 namespace BcBurgerEditor\Lib;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -371,5 +372,64 @@ HTACCESS;
         $str = str_replace("-d-", ".", $str);
         $str = str_replace(['_', '-', '.'], ['+', '/', '='], str_replace("-D-", "..", $str));
         return base64_decode($str);
+    }
+
+    /**
+     * 埋め込みブロックを含む値を拒否する
+     *
+     * 埋め込みブロックの埋め込みタグは base64 で保存され、表示時に元に戻してそのまま出力されるため、
+     * 保存時の入力チェック（BcValidation::containsScript）では中身を検査できない。
+     * そのため、スクリプトを保存できないユーザーには埋め込みブロック自体を保存させない。
+     * BcApp.containsScript.extractors に登録して使う（管理者などスクリプトを保存できる場合は呼ばれない）。
+     *
+     * @param string $html
+     * @return array|false 埋め込みブロックがなければ空の配列、あれば false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function denyEmbedBlocks(string $html): array|false
+    {
+        // simple_html_dom は属性値を読むときに値を加工するため、文字列で判定する前に加工後の形にそろえる
+        // - 解析用の目印（___noise___）は別の文字列に戻される。正規の本文には現れないので、含む値は拒否する
+        // - 属性値の改行は取り除かれる
+        if (str_contains($html, '___noise___')) return false;
+        $html = str_replace(["\r", "\n"], '', $html);
+
+        // ほとんどの値は embed-code を含まないので、先に判定する
+        if (stripos($html, 'embed-code') === false) return [];
+
+        // 表示時に復号されるには data-bge=embed-code の並びが必ず要る。前後の HTML に左右されないよう、文字列だけで判定する
+        // （解析に頼ると、別の入力欄の HTML とつながったときに解釈が変わる場合がある）
+        if (preg_match('/data-bge\\s*=\\s*["\']?\\s*embed-code/i', $html) !== 0) return false;
+
+        // タグの中に embed-code があるか（本文の文章は対象外）。正規表現がエラーの場合は判別できないので拒否する
+        $occurrences = preg_match_all('/<[^<>]*embed-code/i', $html);
+        if ($occurrences === false) return false;
+
+        // 属性値の中の > などで正規表現が数え漏らす場合に備え、表示時と同じ読み込み方でも探す
+        require_once Plugin::path('BcBurgerEditor') . 'libs' . DS . 'simple_html_dom.php';
+        $dom = new \simple_html_dom();
+        $dom->load($html, null, false);
+        $found = count($dom->find('[data-bge=embed-code]'));
+        $dom->clear();
+
+        return ($occurrences || $found)? false : [];
+    }
+
+    /**
+     * 埋め込みブロックを利用できるか
+     *
+     * 管理者と、管理者以外にスクリプトの保存を許可する設定（BcApp.allowedPhpOtherThanAdmins）の場合に利用できる。
+     * BcValidation::containsScript がスクリプトの保存を許可する条件と同じ。
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function canUseEmbedBlock(): bool
+    {
+        return BcUtil::isAdminUser() || (bool)Configure::read('BcApp.allowedPhpOtherThanAdmins');
     }
 }

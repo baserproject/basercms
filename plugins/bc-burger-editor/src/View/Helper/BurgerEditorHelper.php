@@ -364,6 +364,13 @@ class BurgerEditorHelper extends Helper
             $bgCategory = Hash::merge($bgCategory, $configJSONData["bg-category"]);
         }
 
+        // 埋め込みブロックを保存できないユーザーには、選択肢に表示しない
+        if (!BurgerEditorUtil::canUseEmbedBlock()) {
+            foreach($bgCategory as $categoryName => $blockList) {
+                unset($bgCategory[$categoryName]['embed']);
+            }
+        }
+
         // start output
         echo '<div class="bg-block-selection">';
         echo '<div class="bg-blocks">';

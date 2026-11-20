@@ -11,17 +11,26 @@
 
 namespace BcBurgerEditor\Test\TestCase\Lib;
 
+use BaserCore\Model\Validation\BcValidation;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBurgerEditor\Lib\BurgerEditorUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Routing\Router;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BurgerEditorUtilTest
  */
 class BurgerEditorUtilTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * test getGoogleMapApiKey
@@ -340,6 +349,147 @@ class BurgerEditorUtilTest extends BcTestCase
             $encoded = BurgerEditorUtil::b64e($value);
             $this->assertDoesNotMatchRegularExpression('/[+\/=]/', $encoded, "{$value} のエンコード結果に使用できない文字が含まれています");
             $this->assertStringNotContainsString('..', $encoded, "{$value} のエンコード結果に連続ドットが含まれています");
+        }
+    }
+
+    /**
+     * 埋め込みブロックの HTML を生成する（エディタが保存する形式）
+     *
+     * @param string $code 埋め込みタグ
+     * @return string
+     */
+    private function embedBlock(string $code): string
+    {
+        return '<div data-bgb="embed" class="bgb-embed"><div data-bgt="embed" data-bgt-ver="2.1.0" class="bgt-container bgt-embed-container">'
+            . '<div class="bge-embed-code" data-bge="embed-code">' . base64_encode($code) . '</div>'
+            . '<div class="bge-embed-label" data-bge="embed-label">埋め込みタグ</div>'
+            . '</div></div>';
+    }
+
+    /**
+     * test denyEmbedBlocks
+     *
+     * 埋め込みブロックがなければ空の配列、あれば false（拒否）を返す
+     */
+    public function test_denyEmbedBlocks()
+    {
+        // 埋め込みブロックがない
+        $this->assertSame([], BurgerEditorUtil::denyEmbedBlocks('<p>本文</p>'));
+        // タグの外（本文の文章）にある embed-code は対象外
+        $this->assertSame([], BurgerEditorUtil::denyEmbedBlocks('<p>embed-code という文字列</p>'));
+
+        // 埋め込みブロックがある（中身が無害でも拒否する）
+        $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks($this->embedBlock('<iframe src="https://www.youtube.com/embed/xxx"></iframe>')));
+        // 属性名の大文字小文字が違う（表示時は復号されないが、判別できないものは拒否する）
+        $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks('<div DATA-BGE="embed-code">' . base64_encode('<p>a</p>') . '</div>'));
+        // 属性値の中に > がある（正規表現では数え漏れるが、解析で見つかるので拒否する）
+        $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks('<div data-bgb="embed"><div data-bgt="embed"><div title=">" data-bge="embed-code">'
+            . base64_encode('<img src=x onerror=alert(1)>') . '</div></div></div>'));
+        // code 要素の中（解析では中身が取り除かれて見つからず、属性値の > で正規表現も数え漏らす）。
+        // 単独では表示時も復号されないが、前の入力欄に <code> を置かれると外に出るため、文字列の並びで拒否する
+        $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks('<code title="</code>"><div data-bgb="embed"><div data-bgt="embed"><div title=">" data-bge="embed-code">'
+            . base64_encode('<img src=x onerror=alert(1)>') . '</div></div></div></code>'));
+    }
+
+    /**
+     * test denyEmbedBlocks
+     *
+     * embed-code という文字列を書かずに、解析後の属性値だけを embed-code にする入力を拒否する
+     * （simple_html_dom は属性値の改行を取り除き、解析用の目印を元の文字列に戻す）
+     *
+     * @dataProvider denyEmbedBlocksAttributeDataProvider
+     */
+    public function test_denyEmbedBlocks_attribute(string $prefix, string $attribute)
+    {
+        $html = $prefix . '<div data-bgb="embed"><div data-bgt="embed"><div data-bge="' . $attribute . '">'
+            . base64_encode('<img src=x onerror=alert(1)>') . '</div></div></div>';
+        $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks($html));
+    }
+
+    public static function denyEmbedBlocksAttributeDataProvider(): array
+    {
+        return [
+            '属性値に改行（LF）' => ['', "embed-\ncode"],
+            '属性値に改行（CR）' => ['', "embed-\rcode"],
+            '属性値に改行（CRLF）' => ['', "embed-\r\ncode"],
+            'code 要素を使う目印' => ['<code>code</code>', 'embed-___noise___ 1000'],
+            'コメントを使う目印' => ['<!--code-->', 'embed-___noise___ 1000'],
+        ];
+    }
+
+    /**
+     * test denyEmbedBlocks
+     *
+     * 正規表現が制限（pcre.backtrack_limit）に当たった場合は拒否する
+     */
+    public function test_denyEmbedBlocks_regexError()
+    {
+        $jit = ini_get('pcre.jit');
+        $limit = ini_get('pcre.backtrack_limit');
+        ini_set('pcre.jit', '0');
+        ini_set('pcre.backtrack_limit', '1');
+        try {
+            $this->assertFalse(BurgerEditorUtil::denyEmbedBlocks($this->embedBlock('<p>a</p>')));
+        } finally {
+            ini_set('pcre.jit', $jit);
+            ini_set('pcre.backtrack_limit', $limit);
+        }
+    }
+
+    /**
+     * test containsScript
+     *
+     * プラグインの設定で denyEmbedBlocks が登録され、管理者以外は埋め込みブロックを保存できないこと
+     */
+    public function test_containsScript_embedBlock()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        // テスト環境ではプラグインの bootstrap（setting.php の読み込み）が行われないため、設定ファイルを直接読む
+        $setting = include Plugin::path('BcBurgerEditor') . 'config' . DS . 'setting.php';
+        $this->assertContains(BurgerEditorUtil::class . '::denyEmbedBlocks', $setting['BcApp']['containsScript']['extractors']);
+
+        $extractors = Configure::read('BcApp.containsScript.extractors');
+        $allowed = Configure::read('BcApp.allowedPhpOtherThanAdmins');
+        Configure::write('BcApp.containsScript.extractors', $setting['BcApp']['containsScript']['extractors']);
+        try {
+            // 管理者以外：埋め込みブロックは中身にかかわらず拒否、埋め込みブロックのない本文は許可
+            $this->assertFalse(BcValidation::containsScript($this->embedBlock('<script>alert(1)</script>')));
+            $this->assertFalse(BcValidation::containsScript($this->embedBlock('<iframe src="https://www.youtube.com/embed/xxx"></iframe>')));
+            $this->assertTrue(BcValidation::containsScript('<div data-bgb="wysiwyg"><p>本文</p></div>'));
+
+            // 管理者以外にスクリプトを許可する設定：埋め込みブロックも許可
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', true);
+            $this->assertTrue(BcValidation::containsScript($this->embedBlock('<script>alert(1)</script>')));
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowed);
+
+            // 管理者：埋め込みブロックを許可
+            Router::setRequest($this->loginAdmin($this->getRequest()));
+            $this->assertTrue(BcValidation::containsScript($this->embedBlock('<script>alert(1)</script>')));
+        } finally {
+            Configure::write('BcApp.containsScript.extractors', $extractors);
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowed);
+        }
+    }
+
+    /**
+     * test canUseEmbedBlock
+     *
+     * 管理者と、管理者以外にスクリプトを許可する設定の場合だけ、埋め込みブロックを使える
+     */
+    public function test_canUseEmbedBlock()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $allowed = Configure::read('BcApp.allowedPhpOtherThanAdmins');
+        try {
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
+            $this->assertFalse(BurgerEditorUtil::canUseEmbedBlock());
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', true);
+            $this->assertTrue(BurgerEditorUtil::canUseEmbedBlock());
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
+            Router::setRequest($this->loginAdmin($this->getRequest()));
+            $this->assertTrue(BurgerEditorUtil::canUseEmbedBlock());
+        } finally {
+            Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowed);
         }
     }
 

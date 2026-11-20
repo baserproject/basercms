@@ -303,6 +303,10 @@ return [
             'dangerousSchemes' => ['javascript', 'vbscript', 'livescript', 'mocha', 'data'],
             // purify で除去されても拒否理由としない属性（プレフィックス一致・data-* は無害として許容）
             'safeRemovedAttributePrefixes' => ['data-'],
+            // 表示時に別の形式から復元されるHTMLを取り出す処理（'クラス名::メソッド名' の配列）
+            // 値を受け取り、取り出したHTMLの配列を返す。取り出したHTMLも同じ検査にかける。
+            // 安全に取り出せない場合は false を返し、その値を拒否する。プラグインの setting.php から追加する
+            'extractors' => [],
         ],
 
         /**

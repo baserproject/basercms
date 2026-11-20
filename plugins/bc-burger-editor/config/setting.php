@@ -9,11 +9,16 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use BcBurgerEditor\Lib\BurgerEditorUtil;
 use Cake\Utility\Hash;
 
 $config = [
     'BcApp' => [
-        'editors' => ['BcBurgerEditor.BurgerEditor' => 'BurgerEditor']
+        'editors' => ['BcBurgerEditor.BurgerEditor' => 'BurgerEditor'],
+        'containsScript' => [
+            // 埋め込みブロックは保存時に中身を検査できないため、スクリプトを保存できないユーザーには保存させない
+            'extractors' => [BurgerEditorUtil::class . '::denyEmbedBlocks']
+        ]
     ],
     'BcShortCode' => [
         'BcBurgerEditor' => [
