@@ -152,6 +152,8 @@ class BlogContentsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex')) {
             return;
         }
+        // 前回の保存で検索対象外にした状態が残らないよう、一旦解除する
+        $this->unsetExcluded();
         if (empty($entity->content) || !empty($entity->content->exclude_search)) {
             $this->setExcluded();
         }

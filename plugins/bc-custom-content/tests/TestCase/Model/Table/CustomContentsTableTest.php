@@ -242,5 +242,10 @@ class CustomContentsTableTest extends BcTestCase
         $customContent->content->exclude_search = 1;
         $this->CustomContentsTable->beforeSave(new Event("beforeSave"), $customContent, new ArrayObject());
         $this->assertTrue($this->CustomContentsTable->isExcluded());
+
+        // 検索対象外のカスタムコンテンツの後に保存するものは、検索対象外にならない
+        $customContent->content->exclude_search = 0;
+        $this->CustomContentsTable->beforeSave(new Event("beforeSave"), $customContent, new ArrayObject());
+        $this->assertFalse($this->CustomContentsTable->isExcluded());
     }
 }
