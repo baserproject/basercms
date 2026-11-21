@@ -271,6 +271,16 @@ class PagesTableTest extends BcTestCase
         $this->Pages->searchIndexSaving = true;
         $this->Pages->beforeSave($event, $data, $object);
         $this->assertTrue($this->Pages->isExcluded());
+
+        // 検索対象外のページの後に保存するページは、検索対象外にならない
+        $data = new Entity([
+            'test' => 'テストBeforeSave',
+            'content' => [
+                'title' => 'abc'
+            ]
+        ]);
+        $this->Pages->beforeSave($event, $data, $object);
+        $this->assertFalse($this->Pages->isExcluded());
     }
 
     /**

@@ -533,4 +533,19 @@ class MailContentsTableTest extends BcTestCase
         $this->assertArrayHasKey('regex', $errors['mail_template']);
         $this->assertArrayHasKey('regex', $errors['redirect_url']);
     }
+
+    /**
+     * test beforeSave
+     * 検索対象外のメールフォームの後に保存するものは、検索対象外にならない
+     */
+    public function testBeforeSave()
+    {
+        $entity = new \Cake\ORM\Entity(['content' => new \Cake\ORM\Entity(['exclude_search' => true])]);
+        $this->MailContent->beforeSave(new \Cake\Event\Event('beforeSave'), $entity, new \ArrayObject());
+        $this->assertTrue($this->MailContent->isExcluded());
+
+        $entity = new \Cake\ORM\Entity(['content' => new \Cake\ORM\Entity(['exclude_search' => false])]);
+        $this->MailContent->beforeSave(new \Cake\Event\Event('beforeSave'), $entity, new \ArrayObject());
+        $this->assertFalse($this->MailContent->isExcluded());
+    }
 }
