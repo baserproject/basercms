@@ -58,6 +58,11 @@ class BcAdminMiddlewareTest extends BcTestCase
         $request = $this->getRequest('/baser/admin/?site_id=1');
         $request = $this->execPrivateMethod($this->BcAdminMiddleware, 'setCurrentSite', [$request]);
         $this->assertEquals(1, $request->getAttribute('currentSite')->id);
+
+        // 数字以外のサイトIDは既定のサイトにする
+        $request = $this->getRequest('/baser/admin/?site_id=' . urlencode("1'"));
+        $request = $this->execPrivateMethod($this->BcAdminMiddleware, 'setCurrentSite', [$request]);
+        $this->assertEquals(1, $request->getAttribute('currentSite')->id);
     }
 
 }

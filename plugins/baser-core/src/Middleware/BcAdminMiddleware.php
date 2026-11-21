@@ -65,8 +65,10 @@ class BcAdminMiddleware implements MiddlewareInterface
         $queryCurrentSiteId = $request->getQuery('site_id');
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         if ($queryCurrentSiteId) {
-            $query = $sitesTable->find()->where(['Sites.id' => $queryCurrentSiteId]);
-            if(!$query->count()) {
+            // 数字以外は型変換できず例外になるため、存在しないサイトとして扱う
+            $query = (is_scalar($queryCurrentSiteId) && ctype_digit((string)$queryCurrentSiteId))?
+                $sitesTable->find()->where(['Sites.id' => $queryCurrentSiteId]) : null;
+            if(!$query || !$query->count()) {
                 $request = $request->withQueryParams(array_merge(
                     $request->getQueryParams(),
                     ['site_id' => $defaultSiteId]

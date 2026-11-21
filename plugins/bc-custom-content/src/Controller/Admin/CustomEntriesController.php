@@ -23,6 +23,7 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesService;
 use BcCustomContent\Service\CustomTablesServiceInterface;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -54,7 +55,9 @@ class CustomEntriesController extends CustomContentAdminAppController
 
         /** @var CustomTablesService $entriesService */
         $tablesService = $this->getService(CustomTablesServiceInterface::class);
-        $contentId = $tablesService->getCustomContentId($tableId);
+        // 数字以外の ID は int 型の引数に渡せず TypeError になるため、存在しないページとして扱う
+        if (!ctype_digit((string)$tableId)) throw new NotFoundException(__d('baser_core', 'カスタムテーブルが見つかりません。'));
+        $contentId = $tablesService->getCustomContentId((int)$tableId);
 
         if ($contentId) {
             /** @var ContentsService $contentsService */

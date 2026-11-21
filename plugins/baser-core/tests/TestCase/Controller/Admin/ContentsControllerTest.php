@@ -348,4 +348,17 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * test delete
+     * 数字以外の ID は 404
+     */
+    public function testDelete_non_numeric_id()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/contents/delete', ['content' => ['id' => "6'"]]);
+        $this->assertResponseCode(404);
+    }
+
 }

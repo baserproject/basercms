@@ -133,7 +133,10 @@ class UploaderFilesController extends BcAdminAppController
         string $size = 'small')
     {
         $this->viewBuilder()->disableAutoLayout();
-        $this->set($service->getViewVarsForAjaxImage($name, $size));
+        $vars = $service->getViewVarsForAjaxImage($name, $size);
+        // 存在しないファイル名ではテンプレートで TypeError になるため、存在しないページとして扱う
+        if (!$vars['uploaderFile']) $this->notFound();
+        $this->set($vars);
     }
 
     /**

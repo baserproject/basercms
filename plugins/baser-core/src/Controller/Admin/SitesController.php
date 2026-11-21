@@ -116,7 +116,7 @@ class SitesController extends BcAdminAppController
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function edit(SitesAdminServiceInterface $service, $id)
+    public function edit(SitesAdminServiceInterface $service, int $id)
     {
         if (!$id) {
             $this->notFound();

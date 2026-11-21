@@ -106,7 +106,8 @@ class UploaderFilesService implements UploaderFilesServiceInterface
             unset($params['conditions']);
         }
         $conditions = [];
-        if (!empty($params['uploader_category_id'])) {
+        // 数値で指定する条件に数字以外が渡されると型変換できず例外になるため、条件にしない
+        if (!empty($params['uploader_category_id']) && is_scalar($params['uploader_category_id']) && ctype_digit((string)$params['uploader_category_id'])) {
             $conditions = ['UploaderFiles.uploader_category_id' => $params['uploader_category_id']];
         }
         if (!empty($params['uploader_type'])) {

@@ -210,4 +210,14 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertTrue($permission->status);
     }
 
+    /**
+     * test edit
+     * 数字以外の ID は 404
+     */
+    public function testEdit_non_numeric_id()
+    {
+        $this->get('/baser/admin/baser-core/permissions/edit/' . urlencode("2'") . '/1');
+        $this->assertResponseCode(404);
+    }
+
 }
