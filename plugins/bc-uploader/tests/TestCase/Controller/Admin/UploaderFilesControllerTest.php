@@ -202,4 +202,15 @@ class UploaderFilesControllerTest extends BcTestCase
         //使用中テンプレートを確認
         $this->assertEquals("../element/search/uploader_files_index", $this->_controller->viewBuilder()->getTemplate());
     }
+
+    /**
+     * test ajax_image
+     * 存在しないファイル名は 404
+     */
+    public function testAjax_image_not_exists()
+    {
+        $this->get('/baser/admin/bc-uploader/uploader_files/ajax_image/not_exists.png/large');
+        $this->assertResponseCode(404);
+    }
+
 }

@@ -1291,4 +1291,18 @@ class ContentsServiceTest extends BcTestCase
         $rs = $this->ContentsService->getCrumbs(5);
         $this->assertCount(3, $rs);
     }
+
+    /**
+     * test getIndex
+     * 数字以外の作成者ID・フォルダーID、存在しないフォルダーIDは条件にしない
+     */
+    public function testGetIndex_invalid_filter(): void
+    {
+        $this->loadFixtureScenario(ContentsScenario::class);
+        $count = $this->ContentsService->getIndex([])->count();
+        $this->assertEquals($count, $this->ContentsService->getIndex(['author_id' => "1'"])->count());
+        $this->assertEquals($count, $this->ContentsService->getIndex(['folder_id' => "1'"])->count());
+        $this->assertEquals($count, $this->ContentsService->getIndex(['folder_id' => 99999])->count());
+    }
+
 }

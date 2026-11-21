@@ -138,12 +138,21 @@ class MailMessagesAdminServiceTest extends BcTestCase
         // 正常系実行：Encodingを指定するケース
         $request = $this->getRequest()->withQueryParams([
             'Site' => SiteFactory::get(1),
-            'encoding' => 'abc',
+            'encoding' => 'SJIS-win',
             'Content' => ContentFactory::get(1)
         ]);
         $this->loginAdmin($request);
         $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
-        $this->assertEquals('abc', $result['encoding']);
+        $this->assertEquals('SJIS-win', $result['encoding']);
+
+        // 異常系実行：対応していない Encoding を指定するケースは UTF-8 にする
+        $request = $this->getRequest()->withQueryParams([
+            'encoding' => 'UTF-8<script>',
+            'Content' => ContentFactory::get(1)
+        ]);
+        $this->loginAdmin($request);
+        $result = $this->MailMessagesAdminService->getViewVarsForDownloadCsv(1, $request);
+        $this->assertEquals('utf-8', $result['encoding']);
 
         // 正常系実行：Encodingを指定しないケース
         $request = $this->getRequest()->withQueryParams([

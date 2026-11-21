@@ -408,4 +408,27 @@ class PluginsControllerTest extends BcTestCase
         rename(ROOT . DS . 'composer.bak.lock', ROOT . DS . 'composer.lock');
     }
 
+    /**
+     * test install
+     * 存在しないプラグイン名は 404
+     */
+    public function testInstall_not_exists()
+    {
+        $this->get('/baser/admin/baser-core/plugins/install/' . urlencode("BcBlog'"));
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * test reset_db
+     * PUT 以外は一覧へ戻す
+     */
+    public function testReset_db_not_put()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/plugins/reset_db', ['name' => 'BcBlog']);
+        $this->assertRedirect(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Plugins', 'action' => 'index']);
+        $this->assertFlashMessage('無効な処理です。');
+    }
+
 }

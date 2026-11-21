@@ -180,4 +180,15 @@ class PermissionGroupsControllerTest extends BcTestCase
             '1'
         ]);
     }
+
+    /**
+     * test add
+     * prefix を指定しない場合は Admin として表示する
+     */
+    public function testAdd_without_prefix()
+    {
+        $this->get('/baser/admin/baser-core/permission_groups/add/1');
+        $this->assertResponseOk();
+    }
+
 }

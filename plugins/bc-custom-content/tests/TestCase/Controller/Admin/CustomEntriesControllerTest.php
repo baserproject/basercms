@@ -22,6 +22,7 @@ use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -514,4 +515,17 @@ class CustomEntriesControllerTest extends BcTestCase
         //不要なテーブルを削除
         $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
+
+    /**
+     * test beforeFilter
+     * 数字以外のテーブル ID は NotFoundException
+     */
+    public function test_beforeFilter_non_numeric_id()
+    {
+        $this->expectException(NotFoundException::class);
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/bc-custom-content/custom_entries/index/' . urlencode("1'")));
+        $controller = new CustomEntriesController($request);
+        $controller->beforeFilter(new Event('beforeFilter'));
+    }
+
 }

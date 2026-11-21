@@ -59,7 +59,7 @@ class BlogCategoriesController extends BlogAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function add(BlogCategoriesAdminServiceInterface $service, string $blogContentId)
+    public function add(BlogCategoriesAdminServiceInterface $service, int $blogContentId)
     {
         if ($this->request->is('post')) {
             // EVENT BlogCategories.beforeAdd
