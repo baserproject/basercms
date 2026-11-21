@@ -181,7 +181,11 @@ return [];
         $middleware->add(RoutingMiddleware::class);
         $middlewareQueue = $this->Plugin->middleware($middleware);
         $this->assertInstanceOf(AuthenticationMiddleware::class, $middlewareQueue->current());
-        $this->assertEquals(7, $middlewareQueue->count());
+        $this->assertEquals(8, $middlewareQueue->count());
+        $queue = (new \ReflectionProperty($middlewareQueue, 'queue'))->getValue($middlewareQueue);
+        // RoutingMiddleware の直前に BcRedirectMainSiteMiddleware を配置する
+        $this->assertInstanceOf(\BaserCore\Middleware\BcRedirectMainSiteMiddleware::class, $queue[3]);
+        $this->assertSame(RoutingMiddleware::class, $queue[4]);
     }
 
     /**
