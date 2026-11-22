@@ -436,7 +436,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function delete(UsersServiceInterface $service, $id = null)
+    public function delete(UsersServiceInterface $service, ?int $id = null)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));

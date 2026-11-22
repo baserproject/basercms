@@ -269,4 +269,18 @@ class SitesControllerTest extends BcTestCase
         ]);
     }
 
+    /**
+     * test publish / unpublish / delete
+     * 数字以外の ID は 404
+     */
+    public function testPublishUnpublishDelete_non_numeric_id()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        foreach (['publish', 'unpublish', 'delete'] as $action) {
+            $this->post('/baser/admin/baser-core/sites/' . $action . '/' . urlencode("1'"));
+            $this->assertResponseCode(404);
+        }
+    }
+
 }

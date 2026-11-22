@@ -551,6 +551,7 @@ class BlogPostsService implements BlogPostsServiceInterface
                 'blog_content_id を指定してください。',
             ));
         }
+        $postData = $this->filterBlogTagIds($postData);
         $postData['no'] = $this->BlogPosts->getMax('no', ['BlogPosts.blog_content_id' => $postData['blog_content_id']]) + 1;
         $blogPost = $this->BlogPosts->patchEntity($this->BlogPosts->newEmptyEntity(), $postData);
         return $this->BlogPosts->saveOrFail($blogPost);
@@ -579,8 +580,35 @@ class BlogPostsService implements BlogPostsServiceInterface
         // 所属ブログ・記事番号はリクエストから変更させない。
         // 変更を許すと、特定ブログの記事管理のみ許可されたユーザーが記事を他ブログへ移動できる
         unset($postData['id'], $postData['blog_content_id'], $postData['no']);
+        $postData = $this->filterBlogTagIds($postData);
         $blogPost = $this->BlogPosts->patchEntity($post, $postData);
         return $this->BlogPosts->saveOrFail($blogPost);
+    }
+
+    /**
+     * 送信データのブログタグ ID から数字以外を取り除く
+     *
+     * patchEntity は blog_tags._ids を使ってタグを検索するため、
+     * 数字以外が含まれると int に変換できず例外になる
+     *
+     * @param array $postData
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function filterBlogTagIds(array $postData): array
+    {
+        if (!isset($postData['blog_tags']['_ids'])) return $postData;
+        $ids = $postData['blog_tags']['_ids'];
+        if (!is_array($ids)) {
+            $postData['blog_tags']['_ids'] = [];
+            return $postData;
+        }
+        $postData['blog_tags']['_ids'] = array_values(array_filter($ids, function ($id) {
+            return is_scalar($id) && ctype_digit((string)$id);
+        }));
+        return $postData;
     }
 
     /**

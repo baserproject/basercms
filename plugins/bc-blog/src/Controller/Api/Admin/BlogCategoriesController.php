@@ -11,9 +11,9 @@
 namespace BcBlog\Controller\Api\Admin;
 
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
-use BaserCore\Error\BcException;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -80,7 +80,7 @@ class BlogCategoriesController extends BcAdminApiController
         $queryParams = $this->getRequest()->getQueryParams();
 
         if (!isset($queryParams['blog_content_id']) || empty($queryParams['blog_content_id'])) {
-            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+            throw new BadRequestException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
 
         $blogCategories = $message = null;
@@ -146,7 +146,7 @@ class BlogCategoriesController extends BcAdminApiController
         $queryParams = $this->getRequest()->getQueryParams();
 
         if (!isset($queryParams['blog_content_id']) || empty($queryParams['blog_content_id'])) {
-            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+            throw new BadRequestException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
 
         $blogCategories = $message = null;
@@ -181,7 +181,7 @@ class BlogCategoriesController extends BcAdminApiController
         $postData = $this->getRequest()->getData();
 
         if (!isset($postData['blog_content_id']) || empty($postData['blog_content_id'])) {
-            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+            throw new BadRequestException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
 
         $blogCategory = $errors = null;

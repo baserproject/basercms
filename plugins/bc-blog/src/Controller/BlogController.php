@@ -26,6 +26,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Psr\Http\Message\ResponseInterface;
@@ -310,11 +311,12 @@ class BlogController extends BlogFrontAppController
         $this->request->allowMethod(['post', 'put']);
         $postData = $this->getRequest()->getData();
 
-        if (!$postData['blog_content_id']) {
-            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
-        }
-        if (!$postData['blog_post_id']) {
-            throw new BcException(__d('baser_core', 'パラメーターに blog_post_id が指定されていません。'));
+        // 未指定や数字以外の ID はリクエストの誤りとして 400 を返す
+        foreach (['blog_content_id', 'blog_post_id'] as $key) {
+            $value = $postData[$key] ?? null;
+            if (!is_scalar($value) || !ctype_digit((string)$value) || !(int)$value) {
+                throw new BadRequestException(__d('baser_core', 'パラメーターに {0} が指定されていません。', $key));
+            }
         }
 
         $blogContent = $service->getBlogContent($postData['blog_content_id']);

@@ -103,6 +103,8 @@ class SiteValidationTest extends BcTestCase
         // 重複フォルダあり（対象サイト）
         $content = ContentFactory::make(['url' => '/aaa/', 'site_id' => 2])->persist();
         $this->assertTrue($this->SiteValidation->checkContentExists('aaa', ['data' => ['id' => 2]]));
+        // 数字以外の ID は条件にしない（例外にならない）
+        $this->assertFalse($this->SiteValidation->checkContentExists('aaa', ['data' => ['id' => "2'"]]));
         $contents->delete($content);
     }
 

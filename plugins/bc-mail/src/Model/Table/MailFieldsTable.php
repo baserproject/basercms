@@ -67,6 +67,7 @@ class MailFieldsTable extends MailAppTable
             ->maxLength('name', 255, __d('baser_core', '項目名は255文字以内で入力してください。'));
         $validator
             ->scalar('field_name')
+            ->requirePresence('field_name', 'create', __d('baser_core', 'フィールド名を入力してください。'))
             ->notEmptyString('field_name', __d('baser_core', 'フィールド名を入力してください。'))
             ->maxLength('field_name', 50, __d('baser_core', 'フィールド名は50文字以内で入力してください。'))
             ->add('field_name', [
