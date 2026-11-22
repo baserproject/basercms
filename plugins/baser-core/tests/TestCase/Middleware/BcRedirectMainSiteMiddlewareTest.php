@@ -76,6 +76,23 @@ class BcRedirectMainSiteMiddlewareTest extends BcTestCase
 
     /**
      * test Process
+     * リダイレクトの際、クエリ文字列を引き継ぐ
+     */
+    public function test_process_withQuery(): void
+    {
+        $this->loadFixtureScenario(MultiSiteScenario::class);
+        $this->createMainSitePage();
+
+        $response = $this->BcRedirectMainSiteMiddleware->process(
+            $this->getRequest('/en/about?page=2&sort=desc'),
+            $this->createNotFoundHandler()
+        );
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/about?page=2&sort=desc', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * test Process
      * メインサイトにもコンテンツが無い場合はリダイレクトしない
      */
     public function test_process_notExistsMainSite(): void

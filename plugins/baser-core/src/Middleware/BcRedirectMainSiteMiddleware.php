@@ -102,8 +102,10 @@ class BcRedirectMainSiteMiddleware implements MiddlewareInterface
             $mainSiteUrl = '/' . $mainSite->alias . $mainSiteUrl;
         }
         if (!$this->isRoutable($request->withUri($request->getUri()->withPath($mainSiteUrl)))) return null;
+        // クエリ文字列はそのまま引き継ぐ（ページ番号など）
+        $query = $request->getUri()->getQuery();
         return (new Response(['status' => 302]))
-            ->withLocation($request->getAttribute('base') . $mainSiteUrl);
+            ->withLocation($request->getAttribute('base') . $mainSiteUrl . ($query !== ''? '?' . $query : ''));
     }
 
     /**
