@@ -24,6 +24,7 @@ use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Throwable;
 
 /**
@@ -105,6 +106,9 @@ class BcErrorController extends BcFrontAppController
      */
     public function beforeRender(EventInterface $event): void
     {
+        // ルーティングに失敗した場合など、Router のリクエストにはサイトの情報が設定されていないため、
+        // getCurrent() でサイトを設定したリクエストに置き換え、サブサイトのテーマで表示する
+        Router::setRequest($this->getRequest());
         parent::beforeRender($event);
         $this->viewBuilder()->setTemplatePath('Error');
         // プラグイン等のイベントが残っているとエラー画面が正常に表示されない場合があるため、イベントを削除する
