@@ -15,6 +15,9 @@ namespace BaserCore\Model\Entity;
 
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Content
@@ -64,5 +67,34 @@ class Content extends Entity
     protected array $_accessible = [
         '*' => true
     ];
+
+    /**
+     * 既存のコンテンツで、送信値による書き換えを許可しない項目
+     *
+     * ID・種類・紐付け先を編集フォームの送信値で変えられると、別のコンテンツを指したり、
+     * 以後そのコンテンツの編集・削除ができなくなったりするため
+     *
+     * @var array
+     */
+    protected array $_guardedOnUpdate = ['id', 'plugin', 'type', 'entity_id'];
+
+    /**
+     * 項目が一括代入できるかどうか
+     *
+     * 新規作成時は従来どおり、既存のコンテンツでは $_guardedOnUpdate の項目を不可とする
+     *
+     * @param string $field
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAccessible(string $field): bool
+    {
+        if (!$this->isNew() && in_array($field, $this->_guardedOnUpdate, true)) {
+            return false;
+        }
+        return parent::isAccessible($field);
+    }
 
 }

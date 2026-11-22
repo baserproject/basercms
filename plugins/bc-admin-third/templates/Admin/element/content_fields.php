@@ -204,7 +204,7 @@ $editable = $this->BcContents->isEditable($content);
           ]) ?>
         <?php else: ?>
           <?php if ($this->BcAdminForm->getSourceValue("content.self_publish_begin") || $this->BcAdminForm->getSourceValue("content.self_publish_end")): ?>
-            <?php echo $this->BcAdminForm->getSourceValue("content.self_publish_begin") ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue("content.self_publish_end") ?>
+            <?php echo h($this->BcAdminForm->getSourceValue("content.self_publish_begin")) ?>&nbsp;〜&nbsp;<?php echo h($this->BcAdminForm->getSourceValue("content.self_publish_end")) ?>
           <?php endif ?>
           <?php echo $this->BcAdminForm->hidden("content.self_publish_begin") ?>
           <?php echo $this->BcAdminForm->hidden("content.self_publish_end") ?>
