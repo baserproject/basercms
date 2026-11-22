@@ -16,7 +16,10 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -57,6 +60,21 @@ class BcErrorControllerTest extends BcTestCase
     {
         $this->BcErrorController->beforeRender(new Event('beforeRender'));
         $this->assertEquals('BcFront', $this->BcErrorController->viewBuilder()->getTheme());
+    }
+
+    /**
+     * Test beforeRender
+     * サブサイトの URL のエラー画面は、サブサイトのテーマで表示する
+     */
+    public function testBeforeRender_subSite()
+    {
+        SiteFactory::make()->english(3)->setField('theme', 'EnglishTheme')->persist();
+        $request = $this->getRequest('/en/not_exists');
+        // ルーティングに失敗した場合、Router のリクエストにはサイトの情報が設定されていない
+        Router::setRequest(new ServerRequest(['url' => '/en/not_exists']));
+        $controller = new BcErrorController($request);
+        $controller->beforeRender(new Event('beforeRender'));
+        $this->assertEquals('EnglishTheme', $controller->viewBuilder()->getTheme());
     }
 
     /**

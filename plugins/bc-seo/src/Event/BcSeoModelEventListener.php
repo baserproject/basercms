@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Collection\CollectionInterface;
 use Cake\Core\Configure;
+use Cake\Database\Expression\AggregateExpression;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query\SelectQuery;
@@ -46,6 +47,14 @@ class BcSeoModelEventListener extends BcModelEventListener
     {
         if (!$this->isEdit()) {
             return;
+        }
+
+        // 集計の検索（AppTable::getMax など）では SeoMetas を取得しない
+        // SeoMetas の列を足すと ONLY_FULL_GROUP_BY が有効な MySQL で SQL が失敗するため
+        foreach ((array)$query->clause('select') as $field) {
+            if ($field instanceof AggregateExpression) {
+                return;
+            }
         }
 
         $table = $event->getSubject();

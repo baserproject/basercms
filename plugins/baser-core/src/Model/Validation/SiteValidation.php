@@ -57,7 +57,9 @@ class SiteValidation extends Validation
             ['url' => $url],
             ['url' => $url . '/']
         ]]);
-        if(!empty($context['data']['id'])) {
+        // 数字以外の ID は int に変換できず SQL の組み立てで例外になるため条件に加えない
+        $id = $context['data']['id'] ?? null;
+        if (is_scalar($id) && ctype_digit((string)$id) && (int)$id > 0) {
             $query = $query->where(['site_id IS NOT' => $context['data']['id']]);
         }
         return !((bool) $query->count());

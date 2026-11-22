@@ -152,6 +152,8 @@ class BlogContentsTable extends BlogAppTable
         if (!Plugin::isLoaded('BcSearchIndex')) {
             return;
         }
+        // 前回の保存で検索対象外にした状態が残らないよう、一旦解除する
+        $this->unsetExcluded();
         if (empty($entity->content) || !empty($entity->content->exclude_search)) {
             $this->setExcluded();
         }
@@ -226,10 +228,19 @@ class BlogContentsTable extends BlogAppTable
             ->contain(['BlogContents' => ['Contents']])
             ->all();
         if (!$entities->count()) return;
-        foreach($entities as $entity) {
-            // 保存するために強制的に dirty に設定
-            $entity->setDirty('id');
-            $this->BlogPosts->save($entity);
+        foreach($entities as $post) {
+            // 記事を保存すると更新日時が変わるため、検索インデックスだけを作成する
+            if ($post->exclude_search
+                || empty($post->blog_content->content)
+                || !empty($post->blog_content->content->exclude_search)
+            ) {
+                $this->BlogPosts->deleteSearchIndex($post->id);
+                continue;
+            }
+            $searchIndex = $this->BlogPosts->createSearchIndex($post);
+            if ($searchIndex) {
+                $this->BlogPosts->saveSearchIndex($searchIndex);
+            }
         }
     }
 

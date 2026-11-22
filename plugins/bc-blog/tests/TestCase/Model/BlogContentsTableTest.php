@@ -321,6 +321,11 @@ class BlogContentsTableTest extends BcTestCase
         $blogContent = $BlogContentsService->get(2);
         $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
         $this->assertTrue($this->BlogContentsTable->isExcluded());
+
+        // 検索対象外のブログの後に保存するブログは、検索対象外にならない
+        $blogContent = $BlogContentsService->get(1);
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertFalse($this->BlogContentsTable->isExcluded());
     }
 
     /**
@@ -556,6 +561,30 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals('ブログ', $data['type']);
         $this->assertEquals('BlogPost', $data['model']);
         $this->assertEquals('/news/archives/3', $data['url']);
+    }
+
+    /**
+     * test createRelatedSearchIndexes
+     * 検索インデックスを作成しても、ブログ記事の更新日時は変わらない
+     */
+    public function test_createRelatedSearchIndexes_keepModified()
+    {
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+        $blogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        $blogPostsTable->updateAll(['modified' => '2020-01-01 00:00:00'], ['blog_content_id' => 6]);
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+
+        $this->BlogContentsTable->createRelatedSearchIndexes($blogContentsService->get(6));
+
+        $posts = $blogPostsTable->find()->where(['blog_content_id' => 6])->all();
+        $this->assertGreaterThan(0, $posts->count());
+        foreach($posts as $post) {
+            $this->assertEquals('2020-01-01 00:00:00', $post->modified->format('Y-m-d H:i:s'));
+        }
+        // 検索対象外の記事は検索インデックスを作成しない
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
+        $this->assertSame(0, $searchIndexesTable->find()->where(['model' => 'BlogPost', 'model_id' => 8])->count());
+        $this->assertSame(1, $searchIndexesTable->find()->where(['model' => 'BlogPost', 'model_id' => 1])->count());
     }
 
     /**

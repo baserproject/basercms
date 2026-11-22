@@ -178,7 +178,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function delete(PermissionsServiceInterface $service, $permissionId)
+	public function delete(PermissionsServiceInterface $service, int $permissionId)
     {
         $permission = $service->get($permissionId);
         $permissionName = $permission->name;
@@ -200,7 +200,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function copy(PermissionsServiceInterface $service, $permissionId)
+	public function copy(PermissionsServiceInterface $service, int $permissionId)
     {
         $permission = $service->get($permissionId);
         $userGroupId = $permission->user_group_id;
@@ -224,7 +224,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function unpublish(PermissionsServiceInterface $service, $permissionId)
+	public function unpublish(PermissionsServiceInterface $service, int $permissionId)
     {
         $permission = $service->get($permissionId);
         $userGroupId = $permission->user_group_id;
@@ -246,7 +246,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function publish(PermissionsServiceInterface $service, $permissionId)
+	public function publish(PermissionsServiceInterface $service, int $permissionId)
     {
         $permission = $service->get($permissionId);
         $userGroupId = $permission->user_group_id;

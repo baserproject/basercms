@@ -95,7 +95,7 @@ class BlogCategoriesControllerTest extends BcTestCase
 
         //異常系実行：blog_content_id指定しない
         $this->get('/baser/api/admin/bc-blog/blog_categories/index.json?blog_content_id=&token=' . $this->accessToken);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
     }
 
     /**

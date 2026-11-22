@@ -167,7 +167,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function publish(SitesServiceInterface $service, $siteId)
+    public function publish(SitesServiceInterface $service, int $siteId)
     {
         $site = $service->get($siteId);
 
@@ -189,7 +189,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function unpublish(SitesServiceInterface $service, $siteId)
+    public function unpublish(SitesServiceInterface $service, int $siteId)
     {
         $site = $service->get($siteId);
 
@@ -210,7 +210,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(SitesServiceInterface $service, $id)
+    public function delete(SitesServiceInterface $service, int $id)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
