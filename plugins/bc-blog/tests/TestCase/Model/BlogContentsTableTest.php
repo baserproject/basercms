@@ -321,6 +321,11 @@ class BlogContentsTableTest extends BcTestCase
         $blogContent = $BlogContentsService->get(2);
         $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
         $this->assertTrue($this->BlogContentsTable->isExcluded());
+
+        // 検索対象外のブログの後に保存するブログは、検索対象外にならない
+        $blogContent = $BlogContentsService->get(1);
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertFalse($this->BlogContentsTable->isExcluded());
     }
 
     /**
