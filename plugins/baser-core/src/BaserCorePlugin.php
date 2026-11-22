@@ -30,6 +30,7 @@ use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
+use BaserCore\Middleware\BcRedirectMainSiteMiddleware;
 use BaserCore\Middleware\BcRedirectSubSiteMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
@@ -386,6 +387,7 @@ class BaserCorePlugin extends BcPlugin implements AuthenticationServiceProviderI
     {
         $middlewareQueue
             ->insertBefore(RoutingMiddleware::class, new BcRequestFilterMiddleware())
+            ->insertBefore(RoutingMiddleware::class, new BcRedirectMainSiteMiddleware())
             ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
