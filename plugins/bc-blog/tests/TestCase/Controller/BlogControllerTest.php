@@ -488,7 +488,15 @@ class BlogControllerTest extends BcTestCase
                 'message'=>'message test'
             ]);
         $this->assertResponseCode(404);
-
+        // 未指定・数字以外の ID は 400
+        foreach ([['blog_post_id' => 1], ['blog_content_id' => "1'", 'blog_post_id' => 1], ['blog_content_id' => 1, 'blog_post_id' => 'abc']] as $data) {
+            $this->post('/bc-blog/blog/ajax_add_comment', array_merge($data, [
+                'name' => 'name test',
+                'email' => 'test@gmail.com',
+                'message' => 'message test'
+            ]));
+            $this->assertResponseCode(400);
+        }
     }
 
     /**

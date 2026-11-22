@@ -93,7 +93,8 @@ class MailFieldsTableTest extends BcTestCase
         ]);
         $this->assertEquals('項目名を入力してください。', current($errors['name']));
         $this->assertEquals('タイプを入力してください。', current($errors['type']));
-
+        // 新規作成時はフィールド名が必須
+        $this->assertEquals('フィールド名を入力してください。', current($errors['field_name']));
     }
 
 

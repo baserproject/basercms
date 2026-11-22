@@ -220,4 +220,18 @@ class UserGroupsControllerTest extends BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
+    /**
+     * test delete / copy
+     * 数字以外の ID は 404
+     */
+    public function testDeleteCopy_non_numeric_id()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        foreach (['delete', 'copy'] as $action) {
+            $this->post('/baser/admin/baser-core/user_groups/' . $action . '/' . urlencode("1'"));
+            $this->assertResponseCode(404);
+        }
+    }
+
 }

@@ -210,4 +210,18 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertTrue($permission->status);
     }
 
+    /**
+     * test delete / copy / publish / unpublish
+     * 数字以外の ID は 404
+     */
+    public function testDeleteCopyPublishUnpublish_non_numeric_id()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        foreach (['delete', 'copy', 'publish', 'unpublish'] as $action) {
+            $this->post('/baser/admin/baser-core/permissions/' . $action . '/' . urlencode("1'"));
+            $this->assertResponseCode(404);
+        }
+    }
+
 }

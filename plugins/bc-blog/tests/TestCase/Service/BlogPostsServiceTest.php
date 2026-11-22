@@ -1210,4 +1210,19 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals('https://localhost/archives/1', $rs);
     }
 
+    /**
+     * test filterBlogTagIds
+     */
+    public function test_filterBlogTagIds()
+    {
+        // 数字以外のタグ ID は取り除く
+        $rs = $this->BlogPostsService->filterBlogTagIds(['blog_tags' => ['_ids' => [1, '2', "3'", 'abs(4)', [5]]]]);
+        $this->assertEquals([1, '2'], $rs['blog_tags']['_ids']);
+        // 配列でない場合は空にする
+        $rs = $this->BlogPostsService->filterBlogTagIds(['blog_tags' => ['_ids' => '']]);
+        $this->assertEquals([], $rs['blog_tags']['_ids']);
+        // 指定がない場合はそのまま
+        $this->assertEquals(['title' => 'a'], $this->BlogPostsService->filterBlogTagIds(['title' => 'a']));
+    }
+
 }
