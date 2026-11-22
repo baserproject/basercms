@@ -32,10 +32,10 @@
       <div class="bca-box">
         <ul class="bca-list" data-bca-list-layout="horizon" data-bca-list-type='circle'>
           <li class="bca-list__item">
-            <span><?php echo __d('baser_core', 'コンテンツID') ?></span>：<?php echo $this->BcAdminForm->getSourceValue("content.id"); ?>
+            <span><?php echo __d('baser_core', 'コンテンツID') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.id")); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser_core', '実体ID') ?></span>：<?php echo $this->BcAdminForm->getSourceValue("content.entity_id"); ?>
+            <span><?php echo __d('baser_core', '実体ID') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.entity_id")); ?>
           </li>
           <li class="bca-list__item">
             <span><?php echo __d('baser_core', 'プラグイン') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.plugin")); ?>
@@ -44,10 +44,10 @@
             <span><?php echo __d('baser_core', 'コンテンツタイプ') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.type")); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser_core', 'データ作成日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue("content.created"); ?>
+            <span><?php echo __d('baser_core', 'データ作成日') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.created")); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser_core', 'データ更新日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue("content.modified"); ?>
+            <span><?php echo __d('baser_core', 'データ更新日') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.modified")); ?>
           </li>
           <li class="bca-list__item">
             <span><?php echo __d('baser_core', 'サイト') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.site.display_name")) ?>
