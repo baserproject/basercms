@@ -2,35 +2,32 @@
 # yarn lockfile v1
 
 
-"@burger-editor/client@3.5.0-alpha.2":
-  version "3.5.0-alpha.2"
-  resolved "https://registry.npmjs.org/@burger-editor/client/-/client-3.5.0-alpha.2.tgz"
-  integrity sha512-e4Vl2pA7h1v8elGpv63p2SH7xo/Yp7T5YDdV7pNFpL9OAqJ37RzTCu9R/PTa6oPkMb1E3pC4lagCLOJkTRHq9g==
+"@burger-editor/client@3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@burger-editor/client/-/client-3.5.0.tgz#c93aca547a45f3148dfe5d1c8184cc0888fe79ae"
+  integrity sha512-p7XhnwDg+VhBDMiOwiErij53hxamBu5iui7ZjExtKbWH5qJNhRuMxwafPCMxtfEeGPoOS3/kPK/OCvUSt74GzA==
   dependencies:
-    "@burger-editor/frozen-patty" "3.5.0-alpha.2"
+    "@burger-editor/frozen-patty" "3.5.0"
     baserjs "1.0.0-beta.0"
     core-js "3.49.0"
     jaco "5.0.0"
     jquery "3.7.1"
     semver "7.8.0"
 
-"@burger-editor/css@3.5.0-alpha.2":
-  version "3.5.0-alpha.2"
-  resolved "https://registry.npmjs.org/@burger-editor/css/-/css-3.5.0-alpha.2.tgz"
-  integrity sha512-gK4pFfkaWclmDbml4A8ljVQKslW2ejlnuobR6bBachSyA7gojcPeDWmykcwLlHxlRLaicbWvZC08hnFR7PzZWQ==
+"@burger-editor/css@3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@burger-editor/css/-/css-3.5.0.tgz#46fac324a44c7c1fb2e453e6de1229400f87005b"
+  integrity sha512-YzQ80elrnaVRYaRt4fP3XafHKFmC9GDX1xOl9bQMPuGdSKtoMT8dmBtd7JOxM+udia1VDLe6L7Zln0gvNsbI0g==
 
-"@burger-editor/frozen-patty@3.5.0-alpha.2":
-  version "3.5.0-alpha.2"
-  resolved "https://registry.npmjs.org/@burger-editor/frozen-patty/-/frozen-patty-3.5.0-alpha.2.tgz"
-  integrity sha512-7s9Kdh0Fv4+qddNh3IrMtIC2eizKvVYEk96fLkaKfzYtulh1koz9QhZmqqueicDgXIqdJBSJi3cSFFR4S0BXEw==
+"@burger-editor/frozen-patty@3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@burger-editor/frozen-patty/-/frozen-patty-3.5.0.tgz#f0e71cfe39a9b58b2cb98625cb1ee56b9913acf3"
+  integrity sha512-jXygczxJiYp/x7E1b+2cx9qD/T+d1FakVmuwtMhRvE92WDPCfBbGMYuRreVEtx8fMt1l7rWv9yUC4yQoRrRIHg==
 
-"@burger-editor/runtime@3.5.0-alpha.2":
-  version "3.5.0-alpha.2"
-  resolved "https://registry.npmjs.org/@burger-editor/runtime/-/runtime-3.5.0-alpha.2.tgz"
-  integrity sha512-WgZvRF9p4uC5r0eOpPC9c0IDDTRp3tYRirI3N72zkO1ZSMjNFD2tYXiaEw1mB+LEeGegKN43sRAhIx3KUaEGxw==
-  dependencies:
-    jquery "3.7.1"
-    psycle "1.0.0-beta.4"
+"@burger-editor/runtime@3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@burger-editor/runtime/-/runtime-3.5.0.tgz#addf7aaae2ee59cdd6749620db7d41c07290a677"
+  integrity sha512-dUrhIGaTkn1x8ndvMWXJ5Rz4n2qyws8bohIeqq9CxtiL2SNeEXPVu/sBv9B45zgSVoBrFuHjXE8/RJP0zMfg1g==
 
 ansi-styles@^6.2.1:
   version "6.2.1"
@@ -231,11 +228,6 @@ pidtree@^0.6.0:
   version "0.6.0"
   resolved "https://registry.npmjs.org/pidtree/-/pidtree-0.6.0.tgz"
   integrity sha512-eG2dWTVw5bzqGRztnHExczNxt5VGsE6OwTeCG3fdUf9KBsZzO3R5OIIIzWR+iZA0NtZ+RDVdaoE2dK1cn6jH4g==
-
-psycle@1.0.0-beta.4:
-  version "1.0.0-beta.4"
-  resolved "https://registry.npmjs.org/psycle/-/psycle-1.0.0-beta.4.tgz"
-  integrity sha512-PluoLeJ6LWA96oI2Y9w657fRfRcwjNFX+jOG+Bpocmh5EAaw47QW0CoozdtHJLS0fAvnlda5v9Yh3D1YrZGSRw==
 
 qs@^6.5.0:
   version "6.17.1"

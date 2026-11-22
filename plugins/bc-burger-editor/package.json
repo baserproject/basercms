@@ -1,5 +1,5 @@
 {
-	"version": "3.5.0-alpha.2",
+	"version": "3.5.0",
 	"name": "burger-editor",
 	"description": "BurgerEditor for baserCMS",
 	"author": "NPO baser foundation",
@@ -25,8 +25,8 @@
 		"npm-run-all2": "9.0.1"
 	},
 	"dependencies": {
-		"@burger-editor/client": "3.5.0-alpha.2",
-		"@burger-editor/css": "3.5.0-alpha.2",
-		"@burger-editor/runtime": "3.5.0-alpha.2"
+		"@burger-editor/client": "3.5.0",
+		"@burger-editor/css": "3.5.0",
+		"@burger-editor/runtime": "3.5.0"
 	}
 }
