@@ -247,7 +247,7 @@ class ContentsService implements ContentsServiceInterface
         // author_id
         if(!empty($params['parent_id'])) $conditions['Contents.parent_id'] = $params['parent_id'];
         // author_id（数字以外は型変換できず例外になるため条件にしない）
-        if(!empty($params['author_id']) && ctype_digit((string)$params['author_id'])) $conditions['Contents.author_id'] = $params['author_id'];
+        if(!empty($params['author_id']) && is_scalar($params['author_id']) && ctype_digit((string)$params['author_id'])) $conditions['Contents.author_id'] = $params['author_id'];
         // site_id
         if(!empty($params['site_id'])) $conditions['Contents.site_id'] = $params['site_id'];
         // title
@@ -271,7 +271,7 @@ class ContentsService implements ContentsServiceInterface
         }
 
         // folder_id
-        if (!is_null($params['folder_id']) && $params['folder_id'] && ctype_digit((string)$params['folder_id'])) {
+        if (!is_null($params['folder_id']) && $params['folder_id'] && is_scalar($params['folder_id']) && ctype_digit((string)$params['folder_id'])) {
             $folder = $this->Contents->find()->select(['lft', 'rght'])
                  ->where(['Contents.id' => $params['folder_id']])->first();
             if ($folder) $conditions[] = ['Contents.rght <' => $folder->rght, 'Contents.lft >' => $folder->lft];

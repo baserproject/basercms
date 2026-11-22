@@ -136,7 +136,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             }
             // 数値で指定する条件に数字以外が渡されると型変換できず例外になるため、条件にしない
             if (in_array($key, ['site_id', 's', 'content_id', 'c', 'content_filter_id', 'cf'], true)
-                && is_scalar($value) && !ctype_digit((string)$value)) {
+                && (!is_scalar($value) || !ctype_digit((string)$value))) {
                 unset($options[$key]);
             }
         }

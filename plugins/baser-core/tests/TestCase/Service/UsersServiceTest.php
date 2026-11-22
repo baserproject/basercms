@@ -463,6 +463,8 @@ class UsersServiceTest extends BcTestCase
         $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['user_group_id' => "1'"]]);
         $this->assertStringNotContainsString('INNER JOIN user_groups UserGroups', $result->sql());
         $this->assertEquals($this->Users->getIndex([])->count(), $this->Users->getIndex(['user_group_id' => "1'"])->count());
+        // 配列形式も条件にしない
+        $this->assertEquals($this->Users->getIndex([])->count(), $this->Users->getIndex(['user_group_id' => [1]])->count());
     }
 
 }

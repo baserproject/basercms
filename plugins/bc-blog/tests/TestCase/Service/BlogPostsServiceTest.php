@@ -1223,6 +1223,12 @@ class BlogPostsServiceTest extends BcTestCase
             'blog_tag_id' => "1'",
             'blog_category_id' => "1'",
         ])->count());
+        // 配列形式も条件にしない
+        $this->assertEquals(2, $this->BlogPostsService->getIndex([
+            'user_id' => [1],
+            'blog_tag_id' => [1],
+            'blog_category_id' => [1],
+        ])->count());
     }
 
 }
