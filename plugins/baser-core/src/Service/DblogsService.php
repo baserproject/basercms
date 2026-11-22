@@ -170,7 +170,8 @@ class DblogsService implements DblogsServiceInterface
         if (!empty($queryParams['message'])) {
             $query->where(['message LIKE' => '%' . $queryParams['message'] . '%']);
         }
-        if (!empty($queryParams['user_id'])) {
+        // 数値で指定する条件に数字以外が渡されると型変換できず例外になるため、条件にしない
+        if (!empty($queryParams['user_id']) && is_scalar($queryParams['user_id']) && ctype_digit((string)$queryParams['user_id'])) {
             $query->where(['user_id' => $queryParams['user_id']]);
         }
 

@@ -240,6 +240,10 @@ class BlogController extends BlogFrontAppController
                         }
                     }
                 }
+                // 年月日として解釈できない値は、カレンダーウィジェットの mktime() で TypeError になるため、存在しないページとして扱う
+                if ((isset($pass[1]) && $year === '') || (isset($pass[2]) && $month === '') || (isset($pass[3]) && $day === '')) {
+                    $this->notFound();
+                }
                 $this->set($service->getViewVarsForArchivesByDate(
                     $this->paginate($blogPostsService->getIndexByDate($year, $month, $day, array_merge([
                         'status' => 'publish',

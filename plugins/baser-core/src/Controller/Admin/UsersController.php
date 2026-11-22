@@ -203,7 +203,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function login_agent(UsersServiceInterface $service, $id): ?Response
+    public function login_agent(UsersServiceInterface $service, int $id): ?Response
     {
         // 特権確認
         if (BcUtil::isAdminUser() === false) {
@@ -352,7 +352,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UsersAdminServiceInterface $service, $id = null)
+    public function edit(UsersAdminServiceInterface $service, ?int $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));

@@ -108,7 +108,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupsServiceInterface $service, UsersServiceInterface $usersService, $id)
+    public function edit(UserGroupsServiceInterface $service, UsersServiceInterface $usersService, int $id)
     {
         $userGroup = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {

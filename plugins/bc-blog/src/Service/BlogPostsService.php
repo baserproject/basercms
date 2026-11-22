@@ -244,6 +244,10 @@ class BlogPostsService implements BlogPostsServiceInterface
         foreach($params as $key => $value) {
             if ($value === '') unset($params[$key]);
         }
+        // 数値で指定する条件に数字以外が渡されると型変換できず例外になるため、条件にしない
+        foreach(['user_id', 'blog_tag_id', 'blog_category_id'] as $key) {
+            if (isset($params[$key]) && (!is_scalar($params[$key]) || !ctype_digit((string)$params[$key]))) unset($params[$key]);
+        }
         if (empty($params)) return $query;
 
         $params = array_merge([

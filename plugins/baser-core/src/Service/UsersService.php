@@ -159,6 +159,10 @@ class UsersService implements UsersServiceInterface
             'real_name' => null
         ], $params);
 
+        // 数値で指定する条件に数字以外が渡されると型変換できず例外になるため、条件にしない
+        if (!is_null($params['user_group_id']) && (!is_scalar($params['user_group_id']) || !ctype_digit((string)$params['user_group_id']))) {
+            $params['user_group_id'] = null;
+        }
         if (!is_null($params['user_group_id'])) {
             $query->matching('UserGroups', function($q) use ($params) {
                 return $q->where(['UserGroups.id' => $params['user_group_id']]);

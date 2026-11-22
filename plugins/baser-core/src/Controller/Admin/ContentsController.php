@@ -231,6 +231,8 @@ class ContentsController extends BcAdminAppController
 	{
         if ($this->request->is(['post', 'put', 'delete'])) {
             $id = $this->request->getData('content.id');
+            // 数字以外の ID は型変換できず例外になるため、存在しないページとして扱う
+            if (!is_scalar($id) || !ctype_digit((string)$id)) $this->notFound();
             /* @var \BaserCore\Model\Entity\Content $content */
             $content = $service->get($id);
             if ($service->deleteRecursive($id)) {

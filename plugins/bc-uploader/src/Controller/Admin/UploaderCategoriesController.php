@@ -97,7 +97,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UploaderCategoriesServiceInterface $service, $id)
+    public function edit(UploaderCategoriesServiceInterface $service, int $id)
     {
         $entity = $service->get($id);
         if($this->getRequest()->is(['post', 'put'])) {

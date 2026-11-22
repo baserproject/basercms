@@ -144,9 +144,9 @@ class PermissionsController extends BcAdminAppController
      */
 	public function edit(
 	    PermissionsAdminServiceInterface $service,
-	    $userGroupId,
-	    $permissionId,
-	    $permissionGroupId = null
+	    int $userGroupId,
+	    int $permissionId,
+	    ?int $permissionGroupId = null
 	) {
         $permission = $service->get($permissionId);
         if ($this->request->is(['patch', 'post', 'put'])) {

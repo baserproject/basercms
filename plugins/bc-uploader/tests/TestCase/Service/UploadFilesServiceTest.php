@@ -418,4 +418,14 @@ class UploadFilesServiceTest extends BcTestCase
 
     }
 
+    /**
+     * test createAdminIndexConditions
+     * 数字以外のカテゴリIDは条件にしない
+     */
+    public function test_createAdminIndexConditions_non_numeric_category_id()
+    {
+        $result = $this->execPrivateMethod($this->UploaderFilesService, 'createAdminIndexConditions', [['uploader_category_id' => "1'"]]);
+        $this->assertArrayNotHasKey('UploaderFiles.uploader_category_id', $result);
+    }
+
 }

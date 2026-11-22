@@ -141,4 +141,16 @@ class DblogsServiceTest extends BcTestCase
         $this->assertEquals($count - 1, $this->DblogsService->getIndex()->count());
     }
 
+    /**
+     * test getIndex
+     * 数字以外のユーザーIDは条件にしない
+     */
+    public function testGetIndex_non_numeric_user_id()
+    {
+        $this->assertEquals(
+            $this->DblogsService->getIndex([])->count(),
+            $this->DblogsService->getIndex(['user_id' => "1'"])->count()
+        );
+    }
+
 }

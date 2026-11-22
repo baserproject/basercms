@@ -453,4 +453,18 @@ class UsersServiceTest extends BcTestCase
         $this->assertTrue($found, 'バインド値 %山田% が存在すること');
     }
 
+    /**
+     * test createIndexConditions
+     * 数字以外のユーザーグループIDは条件にしない
+     */
+    public function test_createIndexConditions_non_numeric_user_group_id()
+    {
+        $query = $this->Users->Users->find();
+        $result = $this->execPrivateMethod($this->Users, 'createIndexConditions', [$query, ['user_group_id' => "1'"]]);
+        $this->assertStringNotContainsString('INNER JOIN user_groups UserGroups', $result->sql());
+        $this->assertEquals($this->Users->getIndex([])->count(), $this->Users->getIndex(['user_group_id' => "1'"])->count());
+        // 配列形式も条件にしない
+        $this->assertEquals($this->Users->getIndex([])->count(), $this->Users->getIndex(['user_group_id' => [1]])->count());
+    }
+
 }

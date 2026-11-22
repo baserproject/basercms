@@ -256,6 +256,11 @@ class BlogControllerTest extends BcTestCase
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals('yearly', $vars['blogArchiveType']);
         $this->assertEquals('post1', $vars['posts']->toArray()[0]->name);
+        // 年月日として解釈できない値は 404
+        $this->get('/news/archives/date/2023/' . urlencode("1'"));
+        $this->assertResponseCode(404);
+        $this->get('/news/archives/date/2023/1/' . urlencode("1'"));
+        $this->assertResponseCode(404);
     }
 
     /**

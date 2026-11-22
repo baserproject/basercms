@@ -290,4 +290,22 @@ class SearchIndexesServiceTest extends BcTestCase
             ['<a', ['&lt;a']], // htmlspecialchars()
         ];
     }
+
+    /**
+     * test createIndexConditions
+     * 数字以外のサイトID・コンテンツIDは条件にしない（サイトIDは既定値）
+     */
+    public function testCreateIndexConditions_non_numeric_id(): void
+    {
+        $result = $this->execPrivateMethod($this->SearchIndexesService, "createIndexConditions", [['s' => "1'", 'c' => "1'", 'cf' => "1'", 'type' => 'ページ']]);
+        $this->assertEquals(1, $result['SearchIndexes.site_id']);
+        $this->assertArrayNotHasKey('SearchIndexes.content_id', $result);
+        $this->assertArrayNotHasKey('SearchIndexes.content_filter_id', $result);
+        // 配列形式も除外する
+        $result = $this->execPrivateMethod($this->SearchIndexesService, "createIndexConditions", [['s' => [1], 'c' => [1], 'cf' => [1], 'type' => 'ページ']]);
+        $this->assertEquals(1, $result['SearchIndexes.site_id']);
+        $this->assertArrayNotHasKey('SearchIndexes.content_id', $result);
+        $this->assertArrayNotHasKey('SearchIndexes.content_filter_id', $result);
+    }
+
 }

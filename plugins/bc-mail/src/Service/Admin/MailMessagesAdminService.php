@@ -88,8 +88,13 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
     {
         $currentContent = $request->getAttribute('currentContent');
         $this->setup($mailContentId);
+        $encoding = $request->getQuery('encoding');
+        // 対応していない文字コードは mb_convert_encoding で ValueError になるため、既定の UTF-8 にする
+        if (!is_string($encoding) || !in_array(strtolower($encoding), array_map('strtolower', mb_list_encodings()), true)) {
+            $encoding = 'utf-8';
+        }
         return [
-            'encoding' => $request->getQuery('encoding') ?? 'utf-8',
+            'encoding' => $encoding,
             'messages' => $this->MailMessages->convertMessageToCsv($this->getIndex()->all()->toArray()),
             'contentName' => $currentContent ? $request->getAttribute('currentContent')?->name : '',
             'escapeFormula' => !$request->getQuery('disable_formula_escape'),

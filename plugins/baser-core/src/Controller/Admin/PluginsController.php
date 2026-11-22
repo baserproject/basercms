@@ -72,6 +72,8 @@ class PluginsController extends BcAdminAppController
      */
     public function install(PluginsAdminServiceInterface $service, string $name)
     {
+        // 存在しないプラグイン名では設定を取得できず TypeError になるため、存在しないページとして扱う
+        if (!BcUtil::getPluginPath($name)) $this->notFound();
         $this->set($service->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
         if ($service->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
             return;
@@ -320,7 +322,8 @@ class PluginsController extends BcAdminAppController
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser_core', '無効な処理です。'));
-            return;
+            // reset_db のテンプレートは存在せず MissingTemplateException になるため、一覧へ戻す
+            return $this->redirect(['action' => 'index']);
         }
         $plugin = $service->getByName($this->request->getData('name'));
         try {

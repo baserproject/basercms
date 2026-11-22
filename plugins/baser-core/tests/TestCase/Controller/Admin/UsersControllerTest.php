@@ -467,6 +467,18 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * test edit / login_agent
+     * 数字以外の ID は 404
+     */
+    public function testEdit_non_numeric_id()
+    {
+        $this->get('/baser/admin/baser-core/users/edit/' . urlencode("1'"));
+        $this->assertResponseCode(404);
+        $this->get('/baser/admin/baser-core/users/login_agent/' . urlencode("1'"));
+        $this->assertResponseCode(404);
+    }
+
+    /**
      * test delete
      * 数字以外の ID は 404
      */
