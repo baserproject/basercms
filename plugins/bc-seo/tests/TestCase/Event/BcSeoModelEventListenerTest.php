@@ -58,6 +58,30 @@ class BcSeoModelEventListenerTest extends BcTestCase
     }
 
     /**
+     * testBeforeFind_aggregate
+     *
+     * 集計の検索（AppTable::getMax など）には SeoMetas の列を足さない
+     * （足すと MySQL の ONLY_FULL_GROUP_BY で SQL が失敗し、記事を追加できない）
+     */
+    public function testBeforeFind_aggregate()
+    {
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'no' => 3, 'blog_category_id' => 1, 'status' => true])
+            ->persist();
+        $this->loginAdmin($this->getRequest('/baser/admin/bc-blog/blog_posts/add/1'));
+        $blogPostsTable = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
+
+        $query = $blogPostsTable->find();
+        $query->select(['max_value' => $query->func()->max('BlogPosts.no')])
+            ->where(['BlogPosts.blog_content_id' => 1])
+            ->disableHydration();
+        $listener = new BcSeoModelEventListener();
+        $listener->beforeFind(new Event('beforeFind', $blogPostsTable), $query);
+        $this->assertArrayNotHasKey('SeoMetas__id', $query->clause('select'));
+        $this->assertEquals(3, $query->first()['max_value']);
+    }
+
+    /**
      * testBeforeMarshal
      */
     public function testBeforeMarshal()
